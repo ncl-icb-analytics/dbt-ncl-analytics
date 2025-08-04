@@ -57,13 +57,45 @@ models:
       modelling:
         +materialized: table
         +database: "MODELLING"
-        +schema: "OLIDS_MODELLING"
         +post-hook: "{{ add_model_comment() }}"
+        # Business area schema mappings based on OLIDS domains
+        diagnoses:
+          +schema: "OLIDS_DIAGNOSES"
+        medications:
+          +schema: "OLIDS_MEDICATIONS"
+        observations:
+          +schema: "OLIDS_OBSERVATIONS"
+        organisation:
+          +schema: "OLIDS_ORGANISATION"
+        person_attributes:
+          +schema: "OLIDS_PERSON_ATTRIBUTES"
+        programme:
+          +schema: "OLIDS_PROGRAMME"
       reporting:
         +materialized: table
         +database: "REPORTING"
-        +schema: "OLIDS_REPORTING"
         +post-hook: "{{ add_model_comment() }}"
+        # Business area schema mappings for reporting models
+        clinical_safety:
+          +schema: "OLIDS_CLINICAL_SAFETY"
+        data_quality:
+          +schema: "OLIDS_DATA_QUALITY"
+        disease_registers:
+          +schema: "OLIDS_DISEASE_REGISTERS"
+        geography:
+          +schema: "OLIDS_GEOGRAPHY"
+        measures:
+          +schema: "OLIDS_MEASURES"
+        organisation:
+          +schema: "OLIDS_ORGANISATION"
+        person_demographics:
+          +schema: "OLIDS_PERSON_DEMOGRAPHICS"
+        person_dimensions:
+          +schema: "OLIDS_PERSON_DIMENSIONS"
+        person_status:
+          +schema: "OLIDS_PERSON_STATUS"
+        programme:
+          +schema: "OLIDS_PROGRAMME"
       published_reporting_direct_care:
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
@@ -106,4 +138,4 @@ models:
 seeds:
   ncl_analytics:
     +database: "MODELLING"
-    +schema: "NCL_REFERENCE"
+    +schema: "REFERENCE"
