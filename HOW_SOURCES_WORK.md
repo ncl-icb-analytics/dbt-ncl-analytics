@@ -1,5 +1,69 @@
 # How dbt Sources Work in This Project
 
+## Overview
+
+This project uses a dynamic, configuration-driven approach to generate dbt sources and staging models. Everything is controlled by a single configuration file that drives the entire process.
+
+## Step-by-Step Workflow
+
+### 1. Configure Your Data Sources
+
+Edit `scripts/sources/source_mappings.yml` to define which databases and schemas you want to include:
+
+```yaml
+# Example configuration
+- source_name: wl
+  database: DATA_LAKE
+  schema: WL
+  description: Waiting lists and patient pathway data
+  staging_prefix: stg_wl
+```
+
+### 2. Generate Dynamic SQL Query
+
+Run the Python script to create a custom SQL query based on your configuration:
+
+```bash
+python scripts/sources/1_generate_metadata_query.py
+```
+
+This creates `scripts/sources/metadata_query.sql` with SQL that queries only the databases/schemas you've configured.
+
+### 3. Extract Metadata from Snowflake
+
+1. Open `scripts/sources/metadata_query.sql`
+2. Copy the entire SQL query
+3. Paste into Snowflake UI and execute
+4. Export results as CSV 
+5. Save as `table_metadata.csv` in the project root directory
+
+### 4. Generate dbt Sources File
+
+Run the Python script to convert the CSV metadata into dbt sources:
+
+```bash
+python scripts/sources/2_generate_sources.py
+```
+
+This creates `models/sources.yml` with all your table definitions.
+
+### 5. Generate Staging Models
+
+Run the Python script to create individual staging SQL files:
+
+```bash
+python scripts/sources/3_generate_staging_models.py
+```
+
+This creates SQL files in `models/commissioning/staging/`, `models/olids/staging/`, etc.
+
+### 6. Build Your dbt Models
+
+```bash
+dbt run         # Build all models
+dbt test        # Run data quality tests
+```
+
 ## Single sources.yml File
 
 **Location:** `models/sources.yml`
@@ -21,34 +85,16 @@ The `source_mappings.yml` configuration determines:
   database: DATA_LAKE
   schema: WL
   staging_prefix: stg_wl
-  # No domain specified, but script knows this is commissioning
+  # Script automatically assigns to commissioning domain
 ```
 
 ## Staging Model Distribution
 
 When you run `3_generate_staging_models.py`, it reads `sources.yml` and creates staging models in the appropriate folders:
 
-```
-models/
-├── sources.yml                    # ONE file with ALL sources
-├── commissioning/
-│   ├── staging/                  # stg_wl_*, stg_sus_op_*, stg_sus_apc_*, stg_epd_pc_*, stg_dictionary_*
-│   ├── modelling/                # Business logic models
-│   ├── reporting/                # Reporting layer
-│   └── published_reporting_secondary_use/  # Published outputs
-├── olids/
-│   ├── staging/                  # (future integration)
-│   ├── modelling/                # Clinical logic models
-│   ├── reporting/                # Clinical reporting
-│   ├── published_reporting_direct_care/     # Direct care outputs
-│   └── published_reporting_secondary_use/   # Secondary use outputs
-└── shared/
-    ├── staging/                  # Cross-domain reference data staging
-    ├── modelling/                # Shared dimensions, lookups
-    ├── reporting/                # Cross-domain reports
-    ├── published_reporting_direct_care/     # Shared direct care
-    └── published_reporting_secondary_use/   # Shared secondary use
-```
+- `models/commissioning/staging/` - stg_wl_*, stg_sus_op_*, stg_sus_apc_*, stg_epd_pc_*, stg_dictionary_*
+- `models/olids/staging/` - (future integration when OLIDS moves out of UAT)
+- `models/shared/staging/` - Cross-domain reference data staging
 
 ## Key Points
 
