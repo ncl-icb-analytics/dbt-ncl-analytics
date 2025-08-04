@@ -1,0 +1,18 @@
+-- Staging model for dictionary.Specialties
+-- Source: "Dictionary"."dbo"
+{% if source.get('description') %}
+-- Description: Reference data including PDS and lookup tables
+{% endif %}
+
+select
+    "SK_SpecialtyID" as sk_specialtyid,
+    "BK_SpecialtyCode" as bk_specialtycode,
+    "SpecialtyName" as specialtyname,
+    "SpecialtyCategory" as specialtycategory,
+    "IsTreatmentFunction" as istreatmentfunction,
+    "IsMainSpecialty" as ismainspecialty,
+    "DateCreated" as datecreated,
+    "DateUpdated" as dateupdated,
+    "MainSpecialtyDescription" as mainspecialtydescription,
+    "TreatmentFunctionDescription" as treatmentfunctiondescription
+from {{ source('dictionary', 'Specialties') }}

@@ -1,0 +1,58 @@
+# Source Database and Schema Mappings for NCL Analytics
+# This file defines how source databases/schemas map to dbt sources
+# Supports both OLIDS and Commissioning data sources
+# 
+# Structure:
+#   - source_name: Name used in dbt source() references
+#     database: Source database name
+#     schema: Source schema name (optional - if omitted, all schemas in database)
+#     description: What this data source contains
+#     staging_prefix: Prefix for staging models (optional, defaults to stg_{source_name})
+
+version: 1
+
+sources:
+  # ========================================
+  # COMMISSIONING DATA SOURCES
+  # ========================================
+  
+  # Waiting Lists Data
+  - source_name: wl
+    database: DATA_LAKE
+    schema: WL
+    description: Waiting lists and patient pathway data
+    staging_prefix: stg_wl
+    
+  # SUS Unified - Outpatient
+  - source_name: sus_op
+    database: DATA_LAKE
+    schema: SUS_UNIFIED_OP
+    description: SUS outpatient appointments and activity
+    staging_prefix: stg_sus_op
+    
+  # SUS Unified - Admitted Patient Care
+  - source_name: sus_apc
+    database: DATA_LAKE
+    schema: SUS_UNIFIED_APC
+    description: SUS admitted patient care episodes and procedures
+    staging_prefix: stg_sus_apc
+    
+  # EPD Primary Care
+  - source_name: epd_primary_care
+    database: DATA_LAKE
+    schema: EPD_PRIMARY_CARE
+    description: Primary care medications and prescribing data
+    staging_prefix: stg_epd_pc
+    
+  # Dictionary/Reference Data  
+  - source_name: dictionary
+    database: Dictionary
+    schema: dbo
+    description: Reference data including PDS and lookup tables
+    staging_prefix: stg_dictionary
+
+  # ========================================
+  # OLIDS DATA SOURCES (Future Integration)
+  # ========================================
+  # These will be populated when OLIDS moves out of UAT
+  # and can be accessed with ANALYST role

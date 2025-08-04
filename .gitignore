@@ -1,0 +1,54 @@
+# dbt
+target/
+dbt_packages/
+profiles.yml
+logs/
+package-lock.yml
+dbt_internal_packages/
+
+# Environment variables
+.env
+.env.*
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files
+*.csv
+*.xlsx
+*.parquet
+
+
+# Temporary files
+table_metadata.*
+*.log.*
+*.tmp
+*.bak
+
+# Example files (generated for reference)
+sources_example.yml
+
+# Local configuration
+.user.yml
+
+# Snowflake
+snowflake_cache/

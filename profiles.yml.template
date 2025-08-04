@@ -1,0 +1,44 @@
+# dbt profiles template for NCL Analytics project
+# 
+# SETUP INSTRUCTIONS:
+# 1. Copy this file to 'profiles.yml' in the same directory
+# 2. Set the required environment variables (see env.example)
+# 3. Never commit the actual profiles.yml file to git
+#
+# The profiles.yml file is git-ignored for security reasons as it may contain
+# sensitive connection information.
+
+ncl_analytics:
+  target: dev  # Default target - use wrapper scripts or --target for other environments
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      authenticator: externalbrowser
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
+      database: "MODELLING"  # Base database for dev environment
+      schema: DBT_DEV  # Dev schema
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      threads: 16
+      client_session_keep_alive: true
+      query_tag: "dbt_ncl_analytics_dev"
+    
+    prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      authenticator: externalbrowser
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
+      database: "MODELLING"  # Production database
+      schema: DBT_PROD
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      threads: 16
+      client_session_keep_alive: false
+      query_tag: "dbt_ncl_analytics_prod"
+
+# Alternative configuration examples:
+#
+# For password authentication (less secure):
+#   password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+#   authenticator: password  # Remove the externalbrowser line

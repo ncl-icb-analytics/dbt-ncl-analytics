@@ -1,0 +1,18 @@
+-- Staging model for sus_apc.spell.episodes.clinical_coding.diagnosis.snomed
+-- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
+{% if source.get('description') %}
+-- Description: SUS admitted patient care episodes and procedures
+{% endif %}
+
+select
+    "ROWNUMBER_ID" as rownumber_id,
+    "PRIMARYKEY_ID" as primarykey_id,
+    "EPISODES_ID" as episodes_id,
+    "SNOMED_ID" as snomed_id,
+    "code" as code,
+    "sequence_number" as sequence_number,
+    "timestamp" as timestamp,
+    "is_data_absent" as is_data_absent,
+    "data_absent_reason" as data_absent_reason,
+    "dmicImportLogId" as dmicimportlogid
+from {{ source('sus_apc', 'spell.episodes.clinical_coding.diagnosis.snomed') }}

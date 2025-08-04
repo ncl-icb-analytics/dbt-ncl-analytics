@@ -1,0 +1,17 @@
+-- Staging model for dictionary.Dates_Month_Year
+-- Source: "Dictionary"."dbo"
+{% if source.get('description') %}
+-- Description: Reference data including PDS and lookup tables
+{% endif %}
+
+select
+    "SK_YearMonth" as sk_yearmonth,
+    "MonthNum" as monthnum,
+    "MonthName" as monthname,
+    "CalendarMonthNumber" as calendarmonthnumber,
+    "CalendarYearNumber" as calendaryearnumber,
+    "StartOfMonthDate" as startofmonthdate,
+    "EndOfMonthDate" as endofmonthdate,
+    "SK_Date_StartOfMonth" as sk_date_startofmonth,
+    "SK_Date_EndOfMonth" as sk_date_endofmonth
+from {{ source('dictionary', 'Dates_Month_Year') }}

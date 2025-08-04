@@ -1,0 +1,109 @@
+name: 'ncl_analytics'
+version: '1.0'
+config-version: 2
+
+profile: 'ncl_analytics'
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_modules"
+
+model-paths: ["models"]
+
+# Configure dbt audit schema naming
+vars:
+  dbt_audit_schema: "test_audit"
+
+# Configure test failure storage (only for failures)
+tests:
+  +store_failures: false
+  +schema: "test_audit"
+
+models:
+  ncl_analytics:
+    +materialized: table
+    
+    # Commissioning analytics models
+    commissioning:
+      staging:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_STAGING"
+        +post-hook: "{{ add_model_comment() }}"
+      modelling:
+        +materialized: table
+        +database: "MODELLING"
+        +schema: "COMMISSIONING_MODELLING"
+        +post-hook: "{{ add_model_comment() }}"
+      reporting:
+        +materialized: table
+        +database: "REPORTING"
+        +schema: "COMMISSIONING_REPORTING"
+        +post-hook: "{{ add_model_comment() }}"
+      published_reporting_secondary_use:
+        +materialized: table
+        +database: "PUBLISHED_REPORTING__SECONDARY_USE"
+        +schema: "COMMISSIONING_PUBLISHED"
+        +post-hook: "{{ add_model_comment() }}"
+    
+    # OLIDS analytics models (future integration)
+    olids:
+      staging:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_STAGING"
+        +post-hook: "{{ add_model_comment() }}"
+      modelling:
+        +materialized: table
+        +database: "MODELLING"
+        +schema: "OLIDS_MODELLING"
+        +post-hook: "{{ add_model_comment() }}"
+      reporting:
+        +materialized: table
+        +database: "REPORTING"
+        +schema: "OLIDS_REPORTING"
+        +post-hook: "{{ add_model_comment() }}"
+      published_reporting_direct_care:
+        +materialized: table
+        +database: "PUBLISHED_REPORTING__DIRECT_CARE"
+        +schema: "OLIDS_PUBLISHED"
+        +post-hook: "{{ add_model_comment() }}"
+      published_reporting_secondary_use:
+        +materialized: table
+        +database: "PUBLISHED_REPORTING__SECONDARY_USE"
+        +schema: "OLIDS_PUBLISHED"
+        +post-hook: "{{ add_model_comment() }}"
+    
+    # Shared models (reference data, utilities)
+    shared:
+      staging:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_STAGING"
+        +post-hook: "{{ add_model_comment() }}"
+      modelling:
+        +materialized: table
+        +database: "MODELLING"
+        +schema: "REFERENCE"
+        +post-hook: "{{ add_model_comment() }}"
+      reporting:
+        +materialized: table
+        +database: "REPORTING"
+        +schema: "REFERENCE"
+        +post-hook: "{{ add_model_comment() }}"
+      published_reporting_direct_care:
+        +materialized: table
+        +database: "PUBLISHED_REPORTING__DIRECT_CARE"
+        +schema: "REFERENCE"
+        +post-hook: "{{ add_model_comment() }}"
+      published_reporting_secondary_use:
+        +materialized: table
+        +database: "PUBLISHED_REPORTING__SECONDARY_USE"
+        +schema: "REFERENCE"
+        +post-hook: "{{ add_model_comment() }}"
+
+seeds:
+  ncl_analytics:
+    +database: "MODELLING"
+    +schema: "NCL_REFERENCE"

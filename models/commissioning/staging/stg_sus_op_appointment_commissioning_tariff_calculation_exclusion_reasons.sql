@@ -1,0 +1,13 @@
+-- Staging model for sus_op.appointment.commissioning.tariff_calculation.exclusion_reasons
+-- Source: "DATA_LAKE"."SUS_UNIFIED_OP"
+{% if source.get('description') %}
+-- Description: SUS outpatient appointments and activity
+{% endif %}
+
+select
+    "EXCLUSION_REASONS_ID" as exclusion_reasons_id,
+    "exclusion_reasons" as exclusion_reasons,
+    "dmicImportLogId" as dmicimportlogid,
+    "ROWNUMBER_ID" as rownumber_id,
+    "PRIMARYKEY_ID" as primarykey_id
+from {{ source('sus_op', 'appointment.commissioning.tariff_calculation.exclusion_reasons') }}

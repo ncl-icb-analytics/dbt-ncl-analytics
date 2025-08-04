@@ -1,0 +1,45 @@
+-- Staging model for wl.WL_Diagnostics_Data
+-- Source: "DATA_LAKE"."WL"
+{% if source.get('description') %}
+-- Description: Waiting lists and patient pathway data
+{% endif %}
+
+select
+    "DATE_AND_TIME_DATA_SET_CREATED" as date_and_time_data_set_created,
+    "Week_Ending_Date" as week_ending_date,
+    "Waiting_List_Type" as waiting_list_type,
+    "Pseudo NHS_NUMBER" as pseudo_nhs_number,
+    "LOCAL_PATIENT_IDENTIFIER" as local_patient_identifier,
+    "PERSON_STATED_GENDER_CODE" as person_stated_gender_code,
+    "ETHNIC_CATEGORY" as ethnic_category,
+    "Referral_Identifier" as referral_identifier,
+    "PATIENT_PATHWAY_IDENTIFIER" as patient_pathway_identifier,
+    "ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER" as organisation_code_patient_pathway_identifier_issuer,
+    "ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER" as organisation_identifier_code_of_provider,
+    "ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT" as organisation_site_identifier_of_treatment,
+    "ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER" as organisation_identifier_code_of_commissioner,
+    "CONSULTANT_CODE" as consultant_code,
+    "REFERRAL_TO_TREATMENT_PERIOD_START_DATE" as referral_to_treatment_period_start_date,
+    "REFERRAL_TO_TREATMENT_PERIOD_END_DATE" as referral_to_treatment_period_end_date,
+    "Diagnostic_Clock_Start_Date" as diagnostic_clock_start_date,
+    "Diagnostic_Modality" as diagnostic_modality,
+    "Planned_Diagnostic_Due_Date" as planned_diagnostic_due_date,
+    "Proposed_Procedure_OPCS_Code" as proposed_procedure_opcs_code,
+    "PRIORITY_TYPE_CODE" as priority_type_code,
+    "Diagnostic_Priority_Code" as diagnostic_priority_code,
+    "Inclusion_On_Cancer_PTL" as inclusion_on_cancer_ptl,
+    "derSubmissionId" as dersubmissionid,
+    "derRowId" as derrowid,
+    "Der_Age_WeekEndingDate" as der_age_weekendingdate,
+    "Der_Age_at_Referral_To_Treatment_Period_Start_Date" as der_age_at_referral_to_treatment_period_start_date,
+    "Der_AgeBand_WeekEndingDate" as der_ageband_weekendingdate,
+    "Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date" as der_ageband_at_referral_to_treatment_period_start_date,
+    "derCCGofPractice" as derccgofpractice,
+    "derCCGofResidence" as derccgofresidence,
+    "derPracticeCode" as derpracticecode,
+    "derLSOA" as derlsoa,
+    "dmIcbCommissioner" as dmicbcommissioner,
+    "dmSubIcbCommissioner" as dmsubicbcommissioner,
+    "derLSOA2021" as derlsoa2021,
+    "Diagnostic_TCI_Date" as diagnostic_tci_date
+from {{ source('wl', 'WL_Diagnostics_Data') }}
