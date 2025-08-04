@@ -81,11 +81,11 @@ def main():
             prefix = mapping.get('staging_prefix', f'stg_{source_name}')
             
             # Determine domain based on source
-            if source_name in ['wl', 'sus_op', 'sus_apc', 'epd_primary_care', 'dictionary']:
+            if source_name in ['wl', 'sus_op', 'sus_apc', 'epd_primary_care']:
                 domain = 'commissioning'
             elif source_name in ['olids', 'olids_terminology']:
                 domain = 'olids'
-            elif source_name in ['reference']:
+            elif source_name in ['dictionary', 'reference']:
                 domain = 'shared'
             else:
                 domain = 'commissioning'  # Default

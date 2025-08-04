@@ -12,7 +12,7 @@ This project uses dbt to transform healthcare and operational data, creating ana
 - **Waiting Lists (WL)** - Patient waiting times and pathway data  
 - **SUS Unified** - Outpatient (OP) and Admitted Patient Care (APC) data
 - **EPD Primary Care** - Primary care medications and prescribing data
-- **Dictionary/PDS** - Reference data and patient demographic service data
+- **Dictionary** - Reference data and lookup tables (shared across domains)
 
 ## Architecture
 
@@ -118,9 +118,9 @@ dbt test        # Runs data quality tests
 - Primary care prescribing and medications
 - Staging models: `stg_epd_pc_*`
 
-### Dictionary/Reference (dbo)
-- PDS and reference data
-- Staging models: `stg_dictionary_*`
+### Dictionary (dbo)
+- Reference data and lookup tables (shared across domains)
+- Staging models: `stg_dictionary_*` (in shared/staging/)
 
 ## Project Structure
 

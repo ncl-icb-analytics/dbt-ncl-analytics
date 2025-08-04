@@ -92,9 +92,9 @@ The `source_mappings.yml` configuration determines:
 
 When you run `3_generate_staging_models.py`, it reads `sources.yml` and creates staging models in the appropriate folders:
 
-- `models/commissioning/staging/` - stg_wl_*, stg_sus_op_*, stg_sus_apc_*, stg_epd_pc_*, stg_dictionary_*
+- `models/commissioning/staging/` - stg_wl_*, stg_sus_op_*, stg_sus_apc_*, stg_epd_pc_*
 - `models/olids/staging/` - (future integration when OLIDS moves out of UAT)
-- `models/shared/staging/` - Cross-domain reference data staging
+- `models/shared/staging/` - stg_dictionary_* (reference/lookup data used across domains)
 
 ## Key Points
 
