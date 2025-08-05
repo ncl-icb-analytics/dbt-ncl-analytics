@@ -8,6 +8,7 @@
 #     schema: Source schema name (optional - if omitted, all schemas in database)
 #     description: What this data source contains
 #     staging_prefix: Prefix for staging models (optional, defaults to stg_{source_name})
+#     domain: Which domain folder to create staging models in (commissioning, olids, shared)
 
 version: 1
 
@@ -22,6 +23,7 @@ sources:
     schema: WL
     description: Waiting lists and patient pathway data
     staging_prefix: stg_wl
+    domain: commissioning
     
   # SUS Unified - Outpatient
   - source_name: sus_op
@@ -29,6 +31,7 @@ sources:
     schema: SUS_UNIFIED_OP
     description: SUS outpatient appointments and activity
     staging_prefix: stg_sus_op
+    domain: commissioning
     
   # SUS Unified - Admitted Patient Care
   - source_name: sus_apc
@@ -36,6 +39,7 @@ sources:
     schema: SUS_UNIFIED_APC
     description: SUS admitted patient care episodes and procedures
     staging_prefix: stg_sus_apc
+    domain: commissioning
     
   # EPD Primary Care
   - source_name: epd_primary_care
@@ -43,6 +47,7 @@ sources:
     schema: EPD_PRIMARY_CARE
     description: Primary care medications and prescribing data
     staging_prefix: stg_epd_pc
+    domain: commissioning
     
   # Dictionary/Reference Data  
   - source_name: dictionary
@@ -50,6 +55,7 @@ sources:
     schema: dbo
     description: Reference data including PDS and lookup tables
     staging_prefix: stg_dictionary
+    domain: shared
 
   # ========================================
   # OLIDS DATA SOURCES (Future Integration)

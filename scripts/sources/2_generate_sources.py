@@ -3,17 +3,18 @@ import yaml
 import os
 import sys
 
-# Default paths
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))  # Up two levels: sources -> scripts -> project
-INPUT_FILE = os.path.join(PROJECT_ROOT, 'table_metadata.csv')
-OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'models', 'sources.yml')
-MAPPINGS_FILE = os.path.join(SCRIPT_DIR, 'source_mappings.yml')
+# Path configuration
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPTS_DIR = os.path.dirname(CURRENT_DIR)  # scripts directory
+PROJECT_DIR = os.path.dirname(SCRIPTS_DIR)  # actual project root
+INPUT_FILE = os.path.join(PROJECT_DIR, 'table_metadata.csv')
+OUTPUT_FILE = os.path.join(PROJECT_DIR, 'models', 'sources.yml')
+MAPPINGS_FILE = os.path.join(CURRENT_DIR, 'source_mappings.yml')
 
 def load_source_mappings():
     """Load source mappings from YAML file"""
     if not os.path.exists(MAPPINGS_FILE):
-        print(f"Error: Mappings file not found at {MAPPINGS_FILE}")
+        print(f"Error: Mappings file not found at {MAPPINGS_FILE}", file=sys.stderr)
         sys.exit(1)
         
     with open(MAPPINGS_FILE, 'r') as f:

@@ -17,6 +17,7 @@ Edit `scripts/sources/source_mappings.yml` to define which databases and schemas
   schema: WL
   description: Waiting lists and patient pathway data
   staging_prefix: stg_wl
+  domain: commissioning
 ```
 
 ### 2. Generate Dynamic SQL Query
@@ -85,7 +86,7 @@ The `source_mappings.yml` configuration determines:
   database: DATA_LAKE
   schema: WL
   staging_prefix: stg_wl
-  # Script automatically assigns to commissioning domain
+  domain: commissioning  # Explicitly define the target domain
 ```
 
 ## Staging Model Distribution

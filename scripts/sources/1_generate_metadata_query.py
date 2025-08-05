@@ -15,10 +15,12 @@ import yaml
 import os
 import sys
 
+# Path configuration
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def load_source_mappings():
     """Load source mappings from YAML file"""
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    mappings_file = os.path.join(script_dir, 'source_mappings.yml')
+    mappings_file = os.path.join(CURRENT_DIR, 'source_mappings.yml')
     
     if not os.path.exists(mappings_file):
         print(f"Error: source_mappings.yml not found at {mappings_file}", file=sys.stderr)
@@ -99,8 +101,7 @@ def main():
     sql_query = generate_sql_query(mappings_data)
     
     # Write to file
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_file = os.path.join(script_dir, 'metadata_query.sql')
+    output_file = os.path.join(CURRENT_DIR, 'metadata_query.sql')
     
     with open(output_file, 'w') as f:
         f.write(sql_query)

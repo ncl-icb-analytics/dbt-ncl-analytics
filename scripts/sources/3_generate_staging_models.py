@@ -3,17 +3,18 @@ import os
 import sys
 import re
 
-# Paths
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))  # Up two levels: sources -> scripts -> project
-SOURCES_YML = os.path.join(PROJECT_ROOT, 'models', 'sources.yml')
+# Path configuration
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPTS_DIR = os.path.dirname(CURRENT_DIR)  # scripts directory
+PROJECT_DIR = os.path.dirname(SCRIPTS_DIR)  # actual project root
+SOURCES_YML = os.path.join(PROJECT_DIR, 'models', 'sources.yml')
 # Note: Staging directory will be determined based on source mapping
-MAPPINGS_FILE = os.path.join(SCRIPT_DIR, 'source_mappings.yml')
+MAPPINGS_FILE = os.path.join(CURRENT_DIR, 'source_mappings.yml')
 
 def load_source_mappings():
     """Load source mappings from YAML file"""
     if not os.path.exists(MAPPINGS_FILE):
-        print(f"Warning: Mappings file not found at {MAPPINGS_FILE}")
+        print(f"Warning: Mappings file not found at {MAPPINGS_FILE}", file=sys.stderr)
         return {}
         
     with open(MAPPINGS_FILE, 'r') as f:
@@ -62,8 +63,8 @@ def main():
     
     # Load sources.yml
     if not os.path.exists(SOURCES_YML):
-        print(f"Error: sources.yml not found at {SOURCES_YML}")
-        print("Please run metadata_to_dbt_yaml.py first to generate sources.yml")
+        print(f"Error: sources.yml not found at {SOURCES_YML}", file=sys.stderr)
+        print("Please run 2_generate_sources.py first to generate sources.yml", file=sys.stderr)
         sys.exit(1)
         
     with open(SOURCES_YML) as f:
@@ -79,26 +80,17 @@ def main():
         if source_name in mappings:
             mapping = mappings[source_name]
             prefix = mapping.get('staging_prefix', f'stg_{source_name}')
-            
-            # Determine domain based on source
-            if source_name in ['wl', 'sus_op', 'sus_apc', 'epd_primary_care']:
-                domain = 'commissioning'
-            elif source_name in ['olids', 'olids_terminology']:
-                domain = 'olids'
-            elif source_name in ['dictionary', 'reference']:
-                domain = 'shared'
-            else:
-                domain = 'commissioning'  # Default
+            domain = mapping.get('domain', 'commissioning')  # Default to commissioning if not specified
         else:
             prefix = f'stg_{source_name}'
-            domain = 'commissioning'
+            domain = 'commissioning'  # Default
             print(f"Warning: No mapping found for source '{source_name}', using defaults")
         
         # Set staging directory based on domain
         if domain == 'shared':
-            staging_dir = os.path.join(PROJECT_ROOT, 'models', 'shared', 'staging')
+            staging_dir = os.path.join(PROJECT_DIR, 'models', 'shared', 'staging')
         else:
-            staging_dir = os.path.join(PROJECT_ROOT, 'models', domain, 'staging')
+            staging_dir = os.path.join(PROJECT_DIR, 'models', domain, 'staging')
         
         os.makedirs(staging_dir, exist_ok=True)
 
