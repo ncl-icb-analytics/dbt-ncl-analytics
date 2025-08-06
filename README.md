@@ -63,21 +63,21 @@ dbt debug
 
 Edit `scripts/sources/source_mappings.yml` to define your data sources and mappings.
 
-### Step 2: Extract Schema Metadata
+### Step 2: Extract & Download Schema Metadata
 
 Generate dynamic SQL query based on your source mappings:
 
 ```bash
 # Generate dynamic SQL query from your source mappings
-python scripts/sources/1_generate_metadata_query.py
+python scripts/sources/1a_generate_metadata_query.py
 # This creates scripts/sources/metadata_query.sql
 ```
 
-Then run the generated SQL in Snowflake:
-1. Open `scripts/sources/metadata_query.sql` 
-2. Copy and paste into Snowflake UI
-3. Execute query
-4. Export results as CSV and save as `table_metadata.csv` in the project root directory
+```bash
+# Generate dynamic SQL query from your source mappings
+python scripts/sources/1b_extract_metadata_query.py
+# This creates table_metadata.csv
+```
 
 ### Step 3: Generate dbt Sources
 
