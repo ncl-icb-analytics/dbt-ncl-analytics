@@ -111,12 +111,14 @@ def main():
             
             column_list = ',\n    '.join(column_mappings)
             
+            # Add description if available
+            description_comment = ""
+            if source.get('description'):
+                description_comment = f"-- Description: {source.get('description')}\n"
+            
             model_sql = f"""-- Staging model for {source_name}.{table_name}
 -- Source: {source['database']}.{source['schema']}
-{{% if source.get('description') %}}
--- Description: {source.get('description')}
-{{% endif %}}
-
+{description_comment}
 select
     {column_list}
 from {{{{ source('{source_name}', '{table_name}') }}}}"""

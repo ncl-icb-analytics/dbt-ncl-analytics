@@ -1,8 +1,6 @@
 -- Staging model for sus_apc.system.transaction.cds_recipients
 -- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
-{% if source.get('description') %}
 -- Description: SUS admitted patient care episodes and procedures
-{% endif %}
 
 select
     "ROWNUMBER_ID" as rownumber_id,

@@ -1,8 +1,6 @@
 -- Staging model for sus_op.appointment.commissioning.grouping.unbundled_hrg
 -- Source: "DATA_LAKE"."SUS_UNIFIED_OP"
-{% if source.get('description') %}
 -- Description: SUS outpatient appointments and activity
-{% endif %}
 
 select
     "multiple_applies" as multiple_applies,

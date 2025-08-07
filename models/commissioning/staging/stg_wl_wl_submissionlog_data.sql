@@ -1,8 +1,6 @@
 -- Staging model for wl.WL_SubmissionLog_Data
 -- Source: "DATA_LAKE"."WL"
-{% if source.get('description') %}
 -- Description: Waiting lists and patient pathway data
-{% endif %}
 
 select
     "derSubmissionID" as dersubmissionid,

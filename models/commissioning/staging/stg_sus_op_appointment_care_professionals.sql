@@ -1,8 +1,6 @@
 -- Staging model for sus_op.appointment.care_professionals
 -- Source: "DATA_LAKE"."SUS_UNIFIED_OP"
-{% if source.get('description') %}
 -- Description: SUS outpatient appointments and activity
-{% endif %}
 
 select
     "professional_registration_identifier" as professional_registration_identifier,

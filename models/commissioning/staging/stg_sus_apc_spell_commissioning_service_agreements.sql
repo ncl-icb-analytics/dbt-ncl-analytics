@@ -1,8 +1,6 @@
 -- Staging model for sus_apc.spell.commissioning.service_agreements
 -- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
-{% if source.get('description') %}
 -- Description: SUS admitted patient care episodes and procedures
-{% endif %}
 
 select
     "commissioner_assignment_period_end_date" as commissioner_assignment_period_end_date,

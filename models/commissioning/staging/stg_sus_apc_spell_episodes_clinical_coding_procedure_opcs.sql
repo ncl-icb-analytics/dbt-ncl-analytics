@@ -1,8 +1,6 @@
 -- Staging model for sus_apc.spell.episodes.clinical_coding.procedure.opcs
 -- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
-{% if source.get('description') %}
 -- Description: SUS admitted patient care episodes and procedures
-{% endif %}
 
 select
     "dmicImportLogId" as dmicimportlogid,

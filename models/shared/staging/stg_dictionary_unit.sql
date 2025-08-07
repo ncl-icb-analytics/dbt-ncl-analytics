@@ -1,8 +1,6 @@
 -- Staging model for dictionary.Unit
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_UnitID" as sk_unitid,

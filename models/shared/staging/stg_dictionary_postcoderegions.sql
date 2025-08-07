@@ -1,8 +1,6 @@
 -- Staging model for dictionary.PostcodeRegions
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "OSNorthing" as osnorthing,

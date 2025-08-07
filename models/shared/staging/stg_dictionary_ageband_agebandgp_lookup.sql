@@ -1,8 +1,6 @@
 -- Staging model for dictionary.AgeBand_AgeBandGP_Lookup
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_AgeBandID" as sk_agebandid,

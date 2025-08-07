@@ -1,8 +1,6 @@
 -- Staging model for sus_op.appointment.clinical_coding.diagnosis.icd
 -- Source: "DATA_LAKE"."SUS_UNIFIED_OP"
-{% if source.get('description') %}
 -- Description: SUS outpatient appointments and activity
-{% endif %}
 
 select
     "code" as code,

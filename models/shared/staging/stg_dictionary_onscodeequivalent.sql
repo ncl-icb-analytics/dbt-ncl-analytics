@@ -1,8 +1,6 @@
 -- Staging model for dictionary.ONSCodeEquivalent
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "Geography_Code" as geography_code,

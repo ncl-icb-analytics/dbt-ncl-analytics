@@ -1,8 +1,6 @@
 -- Staging model for sus_op.system.transaction.cds_copy_recipients
 -- Source: "DATA_LAKE"."SUS_UNIFIED_OP"
-{% if source.get('description') %}
 -- Description: SUS outpatient appointments and activity
-{% endif %}
 
 select
     "CDS_COPY_RECIPIENTS_ID" as cds_copy_recipients_id,
