@@ -62,9 +62,14 @@ if __name__ == "__main__":
         print(f"Shape: {df.shape}")
         print(df.head())
         df.to_csv(output_file, index=False)
+        print(f"\nMetadata extracted to {output_file}")
+        print(f"\nNext step: Generate sources.yml file:")
+        print(f"  python scripts/sources/2_generate_sources.py")
         
     except FileNotFoundError:
         print(f"SQL file not found: {sql_file_path}")
+        print("Please run script 1a first to generate the metadata query:")
+        print("  python scripts/sources/1a_generate_metadata_query.py")
     except Exception as e:
         print(f"Error executing query: {str(e)}")
     finally:

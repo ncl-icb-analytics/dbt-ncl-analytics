@@ -135,6 +135,8 @@ def main():
         
     print(f"\nGenerated {OUTPUT_FILE}")
     print(f"Created {len(sources)} data sources with {sum(len(s['tables']) for s in sources)} total tables")
+    print(f"\nNext step: Generate staging models:")
+    print(f"  python scripts/sources/3_generate_staging_models.py")
 
 if __name__ == '__main__':
     main()
