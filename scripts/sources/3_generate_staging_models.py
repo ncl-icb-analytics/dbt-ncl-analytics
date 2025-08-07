@@ -137,6 +137,12 @@ from {{{{ source('{source_name}', '{table_name}') }}}}"""
     for domain, count in models_by_domain.items():
         if count > 0:
             print(f"  - {domain}: {count} models")
+    
+    print(f"\n✅ Staging model generation complete!")
+    print(f"Next steps:")
+    print(f"  1. Review generated staging models in models/<domain>/staging/")
+    print(f"  2. Run dbt to test the models: dbt run --select staging")
+    print(f"  3. Begin building your transformation models in modelling/ directories")
 
 if __name__ == '__main__':
     main()

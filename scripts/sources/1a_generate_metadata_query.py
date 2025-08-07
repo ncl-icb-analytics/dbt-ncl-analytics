@@ -107,8 +107,8 @@ def main():
         f.write(sql_query)
     
     print(f"Query saved to {output_file}")
-    print(f"Copy the SQL content and run in Snowflake UI")
-    print(f"Export results as CSV to table_metadata.csv in project root")
+    print(f"\nNext step: Run script 1b to extract metadata automatically:")
+    print(f"  python scripts/sources/1b_extract_metadata.py")
 
 if __name__ == '__main__':
     main()
