@@ -1,8 +1,6 @@
 -- Staging model for dictionary.Dates_Month_Year
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_YearMonth" as sk_yearmonth,

@@ -1,8 +1,6 @@
 -- Staging model for sus_apc.spell.episodes
 -- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
-{% if source.get('description') %}
 -- Description: SUS admitted patient care episodes and procedures
-{% endif %}
 
 select
     "commissioning.grouping.code_cleaning_applied" as commissioning_grouping_code_cleaning_applied,

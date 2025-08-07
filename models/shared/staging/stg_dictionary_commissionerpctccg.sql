@@ -1,8 +1,6 @@
 -- Staging model for dictionary.CommissionerPCTCCG
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_CommissionerID_PCT" as sk_commissionerid_pct,

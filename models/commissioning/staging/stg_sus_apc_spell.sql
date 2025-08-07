@@ -1,8 +1,6 @@
 -- Staging model for sus_apc.spell
 -- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
-{% if source.get('description') %}
 -- Description: SUS admitted patient care episodes and procedures
-{% endif %}
 
 select
     "spell.patient.registration_derived.responsible_ccg_from_pds" as spell_patient_registration_derived_responsible_ccg_from_pds,

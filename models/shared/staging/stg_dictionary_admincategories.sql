@@ -1,8 +1,6 @@
 -- Staging model for dictionary.AdminCategories
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_AdminCategoryID" as sk_admincategoryid,

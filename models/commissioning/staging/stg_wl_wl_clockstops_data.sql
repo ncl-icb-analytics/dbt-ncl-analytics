@@ -1,8 +1,6 @@
 -- Staging model for wl.WL_ClockStops_Data
 -- Source: "DATA_LAKE"."WL"
-{% if source.get('description') %}
 -- Description: Waiting lists and patient pathway data
-{% endif %}
 
 select
     "DATE_AND_TIME_DATA_SET_CREATED" as date_and_time_data_set_created,

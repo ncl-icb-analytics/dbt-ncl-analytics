@@ -1,8 +1,6 @@
 -- Staging model for sus_apc.spell.episodes.care_professionals
 -- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
-{% if source.get('description') %}
 -- Description: SUS admitted patient care episodes and procedures
-{% endif %}
 
 select
     "professional_registration_identifier" as professional_registration_identifier,

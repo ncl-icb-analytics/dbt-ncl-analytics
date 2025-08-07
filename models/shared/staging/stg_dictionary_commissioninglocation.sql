@@ -1,8 +1,6 @@
 -- Staging model for dictionary.CommissioningLocation
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_CCGLocationId" as sk_ccglocationid,

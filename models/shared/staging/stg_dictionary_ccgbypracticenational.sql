@@ -1,8 +1,6 @@
 -- Staging model for dictionary.CCGByPracticeNational
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_ServiceProviderID" as sk_serviceproviderid,

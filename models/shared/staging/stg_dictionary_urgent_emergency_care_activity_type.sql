@@ -1,8 +1,6 @@
 -- Staging model for dictionary.Urgent_Emergency_Care_Activity_Type
 -- Source: "Dictionary"."dbo"
-{% if source.get('description') %}
 -- Description: Reference data including PDS and lookup tables
-{% endif %}
 
 select
     "SK_Urgent_Emergency_Care_Activity_Type_ID" as sk_urgent_emergency_care_activity_type_id,
