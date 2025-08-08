@@ -47,6 +47,19 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- sus_ae: SUS emergency care attendances and activity
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'SUS_AE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SUS_AE'
+  
+  UNION ALL
+  
     -- epd_primary_care: Primary care medications and prescribing data
   SELECT 
     'DATA_LAKE' as database_name,
