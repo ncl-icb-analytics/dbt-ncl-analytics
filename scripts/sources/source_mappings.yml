@@ -40,6 +40,14 @@ sources:
     description: SUS admitted patient care episodes and procedures
     staging_prefix: stg_sus_apc
     domain: commissioning
+  
+   # SUS Unified - Emergency Care
+  - source_name: sus_ae
+    database: DATA_LAKE
+    schema: SUS_AE
+    description: SUS emergency care attendances and activity
+    staging_prefix: stg_sus_ae
+    domain: commissioning
     
   # EPD Primary Care
   - source_name: epd_primary_care
