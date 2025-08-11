@@ -1,5 +1,13 @@
 {{ config(materialized='table') }}
 
+/*
+Count of all active waiting lists per patient.
+
+Clinical Purpose:
+- Care coordination management across providers
+
+Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
+*/
 
 SELECT
     patient_id,
