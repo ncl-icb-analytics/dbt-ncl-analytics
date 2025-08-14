@@ -75,7 +75,7 @@ python scripts/sources/1a_generate_metadata_query.py
 
 ```bash
 # Generate dynamic SQL query from your source mappings
-python scripts/sources/1b_extract_metadata_query.py
+python scripts\sources\1b_extract_metadata.py
 # This creates table_metadata.csv
 ```
 

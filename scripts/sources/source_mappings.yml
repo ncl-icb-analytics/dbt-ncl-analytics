@@ -44,7 +44,7 @@ sources:
    # SUS Unified - Emergency Care
   - source_name: sus_ae
     database: DATA_LAKE
-    schema: SUS_AE
+    schema: SUS_UNIFIED_ECDS
     description: SUS emergency care attendances and activity
     staging_prefix: stg_sus_ae
     domain: commissioning
@@ -56,7 +56,7 @@ sources:
     description: Primary care medications and prescribing data
     staging_prefix: stg_epd_pc
     domain: commissioning
-    
+  
   # Dictionary/Reference Data  
   - source_name: dictionary
     database: Dictionary
