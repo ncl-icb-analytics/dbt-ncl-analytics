@@ -196,5 +196,10 @@ select
     "system.interchange.latest_episode_received_time" as system_interchange_latest_episode_received_time,
     "spell.patient.identity.ethnic_category_2021" as spell_patient_identity_ethnic_category_2021,
     "spell.referral.latest_clinically_appropriate_date" as spell_referral_latest_clinically_appropriate_date,
-    "spell.patient.mother.overseas_visitor_charging_category_at_cds_activity_date" as spell_patient_mother_overseas_visitor_charging_category_at_cds_activity_date
+    "spell.patient.mother.overseas_visitor_charging_category_at_cds_activity_date" as spell_patient_mother_overseas_visitor_charging_category_at_cds_activity_date,
+    LEFT("spell.commissioning.service_agreement.provider", 3) AS provider_code3,
+    LEFT("spell.commissioning.commissioner_assignment.commissioner", 3) AS comm_code3,
+    LEFT("spell.commissioning.commissioner_assignment.commissioner", 5) AS comm_code5
 from {{ source('sus_apc', 'spell') }}
+WHERE "spell.discharge.date" IS NOT NULL
+  AND "spell.open_spell_indicator" = 0
