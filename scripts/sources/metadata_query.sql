@@ -50,13 +50,13 @@ WITH schema_metadata AS (
     -- sus_ae: SUS emergency care attendances and activity
   SELECT 
     'DATA_LAKE' as database_name,
-    'SUS_AE' as schema_name,
+    'SUS_UNIFIED_ECDS' as schema_name,
     table_name,
     column_name,
     data_type,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'SUS_AE'
+  WHERE table_schema = 'SUS_UNIFIED_ECDS'
   
   UNION ALL
   
