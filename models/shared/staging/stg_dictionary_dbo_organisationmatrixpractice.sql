@@ -1,0 +1,10 @@
+-- Staging model for dictionary_dbo.OrganisationMatrixPractice
+-- Source: "Dictionary"."dbo"
+-- Description: Reference data including PDS and lookup tables
+
+select
+    "SK_OrganisationID_Practice" as sk_organisationid_practice,
+    "SK_OrganisationID_Network" as sk_organisationid_network,
+    "SK_OrganisationID_Commissioner" as sk_organisationid_commissioner,
+    "SK_OrganisationID_STP" as sk_organisationid_stp
+from {{ source('dictionary_dbo', 'OrganisationMatrixPractice') }}
