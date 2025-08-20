@@ -48,7 +48,15 @@ sources:
     description: SUS emergency care attendances and activity
     staging_prefix: stg_sus_ae
     domain: commissioning
-    
+
+  # eRS referrals
+  - source_name: eRS_primary_care
+    database: DATA_LAKE
+    schema: ERS
+    description: Primary care referrals data
+    staging_prefix: stg_ers_pc
+    domain: commissioning
+
   # EPD Primary Care
   - source_name: epd_primary_care
     database: DATA_LAKE
@@ -95,6 +103,14 @@ sources:
     schema: Snomed
     description: Reference data for snomed
     staging_prefix: stg_dictionary_snomed
+    domain: shared
+
+  # eRS dictionary
+  - source_name: dictionary_eRS
+    database: Dictionary
+    schema: E-Referral
+    description: Primary care referrals lookups
+    staging_prefix: stg_dictionary_ers
     domain: shared
   # ========================================
   # OLIDS DATA SOURCES (Future Integration)

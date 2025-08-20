@@ -60,6 +60,19 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- eRS_primary_care: Primary care referrals data
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'ERS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'ERS'
+  
+  UNION ALL
+  
     -- epd_primary_care: Primary care medications and prescribing data
   SELECT 
     'DATA_LAKE' as database_name,
@@ -135,6 +148,19 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'Snomed'
+  
+  UNION ALL
+  
+    -- dictionary_eRS: Primary care referrals lookups
+  SELECT 
+    'Dictionary' as database_name,
+    'E-Referral' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'E-Referral'
 )
 
 SELECT 
