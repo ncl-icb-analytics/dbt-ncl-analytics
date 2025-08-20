@@ -1,0 +1,23 @@
+models:
+  - name: fct_person_ers_recent
+    description: "Summary of eRS referrals for each person in the last 2 years"
+    columns:
+      - name: nhs_number_pseudo
+        data_type: varchar
+        description: "sk_id linkable across commissioning models"
+
+      - name: ers_total_count
+        data_type: number
+        description: "Total number of eRS referrals for the person in the last 2 years"
+
+      - name: ers_accepted_count
+        data_type: number
+        description: "Total number of eRS referrals accepted for the person in the last 2 years"
+
+      - name: ers_specialty_count
+        data_type: number
+        description: "Number of unique specialities for eRS referrals in the last 2 years"
+
+      - name: ers_provider_count
+        data_type: number
+        description: "Number of unique providers accepting eRS referrals in the last 2 years"
