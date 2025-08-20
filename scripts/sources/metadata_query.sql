@@ -73,7 +73,7 @@ WITH schema_metadata AS (
   
   UNION ALL
   
-    -- dictionary: Reference data including PDS and lookup tables
+    -- dictionary_dbo: Reference data including PDS and lookup tables
   SELECT 
     'Dictionary' as database_name,
     'dbo' as schema_name,
@@ -83,6 +83,58 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'dbo'
+  
+  UNION ALL
+  
+    -- dictionary_ecds: Reference data for ECDS
+  SELECT 
+    'Dictionary' as database_name,
+    'ECDS_ETOS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'ECDS_ETOS'
+  
+  UNION ALL
+  
+    -- dictionary_op: Reference data for outpatient procedures and treatments
+  SELECT 
+    'Dictionary' as database_name,
+    'OP' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'OP'
+  
+  UNION ALL
+  
+    -- dictionary_ip: Reference data for inpatient procedures and treatments
+  SELECT 
+    'Dictionary' as database_name,
+    'IP' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'IP'
+  
+  UNION ALL
+  
+    -- dictionary_snomed: Reference data for snomed
+  SELECT 
+    'Dictionary' as database_name,
+    'Snomed' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'Snomed'
 )
 
 SELECT 

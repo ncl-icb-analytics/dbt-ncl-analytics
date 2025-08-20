@@ -1,0 +1,16 @@
+-- Staging model for dictionary_dbo.HRG
+-- Source: "Dictionary"."dbo"
+-- Description: Reference data including PDS and lookup tables
+
+select
+    "SK_HRGID" as sk_hrgid,
+    "HRGCode" as hrgcode,
+    "HRGDescription" as hrgdescription,
+    "HRGChapterKey" as hrgchapterkey,
+    "HRGChapter" as hrgchapter,
+    "HRGSubchapterKey" as hrgsubchapterkey,
+    "HRGSubchapter" as hrgsubchapter,
+    "HRG_Version" as hrg_version,
+    "DateCreated" as datecreated,
+    "DateUpdated" as dateupdated
+from {{ source('dictionary_dbo', 'HRG') }}

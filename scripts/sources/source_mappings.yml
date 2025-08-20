@@ -57,14 +57,45 @@ sources:
     staging_prefix: stg_epd_pc
     domain: commissioning
   
-  # Dictionary/Reference Data  
-  - source_name: dictionary
+  # Dictionary/Reference Data dbo
+  - source_name: dictionary_dbo
     database: Dictionary
     schema: dbo
     description: Reference data including PDS and lookup tables
-    staging_prefix: stg_dictionary
+    staging_prefix: stg_dictionary_dbo
     domain: shared
 
+  # Dictionary/Reference Data ECDS_ETOS
+  - source_name: dictionary_ecds
+    database: Dictionary
+    schema: ECDS_ETOS
+    description: Reference data for ECDS
+    staging_prefix: stg_dictionary_ecds
+    domain: shared
+
+  # Dictionary/Reference Data OP
+  - source_name: dictionary_op
+    database: Dictionary
+    schema: OP
+    description: Reference data for outpatient procedures and treatments
+    staging_prefix: stg_dictionary_op
+    domain: shared
+
+    # Dictionary/Reference Data IP
+  - source_name: dictionary_ip
+    database: Dictionary
+    schema: IP
+    description: Reference data for inpatient procedures and treatments
+    staging_prefix: stg_dictionary_ip
+    domain: shared
+
+  # Dictionary/Reference Data SNOMED
+  - source_name: dictionary_snomed
+    database: Dictionary
+    schema: Snomed
+    description: Reference data for snomed
+    staging_prefix: stg_dictionary_snomed
+    domain: shared
   # ========================================
   # OLIDS DATA SOURCES (Future Integration)
   # ========================================
