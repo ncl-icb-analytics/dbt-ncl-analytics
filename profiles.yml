@@ -1,0 +1,24 @@
+ncl_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: ''  # Empty for native execution
+      user: ''     # Empty for native execution
+      role: DBT_ADMIN
+      database: MODELLING  # Base database name - your macro will prepend DEV__
+      schema: DBT_DEV     # Default schema (rarely used due to custom schemas)
+      warehouse: WH_NCL_ENGINEERING_XS
+      threads: 16
+      client_session_keep_alive: false
+    
+    prod:
+      type: snowflake
+      account: ''  # Empty for native execution
+      user: ''     # Empty for native execution  
+      role: DBT_ADMIN
+      database: MODELLING  # Base database name - no prefix for prod
+      schema: DBT_PROD    # Default schema (rarely used due to custom schemas)
+      warehouse: WH_NCL_ENGINEERING_XS
+      threads: 16
+      client_session_keep_alive: false
