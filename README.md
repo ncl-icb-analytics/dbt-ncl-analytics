@@ -10,8 +10,9 @@ This project uses dbt to transform healthcare and operational data, creating ana
 
 **Data sources included:**
 - **Waiting Lists (WL)** - Patient waiting times and pathway data  
-- **SUS Unified** - Outpatient (OP) and Admitted Patient Care (APC) data
+- **SUS Unified** - Outpatient (OP), Admitted Patient Care (APC) and Emergency Care Dataset (ECDS) data
 - **EPD Primary Care** - Primary care medications and prescribing data
+- **eRS electronic Referral Service** - Primary care referrals data
 - **Dictionary** - Reference data and lookup tables (shared across domains)
 
 ## Architecture
@@ -24,7 +25,7 @@ DATA_LAKE → Staging (MODELLING.DBT_STAGING) → Intermediate (MODELLING.*) →
 
 **Database Structure:**
 - `DATA_LAKE.*` - Source data (WL, SUS_UNIFIED_OP, SUS_UNIFIED_APC, EPD_PRIMARY_CARE)
-- `Dictionary.dbo` - Reference data and lookups
+- `Dictionary.*` - Reference data and lookups (Dictionary schemas staged as required)
 - `MODELLING.*` - Intermediate processing (DEV__ prefix for dev)
 - `REPORTING.*` - Final marts (DEV__ prefix for dev) 
 
@@ -75,8 +76,8 @@ python scripts/sources/1a_generate_metadata_query.py
 
 ```bash
 # Generate dynamic SQL query from your source mappings
-python scripts\sources\1b_extract_metadata.py
-# This creates table_metadata.csv
+python scripts\\sources\\1b_extract_metadata.py
+# This creates table_metadata.csv and saves it locally
 ```
 
 ### Step 3: Generate dbt Sources
@@ -114,13 +115,22 @@ dbt test        # Runs data quality tests
 - Inpatient episodes and procedures  
 - Staging models: `stg_sus_apc_*`
 
+### SUS Unified - EMERGENCY CARE DATASET (SUS_UNIFIED_ECDS)
+- Emergency care episodes and procedures  
+- Staging models: `stg_sus_ecds_*`
+
 ### EPD Primary Care (EPD_PRIMARY_CARE)
 - Primary care prescribing and medications
 - Staging models: `stg_epd_pc_*`
 
-### Dictionary (dbo)
+### eRS Primary Care (eRS_PRIMARY_CARE)
+- electronic referral system data for primary care referrals to outpatient services and first appointment bookings
+- Staging models: `stg_ers_pc_*`
+
+### Dictionary
 - Reference data and lookup tables (shared across domains)
-- Staging models: `stg_dictionary_*` (in shared/staging/)
+- Schemas staged as required
+- Staging models: `stg_dictionary_*_*` (in shared/staging/) e.g., stg_dictionary_dbo_*
 
 ## Project Structure
 
@@ -184,6 +194,12 @@ dbt run -s shared                  # Build all shared models
 dbt run -s commissioning.staging   # Build only commissioning staging models
 ```
 
+**For faster YML development:**
+Print a YML outline into the terminal to paste into a new .yml. Descriptions will still need to be added.
+```bash
+dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'  
+```
+
 ## Environment Handling
 
 - **Dev**: Models built in `DEV__MODELLING.*`, `DEV__REPORTING.*`, and `DEV__PUBLISHED_REPORTING__SECONDARY_USE.*`
@@ -194,7 +210,7 @@ dbt run -s commissioning.staging   # Build only commissioning staging models
 
 This project uses the **ANALYST** role which has access to:
 - `DATA_LAKE.*` databases for source data
-- `Dictionary.dbo` for reference data  
+- `Dictionary.*` for reference data  
 - `MODELLING.*` for intermediate processing
 - `REPORTING.*` for final marts
 
