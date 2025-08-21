@@ -5,7 +5,7 @@ ncl_analytics:
       type: snowflake
       account: ''  # Empty for native execution
       user: ''     # Empty for native execution
-      # role: ENGINEER # Removed for native execution
+      role: ''     # Empty for native execution
       database: MODELLING  # Base database name - your macro will prepend DEV__
       schema: DBT_DEV     # Default schema (rarely used due to custom schemas)
       warehouse: WH_NCL_ENGINEERING_XS
@@ -16,7 +16,7 @@ ncl_analytics:
       type: snowflake
       account: ''  # Empty for native execution
       user: ''     # Empty for native execution  
-      # role: ENGINEER # Removed for native execution
+      role: ''     # Empty for native execution
       database: MODELLING  # Base database name - no prefix for prod
       schema: DBT_PROD    # Default schema (rarely used due to custom schemas)
       warehouse: WH_NCL_ENGINEERING_XS
