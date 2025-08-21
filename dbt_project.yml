@@ -23,6 +23,8 @@ tests:
 models:
   ncl_analytics:
     +materialized: table
+    +persist_docs:
+      columns: true
     
     # Commissioning analytics models
     commissioning:
