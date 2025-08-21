@@ -108,7 +108,7 @@ def main():
     
     print(f"Query saved to {output_file}")
     print(f"\nNext step: Run script 1b to extract metadata automatically:")
-    print(f"  python scripts\sources\\1b_extract_metadata.py")
+    print(f"python scripts\\sources\\1b_extract_metadata.py")
 
 if __name__ == '__main__':
     main()
