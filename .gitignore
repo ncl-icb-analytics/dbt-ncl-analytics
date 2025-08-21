@@ -1,6 +1,5 @@
 # dbt
 target/
-dbt_packages/
 profiles.yml
 logs/
 package-lock.yml
