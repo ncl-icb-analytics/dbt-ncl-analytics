@@ -1,6 +1,6 @@
 # dbt
 target/
-profiles.yml
+# profiles.yml is tracked but developers should use skip-worktree for local changes
 logs/
 package-lock.yml
 dbt_internal_packages/

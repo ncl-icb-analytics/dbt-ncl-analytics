@@ -46,12 +46,14 @@ pip install -r requirements.txt
 cp env.example .env
 # Edit .env file with your Snowflake credentials (ANALYST role)
 
-# 4. Setup profile
-cp profiles.yml.template profiles.yml
-# Edit profiles.yml as needed
-
-# 5. Run environment setup script
+# 4. Run environment setup script
+# This will activate venv, load .env, and configure Git to ignore local profiles.yml changes
 .\start_dbt.ps1
+
+# 5. Setup local profiles for development
+# Edit profiles.yml with your Snowflake credentials
+# (See profiles.yml.example for reference)
+# Note: start_dbt.ps1 automatically configures Git to ignore your local changes
 
 # 6. Install dbt dependencies and test connection
 dbt deps
