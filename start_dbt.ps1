@@ -6,10 +6,10 @@ $currentHooksPath = git config core.hooksPath
 
 if ($currentHooksPath -ne ".githooks") {
     git config core.hooksPath .githooks
-    Write-Host "✓ Git hooks configured to use .githooks directory" -ForegroundColor Green
+    Write-Host "[OK] Git hooks configured to use .githooks directory" -ForegroundColor Green
     Write-Host "  Pre-commit hook will warn before committing profiles.yml" -ForegroundColor Gray
 } else {
-    Write-Host "✓ Git hooks already configured" -ForegroundColor Green
+    Write-Host "[OK] Git hooks already configured" -ForegroundColor Green
 }
 Write-Host ""
 
@@ -23,12 +23,12 @@ if (-not $skipWorktreeStatus) {
     git update-index --skip-worktree profiles.yml 2>$null
     
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ Git will now ignore your local profiles.yml changes" -ForegroundColor Green
+        Write-Host "[OK] Git will now ignore your local profiles.yml changes" -ForegroundColor Green
     } else {
         Write-Host "Note: Could not set skip-worktree on profiles.yml (may not be tracked yet)" -ForegroundColor Gray
     }
 } else {
-    Write-Host "✓ Git is already ignoring local profiles.yml changes" -ForegroundColor Green
+    Write-Host "[OK] Git is already ignoring local profiles.yml changes" -ForegroundColor Green
 }
 
 Write-Host "  To update the repo's profiles.yml (for Snowflake native execution): git update-index --no-skip-worktree profiles.yml" -ForegroundColor Gray
@@ -59,7 +59,7 @@ foreach ($line in $lines) {
 }
 
 if ($emptyAccounts.Count -gt 0) {
-    Write-Host "⚠ WARNING: The following profiles have empty credentials: $($emptyAccounts -join ', ')" -ForegroundColor Yellow
+    Write-Host "[WARNING] The following profiles have empty credentials: $($emptyAccounts -join ', ')" -ForegroundColor Yellow
     Write-Host "  These are configured for Snowflake native execution (runs inside Snowflake)" -ForegroundColor Yellow
     Write-Host "  For local development, you need to add your Snowflake credentials:" -ForegroundColor Yellow
     Write-Host "    - account: Your Snowflake account" -ForegroundColor Gray
@@ -68,7 +68,7 @@ if ($emptyAccounts.Count -gt 0) {
     Write-Host "  See profiles.yml.example for reference" -ForegroundColor Gray
     Write-Host ""
 } else {
-    Write-Host "✓ profiles.yml appears to be fully configured" -ForegroundColor Green
+    Write-Host "[OK] profiles.yml appears to be fully configured" -ForegroundColor Green
     Write-Host ""
 }
 
@@ -78,10 +78,10 @@ $venvPath = "venv\Scripts\Activate.ps1"
 & $venvPath
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✓ Virtual environment activated" -ForegroundColor Green
+    Write-Host "[OK] Virtual environment activated" -ForegroundColor Green
     Write-Host "  Python: $(python --version 2>&1)" -ForegroundColor Gray
 } else {
-    Write-Host "✗ Failed to activate virtual environment" -ForegroundColor Red
+    Write-Host "[ERROR] Failed to activate virtual environment" -ForegroundColor Red
     Write-Host "  Run 'python -m venv venv' to create it first" -ForegroundColor Yellow
     exit 1
 }
@@ -99,7 +99,7 @@ if (Test-Path $envPath) {
           $envCount++
       }
     }
-    Write-Host "✓ Loaded $envCount environment variables" -ForegroundColor Green
+    Write-Host "[OK] Loaded $envCount environment variables" -ForegroundColor Green
     
     # Show key variables (without exposing sensitive values)
     if ($env:SNOWFLAKE_ACCOUNT) {
@@ -112,10 +112,10 @@ if (Test-Path $envPath) {
         Write-Host "  SNOWFLAKE_ROLE: $env:SNOWFLAKE_ROLE" -ForegroundColor Gray
     }
 } else {
-    Write-Host "⚠ No .env file found" -ForegroundColor Yellow
+    Write-Host "[WARNING] No .env file found" -ForegroundColor Yellow
     Write-Host "  Copy env.example to .env and add your credentials" -ForegroundColor Gray
 }
 Write-Host ""
 
-Write-Host 'Ready! You can now run dbt commands.' -ForegroundColor Green
-Write-Host 'Try: dbt debug (to test your connection)' -ForegroundColor Gray
+Write-Host "Ready! You can now run dbt commands." -ForegroundColor Green
+Write-Host "Try: dbt debug (to test your connection)" -ForegroundColor Gray
