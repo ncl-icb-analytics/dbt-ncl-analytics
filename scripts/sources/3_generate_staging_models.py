@@ -39,16 +39,23 @@ def sanitise_filename(name):
 
 def sanitise_column_name(col_name):
     """Convert column name to SQL-safe identifier"""
-    
     # Replace dots, slashes, hyphens, spaces, and other problematic characters
     safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', col_name)
     # Remove multiple consecutive underscores
     safe_name = re.sub(r'_+', '_', safe_name)
     # Remove leading/trailing underscores
     safe_name = safe_name.strip('_')
-
-    # Deal with camel case including starting with accroynms - known issue with lowercase of within camel e.g., derCCGofPractice -> der_cc_gof_practice
-    safe_name = re.sub('([a-z0-9])([A-Z])|([A-Z])([A-Z][a-z])', r'\1\3_\2\4', safe_name)
+    
+    # Deal with camel case including starting with acronyms
+    # First handle the special "of" cases (both "Of" and "of") after acronyms
+    safe_name = re.sub(r'([A-Z]+)([Oo]f)([A-Z])', r'\1_\2_\3', safe_name)
+    # Add underscores before uppercase letters that follow lowercase letters or numbers
+    safe_name = re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', safe_name)
+    # Handle acronyms followed by PascalCase (like GPPractice -> GP_Practice, CCG -> CCG)
+    # This splits when multiple capitals are followed by a capital then lowercase
+    safe_name = re.sub(r'([A-Z])([A-Z]+)([A-Z][a-z])', r'\1\2_\3', safe_name)
+    # Convert to lowercase
+    safe_name = safe_name.lower()
 
     # Consistent pseudo key naming  - currently removed due to ambiguous pseudo renaming (2+ pseudo keys identified)
     # if 'pseudo' in safe_name.lower() and 'nhs_number' in safe_name.lower():
