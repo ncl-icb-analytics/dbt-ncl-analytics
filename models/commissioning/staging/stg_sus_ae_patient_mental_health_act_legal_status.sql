@@ -6,7 +6,7 @@ select
     "start_time" as start_time,
     "expiry_date" as expiry_date,
     "expiry_time" as expiry_time,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "assignment_timestamp" as assignment_timestamp,
     "expiry_timestamp" as expiry_timestamp,
     "ROWNUMBER_ID" as rownumber_id,

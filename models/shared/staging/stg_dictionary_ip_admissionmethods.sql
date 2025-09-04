@@ -3,11 +3,11 @@
 -- Description: Reference data for inpatient procedures and treatments
 
 select
-    "SK_AdmissionMethodID" as sk_admissionmethodid,
-    "BK_AdmissionMethodCode" as bk_admissionmethodcode,
-    "AdmissionMethodName" as admissionmethodname,
-    "AdmissionMethodGroup" as admissionmethodgroup,
-    "AdmissionMethodMethodFullName" as admissionmethodmethodfullname,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "SK_AdmissionMethodID" as sk_admission_method_id,
+    "BK_AdmissionMethodCode" as bk_admission_method_code,
+    "AdmissionMethodName" as admission_method_name,
+    "AdmissionMethodGroup" as admission_method_group,
+    "AdmissionMethodMethodFullName" as admission_method_method_full_name,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_ip', 'AdmissionMethods') }}

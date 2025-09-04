@@ -9,5 +9,5 @@ select
     "code" as code,
     "is_data_absent" as is_data_absent,
     "data_absent_reason" as data_absent_reason,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_op', 'appointment.clinical_coding.comorbidities') }}

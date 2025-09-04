@@ -3,10 +3,10 @@
 -- Description: Reference data for outpatient procedures and treatments
 
 select
-    "SK_SourceOfReferral" as sk_sourceofreferral,
-    "BK_SourceOfReferralCode" as bk_sourceofreferralcode,
-    "ReferralType" as referraltype,
-    "ReferralGroup" as referralgroup,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "SK_SourceOfReferral" as sk_source_of_referral,
+    "BK_SourceOfReferralCode" as bk_source_of_referral_code,
+    "ReferralType" as referral_type,
+    "ReferralGroup" as referral_group,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_op', 'SourceOfReferrals') }}

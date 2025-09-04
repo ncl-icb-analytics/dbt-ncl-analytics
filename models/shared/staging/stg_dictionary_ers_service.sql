@@ -66,10 +66,10 @@ select
     "Patient_Booking_Window_Start_Unit_Urgent" as patient_booking_window_start_unit_urgent,
     "Patient_Booking_Window_End_Urgent" as patient_booking_window_end_urgent,
     "Patient_Booking_Window_End_Unit_Urgent" as patient_booking_window_end_unit_urgent,
-    "Patient_Booking_Window_Start_2WW" as patient_booking_window_start_2ww,
-    "Patient_Booking_Window_Start_Unit_2WW" as patient_booking_window_start_unit_2ww,
-    "Patient_Booking_Window_End_2WW" as patient_booking_window_end_2ww,
-    "Patient_Booking_Window_End_Unit_2WW" as patient_booking_window_end_unit_2ww,
+    "Patient_Booking_Window_Start_2WW" as patient_booking_window_start_2_ww,
+    "Patient_Booking_Window_Start_Unit_2WW" as patient_booking_window_start_unit_2_ww,
+    "Patient_Booking_Window_End_2WW" as patient_booking_window_end_2_ww,
+    "Patient_Booking_Window_End_Unit_2WW" as patient_booking_window_end_unit_2_ww,
     "Patient_Booking_Window_Exclude_Saturday" as patient_booking_window_exclude_saturday,
     "Patient_Booking_Window_Exclude_Sunday" as patient_booking_window_exclude_sunday
 from {{ source('dictionary_eRS', 'Service') }}

@@ -9,7 +9,7 @@ select
     "commissioner_reference_number" as commissioner_reference_number,
     "provider_reference_number" as provider_reference_number,
     "service_code" as service_code,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
     "EPISODES_ID" as episodes_id,

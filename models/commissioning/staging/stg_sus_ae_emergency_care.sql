@@ -220,7 +220,7 @@ select
     "referral.period_end_date" as referral_period_end_date,
     "referral.period_length" as referral_period_length,
     "system.record.confidentiality_category" as system_record_confidentiality_category,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "patient.ethnic_category_2021" as patient_ethnic_category_2021,
     "attendance.arrival.ambulance_care_contact_identifier" as attendance_arrival_ambulance_care_contact_identifier,
     "attendance.clinically_ready_to_proceed.timestamp" as attendance_clinically_ready_to_proceed_timestamp,

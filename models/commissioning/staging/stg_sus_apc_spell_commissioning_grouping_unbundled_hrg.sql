@@ -6,7 +6,7 @@ select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
     "tariff" as tariff,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "UNBUNDLED_HRG_ID" as unbundled_hrg_id,
     "code" as code,
     "adult_cc_tariff_days" as adult_cc_tariff_days,

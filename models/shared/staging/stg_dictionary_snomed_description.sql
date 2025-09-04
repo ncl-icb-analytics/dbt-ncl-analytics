@@ -3,13 +3,13 @@
 -- Description: Reference data for snomed
 
 select
-    "SK_SnomedDescriptionID" as sk_snomeddescriptionid,
-    "SK_SnomedModuleID" as sk_snomedmoduleid,
-    "SK_SnomedConceptID" as sk_snomedconceptid,
+    "SK_SnomedDescriptionID" as sk_snomed_description_id,
+    "SK_SnomedModuleID" as sk_snomed_module_id,
+    "SK_SnomedConceptID" as sk_snomed_concept_id,
     "Term" as term,
-    "LanguageCode" as languagecode,
-    "SK_SnomedTypeID" as sk_snomedtypeid,
-    "SK_SnomedCaseSignificanceID" as sk_snomedcasesignificanceid,
-    "SK_SnomedRefSetID" as sk_snomedrefsetid,
-    "SK_SnomedAcceptabilityID" as sk_snomedacceptabilityid
+    "LanguageCode" as language_code,
+    "SK_SnomedTypeID" as sk_snomed_type_id,
+    "SK_SnomedCaseSignificanceID" as sk_snomed_case_significance_id,
+    "SK_SnomedRefSetID" as sk_snomed_ref_set_id,
+    "SK_SnomedAcceptabilityID" as sk_snomed_acceptability_id
 from {{ source('dictionary_snomed', 'Description') }}

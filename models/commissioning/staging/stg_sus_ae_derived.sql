@@ -3,16 +3,16 @@
 -- Description: SUS emergency care attendances and activity
 
 select
-    "dmicSubICBRegistrationSubmitted" as dmicsubicbregistrationsubmitted,
-    "dmicElectoralWardCode" as dmicelectoralwardcode,
+    "dmicSubICBRegistrationSubmitted" as dmic_sub_icb_registration_submitted,
+    "dmicElectoralWardCode" as dmic_electoral_ward_code,
     "PRIMARYKEY_ID" as primarykey_id,
-    "dmicSubICBResidenceSubmitted" as dmicsubicbresidencesubmitted,
-    "dmicCommissionerDerivationReason" as dmiccommissionerderivationreason,
-    "CqcCareHomeCode" as cqccarehomecode,
-    "dmicICBCommissioner" as dmicicbcommissioner,
-    "dmicSubICBCommissioner" as dmicsubicbcommissioner,
-    "dmicICBRegistrationSubmitted" as dmicicbregistrationsubmitted,
-    "dmicICBResidenceSubmitted" as dmicicbresidencesubmitted,
-    "dmicImportLogId" as dmicimportlogid,
-    "dmicLSOA2021" as dmiclsoa2021
+    "dmicSubICBResidenceSubmitted" as dmic_sub_icb_residence_submitted,
+    "dmicCommissionerDerivationReason" as dmic_commissioner_derivation_reason,
+    "CqcCareHomeCode" as cqc_care_home_code,
+    "dmicICBCommissioner" as dmic_icb_commissioner,
+    "dmicSubICBCommissioner" as dmic_sub_icb_commissioner,
+    "dmicICBRegistrationSubmitted" as dmic_icb_registration_submitted,
+    "dmicICBResidenceSubmitted" as dmic_icb_residence_submitted,
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicLSOA2021" as dmic_lsoa2021
 from {{ source('sus_ae', 'derived') }}

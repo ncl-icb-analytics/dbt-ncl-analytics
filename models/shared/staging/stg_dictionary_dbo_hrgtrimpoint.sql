@@ -4,8 +4,8 @@
 
 select
     "SK_HRGID" as sk_hrgid,
-    "SK_TariffTypeID" as sk_tarifftypeid,
-    "FiscalYear" as fiscalyear,
-    "IsElectiveStay" as iselectivestay,
-    "TrimPointDays" as trimpointdays
+    "SK_TariffTypeID" as sk_tariff_type_id,
+    "FiscalYear" as fiscal_year,
+    "IsElectiveStay" as is_elective_stay,
+    "TrimPointDays" as trim_point_days
 from {{ source('dictionary_dbo', 'HRGTrimPoint') }}

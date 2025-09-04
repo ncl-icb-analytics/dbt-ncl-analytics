@@ -7,7 +7,7 @@ select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
     "tariff" as tariff,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "UNBUNDLED_HRG_ID" as unbundled_hrg_id,
     "code" as code
 from {{ source('sus_op', 'appointment.commissioning.grouping.unbundled_hrg') }}

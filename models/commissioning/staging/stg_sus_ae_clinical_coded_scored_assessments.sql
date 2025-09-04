@@ -3,7 +3,7 @@
 -- Description: SUS emergency care attendances and activity
 
 select
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "PRIMARYKEY_ID" as primarykey_id,
     "ROWNUMBER_ID" as rownumber_id,
     "CODED_SCORED_ASSESSMENTS_ID" as coded_scored_assessments_id,

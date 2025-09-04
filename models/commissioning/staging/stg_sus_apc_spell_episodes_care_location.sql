@@ -16,7 +16,7 @@ select
     "night_period_availability" as night_period_availability,
     "start_date" as start_date,
     "end_time" as end_time,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "stage" as stage,
     "ward_stay_sequence_number" as ward_stay_sequence_number,
     "ward_code" as ward_code,

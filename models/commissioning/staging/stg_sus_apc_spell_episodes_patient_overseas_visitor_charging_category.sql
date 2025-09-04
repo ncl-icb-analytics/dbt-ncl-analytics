@@ -10,5 +10,5 @@ select
     "category" as category,
     "applicable_from_date" as applicable_from_date,
     "applicable_end_date" as applicable_end_date,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.patient.overseas_visitor_charging_category') }}

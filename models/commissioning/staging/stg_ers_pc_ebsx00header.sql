@@ -4,19 +4,19 @@
 
 select
     "Version" as version,
-    "OrgID_Referrer" as orgid_referrer,
-    "UniqSubmissionID" as uniqsubmissionid,
+    "OrgID_Referrer" as org_id_referrer,
+    "UniqSubmissionID" as uniq_submission_id,
     "ebsx00_ID" as ebsx00_id,
     "File_Type" as file_type,
-    "RP_StartDate" as rp_startdate,
-    "RP_EndDate" as rp_enddate,
-    "Unique_MonthID" as unique_monthid,
+    "RP_StartDate" as rp_start_date,
+    "RP_EndDate" as rp_end_date,
+    "Unique_MonthID" as unique_month_id,
     "Total_ebsx02" as total_ebsx02,
-    "TotalRecords" as totalrecords,
-    "dmicImportLogId" as dmicimportlogid,
-    "dmicMonthId" as dmicmonthid,
-    "dmicSystemId" as dmicsystemid,
-    "dmicCCGCodeReferrer" as dmicccgcodereferrer,
-    "dmicDSCRO" as dmicdscro,
-    "dmicDateAdded" as dmicdateadded
+    "TotalRecords" as total_records,
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicMonthId" as dmic_month_id,
+    "dmicSystemId" as dmic_system_id,
+    "dmicCCGCodeReferrer" as dmic_ccg_code_referrer,
+    "dmicDSCRO" as dmic_dscro,
+    "dmicDateAdded" as dmic_date_added
 from {{ source('eRS_primary_care', 'ebsx00Header') }}

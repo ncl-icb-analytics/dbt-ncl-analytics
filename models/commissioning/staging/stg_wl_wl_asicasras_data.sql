@@ -9,14 +9,14 @@ select
     "Referral_Identifier" as referral_identifier,
     "ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER" as organisation_identifier_code_of_provider,
     "ACTIVITY_TREATMENT_FUNCTION_CODE" as activity_treatment_function_code,
-    "derSubmissionId" as dersubmissionid,
-    "derRowId" as derrowid,
+    "derSubmissionId" as der_submission_id,
+    "derRowId" as der_row_id,
     "Pseudo NHS_NUMBER" as pseudo_nhs_number,
     "ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER" as organisation_identifier_code_of_commissioner,
     "Last_PAS_Validation_Date" as last_pas_validation_date,
-    "derCCGofPractice" as derccgofpractice,
-    "derCCGofResidence" as derccgofresidence,
-    "derPracticeCode" as derpracticecode,
-    "derLSOA" as derlsoa,
-    "derLSOA2021" as derlsoa2021
+    "derCCGofPractice" as der_ccg_of_practice,
+    "derCCGofResidence" as der_ccg_of_residence,
+    "derPracticeCode" as der_practice_code,
+    "derLSOA" as der_lsoa,
+    "derLSOA2021" as der_lsoa2021
 from {{ source('wl', 'WL_AsiCasRas_Data') }}

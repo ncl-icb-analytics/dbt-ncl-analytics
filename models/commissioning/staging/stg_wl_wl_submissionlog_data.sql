@@ -3,12 +3,12 @@
 -- Description: Waiting lists and patient pathway data
 
 select
-    "derSubmissionID" as dersubmissionid,
-    "derDLPSpecificationName" as derdlpspecificationname,
-    "derFileName" as derfilename,
-    "derSubmissionDateTimeFromDLP" as dersubmissiondatetimefromdlp,
-    "derProviderCode" as derprovidercode,
-    "derWeekEnding" as derweekending,
-    "derIsLatestFiletypeProviderWeekending" as derislatestfiletypeproviderweekending,
-    "derIsLatestFiletypeProvider" as derislatestfiletypeprovider
+    "derSubmissionID" as der_submission_id,
+    "derDLPSpecificationName" as der_dlp_specification_name,
+    "derFileName" as der_file_name,
+    "derSubmissionDateTimeFromDLP" as der_submission_date_time_from_dlp,
+    "derProviderCode" as der_provider_code,
+    "derWeekEnding" as der_week_ending,
+    "derIsLatestFiletypeProviderWeekending" as der_is_latest_filetype_provider_weekending,
+    "derIsLatestFiletypeProvider" as der_is_latest_filetype_provider
 from {{ source('wl', 'WL_SubmissionLog_Data') }}

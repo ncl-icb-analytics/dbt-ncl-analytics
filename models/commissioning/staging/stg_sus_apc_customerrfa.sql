@@ -4,16 +4,16 @@
 
 select
     "PRIMARYKEY_ID" as primarykey_id,
-    "dmicCustomerCode" as dmiccustomercode,
-    "dmicSubmittedCCG" as dmicsubmittedccg,
-    "dmicSubmittedCCGOfResidence" as dmicsubmittedccgofresidence,
-    "dmicDerivedCCG" as dmicderivedccg,
-    "dmicDerivedCCGofResidence" as dmicderivedccgofresidence,
-    "dmicDerivedCCGofGPPrac" as dmicderivedccgofgpprac,
-    "dmicDerivedCCGofDerGPPrac" as dmicderivedccgofdergpprac,
-    "dmicPDSRecipient" as dmicpdsrecipient,
-    "dmicSubmittedProvider" as dmicsubmittedprovider,
-    "dmicImportLogId" as dmicimportlogid,
-    "dmicSubmittedGPPractice" as dmicsubmittedgppractice,
-    "dmicDerivedGPPractice" as dmicderivedgppractice
+    "dmicCustomerCode" as dmic_customer_code,
+    "dmicSubmittedCCG" as dmic_submitted_ccg,
+    "dmicSubmittedCCGOfResidence" as dmic_submitted_ccg_of_residence,
+    "dmicDerivedCCG" as dmic_derived_ccg,
+    "dmicDerivedCCGofResidence" as dmic_derived_ccg_of_residence,
+    "dmicDerivedCCGofGPPrac" as dmic_derived_ccg_of_gp_prac,
+    "dmicDerivedCCGofDerGPPrac" as dmic_derived_ccg_of_der_gp_prac,
+    "dmicPDSRecipient" as dmic_pds_recipient,
+    "dmicSubmittedProvider" as dmic_submitted_provider,
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicSubmittedGPPractice" as dmic_submitted_gp_practice,
+    "dmicDerivedGPPractice" as dmic_derived_gp_practice
 from {{ source('sus_apc', 'CustomerRfa') }}

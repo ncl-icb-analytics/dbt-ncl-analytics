@@ -3,22 +3,22 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_OrganisationID_Root" as sk_organisationid_root,
-    "OrganisationCode_Root" as organisationcode_root,
-    "OrganisationPrimaryRole_Root" as organisationprimaryrole_root,
-    "SK_OrganisationID_Parent" as sk_organisationid_parent,
-    "OrganisationCode_Parent" as organisationcode_parent,
-    "OrganisationPrimaryRole_Parent" as organisationprimaryrole_parent,
-    "SK_OrganisationID_Child" as sk_organisationid_child,
-    "OrganisationCode_Child" as organisationcode_child,
-    "OrganisationPrimaryRole_Child" as organisationprimaryrole_child,
-    "RelationshipType" as relationshiptype,
-    "RelationshipStartDate" as relationshipstartdate,
-    "RelationshipEndDate" as relationshipenddate,
+    "SK_OrganisationID_Root" as sk_organisation_id_root,
+    "OrganisationCode_Root" as organisation_code_root,
+    "OrganisationPrimaryRole_Root" as organisation_primary_role_root,
+    "SK_OrganisationID_Parent" as sk_organisation_id_parent,
+    "OrganisationCode_Parent" as organisation_code_parent,
+    "OrganisationPrimaryRole_Parent" as organisation_primary_role_parent,
+    "SK_OrganisationID_Child" as sk_organisation_id_child,
+    "OrganisationCode_Child" as organisation_code_child,
+    "OrganisationPrimaryRole_Child" as organisation_primary_role_child,
+    "RelationshipType" as relationship_type,
+    "RelationshipStartDate" as relationship_start_date,
+    "RelationshipEndDate" as relationship_end_date,
     "Path" as path,
     "Depth" as depth,
-    "PathStartDate" as pathstartdate,
-    "PathEndDate" as pathenddate,
-    "DateAdded" as dateadded,
-    "DateUpdated" as dateupdated
+    "PathStartDate" as path_start_date,
+    "PathEndDate" as path_end_date,
+    "DateAdded" as date_added,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_dbo', 'OrganisationDescendent') }}

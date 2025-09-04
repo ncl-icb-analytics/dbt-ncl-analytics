@@ -12,5 +12,5 @@ select
     "validation_timestamp" as validation_timestamp,
     "is_data_absent" as is_data_absent,
     "data_absent_reason" as data_absent_reason,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.clinical_coding.coded_scored_assessments') }}

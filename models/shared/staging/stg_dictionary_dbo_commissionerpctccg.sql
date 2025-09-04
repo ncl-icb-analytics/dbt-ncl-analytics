@@ -3,11 +3,11 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_CommissionerID_PCT" as sk_commissionerid_pct,
-    "SK_CommissionerID_CCG" as sk_commissionerid_ccg,
-    "SK_PODTeamID" as sk_podteamid,
-    "PODName" as podname,
+    "SK_CommissionerID_PCT" as sk_commissioner_id_pct,
+    "SK_CommissionerID_CCG" as sk_commissioner_id_ccg,
+    "SK_PODTeamID" as sk_pod_team_id,
+    "PODName" as pod_name,
     "Region" as region,
-    "StartDate" as startdate,
-    "EndDate" as enddate
+    "StartDate" as start_date,
+    "EndDate" as end_date
 from {{ source('dictionary_dbo', 'CommissionerPCTCCG') }}

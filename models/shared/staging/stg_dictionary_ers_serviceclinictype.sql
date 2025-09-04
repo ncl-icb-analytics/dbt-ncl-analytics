@@ -4,5 +4,5 @@
 
 select
     "Service_Id" as service_id,
-    "ClinicType" as clinictype
+    "ClinicType" as clinic_type
 from {{ source('dictionary_eRS', 'ServiceClinicType') }}

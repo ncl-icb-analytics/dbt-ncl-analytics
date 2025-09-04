@@ -3,7 +3,7 @@
 -- Description: Primary care referrals lookups
 
 select
-    "OrganisationID" as organisationid,
-    "SK_OrganisationID" as sk_organisationid,
+    "OrganisationID" as organisation_id,
+    "SK_OrganisationID" as sk_organisation_id,
     "Role" as role
 from {{ source('dictionary_eRS', 'OrganisationOrganisationRole') }}

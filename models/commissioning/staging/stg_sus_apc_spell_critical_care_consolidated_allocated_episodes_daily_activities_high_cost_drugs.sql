@@ -10,5 +10,5 @@ select
     "DAILY_ACTIVITIES_ID" as daily_activities_id,
     "HIGH_COST_DRUGS_ID" as high_cost_drugs_id,
     "high_cost_drugs" as high_cost_drugs,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.critical_care_consolidated.allocated_episodes.daily_activities.high_cost_drugs') }}

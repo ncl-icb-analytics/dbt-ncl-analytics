@@ -8,7 +8,7 @@ select
     "EPISODES_ID" as episodes_id,
     "UNBUNDLED_HRG_ID" as unbundled_hrg_id,
     "tariff" as tariff,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "code" as code,
     "adult_cc_tariff_days" as adult_cc_tariff_days,
     "multiple_applies" as multiple_applies

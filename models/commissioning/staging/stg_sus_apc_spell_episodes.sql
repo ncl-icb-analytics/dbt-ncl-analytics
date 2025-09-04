@@ -184,7 +184,7 @@ select
     "patient.mother.overseas_visitor_status" as patient_mother_overseas_visitor_status,
     "ambulance.incident_number" as ambulance_incident_number,
     "patient.mother.withheld_identity_reason" as patient_mother_withheld_identity_reason,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "patient.identity.ethnic_category_2021" as patient_identity_ethnic_category_2021,
     "labour_delivery.delivery_timestamp" as labour_delivery_delivery_timestamp,
     "referral.latest_clinically_appropriate_date" as referral_latest_clinically_appropriate_date,

@@ -4,15 +4,15 @@
 
 select
     "PRIMARYKEY_ID" as primarykey_id,
-    "dmicImportLogId" as dmicimportlogid,
-    "dmicLSOA2021" as dmiclsoa2021,
-    "dmicSubICBRegistrationSubmitted" as dmicsubicbregistrationsubmitted,
-    "dmicICBResidenceSubmitted" as dmicicbresidencesubmitted,
-    "CqcCareHomeCode" as cqccarehomecode,
-    "dmicICBCommissioner" as dmicicbcommissioner,
-    "dmicSubICBResidenceSubmitted" as dmicsubicbresidencesubmitted,
-    "dmicCommissionerDerivationReason" as dmiccommissionerderivationreason,
-    "dmicElectoralWardCode" as dmicelectoralwardcode,
-    "dmicSubICBCommissioner" as dmicsubicbcommissioner,
-    "dmicICBRegistrationSubmitted" as dmicicbregistrationsubmitted
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicLSOA2021" as dmic_lsoa2021,
+    "dmicSubICBRegistrationSubmitted" as dmic_sub_icb_registration_submitted,
+    "dmicICBResidenceSubmitted" as dmic_icb_residence_submitted,
+    "CqcCareHomeCode" as cqc_care_home_code,
+    "dmicICBCommissioner" as dmic_icb_commissioner,
+    "dmicSubICBResidenceSubmitted" as dmic_sub_icb_residence_submitted,
+    "dmicCommissionerDerivationReason" as dmic_commissioner_derivation_reason,
+    "dmicElectoralWardCode" as dmic_electoral_ward_code,
+    "dmicSubICBCommissioner" as dmic_sub_icb_commissioner,
+    "dmicICBRegistrationSubmitted" as dmic_icb_registration_submitted
 from {{ source('sus_op', 'derived') }}

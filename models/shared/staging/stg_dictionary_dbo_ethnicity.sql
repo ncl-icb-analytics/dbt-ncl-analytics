@@ -3,15 +3,15 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_EthnicityID" as sk_ethnicityid,
-    "BK_EthnicityCode" as bk_ethnicitycode,
-    "EthnicityHESCode" as ethnicityhescode,
-    "EthnicityCodeType" as ethnicitycodetype,
-    "EthnicityCombinedCode" as ethnicitycombinedcode,
-    "EthnicityDesc" as ethnicitydesc,
-    "EthnicityDesc2" as ethnicitydesc2,
-    "EthnicityDescRead" as ethnicitydescread,
-    "DateStart" as datestart,
-    "DateEnd" as dateend,
-    "DateLastUpdate" as datelastupdate
+    "SK_EthnicityID" as sk_ethnicity_id,
+    "BK_EthnicityCode" as bk_ethnicity_code,
+    "EthnicityHESCode" as ethnicity_hes_code,
+    "EthnicityCodeType" as ethnicity_code_type,
+    "EthnicityCombinedCode" as ethnicity_combined_code,
+    "EthnicityDesc" as ethnicity_desc,
+    "EthnicityDesc2" as ethnicity_desc2,
+    "EthnicityDescRead" as ethnicity_desc_read,
+    "DateStart" as date_start,
+    "DateEnd" as date_end,
+    "DateLastUpdate" as date_last_update
 from {{ source('dictionary_dbo', 'Ethnicity') }}

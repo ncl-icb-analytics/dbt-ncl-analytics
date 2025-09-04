@@ -3,7 +3,7 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_EthnicityID" as sk_ethnicityid,
-    "EthnicityCategory" as ethnicitycategory,
-    "EthnicityDesc" as ethnicitydesc
+    "SK_EthnicityID" as sk_ethnicity_id,
+    "EthnicityCategory" as ethnicity_category,
+    "EthnicityDesc" as ethnicity_desc
 from {{ source('dictionary_dbo', 'Ethnicity2') }}

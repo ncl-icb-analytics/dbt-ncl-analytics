@@ -10,5 +10,5 @@ select
     "classification" as classification,
     "start_date" as start_date,
     "end_date" as end_date,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.patient.overseas_visitor') }}

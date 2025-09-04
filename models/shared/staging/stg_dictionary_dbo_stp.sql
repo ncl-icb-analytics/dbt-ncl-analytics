@@ -4,11 +4,11 @@
 
 select
     "SK_STPID" as sk_stpid,
-    "STPCode" as stpcode,
-    "STPName" as stpname,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated,
-    "SK_ServiceProviderGroupID" as sk_serviceprovidergroupid,
-    "ODSCode" as odscode,
-    "SK_OrganisationID" as sk_organisationid
+    "STPCode" as stp_code,
+    "STPName" as stp_name,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated,
+    "SK_ServiceProviderGroupID" as sk_service_provider_group_id,
+    "ODSCode" as ods_code,
+    "SK_OrganisationID" as sk_organisation_id
 from {{ source('dictionary_dbo', 'STP') }}

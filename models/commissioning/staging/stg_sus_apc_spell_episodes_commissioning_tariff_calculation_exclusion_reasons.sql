@@ -8,5 +8,5 @@ select
     "EPISODES_ID" as episodes_id,
     "EXCLUSION_REASONS_ID" as exclusion_reasons_id,
     "exclusion_reasons" as exclusion_reasons,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.commissioning.tariff_calculation.exclusion_reasons') }}

@@ -8,7 +8,7 @@ select
     "treatment_function" as treatment_function,
     "local_sub_specialty" as local_sub_specialty,
     "clinical_responsibility_indicator" as clinical_responsibility_indicator,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
     "professional_registration_issuer" as professional_registration_issuer,

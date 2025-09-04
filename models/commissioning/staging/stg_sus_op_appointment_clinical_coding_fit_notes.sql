@@ -15,5 +15,5 @@ select
     "recorded_date" as recorded_date,
     "follow_up_assessment_required_indicator" as follow_up_assessment_required_indicator,
     "issuer" as issuer,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_op', 'appointment.clinical_coding.fit_notes') }}

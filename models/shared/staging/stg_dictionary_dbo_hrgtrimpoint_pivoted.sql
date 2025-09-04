@@ -4,9 +4,9 @@
 
 select
     "SK_HRGID" as sk_hrgid,
-    "TariffType" as tarifftype,
-    "TariffTypeDesc" as tarifftypedesc,
-    "FiscalYear" as fiscalyear,
-    "Elective_TrimPointDays" as elective_trimpointdays,
-    "Non-Elective_TrimPointDays" as non_elective_trimpointdays
+    "TariffType" as tariff_type,
+    "TariffTypeDesc" as tariff_type_desc,
+    "FiscalYear" as fiscal_year,
+    "Elective_TrimPointDays" as elective_trim_point_days,
+    "Non-Elective_TrimPointDays" as non_elective_trim_point_days
 from {{ source('dictionary_dbo', 'HRGTrimPoint_Pivoted') }}

@@ -5,7 +5,7 @@
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "copy_recipients" as copy_recipients,
     "COPY_RECIPIENTS_ID" as copy_recipients_id
 from {{ source('sus_ae', 'system.record.copy_recipients') }}

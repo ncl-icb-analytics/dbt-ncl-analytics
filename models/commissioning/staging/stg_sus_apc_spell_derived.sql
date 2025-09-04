@@ -3,16 +3,16 @@
 -- Description: SUS admitted patient care episodes and procedures
 
 select
-    "dmicSubICBResidenceSubmitted" as dmicsubicbresidencesubmitted,
-    "dmicICBResidenceSubmitted" as dmicicbresidencesubmitted,
-    "dmicSubICBRegistrationSubmitted" as dmicsubicbregistrationsubmitted,
-    "dmicCommissionerDerivationReason" as dmiccommissionerderivationreason,
-    "dmicLSOA2021" as dmiclsoa2021,
-    "dmicElectoralWardCode" as dmicelectoralwardcode,
+    "dmicSubICBResidenceSubmitted" as dmic_sub_icb_residence_submitted,
+    "dmicICBResidenceSubmitted" as dmic_icb_residence_submitted,
+    "dmicSubICBRegistrationSubmitted" as dmic_sub_icb_registration_submitted,
+    "dmicCommissionerDerivationReason" as dmic_commissioner_derivation_reason,
+    "dmicLSOA2021" as dmic_lsoa2021,
+    "dmicElectoralWardCode" as dmic_electoral_ward_code,
     "PRIMARYKEY_ID" as primarykey_id,
-    "dmicImportLogId" as dmicimportlogid,
-    "dmicSubICBCommissioner" as dmicsubicbcommissioner,
-    "dmicICBRegistrationSubmitted" as dmicicbregistrationsubmitted,
-    "CqcCareHomeCode" as cqccarehomecode,
-    "dmicICBCommissioner" as dmicicbcommissioner
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicSubICBCommissioner" as dmic_sub_icb_commissioner,
+    "dmicICBRegistrationSubmitted" as dmic_icb_registration_submitted,
+    "CqcCareHomeCode" as cqc_care_home_code,
+    "dmicICBCommissioner" as dmic_icb_commissioner
 from {{ source('sus_apc', 'spell.derived') }}

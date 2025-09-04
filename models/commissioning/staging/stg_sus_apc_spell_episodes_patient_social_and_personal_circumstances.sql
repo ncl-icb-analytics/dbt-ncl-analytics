@@ -11,5 +11,5 @@ select
     "recorded_timestamp" as recorded_timestamp,
     "is_data_absent" as is_data_absent,
     "data_absent_reason" as data_absent_reason,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.patient.social_and_personal_circumstances') }}

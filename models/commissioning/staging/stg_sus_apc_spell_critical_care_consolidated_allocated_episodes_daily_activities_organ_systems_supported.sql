@@ -10,5 +10,5 @@ select
     "DAILY_ACTIVITIES_ID" as daily_activities_id,
     "ORGAN_SYSTEMS_SUPPORTED_ID" as organ_systems_supported_id,
     "organ_systems_supported" as organ_systems_supported,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.critical_care_consolidated.allocated_episodes.daily_activities.organ_systems_supported') }}

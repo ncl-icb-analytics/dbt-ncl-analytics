@@ -3,8 +3,8 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_CostBandID" as sk_costbandid,
-    "CostBandLabel" as costbandlabel,
-    "CostBandStart" as costbandstart,
-    "CostBandEnd" as costbandend
+    "SK_CostBandID" as sk_cost_band_id,
+    "CostBandLabel" as cost_band_label,
+    "CostBandStart" as cost_band_start,
+    "CostBandEnd" as cost_band_end
 from {{ source('dictionary_dbo', 'CostBand') }}

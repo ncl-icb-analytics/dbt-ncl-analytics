@@ -6,7 +6,7 @@ select
     "DAILY_ACTIVITIES_ID" as daily_activities_id,
     "CODES_ID" as codes_id,
     "codes" as codes,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
     "CRITICAL_CARE_CONSOLIDATED_ID" as critical_care_consolidated_id,

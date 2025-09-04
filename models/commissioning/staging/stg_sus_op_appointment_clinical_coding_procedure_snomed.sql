@@ -15,5 +15,5 @@ select
     "responsible_anaesthetist.registration_issuer" as responsible_anaesthetist_registration_issuer,
     "is_data_absent" as is_data_absent,
     "data_absent_reason" as data_absent_reason,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_op', 'appointment.clinical_coding.procedure.snomed') }}

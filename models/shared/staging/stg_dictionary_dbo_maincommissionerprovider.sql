@@ -3,10 +3,10 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_OrganisationID_Commissioner" as sk_organisationid_commissioner,
-    "SK_CommissionerID" as sk_commissionerid,
-    "SK_OrganisationID_Provider" as sk_organisationid_provider,
-    "SK_ServiceProviderID" as sk_serviceproviderid,
-    "StartDate" as startdate,
-    "EndDate" as enddate
+    "SK_OrganisationID_Commissioner" as sk_organisation_id_commissioner,
+    "SK_CommissionerID" as sk_commissioner_id,
+    "SK_OrganisationID_Provider" as sk_organisation_id_provider,
+    "SK_ServiceProviderID" as sk_service_provider_id,
+    "StartDate" as start_date,
+    "EndDate" as end_date
 from {{ source('dictionary_dbo', 'MainCommissionerProvider') }}

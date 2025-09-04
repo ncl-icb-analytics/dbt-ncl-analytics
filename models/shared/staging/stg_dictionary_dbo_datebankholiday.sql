@@ -4,9 +4,9 @@
 
 select
     "SK_Date" as sk_date,
-    "FullDate" as fulldate,
+    "FullDate" as full_date,
     "Holiday" as holiday,
-    "InEnglandAndWales" as inenglandandwales,
-    "InNorthernIreland" as innorthernireland,
-    "InScotland" as inscotland
+    "InEnglandAndWales" as in_england_and_wales,
+    "InNorthernIreland" as in_northern_ireland,
+    "InScotland" as in_scotland
 from {{ source('dictionary_dbo', 'DateBankHoliday') }}

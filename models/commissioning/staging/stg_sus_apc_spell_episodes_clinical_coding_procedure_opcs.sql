@@ -3,7 +3,7 @@
 -- Description: SUS admitted patient care episodes and procedures
 
 select
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "main_operating_professional.registration_issuer" as main_operating_professional_registration_issuer,
     "date" as date,
     "main_operating_professional.identifier" as main_operating_professional_identifier,

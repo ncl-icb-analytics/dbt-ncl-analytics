@@ -4,13 +4,13 @@
 
 select
     "SK_HRGID" as sk_hrgid,
-    "HRGCode" as hrgcode,
-    "HRGDescription" as hrgdescription,
-    "HRGChapterKey" as hrgchapterkey,
-    "HRGChapter" as hrgchapter,
-    "HRGSubchapterKey" as hrgsubchapterkey,
-    "HRGSubchapter" as hrgsubchapter,
+    "HRGCode" as hrg_code,
+    "HRGDescription" as hrg_description,
+    "HRGChapterKey" as hrg_chapter_key,
+    "HRGChapter" as hrg_chapter,
+    "HRGSubchapterKey" as hrg_subchapter_key,
+    "HRGSubchapter" as hrg_subchapter,
     "HRG_Version" as hrg_version,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_dbo', 'HRG') }}

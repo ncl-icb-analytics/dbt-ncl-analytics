@@ -8,5 +8,5 @@ select
     "EXPECTED_TREATMENT_TIMES_ID" as expected_treatment_times_id,
     "timestamp" as timestamp,
     "allocated_timestamp" as allocated_timestamp,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_ae', 'attendance.expected_treatment_times') }}

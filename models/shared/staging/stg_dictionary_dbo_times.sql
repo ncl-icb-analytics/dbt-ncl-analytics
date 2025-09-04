@@ -4,19 +4,19 @@
 
 select
     "SK_Time" as sk_time,
-    "FullTime" as fulltime,
-    "FullTime12H" as fulltime12h,
+    "FullTime" as full_time,
+    "FullTime12H" as full_time12_h,
     "Hours" as hours,
-    "Hours12H" as hours12h,
+    "Hours12H" as hours12_h,
     "Minutes" as minutes,
-    "TimeSuffex" as timesuffex,
-    "IsMorning" as ismorning,
-    "HoursName" as hoursname,
-    "Hours12HName" as hours12hname,
-    "QuarterOfDay" as quarterofday,
-    "QuarterOfDayName" as quarterofdayname,
-    "QuarterOfDayNameShort" as quarterofdaynameshort,
-    "QuarterOfHour" as quarterofhour,
-    "QuarterOfHourName" as quarterofhourname,
-    "QuarterOfHourShort" as quarterofhourshort
+    "TimeSuffex" as time_suffex,
+    "IsMorning" as is_morning,
+    "HoursName" as hours_name,
+    "Hours12HName" as hours12_hname,
+    "QuarterOfDay" as quarter_of_day,
+    "QuarterOfDayName" as quarter_of_day_name,
+    "QuarterOfDayNameShort" as quarter_of_day_name_short,
+    "QuarterOfHour" as quarter_of_hour,
+    "QuarterOfHourName" as quarter_of_hour_name,
+    "QuarterOfHourShort" as quarter_of_hour_short
 from {{ source('dictionary_dbo', 'Times') }}

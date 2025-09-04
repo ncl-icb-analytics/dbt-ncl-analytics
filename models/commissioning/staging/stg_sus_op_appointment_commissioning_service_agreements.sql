@@ -4,7 +4,7 @@
 
 select
     "service_code" as service_code,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "commissioner_assignment_period_end_date" as commissioner_assignment_period_end_date,
     "commissioning_serial_number" as commissioning_serial_number,
     "line_number" as line_number,

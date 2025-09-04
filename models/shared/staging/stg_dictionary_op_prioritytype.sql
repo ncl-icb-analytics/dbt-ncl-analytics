@@ -3,9 +3,9 @@
 -- Description: Reference data for outpatient procedures and treatments
 
 select
-    "SK_PriorityTypeID" as sk_prioritytypeid,
-    "BK_PriorityTypeCode" as bk_prioritytypecode,
-    "PriorityTypeDesc" as prioritytypedesc,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "SK_PriorityTypeID" as sk_priority_type_id,
+    "BK_PriorityTypeCode" as bk_priority_type_code,
+    "PriorityTypeDesc" as priority_type_desc,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_op', 'PriorityType') }}

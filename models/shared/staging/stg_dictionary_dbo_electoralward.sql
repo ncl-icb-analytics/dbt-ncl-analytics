@@ -3,9 +3,9 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_ElectoralWardID" as sk_electoralwardid,
-    "CountryCode" as countrycode,
-    "CountryName" as countryname,
+    "SK_ElectoralWardID" as sk_electoral_ward_id,
+    "CountryCode" as country_code,
+    "CountryName" as country_name,
     "National_Grouping_Code" as national_grouping_code,
     "Health_Board_Local_Health_Board_Strategic_Authority_Name" as health_board_local_health_board_strategic_authority_name,
     "High_Level_Health_Authority_Code" as high_level_health_authority_code,
@@ -16,6 +16,6 @@ select
     "Ward_Name" as ward_name,
     "ONS_Ward_Code_old" as ons_ward_code_old,
     "ONS_Ward_Code_9char" as ons_ward_code_9char,
-    "SK_ElectoralWard_ID" as sk_electoralward_id,
-    "IsActive" as isactive
+    "SK_ElectoralWard_ID" as sk_electoral_ward_id,
+    "IsActive" as is_active
 from {{ source('dictionary_dbo', 'ElectoralWard') }}

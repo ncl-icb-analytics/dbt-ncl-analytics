@@ -4,5 +4,5 @@
 
 select
     "Person_ID" as person_id,
-    "NHSNumber Pseudo" as nhsnumber_pseudo
+    "NHSNumber Pseudo" as nhs_number_pseudo
 from {{ source('eRS_primary_care', 'bridging') }}

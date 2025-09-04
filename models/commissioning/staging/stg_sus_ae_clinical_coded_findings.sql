@@ -9,5 +9,5 @@ select
     "code" as code,
     "is_code_approved" as is_code_approved,
     "timestamp" as timestamp,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_ae', 'clinical.coded_findings') }}

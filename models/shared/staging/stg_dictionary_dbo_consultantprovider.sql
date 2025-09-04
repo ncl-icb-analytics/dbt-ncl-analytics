@@ -3,11 +3,11 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_ConsultantID" as sk_consultantid,
-    "SK_ServiceProviderID" as sk_serviceproviderid,
-    "SK_SpecialtyID" as sk_specialtyid,
-    "StartDate" as startdate,
-    "EndDate" as enddate,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "SK_ConsultantID" as sk_consultant_id,
+    "SK_ServiceProviderID" as sk_service_provider_id,
+    "SK_SpecialtyID" as sk_specialty_id,
+    "StartDate" as start_date,
+    "EndDate" as end_date,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_dbo', 'ConsultantProvider') }}

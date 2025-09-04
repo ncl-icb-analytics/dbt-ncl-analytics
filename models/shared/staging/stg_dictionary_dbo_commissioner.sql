@@ -3,15 +3,15 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_CommissionerID" as sk_commissionerid,
-    "CommissionerName" as commissionername,
-    "CommissionerType" as commissionertype,
-    "CommissionerCode" as commissionercode,
-    "StartDate" as startdate,
-    "EndDate" as enddate,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated,
-    "SK_ServiceProviderGroupID" as sk_serviceprovidergroupid,
-    "IsCustomer" as iscustomer,
-    "IsTestOrganisation" as istestorganisation
+    "SK_CommissionerID" as sk_commissioner_id,
+    "CommissionerName" as commissioner_name,
+    "CommissionerType" as commissioner_type,
+    "CommissionerCode" as commissioner_code,
+    "StartDate" as start_date,
+    "EndDate" as end_date,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated,
+    "SK_ServiceProviderGroupID" as sk_service_provider_group_id,
+    "IsCustomer" as is_customer,
+    "IsTestOrganisation" as is_test_organisation
 from {{ source('dictionary_dbo', 'Commissioner') }}
