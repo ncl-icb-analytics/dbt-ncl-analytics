@@ -39,9 +39,6 @@ def sanitise_filename(name):
 
 def sanitise_column_name(col_name):
     """Convert column name to SQL-safe identifier"""
-    # Handle specific problematic patterns first
-    if col_name.lower() in ['nhs_number', 'nhs number']:
-        return 'nhs_number_value'
     
     # Replace dots, slashes, hyphens, spaces, and other problematic characters
     safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', col_name)
@@ -49,6 +46,13 @@ def sanitise_column_name(col_name):
     safe_name = re.sub(r'_+', '_', safe_name)
     # Remove leading/trailing underscores
     safe_name = safe_name.strip('_')
+
+    # Deal with camel case including starting with accroynms - known issue with lowercase of within camel e.g., derCCGofPractice -> der_cc_gof_practice
+    safe_name = re.sub('([a-z0-9])([A-Z])|([A-Z])([A-Z][a-z])', r'\1\3_\2\4', safe_name)
+
+    # Consistent pseudo key naming  - currently removed due to ambiguous pseudo renaming (2+ pseudo keys identified)
+    # if 'pseudo' in safe_name.lower() and 'nhs_number' in safe_name.lower():
+    #    return 'sk_patient_id'
     
     # Handle reserved words and ensure valid SQL identifier
     if safe_name.lower() in ['pseudo', 'group', 'order', 'having', 'where']:
