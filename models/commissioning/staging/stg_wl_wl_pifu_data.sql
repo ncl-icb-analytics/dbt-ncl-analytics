@@ -15,13 +15,13 @@ select
     "Waiting_List_Type" as waiting_list_type,
     "Initiation_Date" as initiation_date,
     "Expiry_Date" as expiry_date,
-    "der_Age_WeekEndingDate" as der_age_weekendingdate,
-    "der_AgeBand_WeekEndingDate" as der_ageband_weekendingdate,
-    "derSubmissionId" as dersubmissionid,
-    "derRowId" as derrowid,
-    "derCCGofPractice" as derccgofpractice,
-    "derCCGofResidence" as derccgofresidence,
-    "derPracticeCode" as derpracticecode,
-    "derLSOA" as derlsoa,
-    "derLSOA2021" as derlsoa2021
+    "der_Age_WeekEndingDate" as der_age_week_ending_date,
+    "der_AgeBand_WeekEndingDate" as der_age_band_week_ending_date,
+    "derSubmissionId" as der_submission_id,
+    "derRowId" as der_row_id,
+    "derCCGofPractice" as der_ccg_of_practice,
+    "derCCGofResidence" as der_ccg_of_residence,
+    "derPracticeCode" as der_practice_code,
+    "derLSOA" as der_lsoa,
+    "derLSOA2021" as der_lsoa2021
 from {{ source('wl', 'WL_PIFU_Data') }}

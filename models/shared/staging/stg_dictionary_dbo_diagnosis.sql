@@ -3,23 +3,23 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_DiagnosisID" as sk_diagnosisid,
+    "SK_DiagnosisID" as sk_diagnosis_id,
     "Code" as code,
-    "AltCode" as altcode,
+    "AltCode" as alt_code,
     "Description" as description,
-    "ShortDescription" as shortdescription,
+    "ShortDescription" as short_description,
     "Modifiers" as modifiers,
     "Chapter_Number" as chapter_number,
     "Chapter" as chapter,
-    "SubChapter" as subchapter,
+    "SubChapter" as sub_chapter,
     "Gender_Mask" as gender_mask,
     "Min_Age" as min_age,
     "Max_Age" as max_age,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated,
-    "SubChapterCode" as subchaptercode,
-    "SubChapter2" as subchapter2,
-    "SubChapter2Code" as subchapter2code,
-    "SubChapter3" as subchapter3,
-    "SubChapter3Code" as subchapter3code
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated,
+    "SubChapterCode" as sub_chapter_code,
+    "SubChapter2" as sub_chapter2,
+    "SubChapter2Code" as sub_chapter2_code,
+    "SubChapter3" as sub_chapter3,
+    "SubChapter3Code" as sub_chapter3_code
 from {{ source('dictionary_dbo', 'Diagnosis') }}

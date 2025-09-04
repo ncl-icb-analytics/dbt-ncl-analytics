@@ -8,5 +8,5 @@ select
     "ALCOHOL_DRUG_INVOLVEMENTS_ID" as alcohol_drug_involvements_id,
     "code" as code,
     "is_code_approved" as is_code_approved,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_ae', 'clinical.injury.alcohol_drug_involvements') }}

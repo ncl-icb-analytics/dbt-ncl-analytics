@@ -3,8 +3,8 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_UnitID_Source" as sk_unitid_source,
-    "SK_UnitID_Target" as sk_unitid_target,
+    "SK_UnitID_Source" as sk_unit_id_source,
+    "SK_UnitID_Target" as sk_unit_id_target,
     "Subtrahend" as subtrahend,
     "Multiplier" as multiplier,
     "Divisor" as divisor,

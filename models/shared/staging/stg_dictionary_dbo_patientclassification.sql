@@ -3,8 +3,8 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_PatientClassificationID" as sk_patientclassificationid,
-    "BK_PatientClassificationCode" as bk_patientclassificationcode,
-    "PatientClassificationName" as patientclassificationname,
-    "PatientClassificationFullName" as patientclassificationfullname
+    "SK_PatientClassificationID" as sk_patient_classification_id,
+    "BK_PatientClassificationCode" as bk_patient_classification_code,
+    "PatientClassificationName" as patient_classification_name,
+    "PatientClassificationFullName" as patient_classification_full_name
 from {{ source('dictionary_dbo', 'PatientClassification') }}

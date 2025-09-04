@@ -5,7 +5,7 @@
 select
     "PARTICIPANTS_ID" as participants_id,
     "identifier" as identifier,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "clinical_responsibility_timestamp" as clinical_responsibility_timestamp,
     "issuer" as issuer,
     "tier" as tier,

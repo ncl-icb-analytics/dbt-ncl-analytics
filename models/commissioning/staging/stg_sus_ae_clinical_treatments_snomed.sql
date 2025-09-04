@@ -7,7 +7,7 @@ select
     "PRIMARYKEY_ID" as primarykey_id,
     "equivalent_ae_code" as equivalent_ae_code,
     "time" as time,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "is_code_approved" as is_code_approved,
     "SNOMED_ID" as snomed_id,
     "date" as date,

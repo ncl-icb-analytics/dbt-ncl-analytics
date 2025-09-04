@@ -42,5 +42,5 @@ select
     "validation.duplicate_of_sus_cc_period" as validation_duplicate_of_sus_cc_period,
     "validation.pbr_cc_indicator" as validation_pbr_cc_indicator,
     "validation.cc_excluded_reason" as validation_cc_excluded_reason,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.critical_care_submitted') }}

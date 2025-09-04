@@ -73,7 +73,7 @@ select
     "appointment.patient.identity.ethnic_category" as appointment_patient_identity_ethnic_category,
     "appointment.patient.registration.general_practitioner" as appointment_patient_registration_general_practitioner,
     "appointment.patient.registration.general_practice" as appointment_patient_registration_general_practice,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "system.report.activity_date_from" as system_report_activity_date_from,
     "system.report.activity_date_to" as system_report_activity_date_to,
     "appointment.booked_reason" as appointment_booked_reason,

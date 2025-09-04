@@ -3,13 +3,13 @@
 -- Description: Reference data for snomed
 
 select
-    "SK_SnomedConceptID" as sk_snomedconceptid,
-    "SK_SnomedModuleID" as sk_snomedmoduleid,
-    "SK_SnomedDescriptionID" as sk_snomeddescriptionid,
-    "PreferredTerm" as preferredterm,
-    "SK_SnomedDefinitionStatusID" as sk_snomeddefinitionstatusid,
-    "DefinitionStatus" as definitionstatus,
-    "IsActive" as isactive,
-    "InNationalDataset" as innationaldataset,
-    "LastUpdated" as lastupdated
+    "SK_SnomedConceptID" as sk_snomed_concept_id,
+    "SK_SnomedModuleID" as sk_snomed_module_id,
+    "SK_SnomedDescriptionID" as sk_snomed_description_id,
+    "PreferredTerm" as preferred_term,
+    "SK_SnomedDefinitionStatusID" as sk_snomed_definition_status_id,
+    "DefinitionStatus" as definition_status,
+    "IsActive" as is_active,
+    "InNationalDataset" as in_national_dataset,
+    "LastUpdated" as last_updated
 from {{ source('dictionary_snomed', 'Concept') }}

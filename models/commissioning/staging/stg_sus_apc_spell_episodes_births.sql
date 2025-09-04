@@ -25,6 +25,6 @@ select
     "delivery_place.location_type" as delivery_place_location_type,
     "baby.withheld_identity_reason" as baby_withheld_identity_reason,
     "baby.overseas_visitor_status" as baby_overseas_visitor_status,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "baby.overseas_visitor_charging_category_at_cds_activity_date" as baby_overseas_visitor_charging_category_at_cds_activity_date
 from {{ source('sus_apc', 'spell.episodes.births') }}

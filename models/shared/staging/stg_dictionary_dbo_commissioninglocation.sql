@@ -3,16 +3,16 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_CCGLocationId" as sk_ccglocationid,
-    "CommissionerCode" as commissionercode,
-    "CommissioningRegionCode" as commissioningregioncode,
-    "CommissioningRegion" as commissioningregion,
-    "LocalAreaTeamCode" as localareateamcode,
-    "LocalAreaTeam" as localareateam,
-    "CommissioningCounty" as commissioningcounty,
-    "CommissioningCountry" as commissioningcountry,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated,
-    "StartDate" as startdate,
-    "EndDate" as enddate
+    "SK_CCGLocationId" as sk_ccg_location_id,
+    "CommissionerCode" as commissioner_code,
+    "CommissioningRegionCode" as commissioning_region_code,
+    "CommissioningRegion" as commissioning_region,
+    "LocalAreaTeamCode" as local_area_team_code,
+    "LocalAreaTeam" as local_area_team,
+    "CommissioningCounty" as commissioning_county,
+    "CommissioningCountry" as commissioning_country,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated,
+    "StartDate" as start_date,
+    "EndDate" as end_date
 from {{ source('dictionary_dbo', 'CommissioningLocation') }}

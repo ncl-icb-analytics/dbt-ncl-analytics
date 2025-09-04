@@ -189,7 +189,7 @@ select
     "spell.commissioning.evidence_based_intervention.category" as spell_commissioning_evidence_based_intervention_category,
     "spell.commissioning.evidence_based_intervention.type" as spell_commissioning_evidence_based_intervention_type,
     "spell.patient.mother.withheld_identity_reason" as spell_patient_mother_withheld_identity_reason,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "system.report.activity_date_from" as system_report_activity_date_from,
     "system.report.activity_date_to" as system_report_activity_date_to,
     "system.interchange.latest_episode_received_date" as system_interchange_latest_episode_received_date,

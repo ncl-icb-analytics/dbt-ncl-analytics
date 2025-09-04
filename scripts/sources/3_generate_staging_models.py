@@ -39,20 +39,41 @@ def sanitise_filename(name):
 
 def sanitise_column_name(col_name):
     """Convert column name to SQL-safe identifier"""
-    # Handle specific problematic patterns first
-    if col_name.lower() in ['nhs_number', 'nhs number']:
-        return 'nhs_number_value'
-    
     # Replace dots, slashes, hyphens, spaces, and other problematic characters
     safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', col_name)
     # Remove multiple consecutive underscores
     safe_name = re.sub(r'_+', '_', safe_name)
     # Remove leading/trailing underscores
     safe_name = safe_name.strip('_')
-    
+
+    # Deal with camel case including starting with acronyms
+
+    # Step 1: Handle special case of "Of" or "of" after acronyms
+    # Matches: CCGof or CCGOf followed by uppercase letter
+    # Example: "CCGofResidence" -> "CCG_of_Residence"
+    safe_name = re.sub(r'([A-Z]+)([Oo]f)([A-Z])', r'\1_\2_\3', safe_name)
+
+    # Step 2: Add underscore when transitioning from lowercase/digit to uppercase
+    # Matches: any lowercase letter or digit followed by uppercase letter
+    # Example: "dmicDerived" -> "dmic_Derived"
+    safe_name = re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', safe_name)
+
+    # Step 3: Split acronyms when followed by PascalCase word
+    # Matches: One or more capitals, followed by another capital and then lowercase
+    # The last capital is the start of the new word, so we split before it
+    # Example: "GPPractice" -> "GP_Practice", "CCG" stays as "CCG"
+    safe_name = re.sub(r'([A-Z])([A-Z]+)([A-Z][a-z])', r'\1\2_\3', safe_name)
+
+    # Step 4: Convert everything to lowercase
+    safe_name = safe_name.lower()
+
+    # Consistent pseudo key naming  - currently removed due to ambiguous pseudo renaming (2+ pseudo keys identified)
+    # if 'pseudo' in safe_name.lower() and 'nhs_number' in safe_name.lower():
+    #    return 'sk_patient_id'
+
     # Handle reserved words and ensure valid SQL identifier
     if safe_name.lower() in ['pseudo', 'group', 'order', 'having', 'where']:
-        safe_name = f'{safe_name}_value'
+            safe_name = f'{safe_name}_value'
     
     # Convert to lowercase for consistency
     return safe_name.lower()

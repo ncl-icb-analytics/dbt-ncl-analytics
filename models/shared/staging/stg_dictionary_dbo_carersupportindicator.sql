@@ -3,7 +3,7 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_CarerSupportIndicatorID" as sk_carersupportindicatorid,
-    "BK_CarerSupportIndicator" as bk_carersupportindicator,
-    "CarerSupportIndicator" as carersupportindicator
+    "SK_CarerSupportIndicatorID" as sk_carer_support_indicator_id,
+    "BK_CarerSupportIndicator" as bk_carer_support_indicator,
+    "CarerSupportIndicator" as carer_support_indicator
 from {{ source('dictionary_dbo', 'CarerSupportIndicator') }}

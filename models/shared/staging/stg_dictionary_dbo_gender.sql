@@ -3,11 +3,11 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_GenderID" as sk_genderid,
+    "SK_GenderID" as sk_gender_id,
     "Gender" as gender,
-    "GenderCode" as gendercode,
-    "GenderCode1" as gendercode1,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated,
-    "GenderCode2" as gendercode2
+    "GenderCode" as gender_code,
+    "GenderCode1" as gender_code1,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated,
+    "GenderCode2" as gender_code2
 from {{ source('dictionary_dbo', 'Gender') }}

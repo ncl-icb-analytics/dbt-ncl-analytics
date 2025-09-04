@@ -3,11 +3,11 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_PodGroupID" as sk_podgroupid,
-    "PodDisplay" as poddisplay,
-    "PodDataset" as poddataset,
-    "PodMainGroup" as podmaingroup,
-    "PodSubGroup" as podsubgroup,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "SK_PodGroupID" as sk_pod_group_id,
+    "PodDisplay" as pod_display,
+    "PodDataset" as pod_dataset,
+    "PodMainGroup" as pod_main_group,
+    "PodSubGroup" as pod_sub_group,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_dbo', 'PODGroups') }}

@@ -13,6 +13,6 @@ select
     "unbundled_hrg_child_cc" as unbundled_hrg_child_cc,
     "tariff_days" as tariff_days,
     "length_of_stay" as length_of_stay,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "critical_care_level" as critical_care_level
 from {{ source('sus_apc', 'spell.critical_care_consolidated.allocated_episodes.daily_activities') }}

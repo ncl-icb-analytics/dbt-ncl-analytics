@@ -7,5 +7,5 @@ select
     "PRIMARYKEY_ID" as primarykey_id,
     "READ_ID" as read_id,
     "code" as code,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_op', 'appointment.clinical_coding.diagnosis.read') }}

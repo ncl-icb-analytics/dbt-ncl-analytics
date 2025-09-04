@@ -3,7 +3,7 @@
 -- Description: SUS outpatient appointments and activity
 
 select
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "OPCS_ID" as opcs_id,
     "code" as code,
     "main_operating_professional.identifier" as main_operating_professional_identifier,

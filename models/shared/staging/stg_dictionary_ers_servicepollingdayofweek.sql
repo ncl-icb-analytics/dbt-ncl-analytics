@@ -4,5 +4,5 @@
 
 select
     "Service_Id" as service_id,
-    "PollingDayOfWeek" as pollingdayofweek
+    "PollingDayOfWeek" as polling_day_of_week
 from {{ source('dictionary_eRS', 'ServicePollingDayOfWeek') }}

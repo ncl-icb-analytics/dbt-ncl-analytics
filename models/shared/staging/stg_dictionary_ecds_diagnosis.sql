@@ -3,8 +3,8 @@
 -- Description: Reference data for ECDS
 
 select
-    "ECDS_UniqueID" as ecds_uniqueid,
-    "REFSET_UniqueID" as refset_uniqueid,
+    "ECDS_UniqueID" as ecds_unique_id,
+    "REFSET_UniqueID" as refset_unique_id,
     "SNOMED_Code" as snomed_code,
     "SNOMED_UK_Preferred_Term" as snomed_uk_preferred_term,
     "SNOMED_Fully_Specified_Name" as snomed_fully_specified_name,
@@ -13,7 +13,7 @@ select
     "ECDS_Group2" as ecds_group2,
     "ECDS_Group3" as ecds_group3,
     "Flag_Allergy" as flag_allergy,
-    "Flag_NotifiableDisease" as flag_notifiabledisease,
+    "Flag_NotifiableDisease" as flag_notifiable_disease,
     "Flag_Injury" as flag_injury,
     "Flag_Male" as flag_male,
     "Flag_Female" as flag_female,
@@ -30,5 +30,5 @@ select
     "Notes" as notes,
     "Valid_From" as valid_from,
     "Valid_To" as valid_to,
-    "dv_IsActive" as dv_isactive
+    "dv_IsActive" as dv_is_active
 from {{ source('dictionary_ecds', 'Diagnosis') }}

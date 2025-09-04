@@ -3,6 +3,6 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_UnitID" as sk_unitid,
-    "UnitLabel" as unitlabel
+    "SK_UnitID" as sk_unit_id,
+    "UnitLabel" as unit_label
 from {{ source('dictionary_dbo', 'UnitMapping') }}

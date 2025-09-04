@@ -8,5 +8,5 @@ select
     "SOCIAL_AND_PERSONAL_CIRCUMSTANCES_ID" as social_and_personal_circumstances_id,
     "code" as code,
     "recorded_timestamp" as recorded_timestamp,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_ae', 'patient.social_and_personal_circumstances') }}

@@ -117,14 +117,14 @@ select
     "ACCEPTS_TRIAGE_REQUESTS" as accepts_triage_requests,
     "SERVICE_SPECIALTY_CD" as service_specialty_cd,
     "SERVICE_SPECIALTY_DESC" as service_specialty_desc,
-    "dmicImportLogId" as dmicimportlogid,
-    "UniqSubmissionID" as uniqsubmissionid,
-    "Unique_MonthID" as unique_monthid,
+    "dmicImportLogId" as dmic_import_log_id,
+    "UniqSubmissionID" as uniq_submission_id,
+    "Unique_MonthID" as unique_month_id,
     "ebsx02_ID" as ebsx02_id,
-    "dmicSystemId" as dmicsystemid,
-    "dmicDateAdded" as dmicdateadded,
-    "dmicCCGofRegistration" as dmicccgofregistration,
-    "dmicCCGofResidence" as dmicccgofresidence,
-    "dmicCCGofReferrer" as dmicccgofreferrer,
-    "dmicCCGofProvider" as dmicccgofprovider
+    "dmicSystemId" as dmic_system_id,
+    "dmicDateAdded" as dmic_date_added,
+    "dmicCCGofRegistration" as dmic_ccg_of_registration,
+    "dmicCCGofResidence" as dmic_ccg_of_residence,
+    "dmicCCGofReferrer" as dmic_ccg_of_referrer,
+    "dmicCCGofProvider" as dmic_ccg_of_provider
 from {{ source('eRS_primary_care', 'ebsx02UBRNAction') }}

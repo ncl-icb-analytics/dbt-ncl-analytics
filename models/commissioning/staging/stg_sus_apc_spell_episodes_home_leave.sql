@@ -11,5 +11,5 @@ select
     "start_time" as start_time,
     "end_date" as end_date,
     "end_time" as end_time,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.home_leave') }}

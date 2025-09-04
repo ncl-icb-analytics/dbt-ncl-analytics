@@ -8,5 +8,5 @@ select
     "EPISODES_ID" as episodes_id,
     "READ_ID" as read_id,
     "code" as code,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.episodes.clinical_coding.diagnosis.read') }}

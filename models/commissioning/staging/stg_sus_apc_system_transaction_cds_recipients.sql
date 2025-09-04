@@ -5,7 +5,7 @@
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "CDS_RECIPIENTS_ID" as cds_recipients_id,
     "cds_recipients" as cds_recipients
 from {{ source('sus_apc', 'system.transaction.cds_recipients') }}

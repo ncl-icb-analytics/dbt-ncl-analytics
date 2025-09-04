@@ -7,7 +7,7 @@ select
     "is_applicable_to_males" as is_applicable_to_males,
     "is_qualifier_approved" as is_qualifier_approved,
     "is_notifiable_disease" as is_notifiable_disease,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
     "SNOMED_ID" as snomed_id,

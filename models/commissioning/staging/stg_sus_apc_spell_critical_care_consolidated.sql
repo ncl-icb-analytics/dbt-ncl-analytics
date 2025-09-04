@@ -38,5 +38,5 @@ select
     "discharge.ready_date" as discharge_ready_date,
     "discharge.ready_time" as discharge_ready_time,
     "discharge.destination" as discharge_destination,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.critical_care_consolidated') }}

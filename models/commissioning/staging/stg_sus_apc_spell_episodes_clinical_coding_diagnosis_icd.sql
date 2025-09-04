@@ -4,7 +4,7 @@
 
 select
     "present_on_admission" as present_on_admission,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "ICD_ID" as icd_id,
     "code" as code,
     "PRIMARYKEY_ID" as primarykey_id,

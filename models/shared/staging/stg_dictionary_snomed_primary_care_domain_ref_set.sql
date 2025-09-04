@@ -9,9 +9,9 @@ select
     "SNOMED_Code_Description" as snomed_code_description,
     "PCD_Refset_ID" as pcd_refset_id,
     "Service_And_Ruleset" as service_and_ruleset,
-    "IsActive" as isactive,
-    "ActiveFrom" as activefrom,
-    "ActiveTo" as activeto,
-    "FirstCreated" as firstcreated,
-    "LastUpdated" as lastupdated
+    "IsActive" as is_active,
+    "ActiveFrom" as active_from,
+    "ActiveTo" as active_to,
+    "FirstCreated" as first_created,
+    "LastUpdated" as last_updated
 from {{ source('dictionary_snomed', 'Primary_Care_Domain_Ref_Set') }}

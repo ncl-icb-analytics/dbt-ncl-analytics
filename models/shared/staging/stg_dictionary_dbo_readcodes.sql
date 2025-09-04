@@ -3,20 +3,20 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_ReadCodeID" as sk_readcodeid,
-    "ReadCode" as readcode,
+    "SK_ReadCodeID" as sk_read_code_id,
+    "ReadCode" as read_code,
     "Term" as term,
-    "SnomedCTCode" as snomedctcode,
-    "InNationalDataset" as innationaldataset,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated,
-    "IsSensitive" as issensitive,
-    "SK_ReadCodeParentID" as sk_readcodeparentid,
-    "SK_BNFChapterID" as sk_bnfchapterid,
-    "IsReadV2" as isreadv2,
-    "IsCTV3" as isctv3,
-    "ReadCodeAlt" as readcodealt,
-    "SK_ReadCodeParentID_ReadV2" as sk_readcodeparentid_readv2,
-    "SK_ReadCodeParentID_CTV3" as sk_readcodeparentid_ctv3,
-    "MatchesReadCodeRegex" as matchesreadcoderegex
+    "SnomedCTCode" as snomed_ct_code,
+    "InNationalDataset" as in_national_dataset,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated,
+    "IsSensitive" as is_sensitive,
+    "SK_ReadCodeParentID" as sk_read_code_parent_id,
+    "SK_BNFChapterID" as sk_bnf_chapter_id,
+    "IsReadV2" as is_read_v2,
+    "IsCTV3" as is_ctv3,
+    "ReadCodeAlt" as read_code_alt,
+    "SK_ReadCodeParentID_ReadV2" as sk_read_code_parent_id_read_v2,
+    "SK_ReadCodeParentID_CTV3" as sk_read_code_parent_id_ctv3,
+    "MatchesReadCodeRegex" as matches_read_code_regex
 from {{ source('dictionary_dbo', 'ReadCodes') }}

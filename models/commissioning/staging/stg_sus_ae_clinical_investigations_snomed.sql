@@ -4,7 +4,7 @@
 
 select
     "is_code_approved" as is_code_approved,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "SNOMED_ID" as snomed_id,
     "code" as code,
     "equivalent_ae_code" as equivalent_ae_code,

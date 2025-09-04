@@ -15,5 +15,5 @@ select
     "is_applicable_to_females" as is_applicable_to_females,
     "is_applicable_to_males" as is_applicable_to_males,
     "is_notifiable_disease" as is_notifiable_disease,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_ae', 'clinical.diagnoses.snomed.max_core_diagnoses') }}

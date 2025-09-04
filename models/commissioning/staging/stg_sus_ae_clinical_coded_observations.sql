@@ -8,7 +8,7 @@ select
     "code" as code,
     "CODED_OBSERVATIONS_ID" as coded_observations_id,
     "timestamp" as timestamp,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "ucum_unit_of_measurement" as ucum_unit_of_measurement,
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id

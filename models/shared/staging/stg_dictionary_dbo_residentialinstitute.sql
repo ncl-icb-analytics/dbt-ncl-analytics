@@ -3,12 +3,12 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_ResidentialInstituteID" as sk_residentialinstituteid,
+    "SK_ResidentialInstituteID" as sk_residential_institute_id,
     "Cipher" as cipher,
-    "ResidentialInstituteCode" as residentialinstitutecode,
-    "ResidentialInstituteName" as residentialinstitutename,
-    "AttractsGlobalSumUplift" as attractsglobalsumuplift,
-    "SK_OrganisationID" as sk_organisationid,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "ResidentialInstituteCode" as residential_institute_code,
+    "ResidentialInstituteName" as residential_institute_name,
+    "AttractsGlobalSumUplift" as attracts_global_sum_uplift,
+    "SK_OrganisationID" as sk_organisation_id,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_dbo', 'ResidentialInstitute') }}

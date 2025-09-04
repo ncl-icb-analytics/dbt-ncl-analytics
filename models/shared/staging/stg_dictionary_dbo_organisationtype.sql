@@ -3,11 +3,11 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_OrganisationTypeID" as sk_organisationtypeid,
-    "OrganisationType" as organisationtype,
-    "ShortOrganisationType" as shortorganisationtype,
-    "CodeAllocatedBy" as codeallocatedby,
-    "IsOrganisationCode" as isorganisationcode,
-    "IsLocationCode" as islocationcode,
-    "SK_ServiceProviderTypeID" as sk_serviceprovidertypeid
+    "SK_OrganisationTypeID" as sk_organisation_type_id,
+    "OrganisationType" as organisation_type,
+    "ShortOrganisationType" as short_organisation_type,
+    "CodeAllocatedBy" as code_allocated_by,
+    "IsOrganisationCode" as is_organisation_code,
+    "IsLocationCode" as is_location_code,
+    "SK_ServiceProviderTypeID" as sk_service_provider_type_id
 from {{ source('dictionary_dbo', 'OrganisationType') }}

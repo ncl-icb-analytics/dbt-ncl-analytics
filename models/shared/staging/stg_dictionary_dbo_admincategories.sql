@@ -3,11 +3,11 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_AdminCategoryID" as sk_admincategoryid,
-    "BK_AdminCategoryCode" as bk_admincategorycode,
-    "AdminCategoryName" as admincategoryname,
-    "AdminCategoryFullName" as admincategoryfullname,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated,
-    "BK_AdminCategoryCode_TinyInt" as bk_admincategorycode_tinyint
+    "SK_AdminCategoryID" as sk_admin_category_id,
+    "BK_AdminCategoryCode" as bk_admin_category_code,
+    "AdminCategoryName" as admin_category_name,
+    "AdminCategoryFullName" as admin_category_full_name,
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated,
+    "BK_AdminCategoryCode_TinyInt" as bk_admin_category_code_tiny_int
 from {{ source('dictionary_dbo', 'AdminCategories') }}

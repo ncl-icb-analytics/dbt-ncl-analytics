@@ -3,10 +3,10 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_PODTeamID" as sk_podteamid,
-    "PODTeamCode" as podteamcode,
-    "PODTeamName" as podteamname,
-    "SK_ServiceProviderGroupID" as sk_serviceprovidergroupid,
-    "IsTestOrganisation" as istestorganisation,
+    "SK_PODTeamID" as sk_pod_team_id,
+    "PODTeamCode" as pod_team_code,
+    "PODTeamName" as pod_team_name,
+    "SK_ServiceProviderGroupID" as sk_service_provider_group_id,
+    "IsTestOrganisation" as is_test_organisation,
     "Region" as region
 from {{ source('dictionary_dbo', 'PODTeams') }}

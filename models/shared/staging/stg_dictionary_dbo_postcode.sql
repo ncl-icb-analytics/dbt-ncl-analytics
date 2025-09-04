@@ -3,7 +3,7 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_PostcodeID" as sk_postcodeid,
+    "SK_PostcodeID" as sk_postcode_id,
     "Postcode_8_chars" as postcode_8_chars,
     "Postcode_single_space_e_Gif" as postcode_single_space_e_gif,
     "Postcode_no_space" as postcode_no_space,
@@ -24,14 +24,14 @@ select
     "yr2011_MSOA" as yr2011_msoa,
     "Latitude" as latitude,
     "Longitude" as longitude,
-    "FirstCreated" as firstcreated,
-    "LastUpdated" as lastupdated,
+    "FirstCreated" as first_created,
+    "LastUpdated" as last_updated,
     "GOR_Code" as gor_code,
     "Postcode_Usertype" as postcode_usertype,
     "Area_Team_Code" as area_team_code,
     "Postcode" as postcode,
     "LSOA" as lsoa,
     "MSOA" as msoa,
-    "SK_PseudoPostcodeID" as sk_pseudopostcodeid,
+    "SK_PseudoPostcodeID" as sk_pseudo_postcode_id,
     "SK_Postcode_ID" as sk_postcode_id
 from {{ source('dictionary_dbo', 'Postcode') }}

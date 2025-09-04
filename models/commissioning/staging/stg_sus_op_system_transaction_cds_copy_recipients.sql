@@ -7,5 +7,5 @@ select
     "PRIMARYKEY_ID" as primarykey_id,
     "ROWNUMBER_ID" as rownumber_id,
     "cds_copy_recipients" as cds_copy_recipients,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_op', 'system.transaction.cds_copy_recipients') }}

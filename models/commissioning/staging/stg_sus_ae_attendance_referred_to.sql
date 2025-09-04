@@ -12,7 +12,7 @@ select
     "request_time" as request_time,
     "assessment_date" as assessment_date,
     "assessment_time" as assessment_time,
-    "dmicImportLogId" as dmicimportlogid,
+    "dmicImportLogId" as dmic_import_log_id,
     "request_timestamp" as request_timestamp,
     "assessment_timestamp" as assessment_timestamp
 from {{ source('sus_ae', 'attendance.referred_to') }}

@@ -3,5 +3,5 @@
 -- Description: Primary care referrals data
 
 select
-    "UniqSubmissionID" as uniqsubmissionid
+    "UniqSubmissionID" as uniq_submission_id
 from {{ source('eRS_primary_care', 'ActiveSubmission') }}

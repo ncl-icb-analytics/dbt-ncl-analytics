@@ -3,5 +3,5 @@
 -- Description: Primary care medications and prescribing data
 
 select
-    "UniqSubmissionId" as uniqsubmissionid
+    "UniqSubmissionId" as uniq_submission_id
 from {{ source('epd_primary_care', 'ActiveSubmission') }}

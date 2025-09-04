@@ -11,5 +11,5 @@ select
     "unbundled_hrg_adult_cc" as unbundled_hrg_adult_cc,
     "tariff_days" as tariff_days,
     "length_of_stay" as length_of_stay,
-    "dmicImportLogId" as dmicimportlogid
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_apc', 'spell.critical_care_consolidated.allocated_episodes') }}

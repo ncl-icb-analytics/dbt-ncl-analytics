@@ -3,10 +3,10 @@
 -- Description: Reference data including PDS and lookup tables
 
 select
-    "SK_PartialPostcode" as sk_partialpostcode,
+    "SK_PartialPostcode" as sk_partial_postcode,
     "Postcode" as postcode,
     "Longitude" as longitude,
     "Latitude" as latitude,
-    "DateCreated" as datecreated,
-    "DateUpdated" as dateupdated
+    "DateCreated" as date_created,
+    "DateUpdated" as date_updated
 from {{ source('dictionary_dbo', 'PartialPostcode') }}
