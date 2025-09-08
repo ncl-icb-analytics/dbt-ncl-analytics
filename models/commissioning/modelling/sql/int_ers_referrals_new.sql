@@ -13,6 +13,8 @@ Clinical Purpose:
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 
 */
+{% set years_from_now = -2 %}
+
 WITH 
     accepted_referrals AS (
         select
@@ -26,7 +28,7 @@ WITH
             ,SERVICE_SPECIALTY_DESC
         from {{ ref('stg_ers_pc_ebsx02ubrnaction')}}
         where ACTION_CD = 1420 -- 'Referral accepted' code
-            and E_REFERRAL_PATHWAY_START BETWEEN DATEADD(YEAR, -2, CURRENT_DATE()) AND CURRENT_DATE()
+            and E_REFERRAL_PATHWAY_START BETWEEN DATEADD(YEAR, {{years_from_now}}, CURRENT_DATE()) AND CURRENT_DATE()
             and E_REFERRAL_PATHWAY_START<=CURRENT_DATE()
     )
 
@@ -57,6 +59,6 @@ select
 from {{ ref('stg_ers_pc_ebsx02ubrnaction')}} as a
 left join accepted_referrals as b on a.ubrn_id = b.ubrn_id 
 where ACTION_CD = 1422 -- 'Referral Created' code
-    and E_REFERRAL_PATHWAY_START BETWEEN DATEADD(YEAR, -2, CURRENT_DATE()) AND CURRENT_DATE()
+    and E_REFERRAL_PATHWAY_START BETWEEN DATEADD(YEAR, {{years_from_now}}, CURRENT_DATE()) AND CURRENT_DATE()
     and E_REFERRAL_PATHWAY_START<=CURRENT_DATE()
 

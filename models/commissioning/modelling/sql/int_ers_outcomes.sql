@@ -3,7 +3,7 @@
         materialized='table')
 }}
 
-
+{% set years_from_now = -1 %}
 /*
 All Recent referrals outcomes
 
@@ -22,7 +22,7 @@ with base as (
         ,action_dt_tm
         ,action_desc
         from {{ ref('stg_ers_pc_ebsx02ubrnaction')}}
-        where  E_REFERRAL_PATHWAY_START BETWEEN DATEADD(YEAR, -2, CURRENT_DATE()) AND CURRENT_DATE()
+        where  E_REFERRAL_PATHWAY_START BETWEEN DATEADD(YEAR, {{years_from_now}}, CURRENT_DATE()) AND CURRENT_DATE()
             and E_REFERRAL_PATHWAY_START<=CURRENT_DATE()
 )
 
