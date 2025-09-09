@@ -22,7 +22,7 @@ select
     /* Information needed to derive standard event information */
     core.primarykey_id as event_id
     , core.spell_patient_identity_nhs_number_value_pseudo as sk_patient_id
-    , core.spell_care_location_site_code_of_treatment as location_id
+    , core.spell_care_location_site_code_of_treatment as site_id
     , core.spell_admission_date as start_date
     , core.spell_discharge_length_of_hospital_stay as duration
     , core.spell_commissioning_grouping_core_hrg as acuity_proxy

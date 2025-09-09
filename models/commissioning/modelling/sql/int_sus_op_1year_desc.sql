@@ -12,7 +12,7 @@ Processing:
 - Map to known definitions [added later]
 
 Clinical Purpose:
-- Establishing use of inpatient services
+- Establishing use of outpatient services
 - Understanding patient service preference
 - Care coordination management across providers
 
@@ -23,15 +23,16 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 select
     core.*
     , dict_provider.service_provider_name as provider_name
-    , dict_org.organisation_name as location_name
+    , dict_org.organisation_name as site_name
     , dict_appt_outcome.attendance_outcome as outcome_desc
     , dict_att_dna.dna_indicator_desc as appointment_outcome_desc
+    , dict_att_t.attendant_type_desc as first_attendance_desc
     , dict_spec.specialty_name as primary_reason_desc
     , dict_appt_priority.priority_type_desc as acuity_desc
     , dict_treat.specialty_name as treatment_desc
     , dict_hrg.hrg_description as type_desc
 
-from {{ ref('int_sus_op_min')}} as core
+from {{ ref('int_sus_op_1year')}} as core
 
 -- speciality and treatment descriptions
 LEFT JOIN {{ref('stg_dictionary_dbo_specialties')}} as dict_spec ON 
@@ -47,7 +48,7 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_hrg') }} as dict_hrg ON
 
 -- organisations
 LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON 
-    core.location_id = dict_org.organisation_code 
+    core.site_id = dict_org.organisation_code 
 
 LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
     ON core.provider_id = dict_provider.service_provider_full_code
@@ -62,3 +63,6 @@ LEFT JOIN {{ ref('stg_dictionary_op_attendanceoutcomes') }} AS dict_appt_outcome
 
 LEFT JOIN {{ ref('stg_dictionary_op_dnaindicators') }} dict_att_dna on 
     core.appointment_attended_or_dna = dict_att_dna.bk_dna_code
+
+LEFT JOIN {{ ref('stg_dictionary_op_attendancetypes') }} dict_att_t on
+    core.appointment_first_attendance = dict_att_t.bk_attendance_type_code
