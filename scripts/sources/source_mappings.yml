@@ -119,7 +119,7 @@ sources:
     schema: CSDS
     description: Community services dataset
     staging_prefix: stg_csds
-    domain: shared
+    domain: commissioning
   # ========================================
   # OLIDS DATA SOURCES (Future Integration)
   # ========================================
