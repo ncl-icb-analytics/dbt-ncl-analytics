@@ -112,6 +112,14 @@ sources:
     description: Primary care referrals lookups
     staging_prefix: stg_dictionary_ers
     domain: shared
+
+  # Community services dataset
+  - source_name: csds
+    database: DATA_LAKE
+    schema: CSDS
+    description: Community services dataset
+    staging_prefix: stg_csds
+    domain: shared
   # ========================================
   # OLIDS DATA SOURCES (Future Integration)
   # ========================================
