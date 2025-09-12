@@ -161,6 +161,19 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'E-Referral'
+  
+  UNION ALL
+  
+    -- csds: Community services dataset
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'CSDS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'CSDS'
 )
 
 SELECT 

@@ -1,5 +1,2660 @@
 version: 2
 sources:
+- name: csds
+  database: '"DATA_LAKE"'
+  schema: '"CSDS"'
+  description: Community services dataset
+  tables:
+  - name: ActiveSubmission
+    identifier: '"ActiveSubmission"'
+    columns:
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+  - name: Bridging
+    identifier: '"Bridging"'
+    columns:
+    - name: Person_ID
+      data_type: TEXT
+    - name: NHSNumber Pseudo
+      data_type: TEXT
+    - name: Person_Index_id
+      data_type: TEXT
+    - name: Pseudo_NHS_Number
+      data_type: TEXT
+  - name: CYP000Header
+    identifier: '"CYP000Header"'
+    columns:
+    - name: DATA SET VERSION NUMBER
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (CODE OF SUBMITTING ORGANISATION)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CODE OF SUBMITTING ORGANISATION)
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE AND TIME DATA SET CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: PRIMARY DATA COLLECTION SYSTEM IN USE
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: END PROCESSING DATE TIME
+      data_type: TIMESTAMP_NTZ
+    - name: CYP000 UNIQUE ID
+      data_type: NUMBER
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UPLOAD DATE TIME
+      data_type: TIMESTAMP_NTZ
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: TOTAL CYP001 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP002 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP003 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP004 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP005 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP006 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP007 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP101 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP102 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP103 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP104 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP105 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP201 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP202 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP301 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP401 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP402 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP403 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP404 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP501 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP502 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP601 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP602 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP603 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP604 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP605 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP606 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP607 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP608 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP609 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP610 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP611 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP612 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP613 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP901 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: TOTAL RECORDS
+      data_type: NUMBER
+    - name: CYPHS SUBMISSION RECORD COUNT
+      data_type: NUMBER
+    - name: TOTAL CYP008 POST PROCESSING ROW COUNT
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicMonthId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCG
+      data_type: TEXT
+  - name: CYP001MPI
+    identifier: '"CYP001MPI"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (LOCAL PATIENT IDENTIFIER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (LOCAL PATIENT IDENTIFIER)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (RESIDENCE RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION CODE (RESIDENCE RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (EDUCATIONAL ESTABLISHMENT)
+      data_type: TEXT
+    - name: ORGANISATION CODE (EDUCATIONAL ESTABLISHMENT)
+      data_type: TEXT
+    - name: NHS NUMBER STATUS INDICATOR CODE
+      data_type: TEXT
+    - name: DateOfBirth Pseudo
+      data_type: TEXT
+    - name: Postcode Pseudo
+      data_type: TEXT
+    - name: PERSON STATED GENDER CODE
+      data_type: TEXT
+    - name: ETHNIC CATEGORY
+      data_type: TEXT
+    - name: ETHNIC CATEGORY 2021
+      data_type: TEXT
+    - name: LANGUAGE CODE (PREFERRED)
+      data_type: TEXT
+    - name: PERSON RELATIONSHIP (MAIN CARER)
+      data_type: TEXT
+    - name: HEALTH VISITOR FIRST ANTENATAL VISIT DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LOOKED AFTER CHILD INDICATOR
+      data_type: TEXT
+    - name: SAFEGUARDING VULNERABILITY FACTORS INDICATOR
+      data_type: TEXT
+    - name: CONSTANT SUPERVISION AND CARE REQUIRED DUE TO DISABILITY INDICATOR
+      data_type: TEXT
+    - name: EDUCATIONAL ASSESSMENT OUTCOME
+      data_type: TEXT
+    - name: PREFERRED DEATH LOCATION DISCUSSED INDICATOR
+      data_type: TEXT
+    - name: PERSON AT RISK OF UNEXPECTED DEATH INDICATOR
+      data_type: TEXT
+    - name: DEATH LOCATION TYPE CODE (PREFERRED)
+      data_type: TEXT
+    - name: PERSON DEATH DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DEATH LOCATION TYPE CODE (ACTUAL)
+      data_type: TEXT
+    - name: DEATH NOT AT PREFERRED LOCATION REASON
+      data_type: TEXT
+    - name: NHS NUMBER STATUS INDICATOR CODE (MOTHER)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP001 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: VALID NHS NUMBER FLAG
+      data_type: TEXT
+    - name: VALID POSTCODE FLAG
+      data_type: TEXT
+    - name: POSTCODE DISTRICT
+      data_type: TEXT
+    - name: Postcode_Default Pseudo
+      data_type: TEXT
+    - name: LOWER SUPER OUTPUT AREA (RESIDENCE)
+      data_type: TEXT
+    - name: LOWER SUPER OUTPUT AREA (RESIDENCE) 2011
+      data_type: TEXT
+    - name: CENSUS YEAR
+      data_type: TEXT
+    - name: COUNTY
+      data_type: TEXT
+    - name: LOCAL AUTHORITY DISTRICT/UNITARY AUTHORITY
+      data_type: TEXT
+    - name: ELECTORAL WARD OF USUAL ADDRESS
+      data_type: TEXT
+    - name: AGE OF PATIENT AT REPORTING PERIOD START (DAYS)
+      data_type: NUMBER
+    - name: AGE OF PATIENT AT REPORTING PERIOD END (DAYS)
+      data_type: NUMBER
+    - name: AGE AT DEATH (DAYS)
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CCG OF RESIDENCE)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CCG OF RESIDENCE)
+      data_type: TEXT
+    - name: AGE OF PATIENT AT REPORTING PERIOD START (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_OF_PATIENT_AT_RP_START
+      data_type: NUMBER
+    - name: AGE OF PATIENT AT REPORTING PERIOD END (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_OF_PATIENT_AT_RP_END
+      data_type: NUMBER
+    - name: AGE AT DEATH (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_DEATH
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (REPORTING PERIOD START DATE)
+      data_type: TEXT
+    - name: AGE GROUP (REPORTING PERIOD END DATE)
+      data_type: TEXT
+    - name: AGE GROUP (DEATH DATE)
+      data_type: TEXT
+    - name: AGE BAND (REPORTING PERIOD START DATE)
+      data_type: TEXT
+    - name: AGE BAND (REPORTING PERIOD END DATE)
+      data_type: TEXT
+    - name: AGE BAND (DEATH DATE)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (SUB ICB LOCATION OF RESIDENCE)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (ICB OF RESIDENCE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicEthnicCategoryGroup
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: dmIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmSubIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP002GP
+    identifier: '"CYP002GP"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: GENERAL MEDICAL PRACTICE (PATIENT REGISTRATION)
+      data_type: TEXT
+    - name: GENERAL MEDICAL PRACTICE CODE (PATIENT REGISTRATION)
+      data_type: TEXT
+    - name: START DATE (GMP PATIENT REGISTRATION)
+      data_type: TIMESTAMP_NTZ
+    - name: END DATE (GMP PATIENT REGISTRATION)
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION IDENTIFIER (GP PRACTICE RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION CODE (GP PRACTICE RESPONSIBILITY)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP002 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: GP DISTANCE FROM HOME
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (CCG OF GP PRACTICE)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CCG OF GP PRACTICE)
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (SUB ICB LOCATION OF GP PRACTICE)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (ICB OF GP PRACTICE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: dmIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmSubIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP003AccommType
+    identifier: '"CYP003AccommType"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: ACCOMMODATION STATUS CODE
+      data_type: TEXT
+    - name: ACCOMMODATION STATUS RECORDED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP003 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: AGE AT ACCOMMODATION STATUS DATE
+      data_type: NUMBER
+    - name: AGE AT ACCOMMODATION STATUS DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_ACCOMMODATION_STATUS_DATE
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (ACCOMMODATION STATUS DATE)
+      data_type: TEXT
+    - name: AGE BAND (ACCOMMODATION STATUS DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP004CarePlanType
+    identifier: '"CYP004CarePlanType"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CARE PLAN IDENTIFIER
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: CARE PLAN TYPE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: CARE PLAN CREATION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE PLAN CREATION TIME
+      data_type: TIMESTAMP_NTZ
+    - name: CARE PLAN LAST UPDATED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE PLAN LAST UPDATED TIME
+      data_type: TIMESTAMP_NTZ
+    - name: CARE PLAN IMPLEMENTATION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP004 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: UNIQUE CARE PLAN IDENTIFIER
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP005CarePlanAgreement
+    identifier: '"CYP005CarePlanAgreement"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CARE PLAN IDENTIFIER
+      data_type: TEXT
+    - name: CARE PLAN CONTENT AGREED BY
+      data_type: TEXT
+    - name: CARE PLAN AGREED BY
+      data_type: TEXT
+    - name: CARE PLAN CONTENT AGREED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE PLAN AGREED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE PLAN CONTENT AGREED TIME
+      data_type: TIMESTAMP_NTZ
+    - name: CARE PLAN AGREED TIME
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP005 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: UNIQUE CARE PLAN IDENTIFIER
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP006SocPerCircumstances
+    identifier: '"CYP006SocPerCircumstances"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: SOCIAL AND PERSONAL CIRCUMSTANCE (SNOMED CT)
+      data_type: TEXT
+    - name: SOCIAL AND PERSONAL CIRCUMSTANCE RECORDED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP006 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP007EmpStatus
+    identifier: '"CYP007EmpStatus"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: EMPLOYMENT STATUS
+      data_type: TEXT
+    - name: EMPLOYMENT STATUS RECORDED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: WEEKLY HOURS WORKED
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP007 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP008OverseasVisitorChargCat
+    identifier: '"CYP008OverseasVisitorChargCat"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: OVERSEAS VISITOR CHARGING CATEGORY
+      data_type: TEXT
+    - name: OVERSEAS VISITOR CHARGING CATEGORY APPLICABLE FROM DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OVERSEAS VISITOR CHARGING CATEGORY APPLICABLE END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP008 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDSCRO
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP101Referral
+    identifier: '"CYP101Referral"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: REFERRAL REQUEST RECEIVED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL REQUEST RECEIVED TIME
+      data_type: TIMESTAMP_NTZ
+    - name: NHS SERVICE AGREEMENT LINE IDENTIFIER
+      data_type: TEXT
+    - name: NHS SERVICE AGREEMENT LINE NUMBER
+      data_type: TEXT
+    - name: SOURCE OF REFERRAL FOR COMMUNITY
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (REFERRING ORGANISATION)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (REFERRING)
+      data_type: TEXT
+    - name: REFERRING ORGANISATION CODE
+      data_type: TEXT
+    - name: REFERRING CARE PROFESSIONAL STAFF GROUP (COMMUNITY CARE)
+      data_type: TEXT
+    - name: REFERRING CARE PROFESSIONAL STAFF GROUP (MENTAL HEALTH AND COMMUNITY CARE)
+      data_type: TEXT
+    - name: PRIORITY TYPE CODE
+      data_type: TEXT
+    - name: PRIMARY REASON FOR REFERRAL (COMMUNITY CARE)
+      data_type: TEXT
+    - name: SERVICE DISCHARGE DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DISCHARGE LETTER ISSUED DATE (COMMUNITY CARE)
+      data_type: TIMESTAMP_NTZ
+    - name: DISCHARGE LETTER ISSUED DATE (MENTAL HEALTH AND COMMUNITY CARE)
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP101 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT SERVICE REFERRAL RECEIVED DATE
+      data_type: NUMBER
+    - name: AGE AT SERVICE REFERRAL DISCHARGE
+      data_type: NUMBER
+    - name: AGE AT SERVICE REFERRAL RECEIVED DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_SERVICE_REFERRAL_RECEIVED_DATE
+      data_type: NUMBER
+    - name: AGE AT SERVICE REFERRAL DISCHARGE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_SERVICE_REFERRAL_DISCHARGE
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (REFERRAL RECEIVED DATE)
+      data_type: TEXT
+    - name: AGE GROUP (SERVICE DISCHARGE DATE)
+      data_type: TEXT
+    - name: AGE BAND (REFERRAL RECEIVED DATE)
+      data_type: TEXT
+    - name: AGE BAND (SERVICE DISCHARGE DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP102ServiceTypeReferredTo
+    identifier: '"CYP102ServiceTypeReferredTo"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: CARE PROFESSIONAL TEAM LOCAL IDENTIFIER
+      data_type: TEXT
+    - name: SERVICE OR TEAM TYPE REFERRED TO (COMMUNITY CARE)
+      data_type: TEXT
+    - name: REFERRAL CLOSURE DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL REJECTION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL CLOSURE REASON
+      data_type: TEXT
+    - name: REFERRAL REJECTION REASON
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP102 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: UNIQUE CARE PROFESSIONAL TEAM LOCAL IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT SERVICE REFERRAL CLOSURE
+      data_type: NUMBER
+    - name: AGE AT SERVICE REFERRAL REJECTION
+      data_type: NUMBER
+    - name: AGE AT SERVICE REFERRAL CLOSURE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_SERVICE_REFERRAL_CLOSURE
+      data_type: NUMBER
+    - name: AGE AT SERVICE REFERRAL REJECTION (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_SERVICE_REFERRAL_REJECTION
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (REFERRAL CLOSURE DATE)
+      data_type: TEXT
+    - name: AGE GROUP (REFERRAL REJECTION DATE)
+      data_type: TEXT
+    - name: AGE BAND (REFERRAL CLOSURE DATE)
+      data_type: TEXT
+    - name: AGE BAND (REFERRAL REJECTION DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP103OtherReasonReferral
+    identifier: '"CYP103OtherReasonReferral"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: OTHER REASON FOR REFERRAL (COMMUNITY CARE)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP103 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP104RTT
+    identifier: '"CYP104RTT"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: BookingReference Pseudo
+      data_type: TEXT
+    - name: PatientPathwayID Pseudo
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (PATIENT PATHWAY IDENTIFIER ISSUER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PATIENT PATHWAY IDENTIFIER ISSUER)
+      data_type: TEXT
+    - name: WAITING TIME MEASUREMENT TYPE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: WAITING TIME MEASUREMENT TYPE
+      data_type: TEXT
+    - name: REFERRAL TO TREATMENT PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL TO TREATMENT PERIOD START TIME
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL TO TREATMENT PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL TO TREATMENT PERIOD END TIME
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL TO TREATMENT PERIOD STATUS
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP104 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT REFERRAL TO TREATMENT START DATE
+      data_type: NUMBER
+    - name: AGE AT REFERRAL TO TREATMENT END DATE
+      data_type: NUMBER
+    - name: TIME BETWEEN REFERRAL TO TREATMENT START AND END DATE
+      data_type: NUMBER
+    - name: AGE AT REFERRAL TO TREATMENT START DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_REFERRAL_TO_TREATMENT_START_DATE
+      data_type: NUMBER
+    - name: AGE AT REFERRAL TO TREATMENT END DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_REFERRAL_TO_TREATMENT_END_DATE
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DERIVED WAITING TIME
+      data_type: TEXT
+    - name: DERIVED WAITING TIME (NIGHT)
+      data_type: TEXT
+    - name: RESPONSE STANDARD MET
+      data_type: TEXT
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (RTT START DATE)
+      data_type: TEXT
+    - name: AGE GROUP (RTT END DATE)
+      data_type: TEXT
+    - name: AGE BAND (RTT START DATE)
+      data_type: TEXT
+    - name: AGE BAND (RTT END DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP105OnwardReferral
+    identifier: '"CYP105OnwardReferral"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: ONWARD REFERRAL DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ONWARD REFERRAL REASON (COMMUNITY CARE)
+      data_type: TEXT
+    - name: ONWARD REFERRAL REASON
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (RECEIVING ORGANISATION)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (RECEIVING)
+      data_type: TEXT
+    - name: ORGANISATION CODE (RECEIVING)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP105 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP201CareContact
+    identifier: '"CYP201CareContact"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CARE CONTACT IDENTIFIER
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: CARE PROFESSIONAL TEAM LOCAL IDENTIFIER
+      data_type: TEXT
+    - name: CARE CONTACT DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE CONTACT TIME
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION IDENTIFIER (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: ADMINISTRATIVE CATEGORY CODE
+      data_type: TEXT
+    - name: CLINICAL CONTACT DURATION OF CARE CONTACT
+      data_type: NUMBER
+    - name: CONSULTATION TYPE
+      data_type: TEXT
+    - name: CARE CONTACT SUBJECT
+      data_type: TEXT
+    - name: CONSULTATION MEDIUM USED
+      data_type: TEXT
+    - name: CONSULTATION MECHANISM (COMMUNITY CARE)
+      data_type: TEXT
+    - name: ACTIVITY LOCATION TYPE CODE
+      data_type: TEXT
+    - name: ORGANISATION SITE IDENTIFIER (OF TREATMENT)
+      data_type: TEXT
+    - name: SITE CODE (OF TREATMENT)
+      data_type: TEXT
+    - name: GROUP THERAPY INDICATOR
+      data_type: TEXT
+    - name: ATTENDED OR DID NOT ATTEND CODE
+      data_type: TEXT
+    - name: ATTENDANCE STATUS
+      data_type: TEXT
+    - name: EARLIEST REASONABLE OFFER DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EARLIEST CLINICALLY APPROPRIATE DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE CONTACT CANCELLATION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE CONTACT CANCELLATION REASON
+      data_type: TEXT
+    - name: REPLACEMENT APPOINTMENT DATE OFFERED
+      data_type: TIMESTAMP_NTZ
+    - name: REPLACEMENT APPOINTMENT BOOKED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP201 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: UNIQUE CARE PROFESSIONAL TEAM LOCAL IDENTIFIER
+      data_type: TEXT
+    - name: UNIQUE CARE CONTACT IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT CARE CONTACT DATE
+      data_type: NUMBER
+    - name: TIME BETWEEN REFERRAL AND CARE CONTACT
+      data_type: NUMBER
+    - name: CONTACT LOCATION DISTANCE FROM HOME
+      data_type: NUMBER
+    - name: AGE AT CARE CONTACT DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_CARE_CONTACT_DATE
+      data_type: NUMBER
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (CARE CONTACT DATE)
+      data_type: TEXT
+    - name: DERIVED BODY MASS INDEX
+      data_type: NUMBER
+    - name: AGE BAND (CARE CONTACT DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP202CareActivity
+    identifier: '"CYP202CareActivity"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: CARE CONTACT IDENTIFIER
+      data_type: TEXT
+    - name: COMMUNITY CARE ACTIVITY TYPE
+      data_type: TEXT
+    - name: COMMUNITY CARE ACTIVITY TYPE CODE
+      data_type: TEXT
+    - name: CARE PROFESSIONAL LOCAL IDENTIFIER
+      data_type: TEXT
+    - name: CLINICAL CONTACT DURATION OF CARE ACTIVITY
+      data_type: NUMBER
+    - name: PROCEDURE SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: PROCEDURE SCHEME IN USE
+      data_type: TEXT
+    - name: CODED PROCEDURE (CLINICAL TERMINOLOGY)
+      data_type: TEXT
+    - name: FINDING SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: FINDING SCHEME IN USE
+      data_type: TEXT
+    - name: CODED FINDING (CODED CLINICAL ENTRY)
+      data_type: TEXT
+    - name: OBSERVATION SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: OBSERVATION SCHEME IN USE
+      data_type: TEXT
+    - name: CODED OBSERVATION (CLINICAL TERMINOLOGY)
+      data_type: TEXT
+    - name: OBSERVATION VALUE
+      data_type: TEXT
+    - name: UCUM UNIT OF MEASUREMENT
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP202 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE CARE CONTACT IDENTIFIER
+      data_type: TEXT
+    - name: UNIQUE CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: DERIVED BREASTFEEDING STATUS (MASTER)
+      data_type: TEXT
+    - name: MAPPED SNOMED CT PROCEDURE CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PROCEDURE CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PROCEDURE PREFERRED TERM
+      data_type: TEXT
+    - name: MAPPED OPCS-4 PROCEDURE CODE
+      data_type: TEXT
+    - name: MAPPED OPCS-4 PROCEDURE DESCRIPTION
+      data_type: TEXT
+    - name: MAPPED SNOMED CT FINDING CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT FINDING CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT FINDING PREFERRED TERM
+      data_type: TEXT
+    - name: MAPPED ICD-10 FINDING CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 FINDING CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 FINDING DESCRIPTION
+      data_type: TEXT
+    - name: MAPPED SNOMED CT OBSERVATION CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT OBSERVATION CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT OBSERVATION PREFERRED TERM
+      data_type: TEXT
+    - name: DERIVED PERSON HEIGHT
+      data_type: TEXT
+    - name: DERIVED PERSON WEIGHT
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicActivityDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_CareProfessionalId_Local
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP301GroupSession
+    identifier: '"CYP301GroupSession"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: GROUP SESSION IDENTIFIER
+      data_type: TEXT
+    - name: GROUP SESSION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION IDENTIFIER (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: CLINICAL CONTACT DURATION OF GROUP SESSION
+      data_type: NUMBER
+    - name: GROUP SESSION TYPE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: GROUP SESSION TYPE CODE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: NUMBER OF GROUP SESSION PARTICIPANTS
+      data_type: NUMBER
+    - name: ACTIVITY LOCATION TYPE CODE
+      data_type: TEXT
+    - name: ORGANISATION SITE IDENTIFIER (OF TREATMENT)
+      data_type: TEXT
+    - name: SITE CODE (OF TREATMENT)
+      data_type: TEXT
+    - name: CARE PROFESSIONAL LOCAL IDENTIFIER
+      data_type: TEXT
+    - name: NHS SERVICE AGREEMENT LINE IDENTIFIER
+      data_type: TEXT
+    - name: NHS SERVICE AGREEMENT LINE NUMBER
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: CYP301 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: Unique_GroupSessionId
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_CareProfessionalId_Local
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP401SpEdNeedId
+    identifier: '"CYP401SpEdNeedId"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: SPECIAL EDUCATIONAL NEED TYPE
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP401 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP402SVF
+    identifier: '"CYP402SVF"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: SAFEGUARDING VULNERABILITY FACTORS TYPE
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP402 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP403CPP
+    identifier: '"CYP403CPP"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: CHILD PROTECTION PLAN REASON CODE
+      data_type: TEXT
+    - name: CHILD PROTECTION PLAN START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CHILD PROTECTION PLAN END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP403 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: AGE AT CHILD PROTECTION PLAN START DATE
+      data_type: NUMBER
+    - name: AGE AT CHILD PROTECTION PLAN END DATE
+      data_type: NUMBER
+    - name: DURATION SPENT ON CHILD PROTECTION PLAN
+      data_type: TEXT
+    - name: AGE AT CHILD PROTECTION PLAN START DATE (YEARS)
+      data_type: NUMBER
+    - name: AGE AT CHILD PROTECTION PLAN END DATE (YEARS)
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE BAND (CHILD PROTECTION PLAN START DATE)
+      data_type: TEXT
+    - name: AGE BAND (CHILD PROTECTION PLAN END DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP404AssTechToSupportDisTyp
+    identifier: '"CYP404AssTechToSupportDisTyp"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: ASSISTIVE TECHNOLOGY FINDING (SNOMED CT)
+      data_type: TEXT
+    - name: PRESCRIPTION DATE (ASSISTIVE TECHNOLOGY)
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP404 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP501CodedImm
+    identifier: '"CYP501CodedImm"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: IMMUNISATION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PROCEDURE SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: PROCEDURE SCHEME IN USE
+      data_type: TEXT
+    - name: IMMUNISATION PROCEDURE (CLINICAL TERMINOLOGY)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (IMMUNISATION RESPONSIBLE ORGANISATION)
+      data_type: TEXT
+    - name: ORGANISATION CODE (IMMUNISATION RESPONSIBLE ORGANISATION)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP501 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: AGE AT IMMUNISATION DATE
+      data_type: NUMBER
+    - name: SCHOOL YEAR AT IMMUNISATION DATE
+      data_type: TEXT
+    - name: AGE AT IMMUNISATION DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_IMMUNISATION_DATE
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (IMMUNISATION DATE)
+      data_type: TEXT
+    - name: AGE BAND (IMMUNISATION DATE)
+      data_type: TEXT
+    - name: MAPPED SNOMED CT PROCEDURE CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PROCEDURE CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PROCEDURE PREFERRED TERM
+      data_type: TEXT
+    - name: MAPPED OPCS-4 PROCEDURE CODE
+      data_type: TEXT
+    - name: MAPPED OPCS-4 PROCEDURE DESCRIPTION
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP502Imm
+    identifier: '"CYP502Imm"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: IMMUNISATION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CHILDHOOD IMMUNISATION TYPE (CHILDREN AND YOUNG PEOPLES HEALTH SERVICES)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (IMMUNISATION RESPONSIBLE ORGANISATION)
+      data_type: TEXT
+    - name: ORGANISATION CODE (IMMUNISATION RESPONSIBLE ORGANISATION)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP502 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: AGE AT IMMUNISATION DATE
+      data_type: NUMBER
+    - name: SCHOOL YEAR AT IMMUNISATION DATE
+      data_type: TEXT
+    - name: AGE AT IMMUNISATION DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_IMMUNISATION_DATE
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE BAND (IMMUNISATION DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP601MedicalHistory
+    identifier: '"CYP601MedicalHistory"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE
+      data_type: TEXT
+    - name: PREVIOUS DIAGNOSIS (CODED CLINICAL ENTRY)
+      data_type: TEXT
+    - name: DIAGNOSIS DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP601 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: MAPPED SNOMED CT PREVIOUS DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PREVIOUS DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PREVIOUS DIAGNOSIS PREFERRED TERM
+      data_type: TEXT
+    - name: MAPPED ICD-10 PREVIOUS DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 PREVIOUS DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 PREVIOUS DIAGNOSIS DESCRIPTION
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP602DisabilityType
+    identifier: '"CYP602DisabilityType"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: DISABILITY CODE
+      data_type: TEXT
+    - name: DISABILITY IMPACT PERCEPTION
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP602 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP603NewbornHearingScreening
+    identifier: '"CYP603NewbornHearingScreening"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: NEWBORN HEARING SCREENING OUTCOME
+      data_type: TEXT
+    - name: SERVICE REQUEST DATE (NEWBORN HEARING AUDIOLOGY)
+      data_type: TIMESTAMP_NTZ
+    - name: PROCEDURE DATE (NEWBORN HEARING AUDIOLOGY)
+      data_type: TIMESTAMP_NTZ
+    - name: NEWBORN HEARING AUDIOLOGY OUTCOME
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP603 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: AGE AT NEWBORN HEARING SERVICE REQUEST DATE
+      data_type: NUMBER
+    - name: IC_AGE_AT_NEWBORN_HEARING_SERVICE_REQUEST_DATE
+      data_type: NUMBER
+    - name: AGE AT NEWBORN HEARING PROCEDURE DATE
+      data_type: NUMBER
+    - name: IC_AGE_AT_NEWBORN_HEARING_PROCEDURE_DATE
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP604BloodSpotResult
+    identifier: '"CYP604BloodSpotResult"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: BLOOD SPOT CARD COMPLETION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: NEWBORN BLOOD SPOT TEST RESULT RECEIVED DATE
+      data_type: TIMESTAMP_NTZ
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (PHENYLKETONURIA)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (SICKLE CELL DISEASE)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (CYSTIC FIBROSIS)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (CONGENITAL HYPOTHYROIDISM)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (MEDIUM CHAIN ACYL-COA DEHYDROGENASE
+        DEFICIENCY)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (HOMOCYSTINURIA)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (MAPLE SYRUP URINE DISEASE)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (GLUTARIC ACIDURIA TYPE 1)
+      data_type: TEXT
+    - name: NEWBORN BLOOD SPOT TEST OUTCOME STATUS CODE (ISOVALERIC ACIDURIA)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP604 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: AGE AT BLOOD SPOT COMPLETION DATE
+      data_type: NUMBER
+    - name: IC_AGE_AT_BLOOD_SPOT_COMPLETION_DATE
+      data_type: NUMBER
+    - name: TIME TAKEN TO RECEIVE BLOOD SPOT RESULT
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP605IPE
+    identifier: '"CYP605IPE"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LOCAL PATIENT IDENTIFIER (EXTENDED)
+      data_type: TEXT
+    - name: INFANT PHYSICAL EXAMINATION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: INFANT PHYSICAL EXAMINATION RESULT (HIPS)
+      data_type: TEXT
+    - name: INFANT PHYSICAL EXAMINATION RESULT (HEART)
+      data_type: TEXT
+    - name: INFANT PHYSICAL EXAMINATION RESULT (EYES)
+      data_type: TEXT
+    - name: INFANT PHYSICAL EXAMINATION RESULT (TESTES)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP605 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: AGE AT 6-8 WEEK PHYSICAL EXAMINATION
+      data_type: NUMBER
+    - name: IC_AGE_AT_6_8_WEEK_PHYSICAL_EXAMINATION
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP606ProvDiag
+    identifier: '"CYP606ProvDiag"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE
+      data_type: TEXT
+    - name: PROVISIONAL DIAGNOSIS (CODED CLINICAL ENTRY)
+      data_type: TEXT
+    - name: PROVISIONAL DIAGNOSIS DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP606 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: MAPPED SNOMED CT PROVISIONAL DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PROVISIONAL DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PROVISIONAL DIAGNOSIS PREFERRED TERM
+      data_type: TEXT
+    - name: MAPPED ICD-10 PROVISIONAL DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 PROVISIONAL DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 PROVISIONAL DIAGNOSIS DESCRIPTION
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP607PrimDiag
+    identifier: '"CYP607PrimDiag"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE
+      data_type: TEXT
+    - name: PRIMARY DIAGNOSIS (CODED CLINICAL ENTRY)
+      data_type: TEXT
+    - name: DIAGNOSIS DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP607 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: MAPPED SNOMED CT PRIMARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PRIMARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT PRIMARY DIAGNOSIS PREFERRED TERM
+      data_type: TEXT
+    - name: MAPPED ICD-10 PRIMARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 PRIMARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 PRIMARY DIAGNOSIS DESCRIPTION
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP608SecDiag
+    identifier: '"CYP608SecDiag"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE (COMMUNITY CARE)
+      data_type: TEXT
+    - name: DIAGNOSIS SCHEME IN USE
+      data_type: TEXT
+    - name: SECONDARY DIAGNOSIS (CODED CLINICAL ENTRY)
+      data_type: TEXT
+    - name: DIAGNOSIS DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP608 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: MAPPED SNOMED CT SECONDARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT SECONDARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER SNOMED CT SECONDARY DIAGNOSIS PREFERRED TERM
+      data_type: TEXT
+    - name: MAPPED ICD-10 SECONDARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 SECONDARY DIAGNOSIS CODE
+      data_type: TEXT
+    - name: MASTER ICD-10 SECONDARY DIAGNOSIS DESCRIPTION
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP609CodedAssessmentReferral
+    identifier: '"CYP609CodedAssessmentReferral"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: CODED ASSESSMENT TOOL TYPE (SNOMED CT)
+      data_type: TEXT
+    - name: PERSON SCORE
+      data_type: TEXT
+    - name: ASSESSMENT TOOL COMPLETION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP609 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE SERVICE REQUEST IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT ASSESSMENT TOOL (REFERRAL) COMPLETION DATE (DAYS)
+      data_type: NUMBER
+    - name: AGE AT ASSESSMENT TOOL (REFERRAL) COMPLETION DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_ASSESSMENT_TOLL_REFERRAL_COMPLETION_DATE
+      data_type: NUMBER
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (ASSESSMENT COMPLETION DATE)
+      data_type: TEXT
+    - name: AGE BAND (ASSESSMENT COMPLETION DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP610BreastfeedingStatus
+    identifier: '"CYP610BreastfeedingStatus"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: BREASTFEEDING STATUS
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP610 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT BREASTFEEDING STATUS OBSERVATION DATE (DAYS)
+      data_type: NUMBER
+    - name: AGE AT BREASTFEEDING STATUS OBSERVATION DATE (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_BREASTFEEDING_STATUS_OBSERVATION_DATE
+      data_type: NUMBER
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE BAND (BREASTFEEDING STATUS DATE)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicObservationDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP611Obs
+    identifier: '"CYP611Obs"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: PERSON WEIGHT
+      data_type: NUMBER
+    - name: PERSON HEIGHT IN METRES
+      data_type: NUMBER
+    - name: PERSON LENGTH IN CENTIMETRES
+      data_type: NUMBER
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP611 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT BMI OBSERVATION (DAYS)
+      data_type: NUMBER
+    - name: AGE AT BMI OBSERVATION (YEARS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_BMI_OBSERVATION
+      data_type: NUMBER
+    - name: SCHOOL YEAR AT BMI OBSERVATION
+      data_type: TEXT
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: AGE GROUP (BMI OBSERVATION)
+      data_type: TEXT
+    - name: AGE BAND (BMI OBSERVATION)
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicObservationDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP612CodedAssessmentContact
+    identifier: '"CYP612CodedAssessmentContact"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: CODED ASSESSMENT TOOL TYPE (SNOMED CT)
+      data_type: TEXT
+    - name: PERSON SCORE
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD NUMBER
+      data_type: NUMBER
+    - name: CYP612 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: PERSON ID
+      data_type: TEXT
+    - name: UNIQUE CSDS ID (PATIENT)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE CARE ACTIVITY IDENTIFIER
+      data_type: TEXT
+    - name: AGE AT  ASSESSMENT TOOL (CONTACT) COMPLETION DATE (DAYS)
+      data_type: NUMBER
+    - name: IC_AGE_AT_ASSESSMENT_TOOL_CONTACT_COMPLETION_DATE
+      data_type: NUMBER
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: ASQ SCORE BAND
+      data_type: TEXT
+    - name: SNOMED CT ASSESSMENT PREFERRED TERM
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicObservationDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: UniqueCYPHS_ID_Patient
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP613AnonSelfAssessment
+    identifier: '"CYP613AnonSelfAssessment"'
+    columns:
+    - name: ASSESSMENT TOOL COMPLETION DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CODED ASSESSMENT TOOL TYPE (SNOMED CT)
+      data_type: TEXT
+    - name: PERSON SCORE
+      data_type: TEXT
+    - name: ACTIVITY LOCATION TYPE CODE
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: CYP613 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
+  - name: CYP901StaffDetails
+    identifier: '"CYP901StaffDetails"'
+    columns:
+    - name: CARE PROFESSIONAL LOCAL IDENTIFIER
+      data_type: TEXT
+    - name: PROFESSIONAL REGISTRATION BODY CODE
+      data_type: TEXT
+    - name: PROFESSIONAL REGISTRATION ENTRY IDENTIFIER
+      data_type: TEXT
+    - name: CARE PROFESSIONAL STAFF GROUP (COMMUNITY CARE)
+      data_type: TEXT
+    - name: OCCUPATION CODE
+      data_type: TEXT
+    - name: CARE PROFESSIONAL (JOB ROLE CODE)
+      data_type: TEXT
+    - name: EFFECTIVE FROM
+      data_type: TIMESTAMP_NTZ
+    - name: CYP901 UNIQUE ID
+      data_type: NUMBER
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION CODE (PROVIDER)
+      data_type: TEXT
+    - name: UNIQUE SUBMISSION ID
+      data_type: TEXT
+    - name: BSP UNIQUE ID
+      data_type: TEXT
+    - name: RECORD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: RECORD END DATE
+      data_type: TIMESTAMP_NTZ
+    - name: UNIQUE MONTH ID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicCCG
+      data_type: TEXT
+    - name: Unique_CareProfessionalId_Local
+      data_type: TEXT
+    - name: FILE TYPE
+      data_type: TEXT
+    - name: REPORTING PERIOD START DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REPORTING PERIOD END DATE
+      data_type: TIMESTAMP_NTZ
 - name: epd_primary_care
   database: '"DATA_LAKE"'
   schema: '"EPD_PRIMARY_CARE"'

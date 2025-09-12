@@ -1,0 +1,43 @@
+-- Staging model for csds.CYP002GP
+-- Source: "DATA_LAKE"."CSDS"
+-- Description: Community services dataset
+
+select
+    "SK" as sk,
+    "LOCAL PATIENT IDENTIFIER (EXTENDED)" as local_patient_identifier_extended,
+    "GENERAL MEDICAL PRACTICE (PATIENT REGISTRATION)" as general_medical_practice_patient_registration,
+    "GENERAL MEDICAL PRACTICE CODE (PATIENT REGISTRATION)" as general_medical_practice_code_patient_registration,
+    "START DATE (GMP PATIENT REGISTRATION)" as start_date_gmp_patient_registration,
+    "END DATE (GMP PATIENT REGISTRATION)" as end_date_gmp_patient_registration,
+    "ORGANISATION IDENTIFIER (GP PRACTICE RESPONSIBILITY)" as organisation_identifier_gp_practice_responsibility,
+    "ORGANISATION CODE (GP PRACTICE RESPONSIBILITY)" as organisation_code_gp_practice_responsibility,
+    "EFFECTIVE FROM" as effective_from,
+    "RECORD NUMBER" as record_number,
+    "CYP002 UNIQUE ID" as cyp002_unique_id,
+    "ORGANISATION IDENTIFIER (CODE OF PROVIDER)" as organisation_identifier_code_of_provider,
+    "ORGANISATION CODE (PROVIDER)" as organisation_code_provider,
+    "PERSON ID" as person_id,
+    "UNIQUE CSDS ID (PATIENT)" as unique_csds_id_patient,
+    "UNIQUE SUBMISSION ID" as unique_submission_id,
+    "BSP UNIQUE ID" as bsp_unique_id,
+    "GP DISTANCE FROM HOME" as gp_distance_from_home,
+    "ORGANISATION IDENTIFIER (CCG OF GP PRACTICE)" as organisation_identifier_ccg_of_gp_practice,
+    "ORGANISATION CODE (CCG OF GP PRACTICE)" as organisation_code_ccg_of_gp_practice,
+    "RECORD START DATE" as record_start_date,
+    "RECORD END DATE" as record_end_date,
+    "UNIQUE MONTH ID" as unique_month_id,
+    "ORGANISATION IDENTIFIER (SUB ICB LOCATION OF GP PRACTICE)" as organisation_identifier_sub_icb_location_of_gp_practice,
+    "ORGANISATION IDENTIFIER (ICB OF GP PRACTICE)" as organisation_identifier_icb_of_gp_practice,
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicSystemId" as dmic_system_id,
+    "dmicCCGCode" as dmic_ccg_code,
+    "dmicCCG" as dmic_ccg,
+    "Unique_LocalPatientId" as unique_local_patient_id,
+    "UniqueCYPHS_ID_Patient" as unique_cyphs_id_patient,
+    "dmIcbRegistrationSubmitted" as dm_icb_registration_submitted,
+    "dmSubIcbRegistrationSubmitted" as dm_sub_icb_registration_submitted,
+    "dmCommissionerDerivationReason" as dm_commissioner_derivation_reason,
+    "FILE TYPE" as file_type,
+    "REPORTING PERIOD START DATE" as reporting_period_start_date,
+    "REPORTING PERIOD END DATE" as reporting_period_end_date
+from {{ source('csds', 'CYP002GP') }}
