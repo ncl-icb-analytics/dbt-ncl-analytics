@@ -3,7 +3,7 @@ version: 1
 models:
   - name: int_wl_count_total
     description: >
-      Count of open waiting lists per person (patient_id),
+      Count of open waiting lists per person (patient_id), count of distinct TFC open waiting lists per person, count of distinct provider open waiting lists per person.
       Derived from `int_wl_current`.
     columns:
       - name: patient_id
