@@ -21,6 +21,8 @@ WITH date_corrected AS (
         activity_treatment_function_code AS tfc_code,
         organisation_identifier_code_of_commissioner AS commissioner_code,
         derLSOA2021 AS lsoa_2021,
+        referral_request_received_date,
+        referral_to_treatment_period_start_date,
         -- Correct all dates to Sundays (Snowflake syntax)
         CASE 
             WHEN DAYOFWEEK(Week_Ending_Date) = 1 THEN Week_Ending_Date  -- Already Sunday
@@ -41,8 +43,9 @@ SELECT
     dc.tfc_code,
     dc.commissioner_code,
     dc.lsoa_2021,
+    dc.referral_request_received_date,
+    dc.referral_to_treatment_period_start_date,
     dc.snapshot_date,
     dc.open_pathways
 FROM date_corrected dc
-CROSS JOIN most_recent_week mrw
-WHERE dc.snapshot_date = mrw.max_date
+INNER JOIN most_recent_week mrw ON dc.snapshot_date = mrw.max_date
