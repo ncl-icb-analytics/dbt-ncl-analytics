@@ -7,4 +7,21 @@ models:
       Derived from `int_wl_current`.
     columns:
       - name: patient_id
-        description: Unique pseudonymised ID for each patient.
+        description: Unique identifier for each patient.
+        tests:
+          - not_null
+          - unique
+
+      - name: wl_current_total_count
+        description: Total number of open waiting lists for the patient.
+
+      - name: wl_current_distinct_providers_count
+        description: Number of distinct providers that the patient has open waiting lists on.
+
+      - name: wl_current_distinct_tfc_count
+        description: Number of distinct Treatment Function Codes (TFCs) that the patient has open waiting lists on.
+
+      - name: same_tfc_multiple_providers_flag
+        description: >
+          Boolean flag indicating whether the patient has the same TFC code
+          assigned to multiple providers.
