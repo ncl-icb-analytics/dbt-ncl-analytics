@@ -1,8 +1,7 @@
 {{ config(materialized='table') }}
 
 /*
-Count of all active waiting lists per patient, number of waiting lists at unique providers, 
-number of waiting lists under unique TFCs, and a flag for whether the patient has an open waiting list for the same TFC under multiple providers.
+Count of all active waiting lists per provider.
 
 Clinical Purpose:
 - Care coordination management across providers
