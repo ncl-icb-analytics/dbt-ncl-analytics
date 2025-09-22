@@ -120,6 +120,14 @@ sources:
     description: Community services dataset
     staging_prefix: stg_csds
     domain: commissioning
+
+  # Community services dataset
+  - source_name: csds_simple
+    database: DATA_LAKE
+    schema: CSDS_SIMPLE
+    description: Community services dataset (simple)
+    staging_prefix: stg_csds_simple
+    domain: commissioning
   # ========================================
   # OLIDS DATA SOURCES (Future Integration)
   # ========================================

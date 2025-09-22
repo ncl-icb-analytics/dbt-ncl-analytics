@@ -1,0 +1,40 @@
+-- Staging model for csds_simple.tblCare_Contact
+-- Source: "DATA_LAKE"."CSDS_SIMPLE"
+-- Description: Community services dataset (simple)
+
+select
+    "Person_ID" as person_id,
+    "NHSNumber_Pseudo" as nhs_number_pseudo,
+    "Age_at_care_contact_date_(Years)" as age_at_care_contact_date_years,
+    "Unique_service_request_identifier" as unique_service_request_identifier,
+    "Unique_care_contact_identifier" as unique_care_contact_identifier,
+    "Unique_care_professional_team_local_identifier" as unique_care_professional_team_local_identifier,
+    "Care_contact_date" as care_contact_date,
+    "Care_contact_time" as care_contact_time,
+    "Administrative_category_code" as administrative_category_code,
+    "Clinical_contact_duration_care_contact" as clinical_contact_duration_care_contact,
+    "Consultation_type" as consultation_type,
+    "Care_contact_subject" as care_contact_subject,
+    "Consultation_medium_used" as consultation_medium_used,
+    "Activity_location_type_code" as activity_location_type_code,
+    "Organisation_identifier_(Code_of_commissioner)" as organisation_identifier_code_of_commissioner,
+    "Organisation_identifier_(Code_of_provider)" as organisation_identifier_code_of_provider,
+    "Organisation_site_identifier_(Of_treatment)" as organisation_site_identifier_of_treatment,
+    "Site_code_(of_treatment)" as site_code_of_treatment,
+    "Group_therapy_indicator" as group_therapy_indicator,
+    "Attended_or_did_not_attend_code" as attended_or_did_not_attend_code,
+    "Care_contact_cancellation_date" as care_contact_cancellation_date,
+    "Care_contact_cancellation_reason" as care_contact_cancellation_reason,
+    "Replacement_appointment_date_offered" as replacement_appointment_date_offered,
+    "Replacement_appointment_booked_date" as replacement_appointment_booked_date,
+    "Contact_location_distance_from_home" as contact_location_distance_from_home,
+    "Age_at_care_contact_date" as age_at_care_contact_date,
+    "Time_between_referral_and_care_contact" as time_between_referral_and_care_contact,
+    "Unique_count_of_care_activities_DV" as unique_count_of_care_activities_dv,
+    "Count_of_coded_findings_DV" as count_of_coded_findings_dv,
+    "Count_of_coded_procedures_DV" as count_of_coded_procedures_dv,
+    "Count_of_coded_obeservations_DV" as count_of_coded_obeservations_dv,
+    "Unique_count_of_care_professional_involvements_DV" as unique_count_of_care_professional_involvements_dv,
+    "Total_care_durations_DV" as total_care_durations_dv,
+    "Service_or_team_type_referred_to_(Community_Care)" as service_or_team_type_referred_to_community_care
+from {{ source('csds_simple', 'tblCare_Contact') }}

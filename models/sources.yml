@@ -2655,6 +2655,353 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: REPORTING PERIOD END DATE
       data_type: TIMESTAMP_NTZ
+- name: csds_simple
+  database: '"DATA_LAKE"'
+  schema: '"CSDS_SIMPLE"'
+  description: Community services dataset (simple)
+  tables:
+  - name: tblCare_Activity
+    identifier: '"tblCare_Activity"'
+    columns:
+    - name: Unique_care_contact_identifier
+      data_type: TEXT
+    - name: Unique_care_activity_identifier
+      data_type: TEXT
+    - name: Community_care_activity_type
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: Care_professional_local_identifier
+      data_type: TEXT
+    - name: Clinical_contact_duration_of_care_activity
+      data_type: NUMBER
+    - name: NHSNumber_Pseudo
+      data_type: TEXT
+    - name: Breast_Feeding_Status_(Latest)_DV
+      data_type: TEXT
+    - name: Person_Weight_(Latest)_DV
+      data_type: NUMBER
+    - name: Person_Height_in_metres_(Latest)_DV
+      data_type: NUMBER
+    - name: Person_Length_in_centimetres_(Latest)_DV
+      data_type: NUMBER
+    - name: Count_of_coded_findings_DV
+      data_type: NUMBER
+    - name: Count_of_coded_observations_DV
+      data_type: NUMBER
+    - name: Count_of_coded_procedures_DV
+      data_type: NUMBER
+  - name: tblCare_Activity_Coding
+    identifier: '"tblCare_Activity_Coding"'
+    columns:
+    - name: Unique_service_request_identifier
+      data_type: TEXT
+    - name: Unique_care_contact_identifier
+      data_type: TEXT
+    - name: Unique_care_activity_identifier
+      data_type: TEXT
+    - name: Code
+      data_type: TEXT
+    - name: Scheme_in_use_(Community_care)
+      data_type: TEXT
+    - name: Care_activity_type
+      data_type: TEXT
+    - name: Value
+      data_type: TEXT
+    - name: UCUM_unit_of_measurement
+      data_type: TEXT
+  - name: tblCare_Contact
+    identifier: '"tblCare_Contact"'
+    columns:
+    - name: Person_ID
+      data_type: TEXT
+    - name: NHSNumber_Pseudo
+      data_type: TEXT
+    - name: Age_at_care_contact_date_(Years)
+      data_type: NUMBER
+    - name: Unique_service_request_identifier
+      data_type: TEXT
+    - name: Unique_care_contact_identifier
+      data_type: TEXT
+    - name: Unique_care_professional_team_local_identifier
+      data_type: TEXT
+    - name: Care_contact_date
+      data_type: TIMESTAMP_NTZ
+    - name: Care_contact_time
+      data_type: TIMESTAMP_NTZ
+    - name: Administrative_category_code
+      data_type: TEXT
+    - name: Clinical_contact_duration_care_contact
+      data_type: NUMBER
+    - name: Consultation_type
+      data_type: TEXT
+    - name: Care_contact_subject
+      data_type: TEXT
+    - name: Consultation_medium_used
+      data_type: TEXT
+    - name: Activity_location_type_code
+      data_type: TEXT
+    - name: Organisation_identifier_(Code_of_commissioner)
+      data_type: TEXT
+    - name: Organisation_identifier_(Code_of_provider)
+      data_type: TEXT
+    - name: Organisation_site_identifier_(Of_treatment)
+      data_type: TEXT
+    - name: Site_code_(of_treatment)
+      data_type: TEXT
+    - name: Group_therapy_indicator
+      data_type: TEXT
+    - name: Attended_or_did_not_attend_code
+      data_type: TEXT
+    - name: Care_contact_cancellation_date
+      data_type: TIMESTAMP_NTZ
+    - name: Care_contact_cancellation_reason
+      data_type: TEXT
+    - name: Replacement_appointment_date_offered
+      data_type: TIMESTAMP_NTZ
+    - name: Replacement_appointment_booked_date
+      data_type: TIMESTAMP_NTZ
+    - name: Contact_location_distance_from_home
+      data_type: NUMBER
+    - name: Age_at_care_contact_date
+      data_type: NUMBER
+    - name: Time_between_referral_and_care_contact
+      data_type: NUMBER
+    - name: Unique_count_of_care_activities_DV
+      data_type: NUMBER
+    - name: Count_of_coded_findings_DV
+      data_type: NUMBER
+    - name: Count_of_coded_procedures_DV
+      data_type: NUMBER
+    - name: Count_of_coded_obeservations_DV
+      data_type: NUMBER
+    - name: Unique_count_of_care_professional_involvements_DV
+      data_type: NUMBER
+    - name: Total_care_durations_DV
+      data_type: NUMBER
+    - name: Service_or_team_type_referred_to_(Community_Care)
+      data_type: TEXT
+  - name: tblDiagnosis
+    identifier: '"tblDiagnosis"'
+    columns:
+    - name: Unique_service_request_identifier
+      data_type: TEXT
+    - name: Code
+      data_type: TEXT
+    - name: Date
+      data_type: TIMESTAMP_NTZ
+    - name: Diagnosis_Type
+      data_type: TEXT
+    - name: Diagnosis_scheme_in_use_(Community_care)
+      data_type: TEXT
+  - name: tblPatient
+    identifier: '"tblPatient"'
+    columns:
+    - name: Person_ID
+      data_type: TEXT
+    - name: Unique_service_request_identifier
+      data_type: TEXT
+    - name: Pseudo_NHS_Number
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: NHS_number_status_indicator_code
+      data_type: TEXT
+    - name: Person_stated_gender_code
+      data_type: TEXT
+    - name: Age_of_patient_at_reporting_period_start_(Years)
+      data_type: NUMBER
+    - name: Age_of_patient_at_reporting_period_end_(Years)
+      data_type: NUMBER
+    - name: Ethnic_category
+      data_type: TEXT
+    - name: Language_code_(Preferred)
+      data_type: TEXT
+    - name: Person_relationship_(Main_carer)
+      data_type: TEXT
+    - name: Health_visitor_first_antenatal_visit_date
+      data_type: TIMESTAMP_NTZ
+    - name: Looked_aftert_child_indicator
+      data_type: TEXT
+    - name: Safeguarding_vulnerability_factors_indicator
+      data_type: TEXT
+    - name: Constant_supervision_and_care_required_due_to_disability_indicator
+      data_type: TEXT
+    - name: Educational_assessment_outcome
+      data_type: TEXT
+    - name: Preferred_death_location_discussed_indicator
+      data_type: TEXT
+    - name: Death_location_type_code_(Preferred)
+      data_type: TEXT
+    - name: Person_death_date
+      data_type: TIMESTAMP_NTZ
+    - name: Death_location_type_code_(Actual)
+      data_type: TEXT
+    - name: Death_not_at_preferred_location_reason
+      data_type: TEXT
+    - name: NHS_number_status_indicator_code_(Mother)
+      data_type: TEXT
+    - name: Postcode_district
+      data_type: TEXT
+    - name: Lower_super_output_area_(Residence)
+      data_type: TEXT
+    - name: Census_year
+      data_type: TEXT
+    - name: Local_authority_district_unitary_authority
+      data_type: TEXT
+    - name: County
+      data_type: TEXT
+    - name: Electoral_ward_of_usual_address
+      data_type: TEXT
+    - name: Organisation_code_(CCG_of_residence)
+      data_type: TEXT
+    - name: Organisation_code_(Local_patient)
+      data_type: TEXT
+    - name: Organisation_code_(Residence_responsibility)
+      data_type: TEXT
+    - name: Organisation_code_(Educational_establishment)
+      data_type: TEXT
+    - name: Organisation_code_(Provider)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (SUB ICB LOCATION OF RESIDENCE)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (ICB OF RESIDENCE)
+      data_type: TEXT
+    - name: Valid_NHS_Number_Flag
+      data_type: TEXT
+    - name: Valid_Postcode_Flag
+      data_type: TEXT
+    - name: Record_Number
+      data_type: NUMBER
+    - name: GP_Practice_(Latest)_DV
+      data_type: TEXT
+    - name: Accommodation_Status_Code_(Latest)_DV
+      data_type: TEXT
+    - name: Accommodation_Status_Recorded_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Care_Plan_Type_(List)_DV
+      data_type: TEXT
+    - name: Care_Plan_Create_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Care_Plan_Implementation_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Care_Plan_Updated_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Care_Plan_Agreed_By_(List)_DV
+      data_type: TEXT
+    - name: Care_Plan_Agreed_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Employment_Status_(Latest)_DV
+      data_type: TEXT
+    - name: Employment_Status_Recorded_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Immunisations_Date_(Earliest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Immunisations_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Count_of_Immunisations_DV
+      data_type: NUMBER
+    - name: Unique_count_of_Immunisation_date_recorded_DV
+      data_type: NUMBER
+    - name: Unique_count_of_clinical_coded_Immunisation_DV
+      data_type: NUMBER
+    - name: Child_Immunisation_date_(Earliest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Child_Immunisation_date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Child_Count_of_Immunisations_DV
+      data_type: NUMBER
+    - name: Child_Unique_count_of_Immunisation_date_recorded_DV
+      data_type: NUMBER
+    - name: Child_Unique_count_of_Immunisation_Type/Service_recorded_DV
+      data_type: NUMBER
+    - name: Special_Educational_Types_(List)_DV
+      data_type: TEXT
+    - name: Has_Special_Educational_Needs_DV
+      data_type: TEXT
+    - name: Safeguarding_Vulnerability_Factors_Type_(List)_DV
+      data_type: TEXT
+    - name: Has Safeguarding Vulnerability Factors
+      data_type: TEXT
+    - name: Child_Protection_Plan_Start_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Child_Protection_Plan_End_Date_(Latest)_DV
+      data_type: TIMESTAMP_NTZ
+    - name: Care_Protection_Plan_Status_DV
+      data_type: TEXT
+    - name: Disability_Codes_(List)_DV
+      data_type: TEXT
+    - name: Disability_Status_DV
+      data_type: TEXT
+    - name: Has_Recording_of_SocPerCircumstances_DV
+      data_type: TEXT
+  - name: tblReferral
+    identifier: '"tblReferral"'
+    columns:
+    - name: Person_ID
+      data_type: TEXT
+    - name: Pseudo_NHS_Number
+      data_type: TEXT
+    - name: Unique_service_request_identifier
+      data_type: TEXT
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: Record_Number
+      data_type: NUMBER
+    - name: Organisation_identifier_(Code_of_provider)
+      data_type: TEXT
+    - name: Organisation_identifier_(Code_of_commissioner)
+      data_type: TEXT
+    - name: Organisation_code_(Code_of_commissioner)
+      data_type: TEXT
+    - name: Referring_organisation_code
+      data_type: TEXT
+    - name: Referral_request_received_date
+      data_type: TIMESTAMP_NTZ
+    - name: Referral_request_received_time
+      data_type: TIMESTAMP_NTZ
+    - name: Referring_care_professional_staff_group_(Community_care)
+      data_type: TEXT
+    - name: Service_discharge_date
+      data_type: TIMESTAMP_NTZ
+    - name: Discharge_letter_issued_date_(Community_care)
+      data_type: TIMESTAMP_NTZ
+    - name: Source_of_referral_for_community
+      data_type: TEXT
+    - name: Priority_type_code
+      data_type: TEXT
+    - name: Primary_reason_for_referral_(Community_care)
+      data_type: TEXT
+    - name: Age_at_service_received_date
+      data_type: NUMBER
+    - name: Age_at_service_referral_discharge
+      data_type: NUMBER
+    - name: ServTeamtoCommunityCare_(List)_DV
+      data_type: TEXT
+    - name: ServOrTeamTypeRefToCC_(Latest_List)_DV
+      data_type: TEXT
+    - name: Organisation_identifier_(Patient_pathway_identifier_issuer)
+      data_type: TEXT
+    - name: Waiting_time_measurement_type_(Community_Care)
+      data_type: TEXT
+    - name: Referral_to_treatment_period_start_date
+      data_type: TIMESTAMP_NTZ
+    - name: Referaal_to_treatment_period_start_time
+      data_type: TIMESTAMP_NTZ
+    - name: Referral_to_treatment_period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: Referral_to_treatment_period_end_time
+      data_type: TIMESTAMP_NTZ
+    - name: Referral_to_treatment_period_status
+      data_type: TEXT
+    - name: Onward_referral_date
+      data_type: TIMESTAMP_NTZ
+    - name: Onward_referral_reason_(Community_care)
+      data_type: TEXT
+    - name: Onward_Referral_reason
+      data_type: TEXT
+    - name: Organisation_identifier_(Receiving_organisation)
+      data_type: TEXT
 - name: epd_primary_care
   database: '"DATA_LAKE"'
   schema: '"EPD_PRIMARY_CARE"'

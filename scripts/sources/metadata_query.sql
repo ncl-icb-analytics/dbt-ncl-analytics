@@ -174,6 +174,19 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'CSDS'
+  
+  UNION ALL
+  
+    -- csds_simple: Community services dataset (simple)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'CSDS_SIMPLE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'CSDS_SIMPLE'
 )
 
 SELECT 
