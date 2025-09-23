@@ -1,9 +1,9 @@
 version: 1
 
 models:
-  - name: int_wl_current
+  - name: int_wl_all_dates
     description: >
-      All active waiting lists, corrected to Sunday snapshot dates. Used for care coordination across providers.
+      All active waiting lists, corrected to Sunday snapshot dates. Used for care coordination across providers. Not limited to most recent snapshot date - can be used for time series.
     columns:
       - name: patient_id
         description: Pseudonymised NHS number

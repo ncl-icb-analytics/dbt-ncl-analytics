@@ -5,7 +5,7 @@
 
 
 /*
-All active waiting lists.
+All current and historical open waiting lists.
 
 Clinical Purpose:
 - Care coordination management across providers
@@ -32,10 +32,6 @@ WITH date_corrected AS (
     FROM {{ ref('stg_wl_wl_openpathways_data') }}
     WHERE Week_Ending_Date IS NOT NULL
       AND Week_Ending_Date <= CURRENT_DATE
-),
-most_recent_week AS (
-    SELECT MAX(snapshot_date) AS max_date
-    FROM date_corrected
 )
 SELECT 
     dc.patient_id,
@@ -48,4 +44,3 @@ SELECT
     dc.snapshot_date,
     dc.open_pathways
 FROM date_corrected dc
-INNER JOIN most_recent_week mrw ON dc.snapshot_date = mrw.max_date
