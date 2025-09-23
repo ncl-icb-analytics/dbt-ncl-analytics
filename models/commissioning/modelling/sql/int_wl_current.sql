@@ -20,7 +20,7 @@ WITH date_corrected AS (
         organisation_identifier_code_of_provider AS provider_code,
         activity_treatment_function_code AS tfc_code,
         organisation_identifier_code_of_commissioner AS commissioner_code,
-        derLSOA2021 AS lsoa_2021,
+        der_LSOA2021 AS lsoa_2021,
         -- Correct all dates to Sundays (Snowflake syntax)
         CASE 
             WHEN DAYOFWEEK(Week_Ending_Date) = 1 THEN Week_Ending_Date  -- Already Sunday

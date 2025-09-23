@@ -4,6 +4,11 @@ config-version: 2
 
 profile: 'ncl_analytics'
 
+# Display connection info when dbt runs start
+on-run-start:
+  - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
+
+
 target-path: "target"
 clean-targets:
   - "target"
@@ -32,34 +37,36 @@ models:
         +materialized: view
         +database: "MODELLING"
         +schema: "DBT_STAGING"
-        +post-hook: "{{ add_model_comment() }}"
+        +tags: ["staging"]
+        +post-hook: ["{{ add_model_comment() }}"]
       modelling:
         +materialized: table
         +database: "MODELLING"
         +schema: "COMMISSIONING_MODELLING"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
       reporting:
         +materialized: table
         +database: "REPORTING"
         +schema: "COMMISSIONING_REPORTING"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "COMMISSIONING_PUBLISHED"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
     
-    # OLIDS analytics models (future integration)
+    # OLIDS analytics models
     olids:
       staging:
         +materialized: view
         +database: "MODELLING"
         +schema: "DBT_STAGING"
-        +post-hook: "{{ add_model_comment() }}"
+        +tags: ["staging"]
+        +post-hook: ["{{ add_model_comment() }}"]
       modelling:
         +materialized: table
         +database: "MODELLING"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
         # Business area schema mappings based on OLIDS domains
         diagnoses:
           +schema: "OLIDS_DIAGNOSES"
@@ -73,15 +80,20 @@ models:
           +schema: "OLIDS_PERSON_ATTRIBUTES"
         programme:
           +schema: "OLIDS_PROGRAMME"
+        utilities:
+          +schema: "OLIDS_UTILITIES"
       reporting:
         +materialized: table
         +database: "REPORTING"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
         # Business area schema mappings for reporting models
         clinical_safety:
           +schema: "OLIDS_CLINICAL_SAFETY"
         data_quality:
           +schema: "OLIDS_DATA_QUALITY"
+        definitions:
+          +database: "{{ target.database.replace('MODELLING', 'REPORTING') }}"
+          +schema: "OLIDS_DEFINITIONS"
         disease_registers:
           +schema: "OLIDS_DISEASE_REGISTERS"
         geography:
@@ -90,10 +102,10 @@ models:
           +schema: "OLIDS_MEASURES"
         organisation:
           +schema: "OLIDS_ORGANISATION"
+        person_analytics:
+          +schema: "OLIDS_PERSON_ANALYTICS"
         person_demographics:
           +schema: "OLIDS_PERSON_DEMOGRAPHICS"
-        person_dimensions:
-          +schema: "OLIDS_PERSON_DIMENSIONS"
         person_status:
           +schema: "OLIDS_PERSON_STATUS"
         programme:
@@ -102,12 +114,12 @@ models:
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "OLIDS_PUBLISHED"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "OLIDS_PUBLISHED"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
     
     # Shared models (reference data, utilities)
     shared:
@@ -115,27 +127,28 @@ models:
         +materialized: view
         +database: "MODELLING"
         +schema: "DBT_STAGING"
-        +post-hook: "{{ add_model_comment() }}"
+        +tags: ["staging"]
+        +post-hook: ["{{ add_model_comment() }}"]
       modelling:
         +materialized: table
         +database: "MODELLING"
         +schema: "REFERENCE"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
       reporting:
         +materialized: table
         +database: "REPORTING"
         +schema: "REFERENCE"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_direct_care:
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "REFERENCE"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "REFERENCE"
-        +post-hook: "{{ add_model_comment() }}"
+        +post-hook: ["{{ add_model_comment() }}"]
 
 seeds:
   ncl_analytics:

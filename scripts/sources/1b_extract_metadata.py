@@ -3,6 +3,10 @@ from snowflake.snowpark.session import Session
 import pathlib
 import os
 import pandas as pd
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 print(os.getenv('SNOWFLAKE_ACCOUNT'))
 
@@ -35,17 +39,23 @@ def execute_sql_to_dataframe(session, sql_file_path):
 
 
 if __name__ == "__main__":
-    
+
+    # Debug: Print environment variables
+    print(f"Environment SNOWFLAKE_ROLE: {os.getenv('SNOWFLAKE_ROLE')}")
+    print(f"Environment SNOWFLAKE_USER: {os.getenv('SNOWFLAKE_USER')}")
+
     # Setup connection using snowpark API
     connection_params  = {
     "account" : os.getenv('SNOWFLAKE_ACCOUNT'),
     "user" : os.getenv('SNOWFLAKE_USER'),
     "authenticator" : "externalbrowser",
     "warehouse" :os.getenv('SNOWFLAKE_WAREHOUSE'),
-    "role" : os.getenv('SNOWFLAKE_ROLE', 'ANALYST'),
+    "role" : os.getenv('SNOWFLAKE_ROLE'),
     "database" : "MODELLING",
     "schema": "DBT_DEV"
     }
+
+    print(f"Connection params role: {connection_params['role']}")
 
     session = Session.builder.configs(connection_params).create()
 
@@ -53,7 +63,9 @@ if __name__ == "__main__":
     
     # File paths for query and output
     sql_file_path = pathlib.Path(__file__).parent / "metadata_query.sql"
-    output_file = pathlib.Path.cwd() / "table_metadata.csv"
+    # Write to scripts/sources directory where source generation reads from
+    current_dir = pathlib.Path(__file__).parent
+    output_file = current_dir / "table_metadata.csv"
     
     # Execute query, get pandas DataFrame and write to root directory
     try:

@@ -33,5 +33,5 @@ select
     "LSOA" as lsoa,
     "MSOA" as msoa,
     "SK_PseudoPostcodeID" as sk_pseudo_postcode_id,
-    "SK_Postcode_ID" as sk_postcode_id
+    "SK_Postcode_ID" as sk_postcode_id_1
 from {{ source('dictionary_dbo', 'Postcode') }}

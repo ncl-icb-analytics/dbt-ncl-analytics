@@ -7,5 +7,5 @@ select
     "SK_CommissionerID" as sk_commissioner_id,
     "SK_ServiceProviderID" as sk_service_provider_id,
     "SK_ServiceProviderGroupID" as sk_service_provider_group_id,
-    "SK_Organisation_ID" as sk_organisation_id
+    "SK_Organisation_ID" as sk_organisation_id_1
 from {{ source('dictionary_dbo', 'OrganisationLookup') }}

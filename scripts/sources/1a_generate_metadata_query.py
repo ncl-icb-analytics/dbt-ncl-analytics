@@ -54,7 +54,18 @@ def generate_sql_query(mappings_data):
         description = source.get('description', '')
         
         if not schema:
-            # Skip database-level mappings for now - would need to query all schemas
+            # Handle database-level mappings - query all schemas in the database (excluding system schemas)
+            select_part = f"""  {f"-- {source_name}: {description}" if description else f"-- {source_name}"}
+  SELECT
+    '{database}' as database_name,
+    table_schema as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "{database}".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema NOT IN ('INFORMATION_SCHEMA')"""
+            union_parts.append(select_part)
             continue
             
         # Add comment for this source

@@ -97,6 +97,18 @@ sources:
     staging_prefix: stg_dictionary_ip
     domain: shared
 
+  # ========================================
+  # OLIDS DATA SOURCES
+  # ========================================
+
+  # OLIDS Core Tables
+  - source_name: olids
+    database: DATA_LAKE
+    schema: OLIDS
+    description: OLIDS stable layer - cleaned and filtered patient records
+    staging_prefix: stg_olids
+    domain: olids
+
   # Dictionary/Reference Data SNOMED
   - source_name: dictionary_snomed
     database: Dictionary
@@ -121,7 +133,64 @@ sources:
     staging_prefix: stg_csds
     domain: commissioning
   # ========================================
-  # OLIDS DATA SOURCES (Future Integration)
+  # DATA_LAKE__NCL REFERENCE DATA SOURCES
   # ========================================
-  # These will be populated when OLIDS moves out of UAT
-  # and can be accessed with ANALYST role
+
+  # TERMINOLOGY schema in DATA_LAKE__NCL
+  - source_name: reference_terminology
+    database: DATA_LAKE__NCL
+    schema: TERMINOLOGY
+    description: Reference terminology data including SNOMED, BNF, and other code sets
+    staging_prefix: stg_reference
+    domain: shared
+
+  # ANALYST_MANAGED schema in DATA_LAKE__NCL
+  - source_name: reference_analyst_managed
+    database: DATA_LAKE__NCL
+    schema: ANALYST_MANAGED
+    description: Analyst-managed reference datasets and business rules
+    staging_prefix: stg_reference
+    domain: shared
+
+  # DATA_MANAGEMENT schema in DATA_LAKE__NCL
+  - source_name: reference_data_management
+    database: DATA_LAKE__NCL
+    schema: DATA_MANAGEMENT
+    description: Data management reference datasets
+    staging_prefix: stg_reference
+    domain: shared
+
+  # CANCER schemas in DATA_LAKE__NCL
+  - source_name: reference_cancer_cwt_alliance
+    database: DATA_LAKE__NCL
+    schema: CANCER__CWT_ALLIANCE
+    description: Cancer waiting times alliance data
+    staging_prefix: stg_reference
+    domain: shared
+
+  - source_name: reference_cancer_emis
+    database: DATA_LAKE__NCL
+    schema: CANCER__EMIS
+    description: Cancer EMIS data
+    staging_prefix: stg_reference
+    domain: shared
+
+  - source_name: reference_cancer_screening
+    database: DATA_LAKE__NCL
+    schema: CANCER__SCREENING
+    description: Cancer screening data
+    staging_prefix: stg_reference
+    domain: shared
+
+  # FINGERTIPS schema in DATA_LAKE__NCL
+  - source_name: reference_fingertips
+    database: DATA_LAKE__NCL
+    schema: FINGERTIPS
+    description: Fingertips indicator data
+    staging_prefix: stg_reference
+    domain: shared
+
+  # ========================================
+  # ADDITIONAL OLIDS DATA SOURCES
+  # ========================================
+  # Additional OLIDS sources can be added here if needed
