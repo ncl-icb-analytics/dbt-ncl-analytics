@@ -19,6 +19,7 @@ WITH TFC_COUNTS AS (
     tfc_code,
     open_pathways
     FROM {{ ref('int_wl_current') }}
+    WHERE patient_id IS NOT NULL
 )
 SELECT
 *
@@ -32,5 +33,5 @@ PIVOT
         WHERE
         "IsTreatmentFunction" = TRUE
         )
-        DEFAULT ON NULL (0)
+    DEFAULT ON NULL (0)
 ) AS pvt
