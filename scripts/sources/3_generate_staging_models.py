@@ -60,8 +60,22 @@ def sanitise_column_name(col_name, apply_transformations=True, used_names=None):
             base_name = safe_name
         else:
             # Apply full transformations for quoted identifiers
-            # Replace dots, slashes, hyphens, spaces, and other problematic characters
-            safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', col_name)
+
+            # Special handling for columns with ellipsis (... in cancer data)
+            # These represent grouped metrics, preserve the full context
+            if '...' in col_name:
+                # Split by ellipsis to get the metric and the context
+                parts = col_name.split('...')
+                if len(parts) == 2:
+                    # e.g. "DaysWithin24...AccountableProvider.24.day.wait"
+                    # becomes "days_within24_accountable_provider_24_day_wait"
+                    safe_name = parts[0] + '_' + parts[1].replace('.', '_')
+                else:
+                    safe_name = col_name.replace('...', '_')
+            else:
+                # Replace dots, slashes, hyphens, spaces, and other problematic characters
+                safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', col_name)
+
             # Remove multiple consecutive underscores
             safe_name = re.sub(r'_+', '_', safe_name)
             # Remove leading/trailing underscores
