@@ -32,6 +32,6 @@ select
     "LocalAreaTeam" as local_area_team,
     "CommissioningCounty" as commissioning_county,
     "CommissioningCountry" as commissioning_country,
-    "SK_Organisation_ID_ServiceProvider" as sk_organisation_id_service_provider,
-    "SK_Organisation_ID_Commissioner" as sk_organisation_id_commissioner
+    "SK_Organisation_ID_ServiceProvider" as sk_organisation_id_service_provider_1,
+    "SK_Organisation_ID_Commissioner" as sk_organisation_id_commissioner_1
 from {{ source('dictionary_dbo', 'CCGByPractice') }}

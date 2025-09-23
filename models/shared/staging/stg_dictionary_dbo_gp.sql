@@ -22,7 +22,7 @@ select
     "SK_NationalGrouping_ID" as sk_national_grouping_id,
     "SK_HealthAuthority_ID" as sk_health_authority_id,
     "SK_CurrentCareOrg_ID" as sk_current_care_org_id,
-    "SK_Postcode_ID" as sk_postcode_id,
+    "SK_Postcode_ID" as sk_postcode_id_1,
     "SK_ParentOrg_ID" as sk_parent_org_id,
     "GMC_GivenName" as gmc_given_name,
     "GMC_Surname" as gmc_surname,

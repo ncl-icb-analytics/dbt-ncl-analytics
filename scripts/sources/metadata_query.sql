@@ -138,6 +138,19 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- olids: OLIDS stable layer - cleaned and filtered patient records
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'OLIDS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'OLIDS'
+  
+  UNION ALL
+  
     -- dictionary_snomed: Reference data for snomed
   SELECT 
     'Dictionary' as database_name,
@@ -174,6 +187,97 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'CSDS'
+  
+  UNION ALL
+  
+    -- reference_terminology: Reference terminology data including SNOMED, BNF, and other code sets
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'TERMINOLOGY' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'TERMINOLOGY'
+  
+  UNION ALL
+  
+    -- reference_analyst_managed: Analyst-managed reference datasets and business rules
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'ANALYST_MANAGED' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'ANALYST_MANAGED'
+  
+  UNION ALL
+  
+    -- reference_data_management: Data management reference datasets
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'DATA_MANAGEMENT' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'DATA_MANAGEMENT'
+  
+  UNION ALL
+  
+    -- reference_cancer_cwt_alliance: Cancer waiting times alliance data
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'CANCER__CWT_ALLIANCE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'CANCER__CWT_ALLIANCE'
+  
+  UNION ALL
+  
+    -- reference_cancer_emis: Cancer EMIS data
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'CANCER__EMIS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'CANCER__EMIS'
+  
+  UNION ALL
+  
+    -- reference_cancer_screening: Cancer screening data
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'CANCER__SCREENING' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'CANCER__SCREENING'
+  
+  UNION ALL
+  
+    -- reference_fingertips: Fingertips indicator data
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'FINGERTIPS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'FINGERTIPS'
 )
 
 SELECT 

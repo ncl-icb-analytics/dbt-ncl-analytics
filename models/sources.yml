@@ -3138,6 +3138,1497 @@ sources:
       data_type: TEXT
     - name: dmicCCGofProvider
       data_type: TEXT
+- name: olids
+  database: '"DATA_LAKE"'
+  schema: '"OLIDS"'
+  description: OLIDS stable layer - cleaned and filtered patient records
+  tables:
+  - name: ALLERGY_INTOLERANCE
+    identifier: '"ALLERGY_INTOLERANCE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: CLINICAL_STATUS
+      data_type: TEXT
+    - name: VERIFICATION_STATUS
+      data_type: TEXT
+    - name: CATEGORY
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: MULTI_LEX_ACTION
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: APPOINTMENT
+    identifier: '"APPOINTMENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PRACTITIONER_IN_ROLE_ID
+      data_type: TEXT
+    - name: SCHEDULE_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PLANNED_DURATION
+      data_type: NUMBER
+    - name: ACTUAL_DURATION
+      data_type: NUMBER
+    - name: APPOINTMENT_STATUS_CONCEPT_ID
+      data_type: TEXT
+    - name: PATIENT_WAIT
+      data_type: NUMBER
+    - name: PATIENT_DELAY
+      data_type: NUMBER
+    - name: DATE_TIME_BOOKED
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_TIME_SENT_IN
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_TIME_LEFT
+      data_type: TIMESTAMP_NTZ
+    - name: CANCELLED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TYPE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: BOOKING_METHOD_CONCEPT_ID
+      data_type: TEXT
+    - name: CONTACT_MODE_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_BLOCKED
+      data_type: BOOLEAN
+    - name: NATIONAL_SLOT_CATEGORY_NAME
+      data_type: TEXT
+    - name: CONTEXT_TYPE
+      data_type: TEXT
+    - name: SERVICE_SETTING
+      data_type: TEXT
+    - name: NATIONAL_SLOT_CATEGORY_DESCRIPTION
+      data_type: TEXT
+    - name: CSDS_CARE_CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: APPOINTMENT_PRACTITIONER
+    identifier: '"APPOINTMENT_PRACTITIONER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: APPOINTMENT_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: LDS_END_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: LDS_RECORD_ID_USER
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: CONCEPT
+    identifier: '"CONCEPT"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: IS_MAPPED
+      data_type: BOOLEAN
+    - name: USE_COUNT
+      data_type: NUMBER
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: CONCEPT_MAP
+    identifier: '"CONCEPT_MAP"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_ID
+      data_type: TEXT
+    - name: SOURCE_CODE_ID
+      data_type: TEXT
+    - name: TARGET_CODE_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: EQUIVALENCE
+      data_type: TEXT
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: DIAGNOSTIC_ORDER
+    identifier: '"DIAGNOSTIC_ORDER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: PARENT_OBSERVATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: RESULT_VALUE
+      data_type: FLOAT
+    - name: RESULT_VALUE_UNITS
+      data_type: TEXT
+    - name: RESULT_DATE
+      data_type: DATE
+    - name: RESULT_TEXT
+      data_type: TEXT
+    - name: IS_PROBLEM
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: PROBLEM_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DIAGNOSTIC_ORDER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: EPISODICITY_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: ENCOUNTER
+    identifier: '"ENCOUNTER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: APPOINTMENT_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_ID
+      data_type: TEXT
+    - name: SERVICE_PROVIDER_ORGANISATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: LOCATION
+      data_type: TEXT
+    - name: ENCOUNTER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: TYPE
+      data_type: TEXT
+    - name: SUB_TYPE
+      data_type: TEXT
+    - name: ADMISSION_METHOD
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: EPISODE_OF_CARE
+    identifier: '"EPISODE_OF_CARE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: EPISODE_TYPE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: EPISODE_STATUS_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EPISODE_OF_CARE_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE_MANAGER_PRACTITIONER_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: FLAG
+    identifier: '"FLAG"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EXPIRED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: FLAG_TEXT
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: LOCATION
+    identifier: '"LOCATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: TYPE_CODE
+      data_type: TEXT
+    - name: TYPE_DESC
+      data_type: TEXT
+    - name: IS_PRIMARY_LOCATION
+      data_type: BOOLEAN
+    - name: HOUSE_NAME
+      data_type: TEXT
+    - name: HOUSE_NUMBER
+      data_type: TEXT
+    - name: HOUSE_NAME_FLAT_NUMBER
+      data_type: TEXT
+    - name: STREET
+      data_type: TEXT
+    - name: ADDRESS_LINE_1
+      data_type: TEXT
+    - name: ADDRESS_LINE_2
+      data_type: TEXT
+    - name: ADDRESS_LINE_3
+      data_type: TEXT
+    - name: ADDRESS_LINE_4
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: MANAGING_ORGANISATION_ID
+      data_type: TEXT
+    - name: OPEN_DATE
+      data_type: DATE
+    - name: CLOSE_DATE
+      data_type: DATE
+    - name: IS_OBSOLETE
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: LOCATION_CONTACT
+    identifier: '"LOCATION_CONTACT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: LOCATION_ID
+      data_type: TEXT
+    - name: IS_PRIMARY_CONTACT
+      data_type: BOOLEAN
+    - name: CONTACT_TYPE
+      data_type: TEXT
+    - name: CONTACT_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: MEDICATION_ORDER
+    identifier: '"MEDICATION_ORDER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_ID
+      data_type: TEXT
+    - name: DIAGNOSTIC_ORDER_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: DOSE
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: DURATION_DAYS
+      data_type: NUMBER
+    - name: ESTIMATED_COST
+      data_type: FLOAT
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: MEDICATION_ORDER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: ISSUE_METHOD
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: ISSUE_METHOD_DESCRIPTION
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: STATEMENT_MEDICATION_NAME
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+  - name: MEDICATION_STATEMENT
+    identifier: '"MEDICATION_STATEMENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_ID
+      data_type: TEXT
+    - name: DIAGNOSTIC_ORDER_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_ID
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CANCELLATION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DOSE
+      data_type: TEXT
+    - name: QUANTITY_VALUE_DESCRIPTION
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: ISSUE_METHOD
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: EXPIRY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: OBSERVATION
+    identifier: '"OBSERVATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: PARENT_OBSERVATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: RESULT_VALUE
+      data_type: FLOAT
+    - name: RESULT_VALUE_UNIT_CONCEPT_ID
+      data_type: TEXT
+    - name: RESULT_DATE
+      data_type: DATE
+    - name: RESULT_TEXT
+      data_type: TEXT
+    - name: IS_PROBLEM
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: PROBLEM_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OBSERVATION_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: EPISODICITY_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: IS_PROBLEM_DELETED
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: RESULT_UNIT_CODE
+      data_type: TEXT
+    - name: RESULT_UNIT_DISPLAY
+      data_type: TEXT
+  - name: ORGANISATION
+    identifier: '"ORGANISATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ASSIGNING_AUTHORITY_CODE
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: TYPE_CODE
+      data_type: TEXT
+    - name: TYPE_DESC
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: PARENT_ORGANISATION_ID
+      data_type: TEXT
+    - name: OPEN_DATE
+      data_type: DATE
+    - name: CLOSE_DATE
+      data_type: DATE
+    - name: IS_OBSOLETE
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT
+    identifier: '"PATIENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: NHS_NUMBER_HASH
+      data_type: BINARY
+    - name: SK_PATIENT_ID
+      data_type: NUMBER
+    - name: TITLE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: REGISTERED_PRACTICE_ID
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+    - name: IS_SPINE_SENSITIVE
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DUMMY_PATIENT
+      data_type: BOOLEAN
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_ADDRESS
+    identifier: '"PATIENT_ADDRESS"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ADDRESS_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_CONTACT
+    identifier: '"PATIENT_CONTACT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: CONTACT_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_PERSON
+    identifier: '"PATIENT_PERSON"'
+    columns:
+    - name: LAKEHOUSEDATEPROCESSED
+      data_type: TEXT
+    - name: LAKEHOUSEDATETIMEUPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+  - name: PATIENT_REGISTERED_PRACTITIONER_IN_ROLE
+    identifier: '"PATIENT_REGISTERED_PRACTITIONER_IN_ROLE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_UPRN
+    identifier: '"PATIENT_UPRN"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: REGISTRAR_EVENT_ID
+      data_type: TEXT
+    - name: MASKED_UPRN
+      data_type: TEXT
+    - name: MASKED_USRN
+      data_type: TEXT
+    - name: MASKED_POSTCODE
+      data_type: TEXT
+    - name: ADDRESS_FORMAT_QUALITY
+      data_type: TEXT
+    - name: POST_CODE_QUALITY
+      data_type: TEXT
+    - name: MATCHED_WITH_ASSIGN
+      data_type: TEXT
+    - name: QUALIFIER
+      data_type: TEXT
+    - name: UPRN_PROPERTY_CLASSIFICATION
+      data_type: TEXT
+    - name: ALGORITHM
+      data_type: TEXT
+    - name: MATCH_PATTERN
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_REGISTRAR_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PERSON
+    identifier: '"PERSON"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: NHS_NUMBER_HASH
+      data_type: BINARY
+    - name: TITLE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+  - name: PRACTITIONER
+    identifier: '"PRACTITIONER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: GMC_CODE
+      data_type: TEXT
+    - name: TITLE
+      data_type: TEXT
+    - name: FIRST_NAME
+      data_type: TEXT
+    - name: LAST_NAME
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: IS_OBSOLETE
+      data_type: BOOLEAN
+    - name: LDS_END_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PRACTITIONER_IN_ROLE
+    identifier: '"PRACTITIONER_IN_ROLE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: ROLE_CODE
+      data_type: TEXT
+    - name: ROLE
+      data_type: TEXT
+    - name: DATE_EMPLOYMENT_START
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_EMPLOYMENT_END
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PROCEDURE_REQUEST
+    identifier: '"PROCEDURE_REQUEST"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: PROCEDURE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: STATUS_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_END_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: REFERRAL_REQUEST
+    identifier: '"REFERRAL_REQUEST"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: REQUESTER_ORGANISATION_ID
+      data_type: TEXT
+    - name: RECIPIENT_ORGANISATION_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_PRIORITY_CONCEPT_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_SPECIALTY_CONCEPT_ID
+      data_type: TEXT
+    - name: MODE
+      data_type: TEXT
+    - name: IS_OUTGOING_REFERRAL
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: REFERRAL_REQUEST_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_DATA_INITIAL_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: SCHEDULE
+    identifier: '"SCHEDULE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: LOCATION_ID
+      data_type: TEXT
+    - name: LOCATION
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TYPE
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: IS_PRIVATE
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: SCHEDULE_PRACTITIONER
+    identifier: '"SCHEDULE_PRACTITIONER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: SCHEDULE_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
 - name: sus_apc
   database: '"DATA_LAKE"'
   schema: '"SUS_UNIFIED_APC"'
@@ -7116,6 +8607,3168 @@ sources:
       data_type: BOOLEAN
     - name: derIsLatestFiletypeProvider
       data_type: BOOLEAN
+- name: reference_analyst_managed
+  database: '"DATA_LAKE__NCL"'
+  schema: '"ANALYST_MANAGED"'
+  description: Analyst-managed reference datasets and business rules
+  tables:
+  - name: BP_THRESHOLDS
+    identifier: '"BP_THRESHOLDS"'
+    columns:
+    - name: THRESHOLD_RULE_ID
+      data_type: TEXT
+    - name: PROGRAMME_OR_GUIDELINE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: PATIENT_GROUP
+      data_type: TEXT
+    - name: THRESHOLD_TYPE
+      data_type: TEXT
+    - name: SYSTOLIC_THRESHOLD
+      data_type: NUMBER
+    - name: DIASTOLIC_THRESHOLD
+      data_type: NUMBER
+    - name: OPERATOR
+      data_type: TEXT
+    - name: NOTES
+      data_type: TEXT
+  - name: EFI2_COEFFICIENTS
+    identifier: '"EFI2_COEFFICIENTS"'
+    columns:
+    - name: MODEL_NAME
+      data_type: TEXT
+    - name: VARIABLE_NAME
+      data_type: TEXT
+    - name: VARIABLE_CATEGORY
+      data_type: TEXT
+    - name: COEFFICIENT
+      data_type: FLOAT
+    - name: TRANSFORMED_COEFFICIENT
+      data_type: FLOAT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: VARIABLE_TYPE
+      data_type: TEXT
+    - name: MODEL_DESCRIPTION
+      data_type: TEXT
+  - name: EFI2_RULES
+    identifier: '"EFI2_RULES"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: DEFICIT
+      data_type: TEXT
+    - name: DEFICIT_TYPE
+      data_type: TEXT
+    - name: TIME_CONSTRAINT_DAYS
+      data_type: FLOAT
+    - name: TIME_CONSTRAINT_TYPE
+      data_type: TEXT
+    - name: TIME_CONSTRAINT_DESCRIPTION
+      data_type: TEXT
+    - name: MIN_AGE
+      data_type: FLOAT
+    - name: AGE_RESTRICTION_DESCRIPTION
+      data_type: TEXT
+    - name: CATEGORY_NAME
+      data_type: TEXT
+    - name: CATEGORY_ORDER
+      data_type: FLOAT
+    - name: CATEGORY_RANGE_START
+      data_type: FLOAT
+    - name: CATEGORY_RANGE_END
+      data_type: FLOAT
+    - name: CATEGORY_DESCRIPTION
+      data_type: TEXT
+    - name: THRESHOLD_VALUE
+      data_type: FLOAT
+    - name: THRESHOLD_COMPARATOR
+      data_type: TEXT
+    - name: THRESHOLD_DESCRIPTION
+      data_type: TEXT
+    - name: THRESHOLD_UNIT
+      data_type: TEXT
+    - name: THRESHOLD_TYPE
+      data_type: TEXT
+    - name: READINGS_REQUIRED
+      data_type: FLOAT
+    - name: READINGS_TIMEFRAME
+      data_type: TEXT
+    - name: SUPERSEDES
+      data_type: TEXT
+    - name: SUPERSEDED_BY
+      data_type: TEXT
+    - name: HIERARCHY_LEVEL
+      data_type: FLOAT
+    - name: RESOLUTION_TEST
+      data_type: TEXT
+    - name: RESOLUTION_THRESHOLD
+      data_type: FLOAT
+    - name: RESOLUTION_UNIT
+      data_type: TEXT
+    - name: RESOLUTION_GENDER_SPECIFIC
+      data_type: BOOLEAN
+    - name: RESOLUTION_MALE_THRESHOLD
+      data_type: FLOAT
+    - name: RESOLUTION_FEMALE_THRESHOLD
+      data_type: FLOAT
+    - name: VALIDATION_RULE
+      data_type: TEXT
+    - name: VALIDATION_DESCRIPTION
+      data_type: TEXT
+    - name: EFI2_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI2_TRANSFORMED_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_FALLS_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_CARE_HOME_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_MORTALITY_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_HOME_CARE_COEFFICIENT
+      data_type: FLOAT
+    - name: SOURCE_INSTRUCTION
+      data_type: TEXT
+    - name: RULE_PRIORITY
+      data_type: NUMBER
+  - name: EFI2_SNOMED
+    identifier: '"EFI2_SNOMED"'
+    columns:
+    - name: DEFICIT
+      data_type: TEXT
+    - name: SNOMEDCT_CONCEPTID
+      data_type: TEXT
+    - name: CTV3
+      data_type: TEXT
+    - name: PROVENANCE
+      data_type: TEXT
+    - name: CODEDESCRIPTION
+      data_type: TEXT
+    - name: TIMECONSTRAINTYEARS
+      data_type: FLOAT
+    - name: AGELIMIT
+      data_type: FLOAT
+    - name: OTHERINSTRUCTIONS
+      data_type: TEXT
+  - name: IMD2019
+    identifier: '"IMD2019"'
+    columns:
+    - name: LSOACODE
+      data_type: TEXT
+    - name: IMDDECILE
+      data_type: NUMBER
+  - name: IMMS_SCHEDULE_LATEST
+    identifier: '"IMMS_SCHEDULE_LATEST"'
+    columns:
+    - name: VACCINE_ORDER
+      data_type: NUMBER
+    - name: VACCINE_ID
+      data_type: TEXT
+    - name: VACCINE_NAME
+      data_type: TEXT
+    - name: DOSE_NUMBER
+      data_type: TEXT
+    - name: DISEASES_PROTECTED_AGAINST
+      data_type: TEXT
+    - name: VACCINE_CODE
+      data_type: TEXT
+    - name: TRADE_NAME
+      data_type: TEXT
+    - name: ADMINISTRATION_ROUTE
+      data_type: TEXT
+    - name: SCHEDULE_AGE
+      data_type: TEXT
+    - name: MINIMUM_AGE_DAYS
+      data_type: NUMBER
+    - name: MAXIMUM_AGE_DAYS
+      data_type: NUMBER
+    - name: MINIMUM_INTERVAL_DAYS
+      data_type: NUMBER
+    - name: NEXT_DOSE_VACCINE_ID
+      data_type: TEXT
+    - name: ELIGIBLE_AGE_FROM_DAYS
+      data_type: NUMBER
+    - name: ELIGIBLE_AGE_TO_DAYS
+      data_type: NUMBER
+    - name: ADMINISTERED_CLUSTER_ID
+      data_type: TEXT
+    - name: DRUG_CLUSTER_ID
+      data_type: TEXT
+    - name: DECLINED_CLUSTER_ID
+      data_type: TEXT
+    - name: CONTRAINDICATED_CLUSTER_ID
+      data_type: TEXT
+    - name: INCOMPATIBLE_CLUSTER_IDS
+      data_type: TEXT
+    - name: INELIGIBILITY_PERIOD_MONTHS
+      data_type: NUMBER
+    - name: INCOMPATIBLE_EXPLANATION
+      data_type: TEXT
+  - name: LSOA2011_LSOA2021
+    identifier: '"LSOA2011_LSOA2021"'
+    columns:
+    - name: LSOA11CD
+      data_type: TEXT
+    - name: LSOA11NM
+      data_type: TEXT
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: CHGIND
+      data_type: TEXT
+    - name: LAD22CD
+      data_type: TEXT
+    - name: LAD22NM
+      data_type: TEXT
+    - name: LAD22NMW
+      data_type: TEXT
+    - name: OBJECTID
+      data_type: NUMBER
+  - name: NCL_GP_PRACTICE_NEIGHBOURHOOD
+    identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+  - name: NCL_NEIGHBOURHOOD
+    identifier: '"NCL_NEIGHBOURHOOD"'
+    columns:
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+  - name: NCL_NEIGHBOURHOOD_LSOA_2021
+    identifier: '"NCL_NEIGHBOURHOOD_LSOA_2021"'
+    columns:
+    - name: LSOA_2021_CODE
+      data_type: TEXT
+    - name: LSOA_2021_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: DATE
+  - name: PRACTICE_NEIGHBOURHOOD_LOOKUP
+    identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP"'
+    columns:
+    - name: PRACTICECODE
+      data_type: TEXT
+    - name: PRACTICENAME
+      data_type: TEXT
+    - name: PCNCODE
+      data_type: TEXT
+    - name: LOCALAUTHORITY
+      data_type: TEXT
+    - name: PRACTICENEIGHBOURHOOD
+      data_type: TEXT
+  - name: PRACTICE_SHORT_NAME
+    identifier: '"PRACTICE_SHORT_NAME"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME_SHORT
+      data_type: TEXT
+- name: reference_cancer_cwt_alliance
+  database: '"DATA_LAKE__NCL"'
+  schema: '"CANCER__CWT_ALLIANCE"'
+  description: Cancer waiting times alliance data
+  tables:
+  - name: CADEAS__CCG__24_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__24_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__24_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__24_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__24_DAY_SCREENING
+    identifier: '"CADEAS__CCG__24_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__24_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__24_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__28_DAY_FDS
+    identifier: '"CADEAS__CCG__28_DAY_FDS"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: NoPatients
+      data_type: FLOAT
+    - name: DaysWithin7
+      data_type: FLOAT
+    - name: Days8To14
+      data_type: FLOAT
+    - name: Days15To21
+      data_type: FLOAT
+    - name: Days22To28
+      data_type: FLOAT
+    - name: Days29To35
+      data_type: FLOAT
+    - name: Days36To42
+      data_type: FLOAT
+    - name: Days43To49
+      data_type: FLOAT
+    - name: Days50To62
+      data_type: FLOAT
+    - name: Days63To76
+      data_type: FLOAT
+    - name: Days77To90
+      data_type: FLOAT
+    - name: Days91To104
+      data_type: FLOAT
+    - name: DaysMoreThan104
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__2WW
+    identifier: '"CADEAS__CCG__2WW"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoSeen
+      data_type: FLOAT
+    - name: DaysWithin14
+      data_type: FLOAT
+    - name: Days15to16
+      data_type: FLOAT
+    - name: Days17to21
+      data_type: FLOAT
+    - name: Days22to28
+      data_type: FLOAT
+    - name: DaysMoreThan28
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__31_DAY
+    identifier: '"CADEAS__CCG__31_DAY"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: No2WWCancer
+      data_type: FLOAT
+    - name: No2WWBreastSymptoms
+      data_type: FLOAT
+    - name: NoUrgentScreening
+      data_type: FLOAT
+    - name: NoOther
+      data_type: FLOAT
+    - name: NoTreated
+      data_type: FLOAT
+    - name: DaysWithin31
+      data_type: FLOAT
+    - name: Days32to38
+      data_type: FLOAT
+    - name: Days39to48
+      data_type: FLOAT
+    - name: Days49to62
+      data_type: FLOAT
+    - name: DaysMoreThan62
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__38_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__38_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_SCREENING
+    identifier: '"CADEAS__CCG__38_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__38_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__62_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__62_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_SCREENING
+    identifier: '"CADEAS__CCG__62_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__62_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__28_DAY_FDS
+    identifier: '"CADEAS__CCG__BREACH__28_DAY_FDS"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: DelayReasonFDS
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__2WW
+    identifier: '"CADEAS__CCG__BREACH__2WW"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: FirstSeenDelayReason
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__31_DAY
+    identifier: '"CADEAS__CCG__BREACH__31_DAY"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonDecisionToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: StandardBreached
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_SCREENING
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__24_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__24_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__24_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__24_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__28_DAY_FDS
+    identifier: '"CADEAS__TRUST__28_DAY_FDS"'
+    columns:
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: NoPatients
+      data_type: FLOAT
+    - name: DaysWithin7
+      data_type: FLOAT
+    - name: Days8To14
+      data_type: FLOAT
+    - name: Days15To21
+      data_type: FLOAT
+    - name: Days22To28
+      data_type: FLOAT
+    - name: Days29To35
+      data_type: FLOAT
+    - name: Days36To42
+      data_type: FLOAT
+    - name: Days43To49
+      data_type: FLOAT
+    - name: Days50To62
+      data_type: FLOAT
+    - name: Days63To76
+      data_type: FLOAT
+    - name: Days77To90
+      data_type: FLOAT
+    - name: Days91To104
+      data_type: FLOAT
+    - name: DaysMoreThan104
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__2WW
+    identifier: '"CADEAS__TRUST__2WW"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoSeen
+      data_type: FLOAT
+    - name: DaysWithin14
+      data_type: FLOAT
+    - name: Days15to16
+      data_type: FLOAT
+    - name: Days17to21
+      data_type: FLOAT
+    - name: Days22to28
+      data_type: FLOAT
+    - name: DaysMoreThan28
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__31_DAY
+    identifier: '"CADEAS__TRUST__31_DAY"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: No2WWCancer
+      data_type: FLOAT
+    - name: No2WWBreastSymptoms
+      data_type: FLOAT
+    - name: NoUrgentScreening
+      data_type: FLOAT
+    - name: NoOther
+      data_type: FLOAT
+    - name: NoTreated
+      data_type: FLOAT
+    - name: DaysWithin31
+      data_type: FLOAT
+    - name: Days32to38
+      data_type: FLOAT
+    - name: Days39to48
+      data_type: FLOAT
+    - name: Days49to62
+      data_type: FLOAT
+    - name: DaysMoreThan62
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__38_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__38_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__38_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__38_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__62_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__62_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__62_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__62_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__28_DAY_FDS
+    identifier: '"CADEAS__TRUST__BREACH__28_DAY_FDS"'
+    columns:
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: DelayReasonFDS
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__2WW
+    identifier: '"CADEAS__TRUST__BREACH__2WW"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: FirstSeenDelayReason
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__31_DAY
+    identifier: '"CADEAS__TRUST__BREACH__31_DAY"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonDecisionToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: StandardBreached
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+- name: reference_cancer_emis
+  database: '"DATA_LAKE__NCL"'
+  schema: '"CANCER__EMIS"'
+  description: Cancer EMIS data
+  tables:
+  - name: CCR_CAN004
+    identifier: '"CCR_CAN004"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: CCR_CAN005
+    identifier: '"CCR_CAN005"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: ESAFETY
+    identifier: '"ESAFETY"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: FIT_MONTHLY
+    identifier: '"FIT_MONTHLY"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: FIT_QUARTERLY
+    identifier: '"FIT_QUARTERLY"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: SOCIAL_PRESCRIBER_REFERRALS
+    identifier: '"SOCIAL_PRESCRIBER_REFERRALS"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+- name: reference_cancer_screening
+  database: '"DATA_LAKE__NCL"'
+  schema: '"CANCER__SCREENING"'
+  description: Cancer screening data
+  tables:
+  - name: SCREENING_LOCAL
+    identifier: '"SCREENING_LOCAL"'
+    columns:
+    - name: Organisation Code
+      data_type: TEXT
+    - name: Organisation Name
+      data_type: TEXT
+    - name: Programme
+      data_type: TEXT
+    - name: Month of Date
+      data_type: TEXT
+    - name: Cohort Age Range
+      data_type: TEXT
+    - name: Cohort Description
+      data_type: TEXT
+    - name: Denominator Name
+      data_type: TEXT
+    - name: Denominator
+      data_type: TEXT
+    - name: Numerator
+      data_type: TEXT
+    - name: Performance
+      data_type: TEXT
+    - name: Acceptable
+      data_type: TEXT
+    - name: Achievable
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: SCREENING_NATIONAL
+    identifier: '"SCREENING_NATIONAL"'
+    columns:
+    - name: Organisation Code
+      data_type: TEXT
+    - name: Organisation Name
+      data_type: TEXT
+    - name: Programme
+      data_type: TEXT
+    - name: Month of Date
+      data_type: TEXT
+    - name: Cohort Age Range
+      data_type: TEXT
+    - name: Cohort Description
+      data_type: TEXT
+    - name: Denominator Name
+      data_type: TEXT
+    - name: Denominator
+      data_type: TEXT
+    - name: Numerator
+      data_type: TEXT
+    - name: Performance
+      data_type: TEXT
+    - name: Acceptable
+      data_type: TEXT
+    - name: Achievable
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+- name: reference_data_management
+  database: '"DATA_LAKE__NCL"'
+  schema: '"DATA_MANAGEMENT"'
+  description: Data management reference datasets
+  tables:
+  - name: GP_WEIGHTED_LIST_SIZE
+    identifier: '"GP_WEIGHTED_LIST_SIZE"'
+    columns:
+    - name: SITE
+      data_type: TEXT
+    - name: FINANCIAL_QUARTER_DATE
+      data_type: DATE
+    - name: PCT
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: GMS_PMS_FLAG
+      data_type: TEXT
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PRACTICE_LIST_SIZE
+      data_type: NUMBER
+    - name: PRACTICE_NORMALISED_WEIGHTED_LIST_SIZE
+      data_type: FLOAT
+    - name: REPORT_EXECUTION_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: PRACTICE_SHORT_NAME
+    identifier: '"PRACTICE_SHORT_NAME"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_SHORT_NAME
+      data_type: TEXT
+- name: reference_fingertips
+  database: '"DATA_LAKE__NCL"'
+  schema: '"FINGERTIPS"'
+  description: Fingertips indicator data
+  tables:
+  - name: INDICATOR_DATA
+    identifier: '"INDICATOR_DATA"'
+    columns:
+    - name: Indicator ID
+      data_type: NUMBER
+    - name: Indicator Name
+      data_type: TEXT
+    - name: Parent Code
+      data_type: TEXT
+    - name: Parent Name
+      data_type: TEXT
+    - name: Area Code
+      data_type: TEXT
+    - name: Area Name
+      data_type: TEXT
+    - name: Area Type
+      data_type: TEXT
+    - name: Sex
+      data_type: TEXT
+    - name: Age
+      data_type: TEXT
+    - name: Category Type
+      data_type: TEXT
+    - name: Category
+      data_type: TEXT
+    - name: Time period
+      data_type: TEXT
+    - name: Value
+      data_type: FLOAT
+    - name: Lower CI 95.0 limit
+      data_type: FLOAT
+    - name: Upper CI 95.0 limit
+      data_type: FLOAT
+    - name: Lower CI 99.8 limit
+      data_type: FLOAT
+    - name: Upper CI 99.8 limit
+      data_type: FLOAT
+    - name: Count
+      data_type: NUMBER
+    - name: Denominator
+      data_type: NUMBER
+    - name: Value note
+      data_type: TEXT
+    - name: Recent Trend
+      data_type: TEXT
+    - name: Compared to England value or percentiles
+      data_type: TEXT
+    - name: Compared to percentiles
+      data_type: TEXT
+    - name: Time period Sortable
+      data_type: NUMBER
+    - name: New data
+      data_type: TEXT
+    - name: Compared to goal
+      data_type: TEXT
+    - name: Time period range
+      data_type: TEXT
+    - name: DATE_UPDATED_LOCAL
+      data_type: DATE
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: INDICATOR_UPDATE_LOG
+    identifier: '"INDICATOR_UPDATE_LOG"'
+    columns:
+    - name: INDICATOR_ID
+      data_type: NUMBER
+    - name: DATE_UPDATED_LOCAL
+      data_type: DATE
+    - name: IS_LATEST
+      data_type: BOOLEAN
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: METADATA_AREA
+    identifier: '"METADATA_AREA"'
+    columns:
+    - name: AREA_ID
+      data_type: NUMBER
+    - name: Name
+      data_type: TEXT
+    - name: Short
+      data_type: TEXT
+    - name: Class
+      data_type: TEXT
+    - name: Sequence
+      data_type: NUMBER
+    - name: CanBeDisplayedOnMap
+      data_type: BOOLEAN
+  - name: METADATA_INDICATOR
+    identifier: '"METADATA_INDICATOR"'
+    columns:
+    - name: Indicator ID
+      data_type: NUMBER
+    - name: Indicator
+      data_type: TEXT
+    - name: Indicator number
+      data_type: TEXT
+    - name: Rationale
+      data_type: TEXT
+    - name: Specific rationale
+      data_type: TEXT
+    - name: Definition
+      data_type: TEXT
+    - name: Data source
+      data_type: TEXT
+    - name: Indicator source
+      data_type: TEXT
+    - name: Definition of numerator
+      data_type: TEXT
+    - name: Source of numerator
+      data_type: TEXT
+    - name: Definition of denominator
+      data_type: TEXT
+    - name: Source of denominator
+      data_type: TEXT
+    - name: Methodology
+      data_type: TEXT
+    - name: Standard population/values
+      data_type: TEXT
+    - name: Frequency
+      data_type: TEXT
+    - name: Confidence interval details
+      data_type: TEXT
+    - name: Disclosure control
+      data_type: TEXT
+    - name: Rounding
+      data_type: TEXT
+    - name: Caveats
+      data_type: TEXT
+    - name: Notes
+      data_type: TEXT
+    - name: Impact of COVID-19
+      data_type: TEXT
+    - name: Copyright
+      data_type: TEXT
+    - name: Data re-use
+      data_type: TEXT
+    - name: Links
+      data_type: TEXT
+    - name: Indicator Content
+      data_type: TEXT
+    - name: Simple Name
+      data_type: TEXT
+    - name: Simple Definition
+      data_type: TEXT
+    - name: Unit
+      data_type: TEXT
+    - name: Value type
+      data_type: TEXT
+    - name: Year type
+      data_type: TEXT
+    - name: Polarity
+      data_type: TEXT
+    - name: Date updated
+      data_type: DATE
+- name: reference_terminology
+  database: '"DATA_LAKE__NCL"'
+  schema: '"TERMINOLOGY"'
+  description: Reference terminology data including SNOMED, BNF, and other code sets
+  tables:
+  - name: BNF_LATEST
+    identifier: '"BNF_LATEST"'
+    columns:
+    - name: PRESENTATION_PACK_LEVEL
+      data_type: TEXT
+    - name: VMP_VMPP_AMP_AMPP
+      data_type: TEXT
+    - name: BNF_CODE
+      data_type: TEXT
+    - name: BNF_NAME
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: DM_D_PRODUCT_DESCRIPTION
+      data_type: TEXT
+    - name: STRENGTH
+      data_type: TEXT
+    - name: UNIT_OF_MEASURE
+      data_type: TEXT
+    - name: DM_D_PRODUCT_PACK_DESCRIPTION
+      data_type: TEXT
+    - name: PACK
+      data_type: TEXT
+    - name: SUB_PACK
+      data_type: TEXT
+    - name: VTM
+      data_type: TEXT
+    - name: VTM_NAME
+      data_type: TEXT
+  - name: CHILDHOOD_IMMS_CODES
+    identifier: '"CHILDHOOD_IMMS_CODES"'
+    columns:
+    - name: VACCINE
+      data_type: TEXT
+    - name: DOSE
+      data_type: TEXT
+    - name: PROPOSEDCLUSTER
+      data_type: TEXT
+    - name: SOURCECLUSTERID
+      data_type: TEXT
+    - name: SOURCECLUSTERDESCRIPTION
+      data_type: TEXT
+    - name: SNOMEDCONCEPTID
+      data_type: NUMBER
+    - name: CODEDESCRIPTION
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
+  - name: COMBINED_CODESETS
+    identifier: '"COMBINED_CODESETS"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
+  - name: ECL_CACHE
+    identifier: '"ECL_CACHE"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: LAST_REFRESHED
+      data_type: TIMESTAMP_NTZ
+    - name: ECL_EXPRESSION_HASH
+      data_type: TEXT
+  - name: ECL_CACHE_METADATA
+    identifier: '"ECL_CACHE_METADATA"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: LAST_SUCCESSFUL_REFRESH
+      data_type: TIMESTAMP_NTZ
+    - name: LAST_ATTEMPTED_REFRESH
+      data_type: TIMESTAMP_NTZ
+    - name: LAST_ERROR_MESSAGE
+      data_type: NUMBER
+    - name: ECL_EXPRESSION_HASH
+      data_type: TEXT
+    - name: RECORD_COUNT
+      data_type: NUMBER
+    - name: LAST_REFRESHED_BY
+      data_type: TEXT
+    - name: LAST_ATTEMPTED_BY
+      data_type: TEXT
+  - name: ECL_CLUSTERS
+    identifier: '"ECL_CLUSTERS"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: ECL_EXPRESSION
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: CREATED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: UPDATED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: CREATED_BY
+      data_type: TEXT
+    - name: UPDATED_BY
+      data_type: TEXT
+    - name: CLUSTER_TYPE
+      data_type: TEXT
+  - name: ECL_CLUSTER_CHANGES
+    identifier: '"ECL_CLUSTER_CHANGES"'
+    columns:
+    - name: CHANGE_ID
+      data_type: NUMBER
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CHANGE_TYPE
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: CHANGE_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: CHANGED_BY
+      data_type: TEXT
+    - name: REFRESH_SESSION_ID
+      data_type: TEXT
+  - name: ETHNICITY_CODES
+    identifier: '"ETHNICITY_CODES"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: TERM
+      data_type: TEXT
+    - name: CATEGORY
+      data_type: TEXT
+    - name: SUBCATEGORY
+      data_type: TEXT
+    - name: GRANULAR
+      data_type: TEXT
+    - name: DEPRIORITISE_FLAG
+      data_type: BOOLEAN
+    - name: PREFERENCE_RANK
+      data_type: NUMBER
+    - name: CATEGORY_SORT
+      data_type: NUMBER
+    - name: DISPLAY_SORT_KEY
+      data_type: TEXT
+  - name: LTC_LCS_CODES
+    identifier: '"LTC_LCS_CODES"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: SNOMED_DESCRIPTION
+      data_type: TEXT
+  - name: PCD_REFSET_LATEST
+    identifier: '"PCD_REFSET_LATEST"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: NUMBER
+    - name: SNOMED_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: PCD_REFSET_ID
+      data_type: TEXT
+    - name: SERVICE_AND_RULESET
+      data_type: TEXT
+  - name: UKHSA_COVID_LATEST
+    identifier: '"UKHSA_COVID_LATEST"'
+    columns:
+    - name: CODING_SCHEME
+      data_type: TEXT
+    - name: LIBRARY
+      data_type: TEXT
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: SNOMED_DESCRIPTION
+      data_type: TEXT
+    - name: CODE_VALIDATED
+      data_type: TEXT
+  - name: UKHSA_FLU_LATEST
+    identifier: '"UKHSA_FLU_LATEST"'
+    columns:
+    - name: CODING_SCHEME
+      data_type: TEXT
+    - name: CODE_LIBRARY
+      data_type: TEXT
+    - name: CODE_GROUP
+      data_type: TEXT
+    - name: CODE_GROUP_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: SNOMED_DESCRIPTION
+      data_type: TEXT
+    - name: DATE_CREATED
+      data_type: TEXT
+    - name: VALIDATED_SCTID
+      data_type: TEXT
+    - name: EMIS_ASTRX
+      data_type: TEXT
+    - name: UNNAMED_9
+      data_type: TEXT
+    - name: TPP_ASTRX
+      data_type: TEXT
+  - name: VALPROATE_PROG_CODES
+    identifier: '"VALPROATE_PROG_CODES"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_CATEGORY
+      data_type: TEXT
+    - name: LOOKBACK_YEARS_OFFSET
+      data_type: FLOAT
+    - name: VALPROATE_PRODUCT_TERM
+      data_type: TEXT
 - name: dictionary_eRS
   database: '"Dictionary"'
   schema: '"E-Referral"'

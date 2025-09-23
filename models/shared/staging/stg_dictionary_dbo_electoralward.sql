@@ -16,6 +16,6 @@ select
     "Ward_Name" as ward_name,
     "ONS_Ward_Code_old" as ons_ward_code_old,
     "ONS_Ward_Code_9char" as ons_ward_code_9char,
-    "SK_ElectoralWard_ID" as sk_electoral_ward_id,
+    "SK_ElectoralWard_ID" as sk_electoral_ward_id_1,
     "IsActive" as is_active
 from {{ source('dictionary_dbo', 'ElectoralWard') }}
