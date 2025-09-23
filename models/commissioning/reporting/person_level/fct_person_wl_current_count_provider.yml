@@ -1,0 +1,13 @@
+version: 1
+
+models:
+  - name: fct_person_wl_current_count_provider
+    description: >
+      Pivoted summary of open pathways per patient across providers.
+      Each column represents the sum of open pathways for a specific provider.
+    columns:
+      - name: patient_id
+        description: Unique identifier for each patient.
+        tests:
+          - not_null
+          - unique
