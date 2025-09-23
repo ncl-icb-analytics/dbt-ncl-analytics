@@ -20,6 +20,18 @@ model-paths: ["models"]
 vars:
   dbt_audit_schema: "test_audit"
 
+  # Flu campaign configuration - Change these values to run for different campaign years
+  flu_current_campaign: "flu_2025_26"     # Current flu campaign (flu_2023_24, flu_2024_25, flu_2025_26)
+  flu_previous_campaign: "flu_2024_25"    # Previous flu campaign (for year-over-year comparison)
+  flu_audit_end_date: "CURRENT_DATE"      # Default audit end date
+
+  # COVID campaign configuration - Multi-campaign support
+  covid_current_autumn: "covid_2025_autumn"    # Current autumn campaign
+  covid_current_spring: "covid_2025_spring"    # Current spring campaign
+  covid_previous_autumn: "covid_2024_autumn"   # Previous autumn campaign
+  covid_previous_spring: "covid_2025_spring"   # Previous spring campaign (for comparison)
+  covid_audit_end_date: "2025-06-30"           # End of last completed campaign (spring 2025)
+
 # Configure test failure storage (only for failures)
 tests:
   +store_failures: false
@@ -30,7 +42,8 @@ models:
     +materialized: table
     +persist_docs:
       columns: true
-    
+    +post-hook: ["{{ grant_ownership_with_copy() }}"]
+
     # Commissioning analytics models
     commissioning:
       staging:
