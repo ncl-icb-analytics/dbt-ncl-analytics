@@ -4,11 +4,12 @@
 
 **dbt** (data build tool) project for NCL Analytics supporting both:
 - **Commissioning analytics** - Currently active using ANALYST role
-- **OLIDS analytics** - Future integration when OLIDS moves out of UAT
+- **OLIDS analytics** - GP data in the One London Integrated Data Set
 
 This project uses dbt to transform healthcare and operational data, creating analytics-ready datasets for analysis from multiple data sources:
 
 **Data sources included:**
+- **OLIDS** - One London Integrated Data Set FHIR GP record data from EMIS/SystmOne.
 - **Waiting Lists (WL)** - Patient waiting times and pathway data  
 - **SUS Unified** - Outpatient (OP), Admitted Patient Care (APC) and Emergency Care Dataset (ECDS) data
 - **EPD Primary Care** - Primary care medications and prescribing data
