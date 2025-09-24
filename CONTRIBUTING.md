@@ -218,6 +218,15 @@ Don't forget to also set up your development environment as per the main README:
    .\start_dbt.ps1
    ```
 
+## Understanding start_dbt.ps1
+
+The start_dbt.ps1 script is essential for local development. It serves two main purposes:
+
+1. **Environment setup**: Loads variables from your .env file (Snowflake account, warehouse, role) into your PowerShell session so dbt can connect to Snowflake
+2. **Credential protection**: Uses git's skip-worktree feature to mark profiles.yml as "unchanged" in git's eyes, even when you edit it with your personal credentials
+
+The skip-worktree setting tells git to assume profiles.yml hasn't changed, effectively hiding your local edits from git status, git diff, and commits. This is a permanent setting in your local repository that persists across terminal sessions, branch switches, and git pulls. It only affects your local machine - other developers need to run the script themselves.
+
 ## Working with dbt Packages and Profiles
 
 This repository has an unconventional setup that's important to understand:
@@ -231,7 +240,7 @@ Unlike typical dbt projects:
 
 ### Important workflow considerations
 
-1. **Always run start_dbt.ps1 first** - This script sets up git skip-worktree for profiles.yml, preventing your local credential changes from being tracked
+1. **Run start_dbt.ps1 before your first commit** - This applies git skip-worktree to profiles.yml (a permanent local config that persists across sessions and branches). You only need to do this once, but the script is safe to run multiple times.
 
 2. **When updating dependencies**:
    - Running `dbt deps` may show changes in `dbt_packages/`
@@ -244,9 +253,14 @@ Unlike typical dbt projects:
    - Check git status carefully for unintended dbt_packages changes
 
 4. **If you see profiles.yml in git status**:
-   - This usually means start_dbt.ps1 hasn't been run
-   - Run the script to re-apply skip-worktree
+   - This usually means start_dbt.ps1 hasn't been run yet
+   - Run the script to apply skip-worktree
    - Never commit your local profiles.yml credentials
+
+5. **To undo skip-worktree** (rarely needed):
+   ```bash
+   git update-index --no-skip-worktree profiles.yml
+   ```
 
 ## Getting Help
 
