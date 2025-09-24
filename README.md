@@ -81,8 +81,10 @@ Run the setup script to configure your environment:
 
 This script:
 - Loads your .env variables into the session
-- Configures Git to ignore your local profiles.yml changes
+- Configures Git to ignore your local profiles.yml changes (using git skip-worktree)
 - Sets up the dbt environment for development
+
+**Important**: Unlike typical dbt projects, both profiles.yml and dbt_packages/ are committed to this repo for Snowflake native execution. The start_dbt.ps1 script prevents your local profiles.yml changes from being tracked while preserving the base configuration.
 
 Note: Run this script each time you start a new terminal session.
 

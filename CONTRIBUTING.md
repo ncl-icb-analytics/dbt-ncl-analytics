@@ -218,6 +218,36 @@ Don't forget to also set up your development environment as per the main README:
    .\start_dbt.ps1
    ```
 
+## Working with dbt Packages and Profiles
+
+This repository has an unconventional setup that's important to understand:
+
+### Why packages and profiles are committed
+
+Unlike typical dbt projects:
+- `dbt_packages/` directory is committed (not gitignored)
+- `profiles.yml` is committed to the repository
+- This is required for Snowflake native execution to work
+
+### Important workflow considerations
+
+1. **Always run start_dbt.ps1 first** - This script sets up git skip-worktree for profiles.yml, preventing your local credential changes from being tracked
+
+2. **When updating dependencies**:
+   - Running `dbt deps` may show changes in `dbt_packages/`
+   - If intentionally updating packages: commit these changes
+   - If not updating packages: discard the changes
+   - Be mindful that package updates affect all team members
+
+3. **Before committing**:
+   - Ensure start_dbt.ps1 has been run to avoid accidentally committing local credentials
+   - Check git status carefully for unintended dbt_packages changes
+
+4. **If you see profiles.yml in git status**:
+   - This usually means start_dbt.ps1 hasn't been run
+   - Run the script to re-apply skip-worktree
+   - Never commit your local profiles.yml credentials
+
 ## Getting Help
 
 If you encounter issues:
