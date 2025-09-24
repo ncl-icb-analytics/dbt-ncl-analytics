@@ -47,14 +47,14 @@ pip install -r requirements.txt
 cp env.example .env
 # Edit .env file with your Snowflake credentials (ANALYST role)
 
-# 4. Run environment setup script
+# 4. Setup local profiles for development
+cp profiles.yml.template profiles.yml
+# Edit profiles.yml with your Snowflake credentials
+# (See profiles.yml.template for reference)
+
+# 5. Run environment setup script
 # This will activate venv, load .env, and configure Git to ignore local profiles.yml changes
 .\start_dbt.ps1
-
-# 5. Setup local profiles for development
-# Edit profiles.yml with your Snowflake credentials
-# (See profiles.yml.example for reference)
-# Note: start_dbt.ps1 automatically configures Git to ignore your local changes
 
 # 6. Install dbt dependencies and test connection
 dbt deps
@@ -145,7 +145,7 @@ models/
 │   ├── reporting/           # Analytics-ready models (tables in REPORTING.COMMISSIONING_REPORTING)
 │   └── published_reporting_secondary_use/  # Published outputs (PUBLISHED_REPORTING__SECONDARY_USE.COMMISSIONING_PUBLISHED)
 │
-├── olids/                   # OLIDS analytics domain (future)
+├── olids/                   # OLIDS analytics domain
 │   ├── staging/             # 1:1 source mappings (views in MODELLING.DBT_STAGING)
 │   ├── modelling/           # Business logic & consolidation (tables in MODELLING.OLIDS_MODELLING)
 │   ├── reporting/           # Analytics-ready models (tables in REPORTING.OLIDS_REPORTING)
@@ -175,11 +175,14 @@ macros/                      # Reusable SQL macros
 
 ## Development
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, branch protection rules, and commit signing setup.
+
 **Daily workflow:**
 ```bash
-dbt run         # Build all models
-dbt test        # Run data quality tests  
-dbt docs serve  # Open documentation
+dbt run            # Build all models
+dbt test           # Run data quality tests
+dbt docs generate  # Generate documentation
+dbt docs serve     # Open documentation in browser
 ```
 
 **For specific models:**
@@ -192,7 +195,7 @@ dbt run -s +model_name             # Build model + dependencies
 **For specific domains:**
 ```bash
 dbt run -s commissioning           # Build all commissioning models
-dbt run -s olids                   # Build all OLIDS models (when available)
+dbt run -s olids                   # Build all OLIDS models
 dbt run -s shared                  # Build all shared models
 dbt run -s commissioning.staging   # Build only commissioning staging models
 ```
@@ -217,6 +220,3 @@ This project uses the **ANALYST** role which has access to:
 - `MODELLING.*` for intermediate processing
 - `REPORTING.*` for final marts
 
-## Future Integration
-
-This project is designed to be merged with the OLIDS dbt project once OLIDS data moves out of the UAT environment requiring special role access.
