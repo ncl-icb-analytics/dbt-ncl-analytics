@@ -19,6 +19,7 @@ WITH PROVIDER_COUNTS AS (
     provider_code,
     open_pathways
     FROM {{ ref('int_wl_current') }}
+    WHERE patient_id IS NOT NULL
 )
 SELECT
 *
@@ -26,9 +27,9 @@ FROM PROVIDER_COUNTS wl
 PIVOT
 (
     SUM(open_pathways) FOR provider_code IN (
-        SELECT DISTINCT 
-        provider_code 
+        SELECT DISTINCT
+        provider_code
         FROM DEV__MODELLING.LOOKUP_NCL.PROVIDER_SHORTHAND
         )
-        DEFAULT ON NULL (0)
+    DEFAULT ON NULL (0)
 ) AS pvt
