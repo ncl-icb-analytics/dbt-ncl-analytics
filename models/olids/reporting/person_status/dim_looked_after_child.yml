@@ -1,0 +1,12 @@
+models:
+  - name: dim_looked_after_child
+    description: Dimension table providing people under 25 who have a looked after child code
+    
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique
+      
+      

@@ -1,0 +1,10 @@
+models:
+  - name: int_childhood_imms_historical_population
+    description: Intermediate table holding demographics for base childhood imms population going back 5 years for child aged 1,2,5,11,16 on each analysis month. This supports the time series model.
+    
+    columns:
+      - name: person_id
+        description: identifier for the person ()
+        
+      - name: is_fiscal_year_end
+        description: Flag to identify the 31st March of each year as FISCAL year
