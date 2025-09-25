@@ -1,0 +1,5 @@
+models:
+  - name: int_childhood_imms_vaccs_historical_age_1
+    description: Intermediate table for historical population aged 1 year old at each analysis month and who have complete or outofschedule vaccinations (declined, contraindicated and overdue excluded). 
+
+    
