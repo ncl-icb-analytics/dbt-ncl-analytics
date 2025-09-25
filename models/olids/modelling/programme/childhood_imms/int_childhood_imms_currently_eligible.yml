@@ -1,0 +1,3 @@
+models:
+  - name: int_childhood_imms_currently_eligible
+    description: Intermediate table to cross join currently childhood imms population with Imms Schedule to get eligibility window. Multiple lines per person
