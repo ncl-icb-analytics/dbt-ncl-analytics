@@ -1,0 +1,4 @@
+models:
+  - name: childhood_imms_person_level_child_dm
+    description: Final data model table holding vaccination detail by dose and demographics for children under 11. Person level data.
+

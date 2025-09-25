@@ -1,0 +1,3 @@
+models:
+  - name: int_childhood_imms_dose_count_eoy_age_5
+    description: Intermediate table for counting vaccinations by month for historical population aged 5 years old at the end of each fiscal year EOY
