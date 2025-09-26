@@ -1,0 +1,47 @@
+version: 2
+models:
+  - name: int_person_geography
+    description: 'Comprehensive person geography mapping including postcode hash, LSOA, borough, neighbourhood and IMD.
+
+      Key Features:
+
+      • Uses person_id directly from patient_address table
+
+      • Selects most recent/active address for each person
+
+      • Maps to 2011 and 2021 census geographies via postcode hash
+
+      • Includes IMD 2019 deprivation data (via 2011 LSOA)
+
+      • Maps to NCL neighbourhoods (via 2021 LSOA)
+
+      • All geographic joins are LEFT JOINs for residents outside London/NCL'
+    columns:
+      - name: person_id
+        description: 'Unique person identifier'
+      - name: postcode_hash
+        description: 'Hashed postcode value for privacy protection'
+      - name: address_start_date
+        description: 'Start date of the address record'
+      - name: address_end_date
+        description: 'End date of the address record (NULL if current)'
+      - name: is_current_address
+        description: 'Flag indicating if this is the current active address'
+      - name: primary_care_organisation
+        description: 'Primary care organisation code from postcode lookup'
+      - name: borough_resident
+        description: 'Local authority/borough of residence'
+      - name: lsoa_code_11
+        description: '2011 Census Lower Layer Super Output Area code'
+      - name: msoa_code_11
+        description: '2011 Census Middle Layer Super Output Area code'
+      - name: lsoa_code_21
+        description: '2021 Census Lower Layer Super Output Area code'
+      - name: msoa_code_21
+        description: '2021 Census Middle Layer Super Output Area code'
+      - name: neighbourhood_resident
+        description: 'NCL neighbourhood of residence (from 2021 LSOA)'
+      - name: imd_decile_19
+        description: 'IMD 2019 decile (1=most deprived, 10=least deprived)'
+      - name: imd_quintile_19
+        description: 'IMD 2019 quintile grouping for analysis'

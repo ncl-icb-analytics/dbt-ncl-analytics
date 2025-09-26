@@ -13,11 +13,6 @@ Business Logic:
 - Demographics: Complete population with full demographic profiles (base table)
 - Behavioural risk factors: All persons with explicit data availability flags (NULL where no assessments)
 - Conditions: All persons with explicit TRUE/FALSE flags (FALSE where no conditions)
-
-TEMPORARY WORKAROUND: 
-- Patient LSOA fields populated with practice LSOA data as we don't have patient postcode to LSOA lookup yet
-- Deprivation data derived from practice LSOA rather than patient LSOA
-- This will be replaced when patient postcode to IMD lookup table becomes available
 */
 
 SELECT
@@ -51,7 +46,7 @@ SELECT
     d.main_language,
     d.interpreter_needed,
     
-    -- Demographics: Practice and geography
+    -- Demographics: Practice registration
     d.practice_code,
     d.practice_name,
     d.pcn_code,
@@ -60,39 +55,32 @@ SELECT
     d.neighbourhood_registered,
     d.borough_registered,
     d.practice_postcode,
-    
-    -- TEMPORARY: Using practice LSOA for patient LSOA until patient postcode lookup available
-    d.practice_lsoa AS patient_lsoa,
-    
-    -- Original practice LSOA field
+
+    -- Patient geography (from postcode mapping)
+    d.lsoa_code_21 AS patient_lsoa,
+    d.borough_resident,
+    d.neighbourhood_resident,
+
+    -- Practice geography (preserved for comparison)
     d.practice_lsoa,
-    
+
     d.ward_code,
     d.ward_name,
-    
-    -- TEMPORARY: Using practice-based deprivation until patient postcode lookup available
-    imd.imddecile AS patient_imd_decile_19,
-    CASE 
-        WHEN imd.imddecile IN (1, 2) THEN 'Most Deprived'
-        WHEN imd.imddecile IN (3, 4) THEN 'Second Most Deprived'
-        WHEN imd.imddecile IN (5, 6) THEN 'Third Most Deprived'
-        WHEN imd.imddecile IN (7, 8) THEN 'Second Least Deprived'
-        WHEN imd.imddecile IN (9, 10) THEN 'Least Deprived'
-        ELSE NULL
-    END AS patient_imd_quintile_19,
-    
-    -- Original practice deprivation fields preserved  
-    imd.imddecile AS practice_imd_decile_19,
-    CASE 
-        WHEN imd.imddecile IN (1, 2) THEN 'Most Deprived'
-        WHEN imd.imddecile IN (3, 4) THEN 'Second Most Deprived'
-        WHEN imd.imddecile IN (5, 6) THEN 'Third Most Deprived'
-        WHEN imd.imddecile IN (7, 8) THEN 'Second Least Deprived'
-        WHEN imd.imddecile IN (9, 10) THEN 'Least Deprived'
+
+    -- Patient IMD (from postcode to LSOA to IMD mapping)
+    d.imd_decile_19 AS patient_imd_decile_19,
+    d.imd_quintile_19 AS patient_imd_quintile_19,
+
+    -- Practice IMD (preserved for comparison/fallback)
+    practice_imd.imddecile AS practice_imd_decile_19,
+    CASE
+        WHEN practice_imd.imddecile IN (1, 2) THEN 'Most Deprived'
+        WHEN practice_imd.imddecile IN (3, 4) THEN 'Second Most Deprived'
+        WHEN practice_imd.imddecile IN (5, 6) THEN 'Third Most Deprived'
+        WHEN practice_imd.imddecile IN (7, 8) THEN 'Second Least Deprived'
+        WHEN practice_imd.imddecile IN (9, 10) THEN 'Least Deprived'
         ELSE NULL
     END AS practice_imd_quintile_19,
-    
-    d.neighbourhood_resident,
     d.postcode_hash,
     d.uprn_hash,
     d.registration_start_date,
@@ -176,6 +164,6 @@ LEFT JOIN {{ ref('fct_person_behavioural_risk_factors') }} b
     ON d.person_id = b.person_id
 LEFT JOIN {{ ref('dim_person_conditions') }} c
     ON d.person_id = c.person_id
--- TEMPORARY: Join to IMD reference using practice LSOA until patient postcode lookup available
-LEFT JOIN {{ ref('stg_reference_imd2019') }} imd
-    ON d.practice_lsoa = imd.lsoacode
+-- Join to IMD reference for practice-based IMD (preserved for comparison)
+LEFT JOIN {{ ref('stg_reference_imd2019') }} practice_imd
+    ON d.practice_lsoa = practice_imd.lsoacode

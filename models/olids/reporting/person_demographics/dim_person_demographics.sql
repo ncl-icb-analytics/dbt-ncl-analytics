@@ -193,14 +193,17 @@ SELECT
     NULL AS uprn_hash,  -- Placeholder for future
     NULL::VARCHAR AS household_id,  -- Placeholder for future
 
-    -- Geographic Data (placeholders for future implementation)
-    NULL AS lsoa_code_21,
-    NULL AS lsoa_name_21,
-    NULL AS ward_code,
-    NULL AS ward_name,
-    NULL::NUMBER AS imd_decile_19,
-    NULL::VARCHAR AS imd_quintile_19,
-    NULL::VARCHAR AS neighbourhood_resident
+    -- Geographic Data from person postcode mapping
+    ca.lsoa_code_21,
+    NULL AS lsoa_name_21,  -- Could be added from reference table if needed
+    NULL AS ward_code,  -- Placeholder for ward mapping
+    NULL AS ward_name,  -- Placeholder for ward mapping
+    ca.imd_decile_19,
+    ca.imd_quintile_19,
+    ca.neighbourhood_resident,
+
+    -- Borough resident (from postcode mapping)
+    ca.borough_resident
 
 FROM {{ ref('dim_person_birth_death') }} bd
 
@@ -224,8 +227,8 @@ LEFT JOIN {{ ref('dim_person_main_language') }} lang
 LEFT JOIN latest_ethnicity le
     ON bd.person_id = le.person_id
 
--- Join current address
-LEFT JOIN {{ ref('int_person_postcode_hash') }} ca
+-- Join comprehensive person geography (postcode, LSOA, IMD, neighbourhood)
+LEFT JOIN {{ ref('int_person_geography') }} ca
     ON bd.person_id = ca.person_id
 
 -- Join practice details

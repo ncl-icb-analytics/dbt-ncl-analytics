@@ -70,7 +70,7 @@ monthly_addresses AS (
         pm.person_id,
         pc.postcode_hash
     FROM person_months pm
-    LEFT JOIN {{ ref('int_person_postcode_hash') }} pc
+    LEFT JOIN {{ ref('int_person_geography') }} pc
         ON pm.person_id = pc.person_id
         AND pc.address_start_date <= pm.analysis_month
         AND (pc.address_end_date IS NULL OR pc.address_end_date >= DATE_TRUNC('month', pm.analysis_month))
