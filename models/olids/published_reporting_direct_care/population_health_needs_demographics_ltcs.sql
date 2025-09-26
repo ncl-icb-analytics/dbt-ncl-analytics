@@ -5,9 +5,7 @@
 
 /*
 Aggregate patient counts by age, ethnicity, PCN, neighbourhood, IMD quintile, LTCs for population health needs dashboard.
-
-Next features:
-resident neighbourhood
+Includes both registration and residence geography for comprehensive analysis.
 */
 
 SELECT
@@ -26,6 +24,9 @@ SELECT
   pcn_name,
   neighbourhood_registered,
   borough_registered,
+  neighbourhood_resident,
+  borough_resident,
+  icb_resident,
   practice_imd_quintile_19,
   patient_imd_quintile_19,
   has_atrial_fibrillation,
