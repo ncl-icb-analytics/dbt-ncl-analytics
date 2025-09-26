@@ -182,7 +182,7 @@ sources:
     staging_prefix: stg_reference
     domain: shared
 
-  # PHENOLAB schema in DATA_LAKE__NCL
+  # Fingertips schema in DATA_LAKE__NCL
   - source_name: reference_fingertips
     database: DATA_LAKE__NCL
     schema: FINGERTIPS
