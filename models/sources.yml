@@ -4321,6 +4321,31 @@ sources:
       data_type: NUMBER
     - name: DEATH_MONTH
       data_type: NUMBER
+  - name: POSTCODE_HASH
+    identifier: '"POSTCODE_HASH"'
+    columns:
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: PRIMARY_CARE_ORGANISATION
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_ORGANISATION
+      data_type: TEXT
+    - name: YR_2011_LSOA
+      data_type: TEXT
+    - name: YR_2011_MSOA
+      data_type: TEXT
+    - name: YR_2021_LSOA
+      data_type: TEXT
+    - name: YR_2021_MSOA
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: IS_LATEST
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
   - name: PRACTITIONER
     identifier: '"PRACTITIONER"'
     columns:
@@ -8806,6 +8831,15 @@ sources:
       data_type: NUMBER
     - name: INCOMPATIBLE_EXPLANATION
       data_type: TEXT
+  - name: INT_PILLAR4_GROUP_NAMES
+    identifier: '"INT_PILLAR4_GROUP_NAMES"'
+    columns:
+    - name: P4_GROUP_KEY
+      data_type: TEXT
+    - name: P4_GROUP_NAME
+      data_type: TEXT
+    - name: LTC_COUNT
+      data_type: NUMBER
   - name: LSOA2011_LSOA2021
     identifier: '"LSOA2011_LSOA2021"'
     columns:
@@ -8838,6 +8872,17 @@ sources:
       data_type: TEXT
     - name: NEIGHBOURHOOD_CODE
       data_type: TEXT
+  - name: NCL_GP_PRACTICE_NEIGHBOURHOOD_BACKUP
+    identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD_BACKUP"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
   - name: NCL_NEIGHBOURHOOD
     identifier: '"NCL_NEIGHBOURHOOD"'
     columns:
@@ -8860,6 +8905,19 @@ sources:
       data_type: DATE
   - name: PRACTICE_NEIGHBOURHOOD_LOOKUP
     identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP"'
+    columns:
+    - name: PRACTICECODE
+      data_type: TEXT
+    - name: PRACTICENAME
+      data_type: TEXT
+    - name: PCNCODE
+      data_type: TEXT
+    - name: LOCALAUTHORITY
+      data_type: TEXT
+    - name: PRACTICENEIGHBOURHOOD
+      data_type: TEXT
+  - name: PRACTICE_NEIGHBOURHOOD_LOOKUP_BACKUP
+    identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP_BACKUP"'
     columns:
     - name: PRACTICECODE
       data_type: TEXT
@@ -11594,6 +11652,39 @@ sources:
     - name: CODE_DESCRIPTION
       data_type: TEXT
     - name: SOURCE
+      data_type: TEXT
+  - name: DEFINITION_STORE
+    identifier: '"DEFINITION_STORE"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_TABLE
+      data_type: TEXT
+    - name: DBID
+      data_type: TEXT
+    - name: CORE_CONCEPT_ID
       data_type: TEXT
   - name: ECL_CACHE
     identifier: '"ECL_CACHE"'
