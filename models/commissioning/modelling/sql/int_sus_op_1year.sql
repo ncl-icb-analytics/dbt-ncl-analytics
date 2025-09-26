@@ -23,6 +23,7 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 
 {% set years_from_now = -1 %}
 
+
 /* Establish event range */
 with filtered_core as (
     select *
