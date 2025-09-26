@@ -72,6 +72,16 @@ neighbourhood_reference AS (
     FROM {{ ref('stg_reference_ncl_neighbourhood_lsoa_2021') }}
     WHERE lsoa_2021_code IS NOT NULL
         AND neighbourhood_name IS NOT NULL
+),
+
+lsoa_names AS (
+    -- Get LSOA names for 2021 codes
+    SELECT DISTINCT
+        lsoa21_cd,
+        lsoa21_nm
+    FROM {{ ref('stg_reference_lsoa2011_lsoa2021') }}
+    WHERE lsoa21_cd IS NOT NULL
+        AND lsoa21_nm IS NOT NULL
 )
 
 SELECT
@@ -83,7 +93,15 @@ SELECT
 
     -- Geographic identifiers
     pg.primary_care_organisation,
-    pg.local_authority_organisation as borough_resident,
+    pco_org.organisation_name as icb_resident,
+    pg.local_authority_organisation,
+
+    -- Borough resident - strip 'London Borough of' prefix from local authority organisation name
+    CASE
+        WHEN la_org.organisation_name LIKE 'London Borough of %'
+            THEN TRIM(SUBSTRING(la_org.organisation_name, 19))
+        ELSE la_org.organisation_name
+    END as borough_resident,
 
     -- 2011 Census geography
     pg.yr_2011_lsoa as lsoa_code_11,
@@ -91,6 +109,7 @@ SELECT
 
     -- 2021 Census geography
     pg.yr_2021_lsoa as lsoa_code_21,
+    ln.lsoa21_nm as lsoa_name_21,
     pg.yr_2021_msoa as msoa_code_21,
 
     -- NCL Neighbourhood (from 2021 LSOA)
@@ -116,3 +135,13 @@ LEFT JOIN imd_reference imd
     ON pg.yr_2011_lsoa = imd.lsoacode
 LEFT JOIN neighbourhood_reference nr
     ON pg.yr_2021_lsoa = nr.lsoa_2021_code
+LEFT JOIN lsoa_names ln
+    ON pg.yr_2021_lsoa = ln.lsoa21_cd
+-- Join organisation names for primary care organisation
+LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} pco_org
+    ON pg.primary_care_organisation = pco_org.organisation_code
+    AND (pco_org.end_date IS NULL OR pco_org.end_date >= CURRENT_DATE())
+-- Join organisation names for local authority/borough
+LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} la_org
+    ON pg.local_authority_organisation = la_org.organisation_code
+    AND (la_org.end_date IS NULL OR la_org.end_date >= CURRENT_DATE())

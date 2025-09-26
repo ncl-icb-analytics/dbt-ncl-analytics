@@ -28,15 +28,21 @@ models:
       - name: is_current_address
         description: 'Flag indicating if this is the current active address'
       - name: primary_care_organisation
-        description: 'Primary care organisation code from postcode lookup'
+        description: 'Primary care organisation (ICB) code where patient resides (from postcode lookup)'
+      - name: icb_resident
+        description: 'ICB name where patient resides (distinct from registration ICB)'
+      - name: local_authority_organisation
+        description: 'Local authority organisation code where patient resides (from postcode lookup)'
       - name: borough_resident
-        description: 'Local authority/borough of residence'
+        description: 'Borough where patient resides (cleaned without "London Borough of" prefix)'
       - name: lsoa_code_11
         description: '2011 Census Lower Layer Super Output Area code'
       - name: msoa_code_11
         description: '2011 Census Middle Layer Super Output Area code'
       - name: lsoa_code_21
         description: '2021 Census Lower Layer Super Output Area code'
+      - name: lsoa_name_21
+        description: '2021 Census Lower Layer Super Output Area name'
       - name: msoa_code_21
         description: '2021 Census Middle Layer Super Output Area code'
       - name: neighbourhood_resident

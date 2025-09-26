@@ -193,17 +193,18 @@ SELECT
     NULL AS uprn_hash,  -- Placeholder for future
     NULL::VARCHAR AS household_id,  -- Placeholder for future
 
-    -- Geographic Data from person postcode mapping
+    -- Geographic Data from person postcode mapping (residence-based)
+    ca.primary_care_organisation as icb_code_resident,
+    ca.icb_resident,
+    ca.local_authority_organisation,
+    ca.borough_resident,
     ca.lsoa_code_21,
-    NULL AS lsoa_name_21,  -- Could be added from reference table if needed
+    ca.lsoa_name_21,
     NULL AS ward_code,  -- Placeholder for ward mapping
     NULL AS ward_name,  -- Placeholder for ward mapping
     ca.imd_decile_19,
     ca.imd_quintile_19,
-    ca.neighbourhood_resident,
-
-    -- Borough resident (from postcode mapping)
-    ca.borough_resident
+    ca.neighbourhood_resident
 
 FROM {{ ref('dim_person_birth_death') }} bd
 
