@@ -69,7 +69,7 @@ monthly_addresses AS (
         pm.analysis_month,
         pm.person_id,
         pc.postcode_hash,
-        pc.icb_code_resident,
+        pc.primary_care_organisation as icb_code_resident,
         pc.icb_resident,
         pc.local_authority_organisation,
         pc.borough_resident,
