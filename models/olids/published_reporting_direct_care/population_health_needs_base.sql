@@ -57,7 +57,10 @@ SELECT
     d.practice_postcode,
 
     -- Patient geography (from postcode mapping)
+    d.icb_code_resident,
+    d.icb_resident,
     d.lsoa_code_21 AS patient_lsoa,
+    d.lsoa_name_21 AS patient_lsoa_name,
     d.borough_resident,
     d.neighbourhood_resident,
 
