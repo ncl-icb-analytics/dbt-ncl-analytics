@@ -19,6 +19,12 @@ SELECT
     demo.pcn_name,
     demo.borough_registered,
     demo.neighbourhood_registered,
+
+    -- Residence geography (where they live)
+    demo.borough_resident,
+    demo.neighbourhood_resident,
+    demo.icb_code_resident,
+    demo.icb_resident,
     
     -- Demographics
     demo.age,

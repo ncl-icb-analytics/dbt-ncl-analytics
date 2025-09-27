@@ -64,13 +64,22 @@ WITH person_months AS (
 ),
 
 monthly_addresses AS (
-    -- Get address valid for each person-month using intermediate model with SCD2 logic
+    -- Get address and geography valid for each person-month using intermediate model with SCD2 logic
     SELECT DISTINCT
         pm.analysis_month,
         pm.person_id,
-        pc.postcode_hash
+        pc.postcode_hash,
+        pc.primary_care_organisation as icb_code_resident,
+        pc.icb_resident,
+        pc.local_authority_organisation,
+        pc.borough_resident,
+        pc.lsoa_code_21,
+        pc.lsoa_name_21,
+        pc.neighbourhood_resident,
+        pc.imd_decile_19,
+        pc.imd_quintile_19
     FROM person_months pm
-    LEFT JOIN {{ ref('int_person_postcode_hash') }} pc
+    LEFT JOIN {{ ref('int_person_geography') }} pc
         ON pm.person_id = pc.person_id
         AND pc.address_start_date <= pm.analysis_month
         AND (pc.address_end_date IS NULL OR pc.address_end_date >= DATE_TRUNC('month', pm.analysis_month))
@@ -363,14 +372,18 @@ SELECT
     NULL AS uprn_hash,  -- Placeholder
     NULL::VARCHAR AS household_id,  -- Placeholder
 
-    -- Geographic placeholders
-    NULL AS lsoa_code_21,
-    NULL AS lsoa_name_21,
-    NULL AS ward_code,
-    NULL AS ward_name,
-    NULL::NUMBER AS imd_decile_19,
-    NULL::VARCHAR AS imd_quintile_19,
-    NULL::VARCHAR AS neighbourhood_resident,
+    -- Geographic Data from person postcode mapping (residence-based)
+    ma.icb_code_resident,
+    ma.icb_resident,
+    ma.local_authority_organisation,
+    ma.borough_resident,
+    ma.lsoa_code_21,
+    ma.lsoa_name_21,
+    NULL AS ward_code,  -- Placeholder for ward mapping
+    NULL AS ward_name,  -- Placeholder for ward mapping
+    ma.imd_decile_19,
+    ma.imd_quintile_19,
+    ma.neighbourhood_resident,
     
     -- SCD2 compatibility fields for person-month grain
     -- For person-month, we treat each month as a separate "period" that spans the full month

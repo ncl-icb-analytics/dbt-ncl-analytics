@@ -103,6 +103,12 @@ SELECT
     d.postcode_hash,
     d.uprn_hash,
     d.household_id,
+
+    -- Residence geography (where they live)
+    d.icb_code_resident,
+    d.icb_resident,
+    d.local_authority_organisation,
+    d.borough_resident,
     d.lsoa_code_21,
     d.lsoa_name_21,
     d.ward_code,

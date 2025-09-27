@@ -55,12 +55,17 @@ WITH uptake_with_demographics AS (
         d.interpreter_needed,
         d.interpreter_type,
         
-        -- Geographic and deprivation
+        -- Geographic and deprivation (residence-based)
         d.imd_quintile_19,
         d.imd_decile_19,
         d.lsoa_code_21 as lsoa_code,
-        
-        -- Practice information
+        d.lsoa_name_21 as lsoa_name,
+        d.borough_resident,
+        d.neighbourhood_resident,
+        d.icb_code_resident,
+        d.icb_resident,
+
+        -- Practice information (registration-based)
         d.practice_code,
         d.practice_name,
         d.pcn_code,
