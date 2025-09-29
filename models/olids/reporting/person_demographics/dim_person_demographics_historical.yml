@@ -164,8 +164,14 @@ models:
       - name: pcn_name_with_borough
         description: 'PCN name with borough prefix'
 
+      - name: icb_code
+        description: 'Integrated Care Board (ICB) code where patient was registered during this month (practice-based)'
+
+      - name: icb_name
+        description: 'Integrated Care Board (ICB) name where patient was registered during this month (practice-based)'
+
       - name: borough_registered
-        description: 'Practice borough'
+        description: 'Practice borough where patient was registered during this month'
 
       - name: practice_postcode
         description: 'Practice postcode'
@@ -185,35 +191,74 @@ models:
       - name: neighbourhood_registered
         description: 'Practice neighbourhood classification'
 
-      - name: post_code_hash
-        description: 'Patient address postcode hash'
+      - name: postcode_hash
+        description: 'Patient residential address postcode hash for privacy protection (as of analysis month)'
 
       - name: uprn_hash
-        description: 'Patient address UPRN hash'
+        description: 'Patient address Unique Property Reference Number hash (placeholder for future use)'
 
       - name: household_id
-        description: 'Household identifier'
+        description: 'Household identifier linking persons at same address (placeholder for future use)'
+
+      - name: icb_code_resident
+        description: 'Integrated Care Board (ICB) code where patient resided during this month (from postcode lookup)'
+
+      - name: icb_resident
+        description: 'Integrated Care Board (ICB) name where patient resided during this month (distinct from registration ICB)'
+
+      - name: local_authority_code
+        description: 'Local Authority District 2025 code (LAD25CD) where patient resided during this month'
+
+      - name: local_authority_name
+        description: 'Local Authority District 2025 name (LAD25NM) where patient resided during this month'
+
+      - name: borough_resident
+        description: 'London borough where patient resided during this month (NULL for non-London residents)'
+
+      - name: is_london_resident
+        description: 'Flag indicating if patient resided in Greater London area during this month'
+
+      - name: london_classification
+        description: 'London area classification during this month (NCL, Other London, Outside London)'
 
       - name: lsoa_code_21
-        description: 'LSOA code 2021'
+        description: 'Lower Layer Super Output Area 2021 census code where patient resided during this month'
 
       - name: lsoa_name_21
-        description: 'LSOA name 2021'
+        description: 'Lower Layer Super Output Area 2021 census name where patient resided during this month'
 
       - name: ward_code
-        description: 'Ward code'
+        description: 'Electoral Ward 2025 code (WD25CD) where patient resided during this month'
 
       - name: ward_name
-        description: 'Ward name'
+        description: 'Electoral Ward 2025 name (WD25NM) where patient resided during this month'
 
       - name: imd_decile_19
-        description: 'IMD decile 2019'
+        description: 'Index of Multiple Deprivation 2019 decile where patient resided during this month (1=most deprived, 10=least deprived)'
 
       - name: imd_quintile_19
-        description: 'IMD quintile 2019'
+        description: 'Index of Multiple Deprivation 2019 quintile text labels where patient resided during this month (Most Deprived to Least Deprived)'
+
+      - name: imd_quintile_numeric_19
+        description: 'Index of Multiple Deprivation 2019 numeric quintile where patient resided during this month (1=most deprived, 5=least deprived)'
 
       - name: neighbourhood_resident
-        description: 'Patient neighbourhood classification'
+        description: 'NCL neighbourhood classification where patient resided during this month (based on 2021 LSOA)'
+
+      - name: is_current_period
+        description: 'Flag indicating if this analysis_month represents the current/latest month'
+
+      - name: effective_start_date
+        description: 'First day of the analysis month (SCD2 compatibility field)'
+
+      - name: effective_end_date
+        description: 'Last day of the analysis month (NULL for current month, SCD2 compatibility field)'
+
+      - name: period_sequence
+        description: 'Sequential number of analysis months for each person (1, 2, 3, ...)'
+
+      - name: age_changes_in_period
+        description: 'Flag indicating if age incremented during this analysis month (birth month anniversary)'
 
     tests:
       - dbt_utils.unique_combination_of_columns:
