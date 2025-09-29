@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: int_sus_op_1year
+    description: "Event history in the last year for outpatient events from SUS data"
+    columns:
+      - name: event_id
+        data_type: varchar
+        description: "Primary key for the event within SUS"
+
+      - name: sk_patient_id
+        data_type: varchar
+        description: "Common commissioning patient identifier"
+
+      - name: provider_id
+        data_type: varchar
+        description: ""
+
+      - name: site_id
+        data_type: varchar
+        description: ""
+
+      - name: start_date
+        data_type: timestamp_ntz
+        description: ""
+
+      - name: expected_duration
+        data_type: varchar
+        description: ""
+
+      - name: appointment_outcome
+        data_type: varchar
+        description: ""
+
+      - name: appointment_attended_or_dna
+        data_type: varchar
+        description: ""
+
+      - name: appointment_first_attendance
+        data_type: varchar
+        description: "Flag for whether the appointment was a first attendance"
+
+      - name: primary_reason_for_event
+        data_type: varchar
+        description: "Listed specialty code for the event"
+
+      - name: acuity
+        data_type: number
+        description: "Referral priority used as a proxy for acuity"
+
+      - name: primary_treatment
+        data_type: varchar
+        description: ""
+
+      - name: source
+        data_type: varchar
+        description: "Commissioning data source"
+
+      - name: type
+        data_type: varchar
+        description: "HRG code type associated with the event"
+
+      - name: cost
+        data_type: number
+        description: "SUS listed cost associated with the event"

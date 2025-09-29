@@ -1,0 +1,102 @@
+version: 2
+
+models:
+  - name: int_sus_op_1year_desc
+    description: "Event history in the last year for outpatient events from SUS data with dictionaries joined"
+    columns:
+      - name: event_id
+        data_type: varchar
+        description: "Primary key for the event within SUS"
+
+      - name: sk_patient_id
+        data_type: varchar
+        description: "Common commissioning patient identifier"
+
+      - name: provider_id
+        data_type: varchar
+        description: ""
+
+      - name: site_id
+        data_type: varchar
+        description: ""
+
+      - name: start_date
+        data_type: timestamp_ntz
+        description: ""
+
+      - name: expected_duration
+        data_type: varchar
+        description: ""
+
+      - name: appointment_outcome
+        data_type: varchar
+        description: ""
+
+      - name: appointment_attended_or_dna
+        data_type: varchar
+        description: ""
+
+      - name: appointment_first_attendance
+        data_type: varchar
+        description: ""
+
+      - name: primary_reason_for_event
+        data_type: varchar
+        description: ""
+
+      - name: acuity
+        data_type: number
+        description: ""
+
+      - name: primary_treatment
+        data_type: varchar
+        description: ""
+
+      - name: source
+        data_type: varchar
+        description: ""
+
+      - name: type
+        data_type: varchar
+        description: ""
+
+      - name: cost
+        data_type: number
+        description: ""
+
+      - name: provider_name
+        data_type: varchar
+        description: ""
+
+      - name: site_name
+        data_type: varchar
+        description: ""
+
+      - name: outcome_desc
+        data_type: varchar
+        description: ""
+
+      - name: appointment_outcome_desc
+        data_type: varchar
+        description: ""
+
+      - name: first_attendance_desc
+        data_type: varchar
+        description: ""
+
+      - name: primary_reason_desc
+        data_type: varchar
+        description: ""
+
+      - name: acuity_desc
+        data_type: varchar
+        description: ""
+
+      - name: treatment_desc
+        data_type: varchar
+        description: ""
+
+      - name: type_desc
+        data_type: varchar
+        description: ""
+
