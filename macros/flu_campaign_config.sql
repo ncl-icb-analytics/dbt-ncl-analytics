@@ -8,19 +8,19 @@ MULTI-CAMPAIGN SUPPORT:
 All flu models work with any campaign year by changing the flu_current_campaign variable.
 
 Available campaigns:
-- 'flu_2023_24' - 2023-24 Flu Vaccination Campaign
-- 'flu_2024_25' - 2024-25 Flu Vaccination Campaign (default)
-- 'flu_2025_26' - 2025-26 Flu Vaccination Campaign
+- 'Flu 2023-24' - 2023-24 Flu Vaccination Campaign
+- 'Flu 2024-25' - 2024-25 Flu Vaccination Campaign (default)
+- 'Flu 2025-26' - 2025-26 Flu Vaccination Campaign
 
 Usage Examples:
 - Default campaign: {{ flu_campaign_config() }}
-- Specific campaign: {{ flu_campaign_config('flu_2023_24') }}
+- Specific campaign: {{ flu_campaign_config('Flu 2023-24') }}
 - Via dbt_project.yml: Set flu_current_campaign variable, then run normally
 
 Configuration in dbt_project.yml:
 vars:
-  flu_current_campaign: "flu_2024_25"     # Change this to switch campaigns
-  flu_previous_campaign: "flu_2023_24"    # For comparison queries
+  flu_current_campaign: "Flu 2024-25"     # Change this to switch campaigns
+  flu_previous_campaign: "Flu 2023-24"    # For comparison queries
 
 CHILD AGE GROUPS:
 - Preschool: Typically ages 2-3, but birth date ranges vary by campaign
@@ -28,8 +28,8 @@ CHILD AGE GROUPS:
 - Age-agnostic model names allow for consistent year-to-year comparisons
 */
 
-{% macro flu_campaign_config(campaign_id='flu_2024_25') %}
-    {%- if campaign_id == 'flu_2023_24' -%}
+{% macro flu_campaign_config(campaign_id='Flu 2024-25') %}
+    {%- if campaign_id == 'Flu 2023-24' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
             '2023-24 Flu Vaccination Campaign' AS campaign_name,
@@ -56,7 +56,7 @@ CHILD AGE GROUPS:
             
             -- Current audit date
             CURRENT_DATE AS audit_end_date
-    {%- elif campaign_id == 'flu_2024_25' -%}
+    {%- elif campaign_id == 'Flu 2024-25' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
             '2024-25 Flu Vaccination Campaign' AS campaign_name,
@@ -83,7 +83,7 @@ CHILD AGE GROUPS:
             
             -- Current audit date
             CURRENT_DATE AS audit_end_date
-    {%- elif campaign_id == 'flu_2025_26' -%}
+    {%- elif campaign_id == 'Flu 2025-26' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
             '2025-26 Flu Vaccination Campaign' AS campaign_name,
@@ -112,7 +112,7 @@ CHILD AGE GROUPS:
             CURRENT_DATE AS audit_end_date
     {%- else -%}
         -- Default to current campaign if unknown campaign_id
-        {{ flu_campaign_config('flu_2024_25') }}
+        {{ flu_campaign_config('Flu 2024-25') }}
     {%- endif -%}
 {% endmacro %}
 
@@ -121,6 +121,6 @@ Helper macro to get a specific campaign date
 Usage: {{ flu_get_campaign_date('campaign_reference_date') }}
 */
 {% macro flu_get_campaign_date(date_name, campaign_id=none) %}
-    {%- set campaign_id = campaign_id or var('flu_current_campaign', 'flu_2024_25') -%}
+    {%- set campaign_id = campaign_id or var('flu_current_campaign', 'Flu 2024-25') -%}
     (SELECT {{ date_name }} FROM ({{ flu_campaign_config(campaign_id) }}))
 {% endmacro %}

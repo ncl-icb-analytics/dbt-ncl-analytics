@@ -13,10 +13,10 @@ Key features:
 
 Multi-Programme Support:
 COVID Campaigns:
-- covid_2024_autumn, covid_2025_spring, covid_2025_autumn
+- COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025
 
 Flu Campaigns: 
-- flu_2023_24, flu_2024_25, flu_2025_26
+- Flu 2023-24, Flu 2024-25, Flu 2025-26
 
 Usage:
 - Filter by programme_type for programme-specific analysis
@@ -124,15 +124,15 @@ final_combined AS (
         CASE 
             WHEN programme_type = 'COVID' THEN
                 CASE 
-                    WHEN campaign_id IN ('covid_2024_autumn') THEN '2024/25'
-                    WHEN campaign_id IN ('covid_2025_spring', 'covid_2025_autumn') THEN '2025/26'
+                    WHEN campaign_id IN ('COVID Autumn 2024') THEN '2024/25'
+                    WHEN campaign_id IN ('COVID Spring 2025', 'COVID Autumn 2025') THEN '2025/26'
                     ELSE 'Unknown'
                 END
             WHEN programme_type = 'FLU' THEN
                 CASE 
-                    WHEN campaign_id = 'flu_2023_24' THEN '2023/24'
-                    WHEN campaign_id = 'flu_2024_25' THEN '2024/25'
-                    WHEN campaign_id = 'flu_2025_26' THEN '2025/26'
+                    WHEN campaign_id = 'Flu 2023-24' THEN '2023/24'
+                    WHEN campaign_id = 'Flu 2024-25' THEN '2024/25'
+                    WHEN campaign_id = 'Flu 2025-26' THEN '2025/26'
                     ELSE 'Unknown'
                 END
             ELSE 'Unknown'
@@ -141,9 +141,9 @@ final_combined AS (
         -- Extract campaign season for easier analysis
         CASE 
             WHEN programme_type = 'COVID' THEN
-                CASE 
-                    WHEN campaign_id LIKE '%autumn%' THEN 'Autumn'
-                    WHEN campaign_id LIKE '%spring%' THEN 'Spring'
+                CASE
+                    WHEN campaign_id LIKE '%Autumn%' THEN 'Autumn'
+                    WHEN campaign_id LIKE '%Spring%' THEN 'Spring'
                     ELSE 'Unknown'
                 END
             WHEN programme_type = 'FLU' THEN 'Annual'

@@ -19,10 +19,10 @@ Key features:
 
 Multi-Programme Support:
 COVID Campaigns:
-- covid_2024_autumn, covid_2025_spring, covid_2025_autumn
+- COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025
 
 Flu Campaigns: 
-- flu_2023_24, flu_2024_25, flu_2025_26
+- Flu 2023-24, Flu 2024-25, Flu 2025-26
 
 Usage:
 - Primary table for COVID and Flu Dashboard in PowerBI/Tableau
@@ -73,11 +73,24 @@ WITH uptake_with_demographics AS (
         d.borough_registered,
         d.neighbourhood_registered,
         
-        -- School information from dim_person_age
+        -- School information from dim_person_age (now handles NULL for non-school ages upstream)
         pa.age_school_stage AS school_year,
         pa.is_primary_school_age,
         pa.is_secondary_school_age,
-        
+
+        -- Flu vaccination setting (Early Years at GP, School-based for Reception-Year 11)
+        CASE
+            WHEN u.programme_type = 'FLU' THEN
+                CASE
+                    WHEN pa.age < 4 THEN 'Early Years (GP)'  -- Pre-school and Nursery ages
+                    WHEN pa.age_school_stage IN ('Reception', 'Year 1', 'Year 2', 'Year 3', 'Year 4',
+                                                  'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9',
+                                                  'Year 10', 'Year 11') THEN 'School-based'
+                    ELSE NULL  -- Year 12, Year 13, and older
+                END
+            ELSE NULL
+        END AS flu_vaccination_setting,
+
         -- Housebound status from dim_person_housebound_status
         COALESCE(hs.is_housebound, FALSE) AS is_housebound,
         
