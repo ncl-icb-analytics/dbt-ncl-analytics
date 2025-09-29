@@ -196,14 +196,18 @@ SELECT
     -- Geographic Data from person postcode mapping (residence-based)
     ca.primary_care_organisation as icb_code_resident,
     ca.icb_resident,
-    ca.local_authority_organisation,
+    ca.local_authority_code,
+    ca.local_authority_name,
     ca.borough_resident,
+    ca.is_london_resident,
+    ca.london_classification,
     ca.lsoa_code_21,
     ca.lsoa_name_21,
-    NULL AS ward_code,  -- Placeholder for ward mapping
-    NULL AS ward_name,  -- Placeholder for ward mapping
+    ca.ward_code,
+    ca.ward_name,
     ca.imd_decile_19,
     ca.imd_quintile_19,
+    ca.imd_quintile_numeric_19,
     ca.neighbourhood_resident
 
 FROM {{ ref('dim_person_birth_death') }} bd

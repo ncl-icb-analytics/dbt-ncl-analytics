@@ -130,17 +130,9 @@ final_dashboard AS (
         interpreter_type,
         
         -- Geographic and deprivation
-        imd_quintile_19, 
-        imd_decile_19, 
+        imd_quintile_19 as imd_quintile_label,
+        imd_decile_19,
         lsoa_code_21 as lsoa_code,
-        CASE 
-            WHEN imd_quintile_19 IS NULL THEN 'Unknown'
-            WHEN imd_quintile_19 = 1 THEN 'Quintile 1 (Most Deprived)'
-            WHEN imd_quintile_19 = 2 THEN 'Quintile 2'
-            WHEN imd_quintile_19 = 3 THEN 'Quintile 3'
-            WHEN imd_quintile_19 = 4 THEN 'Quintile 4'
-            WHEN imd_quintile_19 = 5 THEN 'Quintile 5 (Least Deprived)'
-        END AS imd_quintile_label,
         
         -- Practice information
         practice_code, 

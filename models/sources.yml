@@ -8777,6 +8777,23 @@ sources:
       data_type: FLOAT
     - name: OTHERINSTRUCTIONS
       data_type: TEXT
+  - name: GP_REG_PAT_PRAC_LSOA_ALL
+    identifier: '"GP_REG_PAT_PRAC_LSOA_ALL"'
+    columns:
+    - name: PUBLICATION
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: DATE
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: LSOA_CODE
+      data_type: TEXT
+    - name: SEX
+      data_type: TEXT
+    - name: NUMBER_OF_PATIENTS
+      data_type: NUMBER
   - name: IMD2019
     identifier: '"IMD2019"'
     columns:
@@ -8861,6 +8878,23 @@ sources:
       data_type: TEXT
     - name: OBJECTID
       data_type: NUMBER
+  - name: LSOA21_WARD25_LAD25
+    identifier: '"LSOA21_WARD25_LAD25"'
+    columns:
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: WD25CD
+      data_type: TEXT
+    - name: WD25NM
+      data_type: TEXT
+    - name: LAD25CD
+      data_type: TEXT
+    - name: LAD25NM
+      data_type: TEXT
+    - name: RESIDENT_FLAG
+      data_type: TEXT
   - name: NCL_GP_PRACTICE_NEIGHBOURHOOD
     identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD"'
     columns:

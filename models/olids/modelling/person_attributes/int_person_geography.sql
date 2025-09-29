@@ -6,8 +6,8 @@
 
 /*
 Person Geography
-Comprehensive geographic mapping for persons including postcode hash, LSOA, borough, neighbourhood and IMD.
-Uses person_id directly from patient_address table for accurate matching.
+Geographic mapping for persons including postcode hash, LSOA, borough, neighbourhood and IMD.
+Uses refactored intermediate geography tables for clean separation of concerns.
 All geographic joins are LEFT JOINs as not everyone lives in London/NCL boundaries.
 */
 
@@ -54,16 +54,6 @@ postcode_geography AS (
         AND postcode_hash IS NOT NULL
 ),
 
-imd_reference AS (
-    -- Get IMD 2019 data (based on 2011 LSOA codes)
-    SELECT
-        lsoacode,
-        imddecile
-    FROM {{ ref('stg_reference_imd2019') }}
-    WHERE lsoacode IS NOT NULL
-        AND imddecile IS NOT NULL
-),
-
 neighbourhood_reference AS (
     -- Get NCL neighbourhood data (based on 2021 LSOA codes)
     SELECT DISTINCT
@@ -74,14 +64,18 @@ neighbourhood_reference AS (
         AND neighbourhood_name IS NOT NULL
 ),
 
-lsoa_names AS (
-    -- Get LSOA names for 2021 codes
+london_areas AS (
+    -- Get London area classification from LSOA reference
     SELECT DISTINCT
         lsoa21_cd,
-        lsoa21_nm
-    FROM {{ ref('stg_reference_lsoa2011_lsoa2021') }}
+        lad25_cd,
+        lad25_nm,
+        wd25_cd,
+        wd25_nm,
+        resident_flag,
+        CASE WHEN resident_flag IN ('NCL', 'Other London') THEN TRUE ELSE FALSE END AS is_london_resident
+    FROM {{ ref('stg_reference_lsoa21_ward25_lad25') }}
     WHERE lsoa21_cd IS NOT NULL
-        AND lsoa21_nm IS NOT NULL
 )
 
 SELECT
@@ -93,14 +87,20 @@ SELECT
 
     -- Geographic identifiers
     pg.primary_care_organisation,
-    pco_org.organisation_name as icb_resident,
-    pg.local_authority_organisation,
+    COALESCE(lb_icb.icb_name_clean, pco_map.name) as icb_resident,
 
-    -- Borough resident - strip 'London Borough of' prefix from local authority organisation name
+    -- Local authority information - use LAD from reference data (most reliable)
+    COALESCE(la.lad25_cd, pg.local_authority_organisation) as local_authority_code,
+    COALESCE(la.lad25_nm, la_map.name) as local_authority_name,
+
+    -- Ward information from LSOA reference
+    la.wd25_cd as ward_code,
+    la.wd25_nm as ward_name,
+
+    -- Borough resident - only populated for London areas
     CASE
-        WHEN la_org.organisation_name LIKE 'London Borough of %'
-            THEN TRIM(SUBSTRING(la_org.organisation_name, 19))
-        ELSE la_org.organisation_name
+        WHEN la.is_london_resident = TRUE THEN la.lad25_nm
+        ELSE NULL
     END as borough_resident,
 
     -- 2011 Census geography
@@ -109,39 +109,51 @@ SELECT
 
     -- 2021 Census geography
     pg.yr_2021_lsoa as lsoa_code_21,
-    ln.lsoa21_nm as lsoa_name_21,
+    lsoa_map.name as lsoa_name_21,
     pg.yr_2021_msoa as msoa_code_21,
 
     -- NCL Neighbourhood (from 2021 LSOA)
     nr.neighbourhood_name as neighbourhood_resident,
 
-    -- IMD 2019 data (matched on 2011 LSOA as IMD2019 uses 2011 boundaries)
-    imd.imddecile as imd_decile_19,
+    -- IMD data from dedicated IMD model
+    imd.imd_decile_19,
+    imd.imd_quintile_19,
+    imd.imd_quintile_numeric_19,
+    imd.is_most_deprived_20pct,
 
-    -- IMD Quintile calculation
-    CASE
-        WHEN imd.imddecile IN (1, 2) THEN 'Most Deprived'
-        WHEN imd.imddecile IN (3, 4) THEN 'Second Most Deprived'
-        WHEN imd.imddecile IN (5, 6) THEN 'Third Most Deprived'
-        WHEN imd.imddecile IN (7, 8) THEN 'Second Least Deprived'
-        WHEN imd.imddecile IN (9, 10) THEN 'Least Deprived'
-        ELSE NULL
-    END AS imd_quintile_19
+    -- London resident flag from LSOA reference (more reliable)
+    COALESCE(la.is_london_resident, FALSE) as is_london_resident,
+
+    -- London classification details
+    la.resident_flag as london_classification
 
 FROM current_addresses ca
 LEFT JOIN postcode_geography pg
     ON ca.postcode_hash = pg.postcode_hash
-LEFT JOIN imd_reference imd
-    ON pg.yr_2011_lsoa = imd.lsoacode
+
+-- Join geographic mappings for names
+LEFT JOIN {{ ref('int_geography_mappings') }} pco_map
+    ON pg.primary_care_organisation = pco_map.code
+    AND pco_map.mapping_type = 'PRIMARY_CARE'
+LEFT JOIN {{ ref('int_geography_mappings') }} la_map
+    ON pg.local_authority_organisation = la_map.code
+    AND la_map.mapping_type = 'LOCAL_AUTHORITY'
+LEFT JOIN {{ ref('int_geography_mappings') }} lsoa_map
+    ON pg.yr_2021_lsoa = lsoa_map.code
+    AND lsoa_map.mapping_type = 'LSOA_2021'
+
+-- Join London area information via LSOA
+LEFT JOIN london_areas la
+    ON pg.yr_2021_lsoa = la.lsoa21_cd
+
+-- Join London borough information for ICB name cleaning
+LEFT JOIN {{ ref('int_geography_london_boroughs') }} lb_icb
+    ON pg.primary_care_organisation = lb_icb.icb_code
+
+-- Join IMD information
+LEFT JOIN {{ ref('int_geography_imd') }} imd
+    ON pg.yr_2011_lsoa = imd.lsoa_code_2011
+
+-- Join neighbourhood reference
 LEFT JOIN neighbourhood_reference nr
     ON pg.yr_2021_lsoa = nr.lsoa_2021_code
-LEFT JOIN lsoa_names ln
-    ON pg.yr_2021_lsoa = ln.lsoa21_cd
--- Join organisation names for primary care organisation
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} pco_org
-    ON pg.primary_care_organisation = pco_org.organisation_code
-    AND (pco_org.end_date IS NULL OR pco_org.end_date >= CURRENT_DATE())
--- Join organisation names for local authority/borough
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} la_org
-    ON pg.local_authority_organisation = la_org.organisation_code
-    AND (la_org.end_date IS NULL OR la_org.end_date >= CURRENT_DATE())
