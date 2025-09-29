@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: int_sus_ae_1year
+    description: "Event history in the last year for emergency events from SUS data"
+    columns:
+      - name: event_id
+        data_type: number
+        description: "Primary key for the event within SUS"
+
+      - name: sk_patient_id
+        data_type: varchar
+        description: "Common commissioning patient identifier"
+
+      - name: provider_id
+        data_type: varchar
+        description: ""
+
+      - name: site_id
+        data_type: varchar
+        description: ""
+
+      - name: start_date
+        data_type: timestamp_ntz
+        description: "Date of arrival at urgent care department"
+
+      - name: duration
+        data_type: number
+        description: "Time to urgent care department discharge from arrival, in minutes"
+
+      - name: primary_reason_for_event
+        data_type: varchar
+        description: "Chief complain code of patient for the event"
+
+      - name: acuity
+        data_type: varchar
+        description: "Clinical acuity code of the event"
+
+      - name: flat_diagnosis_codes
+        data_type: varchar
+        description: "SNOMED diagnosis codes recorded in event, flattened into a single string from clinical diagnosis table"
+
+      - name: primary_treatment
+        data_type: varchar
+        description: "First treatment function code (SNOMED) recorded in event"
+
+      - name: primary_investigation
+        data_type: varchar
+        description: "Firest investigation function code (SNOMED) recorded in event"
+
+      - name: source
+        data_type: varchar
+        description: "Commissioning data source"
+
+      - name: department_type
+        data_type: varchar
+        description: "Type of urgent care department attended"
+
+      - name: cost
+        data_type: number
+        description: "SUS listed cost associated with the event"
