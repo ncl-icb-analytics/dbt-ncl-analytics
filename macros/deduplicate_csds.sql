@@ -1,7 +1,7 @@
 
 {% macro deduplicate_csds(
         csds_table,
-        partition_col = None
+        partition_cols = []
         ) %}
 
     {# detect whether csds_table is the cyp101referral table #}
@@ -16,9 +16,9 @@
     SELECT
         ROW_NUMBER() OVER (
             PARTITION BY {{ unique_id_col }}
-            {% if partition_col %}
-                , tbl.{{ partition_col }}
-            {% endif %}
+            {%- for col in partition_cols %}
+                , tbl.{{ col }}
+            {%- endfor %}
             ORDER BY tbl.effective_from DESC
         ) AS sequence,
         tbl.* 
