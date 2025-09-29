@@ -107,14 +107,18 @@ SELECT
     -- Residence geography (where they live)
     d.icb_code_resident,
     d.icb_resident,
-    d.local_authority_organisation,
+    d.local_authority_code,
+    d.local_authority_name,
     d.borough_resident,
+    d.is_london_resident,
+    d.london_classification,
     d.lsoa_code_21,
     d.lsoa_name_21,
     d.ward_code,
     d.ward_name,
     d.imd_decile_19,
     d.imd_quintile_19,
+    d.imd_quintile_numeric_19,
     d.neighbourhood_resident,
     
     -- SCD2 metadata

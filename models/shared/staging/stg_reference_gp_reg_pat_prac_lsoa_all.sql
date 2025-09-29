@@ -1,0 +1,13 @@
+-- Staging model for reference_analyst_managed.GP_REG_PAT_PRAC_LSOA_ALL
+-- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
+-- Description: Analyst-managed reference datasets and business rules
+
+select
+    "PUBLICATION" as publication,
+    "EXTRACT_DATE" as extract_date,
+    "PRACTICE_CODE" as practice_code,
+    "PRACTICE_NAME" as practice_name,
+    "LSOA_CODE" as lsoa_code,
+    "SEX" as sex,
+    "NUMBER_OF_PATIENTS" as number_of_patients
+from {{ source('reference_analyst_managed', 'GP_REG_PAT_PRAC_LSOA_ALL') }}

@@ -169,8 +169,14 @@ models:
       - name: pcn_name_with_borough
         description: 'PCN name with borough prefix'
 
+      - name: icb_code
+        description: 'Integrated Care Board (ICB) code where patient is registered (practice-based)'
+
+      - name: icb_name
+        description: 'Integrated Care Board (ICB) name where patient is registered (practice-based)'
+
       - name: borough_registered
-        description: 'Practice borough'
+        description: 'Practice borough where patient is registered'
 
       - name: practice_postcode
         description: 'Practice postcode'
@@ -190,32 +196,56 @@ models:
       - name: neighbourhood_registered
         description: 'Practice neighbourhood classification'
 
-      - name: post_code_hash
-        description: 'Patient address postcode hash'
+      - name: postcode_hash
+        description: 'Patient residential address postcode hash for privacy protection'
 
       - name: uprn_hash
-        description: 'Patient address UPRN hash'
+        description: 'Patient address Unique Property Reference Number hash (placeholder for future use)'
 
       - name: household_id
-        description: 'Household identifier'
+        description: 'Household identifier linking persons at same address (placeholder for future use)'
+
+      - name: icb_code_resident
+        description: 'Integrated Care Board (ICB) code where patient resides (from postcode lookup)'
+
+      - name: icb_resident
+        description: 'Integrated Care Board (ICB) name where patient resides (distinct from registration ICB)'
+
+      - name: local_authority_code
+        description: 'Local Authority District 2025 code (LAD25CD) where patient resides'
+
+      - name: local_authority_name
+        description: 'Local Authority District 2025 name (LAD25NM) where patient resides'
+
+      - name: borough_resident
+        description: 'London borough where patient resides (NULL for non-London residents)'
+
+      - name: is_london_resident
+        description: 'Flag indicating if patient resides in Greater London area'
+
+      - name: london_classification
+        description: 'London area classification (NCL, Other London, Outside London)'
 
       - name: lsoa_code_21
-        description: 'LSOA code 2021'
+        description: 'Lower Layer Super Output Area 2021 census code where patient resides'
 
       - name: lsoa_name_21
-        description: 'LSOA name 2021'
+        description: 'Lower Layer Super Output Area 2021 census name where patient resides'
 
       - name: ward_code
-        description: 'Ward code'
+        description: 'Electoral Ward 2025 code (WD25CD) where patient resides'
 
       - name: ward_name
-        description: 'Ward name'
+        description: 'Electoral Ward 2025 name (WD25NM) where patient resides'
 
       - name: imd_decile_19
-        description: 'IMD decile 2019'
+        description: 'Index of Multiple Deprivation 2019 decile (1=most deprived, 10=least deprived)'
 
       - name: imd_quintile_19
-        description: 'IMD quintile 2019'
+        description: 'Index of Multiple Deprivation 2019 quintile text labels (Most Deprived to Least Deprived)'
+
+      - name: imd_quintile_numeric_19
+        description: 'Index of Multiple Deprivation 2019 numeric quintile (1=most deprived, 5=least deprived)'
 
       - name: neighbourhood_resident
-        description: 'Patient neighbourhood classification'
+        description: 'NCL neighbourhood classification where patient resides (based on 2021 LSOA)'

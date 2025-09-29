@@ -71,13 +71,19 @@ monthly_addresses AS (
         pc.postcode_hash,
         pc.primary_care_organisation as icb_code_resident,
         pc.icb_resident,
-        pc.local_authority_organisation,
+        pc.local_authority_code,
+        pc.local_authority_name,
         pc.borough_resident,
+        pc.is_london_resident,
+        pc.london_classification,
         pc.lsoa_code_21,
         pc.lsoa_name_21,
+        pc.ward_code,
+        pc.ward_name,
         pc.neighbourhood_resident,
         pc.imd_decile_19,
-        pc.imd_quintile_19
+        pc.imd_quintile_19,
+        pc.imd_quintile_numeric_19
     FROM person_months pm
     LEFT JOIN {{ ref('int_person_geography') }} pc
         ON pm.person_id = pc.person_id
@@ -375,14 +381,18 @@ SELECT
     -- Geographic Data from person postcode mapping (residence-based)
     ma.icb_code_resident,
     ma.icb_resident,
-    ma.local_authority_organisation,
+    ma.local_authority_code,
+    ma.local_authority_name,
     ma.borough_resident,
+    ma.is_london_resident,
+    ma.london_classification,
     ma.lsoa_code_21,
     ma.lsoa_name_21,
-    NULL AS ward_code,  -- Placeholder for ward mapping
-    NULL AS ward_name,  -- Placeholder for ward mapping
+    ma.ward_code,
+    ma.ward_name,
     ma.imd_decile_19,
     ma.imd_quintile_19,
+    ma.imd_quintile_numeric_19,
     ma.neighbourhood_resident,
     
     -- SCD2 compatibility fields for person-month grain
