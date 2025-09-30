@@ -16,11 +16,11 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 
 WITH PROVIDER_COUNTS AS (
     SELECT
-    patient_id,
+    sk_patient_id,
     provider_code,
     COALESCE(open_pathways, 0) AS open_pathways
     FROM {{ ref('int_wl_current') }}
-    WHERE patient_id IS NOT NULL
+    WHERE sk_patient_id IS NOT NULL
 )
 SELECT
 *
