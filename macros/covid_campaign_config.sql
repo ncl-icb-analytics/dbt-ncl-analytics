@@ -8,19 +8,19 @@ MULTI-CAMPAIGN SUPPORT:
 All COVID models work with any campaign by changing the covid_current_campaign variable.
 
 Available campaigns:
-- 'covid_2024_autumn' - Autumn 2024 COVID Vaccination Campaign
-- 'covid_2025_spring' - Spring 2025 COVID Vaccination Campaign  
-- 'covid_2025_autumn' - Autumn 2025 COVID Vaccination Campaign
+- 'COVID Autumn 2024' - Autumn 2024 COVID Vaccination Campaign
+- 'COVID Spring 2025' - Spring 2025 COVID Vaccination Campaign  
+- 'COVID Autumn 2025' - Autumn 2025 COVID Vaccination Campaign
 
 Usage Examples:
 - Default campaign: {{ covid_campaign_config() }}
-- Specific campaign: {{ covid_campaign_config('covid_2024_autumn') }}
+- Specific campaign: {{ covid_campaign_config('COVID Autumn 2024') }}
 - Via dbt_project.yml: Set covid_current_campaign variable, then run normally
 
 Configuration in dbt_project.yml:
 vars:
-  covid_current_campaign: "covid_2025_autumn"     # Change this to switch campaigns
-  covid_previous_campaign: "covid_2024_autumn"    # For comparison queries
+  covid_current_campaign: "COVID Autumn 2025"     # Change this to switch campaigns
+  covid_previous_campaign: "COVID Autumn 2024"    # For comparison queries
 
 CAMPAIGN ELIGIBILITY DIFFERENCES:
 - 2024/25: Broader eligibility (age 65+ autumn, clinical risk groups)
@@ -30,8 +30,8 @@ COMPLEX ASTHMA STEROID WINDOWS:
 Three overlapping 2-year windows to capture repeated steroid use across campaign periods.
 */
 
-{% macro covid_campaign_config(campaign_id='covid_2025_autumn') %}
-    {%- if campaign_id == 'covid_2024_autumn' -%}
+{% macro covid_campaign_config(campaign_id='COVID Autumn 2025') %}
+    {%- if campaign_id == 'COVID Autumn 2024' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
             'Autumn 2024 COVID Vaccination Campaign' AS campaign_name,
@@ -92,7 +92,7 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
             
-    {%- elif campaign_id == 'covid_2025_spring' -%}
+    {%- elif campaign_id == 'COVID Spring 2025' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
             'Spring 2025 COVID Vaccination Campaign' AS campaign_name,
@@ -153,7 +153,7 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
             
-    {%- elif campaign_id == 'covid_2025_autumn' -%}
+    {%- elif campaign_id == 'COVID Autumn 2025' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
             'Autumn 2025 COVID Vaccination Campaign' AS campaign_name,
@@ -215,7 +215,7 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             
     {%- else -%}
         -- Default to current campaign if unknown campaign_id
-        {{ covid_campaign_config('covid_2025_autumn') }}
+        {{ covid_campaign_config('COVID Autumn 2025') }}
     {%- endif -%}
 {% endmacro %}
 
@@ -224,6 +224,6 @@ Helper macro to get a specific campaign date
 Usage: {{ covid_get_campaign_date('campaign_reference_date') }}
 */
 {% macro covid_get_campaign_date(date_name, campaign_id=none) %}
-    {%- set campaign_id = campaign_id or var('covid_current_campaign', 'covid_2025_autumn') -%}
+    {%- set campaign_id = campaign_id or var('covid_current_campaign', 'COVID Autumn 2025') -%}
     (SELECT {{ date_name }} FROM ({{ covid_campaign_config(campaign_id) }}))
 {% endmacro %}
