@@ -87,6 +87,9 @@ if ($LASTEXITCODE -eq 0) {
 }
 Write-Host ""
 
+# Disable AWS metadata service checks (prevents connection pool warnings on Azure)
+[System.Environment]::SetEnvironmentVariable('AWS_EC2_METADATA_DISABLED', 'true', 'Process')
+
 # Load project-specific environment variables
 Write-Host "Loading environment variables from .env..." -ForegroundColor Cyan
 
