@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: int_commissioning_observations
-    description: "Observations (ICD-10) derived from SUS AE, SUS OP, SUS APC, CSDS, MHDS and GP (OLIDs). Diagnosis and procedure codes."
+    description: "Observations derived from SUS AE, SUS OP, SUS APC, CSDS (to be added), and MHDS (to be added). Diagnosis and procedure codes in ICD10 or snomed codes as indicated. No measurement data"
     columns:
       - name: diagnosis_id
         data_type: varchar
@@ -34,8 +34,12 @@ models:
 
       - name: observation_concept_code
         data_type: varchar
-        description: "ICD-10 code representing the observation."
+        description: "ICD-10 or snomed code representing the observation."
 
       - name: observation_concept_name
         data_type: varchar
-        description: "ICD-10 description representing the observation."
+        description: "ICD-10 or snomed description representing the observation."
+
+      - name: observation_vocabulary
+        data_type: varchar
+        description: "Code type of the observation (e.g., ICD-10, SNOMED)."
