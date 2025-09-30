@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        static_analysis='off')
 }}
 
 
@@ -17,7 +18,7 @@ WITH PROVIDER_COUNTS AS (
     SELECT
     patient_id,
     provider_code,
-    open_pathways
+    COALESCE(open_pathways, 0) AS open_pathways
     FROM {{ ref('int_wl_current') }}
     WHERE patient_id IS NOT NULL
 )
@@ -31,5 +32,4 @@ PIVOT
         provider_code
         FROM DEV__MODELLING.LOOKUP_NCL.PROVIDER_SHORTHAND
         )
-    DEFAULT ON NULL (0)
 ) AS pvt

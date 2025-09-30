@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        static_analysis='off')
 }}
 
 
@@ -17,7 +18,7 @@ WITH TFC_COUNTS AS (
     SELECT
     patient_id,
     tfc_code,
-    open_pathways
+    COALESCE(open_pathways, 0) AS open_pathways
     FROM {{ ref('int_wl_current') }}
     WHERE patient_id IS NOT NULL
 )
@@ -33,5 +34,4 @@ PIVOT
         WHERE
         "IsTreatmentFunction" = TRUE
         )
-    DEFAULT ON NULL (0)
 ) AS pvt
