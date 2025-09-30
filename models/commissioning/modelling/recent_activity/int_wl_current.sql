@@ -25,8 +25,8 @@ WITH date_corrected AS (
         referral_to_treatment_period_start_date,
         -- Correct all dates to Sundays (Snowflake syntax)
         CASE 
-            WHEN DAYOFWEEK(Week_Ending_Date) = 1 THEN Week_Ending_Date  -- Already Sunday
-            ELSE DATEADD('day', -(DAYOFWEEK(Week_Ending_Date) - 1), Week_Ending_Date)  -- Move to previous Sunday
+            WHEN DAYOFWEEKISO(Week_Ending_Date) = 7 THEN Week_Ending_Date  -- Already Sunday
+            ELSE DATEADD('day', -DAYOFWEEK(Week_Ending_Date), Week_Ending_Date)  -- Move to previous Sunday
         END AS snapshot_date,
         1 AS open_pathways
     FROM {{ ref('stg_wl_wl_openpathways_data') }}
