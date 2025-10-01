@@ -50,7 +50,7 @@ select
     , dict_hrg.hrg_description as type_desc
     , core.appointment_commissioning_tariff_calculation_final_price as cost
 
-from {{ ref('stg_sus_op_appointment')}} as core
+from {{ ref('stg_sus_op_appointment')}} as core -- TO DO: check if appointments and encounters can be used interchangeably in this context
 
 -- speciality and treatment descriptions
 left join 

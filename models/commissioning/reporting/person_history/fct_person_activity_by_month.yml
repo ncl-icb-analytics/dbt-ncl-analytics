@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: fct_person_activity_by_month
+    description: "Fact table capturing person activity aggregated by month."
+    columns:
+      - name: sk_patient_id
+        description: "Unique identifier for the person"
+      - name: activity_month
+        description: "The month (YYYY-MM) for which the activity started"
+      - name: ae_encounters
+        description: "Count of A&E encounters"
+      - name: ip_encounters
+        description: "Count of inpatient admissions"
+      - name: op_encounters
+        description: "Count of outpatient encounters"
+      - name: ae_cost
+        description: "Sum of A&E encounter cost"
+      - name: ip_cost
+        description: "Sum of inpatient admission cost"
+      - name: op_cost
+        description: "Sum of outpatient encounter cost"
+      - name: ae_duration
+        description: "Sum of A&E encounter duration"
+      - name: ip_duration
+        description: "Sum of inpatient admission duration"
+      - name: op_duration
+        description: "Sum of outpatient encounter duration"
