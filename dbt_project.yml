@@ -165,6 +165,14 @@ models:
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "REFERENCE"
         +post-hook: ["{{ add_model_comment() }}"]
+    
+    # Product models
+    products_direct_care:
+      CLTCS:
+        +materialized: table
+        +database: "PUBLISHED_REPORTING__DIRECT_CARE"
+        +schema: "C_LTCS"
+        +post-hook: ["{{ add_model_comment() }}"]
 
 seeds:
   ncl_analytics:
