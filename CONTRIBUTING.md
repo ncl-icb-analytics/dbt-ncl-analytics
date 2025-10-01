@@ -25,18 +25,13 @@ Before contributing to this project, you'll need to set up the following on your
    ```
 
 3. **Add the SSH key to your GitHub account as a signing key**:
-   - Copy your public key onto your clipboard: `clip < ~/.ssh/id_ed25519.pub`
+   - Copy your public key onto your clipboard: `Get-Content ~/.ssh/id_ed25519.pub | Set-Clipboard`
    - Go to GitHub Settings → SSH and GPG keys
    - Click "New SSH key"
-   - Paste your public key
    - Select "Signing Key" as the key type
    - Paste your public key and save
 
-*Note - this section has omitted adding the SSH key to your SSH key agent to bypass admin requirements and setting up SSH keys for cloning as HTTPS is currently widely used. GPG keys are also an option but have not been explicitly outlined - please speak to the head of data science or engineering if you with to use GPG keys or clone via SSH*
-
 ### Verifying Your Setup
-
-Verify your setup:
 
 1. **Create a test commit**:
    ```bash
@@ -52,42 +47,22 @@ Verify your setup:
    - Push your commit
    - View on GitHub - it should show "Verified" badge
 
-### Troubleshooting Signing Methods
-
-**SSH Signing Issues**:
-- Ensure Git version is 2.34 or higher
-- The SSH key must be the same one added to GitHub
-
-1. **Check your Git version**:
-   ```bash
-   git --version
-   ```
-   If below 2.34, update Git for Windows from https://git-scm.com/download/win
+**If signing fails**:
+- Ensure Git version is 2.34 or higher: `git --version`
+- Update Git for Windows from https://git-scm.com/download/win if needed
+- Verify the SSH key matches the one added to GitHub
 
 ## 2. Branch Protection Rules
 
-This repository has branch protection rules in place to maintain code quality and security:
-
-### Protected Branch: `main`
-
-- **No direct commits**: All changes must go through a pull request (direct commits to main are disabled)
-- **Require signed commits**: All commits must be cryptographically signed (SSH, please discuss if GPG or S/MIME preferred)
-- **Include administrators**: These rules apply to everyone, including repository administrators
-
-### Additional Security Measures
-
-- **Force pushes disabled**: Cannot force push to the main branch, preventing history rewriting
-- **Force deletions disabled**: Cannot delete the main branch, protecting against accidental removal
-
-These rules ensure that:
-- All code changes go through a pull request process
-- The commit history remains intact and auditable
-- All commits can be verified as coming from trusted contributors
-- The main branch is protected from accidental or malicious changes
+The `main` branch is protected:
+- **No direct commits**: All changes must go through a pull request
+- **Signed commits required**: All commits must be cryptographically signed
+- **Force pushes disabled**: History cannot be rewritten
+- **Applies to everyone**: Including repository administrators
 
 ### Creating a Feature Branch
 
-Never work directly on the main branch. Always create a new branch. This can be done following [VScode IDE guidance](https://code.visualstudio.com/docs/sourcecontrol/overview) or via git bash:
+Never work directly on the main branch. Always create a new branch. This can be done following [VScode IDE guidance](https://code.visualstudio.com/docs/sourcecontrol/overview) or via git:
 
 ```bash
 # Create and switch to a new feature branch
@@ -99,6 +74,44 @@ git switch -c fix/your-bug-fix
 # Or for documentation
 git switch -c docs/your-doc-update
 ```
+
+### Managing Work in Progress with Git Stash
+
+If you need to switch branches but have uncommitted changes:
+
+```bash
+# Save current changes
+git stash
+
+# Switch to another branch
+git switch main
+git pull
+
+# Return to your feature branch
+git switch feature/your-feature-name
+
+# Restore your changes
+git stash pop
+```
+
+### Merging and Staying Up to Date
+
+Keep your feature branch up to date:
+
+```bash
+# Update main
+git switch main
+git pull
+
+# Merge into your feature branch
+git switch feature/your-feature-name
+git merge main
+```
+
+**If you encounter merge conflicts**:
+1. Open the conflicting files and resolve conflicts (look for `<<<<<<<`, `=======`, `>>>>>>>` markers)
+2. Stage the resolved files: `git add <file>`
+3. Complete the merge: `git commit`
 
 ### Commit Message Format
 
@@ -143,124 +156,82 @@ git commit -m "chore: update dbt dependencies to latest version"
    - Click "Pull requests" → "New pull request"
    - Select your branch
    - Fill in the PR template
-   - Reference any related issues (e.g., "Fixes #123" or "Closes #123")
-
-3. **PR Guidelines**:
-   - Provide a clear description of changes
-   - Include test results if applicable (`dbt test` output)
-   - Ensure all checks pass
-   - Request review from appropriate team members
+   - Reference any related issues (e.g., "Fixes #123")
 
 ## 3. Pre-commit Hooks
 
-This project uses pre-commit hooks that will automatically:
-- Validate commit message format (must follow Conventional Commits)
-- Check for trailing whitespace
-- Ensure files end with a newline
-- Fix common formatting issues
+Pre-commit hooks automatically validate and format your commits:
+- Validates commit message format (Conventional Commits)
+- Checks for trailing whitespace
+- Ensures files end with a newline
+- Fixes common formatting issues
 
-The hooks run automatically when you commit. If a hook fails, fix the issue and try committing again.
+If a hook fails, fix the issue and commit again.
 
 ## Windows-Specific Troubleshooting
 
-### SSH Connection Issues
+**SSH connection issues**:
+```bash
+# Test connection
+ssh -T git@github.com
 
-If you can't connect via SSH on Windows:
+# Check SSH agent
+ssh-add -l
 
-1. **Test your SSH connection**:
-   ```bash
-   ssh -T git@github.com
-   ```
-   You should see: "Hi username! You've successfully authenticated..."
+# Start SSH agent (PowerShell)
+Start-Service ssh-agent
+```
 
-2. **Check SSH agent is running**:
-   ```bash
-   ssh-add -l
-   ```
-
-3. **If using PowerShell**, you may need to start ssh-agent differently:
-   ```powershell
-   Start-Service ssh-agent
-   ```
-
-4. **Ensure correct permissions on SSH files**:
-   - Your `~/.ssh` directory should only be accessible by you
-   - Private key files should have restricted permissions
-
-### Line Ending Issues
-
-Windows uses different line endings than Unix systems. Configure Git to handle this:
-
+**Line ending issues**:
 ```bash
 git config --global core.autocrlf true
 ```
 
-## Environment Setup Reminder
+## Environment Setup
 
-Don't forget to also set up your development environment as per the main README:
+See the main README for full setup instructions. Quick reference:
 
-1. **Python virtual environment**:
-*note - this will only work if python is part of the PATH, if this is has not been set up either add python to PATH (admin required) or switch to py notation (examples in the best practices documentation)*
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+```bash
+# Python virtual environment
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
 
-2. **Snowflake credentials**:
-   ```bash
-   cp env.example .env
-   # Edit .env with your credentials
-   ```
+# Snowflake credentials
+cp env.example .env
+# Edit .env with your credentials
 
-3. **Run the dbt setup script**:
-   ```bash
-   .\start_dbt.ps1
-   ```
+# Run dbt setup script
+.\start_dbt.ps1
+```
+
+*Note: If `python` command fails, use `py` instead or add Python to PATH.*
 
 ## Understanding start_dbt.ps1
 
-The start_dbt.ps1 script is essential for local development. It serves two main purposes:
+The start_dbt.ps1 script:
+1. Loads Snowflake credentials from .env into your session
+2. Uses git skip-worktree to hide profiles.yml changes from git
 
-1. **Environment setup**: Loads variables from your .env file (Snowflake account, warehouse, role) into your PowerShell session so dbt can connect to Snowflake
-2. **Credential protection**: Uses git's skip-worktree feature to mark profiles.yml as "unchanged" in git's eyes, even when you edit it with your personal credentials
-
-The skip-worktree setting tells git to assume profiles.yml hasn't changed, effectively hiding your local edits from git status, git diff, and commits. This is a permanent setting in your local repository that persists across terminal sessions, branch switches, and git pulls. It only affects your local machine - other developers need to run the script themselves.
+Skip-worktree is a permanent local setting that persists across sessions and branches. Run this script once before your first commit.
 
 ## Working with dbt Packages and Profiles
 
-This repository has an unconventional setup that's important to understand:
+Unlike typical dbt projects, this repository commits:
+- `dbt_packages/` directory
+- `profiles.yml` file
 
-### Why packages and profiles are committed
+This is required for Snowflake native execution.
 
-Unlike typical dbt projects:
-- `dbt_packages/` directory is committed (not gitignored)
-- `profiles.yml` is committed to the repository
-- This is required for Snowflake native execution to work
+**Important**:
+- Run `start_dbt.ps1` before your first commit to avoid committing credentials
+- When `dbt deps` shows `dbt_packages/` changes, only commit if intentionally updating packages
+- If you see `profiles.yml` in git status, run `start_dbt.ps1`
 
-### Important workflow considerations
-
-1. **Run start_dbt.ps1 before your first commit** - This applies git skip-worktree to profiles.yml (a permanent local config that persists across sessions and branches). You only need to do this once, but the script is safe to run multiple times.
-
-2. **When updating dependencies**:
-   - Running `dbt deps` may show changes in `dbt_packages/`
-   - If intentionally updating packages: commit these changes
-   - If not updating packages: discard the changes
-   - Be mindful that package updates affect all team members
-
-3. **Before committing**:
-   - Ensure start_dbt.ps1 has been run to avoid accidentally committing local credentials
-   - Check git status carefully for unintended dbt_packages changes
-
-4. **If you see profiles.yml in git status**:
-   - This usually means start_dbt.ps1 hasn't been run yet
-   - Run the script to apply skip-worktree
-   - Never commit your local profiles.yml credentials
-
-5. **To undo skip-worktree** (rarely needed):
-   ```bash
-   git update-index --no-skip-worktree profiles.yml
-   ```
+**To undo skip-worktree** (rarely needed):
+```bash
+git update-index --no-skip-worktree profiles.yml
+```
 
 ## Getting Help
 

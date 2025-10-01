@@ -55,6 +55,12 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+*Note: If `python` command fails, use `py -m venv venv` instead. To add Python to PATH without admin rights, find where Python is installed (run `py -c "import sys; print(sys.executable)"` to locate it), then run in PowerShell:*
+```powershell
+[Environment]::SetEnvironmentVariable("PATH", "$env:PATH;C:\Path\To\Python", "User")
+```
+*Replace `C:\Path\To\Python` with your Python installation directory. Restart PowerShell after running this command.*
+
 ### 3. Configure Snowflake connection
 
 Two configuration files are needed:
