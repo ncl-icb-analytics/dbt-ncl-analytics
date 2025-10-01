@@ -32,34 +32,80 @@ DATA_LAKE → Staging (MODELLING.DBT_STAGING) → Intermediate (MODELLING.*) →
 
 ## Quick Start
 
-**Prerequisites:** Python 3.8+, access to Snowflake with ANALYST role
+### Prerequisites
+- Python 3.8 or higher
+- Git
+- Access to Snowflake with ANALYST role
+- Windows PowerShell (for start_dbt.ps1 script)
+
+### 1. Clone the repository
 
 ```bash
-# 1. Get the code
 git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics
 cd dbt-ncl-analytics
+```
 
-# 2. Setup Python environment
-python -m venv venv && venv\Scripts\activate
+### 2. Set up Python environment
+
+Create and activate a virtual environment, then install dependencies:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-# 3. Configure Snowflake connection
+*Note: If `python` command fails, use `py -m venv venv` instead. To add Python to PATH without admin rights, find where Python is installed (run `py -c "import sys; print(sys.executable)"` to locate it), then run in PowerShell:*
+```powershell
+[Environment]::SetEnvironmentVariable("PATH", "$env:PATH;C:\Path\To\Python", "User")
+```
+*Replace `C:\Path\To\Python` with your Python installation directory. Restart PowerShell after running this command.*
+
+### 3. Configure Snowflake connection
+
+Two configuration files are needed:
+
+**Environment file (.env)** - Contains Snowflake account details:
+```bash
 cp env.example .env
-# Edit .env file with your Snowflake credentials (ANALYST role)
+```
+Edit `.env` with your Snowflake account, username, warehouse, and role (ANALYST).
 
-# 4. Run environment setup script
-# This will activate venv, load .env, and configure Git to ignore local profiles.yml changes
+**dbt profile (profiles.yml)** - Configures how dbt connects to Snowflake:
+```bash
+cp profiles.yml.template profiles.yml
+```
+Edit `profiles.yml` with your username and authentication method (typically externalbrowser for SSO).
+
+### 4. Initialise development environment
+
+Run the setup script to configure your environment:
+
+```powershell
 .\start_dbt.ps1
+```
 
-# 5. Setup local profiles for development
-# Edit profiles.yml with your Snowflake credentials
-# (See profiles.yml.example for reference)
-# Note: start_dbt.ps1 automatically configures Git to ignore your local changes
+The start_dbt.ps1 script sets up your local development environment by loading your Snowflake credentials from .env and protecting your local profiles.yml changes from being committed.
 
-# 6. Install dbt dependencies and test connection
+Specifically, it:
+- Loads your .env variables into the session
+- Applies git skip-worktree to profiles.yml (a permanent local git config that prevents your credentials from being tracked)
+- Sets up the dbt environment for development
+
+**Important**: Unlike typical dbt projects, both profiles.yml and dbt_packages/ are committed to this repo for Snowflake native execution. The git skip-worktree setting is persistent across sessions and branches - you only need to run this once before your first commit, then again each new terminal session for the environment variables.
+
+Note: Run this script each time you start a new terminal session (for env vars) and always before your first commit (for git skip-worktree).
+
+### 5. Verify installation
+
+Install dbt packages and test your connection:
+
+```bash
 dbt deps
 dbt debug
 ```
+
+When running `dbt debug`, your browser will open for Snowflake authentication. Once authenticated, you should see "All checks passed!" confirming your setup is complete.
 
 ## Setting Up Data Sources
 
@@ -145,7 +191,7 @@ models/
 │   ├── reporting/           # Analytics-ready models (tables in REPORTING.COMMISSIONING_REPORTING)
 │   └── published_reporting_secondary_use/  # Published outputs (PUBLISHED_REPORTING__SECONDARY_USE.COMMISSIONING_PUBLISHED)
 │
-├── olids/                   # OLIDS analytics domain (future)
+├── olids/                   # OLIDS analytics domain
 │   ├── staging/             # 1:1 source mappings (views in MODELLING.DBT_STAGING)
 │   ├── modelling/           # Business logic & consolidation (tables in MODELLING.OLIDS_MODELLING)
 │   ├── reporting/           # Analytics-ready models (tables in REPORTING.OLIDS_REPORTING)
@@ -175,11 +221,14 @@ macros/                      # Reusable SQL macros
 
 ## Development
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, branch protection rules, and commit signing setup.
+
 **Daily workflow:**
 ```bash
-dbt run         # Build all models
-dbt test        # Run data quality tests  
-dbt docs serve  # Open documentation
+dbt run            # Build all models
+dbt test           # Run data quality tests
+dbt docs generate  # Generate documentation
+dbt docs serve     # Open documentation in browser
 ```
 
 **For specific models:**
@@ -192,7 +241,7 @@ dbt run -s +model_name             # Build model + dependencies
 **For specific domains:**
 ```bash
 dbt run -s commissioning           # Build all commissioning models
-dbt run -s olids                   # Build all OLIDS models (when available)
+dbt run -s olids                   # Build all OLIDS models
 dbt run -s shared                  # Build all shared models
 dbt run -s commissioning.staging   # Build only commissioning staging models
 ```
@@ -217,6 +266,3 @@ This project uses the **ANALYST** role which has access to:
 - `MODELLING.*` for intermediate processing
 - `REPORTING.*` for final marts
 
-## Future Integration
-
-This project is designed to be merged with the OLIDS dbt project once OLIDS data moves out of the UAT environment requiring special role access.
