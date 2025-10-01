@@ -19,6 +19,12 @@ SELECT
     demo.pcn_name,
     demo.borough_registered,
     demo.neighbourhood_registered,
+
+    -- Residence geography (where they live)
+    demo.borough_resident,
+    demo.neighbourhood_resident,
+    demo.icb_code_resident,
+    demo.icb_resident,
     
     -- Demographics
     demo.age,
@@ -41,13 +47,14 @@ SELECT
     demo.lsoa_name_21,
     demo.imd_decile_19,
     demo.imd_quintile_19,
-    CASE 
-        WHEN demo.imd_quintile_19 IS NULL THEN 'Unknown'
-        WHEN demo.imd_quintile_19 = 1 THEN 'Quintile 1 (Most Deprived)'
-        WHEN demo.imd_quintile_19 = 2 THEN 'Quintile 2'
-        WHEN demo.imd_quintile_19 = 3 THEN 'Quintile 3'
-        WHEN demo.imd_quintile_19 = 4 THEN 'Quintile 4'
-        WHEN demo.imd_quintile_19 = 5 THEN 'Quintile 5 (Least Deprived)'
+    demo.imd_quintile_numeric_19,
+    CASE
+        WHEN demo.imd_quintile_numeric_19 IS NULL THEN 'Unknown'
+        WHEN demo.imd_quintile_numeric_19 = 1 THEN 'Quintile 1 (Most Deprived)'
+        WHEN demo.imd_quintile_numeric_19 = 2 THEN 'Quintile 2'
+        WHEN demo.imd_quintile_numeric_19 = 3 THEN 'Quintile 3'
+        WHEN demo.imd_quintile_numeric_19 = 4 THEN 'Quintile 4'
+        WHEN demo.imd_quintile_numeric_19 = 5 THEN 'Quintile 5 (Least Deprived)'
     END AS imd_quintile_label,
     
     -- Case finding summary flags

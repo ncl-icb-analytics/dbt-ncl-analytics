@@ -34,7 +34,7 @@ ncl_analytics:
       schema: DBT_PROD
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
       threads: 16
-      client_session_keep_alive: false
+      client_session_keep_alive: true
       query_tag: "dbt_ncl_analytics_prod"
 
 # Alternative configuration examples:

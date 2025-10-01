@@ -79,4 +79,5 @@ sum(all_comp_by_5) as numerator, count(*) as denominator
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_5') }}
 group by
 1, 2, 3, 4, 5, 6, 7, 8
+
 ) p

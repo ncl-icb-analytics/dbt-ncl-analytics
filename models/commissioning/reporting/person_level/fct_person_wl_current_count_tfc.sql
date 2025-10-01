@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        static_analysis='off')
 }}
 
 
@@ -15,10 +16,11 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 
 WITH TFC_COUNTS AS (
     SELECT
-    patient_id,
+    sk_patient_id,
     tfc_code,
-    open_pathways
+    COALESCE(open_pathways, 0) AS open_pathways
     FROM {{ ref('int_wl_current') }}
+    WHERE sk_patient_id IS NOT NULL
 )
 SELECT
 *
@@ -32,5 +34,4 @@ PIVOT
         WHERE
         "IsTreatmentFunction" = TRUE
         )
-        DEFAULT ON NULL (0)
 ) AS pvt

@@ -182,13 +182,21 @@ sources:
     staging_prefix: stg_reference
     domain: shared
 
-  # FINGERTIPS schema in DATA_LAKE__NCL
+  # Fingertips schema in DATA_LAKE__NCL
   - source_name: reference_fingertips
     database: DATA_LAKE__NCL
     schema: FINGERTIPS
     description: Fingertips indicator data
     staging_prefix: stg_reference
     domain: shared
+
+  # Phenolab schema in DATA_LAKE__NCL
+  - source_name: phenolab
+    database: DATA_LAKE__NCL
+    schema: PHENOLAB_DEV
+    description: Phenolab supporting data
+    staging_prefix: stg_reference
+    domain: phenolab
 
   # ========================================
   # ADDITIONAL OLIDS DATA SOURCES

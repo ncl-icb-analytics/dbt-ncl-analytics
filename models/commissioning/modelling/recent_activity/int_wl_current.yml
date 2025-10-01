@@ -5,7 +5,7 @@ models:
     description: >
       All active waiting lists, corrected to Sunday snapshot dates. Used for care coordination across providers.
     columns:
-      - name: patient_id
+      - name: sk_patient_id
         description: Pseudonymised NHS number
       - name: provider_code
         description: Organisation code of provider

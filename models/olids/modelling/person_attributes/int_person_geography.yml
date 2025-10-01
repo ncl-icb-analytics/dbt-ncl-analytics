@@ -1,0 +1,69 @@
+version: 2
+models:
+  - name: int_person_geography
+    description: 'Person geography mapping using refactored intermediate geography tables.
+
+      Key Features:
+
+      • Uses refactored geography models for clean separation of concerns
+
+      • Selects most recent/active address for each person
+
+      • Maps to 2011 and 2021 census geographies via postcode hash
+
+      • Includes IMD data from dedicated IMD model
+
+      • Maps to NCL neighbourhoods (via 2021 LSOA)
+
+      • Includes London borough identification from dedicated model
+
+      • All geographic joins are LEFT JOINs for residents outside London/NCL'
+    columns:
+      - name: person_id
+        description: 'Unique person identifier'
+      - name: postcode_hash
+        description: 'Hashed postcode value for privacy protection'
+      - name: address_start_date
+        description: 'Start date of the address record'
+      - name: address_end_date
+        description: 'End date of the address record (NULL if current)'
+      - name: is_current_address
+        description: 'Flag indicating if this is the current active address'
+      - name: primary_care_organisation
+        description: 'Primary care organisation (ICB) code where patient resides (from postcode lookup)'
+      - name: icb_resident
+        description: 'ICB name where patient resides (from geography mappings)'
+      - name: local_authority_code
+        description: 'Local Authority District 2025 code (LAD25CD) from LSOA reference, fallback to organisation code'
+      - name: local_authority_name
+        description: 'Local Authority District 2025 name (LAD25NM) from LSOA reference, fallback to organisation name'
+      - name: ward_code
+        description: '2025 Ward code (WD25CD) from LSOA reference'
+      - name: ward_name
+        description: '2025 Ward name (WD25NM) from LSOA reference'
+      - name: borough_resident
+        description: 'Borough name where patient resides (only populated for London boroughs)'
+      - name: lsoa_code_11
+        description: '2011 Census Lower Layer Super Output Area code'
+      - name: msoa_code_11
+        description: '2011 Census Middle Layer Super Output Area code'
+      - name: lsoa_code_21
+        description: '2021 Census Lower Layer Super Output Area code'
+      - name: lsoa_name_21
+        description: '2021 Census Lower Layer Super Output Area name'
+      - name: msoa_code_21
+        description: '2021 Census Middle Layer Super Output Area code'
+      - name: neighbourhood_resident
+        description: 'NCL neighbourhood of residence (from 2021 LSOA)'
+      - name: imd_decile_19
+        description: 'IMD 2019 decile from dedicated IMD model'
+      - name: imd_quintile_19
+        description: 'IMD 2019 quintile from dedicated IMD model'
+      - name: imd_quintile_numeric_19
+        description: 'IMD 2019 numeric quintile (1-5) from dedicated IMD model'
+      - name: is_most_deprived_20pct
+        description: 'Flag for most deprived 20% areas (deciles 1-2) from dedicated IMD model'
+      - name: is_london_resident
+        description: 'Flag indicating if person resides in London (based on LSOA reference data)'
+      - name: london_classification
+        description: 'London classification from LSOA reference (NCL, Other London, Outside London)'

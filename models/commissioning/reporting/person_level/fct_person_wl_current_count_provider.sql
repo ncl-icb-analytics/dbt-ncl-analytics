@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        static_analysis='off')
 }}
 
 
@@ -15,10 +16,11 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 
 WITH PROVIDER_COUNTS AS (
     SELECT
-    patient_id,
+    sk_patient_id,
     provider_code,
-    open_pathways
+    COALESCE(open_pathways, 0) AS open_pathways
     FROM {{ ref('int_wl_current') }}
+    WHERE sk_patient_id IS NOT NULL
 )
 SELECT
 *
@@ -26,9 +28,8 @@ FROM PROVIDER_COUNTS wl
 PIVOT
 (
     SUM(open_pathways) FOR provider_code IN (
-        SELECT DISTINCT 
-        provider_code 
+        SELECT DISTINCT
+        provider_code
         FROM DEV__MODELLING.LOOKUP_NCL.PROVIDER_SHORTHAND
         )
-        DEFAULT ON NULL (0)
 ) AS pvt

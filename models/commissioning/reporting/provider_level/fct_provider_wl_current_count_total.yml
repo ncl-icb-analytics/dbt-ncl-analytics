@@ -1,7 +1,7 @@
 version: 1
 
 models:
-  - name: int_wl_count_total
+  - name: fct_provider_wl_current_count_total
     description: >
       Count of open waiting lists per provider (provider_code).
       Derived from `int_wl_current`.

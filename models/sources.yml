@@ -4321,6 +4321,31 @@ sources:
       data_type: NUMBER
     - name: DEATH_MONTH
       data_type: NUMBER
+  - name: POSTCODE_HASH
+    identifier: '"POSTCODE_HASH"'
+    columns:
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: PRIMARY_CARE_ORGANISATION
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_ORGANISATION
+      data_type: TEXT
+    - name: YR_2011_LSOA
+      data_type: TEXT
+    - name: YR_2011_MSOA
+      data_type: TEXT
+    - name: YR_2021_LSOA
+      data_type: TEXT
+    - name: YR_2021_MSOA
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: IS_LATEST
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
   - name: PRACTITIONER
     identifier: '"PRACTITIONER"'
     columns:
@@ -8752,6 +8777,23 @@ sources:
       data_type: FLOAT
     - name: OTHERINSTRUCTIONS
       data_type: TEXT
+  - name: GP_REG_PAT_PRAC_LSOA_ALL
+    identifier: '"GP_REG_PAT_PRAC_LSOA_ALL"'
+    columns:
+    - name: PUBLICATION
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: DATE
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: LSOA_CODE
+      data_type: TEXT
+    - name: SEX
+      data_type: TEXT
+    - name: NUMBER_OF_PATIENTS
+      data_type: NUMBER
   - name: IMD2019
     identifier: '"IMD2019"'
     columns:
@@ -8806,6 +8848,15 @@ sources:
       data_type: NUMBER
     - name: INCOMPATIBLE_EXPLANATION
       data_type: TEXT
+  - name: INT_PILLAR4_GROUP_NAMES
+    identifier: '"INT_PILLAR4_GROUP_NAMES"'
+    columns:
+    - name: P4_GROUP_KEY
+      data_type: TEXT
+    - name: P4_GROUP_NAME
+      data_type: TEXT
+    - name: LTC_COUNT
+      data_type: NUMBER
   - name: LSOA2011_LSOA2021
     identifier: '"LSOA2011_LSOA2021"'
     columns:
@@ -8827,8 +8878,36 @@ sources:
       data_type: TEXT
     - name: OBJECTID
       data_type: NUMBER
+  - name: LSOA21_WARD25_LAD25
+    identifier: '"LSOA21_WARD25_LAD25"'
+    columns:
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: WD25CD
+      data_type: TEXT
+    - name: WD25NM
+      data_type: TEXT
+    - name: LAD25CD
+      data_type: TEXT
+    - name: LAD25NM
+      data_type: TEXT
+    - name: RESIDENT_FLAG
+      data_type: TEXT
   - name: NCL_GP_PRACTICE_NEIGHBOURHOOD
     identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+  - name: NCL_GP_PRACTICE_NEIGHBOURHOOD_BACKUP
+    identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD_BACKUP"'
     columns:
     - name: PRACTICE_CODE
       data_type: TEXT
@@ -8860,6 +8939,19 @@ sources:
       data_type: DATE
   - name: PRACTICE_NEIGHBOURHOOD_LOOKUP
     identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP"'
+    columns:
+    - name: PRACTICECODE
+      data_type: TEXT
+    - name: PRACTICENAME
+      data_type: TEXT
+    - name: PCNCODE
+      data_type: TEXT
+    - name: LOCALAUTHORITY
+      data_type: TEXT
+    - name: PRACTICENEIGHBOURHOOD
+      data_type: TEXT
+  - name: PRACTICE_NEIGHBOURHOOD_LOOKUP_BACKUP
+    identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP_BACKUP"'
     columns:
     - name: PRACTICECODE
       data_type: TEXT
@@ -11529,6 +11621,207 @@ sources:
       data_type: TEXT
     - name: Date updated
       data_type: DATE
+- name: phenolab
+  database: '"DATA_LAKE__NCL"'
+  schema: '"PHENOLAB_DEV"'
+  description: Phenolab supporting data
+  tables:
+  - name: AIC_DEFINITIONS
+    identifier: '"AIC_DEFINITIONS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_ATHENA__CONCEPT
+    identifier: '"BASE_ATHENA__CONCEPT"'
+    columns:
+    - name: CONCEPT_ID
+      data_type: NUMBER
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: DOMAIN_ID
+      data_type: TEXT
+    - name: VOCABULARY_ID
+      data_type: TEXT
+    - name: CONCEPT_CLASS_ID
+      data_type: TEXT
+    - name: STANDARD_CONCEPT
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: VALID_START_DATE
+      data_type: NUMBER
+    - name: VALID_END_DATE
+      data_type: NUMBER
+    - name: INVALID_REASON
+      data_type: TEXT
+  - name: DEFINITION_STORE
+    identifier: '"DEFINITION_STORE"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: HDRUK_DEFINITIONS
+    identifier: '"HDRUK_DEFINITIONS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: ICB_DEFINITIONS
+    identifier: '"ICB_DEFINITIONS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: MEASUREMENT_CONFIGS
+    identifier: '"MEASUREMENT_CONFIGS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+  - name: NHS_SNOMED_REFSETS
+    identifier: '"NHS_SNOMED_REFSETS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: OPENCODELISTS
+    identifier: '"OPENCODELISTS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
 - name: reference_terminology
   database: '"DATA_LAKE__NCL"'
   schema: '"TERMINOLOGY"'
@@ -11594,6 +11887,39 @@ sources:
     - name: CODE_DESCRIPTION
       data_type: TEXT
     - name: SOURCE
+      data_type: TEXT
+  - name: DEFINITION_STORE
+    identifier: '"DEFINITION_STORE"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_TABLE
+      data_type: TEXT
+    - name: DBID
+      data_type: TEXT
+    - name: CORE_CONCEPT_ID
       data_type: TEXT
   - name: ECL_CACHE
     identifier: '"ECL_CACHE"'

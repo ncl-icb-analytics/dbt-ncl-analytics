@@ -21,15 +21,15 @@ vars:
   dbt_audit_schema: "test_audit"
 
   # Flu campaign configuration - Change these values to run for different campaign years
-  flu_current_campaign: "flu_2025_26"     # Current flu campaign (flu_2023_24, flu_2024_25, flu_2025_26)
-  flu_previous_campaign: "flu_2024_25"    # Previous flu campaign (for year-over-year comparison)
+  flu_current_campaign: "Flu 2025-26"     # Current flu campaign (Supported: Flu 2023-24, Flu 2024-25, Flu 2025-26)
+  flu_previous_campaign: "Flu 2024-25"    # Previous flu campaign (for year-over-year comparison)
   flu_audit_end_date: "CURRENT_DATE"      # Default audit end date
 
   # COVID campaign configuration - Multi-campaign support
-  covid_current_autumn: "covid_2025_autumn"    # Current autumn campaign
-  covid_current_spring: "covid_2025_spring"    # Current spring campaign
-  covid_previous_autumn: "covid_2024_autumn"   # Previous autumn campaign
-  covid_previous_spring: "covid_2025_spring"   # Previous spring campaign (for comparison)
+  covid_current_autumn: "COVID Autumn 2025"    # Current autumn campaign
+  covid_current_spring: "COVID Spring 2025"    # Current spring campaign
+  covid_previous_autumn: "COVID Autumn 2024"   # Previous autumn campaign
+  covid_previous_spring: "COVID Spring 2025"   # Previous spring campaign (for comparison)
   covid_audit_end_date: "2025-06-30"           # End of last completed campaign (spring 2025)
 
 # Configure test failure storage (only for failures)

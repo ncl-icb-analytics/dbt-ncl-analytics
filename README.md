@@ -2,19 +2,17 @@
 
 ## What This Is
 
-**dbt** (data build tool) project for NCL Analytics supporting both:
-- **Commissioning analytics** - Currently active using ANALYST role
-- **OLIDS analytics** - GP data in the One London Integrated Data Set
+dbt (data build tool) project for NCL Analytics supporting:
+- **Commissioning analytics** - Secondary care and waiting lists
+- **OLIDS analytics** - GP data from the One London Integrated Data Set
 
-This project uses dbt to transform healthcare and operational data, creating analytics-ready datasets for analysis from multiple data sources:
-
-**Data sources included:**
-- **OLIDS** - One London Integrated Data Set FHIR GP record data from EMIS/SystmOne.
-- **Waiting Lists (WL)** - Patient waiting times and pathway data  
-- **SUS Unified** - Outpatient (OP), Admitted Patient Care (APC) and Emergency Care Dataset (ECDS) data
-- **EPD Primary Care** - Primary care medications and prescribing data
-- **eRS electronic Referral Service** - Primary care referrals data
-- **Dictionary** - Reference data and lookup tables (shared across domains)
+**Data sources:**
+- **OLIDS** - FHIR GP record data (EMIS/SystmOne)
+- **Waiting Lists (WL)** - Patient pathways and waiting times
+- **SUS Unified** - Outpatient, Admitted Patient Care, Emergency Care
+- **EPD Primary Care** - Medications and prescribing
+- **eRS** - Electronic referral service
+- **Dictionary** - Reference data and lookups
 
 ## Architecture
 
@@ -32,108 +30,94 @@ DATA_LAKE → Staging (MODELLING.DBT_STAGING) → Intermediate (MODELLING.*) →
 
 ## Quick Start
 
-**Prerequisites:** Python 3.8+, access to Snowflake with ANALYST role
+### Prerequisites
+- Python 3.8 or higher
+- Git
+- Access to Snowflake with ANALYST role
+- Windows PowerShell (for start_dbt.ps1 script)
+
+### 1. Clone the repository
 
 ```bash
-# 1. Get the code
 git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics
 cd dbt-ncl-analytics
+```
 
-# 2. Setup Python environment
-python -m venv venv && venv\Scripts\activate
+### 2. Set up Python environment
+
+Create and activate a virtual environment, then install dependencies:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-# 3. Configure Snowflake connection
+*Note: If `python` command fails, use `py -m venv venv` instead. To add Python to PATH without admin rights, find where Python is installed (run `py -c "import sys; print(sys.executable)"` to locate it), then run in PowerShell:*
+```powershell
+[Environment]::SetEnvironmentVariable("PATH", "$env:PATH;C:\Path\To\Python", "User")
+```
+*Replace `C:\Path\To\Python` with your Python installation directory. Restart PowerShell after running this command.*
+
+### 3. Configure Snowflake connection
+
+Two configuration files are needed:
+
+**Environment file (.env)** - Contains Snowflake account details:
+```bash
 cp env.example .env
-# Edit .env file with your Snowflake credentials (ANALYST role)
+```
+Edit `.env` with your Snowflake account, username, warehouse, and role (ANALYST).
 
-# 4. Run environment setup script
-# This will activate venv, load .env, and configure Git to ignore local profiles.yml changes
+**dbt profile (profiles.yml)** - Configures how dbt connects to Snowflake:
+```bash
+cp profiles.yml.template profiles.yml
+```
+Edit `profiles.yml` with your username and authentication method (typically externalbrowser for SSO).
+
+### 4. Initialise development environment
+
+```powershell
 .\start_dbt.ps1
+```
 
-# 5. Setup local profiles for development
-# Edit profiles.yml with your Snowflake credentials
-# (See profiles.yml.example for reference)
-# Note: start_dbt.ps1 automatically configures Git to ignore your local changes
+This script:
+- Loads .env variables into your session
+- Applies git skip-worktree to profiles.yml (allows your local profile to diverge from the repo)
 
-# 6. Install dbt dependencies and test connection
+Run once before your first commit, then each new terminal session for environment variables.
+
+**Why skip-worktree instead of gitignore?** profiles.yml must be committed for Snowflake native execution, but each developer needs their own local configuration. gitignore doesn't work for files already tracked by git - skip-worktree tells git to ignore changes to an already-tracked file.
+
+### 5. Verify installation
+
+```bash
 dbt deps
 dbt debug
 ```
 
+Your browser will open for Snowflake authentication. Look for "All checks passed!"
+
 ## Setting Up Data Sources
 
-### Step 1: Configure Data Sources
-
-Edit `scripts/sources/source_mappings.yml` to define your data sources and mappings.
-
-### Step 2: Extract & Download Schema Metadata
-
-Generate dynamic SQL query based on your source mappings:
-
-```bash
-# Generate dynamic SQL query from your source mappings
-python scripts/sources/1a_generate_metadata_query.py
-# This creates scripts/sources/metadata_query.sql
-```
-
-```bash
-# Generate dynamic SQL query from your source mappings
-python scripts\\sources\\1b_extract_metadata.py
-# This creates table_metadata.csv and saves it locally
-```
-
-### Step 3: Generate dbt Sources
-
-```bash
-python scripts/sources/2_generate_sources.py
-# This creates models/sources.yml with all table definitions
-```
-
-### Step 4: Generate Staging Models
-
-```bash
-python scripts/sources/3_generate_staging_models.py
-# This creates SQL files in models/*/staging/ directories
-```
-
-### Step 5: Build and Test
-
-```bash
-dbt run         # Builds all models
-dbt test        # Runs data quality tests
-```
+1. **Configure sources**: Edit `scripts/sources/source_mappings.yml`
+2. **Generate metadata query**: `python scripts/sources/1a_generate_metadata_query.py`
+3. **Extract metadata**: `python scripts/sources/1b_extract_metadata.py`
+4. **Generate sources.yml**: `python scripts/sources/2_generate_sources.py`
+5. **Generate staging models**: `python scripts/sources/3_generate_staging_models.py`
+6. **Build and test**: `dbt run && dbt test`
 
 ## Data Sources
 
-### Waiting Lists (WL)
-- Patient pathways and waiting times
-- Staging models: `stg_wl_*`
-
-### SUS Unified - Outpatient (SUS_UNIFIED_OP) 
-- Outpatient appointments and activity
-- Staging models: `stg_sus_op_*`
-
-### SUS Unified - Admitted Patient Care (SUS_UNIFIED_APC)
-- Inpatient episodes and procedures  
-- Staging models: `stg_sus_apc_*`
-
-### SUS Unified - EMERGENCY CARE DATASET (SUS_UNIFIED_ECDS)
-- Emergency care episodes and procedures  
-- Staging models: `stg_sus_ecds_*`
-
-### EPD Primary Care (EPD_PRIMARY_CARE)
-- Primary care prescribing and medications
-- Staging models: `stg_epd_pc_*`
-
-### eRS Primary Care (eRS_PRIMARY_CARE)
-- electronic referral system data for primary care referrals to outpatient services and first appointment bookings
-- Staging models: `stg_ers_pc_*`
-
-### Dictionary
-- Reference data and lookup tables (shared across domains)
-- Schemas staged as required
-- Staging models: `stg_dictionary_*_*` (in shared/staging/) e.g., stg_dictionary_dbo_*
+| Source | Staging Models | Description |
+|--------|---------------|-------------|
+| Waiting Lists (WL) | `stg_wl_*` | Patient pathways and waiting times |
+| SUS Unified OP | `stg_sus_op_*` | Outpatient appointments |
+| SUS Unified APC | `stg_sus_apc_*` | Admitted patient care |
+| SUS Unified ECDS | `stg_sus_ecds_*` | Emergency care |
+| EPD Primary Care | `stg_epd_pc_*` | Prescribing and medications |
+| eRS Primary Care | `stg_ers_pc_*` | Electronic referrals |
+| Dictionary | `stg_dictionary_*` | Reference data and lookups |
 
 ## Project Structure
 
@@ -145,7 +129,7 @@ models/
 │   ├── reporting/           # Analytics-ready models (tables in REPORTING.COMMISSIONING_REPORTING)
 │   └── published_reporting_secondary_use/  # Published outputs (PUBLISHED_REPORTING__SECONDARY_USE.COMMISSIONING_PUBLISHED)
 │
-├── olids/                   # OLIDS analytics domain (future)
+├── olids/                   # OLIDS analytics domain
 │   ├── staging/             # 1:1 source mappings (views in MODELLING.DBT_STAGING)
 │   ├── modelling/           # Business logic & consolidation (tables in MODELLING.OLIDS_MODELLING)
 │   ├── reporting/           # Analytics-ready models (tables in REPORTING.OLIDS_REPORTING)
@@ -175,11 +159,14 @@ macros/                      # Reusable SQL macros
 
 ## Development
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, branch protection rules, and commit signing setup.
+
 **Daily workflow:**
 ```bash
-dbt run         # Build all models
-dbt test        # Run data quality tests  
-dbt docs serve  # Open documentation
+dbt run            # Build all models
+dbt test           # Run data quality tests
+dbt docs generate  # Generate documentation
+dbt docs serve     # Open documentation in browser
 ```
 
 **For specific models:**
@@ -192,31 +179,44 @@ dbt run -s +model_name             # Build model + dependencies
 **For specific domains:**
 ```bash
 dbt run -s commissioning           # Build all commissioning models
-dbt run -s olids                   # Build all OLIDS models (when available)
+dbt run -s olids                   # Build all OLIDS models
 dbt run -s shared                  # Build all shared models
 dbt run -s commissioning.staging   # Build only commissioning staging models
 ```
 
-**For faster YML development:**
-Print a YML outline into the terminal to paste into a new .yml. Descriptions will still need to be added.
+**Generate YML outline:**
 ```bash
-dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'  
+dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'
 ```
 
-## Environment Handling
+## Schema and Database Generation
 
-- **Dev**: Models built in `DEV__MODELLING.*`, `DEV__REPORTING.*`, and `DEV__PUBLISHED_REPORTING__SECONDARY_USE.*`
-- **Prod**: Models built in `MODELLING.*`, `REPORTING.*`, and `PUBLISHED_REPORTING__SECONDARY_USE.*`
-- Handled automatically via `generate_database_name()` macro
+Custom macros override dbt defaults. All locations are configured in `dbt_project.yml`.
+
+**Database naming**:
+- **Prod**: Base database name (e.g., `REPORTING.COMMISSIONING_REPORTING.model`)
+- **Dev**: Prefixed with `DEV__` (e.g., `DEV__REPORTING.COMMISSIONING_REPORTING.model`)
+
+**Schema naming**:
+- Uses exact `+schema:` value from config (no target prefix added)
+- Example: `COMMISSIONING_REPORTING`, `OLIDS_DIAGNOSES`
+
+When adding folders, update `dbt_project.yml` with `+database:` and `+schema:` settings. Unconfigured models default to `MODELLING.DBT_STAGING`.
 
 ## Role and Permissions
 
-This project uses the **ANALYST** role which has access to:
-- `DATA_LAKE.*` databases for source data
-- `Dictionary.*` for reference data  
-- `MODELLING.*` for intermediate processing
-- `REPORTING.*` for final marts
+This project primarily uses the **ANALYST** role, which has access to:
+- `DATA_LAKE.*` - Source data
+- `Dictionary.*` - Reference data
+- `MODELLING.*` - Intermediate processing
+- `REPORTING.*` - Final marts
+- `PUBLISHED_REPORTING__SECONDARY_USE.*` - Published outputs
+- `PUBLISHED_REPORTING__DIRECT_CARE.*` - Direct care outputs
 
-## Future Integration
+**Role hierarchy**:
+- **ANALYST** - Base role, owns all dbt-created objects
+- **ENGINEER** - Inherits ANALYST permissions
+- **DATA_PLATFORM_MANAGER** - Inherits ENGINEER permissions
 
-This project is designed to be merged with the OLIDS dbt project once OLIDS data moves out of the UAT environment requiring special role access.
+Models can be run using any of these roles. Ownership is automatically transferred to ANALYST with `COPY CURRENT GRANTS`, meaning ANALYST becomes the owner while ENGINEER and DATA_PLATFORM_MANAGER retain management access through role inheritance.
+

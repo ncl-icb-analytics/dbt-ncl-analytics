@@ -278,6 +278,19 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'FINGERTIPS'
+  
+  UNION ALL
+  
+    -- phenolab: Phenolab supporting data
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'PHENOLAB_DEV' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'PHENOLAB_DEV'
 )
 
 SELECT 
