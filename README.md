@@ -191,26 +191,17 @@ dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-
 
 ## Schema and Database Generation
 
-This project uses custom macros to control where models are built:
+Custom macros override dbt defaults. All locations are configured in `dbt_project.yml`.
 
-**Database naming** (`generate_database_name()`):
-- **Prod** (target: `prod`): Uses base database names (e.g., `MODELLING`, `REPORTING`)
-- **Dev** (any other target): Prefixes databases with target name (e.g., `DEV__MODELLING`, `DEV__REPORTING`)
-- Configured in `dbt_project.yml` with `+database:` settings
+**Database naming**:
+- **Prod**: Base database name (e.g., `REPORTING.COMMISSIONING_REPORTING.model`)
+- **Dev**: Prefixed with `DEV__` (e.g., `DEV__REPORTING.COMMISSIONING_REPORTING.model`)
 
-**Schema naming** (`generate_schema_name()`):
-- Uses the exact schema name specified in `dbt_project.yml` with `+schema:`
-- No target schema prefix is added (unlike default dbt behavior)
-- This allows clean schema names like `COMMISSIONING_REPORTING` instead of `dbt_eddie_COMMISSIONING_REPORTING`
+**Schema naming**:
+- Uses exact `+schema:` value from config (no target prefix added)
+- Example: `COMMISSIONING_REPORTING`, `OLIDS_DIAGNOSES`
 
-**Examples**:
-```
-# Prod target
-models/commissioning/reporting/model.sql → REPORTING.COMMISSIONING_REPORTING.model
-
-# Dev target (e.g., eddie)
-models/commissioning/reporting/model.sql → EDDIE__REPORTING.COMMISSIONING_REPORTING.model
-```
+When adding folders, update `dbt_project.yml` with `+database:` and `+schema:` settings. Unconfigured models default to `MODELLING.DBT_STAGING`.
 
 ## Role and Permissions
 
