@@ -16,7 +16,7 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 
 WITH date_corrected AS (
     SELECT
-        Pseudo_NHS_NUMBER AS patient_id,
+        Pseudo_NHS_NUMBER AS sk_patient_id,
         organisation_identifier_code_of_provider AS provider_code,
         activity_treatment_function_code AS tfc_code,
         organisation_identifier_code_of_commissioner AS commissioner_code,
@@ -25,8 +25,8 @@ WITH date_corrected AS (
         referral_to_treatment_period_start_date,
         -- Correct all dates to Sundays (Snowflake syntax)
         CASE 
-            WHEN DAYOFWEEK(Week_Ending_Date) = 1 THEN Week_Ending_Date  -- Already Sunday
-            ELSE DATEADD('day', -(DAYOFWEEK(Week_Ending_Date) - 1), Week_Ending_Date)  -- Move to previous Sunday
+            WHEN DAYOFWEEKISO(Week_Ending_Date) = 7 THEN Week_Ending_Date  -- Already Sunday
+            ELSE DATEADD('day', -DAYOFWEEK(Week_Ending_Date), Week_Ending_Date)  -- Move to previous Sunday
         END AS snapshot_date,
         1 AS open_pathways
     FROM {{ ref('stg_wl_wl_openpathways_data') }}
@@ -38,7 +38,7 @@ most_recent_week AS (
     FROM date_corrected
 )
 SELECT 
-    dc.patient_id,
+    dc.sk_patient_id,
     dc.provider_code,
     dc.tfc_code,
     dc.commissioner_code,
