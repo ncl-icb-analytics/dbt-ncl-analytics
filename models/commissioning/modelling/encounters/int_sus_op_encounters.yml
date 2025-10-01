@@ -1,12 +1,12 @@
 version: 2
 
 models:
-  - name: int_sus_op_1year
-    description: "Event history in the last year for outpatient events from SUS data"
+  - name: int_sus_op_encounters
+    description: "Event history for outpatient encounters from SUS data"
     columns:
-      - name: event_id
+      - name: encounter_id
         data_type: varchar
-        description: "Primary key for the event within SUS"
+        description: "Primary key for the encounter within SUS"
 
       - name: sk_patient_id
         data_type: varchar
@@ -40,9 +40,9 @@ models:
         data_type: varchar
         description: "Flag for whether the appointment was a first attendance"
 
-      - name: primary_reason_for_event
+      - name: primary_reason_for_encounter
         data_type: varchar
-        description: "Listed specialty code for the event"
+        description: "Listed specialty code for the encounter"
 
       - name: acuity
         data_type: number
@@ -58,8 +58,8 @@ models:
 
       - name: type
         data_type: varchar
-        description: "HRG code type associated with the event"
+        description: "HRG code type associated with the encounter"
 
       - name: cost
         data_type: number
-        description: "SUS listed cost associated with the event"
+        description: "SUS listed cost associated with the encounter"

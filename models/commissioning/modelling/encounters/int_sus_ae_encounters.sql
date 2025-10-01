@@ -5,7 +5,7 @@
 
 
 /*
-Recent ECDS activities from SUS
+Emergency care encounters from SUS
 
 Clinical Purpose:
 - Establishing demand for emergency care services
@@ -16,25 +16,15 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 
 */
 
-{% set years_from_now = -1 %}
-
-/* Establish event range */
-with filtered_core as (
-    select *
-    from {{ ref('stg_sus_ae_emergency_care')}}
-    where attendance_arrival_date between dateadd(year, {{years_from_now}}, current_date()) and current_date()
-)
-
-
 select 
     /* Information needed to derive standard event information */
-    core.primarykey_id as event_id
+    core.primarykey_id as encounter_id
     , core.patient_nhs_number_value_pseudo as sk_patient_id
     , core.attendance_location_hes_provider_3 as provider_id
     , core.attendance_location_site as site_id
     , core.attendance_arrival_date as start_date
     , core.attendance_departure_time_since_arrival as duration
-    , core.clinical_chief_complaint_code as primary_reason_for_event
+    , core.clinical_chief_complaint_code as primary_reason_for_encounter
     , core.clinical_acuity_code as acuity
     , diagnosis.flat_diagnosis_codes
     , treatments.code as primary_treatment
@@ -43,7 +33,7 @@ select
     , core.attendance_location_department_type as department_type
     , core.commissioning_national_pricing_final_price as cost
 
-from filtered_core as core
+from {{ ref('stg_sus_ae_emergency_care')}} as core
 
 /* Diagnosis code for infering reason */
 left join (

@@ -1,12 +1,12 @@
 version: 2
 
 models:
-  - name: int_sus_apc_1year
-    description: "Event history in the last year for admitted patient events from SUS data"
+  - name: int_sus_apc_encounters
+    description: "Event history for admitted patient care encounters from SUS data"
     columns:
-      - name: event_id
+      - name: encounter_id
         data_type: number
-        description: "Primary key for the event within SUS"
+        description: "Primary key for the encounter within SUS"
 
       - name: sk_patient_id
         data_type: varchar
