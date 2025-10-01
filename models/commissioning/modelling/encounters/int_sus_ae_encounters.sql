@@ -17,7 +17,7 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 */
 
 select 
-    /* Information needed to derive standard event information */
+    /* Information needed to derive standard encounter information */
     core.primarykey_id as encounter_id
     , core.patient_nhs_number_value_pseudo as sk_patient_id
     , core.attendance_location_hes_provider_3 as provider_id
@@ -40,7 +40,7 @@ left join (
     select diag.primarykey_id
     , listagg(diag.code, ', ') within group (order by diag.snomed_id) as flat_diagnosis_codes
     from {{ref('stg_sus_ae_clinical_diagnoses_snomed')}} diag
-    inner join filtered_core fc on diag.primarykey_id = fc.primarykey_id
+    inner join {{ ref('stg_sus_ae_emergency_care')}} fc on diag.primarykey_id = fc.primarykey_id
     group by diag.primarykey_id
 ) as diagnosis on core.primarykey_id = diagnosis.primarykey_id
 

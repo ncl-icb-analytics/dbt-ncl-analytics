@@ -9,7 +9,7 @@ Outpatient encounters from SUS
 
 Processing:
 - Select key fields
-- Rename fields to standard event model
+- Rename fields to standard encounter model
 - Add dictionary lookups to int_sus_op_min to provide descriptive fields
 - Map to known definitions [added later]
 
@@ -23,7 +23,7 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 */
 
 select 
-    /* Information needed to derive standard event information */
+    /* Information needed to derive standard encounter information */
     core.appointment_identifier as encounter_id
     , core.appointment_patient_identity_nhs_number_value_pseudo as sk_patient_id
     , core.appointment_commissioning_service_agreement_provider as provider_id

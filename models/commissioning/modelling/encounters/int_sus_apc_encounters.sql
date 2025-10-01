@@ -17,7 +17,7 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 */
 
 select 
-    /* Information needed to derive standard event information */
+    /* Information needed to derive standard encounter information */
     core.primarykey_id as encounter_id
     , core.spell_patient_identity_nhs_number_value_pseudo as sk_patient_id
     , core.spell_care_location_site_code_of_treatment as site_id
