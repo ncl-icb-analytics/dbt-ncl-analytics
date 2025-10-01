@@ -22,6 +22,7 @@ END As VACC_ORDER
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.imd_quintile
+,p.imdquintile_order
 ,p.numerator 
 ,p.denominator 
 FROM (
@@ -29,63 +30,64 @@ FROM (
 ------- 16 YEAR METRICS FROM HISTORICAL 
 --sixin1_16y 
 select 
- '6-in-1 (dose 1,2,3) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ '6-in-1 (dose 1,2,3) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(sixin1_comp_by_16) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_16') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --fourin1_16y 
 select 
- '4-in-1 (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ '4-in-1 (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(fourin1_comp_by_16) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_16') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --mmr1_16y 
 select 
- 'MMR (dose 1,2) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'MMR (dose 1,2) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(mmr_comp_by_16) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_16') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --HPV_16y 
 select 
- 'HPV (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'HPV (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(hpv_comp_by_16) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_16') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --threein1_16y 
 select 
- '3-in-1 (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ '3-in-1 (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(threein1_comp_by_16) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_16') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --MenACWY_16y 
 select 
- 'MenACWY (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'MenACWY (dose 1) 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(menacwy_comp_by_16) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_16') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --all_vacc16y 
 select 
- 'All vaccinations 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'All vaccinations 16 Years' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(all_comp_by_16) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_16') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
+
 ) p

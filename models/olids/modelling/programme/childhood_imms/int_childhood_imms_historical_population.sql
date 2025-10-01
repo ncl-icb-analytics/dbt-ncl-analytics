@@ -34,12 +34,20 @@ SELECT DISTINCT
         WHEN dph.ETHNICITY_CATEGORY = 'White' THEN 5
         WHEN dph.ETHNICITY_CATEGORY = 'Unknown' THEN 6
         END AS ETHCAT_ORDER,
-        dph.imd_quintile_19 as IMD_QUINTILE,
+        CASE WHEN dph.IMD_QUINTILE_19 IS NULL THEN 'Unknown' 
+        ELSE dph.IMD_QUINTILE_19 END AS IMD_QUINTILE,
+        CASE 
+        WHEN dph.IMD_QUINTILE_19 = 'Most Deprived' THEN 1
+        WHEN dph.IMD_QUINTILE_19 = 'Second Most Deprived' THEN 2
+        WHEN dph.IMD_QUINTILE_19 = 'Third Most Deprived' THEN 3
+        WHEN dph.IMD_QUINTILE_19 = 'Second Least Deprived' THEN 4
+        WHEN dph.IMD_QUINTILE_19 = 'Least Deprived' THEN 5
+        ELSE 6 END AS IMDQUINTILE_ORDER,
         dph.BOROUGH_REGISTERED AS PRACTICE_BOROUGH,
          dph.practice_name,
         dph.practice_code
     FROM {{ ref('dim_person_demographics_historical') }} dph
-    WHERE dph.analysis_month >= DATEADD('month', -60, CURRENT_DATE)
+    WHERE dph.analysis_month >= DATEADD('month', -48, CURRENT_DATE)
         AND dph.analysis_month <= LAST_DAY(CURRENT_DATE)
         AND dph.age in (1,2,5,11,16)
         AND ICB_CODE = 'QMJ'

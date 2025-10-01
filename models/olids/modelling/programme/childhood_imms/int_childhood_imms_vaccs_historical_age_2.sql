@@ -146,6 +146,7 @@ p.ANALYSIS_MONTH
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.imd_quintile
+,p.imdquintile_order
 ,v.sixin1_comp_by_2
 ,v.hibmc_comp_by_2
 ,v.mmr1_comp_by_2

@@ -51,7 +51,7 @@ where p.age = 11
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 132 months (unlikely)
     ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
          FROM HIST11YRBASE v1
-        WHERE v1.VACCINE_ORDER = 9 and v1.EVENT_TYPE = 'Administration'
+        WHERE v1.VACCINE_ORDER = 14 and v1.EVENT_TYPE = 'Administration'
 )  
 
  -- Creating CTE for HibMenC (dose 1) where 1 row is per patient at 5 yr AS NUMERATOR
@@ -132,6 +132,7 @@ p.ANALYSIS_MONTH
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.imd_quintile
+,p.imdquintile_order
 ,v.sixin1_COMP_BY_11
 ,v.fourin1_COMP_BY_11
 ,v.hibmc_COMP_BY_11

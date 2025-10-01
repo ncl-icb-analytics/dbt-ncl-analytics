@@ -181,6 +181,7 @@ p.ANALYSIS_MONTH
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.imd_quintile
+,p.imdquintile_order
 ,v.SIXIN1_COMP_BY_16
 ,v.FOURIN1_COMP_BY_16
 ,v.HPV_COMP_BY_16

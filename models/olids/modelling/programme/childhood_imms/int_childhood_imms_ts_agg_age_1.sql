@@ -20,6 +20,7 @@ END As VACC_ORDER
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.imd_quintile
+,p.imdquintile_order
 ,p.numerator 
 ,p.denominator 
 FROM (
@@ -27,45 +28,46 @@ FROM (
 ------- 1 YEAR METRICS FROM HISTORICAL 
 --sixin1_1y 
 select 
- '6-in-1 (dose 1,2,3) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ '6-in-1 (dose 1,2,3) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(sixin1_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --rotavirus_1y 
 select 
- 'Rotavirus (dose 1,2) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'Rotavirus (dose 1,2) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(rota_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --menb_1y 
 select 
- 'Men B (dose 1,2) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'Men B (dose 1,2) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(menb_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --pcv_1y 
 select 
- 'PCV (dose 1) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'PCV (dose 1) 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(pcv_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
 
 UNION
 --all_vacc1y 
 select 
- 'All vaccinations 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile,
+ 'All vaccinations 1 Year' as vaccination_metric, analysis_month, practice_name, practice_code, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(all_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by
-1, 2, 3, 4, 5, 6, 7
+1, 2, 3, 4, 5, 6, 7, 8
+
 ) p
