@@ -189,11 +189,28 @@ dbt run -s commissioning.staging   # Build only commissioning staging models
 dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'
 ```
 
-## Environment Handling
+## Schema and Database Generation
 
-- **Dev**: Models built in `DEV__MODELLING.*`, `DEV__REPORTING.*`, and `DEV__PUBLISHED_REPORTING__SECONDARY_USE.*`
-- **Prod**: Models built in `MODELLING.*`, `REPORTING.*`, and `PUBLISHED_REPORTING__SECONDARY_USE.*`
-- Handled automatically via `generate_database_name()` macro
+This project uses custom macros to control where models are built:
+
+**Database naming** (`generate_database_name()`):
+- **Prod** (target: `prod`): Uses base database names (e.g., `MODELLING`, `REPORTING`)
+- **Dev** (any other target): Prefixes databases with target name (e.g., `DEV__MODELLING`, `DEV__REPORTING`)
+- Configured in `dbt_project.yml` with `+database:` settings
+
+**Schema naming** (`generate_schema_name()`):
+- Uses the exact schema name specified in `dbt_project.yml` with `+schema:`
+- No target schema prefix is added (unlike default dbt behavior)
+- This allows clean schema names like `COMMISSIONING_REPORTING` instead of `dbt_eddie_COMMISSIONING_REPORTING`
+
+**Examples**:
+```
+# Prod target
+models/commissioning/reporting/model.sql → REPORTING.COMMISSIONING_REPORTING.model
+
+# Dev target (e.g., eddie)
+models/commissioning/reporting/model.sql → EDDIE__REPORTING.COMMISSIONING_REPORTING.model
+```
 
 ## Role and Permissions
 
