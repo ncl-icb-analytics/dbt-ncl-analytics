@@ -1,3 +1,5 @@
+-- TO BE DELETED: duplicate of stg_dictionary_snomed__concept.sql
+
 {{ config(materialized='view') }}
 
 select
