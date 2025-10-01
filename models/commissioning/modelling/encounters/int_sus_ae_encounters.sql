@@ -33,7 +33,7 @@ select
     , core.attendance_location_department_type as department_type
     , core.commissioning_national_pricing_final_price as cost
 
-from {{ ref('stg_sus_ae_emergency_care')}} as core
+from {{ ref('stg_sus_ae_emergency_care')}} as core -- test commit
 
 /* Diagnosis code for infering reason */
 left join (
