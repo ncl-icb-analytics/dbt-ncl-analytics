@@ -11,9 +11,9 @@ Grain: referral (service_request_identifier)
 Clinical Purpose:
 - understanding utilisation across community care
 
-Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
-
 */
+
+{% set years_from_now = -1 %}
 
 SELECT 
 
@@ -47,6 +47,7 @@ LEFT JOIN
 ON 
         referral.person_id = bridging.person_id
 
+WHERE referral.referral_request_received_date >= DATEADD(YEAR, {{years_from_now}}, current_date())
 GROUP BY
     referral.service_request_identifier,
     bridging.pseudo_nhs_number
