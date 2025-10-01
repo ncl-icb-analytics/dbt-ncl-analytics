@@ -2,19 +2,17 @@
 
 ## What This Is
 
-**dbt** (data build tool) project for NCL Analytics supporting both:
-- **Commissioning analytics** - Currently active using ANALYST role
-- **OLIDS analytics** - GP data in the One London Integrated Data Set
+dbt (data build tool) project for NCL Analytics supporting:
+- **Commissioning analytics** - Secondary care and waiting lists
+- **OLIDS analytics** - GP data from the One London Integrated Data Set
 
-This project uses dbt to transform healthcare and operational data, creating analytics-ready datasets for analysis from multiple data sources:
-
-**Data sources included:**
-- **OLIDS** - One London Integrated Data Set FHIR GP record data from EMIS/SystmOne.
-- **Waiting Lists (WL)** - Patient waiting times and pathway data  
-- **SUS Unified** - Outpatient (OP), Admitted Patient Care (APC) and Emergency Care Dataset (ECDS) data
-- **EPD Primary Care** - Primary care medications and prescribing data
-- **eRS electronic Referral Service** - Primary care referrals data
-- **Dictionary** - Reference data and lookup tables (shared across domains)
+**Data sources:**
+- **OLIDS** - FHIR GP record data (EMIS/SystmOne)
+- **Waiting Lists (WL)** - Patient pathways and waiting times
+- **SUS Unified** - Outpatient, Admitted Patient Care, Emergency Care
+- **EPD Primary Care** - Medications and prescribing
+- **eRS** - Electronic referral service
+- **Dictionary** - Reference data and lookups
 
 ## Architecture
 
@@ -79,107 +77,47 @@ Edit `profiles.yml` with your username and authentication method (typically exte
 
 ### 4. Initialise development environment
 
-Run the setup script to configure your environment:
-
 ```powershell
 .\start_dbt.ps1
 ```
 
-The start_dbt.ps1 script sets up your local development environment by loading your Snowflake credentials from .env and protecting your local profiles.yml changes from being committed.
+This script:
+- Loads .env variables into your session
+- Applies git skip-worktree to profiles.yml (allows your local profile to diverge from the repo)
 
-Specifically, it:
-- Loads your .env variables into the session
-- Applies git skip-worktree to profiles.yml (a permanent local git config that prevents your credentials from being tracked)
-- Sets up the dbt environment for development
+Run once before your first commit, then each new terminal session for environment variables.
 
-**Important**: Unlike typical dbt projects, both profiles.yml and dbt_packages/ are committed to this repo for Snowflake native execution. The git skip-worktree setting is persistent across sessions and branches - you only need to run this once before your first commit, then again each new terminal session for the environment variables.
-
-Note: Run this script each time you start a new terminal session (for env vars) and always before your first commit (for git skip-worktree).
+**Why skip-worktree instead of gitignore?** profiles.yml must be committed for Snowflake native execution, but each developer needs their own local configuration. gitignore doesn't work for files already tracked by git - skip-worktree tells git to ignore changes to an already-tracked file.
 
 ### 5. Verify installation
-
-Install dbt packages and test your connection:
 
 ```bash
 dbt deps
 dbt debug
 ```
 
-When running `dbt debug`, your browser will open for Snowflake authentication. Once authenticated, you should see "All checks passed!" confirming your setup is complete.
+Your browser will open for Snowflake authentication. Look for "All checks passed!"
 
 ## Setting Up Data Sources
 
-### Step 1: Configure Data Sources
-
-Edit `scripts/sources/source_mappings.yml` to define your data sources and mappings.
-
-### Step 2: Extract & Download Schema Metadata
-
-Generate dynamic SQL query based on your source mappings:
-
-```bash
-# Generate dynamic SQL query from your source mappings
-python scripts/sources/1a_generate_metadata_query.py
-# This creates scripts/sources/metadata_query.sql
-```
-
-```bash
-# Generate dynamic SQL query from your source mappings
-python scripts\\sources\\1b_extract_metadata.py
-# This creates table_metadata.csv and saves it locally
-```
-
-### Step 3: Generate dbt Sources
-
-```bash
-python scripts/sources/2_generate_sources.py
-# This creates models/sources.yml with all table definitions
-```
-
-### Step 4: Generate Staging Models
-
-```bash
-python scripts/sources/3_generate_staging_models.py
-# This creates SQL files in models/*/staging/ directories
-```
-
-### Step 5: Build and Test
-
-```bash
-dbt run         # Builds all models
-dbt test        # Runs data quality tests
-```
+1. **Configure sources**: Edit `scripts/sources/source_mappings.yml`
+2. **Generate metadata query**: `python scripts/sources/1a_generate_metadata_query.py`
+3. **Extract metadata**: `python scripts/sources/1b_extract_metadata.py`
+4. **Generate sources.yml**: `python scripts/sources/2_generate_sources.py`
+5. **Generate staging models**: `python scripts/sources/3_generate_staging_models.py`
+6. **Build and test**: `dbt run && dbt test`
 
 ## Data Sources
 
-### Waiting Lists (WL)
-- Patient pathways and waiting times
-- Staging models: `stg_wl_*`
-
-### SUS Unified - Outpatient (SUS_UNIFIED_OP) 
-- Outpatient appointments and activity
-- Staging models: `stg_sus_op_*`
-
-### SUS Unified - Admitted Patient Care (SUS_UNIFIED_APC)
-- Inpatient episodes and procedures  
-- Staging models: `stg_sus_apc_*`
-
-### SUS Unified - EMERGENCY CARE DATASET (SUS_UNIFIED_ECDS)
-- Emergency care episodes and procedures  
-- Staging models: `stg_sus_ecds_*`
-
-### EPD Primary Care (EPD_PRIMARY_CARE)
-- Primary care prescribing and medications
-- Staging models: `stg_epd_pc_*`
-
-### eRS Primary Care (eRS_PRIMARY_CARE)
-- electronic referral system data for primary care referrals to outpatient services and first appointment bookings
-- Staging models: `stg_ers_pc_*`
-
-### Dictionary
-- Reference data and lookup tables (shared across domains)
-- Schemas staged as required
-- Staging models: `stg_dictionary_*_*` (in shared/staging/) e.g., stg_dictionary_dbo_*
+| Source | Staging Models | Description |
+|--------|---------------|-------------|
+| Waiting Lists (WL) | `stg_wl_*` | Patient pathways and waiting times |
+| SUS Unified OP | `stg_sus_op_*` | Outpatient appointments |
+| SUS Unified APC | `stg_sus_apc_*` | Admitted patient care |
+| SUS Unified ECDS | `stg_sus_ecds_*` | Emergency care |
+| EPD Primary Care | `stg_epd_pc_*` | Prescribing and medications |
+| eRS Primary Care | `stg_ers_pc_*` | Electronic referrals |
+| Dictionary | `stg_dictionary_*` | Reference data and lookups |
 
 ## Project Structure
 
@@ -246,10 +184,9 @@ dbt run -s shared                  # Build all shared models
 dbt run -s commissioning.staging   # Build only commissioning staging models
 ```
 
-**For faster YML development:**
-Print a YML outline into the terminal to paste into a new .yml. Descriptions will still need to be added.
+**Generate YML outline:**
 ```bash
-dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'  
+dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'
 ```
 
 ## Environment Handling
@@ -260,9 +197,18 @@ dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-
 
 ## Role and Permissions
 
-This project uses the **ANALYST** role which has access to:
-- `DATA_LAKE.*` databases for source data
-- `Dictionary.*` for reference data  
-- `MODELLING.*` for intermediate processing
-- `REPORTING.*` for final marts
+This project primarily uses the **ANALYST** role, which has access to:
+- `DATA_LAKE.*` - Source data
+- `Dictionary.*` - Reference data
+- `MODELLING.*` - Intermediate processing
+- `REPORTING.*` - Final marts
+- `PUBLISHED_REPORTING__SECONDARY_USE.*` - Published outputs
+- `PUBLISHED_REPORTING__DIRECT_CARE.*` - Direct care outputs
+
+**Role hierarchy**:
+- **ANALYST** - Base role, owns all dbt-created objects
+- **ENGINEER** - Inherits ANALYST permissions
+- **DATA_PLATFORM_MANAGER** - Inherits ENGINEER permissions
+
+Models can be run using any of these roles. Ownership is automatically transferred to ANALYST with `COPY CURRENT GRANTS`, meaning ANALYST becomes the owner while ENGINEER and DATA_PLATFORM_MANAGER retain management access through role inheritance.
 
