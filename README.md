@@ -189,11 +189,19 @@ dbt run -s commissioning.staging   # Build only commissioning staging models
 dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'
 ```
 
-## Environment Handling
+## Schema and Database Generation
 
-- **Dev**: Models built in `DEV__MODELLING.*`, `DEV__REPORTING.*`, and `DEV__PUBLISHED_REPORTING__SECONDARY_USE.*`
-- **Prod**: Models built in `MODELLING.*`, `REPORTING.*`, and `PUBLISHED_REPORTING__SECONDARY_USE.*`
-- Handled automatically via `generate_database_name()` macro
+Custom macros override dbt defaults. All locations are configured in `dbt_project.yml`.
+
+**Database naming**:
+- **Prod**: Base database name (e.g., `REPORTING.COMMISSIONING_REPORTING.model`)
+- **Dev**: Prefixed with `DEV__` (e.g., `DEV__REPORTING.COMMISSIONING_REPORTING.model`)
+
+**Schema naming**:
+- Uses exact `+schema:` value from config (no target prefix added)
+- Example: `COMMISSIONING_REPORTING`, `OLIDS_DIAGNOSES`
+
+When adding folders, update `dbt_project.yml` with `+database:` and `+schema:` settings. Unconfigured models default to `MODELLING.DBT_STAGING`.
 
 ## Role and Permissions
 
