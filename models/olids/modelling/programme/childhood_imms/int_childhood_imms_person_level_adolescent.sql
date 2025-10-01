@@ -42,6 +42,7 @@ CURRENT_DATE AS RUN_DATE
 ,p.ethsubcat_order
 ,p.ethnicity_granular
 ,p.imd_quintile
+,p.imdquintile_order
 ,p.imd_decile
 ,p.main_language
 ,p.practice_borough
