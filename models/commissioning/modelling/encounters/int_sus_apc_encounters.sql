@@ -27,6 +27,7 @@ select
     , core.spell_clinical_coding_grouper_derived_primary_diagnosis  || ', ' || spell_clinical_coding_grouper_derived_secondary_diagnosis  as flat_diagnosis_codes
     , spell_clinical_coding_grouper_derived_dominant_procedure as primary_treatment
     , 'SUS_APC' as source
+    -- TO DO: add pod and pod_group
     , IFF(spell_admission_admission_sub_type = 'NON', spell_admission_admission_type, spell_admission_admission_sub_type) as type
     , core.spell_commissioning_tariff_calculation_final_price as cost
 

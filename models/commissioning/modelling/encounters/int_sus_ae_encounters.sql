@@ -30,6 +30,7 @@ select
     , treatments.code as primary_treatment
     , investigations.code as primary_investigation
     , 'SUS_ECDS' as source
+    -- TO DO: add pod and pod_group
     , core.attendance_location_department_type as department_type
     , core.commissioning_national_pricing_final_price as cost
 

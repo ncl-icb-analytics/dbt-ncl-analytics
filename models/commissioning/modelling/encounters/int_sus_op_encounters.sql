@@ -45,6 +45,7 @@ select
     , core.appointment_care_professional_treatment_function as primary_treatment
     , dict_treat.specialty_name as treatment_desc
     , 'SUS_OP' as source
+    -- TO DO: add pod and pod_group
     , core.appointment_commissioning_grouping_core_hrg as type -- consider changing to something more aligned with team understanding
     , dict_hrg.hrg_description as type_desc
     , core.appointment_commissioning_tariff_calculation_final_price as cost
