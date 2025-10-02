@@ -1,0 +1,19 @@
+models:
+  - name: int_csds_activities_summary
+    description: |
+      Summary of the number and types of activities per contact (tests, assessments, interventions).
+      One row per care contact (CARE_CONTACT_IDENTIFIER).
+    columns:
+      - name: sk_patient_id
+        description: "Unique pseudo-anonymised patient identifier (NHS_NUMBER)"
+        tests:
+          - not_null
+      - name: referral_id
+        description: "Unique identifier for the referral (SERVICE_REQUEST_IDENTIFIER)"
+        tests:
+          - not_null
+      - name: contact_id
+        description: "Unique identifier for the contact (CARE_CONTACT_IDENTIFIER)"
+        tests:
+          - not_null
+          - unique
