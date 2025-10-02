@@ -7,6 +7,8 @@
 /*
 GP encounters from OLIDS appointments
 
+Disclaimer: needs expert dataset reviewer to confirm suitability for purpose
+
 Clinical Purpose:
 - Establishing demand for gp services
 - Understanding patient service preference
@@ -38,4 +40,4 @@ select person_id
     , display
 from {{ ref('stg_olids_appointment') }} oa
 left join concept_mapping cm on oa.APPOINTMENT_STATUS_CONCEPT_ID = cm.appt_stat_concept_code
-where CONTEXT_TYPE = 'Care Related Encounter'
+where CONTEXT_TYPE = 'Care Related Encounter' -- Coverage is good, needs review by dataset expert. Would recommend reviewing national slot type and type more to further refine, and consider pulling any relevant seeming slots from other contexts
