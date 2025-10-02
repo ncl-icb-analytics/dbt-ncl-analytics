@@ -13,8 +13,6 @@ Clinical Purpose:
 
 */
 
-{% set years_from_now = -1 %}
-
 SELECT
 
     bridging.pseudo_nhs_number AS sk_patient_id,
@@ -48,8 +46,6 @@ LEFT JOIN
     {{ ref('stg_csds_bridging') }} AS bridging 
 ON 
         contact.person_id = bridging.person_id
-
-WHERE referral.referral_request_received_date >= DATEADD(YEAR, {{years_from_now}}, current_date())
 
 GROUP BY
     contact.care_contact_identifier,
