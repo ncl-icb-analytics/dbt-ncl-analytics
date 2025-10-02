@@ -1,0 +1,399 @@
+version: 2
+sources:
+- name: dictionary_eRS
+  database: '"Dictionary"'
+  schema: '"E-Referral"'
+  description: Primary care referrals lookups
+  tables:
+  - name: Action
+    identifier: '"Action"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: AdditionalRequirementStatus
+    identifier: '"AdditionalRequirementStatus"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: AdditionalRequirementType
+    identifier: '"AdditionalRequirementType"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: AdviceCloseReason
+    identifier: '"AdviceCloseReason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: AdviceResponseOutcome
+    identifier: '"AdviceResponseOutcome"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: AppointmentType
+    identifier: '"AppointmentType"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: AssessmentOutcome
+    identifier: '"AssessmentOutcome"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: CancelReason
+    identifier: '"CancelReason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: ClinicType
+    identifier: '"ClinicType"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: CommunicationTemplateType
+    identifier: '"CommunicationTemplateType"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: ContactReason
+    identifier: '"ContactReason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: DeferToProviderReason
+    identifier: '"DeferToProviderReason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: DnaReason
+    identifier: '"DnaReason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: E-Referral_Reason
+    identifier: '"E-Referral_Reason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+    - name: Usage
+      data_type: TEXT
+  - name: Gender
+    identifier: '"Gender"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: Organisation
+    identifier: '"Organisation"'
+    columns:
+    - name: OrganisationID
+      data_type: TEXT
+    - name: ParentOrganisationID
+      data_type: TEXT
+    - name: OrganisationRoleCode
+      data_type: TEXT
+    - name: OrganisationName
+      data_type: TEXT
+    - name: Postcode
+      data_type: TEXT
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: SK_OrganisationID_Parent
+      data_type: NUMBER
+    - name: SK_PostcodeID
+      data_type: NUMBER
+  - name: OrganisationOrganisationRole
+    identifier: '"OrganisationOrganisationRole"'
+    columns:
+    - name: OrganisationID
+      data_type: TEXT
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: Role
+      data_type: TEXT
+  - name: OrganisationRole
+    identifier: '"OrganisationRole"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: Position
+    identifier: '"Position"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: Priority
+    identifier: '"Priority"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: RejectionReason
+    identifier: '"RejectionReason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: RestrictReason
+    identifier: '"RestrictReason"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: Service
+    identifier: '"Service"'
+    columns:
+    - name: service_id
+      data_type: TEXT
+    - name: service_name
+      data_type: TEXT
+    - name: Appt_Type_Cd
+      data_type: TEXT
+    - name: Location_Org_Id
+      data_type: TEXT
+    - name: Provider_Org_Id
+      data_type: TEXT
+    - name: Specialty_Cd
+      data_type: TEXT
+    - name: Publish_Ind
+      data_type: BOOLEAN
+    - name: Directly_Bookable_Ind
+      data_type: BOOLEAN
+    - name: Beg_Effective_Dt
+      data_type: TIMESTAMP_NTZ
+    - name: End_Effective_Dt
+      data_type: TIMESTAMP_NTZ
+    - name: Routine
+      data_type: TEXT
+    - name: Urgent
+      data_type: BOOLEAN
+    - name: Two_Week_Wait
+      data_type: NUMBER
+    - name: Referrer_Alert_Present
+      data_type: BOOLEAN
+    - name: Gender_Treated
+      data_type: TEXT
+    - name: Min_Age_Treated
+      data_type: NUMBER
+    - name: Min_Age_Treated_Units
+      data_type: TEXT
+    - name: Max_Age_Treated
+      data_type: NUMBER
+    - name: Max_Age_Treated_Units
+      data_type: TEXT
+    - name: Concept_Count
+      data_type: NUMBER
+    - name: Accepts_Advice_Requests
+      data_type: BOOLEAN
+    - name: On_Secondary_Care_Menu
+      data_type: BOOLEAN
+    - name: Slot_Reservation_Period
+      data_type: NUMBER
+    - name: Service_Transition_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Service_End_Date_Count
+      data_type: NUMBER
+    - name: Last_Modified_Date_Of_Service_End_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Service_Transition_Date_Count
+      data_type: NUMBER
+    - name: Last_Modified_Date_Of_Service_Transition_Date
+      data_type: TIMESTAMP_NTZ
+    - name: IWT_Routine
+      data_type: TEXT
+    - name: IWT_Urgent
+      data_type: TEXT
+    - name: Advocacy_Ind
+      data_type: BOOLEAN
+    - name: Interpreter_Ind
+      data_type: BOOLEAN
+    - name: Transport_Ind
+      data_type: BOOLEAN
+    - name: Restricted_Ind
+      data_type: BOOLEAN
+    - name: Restricted_Dt_Tm
+      data_type: TIMESTAMP_NTZ
+    - name: Restricted_Reason_Cd
+      data_type: TEXT
+    - name: Restriction_Comments
+      data_type: TEXT
+    - name: Restricted_Count
+      data_type: NUMBER
+    - name: Auth_Referrer_Count
+      data_type: NUMBER
+    - name: Auth_Service_Count
+      data_type: NUMBER
+    - name: Auth_Org_Count
+      data_type: NUMBER
+    - name: Unpublished_Dt_Tm
+      data_type: TIMESTAMP_NTZ
+    - name: Unpublished_Count
+      data_type: NUMBER
+    - name: Commissioning_Rule_Count
+      data_type: NUMBER
+    - name: endpoint_id
+      data_type: TEXT
+    - name: Polling_Range
+      data_type: NUMBER
+    - name: Polling_Freq_Type
+      data_type: TEXT
+    - name: Polling_Interval
+      data_type: NUMBER
+    - name: Capacity_Alert_Type
+      data_type: TEXT
+    - name: Capacity_Alert_Beg_Dt
+      data_type: TIMESTAMP_NTZ
+    - name: Capacity_Alert_End_Dt
+      data_type: TIMESTAMP_NTZ
+    - name: Capacity_Alert_Set_Dt_Tm
+      data_type: TIMESTAMP_NTZ
+    - name: Capacity_Alert_Org_Id
+      data_type: TEXT
+    - name: Accepts_Appointment_Requests
+      data_type: BOOLEAN
+    - name: Accepts_Triage_Requests
+      data_type: BOOLEAN
+    - name: Patient_Booking_Window_Start_Routine
+      data_type: TEXT
+    - name: Patient_Booking_Window_Start_Unit_Routine
+      data_type: TEXT
+    - name: Patient_Booking_Window_End_Routine
+      data_type: TEXT
+    - name: Patient_Booking_Window_End_Unit_Routine
+      data_type: TEXT
+    - name: Patient_Booking_Window_Start_Urgent
+      data_type: TEXT
+    - name: Patient_Booking_Window_Start_Unit_Urgent
+      data_type: TEXT
+    - name: Patient_Booking_Window_End_Urgent
+      data_type: TEXT
+    - name: Patient_Booking_Window_End_Unit_Urgent
+      data_type: TEXT
+    - name: Patient_Booking_Window_Start_2WW
+      data_type: TEXT
+    - name: Patient_Booking_Window_Start_Unit_2WW
+      data_type: TEXT
+    - name: Patient_Booking_Window_End_2WW
+      data_type: TEXT
+    - name: Patient_Booking_Window_End_Unit_2WW
+      data_type: TEXT
+    - name: Patient_Booking_Window_Exclude_Saturday
+      data_type: BOOLEAN
+    - name: Patient_Booking_Window_Exclude_Sunday
+      data_type: BOOLEAN
+  - name: ServiceClinicType
+    identifier: '"ServiceClinicType"'
+    columns:
+    - name: Service_Id
+      data_type: TEXT
+    - name: ClinicType
+      data_type: TEXT
+  - name: ServicePollingDayOfWeek
+    identifier: '"ServicePollingDayOfWeek"'
+    columns:
+    - name: Service_Id
+      data_type: TEXT
+    - name: PollingDayOfWeek
+      data_type: TEXT
+  - name: Specialty
+    identifier: '"Specialty"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: TriageOutcomeType
+    identifier: '"TriageOutcomeType"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT
+  - name: WorklistRemovalType
+    identifier: '"WorklistRemovalType"'
+    columns:
+    - name: Code
+      data_type: NUMBER
+    - name: Meaning
+      data_type: TEXT
+    - name: Display
+      data_type: TEXT

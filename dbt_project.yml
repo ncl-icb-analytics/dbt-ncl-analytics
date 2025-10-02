@@ -46,6 +46,12 @@ models:
 
     # Commissioning analytics models
     commissioning:
+      raw:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_RAW"
+        +tags: ["raw"]
+        +post-hook: ["{{ add_model_comment() }}"]
       staging:
         +materialized: view
         +database: "MODELLING"
@@ -70,6 +76,12 @@ models:
     
     # OLIDS analytics models
     olids:
+      raw:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_RAW"
+        +tags: ["raw"]
+        +post-hook: ["{{ add_model_comment() }}"]
       staging:
         +materialized: view
         +database: "MODELLING"
@@ -136,6 +148,12 @@ models:
     
     # Shared models (reference data, utilities)
     shared:
+      raw:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_RAW"
+        +tags: ["raw"]
+        +post-hook: ["{{ add_model_comment() }}"]
       staging:
         +materialized: view
         +database: "MODELLING"

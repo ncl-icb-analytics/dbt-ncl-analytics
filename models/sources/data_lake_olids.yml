@@ -1,0 +1,1518 @@
+version: 2
+sources:
+- name: olids
+  database: '"DATA_LAKE"'
+  schema: '"OLIDS"'
+  description: OLIDS stable layer - cleaned and filtered patient records
+  tables:
+  - name: ALLERGY_INTOLERANCE
+    identifier: '"ALLERGY_INTOLERANCE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: CLINICAL_STATUS
+      data_type: TEXT
+    - name: VERIFICATION_STATUS
+      data_type: TEXT
+    - name: CATEGORY
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: MULTI_LEX_ACTION
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: APPOINTMENT
+    identifier: '"APPOINTMENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PRACTITIONER_IN_ROLE_ID
+      data_type: TEXT
+    - name: SCHEDULE_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PLANNED_DURATION
+      data_type: NUMBER
+    - name: ACTUAL_DURATION
+      data_type: NUMBER
+    - name: APPOINTMENT_STATUS_CONCEPT_ID
+      data_type: TEXT
+    - name: PATIENT_WAIT
+      data_type: NUMBER
+    - name: PATIENT_DELAY
+      data_type: NUMBER
+    - name: DATE_TIME_BOOKED
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_TIME_SENT_IN
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_TIME_LEFT
+      data_type: TIMESTAMP_NTZ
+    - name: CANCELLED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TYPE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: BOOKING_METHOD_CONCEPT_ID
+      data_type: TEXT
+    - name: CONTACT_MODE_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_BLOCKED
+      data_type: BOOLEAN
+    - name: NATIONAL_SLOT_CATEGORY_NAME
+      data_type: TEXT
+    - name: CONTEXT_TYPE
+      data_type: TEXT
+    - name: SERVICE_SETTING
+      data_type: TEXT
+    - name: NATIONAL_SLOT_CATEGORY_DESCRIPTION
+      data_type: TEXT
+    - name: CSDS_CARE_CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: APPOINTMENT_PRACTITIONER
+    identifier: '"APPOINTMENT_PRACTITIONER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: APPOINTMENT_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: LDS_END_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: LDS_RECORD_ID_USER
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: CONCEPT
+    identifier: '"CONCEPT"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: IS_MAPPED
+      data_type: BOOLEAN
+    - name: USE_COUNT
+      data_type: NUMBER
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: CONCEPT_MAP
+    identifier: '"CONCEPT_MAP"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_ID
+      data_type: TEXT
+    - name: SOURCE_CODE_ID
+      data_type: TEXT
+    - name: TARGET_CODE_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: EQUIVALENCE
+      data_type: TEXT
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: DIAGNOSTIC_ORDER
+    identifier: '"DIAGNOSTIC_ORDER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: PARENT_OBSERVATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: RESULT_VALUE
+      data_type: FLOAT
+    - name: RESULT_VALUE_UNITS
+      data_type: TEXT
+    - name: RESULT_DATE
+      data_type: DATE
+    - name: RESULT_TEXT
+      data_type: TEXT
+    - name: IS_PROBLEM
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: PROBLEM_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DIAGNOSTIC_ORDER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: EPISODICITY_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: ENCOUNTER
+    identifier: '"ENCOUNTER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: APPOINTMENT_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_ID
+      data_type: TEXT
+    - name: SERVICE_PROVIDER_ORGANISATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: LOCATION
+      data_type: TEXT
+    - name: ENCOUNTER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: TYPE
+      data_type: TEXT
+    - name: SUB_TYPE
+      data_type: TEXT
+    - name: ADMISSION_METHOD
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: EPISODE_OF_CARE
+    identifier: '"EPISODE_OF_CARE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: EPISODE_TYPE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: EPISODE_STATUS_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EPISODE_OF_CARE_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE_MANAGER_PRACTITIONER_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: FLAG
+    identifier: '"FLAG"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EXPIRED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: FLAG_TEXT
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: LOCATION
+    identifier: '"LOCATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: TYPE_CODE
+      data_type: TEXT
+    - name: TYPE_DESC
+      data_type: TEXT
+    - name: IS_PRIMARY_LOCATION
+      data_type: BOOLEAN
+    - name: HOUSE_NAME
+      data_type: TEXT
+    - name: HOUSE_NUMBER
+      data_type: TEXT
+    - name: HOUSE_NAME_FLAT_NUMBER
+      data_type: TEXT
+    - name: STREET
+      data_type: TEXT
+    - name: ADDRESS_LINE_1
+      data_type: TEXT
+    - name: ADDRESS_LINE_2
+      data_type: TEXT
+    - name: ADDRESS_LINE_3
+      data_type: TEXT
+    - name: ADDRESS_LINE_4
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: MANAGING_ORGANISATION_ID
+      data_type: TEXT
+    - name: OPEN_DATE
+      data_type: DATE
+    - name: CLOSE_DATE
+      data_type: DATE
+    - name: IS_OBSOLETE
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: LOCATION_CONTACT
+    identifier: '"LOCATION_CONTACT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: LOCATION_ID
+      data_type: TEXT
+    - name: IS_PRIMARY_CONTACT
+      data_type: BOOLEAN
+    - name: CONTACT_TYPE
+      data_type: TEXT
+    - name: CONTACT_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: MEDICATION_ORDER
+    identifier: '"MEDICATION_ORDER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_ID
+      data_type: TEXT
+    - name: DIAGNOSTIC_ORDER_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: DOSE
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: DURATION_DAYS
+      data_type: NUMBER
+    - name: ESTIMATED_COST
+      data_type: FLOAT
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: MEDICATION_ORDER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: ISSUE_METHOD
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: ISSUE_METHOD_DESCRIPTION
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: STATEMENT_MEDICATION_NAME
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+  - name: MEDICATION_STATEMENT
+    identifier: '"MEDICATION_STATEMENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_ID
+      data_type: TEXT
+    - name: DIAGNOSTIC_ORDER_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_ID
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CANCELLATION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DOSE
+      data_type: TEXT
+    - name: QUANTITY_VALUE_DESCRIPTION
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: ISSUE_METHOD
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: EXPIRY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: OBSERVATION
+    identifier: '"OBSERVATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: PARENT_OBSERVATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: RESULT_VALUE
+      data_type: FLOAT
+    - name: RESULT_VALUE_UNIT_CONCEPT_ID
+      data_type: TEXT
+    - name: RESULT_DATE
+      data_type: DATE
+    - name: RESULT_TEXT
+      data_type: TEXT
+    - name: IS_PROBLEM
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: PROBLEM_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OBSERVATION_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: EPISODICITY_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: IS_PROBLEM_DELETED
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: RESULT_UNIT_CODE
+      data_type: TEXT
+    - name: RESULT_UNIT_DISPLAY
+      data_type: TEXT
+  - name: ORGANISATION
+    identifier: '"ORGANISATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ASSIGNING_AUTHORITY_CODE
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: TYPE_CODE
+      data_type: TEXT
+    - name: TYPE_DESC
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: PARENT_ORGANISATION_ID
+      data_type: TEXT
+    - name: OPEN_DATE
+      data_type: DATE
+    - name: CLOSE_DATE
+      data_type: DATE
+    - name: IS_OBSOLETE
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT
+    identifier: '"PATIENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: NHS_NUMBER_HASH
+      data_type: BINARY
+    - name: SK_PATIENT_ID
+      data_type: NUMBER
+    - name: TITLE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: REGISTERED_PRACTICE_ID
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+    - name: IS_SPINE_SENSITIVE
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DUMMY_PATIENT
+      data_type: BOOLEAN
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_ADDRESS
+    identifier: '"PATIENT_ADDRESS"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ADDRESS_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_CONTACT
+    identifier: '"PATIENT_CONTACT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: CONTACT_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_PERSON
+    identifier: '"PATIENT_PERSON"'
+    columns:
+    - name: LAKEHOUSEDATEPROCESSED
+      data_type: TEXT
+    - name: LAKEHOUSEDATETIMEUPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+  - name: PATIENT_REGISTERED_PRACTITIONER_IN_ROLE
+    identifier: '"PATIENT_REGISTERED_PRACTITIONER_IN_ROLE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PATIENT_UPRN
+    identifier: '"PATIENT_UPRN"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: REGISTRAR_EVENT_ID
+      data_type: TEXT
+    - name: MASKED_UPRN
+      data_type: TEXT
+    - name: MASKED_USRN
+      data_type: TEXT
+    - name: MASKED_POSTCODE
+      data_type: TEXT
+    - name: ADDRESS_FORMAT_QUALITY
+      data_type: TEXT
+    - name: POST_CODE_QUALITY
+      data_type: TEXT
+    - name: MATCHED_WITH_ASSIGN
+      data_type: TEXT
+    - name: QUALIFIER
+      data_type: TEXT
+    - name: UPRN_PROPERTY_CLASSIFICATION
+      data_type: TEXT
+    - name: ALGORITHM
+      data_type: TEXT
+    - name: MATCH_PATTERN
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_REGISTRAR_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PERSON
+    identifier: '"PERSON"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: NHS_NUMBER_HASH
+      data_type: BINARY
+    - name: TITLE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+  - name: POSTCODE_HASH
+    identifier: '"POSTCODE_HASH"'
+    columns:
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: PRIMARY_CARE_ORGANISATION
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_ORGANISATION
+      data_type: TEXT
+    - name: YR_2011_LSOA
+      data_type: TEXT
+    - name: YR_2011_MSOA
+      data_type: TEXT
+    - name: YR_2021_LSOA
+      data_type: TEXT
+    - name: YR_2021_MSOA
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: IS_LATEST
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: PRACTITIONER
+    identifier: '"PRACTITIONER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: GMC_CODE
+      data_type: TEXT
+    - name: TITLE
+      data_type: TEXT
+    - name: FIRST_NAME
+      data_type: TEXT
+    - name: LAST_NAME
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: IS_OBSOLETE
+      data_type: BOOLEAN
+    - name: LDS_END_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PRACTITIONER_IN_ROLE
+    identifier: '"PRACTITIONER_IN_ROLE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: ROLE_CODE
+      data_type: TEXT
+    - name: ROLE
+      data_type: TEXT
+    - name: DATE_EMPLOYMENT_START
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_EMPLOYMENT_END
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: PROCEDURE_REQUEST
+    identifier: '"PROCEDURE_REQUEST"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: PROCEDURE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: STATUS_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_END_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: REFERRAL_REQUEST
+    identifier: '"REFERRAL_REQUEST"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: REQUESTER_ORGANISATION_ID
+      data_type: TEXT
+    - name: RECIPIENT_ORGANISATION_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_PRIORITY_CONCEPT_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_SPECIALTY_CONCEPT_ID
+      data_type: TEXT
+    - name: MODE
+      data_type: TEXT
+    - name: IS_OUTGOING_REFERRAL
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: REFERRAL_REQUEST_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_DATA_INITIAL_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: SCHEDULE
+    identifier: '"SCHEDULE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: LOCATION_ID
+      data_type: TEXT
+    - name: LOCATION
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TYPE
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: IS_PRIVATE
+      data_type: BOOLEAN
+    - name: IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: SCHEDULE_PRACTITIONER
+    identifier: '"SCHEDULE_PRACTITIONER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: SCHEDULE_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ

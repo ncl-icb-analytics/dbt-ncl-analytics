@@ -1,0 +1,305 @@
+version: 2
+sources:
+- name: eRS_primary_care
+  database: '"DATA_LAKE"'
+  schema: '"ERS"'
+  description: Primary care referrals data
+  tables:
+  - name: ActiveSubmission
+    identifier: '"ActiveSubmission"'
+    columns:
+    - name: UniqSubmissionID
+      data_type: TEXT
+  - name: bridging
+    identifier: '"bridging"'
+    columns:
+    - name: Person_ID
+      data_type: TEXT
+    - name: NHSNumber Pseudo
+      data_type: TEXT
+  - name: ebsx00Header
+    identifier: '"ebsx00Header"'
+    columns:
+    - name: Version
+      data_type: NUMBER
+    - name: OrgID_Referrer
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: NUMBER
+    - name: ebsx00_ID
+      data_type: NUMBER
+    - name: File_Type
+      data_type: TEXT
+    - name: RP_StartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RP_EndDate
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_MonthID
+      data_type: TEXT
+    - name: Total_ebsx02
+      data_type: NUMBER
+    - name: TotalRecords
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicMonthId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCodeReferrer
+      data_type: TEXT
+    - name: dmicDSCRO
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+  - name: ebsx02UBRNAction
+    identifier: '"ebsx02UBRNAction"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: SEQNO
+      data_type: NUMBER
+    - name: UBRN_ID
+      data_type: TEXT
+    - name: E_REFERRAL_PATHWAY_START
+      data_type: TIMESTAMP_NTZ
+    - name: DUE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPECIALTY_CD
+      data_type: TEXT
+    - name: CLINIC_TYPE_CD
+      data_type: TEXT
+    - name: PRIORITY_CD
+      data_type: TEXT
+    - name: REFERRING_CLINICIAN_ID
+      data_type: NUMBER
+    - name: REFERRING_ORG_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: PATIENT_AGE
+      data_type: NUMBER
+    - name: REGISTERED_CLINICIAN_ID
+      data_type: NUMBER
+    - name: REGISTERED_ORG_ID
+      data_type: TEXT
+    - name: GUIDANCE_STATE_CD
+      data_type: TEXT
+    - name: GUIDANCE_OVERRIDE_CD
+      data_type: TEXT
+    - name: SHORTLIST_COUNT
+      data_type: NUMBER
+    - name: ACTION_ID
+      data_type: NUMBER
+    - name: ACTION_DT_TM
+      data_type: TIMESTAMP_NTZ
+    - name: ACTION_CD
+      data_type: TEXT
+    - name: BUS_FUNCTION_CD
+      data_type: TEXT
+    - name: ORG_ID
+      data_type: TEXT
+    - name: PROXIED_BUS_FUNCTION_CD
+      data_type: TEXT
+    - name: PROXIED_ORG_ID
+      data_type: TEXT
+    - name: ACTION_REASON_CD
+      data_type: TEXT
+    - name: SERVICE_ID
+      data_type: NUMBER
+    - name: APPT_DT_TM
+      data_type: TIMESTAMP_NTZ
+    - name: SERVICE_DEFINED_FREEZE_TIME_BREACH
+      data_type: NUMBER
+    - name: PRIORITY_TIME_LIMIT_BREACH
+      data_type: NUMBER
+    - name: REBOOKED_TO_ACTION_ID
+      data_type: NUMBER
+    - name: NAMED_CLINICIAN_ID
+      data_type: NUMBER
+    - name: INITIAL_UBRN_ID
+      data_type: TEXT
+    - name: PREVIOUS_UBRN_ID
+      data_type: TEXT
+    - name: ALLOCATED_CLINICIAN_ID
+      data_type: NUMBER
+    - name: USER_ID
+      data_type: NUMBER
+    - name: PROXY_USER_ID
+      data_type: NUMBER
+    - name: CLINICAL_ASSESSMENT_OUTCOME_CD
+      data_type: TEXT
+    - name: PROBLEM_CD
+      data_type: TEXT
+    - name: PROBLEM_STATUS_CD
+      data_type: TEXT
+    - name: REQUESTED_PROCEDURE_CD
+      data_type: TEXT
+    - name: SEARCHED_CLINICAL_TERM_CD
+      data_type: TEXT
+    - name: SEARCHED_ORGANISATION_OR_SITE_CD
+      data_type: TEXT
+    - name: SEARCHED_AGE_SEX_IND
+      data_type: BOOLEAN
+    - name: SEARCHED_IWT
+      data_type: TEXT
+    - name: SEARCHED_DISTANCE
+      data_type: NUMBER
+    - name: PATIENTS_PARTIAL_POSTCODE
+      data_type: TEXT
+    - name: UBRN
+      data_type: TEXT
+    - name: INITIAL_UBRN
+      data_type: TEXT
+    - name: PREVIOUS_UBRN
+      data_type: TEXT
+    - name: NEXT_UBRN
+      data_type: TEXT
+    - name: IWT
+      data_type: TEXT
+    - name: PATIENT_SEX_CD
+      data_type: TEXT
+    - name: TEST_PATIENT_IND
+      data_type: BOOLEAN
+    - name: CONTENT_SENSITIVE_IND
+      data_type: BOOLEAN
+    - name: WEB_BASED_REFERRER_IND
+      data_type: BOOLEAN
+    - name: AR_STATUS_CD
+      data_type: TEXT
+    - name: ORIGINAL_DUE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ORIGINAL_PRIORITY_CD
+      data_type: TEXT
+    - name: ACTION_DESC
+      data_type: TEXT
+    - name: ACTION_REASON_DESC
+      data_type: TEXT
+    - name: AR_STATUS_DESC
+      data_type: TEXT
+    - name: BUS_FUNCTION_DESC
+      data_type: TEXT
+    - name: CLINICAL_ASSESS_OUTCOME_DESC
+      data_type: TEXT
+    - name: CLINIC_TYPE_DESC
+      data_type: TEXT
+    - name: ORIGINAL_PRIORITY_DESC
+      data_type: TEXT
+    - name: PATIENT_SEX_DESC
+      data_type: TEXT
+    - name: PRIORITY_DESC
+      data_type: TEXT
+    - name: PROXIED_BUS_FUNCTION_DESC
+      data_type: TEXT
+    - name: SEARCHED_CLINICAL_TERM_DESC
+      data_type: TEXT
+    - name: SEARCHED_ORG_OR_SITE_DESC
+      data_type: TEXT
+    - name: SPECIALTY_DESC
+      data_type: TEXT
+    - name: REFERRER_ORG_NAME
+      data_type: TEXT
+    - name: REFERRER_COMMISSIONER_ID
+      data_type: TEXT
+    - name: REFERRER_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: REFERRER_COMMISSIONER_FOUND
+      data_type: BOOLEAN
+    - name: ORG_NAME
+      data_type: TEXT
+    - name: COMMISSIONER_ID
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: COMMISSIONER_FOUND
+      data_type: BOOLEAN
+    - name: PROXIED_ORG_NAME
+      data_type: TEXT
+    - name: PROXIED_COMMISSIONER_ID
+      data_type: TEXT
+    - name: PROXIED_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PROXIED_COMMISSIONER_FOUND
+      data_type: BOOLEAN
+    - name: SERVICE_NAME
+      data_type: TEXT
+    - name: APPT_TYPE_CD
+      data_type: TEXT
+    - name: APPT_TYPE_DESC
+      data_type: TEXT
+    - name: LOCATION_ORG_ID
+      data_type: TEXT
+    - name: LOCATION_ORG_NAME
+      data_type: TEXT
+    - name: PROVIDER_ORG_ID
+      data_type: TEXT
+    - name: PROVIDER_ORG_NAME
+      data_type: TEXT
+    - name: PROVIDER_ORG_TYPE_CODE
+      data_type: TEXT
+    - name: PROVIDER_ORG_TYPE_DESC
+      data_type: TEXT
+    - name: NHS_NUMBER Pseudo
+      data_type: TEXT
+    - name: PATIENTS_LSOA
+      data_type: TEXT
+    - name: PATIENTS_POSTCODE Pseudo
+      data_type: TEXT
+    - name: PATIENTS_REG_GP_PRACTICE_ID
+      data_type: TEXT
+    - name: PATIENTS_REG_GP_PRACTICE_NAME
+      data_type: TEXT
+    - name: PATIENTS_CCG_OF_RESIDENCE_ID
+      data_type: TEXT
+    - name: PATIENTS_CCG_OF_RESIDENCE_NAME
+      data_type: TEXT
+    - name: PATIENTS_CCG_OF_REGISTRATION_ID
+      data_type: TEXT
+    - name: PATIENTS_CCG_OF_REGISTRATION_NAME
+      data_type: TEXT
+    - name: PATIENTS_LA_OF_RESIDENCE_ID
+      data_type: TEXT
+    - name: PATIENTS_LA_OF_RESIDENCE_NAME
+      data_type: TEXT
+    - name: PATIENTS_LA_OF_REGISTRATION_ID
+      data_type: TEXT
+    - name: PATIENTS_LA_OF_REGISTRATION_NAME
+      data_type: TEXT
+    - name: AREA_TEAM_CODE_OF_RESIDENCE
+      data_type: TEXT
+    - name: AREA_TEAM_NAME_OF_RESIDENCE
+      data_type: TEXT
+    - name: AREA_TEAM_CODE_OF_REGISTRATION
+      data_type: TEXT
+    - name: AREA_TEAM_NAME_OF_REGISTRATION
+      data_type: TEXT
+    - name: ACCEPTS_ADVICE_REQUESTS
+      data_type: BOOLEAN
+    - name: ACCEPTS_APPOINTMENT_REQUESTS
+      data_type: BOOLEAN
+    - name: ACCEPTS_TRIAGE_REQUESTS
+      data_type: BOOLEAN
+    - name: SERVICE_SPECIALTY_CD
+      data_type: TEXT
+    - name: SERVICE_SPECIALTY_DESC
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: UniqSubmissionID
+      data_type: NUMBER
+    - name: Unique_MonthID
+      data_type: TEXT
+    - name: ebsx02_ID
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmicCCGofRegistration
+      data_type: TEXT
+    - name: dmicCCGofResidence
+      data_type: TEXT
+    - name: dmicCCGofReferrer
+      data_type: TEXT
+    - name: dmicCCGofProvider
+      data_type: TEXT
