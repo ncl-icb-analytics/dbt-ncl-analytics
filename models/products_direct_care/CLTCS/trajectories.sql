@@ -11,7 +11,7 @@ Clinical Purpose:
 - Showing activity changes over time for patients with complex needs
 
 Testing:
-- Actual table will use cambridge multimorbidity logic and filter to relevant appointments once finalised
+- Actual table will use full array of datasets and include measurement observations
 
 */
 
@@ -36,9 +36,9 @@ activity as(
 )
 
 select il.patient_id
-    ,ARRAY_AGG(COALESCE(a.ae_encounters,0)) within group (order by ds.activity_month) as ae_encounters
-    ,ARRAY_AGG(COALESCE(a.ip_encounters,0)) within group (order by ds.activity_month) as ip_encounters
-    ,ARRAY_AGG(COALESCE(a.op_encounters,0)) within group (order by ds.activity_month) as op_encounters
+    ,ARRAY_AGG(COALESCE(a.ae_encounters,0)) within group (order by ds.activity_month) as ae_encounters_sl
+    ,ARRAY_AGG(COALESCE(a.ip_encounters,0)) within group (order by ds.activity_month) as ip_encounters_sl
+    ,ARRAY_AGG(COALESCE(a.op_encounters,0)) within group (order by ds.activity_month) as op_encounters_sl
 from inclusion_list il
 cross join date_spine ds
 left join activity a 

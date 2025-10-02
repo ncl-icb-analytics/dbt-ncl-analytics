@@ -27,6 +27,7 @@ op_inclusion as(
 
 select pd.sk_patient_id as patient_id
     ,pp.hx_flake as re_id_key
+    ,pp.person_id as olids_id
     ,pd.practice_code
     ,pd.practice_name
     ,pd.pcn_code

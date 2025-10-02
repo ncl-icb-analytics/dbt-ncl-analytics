@@ -1,0 +1,169 @@
+version: 2
+
+models:
+  - name: cohort_data
+    description: "Trajectories and disease flags for CLTCS cohort. One row per person from dim_person_demographics (persons with recorded birth dates) with TRUE/FALSE flags for all conditions, eliminating null-handling complexity.'"
+    columns:
+      - name: patient_id
+        data_type: number
+        description: ""
+
+      - name: ae_encounters_sl
+        data_type: array
+        description: ""
+
+      - name: ip_encounters_sl
+        data_type: array
+        description: ""
+
+      - name: op_encounters_sl
+        data_type: array
+        description: ""
+
+      - name: has_atrial_fibrillation
+        data_type: boolean
+        description: ""
+
+      - name: has_asthma
+        data_type: boolean
+        description: ""
+
+      - name: has_cancer
+        data_type: boolean
+        description: ""
+
+      - name: has_coronary_heart_disease
+        data_type: boolean
+        description: ""
+
+      - name: has_chronic_kidney_disease
+        data_type: boolean
+        description: ""
+
+      - name: has_copd
+        data_type: boolean
+        description: ""
+
+      - name: has_cyp_asthma
+        data_type: boolean
+        description: ""
+
+      - name: has_dementia
+        data_type: boolean
+        description: ""
+
+      - name: has_depression
+        data_type: boolean
+        description: ""
+
+      - name: has_diabetes
+        data_type: boolean
+        description: ""
+
+      - name: has_epilepsy
+        data_type: boolean
+        description: ""
+
+      - name: has_familial_hypercholesterolaemia
+        data_type: boolean
+        description: ""
+
+      - name: has_gestational_diabetes
+        data_type: boolean
+        description: ""
+
+      - name: has_frailty
+        data_type: boolean
+        description: ""
+
+      - name: has_heart_failure
+        data_type: boolean
+        description: ""
+
+      - name: has_hypertension
+        data_type: boolean
+        description: ""
+
+      - name: has_learning_disability
+        data_type: boolean
+        description: ""
+
+      - name: has_learning_disability_all_ages
+        data_type: boolean
+        description: ""
+
+      - name: has_nafld
+        data_type: boolean
+        description: ""
+
+      - name: has_non_diabetic_hyperglycaemia
+        data_type: boolean
+        description: ""
+
+      - name: has_obesity
+        data_type: boolean
+        description: ""
+
+      - name: has_osteoporosis
+        data_type: boolean
+        description: ""
+
+      - name: has_peripheral_arterial_disease
+        data_type: boolean
+        description: ""
+
+      - name: has_palliative_care
+        data_type: boolean
+        description: ""
+
+      - name: has_rheumatoid_arthritis
+        data_type: boolean
+        description: ""
+
+      - name: has_severe_mental_illness
+        data_type: boolean
+        description: ""
+
+      - name: has_stroke_tia
+        data_type: boolean
+        description: ""
+
+      - name: total_conditions
+        data_type: number
+        description: ""
+
+      - name: total_qof_conditions
+        data_type: number
+        description: ""
+
+      - name: total_non_qof_conditions
+        data_type: number
+        description: ""
+
+      - name: cardiovascular_conditions
+        data_type: number
+        description: ""
+
+      - name: respiratory_conditions
+        data_type: number
+        description: ""
+
+      - name: mental_health_conditions
+        data_type: number
+        description: ""
+
+      - name: metabolic_conditions
+        data_type: number
+        description: ""
+
+      - name: musculoskeletal_conditions
+        data_type: number
+        description: ""
+
+      - name: neurology_conditions
+        data_type: number
+        description: ""
+
+      - name: geriatric_conditions
+        data_type: number
+        description: ""

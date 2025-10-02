@@ -12,6 +12,10 @@ models:
         data_type: varchar
         description: "Unique patient identified for LDS re-identification service [hx_flake]"
 
+      - name: olids_id
+        data_type: varchar
+        description: "Unique patient identified from OLIDS data [person_id]"
+
       - name: practice_code
         data_type: varchar
         description: "Current registered GP practice ODS code"
