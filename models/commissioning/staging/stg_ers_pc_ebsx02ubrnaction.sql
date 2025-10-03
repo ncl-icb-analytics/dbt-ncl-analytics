@@ -6,7 +6,7 @@ select UBRN_ID
     ,E_REFERRAL_PATHWAY_START
     ,PATIENT_ID
     ,PATIENTS_REG_GP_PRACTICE_ID
-    ,NHS_NUMBER_Pseudo as sk_patient_id
+    ,NHS_NUMBER_Pseudo --as sk_patient_id
     ,PATIENT_AGE
     ,ORIGINAL_PRIORITY_CD
     ,ORIGINAL_PRIORITY_DESC
