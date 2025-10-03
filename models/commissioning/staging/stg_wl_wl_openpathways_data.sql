@@ -3,7 +3,7 @@
 }}
 
 SELECT
-    Pseudo_NHS_NUMBER --AS sk_patient_id,
+    Pseudo_NHS_NUMBER, --AS sk_patient_id,
     organisation_identifier_code_of_provider,
     activity_treatment_function_code,
     organisation_identifier_code_of_commissioner,
