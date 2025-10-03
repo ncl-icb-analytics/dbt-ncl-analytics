@@ -32,13 +32,11 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['ORGANISATION_ACTIVE_LIST_SIZE']
+              values: ['ORGANISATION_ACTIVE_LIST_SIZE']
 
       - name: active_patient_count
         description: 'Current number of active patients registered with this organisation'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
+              min_value: 0

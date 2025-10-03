@@ -18,8 +18,7 @@ models:
       Purpose: Provide observation-level data for asthma register inclusion and respiratory care pathway monitoring.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: AST_COD, ASTRES_COD
+          cluster_ids: AST_COD, ASTRES_COD
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'

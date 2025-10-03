@@ -263,7 +263,6 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           name: dim_person_demographics_historical_unique_person_month
-          arguments:
-            combination_of_columns:
-              - person_id
-              - analysis_month
+          combination_of_columns:
+            - person_id
+            - analysis_month

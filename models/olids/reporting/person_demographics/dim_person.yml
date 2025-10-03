@@ -48,8 +48,7 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 1
+              min_value: 1
 
       - name: practice_ids
         description: 'Array of all practice IDs this person has been registered with'
@@ -71,5 +70,4 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
+              min_value: 0

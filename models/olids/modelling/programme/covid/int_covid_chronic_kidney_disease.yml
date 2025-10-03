@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: CKD_COV_COD,CKD15_COD,CKD35_COD
+          cluster_ids: CKD_COV_COD,CKD15_COD,CKD35_COD
     
     config:
       meta:

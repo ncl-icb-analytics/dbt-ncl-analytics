@@ -6,5 +6,4 @@ models:
       One row per ethnicity observation covering BAME ethnicity, White British ethnicity, and diabetes screening excluded ethnicities using cluster IDs: ETHNICITY_BAME, ETHNICITY_WHITE_BRITISH, DIABETES_EXCLUDED_ETHNICITY.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: ETHNICITY_BAME,ETHNICITY_WHITE_BRITISH,DIABETES_EXCLUDED_ETHNICITY
+          cluster_ids: ETHNICITY_BAME,ETHNICITY_WHITE_BRITISH,DIABETES_EXCLUDED_ETHNICITY

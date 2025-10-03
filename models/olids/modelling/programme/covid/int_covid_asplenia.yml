@@ -21,8 +21,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: SPLN_COV_COD
+          cluster_ids: SPLN_COV_COD
     
     config:
       meta:

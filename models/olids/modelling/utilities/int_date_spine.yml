@@ -44,16 +44,14 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [1, 2, 3, 4]
+              values: [1, 2, 3, 4]
       
       - name: month_number
         description: Month number (1-12)
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
       
       - name: month_name
         description: Full month name (e.g., 'January')
@@ -98,8 +96,7 @@ models:
         description: UK financial quarter number (1-4, where 1 is Apr-Jun)
         tests:
           - accepted_values:
-              arguments:
-                values: [1, 2, 3, 4]
+              values: [1, 2, 3, 4]
       
       - name: financial_quarter_label
         description: UK financial quarter label (Q1-Q4)

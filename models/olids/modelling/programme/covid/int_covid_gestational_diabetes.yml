@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: GDIAB_COD
+          cluster_ids: GDIAB_COD
     
     config:
       meta:

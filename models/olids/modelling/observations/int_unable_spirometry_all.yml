@@ -6,8 +6,7 @@ models:
       One row per unable spirometry observation using SPIRPU_COD cluster providing alternative evidence pathway for COPD register eligibility.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: SPIRPU_COD
+          cluster_ids: SPIRPU_COD
     columns:
       - name: id
         description: Unique identifier for each unable spirometry observation

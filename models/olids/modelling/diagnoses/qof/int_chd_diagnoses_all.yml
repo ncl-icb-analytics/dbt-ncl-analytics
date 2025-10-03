@@ -28,5 +28,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: CHD_COD
+          cluster_ids: CHD_COD

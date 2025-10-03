@@ -34,5 +34,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: CKDRES_COD, CKD_COD
+          cluster_ids: CKDRES_COD, CKD_COD

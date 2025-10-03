@@ -133,8 +133,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
+              values: ['QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
 
       - name: stp_name
         description: 'STP/ICB name (London Integrated Care Boards)'

@@ -6,5 +6,4 @@ models:
       One row per clinical observation including AF observations, exclusions, DVT, atrial flutter, and pulse measurements (LCS_PULSE_RATE, LCS_PULSE_RHYTHM) for AF_61 and AF_62 case finding indicators.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: DEEP_VEIN_THROMBOSIS,ATRIAL_FLUTTER,ATRIAL_FIBRILLATION_61_EXCLUSIONS,LCS_PULSE_RATE,LCS_PULSE_RHYTHM
+          cluster_ids: DEEP_VEIN_THROMBOSIS,ATRIAL_FLUTTER,ATRIAL_FIBRILLATION_61_EXCLUSIONS,LCS_PULSE_RATE,LCS_PULSE_RHYTHM

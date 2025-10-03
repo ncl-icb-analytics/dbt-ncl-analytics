@@ -25,5 +25,4 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['Housebound', 'Not Housebound']
+              values: ['Housebound', 'Not Housebound']

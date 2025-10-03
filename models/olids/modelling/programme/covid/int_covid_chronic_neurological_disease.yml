@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: CNS_COV_COD
+          cluster_ids: CNS_COV_COD
     
     config:
       meta:

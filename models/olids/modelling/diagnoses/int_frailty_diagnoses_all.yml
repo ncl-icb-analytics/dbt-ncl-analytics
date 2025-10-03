@@ -16,8 +16,7 @@ models:
       Purpose: Provide observation-level data for frailty assessment and intervention tracking.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: FRAILTY_DX
+          cluster_ids: FRAILTY_DX
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'

@@ -8,13 +8,11 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: AUDITC_COD, AUDIT_COD
+          cluster_ids: AUDITC_COD, AUDIT_COD
       - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - id
-              - source_cluster_id
+          combination_of_columns:
+            - id
+            - source_cluster_id
 
     columns:
       - name: person_id

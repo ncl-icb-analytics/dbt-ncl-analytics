@@ -31,5 +31,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: DEM_COD
+          cluster_ids: DEM_COD

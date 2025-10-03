@@ -71,8 +71,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['COVID', 'FLU']
+              values: ['COVID', 'FLU']
         
       - name: campaign_id
         description: Campaign identifier (programme-specific)
