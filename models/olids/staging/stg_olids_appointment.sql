@@ -1,47 +1,48 @@
--- Staging model for olids.APPOINTMENT
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
-
 select
-    "LDS_RECORD_ID" as lds_record_id,
-    "ID" as id,
-    "ORGANISATION_ID" as organisation_id,
-    "PATIENT_ID" as patient_id,
-    "PERSON_ID" as person_id,
-    "PRACTITIONER_IN_ROLE_ID" as practitioner_in_role_id,
-    "SCHEDULE_ID" as schedule_id,
-    "START_DATE" as start_date,
-    "PLANNED_DURATION" as planned_duration,
-    "ACTUAL_DURATION" as actual_duration,
-    "APPOINTMENT_STATUS_CONCEPT_ID" as appointment_status_concept_id,
-    "PATIENT_WAIT" as patient_wait,
-    "PATIENT_DELAY" as patient_delay,
-    "DATE_TIME_BOOKED" as date_time_booked,
-    "DATE_TIME_SENT_IN" as date_time_sent_in,
-    "DATE_TIME_LEFT" as date_time_left,
-    "CANCELLED_DATE" as cancelled_date,
-    "TYPE" as type,
-    "AGE_AT_EVENT" as age_at_event,
-    "AGE_AT_EVENT_BABY" as age_at_event_baby,
-    "AGE_AT_EVENT_NEONATE" as age_at_event_neonate,
-    "BOOKING_METHOD_CONCEPT_ID" as booking_method_concept_id,
-    "CONTACT_MODE_CONCEPT_ID" as contact_mode_concept_id,
-    "IS_BLOCKED" as is_blocked,
-    "NATIONAL_SLOT_CATEGORY_NAME" as national_slot_category_name,
-    "CONTEXT_TYPE" as context_type,
-    "SERVICE_SETTING" as service_setting,
-    "NATIONAL_SLOT_CATEGORY_DESCRIPTION" as national_slot_category_description,
-    "CSDS_CARE_CONTACT_IDENTIFIER" as csds_care_contact_identifier,
-    "LDS_ID" as lds_id,
-    "LDS_BUSINESS_KEY" as lds_business_key,
-    "LDS_DATASET_ID" as lds_dataset_id,
-    "LDS_CDM_EVENT_ID" as lds_cdm_event_id,
-    "LDS_VERSIONER_EVENT_ID" as lds_versioner_event_id,
-    "RECORD_OWNER_ORGANISATION_CODE" as record_owner_organisation_code,
-    "LDS_DATETIME_DATA_ACQUIRED" as lds_datetime_data_acquired,
-    "LDS_INITIAL_DATA_RECEIVED_DATE" as lds_initial_data_received_date,
-    "LDS_IS_DELETED" as lds_is_deleted,
-    "LDS_START_DATE_TIME" as lds_start_date_time,
-    "LDS_LAKEHOUSE_DATE_PROCESSED" as lds_lakehouse_date_processed,
-    "LDS_LAKEHOUSE_DATETIME_UPDATED" as lds_lakehouse_datetime_updated
-from {{ source('olids', 'APPOINTMENT') }}
+    -- Primary key
+    id,
+
+    -- Business columns
+    organisation_id,
+    patient_id,
+    person_id,
+    practitioner_in_role_id,
+    schedule_id,
+    start_date,
+    planned_duration,
+    actual_duration,
+    appointment_status_concept_id,
+    patient_wait,
+    patient_delay,
+    date_time_booked,
+    date_time_sent_in,
+    date_time_left,
+    cancelled_date,
+    type,
+    age_at_event,
+    age_at_event_baby,
+    age_at_event_neonate,
+    booking_method_concept_id,
+    contact_mode_concept_id,
+    is_blocked,
+    national_slot_category_name,
+    context_type,
+    service_setting,
+    national_slot_category_description,
+    csds_care_contact_identifier,
+    lds_id,
+    record_owner_organisation_code,
+    lds_datetime_data_acquired,
+    lds_initial_data_received_date,
+
+    -- Metadata
+    lds_start_date_time,
+    lds_is_deleted,
+    lds_record_id
+
+from {{ ref('raw_olids_appointment') }}
+where lds_is_deleted = false
+qualify row_number() over (
+    partition by id
+    order by lds_start_date_time desc
+) = 1

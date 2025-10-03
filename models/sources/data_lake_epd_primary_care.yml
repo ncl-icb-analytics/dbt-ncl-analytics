@@ -1,0 +1,182 @@
+version: 2
+sources:
+- name: epd_primary_care
+  database: '"DATA_LAKE"'
+  schema: '"EPD_PRIMARY_CARE"'
+  description: Primary care medications and prescribing data
+  tables:
+  - name: ActiveSubmission
+    identifier: '"ActiveSubmission"'
+    columns:
+    - name: UniqSubmissionId
+      data_type: TEXT
+  - name: Meds
+    identifier: '"Meds"'
+    columns:
+    - name: AgeBands
+      data_type: TEXT
+    - name: BSAPrescriptionID
+      data_type: TEXT
+    - name: ChargeStatus
+      data_type: TEXT
+    - name: CostCentreLSOA
+      data_type: TEXT
+    - name: CostCentreODSCode
+      data_type: TEXT
+    - name: CostCentreSubType
+      data_type: TEXT
+    - name: CostCentreType
+      data_type: TEXT
+    - name: DispensedCountryCode
+      data_type: TEXT
+    - name: DispensedPharmacyLSOA
+      data_type: TEXT
+    - name: DispensedPharmacyODSCode
+      data_type: TEXT
+    - name: DispensedPharmacyType
+      data_type: TEXT
+    - name: EPSPrescriptionID
+      data_type: TEXT
+    - name: EPSPrescriptionIndicator
+      data_type: BOOLEAN
+    - name: ExemptionCode
+      data_type: TEXT
+    - name: HighVolVaccineIndicator
+      data_type: BOOLEAN
+    - name: ItemActualCost
+      data_type: NUMBER
+    - name: ItemCount
+      data_type: NUMBER
+    - name: ItemID
+      data_type: TEXT
+    - name: ItemNIC
+      data_type: TEXT
+    - name: MaternityExemptionFlag
+      data_type: BOOLEAN
+    - name: dmicPseudoNHSNumber
+      data_type: TEXT
+    - name: NotDispensedIndicator
+      data_type: BOOLEAN
+    - name: OutOfHoursIndicator
+      data_type: TEXT
+    - name: PaidACBSIndicator
+      data_type: TEXT
+    - name: PaidBNFCode
+      data_type: TEXT
+    - name: PaidBNFName
+      data_type: TEXT
+    - name: PaidCDIndicator
+      data_type: TEXT
+    - name: PaidDisallowedReason
+      data_type: NUMBER
+    - name: PaidDissallowedIndicator
+      data_type: BOOLEAN
+    - name: PaidDrugStrength
+      data_type: TEXT
+    - name: PaidFlavourIndicator
+      data_type: TEXT
+    - name: PaidFormulation
+      data_type: TEXT
+    - name: PaidIndicator
+      data_type: BOOLEAN
+    - name: PaidPADMIndicator
+      data_type: TEXT
+    - name: PaidQuantity
+      data_type: TEXT
+    - name: PaidSpecContIndicator
+      data_type: TEXT
+    - name: PaidSupplierName
+      data_type: TEXT
+    - name: PaiddmdCode
+      data_type: TEXT
+    - name: PatientAge
+      data_type: NUMBER
+    - name: PatientCCG
+      data_type: TEXT
+    - name: PatientGPCCG
+      data_type: TEXT
+    - name: PatientGPLA
+      data_type: TEXT
+    - name: PatientGPLSOA
+      data_type: TEXT
+    - name: PatientGPODS
+      data_type: TEXT
+    - name: PatientGender
+      data_type: TEXT
+    - name: PatientLA
+      data_type: TEXT
+    - name: PatientLSOA
+      data_type: TEXT
+    - name: PrescribedBNFCode
+      data_type: TEXT
+    - name: PrescribedBNFName
+      data_type: TEXT
+    - name: PrescribedCountryCode
+      data_type: TEXT
+    - name: PrescribedFormulation
+      data_type: TEXT
+    - name: PrescribedMedicineStrength
+      data_type: TEXT
+    - name: PrescribedQuantity
+      data_type: TEXT
+    - name: PrescribedSupplierName
+      data_type: TEXT
+    - name: PrescribeddmdCode
+      data_type: TEXT
+    - name: PrescriberID
+      data_type: TEXT
+    - name: PrescriberType
+      data_type: TEXT
+    - name: PrivatePrescriptionIndicator
+      data_type: TEXT
+    - name: ProcessedPeriod
+      data_type: TEXT
+    - name: ProcessingPeriodDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicCostCentreODSCCGCode
+      data_type: TEXT
+    - name: dmicCostCentreLSOACCGCode
+      data_type: TEXT
+    - name: dmicDispensedPharmacyLSOACCGCode
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmicRecordHash
+      data_type: TEXT
+    - name: dmicProcessedPeriod
+      data_type: TEXT
+    - name: UniqSubmissionId
+      data_type: TEXT
+  - name: MedsHeader
+    identifier: '"MedsHeader"'
+    columns:
+    - name: DatSerVer
+      data_type: NUMBER
+    - name: OrgIdProvider
+      data_type: TEXT
+    - name: RPStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RPEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReceivedDate
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: TotalRecords
+      data_type: NUMBER
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: dmicProcessedPeriod
+      data_type: TEXT
+    - name: Unique_MonthID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Master script to run all source generation steps in order
-Generates metadata queries, extracts metadata, creates sources, and generates staging models
+Generates metadata queries, extracts metadata, creates sources, and generates raw layer models
 """
 
 import subprocess
@@ -49,7 +49,7 @@ def main():
         "1a_generate_metadata_query.py",
         "1b_extract_metadata.py",
         "2_generate_sources.py",
-        "3_generate_staging_models.py"
+        "3_generate_raw_models.py"
     ]
 
     logger.info("Starting full source generation pipeline...")
@@ -67,7 +67,7 @@ def main():
     logger.info("Generated:")
     logger.info("  - Metadata queries")
     logger.info("  - Source YAML files")
-    logger.info("  - Staging models")
+    logger.info("  - Raw layer models")
 
 if __name__ == "__main__":
     main()

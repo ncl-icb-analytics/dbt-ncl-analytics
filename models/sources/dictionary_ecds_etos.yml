@@ -1,0 +1,989 @@
+version: 2
+sources:
+- name: dictionary_ecds
+  database: '"Dictionary"'
+  schema: '"ECDS_ETOS"'
+  description: Reference data for ECDS
+  tables:
+  - name: AccessibleInformationProfessionalRequired
+    identifier: '"AccessibleInformationProfessionalRequired"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: AccomodationStatus
+    identifier: '"AccomodationStatus"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: Acuity
+    identifier: '"Acuity"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: ArrivalMode
+    identifier: '"ArrivalMode"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: AttendanceSource
+    identifier: '"AttendanceSource"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: ChiefComplaint
+    identifier: '"ChiefComplaint"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Flag_Pain
+      data_type: BOOLEAN
+    - name: Flag_Injury
+      data_type: BOOLEAN
+    - name: Flag_Male
+      data_type: BOOLEAN
+    - name: Flag_Female
+      data_type: BOOLEAN
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: CodedAssessmentToolType
+    identifier: '"CodedAssessmentToolType"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: CodedFinding
+    identifier: '"CodedFinding"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: CodedObservation
+    identifier: '"CodedObservation"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: Comorbidity
+    identifier: '"Comorbidity"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: Diagnosis
+    identifier: '"Diagnosis"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: ECDS_Group2
+      data_type: TEXT
+    - name: ECDS_Group3
+      data_type: TEXT
+    - name: Flag_Allergy
+      data_type: BOOLEAN
+    - name: Flag_NotifiableDisease
+      data_type: BOOLEAN
+    - name: Flag_Injury
+      data_type: BOOLEAN
+    - name: Flag_Male
+      data_type: BOOLEAN
+    - name: Flag_Female
+      data_type: BOOLEAN
+    - name: Flag_SDEC
+      data_type: BOOLEAN
+    - name: Flag_ADS
+      data_type: BOOLEAN
+    - name: ICD10_Mapping
+      data_type: TEXT
+    - name: ICD10_Description
+      data_type: TEXT
+    - name: ICD11_Mapping
+      data_type: TEXT
+    - name: ICD11_Description
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: DiagnosisQualifier
+    identifier: '"DiagnosisQualifier"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: DischargeDestination
+    identifier: '"DischargeDestination"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: DischargeFollowUp
+    identifier: '"DischargeFollowUp"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: DischargeStatus
+    identifier: '"DischargeStatus"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: InjuryActivityStatus
+    identifier: '"InjuryActivityStatus"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: InjuryActivityType
+    identifier: '"InjuryActivityType"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: InjuryDrugAlcohol
+    identifier: '"InjuryDrugAlcohol"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: InjuryIntent
+    identifier: '"InjuryIntent"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: InjuryMechanism
+    identifier: '"InjuryMechanism"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: InterpreterLanguage
+    identifier: '"InterpreterLanguage"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: PbR_Category
+      data_type: TEXT
+    - name: CDS_Code_Mapping_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: CDS_Investigation_Mapping_That_Is_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: Investigation
+    identifier: '"Investigation"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: TEXT
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: PbR_Category
+      data_type: TEXT
+    - name: CDS_Code_Mapping_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: CDS_Investigation_Mapping_That_Is_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: PlaceofInjury
+    identifier: '"PlaceofInjury"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: ReferredToService
+    identifier: '"ReferredToService"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: Safeguarding
+    identifier: '"Safeguarding"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: SicknessAbsenceCategory
+    identifier: '"SicknessAbsenceCategory"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: PbR_Category
+      data_type: TEXT
+    - name: CDS_Code_Mapping_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: CDS_Treatment_Mapping_That_Is_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: SpokenLanguage
+    identifier: '"SpokenLanguage"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER
+  - name: Treatment
+    identifier: '"Treatment"'
+    columns:
+    - name: ECDS_UniqueID
+      data_type: TEXT
+    - name: REFSET_UniqueID
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_UK_Preferred_Term
+      data_type: TEXT
+    - name: SNOMED_Fully_Specified_Name
+      data_type: TEXT
+    - name: ECDS_Description
+      data_type: TEXT
+    - name: ECDS_Group1
+      data_type: TEXT
+    - name: PbR_Category
+      data_type: TEXT
+    - name: CDS_Code_Mapping_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: CDS_Treatment_Mapping_That_Is_Used_For_HRG_Grouping
+      data_type: TEXT
+    - name: Sort1
+      data_type: NUMBER
+    - name: Sort2
+      data_type: NUMBER
+    - name: Sort3
+      data_type: NUMBER
+    - name: Sort4
+      data_type: NUMBER
+    - name: Notes
+      data_type: TEXT
+    - name: Valid_From
+      data_type: TIMESTAMP_NTZ
+    - name: Valid_To
+      data_type: TIMESTAMP_NTZ
+    - name: dv_IsActive
+      data_type: NUMBER

@@ -25,12 +25,12 @@
 
     FROM {{csds_table}} AS tbl
 
-    INNER JOIN dev__modelling.dbt_staging.stg_csds_activesubmission AS a
+    INNER JOIN {{ref('raw_csds_activesubmission')}} AS a
         ON tbl.unique_submission_id = a.unique_submission_id
 
     {% if not is_referral %}
 
-        INNER JOIN dev__modelling.dbt_staging.stg_csds_cyp101referral AS referral
+        INNER JOIN {{ref('raw_csds_cyp101referral')}} AS referral
             ON tbl.record_number = referral.record_number
 
     {% endif %}

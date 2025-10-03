@@ -1,0 +1,169 @@
+version: 2
+sources:
+- name: reference_cancer_emis
+  database: '"DATA_LAKE__NCL"'
+  schema: '"CANCER__EMIS"'
+  description: Cancer EMIS data
+  tables:
+  - name: CCR_CAN004
+    identifier: '"CCR_CAN004"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: CCR_CAN005
+    identifier: '"CCR_CAN005"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: ESAFETY
+    identifier: '"ESAFETY"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: FIT_MONTHLY
+    identifier: '"FIT_MONTHLY"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: FIT_QUARTERLY
+    identifier: '"FIT_QUARTERLY"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: SOCIAL_PRESCRIBER_REFERRALS
+    identifier: '"SOCIAL_PRESCRIBER_REFERRALS"'
+    columns:
+    - name: Organisation
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: Population Count
+      data_type: NUMBER
+    - name: Parent
+      data_type: NUMBER
+    - name: '%'
+      data_type: TEXT
+    - name: Males
+      data_type: NUMBER
+    - name: Females
+      data_type: NUMBER
+    - name: Excluded
+      data_type: NUMBER
+    - name: Status
+      data_type: TEXT
+    - name: _Year
+      data_type: NUMBER
+    - name: _Month
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ

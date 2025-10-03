@@ -1,32 +1,33 @@
--- Staging model for olids.PATIENT
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
-
 select
-    "LDS_RECORD_ID" as lds_record_id,
-    "ID" as id,
-    "NHS_NUMBER_HASH" as nhs_number_hash,
-    "SK_PATIENT_ID" as sk_patient_id,
-    "TITLE" as title,
-    "GENDER_CONCEPT_ID" as gender_concept_id,
-    "REGISTERED_PRACTICE_ID" as registered_practice_id,
-    "BIRTH_YEAR" as birth_year,
-    "BIRTH_MONTH" as birth_month,
-    "DEATH_YEAR" as death_year,
-    "DEATH_MONTH" as death_month,
-    "IS_SPINE_SENSITIVE" as is_spine_sensitive,
-    "IS_CONFIDENTIAL" as is_confidential,
-    "IS_DUMMY_PATIENT" as is_dummy_patient,
-    "RECORD_OWNER_ORGANISATION_CODE" as record_owner_organisation_code,
-    "LDS_ID" as lds_id,
-    "LDS_BUSINESS_KEY" as lds_business_key,
-    "LDS_DATASET_ID" as lds_dataset_id,
-    "LDS_CDM_EVENT_ID" as lds_cdm_event_id,
-    "LDS_VERSIONER_EVENT_ID" as lds_versioner_event_id,
-    "LDS_DATETIME_DATA_ACQUIRED" as lds_datetime_data_acquired,
-    "LDS_INITIAL_DATE_RECEIVED_DATE" as lds_initial_date_received_date,
-    "LDS_IS_DELETED" as lds_is_deleted,
-    "LDS_START_DATE_TIME" as lds_start_date_time,
-    "LDS_LAKEHOUSE_DATE_PROCESSED" as lds_lakehouse_date_processed,
-    "LDS_LAKEHOUSE_DATETIME_UPDATED" as lds_lakehouse_datetime_updated
-from {{ source('olids', 'PATIENT') }}
+    -- Primary key
+    id,
+
+    -- Business columns
+    nhs_number_hash,
+    sk_patient_id,
+    title,
+    gender_concept_id,
+    registered_practice_id,
+    birth_year,
+    birth_month,
+    death_year,
+    death_month,
+    is_spine_sensitive,
+    is_confidential,
+    is_dummy_patient,
+    record_owner_organisation_code,
+    lds_id,
+    lds_datetime_data_acquired,
+    lds_initial_date_received_date,
+
+    -- Metadata
+    lds_start_date_time,
+    lds_is_deleted,
+    lds_record_id
+
+from {{ ref('raw_olids_patient') }}
+where lds_is_deleted = false
+qualify row_number() over (
+    partition by id
+    order by lds_start_date_time desc
+) = 1

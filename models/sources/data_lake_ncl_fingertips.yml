@@ -1,0 +1,161 @@
+version: 2
+sources:
+- name: reference_fingertips
+  database: '"DATA_LAKE__NCL"'
+  schema: '"FINGERTIPS"'
+  description: Fingertips indicator data
+  tables:
+  - name: INDICATOR_DATA
+    identifier: '"INDICATOR_DATA"'
+    columns:
+    - name: Indicator ID
+      data_type: NUMBER
+    - name: Indicator Name
+      data_type: TEXT
+    - name: Parent Code
+      data_type: TEXT
+    - name: Parent Name
+      data_type: TEXT
+    - name: Area Code
+      data_type: TEXT
+    - name: Area Name
+      data_type: TEXT
+    - name: Area Type
+      data_type: TEXT
+    - name: Sex
+      data_type: TEXT
+    - name: Age
+      data_type: TEXT
+    - name: Category Type
+      data_type: TEXT
+    - name: Category
+      data_type: TEXT
+    - name: Time period
+      data_type: TEXT
+    - name: Value
+      data_type: FLOAT
+    - name: Lower CI 95.0 limit
+      data_type: FLOAT
+    - name: Upper CI 95.0 limit
+      data_type: FLOAT
+    - name: Lower CI 99.8 limit
+      data_type: FLOAT
+    - name: Upper CI 99.8 limit
+      data_type: FLOAT
+    - name: Count
+      data_type: NUMBER
+    - name: Denominator
+      data_type: NUMBER
+    - name: Value note
+      data_type: TEXT
+    - name: Recent Trend
+      data_type: TEXT
+    - name: Compared to England value or percentiles
+      data_type: TEXT
+    - name: Compared to percentiles
+      data_type: TEXT
+    - name: Time period Sortable
+      data_type: NUMBER
+    - name: New data
+      data_type: TEXT
+    - name: Compared to goal
+      data_type: TEXT
+    - name: Time period range
+      data_type: TEXT
+    - name: DATE_UPDATED_LOCAL
+      data_type: DATE
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: INDICATOR_UPDATE_LOG
+    identifier: '"INDICATOR_UPDATE_LOG"'
+    columns:
+    - name: INDICATOR_ID
+      data_type: NUMBER
+    - name: DATE_UPDATED_LOCAL
+      data_type: DATE
+    - name: IS_LATEST
+      data_type: BOOLEAN
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: METADATA_AREA
+    identifier: '"METADATA_AREA"'
+    columns:
+    - name: AREA_ID
+      data_type: NUMBER
+    - name: Name
+      data_type: TEXT
+    - name: Short
+      data_type: TEXT
+    - name: Class
+      data_type: TEXT
+    - name: Sequence
+      data_type: NUMBER
+    - name: CanBeDisplayedOnMap
+      data_type: BOOLEAN
+  - name: METADATA_INDICATOR
+    identifier: '"METADATA_INDICATOR"'
+    columns:
+    - name: Indicator ID
+      data_type: NUMBER
+    - name: Indicator
+      data_type: TEXT
+    - name: Indicator number
+      data_type: TEXT
+    - name: Rationale
+      data_type: TEXT
+    - name: Specific rationale
+      data_type: TEXT
+    - name: Definition
+      data_type: TEXT
+    - name: Data source
+      data_type: TEXT
+    - name: Indicator source
+      data_type: TEXT
+    - name: Definition of numerator
+      data_type: TEXT
+    - name: Source of numerator
+      data_type: TEXT
+    - name: Definition of denominator
+      data_type: TEXT
+    - name: Source of denominator
+      data_type: TEXT
+    - name: Methodology
+      data_type: TEXT
+    - name: Standard population/values
+      data_type: TEXT
+    - name: Frequency
+      data_type: TEXT
+    - name: Confidence interval details
+      data_type: TEXT
+    - name: Disclosure control
+      data_type: TEXT
+    - name: Rounding
+      data_type: TEXT
+    - name: Caveats
+      data_type: TEXT
+    - name: Notes
+      data_type: TEXT
+    - name: Impact of COVID-19
+      data_type: TEXT
+    - name: Copyright
+      data_type: TEXT
+    - name: Data re-use
+      data_type: TEXT
+    - name: Links
+      data_type: TEXT
+    - name: Indicator Content
+      data_type: TEXT
+    - name: Simple Name
+      data_type: TEXT
+    - name: Simple Definition
+      data_type: TEXT
+    - name: Unit
+      data_type: TEXT
+    - name: Value type
+      data_type: TEXT
+    - name: Year type
+      data_type: TEXT
+    - name: Polarity
+      data_type: TEXT
+    - name: Date updated
+      data_type: DATE

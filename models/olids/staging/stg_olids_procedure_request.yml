@@ -1,0 +1,79 @@
+version: 2
+models:
+  - name: stg_olids_procedure_request
+    description: "Procedure requests and interventions ordered or performed. Deduplicated by id and filtered to exclude deleted records."
+    columns:
+      - name: id
+        description: "Primary key - unique identifier for this procedure request"
+        tests:
+          - unique
+          - not_null
+
+      - name: person_id
+        description: "Foreign key to person.id - person-level identifier"
+
+      - name: patient_id
+        description: "Foreign key to patient.id"
+
+      - name: encounter_id
+        description: "Foreign key to encounter.id - encounter when procedure was requested"
+
+      - name: practitioner_id
+        description: "Foreign key to practitioner.id - practitioner who requested the procedure"
+
+      - name: clinical_effective_date
+        description: "Date the procedure request was clinically effective"
+
+      - name: date_precision_concept_id
+        description: "Foreign key to concept.id - precision of the clinical effective date"
+
+      - name: date_recorded
+        description: "Date the record was entered into the system"
+
+      - name: description
+        description: "Text description of the procedure"
+
+      - name: procedure_source_concept_id
+        description: "Foreign key to concept.id - source concept for the procedure type"
+
+      - name: status_concept_id
+        description: "Foreign key to concept.id - status of the procedure request"
+
+      - name: age_at_event
+        description: "Patient age in years at time of procedure request"
+
+      - name: age_at_event_baby
+        description: "Patient age in months for babies (0-24 months)"
+
+      - name: age_at_event_neonate
+        description: "Patient age in days for neonates (0-28 days)"
+
+      - name: is_confidential
+        description: "Boolean indicating if the record is marked as confidential"
+
+      - name: is_deleted
+        description: "Boolean indicating if the clinical record has been deleted"
+
+      - name: lds_end_date_time
+        description: "End datetime for this procedure request"
+
+      - name: lds_id
+        description: "LDS system identifier"
+
+      - name: record_owner_organisation_code
+        description: "Organisation code of the record owner"
+
+      - name: lds_datetime_data_acquired
+        description: "Datetime when data was acquired by LDS"
+
+      - name: lds_initial_data_received_date
+        description: "Date when data was initially received by LDS"
+
+      - name: lds_start_date_time
+        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
+
+      - name: lds_is_deleted
+        description: "Deletion flag - records with TRUE are filtered out in this staging layer"
+
+      - name: lds_record_id
+        description: "LDS assigned unique identifier for the source record version"

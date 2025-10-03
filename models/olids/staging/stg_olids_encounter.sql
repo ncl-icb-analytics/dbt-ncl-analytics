@@ -1,39 +1,40 @@
--- Staging model for olids.ENCOUNTER
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
-
 select
-    "LDS_RECORD_ID" as lds_record_id,
-    "ID" as id,
-    "PERSON_ID" as person_id,
-    "PATIENT_ID" as patient_id,
-    "PRACTITIONER_ID" as practitioner_id,
-    "APPOINTMENT_ID" as appointment_id,
-    "EPISODE_OF_CARE_ID" as episode_of_care_id,
-    "SERVICE_PROVIDER_ORGANISATION_ID" as service_provider_organisation_id,
-    "CLINICAL_EFFECTIVE_DATE" as clinical_effective_date,
-    "DATE_PRECISION_CONCEPT_ID" as date_precision_concept_id,
-    "LOCATION" as location,
-    "ENCOUNTER_SOURCE_CONCEPT_ID" as encounter_source_concept_id,
-    "AGE_AT_EVENT" as age_at_event,
-    "AGE_AT_EVENT_BABY" as age_at_event_baby,
-    "AGE_AT_EVENT_NEONATE" as age_at_event_neonate,
-    "TYPE" as type,
-    "SUB_TYPE" as sub_type,
-    "ADMISSION_METHOD" as admission_method,
-    "END_DATE" as end_date,
-    "DATE_RECORDED" as date_recorded,
-    "IS_DELETED" as is_deleted,
-    "LDS_ID" as lds_id,
-    "LDS_BUSINESS_KEY" as lds_business_key,
-    "LDS_DATASET_ID" as lds_dataset_id,
-    "LDS_CDM_EVENT_ID" as lds_cdm_event_id,
-    "LDS_VERSIONER_EVENT_ID" as lds_versioner_event_id,
-    "RECORD_OWNER_ORGANISATION_CODE" as record_owner_organisation_code,
-    "LDS_DATETIME_DATA_ACQUIRED" as lds_datetime_data_acquired,
-    "LDS_INITIAL_DATA_RECEIVED_DATE" as lds_initial_data_received_date,
-    "LDS_IS_DELETED" as lds_is_deleted,
-    "LDS_START_DATE_TIME" as lds_start_date_time,
-    "LDS_LAKEHOUSE_DATE_PROCESSED" as lds_lakehouse_date_processed,
-    "LDS_LAKEHOUSE_DATETIME_UPDATED" as lds_lakehouse_datetime_updated
-from {{ source('olids', 'ENCOUNTER') }}
+    -- Primary key
+    id,
+
+    -- Business columns
+    person_id,
+    patient_id,
+    practitioner_id,
+    appointment_id,
+    episode_of_care_id,
+    service_provider_organisation_id,
+    clinical_effective_date,
+    date_precision_concept_id,
+    location,
+    encounter_source_concept_id,
+    age_at_event,
+    age_at_event_baby,
+    age_at_event_neonate,
+    type,
+    sub_type,
+    admission_method,
+    end_date,
+    date_recorded,
+    is_deleted,
+    lds_id,
+    record_owner_organisation_code,
+    lds_datetime_data_acquired,
+    lds_initial_data_received_date,
+
+    -- Metadata
+    lds_start_date_time,
+    lds_is_deleted,
+    lds_record_id
+
+from {{ ref('raw_olids_encounter') }}
+where lds_is_deleted = false
+qualify row_number() over (
+    partition by id
+    order by lds_start_date_time desc
+) = 1

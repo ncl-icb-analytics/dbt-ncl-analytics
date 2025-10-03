@@ -1,0 +1,2227 @@
+version: 2
+sources:
+- name: reference_cancer_cwt_alliance
+  database: '"DATA_LAKE__NCL"'
+  schema: '"CANCER__CWT_ALLIANCE"'
+  description: Cancer waiting times alliance data
+  tables:
+  - name: CADEAS__CCG__24_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__24_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__24_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__24_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__24_DAY_SCREENING
+    identifier: '"CADEAS__CCG__24_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__24_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__24_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__28_DAY_FDS
+    identifier: '"CADEAS__CCG__28_DAY_FDS"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: NoPatients
+      data_type: FLOAT
+    - name: DaysWithin7
+      data_type: FLOAT
+    - name: Days8To14
+      data_type: FLOAT
+    - name: Days15To21
+      data_type: FLOAT
+    - name: Days22To28
+      data_type: FLOAT
+    - name: Days29To35
+      data_type: FLOAT
+    - name: Days36To42
+      data_type: FLOAT
+    - name: Days43To49
+      data_type: FLOAT
+    - name: Days50To62
+      data_type: FLOAT
+    - name: Days63To76
+      data_type: FLOAT
+    - name: Days77To90
+      data_type: FLOAT
+    - name: Days91To104
+      data_type: FLOAT
+    - name: DaysMoreThan104
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__2WW
+    identifier: '"CADEAS__CCG__2WW"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoSeen
+      data_type: FLOAT
+    - name: DaysWithin14
+      data_type: FLOAT
+    - name: Days15to16
+      data_type: FLOAT
+    - name: Days17to21
+      data_type: FLOAT
+    - name: Days22to28
+      data_type: FLOAT
+    - name: DaysMoreThan28
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__31_DAY
+    identifier: '"CADEAS__CCG__31_DAY"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: No2WWCancer
+      data_type: FLOAT
+    - name: No2WWBreastSymptoms
+      data_type: FLOAT
+    - name: NoUrgentScreening
+      data_type: FLOAT
+    - name: NoOther
+      data_type: FLOAT
+    - name: NoTreated
+      data_type: FLOAT
+    - name: DaysWithin31
+      data_type: FLOAT
+    - name: Days32to38
+      data_type: FLOAT
+    - name: Days39to48
+      data_type: FLOAT
+    - name: Days49to62
+      data_type: FLOAT
+    - name: DaysMoreThan62
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__38_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__38_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_SCREENING
+    identifier: '"CADEAS__CCG__38_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__38_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__38_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__62_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__62_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_SCREENING
+    identifier: '"CADEAS__CCG__62_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__62_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__62_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__28_DAY_FDS
+    identifier: '"CADEAS__CCG__BREACH__28_DAY_FDS"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: DelayReasonFDS
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__2WW
+    identifier: '"CADEAS__CCG__BREACH__2WW"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: FirstSeenDelayReason
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__31_DAY
+    identifier: '"CADEAS__CCG__BREACH__31_DAY"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: ProviderCode
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonDecisionToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_BREASTSYMP"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_CLASSIC
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_CLASSIC"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: StandardBreached
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_SCREENING
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_SCREENING"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__CCG__BREACH__62_DAY_UPGRADE
+    identifier: '"CADEAS__CCG__BREACH__62_DAY_UPGRADE"'
+    columns:
+    - name: CCG
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: CCG18NM
+      data_type: TEXT
+    - name: CALNCV18NM
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__24_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__24_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__24_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__24_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__24_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysWithin24...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Days25To31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan31...AccountableProvider.24.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__28_DAY_FDS
+    identifier: '"CADEAS__TRUST__28_DAY_FDS"'
+    columns:
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: NoPatients
+      data_type: FLOAT
+    - name: DaysWithin7
+      data_type: FLOAT
+    - name: Days8To14
+      data_type: FLOAT
+    - name: Days15To21
+      data_type: FLOAT
+    - name: Days22To28
+      data_type: FLOAT
+    - name: Days29To35
+      data_type: FLOAT
+    - name: Days36To42
+      data_type: FLOAT
+    - name: Days43To49
+      data_type: FLOAT
+    - name: Days50To62
+      data_type: FLOAT
+    - name: Days63To76
+      data_type: FLOAT
+    - name: Days77To90
+      data_type: FLOAT
+    - name: Days91To104
+      data_type: FLOAT
+    - name: DaysMoreThan104
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__2WW
+    identifier: '"CADEAS__TRUST__2WW"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoSeen
+      data_type: FLOAT
+    - name: DaysWithin14
+      data_type: FLOAT
+    - name: Days15to16
+      data_type: FLOAT
+    - name: Days17to21
+      data_type: FLOAT
+    - name: Days22to28
+      data_type: FLOAT
+    - name: DaysMoreThan28
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__31_DAY
+    identifier: '"CADEAS__TRUST__31_DAY"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: No2WWCancer
+      data_type: FLOAT
+    - name: No2WWBreastSymptoms
+      data_type: FLOAT
+    - name: NoUrgentScreening
+      data_type: FLOAT
+    - name: NoOther
+      data_type: FLOAT
+    - name: NoTreated
+      data_type: FLOAT
+    - name: DaysWithin31
+      data_type: FLOAT
+    - name: Days32to38
+      data_type: FLOAT
+    - name: Days39to48
+      data_type: FLOAT
+    - name: Days49to62
+      data_type: FLOAT
+    - name: DaysMoreThan62
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__38_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__38_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__38_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__38_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__38_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysWithin38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan38...AccountableProvider.38.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__62_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__62_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__62_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__62_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__62_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: NoPatients...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysWithin31...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days32To62...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days63To76...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days77To90...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Days91To104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: DaysMoreThan104...AccountableProvider.62.day.wait
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__28_DAY_FDS
+    identifier: '"CADEAS__TRUST__BREACH__28_DAY_FDS"'
+    columns:
+    - name: Provider.Code.FDS
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: Provider.Code.DTT
+      data_type: TEXT
+    - name: Pathway.End.Reason
+      data_type: TEXT
+    - name: Priority.Type
+      data_type: TEXT
+    - name: Source.of.referral.for.outpatients
+      data_type: TEXT
+    - name: Cancer.Report.Category
+      data_type: TEXT
+    - name: Primary.Cancer.Site
+      data_type: TEXT
+    - name: Clock.Stop.Type
+      data_type: TEXT
+    - name: Exclusion.Reason
+      data_type: TEXT
+    - name: DelayReasonFDS
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__2WW
+    identifier: '"CADEAS__TRUST__BREACH__2WW"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: FirstSeenDelayReason
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__31_DAY
+    identifier: '"CADEAS__TRUST__BREACH__31_DAY"'
+    columns:
+    - name: ProviderCode
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: TreatmentStage
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonDecisionToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: STP
+      data_type: TEXT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_BREASTSYMP
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_BREASTSYMP"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_CLASSIC
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_CLASSIC"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: StandardBreached
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_SCREENING
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_SCREENING"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER
+  - name: CADEAS__TRUST__BREACH__62_DAY_UPGRADE
+    identifier: '"CADEAS__TRUST__BREACH__62_DAY_UPGRADE"'
+    columns:
+    - name: AccountableProvider.62.day.wait
+      data_type: TEXT
+    - name: Month.Number
+      data_type: NUMBER
+    - name: Month
+      data_type: TEXT
+    - name: Year
+      data_type: TEXT
+    - name: DCO
+      data_type: TEXT
+    - name: STP
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: AccountableProvider.38.day.wait.investigative.phase
+      data_type: TEXT
+    - name: AccountableProvider.24.day.wait.treatment.phase
+      data_type: TEXT
+    - name: SeenProvider
+      data_type: TEXT
+    - name: InvestigatingProvider1
+      data_type: TEXT
+    - name: InvestigatingProvider2
+      data_type: TEXT
+    - name: InvestigatingProvider3
+      data_type: TEXT
+    - name: InvestigatingProvider4
+      data_type: TEXT
+    - name: InvestigatingProvider5
+      data_type: TEXT
+    - name: InvestigatingProvider6
+      data_type: TEXT
+    - name: InvestigatingProvider7
+      data_type: TEXT
+    - name: InvestigatingProvider8
+      data_type: TEXT
+    - name: InvestigatingProvider9
+      data_type: TEXT
+    - name: InvestigatingProvider10
+      data_type: TEXT
+    - name: TreatmentProvider
+      data_type: TEXT
+    - name: Number.of.Transfers
+      data_type: NUMBER
+    - name: Allocation.Rules
+      data_type: TEXT
+    - name: AdmittedCare
+      data_type: TEXT
+    - name: TreatmentModality
+      data_type: TEXT
+    - name: CancerReportCategory
+      data_type: TEXT
+    - name: DelayReasonReferralToTreatment
+      data_type: TEXT
+    - name: NoBreaching
+      data_type: FLOAT
+    - name: Trust_Name
+      data_type: TEXT
+    - name: Cancer_Alliance
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: NUMBER

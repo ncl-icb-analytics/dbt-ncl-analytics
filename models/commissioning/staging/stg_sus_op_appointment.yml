@@ -1,0 +1,12 @@
+
+models:
+  - name: int_sus_op_appointment
+    description: |
+      Outpatient appointments from SUS data.
+      One row per appointment.
+    columns:
+      - name: primarykey_id
+        description: "Unique identifier for the appointment (PRIMARYKEY_ID)"
+        tests:
+          - not_null
+          - unique

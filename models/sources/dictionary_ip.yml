@@ -1,0 +1,106 @@
+version: 2
+sources:
+- name: dictionary_ip
+  database: '"Dictionary"'
+  schema: '"IP"'
+  description: Reference data for inpatient procedures and treatments
+  tables:
+  - name: AdmissionMethods
+    identifier: '"AdmissionMethods"'
+    columns:
+    - name: SK_AdmissionMethodID
+      data_type: NUMBER
+    - name: BK_AdmissionMethodCode
+      data_type: TEXT
+    - name: AdmissionMethodName
+      data_type: TEXT
+    - name: AdmissionMethodGroup
+      data_type: TEXT
+    - name: AdmissionMethodMethodFullName
+      data_type: TEXT
+    - name: DateCreated
+      data_type: TIMESTAMP_NTZ
+    - name: DateUpdated
+      data_type: TIMESTAMP_NTZ
+  - name: AdmissionType
+    identifier: '"AdmissionType"'
+    columns:
+    - name: SK_AdmissionTypeID
+      data_type: NUMBER
+    - name: admission_type
+      data_type: TEXT
+    - name: admission_type_group
+      data_type: TEXT
+    - name: admission_type_description
+      data_type: TEXT
+  - name: DischargeDestination
+    identifier: '"DischargeDestination"'
+    columns:
+    - name: SK_DischargeDestinationID
+      data_type: NUMBER
+    - name: BK_DischargeDestinationCode
+      data_type: TEXT
+    - name: DischargeDestinationName
+      data_type: TEXT
+  - name: DischargeMethod
+    identifier: '"DischargeMethod"'
+    columns:
+    - name: SK_DischargeMethodID
+      data_type: NUMBER
+    - name: BK_DischargeMethodCode
+      data_type: TEXT
+    - name: DischargeMethodName
+      data_type: TEXT
+  - name: FirstRegularDayOrNightAdmission
+    identifier: '"FirstRegularDayOrNightAdmission"'
+    columns:
+    - name: SK_FirstRegularDayOrNightAdmissionID
+      data_type: NUMBER
+    - name: BK_FirstRegularDayOrNightAdmission
+      data_type: TEXT
+    - name: FirstRegularDayOrNightAdmission
+      data_type: TEXT
+  - name: IntendedManagement
+    identifier: '"IntendedManagement"'
+    columns:
+    - name: SK_IntendedManagementID
+      data_type: NUMBER
+    - name: BK_IntendedManagementCode
+      data_type: TEXT
+    - name: IntendedManagementDescription
+      data_type: TEXT
+  - name: LastEpisodeInSpellIndicator
+    identifier: '"LastEpisodeInSpellIndicator"'
+    columns:
+    - name: SK_LastEpisodeInSpellIndicatorID
+      data_type: NUMBER
+    - name: BK_LastEpisodeInSpellIndicator
+      data_type: TEXT
+    - name: LastEpisodeInSpellIndicator
+      data_type: TEXT
+  - name: NeoNatalCareLevel
+    identifier: '"NeoNatalCareLevel"'
+    columns:
+    - name: SK_NeoNatalCareLevelID
+      data_type: NUMBER
+    - name: NeoNatalCareCode
+      data_type: TEXT
+    - name: ShortCareDescription
+      data_type: TEXT
+    - name: LongCareDescription
+      data_type: TEXT
+  - name: SourceOfAdmissions
+    identifier: '"SourceOfAdmissions"'
+    columns:
+    - name: SK_SourceOfAdmissionID
+      data_type: NUMBER
+    - name: BK_SourceOfAdmissionCode
+      data_type: TEXT
+    - name: SourceOfAdmissionName
+      data_type: TEXT
+    - name: SourceOfAdmissionFullName
+      data_type: TEXT
+    - name: DateCreated
+      data_type: TIMESTAMP_NTZ
+    - name: DateUpdated
+      data_type: TIMESTAMP_NTZ

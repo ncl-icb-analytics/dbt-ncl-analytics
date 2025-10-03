@@ -1,0 +1,135 @@
+version: 2
+sources:
+- name: dictionary_snomed
+  database: '"Dictionary"'
+  schema: '"Snomed"'
+  description: Reference data for snomed
+  tables:
+  - name: Code
+    identifier: '"Code"'
+    columns:
+    - name: SK_SnomedID
+      data_type: NUMBER
+    - name: SnomedItemID
+      data_type: NUMBER
+    - name: SnomedNamespaceID
+      data_type: NUMBER
+    - name: SnomedPartitionID
+      data_type: NUMBER
+    - name: SnomedCheckDigit
+      data_type: NUMBER
+    - name: InNationalDataset
+      data_type: BOOLEAN
+    - name: SnomedCodeType
+      data_type: TEXT
+    - name: SK_SnomedConceptID
+      data_type: NUMBER
+    - name: SK_SnomedDescriptionID
+      data_type: NUMBER
+    - name: IsSensitive
+      data_type: BOOLEAN
+  - name: Concept
+    identifier: '"Concept"'
+    columns:
+    - name: SK_SnomedConceptID
+      data_type: NUMBER
+    - name: SK_SnomedModuleID
+      data_type: NUMBER
+    - name: SK_SnomedDescriptionID
+      data_type: NUMBER
+    - name: PreferredTerm
+      data_type: TEXT
+    - name: SK_SnomedDefinitionStatusID
+      data_type: NUMBER
+    - name: DefinitionStatus
+      data_type: TEXT
+    - name: IsActive
+      data_type: BOOLEAN
+    - name: InNationalDataset
+      data_type: BOOLEAN
+    - name: LastUpdated
+      data_type: TIMESTAMP_NTZ
+  - name: Description
+    identifier: '"Description"'
+    columns:
+    - name: SK_SnomedDescriptionID
+      data_type: NUMBER
+    - name: SK_SnomedModuleID
+      data_type: NUMBER
+    - name: SK_SnomedConceptID
+      data_type: NUMBER
+    - name: Term
+      data_type: TEXT
+    - name: LanguageCode
+      data_type: TEXT
+    - name: SK_SnomedTypeID
+      data_type: NUMBER
+    - name: SK_SnomedCaseSignificanceID
+      data_type: NUMBER
+    - name: SK_SnomedRefSetID
+      data_type: NUMBER
+    - name: SK_SnomedAcceptabilityID
+      data_type: NUMBER
+  - name: Namespace
+    identifier: '"Namespace"'
+    columns:
+    - name: SK_NamespaceID
+      data_type: NUMBER
+    - name: DateIssued
+      data_type: TIMESTAMP_NTZ
+    - name: Organisation
+      data_type: TEXT
+    - name: Notes
+      data_type: TEXT
+  - name: Primary_Care_Domain_Ref_Set
+    identifier: '"Primary_Care_Domain_Ref_Set"'
+    columns:
+    - name: Cluster_ID
+      data_type: TEXT
+    - name: Cluster_Description
+      data_type: TEXT
+    - name: SNOMED_Code
+      data_type: NUMBER
+    - name: SNOMED_Code_Description
+      data_type: TEXT
+    - name: PCD_Refset_ID
+      data_type: NUMBER
+    - name: Service_And_Ruleset
+      data_type: TEXT
+    - name: IsActive
+      data_type: BOOLEAN
+    - name: ActiveFrom
+      data_type: TIMESTAMP_NTZ
+    - name: ActiveTo
+      data_type: TIMESTAMP_NTZ
+    - name: FirstCreated
+      data_type: TIMESTAMP_NTZ
+    - name: LastUpdated
+      data_type: TIMESTAMP_NTZ
+  - name: Ref_Set_Complex_Map
+    identifier: '"Ref_Set_Complex_Map"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: Active
+      data_type: BOOLEAN
+    - name: Module_ID
+      data_type: NUMBER
+    - name: Ref_Set_ID
+      data_type: NUMBER
+    - name: Referenced_Component_ID
+      data_type: NUMBER
+    - name: Map_Group
+      data_type: NUMBER
+    - name: Map_Priority
+      data_type: NUMBER
+    - name: Map_Rule
+      data_type: TEXT
+    - name: Map_Advice
+      data_type: TEXT
+    - name: Map_Target
+      data_type: TEXT
+    - name: Correlation_ID
+      data_type: NUMBER
+    - name: Map_Block
+      data_type: NUMBER

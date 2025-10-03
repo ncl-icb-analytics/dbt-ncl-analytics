@@ -1,0 +1,275 @@
+version: 2
+sources:
+- name: reference_terminology
+  database: '"DATA_LAKE__NCL"'
+  schema: '"TERMINOLOGY"'
+  description: Reference terminology data including SNOMED, BNF, and other code sets
+  tables:
+  - name: BNF_LATEST
+    identifier: '"BNF_LATEST"'
+    columns:
+    - name: PRESENTATION_PACK_LEVEL
+      data_type: TEXT
+    - name: VMP_VMPP_AMP_AMPP
+      data_type: TEXT
+    - name: BNF_CODE
+      data_type: TEXT
+    - name: BNF_NAME
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: DM_D_PRODUCT_DESCRIPTION
+      data_type: TEXT
+    - name: STRENGTH
+      data_type: TEXT
+    - name: UNIT_OF_MEASURE
+      data_type: TEXT
+    - name: DM_D_PRODUCT_PACK_DESCRIPTION
+      data_type: TEXT
+    - name: PACK
+      data_type: TEXT
+    - name: SUB_PACK
+      data_type: TEXT
+    - name: VTM
+      data_type: TEXT
+    - name: VTM_NAME
+      data_type: TEXT
+  - name: CHILDHOOD_IMMS_CODES
+    identifier: '"CHILDHOOD_IMMS_CODES"'
+    columns:
+    - name: VACCINE
+      data_type: TEXT
+    - name: DOSE
+      data_type: TEXT
+    - name: PROPOSEDCLUSTER
+      data_type: TEXT
+    - name: SOURCECLUSTERID
+      data_type: TEXT
+    - name: SOURCECLUSTERDESCRIPTION
+      data_type: TEXT
+    - name: SNOMEDCONCEPTID
+      data_type: NUMBER
+    - name: CODEDESCRIPTION
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
+  - name: COMBINED_CODESETS
+    identifier: '"COMBINED_CODESETS"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
+  - name: DEFINITION_STORE
+    identifier: '"DEFINITION_STORE"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_TABLE
+      data_type: TEXT
+    - name: DBID
+      data_type: TEXT
+    - name: CORE_CONCEPT_ID
+      data_type: TEXT
+  - name: ECL_CACHE
+    identifier: '"ECL_CACHE"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: LAST_REFRESHED
+      data_type: TIMESTAMP_NTZ
+    - name: ECL_EXPRESSION_HASH
+      data_type: TEXT
+  - name: ECL_CACHE_METADATA
+    identifier: '"ECL_CACHE_METADATA"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: LAST_SUCCESSFUL_REFRESH
+      data_type: TIMESTAMP_NTZ
+    - name: LAST_ATTEMPTED_REFRESH
+      data_type: TIMESTAMP_NTZ
+    - name: LAST_ERROR_MESSAGE
+      data_type: NUMBER
+    - name: ECL_EXPRESSION_HASH
+      data_type: TEXT
+    - name: RECORD_COUNT
+      data_type: NUMBER
+    - name: LAST_REFRESHED_BY
+      data_type: TEXT
+    - name: LAST_ATTEMPTED_BY
+      data_type: TEXT
+  - name: ECL_CLUSTERS
+    identifier: '"ECL_CLUSTERS"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: ECL_EXPRESSION
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: CREATED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: UPDATED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: CREATED_BY
+      data_type: TEXT
+    - name: UPDATED_BY
+      data_type: TEXT
+    - name: CLUSTER_TYPE
+      data_type: TEXT
+  - name: ECL_CLUSTER_CHANGES
+    identifier: '"ECL_CLUSTER_CHANGES"'
+    columns:
+    - name: CHANGE_ID
+      data_type: NUMBER
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CHANGE_TYPE
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: CHANGE_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: CHANGED_BY
+      data_type: TEXT
+    - name: REFRESH_SESSION_ID
+      data_type: TEXT
+  - name: ETHNICITY_CODES
+    identifier: '"ETHNICITY_CODES"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: TERM
+      data_type: TEXT
+    - name: CATEGORY
+      data_type: TEXT
+    - name: SUBCATEGORY
+      data_type: TEXT
+    - name: GRANULAR
+      data_type: TEXT
+    - name: DEPRIORITISE_FLAG
+      data_type: BOOLEAN
+    - name: PREFERENCE_RANK
+      data_type: NUMBER
+    - name: CATEGORY_SORT
+      data_type: NUMBER
+    - name: DISPLAY_SORT_KEY
+      data_type: TEXT
+  - name: LTC_LCS_CODES
+    identifier: '"LTC_LCS_CODES"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: SNOMED_DESCRIPTION
+      data_type: TEXT
+  - name: PCD_REFSET_LATEST
+    identifier: '"PCD_REFSET_LATEST"'
+    columns:
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: NUMBER
+    - name: SNOMED_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: PCD_REFSET_ID
+      data_type: TEXT
+    - name: SERVICE_AND_RULESET
+      data_type: TEXT
+  - name: UKHSA_COVID_LATEST
+    identifier: '"UKHSA_COVID_LATEST"'
+    columns:
+    - name: CODING_SCHEME
+      data_type: TEXT
+    - name: LIBRARY
+      data_type: TEXT
+    - name: CLUSTER_ID
+      data_type: TEXT
+    - name: CLUSTER_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: SNOMED_DESCRIPTION
+      data_type: TEXT
+    - name: CODE_VALIDATED
+      data_type: TEXT
+  - name: UKHSA_FLU_LATEST
+    identifier: '"UKHSA_FLU_LATEST"'
+    columns:
+    - name: CODING_SCHEME
+      data_type: TEXT
+    - name: CODE_LIBRARY
+      data_type: TEXT
+    - name: CODE_GROUP
+      data_type: TEXT
+    - name: CODE_GROUP_DESCRIPTION
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: SNOMED_DESCRIPTION
+      data_type: TEXT
+    - name: DATE_CREATED
+      data_type: TEXT
+    - name: VALIDATED_SCTID
+      data_type: TEXT
+    - name: EMIS_ASTRX
+      data_type: TEXT
+    - name: UNNAMED_9
+      data_type: TEXT
+    - name: TPP_ASTRX
+      data_type: TEXT
+  - name: VALPROATE_PROG_CODES
+    identifier: '"VALPROATE_PROG_CODES"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_CATEGORY
+      data_type: TEXT
+    - name: LOOKBACK_YEARS_OFFSET
+      data_type: FLOAT
+    - name: VALPROATE_PRODUCT_TERM
+      data_type: TEXT

@@ -35,9 +35,9 @@ SELECT
     COUNT_IF(contact.activity_location_type_code ILIKE ANY ('F', 'H', 'J', 'K', 'L', 'M', 'N01', 'N02', 'N03', 'X01')) AS count_location_other
 
 FROM
-    {{ ref('int_csds_cyp101referral_dedup') }} AS referral
+    {{ ref('stg_csds_cyp101referral') }} AS referral
 LEFT JOIN
-    {{ ref('int_csds_cyp201carecontact_dedup') }} AS contact
+    {{ ref('stg_csds_cyp201carecontact') }} AS contact
 ON 
     referral.service_request_identifier = contact.service_request_identifier
 LEFT JOIN

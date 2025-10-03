@@ -1,0 +1,39 @@
+version: 2
+sources:
+- name: reference_data_management
+  database: '"DATA_LAKE__NCL"'
+  schema: '"DATA_MANAGEMENT"'
+  description: Data management reference datasets
+  tables:
+  - name: GP_WEIGHTED_LIST_SIZE
+    identifier: '"GP_WEIGHTED_LIST_SIZE"'
+    columns:
+    - name: SITE
+      data_type: TEXT
+    - name: FINANCIAL_QUARTER_DATE
+      data_type: DATE
+    - name: PCT
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: GMS_PMS_FLAG
+      data_type: TEXT
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PRACTICE_LIST_SIZE
+      data_type: NUMBER
+    - name: PRACTICE_NORMALISED_WEIGHTED_LIST_SIZE
+      data_type: FLOAT
+    - name: REPORT_EXECUTION_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: PRACTICE_SHORT_NAME
+    identifier: '"PRACTICE_SHORT_NAME"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_SHORT_NAME
+      data_type: TEXT

@@ -1,0 +1,9 @@
+-- Raw layer model for dictionary_dbo.OrganisationHierarchyPractice
+-- Source: "Dictionary"."dbo"
+-- Description: Reference data including PDS and lookup tables
+-- This is a 1:1 passthrough from source with standardized column names
+select
+    "SK_OrganisationID" as sk_organisation_id,
+    "SK_OrganisationID_Parent" as sk_organisation_id_parent,
+    "Level" as level
+from {{ source('dictionary_dbo', 'OrganisationHierarchyPractice') }}

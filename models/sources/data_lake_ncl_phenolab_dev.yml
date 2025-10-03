@@ -1,0 +1,203 @@
+version: 2
+sources:
+- name: phenolab
+  database: '"DATA_LAKE__NCL"'
+  schema: '"PHENOLAB_DEV"'
+  description: Phenolab supporting data
+  tables:
+  - name: AIC_DEFINITIONS
+    identifier: '"AIC_DEFINITIONS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_ATHENA__CONCEPT
+    identifier: '"BASE_ATHENA__CONCEPT"'
+    columns:
+    - name: CONCEPT_ID
+      data_type: NUMBER
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: DOMAIN_ID
+      data_type: TEXT
+    - name: VOCABULARY_ID
+      data_type: TEXT
+    - name: CONCEPT_CLASS_ID
+      data_type: TEXT
+    - name: STANDARD_CONCEPT
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: VALID_START_DATE
+      data_type: NUMBER
+    - name: VALID_END_DATE
+      data_type: NUMBER
+    - name: INVALID_REASON
+      data_type: TEXT
+  - name: DEFINITION_STORE
+    identifier: '"DEFINITION_STORE"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: HDRUK_DEFINITIONS
+    identifier: '"HDRUK_DEFINITIONS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: ICB_DEFINITIONS
+    identifier: '"ICB_DEFINITIONS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: MEASUREMENT_CONFIGS
+    identifier: '"MEASUREMENT_CONFIGS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+  - name: NHS_SNOMED_REFSETS
+    identifier: '"NHS_SNOMED_REFSETS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: OPENCODELISTS
+    identifier: '"OPENCODELISTS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ

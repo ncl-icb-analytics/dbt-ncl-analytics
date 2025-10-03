@@ -1,0 +1,36 @@
+-- Raw layer model for olids.PROCEDURE_REQUEST
+-- Source: "DATA_LAKE"."OLIDS"
+-- Description: OLIDS stable layer - cleaned and filtered patient records
+-- This is a 1:1 passthrough from source with standardized column names
+select
+    "LDS_RECORD_ID" as lds_record_id,
+    "ID" as id,
+    "PERSON_ID" as person_id,
+    "PATIENT_ID" as patient_id,
+    "ENCOUNTER_ID" as encounter_id,
+    "PRACTITIONER_ID" as practitioner_id,
+    "CLINICAL_EFFECTIVE_DATE" as clinical_effective_date,
+    "DATE_PRECISION_CONCEPT_ID" as date_precision_concept_id,
+    "DATE_RECORDED" as date_recorded,
+    "DESCRIPTION" as description,
+    "PROCEDURE_SOURCE_CONCEPT_ID" as procedure_source_concept_id,
+    "STATUS_CONCEPT_ID" as status_concept_id,
+    "AGE_AT_EVENT" as age_at_event,
+    "AGE_AT_EVENT_BABY" as age_at_event_baby,
+    "AGE_AT_EVENT_NEONATE" as age_at_event_neonate,
+    "IS_CONFIDENTIAL" as is_confidential,
+    "IS_DELETED" as is_deleted,
+    "LDS_END_DATE_TIME" as lds_end_date_time,
+    "LDS_ID" as lds_id,
+    "LDS_BUSINESS_KEY" as lds_business_key,
+    "LDS_DATASET_ID" as lds_dataset_id,
+    "LDS_CDM_EVENT_ID" as lds_cdm_event_id,
+    "LDS_VERSIONER_EVENT_ID" as lds_versioner_event_id,
+    "RECORD_OWNER_ORGANISATION_CODE" as record_owner_organisation_code,
+    "LDS_DATETIME_DATA_ACQUIRED" as lds_datetime_data_acquired,
+    "LDS_INITIAL_DATA_RECEIVED_DATE" as lds_initial_data_received_date,
+    "LDS_IS_DELETED" as lds_is_deleted,
+    "LDS_START_DATE_TIME" as lds_start_date_time,
+    "LDS_LAKEHOUSE_DATE_PROCESSED" as lds_lakehouse_date_processed,
+    "LDS_LAKEHOUSE_DATETIME_UPDATED" as lds_lakehouse_datetime_updated
+from {{ source('olids', 'PROCEDURE_REQUEST') }}

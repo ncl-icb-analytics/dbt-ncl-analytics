@@ -31,14 +31,14 @@ SELECT
     COUNT_IF(activity.community_care_activity_type IN ('08','09','10','11','12')) AS count_cyp_health_visitor,
      
 FROM
-    {{ ref('int_csds_cyp201carecontact_dedup') }} AS contact
+    {{ ref('stg_csds_cyp201carecontact') }} AS contact
 LEFT JOIN
-    {{ ref('int_csds_cyp202careactivity_dedup') }} AS activity
+    {{ ref('stg_csds_cyp202careactivity') }} AS activity
 ON 
     contact.care_contact_identifier = activity.care_contact_identifier
 
 LEFT JOIN
-    {{ ref('int_csds_cyp101referral_dedup')}} AS referral
+    {{ ref('stg_csds_cyp101referral')}} AS referral
 ON 
     contact.service_request_identifier = referral.service_request_identifier
 

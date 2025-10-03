@@ -1,0 +1,520 @@
+version: 2
+sources:
+- name: wl
+  database: '"DATA_LAKE"'
+  schema: '"WL"'
+  description: Waiting lists and patient pathway data
+  tables:
+  - name: WL_AsiCasRas_Data
+    identifier: '"WL_AsiCasRas_Data"'
+    columns:
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: Week_Ending_Date
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_REQUEST_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Referral_Identifier
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: derSubmissionId
+      data_type: NUMBER
+    - name: derRowId
+      data_type: NUMBER
+    - name: Pseudo NHS_NUMBER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: Last_PAS_Validation_Date
+      data_type: TIMESTAMP_NTZ
+    - name: derCCGofPractice
+      data_type: TEXT
+    - name: derCCGofResidence
+      data_type: TEXT
+    - name: derPracticeCode
+      data_type: TEXT
+    - name: derLSOA
+      data_type: TEXT
+    - name: derLSOA2021
+      data_type: TEXT
+  - name: WL_ClockStarts_Data
+    identifier: '"WL_ClockStarts_Data"'
+    columns:
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: Week_Ending_Date
+      data_type: TIMESTAMP_NTZ
+    - name: PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: derSubmissionId
+      data_type: NUMBER
+    - name: derRowId
+      data_type: NUMBER
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: Pseudo NHS_NUMBER
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: PRIORITY_TYPE_CODE
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_STATUS
+      data_type: TEXT
+    - name: der_Age_WeekEndingDate
+      data_type: NUMBER
+    - name: der_Age_at_Referral_To_Treatment_Period_Start_Date
+      data_type: NUMBER
+    - name: der_AgeBand_WeekEndingDate
+      data_type: TEXT
+    - name: der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
+      data_type: TEXT
+    - name: derCCGofPractice
+      data_type: TEXT
+    - name: derCCGofResidence
+      data_type: TEXT
+    - name: derPracticeCode
+      data_type: TEXT
+    - name: derLSOA
+      data_type: TEXT
+    - name: derLSOA2021
+      data_type: TEXT
+  - name: WL_ClockStops_Data
+    identifier: '"WL_ClockStops_Data"'
+    columns:
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: Week_Ending_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Waiting_List_Type
+      data_type: TEXT
+    - name: Pseudo NHS_NUMBER
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Referral_Identifier
+      data_type: TEXT
+    - name: PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: Source_Of_Referral_For_OutPatients
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: CONSULTANT_CODE
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Outpatient_Future_Appointment_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Due_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Outpatient_Appointment_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Date_Last_Attended
+      data_type: TIMESTAMP_NTZ
+    - name: Last_DNA_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Cancellation_Date
+      data_type: TIMESTAMP_NTZ
+    - name: OUTCOME_OF_ATTENDANCE_CODE
+      data_type: TEXT
+    - name: Local_Outcome_Of_Attendance
+      data_type: TEXT
+    - name: TCI_Date
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_TO_TREATMENT_PERIOD_STATUS
+      data_type: TEXT
+    - name: Local_RTT_Status_Code
+      data_type: TEXT
+    - name: DECISION_TO_ADMIT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OPCS_Code
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ADMISSION_METHOD_CODE_HOSPITAL_PROVIDER_SPELL
+      data_type: TEXT
+    - name: PRIORITY_TYPE_CODE
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Procedure_Priority_Code
+      data_type: TEXT
+    - name: Date_Of_Last_Priority_Review
+      data_type: TIMESTAMP_NTZ
+    - name: Diagnostic_Priority_Code
+      data_type: TEXT
+    - name: Outpatient_Priority_Code
+      data_type: TEXT
+    - name: Last_PAS_Validation_Performed_By
+      data_type: TEXT
+    - name: Last_PAS_Validation_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Last_PAS_Validation_Comments
+      data_type: TEXT
+    - name: Inclusion_On_Cancer_PTL
+      data_type: TEXT
+    - name: Completed_Type
+      data_type: TEXT
+    - name: derSubmissionId
+      data_type: NUMBER
+    - name: derRowId
+      data_type: NUMBER
+    - name: Der_Age_WeekEndingDate
+      data_type: NUMBER
+    - name: Der_Age_at_Referral_To_Treatment_Period_Start_Date
+      data_type: NUMBER
+    - name: Der_AgeBand_WeekEndingDate
+      data_type: TEXT
+    - name: Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
+      data_type: TEXT
+    - name: derCCGofPractice
+      data_type: TEXT
+    - name: derCCGofResidence
+      data_type: TEXT
+    - name: derPracticeCode
+      data_type: TEXT
+    - name: derLSOA
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: FIRST_ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: FIRST_ACTIVITY_TYPE
+      data_type: TEXT
+    - name: DECISION_TO_TREAT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TCI_Date_Provided
+      data_type: TIMESTAMP_NTZ
+    - name: derLSOA2021
+      data_type: TEXT
+    - name: ORIGINAL_REFERRAL_REQUEST_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_REFERRING_ORGANISATION
+      data_type: TEXT
+  - name: WL_Diagnostics_Data
+    identifier: '"WL_Diagnostics_Data"'
+    columns:
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: Week_Ending_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Waiting_List_Type
+      data_type: TEXT
+    - name: Pseudo NHS_NUMBER
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: Referral_Identifier
+      data_type: TEXT
+    - name: PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: CONSULTANT_CODE
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_TO_TREATMENT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Diagnostic_Clock_Start_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Diagnostic_Modality
+      data_type: TEXT
+    - name: Planned_Diagnostic_Due_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Proposed_Procedure_OPCS_Code
+      data_type: TEXT
+    - name: PRIORITY_TYPE_CODE
+      data_type: TEXT
+    - name: Diagnostic_Priority_Code
+      data_type: TEXT
+    - name: Inclusion_On_Cancer_PTL
+      data_type: TEXT
+    - name: derSubmissionId
+      data_type: NUMBER
+    - name: derRowId
+      data_type: NUMBER
+    - name: Der_Age_WeekEndingDate
+      data_type: NUMBER
+    - name: Der_Age_at_Referral_To_Treatment_Period_Start_Date
+      data_type: NUMBER
+    - name: Der_AgeBand_WeekEndingDate
+      data_type: TEXT
+    - name: Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
+      data_type: TEXT
+    - name: derCCGofPractice
+      data_type: TEXT
+    - name: derCCGofResidence
+      data_type: TEXT
+    - name: derPracticeCode
+      data_type: TEXT
+    - name: derLSOA
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: derLSOA2021
+      data_type: TEXT
+    - name: Diagnostic_TCI_Date
+      data_type: TIMESTAMP_NTZ
+  - name: WL_OpenPathways_Data
+    identifier: '"WL_OpenPathways_Data"'
+    columns:
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: Week_Ending_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Waiting_List_Type
+      data_type: TEXT
+    - name: Pseudo NHS_NUMBER
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: PERSON_BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Referral_Identifier
+      data_type: TEXT
+    - name: PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: CONSULTANT_CODE
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Current_Pathway_Period_Start_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Outpatient_Future_Appointment_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Due_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Outpatient_Appointment_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Date_Last_Attended
+      data_type: TIMESTAMP_NTZ
+    - name: Last_DNA_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Cancellation_Date
+      data_type: TIMESTAMP_NTZ
+    - name: OUTCOME_OF_ATTENDANCE_CODE
+      data_type: TEXT
+    - name: Local_Outcome_Of_Attendance
+      data_type: TEXT
+    - name: TCI_Date
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_TO_TREATMENT_PERIOD_STATUS
+      data_type: TEXT
+    - name: Local_RTT_Status_Code
+      data_type: TEXT
+    - name: DECISION_TO_ADMIT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Proposed_Procedure_OPCS_Code
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ADMISSION_METHOD_CODE_HOSPITAL_PROVIDER_SPELL
+      data_type: TEXT
+    - name: PRIORITY_TYPE_CODE
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: Procedure_Priority_Code
+      data_type: TEXT
+    - name: Diagnostic_Priority_Code
+      data_type: TEXT
+    - name: Outpatient_Priority_Code
+      data_type: TEXT
+    - name: Date_Of_Last_Priority_Review
+      data_type: TIMESTAMP_NTZ
+    - name: Last_PAS_Validation_Performed_By
+      data_type: TEXT
+    - name: Last_PAS_Validation_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Last_PAS_Validation_Comments
+      data_type: TEXT
+    - name: Inclusion_On_Cancer_PTL
+      data_type: TEXT
+    - name: derSubmissionId
+      data_type: NUMBER
+    - name: derRowId
+      data_type: NUMBER
+    - name: Der_Age_WeekEndingDate
+      data_type: NUMBER
+    - name: Der_Age_at_Referral_To_Treatment_Period_Start_Date
+      data_type: NUMBER
+    - name: Der_AgeBand_WeekEndingDate
+      data_type: TEXT
+    - name: Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
+      data_type: TEXT
+    - name: derCCGofPractice
+      data_type: TEXT
+    - name: derCCGofResidence
+      data_type: TEXT
+    - name: derPracticeCode
+      data_type: TEXT
+    - name: derLSOA
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: INTENDED_MANAGEMENT_CODE
+      data_type: TEXT
+    - name: Capacity_Status
+      data_type: TEXT
+    - name: Requires_Alternative_Capacity
+      data_type: TEXT
+    - name: ASA_PHYSICAL_STATUS_CLASSIFICATION_SYSTEM_CODE
+      data_type: TEXT
+    - name: Outcome_Of_Patient_Contact
+      data_type: TEXT
+    - name: Transfer_Status
+      data_type: TEXT
+    - name: Mutual_Aid_Accepting_Provider
+      data_type: TEXT
+    - name: FIRST_ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: FIRST_ACTIVITY_TYPE
+      data_type: TEXT
+    - name: DECISION_TO_TREAT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TCI_Date_Provided
+      data_type: TIMESTAMP_NTZ
+    - name: Preliminary_Screening_And_Risk_Assessment_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Action_Following_Preliminary_Screening_And_Risk_Assessment
+      data_type: TEXT
+    - name: derLSOA2021
+      data_type: TEXT
+    - name: ORIGINAL_REFERRAL_REQUEST_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_REFERRING_ORGANISATION
+      data_type: TEXT
+  - name: WL_PIFU_Data
+    identifier: '"WL_PIFU_Data"'
+    columns:
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: Week_Ending_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Pseudo NHS_NUMBER
+      data_type: TEXT
+    - name: PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: Waiting_List_Type
+      data_type: TEXT
+    - name: Initiation_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Expiry_Date
+      data_type: TIMESTAMP_NTZ
+    - name: der_Age_WeekEndingDate
+      data_type: NUMBER
+    - name: der_AgeBand_WeekEndingDate
+      data_type: TEXT
+    - name: derSubmissionId
+      data_type: NUMBER
+    - name: derRowId
+      data_type: NUMBER
+    - name: derCCGofPractice
+      data_type: TEXT
+    - name: derCCGofResidence
+      data_type: TEXT
+    - name: derPracticeCode
+      data_type: TEXT
+    - name: derLSOA
+      data_type: TEXT
+    - name: derLSOA2021
+      data_type: TEXT
+  - name: WL_SubmissionLog_Data
+    identifier: '"WL_SubmissionLog_Data"'
+    columns:
+    - name: derSubmissionID
+      data_type: NUMBER
+    - name: derDLPSpecificationName
+      data_type: TEXT
+    - name: derFileName
+      data_type: TEXT
+    - name: derSubmissionDateTimeFromDLP
+      data_type: TIMESTAMP_NTZ
+    - name: derProviderCode
+      data_type: TEXT
+    - name: derWeekEnding
+      data_type: TIMESTAMP_NTZ
+    - name: derIsLatestFiletypeProviderWeekending
+      data_type: BOOLEAN
+    - name: derIsLatestFiletypeProvider
+      data_type: BOOLEAN
