@@ -7,11 +7,13 @@
 /*
 OLIDS Data Refresh Metadata
 
-Provides centralized refresh date information for OLIDS data and dashboard tables.
+Provides centralised refresh date information for OLIDS data and dashboard tables.
 
 Columns:
 - metric_type: Type of metric (global_data_refresh, table_refresh)
-- table_name: Name of dashboard table (NULL for global metrics)
+- database_name: Snowflake database name (NULL for global metrics)
+- schema_name: Snowflake schema name (NULL for global metrics)
+- table_name: Table name (NULL for global metrics)
 - refresh_date: Date when data was last refreshed
 - last_altered_timestamp: Timestamp when table was last modified (from Snowflake metadata)
 
@@ -26,6 +28,8 @@ ensuring accuracy regardless of partial dbt runs.
 WITH global_refresh AS (
     SELECT
         'global_data_refresh' AS metric_type,
+        NULL AS database_name,
+        NULL AS schema_name,
         NULL AS table_name,
         global_data_refresh_date AS refresh_date,
         NULL AS last_altered_timestamp
@@ -34,7 +38,9 @@ WITH global_refresh AS (
 reporting_tables AS (
     SELECT
         'table_refresh' AS metric_type,
-        table_schema || '.' || table_name AS table_name,
+        table_catalog AS database_name,
+        table_schema AS schema_name,
+        table_name,
         last_altered AS last_altered_timestamp
     FROM {{ this.database }}.INFORMATION_SCHEMA.TABLES
     WHERE table_type = 'BASE TABLE'
@@ -44,7 +50,9 @@ reporting_tables AS (
 
     SELECT
         'table_refresh' AS metric_type,
-        table_schema || '.' || table_name AS table_name,
+        table_catalog AS database_name,
+        table_schema AS schema_name,
+        table_name,
         last_altered AS last_altered_timestamp
     FROM {{ target.database.replace('PUBLISHED_REPORTING__DIRECT_CARE', 'REPORTING') }}.INFORMATION_SCHEMA.TABLES
     WHERE table_type = 'BASE TABLE'
@@ -53,6 +61,8 @@ reporting_tables AS (
 table_refresh AS (
     SELECT
         metric_type,
+        database_name,
+        schema_name,
         table_name,
         last_altered_timestamp::date AS refresh_date,
         last_altered_timestamp
@@ -62,4 +72,4 @@ table_refresh AS (
 SELECT * FROM global_refresh
 UNION ALL
 SELECT * FROM table_refresh
-ORDER BY metric_type, table_name
+ORDER BY metric_type, database_name, schema_name, table_name

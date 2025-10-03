@@ -36,3 +36,15 @@ models:
       Childhood immunisations person-level data for adolescents, for secondary use.
       Filtered to exclude patients with Type 1 opt-outs via dim_person_secondary_use_allowed.
       See childhood_imms_person_level_adolescent_dm in published_reporting_direct_care for full details.
+
+  - name: metadata_refresh_dates_secondary_use
+    description: |
+      Centralised metadata tracking for OLIDS data freshness and table update timestamps (secondary use).
+
+      Provides two types of metrics:
+      - **Global data refresh**: Consensus date where ≥150 practices have uploaded data (excludes future dates and filters out stale practices)
+      - **Table refresh**: Last modified timestamps for all OLIDS tables in REPORTING and PUBLISHED_REPORTING databases
+
+      Table timestamps are retrieved from Snowflake's INFORMATION_SCHEMA, ensuring accuracy regardless of partial dbt runs.
+
+      See metadata_refresh_dates in published_reporting_direct_care for column documentation.
