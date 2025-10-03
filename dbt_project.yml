@@ -7,6 +7,7 @@ profile: 'ncl_analytics'
 # Display connection info when dbt runs start
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
+  - "{{ ensure_governance_tags() }}"
 
 
 target-path: "target"
@@ -132,7 +133,9 @@ models:
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "OLIDS_PUBLISHED"
-        +post-hook: ["{{ add_model_comment() }}"]
+        +post-hook:
+          - "{{ add_model_comment() }}"
+          - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
     
     # Shared models (reference data, utilities)
     shared:

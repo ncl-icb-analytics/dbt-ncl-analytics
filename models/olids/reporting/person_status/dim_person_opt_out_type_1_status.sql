@@ -21,13 +21,15 @@ WITH latest_opt_out_status AS (
         opt.source_cluster_id,
 
         CASE
-            WHEN opt.source_cluster_id IN ('OPT_OUT_TYPE_1_DISSENT', 'OPT_OUT_TYPE_1_DISSENT_WITHDRAWAL') THEN TRUE
+            WHEN opt.source_cluster_id = 'OPT_OUT_TYPE_1_DISSENT' THEN TRUE
+            WHEN opt.source_cluster_id = 'OPT_OUT_TYPE_1_DISSENT_WITHDRAWAL' THEN FALSE
             ELSE FALSE
         END AS is_opted_out,
 
         CASE
-            WHEN opt.source_cluster_id IN ('OPT_OUT_TYPE_1_DISSENT', 'OPT_OUT_TYPE_1_DISSENT_WITHDRAWAL') THEN 'Opted Out'
-            ELSE 'Not Opted Out'
+            WHEN opt.source_cluster_id = 'OPT_OUT_TYPE_1_DISSENT' THEN 'Opted Out'
+            WHEN opt.source_cluster_id = 'OPT_OUT_TYPE_1_DISSENT_WITHDRAWAL' THEN 'Withdrawal of Dissent'
+            ELSE 'Unknown'
         END AS opt_out_status
 
     FROM {{ ref('int_opt_out_type_1_all') }} opt
@@ -49,3 +51,4 @@ SELECT
     is_opted_out,
     opt_out_status
 FROM latest_opt_out_status
+WHERE is_opted_out = TRUE
