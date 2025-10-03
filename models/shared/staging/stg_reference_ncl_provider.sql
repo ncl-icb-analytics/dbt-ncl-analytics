@@ -1,6 +1,6 @@
--- Staging model for reference_analyst_managed.IMD2019
+-- Staging model for reference_lookup_ncl.NCL_PROVIDER
 -- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules
+-- Description: Analyst-managed reference datasets and business rules that have been peer reviewed and are in the modelling environment.
 
 select
     "SK_ORGANISATION_ID" as sk_organisation_id,
