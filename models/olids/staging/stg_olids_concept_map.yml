@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: stg_olids_concept_map
-    description: "Mappings between different coding systems and terminologies. Deduplicated by id using lds_start_date_time."
+    description: "Mappings between different coding systems and terminologies. Static reference table."
     columns:
       - name: id
         description: "Primary key - unique identifier for this concept mapping"
@@ -20,15 +20,13 @@ models:
 
       - name: target_code_id
         description: "Foreign key to concept.id - target concept being mapped to"
+        tests:
+          - relationships:
+              to: ref('stg_olids_concept')
+              field: id
 
       - name: is_primary
         description: "Boolean indicating if this is the primary mapping for the source concept"
 
       - name: equivalence
         description: "Mapping equivalence type (equivalent, equal, wider, subsumes, narrower, specializes, inexact, unmatched, disjoint)"
-
-      - name: lds_start_date_time
-        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
-
-      - name: lds_record_id
-        description: "LDS assigned unique identifier for the source record version"

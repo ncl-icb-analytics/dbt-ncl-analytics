@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: stg_olids_person
-    description: "Person-level demographic records used for patient identity management across systems. Deduplicated by id."
+    description: "Person-level demographic records used for patient identity management across systems. Deduplicated by id with NHS number hashes aggregated into array."
     columns:
       - name: id
         description: "Primary key - unique identifier for this person"
@@ -9,8 +9,8 @@ models:
           - unique
           - not_null
 
-      - name: nhs_number_hash
-        description: "Hashed NHS number for person identification"
+      - name: nhs_number_hashes
+        description: "Array of distinct hashed NHS numbers associated with this person (one person may have multiple NHS number hashes)"
 
       - name: title
         description: "Person title (Mr, Mrs, Dr, etc.)"
@@ -29,6 +29,3 @@ models:
 
       - name: death_month
         description: "Month of death (1-12), if deceased"
-
-      - name: lds_start_date_time
-        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"

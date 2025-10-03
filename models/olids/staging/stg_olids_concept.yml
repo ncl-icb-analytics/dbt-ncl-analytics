@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: stg_olids_concept
-    description: "Terminology and coding concepts used throughout OLIDS. Deduplicated by id using lds_start_date_time."
+    description: "Terminology and coding concepts used throughout OLIDS. Static reference table."
     columns:
       - name: id
         description: "Primary key - unique identifier for this concept"
@@ -26,9 +26,3 @@ models:
 
       - name: use_count
         description: "Number of times this concept is used in the dataset"
-
-      - name: lds_start_date_time
-        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
-
-      - name: lds_record_id
-        description: "LDS assigned unique identifier for the source record version"
