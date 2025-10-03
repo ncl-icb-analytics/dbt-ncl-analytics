@@ -2,7 +2,8 @@
     config(materialized = 'view')
 }}
 
-select primarykey_id
+select {{ dbt_utils.generate_surrogate_key(["primarykey_id", "episodes_id", "icd_id"]) }} as diagnosis_id,
+    ,primarykey_id
         ,icd_id 
         ,rownumber_id 
         ,episodes_id
