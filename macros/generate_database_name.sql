@@ -10,7 +10,7 @@
         {%- if database_prefix is none -%}
             {{ target.database }}
         {%- else -%}
-            {{ database_prefix }}_{{ target.database }}
+            {{ database_prefix }}__{{ target.database }}
         {%- endif -%}
     {%- else -%}
         {%- if database_prefix is none -%}
