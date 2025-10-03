@@ -1,0 +1,49 @@
+version: 2
+models:
+  - name: stg_olids_practitioner_in_role
+    description: "Practitioner roles and their employment history at organisations. Deduplicated by id and filtered to exclude deleted records."
+    columns:
+      - name: id
+        description: "Primary key - unique identifier for this practitioner role"
+        tests:
+          - unique
+          - not_null
+
+      - name: practitioner_id
+        description: "Foreign key to practitioner.id"
+
+      - name: organisation_id
+        description: "Foreign key to organisation.id - organisation where practitioner works"
+
+      - name: role_code
+        description: "Code for the practitioner role"
+
+      - name: role
+        description: "Description of the practitioner role"
+
+      - name: date_employment_start
+        description: "Start date of employment in this role"
+
+      - name: date_employment_end
+        description: "End date of employment in this role"
+
+      - name: lds_id
+        description: "LDS system identifier"
+
+      - name: record_owner_organisation_code
+        description: "Organisation code of the record owner"
+
+      - name: lds_datetime_data_acquired
+        description: "Datetime when data was acquired by LDS"
+
+      - name: lds_initial_data_received_date
+        description: "Date when data was initially received by LDS"
+
+      - name: lds_start_date_time
+        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
+
+      - name: lds_is_deleted
+        description: "Deletion flag - records with TRUE are filtered out in this staging layer"
+
+      - name: lds_record_id
+        description: "LDS assigned unique identifier for the source record version"

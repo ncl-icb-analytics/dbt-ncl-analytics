@@ -1,0 +1,112 @@
+version: 2
+models:
+  - name: stg_olids_appointment
+    description: "Patient appointment records from GP and other healthcare systems. Deduplicated by id and filtered to exclude deleted records."
+    columns:
+      - name: id
+        description: "Primary key - unique identifier for this appointment"
+        tests:
+          - unique
+          - not_null
+
+      - name: organisation_id
+        description: "Foreign key to organisation.id - organisation where appointment took place"
+
+      - name: patient_id
+        description: "Foreign key to patient.id"
+
+      - name: person_id
+        description: "Foreign key to person.id - person-level identifier"
+
+      - name: practitioner_in_role_id
+        description: "Foreign key to practitioner_in_role.id - practitioner role for the appointment"
+
+      - name: schedule_id
+        description: "Foreign key to schedule.id - schedule slot used"
+
+      - name: start_date
+        description: "Start datetime of the appointment"
+
+      - name: planned_duration
+        description: "Planned duration of the appointment in minutes"
+
+      - name: actual_duration
+        description: "Actual duration of the appointment in minutes"
+
+      - name: appointment_status_concept_id
+        description: "Foreign key to concept.id - status of the appointment (booked, arrived, fulfilled, cancelled, etc.)"
+
+      - name: patient_wait
+        description: "Patient wait time in minutes"
+
+      - name: patient_delay
+        description: "Patient delay time in minutes"
+
+      - name: date_time_booked
+        description: "Datetime when the appointment was booked"
+
+      - name: date_time_sent_in
+        description: "Datetime when the patient was sent in"
+
+      - name: date_time_left
+        description: "Datetime when the patient left"
+
+      - name: cancelled_date
+        description: "Date when the appointment was cancelled, if applicable"
+
+      - name: type
+        description: "Type of appointment"
+
+      - name: age_at_event
+        description: "Patient age in years at time of appointment"
+
+      - name: age_at_event_baby
+        description: "Patient age in months for babies (0-24 months)"
+
+      - name: age_at_event_neonate
+        description: "Patient age in days for neonates (0-28 days)"
+
+      - name: booking_method_concept_id
+        description: "Foreign key to concept.id - method used to book the appointment"
+
+      - name: contact_mode_concept_id
+        description: "Foreign key to concept.id - mode of contact (face-to-face, telephone, video, etc.)"
+
+      - name: is_blocked
+        description: "Boolean indicating if the appointment slot is blocked"
+
+      - name: national_slot_category_name
+        description: "National category name for the appointment slot"
+
+      - name: context_type
+        description: "Context type of the appointment"
+
+      - name: service_setting
+        description: "Service setting where the appointment takes place"
+
+      - name: national_slot_category_description
+        description: "National category description for the appointment slot"
+
+      - name: csds_care_contact_identifier
+        description: "CSDS care contact identifier"
+
+      - name: lds_id
+        description: "LDS system identifier"
+
+      - name: record_owner_organisation_code
+        description: "Organisation code of the record owner"
+
+      - name: lds_datetime_data_acquired
+        description: "Datetime when data was acquired by LDS"
+
+      - name: lds_initial_data_received_date
+        description: "Date when data was initially received by LDS"
+
+      - name: lds_start_date_time
+        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
+
+      - name: lds_is_deleted
+        description: "Deletion flag - records with TRUE are filtered out in this staging layer"
+
+      - name: lds_record_id
+        description: "LDS assigned unique identifier for the source record version"

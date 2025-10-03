@@ -88,6 +88,15 @@ models:
         +schema: "DBT_STAGING"
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
+        # Global test: ensure all staging models are not empty
+        +tests:
+          - dbt_utils.recency:
+              datepart: day
+              field: lds_start_date_time
+              interval: 14
+              config:
+                severity: warn
+          - dbt_utils.at_least_one
       modelling:
         +materialized: table
         +database: "MODELLING"
