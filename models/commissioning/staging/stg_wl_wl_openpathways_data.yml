@@ -1,7 +1,7 @@
 version: 1
 
 models:
-  - name: int_wl_all_dates
+  - name: stg_wl_wl_openpathways_data
     description: >
       All active waiting lists, corrected to Sunday snapshot dates. Used for care coordination across providers. Not limited to most recent snapshot date - can be used for time series.
     columns:
