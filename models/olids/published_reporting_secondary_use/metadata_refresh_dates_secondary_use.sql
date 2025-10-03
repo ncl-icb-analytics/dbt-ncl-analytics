@@ -25,13 +25,23 @@ WITH global_refresh AS (
 table_refresh AS (
     SELECT
         'table_refresh' AS metric_type,
-        table_name,
+        table_schema || '.' || table_name AS table_name,
         last_altered::date AS refresh_date,
         last_altered AS last_altered_timestamp
     FROM {{ this.database }}.INFORMATION_SCHEMA.TABLES
-    WHERE table_schema = 'OLIDS_PUBLISHED'
-        AND table_type = 'BASE TABLE'
+    WHERE table_type = 'BASE TABLE'
         AND table_name != 'METADATA_REFRESH_DATES'
+
+    UNION ALL
+
+    SELECT
+        'table_refresh' AS metric_type,
+        table_schema || '.' || table_name AS table_name,
+        last_altered::date AS refresh_date,
+        last_altered AS last_altered_timestamp
+    FROM {{ target.database.replace('PUBLISHED_REPORTING__SECONDARY_USE', 'REPORTING') }}.INFORMATION_SCHEMA.TABLES
+    WHERE table_type = 'BASE TABLE'
+        AND table_schema LIKE 'OLIDS_%'
 )
 
 SELECT * FROM global_refresh

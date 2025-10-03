@@ -31,15 +31,24 @@ WITH global_refresh AS (
         NULL AS last_altered_timestamp
     FROM {{ ref('int_global_data_refresh_date') }}
 ),
-dashboard_tables AS (
+reporting_tables AS (
     SELECT
         'table_refresh' AS metric_type,
-        table_name,
+        table_schema || '.' || table_name AS table_name,
         last_altered AS last_altered_timestamp
     FROM {{ this.database }}.INFORMATION_SCHEMA.TABLES
-    WHERE table_schema = 'OLIDS_PUBLISHED'
-        AND table_type = 'BASE TABLE'
+    WHERE table_type = 'BASE TABLE'
         AND table_name != 'METADATA_REFRESH_DATES'
+
+    UNION ALL
+
+    SELECT
+        'table_refresh' AS metric_type,
+        table_schema || '.' || table_name AS table_name,
+        last_altered AS last_altered_timestamp
+    FROM {{ target.database.replace('PUBLISHED_REPORTING__DIRECT_CARE', 'REPORTING') }}.INFORMATION_SCHEMA.TABLES
+    WHERE table_type = 'BASE TABLE'
+        AND table_schema LIKE 'OLIDS_%'
 ),
 table_refresh AS (
     SELECT
@@ -47,7 +56,7 @@ table_refresh AS (
         table_name,
         last_altered_timestamp::date AS refresh_date,
         last_altered_timestamp
-    FROM dashboard_tables
+    FROM reporting_tables
 )
 
 SELECT * FROM global_refresh
