@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: int_gp_encounters_appt
+    description: "GP encounters from OLIDS appointments filtered to include only relevant 'Care Related Encounter' appointment context types"
+    columns:
+      - name: person_id
+        data_type: varchar
+        description: "Unique identifier for a person [OLIDS person_id]"
+
+      - name: start_date
+        data_type: timestamp_ntz
+        description: "Date and time the appointment started"
+
+      - name: actual_duration
+        data_type: number
+        description: "Appointment duration in minutes"
+
+      - name: national_slot_category_name
+        data_type: varchar
+        description: "NHSE national slot category name to classify the appointment"
+
+      - name: service_setting
+        data_type: varchar
+        description: ""
+
+      - name: code
+        data_type: varchar
+        description: "National code for appointment outcome"
+
+      - name: display
+        data_type: varchar
+        description: "Description of the appointment outcome code"
