@@ -19,7 +19,7 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 select 
     /* Information needed to derive standard encounter information */
     core.primarykey_id as encounter_id
-    , core.spell_patient_identity_nhs_number_value_pseudo as sk_patient_id
+    , core.sk_patient_id
     , core.spell_care_location_site_code_of_treatment as site_id
     , core.spell_admission_date as start_date
     , core.spell_discharge_length_of_hospital_stay as duration

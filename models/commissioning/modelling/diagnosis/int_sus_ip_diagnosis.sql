@@ -17,7 +17,7 @@ with
 
 select 
     {{dbt_utils.generate_surrogate_key( ["f.primarykey_id", "f.rownumber_id", "f.episodes_id", "f.icd_id"])}} as diagnosis_id,
-    se.spell_patient_identity_nhs_number_value_pseudo as sk_patient_id,
+    se.sk_patient_id,
     se.spell_admission_date as date,
     f.primarykey_id as visit_occurrence_id,
     'APC_SPELL' as visit_occurrence_type,

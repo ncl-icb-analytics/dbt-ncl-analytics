@@ -25,7 +25,7 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 select 
     /* Information needed to derive standard encounter information */
     core.appointment_identifier as encounter_id
-    , core.appointment_patient_identity_nhs_number_value_pseudo as sk_patient_id
+    , core.sk_patient_id
     , core.appointment_commissioning_service_agreement_provider as provider_id
     , dict_provider.service_provider_name as provider_name
     , core.appointment_care_location_site_code_of_treatment as site_id
