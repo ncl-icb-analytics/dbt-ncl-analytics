@@ -38,15 +38,8 @@ dashboard_tables AS (
         last_altered AS last_altered_timestamp
     FROM {{ this.database }}.INFORMATION_SCHEMA.TABLES
     WHERE table_schema = 'OLIDS_PUBLISHED'
-        AND table_name IN (
-            'COVID_FLU_DASHBOARD_BASE',
-            'LTC_LCS_CF_DASHBOARD_BASE',
-            'POPULATION_HEALTH_NEEDS_BASE',
-            'POPULATION_HEALTH_NEEDS_BASE_READABLE',
-            'POPULATION_HEALTH_NEEDS_DEMOGRAPHICS_LTCS',
-            'CHILDHOOD_IMMS_PERSON_LEVEL_CHILD_DM',
-            'CHILDHOOD_IMMS_PERSON_LEVEL_ADOLESCENT_DM'
-        )
+        AND table_type = 'BASE TABLE'
+        AND table_name != 'METADATA_REFRESH_DATES'
 ),
 table_refresh AS (
     SELECT
