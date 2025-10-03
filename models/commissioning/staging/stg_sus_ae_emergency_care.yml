@@ -1,0 +1,12 @@
+
+models:
+  - name: int_sus_ae_emergency_care
+    description: |
+      Urgent and Emergency Care (UEC) attendances from SUS data.
+      One row per attendance.
+    columns:
+      - name: primarykey_id
+        description: "Unique identifier for the attendance (PRIMARYKEY_ID)"
+        tests:
+          - not_null
+          - unique
