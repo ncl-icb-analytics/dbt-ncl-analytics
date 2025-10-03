@@ -4,6 +4,9 @@ config-version: 2
 
 profile: 'ncl_analytics'
 
+flags:
+  partial_parse: true
+
 # Display connection info when dbt runs start
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
@@ -43,6 +46,8 @@ models:
     +persist_docs:
       columns: true
     +post-hook: ["{{ grant_ownership_with_copy() }}"]
+    # Temporary: disable downstream layers during staging refactor
+    +enabled: true
 
     # Commissioning analytics models
     commissioning:
@@ -59,21 +64,27 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "MODELLING"
         +schema: "COMMISSIONING_MODELLING"
+        +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
       reporting:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "REPORTING"
         +schema: "COMMISSIONING_REPORTING"
+        +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "COMMISSIONING_PUBLISHED"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
-    
+
     # OLIDS analytics models
     olids:
       raw:
@@ -98,8 +109,10 @@ models:
                 severity: warn
           - dbt_utils.at_least_one
       modelling:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "MODELLING"
+        +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
         # Business area schema mappings based on OLIDS domains
         diagnoses:
@@ -117,8 +130,10 @@ models:
         utilities:
           +schema: "OLIDS_UTILITIES"
       reporting:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "REPORTING"
+        +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
         # Business area schema mappings for reporting models
         clinical_safety:
@@ -145,16 +160,20 @@ models:
         programme:
           +schema: "OLIDS_PROGRAMME"
       published_reporting_direct_care:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "OLIDS_PUBLISHED"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "OLIDS_PUBLISHED"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
-    
+
     # Shared models (reference data, utilities)
     shared:
       raw:
@@ -170,24 +189,32 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "MODELLING"
         +schema: "REFERENCE"
+        +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
       reporting:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "REPORTING"
         +schema: "REFERENCE"
+        +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_direct_care:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "REFERENCE"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
+        +enabled: false  # Temporary: disabled during staging refactor
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "REFERENCE"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
 
 seeds:
