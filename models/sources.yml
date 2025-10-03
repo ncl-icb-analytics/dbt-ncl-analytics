@@ -12095,6 +12095,32 @@ sources:
       data_type: FLOAT
     - name: VALPROATE_PRODUCT_TERM
       data_type: TEXT
+- name: reference_lookup_ncl
+  database: '"MODELLING"'
+  schema: '"LOOKUP_NCL"'
+  description: Analyst-managed reference datasets and business rules in the MODELLING environment
+  tables:
+  - name: NCL_PROVIDER
+    identifier: '"NCL_PROVIDER"'
+    columns:
+    - name: SK_ORGANISATION_ID
+      data_type: NUMBER
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: PROVIDER_SHORTHAND
+      data_type: TEXT
+    - name: REPORTING_CODE
+      data_type: TEXT
+    - name: REPORTING_NAME
+      data_type: TEXT
+    - name: REPORTING_SHORTHAND
+      data_type: TEXT
+    - name: PROVIDER_TYPE
+      data_type: TEXT
+    - name: ROW_TYPE
+      data_type: TEXT
 - name: dictionary_eRS
   database: '"Dictionary"'
   schema: '"E-Referral"'
