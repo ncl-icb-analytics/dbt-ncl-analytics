@@ -14,6 +14,6 @@ SELECT
     COUNT(*) AS wl_current_total_count,
     IFF(p.provider_code IS NOT NULL, TRUE, FALSE) AS "is_ncl_provider"
 FROM {{ ref('int_wl_current') }} wl
-LEFT JOIN DEV__MODELLING.LOOKUP_NCL.PROVIDER_SHORTHAND p ON wl.provider_code = p.provider_code
+LEFT JOIN MODELLING.LOOKUP_NCL.NCL_PROVIDER p ON wl.provider_code = p.provider_code
 GROUP BY 
 ALL
