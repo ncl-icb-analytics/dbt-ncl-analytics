@@ -15,8 +15,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: IMMDX_COV_COD,IMMRX_COD,IMM_ADM_COD,DXT_CHEMO_COD
+          cluster_ids: IMMDX_COV_COD,IMMRX_COD,IMM_ADM_COD,DXT_CHEMO_COD
     
     config:
       meta:

@@ -6,8 +6,7 @@ models:
       One row per eGFR observation using EGFR_COD cluster with CKD stage classification (stages 1-5) and plausible range filtering (1-200 mL/min/1.73m²).'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: EGFR_COD
+          cluster_ids: EGFR_COD
     columns:
       - name: id
         description: Unique identifier for each eGFR observation

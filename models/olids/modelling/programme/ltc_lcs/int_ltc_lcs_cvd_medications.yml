@@ -6,5 +6,4 @@ models:
       One row per medication order for statin medications using cluster ID: LCS_STAT_COD_CVD.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: LCS_STAT_COD_CVD
+          cluster_ids: LCS_STAT_COD_CVD

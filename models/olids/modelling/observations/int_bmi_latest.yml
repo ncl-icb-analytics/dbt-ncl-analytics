@@ -161,10 +161,9 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 18
-                max_value: 150
-                inclusive: true
+              min_value: 18
+              max_value: 150
+              inclusive: true
       - name: id
         description: Latest BMI observation identifier
         tests:
@@ -182,8 +181,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['recorded', 'calculated']
+              values: ['recorded', 'calculated']
       - name: requires_lower_bmi_thresholds
         description: 'Flag indicating if person requires lower BMI thresholds per NICE NG246'
       - name: cardiometabolic_risk_ethnicity_group
@@ -193,21 +191,18 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [true]
+              values: [true]
       - name: bmi_category
         description: 'BMI categorisation using ethnicity-adjusted thresholds per NICE NG246'
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
+              values: ['Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
       - name: bmi_risk_sort_key
         description: 'BMI risk sort key using ethnicity-adjusted thresholds (higher = higher risk)'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 1
-                max_value: 6
-                inclusive: true
+              min_value: 1
+              max_value: 6
+              inclusive: true

@@ -34,5 +34,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: DEPRES_COD, DEPR_COD
+          cluster_ids: DEPRES_COD, DEPR_COD

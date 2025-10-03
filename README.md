@@ -53,6 +53,10 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+**Important:** This project uses dbt-core 1.9.4 (not 1.10+) for Snowflake compatibility. Snowflake's dbt runtime does not yet support dbt 1.10 test macro syntax. Do not upgrade dbt packages or use the new `arguments:` property in test definitions.
+
+**Note on VSCode warnings:** If using the dbt VSCode extension, you may see deprecation warnings (dbt0102) about test arguments. These are cosmetic warnings from the extension's parser and can be safely ignored. The code is correct for dbt 1.9.4 and Snowflake.
+
 *Note: If `python` command fails, use `py -m venv venv` instead. To add Python to PATH without admin rights, find where Python is installed (run `py -c "import sys; print(sys.executable)"` to locate it), then run in PowerShell:*
 ```powershell
 [Environment]::SetEnvironmentVariable("PATH", "$env:PATH;C:\Path\To\Python", "User")

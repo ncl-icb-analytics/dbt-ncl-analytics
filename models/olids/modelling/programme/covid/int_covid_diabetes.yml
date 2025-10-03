@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: DIAB_COD,DMRES_COD,ADDIS_COD
+          cluster_ids: DIAB_COD,DMRES_COD,ADDIS_COD
     
     config:
       meta:

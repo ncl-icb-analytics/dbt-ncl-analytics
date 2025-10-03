@@ -88,8 +88,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['Open Registration', 'Closed Registration']
+              values: ['Open Registration', 'Closed Registration']
 
       - name: is_current_registration
         description: 'Flag indicating if this is the current active registration'
@@ -106,16 +105,14 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 1
+              min_value: 1
 
       - name: total_registrations_count
         description: 'Total number of registrations this person has had'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 1
+              min_value: 1
 
       - name: gap_since_previous_registration_days
         description: 'Number of days between this registration and the previous one'

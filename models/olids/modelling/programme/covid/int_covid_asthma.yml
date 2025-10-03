@@ -15,8 +15,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: AST_COD,ASTRXM1_COD,ASTRXM2_COD,ASTADM_COD
+          cluster_ids: AST_COD,ASTRXM1_COD,ASTRXM2_COD,ASTADM_COD
     
     config:
       meta:

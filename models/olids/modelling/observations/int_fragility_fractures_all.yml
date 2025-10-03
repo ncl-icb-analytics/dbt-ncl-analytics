@@ -6,8 +6,7 @@ models:
       One row per fracture observation using FF_COD cluster with fracture site classification and QOF-compliant date filtering (after April 2012).'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: FF_COD
+          cluster_ids: FF_COD
     columns:
       - name: id
         description: Unique identifier for each fragility fracture observation

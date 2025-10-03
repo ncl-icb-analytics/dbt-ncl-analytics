@@ -51,5 +51,4 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: CHOL2_COD
+          cluster_ids: CHOL2_COD

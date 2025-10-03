@@ -13,9 +13,8 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('def_indicator')
-                field: indicator_id
+              to: ref('def_indicator')
+              field: indicator_id
               
       - name: population_group
         description: Target population (e.g., AGE_LT_80, T2DM, CKD_ACR_GE_70)

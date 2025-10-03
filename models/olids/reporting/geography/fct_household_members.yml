@@ -33,16 +33,14 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]
       
       - name: is_deceased
         description: 'Flag indicating if patient is deceased'
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]
       
       - name: sex
         description: 'Patient sex (Male, Female, Indeterminate, Not Known)'
@@ -66,8 +64,7 @@ models:
         description: 'Flag indicating if interpreter services are required'
         tests:
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]
       
       - name: practice_code
         description: 'GP practice code where patient is registered'

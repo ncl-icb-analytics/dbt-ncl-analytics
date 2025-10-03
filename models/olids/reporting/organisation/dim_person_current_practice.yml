@@ -81,16 +81,14 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 1
+              min_value: 1
 
       - name: total_registrations_count
         description: 'Total number of registrations this person has had'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 1
+              min_value: 1
 
       - name: has_changed_practice
         description: 'Flag indicating if person has ever changed practice (based on total registrations)'

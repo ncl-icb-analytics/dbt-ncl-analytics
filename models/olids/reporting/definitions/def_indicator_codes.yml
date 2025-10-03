@@ -13,9 +13,8 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('def_indicator')
-                field: indicator_id
+              to: ref('def_indicator')
+              field: indicator_id
               
       - name: cluster_id
         description: Source cluster from reference data (e.g., DM_COD, DMRES_COD)

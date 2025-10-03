@@ -57,8 +57,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['Spoken', 'Sign', 'Other Communication Method', 'Not Recorded']
+              values: ['Spoken', 'Sign', 'Other Communication Method', 'Not Recorded']
 
       - name: language_source
         description: 'Source of language data: PREFLANG_COD (preference) or REQINTERPRETER_COD (interpreter requirement)'
@@ -77,5 +76,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: PREFLANG_COD, REQINTERPRETER_COD
+          cluster_ids: PREFLANG_COD, REQINTERPRETER_COD

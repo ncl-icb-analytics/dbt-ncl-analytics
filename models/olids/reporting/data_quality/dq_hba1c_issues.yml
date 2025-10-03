@@ -54,5 +54,4 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: IFCCHBAM_COD, DCCTHBA1C_COD
+          cluster_ids: IFCCHBAM_COD, DCCTHBA1C_COD

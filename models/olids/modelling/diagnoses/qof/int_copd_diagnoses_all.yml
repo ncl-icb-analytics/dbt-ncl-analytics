@@ -34,5 +34,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: COPDRES_COD, COPD_COD
+          cluster_ids: COPDRES_COD, COPD_COD

@@ -8,8 +8,7 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: ALCOHOL_MISUSE_DISORDERS
+          cluster_ids: ALCOHOL_MISUSE_DISORDERS
 
     columns:
       - name: person_id

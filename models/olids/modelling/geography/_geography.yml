@@ -56,22 +56,19 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       - name: imd_quintile_19
         description: IMD quintile text description
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['Most Deprived', 'Second Most Deprived', 'Third Most Deprived', 'Second Least Deprived', 'Least Deprived']
+              values: ['Most Deprived', 'Second Most Deprived', 'Third Most Deprived', 'Second Least Deprived', 'Least Deprived']
       - name: imd_quintile_numeric_19
         description: IMD quintile as number (1-5)
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [1, 2, 3, 4, 5]
+              values: [1, 2, 3, 4, 5]
       - name: imd_tertile_19
         description: IMD tertile grouping
       - name: is_most_deprived_20pct

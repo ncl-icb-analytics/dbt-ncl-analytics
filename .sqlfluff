@@ -1,0 +1,10 @@
+[sqlfluff]
+dialect = snowflake
+templater = dbt
+exclude_rules = None
+
+[sqlfluff:rules]
+max_line_length = 120
+
+[sqlfluff:templater:dbt]
+project_dir = .

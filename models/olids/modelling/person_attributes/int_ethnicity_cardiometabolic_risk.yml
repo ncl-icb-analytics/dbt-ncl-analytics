@@ -16,8 +16,7 @@ models:
       Purpose: Supports ethnicity-adjusted BMI categorisation and clinical risk assessment.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: ETH2016AI_COD, ETH2016AP_COD, ETH2016AB_COD, ETH2016AC_COD, ETH2016AO_COD, ETH2016MWA_COD, ETH2016OA_COD, ETH2016BA_COD, ETH2016MWBA_COD, ETH2016BC_COD, ETH2016MWBC_COD, ETH2016BO_COD
+          cluster_ids: ETH2016AI_COD, ETH2016AP_COD, ETH2016AB_COD, ETH2016AC_COD, ETH2016AO_COD, ETH2016MWA_COD, ETH2016OA_COD, ETH2016BA_COD, ETH2016MWBA_COD, ETH2016BC_COD, ETH2016MWBC_COD, ETH2016BO_COD
     columns:
       - name: person_id
         description: Person identifier
@@ -25,9 +24,8 @@ models:
           - unique
           - not_null
           - relationships:
-              arguments:
-                to: ref('int_patient_person_unique')
-                field: person_id
+              to: ref('int_patient_person_unique')
+              field: person_id
       - name: id
         description: Latest ethnicity observation identifier
         tests:
@@ -79,8 +77,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['South Asian', 'Chinese', 'Other Asian', 'Middle Eastern', 'Black African', 'African-Caribbean', 'Other/White']
+              values: ['South Asian', 'Chinese', 'Other Asian', 'Middle Eastern', 'Black African', 'African-Caribbean', 'Other/White']
       - name: latest_ethnicity_date
         description: Date of most recent ethnicity observation for this person
       - name: all_ethnicity_groups

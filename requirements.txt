@@ -1,9 +1,10 @@
-# Pin dbt-core explicitly to ensure compatibility
-# dbt-snowflake 1.10.0 works with dbt-core 1.10.8
-dbt-core==1.10.8
-dbt-snowflake==1.10.0
+# Pin dbt-core to 1.9.4 for Snowflake compatibility
+# dbt-snowflake 1.9.1 works with dbt-core 1.9.4
+dbt-core==1.9.4
+dbt-snowflake==1.9.1
 pandas==2.3.1
 pyyaml==6.0.2
 snowflake-snowpark-python==1.35.0
 snowflake-snowpark-python[pandas]
 dotenv==0.9.9
+keyring==25.5.0

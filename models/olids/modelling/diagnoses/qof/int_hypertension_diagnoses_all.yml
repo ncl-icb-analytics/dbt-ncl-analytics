@@ -34,5 +34,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: HYPRES_COD, HYP_COD
+          cluster_ids: HYPRES_COD, HYP_COD

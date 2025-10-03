@@ -38,27 +38,23 @@ models:
         description: Count of active risk factors (overweight/obese, current smoker, alcohol risk)
         tests:
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                max_value: 3
+              min_value: 0
+              max_value: 3
       
       - name: has_bmi_data
         description: Flag indicating BMI data is available
         tests:
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]
       
       - name: has_smoking_data
         description: Flag indicating smoking data is available
         tests:
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]
       
       - name: has_alcohol_data
         description: Flag indicating alcohol data is available
         tests:
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]

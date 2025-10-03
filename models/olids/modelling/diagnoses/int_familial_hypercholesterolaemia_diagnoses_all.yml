@@ -16,8 +16,7 @@ models:
       Purpose: Provide observation-level data for FH monitoring and intensive cholesterol management.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: FHYP_COD
+          cluster_ids: FHYP_COD
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'

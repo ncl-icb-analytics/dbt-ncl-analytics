@@ -6,5 +6,4 @@ models:
       One row per NHS health check completion observation using cluster ID HEALTH_CHECK_COMP for tracking recent health checks to avoid duplication in case finding programmes.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: HEALTH_CHECK_COMP
+          cluster_ids: HEALTH_CHECK_COMP

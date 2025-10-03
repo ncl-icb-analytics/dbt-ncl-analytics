@@ -37,5 +37,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: PALCARENI_COD, PALCARE_COD
+          cluster_ids: PALCARENI_COD, PALCARE_COD

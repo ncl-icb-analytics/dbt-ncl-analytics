@@ -6,10 +6,8 @@ models:
       One row per DXA observation using DXA_COD (procedures) and DXA2_COD (T-scores) clusters with clinical T-score interpretation and QOF osteoporosis confirmation flags.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: DXA2_COD, DXA_COD
+          cluster_ids: DXA2_COD, DXA_COD
       - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - id
-              - source_cluster_id
+          combination_of_columns:
+            - id
+            - source_cluster_id
