@@ -7,7 +7,7 @@ profile: 'ncl_analytics'
 # Display connection info when dbt runs start
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
-  - "{{ ensure_governance_tags() }}"
+  - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
 
 
 target-path: "target"
