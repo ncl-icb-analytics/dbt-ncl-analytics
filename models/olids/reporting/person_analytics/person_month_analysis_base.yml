@@ -16,6 +16,10 @@ models:
 
       • UK financial year and quarter dimensions
 
+      Known Limitations:
+
+      • Address/geographic fields use current address for all historical months (address history dates not available)
+
       Purpose: Supports population health reporting and clinical quality indicators. Incremental processing handles new months whilst full refresh captures late-arriving data.'
     
     config:
@@ -167,7 +171,7 @@ models:
         description: PCN name including borough
         
       - name: post_code_hash
-        description: Hashed postcode for privacy
+        description: Hashed postcode for privacy (current address used for all months)
         
       - name: uprn_hash
         description: Hashed UPRN for privacy
