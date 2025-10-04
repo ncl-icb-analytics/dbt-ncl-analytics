@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: int_global_data_refresh_date
+    description: |
+      Global OLIDS data refresh date based on practice upload consensus.
+
+      Calculates the most recent date where at least 150 practices have uploaded observation data,
+      excluding future dates. This consensus approach filters out both stale practices and those
+      entering incorrect future dates, providing a reliable indicator of when most OLIDS data was
+      last refreshed.
+
+      Returns a single row with one column: global_data_refresh_date.
+
+    columns:
+      - name: global_data_refresh_date
+        description: Most recent date where ≥150 practices have uploaded data (excludes future dates)
+        tests:
+          - not_null
