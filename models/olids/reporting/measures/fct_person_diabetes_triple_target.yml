@@ -3,6 +3,8 @@ models:
   - name: fct_person_diabetes_triple_target
     description: 'Diabetes triple target achievement tracking for clinical quality monitoring.
 
+      One row per person on diabetes register.
+
       Target Criteria:
 
       • HbA1c ≤58 mmol/mol (QOF standard for glycaemic control)
