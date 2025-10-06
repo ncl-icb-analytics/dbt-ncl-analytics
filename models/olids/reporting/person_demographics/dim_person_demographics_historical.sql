@@ -64,31 +64,30 @@ WITH person_months AS (
 ),
 
 monthly_addresses AS (
-    -- Get address and geography valid for each person-month using intermediate model with SCD2 logic
-    SELECT DISTINCT
+    -- Get current address for each person-month
+    -- NOTE: Uses current address for all historical months due to lack of address history dates
+    SELECT
         pm.analysis_month,
         pm.person_id,
-        pc.postcode_hash,
-        pc.primary_care_organisation as icb_code_resident,
-        pc.icb_resident,
-        pc.local_authority_code,
-        pc.local_authority_name,
-        pc.borough_resident,
-        pc.is_london_resident,
-        pc.london_classification,
-        pc.lsoa_code_21,
-        pc.lsoa_name_21,
-        pc.ward_code,
-        pc.ward_name,
-        pc.neighbourhood_resident,
-        pc.imd_decile_19,
-        pc.imd_quintile_19,
-        pc.imd_quintile_numeric_19
+        pg.postcode_hash,
+        pg.primary_care_organisation as icb_code_resident,
+        pg.icb_resident,
+        pg.local_authority_code,
+        pg.local_authority_name,
+        pg.borough_resident,
+        pg.is_london_resident,
+        pg.london_classification,
+        pg.lsoa_code_21,
+        pg.lsoa_name_21,
+        pg.ward_code,
+        pg.ward_name,
+        pg.neighbourhood_resident,
+        pg.imd_decile_19,
+        pg.imd_quintile_19,
+        pg.imd_quintile_numeric_19
     FROM person_months pm
-    LEFT JOIN {{ ref('int_person_geography') }} pc
-        ON pm.person_id = pc.person_id
-        AND pc.address_start_date <= pm.analysis_month
-        AND (pc.address_end_date IS NULL OR pc.address_end_date >= DATE_TRUNC('month', pm.analysis_month))
+    LEFT JOIN {{ ref('int_person_geography') }} pg
+        ON pm.person_id = pg.person_id
 ),
 
 monthly_ethnicity AS (
