@@ -61,6 +61,16 @@ SELECT DISTINCT
     BOOLOR_AGG(is_home_bp_row) AS is_home_bp_event,
     BOOLOR_AGG(is_abpm_bp_row) AS is_abpm_bp_event,
 
+    -- Stage 1 hypertension flag: ≥140/90 (clinic) or ≥135/85 (home/ABPM)
+    CASE
+        WHEN BOOLOR_AGG(is_home_bp_row) OR BOOLOR_AGG(is_abpm_bp_row) THEN
+            (MAX(CASE WHEN is_systolic_row THEN result_value ELSE NULL END) >= 135
+             OR MAX(CASE WHEN is_diastolic_row THEN result_value ELSE NULL END) >= 85)
+        ELSE
+            (MAX(CASE WHEN is_systolic_row THEN result_value ELSE NULL END) >= 140
+             OR MAX(CASE WHEN is_diastolic_row THEN result_value ELSE NULL END) >= 90)
+    END AS is_hypertensive_range,
+
     -- Traceability metadata for audit and debugging
     ANY_VALUE(result_unit_display) AS result_unit_display,
     MAX(CASE WHEN is_systolic_row THEN id ELSE NULL END) AS systolic_observation_id,
@@ -72,9 +82,10 @@ SELECT DISTINCT
 FROM row_flags
 GROUP BY person_id, clinical_effective_date
 
--- Clinical validation: ensure we have valid BP events with plausible ranges
-HAVING (systolic_value IS NOT NULL OR diastolic_value IS NOT NULL)
-   AND (systolic_value IS NULL OR (systolic_value >= 40 AND systolic_value <= 350))
-   AND (diastolic_value IS NULL OR (diastolic_value >= 20 AND diastolic_value <= 200))
+-- Clinical validation: ensure we have valid paired BP events with plausible ranges
+HAVING systolic_value IS NOT NULL
+   AND diastolic_value IS NOT NULL
+   AND systolic_value >= 40 AND systolic_value <= 350
+   AND diastolic_value >= 20 AND diastolic_value <= 200
 
 ORDER BY person_id, clinical_effective_date DESC
