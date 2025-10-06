@@ -15,8 +15,8 @@ Currency logic:
 - Considers medication "current" if: order_date + duration_days >= CURRENT_DATE
 - Defaults to 28 days duration if NULL (99% of records have duration populated)
 
-Note: Uses medication_order table (not statement) as it contains actual dispensing
-events with accurate duration_days. Each row represents a pharmacy pickup.
+Note: Uses medication_order table (not statement) as each order represents when the
+GP issues the medication (sends to pharmacy or prints FP10) with accurate duration_days.
 
 Grain: One row per person × medication (latest order only, filtered to current)
 */
