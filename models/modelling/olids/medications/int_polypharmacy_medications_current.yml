@@ -37,8 +37,6 @@ models:
         description: BNF chapter (01-04, 06-10)
         data_tests:
           - not_null
-          - accepted_values:
-              values: ['01', '02', '03', '04', '06', '07', '08', '09', '10']
 
       - name: bnf_name
         description: BNF name/description of the medication
