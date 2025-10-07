@@ -4560,7 +4560,7 @@ sources:
       data_type: TEXT
     - name: LDS_DATETIME_DATA_ACQUIRED
       data_type: TIMESTAMP_NTZ
-    - name: LDS_DATA_INITIAL_RECEIVED_DATE
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_IS_DELETED
       data_type: BOOLEAN

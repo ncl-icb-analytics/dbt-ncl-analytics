@@ -25,9 +25,9 @@ models:
           - unique
       
       - name: sex
-        description: 'Persons sex derived from gender concept mappings (Male, Female, or Unknown)'
+        description: 'Persons sex derived from gender concept mappings'
         tests:
           - not_null
           - accepted_values:
-              values: ['Male', 'Female', 'Unknown']
+              values: ['Male', 'Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']
 

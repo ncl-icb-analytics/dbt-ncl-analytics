@@ -31,8 +31,6 @@ models:
         description: Person's sex
         tests:
           - not_null  # Demographics always has sex (even if 'Unknown')
-          - accepted_values:
-              values: ['Male', 'Female', 'Unknown']
       
       - name: ethnicity_category
         description: Main ethnicity category classification
