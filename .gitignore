@@ -11,6 +11,7 @@ dbt_internal_packages/
 
 # Python
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
