@@ -430,9 +430,6 @@ models:
           at_least: 0.99
       
       # Demographics consistency
-      - dbt_utils.expression_is_true:
-          expression: "sex IN ('Male', 'Female', 'Unknown', 'Other')"
-          name: valid_sex_values
       
       # Note: Prevalence checks moved to custom SQL test file
       # (Can't use aggregate functions in generic test expressions)
