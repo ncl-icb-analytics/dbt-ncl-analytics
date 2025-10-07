@@ -71,6 +71,8 @@ models:
     
     # OLIDS analytics models
     olids:
+      +meta:
+        custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
       staging:
         +materialized: view
         +database: "MODELLING"
