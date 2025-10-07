@@ -25,8 +25,6 @@ models:
       Exclusions:
       - Chapter 5 (acute infections)
       - Chapters 11+ (topicals, devices, dressings)
-    config:
-      materialized: table
 
     columns:
       - name: snomed_code

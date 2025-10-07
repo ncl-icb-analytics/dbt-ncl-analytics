@@ -13,9 +13,6 @@ models:
       - Active supply (order date + duration >= today)
 
       Enriched with BNF details for medication identification and categorization.
-    config:
-      materialized: table
-      cluster_by: ['person_id']
 
     columns:
       - name: person_id

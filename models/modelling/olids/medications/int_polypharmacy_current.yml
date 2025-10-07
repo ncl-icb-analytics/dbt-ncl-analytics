@@ -16,9 +16,7 @@ models:
       - Severe/complex polypharmacy: 10+ medications
 
       Enriched with BNF codes and medication names for current medications.
-    config:
-      materialized: table
-      cluster_by: ['person_id']
+
     columns:
       - name: person_id
         description: Person identifier

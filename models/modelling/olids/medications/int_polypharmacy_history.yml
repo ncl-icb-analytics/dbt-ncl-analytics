@@ -23,9 +23,6 @@ models:
 
       Use for trending analysis and historical polypharmacy status.
       Not used for current state (see int_polypharmacy_current instead).
-    config:
-      materialized: table
-      cluster_by: ['person_id', 'valid_from']
 
     columns:
       - name: person_id

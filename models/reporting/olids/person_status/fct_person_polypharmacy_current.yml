@@ -18,9 +18,7 @@ models:
       - Severe/complex polypharmacy: 10+ medications
 
       Person-level snapshot for reporting. Join to demographic tables for population analysis.
-    config:
-      materialized: table
-      cluster_by: ['person_id']
+
     columns:
       - name: person_id
         description: Person identifier

@@ -15,9 +15,6 @@ models:
       - Duration defaults to 28 days if NULL
 
       Uses medication_order table as source of truth for dispensing events and duration.
-    config:
-      materialized: table
-      cluster_by: ['person_id']
 
     columns:
       - name: person_id
