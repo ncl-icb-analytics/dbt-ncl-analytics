@@ -29,9 +29,9 @@ PIVOT
 (
     SUM(open_pathways) FOR tfc_code IN (
         SELECT
-        "BK_SpecialtyCode"
-        from "Dictionary"."dbo"."Specialties"
+       bk_specialty_code
+        from {{ ref('raw_dictionary_dbo_specialties') }}
         WHERE
-        "IsTreatmentFunction" = TRUE
+        is_treatment_function = TRUE
         )
 ) AS pvt
