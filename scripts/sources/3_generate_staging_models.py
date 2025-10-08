@@ -132,7 +132,7 @@ def main():
         sources = yaml.safe_load(f)
 
     total_models = 0
-    models_by_domain = {'commissioning': 0, 'olids': 0, 'shared': 0}
+    models_by_domain = {'commissioning': 0, 'olids': 0, 'shared': 0, 'phenolab': 0}
 
     for source in sources['sources']:
         source_name = source['name']
