@@ -1,0 +1,28 @@
+version: 2
+models:
+  - name: stg_reference_ethnicity_codes
+    description: "Ethnicity code reference with categorisation and prioritisation"
+    columns:
+      - name: code
+        description: "Primary key - ethnicity code"
+        tests:
+          - unique
+          - not_null
+
+      - name: term
+        description: "Ethnicity term/description"
+
+      - name: category
+        description: "High-level ethnicity category"
+
+      - name: subcategory
+        description: "Ethnicity subcategory"
+
+      - name: granular
+        description: "Most granular ethnicity classification"
+
+      - name: deprioritise_flag
+        description: "Whether to deprioritise this code in selection logic"
+
+      - name: preference_rank
+        description: "Preference ranking for code selection"

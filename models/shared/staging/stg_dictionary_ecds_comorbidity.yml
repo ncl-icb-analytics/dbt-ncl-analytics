@@ -1,0 +1,15 @@
+version: 2
+models:
+  - name: stg_dictionary_ecds_comorbidity
+    description: "ECDS comorbidity reference data mapping SNOMED codes to ECDS descriptions"
+    columns:
+      - name: ecds_unique_id
+        description: "Primary key - ECDS unique identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: snomed_code
+        description: "SNOMED CT code"
+        tests:
+          - not_null

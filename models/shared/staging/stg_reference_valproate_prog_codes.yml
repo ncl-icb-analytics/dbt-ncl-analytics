@@ -1,0 +1,25 @@
+version: 2
+models:
+  - name: stg_reference_valproate_prog_codes
+    description: "Valproate medication codes for pregnancy prevention programme"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code
+            - code_category
+    columns:
+      - name: code
+        description: "SNOMED or other code for valproate product/event"
+        tests:
+          - not_null
+
+      - name: code_category
+        description: "Category of code (medication, pregnancy, etc.)"
+        tests:
+          - not_null
+
+      - name: lookback_years_offset
+        description: "Years to look back for this code category"
+
+      - name: valproate_product_term
+        description: "Valproate product term/description"

@@ -1,0 +1,30 @@
+version: 2
+models:
+  - name: stg_dictionary_ecds_codedfinding
+    description: "ECDS coded finding reference data mapping SNOMED codes to ECDS descriptions"
+    columns:
+      - name: ecds_unique_id
+        description: "Primary key - ECDS unique identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: snomed_code
+        description: "SNOMED CT code"
+        tests:
+          - not_null
+
+      - name: snomed_uk_preferred_term
+        description: "SNOMED UK preferred term"
+
+      - name: ecds_description
+        description: "ECDS description for this code"
+
+      - name: valid_from
+        description: "Valid from date"
+
+      - name: valid_to
+        description: "Valid to date (null if currently valid)"
+
+      - name: dv_is_active
+        description: "Whether code is currently active"

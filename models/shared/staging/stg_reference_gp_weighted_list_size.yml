@@ -1,0 +1,34 @@
+version: 2
+models:
+  - name: stg_reference_gp_weighted_list_size
+    description: "GP practice weighted list size by financial quarter"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - practice_code
+            - financial_quarter_date
+    columns:
+      - name: practice_code
+        description: "GP practice code"
+        tests:
+          - not_null
+
+      - name: financial_quarter_date
+        description: "Financial quarter date"
+        tests:
+          - not_null
+
+      - name: practice_name
+        description: "GP practice name"
+
+      - name: practice_list_size
+        description: "Raw practice list size"
+
+      - name: practice_normalised_weighted_list_size
+        description: "Normalised weighted list size adjusted for demographics"
+
+      - name: commissioner_code
+        description: "Commissioner organisation code"
+
+      - name: report_execution_datetime
+        description: "When the report was executed"

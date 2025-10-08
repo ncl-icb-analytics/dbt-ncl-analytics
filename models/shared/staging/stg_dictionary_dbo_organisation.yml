@@ -1,0 +1,30 @@
+version: 2
+models:
+  - name: stg_dictionary_dbo_organisation
+    description: "Organisation reference data including providers, commissioners, and practices"
+    columns:
+      - name: sk_organisation_id
+        description: "Primary key - surrogate key for organisation"
+        tests:
+          - unique
+          - not_null
+
+      - name: organisation_code
+        description: "Organisation code"
+        tests:
+          - not_null
+
+      - name: organisation_name
+        description: "Organisation name"
+
+      - name: sk_organisation_type_id
+        description: "FK to organisation type"
+
+      - name: start_date
+        description: "Organisation start date"
+
+      - name: end_date
+        description: "Organisation end date (null if active)"
+
+      - name: status
+        description: "Organisation status"

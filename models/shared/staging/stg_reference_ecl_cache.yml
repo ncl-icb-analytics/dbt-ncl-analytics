@@ -1,0 +1,31 @@
+version: 2
+models:
+  - name: stg_reference_ecl_cache
+    description: "SNOMED ECL (Expression Constraint Language) query results cache mapping cluster IDs to expanded SNOMED codes"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - cluster_id
+            - code
+    columns:
+      - name: cluster_id
+        description: "Cluster identifier for the ECL query"
+        tests:
+          - not_null
+
+      - name: code
+        description: "SNOMED code expanded from ECL query"
+        tests:
+          - not_null
+
+      - name: display
+        description: "Display term for the code"
+
+      - name: system
+        description: "Code system (SNOMED CT)"
+
+      - name: last_refreshed
+        description: "Timestamp when cache was last refreshed"
+
+      - name: ecl_expression_hash
+        description: "Hash of the ECL expression for cache validation"

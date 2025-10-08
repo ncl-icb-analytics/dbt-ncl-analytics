@@ -1,0 +1,30 @@
+version: 2
+models:
+  - name: stg_reference_lsoa2011_lsoa2021
+    description: "LSOA 2011 to LSOA 2021 boundary mapping with local authority details"
+    columns:
+      - name: lsoa11_cd
+        description: "Primary key - LSOA 2011 code"
+        tests:
+          - unique
+          - not_null
+
+      - name: lsoa11_nm
+        description: "LSOA 2011 name"
+
+      - name: lsoa21_cd
+        description: "LSOA 2021 code"
+        tests:
+          - not_null
+
+      - name: lsoa21_nm
+        description: "LSOA 2021 name"
+
+      - name: chgind
+        description: "Change indicator (unchanged, split, merged, etc.)"
+
+      - name: lad22_cd
+        description: "Local Authority District 2022 code"
+
+      - name: lad22_nm
+        description: "Local Authority District 2022 name"

@@ -1,2 +1,20 @@
-select *
-from {{ref('raw_dictionary_dbo_organisationdescendent') }}
+select
+    sk_organisation_id_root,
+    organisation_code_root,
+    organisation_primary_role_root,
+    sk_organisation_id_parent,
+    organisation_code_parent,
+    organisation_primary_role_parent,
+    sk_organisation_id_child,
+    organisation_code_child,
+    organisation_primary_role_child,
+    relationship_type,
+    relationship_start_date,
+    relationship_end_date,
+    path,
+    depth,
+    path_start_date,
+    path_end_date,
+    date_added,
+    date_updated
+from {{ ref('raw_dictionary_dbo_organisationdescendent') }}

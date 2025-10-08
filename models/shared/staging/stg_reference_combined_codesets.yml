@@ -1,0 +1,28 @@
+version: 2
+models:
+  - name: stg_reference_combined_codesets
+    description: "Combined code sets mapping cluster IDs to individual codes across multiple coding systems (SNOMED, Read, etc.)"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - cluster_id
+            - code
+    columns:
+      - name: cluster_id
+        description: "Cluster identifier grouping related codes"
+        tests:
+          - not_null
+
+      - name: cluster_description
+        description: "Description of the code cluster"
+
+      - name: code
+        description: "Individual code within the cluster"
+        tests:
+          - not_null
+
+      - name: code_description
+        description: "Description of the individual code"
+
+      - name: source
+        description: "Source coding system (SNOMED, Read, etc.)"
