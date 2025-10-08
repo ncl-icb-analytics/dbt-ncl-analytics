@@ -1,0 +1,4 @@
+version: 2
+models:
+  - name: view_valproate_dashboard_base
+    description: Valproate base population for dashboard one row per person as VIEW
