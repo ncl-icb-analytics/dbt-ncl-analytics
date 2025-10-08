@@ -21,6 +21,7 @@ SELECT DISTINCT
         END AS fiscal_year_label,
         dph.person_id,
         dph.age,
+        dph.is_deceased,
         dph.birth_date_approx,
         DATEADD(YEAR,1,dph.BIRTH_DATE_APPROX) as FIRST_BDAY,
         DATEADD(YEAR,12,dph.BIRTH_DATE_APPROX) as TWELFTH_BDAY,
@@ -51,3 +52,5 @@ SELECT DISTINCT
         AND dph.analysis_month <= LAST_DAY(CURRENT_DATE)
         AND dph.age in (1,2,5,11,16)
         AND ICB_CODE = 'QMJ'
+        --temporarily exclude deceased patients because their age is frozen at death and appearing incorrectly in the denominator in more recent months
+        AND dph.is_deceased = FALSE
