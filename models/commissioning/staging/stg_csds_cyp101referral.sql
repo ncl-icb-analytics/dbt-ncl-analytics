@@ -11,8 +11,8 @@ WITH deduplicated AS (
     }}
 )
 
-SELECT 
-    service_request_identifier,
+SELECT
+    unique_service_request_identifier,
     person_id,
     referral_request_received_date
 FROM deduplicated

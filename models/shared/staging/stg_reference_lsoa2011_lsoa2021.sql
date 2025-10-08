@@ -10,3 +10,4 @@ select
     -- lad22_nmw (Welsh name - not relevant for NCL),
     -- objectid
 from {{ ref('raw_reference_lsoa2011_lsoa2021') }}
+qualify row_number() over (partition by lsoa11_cd order by lsoa21_cd) = 1

@@ -13,3 +13,4 @@ select
     vtm,
     vtm_name
 from {{ ref('raw_reference_bnf_latest') }}
+qualify row_number() over (partition by vmp_vmpp_amp_ampp order by bnf_name) = 1

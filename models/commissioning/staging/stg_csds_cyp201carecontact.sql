@@ -10,9 +10,9 @@ WITH deduplicated AS (
     )
 }} )
 
-select service_request_identifier
+select unique_service_request_identifier
     , person_id
-    , care_contact_identifier
+    , unique_care_contact_identifier
     , care_contact_date
     , activity_location_type_code
     , attendance_status

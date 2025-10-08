@@ -6,7 +6,8 @@ models:
   - dbt_utils.unique_combination_of_columns:
       combination_of_columns:
       - primarykey_id
-      - code
+      - comorbidities_id
+      - rownumber_id
   - dbt_expectations.expect_table_row_count_to_be_between:
       min_value: 1
   columns:
@@ -14,7 +15,13 @@ models:
     description: Primary key from main A&E attendance (FK)
     tests:
     - not_null
-  - name: code
-    description: SNOMED CT comorbidity code
+  - name: comorbidities_id
+    description: Unique identifier for this comorbidity entry
     tests:
     - not_null
+  - name: rownumber_id
+    description: Sequence number for ordering comorbidities within an attendance
+    tests:
+    - not_null
+  - name: code
+    description: SNOMED CT comorbidity code

@@ -8,8 +8,8 @@ models:
     '
   columns:
   - name: diagnosis_id
-    description: Unique identifier for the recorded diagnosis ('primarykey_id', 'episodes_id',
-      'icd_id')
+    description: Unique identifier for the recorded diagnosis (surrogate key from primarykey_id,
+      episodes_id, icd_id, rownumber_id)
     tests:
     - not_null
     - unique

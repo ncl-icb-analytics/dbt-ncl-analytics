@@ -25,6 +25,7 @@ select UBRN_ID
     ,PROVIDER_ORG_TYPE_DESC
     ,SERVICE_SPECIALTY_CD
     ,SERVICE_SPECIALTY_DESC
+    ,action_id
     ,action_dt_tm
     ,action_desc
 from {{ ref('raw_ers_pc_ebsx02ubrnaction') }}

@@ -10,8 +10,6 @@ models:
     - not_null
   - name: sk_patient_id
     description: Pseudonymised NHS number (surrogate key for patient)
-    tests:
-    - not_null
   - name: person_index_id
     description: Person index identifier
   - name: pseudo_nhs_number

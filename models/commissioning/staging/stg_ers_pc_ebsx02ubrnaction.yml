@@ -6,7 +6,7 @@ models:
   - dbt_utils.unique_combination_of_columns:
       combination_of_columns:
       - ubrn_id
-      - action_dt_tm
+      - action_id
   - dbt_expectations.expect_table_row_count_to_be_between:
       min_value: 1
   columns:
@@ -58,6 +58,10 @@ models:
     description: Service specialty code
   - name: service_specialty_desc
     description: Service specialty description
+  - name: action_id
+    description: Action identifier (part of composite key with ubrn_id)
+    tests:
+    - not_null
   - name: action_dt_tm
     description: Date/time of action
     tests:

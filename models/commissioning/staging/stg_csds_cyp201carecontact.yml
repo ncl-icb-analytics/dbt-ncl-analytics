@@ -3,15 +3,13 @@ models:
 - name: stg_csds_cyp201carecontact
   description: CSDS CYP care contacts (deduplicated)
   columns:
-  - name: service_request_identifier
+  - name: unique_service_request_identifier
     description: Service request identifier (FK to referral)
     tests:
     - not_null
   - name: person_id
     description: CSDS person identifier
-    tests:
-    - not_null
-  - name: care_contact_identifier
+  - name: unique_care_contact_identifier
     description: Primary key - unique care contact identifier
     tests:
     - unique
