@@ -24,4 +24,5 @@ models:
   - name: operator
     description: Comparison operator (<=, <, >=, >, =)
   tests:
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

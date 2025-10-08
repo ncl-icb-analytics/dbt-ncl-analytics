@@ -1,20 +1,19 @@
 version: 2
 models:
-  - name: stg_csds_cyp101referral
-    description: "CSDS CYP referral requests (deduplicated)"
+- name: stg_csds_cyp101referral
+  description: CSDS CYP referral requests (deduplicated)
+  columns:
+  - name: service_request_identifier
+    description: Primary key - unique service request identifier
     tests:
-      - dbt_utils.at_least_one
-    columns:
-      - name: service_request_identifier
-        description: "Primary key - unique service request identifier"
-        tests:
-          - unique
-          - not_null
-
-      - name: person_id
-        description: "CSDS person identifier"
-        tests:
-          - not_null
-
-      - name: referral_request_received_date
-        description: "Date referral request was received"
+    - unique
+    - not_null
+  - name: person_id
+    description: CSDS person identifier
+    tests:
+    - not_null
+  - name: referral_request_received_date
+    description: Date referral request was received
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

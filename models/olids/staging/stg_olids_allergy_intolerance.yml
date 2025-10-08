@@ -62,4 +62,5 @@ models:
   - name: lds_record_id
     description: LDS assigned unique identifier for the source record version
   tests:
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

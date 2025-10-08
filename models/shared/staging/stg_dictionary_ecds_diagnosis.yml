@@ -18,4 +18,5 @@ models:
   - name: icd11_mapping
     description: Mapped ICD-11 code
   tests:
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

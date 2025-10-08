@@ -8,7 +8,8 @@ models:
       - sk_organisation_id_root
       - sk_organisation_id_child
       - path
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
   columns:
   - name: sk_organisation_id_root
     description: Root organisation in hierarchy

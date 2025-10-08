@@ -22,4 +22,5 @@ models:
   - name: open_pathways
     description: Constant value indicating open pathways (always >1)
   tests:
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

@@ -1,10 +1,10 @@
 """
-Add dbt_utils.at_least_one test to all staging models.
+Add dbt_expectations.expect_table_row_count_to_be_between test to all staging models.
 
 This script:
 1. Finds all staging .sql files
 2. Checks if they have corresponding .yml files
-3. Adds dbt_utils.at_least_one test if not already present
+3. Adds expect_table_row_count_to_be_between test (min_value: 1) if not already present
 4. Reports any staging models without .yml files
 """
 
@@ -34,23 +34,21 @@ def find_staging_models(project_root: Path) -> List[Tuple[Path, Path]]:
     return staging_models
 
 
-def has_at_least_one_test(model_config: Dict) -> bool:
-    """Check if model already has at_least_one test."""
+def has_row_count_test(model_config: Dict) -> bool:
+    """Check if model already has row count test."""
     tests = model_config.get('tests', [])
 
     # Check model-level tests
     for test in tests:
-        if isinstance(test, str) and 'at_least_one' in test:
-            return True
-        if isinstance(test, dict) and 'dbt_utils.at_least_one' in test:
+        if isinstance(test, dict) and 'dbt_expectations.expect_table_row_count_to_be_between' in test:
             return True
 
     return False
 
 
-def add_at_least_one_test(yml_path: Path) -> bool:
+def add_row_count_test(yml_path: Path) -> bool:
     """
-    Add dbt_utils.at_least_one test to a model YAML if not present.
+    Add expect_table_row_count_to_be_between test to a model YAML if not present.
 
     Returns:
         True if test was added, False if already present or error
@@ -66,13 +64,17 @@ def add_at_least_one_test(yml_path: Path) -> bool:
         # Process each model in the YAML
         modified = False
         for model in data['models']:
-            if not has_at_least_one_test(model):
+            if not has_row_count_test(model):
                 # Add tests key if it doesn't exist
                 if 'tests' not in model:
                     model['tests'] = []
 
-                # Add at_least_one test
-                model['tests'].append('dbt_utils.at_least_one')
+                # Add row count test
+                model['tests'].append({
+                    'dbt_expectations.expect_table_row_count_to_be_between': {
+                        'min_value': 1
+                    }
+                })
                 modified = True
 
         # Write back if modified
@@ -117,12 +119,12 @@ def main():
                     data = yaml.safe_load(f) or {}
 
                 models = data.get('models', [])
-                if models and has_at_least_one_test(models[0]):
-                    print(f"[OK] {model_name}: Already has at_least_one test")
+                if models and has_row_count_test(models[0]):
+                    print(f"[OK] {model_name}: Already has row count test")
                     already_has_test.append(model_name)
                 else:
-                    if add_at_least_one_test(yml_path):
-                        print(f"[+] {model_name}: Added at_least_one test")
+                    if add_row_count_test(yml_path):
+                        print(f"[+] {model_name}: Added row count test")
                         test_added.append(model_name)
                     else:
                         print(f"[!] {model_name}: Could not add test")

@@ -25,4 +25,5 @@ models:
     description: LDS datetime stamp from which the record version was correct - used
       for deduplication to get the latest record
   tests:
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

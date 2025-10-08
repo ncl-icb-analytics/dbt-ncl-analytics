@@ -1,29 +1,27 @@
 version: 2
 models:
-  - name: stg_sus_ae_clinical_diagnoses_snomed
-    description: "SUS A&E clinical diagnoses (SNOMED CT)"
+- name: stg_sus_ae_clinical_diagnoses_snomed
+  description: SUS A&E clinical diagnoses (SNOMED CT)
+  tests:
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+      - primarykey_id
+      - snomed_id
+      - rownumber_id
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
+  columns:
+  - name: primarykey_id
+    description: Primary key from main A&E attendance (FK)
     tests:
-      - dbt_utils.at_least_one
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - primarykey_id
-            - snomed_id
-            - rownumber_id
-    columns:
-      - name: primarykey_id
-        description: "Primary key from main A&E attendance (FK)"
-        tests:
-          - not_null
-
-      - name: snomed_id
-        description: "SNOMED identifier within the attendance"
-        tests:
-          - not_null
-
-      - name: rownumber_id
-        description: "Row number for ordering diagnoses"
-        tests:
-          - not_null
-
-      - name: code
-        description: "SNOMED CT diagnosis code"
+    - not_null
+  - name: snomed_id
+    description: SNOMED identifier within the attendance
+    tests:
+    - not_null
+  - name: rownumber_id
+    description: Row number for ordering diagnoses
+    tests:
+    - not_null
+  - name: code
+    description: SNOMED CT diagnosis code

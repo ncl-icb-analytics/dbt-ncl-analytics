@@ -23,4 +23,5 @@ models:
   - name: use_count
     description: Number of times this concept is used in the dataset
   tests:
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

@@ -1,29 +1,27 @@
 version: 2
 models:
-  - name: stg_sus_op_appointment_clinical_coding_procedure_opcs
-    description: "SUS outpatient appointment clinical procedures (OPCS-4)"
+- name: stg_sus_op_appointment_clinical_coding_procedure_opcs
+  description: SUS outpatient appointment clinical procedures (OPCS-4)
+  tests:
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+      - primarykey_id
+      - opcs_id
+      - rownumber_id
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
+  columns:
+  - name: primarykey_id
+    description: Primary key from main outpatient appointment (FK)
     tests:
-      - dbt_utils.at_least_one
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - primarykey_id
-            - opcs_id
-            - rownumber_id
-    columns:
-      - name: primarykey_id
-        description: "Primary key from main outpatient appointment (FK)"
-        tests:
-          - not_null
-
-      - name: opcs_id
-        description: "OPCS procedure identifier within the appointment"
-        tests:
-          - not_null
-
-      - name: rownumber_id
-        description: "Row number for ordering procedures"
-        tests:
-          - not_null
-
-      - name: code
-        description: "OPCS-4 procedure code"
+    - not_null
+  - name: opcs_id
+    description: OPCS procedure identifier within the appointment
+    tests:
+    - not_null
+  - name: rownumber_id
+    description: Row number for ordering procedures
+    tests:
+    - not_null
+  - name: code
+    description: OPCS-4 procedure code

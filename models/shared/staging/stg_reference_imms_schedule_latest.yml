@@ -30,4 +30,5 @@ models:
   - name: drug_cluster_id
     description: FK to combined_codesets cluster for drug codes
   tests:
-  - dbt_utils.at_least_one
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
