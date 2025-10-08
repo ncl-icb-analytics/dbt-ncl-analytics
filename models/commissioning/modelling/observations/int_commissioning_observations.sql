@@ -20,7 +20,7 @@ with
             ,date
             ,null as clinical_end_date
             ,icd_id as problem_order
-            ,concept_code as observation_concept_code
+            ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,'ICD10' as observation_vocabulary
             -- ,ds.definition_id
@@ -43,7 +43,7 @@ with
             ,date
             ,null as clinical_end_date
             ,problem_order
-            ,concept_code as observation_concept_code
+            ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,'ICD10' as observation_vocabulary
         from {{ ref("int_sus_ip_procedure") }} apc
@@ -59,7 +59,7 @@ with
             ,date
             ,null as clinical_end_date
             ,icd_id as problem_order
-            ,concept_code as observation_concept_code
+            ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,'ICD10' as observation_vocabulary
             -- ,ds.definition_id
@@ -81,7 +81,7 @@ with
         ,date
         ,null as clinical_end_date
         ,problem_order
-        ,concept_code as observation_concept_code
+        ,concept_code::varchar  as observation_concept_code
         ,concept_name as observation_concept_name
         ,'ICD10' as observation_vocabulary
     from {{ ref("int_sus_op_procedure") }}
@@ -97,7 +97,7 @@ with
             ,date
             ,null as clinical_end_date
             ,snomed_id as problem_order
-            ,concept_code as observation_concept_code
+            ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,'ICD10' as observation_vocabulary
             -- ,ds.definition_id
@@ -120,7 +120,7 @@ with
         ,date
         , null as clinical_end_date
         , null as problem_order
-        , snomed_code as concept_code
+        , snomed_code::varchar  as concept_code
         , snomed_decription as concept_name
         ,'SNOMED' as observation_vocabulary
         from {{ ref("int_sus_ae_procedure") }} ae
