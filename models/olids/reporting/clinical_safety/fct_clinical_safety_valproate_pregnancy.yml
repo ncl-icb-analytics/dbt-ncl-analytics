@@ -3,6 +3,8 @@ models:
   - name: fct_clinical_safety_valproate_pregnancy
     description: 'Clinical safety alert identifying individuals of child-bearing age with recent valproate prescriptions.
 
+      One row per person of child-bearing age with valproate prescription within 6 months.
+
       Safety Concern: Valproate has teratogenic effects and requires monitoring in pregnancy or potential pregnancy.
 
       Criteria:

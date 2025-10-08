@@ -40,5 +40,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: IGT_COD, NDH_COD, PRD_COD
+          cluster_ids: IGT_COD, NDH_COD, PRD_COD

@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: LONGRES_COD,RESIDE_COD
+          cluster_ids: LONGRES_COD,RESIDE_COD
     
     config:
       meta:

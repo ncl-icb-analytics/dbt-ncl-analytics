@@ -5,8 +5,7 @@ models:
     description: 'Aggregate patient counts by age, ethnicity, PCN, neighbourhood, IMD quintile, LTCs for population health needs dashboard.'
     tests:
       - dbt_utils.expression_is_true:
-          arguments:
-            expression: "patient_count >= 1"
+          expression: "patient_count >= 1"
     config:
       materialized: view
     columns:

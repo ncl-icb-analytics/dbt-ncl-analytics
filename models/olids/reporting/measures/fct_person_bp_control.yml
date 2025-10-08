@@ -3,6 +3,8 @@ models:
   - name: fct_person_bp_control
     description: 'Blood pressure control assessment using NICE NG136 guidelines with patient-specific targets.
 
+      One row per person that has a blood pressure recording.
+
       Treatment Targets:
 
       • Standard (under 80): <140/90 mmHg

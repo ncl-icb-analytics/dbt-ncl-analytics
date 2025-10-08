@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: PREG_COD,PREGDEL_COD
+          cluster_ids: PREG_COD,PREGDEL_COD
     
     config:
       meta:

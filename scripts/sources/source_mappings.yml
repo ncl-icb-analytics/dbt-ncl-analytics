@@ -202,3 +202,15 @@ sources:
   # ADDITIONAL OLIDS DATA SOURCES
   # ========================================
   # Additional OLIDS sources can be added here if needed
+
+  # ========================================
+  # PDS DATA SOURCES
+  # ========================================
+
+  # Personal Demographics Service
+  - source_name: pds
+    database: DATA_LAKE
+    schema: PDS
+    description: Personal Demographics Service data
+    staging_prefix: stg_pds
+    domain: shared

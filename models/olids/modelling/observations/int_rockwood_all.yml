@@ -8,20 +8,16 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: ROCKWOOD_SCORES
+          cluster_ids: ROCKWOOD_SCORES
       - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - id
-              - source_cluster_id
+          combination_of_columns:
+            - id
+            - source_cluster_id
       - dbt_utils.expression_is_true:
-          arguments:
-            expression: "rockwood_score IS NOT NULL"
+          expression: "rockwood_score IS NOT NULL"
           name: all_rockwood_codes_categorised
       - dbt_utils.expression_is_true:
-          arguments:
-            expression: "frailty_category != 'Unknown'"
+          expression: "frailty_category != 'Unknown'"
           name: all_observations_have_valid_category
 
     columns:

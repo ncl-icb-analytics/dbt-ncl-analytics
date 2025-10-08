@@ -51,8 +51,8 @@ FROM (
         ap.person_id,
         COALESCE(target_concept.display, source_concept.display, 'Unknown') AS sex,
         ROW_NUMBER() OVER (
-            PARTITION BY ap.person_id 
-            ORDER BY 
+            PARTITION BY ap.person_id
+            ORDER BY
                 CASE WHEN target_concept.display IS NOT NULL THEN 1 ELSE 2 END,
                 target_concept.display,
                 source_concept.display

@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: HOMELESS_COD,RESIDE_COD
+          cluster_ids: HOMELESS_COD,RESIDE_COD
     
     config:
       meta:

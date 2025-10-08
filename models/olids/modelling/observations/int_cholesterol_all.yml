@@ -6,8 +6,7 @@ models:
       One row per cholesterol observation using CHOL2_COD cluster with plausible range filtering (0.5-20 mmol/L) and clinical categorisation.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: CHOL2_COD
+          cluster_ids: CHOL2_COD
     columns:
       - name: id
         description: Unique identifier for each cholesterol observation

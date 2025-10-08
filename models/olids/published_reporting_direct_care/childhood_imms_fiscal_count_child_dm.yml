@@ -1,0 +1,3 @@
+models:
+  - name: childhood_imms_fiscal_count_child_dm
+    description: Final data model table UNION AGGREGATED dose counts by month and fiscal year for historical children aged 1,2 and 5 analysis month

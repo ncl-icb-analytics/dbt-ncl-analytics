@@ -13,9 +13,8 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('def_indicator')
-                field: indicator_id
+              to: ref('def_indicator')
+              field: indicator_id
               
       - name: usage_context
         description: Where this indicator is used

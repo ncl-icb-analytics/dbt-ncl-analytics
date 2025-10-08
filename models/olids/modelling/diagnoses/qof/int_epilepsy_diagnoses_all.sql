@@ -6,9 +6,9 @@
 
 /*
 All epilepsy diagnosis observations from clinical records.
-Uses QOF epilepsy cluster IDs:
+Uses QOF epilepsy cluster IDs per v50 business rules:
 - EPIL_COD: Epilepsy diagnoses
-- EPILDRUG_COD: Epilepsy drug codes
+- EPILRES_COD: Epilepsy resolved codes
 
 Clinical Purpose:
 - QOF epilepsy register data collection
@@ -36,16 +36,16 @@ SELECT
 
     -- Epilepsy-specific flags (observation-level only)
     CASE WHEN obs.cluster_id = 'EPIL_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
-    CASE WHEN obs.cluster_id = 'EPILDRUG_COD' THEN TRUE ELSE FALSE END AS is_resolved_code,
+    CASE WHEN obs.cluster_id = 'EPILRES_COD' THEN TRUE ELSE FALSE END AS is_resolved_code,
 
     -- Epilepsy observation type determination
     CASE
         WHEN obs.cluster_id = 'EPIL_COD' THEN 'Epilepsy Diagnosis'
-        WHEN obs.cluster_id = 'EPILDRUG_COD' THEN 'Epilepsy Drug'
+        WHEN obs.cluster_id = 'EPILRES_COD' THEN 'Epilepsy Resolved'
         ELSE 'Unknown'
     END AS epilepsy_observation_type
 
-FROM ({{ get_observations("'EPIL_COD', 'EPILDRUG_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'EPIL_COD', 'EPILRES_COD'", source='PCD') }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL
 
 ORDER BY person_id, clinical_effective_date, id

@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: BMI_COD,BMI_STAGE_COD,SEV_OBESITY_COD
+          cluster_ids: BMI_COD,BMI_STAGE_COD,SEV_OBESITY_COD
     
     config:
       meta:

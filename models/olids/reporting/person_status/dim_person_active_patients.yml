@@ -15,5 +15,4 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [true]  # This table only contains active patients
+              values: [true]  # This table only contains active patients

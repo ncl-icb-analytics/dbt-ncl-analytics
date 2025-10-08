@@ -14,8 +14,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: COVDECL_COD
+          cluster_ids: COVDECL_COD
     
     config:
       meta:

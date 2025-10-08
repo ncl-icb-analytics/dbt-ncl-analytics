@@ -6,13 +6,11 @@ models:
       One row per HbA1c observation handling both IFCC (mmol/mol) and DCCT (%) measurement types with clinical categorisation and QOF target achievement flags.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: DCCTHBA1C_COD, IFCCHBAM_COD
+          cluster_ids: DCCTHBA1C_COD, IFCCHBAM_COD
       - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - id
-              - source_cluster_id
+          combination_of_columns:
+            - id
+            - source_cluster_id
     columns:
       - name: id
         description: Identifier for each HbA1c observation (may not be unique if observation maps to multiple clusters)
@@ -23,20 +21,17 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('int_patient_person_unique')
-                field: person_id
+              to: ref('int_patient_person_unique')
+              field: person_id
       - name: measurement_type
         description: Type of HbA1c measurement (IFCC, DCCT, or UNKNOWN)
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['IFCC', 'DCCT', 'UNKNOWN']
+              values: ['IFCC', 'DCCT', 'UNKNOWN']
       - name: is_valid_hba1c
         description: Flag indicating if HbA1c value is within valid range for its measurement type
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]

@@ -6,8 +6,7 @@ models:
       One row per ACR observation using UACR_TESTING cluster with plausible range filtering (0-1000 mg/mmol) and clinical ACR categorisation.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: UACR_TESTING
+          cluster_ids: UACR_TESTING
     columns:
       - name: id
         description: Unique identifier for each ACR observation

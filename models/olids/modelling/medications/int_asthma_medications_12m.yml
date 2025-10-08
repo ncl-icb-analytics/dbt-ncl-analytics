@@ -4,8 +4,7 @@ models:
     description: 'Asthma medication orders from last 12 months using ASTTRT_COD cluster for QOF monitoring.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: ASTTRT_COD
+          cluster_ids: ASTTRT_COD
     columns:
       - name: person_id
         description: 'Person identifier'

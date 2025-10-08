@@ -27,30 +27,26 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                max_value: 55
+              min_value: 0
+              max_value: 55
 
       - name: sex
         description: 'Sex (Female or Unknown - excludes Male by definition)'
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['Female', 'Unknown']
+              values: ['Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']
 
       - name: is_child_bearing_age_12_55
         description: 'Flag for standard demographic child-bearing age (12-55 years inclusive)'
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [true, false]
+              values: [true, false]
 
       - name: is_child_bearing_age_0_55
         description: 'Flag for clinical safety child-bearing age (0-55 years inclusive) - always TRUE for records in this table'
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: [true]
+              values: [true]

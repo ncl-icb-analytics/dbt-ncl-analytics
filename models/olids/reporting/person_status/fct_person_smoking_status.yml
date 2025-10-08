@@ -70,16 +70,14 @@ models:
         description: Current smoking status (Never Smoked, Ex-Smoker, Current Smoker, Unknown)
         tests:
           - accepted_values:
-              arguments:
-                values: ['Never Smoked', 'Ex-Smoker', 'Current Smoker', 'Unknown']
+              values: ['Never Smoked', 'Ex-Smoker', 'Current Smoker', 'Unknown']
                 
       - name: smoking_risk_sort_key
         description: Smoking risk level (1=Never, 2=Ex-smoker, 3=Current smoker, 0=Unknown)
         tests:
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                max_value: 3
+              min_value: 0
+              max_value: 3
         
       - name: latest_smoking_date
         description: Date of most recent smoking status observation

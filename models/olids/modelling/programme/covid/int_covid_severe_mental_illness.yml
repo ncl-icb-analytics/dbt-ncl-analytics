@@ -19,8 +19,7 @@ models:
     
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: SEV_MENTAL_COD,SMHRES_COD
+          cluster_ids: SEV_MENTAL_COD,SMHRES_COD
     
     config:
       meta:

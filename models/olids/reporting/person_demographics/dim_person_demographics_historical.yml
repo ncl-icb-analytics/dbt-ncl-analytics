@@ -15,7 +15,7 @@ models:
 
       • Practice registration status as of each month
 
-      • Ethnicity and address data as recorded by each month
+      • Ethnicity as recorded by each month
 
       • 5-year rolling history window for performance
 
@@ -26,6 +26,10 @@ models:
       • Excludes persons without any registration history
 
       • Maintains temporal accuracy for all demographic attributes
+
+      Known Limitations:
+
+      • Address/geographic fields use current address for all historical months (address history dates not available)
 
       For analysis queries using specific months.'
 
@@ -192,7 +196,7 @@ models:
         description: 'Practice neighbourhood classification'
 
       - name: postcode_hash
-        description: 'Patient residential address postcode hash for privacy protection (as of analysis month)'
+        description: 'Patient residential address postcode hash for privacy protection (current address used for all months)'
 
       - name: uprn_hash
         description: 'Patient address Unique Property Reference Number hash (placeholder for future use)'
@@ -263,7 +267,6 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           name: dim_person_demographics_historical_unique_person_month
-          arguments:
-            combination_of_columns:
-              - person_id
-              - analysis_month
+          combination_of_columns:
+            - person_id
+            - analysis_month

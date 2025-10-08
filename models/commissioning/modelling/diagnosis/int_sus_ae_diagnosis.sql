@@ -36,9 +36,13 @@ select
     sa.attendance_location_site as site_id,
     dict_site.organisation_name as site_name,
     sa.attendance_location_department_type as department_type,
-    c.concept_code as source_concept_code,
-    'ICD10' as concept_vocabulary,
-    d.*
+    f.code as source_concept_code,
+    d.concept_code as mapped_icd10_code,
+    d.snomed_description as source_concept_name,
+    'SNOMED' as concept_vocabulary,
+    d.snomed_description,
+    d.ecds_group1,
+    d.ecds_group3
 
 from diag_codes as f
 

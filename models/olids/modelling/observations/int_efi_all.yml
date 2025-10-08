@@ -18,8 +18,7 @@ models:
         - Severely Frail: score ≥ 0.24
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: EFI_SCORE, EFI2_SCORE
+          cluster_ids: EFI_SCORE, EFI2_SCORE
     columns:
       - name: person_id
         description: Person identifier

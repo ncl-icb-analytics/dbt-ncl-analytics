@@ -18,8 +18,7 @@ models:
       Purpose: Provides clinically appropriate adult BMI categorisation accounting for ethnic differences in cardiometabolic risk.'
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: BMIVAL_COD
+          cluster_ids: BMIVAL_COD
     columns:
       - name: id
         description: Unique identifier for each BMI observation (recorded or calculated)
@@ -31,28 +30,25 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('int_patient_person_unique')
-                field: person_id
+              to: ref('int_patient_person_unique')
+              field: person_id
       - name: age
         description: 'Age in years at time of analysis (adults 18+ only)'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 18
-                max_value: 150
-                inclusive: true
+              min_value: 18
+              max_value: 150
+              inclusive: true
       - name: bmi_value
         description: BMI value in kg/m²
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 10
-                max_value: 150
-                inclusive: true
-                where: "is_valid_bmi = TRUE"
+              min_value: 10
+              max_value: 150
+              inclusive: true
+              where: "is_valid_bmi = TRUE"
       - name: clinical_effective_date
         description: Date of BMI observation
         tests:
@@ -62,8 +58,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['recorded', 'calculated']
+              values: ['recorded', 'calculated']
       - name: requires_lower_bmi_thresholds
         description: 'Flag indicating if person requires lower BMI thresholds per NICE NG246'
       - name: cardiometabolic_risk_ethnicity_group
@@ -77,14 +72,12 @@ models:
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['Invalid', 'Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
+              values: ['Invalid', 'Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
       - name: bmi_risk_sort_key
         description: 'BMI risk sort key using ethnicity-adjusted thresholds (higher = higher risk)'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                max_value: 6
-                inclusive: true
+              min_value: 0
+              max_value: 6
+              inclusive: true

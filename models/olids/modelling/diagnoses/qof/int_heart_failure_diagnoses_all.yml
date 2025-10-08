@@ -40,5 +40,4 @@ models:
 
     tests:
       - cluster_ids_exist:
-          arguments:
-            cluster_ids: HFLVSD_COD, HFRES_COD, HF_COD, REDEJCFRAC_COD
+          cluster_ids: HFLVSD_COD, HFRES_COD, HF_COD, REDEJCFRAC_COD

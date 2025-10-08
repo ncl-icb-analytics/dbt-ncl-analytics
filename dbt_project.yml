@@ -10,6 +10,7 @@ flags:
 # Display connection info when dbt runs start
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
+  - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
 
 
 target-path: "target"
@@ -87,6 +88,8 @@ models:
 
     # OLIDS analytics models
     olids:
+      +meta:
+        custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
       raw:
         +materialized: view
         +database: "MODELLING"
@@ -172,7 +175,9 @@ models:
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "OLIDS_PUBLISHED"
         +tags: ["published_reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
+        +post-hook:
+          - "{{ add_model_comment() }}"
+          - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
 
     # Shared models (reference data, utilities)
     shared:
