@@ -84,7 +84,7 @@ def add_at_least_one_test(yml_path: Path) -> bool:
         return False
 
     except Exception as e:
-        print(f"  ⚠️  Error processing {yml_path.name}: {e}")
+        print(f"  [!] Error processing {yml_path.name}: {e}")
         return False
 
 
@@ -92,7 +92,7 @@ def main():
     """Main execution."""
     project_root = Path(__file__).parent.parent.parent
 
-    print("🔍 Finding staging models...\n")
+    print("Finding staging models...\n")
     staging_models = find_staging_models(project_root)
 
     print(f"Found {len(staging_models)} staging model(s)\n")
@@ -108,7 +108,7 @@ def main():
         relative_path = sql_path.relative_to(project_root)
 
         if yml_path is None:
-            print(f"❌ {model_name}: No YAML file found ({relative_path})")
+            print(f"[X] {model_name}: No YAML file found ({relative_path})")
             missing_yml.append(relative_path)
         else:
             # Check if test needs to be added
@@ -118,18 +118,18 @@ def main():
 
                 models = data.get('models', [])
                 if models and has_at_least_one_test(models[0]):
-                    print(f"✓  {model_name}: Already has at_least_one test")
+                    print(f"[OK] {model_name}: Already has at_least_one test")
                     already_has_test.append(model_name)
                 else:
                     if add_at_least_one_test(yml_path):
-                        print(f"✅ {model_name}: Added at_least_one test")
+                        print(f"[+] {model_name}: Added at_least_one test")
                         test_added.append(model_name)
                     else:
-                        print(f"⚠️  {model_name}: Could not add test")
+                        print(f"[!] {model_name}: Could not add test")
                         errors.append(model_name)
 
             except Exception as e:
-                print(f"❌ {model_name}: Error - {e}")
+                print(f"[X] {model_name}: Error - {e}")
                 errors.append(model_name)
 
     # Print summary
@@ -137,18 +137,18 @@ def main():
     print("SUMMARY")
     print("="*60)
     print(f"Total staging models: {len(staging_models)}")
-    print(f"✅ Tests added: {len(test_added)}")
-    print(f"✓  Already had test: {len(already_has_test)}")
-    print(f"❌ Missing YAML files: {len(missing_yml)}")
-    print(f"⚠️  Errors: {len(errors)}")
+    print(f"[+] Tests added: {len(test_added)}")
+    print(f"[OK] Already had test: {len(already_has_test)}")
+    print(f"[X] Missing YAML files: {len(missing_yml)}")
+    print(f"[!] Errors: {len(errors)}")
 
     if missing_yml:
-        print("\n📋 Models missing YAML files:")
+        print("\nModels missing YAML files:")
         for path in missing_yml:
             print(f"   - {path}")
 
     if errors:
-        print("\n⚠️  Models with errors:")
+        print("\nModels with errors:")
         for name in errors:
             print(f"   - {name}")
 

@@ -1,32 +1,31 @@
 version: 2
 models:
-  - name: stg_olids_concept_map
-    description: "Mappings between different coding systems and terminologies. Static reference table."
-    columns:
-      - name: id
-        description: "Primary key - unique identifier for this concept mapping"
-        tests:
-          - unique
-          - not_null
-
-      - name: lds_id
-        description: "LDS system identifier"
-
-      - name: concept_map_id
-        description: "Identifier for the concept map group"
-
-      - name: source_code_id
-        description: "Foreign key to concept.id - source concept being mapped from"
-
-      - name: target_code_id
-        description: "Foreign key to concept.id - target concept being mapped to"
-        tests:
-          - relationships:
-              to: ref('stg_olids_concept')
-              field: id
-
-      - name: is_primary
-        description: "Boolean indicating if this is the primary mapping for the source concept"
-
-      - name: equivalence
-        description: "Mapping equivalence type (equivalent, equal, wider, subsumes, narrower, specializes, inexact, unmatched, disjoint)"
+- name: stg_olids_concept_map
+  description: Mappings between different coding systems and terminologies. Static
+    reference table.
+  columns:
+  - name: id
+    description: Primary key - unique identifier for this concept mapping
+    tests:
+    - unique
+    - not_null
+  - name: lds_id
+    description: LDS system identifier
+  - name: concept_map_id
+    description: Identifier for the concept map group
+  - name: source_code_id
+    description: Foreign key to concept.id - source concept being mapped from
+  - name: target_code_id
+    description: Foreign key to concept.id - target concept being mapped to
+    tests:
+    - relationships:
+        to: ref('stg_olids_concept')
+        field: id
+  - name: is_primary
+    description: Boolean indicating if this is the primary mapping for the source
+      concept
+  - name: equivalence
+    description: Mapping equivalence type (equivalent, equal, wider, subsumes, narrower,
+      specializes, inexact, unmatched, disjoint)
+  tests:
+  - dbt_utils.at_least_one

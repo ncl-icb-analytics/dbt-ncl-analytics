@@ -1,11 +1,15 @@
 models:
-  - name: int_sus_apc_spell
-    description: |
-      Admitted Patient Care (APC) spells from SUS data.
-      One row per spell.
-    columns:
-      - name: primarykey_id
-        description: "Unique identifier for the spell (PRIMARYKEY_ID)"
-        tests:
-          - not_null
-          - unique
+- name: int_sus_apc_spell
+  description: 'Admitted Patient Care (APC) spells from SUS data.
+
+    One row per spell.
+
+    '
+  columns:
+  - name: primarykey_id
+    description: Unique identifier for the spell (PRIMARYKEY_ID)
+    tests:
+    - not_null
+    - unique
+  tests:
+  - dbt_utils.at_least_one

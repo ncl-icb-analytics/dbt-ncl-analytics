@@ -1,21 +1,21 @@
 version: 2
 models:
-  - name: stg_dictionary_ecds_diagnosis
-    description: "ECDS diagnosis reference data with ICD-10/11 mappings and clinical flags"
-    columns:
-      - name: ecds_unique_id
-        description: "Primary key - ECDS unique identifier"
-        tests:
-          - unique
-          - not_null
-
-      - name: snomed_code
-        description: "SNOMED CT code"
-        tests:
-          - not_null
-
-      - name: icd10_mapping
-        description: "Mapped ICD-10 code"
-
-      - name: icd11_mapping
-        description: "Mapped ICD-11 code"
+- name: stg_dictionary_ecds_diagnosis
+  description: ECDS diagnosis reference data with ICD-10/11 mappings and clinical
+    flags
+  columns:
+  - name: ecds_unique_id
+    description: Primary key - ECDS unique identifier
+    tests:
+    - unique
+    - not_null
+  - name: snomed_code
+    description: SNOMED CT code
+    tests:
+    - not_null
+  - name: icd10_mapping
+    description: Mapped ICD-10 code
+  - name: icd11_mapping
+    description: Mapped ICD-11 code
+  tests:
+  - dbt_utils.at_least_one

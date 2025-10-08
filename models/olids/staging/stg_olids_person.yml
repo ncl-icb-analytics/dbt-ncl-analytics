@@ -1,31 +1,28 @@
 version: 2
 models:
-  - name: stg_olids_person
-    description: "Person-level demographic records used for patient identity management across systems. Deduplicated by id with NHS number hashes aggregated into array."
-    columns:
-      - name: id
-        description: "Primary key - unique identifier for this person"
-        tests:
-          - unique
-          - not_null
-
-      - name: nhs_number_hashes
-        description: "Array of distinct hashed NHS numbers associated with this person (one person may have multiple NHS number hashes)"
-
-      - name: title
-        description: "Person title (Mr, Mrs, Dr, etc.)"
-
-      - name: gender_concept_id
-        description: "Foreign key to concept.id - person gender"
-
-      - name: birth_year
-        description: "Year of birth"
-
-      - name: birth_month
-        description: "Month of birth (1-12)"
-
-      - name: death_year
-        description: "Year of death, if deceased"
-
-      - name: death_month
-        description: "Month of death (1-12), if deceased"
+- name: stg_olids_person
+  description: Person-level demographic records used for patient identity management
+    across systems. Deduplicated by id with NHS number hashes aggregated into array.
+  columns:
+  - name: id
+    description: Primary key - unique identifier for this person
+    tests:
+    - unique
+    - not_null
+  - name: nhs_number_hashes
+    description: Array of distinct hashed NHS numbers associated with this person
+      (one person may have multiple NHS number hashes)
+  - name: title
+    description: Person title (Mr, Mrs, Dr, etc.)
+  - name: gender_concept_id
+    description: Foreign key to concept.id - person gender
+  - name: birth_year
+    description: Year of birth
+  - name: birth_month
+    description: Month of birth (1-12)
+  - name: death_year
+    description: Year of death, if deceased
+  - name: death_month
+    description: Month of death (1-12), if deceased
+  tests:
+  - dbt_utils.at_least_one

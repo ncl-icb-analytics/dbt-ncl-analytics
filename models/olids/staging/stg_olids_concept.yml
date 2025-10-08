@@ -1,28 +1,26 @@
 version: 2
 models:
-  - name: stg_olids_concept
-    description: "Terminology and coding concepts used throughout OLIDS. Static reference table."
-    columns:
-      - name: id
-        description: "Primary key - unique identifier for this concept"
-        tests:
-          - unique
-          - not_null
-
-      - name: lds_id
-        description: "LDS system identifier"
-
-      - name: system
-        description: "Coding system or terminology (e.g., SNOMED CT, Read, ICD-10)"
-
-      - name: code
-        description: "Code value within the system"
-
-      - name: display
-        description: "Human-readable display text for the code"
-
-      - name: is_mapped
-        description: "Boolean indicating if this concept has been mapped to a standard terminology"
-
-      - name: use_count
-        description: "Number of times this concept is used in the dataset"
+- name: stg_olids_concept
+  description: Terminology and coding concepts used throughout OLIDS. Static reference
+    table.
+  columns:
+  - name: id
+    description: Primary key - unique identifier for this concept
+    tests:
+    - unique
+    - not_null
+  - name: lds_id
+    description: LDS system identifier
+  - name: system
+    description: Coding system or terminology (e.g., SNOMED CT, Read, ICD-10)
+  - name: code
+    description: Code value within the system
+  - name: display
+    description: Human-readable display text for the code
+  - name: is_mapped
+    description: Boolean indicating if this concept has been mapped to a standard
+      terminology
+  - name: use_count
+    description: Number of times this concept is used in the dataset
+  tests:
+  - dbt_utils.at_least_one

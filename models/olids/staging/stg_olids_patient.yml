@@ -1,67 +1,53 @@
 version: 2
 models:
-  - name: stg_olids_patient
-    description: "Patient demographic records from GP systems. Deduplicated by id and filtered to exclude deleted records."
-    columns:
-      - name: id
-        description: "Primary key - unique identifier for this patient"
-        tests:
-          - unique
-          - not_null
-
-      - name: nhs_number_hash
-        description: "Hashed NHS number for patient identification"
-
-      - name: sk_patient_id
-        description: "Surrogate key for patient identification"
-
-      - name: title
-        description: "Patient title (Mr, Mrs, Dr, etc.)"
-
-      - name: gender_concept_id
-        description: "Foreign key to concept.id - patient gender"
-
-      - name: registered_practice_id
-        description: "Foreign key to organisation.id - GP practice where patient is registered"
-
-      - name: birth_year
-        description: "Year of birth"
-
-      - name: birth_month
-        description: "Month of birth (1-12)"
-
-      - name: death_year
-        description: "Year of death, if deceased"
-
-      - name: death_month
-        description: "Month of death (1-12), if deceased"
-
-      - name: is_spine_sensitive
-        description: "Boolean indicating if the patient has requested sensitive data handling"
-
-      - name: is_confidential
-        description: "Boolean indicating if the record is marked as confidential"
-
-      - name: is_dummy_patient
-        description: "Boolean indicating if this is a test or dummy patient record"
-
-      - name: record_owner_organisation_code
-        description: "Organisation code of the record owner"
-
-      - name: lds_id
-        description: "LDS system identifier"
-
-      - name: lds_datetime_data_acquired
-        description: "Datetime when data was acquired by LDS"
-
-      - name: lds_initial_date_received_date
-        description: "Date when data was initially received by LDS"
-
-      - name: lds_start_date_time
-        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
-
-      - name: lds_is_deleted
-        description: "Deletion flag - records with TRUE are filtered out in this staging layer"
-
-      - name: lds_record_id
-        description: "LDS assigned unique identifier for the source record version"
+- name: stg_olids_patient
+  description: Patient demographic records from GP systems. Deduplicated by id and
+    filtered to exclude deleted records.
+  columns:
+  - name: id
+    description: Primary key - unique identifier for this patient
+    tests:
+    - unique
+    - not_null
+  - name: nhs_number_hash
+    description: Hashed NHS number for patient identification
+  - name: sk_patient_id
+    description: Surrogate key for patient identification
+  - name: title
+    description: Patient title (Mr, Mrs, Dr, etc.)
+  - name: gender_concept_id
+    description: Foreign key to concept.id - patient gender
+  - name: registered_practice_id
+    description: Foreign key to organisation.id - GP practice where patient is registered
+  - name: birth_year
+    description: Year of birth
+  - name: birth_month
+    description: Month of birth (1-12)
+  - name: death_year
+    description: Year of death, if deceased
+  - name: death_month
+    description: Month of death (1-12), if deceased
+  - name: is_spine_sensitive
+    description: Boolean indicating if the patient has requested sensitive data handling
+  - name: is_confidential
+    description: Boolean indicating if the record is marked as confidential
+  - name: is_dummy_patient
+    description: Boolean indicating if this is a test or dummy patient record
+  - name: record_owner_organisation_code
+    description: Organisation code of the record owner
+  - name: lds_id
+    description: LDS system identifier
+  - name: lds_datetime_data_acquired
+    description: Datetime when data was acquired by LDS
+  - name: lds_initial_date_received_date
+    description: Date when data was initially received by LDS
+  - name: lds_start_date_time
+    description: LDS datetime stamp from which the record version was correct - used
+      for deduplication to get the latest record
+  - name: lds_is_deleted
+    description: Deletion flag - records with TRUE are filtered out in this staging
+      layer
+  - name: lds_record_id
+    description: LDS assigned unique identifier for the source record version
+  tests:
+  - dbt_utils.at_least_one

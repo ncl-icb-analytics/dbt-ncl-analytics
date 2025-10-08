@@ -1,30 +1,27 @@
 version: 2
 models:
-  - name: stg_reference_bp_thresholds
-    description: "Blood pressure threshold rules for different programmes and patient groups"
-    columns:
-      - name: threshold_rule_id
-        description: "Primary key - unique threshold rule identifier"
-        tests:
-          - unique
-          - not_null
-
-      - name: programme_or_guideline
-        description: "Programme or clinical guideline (QOF, NHS Health Check, etc.)"
-        tests:
-          - not_null
-
-      - name: patient_group
-        description: "Patient group this threshold applies to (e.g., diabetes, CKD)"
-
-      - name: threshold_type
-        description: "Type of threshold (control, treatment target, etc.)"
-
-      - name: systolic_threshold
-        description: "Systolic BP threshold value"
-
-      - name: diastolic_threshold
-        description: "Diastolic BP threshold value"
-
-      - name: operator
-        description: "Comparison operator (<=, <, >=, >, =)"
+- name: stg_reference_bp_thresholds
+  description: Blood pressure threshold rules for different programmes and patient
+    groups
+  columns:
+  - name: threshold_rule_id
+    description: Primary key - unique threshold rule identifier
+    tests:
+    - unique
+    - not_null
+  - name: programme_or_guideline
+    description: Programme or clinical guideline (QOF, NHS Health Check, etc.)
+    tests:
+    - not_null
+  - name: patient_group
+    description: Patient group this threshold applies to (e.g., diabetes, CKD)
+  - name: threshold_type
+    description: Type of threshold (control, treatment target, etc.)
+  - name: systolic_threshold
+    description: Systolic BP threshold value
+  - name: diastolic_threshold
+    description: Diastolic BP threshold value
+  - name: operator
+    description: Comparison operator (<=, <, >=, >, =)
+  tests:
+  - dbt_utils.at_least_one

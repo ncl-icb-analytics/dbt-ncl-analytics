@@ -1,32 +1,29 @@
 version: 2
 models:
-  - name: stg_reference_bnf_latest
-    description: "British National Formulary (BNF) reference data mapping medication codes to SNOMED and dm+d"
-    columns:
-      - name: vmp_vmpp_amp_ampp
-        description: "Primary key - dm+d code (VMP/VMPP/AMP/AMPP)"
-        tests:
-          - unique
-          - not_null
-
-      - name: bnf_code
-        description: "BNF code for medication"
-        tests:
-          - not_null
-
-      - name: bnf_name
-        description: "BNF name for medication"
-
-      - name: snomed_code
-        description: "SNOMED CT code for medication"
-        tests:
-          - not_null
-
-      - name: dm_d_product_description
-        description: "dm+d product description"
-
-      - name: vtm
-        description: "Virtual Therapeutic Moiety code"
-
-      - name: vtm_name
-        description: "Virtual Therapeutic Moiety name"
+- name: stg_reference_bnf_latest
+  description: British National Formulary (BNF) reference data mapping medication
+    codes to SNOMED and dm+d
+  columns:
+  - name: vmp_vmpp_amp_ampp
+    description: Primary key - dm+d code (VMP/VMPP/AMP/AMPP)
+    tests:
+    - unique
+    - not_null
+  - name: bnf_code
+    description: BNF code for medication
+    tests:
+    - not_null
+  - name: bnf_name
+    description: BNF name for medication
+  - name: snomed_code
+    description: SNOMED CT code for medication
+    tests:
+    - not_null
+  - name: dm_d_product_description
+    description: dm+d product description
+  - name: vtm
+    description: Virtual Therapeutic Moiety code
+  - name: vtm_name
+    description: Virtual Therapeutic Moiety name
+  tests:
+  - dbt_utils.at_least_one

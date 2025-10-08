@@ -1,15 +1,16 @@
 version: 2
 models:
-  - name: stg_reference_imd2019
-    description: "Index of Multiple Deprivation 2019 deciles by LSOA"
-    columns:
-      - name: lsoacode
-        description: "Primary key - LSOA code"
-        tests:
-          - unique
-          - not_null
-
-      - name: imddecile
-        description: "IMD decile (1 = most deprived, 10 = least deprived)"
-        tests:
-          - not_null
+- name: stg_reference_imd2019
+  description: Index of Multiple Deprivation 2019 deciles by LSOA
+  columns:
+  - name: lsoacode
+    description: Primary key - LSOA code
+    tests:
+    - unique
+    - not_null
+  - name: imddecile
+    description: IMD decile (1 = most deprived, 10 = least deprived)
+    tests:
+    - not_null
+  tests:
+  - dbt_utils.at_least_one

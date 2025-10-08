@@ -1,39 +1,33 @@
 version: 2
 models:
-  - name: stg_reference_imms_schedule_latest
-    description: "Immunisation schedule with age eligibility, intervals, and code cluster mappings"
-    columns:
-      - name: vaccine_id
-        description: "Primary key - unique vaccine identifier"
-        tests:
-          - unique
-          - not_null
-
-      - name: vaccine_name
-        description: "Vaccine name"
-        tests:
-          - not_null
-
-      - name: dose_number
-        description: "Dose number in schedule"
-
-      - name: diseases_protected_against
-        description: "Diseases this vaccine protects against"
-
-      - name: minimum_age_days
-        description: "Minimum age in days for this vaccine"
-
-      - name: maximum_age_days
-        description: "Maximum age in days for this vaccine"
-
-      - name: eligible_age_from_days
-        description: "Eligibility window start in days"
-
-      - name: eligible_age_to_days
-        description: "Eligibility window end in days"
-
-      - name: administered_cluster_id
-        description: "FK to combined_codesets cluster for administered codes"
-
-      - name: drug_cluster_id
-        description: "FK to combined_codesets cluster for drug codes"
+- name: stg_reference_imms_schedule_latest
+  description: Immunisation schedule with age eligibility, intervals, and code cluster
+    mappings
+  columns:
+  - name: vaccine_id
+    description: Primary key - unique vaccine identifier
+    tests:
+    - unique
+    - not_null
+  - name: vaccine_name
+    description: Vaccine name
+    tests:
+    - not_null
+  - name: dose_number
+    description: Dose number in schedule
+  - name: diseases_protected_against
+    description: Diseases this vaccine protects against
+  - name: minimum_age_days
+    description: Minimum age in days for this vaccine
+  - name: maximum_age_days
+    description: Maximum age in days for this vaccine
+  - name: eligible_age_from_days
+    description: Eligibility window start in days
+  - name: eligible_age_to_days
+    description: Eligibility window end in days
+  - name: administered_cluster_id
+    description: FK to combined_codesets cluster for administered codes
+  - name: drug_cluster_id
+    description: FK to combined_codesets cluster for drug codes
+  tests:
+  - dbt_utils.at_least_one

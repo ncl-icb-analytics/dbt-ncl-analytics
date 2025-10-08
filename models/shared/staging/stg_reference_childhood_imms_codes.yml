@@ -1,31 +1,28 @@
 version: 2
 models:
-  - name: stg_reference_childhood_imms_codes
-    description: "Childhood immunisation SNOMED codes mapped to vaccine types and doses"
+- name: stg_reference_childhood_imms_codes
+  description: Childhood immunisation SNOMED codes mapped to vaccine types and doses
+  tests:
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+      - vaccine
+      - dose
+      - snomedconceptid
+  - dbt_utils.at_least_one
+  columns:
+  - name: vaccine
+    description: Vaccine type (DTaP, MMR, etc.)
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - vaccine
-            - dose
-            - snomedconceptid
-    columns:
-      - name: vaccine
-        description: "Vaccine type (DTaP, MMR, etc.)"
-        tests:
-          - not_null
-
-      - name: dose
-        description: "Dose number/sequence"
-        tests:
-          - not_null
-
-      - name: snomedconceptid
-        description: "SNOMED concept ID for the immunisation code"
-        tests:
-          - not_null
-
-      - name: codedescription
-        description: "Description of the SNOMED code"
-
-      - name: source
-        description: "Source of the code mapping"
+    - not_null
+  - name: dose
+    description: Dose number/sequence
+    tests:
+    - not_null
+  - name: snomedconceptid
+    description: SNOMED concept ID for the immunisation code
+    tests:
+    - not_null
+  - name: codedescription
+    description: Description of the SNOMED code
+  - name: source
+    description: Source of the code mapping

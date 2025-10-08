@@ -1,40 +1,34 @@
 version: 2
 models:
-  - name: stg_olids_postcode_hash
-    description: "Hashed postcodes linked to geographical and administrative areas. Deduplicated by postcode_hash using lds_start_date_time."
-    columns:
-      - name: postcode_hash
-        description: "Primary key - hashed postcode value"
-        tests:
-          - unique
-          - not_null
-
-      - name: primary_care_organisation
-        description: "Primary care organisation code for the postcode area"
-
-      - name: local_authority_organisation
-        description: "Local authority organisation code for the postcode area"
-
-      - name: yr_2011_lsoa
-        description: "2011 Lower Super Output Area code"
-
-      - name: yr_2011_msoa
-        description: "2011 Middle Super Output Area code"
-
-      - name: yr_2021_lsoa
-        description: "2021 Lower Super Output Area code"
-
-      - name: yr_2021_msoa
-        description: "2021 Middle Super Output Area code"
-
-      - name: effective_from
-        description: "Date this geographical mapping became effective"
-
-      - name: effective_to
-        description: "Date this geographical mapping ceased to be effective"
-
-      - name: is_latest
-        description: "Boolean indicating if this is the latest mapping for the postcode"
-
-      - name: lds_start_date_time
-        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
+- name: stg_olids_postcode_hash
+  description: Hashed postcodes linked to geographical and administrative areas. Deduplicated
+    by postcode_hash using lds_start_date_time.
+  columns:
+  - name: postcode_hash
+    description: Primary key - hashed postcode value
+    tests:
+    - unique
+    - not_null
+  - name: primary_care_organisation
+    description: Primary care organisation code for the postcode area
+  - name: local_authority_organisation
+    description: Local authority organisation code for the postcode area
+  - name: yr_2011_lsoa
+    description: 2011 Lower Super Output Area code
+  - name: yr_2011_msoa
+    description: 2011 Middle Super Output Area code
+  - name: yr_2021_lsoa
+    description: 2021 Lower Super Output Area code
+  - name: yr_2021_msoa
+    description: 2021 Middle Super Output Area code
+  - name: effective_from
+    description: Date this geographical mapping became effective
+  - name: effective_to
+    description: Date this geographical mapping ceased to be effective
+  - name: is_latest
+    description: Boolean indicating if this is the latest mapping for the postcode
+  - name: lds_start_date_time
+    description: LDS datetime stamp from which the record version was correct - used
+      for deduplication to get the latest record
+  tests:
+  - dbt_utils.at_least_one

@@ -1,94 +1,73 @@
 version: 2
 models:
-  - name: stg_olids_referral_request
-    description: "Referral requests from GP to secondary care and other services. Deduplicated by id and filtered to exclude deleted records."
-    columns:
-      - name: id
-        description: "Primary key - unique identifier for this referral request"
-        tests:
-          - unique
-          - not_null
-
-      - name: organisation_id
-        description: "Foreign key to organisation.id - organisation where referral was made"
-
-      - name: person_id
-        description: "Foreign key to person.id - person-level identifier"
-
-      - name: patient_id
-        description: "Foreign key to patient.id"
-
-      - name: encounter_id
-        description: "Foreign key to encounter.id - encounter when referral was made"
-
-      - name: practitioner_id
-        description: "Foreign key to practitioner.id - referring practitioner"
-
-      - name: unique_booking_reference_number
-        description: "Unique booking reference number (UBRN) for the referral"
-
-      - name: clinical_effective_date
-        description: "Date the referral request was clinically effective"
-
-      - name: date_precision_concept_id
-        description: "Foreign key to concept.id - precision of the clinical effective date"
-
-      - name: requester_organisation_id
-        description: "Foreign key to organisation.id - organisation making the referral"
-
-      - name: recipient_organisation_id
-        description: "Foreign key to organisation.id - organisation receiving the referral"
-
-      - name: referral_request_priority_concept_id
-        description: "Foreign key to concept.id - priority of the referral (routine, urgent, two-week-wait, etc.)"
-
-      - name: referral_request_type_concept_id
-        description: "Foreign key to concept.id - type of referral"
-
-      - name: referral_request_specialty_concept_id
-        description: "Foreign key to concept.id - specialty to which the referral is made"
-
-      - name: mode
-        description: "Mode of the referral"
-
-      - name: is_outgoing_referral
-        description: "Boolean indicating if this is an outgoing referral from the organisation"
-
-      - name: is_review
-        description: "Boolean indicating if this is a review record"
-
-      - name: referral_request_source_concept_id
-        description: "Foreign key to concept.id - source concept for the referral"
-
-      - name: age_at_event
-        description: "Patient age in years at time of referral"
-
-      - name: age_at_event_baby
-        description: "Patient age in months for babies (0-24 months)"
-
-      - name: age_at_event_neonate
-        description: "Patient age in days for neonates (0-28 days)"
-
-      - name: date_recorded
-        description: "Date the record was entered into the system"
-
-      - name: lds_id
-        description: "LDS system identifier"
-
-      - name: record_owner_organisation_code
-        description: "Organisation code of the record owner"
-
-      - name: lds_datetime_data_acquired
-        description: "Datetime when data was acquired by LDS"
-
-      - name: lds_data_initial_received_date
-        description: "Date when data was initially received by LDS"
-
-      - name: lds_start_date_time
-        description: "LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record"
-
-      - name: lds_is_deleted
-        description: "Deletion flag - records with TRUE are filtered out in this staging layer"
-
-      - name: lds_record_id
-        description: "LDS assigned unique identifier for the source record version"
+- name: stg_olids_referral_request
+  description: Referral requests from GP to secondary care and other services. Deduplicated
+    by id and filtered to exclude deleted records.
+  columns:
+  - name: id
+    description: Primary key - unique identifier for this referral request
+    tests:
+    - unique
+    - not_null
+  - name: organisation_id
+    description: Foreign key to organisation.id - organisation where referral was
+      made
+  - name: person_id
+    description: Foreign key to person.id - person-level identifier
+  - name: patient_id
+    description: Foreign key to patient.id
+  - name: encounter_id
+    description: Foreign key to encounter.id - encounter when referral was made
+  - name: practitioner_id
+    description: Foreign key to practitioner.id - referring practitioner
+  - name: unique_booking_reference_number
+    description: Unique booking reference number (UBRN) for the referral
+  - name: clinical_effective_date
+    description: Date the referral request was clinically effective
+  - name: date_precision_concept_id
+    description: Foreign key to concept.id - precision of the clinical effective date
+  - name: requester_organisation_id
+    description: Foreign key to organisation.id - organisation making the referral
+  - name: recipient_organisation_id
+    description: Foreign key to organisation.id - organisation receiving the referral
+  - name: referral_request_priority_concept_id
+    description: Foreign key to concept.id - priority of the referral (routine, urgent,
+      two-week-wait, etc.)
+  - name: referral_request_type_concept_id
+    description: Foreign key to concept.id - type of referral
+  - name: referral_request_specialty_concept_id
+    description: Foreign key to concept.id - specialty to which the referral is made
+  - name: mode
+    description: Mode of the referral
+  - name: is_outgoing_referral
+    description: Boolean indicating if this is an outgoing referral from the organisation
+  - name: is_review
+    description: Boolean indicating if this is a review record
+  - name: referral_request_source_concept_id
+    description: Foreign key to concept.id - source concept for the referral
+  - name: age_at_event
+    description: Patient age in years at time of referral
+  - name: age_at_event_baby
+    description: Patient age in months for babies (0-24 months)
+  - name: age_at_event_neonate
+    description: Patient age in days for neonates (0-28 days)
+  - name: date_recorded
+    description: Date the record was entered into the system
+  - name: lds_id
+    description: LDS system identifier
+  - name: record_owner_organisation_code
+    description: Organisation code of the record owner
+  - name: lds_datetime_data_acquired
+    description: Datetime when data was acquired by LDS
+  - name: lds_data_initial_received_date
+    description: Date when data was initially received by LDS
+  - name: lds_start_date_time
+    description: LDS datetime stamp from which the record version was correct - used
+      for deduplication to get the latest record
+  - name: lds_is_deleted
+    description: Deletion flag - records with TRUE are filtered out in this staging
+      layer
+  - name: lds_record_id
+    description: LDS assigned unique identifier for the source record version
+  tests:
+  - dbt_utils.at_least_one
