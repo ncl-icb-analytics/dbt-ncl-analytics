@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: stg_csds_cyp101referral
+    description: "CSDS CYP referral requests (deduplicated)"
+    tests:
+      - dbt_utils.at_least_one
+    columns:
+      - name: service_request_identifier
+        description: "Primary key - unique service request identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: person_id
+        description: "CSDS person identifier"
+        tests:
+          - not_null
+
+      - name: referral_request_received_date
+        description: "Date referral request was received"

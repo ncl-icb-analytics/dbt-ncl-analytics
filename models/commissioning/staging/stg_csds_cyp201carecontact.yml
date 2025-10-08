@@ -1,0 +1,31 @@
+version: 2
+models:
+  - name: stg_csds_cyp201carecontact
+    description: "CSDS CYP care contacts (deduplicated)"
+    tests:
+      - dbt_utils.at_least_one
+    columns:
+      - name: service_request_identifier
+        description: "Service request identifier (FK to referral)"
+        tests:
+          - not_null
+
+      - name: person_id
+        description: "CSDS person identifier"
+        tests:
+          - not_null
+
+      - name: care_contact_identifier
+        description: "Primary key - unique care contact identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: care_contact_date
+        description: "Date of care contact"
+
+      - name: activity_location_type_code
+        description: "Code for type of location where activity took place"
+
+      - name: attendance_status
+        description: "Attendance status (attended, DNA, etc.)"

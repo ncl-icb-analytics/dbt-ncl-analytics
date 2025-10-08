@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: stg_sus_ae_clinical_treatments_snomed
+    description: "SUS A&E clinical treatments (SNOMED CT)"
+    tests:
+      - dbt_utils.at_least_one
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - primarykey_id
+            - code
+    columns:
+      - name: primarykey_id
+        description: "Primary key from main A&E attendance (FK)"
+        tests:
+          - not_null
+
+      - name: code
+        description: "SNOMED CT treatment code"
+        tests:
+          - not_null
