@@ -15,7 +15,7 @@ Clinical Purpose:
 
 SELECT
 
-    bridging.pseudo_nhs_number AS sk_patient_id,
+    bridging.sk_patient_id,
     contact.service_request_identifier as referral_id,
     contact.care_contact_identifier AS contact_id,
 
@@ -49,5 +49,5 @@ ON
 
 GROUP BY
     contact.care_contact_identifier,
-    bridging.pseudo_nhs_number,
+    bridging.sk_patient_id,
     contact.service_request_identifier

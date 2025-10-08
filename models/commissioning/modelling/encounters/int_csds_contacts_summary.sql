@@ -17,7 +17,7 @@ Clinical Purpose:
 SELECT 
 
     referral.service_request_identifier AS referral_id,
-    bridging.pseudo_nhs_number AS sk_patient_id,
+    bridging.sk_patient_id,
 
     -- count care contacts
     COUNT(contact.care_contact_identifier) AS contact_count,
@@ -48,4 +48,4 @@ ON
 
 GROUP BY
     referral.service_request_identifier,
-    bridging.pseudo_nhs_number
+    bridging.sk_patient_id

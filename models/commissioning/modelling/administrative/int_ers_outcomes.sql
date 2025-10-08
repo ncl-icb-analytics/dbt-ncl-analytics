@@ -17,7 +17,7 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 with base as (
     select
         UBRN_ID
-        ,NHS_NUMBER_Pseudo
+        ,sk_patient_id
         ,E_REFERRAL_PATHWAY_START
         ,action_dt_tm
         ,action_desc

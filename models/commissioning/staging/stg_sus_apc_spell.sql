@@ -3,7 +3,7 @@
 }}
 
 select primarykey_id 
-    , spell_patient_identity_nhs_number_value_pseudo --as sk_patient_id
+    , spell_patient_identity_nhs_number_value_pseudo as sk_patient_id
     , spell_care_location_site_code_of_treatment
     , spell_admission_date 
     , spell_discharge_length_of_hospital_stay 

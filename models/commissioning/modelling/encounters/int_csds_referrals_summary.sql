@@ -15,7 +15,7 @@ Clinical Purpose:
 
 SELECT
 
-    bridging.pseudo_nhs_number as sk_patient_id,
+    bridging.sk_patient_id,
     ARRAY_AGG(DISTINCT referral.primary_reason_for_referral_community_care) AS all_referral_reasons,
     COUNT(referral.service_request_identifier) as referral_count,
     COUNT_IF(referral.service_discharge_date IS NULL) AS count_open_referral,
@@ -32,4 +32,4 @@ ON
     referral.person_id = bridging.person_id
     
 GROUP BY
-    bridging.pseudo_nhs_number
+    bridging.sk_patient_id

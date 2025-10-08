@@ -32,4 +32,4 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider
 LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON 
     se.spell_care_location_site_code_of_treatment = dict_org.organisation_code 
 
-where se.spell_patient_identity_nhs_number_value_pseudo is not null
+where se.sk_patient_id is not null

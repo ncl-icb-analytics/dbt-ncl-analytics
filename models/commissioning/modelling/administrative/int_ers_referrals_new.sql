@@ -37,7 +37,7 @@ select
     ,a.E_REFERRAL_PATHWAY_START
     ,a.PATIENT_ID
     ,a.PATIENTS_REG_GP_PRACTICE_ID
-    ,a.NHS_NUMBER_Pseudo
+    ,a.sk_patient_id
     ,a.PATIENT_AGE
     ,a.ORIGINAL_PRIORITY_CD
     ,a.ORIGINAL_PRIORITY_DESC
