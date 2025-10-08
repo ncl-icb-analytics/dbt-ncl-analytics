@@ -30,6 +30,6 @@ PIVOT
     SUM(open_pathways) FOR provider_code IN (
         SELECT DISTINCT
         provider_code
-        FROM DEV__MODELLING.LOOKUP_NCL.PROVIDER_SHORTHAND
+        FROM {{ ref('stg_reference_ncl_provider') }}
         )
 ) AS pvt
