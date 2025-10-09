@@ -17,13 +17,14 @@ Testing:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, pcn_code, pcn_name
+    select patient_id, olids_id, pcn_code, pcn_name, age
     from {{ ref('inclusion_cohort')}}
     where eligible = 1
 )
 
 select il.patient_id
     , il.pcn_code
+    , il.age
     -- trajectories for sparkline visualisation [add other domains - GP, Community, MH, total?]
     , tr.ae_encounters_sl
     , tr.ip_encounters_sl
@@ -87,7 +88,9 @@ select il.patient_id
     , case when dcp.hba1c_completed_in_last_12m = true then dcp.latest_hba1c_value else null end as latest_hba1c_value
     ,dcp.latest_hba1c_date
     -- Annual activity (OP, APC, UEC, MH, ASC, Community, GP appts, 111?)
-
+    ,op.op_att_tot_12mo
+    ,op.op_spec_12mo
+    ,op.op_prov_12mo
     -- Current waiting list counts and flags
     ,zeroifnull(wl.wl_current_total_count) as wl_total_count
     ,zeroifnull(wl.wl_current_distinct_providers_count) as wl_provider_count
@@ -117,4 +120,6 @@ left join {{ref('fct_person_diabetes_8_care_processes')}} dcp
     on il.olids_id = dcp.person_id
 left join {{ref('fct_person_wl_current_count_total')}} wl
     on il.patient_id = wl.sk_patient_id
+left join {{ref('fct_person_sus_op_recent')}} op
+    on il.patient_id  = op.sk_patient_id
 
