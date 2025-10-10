@@ -48,7 +48,3 @@ select
 
 from {{ ref('raw_olids_medication_order') }}
 where lds_is_deleted = false
-qualify row_number() over (
-    partition by id
-    order by lds_start_date_time desc
-) = 1
