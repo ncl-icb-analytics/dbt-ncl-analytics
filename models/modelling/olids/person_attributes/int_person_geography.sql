@@ -87,7 +87,7 @@ SELECT
 
     -- Geographic identifiers
     pg.primary_care_organisation,
-    COALESCE(lb_icb.icb_name_clean, pco_map.name) as icb_resident,
+    pco_map.name as icb_resident,
 
     -- Local authority information - use LAD from reference data (most reliable)
     COALESCE(la.lad25_cd, pg.local_authority_organisation) as local_authority_code,
@@ -145,10 +145,6 @@ LEFT JOIN {{ ref('int_geography_mappings') }} lsoa_map
 -- Join London area information via LSOA
 LEFT JOIN london_areas la
     ON pg.yr_2021_lsoa = la.lsoa21_cd
-
--- Join London borough information for ICB name cleaning
-LEFT JOIN {{ ref('int_geography_london_boroughs') }} lb_icb
-    ON pg.primary_care_organisation = lb_icb.icb_code
 
 -- Join IMD information
 LEFT JOIN {{ ref('int_geography_imd') }} imd

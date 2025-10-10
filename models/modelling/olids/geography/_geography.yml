@@ -1,28 +1,6 @@
 version: 2
 
 models:
-  - name: int_geography_london_boroughs
-    description: Identifies London boroughs from ICBs and local authorities with cleaned names
-    columns:
-      - name: icb_code
-        description: ICB/Primary care organisation code
-      - name: icb_name_original
-        description: Original ICB/Primary care organisation name from source
-      - name: icb_name_clean
-        description: Cleaned ICB name with organisation code suffix removed
-      - name: is_london_icb
-        description: Flag indicating if ICB name contains 'London'
-      - name: local_authority_code
-        description: Local authority organisation code
-      - name: local_authority_name_original
-        description: Original local authority name from source
-      - name: local_authority_name_clean
-        description: Cleaned local authority name with 'London Borough of' prefix removed
-      - name: is_london_borough
-        description: Flag indicating if local authority is a London borough
-      - name: is_london_geography
-        description: Combined flag if either ICB or local authority is London-based
-
   - name: int_geography_mappings
     description: Single source of truth for geography code-to-name mappings
     columns:
