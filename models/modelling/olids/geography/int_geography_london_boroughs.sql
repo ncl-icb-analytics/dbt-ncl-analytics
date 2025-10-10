@@ -34,7 +34,7 @@ WITH icb_organisations AS (
 ),
 
 local_authority_organisations AS (
-    -- Get all local authority organisations with cleaned names
+    -- Get London borough organisations with cleaned names
     SELECT DISTINCT
         organisation_code,
         organisation_name AS organisation_name_original,
@@ -50,17 +50,16 @@ local_authority_organisations AS (
                 THEN 'City of London'
             ELSE organisation_name
         END AS organisation_name_clean,
-        CASE
-            WHEN organisation_name LIKE 'London Borough of %'
-              OR organisation_name LIKE 'Royal Borough of %'
-              OR organisation_name IN ('City of Westminster', 'City of London')
-            THEN TRUE
-            ELSE FALSE
-        END AS is_london_borough
+        TRUE AS is_london_borough
     FROM {{ ref('stg_dictionary_dbo_organisation') }}
     WHERE organisation_code IS NOT NULL
         AND organisation_name IS NOT NULL
         AND (end_date IS NULL OR end_date >= CURRENT_DATE())
+        AND (
+            organisation_name LIKE 'London Borough of %'
+            OR organisation_name LIKE 'Royal Borough of %'
+            OR organisation_name IN ('City of Westminster', 'City of London')
+        )
 )
 
 -- ICB organisations with London flags
