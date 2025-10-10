@@ -41,7 +41,7 @@ left join {{ ref("stg_sus_apc_spell") }} se on se.primarykey_id = f.primarykey_i
 LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
     ON se.SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER = dict_provider.service_provider_full_code
 
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON 
-    se.spell_care_location_site_code_of_treatment = dict_org.organisation_code 
+LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON
+    se.spell_care_location_site_code_of_treatment = dict_org.organisation_code
 
-where se.spell_patient_identity_nhs_number_value_pseudo is not null
+where se.sk_patient_id is not null

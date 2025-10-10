@@ -61,7 +61,7 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_site ON
     sa.attendance_location_site = dict_site.organisation_code
 
 -- site name
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON 
-    sa.attendance_location_hes_provider_3 = dict_org.organisation_code 
+LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON
+    sa.attendance_location_hes_provider_3 = dict_org.organisation_code
 
-where sa.patient_nhs_number_value_pseudo is not null
+where sa.sk_patient_id is not null

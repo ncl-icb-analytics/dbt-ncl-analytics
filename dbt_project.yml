@@ -65,21 +65,21 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "MODELLING"
         +schema: "COMMISSIONING_MODELLING"
         +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
       reporting:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "REPORTING"
         +schema: "COMMISSIONING_REPORTING"
         +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "COMMISSIONING_PUBLISHED"
@@ -103,7 +103,7 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "MODELLING"
         +tags: ["modelling"]
@@ -124,7 +124,7 @@ models:
         utilities:
           +schema: "OLIDS_UTILITIES"
       reporting:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "REPORTING"
         +tags: ["reporting"]
@@ -154,14 +154,14 @@ models:
         programme:
           +schema: "OLIDS_PROGRAMME"
       published_reporting_direct_care:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "OLIDS_PUBLISHED"
         +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "OLIDS_PUBLISHED"
@@ -185,28 +185,28 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "MODELLING"
         +schema: "REFERENCE"
         +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
       reporting:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "REPORTING"
         +schema: "REFERENCE"
         +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_direct_care:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "REFERENCE"
         +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
-        +enabled: false  # Temporary: disabled during staging refactor
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "REFERENCE"
