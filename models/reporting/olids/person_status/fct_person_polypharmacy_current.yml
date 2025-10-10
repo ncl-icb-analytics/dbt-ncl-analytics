@@ -1,0 +1,71 @@
+version: 2
+
+models:
+  - name: fct_person_polypharmacy_current
+    description: |
+      Current polypharmacy status per person.
+
+      Grain: One row per person (only persons with current polypharmacy medications)
+
+      Inclusion criteria:
+      - Persons with at least 1 current polypharmacy-scope medication
+      - Repeat prescriptions only (authorisation_type = '182918009')
+      - BNF chapters 1-4, 6-10 (systemic medications)
+      - Active supply (order date + duration >= today)
+
+      Polypharmacy thresholds (NHSBSA standard):
+      - Standard polypharmacy: 5+ medications
+      - Severe/complex polypharmacy: 10+ medications
+
+      Person-level snapshot for reporting. Join to demographic tables for population analysis.
+
+    columns:
+      - name: person_id
+        description: Person identifier
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('dim_person')
+              field: person_id
+
+      - name: medication_count
+        description: Count of current polypharmacy-scope medications
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+
+      - name: medication_bnf_list
+        description: Array of BNF codes for current medications
+        data_tests:
+          - not_null
+
+      - name: medication_name_list
+        description: Array of BNF medication names for current medications
+        data_tests:
+          - not_null
+
+      - name: polypharmacy_status_date
+        description: Earliest order date among current medications
+
+      - name: is_polypharmacy_5plus
+        description: Standard polypharmacy flag (5+ medications)
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+
+      - name: is_polypharmacy_10plus
+        description: Severe/complex polypharmacy flag (10+ medications)
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+
+      - name: medication_count_band
+        description: Medication count grouped into reporting bands (1-4, 5-9, 10-14, 15+)
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['1-4', '5-9', '10-14', '15+']

@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_polypharmacy_medications_list
+    description: |
+      BNF medications in scope for polypharmacy calculation using NHSBSA standard.
+
+      Grain: One row per SNOMED code included in polypharmacy scope
+
+      Inclusion criteria:
+      - BNF chapters 1-4 and 6-10 only (systemic medications)
+      - Must have valid SNOMED code mapping
+
+      Included chapters:
+      - Ch 1: Gastro-Intestinal System
+      - Ch 2: Cardiovascular System
+      - Ch 3: Respiratory System
+      - Ch 4: Central Nervous System
+      - Ch 6: Endocrine System
+      - Ch 7: Obstetrics, Gynaecology & Urinary Tract
+      - Ch 8: Malignant Disease & Immunosuppression
+      - Ch 9: Nutrition & Blood
+      - Ch 10: Musculoskeletal & Joint Diseases
+
+      Exclusions:
+      - Chapter 5 (acute infections)
+      - Chapters 11+ (topicals, devices, dressings)
+
+    columns:
+      - name: snomed_code
+        description: SNOMED CT code for the medication
+        data_tests:
+          - not_null
+          - unique
+
+      - name: bnf_code
+        description: BNF code for the medication
+        data_tests:
+          - not_null
+
+      - name: bnf_chapter
+        description: First 2 characters of BNF code indicating chapter (01-04, 06-10)
+        data_tests:
+          - not_null
+
+      - name: bnf_name
+        description: BNF name/description of the medication
