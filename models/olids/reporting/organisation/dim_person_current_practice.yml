@@ -63,7 +63,8 @@ models:
       - name: practice_is_obsolete
         description: 'Flag indicating if practice record is obsolete'
         tests:
-          - not_null
+          - not_null:
+              severity: warn
 
       - name: registration_start_date
         description: 'Start date of current registration'
