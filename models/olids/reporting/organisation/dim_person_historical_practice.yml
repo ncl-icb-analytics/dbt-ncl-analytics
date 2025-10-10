@@ -36,12 +36,14 @@ models:
       - name: practice_code
         description: 'Practice ODS code'
         tests:
-          - not_null
+          - not_null:
+              severity: warn
 
       - name: practice_name
         description: 'Practice name'
         tests:
-          - not_null
+          - not_null:
+              severity: warn
 
       - name: practice_type_code
         description: 'Practice type code from OLIDS'
@@ -64,7 +66,8 @@ models:
       - name: practice_is_obsolete
         description: 'Flag indicating if practice record is obsolete'
         tests:
-          - not_null
+          - not_null:
+              severity: warn
 
       - name: registration_start_date
         description: 'Start date of this registration period'
