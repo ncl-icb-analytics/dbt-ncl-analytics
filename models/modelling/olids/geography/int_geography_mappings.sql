@@ -26,10 +26,17 @@ WITH postcode_geography AS (
 ),
 
 primary_care_orgs AS (
-    -- ICB/Primary Care Organisation mappings
+    -- ICB/Primary Care Organisation mappings with cleaned names
     SELECT DISTINCT
         organisation_code,
-        organisation_name,
+        -- Remove organisation code suffix from names
+        CASE
+            WHEN organisation_name LIKE '% - ' || organisation_code
+                THEN TRIM(REGEXP_REPLACE(organisation_name, ' - ' || organisation_code || '$', ''))
+            WHEN organisation_name RLIKE '.* - [A-Z0-9]+$'
+                THEN TRIM(REGEXP_REPLACE(organisation_name, ' - [A-Z0-9]+$', ''))
+            ELSE organisation_name
+        END AS organisation_name,
         start_date,
         end_date,
         'PRIMARY_CARE' AS org_type
