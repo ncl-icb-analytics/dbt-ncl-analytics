@@ -125,27 +125,70 @@ Your browser will open for Snowflake authentication. Look for "All checks passed
 
 ## Project Structure
 
+Models are organised by data layer (raw → staging → modelling → reporting → published), then by domain:
+
 ```
 models/
-├── commissioning/           # Commissioning analytics domain
-│   ├── staging/             # 1:1 source mappings (views in MODELLING.DBT_STAGING)
-│   ├── modelling/           # Business logic & consolidation (tables in MODELLING.COMMISSIONING_MODELLING)
-│   ├── reporting/           # Analytics-ready models (tables in REPORTING.COMMISSIONING_REPORTING)
-│   └── published_reporting_secondary_use/  # Published outputs (PUBLISHED_REPORTING__SECONDARY_USE.COMMISSIONING_PUBLISHED)
+├── raw/                     # Source data with minimal transformation
+│   ├── commissioning/       # Commissioning source data (views in MODELLING.DBT_RAW)
+│   ├── olids/               # OLIDS source data (views in MODELLING.DBT_RAW)
+│   ├── phenolab/            # Phenotype lab data (views in MODELLING.DBT_RAW)
+│   └── shared/              # Shared reference data (views in MODELLING.DBT_RAW)
 │
-├── olids/                   # OLIDS analytics domain
-│   ├── staging/             # 1:1 source mappings (views in MODELLING.DBT_STAGING)
-│   ├── modelling/           # Business logic & consolidation (tables in MODELLING.OLIDS_MODELLING)
-│   ├── reporting/           # Analytics-ready models (tables in REPORTING.OLIDS_REPORTING)
-│   ├── published_reporting_direct_care/     # Direct care outputs (PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_PUBLISHED)
-│   └── published_reporting_secondary_use/   # Secondary use outputs (PUBLISHED_REPORTING__SECONDARY_USE.OLIDS_PUBLISHED)
+├── staging/                 # Cleaned and standardised source data
+│   ├── commissioning/       # 1:1 source mappings (views in MODELLING.DBT_STAGING)
+│   ├── olids/               # 1:1 OLIDS mappings (views in MODELLING.DBT_STAGING)
+│   ├── phenolab/            # PhenoLab base models (views in MODELLING.DBT_STAGING)
+│   └── shared/              # Reference data staging (views in MODELLING.DBT_STAGING)
 │
-└── shared/                  # Shared reference data and utilities
-    ├── staging/             # Reference data staging (views in MODELLING.DBT_STAGING)
-    ├── modelling/           # Shared dimensions and lookups (tables in MODELLING.REFERENCE)
-    ├── reporting/           # Shared reporting models (tables in REPORTING.REFERENCE)
-    ├── published_reporting_direct_care/     # Shared direct care outputs (PUBLISHED_REPORTING__DIRECT_CARE.REFERENCE)
-    └── published_reporting_secondary_use/   # Shared secondary use outputs (PUBLISHED_REPORTING__SECONDARY_USE.REFERENCE)
+├── modelling/               # Business logic and transformations
+│   ├── commissioning/       # Commissioning intermediate models (tables in MODELLING.COMMISSIONING_MODELLING)
+│   │   ├── administrative/
+│   │   ├── diagnosis/
+│   │   ├── encounters/
+│   │   ├── observations/
+│   │   └── procedure/
+│   ├── olids/               # OLIDS intermediate models (subdomain schemas auto-generated*)
+│   │   ├── diagnoses/       # → MODELLING.OLIDS_DIAGNOSES
+│   │   ├── medications/     # → MODELLING.OLIDS_MEDICATIONS
+│   │   ├── observations/    # → MODELLING.OLIDS_OBSERVATIONS
+│   │   ├── organisation/    # → MODELLING.OLIDS_ORGANISATION
+│   │   ├── person_attributes/ # → MODELLING.OLIDS_PERSON_ATTRIBUTES
+│   │   ├── programme/       # → MODELLING.OLIDS_PROGRAMME
+│   │   └── utilities/       # → MODELLING.OLIDS_UTILITIES
+│   └── shared/              # Shared dimensions and lookups (tables in MODELLING.REFERENCE)
+│
+├── reporting/               # Aggregated and analytical models
+│   ├── commissioning/       # Commissioning reporting (tables in REPORTING.COMMISSIONING_REPORTING)
+│   │   ├── person_history/
+│   │   ├── person_level/
+│   │   └── provider_level/
+│   ├── olids/               # OLIDS reporting (subdomain schemas auto-generated*)
+│   │   ├── clinical_safety/ # → REPORTING.OLIDS_CLINICAL_SAFETY
+│   │   ├── data_quality/    # → REPORTING.OLIDS_DATA_QUALITY
+│   │   ├── definitions/     # → REPORTING.OLIDS_DEFINITIONS
+│   │   ├── disease_registers/ # → REPORTING.OLIDS_DISEASE_REGISTERS
+│   │   ├── geography/       # → REPORTING.OLIDS_GEOGRAPHY
+│   │   ├── measures/        # → REPORTING.OLIDS_MEASURES
+│   │   ├── organisation/    # → REPORTING.OLIDS_ORGANISATION
+│   │   ├── person_analytics/ # → REPORTING.OLIDS_PERSON_ANALYTICS
+│   │   ├── person_demographics/ # → REPORTING.OLIDS_PERSON_DEMOGRAPHICS
+│   │   ├── person_status/   # → REPORTING.OLIDS_PERSON_STATUS
+│   │   └── programme/       # → REPORTING.OLIDS_PROGRAMME
+│   └── shared/              # Shared reporting models (tables in REPORTING.REFERENCE)
+│
+└── published/               # Production-ready datasets for end users
+    ├── direct_care/         # Direct care outputs
+    │   ├── olids/           # OLIDS direct care (PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_PUBLISHED)
+    │   └── shared/          # Shared direct care (PUBLISHED_REPORTING__DIRECT_CARE.REFERENCE)
+    └── secondary_use/       # Secondary use outputs
+        ├── commissioning/   # Commissioning secondary use (PUBLISHED_REPORTING__SECONDARY_USE.COMMISSIONING_PUBLISHED)
+        ├── olids/           # OLIDS secondary use (PUBLISHED_REPORTING__SECONDARY_USE.OLIDS_PUBLISHED)
+        └── shared/          # Shared secondary use (PUBLISHED_REPORTING__SECONDARY_USE.REFERENCE)
+
+*Automatic schema generation: Domains listed in var('auto_schema_domains') have schema names
+automatically derived from subdomain folder structure (e.g., models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES).
+Currently enabled for: olids. Add domains to auto_schema_domains in dbt_project.yml to enable.
 
 scripts/                     # Automation utilities
 └── sources/                     # Source and staging setup scripts
@@ -156,7 +199,7 @@ scripts/                     # Automation utilities
 
 macros/                      # Reusable SQL macros
 ├── generate_database_name.sql   # Handle DEV__ database prefixes
-├── generate_schema_name.sql     # Schema name generation
+├── generate_schema_name.sql     # Automatic schema derivation from folder structure
 ├── add_model_comment.sql        # Add metadata comments to models
 └── generate_table_comment.sql   # Generate model comment content
 ```
@@ -202,10 +245,18 @@ Custom macros override dbt defaults. All locations are configured in `dbt_projec
 - **Dev**: Prefixed with `DEV__` (e.g., `DEV__REPORTING.COMMISSIONING_REPORTING.model`)
 
 **Schema naming**:
-- Uses exact `+schema:` value from config (no target prefix added)
-- Example: `COMMISSIONING_REPORTING`, `OLIDS_DIAGNOSES`
+- **Explicit schemas**: Uses exact `+schema:` value from config (no target prefix added)
+  - Example: `COMMISSIONING_REPORTING`, `REFERENCE`
+- **Automatic schemas**: For domains listed in `auto_schema_domains` variable, schema names are automatically derived from subdomain folder structure
+  - Pattern: `{DOMAIN}_{SUBDOMAIN}`
+  - Example: `models/modelling/olids/diagnoses/` → `OLIDS_DIAGNOSES`
+  - Configure via `vars.auto_schema_domains` in `dbt_project.yml`
+  - Currently enabled for: `olids`
 
-When adding folders, update `dbt_project.yml` with `+database:` and `+schema:` settings. Unconfigured models default to `MODELLING.DBT_STAGING`.
+**Adding new folders**:
+- For domains using automatic schemas: Simply create the subdomain folder, no config changes needed
+- For other domains: Update `dbt_project.yml` with `+database:` and `+schema:` settings
+- Unconfigured models default to `MODELLING.DBT_STAGING`
 
 ## Role and Permissions
 

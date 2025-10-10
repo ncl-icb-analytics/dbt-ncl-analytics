@@ -24,6 +24,11 @@ model-paths: ["models"]
 vars:
   dbt_audit_schema: "test_audit"
 
+  # Schema generation configuration
+  # Domains listed here will have schema names automatically derived from subdomain folder structure
+  # Pattern: {DOMAIN}_{SUBDOMAIN} e.g. models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES
+  auto_schema_domains: ['olids']
+
   # Flu campaign configuration - Change these values to run for different campaign years
   flu_current_campaign: "Flu 2025-26"     # Current flu campaign (Supported: Flu 2023-24, Flu 2024-25, Flu 2025-26)
   flu_previous_campaign: "Flu 2024-25"    # Previous flu campaign (for year-over-year comparison)
@@ -47,171 +52,87 @@ models:
     +persist_docs:
       columns: true
     +post-hook: ["{{ grant_ownership_with_copy() }}"]
-    # Temporary: disable downstream layers during staging refactor
     +enabled: true
 
-    # Commissioning analytics models
-    commissioning:
-      raw:
-        +materialized: view
-        +database: "MODELLING"
-        +schema: "DBT_RAW"
-        +tags: ["raw"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      staging:
-        +materialized: view
-        +database: "MODELLING"
-        +schema: "DBT_STAGING"
-        +tags: ["staging"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      modelling:
-        +enabled: true
-        +materialized: table
-        +database: "MODELLING"
-        +schema: "COMMISSIONING_MODELLING"
-        +tags: ["modelling"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      reporting:
-        +enabled: true
-        +materialized: table
-        +database: "REPORTING"
-        +schema: "COMMISSIONING_REPORTING"
-        +tags: ["reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      published_reporting_secondary_use:
-        +enabled: true
-        +materialized: table
-        +database: "PUBLISHED_REPORTING__SECONDARY_USE"
-        +schema: "COMMISSIONING_PUBLISHED"
-        +tags: ["published_reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
+    # Raw layer - source data with minimal transformation
+    raw:
+      +materialized: view
+      +database: "MODELLING"
+      +schema: "DBT_RAW"
+      +tags: ["raw"]
+      +post-hook: ["{{ add_model_comment() }}"]
 
-    # OLIDS analytics models
-    olids:
-      +meta:
-        custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
-      raw:
-        +materialized: view
-        +database: "MODELLING"
-        +schema: "DBT_RAW"
-        +tags: ["raw"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      staging:
-        +materialized: view
-        +database: "MODELLING"
-        +schema: "DBT_STAGING"
-        +tags: ["staging"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      modelling:
-        +enabled: true
-        +materialized: table
-        +database: "MODELLING"
-        +tags: ["modelling"]
-        +post-hook: ["{{ add_model_comment() }}"]
-        # Business area schema mappings based on OLIDS domains
-        diagnoses:
-          +schema: "OLIDS_DIAGNOSES"
-        medications:
-          +schema: "OLIDS_MEDICATIONS"
-        observations:
-          +schema: "OLIDS_OBSERVATIONS"
-        organisation:
-          +schema: "OLIDS_ORGANISATION"
-        person_attributes:
-          +schema: "OLIDS_PERSON_ATTRIBUTES"
-        programme:
-          +schema: "OLIDS_PROGRAMME"
-        utilities:
-          +schema: "OLIDS_UTILITIES"
-      reporting:
-        +enabled: true
-        +materialized: table
-        +database: "REPORTING"
-        +tags: ["reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
-        # Business area schema mappings for reporting models
-        clinical_safety:
-          +schema: "OLIDS_CLINICAL_SAFETY"
-        data_quality:
-          +schema: "OLIDS_DATA_QUALITY"
+    # Staging layer - cleaned and standardised source data
+    staging:
+      +materialized: view
+      +database: "MODELLING"
+      +schema: "DBT_STAGING"
+      +tags: ["staging"]
+      +post-hook: ["{{ add_model_comment() }}"]
+      olids:
+        +meta:
+          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+
+    # Modelling layer - business logic and transformations
+    modelling:
+      +enabled: true
+      +materialized: table
+      +database: "MODELLING"
+      +tags: ["modelling"]
+      +post-hook: ["{{ add_model_comment() }}"]
+      commissioning:
+        +schema: "COMMISSIONING_MODELLING"
+      olids:
+        +meta:
+          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+      shared:
+        +schema: "REFERENCE"
+
+    # Reporting layer - aggregated and analytical models
+    reporting:
+      +enabled: true
+      +materialized: table
+      +database: "REPORTING"
+      +tags: ["reporting"]
+      +post-hook: ["{{ add_model_comment() }}"]
+      commissioning:
+        +schema: "COMMISSIONING_REPORTING"
+      olids:
+        +meta:
+          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+        # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         definitions:
           +database: "{{ target.database.replace('MODELLING', 'REPORTING') }}"
-          +schema: "OLIDS_DEFINITIONS"
-        disease_registers:
-          +schema: "OLIDS_DISEASE_REGISTERS"
-        geography:
-          +schema: "OLIDS_GEOGRAPHY"
-        measures:
-          +schema: "OLIDS_MEASURES"
-        organisation:
-          +schema: "OLIDS_ORGANISATION"
-        person_analytics:
-          +schema: "OLIDS_PERSON_ANALYTICS"
-        person_demographics:
-          +schema: "OLIDS_PERSON_DEMOGRAPHICS"
-        person_status:
-          +schema: "OLIDS_PERSON_STATUS"
-        programme:
-          +schema: "OLIDS_PROGRAMME"
-      published_reporting_direct_care:
-        +enabled: true
-        +materialized: table
-        +database: "PUBLISHED_REPORTING__DIRECT_CARE"
-        +schema: "OLIDS_PUBLISHED"
-        +tags: ["published_reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      published_reporting_secondary_use:
-        +enabled: true
-        +materialized: table
-        +database: "PUBLISHED_REPORTING__SECONDARY_USE"
-        +schema: "OLIDS_PUBLISHED"
-        +tags: ["published_reporting"]
-        +post-hook:
-          - "{{ add_model_comment() }}"
-          - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+      shared:
+        +schema: "REFERENCE"
 
-    # Shared models (reference data, utilities)
-    shared:
-      raw:
-        +materialized: view
-        +database: "MODELLING"
-        +schema: "DBT_RAW"
-        +tags: ["raw"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      staging:
-        +materialized: view
-        +database: "MODELLING"
-        +schema: "DBT_STAGING"
-        +tags: ["staging"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      modelling:
-        +enabled: true
-        +materialized: table
-        +database: "MODELLING"
-        +schema: "REFERENCE"
-        +tags: ["modelling"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      reporting:
-        +enabled: true
-        +materialized: table
-        +database: "REPORTING"
-        +schema: "REFERENCE"
-        +tags: ["reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      published_reporting_direct_care:
-        +enabled: true
-        +materialized: table
+    # Published layer - production-ready datasets for end users
+    published:
+      +enabled: true
+      +materialized: table
+      +tags: ["published_reporting"]
+      +post-hook: ["{{ add_model_comment() }}"]
+      direct_care:
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
-        +schema: "REFERENCE"
-        +tags: ["published_reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
-      published_reporting_secondary_use:
-        +enabled: true
-        +materialized: table
+        olids:
+          +meta:
+            custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          +schema: "OLIDS_PUBLISHED"
+        shared:
+          +schema: "REFERENCE"
+      secondary_use:
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
-        +schema: "REFERENCE"
-        +tags: ["published_reporting"]
-        +post-hook: ["{{ add_model_comment() }}"]
+        commissioning:
+          +schema: "COMMISSIONING_PUBLISHED"
+        olids:
+          +meta:
+            custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          +schema: "OLIDS_PUBLISHED"
+          +post-hook:
+            - "{{ add_model_comment() }}"
+            - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+        shared:
+          +schema: "REFERENCE"
 
 seeds:
   ncl_analytics:

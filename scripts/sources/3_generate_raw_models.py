@@ -179,11 +179,8 @@ def main():
                 domain = 'commissioning'  # Default
             print(f"Warning: No mapping found for source '{source_name}', using defaults (domain: {domain})")
 
-        # Set raw directory based on domain
-        if domain == 'shared':
-            raw_dir = os.path.join(PROJECT_DIR, 'models', 'shared', 'raw')
-        else:
-            raw_dir = os.path.join(PROJECT_DIR, 'models', domain, 'raw')
+        # Set raw directory based on new layer-first structure
+        raw_dir = os.path.join(PROJECT_DIR, 'models', 'raw', domain)
 
         os.makedirs(raw_dir, exist_ok=True)
 
@@ -239,7 +236,7 @@ from {{{{ source('{source_name}', '{table_name}') }}}}"""
 
     print(f"\n[SUCCESS] Raw layer generation complete!")
     print(f"Next steps:")
-    print(f"  1. Review generated raw models in models/<domain>/raw/")
+    print(f"  1. Review generated raw models in models/raw/<domain>/")
     print(f"  2. Update dbt_project.yml to configure raw layer")
     print(f"  3. Build manually crafted staging models that reference these raw models")
 
