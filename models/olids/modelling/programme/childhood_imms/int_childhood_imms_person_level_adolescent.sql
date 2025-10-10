@@ -77,4 +77,4 @@ CURRENT_DATE AS RUN_DATE
 FROM VACC_STATUS_ADOL v
 INNER JOIN {{ ref('int_childhood_imms_current_population') }} p using (person_id)
 --replace with accurate AGE flag when available
-WHERE p.age BETWEEN 11 and 17
+WHERE p.age BETWEEN 11 and 18
