@@ -24,6 +24,11 @@ model-paths: ["models"]
 vars:
   dbt_audit_schema: "test_audit"
 
+  # Schema generation configuration
+  # Domains listed here will have schema names automatically derived from subdomain folder structure
+  # Pattern: {DOMAIN}_{SUBDOMAIN} e.g. models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES
+  auto_schema_domains: ['olids']
+
   # Flu campaign configuration - Change these values to run for different campaign years
   flu_current_campaign: "Flu 2025-26"     # Current flu campaign (Supported: Flu 2023-24, Flu 2024-25, Flu 2025-26)
   flu_previous_campaign: "Flu 2024-25"    # Previous flu campaign (for year-over-year comparison)
