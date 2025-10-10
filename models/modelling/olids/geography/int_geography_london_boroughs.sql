@@ -10,7 +10,7 @@ Identifies London boroughs from ICBs and local authorities, providing cleaned bo
 */
 
 WITH icb_organisations AS (
-    -- Get all ICB organisations (primary care organisations) with cleaned names
+    -- Get London ICB organisations (primary care organisations) with cleaned names
     SELECT DISTINCT
         organisation_code,
         organisation_name AS organisation_name_original,
@@ -23,14 +23,12 @@ WITH icb_organisations AS (
                 THEN TRIM(REGEXP_REPLACE(organisation_name, ' - [A-Z0-9]+$', ''))
             ELSE organisation_name
         END AS organisation_name_clean,
-        CASE
-            WHEN UPPER(organisation_name) LIKE '%LONDON%' THEN TRUE
-            ELSE FALSE
-        END AS is_london_icb
+        TRUE AS is_london_icb
     FROM {{ ref('stg_dictionary_dbo_organisation') }}
     WHERE organisation_code IS NOT NULL
         AND organisation_name IS NOT NULL
         AND (end_date IS NULL OR end_date >= CURRENT_DATE())
+        AND UPPER(organisation_name) LIKE '%LONDON%'
 ),
 
 local_authority_organisations AS (
