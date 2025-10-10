@@ -93,4 +93,4 @@ left join {{ ref('stg_dictionary_op_attendancetypes') }} as dict_att_t
 
 where
     core.appointment_identifier is not null
-    and core.sk_patient_idis not null
+    and core.sk_patient_id is not null
