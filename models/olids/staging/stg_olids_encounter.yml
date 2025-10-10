@@ -1,0 +1,68 @@
+version: 2
+models:
+- name: stg_olids_encounter
+  description: Patient encounters and consultations from GP and other healthcare systems.
+    Deduplicated by id and filtered to exclude deleted records.
+  columns:
+  - name: id
+    description: Primary key - unique identifier for this encounter
+    tests:
+    - unique
+    - not_null
+  - name: person_id
+    description: Foreign key to person.id - person-level identifier
+  - name: patient_id
+    description: Foreign key to patient.id
+  - name: practitioner_id
+    description: Foreign key to practitioner.id - practitioner involved in the encounter
+  - name: appointment_id
+    description: Foreign key to appointment.id - associated appointment
+  - name: episode_of_care_id
+    description: Foreign key to episode_of_care.id - associated episode of care
+  - name: service_provider_organisation_id
+    description: Foreign key to organisation.id - organisation providing the service
+  - name: clinical_effective_date
+    description: Date the encounter was clinically effective
+  - name: date_precision_concept_id
+    description: Foreign key to concept.id - precision of the clinical effective date
+  - name: location
+    description: Location where the encounter took place
+  - name: encounter_source_concept_id
+    description: Foreign key to concept.id - source concept for the encounter type
+  - name: age_at_event
+    description: Patient age in years at time of encounter
+  - name: age_at_event_baby
+    description: Patient age in months for babies (0-24 months)
+  - name: age_at_event_neonate
+    description: Patient age in days for neonates (0-28 days)
+  - name: type
+    description: Type of encounter
+  - name: sub_type
+    description: Sub-type classification of the encounter
+  - name: admission_method
+    description: Method of admission for the encounter
+  - name: end_date
+    description: Date the encounter ended
+  - name: date_recorded
+    description: Date the record was entered into the system
+  - name: is_deleted
+    description: Boolean indicating if the clinical record has been deleted
+  - name: lds_id
+    description: LDS system identifier
+  - name: record_owner_organisation_code
+    description: Organisation code of the record owner
+  - name: lds_datetime_data_acquired
+    description: Datetime when data was acquired by LDS
+  - name: lds_initial_data_received_date
+    description: Date when data was initially received by LDS
+  - name: lds_start_date_time
+    description: LDS datetime stamp from which the record version was correct - used
+      for deduplication to get the latest record
+  - name: lds_is_deleted
+    description: Deletion flag - records with TRUE are filtered out in this staging
+      layer
+  - name: lds_record_id
+    description: LDS assigned unique identifier for the source record version
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

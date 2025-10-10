@@ -16,7 +16,7 @@ with
     
 select
     {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.rownumber_id", "f.icd_id"]) }} as diagnosis_id,
-    sa.appointment_patient_identity_nhs_number_value_pseudo as sk_patient_id,
+    sa.sk_patient_id,
     f.primarykey_id as visit_occurrence_id,
     appointment_date as date,
     'OP_ATTENDANCE' as visit_occurrence_type,
@@ -43,7 +43,7 @@ left join {{ ref("stg_sus_op_appointment") }} sa on sa.primarykey_id = f.primary
 LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
     ON sa.appointment_commissioning_service_agreement_provider = dict_provider.service_provider_full_code
 
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON 
-    sa.appointment_care_location_site_code_of_treatment = dict_org.organisation_code 
+LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON
+    sa.appointment_care_location_site_code_of_treatment = dict_org.organisation_code
 
-where sa.appointment_patient_identity_nhs_number_value_pseudo is not null
+where sa.sk_patient_id is not null

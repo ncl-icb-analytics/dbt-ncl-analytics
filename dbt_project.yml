@@ -4,6 +4,9 @@ config-version: 2
 
 profile: 'ncl_analytics'
 
+flags:
+  partial_parse: true
+
 # Display connection info when dbt runs start
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
@@ -44,9 +47,17 @@ models:
     +persist_docs:
       columns: true
     +post-hook: ["{{ grant_ownership_with_copy() }}"]
+    # Temporary: disable downstream layers during staging refactor
+    +enabled: true
 
     # Commissioning analytics models
     commissioning:
+      raw:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_RAW"
+        +tags: ["raw"]
+        +post-hook: ["{{ add_model_comment() }}"]
       staging:
         +materialized: view
         +database: "MODELLING"
@@ -54,25 +65,37 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
+        +enabled: true
         +materialized: table
         +database: "MODELLING"
         +schema: "COMMISSIONING_MODELLING"
+        +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
       reporting:
+        +enabled: true
         +materialized: table
         +database: "REPORTING"
         +schema: "COMMISSIONING_REPORTING"
+        +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "COMMISSIONING_PUBLISHED"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
-    
+
     # OLIDS analytics models
     olids:
       +meta:
         custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+      raw:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_RAW"
+        +tags: ["raw"]
+        +post-hook: ["{{ add_model_comment() }}"]
       staging:
         +materialized: view
         +database: "MODELLING"
@@ -80,8 +103,10 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
+        +enabled: true
         +materialized: table
         +database: "MODELLING"
+        +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
         # Business area schema mappings based on OLIDS domains
         diagnoses:
@@ -99,8 +124,10 @@ models:
         utilities:
           +schema: "OLIDS_UTILITIES"
       reporting:
+        +enabled: true
         +materialized: table
         +database: "REPORTING"
+        +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
         # Business area schema mappings for reporting models
         clinical_safety:
@@ -127,20 +154,30 @@ models:
         programme:
           +schema: "OLIDS_PROGRAMME"
       published_reporting_direct_care:
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "OLIDS_PUBLISHED"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "OLIDS_PUBLISHED"
+        +tags: ["published_reporting"]
         +post-hook:
           - "{{ add_model_comment() }}"
           - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
-    
+
     # Shared models (reference data, utilities)
     shared:
+      raw:
+        +materialized: view
+        +database: "MODELLING"
+        +schema: "DBT_RAW"
+        +tags: ["raw"]
+        +post-hook: ["{{ add_model_comment() }}"]
       staging:
         +materialized: view
         +database: "MODELLING"
@@ -148,24 +185,32 @@ models:
         +tags: ["staging"]
         +post-hook: ["{{ add_model_comment() }}"]
       modelling:
+        +enabled: true
         +materialized: table
         +database: "MODELLING"
         +schema: "REFERENCE"
+        +tags: ["modelling"]
         +post-hook: ["{{ add_model_comment() }}"]
       reporting:
+        +enabled: true
         +materialized: table
         +database: "REPORTING"
         +schema: "REFERENCE"
+        +tags: ["reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_direct_care:
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         +schema: "REFERENCE"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
       published_reporting_secondary_use:
+        +enabled: true
         +materialized: table
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         +schema: "REFERENCE"
+        +tags: ["published_reporting"]
         +post-hook: ["{{ add_model_comment() }}"]
 
 seeds:

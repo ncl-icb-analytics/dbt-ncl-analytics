@@ -1,15 +1,13 @@
--- Staging model for reference_analyst_managed.LSOA2011_LSOA2021
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
-
 select
-    "LSOA11CD" as lsoa11_cd,
-    "LSOA11NM" as lsoa11_nm,
-    "LSOA21CD" as lsoa21_cd,
-    "LSOA21NM" as lsoa21_nm,
-    "CHGIND" as chgind,
-    "LAD22CD" as lad22_cd,
-    "LAD22NM" as lad22_nm,
-    "LAD22NMW" as lad22_nmw,
-    "OBJECTID" as objectid
-from {{ source('reference_analyst_managed', 'LSOA2011_LSOA2021') }}
+    lsoa11_cd,
+    lsoa11_nm,
+    lsoa21_cd,
+    lsoa21_nm,
+    chgind,
+    lad22_cd,
+    lad22_nm
+    -- Excluded:
+    -- lad22_nmw (Welsh name - not relevant for NCL),
+    -- objectid
+from {{ ref('raw_reference_lsoa2011_lsoa2021') }}
+qualify row_number() over (partition by lsoa11_cd order by lsoa21_cd) = 1

@@ -1,0 +1,17 @@
+version: 2
+models:
+- name: stg_dictionary_op_attendanceoutcomes
+  description: Outpatient attendance outcome codes reference
+  columns:
+  - name: sk_attendance_outcome
+    description: Primary key - surrogate key for attendance outcome
+    tests:
+    - unique
+    - not_null
+  - name: bk_attendance_outcome
+    description: Business key - attendance outcome code
+    tests:
+    - not_null
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

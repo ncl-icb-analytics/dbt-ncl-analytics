@@ -1,13 +1,9 @@
--- Staging model for sus_ae.clinical.coded_findings
--- Source: "DATA_LAKE"."SUS_UNIFIED_ECDS"
--- Description: SUS emergency care attendances and activity
+{{
+    config(materialized = 'view')
+}}
 
-select
-    "ROWNUMBER_ID" as rownumber_id,
-    "PRIMARYKEY_ID" as primarykey_id,
-    "CODED_FINDINGS_ID" as coded_findings_id,
-    "code" as code,
-    "is_code_approved" as is_code_approved,
-    "timestamp" as timestamp,
-    "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'clinical.coded_findings') }}
+select primarykey_id
+    ,coded_findings_id
+    ,rownumber_id
+    ,code
+from {{ ref('raw_sus_ae_clinical_coded_findings') }}

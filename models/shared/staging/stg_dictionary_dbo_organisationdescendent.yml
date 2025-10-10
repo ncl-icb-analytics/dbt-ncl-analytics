@@ -1,0 +1,33 @@
+version: 2
+models:
+- name: stg_dictionary_dbo_organisationdescendent
+  description: Organisation hierarchy showing parent-child relationships between organisations
+  tests:
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+      - sk_organisation_id_root
+      - sk_organisation_id_child
+      - path
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
+  columns:
+  - name: sk_organisation_id_root
+    description: Root organisation in hierarchy
+    tests:
+    - not_null
+  - name: sk_organisation_id_parent
+    description: Parent organisation
+    tests:
+    - not_null
+  - name: sk_organisation_id_child
+    description: Child organisation
+    tests:
+    - not_null
+  - name: relationship_type
+    description: Type of relationship between organisations
+  - name: depth
+    description: Depth in the hierarchy
+  - name: path
+    description: Full path in hierarchy
+    tests:
+    - not_null

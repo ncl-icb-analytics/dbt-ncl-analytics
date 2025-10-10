@@ -8,7 +8,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.dirname(CURRENT_DIR)  # scripts directory
 PROJECT_DIR = os.path.dirname(SCRIPTS_DIR)  # actual project root
 INPUT_FILE = os.path.join(CURRENT_DIR, 'table_metadata.csv')
-OUTPUT_FILE = os.path.join(PROJECT_DIR, 'models', 'sources.yml')
+OUTPUT_DIR = os.path.join(PROJECT_DIR, 'models', 'sources')
 MAPPINGS_FILE = os.path.join(CURRENT_DIR, 'source_mappings.yml')
 
 def load_source_mappings():
@@ -53,6 +53,24 @@ def find_source_mapping(database, schema, mappings):
 
     return None
 
+def get_source_filename(source_name, database, schema):
+    """Generate a filename for the source based on database and schema"""
+    # Normalize database name
+    db_normalized = database.replace('DATA_LAKE__', 'data_lake_').replace('Dictionary', 'dictionary').lower()
+
+    # Normalize schema name
+    schema_normalized = schema.lower().replace('_', '_').replace('-', '_')
+
+    # Create filename: database_schema.yml
+    if db_normalized.startswith('data_lake_ncl'):
+        # For DATA_LAKE__NCL, use more specific names
+        filename = f"{db_normalized}_{schema_normalized}.yml"
+    else:
+        # For regular databases
+        filename = f"{db_normalized}_{schema_normalized}.yml"
+
+    return filename
+
 def main():
     # Load mappings
     mappings = load_source_mappings()
@@ -71,8 +89,8 @@ def main():
         print("Columns found in file (tab):", df.columns.tolist())
 
     # Group by database and schema to create sources
-    sources = []
-    sources_created = {}
+    sources_by_file = {}  # Track sources by output filename
+    total_tables = 0
 
     for (database, schema), group in df.groupby(['DATABASE_NAME', 'SCHEMA_NAME']):
         # Find mapping for this database/schema
@@ -89,55 +107,65 @@ def main():
 
         source_name = mapping['source_name']
 
-        # Track which sources we've created
-        if source_name not in sources_created:
-            tables = []
+        # Determine output filename for this source
+        filename = get_source_filename(source_name, database, schema)
 
-            # Get all tables for this source
-            for table_name, table_group in group.groupby('TABLE_NAME'):
-                # Check if specific tables are configured
-                if 'tables' in mapping and table_name not in mapping['tables']:
-                    continue
+        # Initialize file entry if needed
+        if filename not in sources_by_file:
+            sources_by_file[filename] = []
 
-                # Sort columns by ordinal position
-                sorted_columns = table_group.sort_values('ORDINAL_POSITION')
+        tables = []
 
-                table = {
-                    'name': table_name,
-                    'identifier': f'"{table_name}"',  # Quote identifier to preserve case
-                    'columns': [{'name': col, 'data_type': dtype}
-                               for col, dtype in zip(sorted_columns['COLUMN_NAME'],
-                                                   sorted_columns['DATA_TYPE'])]
-                }
-                tables.append(table)
+        # Get all tables for this source
+        for table_name, table_group in group.groupby('TABLE_NAME'):
+            # Check if specific tables are configured
+            if 'tables' in mapping and table_name not in mapping['tables']:
+                continue
 
-            source = {
-                'name': source_name,
-                'database': f'"{mapping["database"]}"',  # Quote for case sensitivity
-                'schema': f'"{mapping.get("schema", schema)}"',  # Quote schema and use mapped case
-                'description': mapping.get('description', ''),
-                'tables': tables
+            # Sort columns by ordinal position
+            sorted_columns = table_group.sort_values('ORDINAL_POSITION')
+
+            table = {
+                'name': table_name,
+                'identifier': f'"{table_name}"',  # Quote identifier to preserve case
+                'columns': [{'name': col, 'data_type': dtype}
+                           for col, dtype in zip(sorted_columns['COLUMN_NAME'],
+                                               sorted_columns['DATA_TYPE'])]
             }
-            sources.append(source)
-            sources_created[source_name] = True
+            tables.append(table)
 
-            print(f"Created source '{source_name}' with {len(tables)} tables")
+        source = {
+            'name': source_name,
+            'database': f'"{mapping["database"]}"',  # Quote for case sensitivity
+            'schema': f'"{mapping.get("schema", schema)}"',  # Quote schema and use mapped case
+            'description': mapping.get('description', ''),
+            'tables': tables
+        }
 
-    # Create sources.yml content
-    sources_yml = {
-        'version': 2,
-        'sources': sources
-    }
+        sources_by_file[filename].append(source)
+        total_tables += len(tables)
+        print(f"Created source '{source_name}' with {len(tables)} tables -> {filename}")
 
-    # Write to file
-    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-    with open(OUTPUT_FILE, 'w') as f:
-        yaml.dump(sources_yml, f, sort_keys=False, default_flow_style=False)
+    # Create output directory
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    print(f"\nGenerated {OUTPUT_FILE}")
-    print(f"Created {len(sources)} data sources with {sum(len(s['tables']) for s in sources)} total tables")
-    print(f"\nNext step: Generate staging models:")
-    print(f"  python scripts/sources/3_generate_staging_models.py")
+    # Write each source file
+    for filename, sources in sources_by_file.items():
+        sources_yml = {
+            'version': 2,
+            'sources': sources
+        }
+
+        output_path = os.path.join(OUTPUT_DIR, filename)
+        with open(output_path, 'w') as f:
+            yaml.dump(sources_yml, f, sort_keys=False, default_flow_style=False)
+
+        print(f"  Written: {filename}")
+
+    print(f"\nGenerated {len(sources_by_file)} source files in {OUTPUT_DIR}")
+    print(f"Total: {sum(len(sources) for sources in sources_by_file.values())} sources with {total_tables} tables")
+    print(f"\nNext step: Generate raw layer models:")
+    print(f"  python scripts/sources/3_generate_raw_models.py")
 
 if __name__ == '__main__':
     main()

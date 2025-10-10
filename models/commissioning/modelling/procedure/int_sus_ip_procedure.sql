@@ -4,7 +4,7 @@
 
 select
     {{ dbt_utils.generate_surrogate_key( ["f.primarykey_id", "f.episodes_id", "f.rownumber_id", "f.opcs_id"])}} as procedure_id,
-    se.spell_patient_identity_nhs_number_value_pseudo as sk_patient_id,
+    se.sk_patient_id,
     se.spell_admission_date as date,
     f.primarykey_id as visit_occurrence_id,
     'APC_SPELL' as visit_occurrence_type,
@@ -32,4 +32,4 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider
 LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON 
     se.spell_care_location_site_code_of_treatment = dict_org.organisation_code 
 
-where se.spell_patient_identity_nhs_number_value_pseudo is not null
+where se.sk_patient_id is not null

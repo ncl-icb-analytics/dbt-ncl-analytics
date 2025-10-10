@@ -1,0 +1,96 @@
+version: 2
+sources:
+- name: dictionary_op
+  database: '"Dictionary"'
+  schema: '"OP"'
+  description: Reference data for outpatient procedures and treatments
+  tables:
+  - name: AttendanceOutcomes
+    identifier: '"AttendanceOutcomes"'
+    columns:
+    - name: SK_AttendanceOutcome
+      data_type: NUMBER
+    - name: BK_AttendanceOutcome
+      data_type: TEXT
+    - name: AttendanceOutcome
+      data_type: TEXT
+    - name: DateCreated
+      data_type: TIMESTAMP_NTZ
+    - name: DateUpdated
+      data_type: TIMESTAMP_NTZ
+  - name: AttendanceTypes
+    identifier: '"AttendanceTypes"'
+    columns:
+    - name: SK_AttendanceType
+      data_type: NUMBER
+    - name: BK_AttendanceTypeCode
+      data_type: TEXT
+    - name: AttendantType
+      data_type: TEXT
+    - name: AttendantTypeDesc
+      data_type: TEXT
+    - name: DateCreated
+      data_type: TIMESTAMP_NTZ
+    - name: DateUpdated
+      data_type: TIMESTAMP_NTZ
+  - name: DNAIndicators
+    identifier: '"DNAIndicators"'
+    columns:
+    - name: SK_DNAIndicatorID
+      data_type: NUMBER
+    - name: BK_DNACode
+      data_type: TEXT
+    - name: DNAIndicatorDesc
+      data_type: TEXT
+    - name: DNAIndicatorStatus
+      data_type: TEXT
+    - name: DateCreated
+      data_type: TIMESTAMP_NTZ
+    - name: DateUpdated
+      data_type: TIMESTAMP_NTZ
+  - name: MedicalStaffTypeSeeingPatient
+    identifier: '"MedicalStaffTypeSeeingPatient"'
+    columns:
+    - name: SK_MedicalStaffTypeID
+      data_type: NUMBER
+    - name: BK_MedicalStaffTypeID
+      data_type: TEXT
+    - name: MedicalStaffTypeSeeingPatient
+      data_type: TEXT
+  - name: PriorityType
+    identifier: '"PriorityType"'
+    columns:
+    - name: SK_PriorityTypeID
+      data_type: NUMBER
+    - name: BK_PriorityTypeCode
+      data_type: TEXT
+    - name: PriorityTypeDesc
+      data_type: TEXT
+    - name: DateCreated
+      data_type: TIMESTAMP_NTZ
+    - name: DateUpdated
+      data_type: TIMESTAMP_NTZ
+  - name: ServiceTypeRequested
+    identifier: '"ServiceTypeRequested"'
+    columns:
+    - name: SK_ServiceTypeRequestedID
+      data_type: NUMBER
+    - name: BK_ServiceTypeRequestedCode
+      data_type: TEXT
+    - name: ServiceTypeRequestedDescription
+      data_type: TEXT
+  - name: SourceOfReferrals
+    identifier: '"SourceOfReferrals"'
+    columns:
+    - name: SK_SourceOfReferral
+      data_type: NUMBER
+    - name: BK_SourceOfReferralCode
+      data_type: TEXT
+    - name: ReferralType
+      data_type: TEXT
+    - name: ReferralGroup
+      data_type: TEXT
+    - name: DateCreated
+      data_type: TIMESTAMP_NTZ
+    - name: DateUpdated
+      data_type: TIMESTAMP_NTZ

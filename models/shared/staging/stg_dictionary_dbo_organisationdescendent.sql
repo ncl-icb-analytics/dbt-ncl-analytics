@@ -1,24 +1,20 @@
--- Staging model for dictionary_dbo.OrganisationDescendent
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
-
 select
-    "SK_OrganisationID_Root" as sk_organisation_id_root,
-    "OrganisationCode_Root" as organisation_code_root,
-    "OrganisationPrimaryRole_Root" as organisation_primary_role_root,
-    "SK_OrganisationID_Parent" as sk_organisation_id_parent,
-    "OrganisationCode_Parent" as organisation_code_parent,
-    "OrganisationPrimaryRole_Parent" as organisation_primary_role_parent,
-    "SK_OrganisationID_Child" as sk_organisation_id_child,
-    "OrganisationCode_Child" as organisation_code_child,
-    "OrganisationPrimaryRole_Child" as organisation_primary_role_child,
-    "RelationshipType" as relationship_type,
-    "RelationshipStartDate" as relationship_start_date,
-    "RelationshipEndDate" as relationship_end_date,
-    "Path" as path,
-    "Depth" as depth,
-    "PathStartDate" as path_start_date,
-    "PathEndDate" as path_end_date,
-    "DateAdded" as date_added,
-    "DateUpdated" as date_updated
-from {{ source('dictionary_dbo', 'OrganisationDescendent') }}
+    sk_organisation_id_root,
+    organisation_code_root,
+    organisation_primary_role_root,
+    sk_organisation_id_parent,
+    organisation_code_parent,
+    organisation_primary_role_parent,
+    sk_organisation_id_child,
+    organisation_code_child,
+    organisation_primary_role_child,
+    relationship_type,
+    relationship_start_date,
+    relationship_end_date,
+    path,
+    depth,
+    path_start_date,
+    path_end_date,
+    date_added,
+    date_updated
+from {{ ref('raw_dictionary_dbo_organisationdescendent') }}

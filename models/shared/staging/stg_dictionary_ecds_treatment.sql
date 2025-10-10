@@ -1,24 +1,21 @@
--- Staging model for dictionary_ecds.Treatment
--- Source: "Dictionary"."ECDS_ETOS"
--- Description: Reference data for ECDS
-
 select
-    "ECDS_UniqueID" as ecds_unique_id,
-    "REFSET_UniqueID" as refset_unique_id,
-    "SNOMED_Code" as snomed_code,
-    "SNOMED_UK_Preferred_Term" as snomed_uk_preferred_term,
-    "SNOMED_Fully_Specified_Name" as snomed_fully_specified_name,
-    "ECDS_Description" as ecds_description,
-    "ECDS_Group1" as ecds_group1,
-    "PbR_Category" as pb_r_category,
-    "CDS_Code_Mapping_Used_For_HRG_Grouping" as cds_code_mapping_used_for_hrg_grouping,
-    "CDS_Treatment_Mapping_That_Is_Used_For_HRG_Grouping" as cds_treatment_mapping_that_is_used_for_hrg_grouping,
-    "Sort1" as sort1,
-    "Sort2" as sort2,
-    "Sort3" as sort3,
-    "Sort4" as sort4,
-    "Notes" as notes,
-    "Valid_From" as valid_from,
-    "Valid_To" as valid_to,
-    "dv_IsActive" as dv_is_active
-from {{ source('dictionary_ecds', 'Treatment') }}
+    ecds_unique_id,
+    refset_unique_id,
+    snomed_code,
+    snomed_uk_preferred_term,
+    snomed_fully_specified_name,
+    ecds_description,
+    ecds_group1,
+    pb_r_category,
+    cds_code_mapping_used_for_hrg_grouping,
+    cds_treatment_mapping_that_is_used_for_hrg_grouping,
+    valid_from,
+    valid_to,
+    dv_is_active
+    -- Excluded (low analytical value):
+    -- sort1, sort2, sort3, sort4, notes
+from {{ ref('raw_dictionary_ecds_treatment') }}
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY ecds_unique_id, valid_from
+    ORDER BY valid_to DESC NULLS LAST
+) = 1

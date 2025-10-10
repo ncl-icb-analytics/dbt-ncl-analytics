@@ -1,15 +1,11 @@
--- Staging model for reference_analyst_managed.BP_THRESHOLDS
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
-
 select
-    "THRESHOLD_RULE_ID" as threshold_rule_id,
-    "PROGRAMME_OR_GUIDELINE" as programme_or_guideline,
-    "DESCRIPTION" as description,
-    "PATIENT_GROUP" as patient_group,
-    "THRESHOLD_TYPE" as threshold_type,
-    "SYSTOLIC_THRESHOLD" as systolic_threshold,
-    "DIASTOLIC_THRESHOLD" as diastolic_threshold,
-    "OPERATOR" as operator,
-    "NOTES" as notes
-from {{ source('reference_analyst_managed', 'BP_THRESHOLDS') }}
+    threshold_rule_id,
+    programme_or_guideline,
+    description,
+    patient_group,
+    threshold_type,
+    systolic_threshold,
+    diastolic_threshold,
+    operator,
+    notes
+from {{ ref('raw_reference_bp_thresholds') }}

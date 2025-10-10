@@ -1,16 +1,12 @@
--- Staging model for dictionary_dbo.Specialties
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
-
 select
-    "SK_SpecialtyID" as sk_specialty_id,
-    "BK_SpecialtyCode" as bk_specialty_code,
-    "SpecialtyName" as specialty_name,
-    "SpecialtyCategory" as specialty_category,
-    "IsTreatmentFunction" as is_treatment_function,
-    "IsMainSpecialty" as is_main_specialty,
-    "DateCreated" as date_created,
-    "DateUpdated" as date_updated,
-    "MainSpecialtyDescription" as main_specialty_description,
-    "TreatmentFunctionDescription" as treatment_function_description
-from {{ source('dictionary_dbo', 'Specialties') }}
+    sk_specialty_id,
+    bk_specialty_code,
+    specialty_name,
+    specialty_category,
+    is_treatment_function,
+    is_main_specialty,
+    date_created,
+    date_updated,
+    main_specialty_description,
+    treatment_function_description
+from {{ ref('raw_dictionary_dbo_specialties') }}

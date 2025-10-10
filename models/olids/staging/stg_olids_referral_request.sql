@@ -1,41 +1,42 @@
--- Staging model for olids.REFERRAL_REQUEST
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
-
 select
-    "LDS_RECORD_ID" as lds_record_id,
-    "ID" as id,
-    "ORGANISATION_ID" as organisation_id,
-    "PERSON_ID" as person_id,
-    "PATIENT_ID" as patient_id,
-    "ENCOUNTER_ID" as encounter_id,
-    "PRACTITIONER_ID" as practitioner_id,
-    "UNIQUE_BOOKING_REFERENCE_NUMBER" as unique_booking_reference_number,
-    "CLINICAL_EFFECTIVE_DATE" as clinical_effective_date,
-    "DATE_PRECISION_CONCEPT_ID" as date_precision_concept_id,
-    "REQUESTER_ORGANISATION_ID" as requester_organisation_id,
-    "RECIPIENT_ORGANISATION_ID" as recipient_organisation_id,
-    "REFERRAL_REQUEST_PRIORITY_CONCEPT_ID" as referral_request_priority_concept_id,
-    "REFERRAL_REQUEST_TYPE_CONCEPT_ID" as referral_request_type_concept_id,
-    "REFERRAL_REQUEST_SPECIALTY_CONCEPT_ID" as referral_request_specialty_concept_id,
-    "MODE" as mode,
-    "IS_OUTGOING_REFERRAL" as is_outgoing_referral,
-    "IS_REVIEW" as is_review,
-    "REFERRAL_REQUEST_SOURCE_CONCEPT_ID" as referral_request_source_concept_id,
-    "AGE_AT_EVENT" as age_at_event,
-    "AGE_AT_EVENT_BABY" as age_at_event_baby,
-    "AGE_AT_EVENT_NEONATE" as age_at_event_neonate,
-    "DATE_RECORDED" as date_recorded,
-    "LDS_ID" as lds_id,
-    "LDS_BUSINESS_KEY" as lds_business_key,
-    "LDS_DATASET_ID" as lds_dataset_id,
-    "LDS_CDM_EVENT_ID" as lds_cdm_event_id,
-    "LDS_VERSIONER_EVENT_ID" as lds_versioner_event_id,
-    "RECORD_OWNER_ORGANISATION_CODE" as record_owner_organisation_code,
-    "LDS_DATETIME_DATA_ACQUIRED" as lds_datetime_data_acquired,
-    "LDS_INITIAL_DATA_RECEIVED_DATE" as lds_initial_data_received_date,
-    "LDS_IS_DELETED" as lds_is_deleted,
-    "LDS_START_DATE_TIME" as lds_start_date_time,
-    "LDS_LAKEHOUSE_DATE_PROCESSED" as lds_lakehouse_date_processed,
-    "LDS_LAKEHOUSE_DATETIME_UPDATED" as lds_lakehouse_datetime_updated
-from {{ source('olids', 'REFERRAL_REQUEST') }}
+    -- Primary key
+    id,
+
+    -- Business columns
+    organisation_id,
+    person_id,
+    patient_id,
+    encounter_id,
+    practitioner_id,
+    unique_booking_reference_number,
+    clinical_effective_date,
+    date_precision_concept_id,
+    requester_organisation_id,
+    recipient_organisation_id,
+    referral_request_priority_concept_id,
+    referral_request_type_concept_id,
+    referral_request_specialty_concept_id,
+    mode,
+    is_outgoing_referral,
+    is_review,
+    referral_request_source_concept_id,
+    age_at_event,
+    age_at_event_baby,
+    age_at_event_neonate,
+    date_recorded,
+    lds_id,
+    record_owner_organisation_code,
+    lds_datetime_data_acquired,
+    lds_initial_data_received_date,
+
+    -- Metadata
+    lds_start_date_time,
+    lds_is_deleted,
+    lds_record_id
+
+from {{ ref('raw_olids_referral_request') }}
+where lds_is_deleted = false
+qualify row_number() over (
+    partition by id
+    order by lds_start_date_time desc
+) = 1

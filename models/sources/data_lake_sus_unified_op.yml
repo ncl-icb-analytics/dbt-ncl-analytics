@@ -1,0 +1,783 @@
+version: 2
+sources:
+- name: sus_op
+  database: '"DATA_LAKE"'
+  schema: '"SUS_UNIFIED_OP"'
+  description: SUS outpatient appointments and activity
+  tables:
+  - name: CustomerRFA
+    identifier: '"CustomerRFA"'
+    columns:
+    - name: dmicDerivedCCGofResidence
+      data_type: BOOLEAN
+    - name: dmicPrimeRecipient
+      data_type: BOOLEAN
+    - name: dmicSubmittedCCG
+      data_type: BOOLEAN
+    - name: dmicSubmittedCCGOfResidence
+      data_type: BOOLEAN
+    - name: dmicDerivedCCG
+      data_type: BOOLEAN
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: dmicCustomerCode
+      data_type: TEXT
+    - name: dmicSubmittedProvider
+      data_type: BOOLEAN
+    - name: dmicSubmittedGPPractice
+      data_type: BOOLEAN
+    - name: dmicDerivedCCGofGPPrac
+      data_type: BOOLEAN
+    - name: dmicDerivedCCGofDerGPPrac
+      data_type: BOOLEAN
+    - name: dmicShortRecipient
+      data_type: BOOLEAN
+    - name: dmicDerivedGPPractice
+      data_type: BOOLEAN
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: InsertDeleteLog
+    identifier: '"InsertDeleteLog"'
+    columns:
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicIsDeleted
+      data_type: BOOLEAN
+    - name: dmicDeletedImportLogId
+      data_type: NUMBER
+  - name: appointment
+    identifier: '"appointment"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: type
+      data_type: TEXT
+    - name: action
+      data_type: TEXT
+    - name: schema_version
+      data_type: NUMBER
+    - name: system.report.as_at
+      data_type: TIMESTAMP_NTZ
+    - name: system.interchange.cds_message_reference
+      data_type: TEXT
+    - name: system.interchange.identifier
+      data_type: TEXT
+    - name: system.transaction.cds_record_type
+      data_type: TEXT
+    - name: system.transaction.cds_unique_identifier
+      data_type: TEXT
+    - name: system.transaction.cds_activity_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_sender
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.lsoa_11
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.country
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.government_office_region
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.residence_county
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.local_authority_district
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.parliamentary_constituency
+      data_type: TEXT
+    - name: system.record.version
+      data_type: TEXT
+    - name: system.record.cds_group_indicator
+      data_type: TEXT
+    - name: system.record.finished_indicator
+      data_type: NUMBER
+    - name: appointment.identifier
+      data_type: TEXT
+    - name: appointment.date
+      data_type: TIMESTAMP_NTZ
+    - name: system.report.date_range
+      data_type: TEXT
+    - name: system.report.clear_data
+      data_type: BOOLEAN
+    - name: system.report.grouper_version
+      data_type: TEXT
+    - name: system.report.tariff_version
+      data_type: TEXT
+    - name: system.report.query_identifier
+      data_type: TEXT
+    - name: appointment.referral.priority_type
+      data_type: NUMBER
+    - name: appointment.referral_to_treatment.ubrn.issuer
+      data_type: TEXT
+    - name: appointment.referral_to_treatment.patient_pathway_identifier.value Pseudo
+      data_type: TEXT
+    - name: appointment.referral_to_treatment.patient_pathway_identifier.issuer
+      data_type: TEXT
+    - name: appointment.referral_to_treatment.period_status
+      data_type: TEXT
+    - name: appointment.referral_to_treatment.waiting_time_measurement_type
+      data_type: TEXT
+    - name: appointment.patient_on_patient_initiated_outpatient_follow_up_pathway_indicator_at_cds_activity_date
+      data_type: TEXT
+    - name: appointment.patient_subject_to_remote_monitoring_indicator_at_cds_activity_date
+      data_type: TEXT
+    - name: appointment.patient.identity.ethnic_category_2021
+      data_type: TEXT
+    - name: appointment.referral.referred_by_first_contact_practitioner_indicator
+      data_type: TEXT
+    - name: appointment.last_patient_did_not_attend_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.last_patient_cancelled_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.patient.residence_derived.ed_county_code
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.ed_district_code
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.electoral_ward_1998
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.index_of_multiple_deprivation.decile
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.index_of_multiple_deprivation.decile_description
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.rural_urban_indicator
+      data_type: TEXT
+    - name: appointment.care_location.type
+      data_type: TEXT
+    - name: appointment.care_professional.multiple_professional_or_discipline_indicator
+      data_type: NUMBER
+    - name: appointment.patient.identity.withheld_identity_reason
+      data_type: TEXT
+    - name: appointment.commissioning.grouping.sus_hrg
+      data_type: TEXT
+    - name: appointment.patient.identity.carer_support_indicator
+      data_type: TEXT
+    - name: system.report.query_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.report.query_time
+      data_type: TEXT
+    - name: system.interchange.cds_control_reference
+      data_type: TEXT
+    - name: system.interchange.cds_record_identifier
+      data_type: TEXT
+    - name: system.interchange.received_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.interchange.received_time
+      data_type: TEXT
+    - name: system.interchange.cds_message_version_number
+      data_type: TEXT
+    - name: appointment.referral_to_treatment.ubrn.value Pseudo
+      data_type: TEXT
+    - name: appointment.referral_to_treatment.ubrn.is_valid
+      data_type: BOOLEAN
+    - name: appointment.referral_to_treatment.ubrn.occurrences
+      data_type: NUMBER
+    - name: appointment.clinical_coding.grouper_derived.dominant_procedure
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.aggregate_unbundled_tariff
+      data_type: NUMBER
+    - name: appointment.referral.direct_access_indicator
+      data_type: TEXT
+    - name: appointment.patient.identity.age_at_record_end
+      data_type: NUMBER
+    - name: appointment.patient.identity.hes_age_at_record_end
+      data_type: NUMBER
+    - name: appointment.patient.identity.gender
+      data_type: TEXT
+    - name: appointment.patient.identity.ethnic_category
+      data_type: TEXT
+    - name: appointment.patient.registration.general_practitioner
+      data_type: TEXT
+    - name: appointment.patient.registration.general_practice
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: system.report.activity_date_from
+      data_type: TIMESTAMP_NTZ
+    - name: system.report.activity_date_to
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.booked_reason
+      data_type: TEXT
+    - name: appointment.consultation_type
+      data_type: TEXT
+    - name: appointment.personalised_outpatient_follow_up_pathway_review_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.personalised_outpatient_follow_up_pathway_expiry_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.patient.residence_derived.cancer_registry
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.grid_reference
+      data_type: TEXT
+    - name: appointment.referral.referrer
+      data_type: TEXT
+    - name: appointment.referral.referring_organisation
+      data_type: TEXT
+    - name: appointment.referral.received_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.referral.source_op
+      data_type: TEXT
+    - name: system.transaction.cds_protocol_identifier
+      data_type: TEXT
+    - name: system.transaction.cds_update_type
+      data_type: NUMBER
+    - name: system.transaction.cds_applicable_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_applicable_time
+      data_type: TEXT
+    - name: system.transaction.cds_prime_recipient
+      data_type: TEXT
+    - name: system.record.identifier
+      data_type: TEXT
+    - name: appointment.patient.registration.responsible_ccg
+      data_type: TEXT
+    - name: appointment.patient.registration_derived.general_practice_from_pds
+      data_type: TEXT
+    - name: appointment.patient.registration_derived.responsible_ccg_from_pds
+      data_type: TEXT
+    - name: appointment.patient.residence.postcode Pseudo
+      data_type: TEXT
+    - name: appointment.patient.residence.postcode_is_valid
+      data_type: BOOLEAN
+    - name: appointment.patient.residence.residence_ccg
+      data_type: TEXT
+    - name: appointment.commissioning.grouping.code_cleaning_applied
+      data_type: BOOLEAN
+    - name: appointment.commissioning.pss_grouping.tariff_uplift_rate
+      data_type: NUMBER
+    - name: appointment.commissioning.tariff_calculation.excluded_from_pbr
+      data_type: NUMBER
+    - name: appointment.commissioning.tariff_calculation.patient_type
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.outpatient_type
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.direct_access_applies
+      data_type: TEXT
+    - name: appointment.patient.overseas_visitor.classification
+      data_type: TEXT
+    - name: appointment.referral.service_type_requested
+      data_type: NUMBER
+    - name: appointment.referral_to_treatment.period_start_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.referral_to_treatment.period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.referral_to_treatment.period_length
+      data_type: NUMBER
+    - name: appointment.time
+      data_type: TEXT
+    - name: appointment.first_attendance
+      data_type: TEXT
+    - name: appointment.attended_or_dna
+      data_type: TEXT
+    - name: appointment.outcome
+      data_type: TEXT
+    - name: appointment.administrative_category
+      data_type: TEXT
+    - name: appointment.patient.identity.nhs_number.value Pseudo
+      data_type: TEXT
+    - name: appointment.care_professional.consultant
+      data_type: TEXT
+    - name: appointment.care_professional.main_specialty
+      data_type: TEXT
+    - name: appointment.care_professional.treatment_function
+      data_type: TEXT
+    - name: appointment.care_professional.local_sub_specialty
+      data_type: TEXT
+    - name: appointment.care_professional.medical_staff_type
+      data_type: TEXT
+    - name: appointment.referral.service_request_identifier
+      data_type: TEXT
+    - name: appointment.referral.latest_clinically_appropriate_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.patient.overseas_visitor_charging_category_at_cds_activity_date
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.bpt_indicator
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.bpt_indicator_action
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.postcode_from_pds Pseudo
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.residence_ccg_from_patient_postcode
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.postcode_district
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.oa_11
+      data_type: TEXT
+    - name: appointment.patient.residence_derived.msoa_11
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.provider_reference_number
+      data_type: TEXT
+    - name: appointment.commissioning.pss_grouping.national_programme_code
+      data_type: TEXT
+    - name: appointment.commissioning.pss_grouping.prescribed_service_line_code
+      data_type: TEXT
+    - name: appointment.care_professional.rehabilitation_assessment_team_type
+      data_type: NUMBER
+    - name: system.record.confidentiality_category
+      data_type: NUMBER
+    - name: appointment.referral.earliest_reasonable_offer_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.patient.identity.nhs_number.status
+      data_type: TEXT
+    - name: appointment.patient.identity.nhs_number.is_valid
+      data_type: BOOLEAN
+    - name: appointment.patient.identity.local_patient_identifier.value
+      data_type: TEXT
+    - name: appointment.patient.identity.local_patient_identifier.issuer
+      data_type: TEXT
+    - name: appointment.patient.identity.birth_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.patient.identity.birth_month
+      data_type: NUMBER
+    - name: appointment.patient.identity.birth_year
+      data_type: NUMBER
+    - name: appointment.patient.identity.age_range
+      data_type: TEXT
+    - name: appointment.patient.identity.age_at_cds_activity_date
+      data_type: NUMBER
+    - name: appointment.patient.identity.age_at_record_start
+      data_type: NUMBER
+    - name: appointment.patient.identity.fractional_age_at_record_start
+      data_type: TEXT
+    - name: appointment.patient.identity.hes_age_at_record_start
+      data_type: NUMBER
+    - name: system.transaction.cds_extract_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_extract_time
+      data_type: TEXT
+    - name: system.transaction.cds_bulk_replacement_group
+      data_type: TEXT
+    - name: system.transaction.cds_report_period_start_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_report_period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.referral.earliest_clinically_appropriate_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.clinical_coding.procedure.operation_status
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.provider
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.provider_derived
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.commissioner
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.is_commissioner_recognised
+      data_type: BOOLEAN
+    - name: appointment.care_location.site_code_of_treatment
+      data_type: TEXT
+    - name: appointment.care_location.class
+      data_type: TEXT
+    - name: appointment.care_location.clinic_code
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.postcode_district
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.government_office_region
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.sha_provider
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.commissioner_derived
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.commissioning_serial_number
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.line_number
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.commissioner_reference_number
+      data_type: TEXT
+    - name: appointment.commissioning.service_agreement.applicable_costing_period
+      data_type: TEXT
+    - name: appointment.commissioning.grouping.core_hrg
+      data_type: TEXT
+    - name: appointment.commissioning.grouping.grouping_method
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.tariff_applied
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.specialised_services_tariff_uplift
+      data_type: NUMBER
+    - name: appointment.commissioning.tariff_calculation.market_forces_factor
+      data_type: NUMBER
+    - name: appointment.commissioning.commissioner_assignment.commissioner
+      data_type: TEXT
+    - name: appointment.commissioning.commissioner_assignment.flowchart_reference
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.initial_tariff
+      data_type: NUMBER
+    - name: appointment.care_location.organisation_geographies.ccg_from_treatment_site.value
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.ccg_from_treatment_site.origin
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.lsoa_provider_distance.value
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.lsoa_provider_distance.origin
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.lsoa_site_of_treatment_distance.value
+      data_type: TEXT
+    - name: appointment.care_location.organisation_geographies.lsoa_site_of_treatment_distance.origin
+      data_type: TEXT
+    - name: appointment.commissioning.tariff_calculation.final_price
+      data_type: NUMBER
+    - name: appointment.expected_duration
+      data_type: TEXT
+    - name: appointment.consultation_medium
+      data_type: TEXT
+    - name: appointment.last_dna_or_cancelled_date
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.patient.identity.pds_death_status
+      data_type: TEXT
+    - name: appointment.patient.identity.pds_date_of_death
+      data_type: TIMESTAMP_NTZ
+    - name: appointment.commissioning.tariff_calculation.aggregate_unbundled_guide_tariff
+      data_type: NUMBER
+  - name: appointment.care_professionals
+    identifier: '"appointment.care_professionals"'
+    columns:
+    - name: professional_registration_identifier
+      data_type: TEXT
+    - name: main_specialty
+      data_type: TEXT
+    - name: treatment_function
+      data_type: TEXT
+    - name: local_sub_specialty
+      data_type: TEXT
+    - name: clinical_responsibility_indicator
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: professional_registration_issuer
+      data_type: TEXT
+    - name: CARE_PROFESSIONALS_ID
+      data_type: NUMBER
+  - name: appointment.clinical_coding.coded_scored_assessments
+    identifier: '"appointment.clinical_coding.coded_scored_assessments"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: CODED_SCORED_ASSESSMENTS_ID
+      data_type: NUMBER
+    - name: tool_type
+      data_type: TEXT
+    - name: person_score
+      data_type: TEXT
+    - name: validation_timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: is_data_absent
+      data_type: BOOLEAN
+    - name: data_absent_reason
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.clinical_coding.comorbidities
+    identifier: '"appointment.clinical_coding.comorbidities"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: COMORBIDITIES_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: is_data_absent
+      data_type: BOOLEAN
+    - name: data_absent_reason
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.clinical_coding.diagnosis.icd
+    identifier: '"appointment.clinical_coding.diagnosis.icd"'
+    columns:
+    - name: code
+      data_type: TEXT
+    - name: present_on_admission
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: ICD_ID
+      data_type: NUMBER
+  - name: appointment.clinical_coding.diagnosis.read
+    identifier: '"appointment.clinical_coding.diagnosis.read"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: READ_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.clinical_coding.diagnosis.snomed
+    identifier: '"appointment.clinical_coding.diagnosis.snomed"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: SNOMED_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: sequence_number
+      data_type: NUMBER
+    - name: timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: is_data_absent
+      data_type: BOOLEAN
+    - name: data_absent_reason
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.clinical_coding.findings
+    identifier: '"appointment.clinical_coding.findings"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: FINDINGS_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: is_data_absent
+      data_type: BOOLEAN
+    - name: data_absent_reason
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.clinical_coding.fit_notes
+    identifier: '"appointment.clinical_coding.fit_notes"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: FIT_NOTES_ID
+      data_type: NUMBER
+    - name: condition
+      data_type: TEXT
+    - name: assessment_date
+      data_type: TIMESTAMP_NTZ
+    - name: diagnosis
+      data_type: TEXT
+    - name: start_date
+      data_type: TIMESTAMP_NTZ
+    - name: end_date
+      data_type: TIMESTAMP_NTZ
+    - name: duration
+      data_type: TEXT
+    - name: recorded_date
+      data_type: TIMESTAMP_NTZ
+    - name: follow_up_assessment_required_indicator
+      data_type: TEXT
+    - name: issuer
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.clinical_coding.observations
+    identifier: '"appointment.clinical_coding.observations"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: OBSERVATIONS_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: value
+      data_type: TEXT
+    - name: ucum_unit_of_measurement
+      data_type: TEXT
+    - name: timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: is_data_absent
+      data_type: BOOLEAN
+    - name: data_absent_reason
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.clinical_coding.procedure.opcs
+    identifier: '"appointment.clinical_coding.procedure.opcs"'
+    columns:
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: OPCS_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: main_operating_professional.identifier
+      data_type: TEXT
+    - name: main_operating_professional.registration_issuer
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: responsible_anaesthetist.registration_issuer
+      data_type: TEXT
+    - name: responsible_anaesthetist.identifier
+      data_type: TEXT
+    - name: date
+      data_type: TIMESTAMP_NTZ
+  - name: appointment.clinical_coding.procedure.snomed
+    identifier: '"appointment.clinical_coding.procedure.snomed"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: SNOMED_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: sequence_number
+      data_type: NUMBER
+    - name: timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: main_operating_professional.identifier
+      data_type: TEXT
+    - name: main_operating_professional.registration_issuer
+      data_type: TEXT
+    - name: responsible_anaesthetist.identifier
+      data_type: TEXT
+    - name: responsible_anaesthetist.registration_issuer
+      data_type: TEXT
+    - name: is_data_absent
+      data_type: BOOLEAN
+    - name: data_absent_reason
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: appointment.commissioning.grouping.unbundled_hrg
+    identifier: '"appointment.commissioning.grouping.unbundled_hrg"'
+    columns:
+    - name: multiple_applies
+      data_type: BOOLEAN
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: tariff
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: UNBUNDLED_HRG_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: tariff_applied
+      data_type: TEXT
+  - name: appointment.commissioning.service_agreements
+    identifier: '"appointment.commissioning.service_agreements"'
+    columns:
+    - name: service_code
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: commissioner_assignment_period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: commissioning_serial_number
+      data_type: TEXT
+    - name: line_number
+      data_type: TEXT
+    - name: commissioner_reference_number
+      data_type: TEXT
+    - name: provider_reference_number
+      data_type: TEXT
+    - name: is_commissioner_recognised
+      data_type: BOOLEAN
+    - name: commissioner_derived
+      data_type: TEXT
+    - name: commissioner_assignment_period_start_date
+      data_type: TIMESTAMP_NTZ
+    - name: SERVICE_AGREEMENTS_ID
+      data_type: NUMBER
+    - name: commissioner
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+  - name: appointment.commissioning.tariff_calculation.exclusion_reasons
+    identifier: '"appointment.commissioning.tariff_calculation.exclusion_reasons"'
+    columns:
+    - name: EXCLUSION_REASONS_ID
+      data_type: NUMBER
+    - name: exclusion_reasons
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+  - name: appointment.patient.social_and_personal_circumstances
+    identifier: '"appointment.patient.social_and_personal_circumstances"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: SOCIAL_AND_PERSONAL_CIRCUMSTANCES_ID
+      data_type: NUMBER
+    - name: code
+      data_type: TEXT
+    - name: recorded_timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: is_data_absent
+      data_type: BOOLEAN
+    - name: data_absent_reason
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+  - name: derived
+    identifier: '"derived"'
+    columns:
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicLSOA2021
+      data_type: TEXT
+    - name: dmicSubICBRegistrationSubmitted
+      data_type: TEXT
+    - name: dmicICBResidenceSubmitted
+      data_type: TEXT
+    - name: CqcCareHomeCode
+      data_type: TEXT
+    - name: dmicICBCommissioner
+      data_type: TEXT
+    - name: dmicSubICBResidenceSubmitted
+      data_type: TEXT
+    - name: dmicCommissionerDerivationReason
+      data_type: TEXT
+    - name: dmicElectoralWardCode
+      data_type: TEXT
+    - name: dmicSubICBCommissioner
+      data_type: TEXT
+    - name: dmicICBRegistrationSubmitted
+      data_type: TEXT
+  - name: system.transaction.cds_copy_recipients
+    identifier: '"system.transaction.cds_copy_recipients"'
+    columns:
+    - name: CDS_COPY_RECIPIENTS_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: cds_copy_recipients
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER

@@ -1,11 +1,7 @@
--- Staging model for reference_analyst_managed.NCL_NEIGHBOURHOOD_LSOA_2021
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
-
 select
-    "LSOA_2021_CODE" as lsoa_2021_code,
-    "LSOA_2021_NAME" as lsoa_2021_name,
-    "NEIGHBOURHOOD_CODE" as neighbourhood_code,
-    "NEIGHBOURHOOD_NAME" as neighbourhood_name,
-    "START_DATE" as start_date
-from {{ source('reference_analyst_managed', 'NCL_NEIGHBOURHOOD_LSOA_2021') }}
+    lsoa_2021_code,
+    lsoa_2021_name,
+    neighbourhood_code,
+    neighbourhood_name,
+    start_date
+from {{ ref('raw_reference_ncl_neighbourhood_lsoa_2021') }}

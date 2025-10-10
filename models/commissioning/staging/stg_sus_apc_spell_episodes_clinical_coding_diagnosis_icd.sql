@@ -1,13 +1,11 @@
--- Staging model for sus_apc.spell.episodes.clinical_coding.diagnosis.icd
--- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
--- Description: SUS admitted patient care episodes and procedures
+{{
+    config(materialized = 'view')
+}}
 
-select
-    "present_on_admission" as present_on_admission,
-    "dmicImportLogId" as dmic_import_log_id,
-    "ICD_ID" as icd_id,
-    "code" as code,
-    "PRIMARYKEY_ID" as primarykey_id,
-    "EPISODES_ID" as episodes_id,
-    "ROWNUMBER_ID" as rownumber_id
-from {{ source('sus_apc', 'spell.episodes.clinical_coding.diagnosis.icd') }}
+select {{ dbt_utils.generate_surrogate_key(["primarykey_id", "episodes_id", "icd_id", "rownumber_id"]) }} as diagnosis_id
+    ,primarykey_id
+    ,icd_id
+    ,rownumber_id
+    ,episodes_id
+    ,code
+from {{ ref('raw_sus_apc_spell_episodes_clinical_coding_diagnosis_icd') }}

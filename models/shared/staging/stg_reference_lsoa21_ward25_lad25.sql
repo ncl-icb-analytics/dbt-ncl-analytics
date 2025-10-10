@@ -1,13 +1,9 @@
--- Staging model for reference_analyst_managed.LSOA21_WARD25_LAD25
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
-
 select
-    "LSOA21CD" as lsoa21_cd,
-    "LSOA21NM" as lsoa21_nm,
-    "WD25CD" as wd25_cd,
-    "WD25NM" as wd25_nm,
-    "LAD25CD" as lad25_cd,
-    "LAD25NM" as lad25_nm,
-    "RESIDENT_FLAG" as resident_flag
-from {{ source('reference_analyst_managed', 'LSOA21_WARD25_LAD25') }}
+    lsoa21_cd,
+    lsoa21_nm,
+    wd25_cd,
+    wd25_nm,
+    lad25_cd,
+    lad25_nm,
+    resident_flag
+from {{ ref('raw_reference_lsoa21_ward25_lad25') }}

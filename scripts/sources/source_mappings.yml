@@ -1,14 +1,14 @@
 # Source Database and Schema Mappings for NCL Analytics
 # This file defines how source databases/schemas map to dbt sources
 # Supports both OLIDS and Commissioning data sources
-# 
+#
 # Structure:
 #   - source_name: Name used in dbt source() references
 #     database: Source database name
 #     schema: Source schema name (optional - if omitted, all schemas in database)
 #     description: What this data source contains
-#     staging_prefix: Prefix for staging models (optional, defaults to stg_{source_name})
-#     domain: Which domain folder to create staging models in (commissioning, olids, shared)
+#     raw_prefix: Prefix for raw layer models (optional, defaults to raw_{source_name})
+#     domain: Which domain folder to create raw models in (commissioning, olids, shared)
 
 version: 1
 
@@ -22,7 +22,7 @@ sources:
     database: DATA_LAKE
     schema: WL
     description: Waiting lists and patient pathway data
-    staging_prefix: stg_wl
+    raw_prefix: raw_wl
     domain: commissioning
     
   # SUS Unified - Outpatient
@@ -30,7 +30,7 @@ sources:
     database: DATA_LAKE
     schema: SUS_UNIFIED_OP
     description: SUS outpatient appointments and activity
-    staging_prefix: stg_sus_op
+    raw_prefix: raw_sus_op
     domain: commissioning
     
   # SUS Unified - Admitted Patient Care
@@ -38,7 +38,7 @@ sources:
     database: DATA_LAKE
     schema: SUS_UNIFIED_APC
     description: SUS admitted patient care episodes and procedures
-    staging_prefix: stg_sus_apc
+    raw_prefix: raw_sus_apc
     domain: commissioning
   
    # SUS Unified - Emergency Care
@@ -46,7 +46,7 @@ sources:
     database: DATA_LAKE
     schema: SUS_UNIFIED_ECDS
     description: SUS emergency care attendances and activity
-    staging_prefix: stg_sus_ae
+    raw_prefix: raw_sus_ae
     domain: commissioning
 
   # eRS referrals
@@ -54,7 +54,7 @@ sources:
     database: DATA_LAKE
     schema: ERS
     description: Primary care referrals data
-    staging_prefix: stg_ers_pc
+    raw_prefix: raw_ers_pc
     domain: commissioning
 
   # EPD Primary Care
@@ -62,7 +62,7 @@ sources:
     database: DATA_LAKE
     schema: EPD_PRIMARY_CARE
     description: Primary care medications and prescribing data
-    staging_prefix: stg_epd_pc
+    raw_prefix: raw_epd_pc
     domain: commissioning
   
   # Dictionary/Reference Data dbo
@@ -70,7 +70,7 @@ sources:
     database: Dictionary
     schema: dbo
     description: Reference data including PDS and lookup tables
-    staging_prefix: stg_dictionary_dbo
+    raw_prefix: raw_dictionary_dbo
     domain: shared
 
   # Dictionary/Reference Data ECDS_ETOS
@@ -78,7 +78,7 @@ sources:
     database: Dictionary
     schema: ECDS_ETOS
     description: Reference data for ECDS
-    staging_prefix: stg_dictionary_ecds
+    raw_prefix: raw_dictionary_ecds
     domain: shared
 
   # Dictionary/Reference Data OP
@@ -86,7 +86,7 @@ sources:
     database: Dictionary
     schema: OP
     description: Reference data for outpatient procedures and treatments
-    staging_prefix: stg_dictionary_op
+    raw_prefix: raw_dictionary_op
     domain: shared
 
     # Dictionary/Reference Data IP
@@ -94,7 +94,7 @@ sources:
     database: Dictionary
     schema: IP
     description: Reference data for inpatient procedures and treatments
-    staging_prefix: stg_dictionary_ip
+    raw_prefix: raw_dictionary_ip
     domain: shared
 
   # ========================================
@@ -106,7 +106,7 @@ sources:
     database: DATA_LAKE
     schema: OLIDS
     description: OLIDS stable layer - cleaned and filtered patient records
-    staging_prefix: stg_olids
+    raw_prefix: raw_olids
     domain: olids
 
   # Dictionary/Reference Data SNOMED
@@ -114,7 +114,7 @@ sources:
     database: Dictionary
     schema: Snomed
     description: Reference data for snomed
-    staging_prefix: stg_dictionary_snomed
+    raw_prefix: raw_dictionary_snomed
     domain: shared
 
   # eRS dictionary
@@ -122,7 +122,7 @@ sources:
     database: Dictionary
     schema: E-Referral
     description: Primary care referrals lookups
-    staging_prefix: stg_dictionary_ers
+    raw_prefix: raw_dictionary_ers
     domain: shared
 
   # Community services dataset
@@ -130,7 +130,7 @@ sources:
     database: DATA_LAKE
     schema: CSDS
     description: Community services dataset
-    staging_prefix: stg_csds
+    raw_prefix: raw_csds
     domain: commissioning
   # ========================================
   # DATA_LAKE__NCL REFERENCE DATA SOURCES
@@ -141,7 +141,7 @@ sources:
     database: DATA_LAKE__NCL
     schema: TERMINOLOGY
     description: Reference terminology data including SNOMED, BNF, and other code sets
-    staging_prefix: stg_reference
+    raw_prefix: raw_reference
     domain: shared
 
   # ANALYST_MANAGED schema in DATA_LAKE__NCL
@@ -149,7 +149,7 @@ sources:
     database: DATA_LAKE__NCL
     schema: ANALYST_MANAGED
     description: Analyst-managed reference datasets and business rules
-    staging_prefix: stg_reference
+    raw_prefix: raw_reference
     domain: shared
 
   # DATA_MANAGEMENT schema in DATA_LAKE__NCL
@@ -157,7 +157,7 @@ sources:
     database: DATA_LAKE__NCL
     schema: DATA_MANAGEMENT
     description: Data management reference datasets
-    staging_prefix: stg_reference
+    raw_prefix: raw_reference
     domain: shared
 
   # CANCER schemas in DATA_LAKE__NCL
@@ -165,21 +165,21 @@ sources:
     database: DATA_LAKE__NCL
     schema: CANCER__CWT_ALLIANCE
     description: Cancer waiting times alliance data
-    staging_prefix: stg_reference
+    raw_prefix: raw_reference
     domain: shared
 
   - source_name: reference_cancer_emis
     database: DATA_LAKE__NCL
     schema: CANCER__EMIS
     description: Cancer EMIS data
-    staging_prefix: stg_reference
+    raw_prefix: raw_reference
     domain: shared
 
   - source_name: reference_cancer_screening
     database: DATA_LAKE__NCL
     schema: CANCER__SCREENING
     description: Cancer screening data
-    staging_prefix: stg_reference
+    raw_prefix: raw_reference
     domain: shared
 
   # Fingertips schema in DATA_LAKE__NCL
@@ -187,7 +187,7 @@ sources:
     database: DATA_LAKE__NCL
     schema: FINGERTIPS
     description: Fingertips indicator data
-    staging_prefix: stg_reference
+    raw_prefix: raw_reference
     domain: shared
 
   # Phenolab schema in DATA_LAKE__NCL
@@ -195,7 +195,7 @@ sources:
     database: DATA_LAKE__NCL
     schema: PHENOLAB_DEV
     description: Phenolab supporting data
-    staging_prefix: stg_reference
+    raw_prefix: raw_phenolab
     domain: phenolab
 
   # ========================================

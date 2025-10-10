@@ -1,0 +1,48 @@
+version: 2
+models:
+- name: stg_olids_episode_of_care
+  description: Episodes of care tracking patient care pathways over time. Deduplicated
+    by id and filtered to exclude deleted records.
+  columns:
+  - name: id
+    description: Primary key - unique identifier for this episode of care
+    tests:
+    - unique
+    - not_null
+  - name: organisation_id
+    description: Foreign key to organisation.id - organisation managing the episode
+  - name: patient_id
+    description: Foreign key to patient.id
+  - name: person_id
+    description: Foreign key to person.id - person-level identifier
+  - name: episode_type_source_concept_id
+    description: Foreign key to concept.id - type of episode of care
+  - name: episode_status_source_concept_id
+    description: Foreign key to concept.id - status of the episode (planned, active,
+      onhold, finished, cancelled)
+  - name: episode_of_care_start_date
+    description: Start date of the episode of care
+  - name: episode_of_care_end_date
+    description: End date of the episode of care
+  - name: care_manager_practitioner_id
+    description: Foreign key to practitioner.id - care manager responsible for the
+      episode
+  - name: lds_id
+    description: LDS system identifier
+  - name: record_owner_organisation_code
+    description: Organisation code of the record owner
+  - name: lds_datetime_data_acquired
+    description: Datetime when data was acquired by LDS
+  - name: lds_initial_data_received_date
+    description: Date when data was initially received by LDS
+  - name: lds_start_date_time
+    description: LDS datetime stamp from which the record version was correct - used
+      for deduplication to get the latest record
+  - name: lds_is_deleted
+    description: Deletion flag - records with TRUE are filtered out in this staging
+      layer
+  - name: lds_record_id
+    description: LDS assigned unique identifier for the source record version
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

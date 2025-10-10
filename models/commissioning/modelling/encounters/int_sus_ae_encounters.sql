@@ -19,7 +19,7 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 select 
     /* Information needed to derive standard encounter information */
     core.primarykey_id as encounter_id
-    , core.patient_nhs_number_value_pseudo as sk_patient_id
+    , core.sk_patient_id
     , core.attendance_location_hes_provider_3 as provider_id
     , core.attendance_location_site as site_id
     , core.attendance_arrival_date as start_date

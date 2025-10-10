@@ -35,18 +35,16 @@ raw_registrations AS (
         prpr.end_date AS registration_end_datetime,
         prpr.practitioner_id,
         prpr.episode_of_care_id,
-        -- Get practice details
-        COALESCE(dp.practice_name, o.name) AS practice_name,  -- Use practice name from dim_practice
-        o.organisation_code AS practice_ods_code,
+        -- Get practice details from record_owner_organisation_code instead of unreliable organisation table
+        prpr.record_owner_organisation_code AS practice_ods_code,
+        dp.practice_name,
         -- Get patient details
         p.sk_patient_id
     FROM {{ ref('stg_olids_patient_registered_practitioner_in_role') }} AS prpr
     INNER JOIN patient_to_person AS ptp
         ON prpr.patient_id = ptp.patient_id
-    LEFT JOIN {{ ref('stg_olids_organisation') }} AS o
-        ON prpr.organisation_id = o.id
     LEFT JOIN {{ ref('dim_practice') }} AS dp
-        ON o.organisation_code = dp.practice_code
+        ON prpr.record_owner_organisation_code = dp.practice_code
     LEFT JOIN {{ ref('stg_olids_patient') }} AS p
         ON prpr.patient_id = p.id
     WHERE prpr.start_date IS NOT NULL

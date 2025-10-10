@@ -1,0 +1,18 @@
+models:
+- name: stg_sus_apc_spell_episodes_clinical_coding_diagnosis_icd
+  description: 'Clinical diagnosis codes recorded in admitted care (APC) from SUS
+    data.
+
+    One row per diagnosis code per admission.
+
+    '
+  columns:
+  - name: diagnosis_id
+    description: Unique identifier for the recorded diagnosis (surrogate key from primarykey_id,
+      episodes_id, icd_id, rownumber_id)
+    tests:
+    - not_null
+    - unique
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

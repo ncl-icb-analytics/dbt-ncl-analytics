@@ -1,0 +1,17 @@
+version: 2
+models:
+- name: stg_dictionary_op_dnaindicators
+  description: Did Not Attend (DNA) indicator codes reference
+  columns:
+  - name: sk_dna_indicator_id
+    description: Primary key - surrogate key for DNA indicator
+    tests:
+    - unique
+    - not_null
+  - name: bk_dna_code
+    description: Business key - DNA code
+    tests:
+    - not_null
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

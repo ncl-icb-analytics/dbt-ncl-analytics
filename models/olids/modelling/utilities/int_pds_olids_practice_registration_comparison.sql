@@ -25,10 +25,10 @@ WITH pds_counts AS (
     SELECT
         org.organisation_code as practice_code,
         org.organisation_name as practice_name,
-        COUNT(DISTINCT person.pseudo_nhs_number) as pds_patient_count
+        COUNT(DISTINCT person.sk_patient_id) as pds_patient_count
     FROM {{ ref('stg_pds_pds_person') }} person
     INNER JOIN {{ ref('stg_pds_pds_patient_care_practice') }} practice
-        ON person.pseudo_nhs_number = practice.pseudo_nhs_number
+        ON person.sk_patient_id = practice.sk_patient_id
     INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} org
         ON practice.primary_care_provider = org.organisation_code
     WHERE (

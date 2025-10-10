@@ -11,7 +11,7 @@ select
     null::number as episodes_id,
     f.opcs_id as problem_order,
     f.rownumber_id,
-    sa.appointment_patient_identity_nhs_number_value_pseudo as sk_patient_id,
+    sa.sk_patient_id,
     sa.appointment_commissioning_service_agreement_provider as organisation_id,
     dict_provider.service_provider_name as organisation_name,  
     sa.appointment_care_location_site_code_of_treatment as site_id,

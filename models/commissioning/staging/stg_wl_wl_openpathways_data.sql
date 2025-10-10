@@ -1,79 +1,21 @@
--- Staging model for wl.WL_OpenPathways_Data
--- Source: "DATA_LAKE"."WL"
--- Description: Waiting lists and patient pathway data
+{{
+    config(materialized = 'view')
+}}
 
-select
-    "DATE_AND_TIME_DATA_SET_CREATED" as date_and_time_data_set_created,
-    "Week_Ending_Date" as week_ending_date,
-    "Waiting_List_Type" as waiting_list_type,
-    "Pseudo NHS_NUMBER" as pseudo_nhs_number,
-    "LOCAL_PATIENT_IDENTIFIER" as local_patient_identifier,
-    "PERSON_BIRTH_DATE" as person_birth_date,
-    "PERSON_STATED_GENDER_CODE" as person_stated_gender_code,
-    "ETHNIC_CATEGORY" as ethnic_category,
-    "REFERRAL_REQUEST_RECEIVED_DATE" as referral_request_received_date,
-    "Referral_Identifier" as referral_identifier,
-    "PATIENT_PATHWAY_IDENTIFIER" as patient_pathway_identifier,
-    "ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER" as organisation_code_patient_pathway_identifier_issuer,
-    "SOURCE_OF_REFERRAL" as source_of_referral,
-    "ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER" as organisation_identifier_code_of_provider,
-    "ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT" as organisation_site_identifier_of_treatment,
-    "MAIN_SPECIALTY_CODE" as main_specialty_code,
-    "ACTIVITY_TREATMENT_FUNCTION_CODE" as activity_treatment_function_code,
-    "CONSULTANT_CODE" as consultant_code,
-    "REFERRAL_TO_TREATMENT_PERIOD_START_DATE" as referral_to_treatment_period_start_date,
-    "Current_Pathway_Period_Start_Date" as current_pathway_period_start_date,
-    "Outpatient_Future_Appointment_Date" as outpatient_future_appointment_date,
-    "Due_Date" as due_date,
-    "Outpatient_Appointment_Date" as outpatient_appointment_date,
-    "Date_Last_Attended" as date_last_attended,
-    "Last_DNA_Date" as last_dna_date,
-    "Cancellation_Date" as cancellation_date,
-    "OUTCOME_OF_ATTENDANCE_CODE" as outcome_of_attendance_code,
-    "Local_Outcome_Of_Attendance" as local_outcome_of_attendance,
-    "TCI_Date" as tci_date,
-    "REFERRAL_TO_TREATMENT_PERIOD_STATUS" as referral_to_treatment_period_status,
-    "Local_RTT_Status_Code" as local_rtt_status_code,
-    "DECISION_TO_ADMIT_DATE" as decision_to_admit_date,
-    "Proposed_Procedure_OPCS_Code" as proposed_procedure_opcs_code,
-    "ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER" as organisation_identifier_code_of_commissioner,
-    "ADMISSION_METHOD_CODE_HOSPITAL_PROVIDER_SPELL" as admission_method_code_hospital_provider_spell,
-    "PRIORITY_TYPE_CODE" as priority_type_code,
-    "REFERRAL_TO_TREATMENT_PERIOD_END_DATE" as referral_to_treatment_period_end_date,
-    "Procedure_Priority_Code" as procedure_priority_code,
-    "Diagnostic_Priority_Code" as diagnostic_priority_code,
-    "Outpatient_Priority_Code" as outpatient_priority_code,
-    "Date_Of_Last_Priority_Review" as date_of_last_priority_review,
-    "Last_PAS_Validation_Performed_By" as last_pas_validation_performed_by,
-    "Last_PAS_Validation_Date" as last_pas_validation_date,
-    "Last_PAS_Validation_Comments" as last_pas_validation_comments,
-    "Inclusion_On_Cancer_PTL" as inclusion_on_cancer_ptl,
-    "derSubmissionId" as der_submission_id,
-    "derRowId" as der_row_id,
-    "Der_Age_WeekEndingDate" as der_age_week_ending_date,
-    "Der_Age_at_Referral_To_Treatment_Period_Start_Date" as der_age_at_referral_to_treatment_period_start_date,
-    "Der_AgeBand_WeekEndingDate" as der_age_band_week_ending_date,
-    "Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date" as der_age_band_at_referral_to_treatment_period_start_date,
-    "derCCGofPractice" as der_ccg_of_practice,
-    "derCCGofResidence" as der_ccg_of_residence,
-    "derPracticeCode" as der_practice_code,
-    "derLSOA" as der_lsoa,
-    "dmIcbCommissioner" as dm_icb_commissioner,
-    "dmSubIcbCommissioner" as dm_sub_icb_commissioner,
-    "INTENDED_MANAGEMENT_CODE" as intended_management_code,
-    "Capacity_Status" as capacity_status,
-    "Requires_Alternative_Capacity" as requires_alternative_capacity,
-    "ASA_PHYSICAL_STATUS_CLASSIFICATION_SYSTEM_CODE" as asa_physical_status_classification_system_code,
-    "Outcome_Of_Patient_Contact" as outcome_of_patient_contact,
-    "Transfer_Status" as transfer_status,
-    "Mutual_Aid_Accepting_Provider" as mutual_aid_accepting_provider,
-    "FIRST_ACTIVITY_DATE" as first_activity_date,
-    "FIRST_ACTIVITY_TYPE" as first_activity_type,
-    "DECISION_TO_TREAT_DATE" as decision_to_treat_date,
-    "TCI_Date_Provided" as tci_date_provided,
-    "Preliminary_Screening_And_Risk_Assessment_Date" as preliminary_screening_and_risk_assessment_date,
-    "Action_Following_Preliminary_Screening_And_Risk_Assessment" as action_following_preliminary_screening_and_risk_assessment,
-    "derLSOA2021" as der_lsoa2021,
-    "ORIGINAL_REFERRAL_REQUEST_RECEIVED_DATE" as original_referral_request_received_date,
-    "ORGANISATION_IDENTIFIER_REFERRING_ORGANISATION" as organisation_identifier_referring_organisation
-from {{ source('wl', 'WL_OpenPathways_Data') }}
+SELECT
+    Pseudo_NHS_NUMBER as sk_patient_id,
+    organisation_identifier_code_of_provider as provider_code,
+    activity_treatment_function_code as tfc_code,
+    organisation_identifier_code_of_commissioner as commissioner_code,
+    der_LSOA2021 as lsoa_2021,
+    referral_request_received_date,
+    referral_to_treatment_period_start_date,
+    -- Correct all dates to Sundays (Snowflake syntax)
+    CASE
+        WHEN DAYOFWEEKISO(Week_Ending_Date) = 7 THEN Week_Ending_Date  -- Already Sunday
+        ELSE DATEADD('day', -DAYOFWEEK(Week_Ending_Date), Week_Ending_Date)  -- Move to previous Sunday
+    END AS snapshot_date,
+    1 AS open_pathways
+FROM {{ ref('raw_wl_wl_openpathways_data') }}
+WHERE Week_Ending_Date IS NOT NULL
+    AND Week_Ending_Date <= CURRENT_DATE
