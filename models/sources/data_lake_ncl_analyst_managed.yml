@@ -26,6 +26,78 @@ sources:
       data_type: TEXT
     - name: NOTES
       data_type: TEXT
+  - name: COMMUNITY_P2_OCCUPANCY
+    identifier: '"COMMUNITY_P2_OCCUPANCY"'
+    columns:
+    - name: UNIT_NAME
+      data_type: TEXT
+    - name: BEDDED_CAPACITY
+      data_type: TEXT
+    - name: ADMISSIONS_IN_MONTH
+      data_type: TEXT
+    - name: DISCHARGES_IN_MONTH
+      data_type: NUMBER
+    - name: AVERAGE_LOS_OF_PATIENTS_DISCHARGED
+      data_type: TEXT
+    - name: BED_DAYS_FOR_DISCHARGED_PATIENTS
+      data_type: TEXT
+    - name: BED_DAYS_AVAILABLE
+      data_type: NUMBER
+    - name: BED_DAYS_OCCUPIED
+      data_type: NUMBER
+    - name: OCCUPANCY_RATE
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: PROVIDER
+      data_type: TEXT
+  - name: COMMUNITY_WAITING_TIMES_LOCAL
+    identifier: '"COMMUNITY_WAITING_TIMES_LOCAL"'
+    columns:
+    - name: SUBMITTED_MONTH
+      data_type: DATE
+    - name: REPORTED_MONTH
+      data_type: DATE
+    - name: PROVIDER
+      data_type: TEXT
+    - name: PROVIDER_SITE
+      data_type: TEXT
+    - name: SERVICE_LINE
+      data_type: TEXT
+    - name: 0-6_WEEKS
+      data_type: NUMBER
+    - name: 6-12_WEEKS
+      data_type: NUMBER
+    - name: 12-16_WEEKS
+      data_type: NUMBER
+    - name: 16-18_WEEKS
+      data_type: NUMBER
+    - name: 18-30_WEEKS
+      data_type: NUMBER
+    - name: 30-40_WEEKS
+      data_type: NUMBER
+    - name: 40-52_WEEKS
+      data_type: NUMBER
+    - name: 52+_WEEKS
+      data_type: NUMBER
+    - name: TOTAL
+      data_type: NUMBER
+    - name: AVERAGE_WEEKS_WAITING
+      data_type: NUMBER
+    - name: SERVICE_LINE_GROUP
+      data_type: TEXT
+    - name: SERVICE_LINE_GROUP_2
+      data_type: TEXT
+    - name: AGE_GROUP
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: PROVIDER_SERVICE_LINE
+      data_type: TEXT
+    - name: IS_EXCLUDED
+      data_type: BOOLEAN
+    - name: EXCLUSION_GROUP
+      data_type: TEXT
   - name: EFI2_COEFFICIENTS
     identifier: '"EFI2_COEFFICIENTS"'
     columns:
@@ -331,6 +403,19 @@ sources:
       data_type: TEXT
     - name: START_DATE
       data_type: DATE
+  - name: NCL_NEIGHBOURHOOD_LSOA_2021_BACKUP
+    identifier: '"NCL_NEIGHBOURHOOD_LSOA_2021_BACKUP"'
+    columns:
+    - name: LSOA_2021_CODE
+      data_type: TEXT
+    - name: LSOA_2021_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: DATE
   - name: PRACTICE_NEIGHBOURHOOD_LOOKUP
     identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP"'
     columns:
@@ -364,3 +449,162 @@ sources:
       data_type: TEXT
     - name: PRACTICE_NAME_SHORT
       data_type: TEXT
+  - name: REFRESHED_DATE
+    identifier: '"REFRESHED_DATE"'
+    columns:
+    - name: REFRESHED_DATE
+      data_type: DATE
+    - name: PRACTICE_COUNT
+      data_type: NUMBER
+  - name: UEC__DAILY__LAS_HANDOVER
+    identifier: '"UEC__DAILY__LAS_HANDOVER"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: SITE_NAME
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: CONVEYANCES_NONBLUE
+      data_type: NUMBER
+    - name: CONVEYANCES_TOTAL_ED
+      data_type: NUMBER
+    - name: TOTAL_HANDOVER
+      data_type: NUMBER
+    - name: ARRIVAL_TO_PATIENT_HANDOVER_AVERAGE
+      data_type: TEXT
+    - name: UNDER_15_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_15_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_15_MIN_PERCENT
+      data_type: FLOAT
+    - name: OVER_15_MIN_RATIO
+      data_type: FLOAT
+    - name: OVER_15_MIN_PERCENT_RANK
+      data_type: NUMBER
+    - name: OVER_15_MIN_OVERRUN_AVERAGE
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_15_MIN_HOURS
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_15_MIN_MINUTES
+      data_type: FLOAT
+    - name: OVER_30_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_30_MIN_PERCENT
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_30_MIN_HOURS
+      data_type: FLOAT
+    - name: OVER_45_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_45_MIN_PERCENT
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_45_MIN_HOURS
+      data_type: FLOAT
+    - name: OVER_60_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_60_MIN_PERCENT
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_60_MIN_HOURS
+      data_type: FLOAT
+    - name: OVER_120_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_120_MIN_PERCENT
+      data_type: FLOAT
+    - name: OVER_180_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_180_MIN_PERCENT
+      data_type: FLOAT
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__REPORT_TARGETS
+    identifier: '"UEC__DAILY__REPORT_TARGETS"'
+    columns:
+    - name: ID
+      data_type: NUMBER
+    - name: DATASET
+      data_type: TEXT
+    - name: METRIC_NAME
+      data_type: TEXT
+    - name: TARGET_DESC
+      data_type: TEXT
+    - name: TARGET_VALUE
+      data_type: NUMBER
+    - name: TARGET_DIRECTION
+      data_type: TEXT
+    - name: TARGET_LENIENCE_AMOUNT
+      data_type: NUMBER
+    - name: TARGET_LENIENCE_TYPE
+      data_type: TEXT
+    - name: ACTIVE_FROM
+      data_type: DATE
+    - name: ACTIVE_UNTIL
+      data_type: DATE
+    - name: SITE
+      data_type: TEXT
+  - name: UEC__DAILY__SMART
+    identifier: '"UEC__DAILY__SMART"'
+    columns:
+    - name: RESPONSE_CHILD_ID
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+    - name: DATE_DATA
+      data_type: DATE
+    - name: DATETIME_UPLOADED
+      data_type: TIMESTAMP_NTZ
+    - name: SITE_CODE_SMART
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: SITE_NAME
+      data_type: TEXT
+    - name: INDICATOR_NAME
+      data_type: TEXT
+    - name: INDICATOR_KEY_NAME
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__TRACKER_DAILY_DELAY
+    identifier: '"UEC__DAILY__TRACKER_DAILY_DELAY"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: METRIC_NAME
+      data_type: TEXT
+    - name: METRIC_VALUE
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__TRACKER_P2_CAPACITY
+    identifier: '"UEC__DAILY__TRACKER_P2_CAPACITY"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: PROVIDER
+      data_type: TEXT
+    - name: UNIT
+      data_type: TEXT
+    - name: BEDS_AVAILABLE
+      data_type: NUMBER
+    - name: BEDS_OCCUPIED
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__TRACKER_VIRTUAL_WARD
+    identifier: '"UEC__DAILY__TRACKER_VIRTUAL_WARD"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: CAPACITY
+      data_type: NUMBER
+    - name: OCCUPIED
+      data_type: NUMBER
+    - name: SYSTEM_VALUE
+      data_type: FLOAT
+    - name: IS_INCLUDES_PAEDIATRIC
+      data_type: BOOLEAN
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ

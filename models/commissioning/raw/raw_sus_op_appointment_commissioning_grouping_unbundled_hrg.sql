@@ -9,5 +9,6 @@ select
     "tariff" as tariff,
     "dmicImportLogId" as dmic_import_log_id,
     "UNBUNDLED_HRG_ID" as unbundled_hrg_id,
-    "code" as code
+    "code" as code,
+    "tariff_applied" as tariff_applied
 from {{ source('sus_op', 'appointment.commissioning.grouping.unbundled_hrg') }}

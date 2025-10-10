@@ -73,8 +73,10 @@ def sanitise_column_name(col_name, apply_transformations=True, used_names=None):
                 else:
                     safe_name = col_name.replace('...', '_')
             else:
-                # Replace dots, slashes, hyphens, spaces, and other problematic characters
-                safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', col_name)
+                # First handle plus sign specially to preserve meaning (52+ -> 52_plus)
+                safe_name = col_name.replace('+', '_plus')
+                # Then replace dots, slashes, hyphens, spaces, and other problematic characters
+                safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', safe_name)
 
             # Remove multiple consecutive underscores
             safe_name = re.sub(r'_+', '_', safe_name)
@@ -105,6 +107,23 @@ def sanitise_column_name(col_name, apply_transformations=True, used_names=None):
             # Handle reserved words and ensure valid SQL identifier
             if safe_name.lower() in ['pseudo', 'group', 'order', 'having', 'where']:
                 safe_name = f'{safe_name}_value'
+
+            # Handle column names starting with digits (invalid SQL identifier)
+            if safe_name and safe_name[0].isdigit():
+                # Prepend the first word based on context, or use generic prefix
+                # For numeric ranges like "0_6", "52_plus", prepend descriptive word
+                if '_' in safe_name:
+                    # Check if it looks like a range pattern (e.g., "0_6_weeks" -> "weeks_0_6")
+                    parts = safe_name.split('_')
+                    # If last part is a descriptive word, move it to front
+                    if parts[-1].isalpha() and not parts[-1].isdigit():
+                        last_word = parts[-1]
+                        safe_name = f"{last_word}_{'_'.join(parts[:-1])}"
+                    else:
+                        # Generic prefix for other numeric-starting columns
+                        safe_name = f"col_{safe_name}"
+                else:
+                    safe_name = f"col_{safe_name}"
 
             base_name = safe_name
 

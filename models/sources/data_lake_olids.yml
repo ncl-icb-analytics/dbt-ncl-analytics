@@ -766,6 +766,16 @@ sources:
       data_type: TEXT
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CODE
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_DISPLAY
+      data_type: TEXT
   - name: OBSERVATION
     identifier: '"OBSERVATION"'
     columns:
@@ -1205,7 +1215,7 @@ sources:
     - name: EFFECTIVE_TO
       data_type: TIMESTAMP_NTZ
     - name: IS_LATEST
-      data_type: BOOLEAN
+      data_type: NUMBER
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
   - name: PRACTITIONER
@@ -1422,7 +1432,7 @@ sources:
       data_type: TEXT
     - name: LDS_DATETIME_DATA_ACQUIRED
       data_type: TIMESTAMP_NTZ
-    - name: LDS_DATA_INITIAL_RECEIVED_DATE
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
@@ -1515,4 +1525,50 @@ sources:
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
       data_type: TEXT
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: TERMINOLOGY_CONCEPT
+    identifier: '"TERMINOLOGY_CONCEPT"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: IS_MAPPED
+      data_type: BOOLEAN
+    - name: USE_COUNT
+      data_type: NUMBER
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: TERMINOLOGY_CONCEPT_MAP
+    identifier: '"TERMINOLOGY_CONCEPT_MAP"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_ID
+      data_type: TEXT
+    - name: SOURCE_CODE_ID
+      data_type: TEXT
+    - name: TARGET_CODE_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: EQUIVALENCE
+      data_type: TEXT
+    - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ

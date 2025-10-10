@@ -189,5 +189,6 @@ select
     "appointment.consultation_medium" as appointment_consultation_medium,
     "appointment.last_dna_or_cancelled_date" as appointment_last_dna_or_cancelled_date,
     "appointment.patient.identity.pds_death_status" as appointment_patient_identity_pds_death_status,
-    "appointment.patient.identity.pds_date_of_death" as appointment_patient_identity_pds_date_of_death
+    "appointment.patient.identity.pds_date_of_death" as appointment_patient_identity_pds_date_of_death,
+    "appointment.commissioning.tariff_calculation.aggregate_unbundled_guide_tariff" as appointment_commissioning_tariff_calculation_aggregate_unbundled_guide_tariff
 from {{ source('sus_op', 'appointment') }}

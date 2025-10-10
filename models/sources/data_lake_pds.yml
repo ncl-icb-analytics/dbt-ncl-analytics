@@ -1,0 +1,211 @@
+version: 2
+sources:
+- name: pds
+  database: '"DATA_LAKE"'
+  schema: '"PDS"'
+  description: Personal Demographics Service data
+  tables:
+  - name: PDS_Address
+    identifier: '"PDS_Address"'
+    columns:
+    - name: RowID
+      data_type: NUMBER
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: derPostcodeSector
+      data_type: TEXT
+    - name: Usual Address Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Usual Address Business Effective To Date
+      data_type: TIMESTAMP_NTZ
+    - name: derCqcCareHomeCode
+      data_type: TEXT
+    - name: derCcgOfResidence
+      data_type: TEXT
+    - name: derLocalAuthorityOfResidence
+      data_type: TEXT
+    - name: derCurrentCcgOfResidence
+      data_type: TEXT
+    - name: derCurrentLaOfResidence
+      data_type: TEXT
+    - name: derCurrentyr2011LSOAofResidence_FromPostcode
+      data_type: TEXT
+    - name: derCurrentyr2021LSOAofResidence_FromPostcode
+      data_type: TEXT
+    - name: dmicPostcodeTypeId
+      data_type: NUMBER
+    - name: dmicPostcodeWellbeingTypeId
+      data_type: NUMBER
+    - name: derIcbOfResidence
+      data_type: TEXT
+    - name: derCurrentIcbOfResidence
+      data_type: TEXT
+    - name: derCurrentyr2021ElectoralWardOfResidence_FromPostcode
+      data_type: TEXT
+  - name: PDS_Address_CareHomeSimilarity
+    identifier: '"PDS_Address_CareHomeSimilarity"'
+    columns:
+    - name: RowID
+      data_type: NUMBER
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: derPostcodeSector
+      data_type: TEXT
+    - name: Usual Address Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Usual Address Business Effective To Date
+      data_type: TIMESTAMP_NTZ
+    - name: derCqcCareHomeCode
+      data_type: TEXT
+    - name: derCcgOfResidence
+      data_type: TEXT
+    - name: derLocalAuthorityOfResidence
+      data_type: TEXT
+    - name: derCurrentCcgOfResidence
+      data_type: TEXT
+    - name: derCurrentLaOfResidence
+      data_type: TEXT
+    - name: derCurrentyr2011LSOAofResidence_FromPostcode
+      data_type: TEXT
+    - name: derCurrentyr2021LSOAofResidence_FromPostcode
+      data_type: TEXT
+    - name: dmicPostcodeTypeId
+      data_type: NUMBER
+    - name: dmicPostcodeWellbeingTypeId
+      data_type: NUMBER
+    - name: derIcbOfResidence
+      data_type: TEXT
+    - name: derCurrentIcbOfResidence
+      data_type: TEXT
+    - name: derCurrentyr2021ElectoralWardOfResidence_FromPostcode
+      data_type: TEXT
+    - name: PDSAddr1Addr2_ContainsString
+      data_type: TEXT
+    - name: Jaccard_CQCOrgName_PDSAddr1_CQCCareHomeCode
+      data_type: TEXT
+    - name: Jaccard_CQCOrgName_PDSAddr1_Similarity
+      data_type: FLOAT
+    - name: Jaccard_CQCOrgName_PDSAddr2_CQCCareHomeCode
+      data_type: TEXT
+    - name: Jaccard_CQCOrgName_PDSAddr2_Similarity
+      data_type: FLOAT
+    - name: Jaccard_CQCAddr1_PDSAddr1_CQCCareHomeCode
+      data_type: TEXT
+    - name: Jaccard_CQCAddr1_PDSAddr1_Similarity
+      data_type: FLOAT
+    - name: Jaccard_CQCAddr1_PDSAddr2_CQCCareHomeCode
+      data_type: TEXT
+    - name: Jaccard_CQCAddr1_PDSAddr2_Similarity
+      data_type: FLOAT
+    - name: Jaccard_CQCAddr2_PDSAddr1_CQCCareHomeCode
+      data_type: TEXT
+    - name: Jaccard_CQCAddr2_PDSAddr1_Similarity
+      data_type: FLOAT
+    - name: Jaccard_CQCAddr2_PDSAddr2_CQCCareHomeCode
+      data_type: TEXT
+    - name: Jaccard_CQCAddr2_PDSAddr2_Similarity
+      data_type: FLOAT
+    - name: JaroWinkler_CQCOrgName_PDSAddr1_CQCCareHomeCode
+      data_type: TEXT
+    - name: JaroWinkler_CQCOrgName_PDSAddr1_Similarity
+      data_type: FLOAT
+    - name: JaroWinkler_CQCOrgName_PDSAddr2_CQCCareHomeCode
+      data_type: TEXT
+    - name: JaroWinkler_CQCOrgName_PDSAddr2_Similarity
+      data_type: FLOAT
+    - name: JaroWinkler_CQCAddr1_PDSAddr1_CQCCareHomeCode
+      data_type: TEXT
+    - name: JaroWinkler_CQCAddr1_PDSAddr1_Similarity
+      data_type: FLOAT
+    - name: JaroWinkler_CQCAddr1_PDSAddr2_CQCCareHomeCode
+      data_type: TEXT
+    - name: JaroWinkler_CQCAddr1_PDSAddr2_Similarity
+      data_type: FLOAT
+    - name: JaroWinkler_CQCAddr2_PDSAddr1_CQCCareHomeCode
+      data_type: TEXT
+    - name: JaroWinkler_CQCAddr2_PDSAddr1_Similarity
+      data_type: FLOAT
+    - name: JaroWinkler_CQCAddr2_PDSAddr2_CQCCareHomeCode
+      data_type: TEXT
+    - name: JaroWinkler_CQCAddr2_PDSAddr2_Similarity
+      data_type: FLOAT
+    - name: Jaccard_CQCuprn_PDSuprn_CQCCareHomeCode
+      data_type: TEXT
+    - name: Jaccard_CQCuprn_PDSuprn_Similarity
+      data_type: FLOAT
+    - name: JaroWinkler_CQCuprn_PDSuprn_CQCCareHomeCode
+      data_type: TEXT
+    - name: JaroWinkler_CQCuprn_PDSuprn_Similarity
+      data_type: FLOAT
+  - name: PDS_Patient_Care_Practice
+    identifier: '"PDS_Patient_Care_Practice"'
+    columns:
+    - name: RowID
+      data_type: NUMBER
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: Primary Care Provider
+      data_type: TEXT
+    - name: Primary Care Provider Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Primary Care Provider Business Effective To Date
+      data_type: TIMESTAMP_NTZ
+    - name: Reason for Removal
+      data_type: TEXT
+    - name: derCcgOfRegistration
+      data_type: TEXT
+    - name: derCurrentCcgOfRegistration
+      data_type: TEXT
+    - name: derIcbOfRegistration
+      data_type: TEXT
+    - name: derCurrentIcbOfRegistration
+      data_type: TEXT
+  - name: PDS_Person
+    identifier: '"PDS_Person"'
+    columns:
+    - name: RowID
+      data_type: NUMBER
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: YearMonth_Of_Birth
+      data_type: TEXT
+    - name: Gender
+      data_type: TEXT
+    - name: Date of Death
+      data_type: TIMESTAMP_NTZ
+    - name: Death Status
+      data_type: TEXT
+    - name: Preferred Language
+      data_type: TEXT
+    - name: Interpreter required
+      data_type: TEXT
+    - name: Person Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Person Business Effective To Date
+      data_type: TIMESTAMP_NTZ
+  - name: PDS_Person_Merger
+    identifier: '"PDS_Person_Merger"'
+    columns:
+    - name: RowID
+      data_type: NUMBER
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: Pseudo Superseded NHS Number
+      data_type: TEXT
+    - name: Person Merger Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Person Merger Business Effective To Date
+      data_type: TIMESTAMP_NTZ
+  - name: PDS_Reason_For_Removal
+    identifier: '"PDS_Reason_For_Removal"'
+    columns:
+    - name: RowID
+      data_type: NUMBER
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: Reason for Removal
+      data_type: TEXT
+    - name: Reason for Removal Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Reason for Removal Business Effective To Date
+      data_type: TIMESTAMP_NTZ

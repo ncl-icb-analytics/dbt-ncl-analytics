@@ -25,3 +25,7 @@ select
     -- Excluded (low analytical value):
     -- sort1, sort2, sort3, sort4, notes
 from {{ ref('raw_dictionary_ecds_diagnosis') }}
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY ecds_unique_id, valid_from
+    ORDER BY valid_to DESC NULLS LAST
+) = 1

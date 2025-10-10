@@ -424,6 +424,8 @@ sources:
       data_type: TEXT
     - name: appointment.patient.identity.pds_date_of_death
       data_type: TIMESTAMP_NTZ
+    - name: appointment.commissioning.tariff_calculation.aggregate_unbundled_guide_tariff
+      data_type: NUMBER
   - name: appointment.care_professionals
     identifier: '"appointment.care_professionals"'
     columns:
@@ -673,6 +675,8 @@ sources:
     - name: UNBUNDLED_HRG_ID
       data_type: NUMBER
     - name: code
+      data_type: TEXT
+    - name: tariff_applied
       data_type: TEXT
   - name: appointment.commissioning.service_agreements
     identifier: '"appointment.commissioning.service_agreements"'

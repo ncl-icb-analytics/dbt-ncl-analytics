@@ -45,5 +45,10 @@ select
     "LDS_IS_DELETED" as lds_is_deleted,
     "LDS_START_DATE_TIME" as lds_start_date_time,
     "LDS_LAKEHOUSE_DATE_PROCESSED" as lds_lakehouse_date_processed,
-    "LDS_LAKEHOUSE_DATETIME_UPDATED" as lds_lakehouse_datetime_updated
+    "LDS_LAKEHOUSE_DATETIME_UPDATED" as lds_lakehouse_datetime_updated,
+    "MAPPED_CONCEPT_ID" as mapped_concept_id,
+    "MAPPED_CONCEPT_CODE" as mapped_concept_code,
+    "MAPPED_CONCEPT_DISPLAY" as mapped_concept_display,
+    "AUTHORISATION_TYPE_CODE" as authorisation_type_code,
+    "AUTHORISATION_TYPE_DISPLAY" as authorisation_type_display
 from {{ source('olids', 'MEDICATION_STATEMENT') }}

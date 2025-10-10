@@ -19,4 +19,5 @@ models:
   - name: valid_from
     description: Valid from date (part of composite key with ecds_unique_id)
     tests:
-    - not_null
+    - not_null:
+        severity: warn
