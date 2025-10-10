@@ -138,6 +138,7 @@ models/
 ├── staging/                 # Cleaned and standardised source data
 │   ├── commissioning/       # 1:1 source mappings (views in MODELLING.DBT_STAGING)
 │   ├── olids/               # 1:1 OLIDS mappings (views in MODELLING.DBT_STAGING)
+│   ├── phenolab/            # PhenoLab base models (views in MODELLING.DBT_STAGING)
 │   └── shared/              # Reference data staging (views in MODELLING.DBT_STAGING)
 │
 ├── modelling/               # Business logic and transformations
