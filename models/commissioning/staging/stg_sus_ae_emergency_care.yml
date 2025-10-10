@@ -1,5 +1,5 @@
 models:
-- name: int_sus_ae_emergency_care
+- name: stg_sus_ae_emergency_care
   description: 'Urgent and Emergency Care (UEC) attendances from SUS data.
 
     One row per attendance.

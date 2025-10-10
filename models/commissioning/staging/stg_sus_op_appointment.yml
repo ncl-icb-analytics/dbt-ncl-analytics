@@ -1,5 +1,5 @@
 models:
-- name: int_sus_op_appointment
+- name: stg_sus_op_appointment
   description: 'Outpatient appointments from SUS data.
 
     One row per appointment.
