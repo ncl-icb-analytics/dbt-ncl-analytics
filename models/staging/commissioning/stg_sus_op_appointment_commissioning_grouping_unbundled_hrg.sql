@@ -1,0 +1,9 @@
+select primarykey_id
+        , rownumber_id
+        , unbundled_hrg_id
+        , code
+        , tariff
+        , tariff_applied
+        , multiple_applies
+        , dmic_import_log_id
+    from {{ref('raw_sus_op_appointment_commissioning_grouping_unbundled_hrg')}}
