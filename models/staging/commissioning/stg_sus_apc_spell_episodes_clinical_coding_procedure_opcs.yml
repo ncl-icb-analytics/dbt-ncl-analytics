@@ -8,7 +8,6 @@ models:
       - primarykey_id
       - episodes_id
       - opcs_id
-      - rownumber_id
   - dbt_expectations.expect_table_row_count_to_be_between:
       min_value: 1
   columns:
