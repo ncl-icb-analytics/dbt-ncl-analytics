@@ -1,0 +1,26 @@
+version: 2
+models:
+- name: stg_csds_cyp202careactivity
+  description: CSDS CYP care activities (deduplicated)
+  columns:
+  - name: care_contact_identifier
+    description: Care contact identifier (FK to care contact)
+    tests:
+    - not_null
+  - name: community_care_activity_type
+    description: Type of community care activity
+  - name: person_id
+    description: CSDS person identifier
+  - name: clinical_contact_duration_of_care_activity
+    description: Duration of clinical contact in minutes
+  - name: coded_procedure_clinical_terminology
+    description: SNOMED CT code for procedure
+  - name: coded_finding_coded_clinical_entry
+    description: SNOMED CT code for finding
+  - name: coded_observation_clinical_terminology
+    description: SNOMED CT code for observation
+  - name: effective_from
+    description: Effective from date for the activity
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
