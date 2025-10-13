@@ -23,6 +23,8 @@ SELECT DISTINCT
         dph.age,
         dph.is_deceased,
         dph.birth_date_approx,
+        ,CASE WHEN dph.BIRTH_DATE_APPROX >= '2024-07-01' THEN 'Yes'
+        ELSE 'No' END AS BORN_JUL_2024_FLAG
         DATEADD(YEAR,1,dph.BIRTH_DATE_APPROX) as FIRST_BDAY,
         DATEADD(YEAR,12,dph.BIRTH_DATE_APPROX) as TWELFTH_BDAY,
         DATEADD(YEAR,13,dph.BIRTH_DATE_APPROX) as THIRTEENTH_BDAY,
