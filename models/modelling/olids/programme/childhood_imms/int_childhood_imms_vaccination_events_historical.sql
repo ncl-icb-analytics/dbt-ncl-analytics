@@ -8,6 +8,8 @@ WITH IMMS_CODE_OBS as (
 SELECT DISTINCT 
         dem.PERSON_ID,
         dem.birth_date_approx,
+        CASE WHEN dem.BIRTH_DATE_APPROX >= '2024-07-01' THEN 'Yes'
+        ELSE 'No' END AS BORN_JUL_2024_FLAG,
         clut.VACCINE_ORDER,
         clut.vaccine AS VACCINE_NAME,
         clut.vaccine_id,
