@@ -118,6 +118,10 @@ models:
           +meta:
             custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
           +schema: "OLIDS_PUBLISHED"
+        CLTCS:
+          +meta:
+            custom_message: "Requires access via application role - clinical programme team only."
+          +schema: "CLTCS"
         shared:
           +schema: "REFERENCE"
       secondary_use:
