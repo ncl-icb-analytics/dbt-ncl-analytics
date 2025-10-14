@@ -14,6 +14,8 @@ models:
         description: "Count of inpatient admissions"
       - name: op_encounters
         description: "Count of outpatient encounters"
+      - name: gp_encounters
+        description: "Count of primary care encounters"
       - name: ae_cost
         description: "Sum of A&E encounter cost"
       - name: ip_cost
@@ -26,3 +28,5 @@ models:
         description: "Sum of inpatient admission duration"
       - name: op_duration
         description: "Sum of outpatient encounter duration"
+      - name: gp_duration
+        description: "Sum of primary care encounter duration (mins) - DQ issues."
