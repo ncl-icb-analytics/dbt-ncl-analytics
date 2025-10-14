@@ -11,7 +11,8 @@ WITH deduplicated AS (
 }} )
 
 
-select care_contact_identifier
+select unique_care_activity_identifier
+    , unique_care_contact_identifier
     , community_care_activity_type
     , person_id
     , clinical_contact_duration_of_care_activity

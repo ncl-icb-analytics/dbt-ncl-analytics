@@ -16,11 +16,11 @@ Clinical Purpose:
 
 SELECT 
 
-    referral.service_request_identifier AS referral_id,
+    referral.unique_service_request_identifier AS referral_id,
     bridging.sk_patient_id,
 
     -- count care contacts
-    COUNT(contact.care_contact_identifier) AS contact_count,
+    COUNT(contact.unique_care_contact_identifier) AS contact_count,
     COUNT_IF(contact.attendance_status IN ('5', '6')) AS count_seen,
     COUNT_IF(contact.attendance_status IN ('7', '3')) AS count_dna,
     COUNT_IF(contact.attendance_status = '2') AS count_patient_cancelled,
@@ -39,7 +39,7 @@ FROM
 LEFT JOIN
     {{ ref('stg_csds_cyp201carecontact') }} AS contact
 ON 
-    referral.service_request_identifier = contact.service_request_identifier
+    referral.unique_service_request_identifier = contact.unique_service_request_identifier
 LEFT JOIN
     {{ ref('stg_csds_bridging') }} AS bridging 
 
@@ -47,5 +47,5 @@ ON
         referral.person_id = bridging.person_id
 
 GROUP BY
-    referral.service_request_identifier,
+    referral.unique_service_request_identifier,
     bridging.sk_patient_id

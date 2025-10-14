@@ -3,7 +3,11 @@ models:
 - name: stg_csds_cyp202careactivity
   description: CSDS CYP care activities (deduplicated)
   columns:
-  - name: care_contact_identifier
+  - name: unique_care_activity_identifier
+    description: activity identifier (PK) 
+    tests:
+    - unique
+  - name: unique_care_contact_identifier
     description: Care contact identifier (FK to care contact)
     tests:
     - not_null

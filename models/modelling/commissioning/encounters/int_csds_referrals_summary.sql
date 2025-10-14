@@ -17,7 +17,7 @@ SELECT
 
     bridging.sk_patient_id,
     ARRAY_AGG(DISTINCT referral.primary_reason_for_referral_community_care) AS all_referral_reasons,
-    COUNT(referral.service_request_identifier) as referral_count,
+    COUNT(referral.unique_service_request_identifier) as referral_count,
     COUNT_IF(referral.service_discharge_date IS NULL) AS count_open_referral,
     COUNT_IF(referral.service_discharge_date IS NOT NULL) AS count_discharged_referral,
     COUNT_IF(referral.priority_type_code = '1') AS  count_routine_priority,
