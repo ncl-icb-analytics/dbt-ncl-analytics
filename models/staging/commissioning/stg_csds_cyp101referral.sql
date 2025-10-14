@@ -14,5 +14,9 @@ WITH deduplicated AS (
 SELECT
     unique_service_request_identifier,
     person_id,
-    referral_request_received_date
+    referral_request_received_date,
+    primary_reason_for_referral_community_care,
+    service_discharge_date,
+    priority_type_code
+
 FROM deduplicated
