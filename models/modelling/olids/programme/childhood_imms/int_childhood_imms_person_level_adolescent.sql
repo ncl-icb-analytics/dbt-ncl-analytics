@@ -51,6 +51,8 @@ CURRENT_DATE AS RUN_DATE
 ,p.gp_name
 ,p.practice_code
 ,p.residential_borough
+,p.residential_neighbourhood
+,p.RESIDENTIAL_LOC
 ,p.ward_code
 ,p.ward_name
 ,p.lac_flag
