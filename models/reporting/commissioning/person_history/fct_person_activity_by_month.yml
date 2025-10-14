@@ -29,4 +29,4 @@ models:
       - name: op_duration
         description: "Sum of outpatient encounter duration"
       - name: gp_duration
-        description: "Sum of outpatient encounter duration (mins) - DQ issues."
+        description: "Sum of primary care encounter duration (mins) - DQ issues."
