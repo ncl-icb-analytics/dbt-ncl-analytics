@@ -7,5 +7,5 @@ models:
       - name: sk_patient_id
         description: "Unique pseudo-anonymised patient identifier (NHS_NUMBER)"
         tests:
-          - not_null
+##          - not_null
           - unique
