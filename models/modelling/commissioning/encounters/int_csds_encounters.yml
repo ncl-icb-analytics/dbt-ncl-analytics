@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: int_csds_encounters
+    description: "Event history for community services encounters (contacts) from CSDS data"
+    columns:
+      - name: sk_patient_id
+        data_type: varchar
+        description: pseudo NHS number

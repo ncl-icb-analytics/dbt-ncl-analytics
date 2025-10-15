@@ -16,12 +16,16 @@ models:
         description: "Count of outpatient encounters"
       - name: gp_encounters
         description: "Count of primary care encounters"
+      - name: cc_encounters
+        description: "Count of community care contacts"
       - name: ae_cost
         description: "Sum of A&E encounter cost"
       - name: ip_cost
         description: "Sum of inpatient admission cost"
       - name: op_cost
         description: "Sum of outpatient encounter cost"
+      - name: cc_cost
+        description: "N/A"
       - name: ae_duration
         description: "Sum of A&E encounter duration"
       - name: ip_duration
@@ -30,3 +34,5 @@ models:
         description: "Sum of outpatient encounter duration"
       - name: gp_duration
         description: "Sum of primary care encounter duration (mins) - DQ issues."
+      - name: cc_duration
+        description: "Sum of community care contacts duration (mins)"
