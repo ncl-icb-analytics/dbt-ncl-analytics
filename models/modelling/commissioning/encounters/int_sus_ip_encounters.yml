@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_sus_apc_encounters
+  - name: int_sus_ip_encounters
     description: "Event history for admitted patient care encounters from SUS data"
     columns:
       - name: encounter_id

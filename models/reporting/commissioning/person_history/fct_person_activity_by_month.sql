@@ -55,7 +55,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
             )
         ) as duration
     from 
-        {{ ref('int_sus_apc_encounters') }} as e
+        {{ ref('int_sus_ip_encounters') }} as e
     left join -- join all months during the spell
         date_range as d
         on d.month_start_date <= coalesce(e.end_date, current_date)
