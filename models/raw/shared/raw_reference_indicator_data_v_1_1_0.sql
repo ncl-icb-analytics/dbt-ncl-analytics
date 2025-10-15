@@ -1,4 +1,4 @@
--- Raw layer model for reference_fingertips.INDICATOR_DATA
+-- Raw layer model for reference_fingertips.INDICATOR_DATA_V_1_1_0
 -- Source: "DATA_LAKE__NCL"."FINGERTIPS"
 -- Description: Fingertips indicator data
 -- This is a 1:1 passthrough from source with standardized column names
@@ -33,4 +33,4 @@ select
     "Time period range" as time_period_range,
     "DATE_UPDATED_LOCAL" as date_updated_local,
     "_TIMESTAMP" as timestamp
-from {{ source('reference_fingertips', 'INDICATOR_DATA') }}
+from {{ source('reference_fingertips', 'INDICATOR_DATA_V_1_1_0') }}

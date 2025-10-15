@@ -98,6 +98,126 @@ sources:
       data_type: BOOLEAN
     - name: EXCLUSION_GROUP
       data_type: TEXT
+  - name: DIAGNOSTICS_MONTHLY_DM01_Pre-release
+    identifier: '"DIAGNOSTICS_MONTHLY_DM01_Pre-release"'
+    columns:
+    - name: PERIOD
+      data_type: TEXT
+    - name: Provider Parent Org Code
+      data_type: TEXT
+    - name: Provider Parent Name
+      data_type: TEXT
+    - name: Provider Org Code
+      data_type: TEXT
+    - name: Provider Org Name
+      data_type: TEXT
+    - name: Commissioner Parent Org Code
+      data_type: TEXT
+    - name: Commissioner Parent Name
+      data_type: TEXT
+    - name: Commissioner Org Code
+      data_type: TEXT
+    - name: Commissioner Org Name
+      data_type: TEXT
+    - name: Diagnostic Tests Sort Order
+      data_type: TEXT
+    - name: Diagnostic Tests
+      data_type: TEXT
+    - name: 00 < 01 Week
+      data_type: NUMBER
+    - name: 01 < 02 Weeks
+      data_type: NUMBER
+    - name: 02 < 03 Weeks
+      data_type: NUMBER
+    - name: 03 < 04 Weeks
+      data_type: NUMBER
+    - name: 04 < 05 Weeks
+      data_type: NUMBER
+    - name: 05 < 06 Weeks
+      data_type: NUMBER
+    - name: 06 < 07 Weeks
+      data_type: NUMBER
+    - name: 07 < 08 Weeks
+      data_type: NUMBER
+    - name: 08 < 09 Weeks
+      data_type: NUMBER
+    - name: 09 < 10 Weeks
+      data_type: NUMBER
+    - name: 10 < 11 Weeks
+      data_type: NUMBER
+    - name: 11 < 12 Weeks
+      data_type: NUMBER
+    - name: 12 < 13 Weeks
+      data_type: NUMBER
+    - name: 13+ Weeks
+      data_type: NUMBER
+    - name: Total WL
+      data_type: NUMBER
+    - name: Waiting List Activity
+      data_type: NUMBER
+    - name: Planned Activity
+      data_type: NUMBER
+    - name: Unscheduled Activity
+      data_type: NUMBER
+    - name: Total Activity
+      data_type: NUMBER
+    - name: <6Weeks
+      data_type: NUMBER
+    - name: 6+WW
+      data_type: NUMBER
+  - name: DIAGNOSTICS_WEEKLY_DM01
+    identifier: '"DIAGNOSTICS_WEEKLY_DM01"'
+    columns:
+    - name: WEEK_ENDING_DATE
+      data_type: TEXT
+    - name: SUBMISSION_DATE
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: PROVIDER_SITE_NAME
+      data_type: TEXT
+    - name: DIAGNOSTIC_MODALITY
+      data_type: TEXT
+    - name: WAITING_LIST_ACTIVITY
+      data_type: NUMBER
+    - name: PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: UNSCHEDULED_ACTIVITY
+      data_type: NUMBER
+    - name: DNA
+      data_type: NUMBER
+    - name: PATIENT_CANCELLED
+      data_type: NUMBER
+    - name: Patient_Declined/Refused
+      data_type: NUMBER
+    - name: 00 < 01 Week
+      data_type: NUMBER
+    - name: 01 < 02 Weeks
+      data_type: NUMBER
+    - name: 02 < 03 Weeks
+      data_type: NUMBER
+    - name: 03 < 04 Weeks
+      data_type: NUMBER
+    - name: 04 < 05 Weeks
+      data_type: NUMBER
+    - name: 05 < 06 Weeks
+      data_type: NUMBER
+    - name: 06 < 07 Weeks
+      data_type: NUMBER
+    - name: 07 < 08 Weeks
+      data_type: NUMBER
+    - name: 08 < 09 Weeks
+      data_type: NUMBER
+    - name: 09 < 10 Weeks
+      data_type: NUMBER
+    - name: 10 < 11 Weeks
+      data_type: NUMBER
+    - name: 11 < 12 Weeks
+      data_type: NUMBER
+    - name: 12 < 13 Weeks
+      data_type: NUMBER
+    - name: 13+ Weeks
+      data_type: NUMBER
   - name: EFI2_COEFFICIENTS
     identifier: '"EFI2_COEFFICIENTS"'
     columns:
@@ -233,6 +353,113 @@ sources:
     - name: SEX
       data_type: TEXT
     - name: NUMBER_OF_PATIENTS
+      data_type: NUMBER
+  - name: IA_CERTIFICATES_MONTHLY
+    identifier: '"IA_CERTIFICATES_MONTHLY"'
+    columns:
+    - name: CERTIFICATE_NAME
+      data_type: TEXT
+    - name: COURSE_CREATED_BY
+      data_type: TEXT
+    - name: DATE_ISSUED
+      data_type: TEXT
+    - name: FULL_NAME_WITH_LINK
+      data_type: TEXT
+    - name: FULL_NAME
+      data_type: TEXT
+    - name: TRUST_HOSPITAL
+      data_type: TEXT
+    - name: BAND_GRADE
+      data_type: TEXT
+    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+      data_type: TEXT
+    - name: CATEGORY_NAME
+      data_type: TEXT
+  - name: IA_COMPLETION_MONTHLY
+    identifier: '"IA_COMPLETION_MONTHLY"'
+    columns:
+    - name: COURSE_FULL_NAME
+      data_type: TEXT
+    - name: COURSE_SHORT_NAME
+      data_type: TEXT
+    - name: FULL_NAME
+      data_type: TEXT
+    - name: ENROLMENT_METHOD
+      data_type: TEXT
+    - name: TRUST_HOSPITAL
+      data_type: TEXT
+    - name: BAND_GRADE
+      data_type: TEXT
+    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+      data_type: TEXT
+    - name: DATE_AND_TIME_ENROLLED
+      data_type: TEXT
+    - name: TIME_STARTED
+      data_type: TEXT
+    - name: TIME_COMPLETED
+      data_type: TEXT
+    - name: STUDENT_PROGRESS
+      data_type: TEXT
+    - name: COURSE_TYPE
+      data_type: TEXT
+  - name: IA_ENROLMENTS_MONTHLY
+    identifier: '"IA_ENROLMENTS_MONTHLY"'
+    columns:
+    - name: COURSE_FULL_NAME
+      data_type: TEXT
+    - name: COURSE_SHORT_NAME
+      data_type: TEXT
+    - name: COURSE_CREATED_BY
+      data_type: TEXT
+    - name: FULL_NAME
+      data_type: TEXT
+    - name: ENROLMENT_METHOD
+      data_type: TEXT
+    - name: TRUST_HOSPITAL
+      data_type: TEXT
+    - name: BAND_GRADE
+      data_type: TEXT
+    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+      data_type: TEXT
+    - name: DATE_AND_TIME_ENROLLED
+      data_type: TEXT
+    - name: TIME_STARTED
+      data_type: TEXT
+    - name: TIME_COMPLETED
+      data_type: TEXT
+    - name: STUDENT_PROGRESS
+      data_type: TEXT
+  - name: IA_NEW_USERS_MONTHLY
+    identifier: '"IA_NEW_USERS_MONTHLY"'
+    columns:
+    - name: FULL_NAME
+      data_type: TEXT
+    - name: USERNAME
+      data_type: TEXT
+    - name: TRUST_HOSPITAL
+      data_type: TEXT
+    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+      data_type: TEXT
+    - name: BAND_GRADE
+      data_type: TEXT
+    - name: DATE_AND_TIME_REGISTERED
+      data_type: TEXT
+    - name: FULL_NAME_WITH_LINK
+      data_type: TEXT
+    - name: FULL_NAME_2
+      data_type: TEXT
+  - name: IA_NUMBERS
+    identifier: '"IA_NUMBERS"'
+    columns:
+    - name: TRAINING
+      data_type: TEXT
+    - name: TRAINING_HOURS_TRAINEE_NUMBERS
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: MONTH_YEAR
+      data_type: TEXT
+    - name: DATA
       data_type: NUMBER
   - name: IMD2019
     identifier: '"IMD2019"'
@@ -456,6 +683,39 @@ sources:
       data_type: DATE
     - name: PRACTICE_COUNT
       data_type: NUMBER
+  - name: UCLH_MSK
+    identifier: '"UCLH_MSK"'
+    columns:
+    - name: PROVIDER
+      data_type: TEXT
+    - name: WEEK_END
+      data_type: TEXT
+    - name: SERVICE_LINE
+      data_type: TEXT
+    - name: TEAM
+      data_type: TEXT
+    - name: No. of Referrals
+      data_type: TEXT
+    - name: ACCEPTED_REFERRALS
+      data_type: TEXT
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: ACTIVITY
+      data_type: TEXT
+    - name: ACTIVITY_TYPE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY
+      data_type: TEXT
+    - name: SERVICE_LINE_GROUP
+      data_type: TEXT
+    - name: WEEK_ENDING
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+    - name: WEEK_NUMBER
+      data_type: NUMBER
+    - name: CCG
+      data_type: TEXT
   - name: UEC__DAILY__LAS_HANDOVER
     identifier: '"UEC__DAILY__LAS_HANDOVER"'
     columns:

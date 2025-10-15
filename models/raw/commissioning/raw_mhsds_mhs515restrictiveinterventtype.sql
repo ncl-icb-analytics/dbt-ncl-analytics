@@ -1,0 +1,41 @@
+-- Raw layer model for mhsds.MHS515RestrictiveInterventType
+-- Source: "DATA_LAKE"."MHSDS"
+-- Description: Mental Health Services Data Set (MHSDS)
+-- This is a 1:1 passthrough from source with standardized column names
+select
+    "SK" as sk,
+    "RestrictiveIntIncID" as restrictive_int_inc_id,
+    "RestrictiveIntTypeID" as restrictive_int_type_id,
+    "RestrictiveIntType" as restrictive_int_type,
+    "StartDateRestrictiveIntType" as start_date_restrictive_int_type,
+    "StartTimeRestrictiveIntType" as start_time_restrictive_int_type,
+    "EndDateRestrictiveIntType" as end_date_restrictive_int_type,
+    "EndTimeRestrictiveIntType" as end_time_restrictive_int_type,
+    "RestraintInjuryPatient" as restraint_injury_patient,
+    "RestraintInjuryCarePers" as restraint_injury_care_pers,
+    "RestraintInjuryOtherPers" as restraint_injury_other_pers,
+    "RecordNumber" as record_number,
+    "MHS515UniqID" as mhs515_uniq_id,
+    "OrgIDProv" as org_id_prov,
+    "Person_ID" as person_id,
+    "UniqSubmissionID" as uniq_submission_id,
+    "UniqServReqID" as uniq_serv_req_id,
+    "UniqHospProvSpellID" as uniq_hosp_prov_spell_id,
+    "UniqHospProvSpellNum" as uniq_hosp_prov_spell_num,
+    "UniqWardStayID" as uniq_ward_stay_id,
+    "UniqMonthID" as uniq_month_id,
+    "EFFECTIVE_FROM" as effective_from,
+    "RecordStartDate" as record_start_date,
+    "RecordEndDate" as record_end_date,
+    "UniqRestrictiveIntIncID" as uniq_restrictive_int_inc_id,
+    "UniqRestrictiveIntTypeID" as uniq_restrictive_int_type_id,
+    "RowNumber" as row_number,
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicSystemId" as dmic_system_id,
+    "dmicCCGCode" as dmic_ccg_code,
+    "dmicDateAdded" as dmic_date_added,
+    "FileType" as file_type,
+    "ReportingPeriodStartDate" as reporting_period_start_date,
+    "ReportingPeriodEndDate" as reporting_period_end_date,
+    "dmicDataset" as dmic_dataset
+from {{ source('mhsds', 'MHS515RestrictiveInterventType') }}

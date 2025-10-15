@@ -64,6 +64,14 @@ sources:
     description: Primary care medications and prescribing data
     raw_prefix: raw_epd_pc
     domain: commissioning
+
+  # Mental Health Services Data Set (MHSDS)
+  - source_name: mhsds
+    database: DATA_LAKE
+    schema: MHSDS
+    description: Mental Health Services Data Set (MHSDS)
+    raw_prefix: raw_mhsds
+    domain: commissioning
   
   # Dictionary/Reference Data dbo
   - source_name: dictionary_dbo
