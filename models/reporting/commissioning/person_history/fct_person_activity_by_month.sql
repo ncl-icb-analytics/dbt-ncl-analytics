@@ -8,7 +8,17 @@ Clinical Purpose:
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 */
 
-with ae_encounter_summary as(
+with date_range AS (-- Generate month start dates for 10 years (120 months)
+    select 
+        date_trunc('month', dateadd('month', seq4() - 119, current_date)) as month_start_date
+        , last_day(date_trunc('month', dateadd('month', seq4() - 119, current_date))) as month_end_date
+        , date_trunc('month', dateadd('month', seq4() - 118, current_date)) as next_month_start_date
+    from 
+        table(generator(rowcount => 120))
+    where 
+        month_start_date <= date_trunc('month', current_date)
+)
+, ae_encounter_summary as(
     select
         sk_patient_id
         , date_trunc('month', start_date) as activity_month
@@ -26,19 +36,34 @@ with ae_encounter_summary as(
 )
 , apc_encounter_summary as(
     select
-        sk_patient_id
-        , date_trunc('month', start_date) as activity_month
+        e.sk_patient_id
+        , d.month_start_date as activity_month
         , 'Inpatient' as activity_type
-        , admission_method_group as activity_subtype
-        , count(*) as encounters
-        , sum(cost) as cost
-        , sum(duration) as duration
+        , e.admission_method_group as activity_subtype
+        , sum(case when d.month_start_date = date_trunc('month', e.start_date) then 1 end) as encounters
+        -- allocate cost and duration proportionally to days in month
+        , sum(
+            (datediff('day'
+            , greatest(e.start_date, d.month_start_date)
+            , least(coalesce(e.end_date, current_date), d.next_month_start_date)
+            )+1) * (cost/(duration_to_date+1))
+        ) as cost
+        , sum(
+            datediff('day'
+            , greatest(e.start_date, d.month_start_date)
+            , least(coalesce(e.end_date, current_date), d.next_month_start_date)
+            )
+        ) as duration
     from 
-        {{ ref('int_sus_apc_encounters') }}
+        {{ ref('int_sus_apc_encounters') }} as e
+    left join -- join all months during the spell
+        date_range as d
+        on d.month_start_date <= coalesce(e.end_date, current_date)
+        and d.month_end_date >= e.start_date
     where 
-        sk_patient_id is not null
+        e.sk_patient_id is not null
     group by 
-        sk_patient_id, date_trunc('month', start_date), admission_method_group
+        e.sk_patient_id, d.month_start_date, e.admission_method_group
 )
 , op_encounter_summary as(
     select
@@ -80,6 +105,7 @@ with ae_encounter_summary as(
     union all
     select * from gp_encounter_summary
 )
+
 select 
     sk_patient_id
     , activity_month
