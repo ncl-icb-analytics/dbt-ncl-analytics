@@ -1,0 +1,22 @@
+version: 2
+models:
+- name: stg_dictionary_dbo_patientclassification
+  description: Patient classification reference data
+  columns:
+  - name: sk_patient_classification_id
+    description: Primary key - surrogate key for patient classification
+    tests:
+    - unique
+    - not_null
+  - name: bk_patient_classification_code
+    description: Business key - patient classification code
+    tests:
+    - unique
+    - not_null
+  - name: patient_classification_name
+    description: Patient classification name
+  - name: patient_classification_full_name
+    description: Patient classification full name
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

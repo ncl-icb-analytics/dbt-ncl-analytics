@@ -43,6 +43,10 @@ models:
         data_type: varchar
         description: ""
 
+      - name: pod
+        data_type: varchar
+        description: "Point of delivery, based on admission method, patient classification and length of stay"
+
       - name: type
         data_type: varchar
         description: ""

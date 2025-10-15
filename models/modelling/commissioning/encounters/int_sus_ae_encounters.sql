@@ -30,7 +30,13 @@ select
     , treatments.code as primary_treatment
     , investigations.code as primary_investigation
     , 'SUS_ECDS' as source
-    -- TO DO: add pod and pod_group
+    , case
+        when core.attendance_location_department_type = '01' then 'AE-T1'
+        when core.attendance_location_department_type = '02' then 'AE-Other'
+        when core.attendance_location_department_type = '03' then 'UCC'
+        when core.attendance_location_department_type = '04' then 'WiC'
+        when core.attendance_location_department_type = '05' then 'SDEC'
+        else 'Others' end as pod
     , core.attendance_location_department_type as department_type
     , core.commissioning_national_pricing_final_price as cost
 

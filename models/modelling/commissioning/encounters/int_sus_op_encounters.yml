@@ -59,6 +59,10 @@ models:
         data_type: varchar
         description: "Commissioning data source"
 
+      - name: pod
+        data_type: varchar
+        description: "Point of delivery, based on HRG code"
+
       - name: type
         data_type: varchar
         description: "HRG code type associated with the encounter"

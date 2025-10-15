@@ -55,6 +55,10 @@ models:
         data_type: varchar
         description: "Commissioning data source"
 
+      - name: pod
+        data_type: varchar
+        description: "Point of delivery, based on type of urgent care department attended"
+
       - name: department_type
         data_type: varchar
         description: "Type of urgent care department attended"
