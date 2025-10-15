@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: fct_person_sus_ae_recent
+    description: ""
+    columns:
+      - name: sk_patient_id
+        data_type: varchar
+        description: ""
+        tests:
+          - not_null
+          - unique
+
+      - name: ae_ill_12mo
+        data_type: number
+        description: ""
+
+      - name: ae_ill_3mo
+        data_type: number
+        description: ""
+
+      - name: ae_ill_1mo
+        data_type: number
+        description: ""
+
+      - name: ae_tot_12mo
+        data_type: number
+        description: ""
+
+      - name: ae_inj_12mo
+        data_type: number
+        description: ""
+
+      - name: ae_t1_12mo
+        data_type: number
+        description: ""
