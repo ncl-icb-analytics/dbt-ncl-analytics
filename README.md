@@ -108,7 +108,7 @@ Your browser will open for Snowflake authentication. Look for "All checks passed
 2. **Generate metadata query**: `python scripts/sources/1a_generate_metadata_query.py`
 3. **Extract metadata**: `python scripts/sources/1b_extract_metadata.py`
 4. **Generate sources.yml**: `python scripts/sources/2_generate_sources.py`
-5. **Generate staging models**: `python scripts/sources/3_generate_staging_models.py`
+5. **Generate raw models**: `python scripts/sources/3_generate_raw_models.py`
 6. **Build and test**: `dbt run && dbt test`
 
 ## Data Sources
