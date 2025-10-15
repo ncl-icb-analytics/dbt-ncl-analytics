@@ -31,7 +31,9 @@ concept_mapping as (
 )
 
 
-select person_id
+select 
+    id as encounter_id
+    , person_id
     , start_date
     , actual_duration
     , national_slot_category_name

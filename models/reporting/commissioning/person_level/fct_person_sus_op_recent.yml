@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: fct_person_sus_op_recent
+    description: ""
+    columns:
+      - name: sk_patient_id
+        data_type: varchar
+        description: ""
+        tests:
+          - not_null
+          - unique
+
+      - name: op_att_tot_12mo
+        data_type: number
+        description: ""
+
+      - name: op_att_tot_3mo
+        data_type: number
+        description: ""
+
+      - name: op_att_tot_1mo
+        data_type: number
+        description: ""
+
+      - name: op_att_first_12mo
+        data_type: number
+        description: ""
+
+      - name: op_app_tot_12mo
+        data_type: number
+        description: ""
+
+      - name: op_spec_12mo
+        data_type: number
+        description: ""
+
+      - name: op_prov_12mo
+        data_type: number
+        description: ""
+
+      - name: op_num_spec_2_prov_12mo
+        data_type: number
+        description: ""
