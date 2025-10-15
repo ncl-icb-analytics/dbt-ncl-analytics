@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='view')
-}}
-
-
 /*
 Outpatient encounters from SUS
 

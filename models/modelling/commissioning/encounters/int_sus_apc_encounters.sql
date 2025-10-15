@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='view')
-}}
-
-
 /*
 Inpatient encounters from SUS
 

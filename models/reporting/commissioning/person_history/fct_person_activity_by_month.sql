@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 /*
 Monthly summary of patient activity
 
