@@ -7,6 +7,9 @@ models:
       - name: encounter_id
         data_type: varchar
         description: "Primary key for the encounter within SUS"
+        tests:
+          - unique
+          - not_null
 
       - name: sk_patient_id
         data_type: varchar
