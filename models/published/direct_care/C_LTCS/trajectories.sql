@@ -31,6 +31,7 @@ activity as(
     , ae_encounters
     , ip_encounters
     , op_encounters
+    , gp_encounters
     from {{ref('fct_person_activity_by_month')}}
     where activity_month between dateadd(month, -13, current_date()) and current_date()
 )
@@ -39,6 +40,7 @@ select il.patient_id
     ,ARRAY_AGG(COALESCE(a.ae_encounters,0)) within group (order by ds.activity_month) as ae_encounters_sl
     ,ARRAY_AGG(COALESCE(a.ip_encounters,0)) within group (order by ds.activity_month) as ip_encounters_sl
     ,ARRAY_AGG(COALESCE(a.op_encounters,0)) within group (order by ds.activity_month) as op_encounters_sl
+    ,ARRAY_AGG(COALESCE(a.gp_encounters,0)) within group (order by ds.activity_month) as gp_encounters_sl
 from inclusion_list il
 cross join date_spine ds
 left join activity a 

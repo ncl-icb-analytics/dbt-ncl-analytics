@@ -5,6 +5,9 @@ models:
       - name: patient_id
         data_type: number
         description: "Unique patient identifier"
+        tests:
+        - not_null
+        - unique
 
       - name: ae_encounters_sl
         data_type: array

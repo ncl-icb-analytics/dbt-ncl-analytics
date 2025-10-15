@@ -22,7 +22,7 @@ with inclusion_list as (
     where eligible = 1
 )
 
-select distinct il.patient_id
+select il.patient_id
     , il.pcn_code
     , il.age
     -- trajectories for sparkline visualisation [add other domains - GP, Community, MH, total?]
@@ -87,17 +87,28 @@ select distinct il.patient_id
     ,dcp.care_processes_completed
     , case when dcp.hba1c_completed_in_last_12m = true then dcp.latest_hba1c_value else null end as latest_hba1c_value
     ,dcp.latest_hba1c_date
+   -- ,dpr.earliest_type2_date
     -- Annual activity (OP, APC, UEC, MH, ASC, Community, GP appts, 111?)
-    ,zeroifnull(op.op_att_tot_12mo) as op_att_tot_12mo
-    ,zeroifnull(op.op_spec_12mo) as op_spec_12mo
-    ,zeroifnull(op.op_prov_12mo) as op_prov_12mo
+    ,zeroifnull(opa.op_att_tot_12mo) as op_att_tot_12mo
+    ,zeroifnull(opa.op_spec_12mo) as op_spec_12mo
+    ,zeroifnull(opa.op_prov_12mo) as op_prov_12mo
+    ,zeroifnull(apca.apc_12mo) as apc_12mo
+    ,zeroifnull(apca.apc_los_12mo) as apc_los_12mo
+    ,zeroifnull(aea.ae_t1_12mo) as ae_t1_12mo
+    ,zeroifnull(aea.ae_inj_12mo) as ae_inj_12mo
+    ,zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo
+    ,zeroifnull(gpa.gp_att_tot_12mo) as gp_att_tot_12mo
+    ,zeroifnull(gpa.gp_app_tot_12mo) as gp_app_tot_12mo
+    ,zeroifnull(gpa.gp_dna_tot_12mo) as gp_dna_tot_12mo
     -- Current waiting list counts and flags
     ,zeroifnull(wl.wl_current_total_count) as wl_total_count
     ,zeroifnull(wl.wl_current_distinct_providers_count) as wl_provider_count
     ,zeroifnull(wl.wl_current_distinct_tfc_count) as wl_specialty_count
     ,wl.same_tfc_multiple_providers_flag as has_same_tfc_multiple_providers_flag
-
     -- polypharmacy, high risk drugs, suspected non-adherence
+    ,polyp.medication_count
+    ,polyp.medication_name_list
+    ,polyp.is_polypharmacy_5plus
 
     -- Current referrals
 
@@ -110,6 +121,8 @@ left join {{ ref('trajectories') }} tr
     on il.patient_id = tr.patient_id
 left join {{ ref('dim_person_conditions')}} pc
     on il.olids_id = pc.person_id
+left join {{ref('fct_person_polypharmacy_current')}} polyp
+    on il.olids_id = polyp.person_id
 left join {{ref('fct_person_behavioural_risk_factors')}} br
     on il.olids_id = br.person_id
 left join {{ref('fct_person_pregnancy_status')}} ps
@@ -118,8 +131,15 @@ left join {{ref('fct_person_bp_control')}} bp
     on il.olids_id = bp.person_id 
 left join {{ref('fct_person_diabetes_8_care_processes')}} dcp
     on il.olids_id = dcp.person_id
+--left join {{ref('fct_person_diabetes_register')}} dpr
+--    on il.olids_id  = dpr.person_id
 left join {{ref('fct_person_wl_current_count_total')}} wl
     on il.patient_id = wl.sk_patient_id
-left join {{ref('fct_person_sus_op_recent')}} op
-    on il.patient_id  = op.sk_patient_id
-
+left join {{ref('fct_person_sus_op_recent')}} opa
+    on il.patient_id  = opa.sk_patient_id
+left join {{ref('fct_person_sus_apc_recent')}} apca
+    on il.patient_id  = apca.sk_patient_id
+left join {{ref('fct_person_sus_ae_recent')}} aea
+    on il.patient_id  = aea.sk_patient_id
+left join {{ref('fct_person_gp_recent')}} gpa
+    on il.patient_id  = gpa.sk_patient_id
