@@ -21,11 +21,31 @@ models:
 
       - name: start_date
         data_type: timestamp_ntz
-        description: ""
+        description: "Date of admission"
+
+      - name: admission_method
+        data_type: varchar
+        description: "Method of admission"
+
+      - name: admission_method_group
+        data_type: varchar
+        description: "Group of admission method"
+
+      - name: admission_patient_classification
+        data_type: varchar
+        description: "Patient classification at admission"
+
+      - name: end_date
+        data_type: timestamp_ntz
+        description: "Date of discharge"
 
       - name: duration
         data_type: number
-        description: ""
+        description: "Length of stay in days"
+
+      - name: duration_to_date
+        data_type: number
+        description: "Length of stay in days, including ongoing stays calculated to current date"
 
       - name: acuity_proxy
         data_type: varchar

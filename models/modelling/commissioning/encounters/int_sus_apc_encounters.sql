@@ -22,10 +22,15 @@ select
     , core.sk_patient_id
     , core.spell_care_location_site_code_of_treatment as site_id
     , core.spell_admission_date as start_date
+    , dict_adm_method.admission_method_name as admission_method
+    , dict_adm_method.admission_method_group as admission_method_group
+    , dict_patient_class.patient_classification_name as admission_patient_classification
+    , core.spell_discharge_date as end_date
     , core.spell_discharge_length_of_hospital_stay as duration
+    , datediff(day, core.spell_admission_date, coalesce(core.spell_discharge_date, current_date)) as duration_to_date
     , core.spell_commissioning_grouping_core_hrg as acuity_proxy
-    , core.spell_clinical_coding_grouper_derived_primary_diagnosis  || ', ' || spell_clinical_coding_grouper_derived_secondary_diagnosis  as flat_diagnosis_codes
-    , spell_clinical_coding_grouper_derived_dominant_procedure as primary_treatment
+    , core.spell_clinical_coding_grouper_derived_primary_diagnosis  || ', ' || core.spell_clinical_coding_grouper_derived_secondary_diagnosis  as flat_diagnosis_codes
+    , core.spell_clinical_coding_grouper_derived_dominant_procedure as primary_treatment
     , 'SUS_APC' as source
     , case 
         when core.spell_admission_method in ('11', '12', '13') -- dict_adm_method.admission_method_group = 'Elective'
@@ -52,3 +57,9 @@ select
     , core.spell_commissioning_tariff_calculation_final_price as cost
 
 from {{ ref('stg_sus_apc_spell')}} as core
+
+left join {{ ref('stg_dictionary_ip_admissionmethods')}} as dict_adm_method
+    ON core.spell_admission_method = dict_adm_method.bk_admission_method_code
+
+left join {{ ref('stg_dictionary_dbo_patientclassification')}} as dict_patient_class
+    ON core.spell_admission_patient_classification = dict_patient_class.bk_patient_classification_code
