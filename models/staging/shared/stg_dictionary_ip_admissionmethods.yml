@@ -1,0 +1,18 @@
+version: 2
+models:
+- name: stg_dictionary_ip_admissionmethods
+  description: Inpatient admission method codes reference
+  columns:
+  - name: sk_admission_method_id
+    description: Primary key - surrogate key for admission method
+    tests:
+    - unique
+    - not_null
+  - name: bk_admission_method_code
+    description: Business key - admission method code
+    tests:
+    - unique
+    - not_null
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

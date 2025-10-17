@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='view')
-}}
-
-
 /*
 GP encounters from OLIDS appointments
 
