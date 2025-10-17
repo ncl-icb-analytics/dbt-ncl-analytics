@@ -160,8 +160,17 @@ models:
           - accepted_values:
               values: [true]
                 
+      - name: has_learning_disability
+        description: QOF Learning Disability register flag (age ≥14 years with LD diagnosis). For population health inclusion group filtering.
+
+      - name: has_severe_mental_illness
+        description: QOF Severe Mental Illness register flag (active SMI diagnosis or recent lithium therapy). For population health inclusion group filtering.
+
+      - name: is_currently_pregnant
+        description: Currently pregnant flag (non-male, pregnancy code within last 9 months, no delivery code after). For population health inclusion group filtering.
+
       - name: created_at
         description: Timestamp when the row was created
         tests:
           - not_null
-        
+

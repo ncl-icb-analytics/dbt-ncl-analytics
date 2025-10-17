@@ -124,7 +124,12 @@ SELECT
     
     -- Registration context
     prac.registration_start_date,
-    
+
+    -- Population health inclusion group filters
+    cond.has_learning_disability,
+    cond.has_severe_mental_illness,
+    COALESCE(preg.is_currently_pregnant, FALSE) AS is_currently_pregnant,
+
     -- Metadata
     CURRENT_DATE() AS data_refresh_date
 
@@ -133,7 +138,11 @@ INNER JOIN {{ ref('dim_person_demographics') }} AS demo
     ON cf.person_id = demo.person_id
 INNER JOIN {{ ref('dim_person_current_practice') }} AS prac
     ON cf.person_id = prac.person_id
-WHERE 
+LEFT JOIN {{ ref('dim_person_conditions') }} AS cond
+    ON cf.person_id = cond.person_id
+LEFT JOIN {{ ref('fct_person_pregnancy_status') }} AS preg
+    ON cf.person_id = preg.person_id
+WHERE
     cf.in_any_case_finding = TRUE  -- Only include people with case finding eligibility
     AND prac.registration_end_date IS NULL  -- Current registrations only
 
