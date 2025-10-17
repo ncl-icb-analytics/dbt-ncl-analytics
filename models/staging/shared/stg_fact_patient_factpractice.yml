@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: stg_fact_patient_factpractice
+    description: Patient GP practice registrations from Fact Patient database. More reliable than PDS for registration tracking.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - sk_patient_id
+            - sk_organisation_id
+            - period_start
+    columns:
+      - name: sk_patient_id
+        description: Surrogate key patient identifier (pseudonymised NHS number)
+        tests:
+          - not_null
+
+      - name: sk_organisation_id
+        description: Surrogate key organisation identifier
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_dictionary_dbo_organisation')
+              field: sk_organisation_id
+
+      - name: practice_ods_code
+        description: GP practice ODS code from organisation table
+        tests:
+          - not_null
+
+      - name: practice_name
+        description: GP practice name from organisation table
+
+      - name: period_start
+        description: Registration period start date
+        tests:
+          - not_null
+
+      - name: period_end
+        description: Registration period end date (null if current registration)
+
+      - name: date_detected_join
+        description: Date the join to practice was detected in source data
+
+      - name: date_detected_left
+        description: Date the departure from practice was detected in source data
+
+      - name: sk_data_source_id
+        description: Data source identifier
+
+      - name: is_current_registration
+        description: Flag indicating if this is a current active registration
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]

@@ -1,0 +1,404 @@
+version: 2
+sources:
+- name: fact_patient
+  database: '"DATA_LAKE"'
+  schema: '"FACT_PATIENT"'
+  description: Patient fact tables
+  tables:
+  - name: DimConditionType
+    identifier: '"DimConditionType"'
+    columns:
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: ConditionType
+      data_type: TEXT
+    - name: ConditionLifespan
+      data_type: NUMBER
+    - name: Description
+      data_type: TEXT
+    - name: HasValue
+      data_type: BOOLEAN
+    - name: SK_UnitID
+      data_type: NUMBER
+  - name: DimDataSource
+    identifier: '"DimDataSource"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_DataSourceParentID
+      data_type: NUMBER
+    - name: DataSource
+      data_type: TEXT
+    - name: Description
+      data_type: TEXT
+  - name: DimLifetimeConditionGroup
+    identifier: '"DimLifetimeConditionGroup"'
+    columns:
+    - name: SK_LifetimeConditionGroupID
+      data_type: NUMBER
+    - name: LifetimeConditionGroup
+      data_type: TEXT
+  - name: DimLifetimeConditionGroupTypeLookup
+    identifier: '"DimLifetimeConditionGroupTypeLookup"'
+    columns:
+    - name: SK_LifetimeConditionGroupID
+      data_type: NUMBER
+    - name: SK_LifetimeConditionTypeID
+      data_type: NUMBER
+    - name: Weighting
+      data_type: NUMBER
+  - name: DimLifetimeConditionType
+    identifier: '"DimLifetimeConditionType"'
+    columns:
+    - name: SK_LifetimeConditionTypeID
+      data_type: NUMBER
+    - name: LifetimeConditionType
+      data_type: TEXT
+    - name: Description
+      data_type: TEXT
+  - name: DimRiskScore
+    identifier: '"DimRiskScore"'
+    columns:
+    - name: SK_RiskScoreID
+      data_type: NUMBER
+    - name: RiskScore
+      data_type: TEXT
+    - name: RiskScoreLifespan
+      data_type: NUMBER
+    - name: Description
+      data_type: TEXT
+  - name: DimRiskScoreBand
+    identifier: '"DimRiskScoreBand"'
+    columns:
+    - name: SK_RiskScoreBandID
+      data_type: NUMBER
+    - name: SK_RiskScoreID
+      data_type: NUMBER
+    - name: RiskScoreBand
+      data_type: TEXT
+    - name: LowerBound
+      data_type: NUMBER
+    - name: UpperBound
+      data_type: NUMBER
+  - name: FactActivity
+    identifier: '"FactActivity"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: Period
+      data_type: TIMESTAMP_NTZ
+    - name: ActivityCount
+      data_type: NUMBER
+    - name: TotalCost
+      data_type: NUMBER
+    - name: BedDays
+      data_type: NUMBER
+    - name: NoTreatment
+      data_type: NUMBER
+    - name: AEAdmission
+      data_type: NUMBER
+  - name: FactCareHome
+    identifier: '"FactCareHome"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: PeriodStart
+      data_type: TIMESTAMP_NTZ
+    - name: PeriodEnd
+      data_type: TIMESTAMP_NTZ
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: Score
+      data_type: FLOAT
+    - name: DateDetectedJoin
+      data_type: TIMESTAMP_NTZ
+    - name: DateDetectedLeft
+      data_type: TIMESTAMP_NTZ
+  - name: FactCareHomeRaw
+    identifier: '"FactCareHomeRaw"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: Score
+      data_type: FLOAT
+    - name: RegistrationStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RegistrationEndDate
+      data_type: TIMESTAMP_NTZ
+  - name: FactCondition
+    identifier: '"FactCondition"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: PeriodStart
+      data_type: TIMESTAMP_NTZ
+    - name: PeriodEnd
+      data_type: TIMESTAMP_NTZ
+    - name: Value
+      data_type: NUMBER
+    - name: DateDetected
+      data_type: TIMESTAMP_NTZ
+  - name: FactLifetimeCondition
+    identifier: '"FactLifetimeCondition"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_LifetimeConditionTypeID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: DateFirstDetected
+      data_type: TIMESTAMP_NTZ
+  - name: FactPractice
+    identifier: '"FactPractice"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: PeriodStart
+      data_type: TIMESTAMP_NTZ
+    - name: PeriodEnd
+      data_type: TIMESTAMP_NTZ
+    - name: DateDetectedJoin
+      data_type: TIMESTAMP_NTZ
+    - name: DateDetectedLeft
+      data_type: TIMESTAMP_NTZ
+  - name: FactPracticeRaw
+    identifier: '"FactPracticeRaw"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: RegistrationStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RegistrationEndDate
+      data_type: TIMESTAMP_NTZ
+  - name: FactProfile
+    identifier: '"FactProfile"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: PeriodStart
+      data_type: TIMESTAMP_NTZ
+    - name: PeriodEnd
+      data_type: TIMESTAMP_NTZ
+    - name: DateOfBirth
+      data_type: TIMESTAMP_NTZ
+    - name: SK_GenderID
+      data_type: NUMBER
+    - name: SK_EthnicityID
+      data_type: NUMBER
+    - name: DateOfDeath
+      data_type: TIMESTAMP_NTZ
+  - name: FactRiskScore
+    identifier: '"FactRiskScore"'
+    columns:
+    - name: SK_RiskScoreID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: PeriodStart
+      data_type: TIMESTAMP_NTZ
+    - name: PeriodEnd
+      data_type: TIMESTAMP_NTZ
+    - name: SK_RiskScoreBandID
+      data_type: NUMBER
+    - name: Value
+      data_type: NUMBER
+    - name: DateDetected
+      data_type: TIMESTAMP_NTZ
+  - name: FactVital
+    identifier: '"FactVital"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: PeriodStart
+      data_type: TIMESTAMP_NTZ
+    - name: PeriodEnd
+      data_type: TIMESTAMP_NTZ
+    - name: BodyTemp
+      data_type: NUMBER
+    - name: RespiratoryRate
+      data_type: NUMBER
+    - name: HeartRate
+      data_type: NUMBER
+    - name: BloodPressureSystolic
+      data_type: NUMBER
+    - name: BloodPressureDiastolic
+      data_type: NUMBER
+    - name: Height
+      data_type: NUMBER
+    - name: Weight
+      data_type: NUMBER
+    - name: BMI
+      data_type: NUMBER
+  - name: Factresidence
+    identifier: '"Factresidence"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: SK_OutputAreaID
+      data_type: NUMBER
+    - name: SK_PostcodeID
+      data_type: NUMBER
+    - name: PeriodStart
+      data_type: TIMESTAMP_NTZ
+    - name: PeriodEnd
+      data_type: TIMESTAMP_NTZ
+    - name: DateDetectedStart
+      data_type: TIMESTAMP_NTZ
+    - name: DateDetectedEnd
+      data_type: TIMESTAMP_NTZ
+  - name: FactresidenceRaw
+    identifier: '"FactresidenceRaw"'
+    columns:
+    - name: SK_DataSourceID
+      data_type: NUMBER
+    - name: SK_PatientID
+      data_type: NUMBER
+    - name: SK_OutputAreaID
+      data_type: NUMBER
+    - name: SK_PostcodeID
+      data_type: NUMBER
+    - name: ResidenceStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ResidenceEndDate
+      data_type: TIMESTAMP_NTZ
+  - name: MetaConditionCodeMaskAEDiag
+    identifier: '"MetaConditionCodeMaskAEDiag"'
+    columns:
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+    - name: IsExclude
+      data_type: BOOLEAN
+  - name: MetaConditionCodeMaskICD10
+    identifier: '"MetaConditionCodeMaskICD10"'
+    columns:
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+    - name: IsExclude
+      data_type: BOOLEAN
+  - name: MetaConditionCodeMaskRead
+    identifier: '"MetaConditionCodeMaskRead"'
+    columns:
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+    - name: IsExclude
+      data_type: BOOLEAN
+  - name: MetaConditionCodeMaskReadMedication
+    identifier: '"MetaConditionCodeMaskReadMedication"'
+    columns:
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+    - name: IsExclude
+      data_type: BOOLEAN
+  - name: MetaConditionCodeMaskSnomed
+    identifier: '"MetaConditionCodeMaskSnomed"'
+    columns:
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: Snomed
+      data_type: NUMBER
+    - name: IsExclude
+      data_type: BOOLEAN
+  - name: MetaConditionCodeMaskSnomedMedication
+    identifier: '"MetaConditionCodeMaskSnomedMedication"'
+    columns:
+    - name: SK_ConditionTypeID
+      data_type: NUMBER
+    - name: Snomed
+      data_type: NUMBER
+    - name: IsExclude
+      data_type: BOOLEAN
+  - name: MetaLifetimeConditionCodeMaskAEDiag
+    identifier: '"MetaLifetimeConditionCodeMaskAEDiag"'
+    columns:
+    - name: SK_LifetimeConditionTypeID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+  - name: MetaLifetimeConditionCodeMaskICD10
+    identifier: '"MetaLifetimeConditionCodeMaskICD10"'
+    columns:
+    - name: SK_LifetimeConditionTypeID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+  - name: MetaLifetimeConditionCodeMaskRead
+    identifier: '"MetaLifetimeConditionCodeMaskRead"'
+    columns:
+    - name: SK_LifetimeConditionTypeID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+  - name: MetaLifetimeConditionCodeMaskSnomed
+    identifier: '"MetaLifetimeConditionCodeMaskSnomed"'
+    columns:
+    - name: SK_LifetimeConditionTypeID
+      data_type: NUMBER
+    - name: Snomed
+      data_type: NUMBER
+  - name: MetaRiskScoreHospitalFrailtyICD10
+    identifier: '"MetaRiskScoreHospitalFrailtyICD10"'
+    columns:
+    - name: SK_HospitalFrailtyID
+      data_type: NUMBER
+    - name: Code
+      data_type: TEXT
+    - name: Score
+      data_type: NUMBER
+  - name: MetaVital
+    identifier: '"MetaVital"'
+    columns:
+    - name: SK_VitalID
+      data_type: NUMBER
+    - name: SK_UnitID
+      data_type: NUMBER
+    - name: Vital
+      data_type: TEXT
+  - name: MetaVitalRead
+    identifier: '"MetaVitalRead"'
+    columns:
+    - name: SK_VitalID
+      data_type: NUMBER
+    - name: CodeMask
+      data_type: TEXT
+  - name: MetaVitalSnomed
+    identifier: '"MetaVitalSnomed"'
+    columns:
+    - name: SK_VitalID
+      data_type: NUMBER
+    - name: Snomed
+      data_type: NUMBER

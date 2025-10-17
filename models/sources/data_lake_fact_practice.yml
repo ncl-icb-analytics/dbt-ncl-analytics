@@ -1,0 +1,102 @@
+version: 2
+sources:
+- name: fact_practice
+  database: '"DATA_LAKE"'
+  schema: '"FACT_PRACTICE"'
+  description: Practice fact tables
+  tables:
+  - name: DimListSizeAge
+    identifier: '"DimListSizeAge"'
+    columns:
+    - name: SK_ListSizeAgeID
+      data_type: NUMBER
+    - name: ListSizeAge
+      data_type: TEXT
+    - name: AgeStarts
+      data_type: NUMBER
+    - name: AgeEnds
+      data_type: NUMBER
+  - name: DimListSizeAgeBand
+    identifier: '"DimListSizeAgeBand"'
+    columns:
+    - name: SK_ListSizeAgeBandID
+      data_type: NUMBER
+    - name: ListSizeAgeBand
+      data_type: TEXT
+    - name: AgeBandStarts
+      data_type: NUMBER
+    - name: AgeBandEnds
+      data_type: NUMBER
+    - name: IsStandardAgeBand
+      data_type: BOOLEAN
+    - name: IsExtendedAgeBand
+      data_type: BOOLEAN
+  - name: DimListSizeSource
+    identifier: '"DimListSizeSource"'
+    columns:
+    - name: SK_ListSizeSourceID
+      data_type: NUMBER
+    - name: ListSizeSource
+      data_type: TEXT
+    - name: Description
+      data_type: TEXT
+  - name: FactListSize
+    identifier: '"FactListSize"'
+    columns:
+    - name: SK_ListSizeSourceID
+      data_type: NUMBER
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: Period
+      data_type: TIMESTAMP_NTZ
+    - name: Value
+      data_type: NUMBER
+  - name: FactListSizeAge
+    identifier: '"FactListSizeAge"'
+    columns:
+    - name: SK_ListSizeSourceID
+      data_type: NUMBER
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: SK_ListSizeAgeID
+      data_type: NUMBER
+    - name: SK_GenderID
+      data_type: NUMBER
+    - name: Period
+      data_type: TIMESTAMP_NTZ
+    - name: Value
+      data_type: NUMBER
+  - name: FactListSizeAgeBand
+    identifier: '"FactListSizeAgeBand"'
+    columns:
+    - name: SK_ListSizeSourceID
+      data_type: NUMBER
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: SK_ListSizeAgeBandID
+      data_type: NUMBER
+    - name: SK_GenderID
+      data_type: NUMBER
+    - name: Period
+      data_type: TIMESTAMP_NTZ
+    - name: Value
+      data_type: NUMBER
+  - name: FactListSizeLocation
+    identifier: '"FactListSizeLocation"'
+    columns:
+    - name: SK_ListSizeSourceID
+      data_type: NUMBER
+    - name: SK_OrganisationID
+      data_type: NUMBER
+    - name: SK_ListSizeAgeBandID
+      data_type: NUMBER
+    - name: SK_GenderID
+      data_type: NUMBER
+    - name: Easting
+      data_type: NUMBER
+    - name: Northing
+      data_type: NUMBER
+    - name: Period
+      data_type: TIMESTAMP_NTZ
+    - name: Value
+      data_type: NUMBER
