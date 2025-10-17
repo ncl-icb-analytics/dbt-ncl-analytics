@@ -35,7 +35,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose1_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 1  AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '6IN1_1'  AND v.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for 6in1 DOSE 2
 ,SIXIN1_DOSE2 AS (
@@ -47,7 +47,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose2_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 4  AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '6IN1_2'  AND v.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for 6in1 DOSE 3
 ,SIXIN1_DOSE3 AS (
@@ -59,7 +59,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose3_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 7  AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '6IN1_3'  AND v.EVENT_TYPE = 'Administration'
 )
  -- Creating CTE for Rotavirus DOSE 1
 ,ROTA_DOSE1 AS (
@@ -71,7 +71,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS rota_dose1_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 3 AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = 'ROTA_1' AND v.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for Rotavirus DOSE 2
 ,ROTA_DOSE2 AS (
@@ -83,7 +83,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS rota_dose2_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-        WHERE v.VACCINE_ORDER = 6 AND v.EVENT_TYPE = 'Administration'
+        WHERE v.VACCINE_ID = 'ROTA_2' AND v.EVENT_TYPE = 'Administration'
 )  
  -- Creating CTE for MenB DOSE 1
 ,MENB_DOSE1 AS (
@@ -95,7 +95,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose1_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-        WHERE v.VACCINE_ORDER = 2 and v.EVENT_TYPE = 'Administration'
+        WHERE v.VACCINE_ID = 'MENB_1' and v.EVENT_TYPE = 'Administration'
 )
  -- Creating CTE for MenB DOSE 1
 ,MENB_DOSE2 AS (
@@ -107,7 +107,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose2_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-        WHERE v.VACCINE_ORDER = 8 AND v.EVENT_TYPE = 'Administration'
+        WHERE v.VACCINE_ID = 'MENB_2' AND v.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for PCV DOSE 1
 ,PCV_DOSE1 AS (
@@ -119,7 +119,7 @@ WHERE p.age = 1 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS pcv_dose1_month_year_label
         FROM FISCAL1YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 5 AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = 'PCV_1' AND v.EVENT_TYPE = 'Administration'
          )
         
 --COMBINED

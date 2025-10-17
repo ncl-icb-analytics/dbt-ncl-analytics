@@ -37,9 +37,9 @@ WHERE AGE = 11
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 132 months (unlikely)
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC11YRBASE v1
-    LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 4 AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
-    LEFT JOIN VACC11YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 7 AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
-    WHERE v1.VACCINE_ORDER = 1 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )  
+     LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
+    LEFT JOIN VACC11YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
+    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )   
 )
  -- Creating CTE for 4-in-1 (dose 1) where 1 row is per patient at 11 yr AS NUMERATOR
 ,FOURIN1 AS (
@@ -51,7 +51,7 @@ WHERE AGE = 11
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 132 months (unlikely)
    ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
            FROM VACC11YRBASE v1
-        WHERE v1.VACCINE_ORDER = 14 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 ) 
  -- Creating CTE for HibMenC (dose 1) where 1 row is per patient at 11 yr AS NUMERATOR
 ,HIBMENC AS (
@@ -65,7 +65,7 @@ WHERE AGE = 11
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 132 months (unlikely)
        ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths
            FROM VACC11YRBASE v1
-        WHERE v1.VACCINE_ORDER = 9 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 )  
 -- Creating CTE for MMR (dose 1) where 1 row is per patient at 11 yr AS NUMERATOR
 ,MMR AS ( 
@@ -84,8 +84,8 @@ WHERE AGE = 11
         v2.VACCINATION_STATUS AS mmr_second_status,
          v2.AGE_AT_EVENT_OBS as mmr_second_event_age,
           FROM VACC11YRBASE v1
-          LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 15 AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-          WHERE v1.VACCINE_ORDER = 11 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+          LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
          
 ) 
 ,COMBINED AS (

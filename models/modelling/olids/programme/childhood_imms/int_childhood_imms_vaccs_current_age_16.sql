@@ -40,9 +40,9 @@ WHERE AGE = 16
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC16YRBASE v1
-    LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 4 AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
-    LEFT JOIN VACC16YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 7 AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
-    WHERE v1.VACCINE_ORDER = 1 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )  
+    LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
+    LEFT JOIN VACC16YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
+    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )  
 )
  -- Creating CTE for 4-in-1 (dose 1) where 1 row is per patient at 16 yr AS NUMERATOR
 ,FOURIN1 AS (
@@ -54,7 +54,7 @@ WHERE AGE = 16
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
    ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
            FROM VACC16YRBASE v1
-        WHERE v1.VACCINE_ORDER = 14 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 ) 
  -- Creating CTE for 3-in-1 (dose 1) where 1 row is per patient AS NUMERATOR
 ,THREEIN1 AS (
@@ -68,7 +68,7 @@ WHERE AGE = 16
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
         ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS threein1_event_age_mths
         FROM VACC16YRBASE v1
-        WHERE v1.VACCINE_ORDER = 18 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = '3IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 )
 -- Creating CTE for MMR (dose 1) where 1 row is per patient at 5 yr AS NUMERATOR
 ,MMR AS ( 
@@ -85,9 +85,9 @@ WHERE AGE = 16
         v2.VACCINATION_STATUS AS mmr_second_status,
          v2.AGE_AT_EVENT_OBS as mmr_second_event_age,
           FROM VACC16YRBASE v1
-          LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 15 
+          LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' 
           AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-          WHERE v1.VACCINE_ORDER = 11 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )      
+          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )      
 ) 
 
 -- Creating CTE for HPV (dose 1) where 1 row is per patient AS NUMERATOR. 
@@ -110,9 +110,9 @@ WHERE AGE = 16
 --HELPER COLUMN to check number of months between DOB and second vaccination date is not > 192 months (16 years) 
         ,ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hpv_second_event_age_mths
         FROM VACC16YRBASE v1
-        LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 17 
+        LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'HPV_2'
         AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-        WHERE v1.VACCINE_ORDER = 16 
+        WHERE v1.VACCINE_ID = 'HPV_1'  
         --AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' ) allow for missing first dose
 )
 
@@ -128,7 +128,7 @@ WHERE AGE = 16
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months 
          ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS menacwy_event_age_mths
     FROM VACC16YRBASE v1
-    WHERE v1.VACCINE_ORDER = 19 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+    WHERE v1.VACCINE_ID = 'MENACWY_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 )
 
 
