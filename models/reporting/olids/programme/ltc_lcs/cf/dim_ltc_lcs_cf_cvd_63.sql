@@ -1,17 +1,60 @@
 {{ config(
     materialized='table') }}
 -- Intermediate model for LTC LCS Case Finding CVD_63
--- Identifies patients on statins (within last 6 months) with non-HDL cholesterol > 2.5 (statin review needed)
+-- Identifies patients with QRISK2 ≥10% on statins (within last 6 months) with non-HDL cholesterol > 2.5 (statin review needed)
 
-WITH statin_medications AS (
-    -- Get all CVD_63 specific statin medications
+WITH qrisk2_readings AS (
+    -- Get all QRISK2 readings with valid values
+    SELECT
+        person_id,
+        clinical_effective_date,
+        result_value,
+        mapped_concept_code AS concept_code,
+        mapped_concept_display AS concept_display
+    FROM {{ ref('int_ltc_lcs_cvd_observations') }}
+    WHERE
+        cluster_id = 'QRISK2_10YEAR'
+        AND result_value IS NOT NULL
+        AND CAST(result_value AS NUMBER) > 0
+),
+
+latest_qrisk2 AS (
+    -- Get the latest QRISK2 reading for each person
+    SELECT
+        person_id,
+        clinical_effective_date,
+        result_value,
+        concept_code,
+        concept_display,
+        ROW_NUMBER()
+            OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC)
+            AS rn
+    FROM qrisk2_readings
+    QUALIFY rn = 1
+),
+
+qrisk2_codes AS (
+    -- Aggregate all QRISK2 codes and displays for each person
+    SELECT
+        person_id,
+        ARRAY_AGG(DISTINCT concept_code) WITHIN GROUP (ORDER BY concept_code)
+            AS all_qrisk2_codes,
+        ARRAY_AGG(DISTINCT concept_display) WITHIN GROUP (
+            ORDER BY concept_display
+        ) AS all_qrisk2_displays
+    FROM qrisk2_readings
+    GROUP BY person_id
+),
+
+statin_medications AS (
+    -- Get all CVD_63 specific statin medications (statins for monitoring)
     SELECT
         person_id,
         order_date,
         mapped_concept_code AS concept_code,
         mapped_concept_display AS concept_display
     FROM {{ ref('int_ltc_lcs_cvd_medications') }}
-    WHERE cluster_id = 'LCS_STAT_COD_CVD'
+    WHERE cluster_id = 'STATIN_CVD_63_MEDICATIONS'
         AND order_date >= dateadd(MONTH, -6, current_date())
 ),
 
@@ -89,6 +132,10 @@ non_hdl_codes AS (
 SELECT
     bp.person_id,
     bp.age,
+    qr.clinical_effective_date AS latest_qrisk2_date,
+    CAST(qr.result_value AS NUMBER) AS latest_qrisk2_value,
+    qc.all_qrisk2_codes,
+    qc.all_qrisk2_displays,
     sm.order_date AS latest_statin_date,
     nh.clinical_effective_date AS latest_non_hdl_date,
     sc.all_statin_codes,
@@ -96,23 +143,28 @@ SELECT
     nhc.all_non_hdl_codes,
     nhc.all_non_hdl_displays,
     COALESCE(
-        sm.person_id IS NOT NULL
+        CAST(qr.result_value AS NUMBER) >= 10
+        AND sm.person_id IS NOT NULL
         AND CAST(nh.result_value AS NUMBER) > 2.5,
         FALSE
     ) AS needs_statin_review,
     CAST(nh.result_value AS NUMBER) AS latest_non_hdl_value,
     COALESCE(
-        sm.person_id IS NOT NULL
+        CAST(qr.result_value AS NUMBER) >= 10
+        AND sm.person_id IS NOT NULL
         AND CAST(nh.result_value AS NUMBER) > 2.5,
         FALSE
     ) AS meets_criteria
 FROM {{ ref('int_ltc_lcs_cf_base_population') }} AS bp
 INNER JOIN {{ ref('dim_person_age') }} AS age ON bp.person_id = age.person_id
+LEFT JOIN latest_qrisk2 AS qr ON bp.person_id = qr.person_id
+LEFT JOIN qrisk2_codes AS qc ON bp.person_id = qc.person_id
 LEFT JOIN latest_statin AS sm ON bp.person_id = sm.person_id
 LEFT JOIN statin_codes AS sc ON bp.person_id = sc.person_id
 LEFT JOIN latest_non_hdl AS nh ON bp.person_id = nh.person_id
 LEFT JOIN non_hdl_codes AS nhc ON bp.person_id = nhc.person_id
 WHERE
-    age.age BETWEEN 40 AND 83  -- CVD age range
+    age.age BETWEEN 40 AND 84  -- CVD age range
+    AND CAST(qr.result_value AS NUMBER) >= 10  -- Must have QRISK2 ≥10%
     AND sm.person_id IS NOT NULL  -- Must be on statins
     AND CAST(nh.result_value AS NUMBER) > 2.5  -- Must have elevated non-HDL cholesterol

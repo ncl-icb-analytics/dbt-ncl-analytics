@@ -1,11 +1,54 @@
 {{ config(
     materialized='table') }}
 
--- CVD_64 case finding: High-dose statin case finding
--- Identifies patients from CVD base population who are NOT on statins (need to start)
+-- CVD_64 case finding: QRisk2/3 ≥10% not on statins
+-- Identifies patients aged 40-84 with QRisk ≥10% who are NOT on statins (need to start)
 -- Excludes those with recent statin medications (12 months) or statin decisions (60 months)
 
-WITH statin_medications AS (
+WITH qrisk2_readings AS (
+    -- Get all QRISK2 readings with valid values
+    SELECT
+        person_id,
+        clinical_effective_date,
+        result_value,
+        mapped_concept_code AS concept_code,
+        mapped_concept_display AS concept_display
+    FROM {{ ref('int_ltc_lcs_cvd_observations') }}
+    WHERE
+        cluster_id = 'QRISK2_10YEAR'
+        AND result_value IS NOT NULL
+        AND CAST(result_value AS NUMBER) >= 10
+),
+
+latest_qrisk2 AS (
+    -- Get the latest QRISK2 reading for each person
+    SELECT
+        person_id,
+        clinical_effective_date,
+        result_value,
+        concept_code,
+        concept_display,
+        ROW_NUMBER()
+            OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC)
+            AS rn
+    FROM qrisk2_readings
+    QUALIFY rn = 1
+),
+
+qrisk2_codes AS (
+    -- Aggregate all QRISK2 codes and displays for each person
+    SELECT
+        person_id,
+        ARRAY_AGG(DISTINCT concept_code) WITHIN GROUP (ORDER BY concept_code)
+            AS all_qrisk2_codes,
+        ARRAY_AGG(DISTINCT concept_display) WITHIN GROUP (
+            ORDER BY concept_display
+        ) AS all_qrisk2_displays
+    FROM qrisk2_readings
+    GROUP BY person_id
+),
+
+statin_medications AS (
     -- Get patients with statin medications in last 12 months
     SELECT DISTINCT
         person_id,
@@ -29,21 +72,17 @@ statin_decisions AS (
     GROUP BY person_id
 )
 
--- Final selection: CVD base population EXCLUDING those on statins or with statin decisions
+-- Final selection: QRisk ≥10 EXCLUDING those on statins or with statin decisions
 SELECT
     bp.person_id,
     bp.age,
-    TRUE AS needs_high_dose_statin,
-    sm.latest_statin_date,
-    sd.latest_decision_date,
-    CASE 
-        WHEN sm.person_id IS NOT NULL THEN 'On statins (last 12 months)'
-        WHEN sd.person_id IS NOT NULL THEN 'Statin decision (last 60 months)'
-        ELSE NULL
-    END AS exclusion_reason
+    qr.clinical_effective_date AS latest_qrisk2_date,
+    CAST(qr.result_value AS NUMBER) AS latest_qrisk2_value,
+    qc.all_qrisk2_codes,
+    qc.all_qrisk2_displays,
+    TRUE AS needs_statin_initiation,
+    COALESCE(CAST(qr.result_value AS NUMBER) >= 10, FALSE) AS meets_criteria
 FROM {{ ref('int_ltc_lcs_cf_cvd_base_population') }} AS bp
-LEFT JOIN statin_medications AS sm ON bp.person_id = sm.person_id
-LEFT JOIN statin_decisions AS sd ON bp.person_id = sd.person_id
-WHERE 
-    sm.person_id IS NULL  -- Not on statins in last 12 months
-    AND sd.person_id IS NULL  -- No statin decision in last 60 months
+INNER JOIN latest_qrisk2 AS qr ON bp.person_id = qr.person_id
+LEFT JOIN qrisk2_codes AS qc ON bp.person_id = qc.person_id
+WHERE CAST(qr.result_value AS NUMBER) >= 10

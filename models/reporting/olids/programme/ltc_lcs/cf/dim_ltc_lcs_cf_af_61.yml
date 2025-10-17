@@ -1,10 +1,10 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_af_61
-    description: 'Atrial fibrillation case finding for patients on cardiac medications who may have undiagnosed AF.
+    description: 'AF case finding for patients on cardiac medications without AF/HF diagnosis.
 
-      One row per person on anticoagulants, AF drugs, digoxin, cardiac glycosides, or protamine drugs (excludes DVT and existing AF/flutter diagnoses).'
-    
+      One row per person on digoxin, flecainide, propafenone, or anticoagulant without AF/HF diagnosis or DVT/PE in last year.'
+
     config:
       meta:
         indicator:
@@ -12,12 +12,11 @@ models:
           type: "CASE_FINDING"
           category: "AF"
           clinical_domain: "Cardiovascular Case Finding"
-          name_short: "On cardiac medication"
-          description_short: "Patients on cardiac medications without AF diagnosis"
+          name_short: "Cardiac meds no AF"
+          description_short: "Patients on cardiac medications without AF/HF diagnosis"
           description_long: >
-            On anticoagulants, AF drugs, digoxin, cardiac glycosides, or protamine drugs without AF diagnosis.
-            Uses differential time windows: 6 months for anticoagulants/protamine, 3 months for other medications.
-            Excludes DVT, atrial flutter, existing AF/flutter diagnoses.
+            Patients on digoxin, flecainide, propafenone, or anticoagulant not on AF or heart failure registers,
+            no DVT/PE in last year.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_AF_61"
