@@ -1,29 +1,29 @@
 /*
-LTC LCS Case Finding: CKD_62 - Consecutive High UACR Readings
+LTC LCS Case Finding: CKD_62 - Multiple High UACR Readings Without Subsequent Normal
 
 Purpose:
-- Identifies patients with two consecutive UACR readings above 4 (case finding for undiagnosed CKD)
+- Identifies patients with two readings of uACR>4 and no subsequent normal reading
 
 Business Logic:
 1. Base Population:
    - Patients aged 17+ from base population (excludes those on CKD and Diabetes registers)
 
 2. UACR Criteria:
-   - Must have at least 2 UACR readings with values > 0
+   - Must have at least 2 UACR readings >4
    - Takes max value per day to handle multiple readings
    - Filters out adjacent day duplicates (same result on consecutive days)
-   - Both most recent and previous reading must be > 4
-   - Uses 'UINE_ACR' cluster ID
+   - Most recent UACR must also be >4 (no subsequent normal reading)
+   - Uses 'UACR_TESTING' cluster ID
 
 3. Output:
-   - Only includes patients who meet all criteria (both readings > 4)
-   - Provides latest and previous UACR values and dates
+   - Only includes patients with 2+ high readings and no subsequent normal
+   - Provides latest UACR value and date
    - Collects all UACR concept codes and displays for traceability
 
 Implementation Notes:
-- Materialized as ephemeral to avoid cluttering the database
-- Uses LAG functions to identify consecutive readings
+- Materialized as table
 - Implements adjacent day filtering logic
+- Checks latest reading is high to ensure no subsequent normal
 
 Dependencies:
 - int_ltc_lcs_cf_base_population: For base population (age >= 17)
@@ -114,28 +114,47 @@ uacr_counts AS (
     HAVING count(*) > 1
 ),
 
-uacr_with_lags AS (
-    -- Get the two most recent readings with their lags
+uacr_high_readings AS (
+    -- Get patients with at least 2 readings >4
     SELECT
-        ur.person_id,
-        ur.clinical_effective_date AS latest_uacr_date,
-        ur.result_value AS latest_uacr_value,
-        lag(ur.clinical_effective_date)
-            OVER (
-                PARTITION BY ur.person_id
-                ORDER BY ur.clinical_effective_date DESC
-            )
-            AS previous_uacr_date,
-        lag(ur.result_value)
-            OVER (
-                PARTITION BY ur.person_id
-                ORDER BY ur.clinical_effective_date DESC
-            )
-            AS previous_uacr_value
-    FROM uacr_ranked AS ur
-    INNER JOIN uacr_counts ON ur.person_id = uacr_counts.person_id
-    WHERE ur.reading_rank <= 2
-    QUALIFY ur.reading_rank = 1
+        person_id,
+        clinical_effective_date,
+        result_value
+    FROM uacr_filtered
+    WHERE result_value > 4
+),
+
+uacr_high_counts AS (
+    -- Count high readings per person
+    SELECT
+        person_id,
+        count(*) AS high_reading_count
+    FROM uacr_high_readings
+    GROUP BY person_id
+    HAVING count(*) >= 2
+),
+
+latest_uacr_all AS (
+    -- Get the most recent UACR (any value) for each person
+    SELECT
+        person_id,
+        clinical_effective_date AS latest_uacr_date,
+        result_value AS latest_uacr_value
+    FROM uacr_filtered
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC) = 1
+),
+
+uacr_with_lags AS (
+    -- Get patients with 2+ high readings where latest reading is also >4 (no subsequent normal)
+    SELECT
+        hc.person_id,
+        latest.latest_uacr_date,
+        latest.latest_uacr_value,
+        NULL AS previous_uacr_date,
+        NULL AS previous_uacr_value
+    FROM uacr_high_counts AS hc
+    INNER JOIN latest_uacr_all AS latest ON hc.person_id = latest.person_id
+    WHERE latest.latest_uacr_value > 4  -- No subsequent normal reading
 ),
 
 uacr_codes AS (
@@ -161,18 +180,8 @@ SELECT
     ceg.previous_uacr_value,
     codes.all_uacr_codes,
     codes.all_uacr_displays,
-    coalesce(
-        ceg.latest_uacr_value > 4 AND ceg.previous_uacr_value > 4,
-        FALSE
-    ) AS has_elevated_uacr,
-    -- Meets criteria flag for mart model
-    coalesce(
-        ceg.latest_uacr_value > 4 AND ceg.previous_uacr_value > 4,
-        FALSE
-    ) AS meets_criteria
+    COALESCE(ceg.latest_uacr_value > 4, FALSE) AS has_elevated_uacr,
+    COALESCE(ceg.latest_uacr_value > 4, FALSE) AS meets_criteria
 FROM base_population AS bp
-LEFT JOIN uacr_with_lags AS ceg ON bp.person_id = ceg.person_id
+INNER JOIN uacr_with_lags AS ceg ON bp.person_id = ceg.person_id
 LEFT JOIN uacr_codes AS codes ON bp.person_id = codes.person_id
-WHERE
-    ceg.latest_uacr_value > 4
-    AND ceg.previous_uacr_value > 4

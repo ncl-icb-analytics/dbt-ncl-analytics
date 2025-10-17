@@ -2,15 +2,15 @@
     materialized='table') }}
 
 -- General CVD base population for case finding indicators
--- Includes patients aged 40-83 who are not on statins, have no statin allergies/contraindications, and no recent statin decisions
+-- Includes patients aged 40-84 who are not on statins, have no statin allergies/contraindications, and no recent statin decisions
 
 WITH base_population AS (
-    -- Get base population aged 40-83
+    -- Get base population aged 40-84
     SELECT
         bp.person_id,
         bp.age
     FROM {{ ref('int_ltc_lcs_cf_base_population') }} AS bp
-    WHERE bp.age BETWEEN 40 AND 83
+    WHERE bp.age BETWEEN 40 AND 84
 ),
 
 statin_medications AS (

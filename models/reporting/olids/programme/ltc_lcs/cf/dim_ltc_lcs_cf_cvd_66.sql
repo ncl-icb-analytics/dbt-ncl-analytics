@@ -1,16 +1,16 @@
 {{ config(
     materialized='table') }}
 
--- CVD_66 case finding: Statin review for patients aged 75-83
--- Identifies patients aged 75-83 without QRISK2 readings in last 60 months
+-- CVD_66 case finding: Statin review for patients aged 75-84
+-- Identifies patients aged 75-84 without QRISK2 readings in last 60 months
 
 WITH base_population AS (
-    -- Get base population aged 75-83
+    -- Get base population aged 75-84
     SELECT
         bp.person_id,
         bp.age
     FROM {{ ref('int_ltc_lcs_cf_base_population') }} AS bp
-    WHERE bp.age BETWEEN 75 AND 83
+    WHERE bp.age BETWEEN 75 AND 84
 ),
 
 statin_medications AS (
@@ -85,7 +85,7 @@ qrisk2_recent AS (
 ),
 
 eligible_patients AS (
-    -- Patients aged 75-83 not on statins, no allergies, no recent decisions, no health checks, no recent QRISK2
+    -- Patients aged 75-84 not on statins, no allergies, no recent decisions, no health checks, no recent QRISK2
     SELECT
         bp.person_id,
         bp.age
@@ -148,7 +148,7 @@ all_qrisk2_codes AS (
     GROUP BY person_id
 )
 
--- Final selection: patients aged 75-83 who need QRISK2 assessment (ensure one row per person)
+-- Final selection: patients aged 75-84 who need QRISK2 assessment (ensure one row per person)
 SELECT
     ep.person_id,
     ep.age,

@@ -1,18 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_66
-    description: 'Case finding for patients aged 75-83 requiring QRISK2 cardiovascular risk assessment.
+    description: 'CVD case finding priority (f): Patients aged 75-84 requiring cardiovascular risk assessment.
 
+      Age 75-84, not on statins (12 months), no QRISK2 in 60 months, no statin allergies or decisions (60 months), no health checks (24 months).
 
-      Business Logic:
-
-      • Identifies patients aged 75-83 years without QRISK2 readings in last 60 months
-
-      • Excludes patients on statins, with statin decisions, or recent health checks
-
-      • Supports age-appropriate cardiovascular risk management and statin review decisions
-
-      • One row per eligible elderly person requiring cardiovascular risk assessment'
+      One row per person requiring cardiovascular risk assessment.'
     
     config:
       meta:
@@ -22,10 +15,9 @@ models:
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
           name_short: "Elderly CVD screen"
-          description_short: "Patients aged 75-83 without recent QRISK2 (60 months)"
+          description_short: "Patients aged 75-84 without recent QRISK2"
           description_long: >
-            Age 75-83y, no QRISK2 in 60 months, not on statins, no statin decisions (60m),
-            no health checks (24m). Need cardiovascular risk assessment.
+            Age 75-84, no QRISK2 in 60 months, not on statins. Priority (f) for cardiovascular risk assessment.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_66"
@@ -45,10 +37,10 @@ models:
             - cluster_id: "CVD_REGISTER_CODES"
               category: "EXCLUSION"
           thresholds:
-            - population_group: "ELDERLY_75_83"
+            - population_group: "ELDERLY_75_84"
               threshold_type: "AGE_RANGE"
-              threshold_value: "75-83"
+              threshold_value: "75-84"
               threshold_operator: "WITHIN"
               threshold_unit: "years"
-              description: "Patients aged 75-83 years requiring assessment"
+              description: "Age 75-84 years"
               sort_order: 1

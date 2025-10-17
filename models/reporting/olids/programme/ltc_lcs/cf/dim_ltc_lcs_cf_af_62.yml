@@ -1,24 +1,12 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_af_62
-    description: 'Mart: LTC LCS Case Finding AF_62 - Identifies patients over 65 with missing pulse checks at NHS Health Check appointments.
+    description: 'AF case finding for patients 65+ without recent pulse check.
 
+      Identifies patients aged 65+ with no pulse rate/rhythm check in last year.
 
-      Population Scope:
+      One row per person aged 65+ without pulse check in last 12 months.'
 
-      • Patients aged 65+ from LTC case finding base population
-
-      • Missing pulse check within 36-month assessment window
-
-
-      Key Features:
-
-      • NHS Health Check programme data integration
-
-      • Pulse check compliance monitoring
-
-      • Clinical exclusion criteria assessment'
-    
     config:
       meta:
         indicator:
@@ -26,11 +14,10 @@ models:
           type: "CASE_FINDING"
           category: "AF"
           clinical_domain: "Cardiovascular Case Finding"
-          name_short: "Missing pulse check"
-          description_short: "Patients 65+ without pulse check in 36 months"
+          name_short: "65+ no pulse check"
+          description_short: "Patients 65+ without pulse check in last year"
           description_long: >
-            Age 65+, no pulse rate/rhythm check in 36m. Excludes existing AF,
-            atrial flutter, recent NHS health checks.
+            Age 65+, no pulse rate/rhythm check in last year.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_AF_62"
@@ -40,10 +27,10 @@ models:
           code_clusters:
             - cluster_id: "LCS_PULSE_RATE"
               category: "MONITORING"
-              time_window: "36_MONTHS"
+              time_window: "12_MONTHS"
             - cluster_id: "LCS_PULSE_RHYTHM"
               category: "MONITORING"
-              time_window: "36_MONTHS"
+              time_window: "12_MONTHS"
             - cluster_id: "ATRIAL_FIBRILLATION"
               category: "EXCLUSION"
             - cluster_id: "ATRIAL_FLUTTER"
@@ -52,14 +39,14 @@ models:
             - population_group: "OLDER_ADULTS"
               threshold_type: "AGE_ELIGIBILITY"
               threshold_value: "65"
-              threshold_operator: "AT_OR_ABOVE"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "years"
-              description: "Minimum age for pulse checking recommendation"
+              description: "Age 65+"
               sort_order: 1
             - population_group: "OLDER_ADULTS"
-              threshold_type: "TIME_SINCE_CHECK"
-              threshold_value: "36"
+              threshold_type: "MONITORING_WINDOW"
+              threshold_value: "12"
               threshold_operator: "GREATER_THAN"
               threshold_unit: "months"
-              description: "Time window for pulse check monitoring"
+              description: "No pulse check in last year"
               sort_order: 2

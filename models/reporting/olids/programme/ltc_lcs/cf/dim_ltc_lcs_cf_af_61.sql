@@ -31,8 +31,7 @@ af_exclusions AS (
         person_id,
         BOOLOR_AGG(
             cluster_id IN (
-                'DEEP_VEIN_THROMBOSIS',  -- Updated cluster ID
-                'ATRIAL_FLUTTER',  -- Updated cluster ID
+                'ATRIAL_FLUTTER',
                 'ATRIAL_FIBRILLATION_61_EXCLUSIONS'
             )
         ) AS has_exclusion_condition,
@@ -40,10 +39,20 @@ af_exclusions AS (
     FROM {{ ref('int_ltc_lcs_af_observations') }}
     WHERE
         cluster_id IN (
-            'DEEP_VEIN_THROMBOSIS',  -- Updated cluster ID
-            'ATRIAL_FLUTTER',  -- Updated cluster ID
+            'ATRIAL_FLUTTER',
             'ATRIAL_FIBRILLATION_61_EXCLUSIONS'
         )
+    GROUP BY person_id
+),
+
+recent_dvt_pe AS (
+    SELECT
+        person_id,
+        TRUE AS has_recent_dvt_pe
+    FROM {{ ref('int_ltc_lcs_af_observations') }}
+    WHERE
+        cluster_id = 'DEEP_VEIN_THROMBOSIS'
+        AND clinical_effective_date >= DATEADD(YEAR, -1, CURRENT_DATE())
     GROUP BY person_id
 )
 
@@ -53,15 +62,22 @@ SELECT DISTINCT
     NULL AS latest_health_check_date,
     e.exclusion_reason,
     m.all_af_medication_codes,
-    m.all_af_medication_displays, -- To be replaced if health check int is created
+    m.all_af_medication_displays,
     COALESCE(m.has_active_anticoagulant, 0) AS has_active_anticoagulant,
     COALESCE(m.has_active_digoxin, 0) AS has_active_digoxin,
     COALESCE(m.has_active_cardiac_glycoside, 0) AS has_active_cardiac_glycoside,
     COALESCE(m.has_active_af_drugs, 0) AS has_active_af_drugs,
     COALESCE(m.has_active_protamine, 0) AS has_active_protamine,
-    COALESCE(e.has_exclusion_condition, FALSE) AS has_exclusion_condition
+    COALESCE(e.has_exclusion_condition, FALSE) AS has_exclusion_condition,
+    COALESCE(dvt.has_recent_dvt_pe, FALSE) AS has_recent_dvt_pe
 FROM {{ ref('int_ltc_lcs_cf_base_population') }} AS bp
-LEFT JOIN af_meds AS m
+INNER JOIN af_meds AS m
     ON bp.person_id = m.person_id
 LEFT JOIN af_exclusions AS e
     ON bp.person_id = e.person_id
+LEFT JOIN recent_dvt_pe AS dvt
+    ON bp.person_id = dvt.person_id
+WHERE
+    m.person_id IS NOT NULL
+    AND COALESCE(e.has_exclusion_condition, FALSE) = FALSE
+    AND COALESCE(dvt.has_recent_dvt_pe, FALSE) = FALSE
