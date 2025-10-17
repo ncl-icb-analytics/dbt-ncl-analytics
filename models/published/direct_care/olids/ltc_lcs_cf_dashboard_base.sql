@@ -89,9 +89,15 @@ base_data AS (
         d.pcn_code,
         d.pcn_name,
         d.borough_registered,
-        d.neighbourhood_registered
+        d.neighbourhood_registered,
+        -- Population health inclusion group filters
+        cond.has_learning_disability,
+        cond.has_severe_mental_illness,
+        COALESCE(preg.is_currently_pregnant, FALSE) AS is_currently_pregnant
     FROM {{ ref('dim_ltc_lcs_cf_summary') }} cf
     LEFT JOIN {{ ref('dim_person_demographics') }} d ON cf.person_id = d.person_id
+    LEFT JOIN {{ ref('dim_person_conditions') }} cond ON cf.person_id = cond.person_id
+    LEFT JOIN {{ ref('fct_person_pregnancy_status') }} preg ON cf.person_id = preg.person_id
 ),
 
 final_dashboard AS (
@@ -135,13 +141,18 @@ final_dashboard AS (
         lsoa_code_21 as lsoa_code,
         
         -- Practice information
-        practice_code, 
-        practice_name, 
-        pcn_code, 
-        pcn_name, 
-        borough_registered, 
+        practice_code,
+        practice_name,
+        pcn_code,
+        pcn_name,
+        borough_registered,
         neighbourhood_registered,
-        
+
+        -- Population health inclusion group filters
+        has_learning_disability,
+        has_severe_mental_illness,
+        is_currently_pregnant,
+
         CURRENT_TIMESTAMP() AS created_at
     FROM (
         SELECT *, 'AF_61' as indicator_id FROM base_data WHERE in_af_61
