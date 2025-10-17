@@ -9,6 +9,8 @@ with VACC2YRBASE as (
 SELECT DISTINCT
 PERSON_ID
 ,BIRTH_DATE_APPROX
+,BORN_JUL_2024_FLAG
+,BORN_JAN_2025_FLAG
 ,FIRST_BDAY
 ,SECOND_BDAY
 ,VACCINE_ORDER
@@ -39,9 +41,9 @@ WHERE AGE = 2
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC2YRBASE v1
-    LEFT JOIN VACC2YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 4 AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
-    LEFT JOIN VACC2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 7 AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
-    WHERE v1.VACCINE_ORDER = 1 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )  
+    LEFT JOIN VACC2YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
+    LEFT JOIN VACC2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
+    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )  
 )
  -- Creating CTE for HibMenC (dose 1) where 1 row is per patient AS NUMERATOR
 ,HIBMENC AS (
@@ -53,7 +55,7 @@ WHERE AGE = 2
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
     ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths,
          FROM VACC2YRBASE v1
-        WHERE v1.VACCINE_ORDER = 9 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 )  
 -- Creating CTE for MMR (dose 1) where 1 row is per patient AS NUMERATOR
 ,MMR AS (
@@ -67,7 +69,7 @@ WHERE AGE = 2
  --HELPER COLUMN to check number of months between DOB and vaccination date to check not > 24 months
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS mmr_first_event_age_mths
         FROM VACC2YRBASE v1
-        WHERE v1.VACCINE_ORDER = 11 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 ) 
 -- Creating CTE for MenB (dose 1 and 2 and booster) where 1 row is per patient AS NUMERATOR
 ,MENB AS (
@@ -86,9 +88,9 @@ v3.AGE_AT_EVENT_OBS as menb_third_event_age,
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS menb_third_event_age_mths
     FROM VACC2YRBASE v1
     LEFT JOIN VACC2YRBASE v2 
-    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 8 AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-    LEFT JOIN VACC2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 12 AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue') 
-    WHERE v1.VACCINE_ORDER = 2 AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+    LEFT JOIN VACC2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = 'MENB_3' AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue') 
+    WHERE v1.VACCINE_ID = 'MENB_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
 )
 -- Creating CTE for PCV (dose 1 and 2) where 1 row is per patient AS NUMERATOR
 ,PCV AS (
@@ -96,16 +98,16 @@ v3.AGE_AT_EVENT_OBS as menb_third_event_age,
         v1.PERSON_ID,  
         v1.VACCINATION_DATE AS pcv_first_date,
         v1.VACCINATION_STATUS AS pcv_first_status,
-v1.AGE_AT_EVENT_OBS as pcv_first_event_age,
+        v1.AGE_AT_EVENT_OBS as pcv_first_event_age,
         v2.VACCINATION_DATE AS pcv_second_date,
         v2.VACCINATION_STATUS AS pcv_second_status,
-v2.AGE_AT_EVENT_OBS as pcv_second_event_age,
+        v2.AGE_AT_EVENT_OBS as pcv_second_event_age,
 --calculate HELPER column number of months between second vaccination date and approx first bday. If it's a negative number than the vaccination is early and not valid
-ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.FIRST_BDAY)) AS pcv_second_first_bday_mths,
+        ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.FIRST_BDAY)) AS pcv_second_first_bday_mths,
          FROM VACC2YRBASE v1
          LEFT JOIN VACC2YRBASE v2 
-         ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 10 AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-         WHERE v1.VACCINE_ORDER = 5 
+         ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'PCV_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+         WHERE v1.VACCINE_ID = 'PCV_1'  
          --AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' ) allow for missing first dose
 ) 
 ,COMBINED AS (
