@@ -5,6 +5,17 @@ sources:
   schema: '"FINGERTIPS"'
   description: Fingertips indicator data
   tables:
+  - name: INDICATOR_AREA_MISMATCH_LOG
+    identifier: '"INDICATOR_AREA_MISMATCH_LOG"'
+    columns:
+    - name: INDICATOR_ID
+      data_type: NUMBER
+    - name: AREA_ID
+      data_type: NUMBER
+    - name: AREA_TYPE_DATA
+      data_type: TEXT
+    - name: AREA_TYPE_META
+      data_type: TEXT
   - name: INDICATOR_DATA
     identifier: '"INDICATOR_DATA"'
     columns:
@@ -22,6 +33,8 @@ sources:
       data_type: TEXT
     - name: Area Type
       data_type: TEXT
+    - name: AREA_ID
+      data_type: NUMBER
     - name: Sex
       data_type: TEXT
     - name: Age
@@ -71,10 +84,21 @@ sources:
     columns:
     - name: INDICATOR_ID
       data_type: NUMBER
+    - name: AREA_ID
+      data_type: NUMBER
     - name: DATE_UPDATED_LOCAL
       data_type: DATE
     - name: IS_LATEST
       data_type: BOOLEAN
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: INGESTION_ERROR_LOG
+    identifier: '"INGESTION_ERROR_LOG"'
+    columns:
+    - name: INDICATOR_ID
+      data_type: NUMBER
+    - name: AREA_ID
+      data_type: NUMBER
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: METADATA_AREA

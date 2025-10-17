@@ -52,7 +52,7 @@ left join {{ref('stg_sus_ae_emergency_care')}} as sa on sa.primarykey_id = f.pri
 left join final_icd_codes as d on d.code = f.code
 
 left join
-    {{ source('phenolab', 'BASE_ATHENA__CONCEPT') }} c
+    {{ ref('raw_phenolab_base_athena_concept') }} c
     on c.concept_code = d.concept_code
     and c.vocabulary_id = 'ICD10'
 
