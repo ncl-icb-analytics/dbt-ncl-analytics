@@ -55,6 +55,6 @@ SELECT DISTINCT
     WHERE dph.analysis_month >= DATEADD('month', -48, CURRENT_DATE)
         AND dph.analysis_month <= LAST_DAY(CURRENT_DATE)
         AND dph.age in (1,2,5,11,16)
-        AND ICB_CODE = 'QMJ'
+        -- AND ICB_CODE = 'QMJ'
         --temporarily exclude deceased patients because their age is frozen at death and appearing incorrectly in the denominator in more recent months
         AND dph.is_deceased = FALSE
