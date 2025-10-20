@@ -18,7 +18,7 @@ WITH demographic_population AS (
         -- Population counts
         COUNT(*) AS total_population,
         
-        -- Sex breakdown
+        -- Gender breakdown
         COUNT(CASE WHEN demo.gender = 'Male' THEN 1 END) AS population_male,
         COUNT(CASE WHEN demo.gender = 'Female' THEN 1 END) AS population_female,
         COUNT(CASE WHEN demo.gender NOT IN ('Male', 'Female') OR demo.gender IS NULL THEN 1 END) AS population_other_gender

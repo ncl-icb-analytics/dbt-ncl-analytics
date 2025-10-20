@@ -5,7 +5,7 @@ models:
 
       Key Features:
 
-      • Includes persons who are not male (Female or Unknown sex) aged 55 or younger
+      • Includes persons who are not male (Female or Unknown gender) aged 55 or younger
 
       • Two age range definitions: 12-55 (standard demographic) and 0-55 (clinical safety programmes)
 
@@ -35,7 +35,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']
+              values: ['Female', 'Unknown', 'Indeterminate gender', 'Finding related to biological gender']
 
       - name: is_child_bearing_age_12_55
         description: 'Flag for standard demographic child-bearing age (12-55 years inclusive)'

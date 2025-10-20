@@ -111,7 +111,7 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Male', 'Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']
+              values: ['Male', 'Female', 'Unknown', 'Indeterminate gender', 'Finding related to biological gender']
 
       - name: ethnicity_category
         description: 'Ethnicity category from latest recording'

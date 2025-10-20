@@ -6,7 +6,7 @@
 }}
 
 -- Person Women Child Bearing Age Dimension Table
--- Identifies non-male individuals (Female or Unknown sex) aged 55 or younger
+-- Identifies non-male individuals (Female or Unknown gender) aged 55 or younger
 -- Calculates boolean flags for different child-bearing age ranges
 
 SELECT

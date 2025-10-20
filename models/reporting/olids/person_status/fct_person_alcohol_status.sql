@@ -64,7 +64,7 @@ combined_data AS (
     -- Combine AUDIT scores and disorder diagnoses
     SELECT 
         COALESCE(a.person_id, d.person_id) AS person_id,
-        a.sex,
+        a.gender,
         
         -- AUDIT information
         a.latest_audit_date,
