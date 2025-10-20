@@ -29,5 +29,5 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Male', 'Female', 'Unknown', 'Indeterminate gender', 'Finding related to biological gender']
+              values: ['Male', 'Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']
 
