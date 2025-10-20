@@ -1,18 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_65
-    description: 'Case finding for patients with moderate cardiovascular risk requiring moderate-dose statin therapy.
+    description: 'CVD case finding priority (e): Patients with QRisk ≥10% not on high-intensity statins.
 
+      Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12 months), no statin allergies or decisions (60 months).
 
-      Business Logic:
-
-      • Identifies patients with latest QRISK2 score ≥10% requiring moderate-dose statin therapy
-
-      • Targets primary prevention patients needing evidence-based lipid management
-
-      • Uses QRISK2-based cardiovascular risk stratification for statin eligibility decisions
-
-      • One row per person meeting moderate cardiovascular risk intervention thresholds'
+      One row per person requiring high-intensity statin initiation or escalation.'
     
     config:
       meta:
@@ -21,11 +14,10 @@ models:
           type: "CASE_FINDING"
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
-          name_short: "Statin indicated"
-          description_short: "Patients with QRISK2 ≥10% requiring moderate-dose statins"
+          name_short: "QRisk ≥10% no high-intensity statin"
+          description_short: "Patients with QRisk ≥10% not on high-intensity statins"
           description_long: >
-            QRISK2 ≥10%, moderate-dose statin for primary prevention
-            per NICE guidance.
+            Age 40-84, QRISK2 ≥10%, not on high-intensity statins. Priority (e) for high-intensity statin therapy.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_65"
@@ -33,17 +25,30 @@ models:
             - "LTC_LCS_DASHBOARD"
             - "CASE_FINDING_PROGRAMME"
           code_clusters:
-            - cluster_id: "QRISK2_RESULTS"
+            - cluster_id: "QRISK2_10YEAR"
               category: "INCLUSION"
-            - cluster_id: "STAT_COD"
-              category: "MONITORING"
-            - cluster_id: "CVD_REGISTER_CODES"
+            - cluster_id: "STATIN_CVD_65_MEDICATIONS"
               category: "EXCLUSION"
+              time_window: "12_MONTHS"
+            - cluster_id: "STATIN_ALLERGY_ADVERSE_REACTION"
+              category: "EXCLUSION"
+            - cluster_id: "STATIN_NOT_INDICATED"
+              category: "EXCLUSION"
+            - cluster_id: "STATINDEC_COD"
+              category: "EXCLUSION"
+              time_window: "60_MONTHS"
           thresholds:
-            - population_group: "PRIMARY_PREVENTION"
+            - population_group: "ADULTS_40_84"
+              threshold_type: "AGE_RANGE"
+              threshold_value: "40-84"
+              threshold_operator: "WITHIN"
+              threshold_unit: "years"
+              description: "Age 40-84 years"
+              sort_order: 1
+            - population_group: "ADULTS_40_84"
               threshold_type: "QRISK2_SCORE"
               threshold_value: "10"
               threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "percentage"
-              description: "QRISK2 score ≥10% qualifying for statin therapy"
-              sort_order: 1
+              description: "QRISK2 ≥10%"
+              sort_order: 2

@@ -1,8 +1,8 @@
 {{ config(
     materialized='table') }}
 
--- CVD_65 case finding: Moderate-dose statin case finding
--- Identifies patients with QRISK2 ≥ 10 who need moderate-dose statins
+-- CVD_65 case finding: Patients with QRisk ≥10% not on high-intensity statins
+-- Identifies patients aged 40-84 with QRISK2 ≥10 who are not on high-intensity statins
 
 WITH qrisk2_patients AS (
     -- Get patients with latest QRISK2 ≥ 10
@@ -28,14 +28,14 @@ WITH qrisk2_patients AS (
         )
 ),
 
-moderate_dose_statins AS (
--- Get patients on moderate-dose statins in last 12 months
+high_intensity_statins AS (
+-- Get patients on high-intensity statins in last 12 months (using CVD_65 specific cluster)
     SELECT DISTINCT
         person_id,
-        MAX(order_date) AS latest_moderate_dose_statin_date
+        MAX(order_date) AS latest_high_intensity_statin_date
     FROM {{ ref('int_ltc_lcs_cvd_medications') }}
     WHERE
-        cluster_id = 'LCS_STAT_COD_CVD'
+        cluster_id = 'STATIN_CVD_65_MEDICATIONS'
         AND order_date >= DATEADD('month', -12, CURRENT_DATE())
     GROUP BY person_id
 ),
@@ -78,17 +78,17 @@ statin_exclusions AS (
 ),
 
 eligible_patients AS (
--- QRISK2 ≥ 10 patients not on moderate-dose statins, no allergies, no recent decisions
+-- QRISK2 ≥ 10 patients not on high-intensity statins, no allergies, no recent decisions
     SELECT
         qp.person_id,
         qp.age,
         qp.latest_qrisk2_date,
         qp.latest_qrisk2_value
     FROM qrisk2_patients AS qp
-    LEFT JOIN moderate_dose_statins AS mds ON qp.person_id = mds.person_id
+    LEFT JOIN high_intensity_statins AS his ON qp.person_id = his.person_id
     LEFT JOIN statin_exclusions AS se ON qp.person_id = se.person_id
     WHERE
-        NOT COALESCE(mds.person_id IS NOT NULL, FALSE)  -- Not on moderate-dose statins
+        NOT COALESCE(his.person_id IS NOT NULL, FALSE)  -- Not on high-intensity statins
         AND NOT COALESCE(se.latest_statin_allergy_date IS NOT NULL, FALSE)  -- No statin allergies
         AND NOT COALESCE(se.latest_statin_decision_date IS NOT NULL, FALSE)  -- No statin decisions
 ),
@@ -122,11 +122,11 @@ all_qrisk2_codes AS (
     GROUP BY person_id
 )
 
--- Final selection: patients who need moderate-dose statins (ensure one row per person)
+-- Final selection: patients who need high-intensity statins (ensure one row per person)
 SELECT
     ep.person_id,
     ep.age,
-    TRUE AS needs_moderate_dose_statin,  -- All patients in this cohort need moderate-dose statins
+    TRUE AS needs_high_intensity_statin,  -- All patients in this cohort need high-intensity statins
     ep.latest_qrisk2_date,
     ep.latest_qrisk2_value,
     aqc.all_qrisk2_codes,

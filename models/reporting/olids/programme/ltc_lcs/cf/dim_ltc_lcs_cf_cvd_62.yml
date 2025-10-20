@@ -1,23 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_62
-    description: 'Mart: LTC LCS Case Finding CVD_62 - Identifies patients with moderate cardiovascular risk (QRISK2 15-19.99%) requiring enhanced monitoring.
+    description: 'CVD case finding priority (b): Patients with moderate cardiovascular risk not on statins.
 
+      Age 40-84 with QRISK2 15-19.99%, not on statins (12 months), no statin allergies or decisions (60 months).
 
-      Population Scope:
-
-      • Patients aged 40-83 from LTC case finding base population
-
-      • Latest QRISK2 score between 15-19.99%
-
-
-      Key Features:
-
-      • QRISK2-based moderate cardiovascular risk stratification
-
-      • Complete cardiovascular risk assessment history
-
-      • Evidence-based case finding for CVD prevention pathways'
+      One row per person meeting criteria for statin initiation.'
     
     config:
       meta:
@@ -27,10 +15,9 @@ models:
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
           name_short: "Moderate CVD risk"
-          description_short: "Patients with QRISK2 score 15-19.99% requiring enhanced monitoring"
+          description_short: "Patients with QRISK2 15-19.99% not on statins"
           description_long: >
-            Age 40-83, QRISK2 15-19.99%. Enhanced monitoring, lifestyle
-            intervention, statin consideration.
+            Age 40-84, QRISK2 15-19.99%, not on statins. Priority (b) for statin initiation.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_62"
@@ -38,22 +25,37 @@ models:
             - "LTC_LCS_DASHBOARD"
             - "CASE_FINDING_PROGRAMME"
           code_clusters:
-            - cluster_id: "QRISK2_RESULTS"
+            - cluster_id: "QRISK2_10YEAR"
               category: "INCLUSION"
-            - cluster_id: "CVD_REGISTER_CODES"
+            - cluster_id: "LCS_STAT_COD_CVD"
               category: "EXCLUSION"
+              time_window: "12_MONTHS"
+            - cluster_id: "STATIN_ALLERGY_ADVERSE_REACTION"
+              category: "EXCLUSION"
+            - cluster_id: "STATIN_NOT_INDICATED"
+              category: "EXCLUSION"
+            - cluster_id: "STATINDEC_COD"
+              category: "EXCLUSION"
+              time_window: "60_MONTHS"
           thresholds:
-            - population_group: "ADULTS_40_83"
+            - population_group: "ADULTS_40_84"
+              threshold_type: "AGE_RANGE"
+              threshold_value: "40-84"
+              threshold_operator: "WITHIN"
+              threshold_unit: "years"
+              description: "Age 40-84 years"
+              sort_order: 1
+            - population_group: "ADULTS_40_84"
               threshold_type: "QRISK2_SCORE"
               threshold_value: "15"
               threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "percentage"
-              description: "QRISK2 score 15-19.99% (moderate risk)"
-              sort_order: 1
-            - population_group: "ADULTS_40_83"
+              description: "QRISK2 15-19.99%"
+              sort_order: 2
+            - population_group: "ADULTS_40_84"
               threshold_type: "QRISK2_SCORE"
               threshold_value: "20"
               threshold_operator: "LESS_THAN"
               threshold_unit: "percentage"
-              description: "QRISK2 score below 20% (upper limit)"
-              sort_order: 2
+              description: "QRISK2 <20%"
+              sort_order: 3
