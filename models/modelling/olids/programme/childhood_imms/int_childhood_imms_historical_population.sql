@@ -2,59 +2,89 @@
     config(
         materialized='table',
         tags=['childhood_imms'])
-        
+
 }}
 
+WITH demographics_with_age AS (
+    SELECT
+        dph.person_id,
+        dph.effective_start_date,
+        dph.effective_end_date,
+        dph.birth_date_approx,
+        dph.is_deceased,
+        dph.ethnicity_category,
+        dph.imd_quintile_19,
+        dph.borough_registered as practice_borough,
+        dph.practice_name,
+        dph.practice_code,
+        -- Generate months for each SCD-2 period
+        ds.month_end_date as analysis_month,
+        -- Calculate age for each month
+        FLOOR(DATEDIFF(month, dph.birth_date_approx, ds.month_end_date) / 12) as age
+    FROM {{ ref('dim_person_demographics_historical') }} dph
+    CROSS JOIN {{ ref('int_date_spine') }} ds
+    WHERE ds.month_end_date >= DATEADD('month', -48, CURRENT_DATE)
+        AND ds.month_end_date <= LAST_DAY(CURRENT_DATE)
+        -- Temporal join: month must fall within the SCD-2 period
+        AND ds.month_end_date >= dph.effective_start_date
+        AND (dph.effective_end_date IS NULL OR ds.month_end_date < dph.effective_end_date)
+        -- Pre-filter to relevant ages to reduce processing
+        AND dph.birth_date_approx IS NOT NULL
+)
+
 SELECT DISTINCT
-        dph.analysis_month,
-        --flag to determine which analysis month is fiscal year end
-        CASE 
-        WHEN EXTRACT(MONTH FROM dph.analysis_month) = 3 
-             AND EXTRACT(DAY FROM dph.analysis_month) = 31
+        dwa.analysis_month,
+        -- Fiscal year end flag
+        CASE
+        WHEN EXTRACT(MONTH FROM dwa.analysis_month) = 3
+             AND EXTRACT(DAY FROM dwa.analysis_month) = 31
         THEN 1
         ELSE 0
         END AS is_fiscal_year_end,
-        CASE 
-        WHEN EXTRACT(MONTH FROM dph.analysis_month) >= 4 
-        THEN TO_CHAR(dph.analysis_month, 'YYYY') || '-' || RIGHT(TO_CHAR(EXTRACT(YEAR FROM dph.analysis_month) + 1), 2)
-        ELSE TO_CHAR(EXTRACT(YEAR FROM dph.analysis_month) - 1) || '-' || RIGHT(TO_CHAR(EXTRACT(YEAR FROM dph.analysis_month)), 2)
+        -- Fiscal year label
+        CASE
+        WHEN EXTRACT(MONTH FROM dwa.analysis_month) >= 4
+        THEN TO_CHAR(dwa.analysis_month, 'YYYY') || '-' || RIGHT(TO_CHAR(EXTRACT(YEAR FROM dwa.analysis_month) + 1), 2)
+        ELSE TO_CHAR(EXTRACT(YEAR FROM dwa.analysis_month) - 1) || '-' || RIGHT(TO_CHAR(EXTRACT(YEAR FROM dwa.analysis_month)), 2)
         END AS fiscal_year_label,
-        dph.person_id,
-        dph.age,
-        dph.is_deceased,
-        dph.birth_date_approx,
-        CASE WHEN dph.BIRTH_DATE_APPROX >= '2024-07-01' THEN 'Yes'
-        ELSE 'No' END AS BORN_JUL_2024_FLAG,
-        CASE WHEN dph.BIRTH_DATE_APPROX >= '2025-01-01' THEN 'Yes'
-        ELSE 'No' END AS BORN_JAN_2025_FLAG,
-        DATEADD(YEAR,1,dph.BIRTH_DATE_APPROX) as FIRST_BDAY,
-        DATEADD(YEAR,12,dph.BIRTH_DATE_APPROX) as TWELFTH_BDAY,
-        DATEADD(YEAR,13,dph.BIRTH_DATE_APPROX) as THIRTEENTH_BDAY,
-        dph.ethnicity_category,
-        CASE 
-        WHEN dph.ETHNICITY_CATEGORY = 'Asian' THEN 1
-        WHEN dph.ETHNICITY_CATEGORY = 'Black' THEN 2
-        WHEN dph.ETHNICITY_CATEGORY = 'Mixed' THEN 3
-        WHEN dph.ETHNICITY_CATEGORY = 'Other' THEN 4
-        WHEN dph.ETHNICITY_CATEGORY = 'White' THEN 5
-        WHEN dph.ETHNICITY_CATEGORY = 'Unknown' THEN 6
-        END AS ETHCAT_ORDER,
-        CASE WHEN dph.IMD_QUINTILE_19 IS NULL THEN 'Unknown' 
-        ELSE dph.IMD_QUINTILE_19 END AS IMD_QUINTILE,
-        CASE 
-        WHEN dph.IMD_QUINTILE_19 = 'Most Deprived' THEN 1
-        WHEN dph.IMD_QUINTILE_19 = 'Second Most Deprived' THEN 2
-        WHEN dph.IMD_QUINTILE_19 = 'Third Most Deprived' THEN 3
-        WHEN dph.IMD_QUINTILE_19 = 'Second Least Deprived' THEN 4
-        WHEN dph.IMD_QUINTILE_19 = 'Least Deprived' THEN 5
-        ELSE 6 END AS IMDQUINTILE_ORDER,
-        dph.BOROUGH_REGISTERED AS PRACTICE_BOROUGH,
-         dph.practice_name,
-        dph.practice_code
-    FROM {{ ref('dim_person_demographics_historical') }} dph
-    WHERE dph.analysis_month >= DATEADD('month', -48, CURRENT_DATE)
-        AND dph.analysis_month <= LAST_DAY(CURRENT_DATE)
-        AND dph.age in (1,2,5,11,16)
-        -- AND ICB_CODE = 'QMJ'
-        --temporarily exclude deceased patients because their age is frozen at death and appearing incorrectly in the denominator in more recent months
-        AND dph.is_deceased = FALSE
+        dwa.person_id,
+        dwa.age,
+        dwa.is_deceased,
+        dwa.birth_date_approx,
+        -- Born after specific dates flags
+        CASE WHEN dwa.birth_date_approx >= '2024-07-01' THEN 'Yes'
+        ELSE 'No' END AS born_jul_2024_flag,
+        CASE WHEN dwa.birth_date_approx >= '2025-01-01' THEN 'Yes'
+        ELSE 'No' END AS born_jan_2025_flag,
+        -- Birthday milestones
+        DATEADD(YEAR, 1, dwa.birth_date_approx) as first_bday,
+        DATEADD(YEAR, 12, dwa.birth_date_approx) as twelfth_bday,
+        DATEADD(YEAR, 13, dwa.birth_date_approx) as thirteenth_bday,
+        -- Ethnicity
+        dwa.ethnicity_category,
+        CASE
+        WHEN dwa.ethnicity_category = 'Asian' THEN 1
+        WHEN dwa.ethnicity_category = 'Black' THEN 2
+        WHEN dwa.ethnicity_category = 'Mixed' THEN 3
+        WHEN dwa.ethnicity_category = 'Other' THEN 4
+        WHEN dwa.ethnicity_category = 'White' THEN 5
+        WHEN dwa.ethnicity_category = 'Unknown' THEN 6
+        END AS ethcat_order,
+        -- IMD
+        CASE WHEN dwa.imd_quintile_19 IS NULL THEN 'Unknown'
+        ELSE dwa.imd_quintile_19 END AS imd_quintile,
+        CASE
+        WHEN dwa.imd_quintile_19 = 'Most Deprived' THEN 1
+        WHEN dwa.imd_quintile_19 = 'Second Most Deprived' THEN 2
+        WHEN dwa.imd_quintile_19 = 'Third Most Deprived' THEN 3
+        WHEN dwa.imd_quintile_19 = 'Second Least Deprived' THEN 4
+        WHEN dwa.imd_quintile_19 = 'Least Deprived' THEN 5
+        ELSE 6 END AS imdquintile_order,
+        -- Practice
+        dwa.practice_borough,
+        dwa.practice_name,
+        dwa.practice_code
+    FROM demographics_with_age dwa
+    WHERE dwa.age IN (1, 2, 5, 11, 16)
+        -- Temporarily exclude deceased patients (age frozen at death)
+        AND dwa.is_deceased = FALSE

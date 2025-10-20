@@ -2,43 +2,37 @@ version: 2
 
 models:
   - name: dim_person_demographics_historical
-    description: 'Historical Person Demographics - Person-Month Grain
+    description: 'Historical Person Demographics - SCD Type 2
 
-      Provides person demographics at monthly granularity for complete temporal analysis.
-      One row per person per month with demographics valid for that specific month.
+      Tracks changes to demographic attributes over time using SCD-2 pattern.
+      One row per person per change period (not per month).
 
       Key Features:
 
-      • Person-month grain for temporal demographic analysis
+      • SCD-2 structure with effective_start_date, effective_end_date, is_current
 
-      • Age calculated accurately for each analysis month
+      • Tracks changes in: practice registration, ethnicity, address/geography
 
-      • Practice registration status as of each month
+      • No age fields (age is derived, not an attribute - calculate in consuming models)
 
-      • Ethnicity as recorded by each month
+      • Change detection: new period created when practice OR ethnicity OR address changes
 
-      • 5-year rolling history window for performance
+      Storage Efficiency:
 
-      Data Quality Filtering:
+      • ~85-90% more efficient than person-month grain
 
-      • Excludes persons without birth dates (required for age)
+      • 4.6M patients with ~5-10 periods each = 23-46M rows vs 276M for person-month
 
-      • Excludes persons without any registration history
+      Data Quality:
 
-      • Maintains temporal accuracy for all demographic attributes
+      • Only includes persons with valid birth dates
 
-      Known Limitations:
+      • Only includes persons with registration history
 
-      • Address/geographic fields use current address for all historical months (address history dates not available)
-
-      For analysis queries using specific months.'
+      For monthly snapshots, use person_month_analysis_base.
+      For current state only, use dim_person_demographics.'
 
     columns:
-      - name: analysis_month
-        description: 'Month end date for this record'
-        tests:
-          - not_null
-
       - name: person_id
         description: 'Unique person identifier'
         tests:
@@ -47,8 +41,26 @@ models:
       - name: sk_patient_id
         description: 'Surrogate key for patient record'
 
+      - name: effective_start_date
+        description: 'Start date of this demographic period (SCD-2)'
+        tests:
+          - not_null
+
+      - name: effective_end_date
+        description: 'End date of this demographic period (NULL if current, SCD-2)'
+
+      - name: is_current
+        description: 'Flag indicating if this is the current period for the person (SCD-2)'
+        tests:
+          - not_null
+
+      - name: period_sequence
+        description: 'Sequential number of periods for each person (1, 2, 3, ...)'
+        tests:
+          - not_null
+
       - name: is_active
-        description: 'Active registration status for this month'
+        description: 'Active registration status during this period'
         tests:
           - not_null
 
@@ -72,7 +84,7 @@ models:
         description: 'Birth month'
 
       - name: birth_date_approx
-        description: 'Approximate birth date'
+        description: 'Approximate birth date (use this with effective_start_date to calculate age)'
 
       - name: birth_date_approx_end_of_month
         description: 'Birth date approximated to end of birth month'
@@ -86,48 +98,17 @@ models:
       - name: death_date_approx
         description: 'Approximate death date if deceased'
 
-      - name: age
-        description: 'Age calculated as of analysis_month'
-
-      - name: age_at_least
-        description: 'Conservative age calculation as of analysis_month'
-
-      - name: age_band_5y
-        description: '5-year age bands as of analysis_month (0-4, 5-9, 10-14, ..., 80-84, 85+)'
-
-      - name: age_band_10y
-        description: '10-year age bands as of analysis_month (0-9, 10-19, 20-29, ..., 70-79, 80+)'
-
-      - name: age_band_nhs
-        description: 'NHS Digital age bands as of analysis_month (0-4, 5-14, 15-24, 25-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+)'
-
-      - name: age_band_ons
-        description: 'ONS age bands as of analysis_month (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, ..., 80-84, 85+)'
-
-      - name: age_life_stage
-        description: 'Life stage categories as of analysis_month (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Senior, Elderly, Very Elderly)'
-
-      - name: is_primary_school_age
-        description: 'Flag indicating primary school age as of analysis_month (ages 4-10)'
-        tests:
-          - not_null
-
-      - name: is_secondary_school_age
-        description: 'Flag indicating secondary school age as of analysis_month (ages 11-17)'
-        tests:
-          - not_null
-
       - name: sex
         description: 'Sex'
 
       - name: ethnicity_category
-        description: 'Ethnicity category as recorded by this month'
+        description: 'Ethnicity category during this period'
 
       - name: ethnicity_subcategory
-        description: 'Ethnicity subcategory as recorded by this month'
+        description: 'Ethnicity subcategory during this period'
 
       - name: ethnicity_granular
-        description: 'Detailed ethnicity as recorded by this month'
+        description: 'Detailed ethnicity during this period'
 
       - name: ethnicity_category_sort
         description: 'Sort order for ethnicity category'
@@ -148,16 +129,16 @@ models:
         description: 'Interpreter needed flag'
 
       - name: practice_code
-        description: 'Practice code active during this month'
+        description: 'Practice code during this period'
 
       - name: practice_name
-        description: 'Practice name active during this month'
+        description: 'Practice name during this period'
 
       - name: registration_start_date
-        description: 'Start date of practice registration for this month'
+        description: 'Start date of practice registration'
 
       - name: registration_end_date
-        description: 'End date of practice registration (NULL if active during this month)'
+        description: 'End date of practice registration (NULL if active)'
 
       - name: pcn_code
         description: 'Primary Care Network code'
@@ -169,13 +150,13 @@ models:
         description: 'PCN name with borough prefix'
 
       - name: icb_code
-        description: 'Integrated Care Board (ICB) code where patient was registered during this month (practice-based)'
+        description: 'Integrated Care Board (ICB) code where patient was registered (practice-based)'
 
       - name: icb_name
-        description: 'Integrated Care Board (ICB) name where patient was registered during this month (practice-based)'
+        description: 'Integrated Care Board (ICB) name where patient was registered (practice-based)'
 
       - name: borough_registered
-        description: 'Practice borough where patient was registered during this month'
+        description: 'Practice borough where patient was registered'
 
       - name: practice_postcode
         description: 'Practice postcode'
@@ -196,77 +177,62 @@ models:
         description: 'Practice neighbourhood classification'
 
       - name: postcode_hash
-        description: 'Patient residential address postcode hash for privacy protection (current address used for all months)'
+        description: 'Patient residential address postcode hash during this period'
 
       - name: uprn_hash
-        description: 'Patient address Unique Property Reference Number hash (placeholder for future use)'
+        description: 'Patient address UPRN hash (placeholder)'
 
       - name: household_id
-        description: 'Household identifier linking persons at same address (placeholder for future use)'
+        description: 'Household identifier (placeholder)'
 
       - name: icb_code_resident
-        description: 'Integrated Care Board (ICB) code where patient resided during this month (from postcode lookup)'
+        description: 'ICB code where patient resided during this period'
 
       - name: icb_resident
-        description: 'Integrated Care Board (ICB) name where patient resided during this month (distinct from registration ICB)'
+        description: 'ICB name where patient resided during this period'
 
       - name: local_authority_code
-        description: 'Local Authority District 2025 code (LAD25CD) where patient resided during this month'
+        description: 'Local Authority code where patient resided during this period'
 
       - name: local_authority_name
-        description: 'Local Authority District 2025 name (LAD25NM) where patient resided during this month'
+        description: 'Local Authority name where patient resided during this period'
 
       - name: borough_resident
-        description: 'London borough where patient resided during this month (NULL for non-London residents)'
+        description: 'London borough where patient resided during this period'
 
       - name: is_london_resident
-        description: 'Flag indicating if patient resided in Greater London area during this month'
+        description: 'Flag indicating if patient resided in Greater London'
 
       - name: london_classification
-        description: 'London area classification during this month (NCL, Other London, Outside London)'
+        description: 'London area classification (NCL, Other London, Outside London)'
 
       - name: lsoa_code_21
-        description: 'Lower Layer Super Output Area 2021 census code where patient resided during this month'
+        description: 'LSOA 2021 code where patient resided during this period'
 
       - name: lsoa_name_21
-        description: 'Lower Layer Super Output Area 2021 census name where patient resided during this month'
+        description: 'LSOA 2021 name where patient resided during this period'
 
       - name: ward_code
-        description: 'Electoral Ward 2025 code (WD25CD) where patient resided during this month'
+        description: 'Electoral Ward 2025 code where patient resided during this period'
 
       - name: ward_name
-        description: 'Electoral Ward 2025 name (WD25NM) where patient resided during this month'
+        description: 'Electoral Ward 2025 name where patient resided during this period'
 
       - name: imd_decile_19
-        description: 'Index of Multiple Deprivation 2019 decile where patient resided during this month (1=most deprived, 10=least deprived)'
+        description: 'IMD 2019 decile (1=most deprived, 10=least deprived)'
 
       - name: imd_quintile_19
-        description: 'Index of Multiple Deprivation 2019 quintile text labels where patient resided during this month (Most Deprived to Least Deprived)'
+        description: 'IMD 2019 quintile text labels'
 
       - name: imd_quintile_numeric_19
-        description: 'Index of Multiple Deprivation 2019 numeric quintile where patient resided during this month (1=most deprived, 5=least deprived)'
+        description: 'IMD 2019 numeric quintile (1=most deprived, 5=least deprived)'
 
       - name: neighbourhood_resident
-        description: 'NCL neighbourhood classification where patient resided during this month (based on 2021 LSOA)'
-
-      - name: is_current_period
-        description: 'Flag indicating if this analysis_month represents the current/latest month'
-
-      - name: effective_start_date
-        description: 'First day of the analysis month (SCD2 compatibility field)'
-
-      - name: effective_end_date
-        description: 'Last day of the analysis month (NULL for current month, SCD2 compatibility field)'
-
-      - name: period_sequence
-        description: 'Sequential number of analysis months for each person (1, 2, 3, ...)'
-
-      - name: age_changes_in_period
-        description: 'Flag indicating if age incremented during this analysis month (birth month anniversary)'
+        description: 'NCL neighbourhood classification'
 
     tests:
       - dbt_utils.unique_combination_of_columns:
-          name: dim_person_demographics_historical_unique_person_month
+          name: dim_person_demographics_historical_unique_person_period
           combination_of_columns:
             - person_id
-            - analysis_month
+            - effective_start_date

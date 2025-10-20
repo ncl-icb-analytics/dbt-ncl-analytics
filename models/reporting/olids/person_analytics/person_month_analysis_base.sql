@@ -3,7 +3,7 @@
         materialized='incremental',
         unique_key=['person_id', 'analysis_month'],
         on_schema_change='fail',
-        cluster_by=['analysis_month', 'borough_registered', 'person_id'],
+        cluster_by=['analysis_month'],
         tags=['daily', 'monthly-full']
     )
 }}
@@ -33,7 +33,7 @@ WITH active_person_months AS (
         AND ds.month_end_date <= LAST_DAY(CURRENT_DATE)    -- Don't create future months
     WHERE hr.registration_status = 'Active'
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY ds.month_end_date, hr.person_id 
+        PARTITION BY ds.month_end_date, hr.person_id
         ORDER BY hr.registration_start_date DESC, hr.is_current_registration DESC
     ) = 1
 )
@@ -59,32 +59,36 @@ SELECT
     ds.financial_quarter_label as financial_quarter,
     ds.financial_quarter_number,
     
-    -- Demographics (temporal join applied)
+    -- Demographics (from SCD-2 temporal join)
     d.birth_year,
     d.birth_date_approx,
     d.birth_date_approx_end_of_month,
-    d.age_at_least,
-    d.age,
+    d.death_year,
+    d.death_month,
+    d.death_date_approx,
+    d.is_deceased,
     d.sex,
     d.ethnicity_category,
     d.ethnicity_subcategory,
     d.ethnicity_granular,
     d.ethnicity_category_sort,
     d.ethnicity_display_sort_key,
-    d.age_band_5y,
-    d.age_band_10y,
-    d.age_band_nhs,
-    d.age_band_ons,
-    d.age_life_stage,
     d.main_language,
     d.language_type,
     d.interpreter_type,
     d.interpreter_needed,
     d.is_active,
     d.inactive_reason,
-    d.death_year,
-    d.death_date_approx,
-    d.is_deceased,
+
+    -- Age calculations for this analysis month
+    {{ calculate_age_attributes(
+        birth_date_field='d.birth_date_approx',
+        reference_date_field='apm.analysis_month',
+        birth_year_field='d.birth_year',
+        birth_month_field='d.birth_month',
+        is_deceased_field='d.is_deceased',
+        death_date_field='d.death_date_approx'
+    ) }},
     
     -- Practice and geography
     d.practice_code,
@@ -125,8 +129,7 @@ SELECT
     d.effective_start_date,
     d.effective_end_date,
     d.period_sequence,
-    d.is_current_period,
-    d.age_changes_in_period,
+    d.is_current,
     
     -- Condition flags (has_*)
     COALESCE(c.has_ast, FALSE) as has_ast,
@@ -192,17 +195,18 @@ FROM active_person_months apm
 INNER JOIN {{ ref('int_date_spine') }} ds
     ON apm.analysis_month = ds.month_end_date
 
--- Join demographics (person-month grain - direct join)
+-- Join demographics (temporal SCD-2 join)
 INNER JOIN {{ ref('dim_person_demographics_historical') }} d
     ON apm.person_id = d.person_id
-    AND apm.analysis_month = d.analysis_month
+    AND apm.analysis_month >= d.effective_start_date
+    AND (d.effective_end_date IS NULL OR apm.analysis_month < d.effective_end_date)
 
 -- Condition flags from episodes table
 LEFT JOIN (
-    SELECT 
+    SELECT
         person_id,
         analysis_month,
-        
+
         -- Active condition flags (has_*)
         MAX(CASE WHEN condition_code = 'AST' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_ast,
         MAX(CASE WHEN condition_code = 'COPD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_copd,
@@ -228,7 +232,7 @@ LEFT JOIN (
         MAX(CASE WHEN condition_code = 'OST' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_ost,
         MAX(CASE WHEN condition_code = 'NAFLD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_nafld,
         MAX(CASE WHEN condition_code = 'FH' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_fh,
-        
+
         -- New episode flags (new_*)
         MAX(CASE WHEN condition_code = 'AST' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_ast,
         MAX(CASE WHEN condition_code = 'COPD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_copd,
@@ -254,23 +258,23 @@ LEFT JOIN (
         MAX(CASE WHEN condition_code = 'OST' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_ost,
         MAX(CASE WHEN condition_code = 'NAFLD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_nafld,
         MAX(CASE WHEN condition_code = 'FH' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_fh,
-        
+
         -- Summary metrics
         COUNT(DISTINCT CASE WHEN has_active_episode THEN condition_code END) as total_active_conditions,
         COUNT(DISTINCT CASE WHEN has_new_episode THEN condition_code END) as total_new_episodes_this_month,
         (COUNT(DISTINCT CASE WHEN has_active_episode THEN condition_code END) > 0)::BOOLEAN as has_any_condition,
         (COUNT(DISTINCT CASE WHEN has_new_episode THEN condition_code END) > 0)::BOOLEAN as has_any_new_episode
-        
+
     FROM (
-        SELECT 
+        SELECT
             person_id,
             condition_code,
             ds.month_end_date as analysis_month,
             -- Active episode: ongoing during this month
-            (episode_start_date <= ds.month_end_date 
+            (episode_start_date <= ds.month_end_date
                 AND (episode_end_date IS NULL OR episode_end_date >= ds.month_start_date))::BOOLEAN as has_active_episode,
-            -- New episode: started this month  
-            (episode_start_date >= ds.month_start_date 
+            -- New episode: started this month
+            (episode_start_date >= ds.month_start_date
                 AND episode_start_date <= ds.month_end_date)::BOOLEAN as has_new_episode
         FROM {{ ref('fct_person_condition_episodes') }} ep
         CROSS JOIN {{ ref('int_date_spine') }} ds
