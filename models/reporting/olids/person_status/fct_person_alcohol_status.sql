@@ -29,7 +29,7 @@ WITH latest_audit_scores AS (
         auditc_positive_screen,
         requires_specialist_intervention,
         brief_intervention_indicated,
-        sex
+        gender
     FROM (
         SELECT 
             *,
@@ -93,7 +93,7 @@ combined_data AS (
 
 SELECT 
     person_id,
-    sex,
+    gender,
     
     -- Assessment dates
     latest_audit_date,

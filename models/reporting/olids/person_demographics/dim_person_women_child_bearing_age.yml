@@ -30,8 +30,8 @@ models:
               min_value: 0
               max_value: 55
 
-      - name: sex
-        description: 'Sex (Female or Unknown - excludes Male by definition)'
+      - name: gender
+        description: 'Gender (Female or Unknown - excludes Male by definition)'
         tests:
           - not_null
           - accepted_values:

@@ -10,7 +10,7 @@ DEMOG.PERSON_ID,
 DEMOG.SK_PATIENT_ID,
 IS_ACTIVE,
 IS_DECEASED,
-DEMOG.SEX AS GENDER,
+DEMOG.GENDER AS GENDER,
 DEMOG.AGE,
 AGE_BAND_5Y,
 CASE WHEN AGE_BAND_5Y = '0-4' THEN 1
@@ -147,9 +147,9 @@ LEFT JOIN {{ ref('dim_valproate_action_status') }} AS ST
           ON DEMOG.PERSON_ID = ST.PERSON_ID
         
 WHERE (
-      DEMOG.SEX = 'Unknown'
+      DEMOG.GENDER = 'Unknown'
       OR
-      DEMOG.SEX != 'Male' -- Changed to be "Not Male" rather than the previous list
+      DEMOG.GENDER != 'Male' -- Changed to be "Not Male" rather than the previous list
       )
       AND
       DEMOG.AGE BETWEEN 0 AND 55

@@ -54,8 +54,8 @@ models:
       - name: is_active
         description: Whether person is active in the system
         
-      - name: sex
-        description: Person's sex
+      - name: gender
+        description: Person's gender
         
       - name: age
         description: Person's current age

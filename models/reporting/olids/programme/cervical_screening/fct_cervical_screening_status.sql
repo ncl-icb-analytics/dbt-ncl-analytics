@@ -28,12 +28,12 @@ Clinical Purpose:
 WITH person_demographics AS (
     SELECT
         dpa.person_id,
-        CASE WHEN dps.sex = 'Female' THEN TRUE ELSE FALSE END AS is_female,
+        CASE WHEN dps.gender = 'Female' THEN TRUE ELSE FALSE END AS is_female,
         dpa.age AS current_age,
         
         -- Age-based screening eligibility
-        CASE 
-            WHEN dps.sex != 'Female' THEN FALSE
+        CASE
+            WHEN dps.gender != 'Female' THEN FALSE
             WHEN dpa.age BETWEEN 25 AND 64 THEN TRUE
             ELSE FALSE
         END AS is_screening_eligible,
@@ -53,8 +53,8 @@ WITH person_demographics AS (
         END AS screening_interval_days
         
     FROM {{ ref('dim_person_age') }} dpa
-    LEFT JOIN {{ ref('dim_person_sex') }} dps ON dpa.person_id = dps.person_id
-    WHERE dps.sex = 'Female'  -- Only include women
+    LEFT JOIN {{ ref('dim_person_gender') }} dps ON dpa.person_id = dps.person_id
+    WHERE dps.gender = 'Female'  -- Only include women
         AND dpa.age BETWEEN 25 AND 64  -- Only include eligible age range
 ),
 
