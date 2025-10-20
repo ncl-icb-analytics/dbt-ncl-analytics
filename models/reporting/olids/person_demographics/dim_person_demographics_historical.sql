@@ -1,136 +1,283 @@
 {{
     config(
         materialized='table',
-        tags=['dimension', 'person', 'demographics', 'historical', 'person_month'],
-        cluster_by=['analysis_month', 'person_id'])
+        tags=['dimension', 'person', 'demographics', 'historical', 'scd2'],
+        cluster_by=['person_id', 'effective_start_date'])
 }}
 
 /*
-Historical Person Demographics - Person-Month Grain
+Historical Person Demographics - SCD Type 2
 
-Provides person-month demographic snapshots for the last 5 years.
-One row per person per month with accurate age and demographics for that specific month.
+Tracks changes to demographic attributes over time using SCD-2 pattern.
+One row per person per change period (not per month).
 
 Key Features:
 
-• Person-month grain for accurate temporal analysis
+• SCD-2 structure with effective_start_date, effective_end_date, is_current
 
-• Age calculated precisely for each month
+• Tracks changes in: practice registration, ethnicity, address/geography
 
-• Practice registration tracked monthly
+• No age fields (age is derived, not an attribute - calculate in consuming models)
 
-• Ethnicity captured as recorded by each month
-
-• Optimised for joining with person_month_analysis_base
-
-• 5-year history window for performance
+• Change detection: new period created when practice OR ethnicity OR address changes
 
 Data Quality:
 
 • Only includes persons with valid birth dates
 
-• Only includes months where person had a registration
+• Only includes persons with registration history
 
+For monthly snapshots, use person_month_analysis_base.
 For current state only, use dim_person_demographics.
 */
 
-WITH person_months AS (
-    -- Generate person-month records for all registered periods
-    SELECT DISTINCT
-        ds.month_end_date as analysis_month,
-        hr.person_id,
-        hr.practice_code,
-        hr.practice_name,
-        hr.registration_start_date,
-        hr.registration_end_date,
-        hr.is_current_registration,
-        -- Person is active if registered for any part of the month
-        CASE 
-            WHEN hr.registration_end_date IS NULL THEN TRUE
-            WHEN hr.registration_end_date > ds.month_end_date THEN TRUE
-            WHEN hr.registration_end_date < hr.registration_start_date THEN TRUE  -- Data quality handling
-            ELSE FALSE
-        END AS is_active
-    FROM {{ ref('dim_person_historical_practice') }} hr
-    INNER JOIN {{ ref('int_date_spine') }} ds
-        ON hr.registration_start_date <= ds.month_end_date
-        AND (hr.registration_end_date IS NULL OR hr.registration_end_date >= ds.month_start_date)
-        AND ds.month_end_date >= DATEADD('month', -60, CURRENT_DATE)  -- 5 year limit
-        AND ds.month_end_date <= LAST_DAY(CURRENT_DATE)  -- Don't create future months
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY ds.month_end_date, hr.person_id 
-        ORDER BY hr.is_current_registration DESC, hr.registration_start_date DESC
-    ) = 1
-),
-
-monthly_addresses AS (
-    -- Get current address for each person-month
-    -- NOTE: Uses current address for all historical months due to lack of address history dates
+WITH person_registrations AS (
+    -- Get all registration periods with practice details
     SELECT
-        pm.analysis_month,
-        pm.person_id,
-        pg.postcode_hash,
-        pg.primary_care_organisation as icb_code_resident,
-        pg.icb_resident,
-        pg.local_authority_code,
-        pg.local_authority_name,
-        pg.borough_resident,
-        pg.is_london_resident,
-        pg.london_classification,
-        pg.lsoa_code_21,
-        pg.lsoa_name_21,
-        pg.ward_code,
-        pg.ward_name,
-        pg.neighbourhood_resident,
-        pg.imd_decile_19,
-        pg.imd_quintile_19,
-        pg.imd_quintile_numeric_19
-    FROM person_months pm
-    LEFT JOIN {{ ref('int_person_geography') }} pg
-        ON pm.person_id = pg.person_id
+        person_id,
+        practice_ods_code as practice_code,
+        practice_name,
+        registration_start_date,
+        registration_end_date,
+        is_current_registration
+    FROM {{ ref('int_patient_registrations') }}
 ),
 
-monthly_ethnicity AS (
-    -- Get ethnicity as recorded by each month
-    SELECT 
-        pm.analysis_month,
-        pm.person_id,
-        ea.ethnicity_category,
-        ea.ethnicity_subcategory,
-        ea.ethnicity_granular,
-        ea.category_sort as ethnicity_category_sort,
-        ea.display_sort_key as ethnicity_display_sort_key
-    FROM person_months pm
-    INNER JOIN {{ ref('int_ethnicity_all') }} ea
-        ON pm.person_id = ea.person_id
-        AND ea.clinical_effective_date <= pm.analysis_month
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY pm.analysis_month, pm.person_id
-        ORDER BY ea.clinical_effective_date DESC, ea.preference_rank ASC
-    ) = 1
+ethnicity_changes AS (
+    -- Get ethnicity changes over time
+    SELECT
+        person_id,
+        ethnicity_category,
+        ethnicity_subcategory,
+        ethnicity_granular,
+        category_sort as ethnicity_category_sort,
+        display_sort_key as ethnicity_display_sort_key,
+        clinical_effective_date as ethnicity_effective_date,
+        preference_rank
+    FROM {{ ref('int_ethnicity_all') }}
+),
+
+address_changes AS (
+    -- Get address changes over time (from person geography which uses SCD logic)
+    SELECT
+        person_id,
+        postcode_hash,
+        address_start_date,
+        address_end_date,
+        primary_care_organisation as icb_code_resident,
+        icb_resident,
+        local_authority_code,
+        local_authority_name,
+        borough_resident,
+        is_london_resident,
+        london_classification,
+        lsoa_code_21,
+        lsoa_name_21,
+        ward_code,
+        ward_name,
+        imd_decile_19,
+        imd_quintile_19,
+        imd_quintile_numeric_19,
+        neighbourhood_resident
+    FROM {{ ref('int_person_geography') }}
+),
+
+all_change_dates AS (
+    -- Combine all dates where any attribute changed
+    SELECT DISTINCT person_id, registration_start_date as change_date
+    FROM person_registrations
+    WHERE registration_start_date IS NOT NULL
+
+    UNION
+
+    SELECT DISTINCT person_id, registration_end_date as change_date
+    FROM person_registrations
+    WHERE registration_end_date IS NOT NULL
+
+    UNION
+
+    SELECT DISTINCT person_id, ethnicity_effective_date as change_date
+    FROM ethnicity_changes
+    WHERE ethnicity_effective_date IS NOT NULL
+
+    UNION
+
+    SELECT DISTINCT person_id, address_start_date as change_date
+    FROM address_changes
+    WHERE address_start_date IS NOT NULL
+
+    UNION
+
+    SELECT DISTINCT person_id, address_end_date as change_date
+    FROM address_changes
+    WHERE address_end_date IS NOT NULL
+),
+
+change_periods AS (
+    -- Create periods between change dates
+    SELECT
+        person_id,
+        change_date as effective_start_date,
+        LEAD(change_date) OVER (
+            PARTITION BY person_id
+            ORDER BY change_date
+        ) as effective_end_date,
+        ROW_NUMBER() OVER (
+            PARTITION BY person_id
+            ORDER BY change_date
+        ) as period_sequence
+    FROM all_change_dates
+),
+
+registrations_for_periods AS (
+    -- Get latest registration active for each period
+    SELECT
+        cp.person_id,
+        cp.effective_start_date,
+        pr.practice_code,
+        pr.practice_name,
+        pr.registration_start_date,
+        pr.registration_end_date,
+        pr.is_current_registration,
+        ROW_NUMBER() OVER (
+            PARTITION BY cp.person_id, cp.effective_start_date
+            ORDER BY pr.is_current_registration DESC, pr.registration_start_date DESC
+        ) as rn
+    FROM change_periods cp
+    LEFT JOIN person_registrations pr
+        ON cp.person_id = pr.person_id
+        AND pr.registration_start_date <= cp.effective_start_date
+        AND (pr.registration_end_date IS NULL OR pr.registration_end_date >= cp.effective_start_date)
+),
+
+ethnicity_for_periods AS (
+    -- Get latest ethnicity known at each period start
+    SELECT
+        cp.person_id,
+        cp.effective_start_date,
+        ec.ethnicity_category,
+        ec.ethnicity_subcategory,
+        ec.ethnicity_granular,
+        ec.ethnicity_category_sort,
+        ec.ethnicity_display_sort_key,
+        ROW_NUMBER() OVER (
+            PARTITION BY cp.person_id, cp.effective_start_date
+            ORDER BY ec.ethnicity_effective_date DESC, ec.preference_rank ASC
+        ) as rn
+    FROM change_periods cp
+    LEFT JOIN ethnicity_changes ec
+        ON cp.person_id = ec.person_id
+        AND ec.ethnicity_effective_date <= cp.effective_start_date
+),
+
+address_for_periods AS (
+    -- Get current address for each person (address SCD dates not yet populated)
+    -- TODO: Once address_start_date/address_end_date are populated, use temporal join
+    SELECT
+        cp.person_id,
+        cp.effective_start_date,
+        ac.postcode_hash,
+        ac.icb_code_resident,
+        ac.icb_resident,
+        ac.local_authority_code,
+        ac.local_authority_name,
+        ac.borough_resident,
+        ac.is_london_resident,
+        ac.london_classification,
+        ac.lsoa_code_21,
+        ac.lsoa_name_21,
+        ac.ward_code,
+        ac.ward_name,
+        ac.imd_decile_19,
+        ac.imd_quintile_19,
+        ac.imd_quintile_numeric_19,
+        ac.neighbourhood_resident
+    FROM change_periods cp
+    LEFT JOIN address_changes ac
+        ON cp.person_id = ac.person_id
+),
+
+periods_with_attributes AS (
+    -- Combine all attributes for each period
+    SELECT
+        cp.person_id,
+        cp.effective_start_date,
+        cp.effective_end_date,
+        cp.period_sequence,
+        CASE WHEN cp.effective_end_date IS NULL THEN TRUE ELSE FALSE END as is_current,
+
+        -- Registration
+        pr.practice_code,
+        pr.practice_name,
+        pr.registration_start_date,
+        pr.registration_end_date,
+        pr.is_current_registration,
+
+        -- Ethnicity
+        ec.ethnicity_category,
+        ec.ethnicity_subcategory,
+        ec.ethnicity_granular,
+        ec.ethnicity_category_sort,
+        ec.ethnicity_display_sort_key,
+
+        -- Address
+        ac.postcode_hash,
+        ac.icb_code_resident,
+        ac.icb_resident,
+        ac.local_authority_code,
+        ac.local_authority_name,
+        ac.borough_resident,
+        ac.is_london_resident,
+        ac.london_classification,
+        ac.lsoa_code_21,
+        ac.lsoa_name_21,
+        ac.ward_code,
+        ac.ward_name,
+        ac.imd_decile_19,
+        ac.imd_quintile_19,
+        ac.imd_quintile_numeric_19,
+        ac.neighbourhood_resident
+
+    FROM change_periods cp
+    LEFT JOIN registrations_for_periods pr
+        ON cp.person_id = pr.person_id
+        AND cp.effective_start_date = pr.effective_start_date
+        AND pr.rn = 1
+    LEFT JOIN ethnicity_for_periods ec
+        ON cp.person_id = ec.person_id
+        AND cp.effective_start_date = ec.effective_start_date
+        AND ec.rn = 1
+    LEFT JOIN address_for_periods ac
+        ON cp.person_id = ac.person_id
+        AND cp.effective_start_date = ac.effective_start_date
 )
 
 SELECT
     -- Core identifiers
-    pm.analysis_month,
-    pm.person_id,
+    pwa.person_id,
     bd.sk_patient_id,
-    
-    -- Status Flags (key person attributes for this month)
-    pm.is_active,
+
+    -- SCD-2 fields
+    pwa.effective_start_date,
+    pwa.effective_end_date,
+    pwa.is_current,
+    pwa.period_sequence,
+
+    -- Status flags
+    COALESCE(pwa.is_current_registration, FALSE) AS is_active,
     bd.is_deceased,
     bd.is_dummy_patient,
-    CASE 
-        WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month THEN 'Deceased'
-        WHEN pm.is_active = FALSE THEN 'Registration ended'
+    CASE
+        WHEN bd.is_deceased THEN 'Deceased'
+        WHEN pwa.is_current_registration = FALSE THEN 'Registration ended'
+        WHEN pwa.practice_code IS NULL THEN 'No registration history'
         ELSE NULL
     END AS inactive_reason,
-    
-    -- Birth and death information
+
+    -- Birth and death information (no age - calculate in consuming models)
     bd.birth_year,
     bd.birth_month,
     bd.birth_date_approx,
-    -- Additional birth date format for legacy compatibility
     CASE
         WHEN bd.birth_year IS NOT NULL AND bd.birth_month IS NOT NULL
             THEN LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1))
@@ -139,231 +286,39 @@ SELECT
     bd.death_year,
     bd.death_month,
     bd.death_date_approx,
-    
-    -- Age calculated for this specific month
-    CASE 
-        WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month 
-            THEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12)
-        WHEN bd.birth_date_approx IS NOT NULL 
-            THEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12)
-        ELSE NULL
-    END AS age,
-    
-    -- Conservative age calculation for this month
-    CASE
-        WHEN bd.birth_year IS NOT NULL AND bd.birth_month IS NOT NULL THEN
-            CASE
-                WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month THEN
-                    -- Age at death
-                    CASE
-                        WHEN bd.death_date_approx >= DATEADD(
-                                year,
-                                DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), bd.death_date_approx),
-                                LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1))
-                             )
-                        THEN DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), bd.death_date_approx)
-                        ELSE DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), bd.death_date_approx) - 1
-                    END
-                ELSE
-                    -- Age for this month (using consistent reference date)
-                    CASE
-                        WHEN DATE_TRUNC('month', pm.analysis_month) >= DATEADD(
-                                year,
-                                DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), DATE_TRUNC('month', pm.analysis_month)),
-                                LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1))
-                             )
-                        THEN DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), DATE_TRUNC('month', pm.analysis_month))
-                        ELSE DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), DATE_TRUNC('month', pm.analysis_month)) - 1
-                    END
-            END
-        ELSE NULL
-    END AS age_at_least,
-    
-    -- Age bands calculated from age for this month
-    CASE
-        WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) >= 100 THEN '100+'
-                ELSE TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) / 5) * 5) || '-' || 
-                     TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) / 5) * 5 + 4)
-            END
-        WHEN bd.birth_date_approx IS NOT NULL 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) >= 100 THEN '100+'
-                ELSE TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) / 5) * 5) || '-' || 
-                     TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) / 5) * 5 + 4)
-            END
-        ELSE 'Unknown'
-    END AS age_band_5y,
-    
-    CASE
-        WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) >= 100 THEN '100+'
-                ELSE TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) / 10) * 10) || '-' || 
-                     TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) / 10) * 10 + 9)
-            END
-        WHEN bd.birth_date_approx IS NOT NULL 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) >= 100 THEN '100+'
-                ELSE TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) / 10) * 10) || '-' || 
-                     TO_VARCHAR(FLOOR(FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) / 10) * 10 + 9)
-            END
-        ELSE 'Unknown'
-    END AS age_band_10y,
-    
-    -- NHS age bands
-    CASE
-        WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 5 THEN '0-4'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 15 THEN '5-14'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 25 THEN '15-24'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 35 THEN '25-34'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 45 THEN '35-44'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 55 THEN '45-54'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 65 THEN '55-64'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 75 THEN '65-74'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 85 THEN '75-84'
-                ELSE '85+'
-            END
-        WHEN bd.birth_date_approx IS NOT NULL 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 5 THEN '0-4'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 15 THEN '5-14'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 25 THEN '15-24'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 35 THEN '25-34'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 45 THEN '35-44'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 55 THEN '45-54'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 65 THEN '55-64'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 75 THEN '65-74'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 85 THEN '75-84'
-                ELSE '85+'
-            END
-        ELSE 'Unknown'
-    END AS age_band_nhs,
-    
-    -- ONS age bands
-    CASE
-        WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 5 THEN '0-4'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 10 THEN '5-9'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 15 THEN '10-14'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 20 THEN '15-19'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 25 THEN '20-24'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 30 THEN '25-29'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 35 THEN '30-34'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 40 THEN '35-39'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 45 THEN '40-44'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 50 THEN '45-49'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 55 THEN '50-54'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 60 THEN '55-59'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 65 THEN '60-64'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 70 THEN '65-69'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 75 THEN '70-74'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 80 THEN '75-79'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 85 THEN '80-84'
-                ELSE '85+'
-            END
-        WHEN bd.birth_date_approx IS NOT NULL 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 5 THEN '0-4'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 10 THEN '5-9'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 15 THEN '10-14'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 20 THEN '15-19'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 25 THEN '20-24'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 30 THEN '25-29'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 35 THEN '30-34'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 40 THEN '35-39'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 45 THEN '40-44'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 50 THEN '45-49'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 55 THEN '50-54'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 60 THEN '55-59'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 65 THEN '60-64'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 70 THEN '65-69'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 75 THEN '70-74'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 80 THEN '75-79'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 85 THEN '80-84'
-                ELSE '85+'
-            END
-        ELSE 'Unknown'
-    END AS age_band_ons,
-    
-    -- Life stage
-    CASE
-        WHEN bd.is_deceased AND bd.death_date_approx <= pm.analysis_month 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 1 THEN 'Infant'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 4 THEN 'Toddler'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 13 THEN 'Child'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 20 THEN 'Adolescent'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 25 THEN 'Young Adult'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 60 THEN 'Adult'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 75 THEN 'Older Adult'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12) < 85 THEN 'Elderly'
-                ELSE 'Very Elderly'
-            END
-        WHEN bd.birth_date_approx IS NOT NULL 
-            THEN CASE
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 0 THEN 'Unknown'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 1 THEN 'Infant'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 4 THEN 'Toddler'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 13 THEN 'Child'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 20 THEN 'Adolescent'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 25 THEN 'Young Adult'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 60 THEN 'Adult'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 75 THEN 'Older Adult'
-                WHEN FLOOR(DATEDIFF(month, bd.birth_date_approx, DATE_TRUNC('month', pm.analysis_month)) / 12) < 85 THEN 'Elderly'
-                ELSE 'Very Elderly'
-            END
-        ELSE 'Unknown'
-    END AS age_life_stage,
-    
-    -- School age flags (calculated for this analysis month using UK academic year logic)
-    {{ calculate_school_age_flags('bd.birth_date_approx', 'pm.analysis_month') }},
-    
+
     -- Sex
     COALESCE(sex.sex, 'Unknown') AS sex,
-    
-    -- Ethnicity as recorded by this month
-    COALESCE(me.ethnicity_category, 'Unknown') AS ethnicity_category,
-    COALESCE(me.ethnicity_subcategory, 'Unknown') AS ethnicity_subcategory,
-    COALESCE(me.ethnicity_granular, 'Unknown') AS ethnicity_granular,
-    me.ethnicity_category_sort,
-    me.ethnicity_display_sort_key,
-    
+
+    -- Ethnicity
+    COALESCE(pwa.ethnicity_category, 'Unknown') AS ethnicity_category,
+    COALESCE(pwa.ethnicity_subcategory, 'Unknown') AS ethnicity_subcategory,
+    COALESCE(pwa.ethnicity_granular, 'Unknown') AS ethnicity_granular,
+    pwa.ethnicity_category_sort,
+    pwa.ethnicity_display_sort_key,
+
     -- Language
     lang.language AS main_language,
     lang.language_type,
     lang.interpreter_type,
     COALESCE(lang.interpreter_needed, FALSE) AS interpreter_needed,
-    
-    -- Practice registration for this month
-    pm.practice_code,
-    pm.practice_name,
-    pm.registration_start_date,
-    pm.registration_end_date,
-    
+
+    -- Practice registration
+    pwa.practice_code,
+    pwa.practice_name,
+    pwa.registration_start_date,
+    pwa.registration_end_date,
+
     -- PCN Information
     dp.pcn_code,
     dp.pcn_name,
     dp.pcn_name_with_borough,
-    
+
     -- ICB Information
     dp.stp_code AS icb_code,
     dp.stp_name AS icb_name,
-    
-    -- Geographic Information
+
+    -- Geographic Information (practice-based)
     dp.borough_registered,
     dp.practice_postcode_dict AS practice_postcode,
     dp.practice_lsoa,
@@ -371,71 +326,46 @@ SELECT
     dp.practice_latitude,
     dp.practice_longitude,
     nbhd.neighbourhood_registered,
-    
-    -- Address for this month
-    ma.postcode_hash,
-    NULL AS uprn_hash,  -- Placeholder
-    NULL::VARCHAR AS household_id,  -- Placeholder
 
-    -- Geographic Data from person postcode mapping (residence-based)
-    ma.icb_code_resident,
-    ma.icb_resident,
-    ma.local_authority_code,
-    ma.local_authority_name,
-    ma.borough_resident,
-    ma.is_london_resident,
-    ma.london_classification,
-    ma.lsoa_code_21,
-    ma.lsoa_name_21,
-    ma.ward_code,
-    ma.ward_name,
-    ma.imd_decile_19,
-    ma.imd_quintile_19,
-    ma.imd_quintile_numeric_19,
-    ma.neighbourhood_resident,
-    
-    -- SCD2 compatibility fields for person-month grain
-    -- For person-month, we treat each month as a separate "period" that spans the full month
-    CASE WHEN pm.analysis_month = LAST_DAY(CURRENT_DATE) THEN TRUE ELSE FALSE END as is_current_period,
-    DATE_TRUNC('month', pm.analysis_month) as effective_start_date,  -- First day of month
-    CASE 
-        WHEN pm.analysis_month = LAST_DAY(CURRENT_DATE) THEN NULL  -- Current month has no end date
-        ELSE pm.analysis_month  -- Month ends on analysis_month (last day of month)
-    END as effective_end_date,
-    ROW_NUMBER() OVER (PARTITION BY pm.person_id ORDER BY pm.analysis_month) as period_sequence,
-    -- Age changes when birth month anniversary occurs within the month
-    CASE 
-        WHEN bd.birth_month = EXTRACT(month FROM pm.analysis_month) THEN TRUE 
-        ELSE FALSE 
-    END as age_changes_in_period
+    -- Address Information
+    pwa.postcode_hash,
+    NULL AS uprn_hash,
+    NULL::VARCHAR AS household_id,
 
-FROM person_months pm
+    -- Geographic Data (residence-based)
+    pwa.icb_code_resident,
+    pwa.icb_resident,
+    pwa.local_authority_code,
+    pwa.local_authority_name,
+    pwa.borough_resident,
+    pwa.is_london_resident,
+    pwa.london_classification,
+    pwa.lsoa_code_21,
+    pwa.lsoa_name_21,
+    pwa.ward_code,
+    pwa.ward_name,
+    pwa.imd_decile_19,
+    pwa.imd_quintile_19,
+    pwa.imd_quintile_numeric_19,
+    pwa.neighbourhood_resident
 
--- Join birth/death information
+FROM periods_with_attributes pwa
+
+-- Join birth/death
 INNER JOIN {{ ref('dim_person_birth_death') }} bd
-    ON pm.person_id = bd.person_id
+    ON pwa.person_id = bd.person_id
 
 -- Join sex
 LEFT JOIN {{ ref('dim_person_sex') }} sex
-    ON pm.person_id = sex.person_id
+    ON pwa.person_id = sex.person_id
 
 -- Join language
 LEFT JOIN {{ ref('dim_person_main_language') }} lang
-    ON pm.person_id = lang.person_id
-
--- Join monthly ethnicity
-LEFT JOIN monthly_ethnicity me
-    ON pm.analysis_month = me.analysis_month
-    AND pm.person_id = me.person_id
-
--- Join monthly address
-LEFT JOIN monthly_addresses ma
-    ON pm.analysis_month = ma.analysis_month
-    AND pm.person_id = ma.person_id
+    ON pwa.person_id = lang.person_id
 
 -- Join practice details
 LEFT JOIN (
-    SELECT 
+    SELECT
         practice_code,
         practice_name,
         pcn_code,
@@ -451,13 +381,14 @@ LEFT JOIN (
         stp_name
     FROM {{ ref('dim_practice') }}
     QUALIFY ROW_NUMBER() OVER (PARTITION BY practice_code ORDER BY practice_type_desc NULLS LAST) = 1
-) dp ON pm.practice_code = dp.practice_code
+) dp ON pwa.practice_code = dp.practice_code
 
 -- Join practice neighbourhood
 LEFT JOIN {{ ref('dim_practice_neighbourhood') }} nbhd
-    ON pm.practice_code = nbhd.practice_code
+    ON pwa.practice_code = nbhd.practice_code
 
--- Filter: Must have birth date
+-- Filter: Must have birth date AND registration history
 WHERE bd.birth_date_approx IS NOT NULL
+  AND pwa.practice_code IS NOT NULL
 
-ORDER BY pm.analysis_month, pm.person_id
+ORDER BY pwa.person_id, pwa.effective_start_date

@@ -9,15 +9,15 @@
 Current Person Demographics Dimension Table
 
 Provides current demographic snapshot for ALL persons with registration history.
-Built directly from intermediate tables for daily refresh accuracy.
+Built as a thin wrapper over dim_person_demographics_historical, selecting only current periods.
 
 Key Features:
 
-• One row per person (current/latest demographics)
+• One row per person (current demographics only)
 
 • Includes ALL persons with registration history (active and inactive)
 
-• Daily refresh compatible - age calculated dynamically
+• Age calculated dynamically for today's date
 
 • is_active flag shows current registration status
 
@@ -30,238 +30,101 @@ Data Quality Filters:
 • Excludes persons without any registration history
 
 For historical analysis, use dim_person_demographics_historical.
+For monthly snapshots, use person_month_analysis_base.
 */
-
-WITH current_registrations AS (
-    -- Get the latest registration for each person
-    SELECT 
-        person_id,
-        practice_ods_code as practice_code,
-        practice_name,
-        registration_start_date,
-        registration_end_date,
-        is_current_registration,
-        is_latest_registration
-    FROM {{ ref('int_patient_registrations') }}
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY person_id 
-        ORDER BY 
-            is_current_registration DESC,  -- Current registrations first
-            registration_start_date DESC,   -- Then most recent
-            registration_record_id DESC     -- Tie-breaker
-    ) = 1
-),
-
-
-latest_ethnicity AS (
-    -- Get the most recent ethnicity recording
-    SELECT 
-        person_id,
-        ethnicity_category,
-        ethnicity_subcategory,
-        ethnicity_granular,
-        category_sort as ethnicity_category_sort,
-        display_sort_key as ethnicity_display_sort_key
-    FROM {{ ref('int_ethnicity_all') }}
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY person_id 
-        ORDER BY 
-            clinical_effective_date DESC, 
-            preference_rank ASC
-    ) = 1
-)
 
 SELECT
     -- Core Identifiers
-    bd.person_id,
-    bd.sk_patient_id,
+    hist.person_id,
+    hist.sk_patient_id,
 
-    -- Status Flags (key person attributes)
-    COALESCE(cr.is_current_registration, FALSE) AS is_active,
-    bd.is_deceased,
-    bd.is_dummy_patient,
-    CASE 
-        WHEN bd.is_deceased THEN 'Deceased'
-        WHEN cr.is_current_registration = FALSE THEN 'Registration ended'
-        WHEN cr.practice_code IS NULL THEN 'No registration history'
-        ELSE NULL
-    END AS inactive_reason,
+    -- Status Flags
+    hist.is_active,
+    hist.is_deceased,
+    hist.is_dummy_patient,
+    hist.inactive_reason,
 
-    -- Basic Demographics from dim_person_birth_death
-    bd.birth_year,
-    bd.birth_date_approx,
-    CASE
-        WHEN bd.birth_year IS NOT NULL AND bd.birth_month IS NOT NULL
-            THEN LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1))
-        ELSE NULL
-    END AS birth_date_approx_end_of_month,
-    bd.death_year,
-    bd.death_date_approx,
-    
+    -- Basic Demographics
+    hist.birth_year,
+    hist.birth_date_approx,
+    hist.birth_date_approx_end_of_month,
+    hist.death_year,
+    hist.death_date_approx,
+
     -- Age calculations (current as of today or death date)
-    CASE 
-        WHEN bd.is_deceased AND bd.death_date_approx IS NOT NULL 
-            THEN FLOOR(DATEDIFF(month, bd.birth_date_approx, bd.death_date_approx) / 12)
-        WHEN bd.birth_date_approx IS NOT NULL 
-            THEN FLOOR(DATEDIFF(month, bd.birth_date_approx, CURRENT_DATE) / 12)
-        ELSE NULL
-    END AS age,
-    
-    -- Age at least (conservative calculation)
-    CASE
-        WHEN bd.birth_year IS NOT NULL AND bd.birth_month IS NOT NULL THEN
-            CASE
-                WHEN bd.is_deceased AND bd.death_date_approx IS NOT NULL THEN
-                    -- Age at death
-                    CASE
-                        WHEN bd.death_date_approx >= DATEADD(
-                                year,
-                                DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), bd.death_date_approx),
-                                LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1))
-                             )
-                        THEN DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), bd.death_date_approx)
-                        ELSE DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), bd.death_date_approx) - 1
-                    END
-                ELSE
-                    -- Current age
-                    CASE
-                        WHEN CURRENT_DATE >= DATEADD(
-                                year,
-                                DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), CURRENT_DATE),
-                                LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1))
-                             )
-                        THEN DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), CURRENT_DATE)
-                        ELSE DATEDIFF(year, LAST_DAY(DATE_FROM_PARTS(bd.birth_year, bd.birth_month, 1)), CURRENT_DATE) - 1
-                    END
-            END
-        ELSE NULL
-    END AS age_at_least,
-    
-    -- Age bands (calculated from current age)
-    pa.age_band_5y,
-    pa.age_band_10y,
-    pa.age_band_nhs,
-    pa.age_band_ons,
-    pa.age_life_stage,
-    
-    -- School age flags
-    pa.is_primary_school_age,
-    pa.is_secondary_school_age,
-    
-    -- Sex from dim_person_sex
-    COALESCE(sex.sex, 'Unknown') AS sex,
+    {{ calculate_age_attributes(
+        birth_date_field='hist.birth_date_approx',
+        reference_date_field='CURRENT_DATE',
+        birth_year_field='hist.birth_year',
+        birth_month_field='hist.birth_month',
+        is_deceased_field='hist.is_deceased',
+        death_date_field='hist.death_date_approx'
+    ) }},
 
-    -- Ethnicity from latest recording
-    COALESCE(le.ethnicity_category, 'Unknown') AS ethnicity_category,
-    COALESCE(le.ethnicity_subcategory, 'Unknown') AS ethnicity_subcategory,
-    COALESCE(le.ethnicity_granular, 'Unknown') AS ethnicity_granular,
-    le.ethnicity_category_sort,
-    le.ethnicity_display_sort_key,
+    -- Sex
+    hist.sex,
 
-    -- Language and Communication from dim_person_main_language
-    lang.language AS main_language,
-    lang.language_type,
-    lang.interpreter_type,
-    COALESCE(lang.interpreter_needed, FALSE) AS interpreter_needed,
-    
+    -- Ethnicity
+    hist.ethnicity_category,
+    hist.ethnicity_subcategory,
+    hist.ethnicity_granular,
+    hist.ethnicity_category_sort,
+    hist.ethnicity_display_sort_key,
+
+    -- Language and Communication
+    hist.main_language,
+    hist.language_type,
+    hist.interpreter_type,
+    hist.interpreter_needed,
+
     -- Practice Registration (current or latest)
-    cr.practice_code,
-    cr.practice_name,
-    cr.registration_start_date,
-    cr.registration_end_date,
-    
-    -- PCN Information from dim_practice
-    dp.pcn_code,
-    dp.pcn_name,
-    dp.pcn_name_with_borough,
-    
-    -- ICB Information from dim_practice
-    dp.stp_code AS icb_code,
-    dp.stp_name AS icb_name,
-    
-    -- Geographic Information from dim_practice
-    dp.borough_registered,
-    dp.practice_postcode_dict AS practice_postcode,
-    dp.practice_lsoa,
-    dp.practice_msoa,
-    dp.practice_latitude,
-    dp.practice_longitude,
-    nbhd.neighbourhood_registered,
-    
+    hist.practice_code,
+    hist.practice_name,
+    hist.registration_start_date,
+    hist.registration_end_date,
+
+    -- PCN Information
+    hist.pcn_code,
+    hist.pcn_name,
+    hist.pcn_name_with_borough,
+
+    -- ICB Information
+    hist.icb_code,
+    hist.icb_name,
+
+    -- Geographic Information
+    hist.borough_registered,
+    hist.practice_postcode,
+    hist.practice_lsoa,
+    hist.practice_msoa,
+    hist.practice_latitude,
+    hist.practice_longitude,
+    hist.neighbourhood_registered,
+
     -- Address Information
-    ca.postcode_hash,
-    NULL AS uprn_hash,  -- Placeholder for future
-    NULL::VARCHAR AS household_id,  -- Placeholder for future
+    hist.postcode_hash,
+    hist.uprn_hash,
+    hist.household_id,
 
     -- Geographic Data from person postcode mapping (residence-based)
-    ca.primary_care_organisation as icb_code_resident,
-    ca.icb_resident,
-    ca.local_authority_code,
-    ca.local_authority_name,
-    ca.borough_resident,
-    ca.is_london_resident,
-    ca.london_classification,
-    ca.lsoa_code_21,
-    ca.lsoa_name_21,
-    ca.ward_code,
-    ca.ward_name,
-    ca.imd_decile_19,
-    ca.imd_quintile_19,
-    ca.imd_quintile_numeric_19,
-    ca.neighbourhood_resident
+    hist.icb_code_resident,
+    hist.icb_resident,
+    hist.local_authority_code,
+    hist.local_authority_name,
+    hist.borough_resident,
+    hist.is_london_resident,
+    hist.london_classification,
+    hist.lsoa_code_21,
+    hist.lsoa_name_21,
+    hist.ward_code,
+    hist.ward_name,
+    hist.imd_decile_19,
+    hist.imd_quintile_19,
+    hist.imd_quintile_numeric_19,
+    hist.neighbourhood_resident
 
-FROM {{ ref('dim_person_birth_death') }} bd
+FROM {{ ref('dim_person_demographics_historical') }} hist
 
--- Join current/latest registration
-LEFT JOIN current_registrations cr
-    ON bd.person_id = cr.person_id
+WHERE hist.is_current = TRUE
 
--- Join age information
-LEFT JOIN {{ ref('dim_person_age') }} pa
-    ON bd.person_id = pa.person_id
-
--- Join sex
-LEFT JOIN {{ ref('dim_person_sex') }} sex
-    ON bd.person_id = sex.person_id
-
--- Join language
-LEFT JOIN {{ ref('dim_person_main_language') }} lang
-    ON bd.person_id = lang.person_id
-
--- Join latest ethnicity
-LEFT JOIN latest_ethnicity le
-    ON bd.person_id = le.person_id
-
--- Join comprehensive person geography (postcode, LSOA, IMD, neighbourhood)
-LEFT JOIN {{ ref('int_person_geography') }} ca
-    ON bd.person_id = ca.person_id
-
--- Join practice details
-LEFT JOIN (
-    SELECT 
-        practice_code,
-        practice_name,
-        pcn_code,
-        pcn_name,
-        pcn_name_with_borough,
-        borough_registered,
-        practice_postcode_dict,
-        practice_lsoa,
-        practice_msoa,
-        practice_latitude,
-        practice_longitude,
-        stp_code,
-        stp_name
-    FROM {{ ref('dim_practice') }}
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY practice_code ORDER BY practice_type_desc NULLS LAST) = 1
-) dp ON cr.practice_code = dp.practice_code
-
--- Join practice neighbourhood
-LEFT JOIN {{ ref('dim_practice_neighbourhood') }} nbhd
-    ON cr.practice_code = nbhd.practice_code
-
--- Filter: Must have birth date AND registration history
-WHERE bd.birth_date_approx IS NOT NULL
-  AND cr.person_id IS NOT NULL
-
-ORDER BY bd.person_id
+ORDER BY hist.person_id
