@@ -5,27 +5,30 @@ models:
     description: 'Current Person Demographics Dimension Table
 
       Provides current demographic snapshot for ALL persons with registration history.
-      Built directly from intermediate tables for daily refresh accuracy.
+      Thin wrapper over dim_person_demographics_historical selecting only current periods.
+
+      Grain: One row per person (current demographics only)
 
       Key Features:
 
-      • One row per person (current/latest demographics)
+      • Derived from dim_person_demographics_historical (is_current = TRUE)
 
       • Includes ALL persons with registration history (active and inactive)
 
-      • Daily refresh compatible - age calculated dynamically
+      • Age calculated dynamically for current date using calculate_age_attributes macro
 
       • is_active flag shows current registration status
 
       • Practice details show latest/current registration
 
-      Data Quality Filters:
+      Inclusion Criteria:
 
-      • Excludes persons without birth dates (required for age)
+      • Must have valid birth_date_approx (required for age calculation)
 
-      • Excludes persons without any registration history
+      • Must have registration history (practice_code IS NOT NULL in historical)
 
-      For historical analysis, use dim_person_demographics_historical.'
+      For historical change tracking, use dim_person_demographics_historical.
+      For monthly snapshots with conditions, use person_month_analysis_base.'
 
     columns:
       - name: person_id

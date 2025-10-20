@@ -5,31 +5,39 @@ models:
     description: 'Historical Person Demographics - SCD Type 2
 
       Tracks changes to demographic attributes over time using SCD-2 pattern.
-      One row per person per change period (not per month).
+      Pure assembly model joining upstream building blocks without duplicating calculations.
+
+      Grain: One row per person per change period (not per month)
 
       Key Features:
 
-      • SCD-2 structure with effective_start_date, effective_end_date, is_current
+      • SCD-2 structure with effective_start_date, effective_end_date, is_current, period_sequence
 
       • Tracks changes in: practice registration, ethnicity, address/geography
 
-      • No age fields (age is derived, not an attribute - calculate in consuming models)
+      • No age fields (age is derived, not an attribute - calculate in consuming models using calculate_age_attributes macro)
 
       • Change detection: new period created when practice OR ethnicity OR address changes
+
+      • Pure assembly: joins from int_patient_registrations, int_ethnicity_all, int_person_geography, dim_person_birth_death, etc.
 
       Storage Efficiency:
 
       • ~85-90% more efficient than person-month grain
 
-      • 4.6M patients with ~5-10 periods each = 23-46M rows vs 276M for person-month
+      • Change-based periods (typically 5-10 per person) vs monthly snapshots
 
-      Data Quality:
+      Inclusion Criteria:
 
-      • Only includes persons with valid birth dates
+      • Must have valid birth_date_approx (required for age calculations in consuming models)
 
-      • Only includes persons with registration history
+      • Must have registration history (practice_code IS NOT NULL)
 
-      For monthly snapshots, use person_month_analysis_base.
+      Known Limitations:
+
+      • Address fields use current address for all periods (address SCD dates not yet populated in int_person_geography)
+
+      For monthly snapshots with conditions, use person_month_analysis_base.
       For current state only, use dim_person_demographics.'
 
     columns:
