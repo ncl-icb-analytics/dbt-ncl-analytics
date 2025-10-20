@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='view')
-}}
-
-
 /*
 Community care encounters (contacts) from CSDS
 
