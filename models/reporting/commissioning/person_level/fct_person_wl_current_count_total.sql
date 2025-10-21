@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 
 /*
 Count of all active waiting lists per patient, number of waiting lists at unique providers, 
@@ -12,9 +12,9 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 
 WITH DUPLICATE_TFCS AS (SELECT DISTINCT
                         sk_patient_id,
-                        tfc_code,
+                        treatment_function_code,
                         provider_code,
-                        ROW_NUMBER() OVER(PARTITION BY sk_patient_id, tfc_code ORDER BY provider_code) AS TFC_MULTIPLE_PROVIDERS_ROW_NUMBER
+                        ROW_NUMBER() OVER(PARTITION BY sk_patient_id,  treatment_function_code ORDER BY provider_code) AS TFC_MULTIPLE_PROVIDERS_ROW_NUMBER
                         FROM {{ ref('int_wl_current') }}
                         WHERE sk_patient_id IS NOT NULL),
 DUPLICATE_TFCS_GROUPED AS (SELECT 
@@ -28,7 +28,7 @@ SELECT
     wl.sk_patient_id,
     COUNT(*) AS wl_current_total_count,
     COUNT(DISTINCT wl.provider_code) AS wl_current_distinct_providers_count,
-    COUNT(DISTINCT wl.tfc_code) AS wl_current_distinct_tfc_count,
+    COUNT(DISTINCT wl.treatment_function_code) AS wl_current_distinct_tfc_count,
     CASE WHEN MAX(dtfc.tfc_multiple_providers_max_row_number) > 1 THEN TRUE ELSE FALSE END AS same_tfc_multiple_providers_flag
 FROM {{ ref('int_wl_current') }} wl
 LEFT JOIN DUPLICATE_TFCS_GROUPED dtfc ON wl.sk_patient_id = dtfc.sk_patient_id

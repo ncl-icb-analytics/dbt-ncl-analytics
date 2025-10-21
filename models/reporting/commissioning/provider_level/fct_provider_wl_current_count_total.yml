@@ -1,19 +1,27 @@
-version: 1
+version: 2
 
 models:
   - name: fct_provider_wl_current_count_total
     description: >
       Count of open waiting lists per provider (provider_code).
       Derived from `int_wl_current`.
+    config:
+      materialized: view
     columns:
       - name: provider_code
-        description: Unique identifier for each provider.
+        description: Identifier for each provider.
         tests:
           - not_null
-          - unique
-
-      - name: wl_current_total_count
-        description: Total number of open waiting lists for the provider.
-
+      - name: provider_site_code
+        description: Unique identifier for each provider.
       - name: is_ncl_provider
         description: Boolean flag to identify providers within NCL footprint.
+      - name: wl_current_total_count
+        description: Total number of open waiting lists for the provider/site.
+    tests:
+    - dbt_expectations.expect_table_row_count_to_be_between:
+        min_value: 1
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+        - provider_code
+        - provider_site_code

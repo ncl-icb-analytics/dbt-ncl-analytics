@@ -1,13 +1,19 @@
-version: 1
+version: 2
 
 models:
   - name: fct_person_wl_current_count_provider
     description: >
       Pivoted summary of open pathways per patient across providers.
       Each column represents the sum of open pathways for a specific provider.
+    config:
+      materialized: view
     columns:
       - name: sk_patient_id
         description: Unique identifier for each patient.
         tests:
           - not_null
           - unique
+    tests:
+    - dbt_expectations.expect_table_row_count_to_be_between:
+        min_value: 1
+

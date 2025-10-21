@@ -1,6 +1,6 @@
 {{
     config(
-        materialized='table',
+        materialized='view',
         static_analysis='off')
 }}
 
@@ -17,7 +17,7 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 WITH TFC_COUNTS AS (
     SELECT
     sk_patient_id,
-    tfc_code,
+    treatment_function_code,
     COALESCE(open_pathways, 0) AS open_pathways
     FROM {{ ref('int_wl_current') }}
     WHERE sk_patient_id IS NOT NULL
@@ -27,9 +27,9 @@ SELECT
 FROM TFC_COUNTS wl
 PIVOT
 (
-    SUM(open_pathways) FOR tfc_code IN (
+    SUM(open_pathways) FOR treatment_function_code IN (
         SELECT
-       bk_specialty_code
+        bk_specialty_code
         from {{ ref('raw_dictionary_dbo_specialties') }}
         WHERE
         is_treatment_function = TRUE
