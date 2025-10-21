@@ -46,6 +46,5 @@ SELECT
     END AS af_observation_type
 
 FROM ({{ get_observations("'AFIB_COD', 'AFIBRES_COD'", source='PCD') }}) obs
-WHERE obs.clinical_effective_date IS NOT NULL
 
 ORDER BY person_id, clinical_effective_date, id

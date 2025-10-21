@@ -52,6 +52,5 @@ SELECT
     END AS stroke_tia_observation_type
 
 FROM ({{ get_observations("'STRK_COD', 'TIA_COD'", source='PCD') }}) obs
-WHERE obs.clinical_effective_date IS NOT NULL
 
 ORDER BY person_id, clinical_effective_date, id

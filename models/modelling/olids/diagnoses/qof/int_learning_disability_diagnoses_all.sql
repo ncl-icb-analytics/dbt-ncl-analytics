@@ -43,6 +43,5 @@ SELECT
     END AS learning_disability_observation_type
 
 FROM ({{ get_observations("'LD_COD'", source='PCD') }}) obs
-WHERE obs.clinical_effective_date IS NOT NULL
 
 ORDER BY person_id, clinical_effective_date, id
