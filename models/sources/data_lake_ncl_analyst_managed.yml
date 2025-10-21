@@ -203,7 +203,7 @@ sources:
       data_type: TEXT
     - name: DIAGNOSTIC_MODALITY
       data_type: TEXT
-    - name: WAITING_LIST_ACTIVITY
+    - name: Waiting list_Activity
       data_type: NUMBER
     - name: PLANNED_ACTIVITY
       data_type: NUMBER
@@ -215,34 +215,83 @@ sources:
       data_type: NUMBER
     - name: Patient_Declined/Refused
       data_type: NUMBER
-    - name: 00 < 01 Week
+    - name: 0 <01 weeks
+      data_type: TEXT
+    - name: 01 <02 weeks
+      data_type: TEXT
+    - name: 02 <03 weeks
+      data_type: TEXT
+    - name: 03 <04 weeks
+      data_type: TEXT
+    - name: 04 <05 weeks
+      data_type: TEXT
+    - name: 05 <06 weeks
+      data_type: TEXT
+    - name: 06 <07 weeks
+      data_type: TEXT
+    - name: 07 <08 weeks
+      data_type: TEXT
+    - name: 08 <09 weeks
+      data_type: TEXT
+    - name: 09 <10 weeks
+      data_type: TEXT
+    - name: 10 <11 weeks
+      data_type: TEXT
+    - name: 11 <12 weeks
+      data_type: TEXT
+    - name: 12 <13 weeks
+      data_type: TEXT
+    - name: 13+ weeks
+      data_type: TEXT
+  - name: DIAGNOSTICS_WEEKLY_DM01_HISTORIC
+    identifier: '"DIAGNOSTICS_WEEKLY_DM01_HISTORIC"'
+    columns:
+    - name: PROVIDER
+      data_type: TEXT
+    - name: SPECIALITY
+      data_type: TEXT
+    - name: DATE
+      data_type: TEXT
+    - name: WEEKNUMBER
+      data_type: TEXT
+    - name: Diagnostic waiting list-With a TCI
+      data_type: TEXT
+    - name: Diagnostic waiting list-Without a TCI
+      data_type: TEXT
+    - name: Diagnostic waiting list-Total
       data_type: NUMBER
-    - name: 01 < 02 Weeks
+    - name: Waiting list
+      data_type: TEXT
+    - name: PLANNED
+      data_type: TEXT
+    - name: UNSCHEDULED
+      data_type: TEXT
+    - name: DM01-Total
       data_type: NUMBER
-    - name: 02 < 03 Weeks
+    - name: DNA
+      data_type: TEXT
+    - name: Patient Cancelled
+      data_type: TEXT
+    - name: Patient Declined/Refused
+      data_type: TEXT
+    - name: Total DNA
       data_type: NUMBER
-    - name: 03 < 04 Weeks
-      data_type: NUMBER
-    - name: 04 < 05 Weeks
-      data_type: NUMBER
-    - name: 05 < 06 Weeks
-      data_type: NUMBER
-    - name: 06 < 07 Weeks
-      data_type: NUMBER
-    - name: 07 < 08 Weeks
-      data_type: NUMBER
-    - name: 08 < 09 Weeks
-      data_type: NUMBER
-    - name: 09 < 10 Weeks
-      data_type: NUMBER
-    - name: 10 < 11 Weeks
-      data_type: NUMBER
-    - name: 11 < 12 Weeks
-      data_type: NUMBER
-    - name: 12 < 13 Weeks
-      data_type: NUMBER
-    - name: 13+ Weeks
-      data_type: NUMBER
+    - name: Cancer 62day pathway - Total on waiting list
+      data_type: TEXT
+    - name: Cancer 62 day pathway - Activity in the week
+      data_type: TEXT
+    - name: Wait List-0<01 weeks
+      data_type: TEXT
+    - name: Wait List-01<02 weeks
+      data_type: TEXT
+    - name: Wait List-02<03 weeks
+      data_type: TEXT
+    - name: Wait List-03<04 weeks
+      data_type: TEXT
+    - name: Wait List-04<05 weeks
+      data_type: TEXT
+    - name: Wait List-05<06 weeks
+      data_type: TEXT
   - name: EFI2_COEFFICIENTS
     identifier: '"EFI2_COEFFICIENTS"'
     columns:
@@ -375,7 +424,7 @@ sources:
       data_type: TEXT
     - name: LSOA_CODE
       data_type: TEXT
-    - name: GENDER
+    - name: SEX
       data_type: TEXT
     - name: NUMBER_OF_PATIENTS
       data_type: NUMBER

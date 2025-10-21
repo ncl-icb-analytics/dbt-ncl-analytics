@@ -32,31 +32,8 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: UPLOADED_DATETIME
       data_type: TIMESTAMP_NTZ
-  - name: BASE_ATHENA__CONCEPT
-    identifier: '"BASE_ATHENA__CONCEPT"'
-    columns:
-    - name: CONCEPT_ID
-      data_type: NUMBER
-    - name: CONCEPT_NAME
-      data_type: TEXT
-    - name: DOMAIN_ID
-      data_type: TEXT
-    - name: VOCABULARY_ID
-      data_type: TEXT
-    - name: CONCEPT_CLASS_ID
-      data_type: TEXT
-    - name: STANDARD_CONCEPT
-      data_type: TEXT
-    - name: CONCEPT_CODE
-      data_type: TEXT
-    - name: VALID_START_DATE
-      data_type: NUMBER
-    - name: VALID_END_DATE
-      data_type: NUMBER
-    - name: INVALID_REASON
-      data_type: TEXT
-  - name: DEFINITION_STORE
-    identifier: '"DEFINITION_STORE"'
+  - name: DEFINITIONSTORE
+    identifier: '"DEFINITIONSTORE"'
     columns:
     - name: CODE
       data_type: TEXT
@@ -82,6 +59,12 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: UPLOADED_DATETIME
       data_type: TIMESTAMP_NTZ
+    - name: SOURCE_TABLE
+      data_type: TEXT
+    - name: DBID
+      data_type: TEXT
+    - name: CORE_CONCEPT_ID
+      data_type: TEXT
   - name: HDRUK_DEFINITIONS
     identifier: '"HDRUK_DEFINITIONS"'
     columns:
@@ -201,3 +184,77 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: UPLOADED_DATETIME
       data_type: TIMESTAMP_NTZ
+  - name: STANDARD_UNITS
+    identifier: '"STANDARD_UNITS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: UNIT
+      data_type: TEXT
+    - name: PRIMARY_UNIT
+      data_type: BOOLEAN
+  - name: UNIT_CONVERSIONS
+    identifier: '"UNIT_CONVERSIONS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: CONVERT_FROM_UNIT
+      data_type: TEXT
+    - name: CONVERT_TO_UNIT
+      data_type: TEXT
+    - name: PRE_OFFSET
+      data_type: FLOAT
+    - name: MULTIPLY_BY
+      data_type: FLOAT
+    - name: POST_OFFSET
+      data_type: FLOAT
+  - name: UNIT_MAPPINGS
+    identifier: '"UNIT_MAPPINGS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: SOURCE_UNIT
+      data_type: TEXT
+    - name: STANDARD_UNIT
+      data_type: TEXT
+    - name: SOURCE_UNIT_COUNT
+      data_type: NUMBER
+    - name: SOURCE_UNIT_LQ
+      data_type: FLOAT
+    - name: SOURCE_UNIT_MEDIAN
+      data_type: FLOAT
+    - name: SOURCE_UNIT_UQ
+      data_type: FLOAT
+  - name: VALUE_BOUNDS
+    identifier: '"VALUE_BOUNDS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: LOWER_LIMIT
+      data_type: FLOAT
+    - name: UPPER_LIMIT
+      data_type: FLOAT

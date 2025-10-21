@@ -73,8 +73,18 @@ def sanitise_column_name(col_name, apply_transformations=True, used_names=None):
                 else:
                     safe_name = col_name.replace('...', '_')
             else:
-                # First handle plus sign specially to preserve meaning (52+ -> 52_plus)
+                # Handle comparison and mathematical operators to preserve meaning
                 safe_name = col_name.replace('+', '_plus')
+                safe_name = safe_name.replace('<', '_lt_')
+                safe_name = safe_name.replace('>', '_gt_')
+                safe_name = safe_name.replace('=', '_eq_')
+                safe_name = safe_name.replace('*', '_all_')
+                # Remove symbols that don't have clear semantic meaning in column names
+                safe_name = safe_name.replace('?', '')
+                safe_name = safe_name.replace('!', '')
+                safe_name = safe_name.replace('@', '_at_')
+                safe_name = safe_name.replace('$', '')
+                safe_name = safe_name.replace('|', '_or_')
                 # Then replace dots, slashes, hyphens, spaces, and other problematic characters
                 safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', safe_name)
 
