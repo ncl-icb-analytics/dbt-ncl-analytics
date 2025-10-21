@@ -7,13 +7,15 @@
 }}
 
 /*
-MH/SMI comprehensive care plan QOF Indicator MH002. Date of the mental health care plan code MHP_COD
+MH/SMI alcohol consumption QOF Indicator MH007. Date of the alchol consumption code ALC_COD
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
-Selects the latest care plan per person.
+Selects the latest code per person.
 */
 select 
 person_id
 ,clinical_effective_date
-,MH_CARE_PLAN_CURRENT_12M
-FROM {{ ref('int_smi_care_plan_all') }}
+,concept_display
+,result_value
+,result_unit_display
+FROM {{ ref('int_smi_alcohol_all') }}
 QUALIFY ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC) = 1
