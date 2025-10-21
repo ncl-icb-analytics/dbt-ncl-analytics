@@ -8,6 +8,6 @@ select
     "PRACTICE_CODE" as practice_code,
     "PRACTICE_NAME" as practice_name,
     "LSOA_CODE" as lsoa_code,
-    "GENDER" as gender,
+    "SEX" as sex,
     "NUMBER_OF_PATIENTS" as number_of_patients
 from {{ source('reference_analyst_managed', 'GP_REG_PAT_PRAC_LSOA_ALL') }}
