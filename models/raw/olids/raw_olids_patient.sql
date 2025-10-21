@@ -24,7 +24,7 @@ select
     "LDS_CDM_EVENT_ID" as lds_cdm_event_id,
     "LDS_VERSIONER_EVENT_ID" as lds_versioner_event_id,
     "LDS_DATETIME_DATA_ACQUIRED" as lds_datetime_data_acquired,
-    "LDS_INITIAL_DATE_RECEIVED_DATE" as lds_initial_date_received_date,
+    "LDS_INITIAL_DATA_RECEIVED_DATE" as lds_initial_data_received_date,
     "LDS_IS_DELETED" as lds_is_deleted,
     "LDS_START_DATE_TIME" as lds_start_date_time,
     "LDS_LAKEHOUSE_DATE_PROCESSED" as lds_lakehouse_date_processed,
