@@ -1,7 +1,9 @@
 {{
     config(
         materialized='table',
-        cluster_by=['person_id', 'clinical_effective_date'])
+        cluster_by=['person_id', 'clinical_effective_date'],
+        tags=['smi_registry']
+        )
 }}
 
 /*
@@ -26,5 +28,5 @@ SELECT
     END AS MH_care_plan_current_12m
 
 FROM ({{ get_observations("'MHP_COD'") }}) obs
-WHERE obs.clinical_effective_date IS NOT NULL
+WHERE obs.clinical_effective_date IS NOT NULL 
 ORDER BY person_id, clinical_effective_date DESC
