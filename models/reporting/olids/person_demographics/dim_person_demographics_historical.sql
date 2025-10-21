@@ -287,8 +287,8 @@ SELECT
     bd.death_month,
     bd.death_date_approx,
 
-    -- Sex
-    COALESCE(sex.sex, 'Unknown') AS sex,
+    -- Gender
+    COALESCE(gender.gender, 'Unknown') AS gender,
 
     -- Ethnicity
     COALESCE(pwa.ethnicity_category, 'Unknown') AS ethnicity_category,
@@ -355,9 +355,9 @@ FROM periods_with_attributes pwa
 INNER JOIN {{ ref('dim_person_birth_death') }} bd
     ON pwa.person_id = bd.person_id
 
--- Join sex
-LEFT JOIN {{ ref('dim_person_sex') }} sex
-    ON pwa.person_id = sex.person_id
+-- Join gender
+LEFT JOIN {{ ref('dim_person_gender') }} gender
+    ON pwa.person_id = gender.person_id
 
 -- Join language
 LEFT JOIN {{ ref('dim_person_main_language') }} lang

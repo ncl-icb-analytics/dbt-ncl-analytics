@@ -20,7 +20,7 @@ SELECT
     THEN 'Active' 
     ELSE 'Inactive' 
     END AS "Deceased Flag",
-  sex AS "Gender",
+  gender AS "Gender",
   age AS "Age",
   age_at_least AS "Age (at least)",
   death_date_approx AS "Death Date (est.)",

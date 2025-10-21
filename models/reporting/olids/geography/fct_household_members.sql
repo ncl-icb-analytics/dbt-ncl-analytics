@@ -25,7 +25,7 @@ select
   -- Person demographics and status
   dem.is_active,
   dem.is_deceased,
-  dem.sex,
+  dem.gender,
   dem.age,
   dem.age_life_stage,
   dem.age_band_ons,

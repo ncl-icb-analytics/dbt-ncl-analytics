@@ -1,12 +1,12 @@
 {{
     config(
         materialized='table',
-        tags=['dimension', 'person', 'sex'],
+        tags=['dimension', 'person', 'gender'],
         cluster_by=['person_id'])
 }}
 
--- Person Sex Dimension Table
--- Derives sex from gender concepts using dynamic concept lookups
+-- Person Gender Dimension Table
+-- Derives gender from gender concepts using dynamic concept lookups
 -- Ensures one row per person by preferring a mapped patient with gender; falls back to current registration
 
 WITH current_patient_per_person AS (
@@ -45,11 +45,11 @@ all_persons AS (
 
 SELECT
     person_id,
-    sex
+    gender
 FROM (
     SELECT
         ap.person_id,
-        COALESCE(target_concept.display, source_concept.display, 'Unknown') AS sex,
+        COALESCE(target_concept.display, source_concept.display, 'Unknown') AS gender,
         ROW_NUMBER() OVER (
             PARTITION BY ap.person_id
             ORDER BY

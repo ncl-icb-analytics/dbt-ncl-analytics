@@ -35,7 +35,7 @@ sources:
       data_type: TEXT
     - name: AREA_ID
       data_type: NUMBER
-    - name: Sex
+    - name: Gender
       data_type: TEXT
     - name: Age
       data_type: TEXT

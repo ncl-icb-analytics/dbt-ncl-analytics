@@ -42,8 +42,8 @@ models:
           - accepted_values:
               values: [true, false]
       
-      - name: sex
-        description: 'Patient sex (Male, Female, Indeterminate, Not Known)'
+      - name: gender
+        description: 'Patient gender (Male, Female, Indeterminate, Not Known)'
       
       - name: age
         description: 'Current age in years'

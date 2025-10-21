@@ -67,7 +67,7 @@ SELECT
     d.death_month,
     d.death_date_approx,
     d.is_deceased,
-    d.sex,
+    d.gender,
     d.ethnicity_category,
     d.ethnicity_subcategory,
     d.ethnicity_granular,

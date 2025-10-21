@@ -7,7 +7,7 @@ WITH child_bearing_age AS (
     SELECT
         person_id,
         age,
-        sex,
+        gender,
         is_child_bearing_age_0_55
     FROM {{ ref('dim_person_women_child_bearing_age') }}
     WHERE is_child_bearing_age_0_55 = TRUE
@@ -31,7 +31,7 @@ recent_valproate AS (
 SELECT
     cba.person_id,
     cba.age,
-    cba.sex,
+    cba.gender,
     cba.is_child_bearing_age_0_55,
     rv.most_recent_order_date AS most_recent_valproate_order_date,
     rv.medication_order_id AS valproate_medication_order_id,
