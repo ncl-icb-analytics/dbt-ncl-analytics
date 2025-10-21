@@ -30,5 +30,6 @@ select
     "derCCGofResidence" as der_ccg_of_residence,
     "derPracticeCode" as der_practice_code,
     "derLSOA" as der_lsoa,
-    "derLSOA2021" as der_lsoa2021
+    "derLSOA2021" as der_lsoa2021,
+    "UNIQUE_BOOKING_REFERENCE_NUMBER" as unique_booking_reference_number
 from {{ source('wl', 'WL_ClockStarts_Data') }}

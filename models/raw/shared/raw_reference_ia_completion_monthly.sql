@@ -9,7 +9,7 @@ select
     "Enrolment method" as enrolment_method,
     "Trust / Hospital" as trust_hospital,
     "Band/Grade" as band_grade,
-    "What best describes your role?" as what_best_describes_your_role?,
+    "What best describes your role?" as what_best_describes_your_role,
     "Date and time enrolled" as date_and_time_enrolled,
     "Time started" as time_started,
     "Time completed" as time_completed,

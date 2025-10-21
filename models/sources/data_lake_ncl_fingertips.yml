@@ -35,7 +35,70 @@ sources:
       data_type: TEXT
     - name: AREA_ID
       data_type: NUMBER
-    - name: Gender
+    - name: Sex
+      data_type: TEXT
+    - name: Age
+      data_type: TEXT
+    - name: Category Type
+      data_type: TEXT
+    - name: Category
+      data_type: TEXT
+    - name: Time period
+      data_type: TEXT
+    - name: Value
+      data_type: FLOAT
+    - name: Lower CI 95.0 limit
+      data_type: FLOAT
+    - name: Upper CI 95.0 limit
+      data_type: FLOAT
+    - name: Lower CI 99.8 limit
+      data_type: FLOAT
+    - name: Upper CI 99.8 limit
+      data_type: FLOAT
+    - name: Count
+      data_type: NUMBER
+    - name: Denominator
+      data_type: NUMBER
+    - name: Value note
+      data_type: TEXT
+    - name: Recent Trend
+      data_type: TEXT
+    - name: Compared to England value or percentiles
+      data_type: TEXT
+    - name: Compared to percentiles
+      data_type: TEXT
+    - name: Time period Sortable
+      data_type: NUMBER
+    - name: New data
+      data_type: TEXT
+    - name: Compared to goal
+      data_type: TEXT
+    - name: Time period range
+      data_type: TEXT
+    - name: DATE_UPDATED_LOCAL
+      data_type: DATE
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: INDICATOR_DATA_SP
+    identifier: '"INDICATOR_DATA_SP"'
+    columns:
+    - name: Indicator ID
+      data_type: NUMBER
+    - name: Indicator Name
+      data_type: TEXT
+    - name: Parent Code
+      data_type: TEXT
+    - name: Parent Name
+      data_type: TEXT
+    - name: Area Code
+      data_type: TEXT
+    - name: Area Name
+      data_type: TEXT
+    - name: Area Type
+      data_type: TEXT
+    - name: AREA_ID
+      data_type: NUMBER
+    - name: Sex
       data_type: TEXT
     - name: Age
       data_type: TEXT
@@ -81,6 +144,19 @@ sources:
       data_type: TIMESTAMP_NTZ
   - name: INDICATOR_UPDATE_LOG
     identifier: '"INDICATOR_UPDATE_LOG"'
+    columns:
+    - name: INDICATOR_ID
+      data_type: NUMBER
+    - name: AREA_ID
+      data_type: NUMBER
+    - name: DATE_UPDATED_LOCAL
+      data_type: DATE
+    - name: IS_LATEST
+      data_type: BOOLEAN
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: INDICATOR_UPDATE_LOG_SP
+    identifier: '"INDICATOR_UPDATE_LOG_SP"'
     columns:
     - name: INDICATOR_ID
       data_type: NUMBER

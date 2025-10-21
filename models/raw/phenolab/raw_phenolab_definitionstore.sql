@@ -1,4 +1,4 @@
--- Raw layer model for phenolab.DEFINITION_STORE
+-- Raw layer model for phenolab.DEFINITIONSTORE
 -- Source: "DATA_LAKE__NCL"."PHENOLAB_DEV"
 -- Description: Phenolab supporting data
 -- This is a 1:1 passthrough from source with standardized column names
@@ -14,5 +14,8 @@ select
     "DEFINITION_VERSION" as definition_version,
     "DEFINITION_SOURCE" as definition_source,
     "VERSION_DATETIME" as version_datetime,
-    "UPLOADED_DATETIME" as uploaded_datetime
-from {{ source('phenolab', 'DEFINITION_STORE') }}
+    "UPLOADED_DATETIME" as uploaded_datetime,
+    "SOURCE_TABLE" as source_table,
+    "DBID" as dbid,
+    "CORE_CONCEPT_ID" as core_concept_id
+from {{ source('phenolab', 'DEFINITIONSTORE') }}

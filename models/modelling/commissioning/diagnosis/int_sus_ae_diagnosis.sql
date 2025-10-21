@@ -1,4 +1,4 @@
-{{ config(materialized="table") }}
+{{ config(materialized="table", enabled=false) }}
 
 -- note: using sk_patient_id as person_id
 

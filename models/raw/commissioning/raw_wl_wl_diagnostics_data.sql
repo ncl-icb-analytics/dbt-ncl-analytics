@@ -39,5 +39,6 @@ select
     "dmIcbCommissioner" as dm_icb_commissioner,
     "dmSubIcbCommissioner" as dm_sub_icb_commissioner,
     "derLSOA2021" as der_lsoa2021,
-    "Diagnostic_TCI_Date" as diagnostic_tci_date
+    "Diagnostic_TCI_Date" as diagnostic_tci_date,
+    "UNIQUE_BOOKING_REFERENCE_NUMBER" as unique_booking_reference_number
 from {{ source('wl', 'WL_Diagnostics_Data') }}
