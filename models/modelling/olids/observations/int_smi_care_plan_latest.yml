@@ -1,0 +1,8 @@
+version: 1
+models:
+  - name: int_smi_care_plan_latest
+    description: 'Mental Health /SMI care pan for SMI registry replacement/QOF indicator.
+      Latest value for Mental Health /SMI care pan observation using MHP_COD cluster with currency flag in last 12 months'
+    tests:
+      - cluster_ids_exist:
+          cluster_ids: MHP_COD
