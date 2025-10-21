@@ -106,8 +106,8 @@ models:
       - name: death_date_approx
         description: 'Approximate death date if deceased'
 
-      - name: sex
-        description: 'Sex'
+      - name: gender
+        description: 'Gender'
 
       - name: ethnicity_category
         description: 'Ethnicity category during this period'

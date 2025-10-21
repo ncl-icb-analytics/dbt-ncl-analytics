@@ -27,3 +27,14 @@ sources:
       data_type: TIMESTAMP_TZ
     - name: CRITERIA
       data_type: TEXT
+  - name: 'OP_OE_RATIO'
+    identifier: 'OP_OE_RATIO'
+    columns:
+    - name: 	PATIENT_ID
+      data_type: NUMBER
+    - name: OE_RATIO
+      data_type: NUMBER
+    - name: PREDICTED
+      data_type: NUMBER
+    - name: OP_ATT_TOT_12MO
+      data_type: NUMBER

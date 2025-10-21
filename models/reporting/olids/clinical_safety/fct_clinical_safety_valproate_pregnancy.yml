@@ -22,8 +22,8 @@ models:
       - name: age
         description: Person's current age
         
-      - name: sex
-        description: Person's sex
+      - name: gender
+        description: Person's gender
         
       - name: is_child_bearing_age_0_55
         description: Whether person is within child-bearing age range (0-55 years)

@@ -61,8 +61,8 @@ SELECT
         death_date_field='hist.death_date_approx'
     ) }},
 
-    -- Sex
-    hist.sex,
+    -- Gender
+    hist.gender,
 
     -- Ethnicity
     hist.ethnicity_category,

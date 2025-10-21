@@ -1,7 +1,7 @@
 version: 2
 models:
-  - name: dim_person_sex
-    description: 'Sex demographics for all persons with standardised three-category classification.
+  - name: dim_person_gender
+    description: 'Gender demographics for all persons with standardised three-category classification.
 
       Key Features:
 
@@ -24,8 +24,8 @@ models:
           - not_null
           - unique
       
-      - name: sex
-        description: 'Persons sex derived from gender concept mappings'
+      - name: gender
+        description: 'Persons gender derived from gender concept mappings'
         tests:
           - not_null
           - accepted_values:

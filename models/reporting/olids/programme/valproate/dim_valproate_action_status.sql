@@ -44,7 +44,7 @@ pregnancy_status AS (
         COALESCE(perm.person_id IS NOT NULL, FALSE) AS has_permanent_absence_of_pregnancy_risk
         
     FROM {{ ref('dim_person') }} AS p
-    INNER JOIN {{ ref('dim_person_sex') }} AS sex ON p.person_id = sex.person_id
+    INNER JOIN {{ ref('dim_person_gender') }} AS gender ON p.person_id = gender.person_id
     LEFT JOIN (
         SELECT
             person_id,
@@ -57,7 +57,7 @@ pregnancy_status AS (
         SELECT DISTINCT person_id
         FROM {{ ref('int_pregnancy_absence_risk_all') }}
     ) AS perm ON p.person_id = perm.person_id
-    WHERE sex.sex != 'Male' -- Only non-male individuals
+    WHERE gender.gender != 'Male' -- Only non-male individuals
 ),
 
 learning_disability AS (
@@ -70,7 +70,7 @@ learning_disability AS (
 SELECT
     db.person_id,
     db.age,
-    db.sex,
+    db.gender,
     
     -- PPP Status
     COALESCE(ppp.has_ppp_event, FALSE) AS has_ppp_status,

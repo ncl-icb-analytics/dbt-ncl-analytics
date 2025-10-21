@@ -11,7 +11,7 @@ select
     "Area Name" as area_name,
     "Area Type" as area_type,
     "AREA_ID" as area_id,
-    "Sex" as sex,
+    "Gender" as gender,
     "Age" as age,
     "Category Type" as category_type,
     "Category" as category,

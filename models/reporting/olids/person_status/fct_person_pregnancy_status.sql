@@ -59,7 +59,7 @@ pregnancy_status AS (
 
         -- Demographics (non-male only)
         age.age,
-        sex.sex,
+        gender.gender,
 
         -- Pregnancy logic: recent pregnancy code (last 9 months) after any delivery code
         preg.latest_preg_date AS latest_preg_cod_date,
@@ -92,16 +92,16 @@ pregnancy_status AS (
 
     FROM {{ ref('dim_person') }} AS p
     INNER JOIN {{ ref('dim_person_age') }} AS age ON p.person_id = age.person_id
-    INNER JOIN {{ ref('dim_person_sex') }} AS sex ON p.person_id = sex.person_id
+    INNER JOIN {{ ref('dim_person_gender') }} AS gender ON p.person_id = gender.person_id
     LEFT JOIN pregnancy_aggregated AS preg ON p.person_id = preg.person_id
     LEFT JOIN permanent_absence_risk AS perm ON p.person_id = perm.person_id
-    WHERE sex.sex != 'Male' -- Only non-male individuals
+    WHERE gender.gender != 'Male' -- Only non-male individuals
 )
 
 SELECT
     person_id,
     age,
-    sex,
+    gender,
     is_currently_pregnant,
     latest_preg_cod_date,
     latest_pregdel_cod_date,

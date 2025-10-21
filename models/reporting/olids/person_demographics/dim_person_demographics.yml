@@ -106,8 +106,8 @@ models:
         tests:
           - not_null
 
-      - name: sex
-        description: 'Sex'
+      - name: gender
+        description: 'Gender'
         tests:
           - not_null
           - accepted_values:

@@ -61,7 +61,7 @@ base_data AS (
         -- Demographics
         d.sk_patient_id,
         d.is_active,
-        d.sex,
+        d.gender,
         d.age,
         d.age_band_5y,
         d.age_band_10y,
@@ -121,7 +121,7 @@ final_dashboard AS (
         TRUE as indicator_flag,
         
         -- Demographics
-        sex, 
+        gender, 
         age,
         age_band_5y, 
         age_band_10y, 

@@ -375,7 +375,7 @@ sources:
       data_type: TEXT
     - name: LSOA_CODE
       data_type: TEXT
-    - name: SEX
+    - name: GENDER
       data_type: TEXT
     - name: NUMBER_OF_PATIENTS
       data_type: NUMBER
