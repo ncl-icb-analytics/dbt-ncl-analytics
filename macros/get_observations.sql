@@ -19,7 +19,7 @@
         o.id,
         o.patient_id,
         pp.person_id,
-        o.clinical_effective_date,
+        COALESCE(o.clinical_effective_date, '1900-01-01') AS clinical_effective_date,
         o.result_value,
         o.result_value_unit_concept_id,
         o.result_unit_display,
