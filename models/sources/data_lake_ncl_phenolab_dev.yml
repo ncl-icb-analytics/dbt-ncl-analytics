@@ -119,6 +119,17 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: UPLOADED_DATETIME
       data_type: TIMESTAMP_NTZ
+  - name: MEASUREMENT_CONFIGS
+    identifier: '"MEASUREMENT_CONFIGS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
   - name: NHS_SNOMED_REFSETS
     identifier: '"NHS_SNOMED_REFSETS"'
     columns:
