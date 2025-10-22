@@ -22,10 +22,10 @@ SELECT
     , CASE WHEN LENGTH(c.chapter_path) - LENGTH(REPLACE(c.chapter_path, '>', '')) >= 3 
            THEN SUBSTR(c.chapter_path, 
                        POSITION('>' IN SUBSTR(c.chapter_path || '>', 
-                       POSITION('>' IN SUBSTR(c.chapter_path || '>', POSITION('>' IN "Chapter_Path") + 1)) + 1)) + 2, 
+                       POSITION('>' IN SUBSTR(c.chapter_path || '>', POSITION('>' IN c.chapter_path) + 1)) + 1)) + 2, 
                        LENGTH(c.chapter_path) - 
                        POSITION('>' IN SUBSTR(c.chapter_path || '>', 
-                       POSITION('>' IN SUBSTR(c.chapter_path || '>', POSITION('>' IN "Chapter_Path") + 1)) + 1)))
+                       POSITION('>' IN SUBSTR(c.chapter_path || '>', POSITION('>' IN c.chapter_path) + 1)) + 1)))
            ELSE NULL 
       END AS bnf_chapter_level4
     , m.cost_centre_ods_code
