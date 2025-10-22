@@ -79,8 +79,8 @@ sources:
       data_type: DATE
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
-  - name: INDICATOR_DATA_V_1_1_0
-    identifier: '"INDICATOR_DATA_V_1_1_0"'
+  - name: INDICATOR_DATA_SP
+    identifier: '"INDICATOR_DATA_SP"'
     columns:
     - name: Indicator ID
       data_type: NUMBER
@@ -155,8 +155,8 @@ sources:
       data_type: BOOLEAN
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
-  - name: INDICATOR_UPDATE_LOG_V_1_1_0
-    identifier: '"INDICATOR_UPDATE_LOG_V_1_1_0"'
+  - name: INDICATOR_UPDATE_LOG_SP
+    identifier: '"INDICATOR_UPDATE_LOG_SP"'
     columns:
     - name: INDICATOR_ID
       data_type: NUMBER

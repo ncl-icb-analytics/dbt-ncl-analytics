@@ -1,3 +1,8 @@
+{{ config(
+    materialized='table',
+    tags=['staging', 'olids', 'reference']
+) }}
+
 select
     -- Primary key
     id,

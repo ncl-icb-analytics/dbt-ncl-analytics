@@ -7,6 +7,9 @@ models:
       - name: encounter_id
         data_type: varchar
         description: "Primary key for the encounter within SUS"
+        tests:
+          - unique
+          - not_null
 
       - name: sk_patient_id
         data_type: varchar
@@ -55,6 +58,10 @@ models:
       - name: source
         data_type: varchar
         description: "Commissioning data source"
+
+      - name: pod
+        data_type: varchar
+        description: "Point of delivery, based on HRG code"
 
       - name: type
         data_type: varchar

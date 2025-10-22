@@ -17,7 +17,7 @@ Testing:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, pcn_code, pcn_name, age
+    select patient_id, olids_id, pcn_code, pcn_name, age, main_language
     from {{ ref('inclusion_cohort')}}
     where eligible = 1
 )
@@ -25,10 +25,13 @@ with inclusion_list as (
 select il.patient_id
     , il.pcn_code
     , il.age
+    , il.main_language as main_language
+    , case when il.main_language in ('English', 'Not Recorded') then 0 else 1 end as main_language_flag -- TO DO: switch to interpreter flag
     -- trajectories for sparkline visualisation [add other domains - GP, Community, MH, total?]
     , tr.ae_encounters_sl
     , tr.ip_encounters_sl
     , tr.op_encounters_sl
+    , tr.gp_encounters_sl
     -- local disease registries and counts [ only of primary care for now, add acute/community etc data later ]
     , pc.has_atrial_fibrillation
     , pc.has_asthma
@@ -37,17 +40,17 @@ select il.patient_id
     , pc.has_chronic_kidney_disease
     , pc.has_copd
     , pc.has_cyp_asthma
-    , pc.has_dementia
+    , pc.has_dementia as has_dementia
     , pc.has_depression
     , pc.has_diabetes
     , pc.has_epilepsy
     , pc.has_familial_hypercholesterolaemia
     , pc.has_gestational_diabetes
-    , pc.has_frailty -- replace with ef2?
+    , pc.has_frailty as has_frailty-- replace with ef2?
     , pc.has_heart_failure
     , pc.has_hypertension
     , pc.has_learning_disability
-    , pc.has_learning_disability_all_ages
+    , pc.has_learning_disability_all_ages as has_learning_disability_all_ages
     , pc.has_nafld
     , pc.has_non_diabetic_hyperglycaemia
     , pc.has_obesity
@@ -55,7 +58,7 @@ select il.patient_id
     , pc.has_peripheral_arterial_disease
     , pc.has_palliative_care
     , pc.has_rheumatoid_arthritis
-    , pc.has_severe_mental_illness
+    , pc.has_severe_mental_illness as has_severe_mental_illness
     , pc.has_stroke_tia
     , pc.total_conditions
     , pc.total_qof_conditions -- replace cambridge multimorbidity score/ similar complexity metric?
@@ -64,7 +67,7 @@ select il.patient_id
     , pc.respiratory_conditions
     , pc.mental_health_conditions
     , pc.metabolic_conditions
-    , pc.musculoskeletal_conditions
+    , pc.musculoskeletal_conditions as musculoskeletal_conditions
     , pc.neurology_conditions
     , pc.geriatric_conditions
     -- Lifestyle and behavioural factors
@@ -92,6 +95,8 @@ select il.patient_id
     ,zeroifnull(opa.op_att_tot_12mo) as op_att_tot_12mo
     ,zeroifnull(opa.op_spec_12mo) as op_spec_12mo
     ,zeroifnull(opa.op_prov_12mo) as op_prov_12mo
+    ,rat.predicted as op_predicted
+    ,rat.oe_ratio as op_oe_ratio
     ,zeroifnull(apca.apc_12mo) as apc_12mo
     ,zeroifnull(apca.apc_los_12mo) as apc_los_12mo
     ,zeroifnull(aea.ae_t1_12mo) as ae_t1_12mo
@@ -109,7 +114,7 @@ select il.patient_id
     ,polyp.medication_count
     ,polyp.medication_name_list
     ,polyp.is_polypharmacy_5plus
-
+    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability_all_ages) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
     -- Current referrals
 
     -- Current risk scores?
@@ -143,3 +148,5 @@ left join {{ref('fct_person_sus_ae_recent')}} aea
     on il.patient_id  = aea.sk_patient_id
 left join {{ref('fct_person_gp_recent')}} gpa
     on il.patient_id  = gpa.sk_patient_id
+left join  {{source('c_ltcs','OP_OE_RATIO')}} rat
+    on il.patient_id  = rat.patient_id 

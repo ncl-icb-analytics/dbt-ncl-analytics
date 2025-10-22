@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='view')
-}}
-
-
 /*
 Outpatient encounters from SUS
 
@@ -45,6 +39,18 @@ select
     , core.appointment_care_professional_treatment_function as primary_treatment
     , dict_treat.specialty_name as treatment_desc
     , 'SUS_OP' as source
+    , case
+        when core.appointment_commissioning_grouping_core_hrg in ('WF01A','WF02A') then 'OPFUP-F2F'
+        when core.appointment_commissioning_grouping_core_hrg in ('WF01B','WF02B') then 'OPFA-F2F'
+        when core.appointment_commissioning_grouping_core_hrg in ('WF01C','WF02C') then 'OPFUP-NFTF'
+        when core.appointment_commissioning_grouping_core_hrg in ('WF01D','WF02D') then 'OPFA-NFTF'
+        when left(core.appointment_commissioning_grouping_core_hrg, 1) not in ('W', 'U')
+            and dict_att_t.attendant_type_desc = 'First' then 'OPPROC-FA'
+        when left(core.appointment_commissioning_grouping_core_hrg, 1) not in ('W', 'U')
+            and dict_att_t.attendant_type_desc = 'Follow-up' then 'OPPROC-FU'
+        when core.appointment_commissioning_grouping_core_hrg is null then 'UNKNOWN'
+        else 'OPPROC'
+        end as pod
     -- TO DO: add pod and pod_group
     , core.appointment_commissioning_grouping_core_hrg as type -- consider changing to something more aligned with team understanding
     , dict_hrg.hrg_description as type_desc

@@ -99,6 +99,8 @@ sources:
       data_type: TEXT
     - name: derLSOA2021
       data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
+      data_type: TEXT
   - name: WL_ClockStops_Data
     identifier: '"WL_ClockStops_Data"'
     columns:
@@ -228,6 +230,8 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: ORGANISATION_IDENTIFIER_REFERRING_ORGANISATION
       data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
+      data_type: TEXT
   - name: WL_Diagnostics_Data
     identifier: '"WL_Diagnostics_Data"'
     columns:
@@ -305,6 +309,8 @@ sources:
       data_type: TEXT
     - name: Diagnostic_TCI_Date
       data_type: TIMESTAMP_NTZ
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
+      data_type: TEXT
   - name: WL_OpenPathways_Data
     identifier: '"WL_OpenPathways_Data"'
     columns:
@@ -453,6 +459,8 @@ sources:
     - name: ORIGINAL_REFERRAL_REQUEST_RECEIVED_DATE
       data_type: TIMESTAMP_NTZ
     - name: ORGANISATION_IDENTIFIER_REFERRING_ORGANISATION
+      data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
       data_type: TEXT
   - name: WL_PIFU_Data
     identifier: '"WL_PIFU_Data"'

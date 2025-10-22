@@ -12,7 +12,7 @@ select
     lds_id,
     record_owner_organisation_code,
     lds_datetime_data_acquired,
-    lds_initial_date_received_date,
+    lds_initial_data_received_date,
 
     -- Metadata
     lds_start_date_time,

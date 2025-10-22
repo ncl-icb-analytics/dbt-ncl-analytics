@@ -1,7 +1,7 @@
 {{ config(
     materialized='table') }}
 
--- Intermediate model for LTC LCS Case Finding AF_62: Patients over 65 missing pulse check in last 36 months
+-- Intermediate model for LTC LCS Case Finding AF_62: Patients over 65 missing pulse check in last year
 -- Uses modular approach: leverages base population, observations intermediate, and exclusions
 
 WITH base_population AS (
@@ -23,7 +23,7 @@ pulse_checks AS (
     FROM {{ ref('int_ltc_lcs_af_observations') }}
     WHERE
         cluster_id IN ('LCS_PULSE_RATE', 'LCS_PULSE_RHYTHM')
-        AND clinical_effective_date >= dateadd(MONTH, -36, current_date())
+        AND clinical_effective_date >= dateadd(YEAR, -1, current_date())
 ),
 
 pulse_check_summary AS (

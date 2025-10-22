@@ -8,26 +8,26 @@
 with vacc_status_adol as (
 SELECT
   cv.person_id
-   ,MAX(CASE WHEN  vaccine_order = 1 THEN cv.vaccination_status END) as sixin1_status_dose_1
-  ,MAX(CASE WHEN  vaccine_order = 1 THEN cv.vaccination_date END) as sixin1_date_dose_1
-  ,MAX(CASE WHEN vaccine_order = 4 THEN cv.vaccination_status END) as sixin1_status_dose_2
-  ,MAX(CASE WHEN vaccine_order = 4 THEN cv.vaccination_date END) as sixin1_date_dose_2
-  ,MAX(CASE WHEN vaccine_order = 7 THEN cv.vaccination_status END) as sixin1_status_dose_3
-  ,MAX(CASE WHEN vaccine_order = 7 THEN cv.vaccination_date END) as sixin1_date_dose_3
-  ,MAX(CASE WHEN vaccine_order = 9 THEN cv.vaccination_status END) as hibmc_status_dose_1
-,MAX(CASE WHEN vaccine_order = 9 THEN cv.vaccination_date END) as hibmc_date_dose_1
-	,MAX(CASE WHEN vaccine_order = 11 THEN cv.vaccination_status END) as mmr_status_dose_1
-	,MAX(CASE WHEN vaccine_order = 11 THEN cv.vaccination_date END) as mmr_date_dose_1
-	,MAX(CASE WHEN vaccine_order = 15 THEN cv.vaccination_status END) as mmr_status_dose_2
-	,MAX(CASE WHEN vaccine_order = 15 THEN cv.vaccination_date END) as mmr_date_dose_2
- ,MAX(CASE WHEN vaccine_order = 14 THEN cv.vaccination_status END) as fourin1_status_dose_1
-	,MAX(CASE WHEN vaccine_order = 14 THEN cv.vaccination_date END) as fourin1_date_dose_1
- ,MAX(CASE WHEN vaccine_order = 16 THEN cv.vaccination_status END) as hpv_status_dose_1
-	,MAX(CASE WHEN vaccine_order = 16 THEN cv.vaccination_date END) as hpv_date_dose_1
-,MAX(CASE WHEN vaccine_order = 18 THEN cv.vaccination_status END) as threein1_status_dose_1
-,MAX(CASE WHEN vaccine_order = 18 THEN cv.vaccination_date END) as threein1_date_dose_1
-,MAX(CASE WHEN vaccine_order = 19 THEN cv.vaccination_status END) as menacwy_status_dose_1
-,MAX(CASE WHEN vaccine_order = 19 THEN cv.vaccination_date END) as menacwy_date_dose_1
+,MAX(CASE WHEN  vaccine_id = '6IN1_1' THEN cv.vaccination_status END) as sixin1_status_dose_1
+,MAX(CASE WHEN  vaccine_id = '6IN1_1' THEN cv.vaccination_date END) as sixin1_date_dose_1
+,MAX(CASE WHEN vaccine_id = '6IN1_2' THEN cv.vaccination_status END) as sixin1_status_dose_2
+,MAX(CASE WHEN vaccine_id = '6IN1_2' THEN cv.vaccination_date END) as sixin1_date_dose_2
+,MAX(CASE WHEN vaccine_id = '6IN1_3' THEN cv.vaccination_status END) as sixin1_status_dose_3
+,MAX(CASE WHEN vaccine_id = '6IN1_3' THEN cv.vaccination_date END) as sixin1_date_dose_3
+,MAX(CASE WHEN vaccine_id = 'HIBMENC_1' THEN cv.vaccination_status END) as hibmc_status_dose_1
+,MAX(CASE WHEN vaccine_id = 'HIBMENC_1' THEN cv.vaccination_date END) as hibmc_date_dose_1
+,MAX(CASE WHEN vaccine_id = 'MMR_1' THEN cv.vaccination_status END) as mmr_status_dose_1
+,MAX(CASE WHEN vaccine_id = 'MMR_1' THEN cv.vaccination_date END) as mmr_date_dose_1
+,MAX(CASE WHEN vaccine_id = 'MMR_2' THEN cv.vaccination_status END) as mmr_status_dose_2
+,MAX(CASE WHEN vaccine_id = 'MMR_2' THEN cv.vaccination_date END) as mmr_date_dose_2
+,MAX(CASE WHEN vaccine_id = '4IN1_1' THEN cv.vaccination_status END) as fourin1_status_dose_1
+,MAX(CASE WHEN vaccine_id = '4IN1_1' THEN cv.vaccination_date END) as fourin1_date_dose_1
+,MAX(CASE WHEN vaccine_id = 'HPV_1' THEN cv.vaccination_status END) as hpv_status_dose_1
+,MAX(CASE WHEN vaccine_id = 'HPV_1' THEN cv.vaccination_date END) as hpv_date_dose_1
+,MAX(CASE WHEN vaccine_id = '3IN1_1' THEN cv.vaccination_status END) as threein1_status_dose_1
+,MAX(CASE WHEN vaccine_id = '3IN1_1' THEN cv.vaccination_date END) as threein1_date_dose_1
+,MAX(CASE WHEN vaccine_id = 'MENACWY_1' THEN cv.vaccination_status END) as menacwy_status_dose_1
+,MAX(CASE WHEN vaccine_id = 'MENACWY_1' THEN cv.vaccination_date END) as menacwy_date_dose_1
 FROM {{ ref('int_childhood_imms_vaccination_status_current') }} cv
 GROUP BY cv.person_id
 )

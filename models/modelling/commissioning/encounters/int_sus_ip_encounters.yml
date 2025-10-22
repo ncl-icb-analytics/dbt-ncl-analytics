@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: int_sus_ip_encounters
+    description: "Event history for admitted patient care encounters from SUS data"
+    columns:
+      - name: encounter_id
+        data_type: number
+        description: "Primary key for the encounter within SUS"
+        tests:
+          - unique
+          - not_null
+
+      - name: sk_patient_id
+        data_type: varchar
+        description: "Common commissioning patient identifier"
+
+      - name: site_id
+        data_type: varchar
+        description: ""
+
+      - name: start_date
+        data_type: timestamp_ntz
+        description: "Date of admission"
+
+      - name: admission_method
+        data_type: varchar
+        description: "Method of admission"
+
+      - name: admission_method_group
+        data_type: varchar
+        description: "Group of admission method"
+
+      - name: admission_patient_classification
+        data_type: varchar
+        description: "Patient classification at admission"
+
+      - name: end_date
+        data_type: timestamp_ntz
+        description: "Date of discharge"
+
+      - name: duration
+        data_type: number
+        description: "Length of stay in days"
+
+      - name: duration_to_date
+        data_type: number
+        description: "Length of stay in days, including ongoing stays calculated to current date"
+
+      - name: acuity_proxy
+        data_type: varchar
+        description: ""
+
+      - name: flat_diagnosis_codes
+        data_type: varchar
+        description: ""
+
+      - name: primary_treatment
+        data_type: varchar
+        description: ""
+
+      - name: source
+        data_type: varchar
+        description: ""
+
+      - name: pod
+        data_type: varchar
+        description: "Point of delivery, based on admission method, patient classification and length of stay"
+
+      - name: type
+        data_type: varchar
+        description: ""
+
+      - name: cost
+        data_type: number
+        description: ""

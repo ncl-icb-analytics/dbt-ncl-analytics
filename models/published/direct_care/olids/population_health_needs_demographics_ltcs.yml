@@ -13,8 +13,8 @@ models:
         description: Indicates if the patient is currently active.
       - name: is_deceased
         description: Indicates if the patient is deceased.
-      - name: sex
-        description: Patient's sex.
+      - name: gender
+        description: Patient's gender.
       - name: age_band_5y
         description: Age band in 5-year intervals.
       - name: age_band_10y

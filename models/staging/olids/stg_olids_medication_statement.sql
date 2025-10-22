@@ -30,7 +30,6 @@ select
     date_recorded,
     is_active,
     is_confidential,
-    is_deleted,
     expiry_date,
     lds_id,
     record_owner_organisation_code,

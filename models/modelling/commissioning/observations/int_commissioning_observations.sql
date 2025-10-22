@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='view', enabled=false) }}
 
 -- note: using sk_patient_id as person_id
 

@@ -7,7 +7,7 @@ models:
 
       Key Features:
 
-      • Age restriction: Adults 18+ only (pediatric BMI requires age/sex-specific percentiles)
+      • Age restriction: Adults 18+ only (pediatric BMI requires age/gender-specific percentiles)
 
       • Ethnicity-adjusted BMI categories per NICE NG246 (lower thresholds for at-risk populations)
 

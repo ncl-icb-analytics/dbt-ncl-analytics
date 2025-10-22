@@ -11,7 +11,7 @@ Includes both registration and residence geography for comprehensive analysis.
 SELECT
   is_active,
   is_deceased,
-  sex,
+  gender,
   age_band_5y,
   age_band_10y,
   age_band_nhs,

@@ -2,9 +2,9 @@
     materialized='table') }}
 
 -- Intermediate model for LTC LCS CF DM_66 case finding
--- Patients who meet ALL of the following criteria:
--- 1. Latest HbA1c reading ≥ 42 and < 46 mmol/mol
--- 2. HbA1c reading must be within the last 12 months
+-- Patients who meet ALL of the following criteria (spec priority f):
+-- 1. Latest HbA1c reading ≥42 and ≤45 mmol/mol
+-- 2. No HbA1c reading in the last 12 months
 
 WITH base_population AS (
     -- Get base population aged 17+ (already excludes LTC registers and NHS health checks)
@@ -16,7 +16,7 @@ WITH base_population AS (
 ),
 
 hba1c_readings AS (
-    -- Get all HbA1c readings within last 12 months
+    -- Get all HbA1c readings with values > 0
     SELECT
         person_id,
         clinical_effective_date,
@@ -27,7 +27,6 @@ hba1c_readings AS (
     WHERE
         cluster_id = 'HBA1C_LEVEL'
         AND result_value > 0
-        AND clinical_effective_date >= DATEADD(YEAR, -1, CURRENT_DATE())
 ),
 
 latest_hba1c AS (
@@ -50,7 +49,7 @@ latest_hba1c AS (
         = 1
 )
 
--- Final selection with HbA1c range assessment
+-- Final selection: HbA1c 42-45 with no recent HbA1c in last year
 SELECT
     bp.person_id,
     bp.age,
@@ -59,11 +58,14 @@ SELECT
     hba1c.all_hba1c_codes,
     hba1c.all_hba1c_displays,
     COALESCE(
-        hba1c.latest_hba1c_value >= 42 AND hba1c.latest_hba1c_value < 46,
+        hba1c.latest_hba1c_value >= 42
+        AND hba1c.latest_hba1c_value <= 45
+        AND hba1c.latest_hba1c_date < DATEADD(YEAR, -1, CURRENT_DATE()),
         FALSE
-    ) AS has_elevated_hba1c
+    ) AS has_elevated_hba1c_needing_recheck
 FROM base_population AS bp
-LEFT JOIN latest_hba1c AS hba1c ON bp.person_id = hba1c.person_id
+INNER JOIN latest_hba1c AS hba1c ON bp.person_id = hba1c.person_id
 WHERE
     hba1c.latest_hba1c_value >= 42
-    AND hba1c.latest_hba1c_value < 46
+    AND hba1c.latest_hba1c_value <= 45
+    AND hba1c.latest_hba1c_date < DATEADD(YEAR, -1, CURRENT_DATE())

@@ -34,7 +34,7 @@ select pp.sk_patient_id as patient_id
     ,pd.pcn_name
     ,pd.main_language
     ,pd.age
-    ,pd.sex
+    ,pd.gender
     ,pd.ethnicity_category
     ,case when pc.has_condition = 1 or op.has_recent_op = 1 then 1 else 0 end as eligible
 from {{ref('dim_person_pseudo')}} pp

@@ -37,12 +37,12 @@ where p.age = 5
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 60 months
     ROUND(MONTHS_BETWEEN(v3.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM HIST5YRBASE v1
-    LEFT JOIN HIST5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 4 AND v2.EVENT_TYPE = 'Administration'
-    LEFT JOIN HIST5YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 7 AND v3.EVENT_TYPE = 'Administration'
-    WHERE v1.VACCINE_ORDER = 1  AND v1.EVENT_TYPE = 'Administration'
+    LEFT JOIN HIST5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.EVENT_TYPE = 'Administration'
+    LEFT JOIN HIST5YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.EVENT_TYPE = 'Administration'
+    WHERE v1.VACCINE_ID = '6IN1_1'  AND v1.EVENT_TYPE = 'Administration'
 )
 
--- Creating CTE for HibMenC (dose 1) where 1 row is per patient AS NUMERATOR
+-- Creating CTE for 4-in-1 (dose 1) where 1 row is per patient AS NUMERATOR
 ,FOURIN1 AS (
     SELECT 
         v1.PERSON_ID, 
@@ -51,7 +51,7 @@ where p.age = 5
 --HELPER COLUMN to check number of months between DOB and vaccination date is not >60 months
     ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
          FROM HIST5YRBASE v1
-        WHERE v1.VACCINE_ORDER = 14 and v1.EVENT_TYPE = 'Administration'
+        WHERE v1.VACCINE_ID = '4IN1_1' and v1.EVENT_TYPE = 'Administration'
 )  
 
  -- Creating CTE for HibMenC (dose 1) where 1 row is per patient at 5 yr AS NUMERATOR
@@ -63,7 +63,7 @@ where p.age = 5
     --HELPER COLUMN to check number of months between DOB and vaccination date is not >60 months
     ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths
         FROM HIST5YRBASE v1
-        WHERE v1.VACCINE_ORDER = 9 AND v1.EVENT_TYPE = 'Administration'
+        WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.EVENT_TYPE = 'Administration'
 )
 
 -- Creating CTE for MMR (dose 1 & Dose 2) where 1 row is per patient AS NUMERATOR
@@ -81,8 +81,8 @@ where p.age = 5
         --HELPER COLUMN to check number of months between DOB and second vaccination date is not >60 months
     ROUND(MONTHS_BETWEEN(v2.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS mmr_second_event_age_mths
         FROM HIST5YRBASE v1
-        LEFT JOIN HIST5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 15 and v2.EVENT_TYPE = 'Administration'
-        WHERE v1.VACCINE_ORDER = 11 and v1.EVENT_TYPE = 'Administration'
+        LEFT JOIN HIST5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' and v2.EVENT_TYPE = 'Administration'
+        WHERE v1.VACCINE_ID = 'MMR_1' and v1.EVENT_TYPE = 'Administration'
 ) 
 
 ,COMBINED AS (

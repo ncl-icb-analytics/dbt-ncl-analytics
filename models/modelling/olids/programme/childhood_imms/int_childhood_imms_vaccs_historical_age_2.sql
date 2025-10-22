@@ -36,9 +36,9 @@ where p.age = 2
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
     ROUND(MONTHS_BETWEEN(v3.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM HIST2YRBASE v1
-    LEFT JOIN HIST2YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 4 AND v2.EVENT_TYPE = 'Administration'
-    LEFT JOIN HIST2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 7 AND v3.EVENT_TYPE = 'Administration'
-    WHERE v1.VACCINE_ORDER = 1  AND v1.EVENT_TYPE = 'Administration'
+    LEFT JOIN HIST2YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.EVENT_TYPE = 'Administration'
+    LEFT JOIN HIST2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.EVENT_TYPE = 'Administration'
+    WHERE v1.VACCINE_ID = '6IN1_1'  AND v1.EVENT_TYPE = 'Administration'
 )
 
 -- Creating CTE for HibMenC (dose 1) where 1 row is per patient AS NUMERATOR
@@ -50,7 +50,7 @@ where p.age = 2
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
     ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths,
          FROM HIST2YRBASE v1
-        WHERE v1.VACCINE_ORDER = 9 and v1.EVENT_TYPE = 'Administration'
+        WHERE v1.VACCINE_ID = 'HIBMENC_1' and v1.EVENT_TYPE = 'Administration'
 )  
 -- Creating CTE for MMR (dose 1) where 1 row is per patient AS NUMERATOR
 ,MMR AS (
@@ -61,7 +61,7 @@ where p.age = 2
 --calculate HELPER column number of months between first vaccination date and approx first bday. If it's a negative number than the vaccination is early and not valid
 ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.FIRST_BDAY)) AS mmr_first_bday_mths,
         FROM HIST2YRBASE v1
-        WHERE v1.VACCINE_ORDER = 11 and v1.EVENT_TYPE = 'Administration'
+        WHERE v1.VACCINE_ID = 'MMR_1' and v1.EVENT_TYPE = 'Administration'
 ) 
 -- Creating CTE for MenB (dose 1 and 2 and booster) where 1 row is per patient AS NUMERATOR
 ,MENB AS (
@@ -77,9 +77,9 @@ v3.AGE_AT_EVENT as menb_third_event_age,
     ROUND(MONTHS_BETWEEN(v3.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS menb_third_event_age_mths
     FROM HIST2YRBASE v1
     LEFT JOIN HIST2YRBASE v2 
-    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 8 AND v2.EVENT_TYPE = 'Administration'
-    LEFT JOIN HIST2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 12 AND v3.EVENT_TYPE = 'Administration'
-    WHERE v1.VACCINE_ORDER = 2 and v1.EVENT_TYPE = 'Administration'
+    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2' AND v2.EVENT_TYPE = 'Administration'
+    LEFT JOIN HIST2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = 'MENB_3' AND v3.EVENT_TYPE = 'Administration'
+    WHERE v1.VACCINE_ID = 'MENB_1' and v1.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for PCV (dose 1 and 2) where 1 row is per patient AS NUMERATOR this is relevant for infants born on or after January 1, 2020
 ,PCV AS (
@@ -92,8 +92,8 @@ v3.AGE_AT_EVENT as menb_third_event_age,
 ROUND(MONTHS_BETWEEN(v2.EVENT_DATE, v1.FIRST_BDAY)) AS pcv_second_first_bday_mths,
          FROM HIST2YRBASE v1
          LEFT JOIN HIST2YRBASE v2 
-         ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 10 AND v2.EVENT_TYPE = 'Administration'
-         WHERE v1.VACCINE_ORDER = 5 AND v1.EVENT_TYPE = 'Administration'
+         ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'PCV_2' AND v2.EVENT_TYPE = 'Administration'
+         WHERE v1.VACCINE_ID = 'PCV_1' AND v1.EVENT_TYPE = 'Administration'
          AND v1.BIRTH_DATE_APPROX >= '2020-01-16'
          )
 ,COMBINED AS (

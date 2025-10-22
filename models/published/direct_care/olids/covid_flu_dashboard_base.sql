@@ -42,7 +42,7 @@ WITH uptake_with_demographics AS (
         
         -- Demographics from dim_person_demographics
         d.is_active,
-        d.sex,
+        d.gender,
         d.age,
         d.age_band_5y,
         d.age_band_10y,

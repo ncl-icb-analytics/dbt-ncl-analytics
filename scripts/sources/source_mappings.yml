@@ -222,3 +222,23 @@ sources:
     description: Personal Demographics Service data
     staging_prefix: stg_pds
     domain: shared
+
+  # ========================================
+  # FACT SCHEMAS IN DATA_LAKE
+  # ========================================
+
+  # Fact Patient Schema
+  - source_name: fact_patient
+    database: DATA_LAKE
+    schema: FACT_PATIENT
+    description: Patient fact tables
+    raw_prefix: raw_fact_patient
+    domain: shared
+
+  # Fact Practice Schema
+  - source_name: fact_practice
+    database: DATA_LAKE
+    schema: FACT_PRACTICE
+    description: Practice fact tables
+    raw_prefix: raw_fact_practice
+    domain: shared

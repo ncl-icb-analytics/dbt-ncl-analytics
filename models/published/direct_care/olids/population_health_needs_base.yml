@@ -27,10 +27,10 @@ models:
         tests:
           - not_null  # Demographics always has age for persons with birth dates
       
-      - name: sex
-        description: Person's sex
+      - name: gender
+        description: Person's gender
         tests:
-          - not_null  # Demographics always has sex (even if 'Unknown')
+          - not_null  # Demographics always has gender (even if 'Unknown')
       
       - name: ethnicity_category
         description: Main ethnicity category classification

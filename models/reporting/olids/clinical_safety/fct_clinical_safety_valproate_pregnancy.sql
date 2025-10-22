@@ -12,7 +12,7 @@ SELECT
     -- Core identifiers
     preg.person_id,
     preg.age,
-    preg.sex,
+    preg.gender,
     preg.is_child_bearing_age_0_55,
 
     -- Pregnancy details

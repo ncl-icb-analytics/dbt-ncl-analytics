@@ -3,9 +3,9 @@
 -- Description: Analyst-managed reference datasets and business rules
 -- This is a 1:1 passthrough from source with standardized column names
 select
-    "TRAINING" as training,
-    "TRAINING_HOURS_TRAINEE_NUMBERS" as training_hours_trainee_numbers,
-    "MEASURE" as measure,
-    "MONTH_YEAR" as month_year,
-    "DATA" as data
+    "Training" as training,
+    "Training Hours/Trainee Numbers" as training_hours_trainee_numbers,
+    "Measure" as measure,
+    "Month/Year" as month_year,
+    "Data" as data
 from {{ source('reference_analyst_managed', 'IA_NUMBERS') }}

@@ -23,7 +23,7 @@ SELECT
     -- Demographics: Status and identifiers
     d.is_active,
     d.is_deceased,
-    d.sex,
+    d.gender,
     d.birth_date_approx,
     d.birth_date_approx_end_of_month,
     d.age,

@@ -31,7 +31,6 @@ select
     "ISSUE_METHOD" as issue_method,
     "DATE_RECORDED" as date_recorded,
     "IS_CONFIDENTIAL" as is_confidential,
-    "IS_DELETED" as is_deleted,
     "ISSUE_METHOD_DESCRIPTION" as issue_method_description,
     "LDS_ID" as lds_id,
     "LDS_BUSINESS_KEY" as lds_business_key,

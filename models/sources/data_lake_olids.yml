@@ -263,7 +263,7 @@ sources:
       data_type: TEXT
     - name: RESULT_VALUE
       data_type: FLOAT
-    - name: RESULT_VALUE_UNITS
+    - name: RESULT_VALUE_UNITS_CONCEPT_ID
       data_type: TEXT
     - name: RESULT_DATE
       data_type: DATE
@@ -289,8 +289,6 @@ sources:
       data_type: BOOLEAN
     - name: DATE_RECORDED
       data_type: TIMESTAMP_NTZ
-    - name: IS_DELETED
-      data_type: BOOLEAN
     - name: PERSON_ID
       data_type: TEXT
     - name: LDS_ID
@@ -360,8 +358,6 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: DATE_RECORDED
       data_type: TIMESTAMP_NTZ
-    - name: IS_DELETED
-      data_type: BOOLEAN
     - name: LDS_ID
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
@@ -639,8 +635,6 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: IS_CONFIDENTIAL
       data_type: BOOLEAN
-    - name: IS_DELETED
-      data_type: BOOLEAN
     - name: ISSUE_METHOD_DESCRIPTION
       data_type: TEXT
     - name: LDS_ID
@@ -738,8 +732,6 @@ sources:
       data_type: BOOLEAN
     - name: IS_CONFIDENTIAL
       data_type: BOOLEAN
-    - name: IS_DELETED
-      data_type: BOOLEAN
     - name: EXPIRY_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_ID
@@ -799,7 +791,7 @@ sources:
       data_type: TEXT
     - name: RESULT_VALUE
       data_type: FLOAT
-    - name: RESULT_VALUE_UNIT_CONCEPT_ID
+    - name: RESULT_VALUE_UNITS_CONCEPT_ID
       data_type: TEXT
     - name: RESULT_DATE
       data_type: DATE
@@ -825,8 +817,6 @@ sources:
       data_type: BOOLEAN
     - name: DATE_RECORDED
       data_type: TIMESTAMP_NTZ
-    - name: IS_DELETED
-      data_type: BOOLEAN
     - name: IS_PROBLEM_DELETED
       data_type: BOOLEAN
     - name: IS_CONFIDENTIAL
@@ -959,7 +949,7 @@ sources:
       data_type: TEXT
     - name: LDS_DATETIME_DATA_ACQUIRED
       data_type: TIMESTAMP_NTZ
-    - name: LDS_INITIAL_DATE_RECEIVED_DATE
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
@@ -1002,7 +992,7 @@ sources:
       data_type: TEXT
     - name: LDS_DATETIME_DATA_ACQUIRED
       data_type: TIMESTAMP_NTZ
-    - name: LDS_INITIAL_DATE_RECEIVED_DATE
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
@@ -1329,7 +1319,7 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: DESCRIPTION
       data_type: TEXT
-    - name: PROCEDURE_SOURCE_CONCEPT_ID
+    - name: PROCEDURE_REQUEST_SOURCE_CONCEPT_ID
       data_type: TEXT
     - name: STATUS_CONCEPT_ID
       data_type: TEXT
@@ -1340,8 +1330,6 @@ sources:
     - name: AGE_AT_EVENT_NEONATE
       data_type: NUMBER
     - name: IS_CONFIDENTIAL
-      data_type: BOOLEAN
-    - name: IS_DELETED
       data_type: BOOLEAN
     - name: LDS_END_DATE_TIME
       data_type: TIMESTAMP_NTZ
@@ -1465,8 +1453,6 @@ sources:
       data_type: TEXT
     - name: IS_PRIVATE
       data_type: BOOLEAN
-    - name: IS_DELETED
-      data_type: BOOLEAN
     - name: LDS_ID
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
@@ -1525,50 +1511,4 @@ sources:
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
       data_type: TEXT
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
-      data_type: TIMESTAMP_NTZ
-  - name: TERMINOLOGY_CONCEPT
-    identifier: '"TERMINOLOGY_CONCEPT"'
-    columns:
-    - name: ID
-      data_type: TEXT
-    - name: LDS_ID
-      data_type: TEXT
-    - name: LDS_BUSINESS_KEY
-      data_type: TEXT
-    - name: LDS_DATASET_ID
-      data_type: TEXT
-    - name: SYSTEM
-      data_type: TEXT
-    - name: CODE
-      data_type: TEXT
-    - name: DISPLAY
-      data_type: TEXT
-    - name: IS_MAPPED
-      data_type: BOOLEAN
-    - name: USE_COUNT
-      data_type: NUMBER
-    - name: LDS_START_DATE_TIME
-      data_type: TIMESTAMP_NTZ
-  - name: TERMINOLOGY_CONCEPT_MAP
-    identifier: '"TERMINOLOGY_CONCEPT_MAP"'
-    columns:
-    - name: ID
-      data_type: TEXT
-    - name: LDS_ID
-      data_type: TEXT
-    - name: LDS_BUSINESS_KEY
-      data_type: TEXT
-    - name: LDS_DATASET_ID
-      data_type: TEXT
-    - name: CONCEPT_MAP_ID
-      data_type: TEXT
-    - name: SOURCE_CODE_ID
-      data_type: TEXT
-    - name: TARGET_CODE_ID
-      data_type: TEXT
-    - name: IS_PRIMARY
-      data_type: BOOLEAN
-    - name: EQUIVALENCE
-      data_type: TEXT
-    - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ

@@ -26,6 +26,31 @@ sources:
       data_type: TEXT
     - name: NOTES
       data_type: TEXT
+  - name: CANCER__FDS_OUTCOMES
+    identifier: '"CANCER__FDS_OUTCOMES"'
+    columns:
+    - name: PERIOD
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: STANDARD
+      data_type: TEXT
+    - name: ORG_CODE
+      data_type: TEXT
+    - name: STAGE_ROUTE
+      data_type: TEXT
+    - name: FDS_END_REASON
+      data_type: TEXT
+    - name: CANCER_TYPE
+      data_type: TEXT
+    - name: TOTAL_TREATED
+      data_type: NUMBER
+    - name: WITHIN_STANDARD
+      data_type: NUMBER
+    - name: BREACHES
+      data_type: NUMBER
   - name: COMMUNITY_P2_OCCUPANCY
     identifier: '"COMMUNITY_P2_OCCUPANCY"'
     columns:
@@ -178,7 +203,7 @@ sources:
       data_type: TEXT
     - name: DIAGNOSTIC_MODALITY
       data_type: TEXT
-    - name: WAITING_LIST_ACTIVITY
+    - name: Waiting list_Activity
       data_type: NUMBER
     - name: PLANNED_ACTIVITY
       data_type: NUMBER
@@ -190,34 +215,83 @@ sources:
       data_type: NUMBER
     - name: Patient_Declined/Refused
       data_type: NUMBER
-    - name: 00 < 01 Week
+    - name: 0 <01 weeks
+      data_type: TEXT
+    - name: 01 <02 weeks
+      data_type: TEXT
+    - name: 02 <03 weeks
+      data_type: TEXT
+    - name: 03 <04 weeks
+      data_type: TEXT
+    - name: 04 <05 weeks
+      data_type: TEXT
+    - name: 05 <06 weeks
+      data_type: TEXT
+    - name: 06 <07 weeks
+      data_type: TEXT
+    - name: 07 <08 weeks
+      data_type: TEXT
+    - name: 08 <09 weeks
+      data_type: TEXT
+    - name: 09 <10 weeks
+      data_type: TEXT
+    - name: 10 <11 weeks
+      data_type: TEXT
+    - name: 11 <12 weeks
+      data_type: TEXT
+    - name: 12 <13 weeks
+      data_type: TEXT
+    - name: 13+ weeks
+      data_type: TEXT
+  - name: DIAGNOSTICS_WEEKLY_DM01_HISTORIC
+    identifier: '"DIAGNOSTICS_WEEKLY_DM01_HISTORIC"'
+    columns:
+    - name: PROVIDER
+      data_type: TEXT
+    - name: SPECIALITY
+      data_type: TEXT
+    - name: DATE
+      data_type: TEXT
+    - name: WEEKNUMBER
+      data_type: TEXT
+    - name: Diagnostic waiting list-With a TCI
+      data_type: TEXT
+    - name: Diagnostic waiting list-Without a TCI
+      data_type: TEXT
+    - name: Diagnostic waiting list-Total
       data_type: NUMBER
-    - name: 01 < 02 Weeks
+    - name: Waiting list
+      data_type: TEXT
+    - name: PLANNED
+      data_type: TEXT
+    - name: UNSCHEDULED
+      data_type: TEXT
+    - name: DM01-Total
       data_type: NUMBER
-    - name: 02 < 03 Weeks
+    - name: DNA
+      data_type: TEXT
+    - name: Patient Cancelled
+      data_type: TEXT
+    - name: Patient Declined/Refused
+      data_type: TEXT
+    - name: Total DNA
       data_type: NUMBER
-    - name: 03 < 04 Weeks
-      data_type: NUMBER
-    - name: 04 < 05 Weeks
-      data_type: NUMBER
-    - name: 05 < 06 Weeks
-      data_type: NUMBER
-    - name: 06 < 07 Weeks
-      data_type: NUMBER
-    - name: 07 < 08 Weeks
-      data_type: NUMBER
-    - name: 08 < 09 Weeks
-      data_type: NUMBER
-    - name: 09 < 10 Weeks
-      data_type: NUMBER
-    - name: 10 < 11 Weeks
-      data_type: NUMBER
-    - name: 11 < 12 Weeks
-      data_type: NUMBER
-    - name: 12 < 13 Weeks
-      data_type: NUMBER
-    - name: 13+ Weeks
-      data_type: NUMBER
+    - name: Cancer 62day pathway - Total on waiting list
+      data_type: TEXT
+    - name: Cancer 62 day pathway - Activity in the week
+      data_type: TEXT
+    - name: Wait List-0<01 weeks
+      data_type: TEXT
+    - name: Wait List-01<02 weeks
+      data_type: TEXT
+    - name: Wait List-02<03 weeks
+      data_type: TEXT
+    - name: Wait List-03<04 weeks
+      data_type: TEXT
+    - name: Wait List-04<05 weeks
+      data_type: TEXT
+    - name: Wait List-05<06 weeks
+      data_type: TEXT
   - name: EFI2_COEFFICIENTS
     identifier: '"EFI2_COEFFICIENTS"'
     columns:
@@ -357,109 +431,109 @@ sources:
   - name: IA_CERTIFICATES_MONTHLY
     identifier: '"IA_CERTIFICATES_MONTHLY"'
     columns:
-    - name: CERTIFICATE_NAME
+    - name: Certificate name
       data_type: TEXT
-    - name: COURSE_CREATED_BY
+    - name: Course created by
       data_type: TEXT
-    - name: DATE_ISSUED
+    - name: Date issued
       data_type: TEXT
-    - name: FULL_NAME_WITH_LINK
+    - name: Full name with link
       data_type: TEXT
-    - name: FULL_NAME
+    - name: Full name
       data_type: TEXT
-    - name: TRUST_HOSPITAL
+    - name: Trust / Hospital
       data_type: TEXT
-    - name: BAND_GRADE
+    - name: Band/Grade
       data_type: TEXT
-    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+    - name: What best describes your role?
       data_type: TEXT
-    - name: CATEGORY_NAME
+    - name: Category name
       data_type: TEXT
   - name: IA_COMPLETION_MONTHLY
     identifier: '"IA_COMPLETION_MONTHLY"'
     columns:
-    - name: COURSE_FULL_NAME
+    - name: Course full name
       data_type: TEXT
-    - name: COURSE_SHORT_NAME
+    - name: Course short name
       data_type: TEXT
-    - name: FULL_NAME
+    - name: Full name
       data_type: TEXT
-    - name: ENROLMENT_METHOD
+    - name: Enrolment method
       data_type: TEXT
-    - name: TRUST_HOSPITAL
+    - name: Trust / Hospital
       data_type: TEXT
-    - name: BAND_GRADE
+    - name: Band/Grade
       data_type: TEXT
-    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+    - name: What best describes your role?
       data_type: TEXT
-    - name: DATE_AND_TIME_ENROLLED
+    - name: Date and time enrolled
       data_type: TEXT
-    - name: TIME_STARTED
+    - name: Time started
       data_type: TEXT
-    - name: TIME_COMPLETED
+    - name: Time completed
       data_type: TEXT
-    - name: STUDENT_PROGRESS
+    - name: Student progress
       data_type: TEXT
-    - name: COURSE_TYPE
+    - name: Course Type
       data_type: TEXT
   - name: IA_ENROLMENTS_MONTHLY
     identifier: '"IA_ENROLMENTS_MONTHLY"'
     columns:
-    - name: COURSE_FULL_NAME
+    - name: Course full name
       data_type: TEXT
-    - name: COURSE_SHORT_NAME
+    - name: Course short name
       data_type: TEXT
-    - name: COURSE_CREATED_BY
+    - name: Course created by
       data_type: TEXT
-    - name: FULL_NAME
+    - name: Full name
       data_type: TEXT
-    - name: ENROLMENT_METHOD
+    - name: Enrolment method
       data_type: TEXT
-    - name: TRUST_HOSPITAL
+    - name: Trust / Hospital
       data_type: TEXT
-    - name: BAND_GRADE
+    - name: Band/Grade
       data_type: TEXT
-    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+    - name: What best describes your role?
       data_type: TEXT
-    - name: DATE_AND_TIME_ENROLLED
+    - name: Date and time enrolled
       data_type: TEXT
-    - name: TIME_STARTED
+    - name: Time started
       data_type: TEXT
-    - name: TIME_COMPLETED
+    - name: Time completed
       data_type: TEXT
-    - name: STUDENT_PROGRESS
+    - name: Student progress
       data_type: TEXT
   - name: IA_NEW_USERS_MONTHLY
     identifier: '"IA_NEW_USERS_MONTHLY"'
     columns:
-    - name: FULL_NAME
+    - name: Full name
       data_type: TEXT
-    - name: USERNAME
+    - name: Username
       data_type: TEXT
-    - name: TRUST_HOSPITAL
+    - name: Trust / Hospital
       data_type: TEXT
-    - name: WHAT_BEST_DESCRIBES_YOUR_ROLE
+    - name: What best describes your role?
       data_type: TEXT
-    - name: BAND_GRADE
+    - name: Band/Grade
       data_type: TEXT
-    - name: DATE_AND_TIME_REGISTERED
+    - name: Date and time registered
       data_type: TEXT
-    - name: FULL_NAME_WITH_LINK
+    - name: Full name with link
       data_type: TEXT
-    - name: FULL_NAME_2
+    - name: Full name 2
       data_type: TEXT
   - name: IA_NUMBERS
     identifier: '"IA_NUMBERS"'
     columns:
-    - name: TRAINING
+    - name: Training
       data_type: TEXT
-    - name: TRAINING_HOURS_TRAINEE_NUMBERS
+    - name: Training Hours/Trainee Numbers
       data_type: TEXT
-    - name: MEASURE
+    - name: Measure
       data_type: TEXT
-    - name: MONTH_YEAR
+    - name: Month/Year
       data_type: TEXT
-    - name: DATA
+    - name: Data
       data_type: NUMBER
   - name: IMD2019
     identifier: '"IMD2019"'
