@@ -1,10 +1,10 @@
-select
-    -- Primary key
-    id,
+{{ config(
+    materialized='table',
+    tags=['staging', 'olids', 'reference'],
+    cluster_by=['source_code_id']
+) }}
 
-    -- Business columns
-    lds_id,
-    concept_map_id,
+select distinct
     source_code_id,
     target_code_id,
     is_primary,

@@ -21,7 +21,7 @@
         pp.person_id,
         COALESCE(o.clinical_effective_date, '1900-01-01') AS clinical_effective_date,
         o.result_value,
-        o.result_value_unit_concept_id,
+        o.result_value_units_concept_id,
         o.result_unit_display,
         o.result_text,
         o.is_problem,

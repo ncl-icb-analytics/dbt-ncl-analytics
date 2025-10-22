@@ -23,7 +23,6 @@ select
     "ADMISSION_METHOD" as admission_method,
     "END_DATE" as end_date,
     "DATE_RECORDED" as date_recorded,
-    "IS_DELETED" as is_deleted,
     "LDS_ID" as lds_id,
     "LDS_BUSINESS_KEY" as lds_business_key,
     "LDS_DATASET_ID" as lds_dataset_id,

@@ -1,18 +1,9 @@
 version: 2
 models:
 - name: stg_olids_concept_map
-  description: Mappings between different coding systems and terminologies. Static
-    reference table.
+  description: Mappings between different coding systems and terminologies. Deduplicated
+    on business key.
   columns:
-  - name: id
-    description: Primary key - unique identifier for this concept mapping
-    tests:
-    - unique
-    - not_null
-  - name: lds_id
-    description: LDS system identifier
-  - name: concept_map_id
-    description: Identifier for the concept map group
   - name: source_code_id
     description: Foreign key to concept.id - source concept being mapped from
   - name: target_code_id

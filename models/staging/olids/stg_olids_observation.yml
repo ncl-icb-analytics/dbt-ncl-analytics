@@ -26,7 +26,7 @@ models:
     description: Foreign key to concept.id - precision of the clinical effective date
   - name: result_value
     description: Numeric result value of the observation
-  - name: result_value_unit_concept_id
+  - name: result_value_units_concept_id
     description: Foreign key to concept.id - unit of measure for the result value
   - name: result_date
     description: Date the result was obtained
@@ -53,8 +53,6 @@ models:
     description: Boolean indicating if this is the primary observation
   - name: date_recorded
     description: Date the record was entered into the system
-  - name: is_deleted
-    description: Boolean indicating if the clinical record has been deleted
   - name: is_problem_deleted
     description: Boolean indicating if the associated problem has been deleted
   - name: is_confidential
