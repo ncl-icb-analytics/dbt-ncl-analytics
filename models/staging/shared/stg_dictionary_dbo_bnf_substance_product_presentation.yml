@@ -1,0 +1,13 @@
+version: 2
+models:
+- name: stg_dictionary_dbo_bnf_substance_product_presentation
+  description: Dictionary for BNF substance product presentations
+  columns:
+  - name: sk_bnfid
+    description: Surrogate key for bnf substance product presentation
+    tests:
+    - unique
+    - not_null
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
