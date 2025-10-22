@@ -149,7 +149,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , 'CareContact' as activity_subtype
         , count(*) as encounters
         , sum(proxy_cost) as cost
-        , sum(duration) as duration
+        , sum(duration/1440) as duration -- convert to days from minutes to align with spells
     from 
         {{ ref('int_mhsds_carecontact_encounters') }}
     group by
@@ -234,7 +234,7 @@ select
     , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'Spell' then cost else 0 end) as mh_spell_cost
     , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'CareContact' then cost else 0 end) as mh_contact_cost
     , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'Spell' then duration else 0 end) as mh_spell_duration
-    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'CareContact' then duration else 0 end) as mh_contact_duration
+    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'CareContact' then duration*1440 else 0 end) as mh_contact_duration -- convert back to minutes
 from 
     combined
 group by 
