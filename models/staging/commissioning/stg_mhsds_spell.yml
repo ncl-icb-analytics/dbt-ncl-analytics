@@ -2,7 +2,7 @@ models:
 - name: stg_mhsds_spell
   description: 'Mental Health Services Data Set (MHSDS) spells'
   columns:
-  - name: hosp_prov_spell_id
+  - name: uniq_hosp_prov_spell_num
     description: A unique identifier for each Hospital Provider Spell for a Health Care Provider
     tests:
     - not_null
