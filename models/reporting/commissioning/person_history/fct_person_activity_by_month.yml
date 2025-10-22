@@ -24,6 +24,8 @@ models:
         description: "Count of primary care encounters"
       - name: cc_encounters
         description: "Count of community care contacts"
+      - name: mh_encounters
+        description: "Count of mental health encounters"
       - name: ae_cost
         description: "Sum of A&E encounter cost"
       - name: ip_cost
@@ -32,6 +34,8 @@ models:
         description: "Sum of outpatient encounter cost"
       - name: cc_cost
         description: "N/A"
+      - name: mh_cost
+        description:  "Sum of mental health encounter proxy cost - uses national cost collection averages adjusted for NCL"
       - name: ae_duration
         description: "Sum of A&E encounter duration in hours"
       - name: ip_duration
@@ -42,6 +46,8 @@ models:
         description: "Sum of primary care encounter duration in mins - DQ issues."
       - name: cc_duration
         description: "Sum of community care contacts duration in mins"
+      - name: mh_duration
+        description: "Sum of mental health encounter duration in days"
 
       - name: ae_emergency_encounters
         description: "Count of emergency care A&E encounters (AE-T1, AE-Other)"
@@ -99,4 +105,17 @@ models:
         description: "Sum of outpatient follow-up attendance duration in days (OPFUP-F2F, OPFUP-NFTF)"
       - name: op_proc_duration
         description: "Sum of outpatient procedure attendance duration in days (OPPROC)"
+
+      - name: mh_spell_encounters
+        description: "Count of mental health service spells"
+      - name: mh_care_contact_encounters
+        description: "Count of mental health care contact encounters" 
+      - name: mh_spell_cost
+        description: "Sum of mental health service spell proxy cost - uses national cost collection average (£651) adjusted for NCL"
+      - name: mh_care_contact_cost
+        description: "Sum of mental health care contact encounter proxy cost - uses national cost collection average (£302) adjusted for NCL"
+      - name: mh_spell_duration
+        description: "Sum of mental health service spell duration in days (includes estimates where actual end date is missing)" 
+      - name: mh_care_contact_duration
+        description: "Sum of mental health care contact encounter duration in minutes"
 

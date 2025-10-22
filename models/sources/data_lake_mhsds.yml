@@ -1,0 +1,4587 @@
+version: 2
+sources:
+- name: mhsds
+  database: '"DATA_LAKE"'
+  schema: '"MHSDS"'
+  description: Mental Health Services Data Set (MHSDS)
+  tables:
+  - name: ActiveSubmission
+    identifier: '"ActiveSubmission"'
+    columns:
+    - name: OrgIDProvider
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+  - name: MHS000Header
+    identifier: '"MHS000Header"'
+    columns:
+    - name: DatSetVer
+      data_type: NUMBER
+    - name: OrgIDProvider
+      data_type: TEXT
+    - name: OrgIDSubmit
+      data_type: TEXT
+    - name: PrimSystemInUse
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: DateTimeDatSetCreate
+      data_type: TIMESTAMP_NTZ
+    - name: MHS000UniqID
+      data_type: NUMBER
+    - name: FileType
+      data_type: TEXT
+    - name: TotRec
+      data_type: NUMBER
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: TotMHS000
+      data_type: NUMBER
+    - name: TotMHS001
+      data_type: NUMBER
+    - name: TotMHS002
+      data_type: NUMBER
+    - name: TotMHS003
+      data_type: NUMBER
+    - name: TotMHS004
+      data_type: NUMBER
+    - name: TotMHS005
+      data_type: NUMBER
+    - name: TotMHS006
+      data_type: NUMBER
+    - name: TotMHS007
+      data_type: NUMBER
+    - name: TotMHS008
+      data_type: NUMBER
+    - name: TotMHS009
+      data_type: NUMBER
+    - name: TotMHS010
+      data_type: NUMBER
+    - name: TotMHS011
+      data_type: NUMBER
+    - name: TotMHS012
+      data_type: NUMBER
+    - name: TotMHS013
+      data_type: NUMBER
+    - name: TotMHS014
+      data_type: NUMBER
+    - name: TotMHS101
+      data_type: NUMBER
+    - name: TotMHS102
+      data_type: NUMBER
+    - name: TotMHS103
+      data_type: NUMBER
+    - name: TotMHS104
+      data_type: NUMBER
+    - name: TotMHS105
+      data_type: NUMBER
+    - name: TotMHS106
+      data_type: NUMBER
+    - name: TotMHS107
+      data_type: NUMBER
+    - name: TotMHS201
+      data_type: NUMBER
+    - name: TotMHS202
+      data_type: NUMBER
+    - name: TotMHS203
+      data_type: NUMBER
+    - name: TotMHS204
+      data_type: NUMBER
+    - name: TotMHS205
+      data_type: NUMBER
+    - name: TotMHS206
+      data_type: NUMBER
+    - name: TotMHS301
+      data_type: NUMBER
+    - name: TotMHS302
+      data_type: NUMBER
+    - name: TotMHS401
+      data_type: NUMBER
+    - name: TotMHS402
+      data_type: NUMBER
+    - name: TotMHS403
+      data_type: NUMBER
+    - name: TotMHS404
+      data_type: NUMBER
+    - name: TotMHS405
+      data_type: NUMBER
+    - name: TotMHS501
+      data_type: NUMBER
+    - name: TotMHS502
+      data_type: NUMBER
+    - name: TotMHS503
+      data_type: NUMBER
+    - name: TotMHS504
+      data_type: NUMBER
+    - name: TotMHS505
+      data_type: NUMBER
+    - name: TotMHS506
+      data_type: NUMBER
+    - name: TotMHS507
+      data_type: NUMBER
+    - name: TotMHS509
+      data_type: NUMBER
+    - name: TotMHS510
+      data_type: NUMBER
+    - name: TotMHS511
+      data_type: NUMBER
+    - name: TotMHS512
+      data_type: NUMBER
+    - name: TotMHS513
+      data_type: NUMBER
+    - name: TotMHS514
+      data_type: NUMBER
+    - name: TotMHS515
+      data_type: NUMBER
+    - name: TotMHS516
+      data_type: NUMBER
+    - name: TotMHS517
+      data_type: NUMBER
+    - name: TotMHS518
+      data_type: NUMBER
+    - name: TotMHS601
+      data_type: NUMBER
+    - name: TotMHS603
+      data_type: NUMBER
+    - name: TotMHS604
+      data_type: NUMBER
+    - name: TotMHS605
+      data_type: NUMBER
+    - name: TotMHS606
+      data_type: NUMBER
+    - name: TotMHS607
+      data_type: NUMBER
+    - name: TotMHS608
+      data_type: NUMBER
+    - name: TotMHS609
+      data_type: NUMBER
+    - name: TotMHS701
+      data_type: NUMBER
+    - name: TotMHS702
+      data_type: NUMBER
+    - name: TotMHS801
+      data_type: NUMBER
+    - name: TotMHS802
+      data_type: NUMBER
+    - name: TotMHS803
+      data_type: NUMBER
+    - name: TotMHS804
+      data_type: NUMBER
+    - name: TotMHS901
+      data_type: NUMBER
+    - name: TotMHS902
+      data_type: NUMBER
+    - name: TotMHS903
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS001MPI
+    identifier: '"MHS001MPI"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: OrgIDLocalPatientId
+      data_type: TEXT
+    - name: OrgIDResidenceResp
+      data_type: TEXT
+    - name: OrgIDEduEstab
+      data_type: TEXT
+    - name: NHSNumber Pseudo
+      data_type: TEXT
+    - name: NHSNumberStatus
+      data_type: TEXT
+    - name: PersonBirthDate Pseudo
+      data_type: TEXT
+    - name: Postcode Pseudo
+      data_type: TEXT
+    - name: GenderIDCode
+      data_type: TEXT
+    - name: GenderSameAtBirth
+      data_type: TEXT
+    - name: Gender
+      data_type: TEXT
+    - name: MaritalStatus
+      data_type: TEXT
+    - name: EthnicCategory
+      data_type: TEXT
+    - name: EthnicCategory2021
+      data_type: TEXT
+    - name: LanguageCodePreferred
+      data_type: TEXT
+    - name: PersDeathDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS001UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: OrgIDCCGRes
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: AgeRepPeriodStart
+      data_type: NUMBER
+    - name: AgeRepPeriodEnd
+      data_type: NUMBER
+    - name: AgeDeath
+      data_type: NUMBER
+    - name: PostcodeDistrict
+      data_type: TEXT
+    - name: DefaultPostcode Pseudo
+      data_type: TEXT
+    - name: LSOA2011
+      data_type: TEXT
+    - name: LSOA
+      data_type: TEXT
+    - name: LSOA2021
+      data_type: TEXT
+    - name: LADistrictAuth
+      data_type: TEXT
+    - name: County
+      data_type: TEXT
+    - name: ElectoralWard
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: NHSDEthnicity
+      data_type: TEXT
+    - name: PatMRecInRP
+      data_type: BOOLEAN
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: CCGGPRes
+      data_type: TEXT
+    - name: IMDQuart
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: OrgIDICBRes
+      data_type: TEXT
+    - name: OrgIDICSRes
+      data_type: TEXT
+    - name: EthnicityHigher
+      data_type: TEXT
+    - name: EthnicityLow
+      data_type: TEXT
+    - name: LDAFlag
+      data_type: BOOLEAN
+    - name: STPICRECCCG
+      data_type: TEXT
+    - name: RegionICRECCCG
+      data_type: TEXT
+    - name: EmploymentNationalLatest
+      data_type: TEXT
+    - name: EmploymentProviderLatest
+      data_type: TEXT
+    - name: AccommodationNationalLatest
+      data_type: TEXT
+    - name: AccommodationProviderLatest
+      data_type: TEXT
+    - name: OrgIDSubICBLocResidence
+      data_type: TEXT
+    - name: ICRECSUBICB
+      data_type: TEXT
+    - name: ICRECCCG
+      data_type: TEXT
+    - name: ICRECSUBICBNAME
+      data_type: TEXT
+    - name: ICRECCCGNAME
+      data_type: TEXT
+    - name: RegionICRECSUBICB
+      data_type: TEXT
+    - name: RegionICRECSUBICBName
+      data_type: TEXT
+    - name: ICRECICB
+      data_type: TEXT
+    - name: ICRECICBName
+      data_type: TEXT
+    - name: NHSEValidatedPostcode Pseudo
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicOrgIDCCGGPPractice
+      data_type: TEXT
+    - name: dmicEthnicCategoryGroup
+      data_type: TEXT
+    - name: dmicAgeGroupRPEndDate
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: dmIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmSubIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmSubIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS002GP
+    identifier: '"MHS002GP"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: GMPReg
+      data_type: TEXT
+    - name: GMPCodeReg
+      data_type: TEXT
+    - name: StartDateGMPRegistration
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateGMPRegistration
+      data_type: TIMESTAMP_NTZ
+    - name: OrgIDGPPrac
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS002UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: GPDistanceHome
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: LADistrictAuthGPPractice
+      data_type: TEXT
+    - name: OrgIDICBGPPractice
+      data_type: TEXT
+    - name: OrgIDICSGPPractice
+      data_type: TEXT
+    - name: OrgIDSubICBLocGP
+      data_type: TEXT
+    - name: OrgIDCCGGPPractice
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: dmIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmSubIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS003AccommStatus
+    identifier: '"MHS003AccommStatus"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: AccommodationStatusCode
+      data_type: TEXT
+    - name: AccommodationType
+      data_type: TEXT
+    - name: SettledAccommodationInd
+      data_type: TEXT
+    - name: AccommodationStatusDate
+      data_type: TIMESTAMP_NTZ
+    - name: AccommodationTypeDate
+      data_type: TIMESTAMP_NTZ
+    - name: SCHPlacementType
+      data_type: TEXT
+    - name: AccommodationTypeStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: AccommodationTypeEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS003UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: AgeAccomStatusDate
+      data_type: NUMBER
+    - name: AgeAccomTypeDate
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS004EmpStatus
+    identifier: '"MHS004EmpStatus"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: EmployStatus
+      data_type: TEXT
+    - name: EmployStatusStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: EmployStatusEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EmployStatusRecDate
+      data_type: TIMESTAMP_NTZ
+    - name: PatPrimEmpContTypeMH
+      data_type: TEXT
+    - name: WeekHoursWorked
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS004UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS005PatInd
+    identifier: '"MHS005PatInd"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: ConstSuperReqDueToDis
+      data_type: TEXT
+    - name: ParentalResp
+      data_type: TEXT
+    - name: YoungCarer
+      data_type: TEXT
+    - name: LACStatus
+      data_type: TEXT
+    - name: LACLegalStatus
+      data_type: TEXT
+    - name: EducationalAssessOutcome
+      data_type: TEXT
+    - name: CPP
+      data_type: TEXT
+    - name: ExBAFIndicator
+      data_type: TEXT
+    - name: OffenceHistory
+      data_type: TEXT
+    - name: ProPsychDate
+      data_type: TIMESTAMP_NTZ
+    - name: EmerPsychDate
+      data_type: TIMESTAMP_NTZ
+    - name: ManPsychDate
+      data_type: TIMESTAMP_NTZ
+    - name: PsychPrescDate
+      data_type: TIMESTAMP_NTZ
+    - name: PsychTreatDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReasonableAdjustmentInd
+      data_type: TEXT
+    - name: IMCARequired
+      data_type: TEXT
+    - name: IMHARequired
+      data_type: TEXT
+    - name: IMCAAssigned
+      data_type: TEXT
+    - name: IMHAAssigned
+      data_type: TEXT
+    - name: LDStatus
+      data_type: TEXT
+    - name: AutismStatus
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS005UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS006MHCareCoord
+    identifier: '"MHS006MHCareCoord"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: StartDateAssCareCoord
+      data_type: TIMESTAMP_NTZ
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: EndDateAssCareCoord
+      data_type: TIMESTAMP_NTZ
+    - name: CareProfServOrTeamTypeAssoc
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS006UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: InactTimeCC
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS007DisabilityType
+    identifier: '"MHS007DisabilityType"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: DisabCode
+      data_type: TEXT
+    - name: DisabImpacPercep
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS007UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS008CarePlanType
+    identifier: '"MHS008CarePlanType"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CarePlanID
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: CarePlanTypeMH
+      data_type: TEXT
+    - name: CarePlanCreatDate
+      data_type: TIMESTAMP_NTZ
+    - name: CarePlanCreationTime
+      data_type: TIMESTAMP_NTZ
+    - name: CarePlanLastUpdateDate
+      data_type: TIMESTAMP_NTZ
+    - name: CarePlanLastUpdateTime
+      data_type: TIMESTAMP_NTZ
+    - name: CarePlanImplementDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS008UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCarePlanID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS009CarePlanAgreement
+    identifier: '"MHS009CarePlanAgreement"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CarePlanID
+      data_type: TEXT
+    - name: FamilyCarePlanIndicator
+      data_type: TEXT
+    - name: NoFamilyCarePlanReason
+      data_type: TEXT
+    - name: CarePlanContentAgreedBy
+      data_type: TEXT
+    - name: CarePlanAgreedBy
+      data_type: TEXT
+    - name: CarePlanContentAgreedDate
+      data_type: TIMESTAMP_NTZ
+    - name: CarePlanAgreedDate
+      data_type: TIMESTAMP_NTZ
+    - name: CarePlanContentAgreedTime
+      data_type: TIMESTAMP_NTZ
+    - name: CarePlanAgreedTime
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS009UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCarePlanID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS010AssTechToSupportDisTyp
+    identifier: '"MHS010AssTechToSupportDisTyp"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: AssistiveTechnologyFinding
+      data_type: TEXT
+    - name: AssistiveTechnologyPrescTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: AssistiveTechnologyPrescDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS010UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS011SocPerCircumstances
+    identifier: '"MHS011SocPerCircumstances"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: SocPerCircumstance
+      data_type: TEXT
+    - name: SocPerCircumstanceRecTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: SocPerCircumstanceRecDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS011UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS012OverseasVisitorChargCat
+    identifier: '"MHS012OverseasVisitorChargCat"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: OvsVisChCat
+      data_type: TEXT
+    - name: OvsVisChCatAppDate
+      data_type: TIMESTAMP_NTZ
+    - name: OvsVisChCatEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS012UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS013MHCurrencyModel
+    identifier: '"MHS013MHCurrencyModel"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: MHResourceGroupType
+      data_type: TEXT
+    - name: StartDateMHResourceGroup
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateMHResourceGroup
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS013UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS101Referral
+    identifier: '"MHS101Referral"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: CareProfTeamLocalID
+      data_type: TEXT
+    - name: ReferralRequestReceivedDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReferralRequestReceivedTime
+      data_type: TIMESTAMP_NTZ
+    - name: NHSServAgreeLineID
+      data_type: TEXT
+    - name: NHSServAgreeLineNum
+      data_type: TEXT
+    - name: SpecialisedMHServiceCode
+      data_type: TEXT
+    - name: SourceOfReferralMH
+      data_type: TEXT
+    - name: OrgIDReferringOrg
+      data_type: TEXT
+    - name: OrgIDReferring
+      data_type: TEXT
+    - name: ReferringCareProfessionalType
+      data_type: TEXT
+    - name: ReferringCareProfessionalStaffGroup
+      data_type: TEXT
+    - name: ClinRespPriorityType
+      data_type: TEXT
+    - name: PrimReasonReferralMH
+      data_type: TEXT
+    - name: ReasonOAT
+      data_type: TEXT
+    - name: DecisionToTreatDate
+      data_type: TIMESTAMP_NTZ
+    - name: DecisionToTreatTime
+      data_type: TIMESTAMP_NTZ
+    - name: DischPlanCreationDate
+      data_type: TIMESTAMP_NTZ
+    - name: DischPlanCreationTime
+      data_type: TIMESTAMP_NTZ
+    - name: DischPlanLastUpdatedDate
+      data_type: TIMESTAMP_NTZ
+    - name: DischPlanLastUpdatedTime
+      data_type: TIMESTAMP_NTZ
+    - name: ServDischDate
+      data_type: TIMESTAMP_NTZ
+    - name: ServDischTime
+      data_type: TIMESTAMP_NTZ
+    - name: DischLetterIssDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReferRejectionDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReferRejectionTime
+      data_type: TIMESTAMP_NTZ
+    - name: ReferRejectReason
+      data_type: TEXT
+    - name: ReferClosReason
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS101UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: AgeServReferRecDate
+      data_type: NUMBER
+    - name: AgeServReferDischDate
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: InactTimeRef
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: ReferralServiceAreasOpenEndRPLDA
+      data_type: BOOLEAN
+    - name: ReferralServiceAreasOpenEndRPCYP
+      data_type: BOOLEAN
+    - name: ReferralServiceAreasOpenEndRPAMH
+      data_type: BOOLEAN
+    - name: ReferralServiceAreasStartingInRPLDA
+      data_type: BOOLEAN
+    - name: ReferralServiceAreasStartingInRPCYP
+      data_type: BOOLEAN
+    - name: ReferralServiceAreasStartingInRPAMH
+      data_type: BOOLEAN
+    - name: FirstContactEverDate
+      data_type: TIMESTAMP_NTZ
+    - name: CountOfAttendedCareContacts
+      data_type: NUMBER
+    - name: FirstContactEverWhereAgeAtContactUnder18Date
+      data_type: TIMESTAMP_NTZ
+    - name: SecondContactEverWhereAgeAtContactUnder18Date
+      data_type: TIMESTAMP_NTZ
+    - name: CountOfAttendedCareContactsInFinancialYear
+      data_type: NUMBER
+    - name: CountAttendedCareContactsInFinancialYearPersonWas017AtTimeOfContact
+      data_type: NUMBER
+    - name: FirstAttendedContactInRPDate
+      data_type: TIMESTAMP_NTZ
+    - name: FirstAttendedContactInFinancialYearDate
+      data_type: TIMESTAMP_NTZ
+    - name: SecondAttendedContactEverDate
+      data_type: TIMESTAMP_NTZ
+    - name: SecondAttendedContactInFinancialYearDate
+      data_type: TIMESTAMP_NTZ
+    - name: UniqCareProfTeamLocalID
+      data_type: TEXT
+    - name: ServTeamType
+      data_type: TEXT
+    - name: ServiceTypeName
+      data_type: TEXT
+    - name: ServTeamIntAgeGroup
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicServiceAreaCYPRefStartIndicator
+      data_type: BOOLEAN
+    - name: dmicAreaEndRP
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+    - name: dmicUniqCareProfTeamIdPercentUnder18
+      data_type: NUMBER
+    - name: dmicIsCYPServiceTypeIndicator
+      data_type: BOOLEAN
+    - name: dmicIsLDAServiceTypeIndicator
+      data_type: BOOLEAN
+    - name: dmicIsAMHServiceTypeIndicator
+      data_type: BOOLEAN
+  - name: MHS102ServiceTypeReferredTo
+    identifier: '"MHS102ServiceTypeReferredTo"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: OtherCareProfTeamLocalID
+      data_type: TEXT
+    - name: CareProfTeamLocalId
+      data_type: TEXT
+    - name: ReferClosureDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReferClosureTime
+      data_type: TIMESTAMP_NTZ
+    - name: ReferRejectionDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReferRejectionTime
+      data_type: TIMESTAMP_NTZ
+    - name: ReferRejectReason
+      data_type: TEXT
+    - name: ReferClosReason
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS102UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: AgeServReferClosure
+      data_type: NUMBER
+    - name: AgeServReferRejection
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: InactTimeST
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: TeamTypePredominantAgeU18
+      data_type: BOOLEAN
+    - name: ServTeamTypeRefToMH
+      data_type: TEXT
+    - name: ServiceTypeName
+      data_type: TEXT
+    - name: UniqOtherCareProfTeamLocalId
+      data_type: TEXT
+    - name: UniqCareProfTeamID
+      data_type: TEXT
+    - name: ServTeamIntAgeGroup
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicIsCYPServiceTypeIndicator
+      data_type: BOOLEAN
+    - name: dmicIsLDAServiceTypeIndicator
+      data_type: BOOLEAN
+    - name: dmicIsAMHServiceTypeIndicator
+      data_type: BOOLEAN
+    - name: dmicUniqCareProfTeamIdPercentUnder18
+      data_type: NUMBER
+    - name: CAMHSTier
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS103OtherReasonReferral
+    identifier: '"MHS103OtherReasonReferral"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: OtherReasonReferMH
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS103UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS104RTT
+    identifier: '"MHS104RTT"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: PatPathId Pseudo
+      data_type: TEXT
+    - name: WaitTimeMeasureType
+      data_type: TEXT
+    - name: OrgIDPatPathIdIssuer
+      data_type: TEXT
+    - name: ReferToTreatPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReferToTreatPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReferToTreatPeriodStatus
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS104UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: AgeReferTreatStartDate
+      data_type: NUMBER
+    - name: AgeReferTreatEndDate
+      data_type: NUMBER
+    - name: TimeReferStartAndEndDate
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS105OnwardReferral
+    identifier: '"MHS105OnwardReferral"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: DecisionToReferDate
+      data_type: TIMESTAMP_NTZ
+    - name: DecisionToReferTime
+      data_type: TIMESTAMP_NTZ
+    - name: OnwardReferDate
+      data_type: TIMESTAMP_NTZ
+    - name: OnwardReferTime
+      data_type: TIMESTAMP_NTZ
+    - name: OnwardReferReason
+      data_type: TEXT
+    - name: OATReason
+      data_type: TEXT
+    - name: OrgIDReceiving
+      data_type: TEXT
+    - name: ReferralProc
+      data_type: TEXT
+    - name: CodeRefProcAndProcStatus
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS105UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS106DischargePlanAgreement
+    identifier: '"MHS106DischargePlanAgreement"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: DischPlanContentAgreedBy
+      data_type: TEXT
+    - name: DischPlanAgreedBy
+      data_type: TEXT
+    - name: DischPlanContentAgreedDate
+      data_type: TIMESTAMP_NTZ
+    - name: DischPlanAgreedDate
+      data_type: TIMESTAMP_NTZ
+    - name: DischPlanContentAgreedTime
+      data_type: TIMESTAMP_NTZ
+    - name: DischPlanAgreedTime
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS106UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS107MedicationPrescription
+    identifier: '"MHS107MedicationPrescription"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: PrescriptionID
+      data_type: TEXT
+    - name: PrescriptionDate
+      data_type: TIMESTAMP_NTZ
+    - name: PrescriptionTime
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS107UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS201CareContact
+    identifier: '"MHS201CareContact"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CareContactId
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: CareContDate
+      data_type: TIMESTAMP_NTZ
+    - name: CareContTime
+      data_type: TIMESTAMP_NTZ
+    - name: OtherCareProfTeamLocalID
+      data_type: TEXT
+    - name: CareProfTeamLocalId
+      data_type: TEXT
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: AdminCatCode
+      data_type: TEXT
+    - name: SpecialisedMHServiceCode
+      data_type: TEXT
+    - name: ClinContDurOfCareCont
+      data_type: NUMBER
+    - name: ConsType
+      data_type: TEXT
+    - name: CareContSubj
+      data_type: TEXT
+    - name: ConsMechanismMH
+      data_type: TEXT
+    - name: ConsMediumUsed
+      data_type: TEXT
+    - name: ActLocTypeCode
+      data_type: TEXT
+    - name: PlaceOfSafetyInd
+      data_type: TEXT
+    - name: SiteIDOfTreat
+      data_type: TEXT
+    - name: GroupTherapyInd
+      data_type: TEXT
+    - name: LanguageCodeTreat
+      data_type: TEXT
+    - name: InterpreterPresentInd
+      data_type: TEXT
+    - name: ComPeriMHPartAssessOfferInd
+      data_type: TEXT
+    - name: PlannedCareContIndicator
+      data_type: TEXT
+    - name: CareContPatientTherMode
+      data_type: TEXT
+    - name: AttendStatus
+      data_type: TEXT
+    - name: AttendOrDNACode
+      data_type: TEXT
+    - name: EarliestReasonOfferDate
+      data_type: TIMESTAMP_NTZ
+    - name: EarliestClinAppDate
+      data_type: TIMESTAMP_NTZ
+    - name: CareContCancelDate
+      data_type: TIMESTAMP_NTZ
+    - name: CareContCancelReas
+      data_type: TEXT
+    - name: RepApptOfferDate
+      data_type: TIMESTAMP_NTZ
+    - name: RepApptBookDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReasonableAdjustmentMade
+      data_type: TEXT
+    - name: ReasonPatientNoIMCA
+      data_type: TEXT
+    - name: ReasonPatientNoIMHA
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS201UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqCareContID
+      data_type: TEXT
+    - name: AgeCareContDate
+      data_type: NUMBER
+    - name: ContLocDistanceHome
+      data_type: NUMBER
+    - name: TimeReferAndCareContact
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqOtherCareProfTeamLocalID
+      data_type: TEXT
+    - name: UniqCareProfTeamID
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicMinContactDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicMaxContactDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS202CareActivity
+    identifier: '"MHS202CareActivity"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CareActId
+      data_type: TEXT
+    - name: CareContactId
+      data_type: TEXT
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: ClinContactDurOfCareAct
+      data_type: NUMBER
+    - name: Procedure
+      data_type: TEXT
+    - name: CodeProcAndProcStatus
+      data_type: TEXT
+    - name: FindSchemeInUse
+      data_type: TEXT
+    - name: Finding
+      data_type: TEXT
+    - name: CodeFind
+      data_type: TEXT
+    - name: Observation
+      data_type: TEXT
+    - name: CodeObs
+      data_type: TEXT
+    - name: ObsValue
+      data_type: TEXT
+    - name: UnitOfMeasurement_UCUM
+      data_type: TEXT
+    - name: UnitMeasure
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS202UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqCareContID
+      data_type: TEXT
+    - name: UniqCareActID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: MasterSnomedCTFindingCode
+      data_type: TEXT
+    - name: MasterSnomedCTObsCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicActivityDate
+      data_type: TIMESTAMP_NTZ
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: ObsSchemeInUse
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS203OtherAttend
+    identifier: '"MHS203OtherAttend"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CareContactId
+      data_type: TEXT
+    - name: OtherPersonInAttend
+      data_type: TEXT
+    - name: ReasonPatientNoIMCA
+      data_type: TEXT
+    - name: ReasonPatientNoIMHA
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS203UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqCareContID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS204IndirectActivity
+    identifier: '"MHS204IndirectActivity"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: IndirectActDate
+      data_type: TIMESTAMP_NTZ
+    - name: OtherCareProfTeamLocalID
+      data_type: TEXT
+    - name: CareProfTeamLocalId
+      data_type: TEXT
+    - name: IndirectActTime
+      data_type: TIMESTAMP_NTZ
+    - name: IndActPersCons
+      data_type: TEXT
+    - name: DurationIndirectAct
+      data_type: TEXT
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: IndActProcedure
+      data_type: TEXT
+    - name: CodeProcAndProcStatus
+      data_type: TEXT
+    - name: CodeIndActProcAndProcStatus
+      data_type: TEXT
+    - name: FindSchemeInUse
+      data_type: TEXT
+    - name: Finding
+      data_type: TEXT
+    - name: CodeFind
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS204UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: MasterSnomedCTFindingCode
+      data_type: TEXT
+    - name: AgeAtIndirectActivity
+      data_type: NUMBER
+    - name: UniqOtherCareProfTeamLocalID
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS205PatientSDDI
+    identifier: '"MHS205PatientSDDI"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestID
+      data_type: TEXT
+    - name: OrgIDPSDDIProvider
+      data_type: TEXT
+    - name: StartDatePSDDI
+      data_type: TIMESTAMP_NTZ
+    - name: EndDatePSDDI
+      data_type: TIMESTAMP_NTZ
+    - name: PSDDIMech
+      data_type: TEXT
+    - name: PSDDIProcedure
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS205UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+  - name: MHS206StaffActivity
+    identifier: '"MHS206StaffActivity"'
+    columns:
+    - name: CareActID
+      data_type: TEXT
+    - name: CareProfLocalID
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS206UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCareContID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+    - name: SK
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqCareActID
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqServReqId
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+  - name: MHS301GroupSession
+    identifier: '"MHS301GroupSession"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: GroupSessId
+      data_type: TEXT
+    - name: GroupSessDate
+      data_type: TIMESTAMP_NTZ
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: ClinContDurOfGroupSess
+      data_type: NUMBER
+    - name: GroupSessType
+      data_type: TEXT
+    - name: NumberOfGroupSessParticip
+      data_type: NUMBER
+    - name: ActLocTypeCode
+      data_type: TEXT
+    - name: SiteIDOfTreat
+      data_type: TEXT
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: ServTeamTypeRefToMH
+      data_type: TEXT
+    - name: NHSServAgreeLineID
+      data_type: TEXT
+    - name: NHSServAgreeLineNum
+      data_type: TEXT
+    - name: MHS301UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: UniqGroupSessId
+      data_type: TEXT
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS302MHDropInContact
+    identifier: '"MHS302MHDropInContact"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: MHDropInContactId
+      data_type: TEXT
+    - name: CareContactDateMHDropInContact
+      data_type: TIMESTAMP_NTZ
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: MHDropInContactServiceType
+      data_type: TEXT
+    - name: StartTimeDropInContact
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeDropInContact
+      data_type: TIMESTAMP_NTZ
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: NHSNumber Pseudo
+      data_type: TEXT
+    - name: PersonBirthDate Pseudo
+      data_type: TEXT
+    - name: GenderIDCode
+      data_type: TEXT
+    - name: GenderSameAtBirth
+      data_type: TEXT
+    - name: EthnicCategory
+      data_type: TEXT
+    - name: EthnicCategory2021
+      data_type: TEXT
+    - name: ConsMechanismMH
+      data_type: TEXT
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: MHDropInContactOutcome
+      data_type: TEXT
+    - name: OrgIDReceiving
+      data_type: TEXT
+    - name: MHS302UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: AgeRepPeriodStart
+      data_type: NUMBER
+    - name: AgeRepPeriodEnd
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: NHSDEthnicity
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqMHDropInContactId
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS401MHActPeriod
+    identifier: '"MHS401MHActPeriod"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: MHActLegalStatusClassPeriodId
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: StartDateMHActLegalStatusClass
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeMHActLegalStatusClass
+      data_type: TIMESTAMP_NTZ
+    - name: LegalStatusClassPeriodStartReason
+      data_type: TEXT
+    - name: ExpiryDateMHActLegalStatusClass
+      data_type: TIMESTAMP_NTZ
+    - name: ExpiryTimeMHActLegalStatusClass
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateMHActLegalStatusClass
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeMHActLegalStatusClass
+      data_type: TIMESTAMP_NTZ
+    - name: LegalStatusClassPeriodEndReason
+      data_type: TEXT
+    - name: LegalStatusCode
+      data_type: TEXT
+    - name: MentalCat
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS401UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMHActEpisodeID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: NHSDLegalStatus
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: InactTimeMHAPeriod
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS402RespClinicianAssignment
+    identifier: '"MHS402RespClinicianAssignment"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: MHActLegalStatusClassPeriodId
+      data_type: TEXT
+    - name: StartDateRespClinAssign
+      data_type: TIMESTAMP_NTZ
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: EndDateRespClinAssign
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS402UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMHActEpisodeID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS403ConditionalDischarge
+    identifier: '"MHS403ConditionalDischarge"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: MHActLegalStatusClassPeriodId
+      data_type: TEXT
+    - name: StartDateMHCondDisch
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateMHCondDisch
+      data_type: TIMESTAMP_NTZ
+    - name: CondDischEndReason
+      data_type: TEXT
+    - name: AbsDischResp
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS403UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMHActEpisodeID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS404CommTreatOrder
+    identifier: '"MHS404CommTreatOrder"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: MHActLegalStatusClassPeriodId
+      data_type: TEXT
+    - name: StartDateCommTreatOrd
+      data_type: TIMESTAMP_NTZ
+    - name: ExpiryDateCommTreatOrd
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateCommTreatOrd
+      data_type: TIMESTAMP_NTZ
+    - name: CommTreatOrdEndReason
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS404UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMHActEpisodeID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS405CommTreatOrderRecall
+    identifier: '"MHS405CommTreatOrderRecall"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: MHActLegalStatusClassPeriodId
+      data_type: TEXT
+    - name: StartDateCommTreatOrdRecall
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeCommTreatOrdRecall
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateCommTreatOrdRecall
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeCommTreatOrdRecall
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS405UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMHActEpisodeID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS501HospProvSpell
+    identifier: '"MHS501HospProvSpell"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: HospProvSpellID
+      data_type: TEXT
+    - name: HospProvSpellNum
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: StartDateHospProvSpell
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeHospProvSpell
+      data_type: TIMESTAMP_NTZ
+    - name: DecidedToAdmitDate
+      data_type: TIMESTAMP_NTZ
+    - name: DecidedToAdmitTime
+      data_type: TIMESTAMP_NTZ
+    - name: SourceAdmCodeHospProvSpell
+      data_type: TEXT
+    - name: SourceAdmMHHospProvSpell
+      data_type: TEXT
+    - name: MethAdmMHHospProvSpell
+      data_type: TEXT
+    - name: AdmMethCodeHospProvSpell
+      data_type: TEXT
+    - name: PostcodeMainVisitor Pseudo
+      data_type: TEXT
+    - name: EstimatedDischDateHospProvSpell
+      data_type: TIMESTAMP_NTZ
+    - name: PlannedDischDateHospProvSpell
+      data_type: TIMESTAMP_NTZ
+    - name: PlannedDestDisch
+      data_type: TEXT
+    - name: PlannedDischDestCode
+      data_type: TEXT
+    - name: DischDateHospProvSpell
+      data_type: TIMESTAMP_NTZ
+    - name: DischTimeHospProvSpell
+      data_type: TIMESTAMP_NTZ
+    - name: MethOfDischMHHospProvSpell
+      data_type: TEXT
+    - name: DischMethCodeHospProvSpell
+      data_type: TEXT
+    - name: DestOfDischHospProvSpell
+      data_type: TEXT
+    - name: DischDestCodeHospProvSpell
+      data_type: TEXT
+    - name: PostcodeDischDestHospProvSpell Pseudo
+      data_type: TEXT
+    - name: TransformingCareInd
+      data_type: TEXT
+    - name: TransformingCareCategory
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS501UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: PostcodeDistrictMainVisitor
+      data_type: TEXT
+    - name: PostcodeDistrictDischDest
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: InactTimeHPS
+      data_type: TIMESTAMP_NTZ
+    - name: LOSDischHosSpell
+      data_type: NUMBER
+    - name: LOSHosSpellEoRP
+      data_type: NUMBER
+    - name: TimeEstDischDate
+      data_type: NUMBER
+    - name: TimePlanDischDate
+      data_type: NUMBER
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: AgeHospStartDate
+      data_type: NUMBER
+    - name: AgeHospDischDate
+      data_type: NUMBER
+    - name: NHSEValidatedPostcodeMainVisitor Pseudo
+      data_type: TEXT
+    - name: NHSEValidatedPostcodeDischDestHospProvSpell Pseudo
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS502WardStay
+    identifier: '"MHS502WardStay"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: WardCode
+      data_type: TEXT
+    - name: HospProvSpellID
+      data_type: TEXT
+    - name: HospProvSpellNum
+      data_type: TEXT
+    - name: StartDateWardStay
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeWardStay
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateMHTrialLeave
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateWardStay
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeWardStay
+      data_type: TIMESTAMP_NTZ
+    - name: MHAdmittedPatientClass
+      data_type: TEXT
+    - name: SiteIDOfTreat
+      data_type: TEXT
+    - name: WardType
+      data_type: TEXT
+    - name: WardAge
+      data_type: TEXT
+    - name: WardIntendedSex
+      data_type: TEXT
+    - name: WardSexTypeCode
+      data_type: TEXT
+    - name: WardIntendedClinCareMH
+      data_type: TEXT
+    - name: IntendClinCareIntenCodeMH
+      data_type: TEXT
+    - name: WardSecLevel
+      data_type: TEXT
+    - name: LockedWardInd
+      data_type: TEXT
+    - name: HospitalBedTypeMH
+      data_type: TEXT
+    - name: SpecialisedMHServiceCode
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS502UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: WardLocDistanceHome
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: InactTimeWS
+      data_type: TIMESTAMP_NTZ
+    - name: BedTypeAdultEndRP
+      data_type: TEXT
+    - name: BedTypeAdultDischarge
+      data_type: TEXT
+    - name: BedDaysWSEndRP
+      data_type: NUMBER
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: WardStayServiceAreasOpenEndRPAMH
+      data_type: BOOLEAN
+    - name: WardStayServiceAreasOpenEndRPCYP
+      data_type: BOOLEAN
+    - name: WardStayServiceAreasStartingInRPLDA
+      data_type: BOOLEAN
+    - name: WardStayServiceAreasStartingInRPAMH
+      data_type: BOOLEAN
+    - name: WardStayServiceAreasStartingInRPCYP
+      data_type: BOOLEAN
+    - name: SpecialisedMHServiceName
+      data_type: TEXT
+    - name: WardStayBedTypesLkup
+      data_type: TEXT
+    - name: HospitalBedTypeName
+      data_type: TEXT
+    - name: WardStayServiceAreasOpenEndRPLDA
+      data_type: BOOLEAN
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicWardStayArea
+      data_type: TEXT
+    - name: dmicWardStayAreaEndRP
+      data_type: TEXT
+    - name: dmicWardStayAreaDischarge
+      data_type: TEXT
+    - name: dmicCYPAtStartIndicator
+      data_type: BOOLEAN
+    - name: AMHServiceWSDischarge
+      data_type: BOOLEAN
+    - name: CYPServiceWSDischarge
+      data_type: BOOLEAN
+    - name: LDAServiceWSDischarge
+      data_type: BOOLEAN
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS503AssignedCareProf
+    identifier: '"MHS503AssignedCareProf"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: HospProvSpellID
+      data_type: TEXT
+    - name: HospProvSpellNum
+      data_type: TEXT
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: StartDateAssCareProf
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateAssCareProf
+      data_type: TIMESTAMP_NTZ
+    - name: TreatFuncCodeMH
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS503UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS504DelayedDischarge
+    identifier: '"MHS504DelayedDischarge"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: HospProvSpellID
+      data_type: TEXT
+    - name: HospProvSpellNum
+      data_type: TEXT
+    - name: StartDateDelayDisch
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateDelayDisch
+      data_type: TIMESTAMP_NTZ
+    - name: DelayDischReason
+      data_type: TEXT
+    - name: AttribToIndic
+      data_type: TEXT
+    - name: OrgIDRespLADelayDisch
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS504UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: BedDaysDDRP
+      data_type: NUMBER
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS505RestrictiveInterventInc
+    identifier: '"MHS505RestrictiveInterventInc"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: RestrictiveIntIncID
+      data_type: TEXT
+    - name: HospProvSpellID
+      data_type: TEXT
+    - name: StartDateRestrictiveIntInc
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeRestrictiveIntInc
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateRestrictiveIntInc
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeRestrictiveIntInc
+      data_type: TIMESTAMP_NTZ
+    - name: RestrictiveIntReason
+      data_type: TEXT
+    - name: RestrictiveIntPIReviewHeldPat
+      data_type: TEXT
+    - name: RestrictiveIntPIReviewNotHeldReasPat
+      data_type: TEXT
+    - name: RestrictiveIntPIReviewHeldCarePers
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS505UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: UniqRestrictiveIntIncID
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS505RestrictiveIntervention
+    identifier: '"MHS505RestrictiveIntervention"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: StartDateRestrictiveInt
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeRestrictiveInt
+      data_type: TIMESTAMP_NTZ
+    - name: RestrictiveIntType
+      data_type: TEXT
+    - name: EndDateRestrictiveInt
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeRestrictiveInt
+      data_type: TIMESTAMP_NTZ
+    - name: RestraintInjuryPatient
+      data_type: TEXT
+    - name: RestraintInjuryCarePers
+      data_type: TEXT
+    - name: RestraintInjuryOtherPers
+      data_type: TEXT
+    - name: RestrictiveIntPIReviewHeldPat
+      data_type: TEXT
+    - name: RestrictiveIntPIReviewNotHeldReasPat
+      data_type: TEXT
+    - name: RestrictiveIntPIReviewHeldCarePers
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS505UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS506Assault
+    identifier: '"MHS506Assault"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: DateAssault
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS506UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS507SelfHarm
+    identifier: '"MHS507SelfHarm"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: DateSelfHarm
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS507UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS509HomeLeave
+    identifier: '"MHS509HomeLeave"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: StartDateHomeLeave
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeHomeLeave
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateHomeLeave
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeHomeLeave
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS509UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: HomeLeaveDaysEndRP
+      data_type: NUMBER
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS510LeaveOfAbsence
+    identifier: '"MHS510LeaveOfAbsence"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: StartDateMHLeaveAbs
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeMHLeaveAbs
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateMHLeaveAbs
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeMHLeaveAbs
+      data_type: TIMESTAMP_NTZ
+    - name: MHLeaveAbsEndReason
+      data_type: TEXT
+    - name: EscortedLeaveIndicator
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS510UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: LOADaysRP
+      data_type: NUMBER
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS511AbsenceWithoutLeave
+    identifier: '"MHS511AbsenceWithoutLeave"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: StartDateMHAbsWOLeave
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeMHAbsWOLeave
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateMHAbsWOLeave
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeMHAbsWOLeave
+      data_type: TIMESTAMP_NTZ
+    - name: MHAbsWOLeaveEndReason
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS511UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: AWOLDaysEndRP
+      data_type: NUMBER
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS512HospSpellComm
+    identifier: '"MHS512HospSpellComm"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: HospProvSpellId
+      data_type: TEXT
+    - name: HospProvSpellNum
+      data_type: TEXT
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: StartDateOrgCodeComm
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateOrgCodeComm
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS512UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellId
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS513SubstanceMisuse
+    identifier: '"MHS513SubstanceMisuse"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: SubstanceMisuse
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS513UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS514TrialLeave
+    identifier: '"MHS514TrialLeave"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: StartDateMHTrialLeave
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeMHTrialLeave
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateMHTrialLeave
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeMHTrialLeave
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS514UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS515RestrictiveInterventType
+    identifier: '"MHS515RestrictiveInterventType"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: RestrictiveIntIncID
+      data_type: TEXT
+    - name: RestrictiveIntTypeID
+      data_type: TEXT
+    - name: RestrictiveIntType
+      data_type: TEXT
+    - name: StartDateRestrictiveIntType
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeRestrictiveIntType
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateRestrictiveIntType
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeRestrictiveIntType
+      data_type: TIMESTAMP_NTZ
+    - name: RestraintInjuryPatient
+      data_type: TEXT
+    - name: RestraintInjuryCarePers
+      data_type: TEXT
+    - name: RestraintInjuryOtherPers
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS515UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqHospProvSpellNum
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: UniqRestrictiveIntIncID
+      data_type: TEXT
+    - name: UniqRestrictiveIntTypeID
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS516PoliceAssistanceRequest
+    identifier: '"MHS516PoliceAssistanceRequest"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: WardStayId
+      data_type: TEXT
+    - name: PoliceAssistReqDate
+      data_type: TIMESTAMP_NTZ
+    - name: PoliceAssistReqTime
+      data_type: TIMESTAMP_NTZ
+    - name: PoliceAssistArrDate
+      data_type: TIMESTAMP_NTZ
+    - name: PoliceAssistArrTime
+      data_type: TIMESTAMP_NTZ
+    - name: PoliceRestraintForceUsedInd
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS516UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqWardStayID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS517SMHExceptionalPackofCare
+    identifier: '"MHS517SMHExceptionalPackofCare"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: HospProvSpellID
+      data_type: TEXT
+    - name: SMHEPCCharge
+      data_type: NUMBER
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: StartDateSMHEPC
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateSMHEPC
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS517UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS518ClinReadyforDischarge
+    identifier: '"MHS518ClinReadyforDischarge"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: HospProvSpellID
+      data_type: TEXT
+    - name: StartDateClinReadyforDisch
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateClinReadyforDisch
+      data_type: TIMESTAMP_NTZ
+    - name: ClinReadyforDischDelayReason
+      data_type: TEXT
+    - name: AttribToIndic
+      data_type: TEXT
+    - name: OrgIDRespLAClinReadyforDisch
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS518UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqHospProvSpellID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS601MedHistPrevDiag
+    identifier: '"MHS601MedHistPrevDiag"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: DiagSchemeInUse
+      data_type: TEXT
+    - name: PrevDiag
+      data_type: TEXT
+    - name: CodedDiagTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: DiagDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS601UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: MasterSnomedCTPrevDiagCode
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS603ProvDiag
+    identifier: '"MHS603ProvDiag"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: DiagSchemeInUse
+      data_type: TEXT
+    - name: ProvDiag
+      data_type: TEXT
+    - name: CodedProvDiagTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: ProvDiagDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS603UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: MasterSnomedCTProvDiagCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS604PrimDiag
+    identifier: '"MHS604PrimDiag"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: DiagSchemeInUse
+      data_type: TEXT
+    - name: PrimDiag
+      data_type: TEXT
+    - name: CodedDiagTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: DiagDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS604UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: MasterSnomedCTPrimDiagCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS605SecDiag
+    identifier: '"MHS605SecDiag"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: DiagSchemeInUse
+      data_type: TEXT
+    - name: SecDiag
+      data_type: TEXT
+    - name: CodedDiagTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: DiagDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS605UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: MasterSnomedCTSecDiagCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS606CodedScoreAssessmentRefer
+    identifier: '"MHS606CodedScoreAssessmentRefer"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestId
+      data_type: TEXT
+    - name: CodedAssToolType
+      data_type: TEXT
+    - name: PersScore
+      data_type: TEXT
+    - name: AssToolCompTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: AssToolCompDate
+      data_type: TIMESTAMP_NTZ
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS606UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: AgeAssessToolReferCompDate
+      data_type: NUMBER
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS607CodedScoreAssessmentAct
+    identifier: '"MHS607CodedScoreAssessmentAct"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CareActId
+      data_type: TEXT
+    - name: CodedAssToolType
+      data_type: TEXT
+    - name: PersScore
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS607UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqCareContID
+      data_type: TEXT
+    - name: UniqCareActID
+      data_type: TEXT
+    - name: AgeAssessToolCont
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS608AnonSelfAssess
+    identifier: '"MHS608AnonSelfAssess"'
+    columns:
+    - name: AssToolCompTimestamp
+      data_type: TIMESTAMP_NTZ
+    - name: AssToolCompDate
+      data_type: TIMESTAMP_NTZ
+    - name: CodedAssToolType
+      data_type: TEXT
+    - name: PersScore
+      data_type: TEXT
+    - name: ActLocTypeCode
+      data_type: TEXT
+    - name: OrgIDComm
+      data_type: TEXT
+    - name: MHS608UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS609PresComp
+    identifier: '"MHS609PresComp"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ServiceRequestID
+      data_type: TEXT
+    - name: FindSchemeInUse
+      data_type: TEXT
+    - name: PresComp
+      data_type: TEXT
+    - name: PresCompCodSig
+      data_type: TEXT
+    - name: PresCompDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS609UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqServReqID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+  - name: MHS701CPACareEpisode
+    identifier: '"MHS701CPACareEpisode"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CPAEpisodeId
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: StartDateCPA
+      data_type: TIMESTAMP_NTZ
+    - name: EndDateCPA
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS701UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCPAEpisodeID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS702CPAReview
+    identifier: '"MHS702CPAReview"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: CPAEpisodeId
+      data_type: TEXT
+    - name: CPAReviewDate
+      data_type: TIMESTAMP_NTZ
+    - name: CPARevAbuseQuestAskInd
+      data_type: TEXT
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS702UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCPAEpisodeID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS801ClusterTool
+    identifier: '"MHS801ClusterTool"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ClustId
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: ClustCat
+      data_type: TEXT
+    - name: AssToolCompDate
+      data_type: TIMESTAMP_NTZ
+    - name: AssToolCompTime
+      data_type: TIMESTAMP_NTZ
+    - name: ClustToolAssReason
+      data_type: TEXT
+    - name: MHCareClusterSuperClass
+      data_type: TEXT
+    - name: AMHCareClustCodeInit
+      data_type: TEXT
+    - name: LDCareClustInit
+      data_type: TEXT
+    - name: FLDCareClustInit
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS801UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqClustID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS802ClusterAssess
+    identifier: '"MHS802ClusterAssess"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ClustId
+      data_type: TEXT
+    - name: CodedAssToolType
+      data_type: TEXT
+    - name: PersScore
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS802UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqClustID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS803CareCluster
+    identifier: '"MHS803CareCluster"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: ClustId
+      data_type: TEXT
+    - name: StartDateCareClust
+      data_type: TIMESTAMP_NTZ
+    - name: StartTimeCareClust
+      data_type: TIMESTAMP_NTZ
+    - name: AMHCareClustCodeFin
+      data_type: TEXT
+    - name: CAMHNeedsBasedGroupingCode
+      data_type: TEXT
+    - name: LDCareClustCodeFin
+      data_type: TEXT
+    - name: FMHCareClustCodeFin
+      data_type: TEXT
+    - name: FLDCareClustCodeFin
+      data_type: TEXT
+    - name: EndDateCareClust
+      data_type: TIMESTAMP_NTZ
+    - name: EndTimeCareClust
+      data_type: TIMESTAMP_NTZ
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS803UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqClustID
+      data_type: TEXT
+    - name: ClusterStartRPFlag
+      data_type: BOOLEAN
+    - name: ClusterEndRPFlag
+      data_type: BOOLEAN
+    - name: ClusterOpenEndRPFlag
+      data_type: BOOLEAN
+    - name: ClusterDaysRP
+      data_type: NUMBER
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: RecordStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: RecordEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: InactTimeCC
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS804FiveForensicPathways
+    identifier: '"MHS804FiveForensicPathways"'
+    columns:
+    - name: SK
+      data_type: TEXT
+    - name: LocalPatientId
+      data_type: TEXT
+    - name: FFPAssDate
+      data_type: TIMESTAMP_NTZ
+    - name: FFPAssReason
+      data_type: TEXT
+    - name: FFPCode
+      data_type: TEXT
+    - name: RecordNumber
+      data_type: NUMBER
+    - name: MHS804UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: Person_ID
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: Unique_LocalPatientId
+      data_type: TEXT
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS901StaffDetails
+    identifier: '"MHS901StaffDetails"'
+    columns:
+    - name: CareProfLocalId
+      data_type: TEXT
+    - name: OrgIDCareProfLocalID
+      data_type: TEXT
+    - name: ProfRegBodyCode
+      data_type: TEXT
+    - name: ProfRegEntryId
+      data_type: TEXT
+    - name: CareProfStaffGpMH
+      data_type: TEXT
+    - name: MainSpecCodeMH
+      data_type: TEXT
+    - name: OccCode
+      data_type: TEXT
+    - name: CareProfJobRoleCode
+      data_type: TEXT
+    - name: MHS901UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqCareProfLocalID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS902ServiceTeamDetails
+    identifier: '"MHS902ServiceTeamDetails"'
+    columns:
+    - name: CareProfTeamLocalID
+      data_type: TEXT
+    - name: OrgIDCareProfTeamLocalID
+      data_type: TEXT
+    - name: ServTeamTypeMH
+      data_type: TEXT
+    - name: ServTeamIntAgeGroup
+      data_type: TEXT
+    - name: MHS902UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: ServiceTypeName
+      data_type: TEXT
+    - name: UniqCareProfTeamLocalID
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHS903WardDetails
+    identifier: '"MHS903WardDetails"'
+    columns:
+    - name: WardCode
+      data_type: TEXT
+    - name: SiteIDOfWard
+      data_type: TEXT
+    - name: WardIntendedSex
+      data_type: TEXT
+    - name: WardIntendedClinCareMH
+      data_type: TEXT
+    - name: WardAge
+      data_type: TEXT
+    - name: WardType
+      data_type: TEXT
+    - name: WardSecLevel
+      data_type: TEXT
+    - name: LockedWardInd
+      data_type: BOOLEAN
+    - name: AvailBedDays
+      data_type: TEXT
+    - name: ClosedBedDays
+      data_type: TEXT
+    - name: MHS903UniqID
+      data_type: NUMBER
+    - name: OrgIDProv
+      data_type: TEXT
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: UniqMonthID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: UniqWardCode
+      data_type: TEXT
+    - name: RowNumber
+      data_type: NUMBER
+    - name: dmicImportLogId
+      data_type: NUMBER
+    - name: dmicSystemId
+      data_type: NUMBER
+    - name: dmicCCGCode
+      data_type: TEXT
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: ReportingPeriodStartDate
+      data_type: TIMESTAMP_NTZ
+    - name: ReportingPeriodEndDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmicDataset
+      data_type: TEXT
+  - name: MHSDS_RelatedOrganisation
+    identifier: '"MHSDS_RelatedOrganisation"'
+    columns:
+    - name: RecordNumber
+      data_type: TEXT
+    - name: SourceObject
+      data_type: TEXT
+    - name: SourceColumn
+      data_type: TEXT
+    - name: OrganisationCode_Related
+      data_type: TEXT
+  - name: bridging
+    identifier: '"bridging"'
+    columns:
+    - name: Person_ID
+      data_type: TEXT
+    - name: NHSNumber Pseudo
+      data_type: TEXT
+    - name: Person_Index_id
+      data_type: TEXT
+    - name: Pseudo_NHS_Number
+      data_type: TEXT
