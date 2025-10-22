@@ -13,9 +13,11 @@ Selects the latest code per person.
 */
 select 
 person_id
+,gender
 ,clinical_effective_date
 ,concept_display
 ,result_value
 ,result_unit_display
-FROM {{ ref('int_smi_alcohol_all') }}
-QUALIFY ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC) = 1
+,alcohol_risk_category
+FROM {{ ref('int_smi_alcohol_all') }} a
+QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY clinical_effective_date DESC, CASE WHEN result_value IS NOT NULL THEN 1 ELSE 0 END DESC) = 1
