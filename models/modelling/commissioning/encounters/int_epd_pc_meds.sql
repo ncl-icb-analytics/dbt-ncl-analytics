@@ -74,7 +74,7 @@ SELECT
         WHEN m.exemption_code = 'Z' THEN 'Exempt - No Declaration/Declaration Not Specific'
         ELSE 'Unknown Exemption Code'
       END AS exemption_description
-    , m.item_actual_cost / 100 as item_actual_cost, --NB: raw cost is in penc
+    , m.item_actual_cost / 100 as item_actual_cost --NB: raw cost is in penc
     , m.item_count
     , m.item_id
     , m.item_nic / 100 as item_nic
