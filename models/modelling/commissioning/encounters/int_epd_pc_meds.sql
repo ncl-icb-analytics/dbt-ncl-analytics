@@ -1,5 +1,5 @@
 SELECT 
-    m.age_band
+    m.age_bands
     , c.chapter_name as nbf_chapter_name
     , CASE WHEN LENGTH(c.chapter_path) - LENGTH(REPLACE(c.chapter_path, '>', '')) >= 0 
            THEN SUBSTR(c.chapter_path, 1, POSITION('>' IN c.chapter_path || '>') - 1)
