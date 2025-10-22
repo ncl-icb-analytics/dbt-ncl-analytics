@@ -11,4 +11,4 @@ select
     url,
     date_created,
     date_update
-from {{ ref('raw_dictionary_dbo_bnf') }}
+from {{ ref('raw_dictionary_dbo_bnf_chapter') }}
