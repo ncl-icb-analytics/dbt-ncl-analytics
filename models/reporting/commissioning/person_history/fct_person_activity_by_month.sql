@@ -110,6 +110,51 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     group by
         sk_patient_id, date_trunc('month', start_date)
 )
+, mhsds_spell_encounter_summary as(
+    select
+        e.sk_patient_id
+        , d.month_start_date as activity_month
+        , 'MentalHealthServices' as activity_type
+        , 'Spell' as activity_subtype
+        , sum(case when d.month_start_date = date_trunc('month', e.start_date) then 1 end) as encounters
+        -- allocate cost and duration proportionally to days in month
+        , sum(
+            (datediff('day'
+            , greatest(e.start_date, d.month_start_date)
+            , least(coalesce(e.end_date, current_date), d.next_month_start_date)
+            )+1) * (proxy_cost/(duration_to_date+1))
+        ) as cost
+        , sum(
+            datediff('day'
+            , greatest(e.start_date, d.month_start_date)
+            , least(coalesce(e.end_date, current_date), d.next_month_start_date)
+            )
+        ) as duration
+    from 
+        {{ ref('int_mhsds_spell_encounters') }} as e
+    left join -- join all months during the spell
+        date_range as d
+        on d.month_start_date <= coalesce(e.end_date, current_date)
+        and d.month_end_date >= e.start_date
+    where 
+        e.sk_patient_id is not null
+    group by 
+        e.sk_patient_id, d.month_start_date
+)
+, mhsds_carecontact_encounter_summary as(
+    select
+        sk_patient_id
+        , date_trunc('month', start_date) as activity_month
+        , 'MentalHealthServices' as activity_type
+        , 'CareContact' as activity_subtype
+        , count(*) as encounters
+        , sum(proxy_cost) as cost
+        , sum(duration) as duration
+    from 
+        {{ ref('int_mhsds_carecontact_encounters') }}
+    group by
+        sk_patient_id, date_trunc('month', start_date)
+)
 , combined as(
     select * from ae_encounter_summary
     union all
@@ -120,6 +165,10 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     select * from gp_encounter_summary
     union all
     select * from csds_encounter_summary
+    union all
+    select * from mhsds_spell_encounter_summary
+    union all
+    select * from mhsds_carecontact_encounter_summary
 )
 
 select 
@@ -134,17 +183,20 @@ select
     , sum(case when activity_type = 'Outpatient' then encounters else 0 end) as op_encounters
     , sum(case when activity_type = 'PrimaryCare' then encounters else 0 end) as gp_encounters
     , sum(case when activity_type = 'CommunityCareContact' then encounters else 0 end) as cc_encounters
+    , sum(case when activity_type = 'MentalHealthServices' then encounters else 0 end) as mh_encounters
     -- cost
     , sum(case when activity_type = 'A&E' then cost else 0 end) as ae_cost
     , sum(case when activity_type = 'Inpatient' then cost else 0 end) as ip_cost
     , sum(case when activity_type = 'Outpatient' then cost else 0 end) as op_cost
     , sum(case when activity_type = 'CommunityCareContact' then cost else 0 end) as cc_cost
+    , sum(case when activity_type = 'MentalHealthServices' then cost else 0 end) as mh_cost
     -- duration
     , sum(case when activity_type = 'A&E' then duration else 0 end) as ae_duration
     , sum(case when activity_type = 'Inpatient' then duration else 0 end) as ip_duration
     , sum(case when activity_type = 'Outpatient' then duration else 0 end) as op_duration
     , sum(case when activity_type = 'PrimaryCare' then duration else 0 end) as gp_duration
     , sum(case when activity_type = 'CommunityCareContact' then duration else 0 end) as cc_duration
+    , sum(case when activity_type = 'MentalHealthServices' then duration else 0 end) as mh_duration
     --- subtype breakdowns
     -- A&E
     , sum(case when activity_type = 'A&E' and activity_subtype in ('AE-T1', 'AE-Other') then encounters else 0 end) as ae_emergency_encounters
@@ -176,6 +228,13 @@ select
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFA-F2F', 'OPFA-NFTF') then duration else 0 end) as op_fa_duration
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFUP-F2F', 'OPFUP-NFTF') then duration else 0 end) as op_fup_duration
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPPROC') then duration else 0 end) as op_proc_duration
+    -- MH
+    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'Spell' then encounters else 0 end) as mh_spell_encounters
+    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'CareContact' then encounters else 0 end) as mh_contact_encounters
+    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'Spell' then cost else 0 end) as mh_spell_cost
+    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'CareContact' then cost else 0 end) as mh_contact_cost
+    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'Spell' then duration else 0 end) as mh_spell_duration
+    , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'CareContact' then duration else 0 end) as mh_contact_duration
 from 
     combined
 group by 
