@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: population_health_needs_base_secondary_use
+    description: |
+      Population health needs base table for secondary use.
+      Filtered to exclude patients with Type 1 opt-outs via dim_person_secondary_use_allowed.
+      See population_health_needs_base in published_reporting_direct_care for full details.

@@ -117,7 +117,7 @@ models:
         olids:
           +meta:
             custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
-          +schema: "OLIDS_PUBLISHED"
+          # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         C_LTCS:
           +meta:
             custom_message: "Requires access via application role - clinical programme team only."
@@ -131,7 +131,7 @@ models:
         olids:
           +meta:
             custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
-          +schema: "OLIDS_PUBLISHED"
+          # Schema names automatically derived from subdomain folder names via generate_schema_name macro
           +post-hook:
             - "{{ add_model_comment() }}"
             - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
