@@ -10,7 +10,8 @@
 PDS/OLIDS Practice Registration Discrepancies (Direct Care)
 
 Published view showing practices with significant discrepancies (>=20%) between
-PDS and OLIDS registration counts.
+PDS and OLIDS registration counts. Uses episode_of_care with registration type filtering
+and PDS merger handling for accurate comparison.
 
 Use Cases:
 - Data quality monitoring dashboards
@@ -22,12 +23,14 @@ PowerBI Usage:
 - Connect to PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_PUBLISHED schema
 - Filter by has_significant_discrepancy = TRUE for problem practices
 - Use percent_difference for severity assessment
+- pds_merged_persons accounts for NHS number changes (recommended for comparison)
 */
 
 SELECT
     practice_code,
     practice_name,
-    pds_patient_count,
+    pds_unmerged_persons,
+    pds_merged_persons,
     olids_patient_count,
     difference,
     percent_difference,
