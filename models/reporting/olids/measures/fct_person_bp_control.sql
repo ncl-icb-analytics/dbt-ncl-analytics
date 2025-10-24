@@ -162,7 +162,7 @@ SELECT
 
     -- Risk-based timeliness: higher risk = more frequent monitoring
     CASE
-        -- Tier 1: High risk (T2DM OR CKD OR diagnosed HTN) - check within 12 months
+        -- High risk (T2DM OR CKD OR diagnosed HTN) - check within 12 months
         WHEN
             (
                 (rt.is_on_dm_register AND rt.diabetes_type = 'Type 2')
@@ -176,22 +176,10 @@ SELECT
                     FALSE
                 )
 
-        -- Tier 2: Medium risk (age ≥40, no high-risk conditions) - check within 24 months
+        -- Standard monitoring (age ≥40, no high-risk conditions) - check within 5 years
         WHEN (
             NOT (rt.is_on_dm_register AND rt.diabetes_type = 'Type 2')
             AND NOT rt.has_ckd AND NOT rt.is_diagnosed_htn AND rt.age >= 40
-        )
-            THEN
-                COALESCE(
-                    DATEDIFF(MONTH, rt.latest_bp_date, CURRENT_DATE())
-                    <= 24,
-                    FALSE
-                )
-
-        -- Tier 3: Low risk (age <40, no high-risk conditions) - check within 60 months
-        WHEN (
-            NOT (rt.is_on_dm_register AND rt.diabetes_type = 'Type 2')
-            AND NOT rt.has_ckd AND NOT rt.is_diagnosed_htn AND rt.age < 40
         )
             THEN
                 COALESCE(
@@ -200,7 +188,8 @@ SELECT
                     FALSE
                 )
 
-        ELSE FALSE
+        -- Age <40 with no high-risk conditions - no threshold
+        ELSE NULL
     END AS is_latest_bp_within_recommended_interval
 
 FROM ranked_thresholds AS rt
