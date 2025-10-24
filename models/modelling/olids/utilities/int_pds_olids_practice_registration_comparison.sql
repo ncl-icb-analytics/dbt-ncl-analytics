@@ -45,9 +45,9 @@ WITH pds_registrations AS (
     INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} prac
         ON reg.primary_care_provider = prac.organisation_code
     INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} icb
-        ON prac.sk_parentorg_id = icb.sk_organisationid
+        ON prac.sk_organisation_id_parent_org = icb.sk_organisation_id
         AND icb.organisation_code = '93C'
-        AND prac.enddate IS NULL
+        AND prac.end_date IS NULL
     WHERE per.death_status IS NULL
         AND per.date_of_death IS NULL
         AND reg.sk_patient_id IS NOT NULL
