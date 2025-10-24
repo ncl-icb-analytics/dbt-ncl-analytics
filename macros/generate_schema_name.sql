@@ -9,6 +9,8 @@
     - Examples:
       - models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES schema
       - models/reporting/olids/person_analytics/ → OLIDS_PERSON_ANALYTICS schema
+      - models/published/direct_care/olids/childhood_imms/ → OLIDS_CHILDHOOD_IMMS schema
+      - models/published/secondary_use/olids/db_utils/ → OLIDS_DB_UTILS schema
     - Configure which domains use automatic schema naming via the 'auto_schema_domains' variable in dbt_project.yml
     - Other domains use explicit schema configuration from dbt_project.yml
 
@@ -30,6 +32,12 @@
             {# Extract domain and subdomain from folder structure #}
             {%- set domain = path_parts[2] | upper -%}
             {%- set subdomain = path_parts[3] | upper -%}
+            {{ domain ~ '_' ~ subdomain }}
+        {# Check if model is in published layer with subdomain folders and domain uses auto schema #}
+        {%- elif path_parts | length >= 5 and path_parts[1] == 'published' and path_parts[3] in auto_schema_domains -%}
+            {# Extract domain and subdomain from folder structure (published/direct_care|secondary_use/olids/subdomain) #}
+            {%- set domain = path_parts[3] | upper -%}
+            {%- set subdomain = path_parts[4] | upper -%}
             {{ domain ~ '_' ~ subdomain }}
         {%- else -%}
             {{ default_schema }}
