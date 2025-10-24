@@ -17,6 +17,14 @@ models:
 
       • CKD with ACR ≥70: <130/80 mmHg
 
+      Monitoring Intervals:
+
+      • T2DM/CKD/HTN: 12 months
+
+      • Age ≥40 (no conditions): 60 months (5 years)
+
+      • Age <40 (no conditions): no threshold
+
       Diagnostic Thresholds:
 
       • Stage 1 - Clinic: ≥140/90 mmHg
@@ -171,6 +179,12 @@ models:
         
       - name: systolic_excess
         description: mmHg above systolic target (negative if below target)
-        
+
       - name: diastolic_excess
         description: mmHg above diastolic target (negative if below target)
+
+      - name: latest_bp_reading_age_months
+        description: Months since most recent BP measurement
+
+      - name: is_latest_bp_within_recommended_interval
+        description: "Whether BP reading is within recommended interval: 12 months for T2DM/CKD/HTN, 60 months for age ≥40, NULL for age <40"
