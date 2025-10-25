@@ -45,9 +45,10 @@ SELECT
 FROM {{ ref('int_pds_olids_practice_registration_comparison') }}
 ORDER BY
     CASE
-        WHEN ABS(percent_difference) >= 20 THEN 1
-        WHEN ABS(percent_difference) >= 5 THEN 2
+        WHEN ABS(COALESCE(percent_difference, 0)) >= 20 THEN 1
+        WHEN ABS(COALESCE(percent_difference, 0)) >= 5 THEN 2
         WHEN percent_difference IS NOT NULL THEN 3
         ELSE 4
     END,
-    ABS(percent_difference) DESC
+    ABS(COALESCE(percent_difference, 0)) DESC,
+    practice_code
