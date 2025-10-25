@@ -5,102 +5,147 @@
         cluster_by=['person_id', 'registration_start_date'])
 }}
 
--- Patient Registrations - Clean registration periods from PATIENT_REGISTERED_PRACTITIONER_IN_ROLE
--- Processes raw PATIENT_REGISTERED_PRACTITIONER_IN_ROLE into proper registration periods
--- Uses PATIENT_PERSON bridge table to get canonical person_id (not direct person_id field)
--- Handles overlapping registrations, active registrations, and historical periods
--- Forms the foundation for patient-practice relationship analysis
--- Uses the correct registration criteria for active patient determination
+-- Patient Registrations - Uses episode_of_care with registration type filtering
+-- Processes episode_of_care filtered to registration episodes only (concept code 24531000000104)
+-- Uses PATIENT_PERSON bridge table to get canonical person_id
+-- Handles deceased patients and active registration determination
+-- Aligns with PDS comparison methodology
 
 WITH patient_to_person AS (
-    -- Get ALL person_id mappings for each patient_id to preserve registration history
-    -- Use staging table directly instead of deduplicated version to keep all patient_ids per person
-    SELECT 
+    SELECT
         pp.patient_id,
         pp.person_id
     FROM {{ ref('stg_olids_patient_person') }} AS pp
-    WHERE pp.patient_id IS NOT NULL 
+    WHERE pp.patient_id IS NOT NULL
         AND pp.person_id IS NOT NULL
 ),
 
-raw_registrations AS (
-    -- Get all registration episodes from PATIENT_REGISTERED_PRACTITIONER_IN_ROLE
-    -- Use patient_id to get canonical person_id via PATIENT_PERSON bridge
+patient_deceased_status AS (
     SELECT
-        prpr.id AS registration_record_id,
-        prpr.patient_id,
-        ptp.person_id,  -- Use person_id from bridge table instead of direct field
-        prpr.organisation_id,
-        prpr.start_date AS registration_start_datetime,
-        prpr.end_date AS registration_end_datetime,
-        prpr.practitioner_id,
-        prpr.episode_of_care_id,
-        -- Get practice details from record_owner_organisation_code instead of unreliable organisation table
-        prpr.record_owner_organisation_code AS practice_ods_code,
+        p.id AS patient_id,
+        p.death_year,
+        p.death_month,
+        p.death_year IS NOT NULL AS is_deceased,
+        CASE
+            WHEN p.death_year IS NOT NULL AND p.death_month IS NOT NULL
+                THEN DATEADD(
+                    DAY,
+                    FLOOR(
+                        DAY(LAST_DAY(TO_DATE(p.death_year || '-' || p.death_month || '-01'))) / 2
+                    ),
+                    TO_DATE(p.death_year || '-' || p.death_month || '-01')
+                )
+        END AS death_date_approx
+    FROM {{ ref('stg_olids_patient') }} AS p
+),
+
+episode_type_registration AS (
+    -- Get concept_id for 'Registration type' (code 24531000000104)
+    SELECT DISTINCT c.id AS concept_id
+    FROM {{ ref('stg_olids_concept') }} c
+    WHERE c.code = '24531000000104'
+        AND c.display = 'Registration type'
+),
+
+raw_registrations AS (
+    -- Get registration episodes from EPISODE_OF_CARE filtered by registration type
+    SELECT
+        eoc.id AS registration_record_id,
+        eoc.patient_id,
+        ptp.person_id,
+        eoc.organisation_id,
+        eoc.episode_of_care_start_date AS registration_start_datetime,
+        eoc.episode_of_care_end_date AS registration_end_datetime,
+        eoc.care_manager_practitioner_id AS practitioner_id,
+        eoc.id AS episode_of_care_id,
+        -- Get practice details from record_owner_organisation_code for consistency
+        eoc.record_owner_organisation_code AS practice_ods_code,
         dp.practice_name,
         -- Get patient details
-        p.sk_patient_id
-    FROM {{ ref('stg_olids_patient_registered_practitioner_in_role') }} AS prpr
+        p.sk_patient_id,
+        pds.is_deceased,
+        pds.death_date_approx
+    FROM {{ ref('stg_olids_episode_of_care') }} AS eoc
     INNER JOIN patient_to_person AS ptp
-        ON prpr.patient_id = ptp.patient_id
+        ON eoc.patient_id = ptp.patient_id
+    -- Filter to registration type episodes only via concept map
+    LEFT JOIN {{ ref('stg_olids_concept_map') }} cm
+        ON eoc.episode_type_source_concept_id = cm.source_code_id
+    INNER JOIN episode_type_registration etr
+        ON cm.target_code_id = etr.concept_id
     LEFT JOIN {{ ref('dim_practice') }} AS dp
-        ON prpr.record_owner_organisation_code = dp.practice_code
+        ON eoc.record_owner_organisation_code = dp.practice_code
     LEFT JOIN {{ ref('stg_olids_patient') }} AS p
-        ON prpr.patient_id = p.id
-    WHERE prpr.start_date IS NOT NULL
-        AND prpr.patient_id IS NOT NULL  -- Filter out records without patient_id
-    -- FIX: Only deduplicate truly identical registration records from source data
-    -- Include person_id in partition to preserve same person's registrations via different patient_ids
+        ON eoc.patient_id = p.id
+    LEFT JOIN patient_deceased_status AS pds
+        ON eoc.patient_id = pds.patient_id
+    WHERE eoc.episode_of_care_start_date IS NOT NULL
+        AND eoc.patient_id IS NOT NULL
+        AND eoc.organisation_id IS NOT NULL
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY 
-            ptp.person_id,  -- Include person_id to preserve multiple patient_ids for same person
-            prpr.organisation_id,
-            prpr.start_date,
-            prpr.end_date,
-            prpr.practitioner_id,
-            prpr.episode_of_care_id
-        ORDER BY prpr.id  -- Use ID as tie-breaker for deterministic results
+        PARTITION BY
+            ptp.person_id,
+            eoc.organisation_id,
+            eoc.episode_of_care_start_date,
+            eoc.episode_of_care_end_date,
+            eoc.care_manager_practitioner_id
+        ORDER BY eoc.id
     ) = 1
 ),
 
 cleaned_registrations AS (
-    -- Clean and validate registration periods using new registration criteria
+    -- Clean and validate registration periods with deceased patient logic
     SELECT
         rr.*,
-        -- Determine if registration is currently active using the new criteria:
-        -- Active if: end_date IS NULL OR end_date > CURRENT_DATE() OR end_date < start_date
+        -- Registration is current if end date suggests active AND patient not deceased
         (
-            rr.registration_end_datetime IS NULL 
-            OR rr.registration_end_datetime > CURRENT_DATE()
-            OR rr.registration_end_datetime < rr.registration_start_datetime
+            (
+                rr.registration_end_datetime IS NULL
+                OR rr.registration_end_datetime > CURRENT_DATE()
+                OR rr.registration_end_datetime < rr.registration_start_datetime
+            )
+            AND (
+                NOT rr.is_deceased
+                OR rr.death_date_approx IS NULL
+                OR rr.death_date_approx > CURRENT_DATE()
+            )
         ) AS is_current_registration,
 
         -- Calculate registration duration (only for completed registrations with valid end dates)
         CASE
             WHEN rr.registration_end_datetime IS NOT NULL
                 AND rr.registration_end_datetime >= rr.registration_start_datetime
-                THEN
-                    DATEDIFF(
-                        'day',
-                        rr.registration_start_datetime,
-                        rr.registration_end_datetime
-                    )
+                THEN DATEDIFF('day', rr.registration_start_datetime, rr.registration_end_datetime)
         END AS registration_duration_days,
 
-        -- Effective end date for analysis (NULL for active registrations)
+        -- Effective end date considers both registration end and death
         CASE
-            WHEN (
-                rr.registration_end_datetime IS NULL 
-                OR rr.registration_end_datetime > CURRENT_DATE()
-                OR rr.registration_end_datetime < rr.registration_start_datetime
-            ) THEN NULL
-            ELSE rr.registration_end_datetime
+            -- If deceased, use death date as effective end if earlier
+            WHEN rr.is_deceased
+                AND rr.death_date_approx IS NOT NULL
+                AND rr.death_date_approx >= rr.registration_start_datetime
+                AND rr.death_date_approx <= CURRENT_DATE()
+                AND (
+                    rr.registration_end_datetime IS NULL
+                    OR rr.death_date_approx < rr.registration_end_datetime
+                )
+                THEN rr.death_date_approx
+            -- If registration ended validly, use registration end date
+            WHEN rr.registration_end_datetime IS NOT NULL
+                AND rr.registration_end_datetime >= rr.registration_start_datetime
+                AND rr.registration_end_datetime <= CURRENT_DATE()
+                THEN rr.registration_end_datetime
+            ELSE NULL
         END AS effective_end_date,
 
-        -- Registration period classification
+        -- Registration status classification
         CASE
+            WHEN rr.is_deceased
+                AND rr.death_date_approx IS NOT NULL
+                AND rr.death_date_approx <= CURRENT_DATE()
+                THEN 'Historical - Deceased'
             WHEN (
-                rr.registration_end_datetime IS NULL 
+                rr.registration_end_datetime IS NULL
                 OR rr.registration_end_datetime > CURRENT_DATE()
                 OR rr.registration_end_datetime < rr.registration_start_datetime
             ) THEN 'Active'
