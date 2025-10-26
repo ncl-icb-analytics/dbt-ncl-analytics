@@ -110,4 +110,4 @@ Automated semantic versioning with [release-please](https://github.com/googleapi
 
 ## License
 
-Proprietary to North Central London ICB.
+Dual licensed under Open Government v3 & MIT. All code outputs subject to Crown Copyright.
