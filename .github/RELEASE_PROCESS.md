@@ -192,3 +192,4 @@ The git diff analysis captures all `.sql` changes automatically. If models are m
 - **Manifest**: `.github/.release-please-manifest.json`
 - **Analysis Script**: `.github/scripts/analyse-dbt-changes.sh`
 - **Changelog**: `CHANGELOG.md`
+Release-please is now configured and ready!
