@@ -4,12 +4,13 @@ dbt (data build tool) project for NCL ICB Analytics, transforming healthcare dat
 
 ## What We Build
 
-**Analytics domains:**
-- **Commissioning analytics** - Secondary care activity, waiting lists, community and mental health services
-- **OLIDS analytics** - QOF disease registers, clinical programmes, population health metrics
+This project transforms healthcare data into analytical datasets across two main domains:
 
-**Data sources:**
-- OLIDS (GP data via FHIR), SUS Unified (secondary care), Waiting Lists, Community Services (CSDS/MHSDS), EPD Primary Care (prescribing), eRS (referrals), Dictionary (reference data)
+**Commissioning analytics** - Secondary care activity, waiting lists, community and mental health services
+
+**OLIDS analytics** - QOF disease registers, clinical programmes, population health metrics
+
+Data sources include OLIDS (GP data via FHIR), SUS Unified (secondary care), Waiting Lists, Community Services (CSDS/MHSDS), EPD Primary Care (prescribing), eRS (referrals), and Dictionary (reference data).
 
 ## Getting Started
 
@@ -30,30 +31,32 @@ DATA_LAKE → Raw → Staging → Modelling → Reporting → Published
 
 ```
 models/
-├── raw/           # Source data with minimal transformation
-├── staging/       # Cleaned 1:1 source mappings
-├── modelling/     # Business logic and transformations
+├── raw/           # 1:1 views of source data
+├── staging/       # Cleaned and standardised source mappings
+├── modelling/     # Modular transformations and building blocks
 │   ├── commissioning/
 │   ├── olids/
 │   └── shared/
-├── reporting/     # Aggregated analytical models
+├── reporting/     # Analytics-ready datasets
 │   ├── commissioning/
 │   ├── olids/
 │   └── shared/
-└── published/     # Production datasets
+└── published/     # Objects feeding external reports and dashboards
     ├── direct_care/
     └── secondary_use/
 ```
 
 Each domain is further organised into subdomains (e.g., `diagnoses/`, `medications/`, `observations/`) with automatic schema generation for configured domains.
 
-### Database Structure
+### Database Layers
 
-- **DATA_LAKE.\*** - Source data
-- **Dictionary.\*** - Reference data
-- **MODELLING.\*** - Intermediate processing (DEV__ prefix in development)
-- **REPORTING.\*** - Analytical marts (DEV__ prefix in development)
-- **PUBLISHED_REPORTING__\*** - Production-ready outputs
+- **DATA_LAKE** - Raw data repository with 1:1 views of external sources
+- **MODELLING** - Initial transformations: filter, reshape, categorise, and link data sources
+- **REPORTING** - Analytics-ready datasets with business metrics and KPIs
+- **PUBLISHED_REPORTING__SECONDARY_USE** - Standard reporting layer for population health and operational analytics
+- **PUBLISHED_REPORTING__DIRECT_CARE** - Restricted layer for individual patient care (consent-based access)
+
+Development uses DEV__ prefixed variants (e.g., DEV__MODELLING, DEV__REPORTING) for safe development before promotion to production.
 
 ## Documentation
 
