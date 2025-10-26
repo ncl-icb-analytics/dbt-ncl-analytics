@@ -1,0 +1,77 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: simple
+
+      # Checkout code if a release was created
+      - name: Checkout code
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Analyse dbt model changes
+      - name: Analyse dbt model changes
+        if: ${{ steps.release.outputs.release_created }}
+        id: analyse
+        run: |
+          chmod +x .github/scripts/analyse-dbt-changes.sh
+
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || git rev-list --max-parents=0 HEAD)
+
+          # Run analysis and capture output
+          ANALYSIS=$(.github/scripts/analyse-dbt-changes.sh ${{ steps.release.outputs.tag_name }})
+
+          # Save to file for use in next step
+          echo "$ANALYSIS" > /tmp/dbt-analysis.md
+
+          echo "Analysis complete"
+          cat /tmp/dbt-analysis.md
+
+      # Update release notes with dbt analysis
+      - name: Update release notes
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get current release notes
+          CURRENT_NOTES=$(gh release view ${{ steps.release.outputs.tag_name }} --json body -q .body)
+
+          # Read analysis
+          DBT_ANALYSIS=$(cat /tmp/dbt-analysis.md)
+
+          # Combine notes
+          NEW_NOTES="$CURRENT_NOTES
+
+---
+
+## dbt Models Changed
+
+$DBT_ANALYSIS"
+
+          # Update release
+          gh release edit ${{ steps.release.outputs.tag_name }} --notes "$NEW_NOTES"
+
+      # Optional: Post to Slack/Teams
+      # - name: Notify team
+      #   if: ${{ steps.release.outputs.release_created }}
+      #   run: |
+      #     echo "New release created: ${{ steps.release.outputs.tag_name }}"
+      #     # Add your notification logic here
