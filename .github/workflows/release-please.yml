@@ -19,16 +19,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
 
-      # Auto-merge Release PR
-      - name: Auto-merge Release PR
-        if: ${{ steps.release.outputs.pr }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR_NUMBER="${{ steps.release.outputs.pr }}"
-          echo "Auto-merging Release PR #$PR_NUMBER"
-          gh pr merge $PR_NUMBER --auto --squash --delete-branch
-
       # Checkout code if a release was created
       - name: Checkout code
         if: ${{ steps.release.outputs.release_created }}
@@ -61,20 +51,23 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get current release notes and save to file
-          gh release view ${{ steps.release.outputs.tag_name }} --json body -q .body > /tmp/current-notes.md
+          # Get current release notes
+          CURRENT_NOTES=$(gh release view ${{ steps.release.outputs.tag_name }} --json body -q .body)
 
-          # Combine notes using cat
-          cat /tmp/current-notes.md > /tmp/combined-notes.md
-          echo "" >> /tmp/combined-notes.md
-          echo "---" >> /tmp/combined-notes.md
-          echo "" >> /tmp/combined-notes.md
-          echo "## dbt Models Changed" >> /tmp/combined-notes.md
-          echo "" >> /tmp/combined-notes.md
-          cat /tmp/dbt-analysis.md >> /tmp/combined-notes.md
+          # Read analysis
+          DBT_ANALYSIS=$(cat /tmp/dbt-analysis.md)
 
-          # Update release with combined notes
-          gh release edit ${{ steps.release.outputs.tag_name }} --notes-file /tmp/combined-notes.md
+          # Combine notes
+          NEW_NOTES="$CURRENT_NOTES
+
+---
+
+## dbt Models Changed
+
+$DBT_ANALYSIS"
+
+          # Update release
+          gh release edit ${{ steps.release.outputs.tag_name }} --notes "$NEW_NOTES"
 
       # Optional: Post to Slack/Teams
       # - name: Notify team
