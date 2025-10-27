@@ -6,7 +6,8 @@
 WITH deduplicated AS (
     {{
         deduplicate_csds(
-            csds_table = ref('raw_csds_cyp101referral')
+            csds_table = ref('raw_csds_cyp101referral'),
+            partition_cols = ['unique_service_request_identifier']
         )
     }}
 )

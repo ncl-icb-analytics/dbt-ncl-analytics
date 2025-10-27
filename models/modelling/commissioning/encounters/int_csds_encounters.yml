@@ -7,3 +7,6 @@ models:
       - name: sk_patient_id
         data_type: varchar
         description: pseudo NHS number
+        tests:
+          - not_null
+  

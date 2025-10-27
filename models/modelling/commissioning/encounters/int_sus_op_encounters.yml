@@ -14,6 +14,8 @@ models:
       - name: sk_patient_id
         data_type: varchar
         description: "Common commissioning patient identifier"
+        tests:
+          - not_null
 
       - name: provider_id
         data_type: varchar

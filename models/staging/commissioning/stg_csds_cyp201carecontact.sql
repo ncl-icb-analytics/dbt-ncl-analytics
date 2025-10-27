@@ -6,7 +6,7 @@ WITH deduplicated AS (
 {{
     deduplicate_csds(
         csds_table = ref('raw_csds_cyp201carecontact'),
-        partition_cols = ['unique_care_contact_identifier']
+        partition_cols = ['unique_service_request_identifier', 'unique_care_contact_identifier']
     )
 }} )
 
