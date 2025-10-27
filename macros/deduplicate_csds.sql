@@ -7,7 +7,7 @@
 
     SELECT
         ROW_NUMBER() OVER (
-            PARTITION BY 'tbl.unique_service_request_identifier'
+            PARTITION BY tbl.unique_service_request_identifier
             {%- for col in partition_cols %}
                 , tbl.{{ col }}
             {%- endfor %}
