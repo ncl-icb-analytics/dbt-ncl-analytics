@@ -9,9 +9,16 @@ models:
 
       Inclusion criteria:
       - Repeat prescriptions only (authorisation_type = '182918009')
-      - BNF chapters 1-4, 6-10 (polypharmacy scope)
+      - Polypharmacy-scope medications (via int_polypharmacy_medications_list)
       - Medication count periods lasting 3+ days (smoothed to filter transient fluctuations)
       - Last 5 years only
+
+      Polypharmacy scope uses exclusion-based filtering:
+      - Excludes most infections (except HIV and hepatitis antivirals)
+      - Excludes vitamins, minerals, nutrition products
+      - Excludes contraceptives, thyroid drugs, topicals
+      - Excludes devices, dressings, appliances
+      - See int_polypharmacy_medications_list for complete scope definition
 
       Event-based SCD tracking medication burden changes over time.
       Creates new row only when medication count changes and persists for 3+ days.

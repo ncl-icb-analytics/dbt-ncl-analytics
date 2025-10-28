@@ -3,28 +3,38 @@ version: 2
 models:
   - name: int_polypharmacy_medications_list
     description: |
-      BNF medications in scope for polypharmacy calculation using NHSBSA standard.
+      BNF medications in scope for polypharmacy calculation using exclusion-based filtering.
 
       Grain: One row per SNOMED code included in polypharmacy scope
 
-      Inclusion criteria:
-      - BNF chapters 1-4 and 6-10 only (systemic medications)
+      Approach:
+      - Exclusions defined in stg_reference_bnf_polypharmacy_exclusions (seed: bnf_polypharmacy_exclusions.csv)
+      - Hierarchical matching: checks 4-digit subchapter, then 2-digit chapter
+      - Future-proof: new BNF codes automatically included unless explicitly excluded
       - Must have valid SNOMED code mapping
 
-      Included chapters:
-      - Ch 1: Gastro-Intestinal System
-      - Ch 2: Cardiovascular System
-      - Ch 3: Respiratory System
-      - Ch 4: Central Nervous System
-      - Ch 6: Endocrine System
-      - Ch 7: Obstetrics, Gynaecology & Urinary Tract
-      - Ch 8: Malignant Disease & Immunosuppression
-      - Ch 9: Nutrition & Blood
-      - Ch 10: Musculoskeletal & Joint Diseases
+      Included chapters (with exclusions):
+      - Ch 1: Gastro-Intestinal System (excl 1.7, 1.8)
+      - Ch 2: Cardiovascular System (all included)
+      - Ch 3: Respiratory System (excl 3.8, 3.9)
+      - Ch 4: Central Nervous System (all included)
+      - Ch 5: Infections (ONLY 5.3.1 HIV and 5.3.3 hepatitis included)
+      - Ch 6: Endocrine System (excl 6.1.6, 6.2)
+      - Ch 7: Obstetrics, Gynaecology & Urinary Tract (excl 7.1, 7.2, 7.3)
+      - Ch 8: Malignant Disease & Immunosuppression (all included)
+      - Ch 9: Nutrition & Blood (excl 9.1-9.14, essentially all)
+      - Ch 10: Musculoskeletal & Joint Diseases (excl 10.3)
 
-      Exclusions:
-      - Chapter 5 (acute infections)
-      - Chapters 11+ (topicals, devices, dressings)
+      Excluded chapters (all subchapters):
+      - Ch 11: Eye preparations
+      - Ch 12: Ear, nose, and oropharynx
+      - Ch 13: Skin preparations
+      - Ch 14: Vaccines and immunoglobulins
+      - Ch 15: Anaesthesia
+      - Ch 18: Contrast media
+      - Ch 20-23: Dressings and appliances
+
+      Reference: GitHub issue #158
 
     columns:
       - name: snomed_code

@@ -11,7 +11,14 @@ models:
       - Persons with at least 1 current polypharmacy-scope medication
       - Medications counted from int_polypharmacy_medications_current (source of truth)
 
-      Polypharmacy thresholds (NHSBSA standard):
+      Polypharmacy scope uses exclusion-based filtering:
+      - Excludes most infections (except HIV and hepatitis antivirals)
+      - Excludes vitamins, minerals, nutrition products
+      - Excludes contraceptives, thyroid drugs, topicals
+      - Excludes devices, dressings, appliances
+      - See int_polypharmacy_medications_list for complete scope definition
+
+      Polypharmacy thresholds:
       - Standard polypharmacy: 5+ medications
       - Severe/complex polypharmacy: 10+ medications
 

@@ -140,5 +140,12 @@ models:
 
 seeds:
   ncl_analytics:
-    +database: "MODELLING"
-    +schema: "REFERENCE"
+    +database: "DATA_LAKE__NCL"
+    +schema: "DBT_SEEDS"
+    +quote_columns: false
+
+    bnf_polypharmacy_exclusions:
+      +column_types:
+        bnf_chapter_code: varchar(10)
+        chapter_name: varchar(200)
+        is_excluded: boolean
