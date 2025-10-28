@@ -5,7 +5,7 @@ models:
 
       Key Features:
 
-      • Includes persons who are not male (Female or Unknown sex) aged 55 or younger
+      • Includes persons who are not male (Female or Unknown gender) aged 55 or younger
 
       • Two age range definitions: 12-55 (standard demographic) and 0-55 (clinical safety programmes)
 
@@ -30,8 +30,8 @@ models:
               min_value: 0
               max_value: 55
 
-      - name: sex
-        description: 'Sex (Female or Unknown - excludes Male by definition)'
+      - name: gender
+        description: 'Gender (Female or Unknown - excludes Male by definition)'
         tests:
           - not_null
           - accepted_values:

@@ -43,9 +43,9 @@ models:
         data_type: number
         description: "Patient age in years"
 
-      - name: sex
+      - name: gender
         data_type: varchar
-        description: "Patient sex"
+        description: "Patient gender"
 
       - name: ethnicity_category
         data_type: varchar

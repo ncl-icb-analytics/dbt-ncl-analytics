@@ -21,7 +21,6 @@ select
     admission_method,
     end_date,
     date_recorded,
-    is_deleted,
     lds_id,
     record_owner_organisation_code,
     lds_datetime_data_acquired,

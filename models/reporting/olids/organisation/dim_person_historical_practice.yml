@@ -32,7 +32,6 @@ models:
         description: 'OLIDS internal practice ID'
         tests:
           - not_null
-
       - name: practice_code
         description: 'Practice ODS code'
         tests:

@@ -48,7 +48,7 @@ WITH base_observations AS (
 observations_with_demographics AS (
     SELECT 
         bo.*,
-        pd.sex
+        pd.gender
     FROM base_observations bo
     LEFT JOIN {{ ref('dim_person_demographics') }} pd
         ON bo.person_id = pd.person_id
@@ -64,7 +64,7 @@ SELECT
     concept_display,
     source_cluster_id,
     original_result_value,
-    sex,
+    gender,
 
     -- Determine AUDIT type
     CASE 

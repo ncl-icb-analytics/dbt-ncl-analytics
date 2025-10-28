@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: pds_olids_practice_discrepancies_secondary_use
+    description: |
+      Published view showing practices with significant discrepancies (>=20%) between
+      PDS and OLIDS registration counts.

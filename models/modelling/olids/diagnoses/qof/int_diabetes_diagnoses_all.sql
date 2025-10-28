@@ -34,7 +34,6 @@ WITH diabetes_observations_all_clusters AS (
         obs.mapped_concept_display AS concept_display,
         obs.cluster_id AS source_cluster_id
     FROM ({{ get_observations("'DM_COD', 'DMTYPE1_COD', 'DMTYPE2_COD', 'DMRES_COD'", source='PCD') }}) obs
-    WHERE obs.clinical_effective_date IS NOT NULL
 ),
 
 diabetes_observations_categorised AS (

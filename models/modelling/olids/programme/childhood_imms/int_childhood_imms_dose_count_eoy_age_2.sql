@@ -36,7 +36,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose1_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 1  AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '6IN1_1' AND v.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for 6in1 DOSE 2
 ,SIXIN1_DOSE2 AS (
@@ -48,7 +48,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose2_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 4  AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '6IN1_2'  AND v.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for 6in1 DOSE 3
 ,SIXIN1_DOSE3 AS (
@@ -60,7 +60,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose3_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 7  AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '6IN1_3'  AND v.EVENT_TYPE = 'Administration'
 )
  -- Creating CTE for HIBMENC DOSE 1
 ,HIBMENC_DOSE1 AS (
@@ -72,7 +72,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS hibmc_dose1_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 9 AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = 'HIBMENC_1' AND v.EVENT_TYPE = 'Administration'
 )
 -- Creating CTE for MMR Dose 1
 ,MMR_DOSE1 AS (
@@ -84,7 +84,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS  mmr_dose1_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-        WHERE v.VACCINE_ORDER = 11 AND v.EVENT_TYPE = 'Administration'
+        WHERE v.VACCINE_ID = 'MMR_1' AND v.EVENT_TYPE = 'Administration'
 )  
  -- Creating CTE for MenB DOSE 1
 ,MENB_DOSE1 AS (
@@ -96,7 +96,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose1_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-        WHERE v.VACCINE_ORDER = 2 and v.EVENT_TYPE = 'Administration'
+        WHERE v.VACCINE_ID = 'MENB_1' and v.EVENT_TYPE = 'Administration'
 )
  -- Creating CTE for MenB DOSE 2
 ,MENB_DOSE2 AS (
@@ -108,7 +108,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose2_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-        WHERE v.VACCINE_ORDER = 8 AND v.EVENT_TYPE = 'Administration'
+        WHERE v.VACCINE_ID = 'MENB_2' AND v.EVENT_TYPE = 'Administration'
 )
  -- Creating CTE for MenB DOSE 3
 ,MENB_DOSE3 AS (
@@ -120,7 +120,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose3_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-        WHERE v.VACCINE_ORDER = 12 AND v.EVENT_TYPE = 'Administration'
+        WHERE v.VACCINE_ID = 'MENB_3' AND v.EVENT_TYPE = 'Administration'
     )
 -- Creating CTE for PCV DOSE 1
 ,PCV_DOSE1 AS (
@@ -132,7 +132,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS pcv_dose1_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 5 AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = 'PCV_1' AND v.EVENT_TYPE = 'Administration'
          )
 -- Creating CTE for PCV DOSE 2
 ,PCV_DOSE2 AS (
@@ -144,7 +144,7 @@ WHERE p.age = 2 AND is_fiscal_year_end = 1
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS pcv_dose2_month_year_label
         FROM FISCAL2YRBASE v
         --restrict to administered doses only
-       WHERE v.VACCINE_ORDER = 10 AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = 'PCV_2' AND v.EVENT_TYPE = 'Administration'
          )
         
 --COMBINED

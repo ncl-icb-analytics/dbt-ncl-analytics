@@ -1,4 +1,4 @@
-{{ config(materialized="table") }}
+{{ config(materialized="table", enabled=false) }}
 
 -- note: using sk_patient_id as person_id
 
@@ -33,7 +33,7 @@ select
     c.concept_name,  -- mapped concept name from the vocabulary
     'ICD10' as concept_vocabulary
 from final_icd_codes f
-left join  {{ source('phenolab', 'BASE_ATHENA__CONCEPT') }} c
+left join  {{ ref('raw_phenolab_base_athena_concept') }} c
     on c.concept_code = f.concept_code
     and c.vocabulary_id = 'ICD10'
 left join {{ ref("stg_sus_apc_spell") }} se on se.primarykey_id = f.primarykey_id

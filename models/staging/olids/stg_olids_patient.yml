@@ -39,7 +39,7 @@ models:
     description: LDS system identifier
   - name: lds_datetime_data_acquired
     description: Datetime when data was acquired by LDS
-  - name: lds_initial_date_received_date
+  - name: lds_initial_data_received_date
     description: Date when data was initially received by LDS
   - name: lds_start_date_time
     description: LDS datetime stamp from which the record version was correct - used

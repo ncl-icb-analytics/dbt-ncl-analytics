@@ -10,6 +10,8 @@ p.PERSON_ID
 ,p.practice_name
 ,p.age
 ,p.BIRTH_DATE_APPROX
+,p.BORN_JUL_2024_FLAG
+,p.BORN_JAN_2025_FLAG
 ,v.VACCINE_ID
 ,v.VACCINE_NAME
 ,v.VACCINE_ORDER
@@ -35,9 +37,9 @@ where p.age = 1
     --HELPER COLUMN to check number of months between DOB and 3rd vaccination date to check not 12 months
     ROUND(MONTHS_BETWEEN(v3.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM HIST1YRBASE v1
-    LEFT JOIN HIST1YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 4 AND v2.EVENT_TYPE = 'Administration'
-    LEFT JOIN HIST1YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ORDER = 7 AND v3.EVENT_TYPE = 'Administration'
-    WHERE v1.VACCINE_ORDER = 1  AND v1.EVENT_TYPE = 'Administration'
+    LEFT JOIN HIST1YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.EVENT_TYPE = 'Administration'
+    LEFT JOIN HIST1YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.EVENT_TYPE = 'Administration'
+    WHERE v1.VACCINE_ID = '6IN1_1'  AND v1.EVENT_TYPE = 'Administration'
 )
 
  -- Creating CTE for Rotavirus (dose 1 and 2) where 1 row is per patient AS NUMERATOR
@@ -52,11 +54,11 @@ where p.age = 1
     ROUND(MONTHS_BETWEEN(v2.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS rota_second_event_age_mths
     FROM HIST1YRBASE v1
     LEFT JOIN HIST1YRBASE v2 
-    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 6 AND v2.EVENT_TYPE = 'Administration'
-    WHERE v1.VACCINE_ORDER = 3 AND v1.EVENT_TYPE = 'Administration'
+    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'ROTA_2' AND v2.EVENT_TYPE = 'Administration'
+    WHERE v1.VACCINE_ID = 'ROTA_1' AND v1.EVENT_TYPE = 'Administration'
 )  
--- Creating CTE for MenB (dose 1 and 2 and booster) where 1 row is per patient AS NUMERATOR
-,MENB AS (
+-- Creating CTE for MenB (dose 1 and 2 and booster) born before 1st July 2024 receive their vaccination at 16 weeks
+,MENB1 AS (
     SELECT 
       v1.PERSON_ID, 
           v1.EVENT_DATE AS menb_first_date, 
@@ -67,11 +69,28 @@ where p.age = 1
     ROUND(MONTHS_BETWEEN(v2.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS menb_second_event_age_mths
     FROM HIST1YRBASE v1
     LEFT JOIN HIST1YRBASE v2 
-    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ORDER = 8 AND v2.EVENT_TYPE = 'Administration'
-    WHERE v1.VACCINE_ORDER = 2 and v1.EVENT_TYPE = 'Administration'
+    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2' AND v2.EVENT_TYPE = 'Administration'
+    WHERE v1.VACCINE_ID = 'MENB_1' and v1.EVENT_TYPE = 'Administration'
+   AND v1.BORN_JUL_2024_FLAG = 'No'
    )
--- Creating CTE for PCV (dose 1 and 2) where 1 row is per patient AS NUMERATOR this is relevant for infants born on or after January 1, 2020
-,PCV AS (
+   -- Creating CTE for MenB (dose 1 and 2 and booster) born on or after 1st July 2024 receive their vaccination at 12 weeks
+,MENB1B AS (
+    SELECT 
+      v1.PERSON_ID, 
+          v1.EVENT_DATE AS menb_first_date, 
+          v1.AGE_AT_EVENT as menb_first_event_age,
+         v2.EVENT_DATE AS menb_second_date,
+         v2.AGE_AT_EVENT as menb_second_event_age,
+    --HELPER COLUMN to check number of months between DOB and 2nd vaccination date to check not 12 months
+    ROUND(MONTHS_BETWEEN(v2.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS menb_second_event_age_mths
+    FROM HIST1YRBASE v1
+    LEFT JOIN HIST1YRBASE v2 
+    ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2B' AND v2.EVENT_TYPE = 'Administration'
+    WHERE v1.VACCINE_ID = 'MENB_1' and v1.EVENT_TYPE = 'Administration'
+    AND v1.BORN_JUL_2024_FLAG = 'Yes'
+   )
+-- Creating CTE for PCV (dose 1 and 2) for infants born on or after January 1, 2020 and before 1st July 2024 receive their vaccination at 12 weeks
+,PCV1 AS (
     SELECT 
         v1.PERSON_ID, 
         v1.EVENT_DATE AS pcv_first_date,
@@ -79,9 +98,22 @@ where p.age = 1
     --HELPER COLUMN to check number of months between DOB and 2nd vaccination date to check not 12 months
         ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS pcv_first_event_age_mths
          FROM HIST1YRBASE v1
-       WHERE v1.VACCINE_ORDER = 5 AND v1.EVENT_TYPE = 'Administration'
+       WHERE v1.VACCINE_ID = 'PCV_1' AND v1.EVENT_TYPE = 'Administration'
        AND v1.BIRTH_DATE_APPROX >= '2020-01-16'
+       AND v1.BORN_JUL_2024_FLAG = 'No'  
          )
+-- Creating CTE for PCV (dose 1) Children born on or after 1st July 2024 receive their vaccination at 16 weeks
+,PCV1B AS (
+    SELECT 
+        v1.PERSON_ID, 
+        v1.EVENT_DATE AS pcv_first_date,
+        v1.AGE_AT_EVENT as pcv_first_event_age,
+    --HELPER COLUMN to check number of months between DOB and 2nd vaccination date to check not 12 months
+        ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS pcv_first_event_age_mths
+         FROM HIST1YRBASE v1
+       WHERE v1.VACCINE_ID = 'PCV_1B' AND v1.EVENT_TYPE = 'Administration' 
+       AND v1.BORN_JUL_2024_FLAG = 'Yes'
+) 
 ,COMBINED AS (
 SELECT DISTINCT
 v.PERSON_ID 
@@ -93,16 +125,23 @@ v.PERSON_ID
 --ROTAVIRUS 2 doses anytime before or on first bday ie age at event <=1 and check that second Rota age at event in months <=12
       ,CASE WHEN r.rota_first_event_age <= 1 AND r.rota_second_event_age <= 1 AND r.rota_second_event_age_mths <= 12  THEN 1
 		 ELSE 0 end as rota_comp_by_1
-  --MENB 2 doses must be less than 1 on event date
+--MENB1 2 doses must be less than 1 on event date (born before 1st July 2024)
     ,CASE WHEN m.menb_first_event_age <= 1 AND m.menb_second_event_age <= 1 AND m.menb_second_event_age_mths <= 12  THEN 1
+--MENB1B 2 doses must be less than 1 on event date (born on or after 1st July 2024)
+   WHEN m1.menb_first_event_age <= 1 AND m1.menb_second_event_age <= 1 AND m1.menb_second_event_age_mths <= 12  THEN 1   
 		 else 0 end as menb_comp_by_1
---PCV 1 dose anytime before or on first bday
-    ,CASE WHEN p.pcv_first_event_age <= 1 AND p.pcv_first_event_age_mths <=12 THEN 1 ELSE 0 END AS pcv_comp_by_1  
+--PCV1 1 dose anytime before or on first bday (born before 1st July 2024)
+    ,CASE WHEN p.pcv_first_event_age <= 1 AND p.pcv_first_event_age_mths <=12 THEN 1 
+--PCV1B 1 dose anytime before or on first bday (born on or after 1st July 2024)
+    WHEN p1.pcv_first_event_age <= 1 AND p1.pcv_first_event_age_mths <=12 THEN 1 
+    ELSE 0 END AS pcv_comp_by_1   
 FROM HIST1YRBASE v  
 left join SIXIN1 s using (PERSON_ID) 
 left join ROTA r using (PERSON_ID)   
-left join MENB m using (PERSON_ID) 
-left join PCV p using (PERSON_ID) 
+left join MENB1 m using (PERSON_ID) 
+left join MENB1B m1 using (PERSON_ID)
+left join PCV1 p using (PERSON_ID) 
+left join PCV1B p1 using (PERSON_ID) 
 )
 ,FINAL_PREJOIN AS (
 SELECT 

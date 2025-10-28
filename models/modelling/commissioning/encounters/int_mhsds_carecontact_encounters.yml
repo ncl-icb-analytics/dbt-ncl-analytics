@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: int_mhsds_carecontact_encounters
+    description: "Event history for Mental Health care contacts from MHSDS data"
+    columns:
+      - name: encounter_id
+        description: "Surrogate key - unique identifier for the care contact encounter"
+        tests:
+          - unique
+          - not_null
+      - name: sk_patient_id
+        description: pseudo NHS number
+      - name: start_date
+        description: Date of the care contact
+      - name: proxy_cost
+        description: Proxy cost of the care contact based on national cost collection average cost per Mental Health Care Contact (£302), adjusted by +15.7% for NCL
+      - name: source
+        description: Source system of the data (MHSDS)

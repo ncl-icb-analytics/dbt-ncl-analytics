@@ -86,6 +86,19 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- mhsds: Mental Health Services Data Set (MHSDS)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'MHSDS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'MHSDS'
+  
+  UNION ALL
+  
     -- dictionary_dbo: Reference data including PDS and lookup tables
   SELECT 
     'Dictionary' as database_name,
@@ -304,6 +317,32 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'PDS'
+  
+  UNION ALL
+  
+    -- fact_patient: Patient fact tables
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'FACT_PATIENT' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'FACT_PATIENT'
+  
+  UNION ALL
+  
+    -- fact_practice: Practice fact tables
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'FACT_PRACTICE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'FACT_PRACTICE'
 )
 
 SELECT 

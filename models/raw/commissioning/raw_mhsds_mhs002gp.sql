@@ -1,0 +1,41 @@
+-- Raw layer model for mhsds.MHS002GP
+-- Source: "DATA_LAKE"."MHSDS"
+-- Description: Mental Health Services Data Set (MHSDS)
+-- This is a 1:1 passthrough from source with standardized column names
+select
+    "SK" as sk,
+    "LocalPatientId" as local_patient_id,
+    "GMPReg" as gmp_reg,
+    "GMPCodeReg" as gmp_code_reg,
+    "StartDateGMPRegistration" as start_date_gmp_registration,
+    "EndDateGMPRegistration" as end_date_gmp_registration,
+    "OrgIDGPPrac" as org_idgp_prac,
+    "RecordNumber" as record_number,
+    "MHS002UniqID" as mhs002_uniq_id,
+    "OrgIDProv" as org_id_prov,
+    "Person_ID" as person_id,
+    "UniqSubmissionID" as uniq_submission_id,
+    "GPDistanceHome" as gp_distance_home,
+    "UniqMonthID" as uniq_month_id,
+    "RecordStartDate" as record_start_date,
+    "RecordEndDate" as record_end_date,
+    "EFFECTIVE_FROM" as effective_from,
+    "LADistrictAuthGPPractice" as la_district_auth_gp_practice,
+    "OrgIDICBGPPractice" as org_idicbgp_practice,
+    "OrgIDICSGPPractice" as org_idicsgp_practice,
+    "OrgIDSubICBLocGP" as org_id_sub_icb_loc_gp,
+    "OrgIDCCGGPPractice" as org_idccggp_practice,
+    "RowNumber" as row_number,
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicSystemId" as dmic_system_id,
+    "dmicCCGCode" as dmic_ccg_code,
+    "dmicDateAdded" as dmic_date_added,
+    "Unique_LocalPatientId" as unique_local_patient_id,
+    "dmIcbRegistrationSubmitted" as dm_icb_registration_submitted,
+    "dmSubIcbRegistrationSubmitted" as dm_sub_icb_registration_submitted,
+    "dmCommissionerDerivationReason" as dm_commissioner_derivation_reason,
+    "FileType" as file_type,
+    "ReportingPeriodStartDate" as reporting_period_start_date,
+    "ReportingPeriodEndDate" as reporting_period_end_date,
+    "dmicDataset" as dmic_dataset
+from {{ source('mhsds', 'MHS002GP') }}

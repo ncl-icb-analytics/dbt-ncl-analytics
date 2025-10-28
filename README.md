@@ -1,277 +1,116 @@
-# NCL Analytics DBT Project
+# NCL Analytics dbt Project
 
-## What This Is
+dbt (data build tool) project for NCL ICB Analytics, transforming healthcare data into actionable insights across North Central London.
 
-dbt (data build tool) project for NCL Analytics supporting:
-- **Commissioning analytics** - Secondary care and waiting lists
-- **OLIDS analytics** - GP data from the One London Integrated Data Set
+## What We Build
 
-**Data sources:**
-- **OLIDS** - FHIR GP record data (EMIS/SystmOne)
-- **Waiting Lists (WL)** - Patient pathways and waiting times
-- **SUS Unified** - Outpatient, Admitted Patient Care, Emergency Care
-- **EPD Primary Care** - Medications and prescribing
-- **eRS** - Electronic referral service
-- **Dictionary** - Reference data and lookups
+This project transforms healthcare data into analytical datasets across two main domains:
+
+**Commissioning analytics** - Secondary care activity, waiting lists, community and mental health services
+
+**OLIDS analytics** - QOF disease registers, clinical programmes, population health metrics
+
+Data sources include OLIDS (GP data via FHIR), SUS Unified (secondary care), Waiting Lists, Community Services (CSDS/MHSDS), EPD Primary Care (prescribing), eRS (referrals), and Dictionary (reference data).
+
+## Getting Started
+
+**New to the project?** See [CONTRIBUTING.md](CONTRIBUTING.md) for complete setup instructions.
+
+**Already set up?** See [Development Guide](docs/development-guide.md) for daily workflows and advanced patterns.
 
 ## Architecture
 
-Based on the 3-database architecture:
+### Data Flow
 
 ```
-DATA_LAKE → Staging (MODELLING.DBT_STAGING) → Intermediate (MODELLING.*) → Marts (REPORTING.*)
+DATA_LAKE → Raw → Staging → Modelling → Reporting → Published
+           (views) (views)   (tables)    (tables)    (tables)
 ```
 
-**Database Structure:**
-- `DATA_LAKE.*` - Source data (WL, SUS_UNIFIED_OP, SUS_UNIFIED_APC, EPD_PRIMARY_CARE)
-- `Dictionary.*` - Reference data and lookups (Dictionary schemas staged as required)
-- `MODELLING.*` - Intermediate processing (DEV__ prefix for dev)
-- `REPORTING.*` - Final marts (DEV__ prefix for dev) 
-
-## Quick Start
-
-### Prerequisites
-- Python 3.8 or higher
-- Git
-- Access to Snowflake with ANALYST role
-- Windows PowerShell (for start_dbt.ps1 script)
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics
-cd dbt-ncl-analytics
-```
-
-### 2. Set up Python environment
-
-Create and activate a virtual environment, then install dependencies:
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-**Important:** This project uses dbt-core 1.9.4 (not 1.10+) for Snowflake compatibility. Snowflake's dbt runtime does not yet support dbt 1.10 test macro syntax. Do not upgrade dbt packages or use the new `arguments:` property in test definitions.
-
-**Note on VSCode warnings:** If using the dbt VSCode extension, you may see deprecation warnings (dbt0102) about test arguments. These are cosmetic warnings from the extension's parser and can be safely ignored. The code is correct for dbt 1.9.4 and Snowflake.
-
-*Note: If `python` command fails, use `py -m venv venv` instead. To add Python to PATH without admin rights, find where Python is installed (run `py -c "import sys; print(sys.executable)"` to locate it), then run in PowerShell:*
-```powershell
-[Environment]::SetEnvironmentVariable("PATH", "$env:PATH;C:\Path\To\Python", "User")
-```
-*Replace `C:\Path\To\Python` with your Python installation directory. Restart PowerShell after running this command.*
-
-### 3. Configure Snowflake connection
-
-Two configuration files are needed:
-
-**Environment file (.env)** - Contains Snowflake account details:
-```bash
-cp env.example .env
-```
-Edit `.env` with your Snowflake account, username, warehouse, and role (ANALYST).
-
-**dbt profile (profiles.yml)** - Configures how dbt connects to Snowflake:
-```bash
-cp profiles.yml.template profiles.yml
-```
-Edit `profiles.yml` with your username and authentication method (typically externalbrowser for SSO).
-
-### 4. Initialise development environment
-
-```powershell
-.\start_dbt.ps1
-```
-
-This script:
-- Loads .env variables into your session
-- Applies git skip-worktree to profiles.yml (allows your local profile to diverge from the repo)
-
-Run once before your first commit, then each new terminal session for environment variables.
-
-**Why skip-worktree instead of gitignore?** profiles.yml must be committed for Snowflake native execution, but each developer needs their own local configuration. gitignore doesn't work for files already tracked by git - skip-worktree tells git to ignore changes to an already-tracked file.
-
-### 5. Verify installation
-
-```bash
-dbt deps
-dbt debug
-```
-
-Your browser will open for Snowflake authentication. Look for "All checks passed!"
-
-## Setting Up Data Sources
-
-1. **Configure sources**: Edit `scripts/sources/source_mappings.yml`
-2. **Generate metadata query**: `python scripts/sources/1a_generate_metadata_query.py`
-3. **Extract metadata**: `python scripts/sources/1b_extract_metadata.py`
-4. **Generate sources.yml**: `python scripts/sources/2_generate_sources.py`
-5. **Generate staging models**: `python scripts/sources/3_generate_staging_models.py`
-6. **Build and test**: `dbt run && dbt test`
-
-## Data Sources
-
-| Source | Staging Models | Description |
-|--------|---------------|-------------|
-| Waiting Lists (WL) | `stg_wl_*` | Patient pathways and waiting times |
-| SUS Unified OP | `stg_sus_op_*` | Outpatient appointments |
-| SUS Unified APC | `stg_sus_apc_*` | Admitted patient care |
-| SUS Unified ECDS | `stg_sus_ecds_*` | Emergency care |
-| EPD Primary Care | `stg_epd_pc_*` | Prescribing and medications |
-| eRS Primary Care | `stg_ers_pc_*` | Electronic referrals |
-| Dictionary | `stg_dictionary_*` | Reference data and lookups |
-
-## Project Structure
-
-Models are organised by data layer (raw → staging → modelling → reporting → published), then by domain:
+### Layer Organisation
 
 ```
 models/
-├── raw/                     # Source data with minimal transformation
-│   ├── commissioning/       # Commissioning source data (views in MODELLING.DBT_RAW)
-│   ├── olids/               # OLIDS source data (views in MODELLING.DBT_RAW)
-│   ├── phenolab/            # Phenotype lab data (views in MODELLING.DBT_RAW)
-│   └── shared/              # Shared reference data (views in MODELLING.DBT_RAW)
-│
-├── staging/                 # Cleaned and standardised source data
-│   ├── commissioning/       # 1:1 source mappings (views in MODELLING.DBT_STAGING)
-│   ├── olids/               # 1:1 OLIDS mappings (views in MODELLING.DBT_STAGING)
-│   ├── phenolab/            # PhenoLab base models (views in MODELLING.DBT_STAGING)
-│   └── shared/              # Reference data staging (views in MODELLING.DBT_STAGING)
-│
-├── modelling/               # Business logic and transformations
-│   ├── commissioning/       # Commissioning intermediate models (tables in MODELLING.COMMISSIONING_MODELLING)
-│   │   ├── administrative/
-│   │   ├── diagnosis/
-│   │   ├── encounters/
-│   │   ├── observations/
-│   │   └── procedure/
-│   ├── olids/               # OLIDS intermediate models (subdomain schemas auto-generated*)
-│   │   ├── diagnoses/       # → MODELLING.OLIDS_DIAGNOSES
-│   │   ├── medications/     # → MODELLING.OLIDS_MEDICATIONS
-│   │   ├── observations/    # → MODELLING.OLIDS_OBSERVATIONS
-│   │   ├── organisation/    # → MODELLING.OLIDS_ORGANISATION
-│   │   ├── person_attributes/ # → MODELLING.OLIDS_PERSON_ATTRIBUTES
-│   │   ├── programme/       # → MODELLING.OLIDS_PROGRAMME
-│   │   └── utilities/       # → MODELLING.OLIDS_UTILITIES
-│   └── shared/              # Shared dimensions and lookups (tables in MODELLING.REFERENCE)
-│
-├── reporting/               # Aggregated and analytical models
-│   ├── commissioning/       # Commissioning reporting (tables in REPORTING.COMMISSIONING_REPORTING)
-│   │   ├── person_history/
-│   │   ├── person_level/
-│   │   └── provider_level/
-│   ├── olids/               # OLIDS reporting (subdomain schemas auto-generated*)
-│   │   ├── clinical_safety/ # → REPORTING.OLIDS_CLINICAL_SAFETY
-│   │   ├── data_quality/    # → REPORTING.OLIDS_DATA_QUALITY
-│   │   ├── definitions/     # → REPORTING.OLIDS_DEFINITIONS
-│   │   ├── disease_registers/ # → REPORTING.OLIDS_DISEASE_REGISTERS
-│   │   ├── geography/       # → REPORTING.OLIDS_GEOGRAPHY
-│   │   ├── measures/        # → REPORTING.OLIDS_MEASURES
-│   │   ├── organisation/    # → REPORTING.OLIDS_ORGANISATION
-│   │   ├── person_analytics/ # → REPORTING.OLIDS_PERSON_ANALYTICS
-│   │   ├── person_demographics/ # → REPORTING.OLIDS_PERSON_DEMOGRAPHICS
-│   │   ├── person_status/   # → REPORTING.OLIDS_PERSON_STATUS
-│   │   └── programme/       # → REPORTING.OLIDS_PROGRAMME
-│   └── shared/              # Shared reporting models (tables in REPORTING.REFERENCE)
-│
-└── published/               # Production-ready datasets for end users
-    ├── direct_care/         # Direct care outputs
-    │   ├── olids/           # OLIDS direct care (PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_PUBLISHED)
-    │   └── shared/          # Shared direct care (PUBLISHED_REPORTING__DIRECT_CARE.REFERENCE)
-    └── secondary_use/       # Secondary use outputs
-        ├── commissioning/   # Commissioning secondary use (PUBLISHED_REPORTING__SECONDARY_USE.COMMISSIONING_PUBLISHED)
-        ├── olids/           # OLIDS secondary use (PUBLISHED_REPORTING__SECONDARY_USE.OLIDS_PUBLISHED)
-        └── shared/          # Shared secondary use (PUBLISHED_REPORTING__SECONDARY_USE.REFERENCE)
-
-*Automatic schema generation: Domains listed in var('auto_schema_domains') have schema names
-automatically derived from subdomain folder structure (e.g., models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES).
-Currently enabled for: olids. Add domains to auto_schema_domains in dbt_project.yml to enable.
-
-scripts/                     # Automation utilities
-└── sources/                     # Source and staging setup scripts
-    ├── source_mappings.yml          # Configuration: Define data sources and mappings
-    ├── 1_generate_metadata_query.py # Step 1: Generate dynamic SQL from source mappings
-    ├── 2_generate_sources.py        # Step 2: Generate sources.yml from metadata CSV
-    └── 3_generate_staging_models.py # Step 3: Create staging SQL files
-
-macros/                      # Reusable SQL macros
-├── generate_database_name.sql   # Handle DEV__ database prefixes
-├── generate_schema_name.sql     # Automatic schema derivation from folder structure
-├── add_model_comment.sql        # Add metadata comments to models
-└── generate_table_comment.sql   # Generate model comment content
+├── raw/           # 1:1 views of source data
+├── staging/       # Cleaned and standardised source mappings
+├── modelling/     # Modular transformations and building blocks
+│   ├── commissioning/
+│   ├── olids/
+│   └── shared/
+├── reporting/     # Analytics-ready datasets
+│   ├── commissioning/
+│   ├── olids/
+│   └── shared/
+└── published/     # Objects feeding external reports and dashboards
+    ├── direct_care/
+    └── secondary_use/
 ```
 
-## Development
+Each domain is further organised into subdomains (e.g., `diagnoses/`, `medications/`, `observations/`) with automatic schema generation for configured domains.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, branch protection rules, and commit signing setup.
+### Database Layers
 
-**Daily workflow:**
+- **DATA_LAKE** - Raw data repository with 1:1 views of external sources
+- **MODELLING** - Initial transformations: filter, reshape, categorise, and link data sources
+- **REPORTING** - Analytics-ready datasets with business metrics and KPIs
+- **PUBLISHED_REPORTING__SECONDARY_USE** - Standard reporting layer for population health and operational analytics
+- **PUBLISHED_REPORTING__DIRECT_CARE** - Restricted layer for individual patient care (consent-based access)
+
+Development uses DEV__ prefixed variants (e.g., DEV__MODELLING, DEV__REPORTING) for safe development before promotion to production.
+
+## Documentation
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Complete onboarding for new contributors
+- **[docs/development-guide.md](docs/development-guide.md)** - Daily workflows, commands, and advanced patterns
+- **[docs/working-with-sources.md](docs/working-with-sources.md)** - Source generation workflow
+- **[CHANGELOG.md](CHANGELOG.md)** - Release history
+
+## Key Features
+
+- **Configuration-driven sources** - Automated generation of dbt sources and staging models
+- **Automatic schema generation** - Schemas derived from folder structure for configured domains
+- **Conventional commits** - Semantic versioning with automated releases
+- **Branch protection** - Signed commits required, all changes via pull requests
+- **Comprehensive testing** - dbt tests and expectations for data quality
+
+## Common Commands
+
 ```bash
-dbt run            # Build all models
-dbt test           # Run data quality tests
-dbt docs generate  # Generate documentation
-dbt docs serve     # Open documentation in browser
+dbt run                    # Build all models
+dbt test                   # Run data quality tests
+dbt run -s olids           # Build all OLIDS models
+dbt run -s +model_name     # Build model with dependencies
+dbt docs generate          # Generate documentation
+dbt docs serve             # View documentation
 ```
 
-**For specific models:**
-```bash
-dbt run -s model_name              # Build one model
-dbt run -s staging                 # Build all staging models
-dbt run -s +model_name             # Build model + dependencies
-```
+See [Development Guide](docs/development-guide.md) for more commands and patterns.
 
-**For specific domains:**
-```bash
-dbt run -s commissioning           # Build all commissioning models
-dbt run -s olids                   # Build all OLIDS models
-dbt run -s shared                  # Build all shared models
-dbt run -s commissioning.staging   # Build only commissioning staging models
-```
+## Technology Stack
 
-**Generate YML outline:**
-```bash
-dbt run-operation generate_model_yaml --args '{"model_names": ["your-model-name-here",], "upstream_descriptions": true}'
-```
+- **dbt-core 1.9.4** - Data transformation framework (do not upgrade to 1.10+)
+- **Snowflake** - Cloud data warehouse
+- **Python 3.8+** - Scripting and automation
+- **dbt packages** - dbt_utils, dbt_expectations, dbt_date, codegen
 
-## Schema and Database Generation
+## Roles and Permissions
 
-Custom macros override dbt defaults. All locations are configured in `dbt_project.yml`.
+Uses **ANALYST** role with access to all project databases. Role hierarchy: ANALYST → ENGINEER → DATA_PLATFORM_MANAGER. All dbt objects owned by ANALYST with inherited permissions.
 
-**Database naming**:
-- **Prod**: Base database name (e.g., `REPORTING.COMMISSIONING_REPORTING.model`)
-- **Dev**: Prefixed with `DEV__` (e.g., `DEV__REPORTING.COMMISSIONING_REPORTING.model`)
+## Release Management
 
-**Schema naming**:
-- **Explicit schemas**: Uses exact `+schema:` value from config (no target prefix added)
-  - Example: `COMMISSIONING_REPORTING`, `REFERENCE`
-- **Automatic schemas**: For domains listed in `auto_schema_domains` variable, schema names are automatically derived from subdomain folder structure
-  - Pattern: `{DOMAIN}_{SUBDOMAIN}`
-  - Example: `models/modelling/olids/diagnoses/` → `OLIDS_DIAGNOSES`
-  - Configure via `vars.auto_schema_domains` in `dbt_project.yml`
-  - Currently enabled for: `olids`
+Automated semantic versioning with [release-please](https://github.com/googleapis/release-please):
+- Releases created from conventional commit messages
+- Changelog automatically generated
+- Release PRs auto-merge when created
 
-**Adding new folders**:
-- For domains using automatic schemas: Simply create the subdomain folder, no config changes needed
-- For other domains: Update `dbt_project.yml` with `+database:` and `+schema:` settings
-- Unconfigured models default to `MODELLING.DBT_STAGING`
+## Getting Help
 
-## Role and Permissions
+- **New contributor?** [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Need workflows?** [Development Guide](docs/development-guide.md)
+- **Working with sources?** [Working with Sources](docs/working-with-sources.md)
+- **Found a bug?** [Open an issue](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/issues)
 
-This project primarily uses the **ANALYST** role, which has access to:
-- `DATA_LAKE.*` - Source data
-- `Dictionary.*` - Reference data
-- `MODELLING.*` - Intermediate processing
-- `REPORTING.*` - Final marts
-- `PUBLISHED_REPORTING__SECONDARY_USE.*` - Published outputs
-- `PUBLISHED_REPORTING__DIRECT_CARE.*` - Direct care outputs
+## License
 
-**Role hierarchy**:
-- **ANALYST** - Base role, owns all dbt-created objects
-- **ENGINEER** - Inherits ANALYST permissions
-- **DATA_PLATFORM_MANAGER** - Inherits ENGINEER permissions
-
-Models can be run using any of these roles. Ownership is automatically transferred to ANALYST with `COPY CURRENT GRANTS`, meaning ANALYST becomes the owner while ENGINEER and DATA_PLATFORM_MANAGER retain management access through role inheritance.
-
+Dual licensed under Open Government v3 & MIT. All code outputs subject to Crown Copyright.

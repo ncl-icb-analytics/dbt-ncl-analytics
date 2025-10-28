@@ -174,7 +174,7 @@ bmi_with_ethnicity AS (
     FROM all_bmi ab
     INNER JOIN {{ ref('dim_person_age') }} age
         ON ab.person_id = age.person_id
-        AND age.age >= 18  -- Adults only - pediatric BMI uses age/sex-specific percentiles
+        AND age.age >= 18  -- Adults only - pediatric BMI uses age/gender-specific percentiles
     LEFT JOIN {{ ref('int_ethnicity_cardiometabolic_risk') }} ecr
         ON ab.person_id = ecr.person_id
 )

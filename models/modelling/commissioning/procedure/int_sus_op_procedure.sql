@@ -1,4 +1,4 @@
-{{ config(materialized="table") }}
+{{ config(materialized="table", enabled=false) }}
 
 -- note: using sk_patient_id as person_id
 
@@ -23,7 +23,7 @@ select
 from {{ ref("stg_sus_op_appointment_clinical_coding_procedure_opcs") }} f
 
 left join
-    {{ source('phenolab', 'BASE_ATHENA__CONCEPT') }} c
+    {{ ref('raw_phenolab_base_athena_concept') }} c
     on replace(c.concept_code, '.', '') = f.code
     and c.vocabulary_id = 'OPCS4'
 

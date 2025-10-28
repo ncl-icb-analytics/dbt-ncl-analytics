@@ -25,7 +25,7 @@ models:
     description: Date the record was entered into the system
   - name: description
     description: Text description of the procedure
-  - name: procedure_source_concept_id
+  - name: procedure_request_source_concept_id
     description: Foreign key to concept.id - source concept for the procedure type
   - name: status_concept_id
     description: Foreign key to concept.id - status of the procedure request

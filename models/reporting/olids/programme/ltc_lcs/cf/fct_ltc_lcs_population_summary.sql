@@ -18,10 +18,10 @@ WITH demographic_population AS (
         -- Population counts
         COUNT(*) AS total_population,
         
-        -- Sex breakdown
-        COUNT(CASE WHEN demo.sex = 'Male' THEN 1 END) AS population_male,
-        COUNT(CASE WHEN demo.sex = 'Female' THEN 1 END) AS population_female,
-        COUNT(CASE WHEN demo.sex NOT IN ('Male', 'Female') OR demo.sex IS NULL THEN 1 END) AS population_other_sex
+        -- Gender breakdown
+        COUNT(CASE WHEN demo.gender = 'Male' THEN 1 END) AS population_male,
+        COUNT(CASE WHEN demo.gender = 'Female' THEN 1 END) AS population_female,
+        COUNT(CASE WHEN demo.gender NOT IN ('Male', 'Female') OR demo.gender IS NULL THEN 1 END) AS population_other_gender
         
     FROM {{ ref('dim_person_demographics') }} AS demo
     INNER JOIN {{ ref('dim_person_current_practice') }} AS prac
@@ -85,10 +85,10 @@ case_finding_demographics AS (
         -- CYP Asthma indicator
         COUNT(CASE WHEN cf.in_cyp_ast_61 THEN 1 END) AS cf_cyp_ast_61_count,
         
-        -- Sex-specific case finding counts
-        COUNT(CASE WHEN cf.in_any_case_finding AND demo.sex = 'Male' THEN 1 END) AS case_finding_male,
-        COUNT(CASE WHEN cf.in_any_case_finding AND demo.sex = 'Female' THEN 1 END) AS case_finding_female,
-        COUNT(CASE WHEN cf.in_any_case_finding AND (demo.sex NOT IN ('Male', 'Female') OR demo.sex IS NULL) THEN 1 END) AS case_finding_other_sex
+        -- Gender-specific case finding counts
+        COUNT(CASE WHEN cf.in_any_case_finding AND demo.gender = 'Male' THEN 1 END) AS case_finding_male,
+        COUNT(CASE WHEN cf.in_any_case_finding AND demo.gender = 'Female' THEN 1 END) AS case_finding_female,
+        COUNT(CASE WHEN cf.in_any_case_finding AND (demo.gender NOT IN ('Male', 'Female') OR demo.gender IS NULL) THEN 1 END) AS case_finding_other_gender
         
     FROM {{ ref('dim_ltc_lcs_cf_summary') }} AS cf
     INNER JOIN {{ ref('dim_person_demographics') }} AS demo
@@ -126,7 +126,7 @@ SELECT
     demo.total_population,
     demo.population_male,
     demo.population_female,
-    demo.population_other_sex,
+    demo.population_other_gender,
     COALESCE(cf.case_finding_eligible_population, 0) AS case_finding_eligible_population,
     COALESCE(cf.total_case_finding_count, 0) AS total_case_finding_count,
     
@@ -156,10 +156,10 @@ SELECT
     COALESCE(cf.cf_htn_66_count, 0) AS cf_htn_66_count,
     COALESCE(cf.cf_cyp_ast_61_count, 0) AS cf_cyp_ast_61_count,
     
-    -- Sex-specific case finding
+    -- Gender-specific case finding
     COALESCE(cf.case_finding_male, 0) AS case_finding_male,
     COALESCE(cf.case_finding_female, 0) AS case_finding_female,
-    COALESCE(cf.case_finding_other_sex, 0) AS case_finding_other_sex,
+    COALESCE(cf.case_finding_other_gender, 0) AS case_finding_other_gender,
     
     -- Calculated rates and percentages
     CASE 

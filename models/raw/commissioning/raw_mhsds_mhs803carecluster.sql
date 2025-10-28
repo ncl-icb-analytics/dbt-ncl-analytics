@@ -1,0 +1,40 @@
+-- Raw layer model for mhsds.MHS803CareCluster
+-- Source: "DATA_LAKE"."MHSDS"
+-- Description: Mental Health Services Data Set (MHSDS)
+-- This is a 1:1 passthrough from source with standardized column names
+select
+    "SK" as sk,
+    "ClustId" as clust_id,
+    "StartDateCareClust" as start_date_care_clust,
+    "StartTimeCareClust" as start_time_care_clust,
+    "AMHCareClustCodeFin" as amh_care_clust_code_fin,
+    "CAMHNeedsBasedGroupingCode" as camh_needs_based_grouping_code,
+    "LDCareClustCodeFin" as ld_care_clust_code_fin,
+    "FMHCareClustCodeFin" as fmh_care_clust_code_fin,
+    "FLDCareClustCodeFin" as fld_care_clust_code_fin,
+    "EndDateCareClust" as end_date_care_clust,
+    "EndTimeCareClust" as end_time_care_clust,
+    "RecordNumber" as record_number,
+    "MHS803UniqID" as mhs803_uniq_id,
+    "OrgIDProv" as org_id_prov,
+    "Person_ID" as person_id,
+    "UniqSubmissionID" as uniq_submission_id,
+    "UniqClustID" as uniq_clust_id,
+    "ClusterStartRPFlag" as cluster_start_rp_flag,
+    "ClusterEndRPFlag" as cluster_end_rp_flag,
+    "ClusterOpenEndRPFlag" as cluster_open_end_rp_flag,
+    "ClusterDaysRP" as cluster_days_rp,
+    "UniqMonthID" as uniq_month_id,
+    "RecordStartDate" as record_start_date,
+    "RecordEndDate" as record_end_date,
+    "InactTimeCC" as inact_time_cc,
+    "EFFECTIVE_FROM" as effective_from,
+    "dmicImportLogId" as dmic_import_log_id,
+    "dmicSystemId" as dmic_system_id,
+    "dmicCCGCode" as dmic_ccg_code,
+    "dmicDateAdded" as dmic_date_added,
+    "FileType" as file_type,
+    "ReportingPeriodStartDate" as reporting_period_start_date,
+    "ReportingPeriodEndDate" as reporting_period_end_date,
+    "dmicDataset" as dmic_dataset
+from {{ source('mhsds', 'MHS803CareCluster') }}

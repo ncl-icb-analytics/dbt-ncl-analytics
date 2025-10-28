@@ -32,7 +32,6 @@ select
     "DATE_RECORDED" as date_recorded,
     "IS_ACTIVE" as is_active,
     "IS_CONFIDENTIAL" as is_confidential,
-    "IS_DELETED" as is_deleted,
     "EXPIRY_DATE" as expiry_date,
     "LDS_ID" as lds_id,
     "LDS_BUSINESS_KEY" as lds_business_key,

@@ -54,5 +54,5 @@ models:
       - name: simplified_risk_level
         description: Simplified risk categorisation (Low/Moderate/High) for aggregation
 
-      - name: sex
-        description: Person's sex used for risk stratification (where applicable)
+      - name: gender
+        description: Person's gender used for risk stratification (where applicable)

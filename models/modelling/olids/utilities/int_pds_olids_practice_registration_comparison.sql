@@ -8,97 +8,106 @@
 /*
 PDS/OLIDS Practice Registration Comparison
 
-Compares patient registration counts between Personal Demographics Service and OLIDS
-to identify discrepancies at practice level.
+Compares patient registration counts between PDS and OLIDS to identify discrepancies.
+Uses episode_of_care filtered to registration type episodes.
+Aligns with PDS comparison methodology from validation scripts.
 
 Discrepancies may indicate:
 - Data quality issues in either system
 - Timing differences in data updates
 - Practices with incomplete OLIDS coverage
 - Registration processing delays
-
-Highlights practices with >=20% discrepancy for investigation.
 */
 
-WITH pds_counts AS (
-    -- Count active patients per practice from Personal Demographics Service
+WITH pds_registrations AS (
+    -- Get current registrations from PDS with proper merger and death filtering
     SELECT
-        org.organisation_code as practice_code,
-        org.organisation_name as practice_name,
-        COUNT(DISTINCT person.sk_patient_id) as pds_patient_count
-    FROM {{ ref('stg_pds_pds_person') }} person
-    INNER JOIN {{ ref('stg_pds_pds_patient_care_practice') }} practice
-        ON person.sk_patient_id = practice.sk_patient_id
-    INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} org
-        ON practice.primary_care_provider = org.organisation_code
-    WHERE (
-        practice.primary_care_provider_business_effective_to_date IS NULL
-        OR practice.primary_care_provider_business_effective_to_date >= CURRENT_DATE()
-    )
-    GROUP BY
-        org.organisation_code,
-        org.organisation_name
+        reg.primary_care_provider AS practice_code,
+        prac.organisation_name AS practice_name,
+        reg.sk_patient_id,
+        -- Handle NHS number mergers to get canonical person
+        COALESCE(merg.sk_patient_id_superseded, reg.sk_patient_id) AS merged_sk_patient_id
+    FROM {{ ref('stg_pds_pds_patient_care_practice') }} reg
+    LEFT JOIN {{ ref('stg_pds_pds_person_merger') }} merg
+        ON reg.sk_patient_id = merg.sk_patient_id
+    LEFT JOIN {{ ref('stg_pds_pds_person') }} per
+        ON reg.sk_patient_id = per.sk_patient_id
+        AND per.person_business_effective_from_date <= COALESCE(reg.primary_care_provider_business_effective_to_date, '9999-12-31')
+        AND COALESCE(per.person_business_effective_to_date, '9999-12-31') >= reg.primary_care_provider_business_effective_from_date
+        AND CURRENT_DATE() BETWEEN per.person_business_effective_from_date
+            AND COALESCE(per.person_business_effective_to_date, '9999-12-31')
+    LEFT JOIN {{ ref('stg_pds_pds_reason_for_removal') }} reas
+        ON reg.sk_patient_id = reas.sk_patient_id
+        AND reas.reason_for_removal_business_effective_from_date <= COALESCE(reg.primary_care_provider_business_effective_to_date, '9999-12-31')
+        AND COALESCE(reas.reason_for_removal_business_effective_to_date, '9999-12-31') >= reg.primary_care_provider_business_effective_from_date
+        AND CURRENT_DATE() BETWEEN reas.reason_for_removal_business_effective_from_date
+            AND COALESCE(reas.reason_for_removal_business_effective_to_date, '9999-12-31')
+    INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} prac
+        ON reg.primary_care_provider = prac.organisation_code
+    INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} icb
+        ON prac.sk_organisation_id_parent_org = icb.sk_organisation_id
+        AND icb.organisation_code = '93C'
+        AND prac.end_date IS NULL
+    WHERE per.death_status IS NULL
+        AND per.date_of_death IS NULL
+        AND reg.sk_patient_id IS NOT NULL
+        AND CURRENT_DATE() BETWEEN reg.primary_care_provider_business_effective_from_date
+            AND COALESCE(reg.primary_care_provider_business_effective_to_date, '9999-12-31')
+        AND reas.reason_for_removal IS NULL
 ),
 
-olids_current_registrations AS (
-    -- Get the current registration for each patient from OLIDS
-    SELECT
-        p.sk_patient_id,
-        o.organisation_code as practice_code,
-        o.name as practice_name
-    FROM {{ ref('stg_olids_patient_registered_practitioner_in_role') }} prpr
-    INNER JOIN {{ ref('stg_olids_patient') }} p
-        ON prpr.patient_id = p.id
-    INNER JOIN {{ ref('stg_olids_organisation') }} o
-        ON prpr.organisation_id = o.id
-    WHERE
-        prpr.start_date IS NOT NULL
-        AND p.sk_patient_id IS NOT NULL
-        AND (
-            prpr.end_date IS NULL
-            OR prpr.end_date > CURRENT_DATE()
-        )
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY p.sk_patient_id
-        ORDER BY
-            prpr.start_date DESC,
-            prpr.id DESC
-    ) = 1
-),
-
-olids_counts AS (
-    -- Count distinct patients per practice from OLIDS
+pds_counts AS (
     SELECT
         practice_code,
         practice_name,
-        COUNT(DISTINCT sk_patient_id) as olids_patient_count
-    FROM olids_current_registrations
+        COUNT(DISTINCT sk_patient_id) AS pds_unmerged_persons,
+        COUNT(DISTINCT merged_sk_patient_id) AS pds_merged_persons
+    FROM pds_registrations
+    GROUP BY practice_code, practice_name
+),
+
+olids_counts AS (
+    -- Count patients per practice from OLIDS using new registration logic
+    -- Uses episode_of_care filtered to registration type with deceased handling
+    SELECT
+        reg.practice_ods_code AS practice_code,
+        reg.practice_name,
+        COUNT(DISTINCT reg.sk_patient_id) AS olids_registered_patients
+    FROM {{ ref('int_patient_registrations') }} reg
+    WHERE reg.is_current_registration = TRUE
+        AND reg.practice_ods_code IS NOT NULL
     GROUP BY
-        practice_code,
-        practice_name
+        reg.practice_ods_code,
+        reg.practice_name
 )
 
--- Calculate discrepancies for all practices
+-- Calculate discrepancies for all practices comparing merged PDS counts to OLIDS
 SELECT
-    COALESCE(pds.practice_code, olids.practice_code) as practice_code,
-    COALESCE(pds.practice_name, olids.practice_name) as practice_name,
-    COALESCE(pds.pds_patient_count, 0) as pds_patient_count,
-    COALESCE(olids.olids_patient_count, 0) as olids_patient_count,
-    pds.pds_patient_count - COALESCE(olids.olids_patient_count, 0) as difference,
+    COALESCE(pds.practice_code, olids.practice_code) AS practice_code,
+    COALESCE(pds.practice_name, olids.practice_name) AS practice_name,
+    COALESCE(pds.pds_unmerged_persons, 0) AS pds_unmerged_persons,
+    COALESCE(pds.pds_merged_persons, 0) AS pds_merged_persons,
+    COALESCE(olids.olids_registered_patients, 0) AS olids_patient_count,
+    -- Use merged PDS count for comparison as it accounts for NHS number changes
+    COALESCE(olids.olids_registered_patients, 0) - COALESCE(pds.pds_merged_persons, 0) AS difference,
     CASE
-        WHEN olids.olids_patient_count = 0 OR olids.olids_patient_count IS NULL THEN NULL
+        WHEN pds.pds_merged_persons = 0 OR pds.pds_merged_persons IS NULL THEN NULL
         ELSE ROUND(
-            (pds.pds_patient_count - olids.olids_patient_count) * 100.0 / olids.olids_patient_count,
+            (COALESCE(olids.olids_registered_patients, 0) - pds.pds_merged_persons) * 100.0 / pds.pds_merged_persons,
             2
         )
-    END as percent_difference,
+    END AS percent_difference,
     CASE
         WHEN ABS(COALESCE(
-            (pds.pds_patient_count - olids.olids_patient_count) * 100.0 / NULLIF(olids.olids_patient_count, 0),
+            (COALESCE(olids.olids_registered_patients, 0) - pds.pds_merged_persons) * 100.0 / NULLIF(pds.pds_merged_persons, 0),
             0
         )) >= 20 THEN TRUE
         ELSE FALSE
-    END as has_significant_discrepancy
+    END AS has_significant_discrepancy
 FROM pds_counts pds
 FULL OUTER JOIN olids_counts olids
     ON pds.practice_code = olids.practice_code
+ORDER BY ABS(COALESCE(
+    (COALESCE(olids.olids_registered_patients, 0) - pds.pds_merged_persons) * 100.0 / NULLIF(pds.pds_merged_persons, 0),
+    0
+)) DESC

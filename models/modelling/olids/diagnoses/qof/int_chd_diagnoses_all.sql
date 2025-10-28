@@ -35,6 +35,5 @@ SELECT
     CASE WHEN obs.cluster_id = 'CHD_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code
 
 FROM ({{ get_observations("'CHD_COD'", source='PCD') }}) obs
-WHERE obs.clinical_effective_date IS NOT NULL
 
 ORDER BY person_id, clinical_effective_date, id

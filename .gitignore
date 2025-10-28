@@ -57,3 +57,6 @@ snowflake_cache/
 *.keyring
 .keyring/
 keyring.cfg
+
+# Claude Code
+.claude/

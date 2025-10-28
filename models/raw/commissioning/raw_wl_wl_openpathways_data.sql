@@ -75,5 +75,6 @@ select
     "Action_Following_Preliminary_Screening_And_Risk_Assessment" as action_following_preliminary_screening_and_risk_assessment,
     "derLSOA2021" as der_lsoa2021,
     "ORIGINAL_REFERRAL_REQUEST_RECEIVED_DATE" as original_referral_request_received_date,
-    "ORGANISATION_IDENTIFIER_REFERRING_ORGANISATION" as organisation_identifier_referring_organisation
+    "ORGANISATION_IDENTIFIER_REFERRING_ORGANISATION" as organisation_identifier_referring_organisation,
+    "UNIQUE_BOOKING_REFERENCE_NUMBER" as unique_booking_reference_number
 from {{ source('wl', 'WL_OpenPathways_Data') }}
