@@ -1,0 +1,4369 @@
+version: 2
+sources:
+- name: aic
+  database: '"DATA_LAKE__NCL"'
+  schema: '"AIC_DEV"'
+  description: AIC pipelines
+  tables:
+  - name: BASE_ATHENA__CONCEPT
+    identifier: '"BASE_ATHENA__CONCEPT"'
+    columns:
+    - name: CONCEPT_ID
+      data_type: NUMBER
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: DOMAIN_ID
+      data_type: TEXT
+    - name: VOCABULARY_ID
+      data_type: TEXT
+    - name: CONCEPT_CLASS_ID
+      data_type: TEXT
+    - name: STANDARD_CONCEPT
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: VALID_START_DATE
+      data_type: DATE
+    - name: VALID_END_DATE
+      data_type: DATE
+    - name: INVALID_REASON
+      data_type: TEXT
+  - name: BASE_CCMS_DMD_CODES
+    identifier: '"BASE_CCMS_DMD_CODES"'
+    columns:
+    - name: CONDITIONID
+      data_type: NUMBER
+    - name: CONDITIONNAME
+      data_type: TEXT
+    - name: PRODUCTID
+      data_type: NUMBER
+    - name: PRIMARYTERM
+      data_type: TEXT
+  - name: BASE_CCMS_SNOMED_CODES
+    identifier: '"BASE_CCMS_SNOMED_CODES"'
+    columns:
+    - name: CONDITIONID
+      data_type: NUMBER
+    - name: CONDITIONNAME
+      data_type: TEXT
+    - name: CONCEPTID
+      data_type: NUMBER
+    - name: PRIMARYTERM
+      data_type: TEXT
+  - name: BASE_GOV__IMD_2019
+    identifier: '"BASE_GOV__IMD_2019"'
+    columns:
+    - name: LSOA_CODE_2011
+      data_type: TEXT
+    - name: LSOA_NAME_2011
+      data_type: TEXT
+    - name: LA_CODE_2019
+      data_type: TEXT
+    - name: LA_NAME_2019
+      data_type: TEXT
+    - name: IMD_RANK
+      data_type: NUMBER
+    - name: IMD_DECILE
+      data_type: NUMBER
+  - name: BASE_GOV__WARD_NAMES
+    identifier: '"BASE_GOV__WARD_NAMES"'
+    columns:
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: WARD_NAME
+      data_type: TEXT
+  - name: BASE_NHSBSA__APID_VPID
+    identifier: '"BASE_NHSBSA__APID_VPID"'
+    columns:
+    - name: APID
+      data_type: NUMBER
+    - name: VPID
+      data_type: NUMBER
+  - name: BASE_OLIDS__APPOINTMENT
+    identifier: '"BASE_OLIDS__APPOINTMENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PRACTITIONER_IN_ROLE_ID
+      data_type: TEXT
+    - name: SCHEDULE_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PLANNED_DURATION
+      data_type: NUMBER
+    - name: ACTUAL_DURATION
+      data_type: NUMBER
+    - name: APPOINTMENT_STATUS_CONCEPT_ID
+      data_type: TEXT
+    - name: PATIENT_WAIT
+      data_type: NUMBER
+    - name: PATIENT_DELAY
+      data_type: NUMBER
+    - name: DATE_TIME_BOOKED
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_TIME_SENT_IN
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_TIME_LEFT
+      data_type: TIMESTAMP_NTZ
+    - name: CANCELLED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TYPE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: BOOKING_METHOD_CONCEPT_ID
+      data_type: TEXT
+    - name: CONTACT_MODE_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_BLOCKED
+      data_type: BOOLEAN
+    - name: NATIONAL_SLOT_CATEGORY_NAME
+      data_type: TEXT
+    - name: CONTEXT_TYPE
+      data_type: TEXT
+    - name: SERVICE_SETTING
+      data_type: TEXT
+    - name: NATIONAL_SLOT_CATEGORY_DESCRIPTION
+      data_type: TEXT
+    - name: CSDS_CARE_CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__CONCEPT
+    identifier: '"BASE_OLIDS__CONCEPT"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: IS_MAPPED
+      data_type: BOOLEAN
+    - name: USE_COUNT
+      data_type: NUMBER
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__CONCEPT_MAP
+    identifier: '"BASE_OLIDS__CONCEPT_MAP"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_ID
+      data_type: TEXT
+    - name: SOURCE_CODE_ID
+      data_type: TEXT
+    - name: TARGET_CODE_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: EQUIVALENCE
+      data_type: TEXT
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__ENCOUNTER
+    identifier: '"BASE_OLIDS__ENCOUNTER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: APPOINTMENT_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_ID
+      data_type: TEXT
+    - name: SERVICE_PROVIDER_ORGANISATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: LOCATION
+      data_type: TEXT
+    - name: ENCOUNTER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: TYPE
+      data_type: TEXT
+    - name: SUB_TYPE
+      data_type: TEXT
+    - name: ADMISSION_METHOD
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__EPISODE_OF_CARE
+    identifier: '"BASE_OLIDS__EPISODE_OF_CARE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: EPISODE_TYPE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: EPISODE_STATUS_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EPISODE_OF_CARE_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE_MANAGER_PRACTITIONER_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__MEDICATION_ORDER
+    identifier: '"BASE_OLIDS__MEDICATION_ORDER"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_ID
+      data_type: TEXT
+    - name: DIAGNOSTIC_ORDER_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: DOSE
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: DURATION_DAYS
+      data_type: NUMBER
+    - name: ESTIMATED_COST
+      data_type: FLOAT
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: MEDICATION_ORDER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: ISSUE_METHOD
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: ISSUE_METHOD_DESCRIPTION
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: STATEMENT_MEDICATION_NAME
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+  - name: BASE_OLIDS__MEDICATION_STATEMENT
+    identifier: '"BASE_OLIDS__MEDICATION_STATEMENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ALLERGY_INTOLERANCE_ID
+      data_type: TEXT
+    - name: DIAGNOSTIC_ORDER_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_ID
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CANCELLATION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DOSE
+      data_type: TEXT
+    - name: QUANTITY_VALUE_DESCRIPTION
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: MEDICATION_NAME
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: ISSUE_METHOD
+      data_type: TEXT
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: EXPIRY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CODE
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_DISPLAY
+      data_type: TEXT
+  - name: BASE_OLIDS__OBSERVATION
+    identifier: '"BASE_OLIDS__OBSERVATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: PARENT_OBSERVATION_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: RESULT_VALUE
+      data_type: FLOAT
+    - name: RESULT_DATE
+      data_type: DATE
+    - name: RESULT_TEXT
+      data_type: TEXT
+    - name: IS_PROBLEM
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: PROBLEM_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OBSERVATION_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: EPISODICITY_CONCEPT_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: IS_PROBLEM_DELETED
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: RESULT_UNIT_CODE
+      data_type: TEXT
+    - name: RESULT_UNIT_DISPLAY
+      data_type: TEXT
+  - name: BASE_OLIDS__ORGANISATION
+    identifier: '"BASE_OLIDS__ORGANISATION"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ASSIGNING_AUTHORITY_CODE
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: TYPE_CODE
+      data_type: TEXT
+    - name: TYPE_DESC
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: PARENT_ORGANISATION_ID
+      data_type: TEXT
+    - name: OPEN_DATE
+      data_type: DATE
+    - name: CLOSE_DATE
+      data_type: DATE
+    - name: IS_OBSOLETE
+      data_type: BOOLEAN
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__PATIENT
+    identifier: '"BASE_OLIDS__PATIENT"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: NHS_NUMBER_HASH
+      data_type: BINARY
+    - name: SK_PATIENT_ID
+      data_type: NUMBER
+    - name: TITLE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: REGISTERED_PRACTICE_ID
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+    - name: IS_SPINE_SENSITIVE
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DUMMY_PATIENT
+      data_type: BOOLEAN
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__PATIENT_ADDRESS
+    identifier: '"BASE_OLIDS__PATIENT_ADDRESS"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ADDRESS_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__PATIENT_PERSON
+    identifier: '"BASE_OLIDS__PATIENT_PERSON"'
+    columns:
+    - name: LAKEHOUSEDATEPROCESSED
+      data_type: TEXT
+    - name: LAKEHOUSEDATETIMEUPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+  - name: BASE_OLIDS__PATIENT_REGISTERED_PRACTITIONER_IN_ROLE
+    identifier: '"BASE_OLIDS__PATIENT_REGISTERED_PRACTITIONER_IN_ROLE"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: EPISODE_OF_CARE_ID
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__PATIENT_UPRN
+    identifier: '"BASE_OLIDS__PATIENT_UPRN"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: REGISTRAR_EVENT_ID
+      data_type: TEXT
+    - name: MASKED_UPRN
+      data_type: TEXT
+    - name: MASKED_USRN
+      data_type: TEXT
+    - name: MASKED_POSTCODE
+      data_type: TEXT
+    - name: ADDRESS_FORMAT_QUALITY
+      data_type: TEXT
+    - name: POST_CODE_QUALITY
+      data_type: TEXT
+    - name: MATCHED_WITH_ASSIGN
+      data_type: TEXT
+    - name: QUALIFIER
+      data_type: TEXT
+    - name: UPRN_PROPERTY_CLASSIFICATION
+      data_type: TEXT
+    - name: ALGORITHM
+      data_type: TEXT
+    - name: MATCH_PATTERN
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_REGISTRAR_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__PERSON
+    identifier: '"BASE_OLIDS__PERSON"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: NHS_NUMBER_HASH
+      data_type: BINARY
+    - name: TITLE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+  - name: BASE_OLIDS__POSTCODE_HASH
+    identifier: '"BASE_OLIDS__POSTCODE_HASH"'
+    columns:
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: PRIMARY_CARE_ORGANISATION
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_ORGANISATION
+      data_type: TEXT
+    - name: YR_2011_LSOA
+      data_type: TEXT
+    - name: YR_2011_MSOA
+      data_type: TEXT
+    - name: YR_2021_LSOA
+      data_type: TEXT
+    - name: YR_2021_MSOA
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: IS_LATEST
+      data_type: NUMBER
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__REFERRAL_REQUEST
+    identifier: '"BASE_OLIDS__REFERRAL_REQUEST"'
+    columns:
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: REQUESTER_ORGANISATION_ID
+      data_type: TEXT
+    - name: RECIPIENT_ORGANISATION_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_PRIORITY_CONCEPT_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_SPECIALTY_CONCEPT_ID
+      data_type: TEXT
+    - name: MODE
+      data_type: TEXT
+    - name: IS_OUTGOING_REFERRAL
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: REFERRAL_REQUEST_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_BABY
+      data_type: NUMBER
+    - name: AGE_AT_EVENT_NEONATE
+      data_type: NUMBER
+    - name: DATE_RECORDED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_VERSIONER_EVENT_ID
+      data_type: TEXT
+    - name: RECORD_OWNER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: TEXT
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__TERMINOLOGY_CONCEPT
+    identifier: '"BASE_OLIDS__TERMINOLOGY_CONCEPT"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: SYSTEM
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: IS_MAPPED
+      data_type: BOOLEAN
+    - name: USE_COUNT
+      data_type: NUMBER
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_OLIDS__TERMINOLOGY_CONCEPT_MAP
+    identifier: '"BASE_OLIDS__TERMINOLOGY_CONCEPT_MAP"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_ID
+      data_type: TEXT
+    - name: SOURCE_CODE_ID
+      data_type: TEXT
+    - name: TARGET_CODE_ID
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: EQUIVALENCE
+      data_type: TEXT
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_SNOMED__CONCEPT
+    identifier: '"BASE_SNOMED__CONCEPT"'
+    columns:
+    - name: SK_SNOMED_CONCEPT_ID
+      data_type: NUMBER
+    - name: SK_SNOMED_DESCRIPTION_ID
+      data_type: NUMBER
+    - name: SK_SNOMED_MODULE_ID
+      data_type: NUMBER
+    - name: PREFERRED_TERM
+      data_type: TEXT
+    - name: SK_SNOMED_DEFINITION_STATUS_ID
+      data_type: NUMBER
+    - name: DEFINITION_STATUS
+      data_type: TEXT
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: IN_NATIONAL_DATASET
+      data_type: BOOLEAN
+    - name: LAST_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_SUS__APC_SPELL
+    identifier: '"BASE_SUS__APC_SPELL"'
+    columns:
+    - name: SPELL_PATIENT_REGISTRATION_DERIVED_RESPONSIBLE_CCG_FROM_PDS
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_POSTCODE_PSEUDO
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_POSTCODE_IS_VALID
+      data_type: BOOLEAN
+    - name: SPELL_PATIENT_RESIDENCE_RESIDENCE_CCG
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_POSTCODE_FROM_PDS_PSEUDO
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_RESIDENCE_CCG_FROM_PATIENT_POSTCODE
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_POSTCODE_DISTRICT
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_OA_11
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_MSOA_11
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_LSOA_11
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_COUNTRY
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_GOVERNMENT_OFFICE_REGION
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_RESIDENCE_COUNTY
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_LOCAL_AUTHORITY_DISTRICT
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_PARLIAMENTARY_CONSTITUENCY
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_ED_COUNTY_CODE
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_ED_DISTRICT_CODE
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_ELECTORAL_WARD_1998
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE_DESCRIPTION
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_RURAL_URBAN_INDICATOR
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_CANCER_REGISTRY
+      data_type: TEXT
+    - name: SPELL_PATIENT_RESIDENCE_DERIVED_GRID_REFERENCE
+      data_type: TEXT
+    - name: SPELL_PATIENT_MENTAL_HEALTH_ACT_LEGAL_STATUS_CLASSIFICATION
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_NHS_NUMBER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_NHS_NUMBER_STATUS
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_NHS_NUMBER_IS_VALID
+      data_type: BOOLEAN
+    - name: SPELL_PATIENT_IDENTITY_LOCAL_PATIENT_IDENTIFIER_VALUE
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_LOCAL_PATIENT_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_PATIENT_IDENTITY_BIRTH_MONTH
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_BIRTH_YEAR
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_AGE_RANGE
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_AGE_AT_CDS_ACTIVITY_DATE
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_SPELL_AGE
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_AGE_ON_ADMISSION
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_AGE_AT_RECORD_START
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_FRACTIONAL_AGE_AT_RECORD_START
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_HES_AGE_AT_RECORD_START
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_AGE_AT_RECORD_END
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_HES_AGE_AT_RECORD_END
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_GENDER
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_MARITAL_STATUS
+      data_type: TEXT
+    - name: SPELL_PATIENT_REGISTRATION_GENERAL_PRACTITIONER
+      data_type: TEXT
+    - name: SPELL_PATIENT_REGISTRATION_GENERAL_PRACTICE
+      data_type: TEXT
+    - name: SPELL_PATIENT_REGISTRATION_RESPONSIBLE_CCG
+      data_type: TEXT
+    - name: SPELL_PATIENT_REGISTRATION_DERIVED_GENERAL_PRACTICE_FROM_PDS
+      data_type: TEXT
+    - name: SPELL_REFERRAL_TO_TREATMENT_PATIENT_PATHWAY_IDENTIFIER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: SPELL_REFERRAL_TO_TREATMENT_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: SPELL_REFERRAL_TO_TREATMENT_PERIOD_STATUS
+      data_type: TEXT
+    - name: SPELL_REFERRAL_TO_TREATMENT_WAITING_TIME_MEASUREMENT_TYPE
+      data_type: TEXT
+    - name: SPELL_REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_DISCHARGE_TO_HOSPITAL_AT_HOME
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_NHS_NUMBER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_NHS_NUMBER_STATUS
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_LOCAL_PATIENT_IDENTIFIER_VALUE
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_LOCAL_PATIENT_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_PATIENT_MOTHER_BIRTH_MONTH
+      data_type: NUMBER
+    - name: SPELL_PATIENT_MOTHER_BIRTH_YEAR
+      data_type: NUMBER
+    - name: SPELL_PATIENT_MOTHER_AGE_RANGE
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_POSTCODE_PSEUDO
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_RESIDENCE_CCG
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_POSTCODE_FROM_PDS_PSEUDO
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_RESIDENCE_CCG_FROM_PDS
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_GENERAL_PRACTICE_FROM_PDS
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_RESPONSIBLE_CCG_FROM_PDS
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_READY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_REFERRAL_TO_TREATMENT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_REFERRAL_TO_TREATMENT_PERIOD_LENGTH
+      data_type: NUMBER
+    - name: SPELL_PATIENT_OVERSEAS_VISITOR_CLASSIFICATION
+      data_type: TEXT
+    - name: SPELL_REFERRAL_REFERRER
+      data_type: TEXT
+    - name: SPELL_REFERRAL_REFERRING_ORGANISATION
+      data_type: TEXT
+    - name: SPELL_REFERRAL_DECIDED_TO_ADMIT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_ADMISSION_ADMINISTRATIVE_CATEGORY
+      data_type: TEXT
+    - name: SPELL_ADMISSION_INTENDED_MANAGEMENT
+      data_type: TEXT
+    - name: SPELL_ADMISSION_PATIENT_CLASSIFICATION
+      data_type: TEXT
+    - name: SPELL_ADMISSION_METHOD
+      data_type: TEXT
+    - name: SPELL_ADMISSION_SOURCE
+      data_type: TEXT
+    - name: SPELL_ADMISSION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_ADMISSION_TIME
+      data_type: TEXT
+    - name: SPELL_ADMISSION_DURATION_ELECTIVE_WAIT
+      data_type: NUMBER
+    - name: SPELL_ADMISSION_ADMISSION_TYPE
+      data_type: TEXT
+    - name: SPELL_ADMISSION_ADMISSION_SUB_TYPE
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_DESTINATION
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_METHOD
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_DISCHARGE_TIME
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_LENGTH_OF_HOSPITAL_STAY
+      data_type: NUMBER
+    - name: SPELL_DISCHARGE_PBR_DELAYED_DISCHARGE_DAYS
+      data_type: NUMBER
+    - name: SPELL_CARE_LOCATION_SITE_CODE_OF_TREATMENT
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_POSTCODE_DISTRICT
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_GOVERNMENT_OFFICE_REGION
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_SHA_PROVIDER
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_CCG_FROM_TREATMENT_SITE_VALUE
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_ADMISSION_TYPE
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PATIENT_TYPE
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_UNADJUSTED_DAYS
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_CRITICAL_CARE_DAYS
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_REHABILITATION_DAYS
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_PALLIATIVE_CARE_DAYS
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_QUALIFYING_DAYS
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_TRIM_POINT
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_EXCESS_BED_DAYS
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_PBR_DELAYED_DISCHARGE_DAYS
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_TARIFF_APPLIED
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_INITIAL_TARIFF
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_PER_DIEM_RATE
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_EXCESS_BED_DAYS_TARIFF
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_MARKET_FORCES_FACTOR
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_FINAL_PRICE
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_COMMISSIONER_ASSIGNMENT_COMMISSIONER
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_COMMISSIONER_ASSIGNMENT_FLOWCHART_REFERENCE
+      data_type: TEXT
+    - name: SPELL_REFERRAL_DIRECT_ACCESS_INDICATOR
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_LINE_NUMBER
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_COMMISSIONER_ASSIGNMENT_NHSE_PLANNING_COMMISSIONER
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_CARER_SUPPORT_INDICATOR
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_AGGREGATE_UNBUNDLED_TARIFF
+      data_type: NUMBER
+    - name: SPELL_REFERRAL_TO_TREATMENT_UBRN_ISSUER
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_CCG_FROM_TREATMENT_SITE_ORIGIN
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_PROVIDER_DISTANCE_VALUE
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_PROVIDER_DISTANCE_ORIGIN
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_SITE_OF_TREATMENT_DISTANCE_VALUE
+      data_type: TEXT
+    - name: SPELL_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_SITE_OF_TREATMENT_DISTANCE_ORIGIN
+      data_type: TEXT
+    - name: SPELL_CLINICAL_CODING_GROUPER_DERIVED_PRIMARY_DIAGNOSIS
+      data_type: TEXT
+    - name: SPELL_CLINICAL_CODING_GROUPER_DERIVED_SECONDARY_DIAGNOSIS
+      data_type: TEXT
+    - name: SPELL_CLINICAL_CODING_GROUPER_DERIVED_DOMINANT_PROCEDURE
+      data_type: TEXT
+    - name: SPELL_CLINICAL_CODING_PROCEDURE_OPERATION_STATUS
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_DERIVED
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_IS_COMMISSIONER_RECOGNISED
+      data_type: BOOLEAN
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER_DERIVED
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONING_SERIAL_NUMBER
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_SERVICE_AGREEMENT_APPLICABLE_COSTING_PERIOD
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_GROUPING_CORE_HRG
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_GROUPING_GROUPING_METHOD
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_GROUPING_PROGRAMME_BUDGETING_CATEGORY
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_GROUPING_CODE_CLEANING_APPLIED
+      data_type: BOOLEAN
+    - name: SPELL_COMMISSIONING_PSS_GROUPING_TARIFF_UPLIFT_RATE
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_EXCLUDED_FROM_PBR
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_SPELL_TYPE
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: TYPE
+      data_type: TEXT
+    - name: ACTION
+      data_type: TEXT
+    - name: SCHEMA_VERSION
+      data_type: NUMBER
+    - name: SYSTEM_REPORT_AS_AT
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_REPORT_DATE_RANGE
+      data_type: TEXT
+    - name: SYSTEM_REPORT_CLEAR_DATA
+      data_type: BOOLEAN
+    - name: SYSTEM_REPORT_GROUPER_VERSION
+      data_type: TEXT
+    - name: SYSTEM_REPORT_TARIFF_VERSION
+      data_type: TEXT
+    - name: SYSTEM_REPORT_QUERY_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_REPORT_QUERY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_REPORT_QUERY_TIME
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_INTERCHANGE_RECEIVED_TIME
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_RECORD_VERSION
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CDS_GROUP_INDICATOR
+      data_type: TEXT
+    - name: SPELL_HOSPITAL_PROVIDER_SPELL_NUMBER
+      data_type: TEXT
+    - name: SPELL_OPEN_SPELL_INDICATOR
+      data_type: TEXT
+    - name: SPELL_PBR_INCLUDED_EPISODES_IN_SPELL
+      data_type: NUMBER
+    - name: SPELL_PBR_EXCLUDED_EPISODES_IN_SPELL
+      data_type: NUMBER
+    - name: SPELL_HAS_DATA_QUALITY_ERROR
+      data_type: NUMBER
+    - name: SPELL_COMMISSIONING_PSS_GROUPING_NATIONAL_PROGRAMME_CODE
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_PSS_GROUPING_PRESCRIBED_SERVICE_LINE_CODE
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_SPECIALISED_SERVICES_TARIFF_UPLIFT
+      data_type: NUMBER
+    - name: SPELL_REFERRAL_TO_TREATMENT_UBRN_VALUE_PSEUDO
+      data_type: TEXT
+    - name: SPELL_REFERRAL_EARLIEST_REASONABLE_OFFER_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_COMMISSIONING_GROUPING_BEST_PRACTICE_FLAG
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_GROUPING_BEST_PRACTICE_ACTION
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_PDS_DEATH_STATUS
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_PDS_DATE_OF_DEATH
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_AMBULANCE_CONVEYING_TRUST
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CONFIDENTIALITY_CATEGORY
+      data_type: NUMBER
+    - name: SPELL_PATIENT_IDENTITY_WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_OVERSEAS_VISITOR_STATUS
+      data_type: TEXT
+    - name: SPELL_AMBULANCE_INCIDENT_NUMBER
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_EVIDENCE_BASED_INTERVENTION_CATEGORY
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_EVIDENCE_BASED_INTERVENTION_TYPE
+      data_type: TEXT
+    - name: SPELL_PATIENT_MOTHER_WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: SYSTEM_REPORT_ACTIVITY_DATE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_REPORT_ACTIVITY_DATE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_INTERCHANGE_LATEST_EPISODE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_INTERCHANGE_LATEST_EPISODE_RECEIVED_TIME
+      data_type: TEXT
+    - name: SPELL_PATIENT_IDENTITY_ETHNIC_CATEGORY_2021
+      data_type: TEXT
+    - name: SPELL_REFERRAL_LATEST_CLINICALLY_APPROPRIATE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_PATIENT_MOTHER_OVERSEAS_VISITOR_CHARGING_CATEGORY_AT_CDS_ACTIVITY_DATE
+      data_type: TEXT
+    - name: SPELL_COMMISSIONING_TARIFF_CALCULATION_AGGREGATE_UNBUNDLED_GUIDE_TARIFF
+      data_type: NUMBER
+  - name: BASE_SUS__APC_SPELL_COMMISSIONING_GROUPING_UNBUNDLED_HRG
+    identifier: '"BASE_SUS__APC_SPELL_COMMISSIONING_GROUPING_UNBUNDLED_HRG"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: TARIFF
+      data_type: NUMBER
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: UNBUNDLED_HRG_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: ADULT_CC_TARIFF_DAYS
+      data_type: NUMBER
+    - name: MULTIPLE_APPLIES
+      data_type: BOOLEAN
+    - name: TARIFF_APPLIED
+      data_type: TEXT
+  - name: BASE_SUS__APC_SPELL_CRITICAL_CARE_CONSOLIDATED
+    identifier: '"BASE_SUS__APC_SPELL_CRITICAL_CARE_CONSOLIDATED"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: CRITICAL_CARE_CONSOLIDATED_ID
+      data_type: NUMBER
+    - name: IDENTIFIER_LOCAL_IDENTIFIER
+      data_type: TEXT
+    - name: IDENTIFIER_SUS_CC_PERIOD
+      data_type: TEXT
+    - name: IDENTIFIER_SUBMITTED_ON_EPISODE
+      data_type: TEXT
+    - name: IDENTIFIER_CC_PERIOD_TYPE
+      data_type: TEXT
+    - name: IDENTIFIER_CC_PERIOD_TYPE_NUMERIC
+      data_type: TEXT
+    - name: ADMISSION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ADMISSION_TIME
+      data_type: TEXT
+    - name: ADMISSION_UNIT_FUNCTION
+      data_type: TEXT
+    - name: ADMISSION_UNIT_BED_CONFIGURATION
+      data_type: TEXT
+    - name: ADMISSION_SOURCE
+      data_type: TEXT
+    - name: ADMISSION_SOURCE_LOCATION
+      data_type: TEXT
+    - name: DISCHARGE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DISCHARGE_TIME
+      data_type: TEXT
+    - name: DISCHARGE_STATUS
+      data_type: TEXT
+    - name: DISCHARGE_LOCATION
+      data_type: TEXT
+    - name: ORGAN_SUPPORT_DAYS_ADVANCED_RESPIRATORY
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_BASIC_RESPIRATORY
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_ADVANCED_CARDIOVASCULAR
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_BASIC_CARDIOVASCULAR
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_RENAL
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_NEUROLOGICAL
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_GASTRO_INTESTINAL
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_DERMATOLOGICAL
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_LIVER
+      data_type: NUMBER
+    - name: ORGAN_SUPPORT_DAYS_MAXIMUM_SYSTEMS
+      data_type: TEXT
+    - name: INTENSITY_SUPPORT_DAYS_LEVEL_2
+      data_type: NUMBER
+    - name: INTENSITY_SUPPORT_DAYS_LEVEL_3
+      data_type: NUMBER
+    - name: ADMISSION_GESTATION_LENGTH_AT_DELIVERY
+      data_type: NUMBER
+    - name: ADMISSION_TYPE
+      data_type: TEXT
+    - name: DISCHARGE_READY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DISCHARGE_READY_TIME
+      data_type: TEXT
+    - name: DISCHARGE_DESTINATION
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+  - name: BASE_SUS__APC_SPELL_EPISODES
+    identifier: '"BASE_SUS__APC_SPELL_EPISODES"'
+    columns:
+    - name: COMMISSIONING_GROUPING_CODE_CLEANING_APPLIED
+      data_type: BOOLEAN
+    - name: COMMISSIONING_TARIFF_CALCULATION_EXCLUDED_FROM_PBR
+      data_type: NUMBER
+    - name: COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_CRITICAL_CARE_DAYS
+      data_type: NUMBER
+    - name: COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_REHABILITATION_DAYS
+      data_type: NUMBER
+    - name: COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_PALLIATIVE_CARE_DAYS
+      data_type: NUMBER
+    - name: COMMISSIONING_TARIFF_CALCULATION_PBR_LENGTH_OF_STAY_PBR_DELAYED_DISCHARGE_DAYS
+      data_type: NUMBER
+    - name: SYSTEM_TRANSACTION_CDS_UPDATE_TYPE
+      data_type: NUMBER
+    - name: SYSTEM_TRANSACTION_CDS_APPLICABLE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_APPLICABLE_TIME
+      data_type: TEXT
+    - name: REFERRAL_DIRECT_ACCESS_INDICATOR
+      data_type: TEXT
+    - name: FIRST_REGULAR_DAY_OR_NIGHT_ADMISSION
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_LINE_NUMBER
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_CARER_SUPPORT_INDICATOR
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_UBRN_ISSUER
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PATIENT_PATHWAY_IDENTIFIER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_STATUS
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_WAITING_TIME_MEASUREMENT_TYPE
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DISCHARGE_TO_HOSPITAL_AT_HOME
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_LOCAL_SUB_SPECIALTY
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: PATIENT_MOTHER_NHS_NUMBER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CDS_GROUP_INDICATOR
+      data_type: TEXT
+    - name: SYSTEM_RECORD_FINISHED_INDICATOR
+      data_type: NUMBER
+    - name: SPELL_HOSPITAL_PROVIDER_SPELL_NUMBER
+      data_type: TEXT
+    - name: SPELL_OPEN_SPELL_INDICATOR
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_NHS_NUMBER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_NHS_NUMBER_STATUS
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_NHS_NUMBER_IS_VALID
+      data_type: BOOLEAN
+    - name: PATIENT_IDENTITY_LOCAL_PATIENT_IDENTIFIER_VALUE
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_LOCAL_PATIENT_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PATIENT_IDENTITY_BIRTH_MONTH
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_BIRTH_YEAR
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_AGE_RANGE
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_AGE_AT_CDS_ACTIVITY_DATE
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_AGE_ON_ADMISSION
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_AGE_AT_RECORD_START
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_FRACTIONAL_AGE_AT_RECORD_START
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_HES_AGE_AT_RECORD_START
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_AGE_AT_RECORD_END
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_HES_AGE_AT_RECORD_END
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_GENDER
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_IDENTITY_MARITAL_STATUS
+      data_type: TEXT
+    - name: START_TIME
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_TIME
+      data_type: TEXT
+    - name: DURATION
+      data_type: NUMBER
+    - name: LAST_EPISODE_INDICATOR
+      data_type: TEXT
+    - name: NEONATAL_LEVEL_OF_CARE
+      data_type: TEXT
+    - name: PSYCHIATRIC_PATIENT_STATUS
+      data_type: TEXT
+    - name: DOMINANT_EPISODE_FLAG
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_CONSULTANT
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_MAIN_SPECIALTY
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_TREATMENT_FUNCTION
+      data_type: TEXT
+    - name: CLINICAL_CODING_GROUPER_DERIVED_DOMINANT_PROCEDURE
+      data_type: TEXT
+    - name: CLINICAL_CODING_PROCEDURE_OPERATION_STATUS
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_PROVIDER
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_DERIVED
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_IS_COMMISSIONER_RECOGNISED
+      data_type: BOOLEAN
+    - name: COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER_DERIVED
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONING_SERIAL_NUMBER
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: COMMISSIONING_GROUPING_CORE_HRG
+      data_type: TEXT
+    - name: COMMISSIONING_GROUPING_GROUPING_METHOD
+      data_type: TEXT
+    - name: COMMISSIONING_GROUPING_PROGRAMME_BUDGETING_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_REGISTRATION_GENERAL_PRACTITIONER
+      data_type: TEXT
+    - name: PATIENT_REGISTRATION_GENERAL_PRACTICE
+      data_type: TEXT
+    - name: PATIENT_REGISTRATION_RESPONSIBLE_CCG
+      data_type: TEXT
+    - name: PATIENT_REGISTRATION_DERIVED_GENERAL_PRACTICE_FROM_PDS
+      data_type: TEXT
+    - name: PATIENT_REGISTRATION_DERIVED_RESPONSIBLE_CCG_FROM_PDS
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_POSTCODE_PSEUDO
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_POSTCODE_IS_VALID
+      data_type: BOOLEAN
+    - name: PATIENT_RESIDENCE_RESIDENCE_CCG
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_POSTCODE_FROM_PDS_PSEUDO
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_RESIDENCE_CCG_FROM_PATIENT_POSTCODE
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_POSTCODE_DISTRICT
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_OA_11
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_MSOA_11
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_LSOA_11
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_COUNTRY
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_GOVERNMENT_OFFICE_REGION
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_RESIDENCE_COUNTY
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_LOCAL_AUTHORITY_DISTRICT
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_PARLIAMENTARY_CONSTITUENCY
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_ED_COUNTY_CODE
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_ED_DISTRICT_CODE
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_ELECTORAL_WARD_1998
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: EPISODES_ID
+      data_type: NUMBER
+    - name: SYSTEM_INTERCHANGE_CDS_CONTROL_REFERENCE
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_CDS_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_INTERCHANGE_RECEIVED_TIME
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_CDS_MESSAGE_VERSION_NUMBER
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_CDS_MESSAGE_REFERENCE
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_RECORD_TYPE
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_SENDER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_EXTRACT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_EXTRACT_TIME
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_PROTOCOL_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_BULK_REPLACEMENT_GROUP
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_REPORT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_REPORT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_PRIME_RECIPIENT
+      data_type: TEXT
+    - name: SYSTEM_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_RECORD_VERSION
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE_DESCRIPTION
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_RURAL_URBAN_INDICATOR
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_CANCER_REGISTRY
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_DERIVED_GRID_REFERENCE
+      data_type: TEXT
+    - name: PATIENT_MENTAL_HEALTH_ACT_LEGAL_STATUS_CLASSIFICATION
+      data_type: TEXT
+    - name: REFERRAL_REFERRER
+      data_type: TEXT
+    - name: REFERRAL_REFERRING_ORGANISATION
+      data_type: TEXT
+    - name: REFERRAL_DECIDED_TO_ADMIT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ADMISSION_ADMINISTRATIVE_CATEGORY
+      data_type: TEXT
+    - name: ADMISSION_INTENDED_MANAGEMENT
+      data_type: TEXT
+    - name: ADMISSION_PATIENT_CLASSIFICATION
+      data_type: TEXT
+    - name: ADMISSION_METHOD
+      data_type: TEXT
+    - name: ADMISSION_SOURCE
+      data_type: TEXT
+    - name: ADMISSION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ADMISSION_TIME
+      data_type: TEXT
+    - name: ADMISSION_DURATION_ELECTIVE_WAIT
+      data_type: NUMBER
+    - name: ADMISSION_ADMISSION_TYPE
+      data_type: TEXT
+    - name: ADMISSION_ADMISSION_SUB_TYPE
+      data_type: TEXT
+    - name: DISCHARGE_DESTINATION
+      data_type: TEXT
+    - name: DISCHARGE_METHOD
+      data_type: TEXT
+    - name: DISCHARGE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DISCHARGE_TIME
+      data_type: TEXT
+    - name: NUMBER
+      data_type: NUMBER
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PATIENT_MOTHER_NHS_NUMBER_STATUS
+      data_type: TEXT
+    - name: PATIENT_MOTHER_LOCAL_PATIENT_IDENTIFIER_VALUE
+      data_type: TEXT
+    - name: PATIENT_MOTHER_LOCAL_PATIENT_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: PATIENT_MOTHER_BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PATIENT_MOTHER_BIRTH_MONTH
+      data_type: NUMBER
+    - name: PATIENT_MOTHER_BIRTH_YEAR
+      data_type: NUMBER
+    - name: PATIENT_MOTHER_AGE_RANGE
+      data_type: TEXT
+    - name: PATIENT_MOTHER_POSTCODE_PSEUDO
+      data_type: TEXT
+    - name: PATIENT_MOTHER_RESIDENCE_CCG
+      data_type: TEXT
+    - name: PATIENT_MOTHER_POSTCODE_FROM_PDS_PSEUDO
+      data_type: TEXT
+    - name: PATIENT_MOTHER_RESIDENCE_CCG_FROM_PDS
+      data_type: TEXT
+    - name: PATIENT_MOTHER_GENERAL_PRACTICE_FROM_PDS
+      data_type: TEXT
+    - name: PATIENT_MOTHER_RESPONSIBLE_CCG_FROM_PDS
+      data_type: TEXT
+    - name: PREGNANCY_NUMBER_OF_BABIES
+      data_type: TEXT
+    - name: PREGNANCY_FIRST_ASSESSMENT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PREGNANCY_GENERAL_PRACTITIONER_ANTENATAL
+      data_type: TEXT
+    - name: PREGNANCY_GENERAL_PRACTICE_ANTENATAL
+      data_type: TEXT
+    - name: LABOUR_DELIVERY_INTENDED_DELIVERY_PLACE_TYPE
+      data_type: TEXT
+    - name: LABOUR_DELIVERY_INTENDED_DELIVERY_PLACE_CHANGE_REASON
+      data_type: TEXT
+    - name: LABOUR_DELIVERY_ANAESTHETIC_DURING
+      data_type: TEXT
+    - name: LABOUR_DELIVERY_ANAESTHETIC_POST
+      data_type: TEXT
+    - name: LABOUR_DELIVERY_GESTATION_LENGTH_ONSET
+      data_type: NUMBER
+    - name: LABOUR_DELIVERY_ONSET_METHOD
+      data_type: NUMBER
+    - name: LABOUR_DELIVERY_DELIVERY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DISCHARGE_READY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_TO_TREATMENT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_TO_TREATMENT_PERIOD_LENGTH
+      data_type: NUMBER
+    - name: COMMISSIONING_PSS_GROUPING_NATIONAL_PROGRAMME_CODE
+      data_type: TEXT
+    - name: COMMISSIONING_PSS_GROUPING_PRESCRIBED_SERVICE_LINE_CODE
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_MULTIPLE_PROFESSIONAL_OR_DISCIPLINE_INDICATOR
+      data_type: NUMBER
+    - name: REFERRAL_TO_TREATMENT_UBRN_VALUE_PSEUDO
+      data_type: TEXT
+    - name: REFERRAL_EARLIEST_REASONABLE_OFFER_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: AMBULANCE_CONVEYING_TRUST
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_REHABILITATION_ASSESSMENT_TEAM_TYPE
+      data_type: NUMBER
+    - name: LABOUR_DELIVERY_INTENDED_DELIVERY_PLACE_LOCATION_CLASS
+      data_type: TEXT
+    - name: LABOUR_DELIVERY_INTENDED_DELIVERY_PLACE_LOCATION_TYPE
+      data_type: TEXT
+    - name: PREGNANCY_TOTAL_PREVIOUS_PREGNANCIES
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CONFIDENTIALITY_CATEGORY
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: PATIENT_MOTHER_OVERSEAS_VISITOR_STATUS
+      data_type: TEXT
+    - name: AMBULANCE_INCIDENT_NUMBER
+      data_type: TEXT
+    - name: PATIENT_MOTHER_WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: PATIENT_IDENTITY_ETHNIC_CATEGORY_2021
+      data_type: TEXT
+    - name: LABOUR_DELIVERY_DELIVERY_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_LATEST_CLINICALLY_APPROPRIATE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PATIENT_MOTHER_OVERSEAS_VISITOR_CHARGING_CATEGORY_AT_CDS_ACTIVITY_DATE
+      data_type: TEXT
+  - name: BASE_SUS__APC_SPELL_EPISODES_BIRTHS
+    identifier: '"BASE_SUS__APC_SPELL_EPISODES_BIRTHS"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: EPISODES_ID
+      data_type: NUMBER
+    - name: BIRTHS_ID
+      data_type: NUMBER
+    - name: BIRTH_ORDER
+      data_type: NUMBER
+    - name: DELIVERY_METHOD
+      data_type: TEXT
+    - name: GESTATION_LENGTH_ASSESSMENT
+      data_type: NUMBER
+    - name: RESUSCITATION_METHOD
+      data_type: TEXT
+    - name: STATUS_OF_PERSON_CONDUCTING_DELIVERY
+      data_type: TEXT
+    - name: DELIVERY_PLACE_TYPE
+      data_type: TEXT
+    - name: LIVE_OR_STILL_BIRTH
+      data_type: TEXT
+    - name: BIRTH_WEIGHT
+      data_type: NUMBER
+    - name: BABY_GENDER
+      data_type: TEXT
+    - name: BABY_LOCAL_PATIENT_IDENTIFIER_VALUE
+      data_type: TEXT
+    - name: BABY_LOCAL_PATIENT_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: BABY_NHS_NUMBER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: BABY_NHS_NUMBER_STATUS
+      data_type: TEXT
+    - name: BABY_BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DELIVERY_PLACE_LOCATION_CLASS
+      data_type: TEXT
+    - name: DELIVERY_PLACE_LOCATION_TYPE
+      data_type: TEXT
+    - name: BABY_WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: BABY_OVERSEAS_VISITOR_STATUS
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: BABY_OVERSEAS_VISITOR_CHARGING_CATEGORY_AT_CDS_ACTIVITY_DATE
+      data_type: TEXT
+  - name: BASE_SUS__APC_SPELL_EPISODES_CLINICAL_CODING_DIAGNOSIS_ICD
+    identifier: '"BASE_SUS__APC_SPELL_EPISODES_CLINICAL_CODING_DIAGNOSIS_ICD"'
+    columns:
+    - name: PRESENT_ON_ADMISSION
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: ICD_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: EPISODES_ID
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+  - name: BASE_SUS__APC_SPELL_EPISODES_CLINICAL_CODING_PROCEDURE_OPCS
+    identifier: '"BASE_SUS__APC_SPELL_EPISODES_CLINICAL_CODING_PROCEDURE_OPCS"'
+    columns:
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: MAIN_OPERATING_PROFESSIONAL_REGISTRATION_ISSUER
+      data_type: TEXT
+    - name: DATE
+      data_type: TIMESTAMP_NTZ
+    - name: MAIN_OPERATING_PROFESSIONAL_IDENTIFIER
+      data_type: TEXT
+    - name: RESPONSIBLE_ANAESTHETIST_IDENTIFIER
+      data_type: TEXT
+    - name: RESPONSIBLE_ANAESTHETIST_REGISTRATION_ISSUER
+      data_type: TEXT
+    - name: EPISODES_ID
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: OPCS_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+  - name: BASE_SUS__APC_SPELL_EPISODES_COMMISSIONING_GROUPING_UNBUNDLED_HRG
+    identifier: '"BASE_SUS__APC_SPELL_EPISODES_COMMISSIONING_GROUPING_UNBUNDLED_HRG"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: EPISODES_ID
+      data_type: NUMBER
+    - name: UNBUNDLED_HRG_ID
+      data_type: NUMBER
+    - name: TARIFF
+      data_type: NUMBER
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: ADULT_CC_TARIFF_DAYS
+      data_type: NUMBER
+    - name: MULTIPLE_APPLIES
+      data_type: BOOLEAN
+  - name: BASE_SUS__ECDS_ATTENDANCE_EXPECTED_TREATMENT_TIMES
+    identifier: '"BASE_SUS__ECDS_ATTENDANCE_EXPECTED_TREATMENT_TIMES"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: EXPECTED_TREATMENT_TIMES_ID
+      data_type: NUMBER
+    - name: TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: ALLOCATED_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+  - name: BASE_SUS__ECDS_ATTENDANCE_REFERRED_TO
+    identifier: '"BASE_SUS__ECDS_ATTENDANCE_REFERRED_TO"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: REFERRED_TO_ID
+      data_type: NUMBER
+    - name: SERVICE
+      data_type: TEXT
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: REQUEST_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REQUEST_TIME
+      data_type: TEXT
+    - name: ASSESSMENT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ASSESSMENT_TIME
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: REQUEST_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: ASSESSMENT_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_SUS__ECDS_CLINICAL_CODED_FINDINGS
+    identifier: '"BASE_SUS__ECDS_CLINICAL_CODED_FINDINGS"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: CODED_FINDINGS_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+  - name: BASE_SUS__ECDS_CLINICAL_CODED_OBSERVATIONS
+    identifier: '"BASE_SUS__ECDS_CLINICAL_CODED_OBSERVATIONS"'
+    columns:
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: VALUE
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: CODED_OBSERVATIONS_ID
+      data_type: NUMBER
+    - name: TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: UCUM_UNIT_OF_MEASUREMENT
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+  - name: BASE_SUS__ECDS_CLINICAL_CODED_SCORED_ASSESSMENTS
+    identifier: '"BASE_SUS__ECDS_CLINICAL_CODED_SCORED_ASSESSMENTS"'
+    columns:
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: CODED_SCORED_ASSESSMENTS_ID
+      data_type: NUMBER
+    - name: PERSON_SCORE
+      data_type: TEXT
+    - name: VALIDATION_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: TOOL_TYPE_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: TOOL_TYPE_CODE
+      data_type: TEXT
+  - name: BASE_SUS__ECDS_CLINICAL_COMORBIDITIES
+    identifier: '"BASE_SUS__ECDS_CLINICAL_COMORBIDITIES"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: COMORBIDITIES_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+  - name: BASE_SUS__ECDS_CLINICAL_DIAGNOSES_SNOMED
+    identifier: '"BASE_SUS__ECDS_CLINICAL_DIAGNOSES_SNOMED"'
+    columns:
+    - name: IS_APPLICABLE_TO_FEMALES
+      data_type: BOOLEAN
+    - name: IS_APPLICABLE_TO_MALES
+      data_type: BOOLEAN
+    - name: IS_QUALIFIER_APPROVED
+      data_type: BOOLEAN
+    - name: IS_NOTIFIABLE_DISEASE
+      data_type: BOOLEAN
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: SNOMED_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: IS_INJURY_RELATED
+      data_type: BOOLEAN
+    - name: EQUIVALENT_AE_CODE
+      data_type: TEXT
+    - name: SEQUENCE_NUMBER
+      data_type: NUMBER
+    - name: IS_AEC_RELATED
+      data_type: BOOLEAN
+    - name: IS_ALLERGY_RELATED
+      data_type: BOOLEAN
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: QUALIFIER
+      data_type: TEXT
+  - name: BASE_SUS__ECDS_CLINICAL_INJURY_ALCOHOL_DRUG_INVOLVEMENTS
+    identifier: '"BASE_SUS__ECDS_CLINICAL_INJURY_ALCOHOL_DRUG_INVOLVEMENTS"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: ALCOHOL_DRUG_INVOLVEMENTS_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+  - name: BASE_SUS__ECDS_CLINICAL_INVESTIGATIONS_SNOMED
+    identifier: '"BASE_SUS__ECDS_CLINICAL_INVESTIGATIONS_SNOMED"'
+    columns:
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: SNOMED_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: EQUIVALENT_AE_CODE
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TIME
+      data_type: TEXT
+    - name: TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_SUS__ECDS_CLINICAL_TREATMENTS_SNOMED
+    identifier: '"BASE_SUS__ECDS_CLINICAL_TREATMENTS_SNOMED"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: EQUIVALENT_AE_CODE
+      data_type: TEXT
+    - name: TIME
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: SNOMED_ID
+      data_type: NUMBER
+    - name: DATE
+      data_type: TIMESTAMP_NTZ
+    - name: TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: CODE
+      data_type: TEXT
+  - name: BASE_SUS__ECDS_EMERGENCY_CARE
+    identifier: '"BASE_SUS__ECDS_EMERGENCY_CARE"'
+    columns:
+    - name: PATIENT_USUAL_ADDRESS_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE_DESCRIPTION
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_RURAL_URBAN_INDICATOR
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_CANCER_REGISTRY
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_COMMISSIONING_REGION
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_CCG
+      data_type: TEXT
+    - name: PATIENT_RESIDENCE_CCG_FROM_PATIENT_POSTCODE
+      data_type: TEXT
+    - name: PATIENT_HES_CCG_FROM_PATIENT_POSTCODE
+      data_type: TEXT
+    - name: PATIENT_STATED_GENDER
+      data_type: TEXT
+    - name: PATIENT_ACCOMMODATION_STATUS_CODE
+      data_type: TEXT
+    - name: PATIENT_ACCOMMODATION_STATUS_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: PATIENT_PREFERRED_SPOKEN_LANGUAGE_CODE
+      data_type: TEXT
+    - name: PATIENT_PREFERRED_SPOKEN_LANGUAGE_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: PATIENT_ACCESSIBLE_INFORMATION_PROFESSIONAL_REQUIRED_CODE
+      data_type: TEXT
+    - name: PATIENT_ACCESSIBLE_INFORMATION_PROFESSIONAL_REQUIRED_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: PATIENT_OVERSEAS_VISITOR_CHARGING_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_GP_REGISTRATION_GENERAL_PRACTITIONER
+      data_type: TEXT
+    - name: PATIENT_GP_REGISTRATION_GENERAL_PRACTICE
+      data_type: TEXT
+    - name: PATIENT_GP_REGISTRATION_PDS_GENERAL_PRACTICE
+      data_type: TEXT
+    - name: PATIENT_GP_REGISTRATION_RESPONSIBLE_CCG_FROM_GENERAL_PRACTICE
+      data_type: TEXT
+    - name: PATIENT_GP_REGISTRATION_HES_CCG_FROM_GENERAL_PRACTICE
+      data_type: TEXT
+    - name: PATIENT_GP_REGISTRATION_HES_RESPONSIBLE_CCG_VALUE
+      data_type: TEXT
+    - name: PATIENT_GP_REGISTRATION_HES_RESPONSIBLE_CCG_ORIGIN
+      data_type: TEXT
+    - name: ATTENDANCE_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_SITE
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_HES_PROVIDER_3
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_HES_PROVIDER_5
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_POSTCODE_DISTRICT
+      data_type: TEXT
+    - name: SYSTEM_REPORT_QUERY_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_REPORT_QUERY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_REPORT_QUERY_TIME
+      data_type: TEXT
+    - name: SYSTEM_REFERENCE_DATA_SNOMED_VERSION
+      data_type: TEXT
+    - name: PATIENT_NHS_NUMBER_STATUS
+      data_type: TEXT
+    - name: PATIENT_NHS_NUMBER_IS_VALID
+      data_type: BOOLEAN
+    - name: PATIENT_LOCAL_PATIENT_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: PATIENT_PATIENT_TYPE
+      data_type: TEXT
+    - name: PATIENT_AGE_RANGE
+      data_type: NUMBER
+    - name: PATIENT_AGE_AT_CDS_ACTIVITY_DATE
+      data_type: NUMBER
+    - name: PATIENT_AGE_AT_ARRIVAL
+      data_type: NUMBER
+    - name: PATIENT_FRACTIONAL_AGE_AT_ARRIVAL
+      data_type: TEXT
+    - name: PATIENT_HES_AGE_AT_ARRIVAL
+      data_type: NUMBER
+    - name: PATIENT_HES_AGE_AT_DEPARTURE
+      data_type: NUMBER
+    - name: PATIENT_USUAL_ADDRESS_IS_POSTCODE_VALID
+      data_type: BOOLEAN
+    - name: PATIENT_USUAL_ADDRESS_POSTCODE_DISTRICT
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_OA_11
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_MSOA_11
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_LSOA_11
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_COUNTRY
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_GOVERNMENT_OFFICE_REGION
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_RESIDENCE_COUNTY
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_LOCAL_AUTHORITY_DISTRICT
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_PARLIAMENTARY_CONSTITUENCY
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_ED_COUNTY_CODE
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_ED_DISTRICT_CODE
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_ELECTORAL_WARD_1998
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: PATIENT_NHS_NUMBER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: PATIENT_USUAL_ADDRESS_POSTCODE_PSEUDO
+      data_type: TEXT
+    - name: PATIENT_ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_LOCAL_PATIENT_IDENTIFIER_VALUE
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: REFERRAL_PATIENT_PATHWAY_IDENTIFIER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_INTERCHANGE_SCHEMA_VERSION
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_PROTOCOL_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_UPDATE_TYPE
+      data_type: NUMBER
+    - name: SYSTEM_TRANSACTION_CDS_APPLICABLE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_APPLICABLE_TIME
+      data_type: TEXT
+    - name: SYSTEM_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_RECORD_VERSION
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CDS_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CDS_RECORD_TYPE
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CDS_GROUP_INDICATOR
+      data_type: NUMBER
+    - name: SYSTEM_RECORD_FINISHED_INDICATOR
+      data_type: NUMBER
+    - name: SYSTEM_RECORD_CDS_ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_RECORD_SENDER
+      data_type: TEXT
+    - name: SYSTEM_RECORD_PRIME_RECIPIENT
+      data_type: TEXT
+    - name: SYSTEM_RECORD_PROVIDER
+      data_type: TEXT
+    - name: SYSTEM_RECORD_COMMISSIONER
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_GOVERNMENT_OFFICE_REGION
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_SHA_PROVIDER
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_HES_CCG_FROM_TREATMENT_SITE_VALUE
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_HES_CCG_FROM_TREATMENT_SITE_ORIGIN
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_DEPARTMENT_TYPE
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_LSOA_PROVIDER_DISTANCE_VALUE
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_LSOA_PROVIDER_DISTANCE_ORIGIN
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_LSOA_SITE_OF_TREATMENT_DISTANCE_VALUE
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_LSOA_SITE_OF_TREATMENT_DISTANCE_ORIGIN
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_ARRIVAL_TIME
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_MONTH
+      data_type: NUMBER
+    - name: ATTENDANCE_ARRIVAL_ARRIVAL_MODE_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_ARRIVAL_MODE_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: ATTENDANCE_ARRIVAL_ATTENDANCE_CATEGORY
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_PLANNED
+      data_type: BOOLEAN
+    - name: ATTENDANCE_ARRIVAL_ATTENDANCE_SOURCE_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_ATTENDANCE_SOURCE_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: ATTENDANCE_CONCLUSION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_CONCLUSION_TIME
+      data_type: TEXT
+    - name: ATTENDANCE_CONCLUSION_TIME_SINCE_ARRIVAL
+      data_type: NUMBER
+    - name: ATTENDANCE_DEPARTURE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_DEPARTURE_TIME
+      data_type: TEXT
+    - name: ATTENDANCE_DEPARTURE_TIME_SINCE_ARRIVAL
+      data_type: NUMBER
+    - name: ATTENDANCE_DISCHARGE_STATUS_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_DISCHARGE_STATUS_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: COMMISSIONING_SERVICE_AGREEMENT_PROVIDER
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_SHA_COMMISSIONER
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_IS_COMMISSIONER_RECOGNISED
+      data_type: BOOLEAN
+    - name: COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_TYPE
+      data_type: TEXT
+    - name: COMMISSIONING_GROUPING_GROUPER_VERSION
+      data_type: TEXT
+    - name: COMMISSIONING_GROUPING_CODE_CLEANING_APPLIED
+      data_type: BOOLEAN
+    - name: COMMISSIONING_GROUPING_HEALTH_RESOURCE_GROUP
+      data_type: TEXT
+    - name: COMMISSIONING_NATIONAL_PRICING_COSTING_PERIOD
+      data_type: TEXT
+    - name: COMMISSIONING_NATIONAL_PRICING_EXCLUDED
+      data_type: BOOLEAN
+    - name: COMMISSIONING_NATIONAL_PRICING_TARIFF
+      data_type: NUMBER
+    - name: COMMISSIONING_NATIONAL_PRICING_TARIFF_DESCRIPTION
+      data_type: TEXT
+    - name: COMMISSIONING_NATIONAL_PRICING_MARKET_FORCES_FACTOR
+      data_type: NUMBER
+    - name: COMMISSIONING_NATIONAL_PRICING_MARKET_FORCES_ADJUSTMENT
+      data_type: NUMBER
+    - name: COMMISSIONING_NATIONAL_PRICING_FINAL_PRICE
+      data_type: NUMBER
+    - name: DATA_QUALITY_CHIEF_COMPLAINT_EXPECTED
+      data_type: BOOLEAN
+    - name: DATA_QUALITY_CHIEF_COMPLAINT_COMPLETED
+      data_type: BOOLEAN
+    - name: DATA_QUALITY_PRIMARY_DIAGNOSIS_EXPECTED
+      data_type: BOOLEAN
+    - name: DATA_QUALITY_PRIMARY_DIAGNOSIS_COMPLETED
+      data_type: BOOLEAN
+    - name: ATTENDANCE_INITIAL_ASSESSMENT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_INITIAL_ASSESSMENT_TIME
+      data_type: TEXT
+    - name: ATTENDANCE_INITIAL_ASSESSMENT_TIME_SINCE_ARRIVAL
+      data_type: NUMBER
+    - name: ATTENDANCE_SEEN_FOR_TREATMENT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_SEEN_FOR_TREATMENT_TIME
+      data_type: TEXT
+    - name: ATTENDANCE_SEEN_FOR_TREATMENT_TIME_SINCE_ARRIVAL
+      data_type: NUMBER
+    - name: ATTENDANCE_DISCHARGE_DESTINATION_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_DISCHARGE_DESTINATION_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: ATTENDANCE_DISCHARGE_FOLLOW_UP_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_DISCHARGE_FOLLOW_UP_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_CHIEF_COMPLAINT_CODE
+      data_type: TEXT
+    - name: CLINICAL_CHIEF_COMPLAINT_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_CHIEF_COMPLAINT_IS_INJURY_RELATED
+      data_type: BOOLEAN
+    - name: CLINICAL_INJURY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CLINICAL_INJURY_TIME
+      data_type: TEXT
+    - name: CLINICAL_INJURY_ACTIVITY_STATUS_CODE
+      data_type: TEXT
+    - name: CLINICAL_INJURY_ACTIVITY_STATUS_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_INJURY_ACTIVITY_TYPE_CODE
+      data_type: TEXT
+    - name: CLINICAL_INJURY_ACTIVITY_TYPE_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_INJURY_INTENT_CODE
+      data_type: TEXT
+    - name: CLINICAL_INJURY_INTENT_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_INJURY_MECHANISM_CODE
+      data_type: TEXT
+    - name: CLINICAL_INJURY_MECHANISM_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_INJURY_PLACE_TYPE
+      data_type: TEXT
+    - name: CLINICAL_INJURY_PLACE_IS_TYPE_APPROVED
+      data_type: BOOLEAN
+    - name: DATA_QUALITY_CHIEF_COMPLAINT_VALID
+      data_type: BOOLEAN
+    - name: DATA_QUALITY_PRIMARY_DIAGNOSIS_VALID
+      data_type: BOOLEAN
+    - name: COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONING_SERIAL_NUMBER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_BULK_REPLACEMENT_GROUP
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_EXTRACT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_EXTRACT_TIME
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_REPORT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_REPORT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_ARRIVAL_AMBULANCE_INCIDENT_NUMBER
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_CONVEYING_AMBULANCE_TRUST
+      data_type: TEXT
+    - name: CLINICAL_ACUITY_CODE
+      data_type: TEXT
+    - name: CLINICAL_ACUITY_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: ATTENDANCE_CLINICALLY_READY_TO_PROCEED_TIME_SINCE_ARRIVAL
+      data_type: NUMBER
+    - name: REFERRAL_UBRN_VALUE_PSEUDO
+      data_type: TEXT
+    - name: REFERRAL_UBRN_ISSUER
+      data_type: TEXT
+    - name: PATIENT_NAME_SUFFIX
+      data_type: TEXT
+    - name: CLINICAL_DISEASE_NOTIFICATION_CODE
+      data_type: TEXT
+    - name: CLINICAL_DISEASE_NOTIFICATION_DESCRIPTION
+      data_type: TEXT
+    - name: SCHEMA_VERSION
+      data_type: TEXT
+    - name: ATTENDANCE_LOCATION_ACTIVITY_TYPE
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_ARRIVAL_CONSULTATION_MECHANISM
+      data_type: TEXT
+    - name: ATTENDANCE_INITIAL_ASSESSMENT_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_SEEN_FOR_TREATMENT_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_EXTENDED_CARE_EPISODE_IDENTIFIER
+      data_type: TEXT
+    - name: ATTENDANCE_DEPARTURE_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_DECISION_TO_ADMIT_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: CLINICAL_CODING_FIT_NOTE_ASSESSMENT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CLINICAL_CODING_FIT_NOTE_CONDITION
+      data_type: TEXT
+    - name: CLINICAL_CODING_FIT_NOTE_CONDITION_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_CODING_FIT_NOTE_DIAGNOSIS
+      data_type: TEXT
+    - name: CLINICAL_CODING_FIT_NOTE_DIAGNOSIS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_CODING_FIT_NOTE_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CLINICAL_CODING_FIT_NOTE_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CLINICAL_CODING_FIT_NOTE_DURATION
+      data_type: TEXT
+    - name: CLINICAL_CODING_FIT_NOTE_RECORDED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CLINICAL_CODING_FIT_NOTE_FOLLOW_UP_ASSESSMENT_REQUIRED_INDICATOR
+      data_type: TEXT
+    - name: CLINICAL_CODING_FIT_NOTE_ISSUER
+      data_type: TEXT
+    - name: ATTENDANCE_DISCHARGE_INFORMATION_GIVEN_INDICATOR
+      data_type: TEXT
+    - name: CLINICAL_INJURY_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_DECISION_TO_ADMIT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ATTENDANCE_DECISION_TO_ADMIT_TIME
+      data_type: TEXT
+    - name: ATTENDANCE_DECISION_TO_ADMIT_TIME_SINCE_ARRIVAL
+      data_type: NUMBER
+    - name: ATTENDANCE_DECISION_TO_ADMIT_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: ATTENDANCE_DISCHARGE_INFORMATION_GIVEN_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_DISCHARGE_INFORMATION_GIVEN_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: ATTENDANCE_ARRIVAL_ATTENDANCE_SOURCE_ORGANISATION
+      data_type: TEXT
+    - name: CLINICAL_CHIEF_COMPLAINT_EXTENDED_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_DECISION_TO_ADMIT_RECEIVING_SITE
+      data_type: TEXT
+    - name: COMMISSIONING_SERVICE_AGREEMENT_LINE_NUMBER
+      data_type: TEXT
+    - name: REFERRAL_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: REFERRAL_PERIOD_STATUS
+      data_type: TEXT
+    - name: REFERRAL_WAITING_TIME_MEASUREMENT_TYPE
+      data_type: TEXT
+    - name: PATIENT_INTERPRETER_LANGUAGE_CODE
+      data_type: TEXT
+    - name: PATIENT_INTERPRETER_LANGUAGE_IS_CODE_APPROVED
+      data_type: BOOLEAN
+    - name: CLINICAL_DISEASE_NOTIFICATION
+      data_type: TEXT
+    - name: PATIENT_WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: CLINICAL_INJURY_PLACE_LATITUDE
+      data_type: NUMBER
+    - name: CLINICAL_INJURY_PLACE_LONGITUDE
+      data_type: NUMBER
+    - name: REFERRAL_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REFERRAL_PERIOD_LENGTH
+      data_type: NUMBER
+    - name: SYSTEM_RECORD_CONFIDENTIALITY_CATEGORY
+      data_type: NUMBER
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: PATIENT_ETHNIC_CATEGORY_2021
+      data_type: TEXT
+    - name: ATTENDANCE_ARRIVAL_AMBULANCE_CARE_CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: ATTENDANCE_CLINICALLY_READY_TO_PROCEED_TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+    - name: COMMISSIONING_COMMISSIONER_ASSIGNMENT_COMMISSIONER
+      data_type: TEXT
+    - name: COMMISSIONING_COMMISSIONER_ASSIGNMENT_FLOWCHART_REFERENCE
+      data_type: TEXT
+  - name: BASE_SUS__OP_APPOINTMENT
+    identifier: '"BASE_SUS__OP_APPOINTMENT"'
+    columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: TYPE
+      data_type: TEXT
+    - name: ACTION
+      data_type: TEXT
+    - name: SCHEMA_VERSION
+      data_type: NUMBER
+    - name: SYSTEM_REPORT_AS_AT
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_INTERCHANGE_CDS_MESSAGE_REFERENCE
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_RECORD_TYPE
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_SENDER
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_LSOA_11
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_COUNTRY
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_GOVERNMENT_OFFICE_REGION
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_RESIDENCE_COUNTY
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_LOCAL_AUTHORITY_DISTRICT
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_PARLIAMENTARY_CONSTITUENCY
+      data_type: TEXT
+    - name: SYSTEM_RECORD_VERSION
+      data_type: TEXT
+    - name: SYSTEM_RECORD_CDS_GROUP_INDICATOR
+      data_type: TEXT
+    - name: SYSTEM_RECORD_FINISHED_INDICATOR
+      data_type: NUMBER
+    - name: APPOINTMENT_IDENTIFIER
+      data_type: TEXT
+    - name: APPOINTMENT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_REPORT_DATE_RANGE
+      data_type: TEXT
+    - name: SYSTEM_REPORT_CLEAR_DATA
+      data_type: BOOLEAN
+    - name: SYSTEM_REPORT_GROUPER_VERSION
+      data_type: TEXT
+    - name: SYSTEM_REPORT_TARIFF_VERSION
+      data_type: TEXT
+    - name: SYSTEM_REPORT_QUERY_IDENTIFIER
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_PRIORITY_TYPE
+      data_type: NUMBER
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_UBRN_ISSUER
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_PATIENT_PATHWAY_IDENTIFIER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_PATIENT_PATHWAY_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_PERIOD_STATUS
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_WAITING_TIME_MEASUREMENT_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_ON_PATIENT_INITIATED_OUTPATIENT_FOLLOW_UP_PATHWAY_INDICATOR_AT_CDS_ACTIVITY_DATE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_SUBJECT_TO_REMOTE_MONITORING_INDICATOR_AT_CDS_ACTIVITY_DATE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_ETHNIC_CATEGORY_2021
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_REFERRED_BY_FIRST_CONTACT_PRACTITIONER_INDICATOR
+      data_type: TEXT
+    - name: APPOINTMENT_LAST_PATIENT_DID_NOT_ATTEND_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_LAST_PATIENT_CANCELLED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_ED_COUNTY_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_ED_DISTRICT_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_ELECTORAL_WARD_1998
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_INDEX_OF_MULTIPLE_DEPRIVATION_DECILE_DESCRIPTION
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_RURAL_URBAN_INDICATOR
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_PROFESSIONAL_MULTIPLE_PROFESSIONAL_OR_DISCIPLINE_INDICATOR
+      data_type: NUMBER
+    - name: APPOINTMENT_PATIENT_IDENTITY_WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_GROUPING_SUS_HRG
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_CARER_SUPPORT_INDICATOR
+      data_type: TEXT
+    - name: SYSTEM_REPORT_QUERY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_REPORT_QUERY_TIME
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_CDS_CONTROL_REFERENCE
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_CDS_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_INTERCHANGE_RECEIVED_TIME
+      data_type: TEXT
+    - name: SYSTEM_INTERCHANGE_CDS_MESSAGE_VERSION_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_UBRN_VALUE_PSEUDO
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_UBRN_IS_VALID
+      data_type: BOOLEAN
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_UBRN_OCCURRENCES
+      data_type: NUMBER
+    - name: APPOINTMENT_CLINICAL_CODING_GROUPER_DERIVED_DOMINANT_PROCEDURE
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_AGGREGATE_UNBUNDLED_TARIFF
+      data_type: NUMBER
+    - name: APPOINTMENT_REFERRAL_DIRECT_ACCESS_INDICATOR
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_AGE_AT_RECORD_END
+      data_type: NUMBER
+    - name: APPOINTMENT_PATIENT_IDENTITY_HES_AGE_AT_RECORD_END
+      data_type: NUMBER
+    - name: APPOINTMENT_PATIENT_IDENTITY_GENDER
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_REGISTRATION_GENERAL_PRACTITIONER
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_REGISTRATION_GENERAL_PRACTICE
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: SYSTEM_REPORT_ACTIVITY_DATE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_REPORT_ACTIVITY_DATE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_BOOKED_REASON
+      data_type: TEXT
+    - name: APPOINTMENT_CONSULTATION_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_PERSONALISED_OUTPATIENT_FOLLOW_UP_PATHWAY_REVIEW_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_PERSONALISED_OUTPATIENT_FOLLOW_UP_PATHWAY_EXPIRY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_CANCER_REGISTRY
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_GRID_REFERENCE
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_REFERRER
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_REFERRING_ORGANISATION
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_REFERRAL_SOURCE_OP
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_PROTOCOL_IDENTIFIER
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_UPDATE_TYPE
+      data_type: NUMBER
+    - name: SYSTEM_TRANSACTION_CDS_APPLICABLE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_APPLICABLE_TIME
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_PRIME_RECIPIENT
+      data_type: TEXT
+    - name: SYSTEM_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_REGISTRATION_RESPONSIBLE_CCG
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_REGISTRATION_DERIVED_GENERAL_PRACTICE_FROM_PDS
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_REGISTRATION_DERIVED_RESPONSIBLE_CCG_FROM_PDS
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_POSTCODE_PSEUDO
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_POSTCODE_IS_VALID
+      data_type: BOOLEAN
+    - name: APPOINTMENT_PATIENT_RESIDENCE_RESIDENCE_CCG
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_GROUPING_CODE_CLEANING_APPLIED
+      data_type: BOOLEAN
+    - name: APPOINTMENT_COMMISSIONING_PSS_GROUPING_TARIFF_UPLIFT_RATE
+      data_type: NUMBER
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_EXCLUDED_FROM_PBR
+      data_type: NUMBER
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_PATIENT_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_OUTPATIENT_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_DIRECT_ACCESS_APPLIES
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_OVERSEAS_VISITOR_CLASSIFICATION
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_SERVICE_TYPE_REQUESTED
+      data_type: NUMBER
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_REFERRAL_TO_TREATMENT_PERIOD_LENGTH
+      data_type: NUMBER
+    - name: APPOINTMENT_TIME
+      data_type: TEXT
+    - name: APPOINTMENT_FIRST_ATTENDANCE
+      data_type: TEXT
+    - name: APPOINTMENT_ATTENDED_OR_DNA
+      data_type: TEXT
+    - name: APPOINTMENT_OUTCOME
+      data_type: TEXT
+    - name: APPOINTMENT_ADMINISTRATIVE_CATEGORY
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_NHS_NUMBER_VALUE_PSEUDO
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_PROFESSIONAL_CONSULTANT
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_PROFESSIONAL_MAIN_SPECIALTY
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_PROFESSIONAL_TREATMENT_FUNCTION
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_PROFESSIONAL_LOCAL_SUB_SPECIALTY
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_PROFESSIONAL_MEDICAL_STAFF_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_SERVICE_REQUEST_IDENTIFIER
+      data_type: TEXT
+    - name: APPOINTMENT_REFERRAL_LATEST_CLINICALLY_APPROPRIATE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_PATIENT_OVERSEAS_VISITOR_CHARGING_CATEGORY_AT_CDS_ACTIVITY_DATE
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_BPT_INDICATOR
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_BPT_INDICATOR_ACTION
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_POSTCODE_FROM_PDS_PSEUDO
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_RESIDENCE_CCG_FROM_PATIENT_POSTCODE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_POSTCODE_DISTRICT
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_OA_11
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_RESIDENCE_DERIVED_MSOA_11
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_PSS_GROUPING_NATIONAL_PROGRAMME_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_PSS_GROUPING_PRESCRIBED_SERVICE_LINE_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_PROFESSIONAL_REHABILITATION_ASSESSMENT_TEAM_TYPE
+      data_type: NUMBER
+    - name: SYSTEM_RECORD_CONFIDENTIALITY_CATEGORY
+      data_type: NUMBER
+    - name: APPOINTMENT_REFERRAL_EARLIEST_REASONABLE_OFFER_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_PATIENT_IDENTITY_NHS_NUMBER_STATUS
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_NHS_NUMBER_IS_VALID
+      data_type: BOOLEAN
+    - name: APPOINTMENT_PATIENT_IDENTITY_LOCAL_PATIENT_IDENTIFIER_VALUE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_LOCAL_PATIENT_IDENTIFIER_ISSUER
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_PATIENT_IDENTITY_BIRTH_MONTH
+      data_type: NUMBER
+    - name: APPOINTMENT_PATIENT_IDENTITY_BIRTH_YEAR
+      data_type: NUMBER
+    - name: APPOINTMENT_PATIENT_IDENTITY_AGE_RANGE
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_AGE_AT_CDS_ACTIVITY_DATE
+      data_type: NUMBER
+    - name: APPOINTMENT_PATIENT_IDENTITY_AGE_AT_RECORD_START
+      data_type: NUMBER
+    - name: APPOINTMENT_PATIENT_IDENTITY_FRACTIONAL_AGE_AT_RECORD_START
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_HES_AGE_AT_RECORD_START
+      data_type: NUMBER
+    - name: SYSTEM_TRANSACTION_CDS_EXTRACT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_EXTRACT_TIME
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_BULK_REPLACEMENT_GROUP
+      data_type: TEXT
+    - name: SYSTEM_TRANSACTION_CDS_REPORT_PERIOD_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SYSTEM_TRANSACTION_CDS_REPORT_PERIOD_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_REFERRAL_EARLIEST_CLINICALLY_APPROPRIATE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_CLINICAL_CODING_PROCEDURE_OPERATION_STATUS
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_DERIVED
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_IS_COMMISSIONER_RECOGNISED
+      data_type: BOOLEAN
+    - name: APPOINTMENT_CARE_LOCATION_SITE_CODE_OF_TREATMENT
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_CLASS
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_CLINIC_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_POSTCODE_DISTRICT
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_GOVERNMENT_OFFICE_REGION
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_SHA_PROVIDER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER_DERIVED
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONING_SERIAL_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_LINE_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_COMMISSIONER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_SERVICE_AGREEMENT_APPLICABLE_COSTING_PERIOD
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_GROUPING_CORE_HRG
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_GROUPING_GROUPING_METHOD
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_TARIFF_APPLIED
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_SPECIALISED_SERVICES_TARIFF_UPLIFT
+      data_type: NUMBER
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_MARKET_FORCES_FACTOR
+      data_type: NUMBER
+    - name: APPOINTMENT_COMMISSIONING_COMMISSIONER_ASSIGNMENT_COMMISSIONER
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_COMMISSIONER_ASSIGNMENT_FLOWCHART_REFERENCE
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_INITIAL_TARIFF
+      data_type: NUMBER
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_CCG_FROM_TREATMENT_SITE_VALUE
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_CCG_FROM_TREATMENT_SITE_ORIGIN
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_PROVIDER_DISTANCE_VALUE
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_PROVIDER_DISTANCE_ORIGIN
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_SITE_OF_TREATMENT_DISTANCE_VALUE
+      data_type: TEXT
+    - name: APPOINTMENT_CARE_LOCATION_ORGANISATION_GEOGRAPHIES_LSOA_SITE_OF_TREATMENT_DISTANCE_ORIGIN
+      data_type: TEXT
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_FINAL_PRICE
+      data_type: NUMBER
+    - name: APPOINTMENT_EXPECTED_DURATION
+      data_type: TEXT
+    - name: APPOINTMENT_CONSULTATION_MEDIUM
+      data_type: TEXT
+    - name: APPOINTMENT_LAST_DNA_OR_CANCELLED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_PATIENT_IDENTITY_PDS_DEATH_STATUS
+      data_type: TEXT
+    - name: APPOINTMENT_PATIENT_IDENTITY_PDS_DATE_OF_DEATH
+      data_type: TIMESTAMP_NTZ
+    - name: APPOINTMENT_COMMISSIONING_TARIFF_CALCULATION_AGGREGATE_UNBUNDLED_GUIDE_TARIFF
+      data_type: NUMBER
+  - name: BASE_SUS__OP_APPOINTMENT_CLINICAL_CODING_DIAGNOSIS_ICD
+    identifier: '"BASE_SUS__OP_APPOINTMENT_CLINICAL_CODING_DIAGNOSIS_ICD"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: PRESENT_ON_ADMISSION
+      data_type: TEXT
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: ICD_ID
+      data_type: NUMBER
+  - name: BASE_SUS__OP_APPOINTMENT_CLINICAL_CODING_PROCEDURE_OPCS
+    identifier: '"BASE_SUS__OP_APPOINTMENT_CLINICAL_CODING_PROCEDURE_OPCS"'
+    columns:
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: OPCS_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: MAIN_OPERATING_PROFESSIONAL_IDENTIFIER
+      data_type: TEXT
+    - name: MAIN_OPERATING_PROFESSIONAL_REGISTRATION_ISSUER
+      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: RESPONSIBLE_ANAESTHETIST_REGISTRATION_ISSUER
+      data_type: TEXT
+    - name: RESPONSIBLE_ANAESTHETIST_IDENTIFIER
+      data_type: TEXT
+    - name: DATE
+      data_type: TIMESTAMP_NTZ
+  - name: BASE_SUS__OP_APPOINTMENT_COMMISSIONING_GROUPING_UNBUNDLED_HRG
+    identifier: '"BASE_SUS__OP_APPOINTMENT_COMMISSIONING_GROUPING_UNBUNDLED_HRG"'
+    columns:
+    - name: MULTIPLE_APPLIES
+      data_type: BOOLEAN
+    - name: ROWNUMBER_ID
+      data_type: NUMBER
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER
+    - name: TARIFF
+      data_type: NUMBER
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: UNBUNDLED_HRG_ID
+      data_type: NUMBER
+    - name: CODE
+      data_type: TEXT
+    - name: TARIFF_APPLIED
+      data_type: TEXT
+  - name: INT_CCMS_CURRENT
+    identifier: '"INT_CCMS_CURRENT"'
+    columns:
+    - name: CCMS_CURRENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: CAMBRIDGE_COMORBIDITY_SCORE
+      data_type: NUMBER
+    - name: LAST_UPDATED
+      data_type: TIMESTAMP_LTZ
+  - name: INT_CONDITION
+    identifier: '"INT_CONDITION"'
+    columns:
+    - name: MASTER_CONDITION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: VISIT_OCCURRENCE_ID
+      data_type: TEXT
+    - name: VISIT_OCCURRENCE_TYPE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CLINICAL_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: VISIT_PROBLEM_ORDER
+      data_type: NUMBER
+    - name: CONDITION_CONCEPT_CODE
+      data_type: TEXT
+    - name: CONDITION_CONCEPT_NAME
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: CONDITION_DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+  - name: INT_CONDITION_PER_YEAR
+    identifier: '"INT_CONDITION_PER_YEAR"'
+    columns:
+    - name: CONDITION_PER_YEAR_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: CONDITION_YEAR
+      data_type: NUMBER
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CODES
+      data_type: ARRAY
+    - name: CODE_DESCRIPTIONS
+      data_type: ARRAY
+    - name: VOCABULARIES
+      data_type: ARRAY
+    - name: IS_FROM_GP
+      data_type: BOOLEAN
+    - name: IS_FROM_APC
+      data_type: BOOLEAN
+    - name: IS_FROM_OP
+      data_type: BOOLEAN
+    - name: TOTAL_RECORDS
+      data_type: NUMBER
+  - name: INT_GP_MEDICATION_ORDER
+    identifier: '"INT_GP_MEDICATION_ORDER"'
+    columns:
+    - name: MEDICATION_ORDER_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: MEDICATION_CONCEPT_CODE
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_NAME
+      data_type: TEXT
+    - name: VMP_CONCEPT_CODE
+      data_type: TEXT
+    - name: VMP_CONCEPT_NAME
+      data_type: TEXT
+    - name: VTM_CONCEPT_CODE
+      data_type: TEXT
+    - name: VTM_CONCEPT_NAME
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: DOSE_INSTRUCTIONS
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: DURATION_DAYS
+      data_type: NUMBER
+    - name: ESTIMATED_COST
+      data_type: FLOAT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+  - name: INT_GP_MEDICATION_STATEMENT
+    identifier: '"INT_GP_MEDICATION_STATEMENT"'
+    columns:
+    - name: MEDICATION_STATEMENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: VISIT_OCCURRENCE_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: CANCELLATION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: MEDICATION_CONCEPT_CODE
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_NAME
+      data_type: TEXT
+    - name: VMP_CONCEPT_CODE
+      data_type: TEXT
+    - name: VMP_CONCEPT_NAME
+      data_type: TEXT
+    - name: VTM_CONCEPT_CODE
+      data_type: TEXT
+    - name: VTM_CONCEPT_NAME
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: DOSE_INSTRUCTIONS
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_CODE
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_NAME
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+  - name: INT_GP_REGISTRATION
+    identifier: '"INT_GP_REGISTRATION"'
+    columns:
+    - name: GP_REGISTRATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: PRIMARY_CARE_NETWORK
+      data_type: TEXT
+    - name: REGISTRATION_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REGISTRATION_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REGISTRATION_DAYS
+      data_type: NUMBER
+    - name: IS_PRIMARY_ACTIVE_REGISTRATION
+      data_type: BOOLEAN
+  - name: INT_MEASUREMENT
+    identifier: '"INT_MEASUREMENT"'
+    columns:
+    - name: MEASUREMENT_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: MEASUREMENT_NAME
+      data_type: TEXT
+    - name: MEASUREMENT_VALUE_AS_NUMBER
+      data_type: FLOAT
+    - name: MEASUREMENT_UNIT
+      data_type: TEXT
+    - name: MEASUREMENT_SOURCE_CONCEPT_CODE
+      data_type: TEXT
+    - name: MEASUREMENT_SOURCE_CONCEPT_NAME
+      data_type: TEXT
+    - name: MEASUREMENT_SOURCE_VALUE
+      data_type: FLOAT
+    - name: MEASUREMENT_SOURCE_UNIT
+      data_type: TEXT
+    - name: LOWER_LIMIT
+      data_type: FLOAT
+    - name: UPPER_LIMIT
+      data_type: FLOAT
+    - name: IS_NO_UNIT_MAPPING
+      data_type: BOOLEAN
+    - name: IS_BELOW_BOUND
+      data_type: BOOLEAN
+    - name: IS_ABOVE_BOUND
+      data_type: BOOLEAN
+  - name: INT_PERSON
+    identifier: '"INT_PERSON"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+    - name: GENDER_CONCEPT_CODE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_NAME
+      data_type: TEXT
+    - name: ETHNICITY_CONCEPT_CODE
+      data_type: TEXT
+    - name: ETHNICITY_CONCEPT_NAME
+      data_type: TEXT
+    - name: RESIDENCE_WARD_CODE
+      data_type: TEXT
+    - name: RESIDENCE_WARD_NAME
+      data_type: TEXT
+    - name: RESIDENCE_BOROUGH_CODE
+      data_type: TEXT
+    - name: RESIDENCE_BOROUGH_NAME
+      data_type: TEXT
+    - name: RESIDENCE_UPRN
+      data_type: TEXT
+    - name: RESIDENCE_LSOA
+      data_type: TEXT
+    - name: RESIDENCE_MSOA
+      data_type: TEXT
+    - name: IMD_DECILE
+      data_type: NUMBER
+    - name: IMD_QUINTILE
+      data_type: NUMBER
+    - name: IS_TYPE_1_OPTOUT
+      data_type: BOOLEAN
+    - name: IS_DEAD
+      data_type: BOOLEAN
+    - name: IS_ACTIVE_REGISTERED
+      data_type: BOOLEAN
+  - name: INT_VISIT_OCCURRENCE
+    identifier: '"INT_VISIT_OCCURRENCE"'
+    columns:
+    - name: VISIT_OCCURRENCE_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: VISIT_SOURCE_TYPE
+      data_type: TEXT
+    - name: VISIT_SOURCE_ID
+      data_type: TEXT
+    - name: VISIT_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: VISIT_START_TIME
+      data_type: TIME
+    - name: VISIT_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: VISIT_END_TIME
+      data_type: TIME
+    - name: VISIT_LENGTH_OF_STAY_HOURS
+      data_type: NUMBER
+    - name: VISIT_LENGTH_OF_STAY_DAYS
+      data_type: NUMBER
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: SITE_NAME
+      data_type: TEXT
+    - name: VISIT_ADMISSION_METHOD
+      data_type: TEXT
+    - name: VISIT_ADMISSION_SOURCE
+      data_type: TEXT
+    - name: VISIT_SPECIALTY
+      data_type: TEXT
+    - name: VISIT_SOURCE_SUBTYPE
+      data_type: TEXT
+    - name: VISIT_DISCHARGE_DESTINATION
+      data_type: TEXT
+    - name: VISIT_DISCHARGE_METHOD
+      data_type: TEXT
+    - name: COMMISSIONING_FINAL_PRICE
+      data_type: FLOAT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: IS_LESS_THAN_24_HOURS
+      data_type: BOOLEAN
+    - name: IS_GREATER_THAN_3_MONTHS
+      data_type: BOOLEAN
+    - name: IS_GREATER_THAN_6_MONTHS
+      data_type: BOOLEAN
+    - name: IS_GREATER_THAN_12_MONTHS
+      data_type: BOOLEAN
+  - name: STG_CCMS__FINAL_FLAGS
+    identifier: '"STG_CCMS__FINAL_FLAGS"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ALCOHOLPROBLEMS
+      data_type: NUMBER
+    - name: ANXIETYORDEPRESSION
+      data_type: NUMBER
+    - name: ATRIALFIBRILLATION
+      data_type: NUMBER
+    - name: CANCERINTHELAST5YEARS
+      data_type: NUMBER
+    - name: CHRONICKIDNEYDISEASE
+      data_type: NUMBER
+    - name: CHRONICLIVERDISEASEANDVIRALHEPATITIS
+      data_type: NUMBER
+    - name: CONSTIPATION
+      data_type: NUMBER
+    - name: COPD
+      data_type: NUMBER
+    - name: DEMENTIA
+      data_type: NUMBER
+    - name: DIABETES
+      data_type: NUMBER
+    - name: DISORDEROFPROSTATE
+      data_type: NUMBER
+    - name: EPILEPSY
+      data_type: NUMBER
+    - name: HEARTFAILURE
+      data_type: NUMBER
+    - name: IRRITABLEBOWELSYNDROME
+      data_type: NUMBER
+    - name: LEARNINGDISABILITY
+      data_type: NUMBER
+    - name: MULTIPLESCLEROSIS
+      data_type: NUMBER
+    - name: PAINFULCONDITION
+      data_type: NUMBER
+    - name: PARKINSONISM
+      data_type: NUMBER
+    - name: PERIPHVASCDISEASELEG
+      data_type: NUMBER
+    - name: PSYCHOACTIVESUBSTANCEMISUSE
+      data_type: NUMBER
+    - name: SCHIZOPHRENIAORBIPOLARDISORDER
+      data_type: NUMBER
+  - name: STG_CCMS__INT_FLAGS
+    identifier: '"STG_CCMS__INT_FLAGS"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ALCOHOLINTOXICATION
+      data_type: NUMBER
+    - name: HARMFULUSEOFALCOHOL
+      data_type: NUMBER
+    - name: DISORDERCAUSEDBYALCOHOL
+      data_type: NUMBER
+    - name: DEPRESSIVEDISORDER
+      data_type: NUMBER
+    - name: ANXIETYDISORDER
+      data_type: NUMBER
+    - name: NEUROSIS
+      data_type: NUMBER
+    - name: ATRIALFIBRILLATION
+      data_type: NUMBER
+    - name: MALIGNANTNEOPLASTICDISEASEEXCEPTSKIN
+      data_type: NUMBER
+    - name: MALIGNANTMELANOMA
+      data_type: NUMBER
+    - name: VIRALHEPATITISRPT
+      data_type: NUMBER
+    - name: CHRONICLIVERDISEASE
+      data_type: NUMBER
+    - name: COPD
+      data_type: NUMBER
+    - name: DEMENTIA
+      data_type: NUMBER
+    - name: DIABETEST1
+      data_type: NUMBER
+    - name: DIABETEST2
+      data_type: NUMBER
+    - name: DISORDEROFPROSTATE
+      data_type: NUMBER
+    - name: EPILEPSY
+      data_type: NUMBER
+    - name: CONGESTIVECARDIACFAILURE
+      data_type: NUMBER
+    - name: IRRITABLEBOWELSYNDROME
+      data_type: NUMBER
+    - name: DEVELOPMENTALACADEMICDISORDER
+      data_type: NUMBER
+    - name: INTELLECTUALDISABILITY
+      data_type: NUMBER
+    - name: COMPLETETRISOMY21SYNDROME
+      data_type: NUMBER
+    - name: MULTIPLESCLEROSIS
+      data_type: NUMBER
+    - name: PARKINSONISM
+      data_type: NUMBER
+    - name: PERIPHVASCDISEASELEG
+      data_type: NUMBER
+    - name: SUBSTANCEMISUSE
+      data_type: NUMBER
+    - name: SCHIZOPHRENIADISORDER
+      data_type: NUMBER
+    - name: BIPOLARDISORDER
+      data_type: NUMBER
+    - name: ANTIDEPRESSANTMEDICATION
+      data_type: NUMBER
+    - name: ANXIOLYTICS
+      data_type: NUMBER
+    - name: LAXATIVES
+      data_type: NUMBER
+    - name: ANTIEPILEPTICMEDICATION
+      data_type: NUMBER
+    - name: ANTISPASMEDICMEDICATION
+      data_type: NUMBER
+    - name: ANALGESICSOROPIODSNOTMIGRAINEMEDICATION
+      data_type: NUMBER
+    - name: ANTIEPILEPTICMEDICATIONEXCEPTBENZODIAZEPINES
+      data_type: NUMBER
+    - name: LITHIUM
+      data_type: NUMBER
+    - name: EGFR
+      data_type: NUMBER
+  - name: STG_CONCEPT__STATS
+    identifier: '"STG_CONCEPT__STATS"'
+    columns:
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: CONCEPT_CODE_COUNT
+      data_type: NUMBER
+    - name: UNIQUE_PATIENT_COUNT
+      data_type: NUMBER
+    - name: LQ_VALUE
+      data_type: FLOAT
+    - name: MEDIAN_VALUE
+      data_type: FLOAT
+    - name: UQ_VALUE
+      data_type: FLOAT
+    - name: PERCENT_HAS_RESULT_VALUE
+      data_type: FLOAT
+  - name: STG_GP__APPOINTMENT
+    identifier: '"STG_GP__APPOINTMENT"'
+    columns:
+    - name: APPOINTMENT_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PLANNED_DURATION
+      data_type: NUMBER
+    - name: ACTUAL_DURATION
+      data_type: NUMBER
+    - name: APPOINTMENT_STATUS_CONCEPT_ID
+      data_type: TEXT
+    - name: APPOINTMENT_STATUS_CONCEPT_NAME
+      data_type: TEXT
+    - name: PATIENT_WAIT
+      data_type: NUMBER
+    - name: PATIENT_DELAY
+      data_type: NUMBER
+    - name: DATE_TIME_SENT_IN
+      data_type: TIMESTAMP_NTZ
+    - name: DATE_TIME_LEFT
+      data_type: TIMESTAMP_NTZ
+    - name: CANCELLED_DATE
+      data_type: TIMESTAMP_NTZ
+  - name: STG_GP__CONCEPT
+    identifier: '"STG_GP__CONCEPT"'
+    columns:
+    - name: DB_CONCEPT_ID
+      data_type: TEXT
+    - name: DB_CONCEPT_ID_TYPE
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: CONCEPT_SYSTEM
+      data_type: TEXT
+    - name: VALID_FROM
+      data_type: DATE
+    - name: VALID_TO
+      data_type: DATE
+  - name: STG_GP__CONCEPT_MAP
+    identifier: '"STG_GP__CONCEPT_MAP"'
+    columns:
+    - name: MAP_ID
+      data_type: TEXT
+    - name: SOURCE_DB_CONCEPT_ID
+      data_type: TEXT
+    - name: SOURCE_DB_CONCEPT_ID_TYPE
+      data_type: TEXT
+    - name: SOURCE_CONCEPT_CODE
+      data_type: TEXT
+    - name: SOURCE_CONCEPT_NAME
+      data_type: TEXT
+    - name: SOURCE_CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: TARGET_DB_CONCEPT_ID
+      data_type: TEXT
+    - name: TARGET_DB_CONCEPT_ID_TYPE
+      data_type: TEXT
+    - name: TARGET_CONCEPT_CODE
+      data_type: TEXT
+    - name: TARGET_CONCEPT_NAME
+      data_type: TEXT
+    - name: TARGET_CONCEPT_VOCABULARY
+      data_type: TEXT
+  - name: STG_GP__ENCOUNTER
+    identifier: '"STG_GP__ENCOUNTER"'
+    columns:
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PRACTITIONER_ID
+      data_type: TEXT
+    - name: APPOINTMENT_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ENCOUNTER_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_SOURCE_CONCEPT_NAME
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: ADMISSION_METHOD
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+  - name: STG_GP__MEASUREMENT
+    identifier: '"STG_GP__MEASUREMENT"'
+    columns:
+    - name: MEASUREMENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: MEASUREMENT_NAME
+      data_type: TEXT
+    - name: OBSERVATION_CONCEPT_ID
+      data_type: TEXT
+    - name: OBSERVATION_CONCEPT_CODE
+      data_type: TEXT
+    - name: OBSERVATION_CONCEPT_NAME
+      data_type: TEXT
+    - name: OBSERVATION_CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: RESULT_VALUE
+      data_type: FLOAT
+    - name: RESULT_VALUE_UNIT
+      data_type: TEXT
+  - name: STG_GP__MEDICATION_ORDER
+    identifier: '"STG_GP__MEDICATION_ORDER"'
+    columns:
+    - name: MEDICATION_ORDER_ID
+      data_type: TEXT
+    - name: MEDICATION_STATEMENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: MEDICATION_CONCEPT_ID
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_CODE
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_NAME
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: DOSE_INSTRUCTIONS
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: DURATION_DAYS
+      data_type: NUMBER
+    - name: ESTIMATED_COST
+      data_type: FLOAT
+    - name: ISSUE_METHOD_DESCRIPTION
+      data_type: TEXT
+  - name: STG_GP__MEDICATION_STATEMENT
+    identifier: '"STG_GP__MEDICATION_STATEMENT"'
+    columns:
+    - name: MEDICATION_STATEMENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: CANCELLATION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: MEDICATION_CONCEPT_ID
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_CODE
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_NAME
+      data_type: TEXT
+    - name: MEDICATION_CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: BNF_REFERENCE
+      data_type: TEXT
+    - name: DOSE_INSTRUCTIONS
+      data_type: TEXT
+    - name: QUANTITY_VALUE
+      data_type: FLOAT
+    - name: QUANTITY_UNIT
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_ID
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_CODE
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_NAME
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_CONCEPT_VOCABULARY
+      data_type: TEXT
+  - name: STG_GP__OBSERVATION
+    identifier: '"STG_GP__OBSERVATION"'
+    columns:
+    - name: OBSERVATION_ID
+      data_type: TEXT
+    - name: PARENT_OBSERVATION_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ENCOUNTER_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: NUMBER
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: PROBLEM_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OBSERVATION_CONCEPT_ID
+      data_type: TEXT
+    - name: OBSERVATION_CONCEPT_CODE
+      data_type: TEXT
+    - name: OBSERVATION_CONCEPT_NAME
+      data_type: TEXT
+    - name: OBSERVATION_CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: RESULT_VALUE
+      data_type: FLOAT
+    - name: RESULT_VALUE_UNIT
+      data_type: TEXT
+    - name: IS_PROBLEM
+      data_type: BOOLEAN
+    - name: IS_REVIEW
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+  - name: STG_GP__ORGANISATION
+    identifier: '"STG_GP__ORGANISATION"'
+    columns:
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: TYPE_CODE
+      data_type: TEXT
+    - name: TYPE_DESC
+      data_type: TEXT
+    - name: PARENT_ORGANISATION_ID
+      data_type: TEXT
+    - name: OPEN_DATE
+      data_type: DATE
+    - name: CLOSE_DATE
+      data_type: DATE
+    - name: IS_CLOSED
+      data_type: BOOLEAN
+  - name: STG_GP__PATIENT
+    identifier: '"STG_GP__PATIENT"'
+    columns:
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: NUMBER
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: GENDER_CONCEPT_CODE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_NAME
+      data_type: TEXT
+    - name: GENDER_CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+    - name: IS_DEAD
+      data_type: BOOLEAN
+    - name: IS_SPINE_SENSITIVE
+      data_type: BOOLEAN
+    - name: IS_CONFIDENTIAL
+      data_type: BOOLEAN
+    - name: IS_DUMMY_PATIENT
+      data_type: BOOLEAN
+  - name: STG_GP__PATIENT_REGISTRATION
+    identifier: '"STG_GP__PATIENT_REGISTRATION"'
+    columns:
+    - name: PATIENT_REGISTERED_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REGISTRATION_DAYS
+      data_type: NUMBER
+    - name: IS_ACTIVE_REGISTRATION
+      data_type: BOOLEAN
+    - name: IS_REGISTRATION_ENDED
+      data_type: BOOLEAN
+    - name: DQ_IS_BAD_DATES
+      data_type: BOOLEAN
+    - name: DQ_IS_MULTIPLE_ACTIVE
+      data_type: BOOLEAN
+  - name: STG_GP__PERSON
+    identifier: '"STG_GP__PERSON"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: GENDER_CONCEPT_CODE
+      data_type: TEXT
+    - name: GENDER_CONCEPT_NAME
+      data_type: TEXT
+    - name: GENDER_CONCEPT_VOCABULARY
+      data_type: TEXT
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: DEATH_YEAR
+      data_type: NUMBER
+    - name: DEATH_MONTH
+      data_type: NUMBER
+    - name: IS_DEAD
+      data_type: BOOLEAN
+  - name: STG_GP__PERSON_PATIENT
+    identifier: '"STG_GP__PERSON_PATIENT"'
+    columns:
+    - name: PID_PT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: DQ_IS_MULTIPLE_PT
+      data_type: BOOLEAN
+  - name: STG_GP__PERSON_SKPATID
+    identifier: '"STG_GP__PERSON_SKPATID"'
+    columns:
+    - name: PID_SKID_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: NUMBER
+    - name: DQ_IS_MULTIPLE_PID
+      data_type: BOOLEAN
+    - name: DQ_IS_MULTIPLE_SKID
+      data_type: BOOLEAN
+  - name: STG_NHSBSA__APID_VPID
+    identifier: '"STG_NHSBSA__APID_VPID"'
+    columns:
+    - name: APID
+      data_type: NUMBER
+    - name: VPID
+      data_type: NUMBER
+  - name: STG_PHENOLAB__DEFINITION_STORE
+    identifier: '"STG_PHENOLAB__DEFINITION_STORE"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_TABLE
+      data_type: TEXT
+    - name: DBID
+      data_type: TEXT
+    - name: CORE_CONCEPT_ID
+      data_type: TEXT
+  - name: STG_PHENOLAB__MEASUREMENT_CONFIGS
+    identifier: '"STG_PHENOLAB__MEASUREMENT_CONFIGS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+  - name: STG_PHENOLAB__STANDARD_UNITS
+    identifier: '"STG_PHENOLAB__STANDARD_UNITS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: UNIT
+      data_type: TEXT
+    - name: PRIMARY_UNIT
+      data_type: BOOLEAN
+  - name: STG_PHENOLAB__UNIT_CONVERSIONS
+    identifier: '"STG_PHENOLAB__UNIT_CONVERSIONS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: CONVERT_FROM_UNIT
+      data_type: TEXT
+    - name: CONVERT_TO_UNIT
+      data_type: TEXT
+    - name: PRE_OFFSET
+      data_type: FLOAT
+    - name: MULTIPLY_BY
+      data_type: FLOAT
+    - name: POST_OFFSET
+      data_type: FLOAT
+  - name: STG_PHENOLAB__UNIT_MAPPINGS
+    identifier: '"STG_PHENOLAB__UNIT_MAPPINGS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: SOURCE_UNIT
+      data_type: TEXT
+    - name: STANDARD_UNIT
+      data_type: TEXT
+    - name: SOURCE_UNIT_COUNT
+      data_type: NUMBER
+    - name: SOURCE_UNIT_LQ
+      data_type: FLOAT
+    - name: SOURCE_UNIT_MEDIAN
+      data_type: FLOAT
+    - name: SOURCE_UNIT_UQ
+      data_type: FLOAT
+  - name: STG_PHENOLAB__VALUE_BOUNDS
+    identifier: '"STG_PHENOLAB__VALUE_BOUNDS"'
+    columns:
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: CONFIG_ID
+      data_type: TEXT
+    - name: CONFIG_VERSION
+      data_type: TEXT
+    - name: LOWER_LIMIT
+      data_type: FLOAT
+    - name: UPPER_LIMIT
+      data_type: FLOAT
+  - name: STG_SUS__APC_DIAGNOSIS_ICD10
+    identifier: '"STG_SUS__APC_DIAGNOSIS_ICD10"'
+    columns:
+    - name: APC_DIAGNOSIS_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: SPELL_ID
+      data_type: NUMBER
+    - name: ICD_ORDER
+      data_type: NUMBER
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: SUB_ORGANISATION_ID
+      data_type: TEXT
+    - name: SUB_ORGANISATION_NAME
+      data_type: TEXT
+    - name: ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: CONCEPT_VOCABULARY
+      data_type: TEXT
+  - name: STG_SUS__APC_PROCEDURE_OPCS4
+    identifier: '"STG_SUS__APC_PROCEDURE_OPCS4"'
+    columns:
+    - name: APC_PROCEDURE_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: SPELL_ID
+      data_type: NUMBER
+    - name: OPCS_ORDER
+      data_type: NUMBER
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: SUB_ORGANISATION_ID
+      data_type: TEXT
+    - name: SUB_ORGANISATION_NAME
+      data_type: TEXT
+    - name: ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: CONCEPT_VOCABULARY
+      data_type: TEXT
+  - name: STG_SUS__APC_SPELL
+    identifier: '"STG_SUS__APC_SPELL"'
+    columns:
+    - name: SPELL_ID
+      data_type: NUMBER
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: AGE_ON_ADMISSION
+      data_type: NUMBER
+    - name: SPELL_ADMISSION_METHOD
+      data_type: TEXT
+    - name: SPELL_ADMISSION_SOURCE
+      data_type: TEXT
+    - name: SPELL_ADMISSION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_ADMISSION_TIME
+      data_type: TEXT
+    - name: SPELL_ADMISSION_ADMISSION_TYPE
+      data_type: TEXT
+    - name: SPELL_ADMISSION_ADMISSION_SUB_TYPE
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_DESTINATION
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_METHOD
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SPELL_DISCHARGE_TIME
+      data_type: TEXT
+    - name: SPELL_DISCHARGE_LENGTH_OF_HOSPITAL_STAY
+      data_type: NUMBER
+    - name: COMMISSIONING_TARIFF_CALCULATION_TARIFF_APPLIED
+      data_type: TEXT
+    - name: COMMISSIONING_TARIFF_CALCULATION_FINAL_PRICE
+      data_type: NUMBER
+  - name: STG_SUS__APC_SPELL_EPISODE
+    identifier: '"STG_SUS__APC_SPELL_EPISODE"'
+    columns:
+    - name: EPISODE_ID
+      data_type: NUMBER
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: SPELL_ID
+      data_type: NUMBER
+    - name: BIRTH_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: BIRTH_MONTH
+      data_type: NUMBER
+    - name: BIRTH_YEAR
+      data_type: NUMBER
+    - name: AGE_ON_ADMISSION
+      data_type: NUMBER
+    - name: EPISODE_NUMBER
+      data_type: NUMBER
+    - name: EPISODE_START_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EPISODE_START_TIME
+      data_type: TEXT
+    - name: EPISODE_END_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: EPISODE_END_TIME
+      data_type: TEXT
+    - name: EPISODE_MAIN_SPECIALTY
+      data_type: TEXT
+    - name: EPISODE_TREATMENT_FUNCTION
+      data_type: TEXT
+  - name: STG_SUS__ECDS_ATTENDANCE
+    identifier: '"STG_SUS__ECDS_ATTENDANCE"'
+    columns:
+    - name: ECDS_ATTENDANCE_ID
+      data_type: NUMBER
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: AGE_AT_ARRIVAL
+      data_type: NUMBER
+    - name: ECDS_ATTENDANCE_PROVIDER_CODE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_PROVIDER_NAME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_SITE_CODE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_SITE_NAME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DEPARTMENT_TYPE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_ARRIVAL_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ECDS_ATTENDANCE_ARRIVAL_TIME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_ARRIVAL_MODE_CODE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_ARRIVAL_MODE_NAME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_ARRIVAL_CATEGORY
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DEPARTURE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ECDS_ATTENDANCE_DEPARTURE_TIME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DISCHARGE_STATUS_CODE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DISCHARGE_STATUS_NAME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DISCHARGE_DESTINATION_CODE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DISCHARGE_DESTINATION_NAME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DISCHARGE_FOLLOW_UP_CODE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DISCHARGE_FOLLOW_UP_NAME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DECISION_TO_ADMIT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: ECDS_ATTENDANCE_DECISION_TO_ADMIT_TIME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DECISION_TO_ADMIT_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DECISION_TO_ADMIT_TREATMENT_FUNCTION_NAME
+      data_type: TEXT
+    - name: ECDS_ATTENDANCE_DECISION_TO_ADMIT_RECEIVING_SITE
+      data_type: TEXT
+    - name: COMMISSIONING_HRG_CODE
+      data_type: TEXT
+    - name: COMMISSIONING_TARIFF
+      data_type: NUMBER
+    - name: COMMISSIONING_FINAL_PRICE
+      data_type: NUMBER
+  - name: STG_SUS__OP_APPOINTMENT
+    identifier: '"STG_SUS__OP_APPOINTMENT"'
+    columns:
+    - name: OP_APPOINTMENT_ID
+      data_type: NUMBER
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: OP_APPOINTMENT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OP_APPOINTMENT_TIME
+      data_type: TEXT
+    - name: OP_APPOINTMENT_ATTENDED_CODE
+      data_type: TEXT
+    - name: OP_APPOINTMENT_ATTENDED_NAME
+      data_type: TEXT
+    - name: OP_APPOINTMENT_SPECIALTY_CODE
+      data_type: TEXT
+    - name: OP_APPOINTMENT_SPECIALTY_NAME
+      data_type: TEXT
+    - name: OP_APPOINTMENT_OUTCOME_CODE
+      data_type: TEXT
+    - name: OP_APPOINTMENT_OUTCOME_NAME
+      data_type: TEXT
+    - name: OP_APPOINTMENT_ADMIN_CATEGORY_CODE
+      data_type: TEXT
+    - name: OP_APPOINTMENT_ADMIN_CATEGORY_NAME
+      data_type: TEXT
+    - name: OP_APPOINTMENT_TARIFF_FINAL_PRICE
+      data_type: NUMBER
+  - name: STG_SUS__OP_DIAGNOSIS_ICD10
+    identifier: '"STG_SUS__OP_DIAGNOSIS_ICD10"'
+    columns:
+    - name: OP_DIAGNOSIS_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: ATTENDANCE_ID
+      data_type: NUMBER
+    - name: ICD_ORDER
+      data_type: NUMBER
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: SUB_ORGANISATION_ID
+      data_type: TEXT
+    - name: SUB_ORGANISATION_NAME
+      data_type: TEXT
+    - name: ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: CONCEPT_VOCABULARY
+      data_type: TEXT
+  - name: STG_SUS__OP_PROCEDURE_OPCS4
+    identifier: '"STG_SUS__OP_PROCEDURE_OPCS4"'
+    columns:
+    - name: OP_PROCEDURE_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: ATTENDANCE_ID
+      data_type: NUMBER
+    - name: OPCS_ORDER
+      data_type: NUMBER
+    - name: ORGANISATION_ID
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: SUB_ORGANISATION_ID
+      data_type: TEXT
+    - name: SUB_ORGANISATION_NAME
+      data_type: TEXT
+    - name: ACTIVITY_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: CONCEPT_VOCABULARY
+      data_type: TEXT

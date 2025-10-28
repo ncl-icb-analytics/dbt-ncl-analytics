@@ -204,7 +204,15 @@ sources:
     schema: PHENOLAB_DEV
     description: Phenolab supporting data
     raw_prefix: raw_phenolab
-    domain: phenolab
+    domain: shared
+  
+   # AIC schema in DATA_LAKE__NCL
+  - source_name: aic
+    database: DATA_LAKE__NCL
+    schema: AIC_DEV
+    description: AIC pipelines
+    raw_prefix: raw_aic
+    domain: shared
 
   # ========================================
   # ADDITIONAL OLIDS DATA SOURCES

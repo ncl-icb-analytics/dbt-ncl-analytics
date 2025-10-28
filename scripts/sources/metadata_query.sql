@@ -307,6 +307,19 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- aic: AIC pipelines
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'AIC_DEV' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'AIC_DEV'
+  
+  UNION ALL
+  
     -- pds: Personal Demographics Service data
   SELECT 
     'DATA_LAKE' as database_name,
