@@ -48,7 +48,21 @@ with
             ,concept_vocabulary as observation_vocabulary
         from {{ ref("int_sus_ip_procedure") }} apc
     ),
-
+    apc_procedure_hrg as (
+        select procedure_id as event_id
+            ,sk_patient_id
+            ,visit_occurrence_id
+            ,visit_occurrence_type
+            ,organisation_id
+            ,organisation_name
+            ,date
+            ,null as clinical_end_date
+            ,problem_order
+            ,source_concept_code::varchar  as observation_concept_code
+            ,concept_name as observation_concept_name
+            ,concept_vocabulary as observation_vocabulary
+    from {{ ref("int_sus_apc_procedure_hrg") }}
+    ),
     op_diagnosis as (
         select diagnosis_id as event_id
             ,sk_patient_id
@@ -147,6 +161,9 @@ with
         union 
         select *
         from apc_procedure
+        union
+        select *
+        from apc_procedure_hrg
         union
         select *
         from op_diagnosis
