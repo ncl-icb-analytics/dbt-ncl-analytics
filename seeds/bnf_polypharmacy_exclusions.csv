@@ -3,6 +3,7 @@ bnf_chapter_code,chapter_name,is_excluded
 01.08,Stoma care,TRUE
 03.08,Aromatic inhalations,TRUE
 03.09,Cough preparations,TRUE
+05,Infections,TRUE
 05.01,Antibacterial drugs,TRUE
 05.02,Antifungal drugs,TRUE
 05.03.01,HIV infection,FALSE
