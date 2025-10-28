@@ -1,0 +1,47 @@
+models:
+  - name: stg_sus_apc_spell_episodes_commissioning_grouping_unbundled_hrg
+    description: ""
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+        - primarykey_id
+        - episodes_id
+        - unbundled_hrg_id
+    - dbt_expectations.expect_table_row_count_to_be_between:
+        min_value: 1
+    columns:
+      - name: primarykey_id
+        data_type: number
+        description: "Primary key from spell (FK). The unique primary key of the parent record in the [spell] table used to link to records in the child tables. This is based on the [system.record.identifier] which is the same value as the [Generated Record ID] from the monthly SUS release."
+
+      - name: episodes_id
+        data_type: number
+        description: "Episode identifier used in combination with the [PRIMARYKEY_ID] to uniquely identify the episode in the child table"
+
+      - name: rownumber_id
+        data_type: number
+        description: "The row number of the record based on the position within the source file."
+
+      - name: unbundled_hrg_id
+        data_type: number
+        description: "HRG identifier within the spell. Used in combination with the [PRIMARYKEY_ID] to uniquely identify the row in the child table"
+
+      - name: code
+        data_type: varchar
+        description: "An unbundled HRG represents significant treatment that has been delivered in addition to that represented by the Core HRG. Each unbundled HRG may influence the national tariff applied or may be the basis for a locally agreed payment"
+
+      - name: tariff
+        data_type: number
+        description: "Derived field unbundled HRG tariff"
+
+      - name: tariff_applied
+        data_type: varchar
+        description: ""
+
+      - name: multiple_applies
+        data_type: boolean
+        description: "Derived field unbundled HRG multiple indicator flag"
+
+      - name: dmic_import_log_id
+        data_type: number
+        description: ""

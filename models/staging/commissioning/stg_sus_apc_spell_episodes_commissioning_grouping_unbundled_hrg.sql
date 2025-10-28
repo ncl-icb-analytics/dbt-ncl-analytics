@@ -1,0 +1,10 @@
+select primarykey_id
+        , episodes_id
+        , rownumber_id
+        , unbundled_hrg_id
+        , code
+        , tariff
+        , adult_cc_tariff_days
+        , multiple_applies
+        , dmic_import_log_id
+    from {{ref('raw_sus_apc_spell_episodes_commissioning_grouping_unbundled_hrg')}}
