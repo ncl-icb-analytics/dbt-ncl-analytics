@@ -34,7 +34,7 @@ select
 from final_icd_codes f
 
 left join
-    {{ ref('raw_aic_base_athena_concept') }} c
+    {{ source('aic', 'BASE_ATHENA__CONCEPT') }} c
     on c.concept_code = f.concept_code
     and c.vocabulary_id = 'ICD10'
 
