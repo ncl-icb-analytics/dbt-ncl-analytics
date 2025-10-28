@@ -110,7 +110,7 @@ select
 from all_obs as f
 
 /* Diagnosis code for infering reason */
-left join {{ref('stg_sus_ae_emergency_care')}} as sa on sa.primarykey_id = f.primarykey_id
+left join {{ref('stg_sus_ae_emergency_care')}}  as sa on sa.primarykey_id = f.primarykey_id
 
 -- provider name
 LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_site ON 

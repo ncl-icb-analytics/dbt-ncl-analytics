@@ -1,4 +1,4 @@
-{{ config(materialized="table", enabled=false) }}
+{{ config(materialized="table") }}
 
 -- note: using sk_patient_id as person_id
 
@@ -34,7 +34,7 @@ select
 from final_icd_codes f
 
 left join
-    {{ ref('raw_phenolab_base_athena_concept') }} c
+    {{ source('aic', 'BASE_ATHENA__CONCEPT') }} c
     on c.concept_code = f.concept_code
     and c.vocabulary_id = 'ICD10'
 

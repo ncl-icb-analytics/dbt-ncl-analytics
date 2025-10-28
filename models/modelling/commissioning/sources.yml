@@ -1,0 +1,81 @@
+version: 2
+sources:
+- name: aic
+  database: '"DATA_LAKE__NCL"'
+  schema: '"AIC_DEV"'
+  description: AIC pipelines
+  tables:
+  - name: BASE_ATHENA__CONCEPT
+    identifier: '"BASE_ATHENA__CONCEPT"'
+    columns:
+    - name: CONCEPT_ID
+      data_type: NUMBER
+    - name: CONCEPT_NAME
+      data_type: TEXT
+    - name: DOMAIN_ID
+      data_type: TEXT
+    - name: VOCABULARY_ID
+      data_type: TEXT
+    - name: CONCEPT_CLASS_ID
+      data_type: TEXT
+    - name: STANDARD_CONCEPT
+      data_type: TEXT
+    - name: CONCEPT_CODE
+      data_type: TEXT
+    - name: VALID_START_DATE
+      data_type: DATE
+    - name: VALID_END_DATE
+      data_type: DATE
+    - name: INVALID_REASON
+      data_type: TEXT
+  - name: BASE_CCMS_DMD_CODES
+    identifier: '"BASE_CCMS_DMD_CODES"'
+    columns:
+    - name: CONDITIONID
+      data_type: NUMBER
+    - name: CONDITIONNAME
+      data_type: TEXT
+    - name: PRODUCTID
+      data_type: NUMBER
+    - name: PRIMARYTERM
+      data_type: TEXT
+  - name: BASE_CCMS_SNOMED_CODES
+    identifier: '"BASE_CCMS_SNOMED_CODES"'
+    columns:
+    - name: CONDITIONID
+      data_type: NUMBER
+    - name: CONDITIONNAME
+      data_type: TEXT
+    - name: CONCEPTID
+      data_type: NUMBER
+    - name: PRIMARYTERM
+      data_type: TEXT
+  - name: BASE_GOV__IMD_2019
+    identifier: '"BASE_GOV__IMD_2019"'
+    columns:
+    - name: LSOA_CODE_2011
+      data_type: TEXT
+    - name: LSOA_NAME_2011
+      data_type: TEXT
+    - name: LA_CODE_2019
+      data_type: TEXT
+    - name: LA_NAME_2019
+      data_type: TEXT
+    - name: IMD_RANK
+      data_type: NUMBER
+    - name: IMD_DECILE
+      data_type: NUMBER
+  - name: BASE_GOV__WARD_NAMES
+    identifier: '"BASE_GOV__WARD_NAMES"'
+    columns:
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: WARD_NAME
+      data_type: TEXT
+  - name: BASE_NHSBSA__APID_VPID
+    identifier: '"BASE_NHSBSA__APID_VPID"'
+    columns:
+    - name: APID
+      data_type: NUMBER
+    - name: VPID
+      data_type: NUMBER

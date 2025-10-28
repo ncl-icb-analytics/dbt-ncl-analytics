@@ -204,7 +204,7 @@ sources:
     schema: PHENOLAB_DEV
     description: Phenolab supporting data
     raw_prefix: raw_phenolab
-    domain: phenolab
+    domain: shared
 
   # ========================================
   # ADDITIONAL OLIDS DATA SOURCES

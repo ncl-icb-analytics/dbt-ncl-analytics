@@ -1,15 +1,8 @@
-{{ config(materialized='view', enabled=false) }}
+{{ config(materialized='view') }}
 
 -- note: using sk_patient_id as person_id
 
 with
-    -- Filter out measurement definitions from DEFINITIONSTORE
-    -- definitionstore_filtered as (
-    --     select *
-    --     from {{ source("phenolab", "DEFINITION_STORE") }}
-    --     where not lower(definition_name) like 'measurement_%'
-    -- ),
-    
     apc_diagnosis as (
         select diagnosis_id as event_id
             ,sk_patient_id
@@ -23,14 +16,7 @@ with
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
-            -- ,ds.definition_id
-            -- ,ds.definition_name
-            -- ,ds.definition_source
         from {{ ref("int_sus_ip_diagnosis") }} apc
-        -- inner join
-        --     definitionstore_filtered ds
-        --     on apc.concept_code = ds.code
-        --     and apc.concept_vocabulary = ds.vocabulary
     ),
 
     apc_procedure as (
@@ -76,14 +62,7 @@ with
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
-            -- ,ds.definition_id
-            -- ,ds.definition_name
-            -- ,ds.definition_source
         from {{ ref("int_sus_op_diagnosis") }} op
-        -- inner join
-        --     definitionstore_filtered ds
-        --     on op.concept_code = ds.code
-        --     and op.concept_vocabulary = ds.vocabulary
     ),
     op_procedure as (
     select procedure_id as event_id
@@ -129,14 +108,9 @@ with
             ,source_concept_code::varchar  as observation_concept_code
             ,source_concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
-            -- ,ds.definition_id
-            -- ,ds.definition_name
-            -- ,ds.definition_source
+ 
         from {{ ref("int_sus_ae_diagnosis") }} ae
-        -- inner join
-        --     definitionstore_filtered ds
-        --     on ae.concept_code = ds.code
-        --     and ae.concept_vocabulary = ds.vocabulary
+
    ),
 
    ae_procedure as(
@@ -193,9 +167,4 @@ select
     observation_concept_code,
     observation_concept_name,
     observation_vocabulary
-    -- definition_id,
-    -- definition_name as condition_definition_name,
-    -- definition_source,
--- observation_concept_code,
--- observation_concept_name,
 from all_observations
