@@ -122,11 +122,12 @@ tests:
     min_value: 1
 - dbt_utils.unique_combination_of_columns:
     combination_of_columns:
-    - pseudo_nhs_number
+    - sk_patient_id
     - referral_identifier
     - patient_pathway_identifier
-    - tfc_code
+    - treatment_function_code
     - provider_code
     - provider_site_code
     - week_ending_date
-    - severity: warn
+    - referral_to_treatment_period_start_date
+    severity: warn
