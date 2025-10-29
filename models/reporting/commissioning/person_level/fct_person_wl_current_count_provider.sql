@@ -1,10 +1,8 @@
 {{
     config(
-        materialized='table',
-        static_analysis='off',
-        enabled=false)
+        materialized='view',
+        static_analysis='off')
 }}
-
 
 /*
 Number of open pathways at NCL providers per patient.
@@ -12,7 +10,6 @@ Clinical Purpose:
 - Care coordination management across providers
 
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
-
 */
 
 WITH PROVIDER_COUNTS AS (
@@ -29,8 +26,10 @@ FROM PROVIDER_COUNTS wl
 PIVOT
 (
     SUM(open_pathways) FOR provider_code IN (
-        SELECT DISTINCT
-        provider_code
-        FROM {{ ref('stg_reference_ncl_provider') }}
-        )
+                                            SELECT DISTINCT
+                                            reporting_code
+                                            FROM {{ ref('stg_reference_ncl_provider') }}
+                                            WHERE
+                                            ROW_TYPE IN ('trust','historic_nmuh')
+                                            )
 ) AS pvt
