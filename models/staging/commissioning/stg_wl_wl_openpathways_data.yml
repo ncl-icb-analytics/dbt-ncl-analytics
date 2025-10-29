@@ -132,7 +132,7 @@ models:
     - name: row_id
       description: Unique row identifier
       tests:
-      - not null
+      - not_null
       - unique
     - name: open_pathways
       description: Flag indicating open pathway (always 1)
@@ -145,6 +145,9 @@ models:
       - referral_identifier
       - patient_pathway_identifier
       - treatment_function_code
+      - provider_code
       - provider_site_code
       - week_ending_date
-      - severity: warn
+      - referral_to_treatment_period_start_date
+      - date_and_time_data_set_created
+      severity: warn
