@@ -188,6 +188,19 @@ q.person_id
 FROM {{ ref('int_qrisk_latest') }} q
 INNER JOIN SMI_POP p USING (PERSON_ID)
 )
+
+--illicit drug use
+,illicit as (
+select 
+i.person_id
+,DATE(i.clinical_effective_date) as ILLICIT_DRUG_DATE
+,i.ILLICIT_DRUG_ASSESSED_LAST_12M
+,i.ILLICIT_DRUG_PATTERN
+,i.ILLICIT_DRUG_CLASS
+FROM {{ ref('int_smi_illicit_drug_latest') }} i
+INNER JOIN SMI_POP p USING (PERSON_ID)
+)
+
 --flu if eligible (morbidly obese etc) and covid (should be age 75+, Imm supp and care home only)
 ,covidflu as (
 select distinct
@@ -239,6 +252,10 @@ p.*
 ,CASE WHEN a.person_id is NULL THEN 'No' ELSE 'Yes' END AS AUDIT_CHECK_12M
 ,a.audit_date
 ,a.audit_risk_category
+,i.ILLICIT_DRUG_DATE
+,i.ILLICIT_DRUG_ASSESSED_LAST_12M
+,i.ILLICIT_DRUG_PATTERN
+,i.ILLICIT_DRUG_CLASS
 ,CASE WHEN bp.person_id is NULL THEN 'No' ELSE 'Yes' END AS BP_CHECK_12M
 ,bp.bp_date
 ,bp.LATEST_SYSTOLIC_VALUE
@@ -266,3 +283,5 @@ LEFT JOIN latest_alcohol_qof a1 using (person_id)
 LEFT JOIN latest_BP bp using (person_id)
 LEFT JOIN latest_Care m using (person_id)
 LEFT JOIN qrisk q using (person_id)
+LEFT JOIN illicit i using (person_id)
+-- LEFT JOIN covidflu cf using (person_id)
