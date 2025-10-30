@@ -1,6 +1,6 @@
 -- Raw layer model for reference_lookup_ncl.NCL_PROVIDER
 -- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules in the MODELLING environment
+-- Description: NCL reference lookup tables
 -- This is a 1:1 passthrough from source with standardized column names
 select
     "SK_ORGANISATION_ID" as sk_organisation_id,

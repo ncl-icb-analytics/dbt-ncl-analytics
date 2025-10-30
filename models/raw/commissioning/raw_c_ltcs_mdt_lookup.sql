@@ -4,5 +4,5 @@
 -- This is a 1:1 passthrough from source with standardized column names
 select
     "PCN_CODE" as pcn_code,
-    "DATE" as date
+    "MDT_DATE" as mdt_date
 from {{ source('c_ltcs', 'MDT_LOOKUP') }}

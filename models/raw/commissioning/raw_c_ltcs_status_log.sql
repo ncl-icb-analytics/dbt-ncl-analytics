@@ -5,7 +5,7 @@
 select
     "PATIENT_ID" as patient_id,
     "PCN_CODE" as pcn_code,
-    "DATE" as date,
+    "MDT_DATE" as mdt_date,
     "ACTION" as action,
     "ACTION_DATE" as action_date,
     "CRITERIA" as criteria

@@ -123,6 +123,63 @@ sources:
       data_type: BOOLEAN
     - name: EXCLUSION_GROUP
       data_type: TEXT
+  - name: CONSULTANT_CONNECT
+    identifier: '"CONSULTANT_CONNECT"'
+    columns:
+    - name: Date
+      data_type: TIMESTAMP_NTZ
+    - name: Time
+      data_type: TIMESTAMP_NTZ
+    - name: User
+      data_type: TEXT
+    - name: Organisation
+      data_type: TEXT
+    - name: GP_Code
+      data_type: TEXT
+    - name: GPPracticeName
+      data_type: TEXT
+    - name: grand_total_weighted_list_size
+      data_type: FLOAT
+    - name: borough
+      data_type: TEXT
+    - name: PCN
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: ICS
+      data_type: TEXT
+    - name: Photos
+      data_type: FLOAT
+    - name: Shared with
+      data_type: TEXT
+    - name: Consultant
+      data_type: TEXT
+    - name: Trust
+      data_type: TEXT
+    - name: ResponseTimeFormatted
+      data_type: TEXT
+    - name: ResponseTimeSeconds
+      data_type: FLOAT
+    - name: WaitTimeSeconds
+      data_type: FLOAT
+    - name: TalkTimeSeconds
+      data_type: FLOAT
+    - name: Specialism
+      data_type: TEXT
+    - name: ServiceType
+      data_type: TEXT
+    - name: RotaPosition
+      data_type: FLOAT
+    - name: Outcome
+      data_type: TEXT
+    - name: DateClosed
+      data_type: TEXT
+    - name: LastActivity
+      data_type: TEXT
+    - name: ContactType
+      data_type: TEXT
+    - name: Activity
+      data_type: NUMBER
   - name: CSDS_LOOKUP
     identifier: '"CSDS_LOOKUP"'
     columns:
@@ -1134,6 +1191,238 @@ sources:
       data_type: TEXT
     - name: IMDDECILE
       data_type: NUMBER
+  - name: IMD_2019
+    identifier: '"IMD_2019"'
+    columns:
+    - name: LSOA_CODE_2011
+      data_type: TEXT
+    - name: LSOA_NAME_2011
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_CODE_2019
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_NAME_2019
+      data_type: TEXT
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_SCORE
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EMPLOYMENT_SCORE_RATE
+      data_type: NUMBER
+    - name: EMPLOYMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EMPLOYMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_SCORE
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_SCORE
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CRIME_SCORE
+      data_type: NUMBER
+    - name: CRIME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CRIME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_SCORE
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_SCORE
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: TOTAL_POPULATION_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: DEPENDENT_CHILDREN_AGED_0_TO_15_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: POPULATION_AGED_16_TO_59_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: OLDER_POPULATION_AGED_60_AND_OVER_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: WORKING_AGE_POPULATION_18_TO_59_64_FOR_USE_WITH_EMPLOYMENT_DEPRIVATION_DOMAIN_EXCLUDING_PRISONERS
+      data_type: NUMBER
+  - name: IMD_2025
+    identifier: '"IMD_2025"'
+    columns:
+    - name: LSOA_CODE_2021
+      data_type: TEXT
+    - name: LSOA_NAME_2021
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_CODE_2024
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_NAME_2024
+      data_type: TEXT
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_SCORE
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EMPLOYMENT_SCORE_RATE
+      data_type: NUMBER
+    - name: EMPLOYMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EMPLOYMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_SCORE
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_SCORE
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CRIME_SCORE
+      data_type: NUMBER
+    - name: CRIME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CRIME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_SCORE
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_SCORE
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: TOTAL_POPULATION_MID_2022
+      data_type: NUMBER
+    - name: DEPENDENT_CHILDREN_AGED_0_TO_15_MID_2022
+      data_type: NUMBER
+    - name: OLDER_POPULATION_AGED_60_AND_OVER_MID_2022
+      data_type: NUMBER
+    - name: WORKING_AGE_POPULATION_18_TO_66_FOR_USE_WITH_EMPLOYMENT_DEPRIVATION_DOMAIN_MID_2022
+      data_type: NUMBER
   - name: IMMS_SCHEDULE_LATEST
     identifier: '"IMMS_SCHEDULE_LATEST"'
     columns:
@@ -1792,6 +2081,57 @@ sources:
       data_type: BOOLEAN
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
+  - name: turnaround_times_clean_write_test
+    identifier: '"turnaround_times_clean_write_test"'
+    columns:
+    - name: DiagnosticTestDateTime
+      data_type: TIMESTAMP_NTZ
+    - name: PatientSourceTypeName
+      data_type: TEXT
+    - name: Modality
+      data_type: TEXT
+    - name: SiteName
+      data_type: TEXT
+    - name: SiteNameShort
+      data_type: TEXT
+    - name: ProviderTrust
+      data_type: TEXT
+    - name: ProviderTrustShort
+      data_type: TEXT
+    - name: PriorityTypeCode
+      data_type: TEXT
+    - name: CancerPathwayFlag
+      data_type: TEXT
+    - name: BreachScan
+      data_type: FLOAT
+    - name: BreachScan7Day
+      data_type: FLOAT
+    - name: TATScan
+      data_type: FLOAT
+    - name: BreachReportNCL
+      data_type: FLOAT
+    - name: BreachReportNCLCancer7Day
+      data_type: FLOAT
+    - name: BreachReport4Week
+      data_type: FLOAT
+    - name: BreachReportNHSE
+      data_type: FLOAT
+    - name: BreachReportNHSECancer7Day
+      data_type: FLOAT
+    - name: TATReport
+      data_type: FLOAT
+    - name: BreachOverall
+      data_type: FLOAT
+    - name: BreachOverallCancer7Day
+      data_type: FLOAT
+    - name: TATOverall
+      data_type: FLOAT
+    - name: TestAwaitingReport
+      data_type: FLOAT
+    - name: TestUnreported
+      data_type: FLOAT
+    - name: DataType
+      data_type: TEXT
   - name: turnaround_times_raw_write_test
     identifier: '"turnaround_times_raw_write_test"'
     columns:

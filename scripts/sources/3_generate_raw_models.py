@@ -168,7 +168,7 @@ def main():
     # Get list of source names from mappings (these are auto-generated)
     auto_generated_source_names = set(mappings.keys())
     
-    # First, load manual sources.yml (only for sources NOT in source_mappings.yml)
+    # First, load manual sources.yml (these override auto-generated sources)
     manual_sources_file = os.path.join(SOURCES_DIR, 'sources.yml')
     if os.path.exists(manual_sources_file):
         with open(manual_sources_file) as f:
@@ -176,12 +176,11 @@ def main():
             if sources_data and 'sources' in sources_data:
                 for source in sources_data['sources']:
                     source_name = source['name']
-                    # Only include if NOT in source_mappings.yml (fully manual sources like 'aic')
-                    if source_name not in auto_generated_source_names:
-                        manual_sources[source_name] = source
-                        source_files[source_name] = 'sources.yml'
+                    # Sources in sources.yml override auto-generated ones
+                    manual_sources[source_name] = source
+                    source_files[source_name] = 'sources.yml'
     
-    # Then load auto-generated files (excluding sources.yml)
+    # Then load auto-generated files (excluding sources.yml), but skip if already in sources.yml
     for filename in sorted(os.listdir(SOURCES_DIR)):
         if filename.endswith('.yml') and filename != 'sources.yml':
             filepath = os.path.join(SOURCES_DIR, filename)
@@ -190,12 +189,12 @@ def main():
                 if sources_data and 'sources' in sources_data:
                     for source in sources_data['sources']:
                         source_name = source['name']
-                        # Auto-generated sources (from source_mappings.yml) take precedence
-                        # Manual table definitions are already merged during generation
-                        auto_sources[source_name] = source
-                        source_files[source_name] = filename
+                        # Only add if not already defined in sources.yml (manual sources take precedence)
+                        if source_name not in manual_sources:
+                            auto_sources[source_name] = source
+                            source_files[source_name] = filename
     
-    # Combine all sources: manual-only sources + auto-generated sources
+    # Combine all sources: manual sources (from sources.yml) take precedence, then auto-generated
     for source_name, source in manual_sources.items():
         all_sources.append(source)
     for source_name, source in auto_sources.items():

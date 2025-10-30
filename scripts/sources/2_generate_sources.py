@@ -11,63 +11,30 @@ INPUT_FILE = os.path.join(CURRENT_DIR, 'table_metadata.csv')
 OUTPUT_DIR = os.path.join(PROJECT_DIR, 'models', 'sources')
 MAPPINGS_FILE = os.path.join(CURRENT_DIR, 'source_mappings.yml')
 
-def load_manual_sources(mappings):
-    """Load manually defined sources and their tables from sources.yml
-    
-    Args:
-        mappings: dict of source mappings from source_mappings.yml (to check if source is auto-generated)
+def load_manual_sources():
+    """Load manually defined sources and tables from sources.yml
     
     Returns:
-        tuple: (manual_only_sources, manual_table_overrides)
-            - manual_only_sources: set of source names that are fully manual (NOT in source_mappings.yml)
-            - manual_table_overrides: dict {source_name: {table_name: table_def}} for manual table definitions
+        tuple: (set of source names, dict mapping source_name -> set of table names)
     """
     manual_sources_file = os.path.join(OUTPUT_DIR, 'sources.yml')
-    manual_only_sources = set()  # Sources NOT in source_mappings.yml (fully manual, like 'aic')
-    manual_table_overrides = {}  # {source_name: {table_name: table_def}} for sources IN source_mappings.yml
-    
-    # Get set of source names that are auto-generated (from source_mappings.yml)
-    # mappings is keyed by (database, schema) tuples, so iterate values to get source names
-    auto_generated_source_names = set()
-    for mapping in mappings.values():
-        if 'source_name' in mapping:
-            auto_generated_source_names.add(mapping['source_name'])
+    manual_source_names = set()
+    manual_source_tables = {}  # source_name -> set of table names
     
     if os.path.exists(manual_sources_file):
         with open(manual_sources_file, 'r') as f:
             sources_data = yaml.safe_load(f)
-            
-            # Load fully manual sources (NOT in source_mappings.yml)
             if sources_data and 'sources' in sources_data and sources_data['sources']:
                 for source in sources_data['sources']:
                     source_name = source['name']
+                    manual_source_names.add(source_name)
                     
-                    # Check if source is in source_mappings.yml (auto-generated) or not (fully manual)
-                    if source_name not in auto_generated_source_names:
-                        # Fully manual source - NOT in source_mappings.yml (e.g. 'aic')
-                        manual_only_sources.add(source_name)
-                        if 'tables' in source:
-                            manual_table_overrides[source_name] = {}
-                            for table in source['tables']:
-                                table_name = table['name']
-                                manual_table_overrides[source_name][table_name] = table
-            
-            # Load manual table overrides for sources IN source_mappings.yml
-            # These are stored under 'manual_table_overrides' key to avoid dbt seeing them as duplicate sources
-            if sources_data and 'manual_table_overrides' in sources_data and sources_data['manual_table_overrides']:
-                for override in sources_data['manual_table_overrides']:
-                    if isinstance(override, dict) and 'source_name' in override:
-                        source_name = override['source_name']
-                        if source_name in auto_generated_source_names:
-                            # This is a table override for an auto-generated source
-                            if source_name not in manual_table_overrides:
-                                manual_table_overrides[source_name] = {}
-                            if 'tables' in override:
-                                for table in override['tables']:
-                                    table_name = table['name']
-                                    manual_table_overrides[source_name][table_name] = table
+                    # Track manually defined tables for this source
+                    if 'tables' in source:
+                        table_names = {table['name'] for table in source['tables']}
+                        manual_source_tables[source_name] = table_names
     
-    return manual_only_sources, manual_table_overrides
+    return manual_source_names, manual_source_tables
 
 def load_source_mappings():
     """Load source mappings from YAML file"""
@@ -134,14 +101,10 @@ def main():
     mappings = load_source_mappings()
     print(f"Loaded {len(mappings)} source mappings from {MAPPINGS_FILE}")
     
-    # Load manual sources and table overrides
-    manual_only_sources, manual_table_overrides = load_manual_sources(mappings)
-    if manual_only_sources:
-        print(f"Found {len(manual_only_sources)} fully manual sources (will skip auto-generation): {', '.join(sorted(manual_only_sources))}")
-    if manual_table_overrides:
-        print(f"Found {len(manual_table_overrides)} sources with manual table overrides: {', '.join(sorted(manual_table_overrides.keys()))}")
-        for source_name, tables in manual_table_overrides.items():
-            print(f"  - {source_name}: {len(tables)} manually defined tables")
+    # Load manually defined sources and tables from sources.yml (these override auto-generation)
+    manual_source_names, manual_source_tables = load_manual_sources()
+    if manual_source_names:
+        print(f"Found {len(manual_source_names)} manually defined sources in sources.yml (will skip auto-generation): {', '.join(sorted(manual_source_names))}")
 
     # Try comma first, fallback to tab if error
     try:
@@ -174,9 +137,9 @@ def main():
 
         source_name = mapping['source_name']
         
-        # Skip sources that are fully manual (NOT in source_mappings.yml)
-        if source_name in manual_only_sources:
-            print(f"Info: Source '{source_name}' is fully manual (not in source_mappings.yml), skipping auto-generation...")
+        # Skip sources that are manually defined in sources.yml (they override auto-generation)
+        if source_name in manual_source_names:
+            print(f"Info: Source '{source_name}' is manually defined in sources.yml, skipping auto-generation...")
             continue
         
         # Note: Source names stay as-is (no 'auto_' prefix in source name)
@@ -190,7 +153,6 @@ def main():
             sources_by_file[filename] = []
 
         tables = []
-        manual_source_tables = manual_table_overrides.get(source_name, {})
 
         # Get all tables for this source from metadata
         for table_name, table_group in group.groupby('TABLE_NAME'):
@@ -198,22 +160,17 @@ def main():
             if 'tables' in mapping and table_name not in mapping['tables']:
                 continue
 
-            # Prefer manual table definition if it exists (from sources.yml table overrides)
-            if source_name in manual_table_overrides and table_name in manual_source_tables:
-                print(f"  Using manual definition for {source_name}.{table_name}")
-                tables.append(manual_source_tables[table_name])
-            else:
-                # Auto-generate from metadata
-                sorted_columns = table_group.sort_values('ORDINAL_POSITION')
+            # Auto-generate from metadata
+            sorted_columns = table_group.sort_values('ORDINAL_POSITION')
 
-                table = {
-                    'name': table_name,
-                    'identifier': f'"{table_name}"',  # Quote identifier to preserve case
-                    'columns': [{'name': col, 'data_type': dtype}
-                               for col, dtype in zip(sorted_columns['COLUMN_NAME'],
-                                                   sorted_columns['DATA_TYPE'])]
-                }
-                tables.append(table)
+            table = {
+                'name': table_name,
+                'identifier': f'"{table_name}"',  # Quote identifier to preserve case
+                'columns': [{'name': col, 'data_type': dtype}
+                           for col, dtype in zip(sorted_columns['COLUMN_NAME'],
+                                               sorted_columns['DATA_TYPE'])]
+            }
+            tables.append(table)
 
         source = {
             'name': source_name,  # Keep original source name (no 'auto_' prefix)
@@ -229,6 +186,43 @@ def main():
 
     # Create output directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    # Clean up auto-generated files: remove sources that are now manually defined
+    # Find all auto-generated files and remove manual sources from them
+    if os.path.exists(OUTPUT_DIR):
+        for filename in os.listdir(OUTPUT_DIR):
+            if filename.startswith('auto_') and filename.endswith('.yml'):
+                file_path = os.path.join(OUTPUT_DIR, filename)
+                try:
+                    with open(file_path, 'r') as f:
+                        file_sources = yaml.safe_load(f)
+                        if file_sources and 'sources' in file_sources:
+                            # Filter out manual sources
+                            original_sources = file_sources['sources']
+                            filtered_sources = [
+                                source for source in original_sources
+                                if source.get('name') not in manual_source_names
+                            ]
+                            
+                            # If any sources were removed, update or delete the file
+                            if len(filtered_sources) < len(original_sources):
+                                removed_sources = [
+                                    source.get('name') for source in original_sources
+                                    if source.get('name') in manual_source_names
+                                ]
+                                
+                                if filtered_sources:
+                                    # Some sources remain, update the file
+                                    file_sources['sources'] = filtered_sources
+                                    with open(file_path, 'w') as f:
+                                        yaml.dump(file_sources, f, sort_keys=False, default_flow_style=False)
+                                    print(f"  Updated {filename} (removed manual sources: {', '.join(removed_sources)})")
+                                else:
+                                    # All sources were manual, delete the file
+                                    os.remove(file_path)
+                                    print(f"  Deleted {filename} (all sources [{', '.join(removed_sources)}] are now manually defined in sources.yml)")
+                except Exception as e:
+                    print(f"  Warning: Could not check {filename}: {e}")
 
     # Write each source file (excluding sources.yml which contains manual-only sources)
     for filename, sources in sources_by_file.items():

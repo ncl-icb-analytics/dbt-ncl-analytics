@@ -1,28 +1,9 @@
 version: 2
-# Manual sources configuration
-# - Sources NOT in source_mappings.yml: Fully manual sources (e.g. 'aic')
-#   These must have database/schema defined here as they won't be auto-generated
-# 
-# IMPORTANT: For sources IN source_mappings.yml, define manual table overrides below
-# using the 'manual_table_overrides' key. These will be automatically merged into
-# the auto-generated files during source generation, so they won't appear as duplicates.
+# Manual sources - these override auto-generation
+# If a source is defined here, it will be used instead of auto-generating from metadata
+# Sources can be fully manual (not in source_mappings.yml) or override auto-generated sources (in source_mappings.yml)
 
 sources:
-# Manual table definitions for sources that ARE in source_mappings.yml
-# These are merged into auto-generated files by 2_generate_sources.py
-# Format: source_name: {table_name: table_definition}
-# Example structure (commented out - uncomment and modify as needed):
-# - source_name: c_ltcs
-#   tables:
-#   - name: MDT_LOOKUP
-#     identifier: MDT_LOOKUP
-#     columns:
-#     - name: PCN_CODE
-#       data_type: TEXT
-#     - name: DATE
-#       data_type: DATE
-
-# Fully manual source (NOT in source_mappings.yml)
 - name: aic
   database: '"DATA_LAKE__NCL"'
   schema: '"AIC_DEV"'
@@ -103,42 +84,20 @@ sources:
     - name: VPID
       data_type: NUMBER
 
-# Manual table overrides for sources IN source_mappings.yml
-# These are stored under 'manual_table_overrides' (not 'sources') so dbt doesn't see them as duplicate sources
-# The script automatically merges these into the auto-generated files during generation
-manual_table_overrides:
-- source_name: reference_lookup_ncl
-  tables:
-  - name: NCL_PROVIDER
-    identifier: '"NCL_PROVIDER"'
-    columns:
-    - name: SK_ORGANISATION_ID
-      data_type: NUMBER
-    - name: PROVIDER_CODE
-      data_type: TEXT
-    - name: PROVIDER_NAME
-      data_type: TEXT
-    - name: PROVIDER_SHORTHAND
-      data_type: TEXT
-    - name: REPORTING_CODE
-      data_type: TEXT
-    - name: REPORTING_NAME
-      data_type: TEXT
-    - name: REPORTING_SHORTHAND
-      data_type: TEXT
-    - name: PROVIDER_TYPE
-      data_type: TEXT
-    - name: ROW_TYPE
-      data_type: TEXT
+# Override auto-generated sources with manual table definitions
+# These sources ARE in source_mappings.yml but have manual table definitions here
 
-- source_name: c_ltcs
+- name: c_ltcs
+  database: '"DEV__PUBLISHED_REPORTING__DIRECT_CARE"'
+  schema: '"C_LTCS"'
+  description: C-LTCS tables
   tables:
   - name: 'MDT_LOOKUP'
     identifier: 'MDT_LOOKUP'
     columns:
     - name: PCN_CODE
       data_type: TEXT
-    - name: DATE
+    - name: MDT_DATE
       data_type: DATE
   - name: 'STATUS_LOG'
     identifier: 'STATUS_LOG'
@@ -147,7 +106,7 @@ manual_table_overrides:
       data_type: NUMBER
     - name: PCN_CODE
       data_type: TEXT
-    - name: DATE
+    - name: MDT_DATE
       data_type: DATE
     - name: ACTION
       data_type: TEXT

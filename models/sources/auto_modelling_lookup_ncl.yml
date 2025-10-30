@@ -334,6 +334,27 @@ sources:
       data_type: TEXT
     - name: START_DATE
       data_type: DATE
+  - name: NCL_PROVIDER
+    identifier: '"NCL_PROVIDER"'
+    columns:
+    - name: SK_ORGANISATION_ID
+      data_type: NUMBER
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: PROVIDER_SHORTHAND
+      data_type: TEXT
+    - name: REPORTING_CODE
+      data_type: TEXT
+    - name: REPORTING_NAME
+      data_type: TEXT
+    - name: REPORTING_SHORTHAND
+      data_type: TEXT
+    - name: PROVIDER_TYPE
+      data_type: TEXT
+    - name: ROW_TYPE
+      data_type: TEXT
   - name: NEIGHBOURHOODS_2011
     identifier: '"NEIGHBOURHOODS_2011"'
     columns:
