@@ -8,6 +8,10 @@ models:
       - primarykey_id
       - episodes_id
       - opcs_id
+      config:
+        severity: error
+        error_if: ">1000"
+        warn_if: ">10"
   - dbt_expectations.expect_table_row_count_to_be_between:
       min_value: 1
   columns:
