@@ -24,7 +24,8 @@ jobs:
         run: |
           echo "release_created: ${{ steps.release.outputs.release_created }}"
           echo "prs_created: ${{ steps.release.outputs.prs_created }}"
-          echo "pr output: ${{ steps.release.outputs.pr }}"
+          PR_OUTPUT='${{ steps.release.outputs.pr }}'
+          echo "pr output: $PR_OUTPUT"
           echo "tag_name: ${{ steps.release.outputs.tag_name }}"
 
       # Auto-merge Release PR
