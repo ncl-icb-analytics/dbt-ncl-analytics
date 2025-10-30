@@ -1,8 +1,28 @@
 version: 2
-sources:
-# Manual sources - these are NOT in source_mappings.yml and will not be auto-generated
-# For sources in source_mappings.yml, use manual table definitions there if needed
+# Manual sources configuration
+# - Sources NOT in source_mappings.yml: Fully manual sources (e.g. 'aic')
+#   These must have database/schema defined here as they won't be auto-generated
+# 
+# IMPORTANT: For sources IN source_mappings.yml, define manual table overrides below
+# using the 'manual_table_overrides' key. These will be automatically merged into
+# the auto-generated files during source generation, so they won't appear as duplicates.
 
+sources:
+# Manual table definitions for sources that ARE in source_mappings.yml
+# These are merged into auto-generated files by 2_generate_sources.py
+# Format: source_name: {table_name: table_definition}
+# Example structure (commented out - uncomment and modify as needed):
+# - source_name: c_ltcs
+#   tables:
+#   - name: MDT_LOOKUP
+#     identifier: MDT_LOOKUP
+#     columns:
+#     - name: PCN_CODE
+#       data_type: TEXT
+#     - name: DATE
+#       data_type: DATE
+
+# Fully manual source (NOT in source_mappings.yml)
 - name: aic
   database: '"DATA_LAKE__NCL"'
   schema: '"AIC_DEV"'
@@ -81,5 +101,69 @@ sources:
     - name: APID
       data_type: NUMBER
     - name: VPID
+      data_type: NUMBER
+
+# Manual table overrides for sources IN source_mappings.yml
+# These are stored under 'manual_table_overrides' (not 'sources') so dbt doesn't see them as duplicate sources
+# The script automatically merges these into the auto-generated files during generation
+manual_table_overrides:
+- source_name: reference_lookup_ncl
+  tables:
+  - name: NCL_PROVIDER
+    identifier: '"NCL_PROVIDER"'
+    columns:
+    - name: SK_ORGANISATION_ID
+      data_type: NUMBER
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: PROVIDER_SHORTHAND
+      data_type: TEXT
+    - name: REPORTING_CODE
+      data_type: TEXT
+    - name: REPORTING_NAME
+      data_type: TEXT
+    - name: REPORTING_SHORTHAND
+      data_type: TEXT
+    - name: PROVIDER_TYPE
+      data_type: TEXT
+    - name: ROW_TYPE
+      data_type: TEXT
+
+- source_name: c_ltcs
+  tables:
+  - name: 'MDT_LOOKUP'
+    identifier: 'MDT_LOOKUP'
+    columns:
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: DATE
+      data_type: DATE
+  - name: 'STATUS_LOG'
+    identifier: 'STATUS_LOG'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: DATE
+      data_type: DATE
+    - name: ACTION
+      data_type: TEXT
+    - name: ACTION_DATE
+      data_type: TIMESTAMP_TZ
+    - name: CRITERIA
+      data_type: TEXT
+  - name: 'OP_OE_RATIO'
+    identifier: 'OP_OE_RATIO'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: OE_RATIO
+      data_type: NUMBER
+    - name: PREDICTED
+      data_type: NUMBER
+    - name: OP_ATT_TOT_12MO
       data_type: NUMBER
 
