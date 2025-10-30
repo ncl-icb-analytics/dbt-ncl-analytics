@@ -28,6 +28,11 @@ jobs:
           echo "pr output: $PR_OUTPUT"
           echo "tag_name: ${{ steps.release.outputs.tag_name }}"
 
+      # Checkout code for gh CLI
+      - name: Checkout code
+        if: ${{ steps.release.outputs.pr }}
+        uses: actions/checkout@v4
+
       # Auto-merge Release PR
       - name: Auto-merge Release PR
         if: ${{ steps.release.outputs.pr }}
