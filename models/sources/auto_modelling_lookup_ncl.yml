@@ -1,0 +1,425 @@
+version: 2
+sources:
+- name: reference_lookup_ncl
+  database: '"MODELLING"'
+  schema: '"LOOKUP_NCL"'
+  description: Analyst-managed reference datasets and business rules in the MODELLING
+    environment
+  tables:
+  - name: CCG_ICB
+    identifier: '"CCG_ICB"'
+    columns:
+    - name: OLD_CCG_CODE
+      data_type: TEXT
+    - name: NEW_CCG_CODE
+      data_type: TEXT
+    - name: ICB_CODE
+      data_type: TEXT
+    - name: ICB_NAME
+      data_type: TEXT
+  - name: FIN_WEEK_NUMBER_2019_2031
+    identifier: '"FIN_WEEK_NUMBER_2019_2031"'
+    columns:
+    - name: FULL_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: NEW_START_OF_FIN_WEEK
+      data_type: TIMESTAMP_NTZ
+    - name: NEW_FIN_YEAR
+      data_type: TEXT
+    - name: NEW_FIN_WEEK_NUM
+      data_type: NUMBER
+  - name: GP_PRACTICE
+    identifier: '"GP_PRACTICE"'
+    columns:
+    - name: SK_ORGANISATION_ID
+      data_type: NUMBER
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: PRACTICE_NAME_SHORT
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: PCN_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+  - name: GP_RAW_LIST_SIZE_AGE_SEX_HIST
+    identifier: '"GP_RAW_LIST_SIZE_AGE_SEX_HIST"'
+    columns:
+    - name: EXTRACT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SUB_ICB_LOCATION_CODE
+      data_type: TEXT
+    - name: ONS_SUB_ICB_LOCATION_CODE
+      data_type: TEXT
+    - name: ORG_CODE
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: SEX
+      data_type: TEXT
+    - name: AGE
+      data_type: TEXT
+    - name: NUMBER_OF_PATIENTS
+      data_type: FLOAT
+    - name: CREATE_TS
+      data_type: TIMESTAMP_NTZ
+  - name: GP_RAW_LIST_SIZE_AGE_SEX_LATEST
+    identifier: '"GP_RAW_LIST_SIZE_AGE_SEX_LATEST"'
+    columns:
+    - name: EXTRACT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SUB_ICB_LOCATION_CODE
+      data_type: TEXT
+    - name: ONS_SUB_ICB_LOCATION_CODE
+      data_type: TEXT
+    - name: ORG_CODE
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: SEX
+      data_type: TEXT
+    - name: AGE
+      data_type: TEXT
+    - name: NUMBER_OF_PATIENTS
+      data_type: FLOAT
+    - name: CREATE_TS
+      data_type: TIMESTAMP_NTZ
+  - name: GP_RAW_LIST_SIZE_TOTAL_LATEST
+    identifier: '"GP_RAW_LIST_SIZE_TOTAL_LATEST"'
+    columns:
+    - name: EXTRACT_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SUB_ICB_LOCATION_CODE
+      data_type: TEXT
+    - name: ONS_SUB_ICB_LOCATION_CODE
+      data_type: TEXT
+    - name: ORG_CODE
+      data_type: TEXT
+    - name: POSTCODE
+      data_type: TEXT
+    - name: TOTAL_LIST_SIZE
+      data_type: FLOAT
+    - name: CREATE_TS
+      data_type: TIMESTAMP_NTZ
+  - name: GP_WEIGHTED_LIST_SIZE_HIST
+    identifier: '"GP_WEIGHTED_LIST_SIZE_HIST"'
+    columns:
+    - name: SITE
+      data_type: TEXT
+    - name: FINANCIAL_QUARTER_DATE
+      data_type: DATE
+    - name: PCT
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: GMS_PMS_FLAG
+      data_type: TEXT
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PRACTICE_LIST_SIZE
+      data_type: NUMBER
+    - name: PRACTICE_NORMALISED_WEIGHTED_LIST_SIZE
+      data_type: FLOAT
+    - name: REPORT_EXECUTION_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: GP_WEIGHTED_LIST_SIZE_LATEST
+    identifier: '"GP_WEIGHTED_LIST_SIZE_LATEST"'
+    columns:
+    - name: SITE
+      data_type: TEXT
+    - name: FINANCIAL_QUARTER_DATE
+      data_type: DATE
+    - name: PCT
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: GMS_PMS_FLAG
+      data_type: TEXT
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PRACTICE_LIST_SIZE
+      data_type: NUMBER
+    - name: PRACTICE_NORMALISED_WEIGHTED_LIST_SIZE
+      data_type: FLOAT
+    - name: REPORT_EXECUTION_DATETIME
+      data_type: TIMESTAMP_NTZ
+  - name: IMD_2019
+    identifier: '"IMD_2019"'
+    columns:
+    - name: LSOA_CODE_2011
+      data_type: TEXT
+    - name: LSOA_NAME_2011
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_CODE_2019
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_NAME_2019
+      data_type: TEXT
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_SCORE
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_RANK
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_DECILE
+      data_type: NUMBER
+    - name: INCOME_SCORE
+      data_type: NUMBER
+    - name: INCOME_RANK
+      data_type: NUMBER
+    - name: INCOME_DECILE
+      data_type: NUMBER
+    - name: EMPLOYMENT_SCORE
+      data_type: NUMBER
+    - name: EMPLOYMENT_RANK
+      data_type: NUMBER
+    - name: EMPLOYMENT_DECILE
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_SCORE
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_RANK
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_DECILE
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_SCORE
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_RANK
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_DECILE
+      data_type: NUMBER
+    - name: CRIME_SCORE
+      data_type: NUMBER
+    - name: CRIME_RANK
+      data_type: NUMBER
+    - name: CRIME_DECILE
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_SCORE
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_RANK
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_DECILE
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_SCORE
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_RANK
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_DECILE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_SCORE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_RANK
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_DECILE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_SCORE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_RANK
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_DECILE
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB-DOMAIN_SCORE
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB-DOMAIN_RANK
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB-DOMAIN_DECILE
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB-DOMAIN_SCORE
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB-DOMAIN_RANK
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB-DOMAIN_DECILE
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB-DOMAIN_SCORE
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB-DOMAIN_RANK
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB-DOMAIN_DECILE
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB-DOMAIN_SCORE
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB-DOMAIN_RANK
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB-DOMAIN_DECILE
+      data_type: NUMBER
+    - name: INDOORS_SUB-DOMAIN_SCORE
+      data_type: NUMBER
+    - name: INDOORS_SUB-DOMAIN_RANK
+      data_type: NUMBER
+    - name: INDOORS_SUB-DOMAIN_DECILE
+      data_type: NUMBER
+    - name: OUTDOORS_SUB-DOMAIN_SCORE
+      data_type: NUMBER
+    - name: OUTDOORS_SUB-DOMAIN_RANK
+      data_type: NUMBER
+    - name: OUTDOORS_SUB-DOMAIN_DECILE
+      data_type: NUMBER
+    - name: TOTAL_POPULATION_MID_2015
+      data_type: NUMBER
+    - name: DEPENDENT_CHILDREN_AGED_0-15_MID_2015
+      data_type: NUMBER
+    - name: POPULATION_AGED_16-59_MID_2015
+      data_type: NUMBER
+    - name: OLDER_POPULATION_AGED_60_AND_OVER_MID_2015
+      data_type: NUMBER
+    - name: WORKING_AGE_POPULATION_18-59/64
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_QUINTILE
+      data_type: NUMBER
+  - name: IMD_PRACTICE
+    identifier: '"IMD_PRACTICE"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: DATE_INDICATOR
+      data_type: TEXT
+    - name: IMD_DECILE
+      data_type: NUMBER
+  - name: LSOA_2021_WARD_2025_LOCAL_AUTHORITY_2025
+    identifier: '"LSOA_2021_WARD_2025_LOCAL_AUTHORITY_2025"'
+    columns:
+    - name: LSOA_2021_CODE
+      data_type: TEXT
+    - name: LSOA_2021_NAME
+      data_type: TEXT
+    - name: WARD_2025_CODE
+      data_type: TEXT
+    - name: WARD_2025_NAME
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_2025_CODE
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_2025_NAME
+      data_type: TEXT
+    - name: RESIDENT_FLAG
+      data_type: TEXT
+  - name: NCL_GP_PRACTICE_NEIGHBOURHOOD
+    identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+  - name: NCL_NEIGHBOURHOOD
+    identifier: '"NCL_NEIGHBOURHOOD"'
+    columns:
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+  - name: NCL_NEIGHBOURHOOD_LSOA_2021_LATEST
+    identifier: '"NCL_NEIGHBOURHOOD_LSOA_2021_LATEST"'
+    columns:
+    - name: LSOA_2021_CODE
+      data_type: TEXT
+    - name: LSOA_2021_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: DATE
+  - name: NEIGHBOURHOODS_2011
+    identifier: '"NEIGHBOURHOODS_2011"'
+    columns:
+    - name: LSOA11CD
+      data_type: TEXT
+    - name: LSOA11NM
+      data_type: TEXT
+    - name: LSOA21CD_1
+      data_type: TEXT
+    - name: LSOA21NM_1
+      data_type: TEXT
+    - name: WD24CD
+      data_type: TEXT
+    - name: WD24NM
+      data_type: TEXT
+    - name: LAD24CD
+      data_type: TEXT
+    - name: LAD24NM
+      data_type: TEXT
+    - name: Neighbourhood
+      data_type: TEXT
+  - name: NHSE_SERVICE_CODES_2526
+    identifier: '"NHSE_SERVICE_CODES_2526"'
+    columns:
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SERVICE_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_CODE_INCLUDING_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_CATEGORY_DESCRIPTION
+      data_type: TEXT
+    - name: National_Programme_of_Care_(NPoC)_Category_and_Clinical_Reference_Group_(CRG)
+      data_type: TEXT
+    - name: HIGHLY_SPECIALISED_SERVICE
+      data_type: TEXT
+    - name: Identified_by_PS_Operational_Tool_2024/25
+      data_type: TEXT
+    - name: NOTES
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: DATE
+    - name: EFFECTIVE_TO
+      data_type: TEXT
+    - name: IS_CURRENT
+      data_type: NUMBER
+    - name: 2024/25_ICB_Delegation_Status
+      data_type: TEXT
+    - name: 2025/26_ICB_Delegation_Status
+      data_type: TEXT
+    - name: DELEGATION_STATUS_CHANGE
+      data_type: BOOLEAN
+    - name: GROUPING
+      data_type: TEXT
+    - name: AMENDED_RECORD_INDICATOR
+      data_type: TEXT
+  - name: POPULATION_SEGMENTATION_CODE_LOOKUP
+    identifier: '"POPULATION_SEGMENTATION_CODE_LOOKUP"'
+    columns:
+    - name: POPSEG_CODE
+      data_type: TEXT
+    - name: POPSEG_NAME
+      data_type: TEXT
+  - name: PS_SEG_LKP
+    identifier: '"PS_SEG_LKP"'
+    columns:
+    - name: POPSEG
+      data_type: TEXT
+    - name: POPSEG_DESC
+      data_type: TEXT
+  - name: WORKING_AND_CALENDAR_DAYS
+    identifier: '"WORKING_AND_CALENDAR_DAYS"'
+    columns:
+    - name: FIN_YEAR
+      data_type: TEXT
+    - name: FIN_MONTH
+      data_type: TEXT
+    - name: FIN_MONTH_NO
+      data_type: NUMBER
+    - name: MONTH
+      data_type: TEXT
+    - name: CALENDAR_DAYS
+      data_type: NUMBER
+    - name: WORKING_DAYS
+      data_type: NUMBER
+    - name: FIN_YEAR_SHORT
+      data_type: TEXT
+    - name: FIN_YEAR_SHORT_DASH
+      data_type: TEXT

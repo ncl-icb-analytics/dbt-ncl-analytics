@@ -242,3 +242,25 @@ sources:
     description: Practice fact tables
     raw_prefix: raw_fact_practice
     domain: shared
+
+  # ========================================
+  # MANUAL SOURCES (not auto-generated)
+  # ========================================
+  # These sources are manually defined in models/sources/sources.yml
+  # They are included here for raw model generation configuration only
+
+  # Reference Lookup NCL - Analyst-managed reference datasets
+  - source_name: reference_lookup_ncl
+    database: MODELLING
+    schema: LOOKUP_NCL
+    description: Analyst-managed reference datasets and business rules in the MODELLING environment
+    raw_prefix: raw_reference_lookup_ncl
+    domain: shared
+
+  # C-LTCS tables
+  - source_name: c_ltcs
+    database: DEV__PUBLISHED_REPORTING__DIRECT_CARE
+    schema: C_LTCS
+    description: C-LTCS tables
+    raw_prefix: raw_c_ltcs
+    domain: commissioning

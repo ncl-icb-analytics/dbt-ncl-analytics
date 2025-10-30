@@ -1,5 +1,8 @@
 version: 2
 sources:
+# Manual sources - these are NOT in source_mappings.yml and will not be auto-generated
+# For sources in source_mappings.yml, use manual table definitions there if needed
+
 - name: aic
   database: '"DATA_LAKE__NCL"'
   schema: '"AIC_DEV"'
@@ -79,3 +82,4 @@ sources:
       data_type: NUMBER
     - name: VPID
       data_type: NUMBER
+

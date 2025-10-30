@@ -158,36 +158,75 @@ def main():
         sys.exit(1)
 
     # Read all .yml files from sources directory
+    # Sources in source_mappings.yml: Use auto-generated file (which already has manual table definitions preferred)
+    # Sources NOT in source_mappings.yml: Use manual sources.yml definition
     all_sources = []
-    for filename in os.listdir(SOURCES_DIR):
-        if filename.endswith('.yml'):
+    source_files = {}  # Track which file each source came from
+    manual_sources = {}  # Track manual sources by name (NOT in source_mappings.yml)
+    auto_sources = {}  # Track auto-generated sources by name
+    
+    # Get list of source names from mappings (these are auto-generated)
+    auto_generated_source_names = set(mappings.keys())
+    
+    # First, load manual sources.yml (only for sources NOT in source_mappings.yml)
+    manual_sources_file = os.path.join(SOURCES_DIR, 'sources.yml')
+    if os.path.exists(manual_sources_file):
+        with open(manual_sources_file) as f:
+            sources_data = yaml.safe_load(f)
+            if sources_data and 'sources' in sources_data:
+                for source in sources_data['sources']:
+                    source_name = source['name']
+                    # Only include if NOT in source_mappings.yml (fully manual sources like 'aic')
+                    if source_name not in auto_generated_source_names:
+                        manual_sources[source_name] = source
+                        source_files[source_name] = 'sources.yml'
+    
+    # Then load auto-generated files (excluding sources.yml)
+    for filename in sorted(os.listdir(SOURCES_DIR)):
+        if filename.endswith('.yml') and filename != 'sources.yml':
             filepath = os.path.join(SOURCES_DIR, filename)
             with open(filepath) as f:
                 sources_data = yaml.safe_load(f)
                 if sources_data and 'sources' in sources_data:
-                    all_sources.extend(sources_data['sources'])
+                    for source in sources_data['sources']:
+                        source_name = source['name']
+                        # Auto-generated sources (from source_mappings.yml) take precedence
+                        # Manual table definitions are already merged during generation
+                        auto_sources[source_name] = source
+                        source_files[source_name] = filename
+    
+    # Combine all sources: manual-only sources + auto-generated sources
+    for source_name, source in manual_sources.items():
+        all_sources.append(source)
+    for source_name, source in auto_sources.items():
+        all_sources.append(source)
 
     total_models = 0
     models_by_domain = {'commissioning': 0, 'olids': 0, 'shared': 0, 'phenolab': 0}
 
     for source in all_sources:
         source_name = source['name']
+        
+        # Use source name as-is for source() calls (no 'auto_' prefix)
+        # The 'auto_' prefix is only in filenames, not in source names
+        source_ref_name = source_name
+        original_source_name = source_name  # For mapping lookup
 
-        # Get raw prefix and domain from mappings
-        if source_name in mappings:
-            mapping = mappings[source_name]
-            prefix = mapping.get('raw_prefix', f'raw_{source_name}')
+        # Get raw prefix and domain from mappings using original source name
+        if original_source_name in mappings:
+            mapping = mappings[original_source_name]
+            prefix = mapping.get('raw_prefix', f'raw_{original_source_name}')
             domain = mapping.get('domain', 'commissioning')  # Default to commissioning if not specified
         else:
-            prefix = f'raw_{source_name}'
+            prefix = f'raw_{original_source_name}'
             # Set domain based on source name patterns
-            if source_name.startswith('reference') or source_name == 'olids':
+            if original_source_name.startswith('reference') or original_source_name == 'olids':
                 domain = 'commissioning'  # Reference sources go to commissioning
-            elif source_name.startswith('dictionary'):
+            elif original_source_name.startswith('dictionary'):
                 domain = 'shared'  # Dictionary sources go to shared
             else:
                 domain = 'commissioning'  # Default
-            print(f"Warning: No mapping found for source '{source_name}', using defaults (domain: {domain})")
+            print(f"Warning: No mapping found for source '{original_source_name}', using defaults (domain: {domain})")
 
         # Set raw directory based on new layer-first structure
         raw_dir = os.path.join(PROJECT_DIR, 'models', 'raw', domain)
@@ -220,12 +259,14 @@ def main():
                 description_comment = f"-- Description: {source.get('description')}\n"
 
             schema_info = f".{source['schema']}" if 'schema' in source else ""
-            model_sql = f"""-- Raw layer model for {source_name}.{table_name}
+            # Use source_ref_name (prefixed for auto, original for manual) in source() call
+            # But keep raw model names unchanged (using prefix from mappings)
+            model_sql = f"""-- Raw layer model for {source_ref_name}.{table_name}
 -- Source: {source['database']}{schema_info}
 {description_comment}-- This is a 1:1 passthrough from source with standardized column names
 select
     {column_list}
-from {{{{ source('{source_name}', '{table_name}') }}}}"""
+from {{{{ source('{source_ref_name}', '{table_name}') }}}}"""
 
             # Create model name with prefix and safe table name
             model_name = f"{prefix}_{table_name_safe}"

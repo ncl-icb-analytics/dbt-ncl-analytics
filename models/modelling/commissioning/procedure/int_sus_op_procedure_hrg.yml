@@ -58,7 +58,7 @@ models:
         data_type: varchar
         description: "HRG code. Either: Unbundled HRG code or the core HRG derived by SUS as a result of HRG grouping and used for tariff application"
         tests:
-        - not null
+        - not_null
 
       - name: concept_name
         data_type: varchar

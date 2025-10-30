@@ -1,0 +1,249 @@
+version: 2
+sources:
+- name: c_ltcs
+  database: '"DEV__PUBLISHED_REPORTING__DIRECT_CARE"'
+  schema: '"C_LTCS"'
+  description: C-LTCS tables
+  tables:
+  - name: COHORT_DATA
+    identifier: '"COHORT_DATA"'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: AGE
+      data_type: NUMBER
+    - name: MAIN_LANGUAGE
+      data_type: TEXT
+    - name: MAIN_LANGUAGE_FLAG
+      data_type: NUMBER
+    - name: AE_ENCOUNTERS_SL
+      data_type: ARRAY
+    - name: IP_ENCOUNTERS_SL
+      data_type: ARRAY
+    - name: OP_ENCOUNTERS_SL
+      data_type: ARRAY
+    - name: GP_ENCOUNTERS_SL
+      data_type: ARRAY
+    - name: HAS_ATRIAL_FIBRILLATION
+      data_type: BOOLEAN
+    - name: HAS_ASTHMA
+      data_type: BOOLEAN
+    - name: HAS_CANCER
+      data_type: BOOLEAN
+    - name: HAS_CORONARY_HEART_DISEASE
+      data_type: BOOLEAN
+    - name: HAS_CHRONIC_KIDNEY_DISEASE
+      data_type: BOOLEAN
+    - name: HAS_COPD
+      data_type: BOOLEAN
+    - name: HAS_CYP_ASTHMA
+      data_type: BOOLEAN
+    - name: HAS_DEMENTIA
+      data_type: BOOLEAN
+    - name: HAS_DEPRESSION
+      data_type: BOOLEAN
+    - name: HAS_DIABETES
+      data_type: BOOLEAN
+    - name: HAS_EPILEPSY
+      data_type: BOOLEAN
+    - name: HAS_FAMILIAL_HYPERCHOLESTEROLAEMIA
+      data_type: BOOLEAN
+    - name: HAS_GESTATIONAL_DIABETES
+      data_type: BOOLEAN
+    - name: HAS_FRAILTY
+      data_type: BOOLEAN
+    - name: HAS_HEART_FAILURE
+      data_type: BOOLEAN
+    - name: HAS_HYPERTENSION
+      data_type: BOOLEAN
+    - name: HAS_LEARNING_DISABILITY
+      data_type: BOOLEAN
+    - name: HAS_LEARNING_DISABILITY_ALL_AGES
+      data_type: BOOLEAN
+    - name: HAS_NAFLD
+      data_type: BOOLEAN
+    - name: HAS_NON_DIABETIC_HYPERGLYCAEMIA
+      data_type: BOOLEAN
+    - name: HAS_OBESITY
+      data_type: BOOLEAN
+    - name: HAS_OSTEOPOROSIS
+      data_type: BOOLEAN
+    - name: HAS_PERIPHERAL_ARTERIAL_DISEASE
+      data_type: BOOLEAN
+    - name: HAS_PALLIATIVE_CARE
+      data_type: BOOLEAN
+    - name: HAS_RHEUMATOID_ARTHRITIS
+      data_type: BOOLEAN
+    - name: HAS_SEVERE_MENTAL_ILLNESS
+      data_type: BOOLEAN
+    - name: HAS_STROKE_TIA
+      data_type: BOOLEAN
+    - name: TOTAL_CONDITIONS
+      data_type: NUMBER
+    - name: TOTAL_QOF_CONDITIONS
+      data_type: NUMBER
+    - name: TOTAL_NON_QOF_CONDITIONS
+      data_type: NUMBER
+    - name: CARDIOVASCULAR_CONDITIONS
+      data_type: NUMBER
+    - name: RESPIRATORY_CONDITIONS
+      data_type: NUMBER
+    - name: MENTAL_HEALTH_CONDITIONS
+      data_type: NUMBER
+    - name: METABOLIC_CONDITIONS
+      data_type: NUMBER
+    - name: MUSCULOSKELETAL_CONDITIONS
+      data_type: NUMBER
+    - name: NEUROLOGY_CONDITIONS
+      data_type: NUMBER
+    - name: GERIATRIC_CONDITIONS
+      data_type: NUMBER
+    - name: SMOKING_STATUS
+      data_type: TEXT
+    - name: SMOKING_RISK_SORT_KEY
+      data_type: NUMBER
+    - name: BMI_CATEGORY
+      data_type: TEXT
+    - name: BMI_VALUE
+      data_type: FLOAT
+    - name: BMI_RISK_SORT_KEY
+      data_type: NUMBER
+    - name: ALCOHOL_STATUS
+      data_type: TEXT
+    - name: ALCOHOL_RISK_SORT_KEY
+      data_type: NUMBER
+    - name: IS_CURRENTLY_PREGNANT
+      data_type: BOOLEAN
+    - name: IS_OVERALL_BP_CONTROLLED
+      data_type: BOOLEAN
+    - name: IS_MOST_RECENT_OVERALL_BP_CONTROLLED
+      data_type: BOOLEAN
+    - name: LATEST_SYSTOLIC_VALUE
+      data_type: FLOAT
+    - name: LATEST_DIASTOLIC_VALUE
+      data_type: FLOAT
+    - name: LATEST_BP_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: CARE_PROCESSES_COMPLETED
+      data_type: NUMBER
+    - name: LATEST_HBA1C_VALUE
+      data_type: NUMBER
+    - name: LATEST_HBA1C_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: OP_ATT_TOT_12MO
+      data_type: NUMBER
+    - name: OP_SPEC_12MO
+      data_type: NUMBER
+    - name: OP_PROV_12MO
+      data_type: NUMBER
+    - name: OP_PREDICTED
+      data_type: NUMBER
+    - name: OP_OE_RATIO
+      data_type: NUMBER
+    - name: APC_12MO
+      data_type: NUMBER
+    - name: APC_LOS_12MO
+      data_type: NUMBER
+    - name: AE_T1_12MO
+      data_type: NUMBER
+    - name: AE_INJ_12MO
+      data_type: NUMBER
+    - name: AE_TOT_12MO
+      data_type: NUMBER
+    - name: GP_ATT_TOT_12MO
+      data_type: NUMBER
+    - name: GP_APP_TOT_12MO
+      data_type: NUMBER
+    - name: GP_DNA_TOT_12MO
+      data_type: NUMBER
+    - name: WL_TOTAL_COUNT
+      data_type: NUMBER
+    - name: WL_PROVIDER_COUNT
+      data_type: NUMBER
+    - name: WL_SPECIALTY_COUNT
+      data_type: NUMBER
+    - name: HAS_SAME_TFC_MULTIPLE_PROVIDERS_FLAG
+      data_type: BOOLEAN
+    - name: MEDICATION_COUNT
+      data_type: NUMBER
+    - name: MEDICATION_NAME_LIST
+      data_type: ARRAY
+    - name: IS_POLYPHARMACY_5PLUS
+      data_type: BOOLEAN
+    - name: ATTENDANCE_DIFFICULTY_SCORE
+      data_type: NUMBER
+  - name: INCLUSION_COHORT
+    identifier: '"INCLUSION_COHORT"'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: RE_ID_KEY
+      data_type: TEXT
+    - name: OLIDS_ID
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: PCN_NAME
+      data_type: TEXT
+    - name: MAIN_LANGUAGE
+      data_type: TEXT
+    - name: AGE
+      data_type: NUMBER
+    - name: GENDER
+      data_type: TEXT
+    - name: ETHNICITY_CATEGORY
+      data_type: TEXT
+    - name: ELIGIBLE
+      data_type: NUMBER
+  - name: PERSON_SUMMARY
+    identifier: '"PERSON_SUMMARY"'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: PCN
+      data_type: NUMBER
+    - name: ELIGIBLE
+      data_type: NUMBER
+    - name: FEMALE
+      data_type: NUMBER
+    - name: AGE
+      data_type: FLOAT
+    - name: WEIGHT
+      data_type: FLOAT
+    - name: DISEASE_PROB
+      data_type: FLOAT
+    - name: HAS_DISEASE_1
+      data_type: NUMBER
+    - name: BIOMARKER_1
+      data_type: FLOAT
+    - name: BIOMARKER_2
+      data_type: FLOAT
+    - name: CV_EVENTS
+      data_type: NUMBER
+    - name: AV_EVENTS_PER_YEAR
+      data_type: NUMBER
+    - name: SCORE
+      data_type: FLOAT
+    - name: RANK_PCT_EVENTS
+      data_type: FLOAT
+    - name: RANK_PCT_CV_EV
+      data_type: FLOAT
+  - name: TRAJECTORIES
+    identifier: '"TRAJECTORIES"'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: AE_ENCOUNTERS_SL
+      data_type: ARRAY
+    - name: IP_ENCOUNTERS_SL
+      data_type: ARRAY
+    - name: OP_ENCOUNTERS_SL
+      data_type: ARRAY
+    - name: GP_ENCOUNTERS_SL
+      data_type: ARRAY
