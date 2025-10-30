@@ -6,6 +6,7 @@ with unbundled as(
         , unbundled_hrg_id as problem_order
         , code
     from {{ref('stg_sus_op_appointment_commissioning_grouping_unbundled_hrg')}}
+    where code is not null
 ),
 core as (
     select
@@ -13,6 +14,7 @@ core as (
         0::number as problem_order, 
         appointment_commissioning_grouping_core_hrg as code
     from {{ ref('stg_sus_op_appointment')}} 
+    where appointment_commissioning_grouping_core_hrg is not null
 ),
 hrg_list as(
     select *
