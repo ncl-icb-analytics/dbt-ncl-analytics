@@ -20,6 +20,9 @@ select core.primarykey_id
     , core.spell_patient_identity_nhs_number_value_pseudo as sk_patient_id
     , core.spell_care_location_site_code_of_treatment
     , core.spell_admission_date
+    , core.spell_admission_method
+    , core.spell_admission_patient_classification
+    , core.spell_discharge_date
     , core.spell_discharge_length_of_hospital_stay
     , case when vo.organisation_code is not null 
         then core.SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER 
