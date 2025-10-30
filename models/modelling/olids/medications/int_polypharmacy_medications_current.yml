@@ -3,14 +3,22 @@ version: 2
 models:
   - name: int_polypharmacy_medications_current
     description: |
-      Current repeat medications within polypharmacy scope (BNF chapters 1-4, 6-10).
+      Current repeat medications within polypharmacy scope using exclusion-based filtering.
 
       Grain: One row per person × medication (current polypharmacy-scope medications only)
 
       Inclusion criteria:
       - Current repeat prescriptions (from int_medication_orders_repeat_current)
-      - BNF chapters 1-4, 6-10 only (INNER JOIN with polypharmacy medications list)
+      - Medications in polypharmacy scope (INNER JOIN with int_polypharmacy_medications_list)
       - Active supply (order date + duration >= today)
+
+      Polypharmacy scope excludes:
+      - Most of Chapter 5 (infections, except HIV 5.3.1 and hepatitis 5.3.3)
+      - Chapter 9 subchapters (vitamins, minerals, nutrition)
+      - Various subchapters (contraceptives, thyroid drugs, topicals, etc.)
+      - Chapters 11-15, 18, 20-23 (devices, dressings, appliances)
+
+      See int_polypharmacy_medications_list for complete exclusion details.
 
       Enriched with BNF details for medication identification and categorization.
 
@@ -31,7 +39,7 @@ models:
           - not_null
 
       - name: bnf_chapter
-        description: BNF chapter (01-04, 06-10)
+        description: BNF chapter (2-digit code) - varies based on polypharmacy scope exclusions
         data_tests:
           - not_null
 
