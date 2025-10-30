@@ -343,6 +343,32 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'FACT_PRACTICE'
+  
+  UNION ALL
+  
+    -- reference_lookup_ncl: Analyst-managed reference datasets and business rules in the MODELLING environment
+  SELECT 
+    'MODELLING' as database_name,
+    'LOOKUP_NCL' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "MODELLING".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'LOOKUP_NCL'
+  
+  UNION ALL
+  
+    -- c_ltcs: C-LTCS tables
+  SELECT 
+    'DEV__PUBLISHED_REPORTING__DIRECT_CARE' as database_name,
+    'C_LTCS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DEV__PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'C_LTCS'
 )
 
 SELECT 

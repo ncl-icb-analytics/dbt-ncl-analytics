@@ -5,6 +5,7 @@
 select
     "INDICATOR_ID" as indicator_id,
     "AREA_ID" as area_id,
+    "AREA_TYPE" as area_type,
     "DATE_UPDATED_LOCAL" as date_updated_local,
     "IS_LATEST" as is_latest,
     "_TIMESTAMP" as timestamp

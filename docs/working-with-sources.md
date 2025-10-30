@@ -4,6 +4,22 @@
 
 This project uses a dynamic, configuration-driven approach to generate dbt sources and staging models. Everything is controlled by a single configuration file that drives the entire process.
 
+## Source File Structure
+
+Sources are organised into two types:
+
+1. **Auto-generated sources** (`auto_*.yml` files):
+   - Generated automatically from database metadata
+   - Located in `models/sources/auto_*.yml`
+   - Include all tables found in the configured database/schema
+   - Re-generated each time the source generation script runs
+
+2. **Manual sources** (`sources.yml`):
+   - Manually defined and maintained
+   - Located in `models/sources/sources.yml`
+   - Used for sources not in `source_mappings.yml` or with custom table definitions
+   - Take precedence over auto-generated sources (prevents duplicates)
+
 ## Step-by-Step Workflow
 
 ### 1. Configure Your Data Sources
@@ -38,7 +54,7 @@ This creates `scripts/sources/metadata_query.sql` with SQL that queries only the
 4. Export results as CSV 
 5. Save as `table_metadata.csv` in the project root directory
 
-### 4. Generate dbt Sources File
+### 4. Generate dbt Sources Files
 
 Run the Python script to convert the CSV metadata into dbt sources:
 
@@ -46,7 +62,12 @@ Run the Python script to convert the CSV metadata into dbt sources:
 python scripts/sources/2_generate_sources.py
 ```
 
-This creates `models/sources.yml` with all your table definitions.
+This creates auto-generated source files (`models/sources/auto_*.yml`) for all sources defined in `source_mappings.yml`. 
+
+**Important:** The script automatically:
+- Skips auto-generating sources that are manually defined in `sources.yml`
+- Cleans up existing auto-generated files if sources become manual
+- Prevents duplicate source definitions
 
 ### 5. Generate Staging Models
 
@@ -65,14 +86,51 @@ dbt run         # Build all models
 dbt test        # Run data quality tests
 ```
 
-## Single sources.yml File
+## Manual Sources (sources.yml)
 
-**Location:** `models/sources.yml`
+**Location:** `models/sources/sources.yml`
 
-This single file contains ALL data sources from ALL domains:
-- Commissioning sources (wl, sus_op, sus_apc, epd_primary_care, dictionary)
-- OLIDS sources (future integration when OLIDS moves out of UAT)
-- Shared sources (cross-domain reference data)
+This file contains manually defined sources that:
+- Are NOT in `source_mappings.yml` (fully manual sources like `aic`)
+- Override auto-generated sources with custom table definitions (like `c_ltcs`)
+
+### When to Use Manual Sources
+
+Use manual sources in `sources.yml` when:
+
+1. **Source is not in source_mappings.yml**: The source won't be auto-generated, so define it manually
+2. **You need custom table definitions**: Only specific tables are needed, not all tables in the schema
+3. **You need custom column definitions**: Override auto-generated column metadata
+
+### Examples
+
+**Fully manual source** (not in source_mappings.yml):
+```yaml
+- name: aic
+  database: '"DATA_LAKE__NCL"'
+  schema: '"AIC_DEV"'
+  description: AIC pipelines
+  tables:
+    - name: BASE_ATHENA__CONCEPT
+      # ... column definitions
+```
+
+**Partial override** (source exists in source_mappings.yml but only some tables needed):
+```yaml
+- name: c_ltcs
+  database: '"DEV__PUBLISHED_REPORTING__DIRECT_CARE"'
+  schema: '"C_LTCS"'
+  description: C-LTCS tables
+  tables:
+    - name: MDT_LOOKUP  # Only this table, not all tables in schema
+      # ... column definitions
+```
+
+## Auto-Generated Sources
+
+**Location:** `models/sources/auto_*.yml`
+
+These files are automatically generated and include ALL tables found in the configured database/schema. Do not edit these files manually - they will be overwritten on the next generation run.
 
 ## How Sources Map to Models
 
@@ -99,12 +157,35 @@ When you run `3_generate_staging_models.py`, it reads `sources.yml` and creates 
 
 ## Key Points
 
-1. **One sources.yml** - All sources in one file
-2. **Multiple staging folders** - Models distributed by domain
-3. **source() function** - Works the same regardless of folder:
+1. **Manual sources override auto-generated** - If a source exists in `sources.yml`, it won't be auto-generated
+2. **No duplicates** - The generation script prevents duplicate source definitions
+3. **Multiple staging folders** - Models distributed by domain
+4. **source() function** - Works the same regardless of folder:
    ```sql
    -- In any staging model:
    SELECT * FROM {{ source('wl', 'WL_OpenPathways_Data') }}
    ```
 
-4. **Domain selection** - Models are organised by domain for clear separation of concerns
+5. **Domain selection** - Models are organised by domain for clear separation of concerns
+
+## Best Practices
+
+### Adding a New Source
+
+1. **If all tables are needed**: Add to `source_mappings.yml` and let it auto-generate
+2. **If only specific tables needed**: Add to `sources.yml` with manual table definitions
+3. **If source not in mappings**: Define fully in `sources.yml`
+
+### Updating an Existing Source
+
+1. **Auto-generated source**: Update `source_mappings.yml` and regenerate
+2. **Manual source**: Edit `sources.yml` directly
+3. **Convert auto to manual**: Add to `sources.yml` and the script will skip auto-generation automatically
+
+### Avoiding Duplicates
+
+- Never define the same source in both `sources.yml` and auto-generated files
+- The script prevents this automatically, but if you see duplicate errors:
+  - Check if source exists in `sources.yml`
+  - Check if source is being auto-generated
+  - Remove it from one location

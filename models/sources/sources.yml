@@ -1,4 +1,8 @@
 version: 2
+# Manual sources - these override auto-generation
+# If a source is defined here, it will be used instead of auto-generating from metadata
+# Sources can be fully manual (not in source_mappings.yml) or override auto-generated sources (in source_mappings.yml)
+
 sources:
 - name: aic
   database: '"DATA_LAKE__NCL"'
@@ -79,3 +83,46 @@ sources:
       data_type: NUMBER
     - name: VPID
       data_type: NUMBER
+
+# Override auto-generated sources with manual table definitions
+# These sources ARE in source_mappings.yml but have manual table definitions here
+
+- name: c_ltcs
+  database: '"DEV__PUBLISHED_REPORTING__DIRECT_CARE"'
+  schema: '"C_LTCS"'
+  description: C-LTCS tables
+  tables:
+  - name: 'MDT_LOOKUP'
+    identifier: 'MDT_LOOKUP'
+    columns:
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: MDT_DATE
+      data_type: DATE
+  - name: 'STATUS_LOG'
+    identifier: 'STATUS_LOG'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: MDT_DATE
+      data_type: DATE
+    - name: ACTION
+      data_type: TEXT
+    - name: ACTION_DATE
+      data_type: TIMESTAMP_TZ
+    - name: CRITERIA
+      data_type: TEXT
+  - name: 'OP_OE_RATIO'
+    identifier: 'OP_OE_RATIO'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: OE_RATIO
+      data_type: NUMBER
+    - name: PREDICTED
+      data_type: NUMBER
+    - name: OP_ATT_TOT_12MO
+      data_type: NUMBER
+

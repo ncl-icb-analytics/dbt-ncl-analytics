@@ -1,0 +1,2203 @@
+version: 2
+sources:
+- name: reference_analyst_managed
+  database: '"DATA_LAKE__NCL"'
+  schema: '"ANALYST_MANAGED"'
+  description: Analyst-managed reference datasets and business rules
+  tables:
+  - name: BP_THRESHOLDS
+    identifier: '"BP_THRESHOLDS"'
+    columns:
+    - name: THRESHOLD_RULE_ID
+      data_type: TEXT
+    - name: PROGRAMME_OR_GUIDELINE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: PATIENT_GROUP
+      data_type: TEXT
+    - name: THRESHOLD_TYPE
+      data_type: TEXT
+    - name: SYSTOLIC_THRESHOLD
+      data_type: NUMBER
+    - name: DIASTOLIC_THRESHOLD
+      data_type: NUMBER
+    - name: OPERATOR
+      data_type: TEXT
+    - name: NOTES
+      data_type: TEXT
+  - name: CANCER__FDS_OUTCOMES
+    identifier: '"CANCER__FDS_OUTCOMES"'
+    columns:
+    - name: PERIOD
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: STANDARD
+      data_type: TEXT
+    - name: ORG_CODE
+      data_type: TEXT
+    - name: STAGE_ROUTE
+      data_type: TEXT
+    - name: FDS_END_REASON
+      data_type: TEXT
+    - name: CANCER_TYPE
+      data_type: TEXT
+    - name: TOTAL_TREATED
+      data_type: NUMBER
+    - name: WITHIN_STANDARD
+      data_type: NUMBER
+    - name: BREACHES
+      data_type: NUMBER
+  - name: COMMUNITY_P2_OCCUPANCY
+    identifier: '"COMMUNITY_P2_OCCUPANCY"'
+    columns:
+    - name: UNIT_NAME
+      data_type: TEXT
+    - name: BEDDED_CAPACITY
+      data_type: TEXT
+    - name: ADMISSIONS_IN_MONTH
+      data_type: TEXT
+    - name: DISCHARGES_IN_MONTH
+      data_type: NUMBER
+    - name: AVERAGE_LOS_OF_PATIENTS_DISCHARGED
+      data_type: TEXT
+    - name: BED_DAYS_FOR_DISCHARGED_PATIENTS
+      data_type: TEXT
+    - name: BED_DAYS_AVAILABLE
+      data_type: NUMBER
+    - name: BED_DAYS_OCCUPIED
+      data_type: NUMBER
+    - name: OCCUPANCY_RATE
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: PROVIDER
+      data_type: TEXT
+  - name: COMMUNITY_WAITING_TIMES_LOCAL
+    identifier: '"COMMUNITY_WAITING_TIMES_LOCAL"'
+    columns:
+    - name: SUBMITTED_MONTH
+      data_type: DATE
+    - name: REPORTED_MONTH
+      data_type: DATE
+    - name: PROVIDER
+      data_type: TEXT
+    - name: PROVIDER_SITE
+      data_type: TEXT
+    - name: SERVICE_LINE
+      data_type: TEXT
+    - name: 0-6_WEEKS
+      data_type: NUMBER
+    - name: 6-12_WEEKS
+      data_type: NUMBER
+    - name: 12-16_WEEKS
+      data_type: NUMBER
+    - name: 16-18_WEEKS
+      data_type: NUMBER
+    - name: 18-30_WEEKS
+      data_type: NUMBER
+    - name: 30-40_WEEKS
+      data_type: NUMBER
+    - name: 40-52_WEEKS
+      data_type: NUMBER
+    - name: 52+_WEEKS
+      data_type: NUMBER
+    - name: TOTAL
+      data_type: NUMBER
+    - name: AVERAGE_WEEKS_WAITING
+      data_type: NUMBER
+    - name: SERVICE_LINE_GROUP
+      data_type: TEXT
+    - name: SERVICE_LINE_GROUP_2
+      data_type: TEXT
+    - name: AGE_GROUP
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: PROVIDER_SERVICE_LINE
+      data_type: TEXT
+    - name: IS_EXCLUDED
+      data_type: BOOLEAN
+    - name: EXCLUSION_GROUP
+      data_type: TEXT
+  - name: CONSULTANT_CONNECT
+    identifier: '"CONSULTANT_CONNECT"'
+    columns:
+    - name: Date
+      data_type: TIMESTAMP_NTZ
+    - name: Time
+      data_type: TIMESTAMP_NTZ
+    - name: User
+      data_type: TEXT
+    - name: Organisation
+      data_type: TEXT
+    - name: GP_Code
+      data_type: TEXT
+    - name: GPPracticeName
+      data_type: TEXT
+    - name: grand_total_weighted_list_size
+      data_type: FLOAT
+    - name: borough
+      data_type: TEXT
+    - name: PCN
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: ICS
+      data_type: TEXT
+    - name: Photos
+      data_type: FLOAT
+    - name: Shared with
+      data_type: TEXT
+    - name: Consultant
+      data_type: TEXT
+    - name: Trust
+      data_type: TEXT
+    - name: ResponseTimeFormatted
+      data_type: TEXT
+    - name: ResponseTimeSeconds
+      data_type: FLOAT
+    - name: WaitTimeSeconds
+      data_type: FLOAT
+    - name: TalkTimeSeconds
+      data_type: FLOAT
+    - name: Specialism
+      data_type: TEXT
+    - name: ServiceType
+      data_type: TEXT
+    - name: RotaPosition
+      data_type: FLOAT
+    - name: Outcome
+      data_type: TEXT
+    - name: DateClosed
+      data_type: TEXT
+    - name: LastActivity
+      data_type: TEXT
+    - name: ContactType
+      data_type: TEXT
+    - name: Activity
+      data_type: NUMBER
+  - name: CSDS_LOOKUP
+    identifier: '"CSDS_LOOKUP"'
+    columns:
+    - name: CSDS_FIELDNAME
+      data_type: TEXT
+    - name: SIMPLETABLE_FIELDNAME
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+  - name: DIAGNOSTICS_MONTHLY_DM01_Pre-release
+    identifier: '"DIAGNOSTICS_MONTHLY_DM01_Pre-release"'
+    columns:
+    - name: PERIOD
+      data_type: TEXT
+    - name: Provider Parent Org Code
+      data_type: TEXT
+    - name: Provider Parent Name
+      data_type: TEXT
+    - name: Provider Org Code
+      data_type: TEXT
+    - name: Provider Org Name
+      data_type: TEXT
+    - name: Commissioner Parent Org Code
+      data_type: TEXT
+    - name: Commissioner Parent Name
+      data_type: TEXT
+    - name: Commissioner Org Code
+      data_type: TEXT
+    - name: Commissioner Org Name
+      data_type: TEXT
+    - name: Diagnostic Tests Sort Order
+      data_type: TEXT
+    - name: Diagnostic Tests
+      data_type: TEXT
+    - name: 00 < 01 Week
+      data_type: NUMBER
+    - name: 01 < 02 Weeks
+      data_type: NUMBER
+    - name: 02 < 03 Weeks
+      data_type: NUMBER
+    - name: 03 < 04 Weeks
+      data_type: NUMBER
+    - name: 04 < 05 Weeks
+      data_type: NUMBER
+    - name: 05 < 06 Weeks
+      data_type: NUMBER
+    - name: 06 < 07 Weeks
+      data_type: NUMBER
+    - name: 07 < 08 Weeks
+      data_type: NUMBER
+    - name: 08 < 09 Weeks
+      data_type: NUMBER
+    - name: 09 < 10 Weeks
+      data_type: NUMBER
+    - name: 10 < 11 Weeks
+      data_type: NUMBER
+    - name: 11 < 12 Weeks
+      data_type: NUMBER
+    - name: 12 < 13 Weeks
+      data_type: NUMBER
+    - name: 13+ Weeks
+      data_type: NUMBER
+    - name: Total WL
+      data_type: NUMBER
+    - name: Waiting List Activity
+      data_type: NUMBER
+    - name: Planned Activity
+      data_type: NUMBER
+    - name: Unscheduled Activity
+      data_type: NUMBER
+    - name: Total Activity
+      data_type: NUMBER
+    - name: <6Weeks
+      data_type: NUMBER
+    - name: 6+WW
+      data_type: NUMBER
+  - name: DIAGNOSTICS_WEEKLY_DM01
+    identifier: '"DIAGNOSTICS_WEEKLY_DM01"'
+    columns:
+    - name: WEEK_ENDING_DATE
+      data_type: TEXT
+    - name: SUBMISSION_DATE
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: PROVIDER_SITE_NAME
+      data_type: TEXT
+    - name: DIAGNOSTIC_MODALITY
+      data_type: TEXT
+    - name: Waiting list_Activity
+      data_type: NUMBER
+    - name: PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: UNSCHEDULED_ACTIVITY
+      data_type: NUMBER
+    - name: DNA
+      data_type: NUMBER
+    - name: PATIENT_CANCELLED
+      data_type: NUMBER
+    - name: Patient_Declined/Refused
+      data_type: NUMBER
+    - name: 0 <01 weeks
+      data_type: NUMBER
+    - name: 01 <02 weeks
+      data_type: NUMBER
+    - name: 02 <03 weeks
+      data_type: NUMBER
+    - name: 03 <04 weeks
+      data_type: NUMBER
+    - name: 04 <05 weeks
+      data_type: NUMBER
+    - name: 05 <06 weeks
+      data_type: NUMBER
+    - name: 06 <07 weeks
+      data_type: NUMBER
+    - name: 07 <08 weeks
+      data_type: NUMBER
+    - name: 08 <09 weeks
+      data_type: NUMBER
+    - name: 09 <10 weeks
+      data_type: NUMBER
+    - name: 10 <11 weeks
+      data_type: NUMBER
+    - name: 11 <12 weeks
+      data_type: NUMBER
+    - name: 12 <13 weeks
+      data_type: NUMBER
+    - name: 13+ weeks
+      data_type: NUMBER
+  - name: DIAGNOSTICS_WEEKLY_DM01_HISTORIC
+    identifier: '"DIAGNOSTICS_WEEKLY_DM01_HISTORIC"'
+    columns:
+    - name: PROVIDER
+      data_type: TEXT
+    - name: SPECIALITY
+      data_type: TEXT
+    - name: DATE
+      data_type: TEXT
+    - name: WEEKNUMBER
+      data_type: TEXT
+    - name: Diagnostic waiting list-With a TCI
+      data_type: NUMBER
+    - name: Diagnostic waiting list-Without a TCI
+      data_type: NUMBER
+    - name: Diagnostic waiting list-Total
+      data_type: NUMBER
+    - name: Waiting list
+      data_type: NUMBER
+    - name: PLANNED
+      data_type: NUMBER
+    - name: UNSCHEDULED
+      data_type: NUMBER
+    - name: DM01-Total
+      data_type: NUMBER
+    - name: DNA
+      data_type: NUMBER
+    - name: Patient Cancelled
+      data_type: NUMBER
+    - name: Patient Declined/Refused
+      data_type: NUMBER
+    - name: Total DNA
+      data_type: NUMBER
+    - name: Cancer 62day pathway - Total on waiting list
+      data_type: NUMBER
+    - name: Cancer 62 day pathway - Activity in the week
+      data_type: NUMBER
+    - name: Wait List-0<01 weeks
+      data_type: NUMBER
+    - name: Wait List-01<02 weeks
+      data_type: NUMBER
+    - name: Wait List-02<03 weeks
+      data_type: NUMBER
+    - name: Wait List-03<04 weeks
+      data_type: NUMBER
+    - name: Wait List-04<05 weeks
+      data_type: NUMBER
+    - name: Wait List-05<06 weeks
+      data_type: NUMBER
+  - name: EFI2_COEFFICIENTS
+    identifier: '"EFI2_COEFFICIENTS"'
+    columns:
+    - name: MODEL_NAME
+      data_type: TEXT
+    - name: VARIABLE_NAME
+      data_type: TEXT
+    - name: VARIABLE_CATEGORY
+      data_type: TEXT
+    - name: COEFFICIENT
+      data_type: FLOAT
+    - name: TRANSFORMED_COEFFICIENT
+      data_type: FLOAT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: VARIABLE_TYPE
+      data_type: TEXT
+    - name: MODEL_DESCRIPTION
+      data_type: TEXT
+  - name: EFI2_RULES
+    identifier: '"EFI2_RULES"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: DEFICIT
+      data_type: TEXT
+    - name: DEFICIT_TYPE
+      data_type: TEXT
+    - name: TIME_CONSTRAINT_DAYS
+      data_type: FLOAT
+    - name: TIME_CONSTRAINT_TYPE
+      data_type: TEXT
+    - name: TIME_CONSTRAINT_DESCRIPTION
+      data_type: TEXT
+    - name: MIN_AGE
+      data_type: FLOAT
+    - name: AGE_RESTRICTION_DESCRIPTION
+      data_type: TEXT
+    - name: CATEGORY_NAME
+      data_type: TEXT
+    - name: CATEGORY_ORDER
+      data_type: FLOAT
+    - name: CATEGORY_RANGE_START
+      data_type: FLOAT
+    - name: CATEGORY_RANGE_END
+      data_type: FLOAT
+    - name: CATEGORY_DESCRIPTION
+      data_type: TEXT
+    - name: THRESHOLD_VALUE
+      data_type: FLOAT
+    - name: THRESHOLD_COMPARATOR
+      data_type: TEXT
+    - name: THRESHOLD_DESCRIPTION
+      data_type: TEXT
+    - name: THRESHOLD_UNIT
+      data_type: TEXT
+    - name: THRESHOLD_TYPE
+      data_type: TEXT
+    - name: READINGS_REQUIRED
+      data_type: FLOAT
+    - name: READINGS_TIMEFRAME
+      data_type: TEXT
+    - name: SUPERSEDES
+      data_type: TEXT
+    - name: SUPERSEDED_BY
+      data_type: TEXT
+    - name: HIERARCHY_LEVEL
+      data_type: FLOAT
+    - name: RESOLUTION_TEST
+      data_type: TEXT
+    - name: RESOLUTION_THRESHOLD
+      data_type: FLOAT
+    - name: RESOLUTION_UNIT
+      data_type: TEXT
+    - name: RESOLUTION_GENDER_SPECIFIC
+      data_type: BOOLEAN
+    - name: RESOLUTION_MALE_THRESHOLD
+      data_type: FLOAT
+    - name: RESOLUTION_FEMALE_THRESHOLD
+      data_type: FLOAT
+    - name: VALIDATION_RULE
+      data_type: TEXT
+    - name: VALIDATION_DESCRIPTION
+      data_type: TEXT
+    - name: EFI2_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI2_TRANSFORMED_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_FALLS_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_CARE_HOME_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_MORTALITY_COEFFICIENT
+      data_type: FLOAT
+    - name: EFI_PLUS_HOME_CARE_COEFFICIENT
+      data_type: FLOAT
+    - name: SOURCE_INSTRUCTION
+      data_type: TEXT
+    - name: RULE_PRIORITY
+      data_type: NUMBER
+  - name: EFI2_SNOMED
+    identifier: '"EFI2_SNOMED"'
+    columns:
+    - name: DEFICIT
+      data_type: TEXT
+    - name: SNOMEDCT_CONCEPTID
+      data_type: TEXT
+    - name: CTV3
+      data_type: TEXT
+    - name: PROVENANCE
+      data_type: TEXT
+    - name: CODEDESCRIPTION
+      data_type: TEXT
+    - name: TIMECONSTRAINTYEARS
+      data_type: FLOAT
+    - name: AGELIMIT
+      data_type: FLOAT
+    - name: OTHERINSTRUCTIONS
+      data_type: TEXT
+  - name: FA__MONTHLY_FA_ACM_VERSIONS_V3
+    identifier: '"FA__MONTHLY_FA_ACM_VERSIONS_V3"'
+    columns:
+    - name: POINT OF DELIVERY CODE
+      data_type: TEXT
+    - name: LOCAL POINT OF DELIVERY CODE
+      data_type: TEXT
+    - name: PODGroupOverview
+      data_type: TEXT
+    - name: POINT OF DELIVERY FURTHER DETAIL CODE
+      data_type: TEXT
+    - name: LOCAL POINT OF DELIVERY DESCRIPTION
+      data_type: TEXT
+    - name: POINT OF DELIVERY FURTHER DETAIL DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF CODE
+      data_type: TEXT
+    - name: CONTRACT MONITORING ACTUAL MARKET FORCES FACTOR
+      data_type: NUMBER
+    - name: ACTIVITY TREATMENT FUNCTION CODE
+      data_type: TEXT
+    - name: MAIN SPECIALTY CODE
+      data_type: TEXT
+    - name: LOCAL SUB-SPECIALTY CODE
+      data_type: TEXT
+    - name: FinMonth
+      data_type: TEXT
+    - name: DV_FINANCIALMONTH
+      data_type: NUMBER
+    - name: DV_FINANCIALYEAR
+      data_type: NUMBER
+    - name: FINANCIALYEAR
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (CODE OF COMMISSIONER)
+      data_type: TEXT
+    - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
+      data_type: TEXT
+    - name: OLD PROVIDER NAMES
+      data_type: TEXT
+    - name: DV_REPORTING TYPE
+      data_type: TEXT
+    - name: Organisation_Name
+      data_type: TEXT
+    - name: NCL_FLAG
+      data_type: TEXT
+    - name: COMMISSIONED SERVICE CATEGORY CODE
+      data_type: TEXT
+    - name: SERVICE CODE
+      data_type: TEXT
+    - name: ACTIVITY
+      data_type: NUMBER
+    - name: PRICE
+      data_type: NUMBER
+  - name: FA__MONTHLY_FA_SLAM_1920_V3
+    identifier: '"FA__MONTHLY_FA_SLAM_1920_V3"'
+    columns:
+    - name: SLAMPOD
+      data_type: TEXT
+    - name: LOCAL POINT OF DELIVERY CODE
+      data_type: TEXT
+    - name: PODGroupOverview
+      data_type: TEXT
+    - name: PODGroup
+      data_type: TEXT
+    - name: SLAMPODDescription
+      data_type: TEXT
+    - name: PODGroupDescription
+      data_type: TEXT
+    - name: SLAMHRGCode
+      data_type: TEXT
+    - name: CONTRACT MONITORING ACTUAL MARKET FORCES FACTOR
+      data_type: TEXT
+    - name: SLAMSpecialtyCode
+      data_type: TEXT
+    - name: MAIN SPECIALTY CODE
+      data_type: TEXT
+    - name: LOCAL SUB SPECIALTY CODE
+      data_type: TEXT
+    - name: FinMonth
+      data_type: TEXT
+    - name: DV_FINANCIALMONTH
+      data_type: NUMBER
+    - name: DV_FINANCIALYEAR
+      data_type: NUMBER
+    - name: FinancialYear
+      data_type: TEXT
+    - name: CommissionerID
+      data_type: TEXT
+    - name: ServiceProviderID
+      data_type: TEXT
+    - name: OLD PROVIDER NAMES
+      data_type: TEXT
+    - name: Reporting Type
+      data_type: TEXT
+    - name: ServiceProviderDescription
+      data_type: TEXT
+    - name: NCL_FLag
+      data_type: TEXT
+    - name: COMMISSIONED SERVICE CATEGORY CODE
+      data_type: TEXT
+    - name: SERVICE CODE
+      data_type: TEXT
+    - name: ACTIVITY
+      data_type: NUMBER
+    - name: PRICE
+      data_type: NUMBER
+  - name: FA__MONTHLY_IAP_2526_GOSH_NEW_NCL_ONLY
+    identifier: '"FA__MONTHLY_IAP_2526_GOSH_NEW_NCL_ONLY"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+    - name: PHASING_CODE
+      data_type: TEXT
+    - name: PHASING_DESCRIPTION
+      data_type: TEXT
+    - name: REGION
+      data_type: TEXT
+    - name: FILE_NAME
+      data_type: TEXT
+    - name: WORKSHEET
+      data_type: TEXT
+  - name: FA__MONTHLY_IAP_2526_MEH
+    identifier: '"FA__MONTHLY_IAP_2526_MEH"'
+    columns:
+    - name: COUNT
+      data_type: NUMBER
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: DATE
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: NUMBER
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: NUMBER
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: TEXT
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+  - name: FA__MONTHLY_IAP_2526_RFL_NTPS
+    identifier: '"FA__MONTHLY_IAP_2526_RFL_NTPS"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+  - name: FA__MONTHLY_IAP_2526_RNOH_NEW_NCL_ONLY_220725
+    identifier: '"FA__MONTHLY_IAP_2526_RNOH_NEW_NCL_ONLY_220725"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: NUMBER
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: NUMBER
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+  - name: FA__MONTHLY_IAP_2526_UCLH_160725
+    identifier: '"FA__MONTHLY_IAP_2526_UCLH_160725"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: NUMBER
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: NUMBER
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_(FIRST)
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_(FIRST)
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: TEXT
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+  - name: FA__MONTHLY_IAP_2526_WH
+    identifier: '"FA__MONTHLY_IAP_2526_WH"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+  - name: FA__MONTHLY_NHSE_SERVICE_CODES_2526
+    identifier: '"FA__MONTHLY_NHSE_SERVICE_CODES_2526"'
+    columns:
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SERVICE_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_CODE_INCLUDING_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_CATEGORY_DESCRIPTION
+      data_type: TEXT
+    - name: National_Programme_of_Care_(NPoC)_Category_and_Clinical_Reference_Group_(CRG)
+      data_type: TEXT
+    - name: HIGHLY_SPECIALISED_SERVICE
+      data_type: TEXT
+    - name: Identified_by_PS_Operational_Tool_2024/25
+      data_type: TEXT
+    - name: NOTES
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: DATE
+    - name: EFFECTIVE_TO
+      data_type: TEXT
+    - name: IS_CURRENT
+      data_type: NUMBER
+    - name: 2024/25_ICB_Delegation_Status
+      data_type: TEXT
+    - name: 2025/26_ICB_Delegation_Status
+      data_type: TEXT
+    - name: DELEGATION_STATUS_CHANGE
+      data_type: BOOLEAN
+    - name: GROUPING
+      data_type: TEXT
+    - name: AMENDED_RECORD_INDICATOR
+      data_type: TEXT
+  - name: FA__MONTHLY_REF_TRUST_VW
+    identifier: '"FA__MONTHLY_REF_TRUST_VW"'
+    columns:
+    - name: SK_ORGANISATIONID
+      data_type: NUMBER
+    - name: TRUST_CODE
+      data_type: TEXT
+    - name: TRUST_NAME
+      data_type: TEXT
+    - name: TRUST_SHORTHAND
+      data_type: TEXT
+    - name: ORG_CODE
+      data_type: TEXT
+    - name: ORG_NAME
+      data_type: TEXT
+    - name: ORG_SHORTHAND
+      data_type: TEXT
+    - name: GEO_TYPE
+      data_type: TEXT
+  - name: FA__MONTHLY_SLAM_POD_GROUP_OVERVIEW
+    identifier: '"FA__MONTHLY_SLAM_POD_GROUP_OVERVIEW"'
+    columns:
+    - name: SLAMPOD
+      data_type: TEXT
+    - name: PODGROUPOVERVIEW
+      data_type: TEXT
+  - name: GP_REG_PAT_PRAC_LSOA_ALL
+    identifier: '"GP_REG_PAT_PRAC_LSOA_ALL"'
+    columns:
+    - name: PUBLICATION
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: DATE
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: LSOA_CODE
+      data_type: TEXT
+    - name: SEX
+      data_type: TEXT
+    - name: NUMBER_OF_PATIENTS
+      data_type: NUMBER
+  - name: IA_CERTIFICATES_MONTHLY
+    identifier: '"IA_CERTIFICATES_MONTHLY"'
+    columns:
+    - name: Certificate name
+      data_type: TEXT
+    - name: Course created by
+      data_type: TEXT
+    - name: Date issued
+      data_type: TEXT
+    - name: Full name with link
+      data_type: TEXT
+    - name: Full name
+      data_type: TEXT
+    - name: Trust / Hospital
+      data_type: TEXT
+    - name: Band/Grade
+      data_type: TEXT
+    - name: What best describes your role?
+      data_type: TEXT
+    - name: Category name
+      data_type: TEXT
+  - name: IA_COMPLETION_MONTHLY
+    identifier: '"IA_COMPLETION_MONTHLY"'
+    columns:
+    - name: Course full name
+      data_type: TEXT
+    - name: Course short name
+      data_type: TEXT
+    - name: Full name
+      data_type: TEXT
+    - name: Enrolment method
+      data_type: TEXT
+    - name: Trust / Hospital
+      data_type: TEXT
+    - name: Band/Grade
+      data_type: TEXT
+    - name: What best describes your role?
+      data_type: TEXT
+    - name: Date and time enrolled
+      data_type: TEXT
+    - name: Time started
+      data_type: TEXT
+    - name: Time completed
+      data_type: TEXT
+    - name: Student progress
+      data_type: TEXT
+    - name: Course Type
+      data_type: TEXT
+  - name: IA_ENROLMENTS_MONTHLY
+    identifier: '"IA_ENROLMENTS_MONTHLY"'
+    columns:
+    - name: Course full name
+      data_type: TEXT
+    - name: Course short name
+      data_type: TEXT
+    - name: Course created by
+      data_type: TEXT
+    - name: Full name
+      data_type: TEXT
+    - name: Enrolment method
+      data_type: TEXT
+    - name: Trust / Hospital
+      data_type: TEXT
+    - name: Band/Grade
+      data_type: TEXT
+    - name: What best describes your role?
+      data_type: TEXT
+    - name: Date and time enrolled
+      data_type: TEXT
+    - name: Time started
+      data_type: TEXT
+    - name: Time completed
+      data_type: TEXT
+    - name: Student progress
+      data_type: TEXT
+  - name: IA_NEW_USERS_MONTHLY
+    identifier: '"IA_NEW_USERS_MONTHLY"'
+    columns:
+    - name: Full name
+      data_type: TEXT
+    - name: Username
+      data_type: TEXT
+    - name: Trust / Hospital
+      data_type: TEXT
+    - name: What best describes your role?
+      data_type: TEXT
+    - name: Band/Grade
+      data_type: TEXT
+    - name: Date and time registered
+      data_type: TEXT
+    - name: Full name with link
+      data_type: TEXT
+    - name: Full name 2
+      data_type: TEXT
+  - name: IA_NUMBERS
+    identifier: '"IA_NUMBERS"'
+    columns:
+    - name: Training
+      data_type: TEXT
+    - name: Training Hours/Trainee Numbers
+      data_type: TEXT
+    - name: Measure
+      data_type: TEXT
+    - name: Month/Year
+      data_type: TEXT
+    - name: Data
+      data_type: NUMBER
+  - name: IMD2019
+    identifier: '"IMD2019"'
+    columns:
+    - name: LSOACODE
+      data_type: TEXT
+    - name: IMDDECILE
+      data_type: NUMBER
+  - name: IMD_2019
+    identifier: '"IMD_2019"'
+    columns:
+    - name: LSOA_CODE_2011
+      data_type: TEXT
+    - name: LSOA_NAME_2011
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_CODE_2019
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_NAME_2019
+      data_type: TEXT
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_SCORE
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EMPLOYMENT_SCORE_RATE
+      data_type: NUMBER
+    - name: EMPLOYMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EMPLOYMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_SCORE
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_SCORE
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CRIME_SCORE
+      data_type: NUMBER
+    - name: CRIME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CRIME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_SCORE
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_SCORE
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: TOTAL_POPULATION_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: DEPENDENT_CHILDREN_AGED_0_TO_15_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: POPULATION_AGED_16_TO_59_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: OLDER_POPULATION_AGED_60_AND_OVER_MID_2015_EXCLUDING_PRISONERS
+      data_type: NUMBER
+    - name: WORKING_AGE_POPULATION_18_TO_59_64_FOR_USE_WITH_EMPLOYMENT_DEPRIVATION_DOMAIN_EXCLUDING_PRISONERS
+      data_type: NUMBER
+  - name: IMD_2025
+    identifier: '"IMD_2025"'
+    columns:
+    - name: LSOA_CODE_2021
+      data_type: TEXT
+    - name: LSOA_NAME_2021
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_CODE_2024
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_NAME_2024
+      data_type: TEXT
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_SCORE
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EMPLOYMENT_SCORE_RATE
+      data_type: NUMBER
+    - name: EMPLOYMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EMPLOYMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_SCORE
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: EDUCATION_SKILLS_AND_TRAINING_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_SCORE
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: HEALTH_DEPRIVATION_AND_DISABILITY_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CRIME_SCORE
+      data_type: NUMBER
+    - name: CRIME_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CRIME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_SCORE
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_AND_SERVICES_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_SCORE
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_SCORE_RATE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: INDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_SCORE
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
+      data_type: NUMBER
+    - name: OUTDOORS_SUB_TO_DOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
+      data_type: NUMBER
+    - name: TOTAL_POPULATION_MID_2022
+      data_type: NUMBER
+    - name: DEPENDENT_CHILDREN_AGED_0_TO_15_MID_2022
+      data_type: NUMBER
+    - name: OLDER_POPULATION_AGED_60_AND_OVER_MID_2022
+      data_type: NUMBER
+    - name: WORKING_AGE_POPULATION_18_TO_66_FOR_USE_WITH_EMPLOYMENT_DEPRIVATION_DOMAIN_MID_2022
+      data_type: NUMBER
+  - name: IMMS_SCHEDULE_LATEST
+    identifier: '"IMMS_SCHEDULE_LATEST"'
+    columns:
+    - name: VACCINE_ORDER
+      data_type: NUMBER
+    - name: VACCINE_ID
+      data_type: TEXT
+    - name: VACCINE_NAME
+      data_type: TEXT
+    - name: DOSE_NUMBER
+      data_type: TEXT
+    - name: DISEASES_PROTECTED_AGAINST
+      data_type: TEXT
+    - name: VACCINE_CODE
+      data_type: TEXT
+    - name: TRADE_NAME
+      data_type: TEXT
+    - name: ADMINISTRATION_ROUTE
+      data_type: TEXT
+    - name: SCHEDULE_AGE
+      data_type: TEXT
+    - name: MINIMUM_AGE_DAYS
+      data_type: NUMBER
+    - name: MAXIMUM_AGE_DAYS
+      data_type: NUMBER
+    - name: MINIMUM_INTERVAL_DAYS
+      data_type: NUMBER
+    - name: NEXT_DOSE_VACCINE_ID
+      data_type: TEXT
+    - name: ELIGIBLE_AGE_FROM_DAYS
+      data_type: NUMBER
+    - name: ELIGIBLE_AGE_TO_DAYS
+      data_type: NUMBER
+    - name: ADMINISTERED_CLUSTER_ID
+      data_type: TEXT
+    - name: DRUG_CLUSTER_ID
+      data_type: TEXT
+    - name: DECLINED_CLUSTER_ID
+      data_type: TEXT
+    - name: CONTRAINDICATED_CLUSTER_ID
+      data_type: TEXT
+    - name: INCOMPATIBLE_CLUSTER_IDS
+      data_type: TEXT
+    - name: INELIGIBILITY_PERIOD_MONTHS
+      data_type: NUMBER
+    - name: INCOMPATIBLE_EXPLANATION
+      data_type: TEXT
+  - name: INT_PILLAR4_GROUP_NAMES
+    identifier: '"INT_PILLAR4_GROUP_NAMES"'
+    columns:
+    - name: P4_GROUP_KEY
+      data_type: TEXT
+    - name: P4_GROUP_NAME
+      data_type: TEXT
+    - name: LTC_COUNT
+      data_type: NUMBER
+  - name: LAST_SUNDAY_OF_THE_MONTH
+    identifier: '"LAST_SUNDAY_OF_THE_MONTH"'
+    columns:
+    - name: LastSundayOfMonthDate
+      data_type: TIMESTAMP_NTZ
+    - name: MonthName
+      data_type: TEXT
+    - name: CalendarYearNumber
+      data_type: NUMBER
+    - name: FiscalCalendarYearName
+      data_type: TEXT
+    - name: FiscalCalendarMonthNameYM
+      data_type: TEXT
+    - name: StartOfMonthDate
+      data_type: TIMESTAMP_NTZ
+    - name: EndOfMonthDate
+      data_type: TIMESTAMP_NTZ
+  - name: LSACM_M12_FREEZE_FILE_IDS
+    identifier: '"LSACM_M12_FREEZE_FILE_IDS"'
+    columns:
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER
+    - name: FILEID
+      data_type: NUMBER
+  - name: LSOA2011_LSOA2021
+    identifier: '"LSOA2011_LSOA2021"'
+    columns:
+    - name: LSOA11CD
+      data_type: TEXT
+    - name: LSOA11NM
+      data_type: TEXT
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: CHGIND
+      data_type: TEXT
+    - name: LAD22CD
+      data_type: TEXT
+    - name: LAD22NM
+      data_type: TEXT
+    - name: LAD22NMW
+      data_type: TEXT
+    - name: OBJECTID
+      data_type: NUMBER
+  - name: LSOA21_WARD25_LAD25
+    identifier: '"LSOA21_WARD25_LAD25"'
+    columns:
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: WD25CD
+      data_type: TEXT
+    - name: WD25NM
+      data_type: TEXT
+    - name: LAD25CD
+      data_type: TEXT
+    - name: LAD25NM
+      data_type: TEXT
+    - name: RESIDENT_FLAG
+      data_type: TEXT
+  - name: NCL_GP_PRACTICE_NEIGHBOURHOOD
+    identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+  - name: NCL_GP_PRACTICE_NEIGHBOURHOOD_BACKUP
+    identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD_BACKUP"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+  - name: NCL_NEIGHBOURHOOD
+    identifier: '"NCL_NEIGHBOURHOOD"'
+    columns:
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+  - name: NCL_NEIGHBOURHOOD_LSOA_2021
+    identifier: '"NCL_NEIGHBOURHOOD_LSOA_2021"'
+    columns:
+    - name: LSOA_2021_CODE
+      data_type: TEXT
+    - name: LSOA_2021_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: DATE
+  - name: NCL_NEIGHBOURHOOD_LSOA_2021_BACKUP
+    identifier: '"NCL_NEIGHBOURHOOD_LSOA_2021_BACKUP"'
+    columns:
+    - name: LSOA_2021_CODE
+      data_type: TEXT
+    - name: LSOA_2021_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: DATE
+  - name: PRACTICE_NEIGHBOURHOOD_LOOKUP
+    identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP"'
+    columns:
+    - name: PRACTICECODE
+      data_type: TEXT
+    - name: PRACTICENAME
+      data_type: TEXT
+    - name: PCNCODE
+      data_type: TEXT
+    - name: LOCALAUTHORITY
+      data_type: TEXT
+    - name: PRACTICENEIGHBOURHOOD
+      data_type: TEXT
+  - name: PRACTICE_NEIGHBOURHOOD_LOOKUP_BACKUP
+    identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP_BACKUP"'
+    columns:
+    - name: PRACTICECODE
+      data_type: TEXT
+    - name: PRACTICENAME
+      data_type: TEXT
+    - name: PCNCODE
+      data_type: TEXT
+    - name: LOCALAUTHORITY
+      data_type: TEXT
+    - name: PRACTICENEIGHBOURHOOD
+      data_type: TEXT
+  - name: PRACTICE_SHORT_NAME
+    identifier: '"PRACTICE_SHORT_NAME"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME_SHORT
+      data_type: TEXT
+  - name: REFRESHED_DATE
+    identifier: '"REFRESHED_DATE"'
+    columns:
+    - name: REFRESHED_DATE
+      data_type: DATE
+    - name: PRACTICE_COUNT
+      data_type: NUMBER
+  - name: TURNAROUND_TIMES
+    identifier: '"TURNAROUND_TIMES"'
+    columns:
+    - name: DiagnosticTestDateTime
+      data_type: TIMESTAMP_NTZ
+    - name: PatientSourceTypeName
+      data_type: TEXT
+    - name: Modality
+      data_type: TEXT
+    - name: SiteName
+      data_type: TEXT
+    - name: SiteNameShort
+      data_type: TEXT
+    - name: ProviderTrust
+      data_type: TEXT
+    - name: ProviderTrustShort
+      data_type: TEXT
+    - name: PriorityTypeCode
+      data_type: TEXT
+    - name: CancerPathwayFlag
+      data_type: TEXT
+    - name: BreachScan
+      data_type: FLOAT
+    - name: BreachScan7Day
+      data_type: FLOAT
+    - name: TATScan
+      data_type: FLOAT
+    - name: BreachReportNCL
+      data_type: FLOAT
+    - name: BreachReportNCLCancer7Day
+      data_type: FLOAT
+    - name: BreachReport4Week
+      data_type: FLOAT
+    - name: BreachReportNHSE
+      data_type: FLOAT
+    - name: BreachReportNHSECancer7Day
+      data_type: FLOAT
+    - name: TATReport
+      data_type: FLOAT
+    - name: BreachOverall
+      data_type: FLOAT
+    - name: BreachOverallCancer7Day
+      data_type: FLOAT
+    - name: TATOverall
+      data_type: FLOAT
+    - name: TestAwaitingReport
+      data_type: FLOAT
+    - name: TestUnreported
+      data_type: FLOAT
+    - name: DataType
+      data_type: TEXT
+  - name: TURNAROUND_TIMES_RAW
+    identifier: '"TURNAROUND_TIMES_RAW"'
+    columns:
+    - name: submission_date
+      data_type: TIMESTAMP_NTZ
+    - name: data_type
+      data_type: TEXT
+    - name: month
+      data_type: TEXT
+    - name: year
+      data_type: TEXT
+    - name: ethnic_category
+      data_type: TEXT
+    - name: person_gender
+      data_type: FLOAT
+    - name: general_medical_practice
+      data_type: TEXT
+    - name: patient_source_type
+      data_type: NUMBER
+    - name: referrer_code
+      data_type: TEXT
+    - name: referring_org
+      data_type: TEXT
+    - name: diagnostic_test_request_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_request_received_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: service_report_issue_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: imaging_code_nicip
+      data_type: TEXT
+    - name: imaging_code_snomed
+      data_type: TEXT
+    - name: provider_site_code
+      data_type: TEXT
+    - name: priority_type_code
+      data_type: NUMBER
+    - name: cancer_pathway_flag
+      data_type: BOOLEAN
+    - name: file_name
+      data_type: TEXT
+    - name: month_year
+      data_type: TEXT
+    - name: submission_month
+      data_type: FLOAT
+    - name: submission_year
+      data_type: FLOAT
+    - name: data_period
+      data_type: TIMESTAMP_NTZ
+    - name: trust_code
+      data_type: TEXT
+    - name: combined_imaging_code
+      data_type: TEXT
+    - name: priority_type_code_routine_default
+      data_type: FLOAT
+    - name: TAT_scan
+      data_type: FLOAT
+    - name: TAT_report
+      data_type: FLOAT
+    - name: TAT_overall
+      data_type: FLOAT
+    - name: datedifftest
+      data_type: FLOAT
+    - name: cancer_pathway_flag_string
+      data_type: TEXT
+    - name: referring_organisation
+      data_type: TEXT
+  - name: TURNAROUND_TIMES_RAW_TEST
+    identifier: '"TURNAROUND_TIMES_RAW_TEST"'
+    columns:
+    - name: submission_date
+      data_type: TIMESTAMP_NTZ
+    - name: data_type
+      data_type: TEXT
+    - name: month
+      data_type: TEXT
+    - name: year
+      data_type: TEXT
+    - name: ethnic_category
+      data_type: TEXT
+    - name: person_gender
+      data_type: FLOAT
+    - name: general_medical_practice
+      data_type: TEXT
+    - name: patient_source_type
+      data_type: NUMBER
+    - name: referrer_code
+      data_type: TEXT
+    - name: referring_org
+      data_type: TEXT
+    - name: diagnostic_test_request_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_request_received_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: service_report_issue_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: imaging_code_nicip
+      data_type: TEXT
+    - name: imaging_code_snomed
+      data_type: TEXT
+    - name: provider_site_code
+      data_type: TEXT
+    - name: priority_type_code
+      data_type: NUMBER
+    - name: cancer_pathway_flag
+      data_type: BOOLEAN
+    - name: file_name
+      data_type: TEXT
+    - name: month_year
+      data_type: TEXT
+    - name: submission_month
+      data_type: FLOAT
+    - name: submission_year
+      data_type: FLOAT
+    - name: data_period
+      data_type: TIMESTAMP_NTZ
+    - name: trust_code
+      data_type: TEXT
+    - name: combined_imaging_code
+      data_type: TEXT
+    - name: priority_type_code_routine_default
+      data_type: FLOAT
+    - name: TAT_scan
+      data_type: FLOAT
+    - name: TAT_report
+      data_type: FLOAT
+    - name: TAT_overall
+      data_type: FLOAT
+    - name: datedifftest
+      data_type: FLOAT
+    - name: cancer_pathway_flag_string
+      data_type: TEXT
+    - name: referring_organisation
+      data_type: TEXT
+  - name: TURNAROUND_TIMES_RAW_WRITE_TEST_BACKUP
+    identifier: '"TURNAROUND_TIMES_RAW_WRITE_TEST_BACKUP"'
+    columns:
+    - name: submission_date
+      data_type: TEXT
+    - name: data_type
+      data_type: TEXT
+    - name: month
+      data_type: TEXT
+    - name: year
+      data_type: TEXT
+    - name: ethnic_category
+      data_type: TEXT
+    - name: person_gender
+      data_type: FLOAT
+    - name: general_medical_practice
+      data_type: TEXT
+    - name: patient_source_type
+      data_type: NUMBER
+    - name: referrer_code
+      data_type: TEXT
+    - name: referring_org
+      data_type: TEXT
+    - name: diagnostic_test_request_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_request_received_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: service_report_issue_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: imaging_code_nicip
+      data_type: TEXT
+    - name: imaging_code_snomed
+      data_type: TEXT
+    - name: provider_site_code
+      data_type: TEXT
+    - name: priority_type_code
+      data_type: NUMBER
+    - name: cancer_pathway_flag
+      data_type: BOOLEAN
+    - name: file_name
+      data_type: TEXT
+    - name: month_year
+      data_type: TEXT
+    - name: submission_month
+      data_type: FLOAT
+    - name: submission_year
+      data_type: FLOAT
+    - name: data_period
+      data_type: TEXT
+    - name: trust_code
+      data_type: TEXT
+    - name: combined_imaging_code
+      data_type: TEXT
+    - name: priority_type_code_routine_default
+      data_type: FLOAT
+    - name: TAT_scan
+      data_type: FLOAT
+    - name: TAT_report
+      data_type: FLOAT
+    - name: TAT_overall
+      data_type: FLOAT
+    - name: datedifftest
+      data_type: FLOAT
+    - name: cancer_pathway_flag_string
+      data_type: TEXT
+    - name: referring_organisation
+      data_type: TEXT
+  - name: UCLH_MSK
+    identifier: '"UCLH_MSK"'
+    columns:
+    - name: PROVIDER
+      data_type: TEXT
+    - name: WEEK_END
+      data_type: TEXT
+    - name: SERVICE_LINE
+      data_type: TEXT
+    - name: TEAM
+      data_type: TEXT
+    - name: No. of Referrals
+      data_type: TEXT
+    - name: ACCEPTED_REFERRALS
+      data_type: TEXT
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: ACTIVITY
+      data_type: TEXT
+    - name: ACTIVITY_TYPE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY
+      data_type: TEXT
+    - name: SERVICE_LINE_GROUP
+      data_type: TEXT
+    - name: WEEK_ENDING
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+    - name: WEEK_NUMBER
+      data_type: NUMBER
+    - name: CCG
+      data_type: TEXT
+  - name: UEC__DAILY__LAS_HANDOVER
+    identifier: '"UEC__DAILY__LAS_HANDOVER"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: SITE_NAME
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: CONVEYANCES_NONBLUE
+      data_type: NUMBER
+    - name: CONVEYANCES_TOTAL_ED
+      data_type: NUMBER
+    - name: TOTAL_HANDOVER
+      data_type: NUMBER
+    - name: ARRIVAL_TO_PATIENT_HANDOVER_AVERAGE
+      data_type: TEXT
+    - name: UNDER_15_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_15_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_15_MIN_PERCENT
+      data_type: FLOAT
+    - name: OVER_15_MIN_RATIO
+      data_type: FLOAT
+    - name: OVER_15_MIN_PERCENT_RANK
+      data_type: NUMBER
+    - name: OVER_15_MIN_OVERRUN_AVERAGE
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_15_MIN_HOURS
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_15_MIN_MINUTES
+      data_type: FLOAT
+    - name: OVER_30_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_30_MIN_PERCENT
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_30_MIN_HOURS
+      data_type: FLOAT
+    - name: OVER_45_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_45_MIN_PERCENT
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_45_MIN_HOURS
+      data_type: FLOAT
+    - name: OVER_60_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_60_MIN_PERCENT
+      data_type: FLOAT
+    - name: TOTAL_TIME_LOST_OVER_60_MIN_HOURS
+      data_type: FLOAT
+    - name: OVER_120_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_120_MIN_PERCENT
+      data_type: FLOAT
+    - name: OVER_180_MIN_COUNT
+      data_type: NUMBER
+    - name: OVER_180_MIN_PERCENT
+      data_type: FLOAT
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__REPORT_TARGETS
+    identifier: '"UEC__DAILY__REPORT_TARGETS"'
+    columns:
+    - name: ID
+      data_type: NUMBER
+    - name: DATASET
+      data_type: TEXT
+    - name: METRIC_NAME
+      data_type: TEXT
+    - name: TARGET_DESC
+      data_type: TEXT
+    - name: TARGET_VALUE
+      data_type: NUMBER
+    - name: TARGET_DIRECTION
+      data_type: TEXT
+    - name: TARGET_LENIENCE_AMOUNT
+      data_type: NUMBER
+    - name: TARGET_LENIENCE_TYPE
+      data_type: TEXT
+    - name: ACTIVE_FROM
+      data_type: DATE
+    - name: ACTIVE_UNTIL
+      data_type: DATE
+    - name: SITE
+      data_type: TEXT
+  - name: UEC__DAILY__SMART
+    identifier: '"UEC__DAILY__SMART"'
+    columns:
+    - name: RESPONSE_CHILD_ID
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+    - name: DATE_DATA
+      data_type: DATE
+    - name: DATETIME_UPLOADED
+      data_type: TIMESTAMP_NTZ
+    - name: SITE_CODE_SMART
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: SITE_NAME
+      data_type: TEXT
+    - name: INDICATOR_NAME
+      data_type: TEXT
+    - name: INDICATOR_KEY_NAME
+      data_type: TEXT
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__TRACKER_DAILY_DELAY
+    identifier: '"UEC__DAILY__TRACKER_DAILY_DELAY"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: METRIC_NAME
+      data_type: TEXT
+    - name: METRIC_VALUE
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__TRACKER_P2_CAPACITY
+    identifier: '"UEC__DAILY__TRACKER_P2_CAPACITY"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: PROVIDER
+      data_type: TEXT
+    - name: UNIT
+      data_type: TEXT
+    - name: BEDS_AVAILABLE
+      data_type: NUMBER
+    - name: BEDS_OCCUPIED
+      data_type: NUMBER
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: UEC__DAILY__TRACKER_VIRTUAL_WARD
+    identifier: '"UEC__DAILY__TRACKER_VIRTUAL_WARD"'
+    columns:
+    - name: DATE_DATA
+      data_type: DATE
+    - name: CAPACITY
+      data_type: NUMBER
+    - name: OCCUPIED
+      data_type: NUMBER
+    - name: SYSTEM_VALUE
+      data_type: FLOAT
+    - name: IS_INCLUDES_PAEDIATRIC
+      data_type: BOOLEAN
+    - name: _TIMESTAMP
+      data_type: TIMESTAMP_NTZ
+  - name: turnaround_times_clean_write_test
+    identifier: '"turnaround_times_clean_write_test"'
+    columns:
+    - name: DiagnosticTestDateTime
+      data_type: TIMESTAMP_NTZ
+    - name: PatientSourceTypeName
+      data_type: TEXT
+    - name: Modality
+      data_type: TEXT
+    - name: SiteName
+      data_type: TEXT
+    - name: SiteNameShort
+      data_type: TEXT
+    - name: ProviderTrust
+      data_type: TEXT
+    - name: ProviderTrustShort
+      data_type: TEXT
+    - name: PriorityTypeCode
+      data_type: TEXT
+    - name: CancerPathwayFlag
+      data_type: TEXT
+    - name: BreachScan
+      data_type: FLOAT
+    - name: BreachScan7Day
+      data_type: FLOAT
+    - name: TATScan
+      data_type: FLOAT
+    - name: BreachReportNCL
+      data_type: FLOAT
+    - name: BreachReportNCLCancer7Day
+      data_type: FLOAT
+    - name: BreachReport4Week
+      data_type: FLOAT
+    - name: BreachReportNHSE
+      data_type: FLOAT
+    - name: BreachReportNHSECancer7Day
+      data_type: FLOAT
+    - name: TATReport
+      data_type: FLOAT
+    - name: BreachOverall
+      data_type: FLOAT
+    - name: BreachOverallCancer7Day
+      data_type: FLOAT
+    - name: TATOverall
+      data_type: FLOAT
+    - name: TestAwaitingReport
+      data_type: FLOAT
+    - name: TestUnreported
+      data_type: FLOAT
+    - name: DataType
+      data_type: TEXT
+  - name: turnaround_times_raw_write_test
+    identifier: '"turnaround_times_raw_write_test"'
+    columns:
+    - name: submission_date
+      data_type: TEXT
+    - name: data_type
+      data_type: TEXT
+    - name: month
+      data_type: TEXT
+    - name: year
+      data_type: TEXT
+    - name: ethnic_category
+      data_type: TEXT
+    - name: person_gender
+      data_type: FLOAT
+    - name: general_medical_practice
+      data_type: TEXT
+    - name: patient_source_type
+      data_type: NUMBER
+    - name: referrer_code
+      data_type: TEXT
+    - name: referring_org
+      data_type: TEXT
+    - name: diagnostic_test_request_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_request_received_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: diagnostic_test_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: service_report_issue_date_time
+      data_type: TIMESTAMP_NTZ
+    - name: imaging_code_nicip
+      data_type: TEXT
+    - name: imaging_code_snomed
+      data_type: TEXT
+    - name: provider_site_code
+      data_type: TEXT
+    - name: priority_type_code
+      data_type: NUMBER
+    - name: cancer_pathway_flag
+      data_type: BOOLEAN
+    - name: file_name
+      data_type: TEXT
+    - name: month_year
+      data_type: TEXT
+    - name: submission_month
+      data_type: FLOAT
+    - name: submission_year
+      data_type: FLOAT
+    - name: data_period
+      data_type: TEXT
+    - name: trust_code
+      data_type: TEXT
+    - name: combined_imaging_code
+      data_type: TEXT
+    - name: priority_type_code_routine_default
+      data_type: FLOAT
+    - name: TAT_scan
+      data_type: FLOAT
+    - name: TAT_report
+      data_type: FLOAT
+    - name: TAT_overall
+      data_type: FLOAT
+    - name: datedifftest
+      data_type: FLOAT
+    - name: cancer_pathway_flag_string
+      data_type: TEXT
+    - name: referring_organisation
+      data_type: TEXT
