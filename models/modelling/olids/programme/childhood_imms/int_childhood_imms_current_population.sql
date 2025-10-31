@@ -90,10 +90,12 @@ WHEN dem.IMD_QUINTILE_19 = 'Least Deprived' THEN 5
 ELSE 6 END AS IMDQUINTILE_ORDER
 ,dem.IMD_DECILE_19 AS IMD_DECILE
 ,CASE 
-WHEN m.LANGUAGE = 'Pushto' THEN 'Pashto' 
-WHEN m.language in ('Makaton sign language','Sign language','British Sign Language') THEN 'Sign language'
-WHEN m.language = 'Not Recorded' THEN 'Unknown'
-ELSE m.LANGUAGE END AS MAIN_LANGUAGE
+WHEN dem.MAIN_LANGUAGE = 'Pushto' THEN 'Pashto' 
+WHEN dem.MAIN_LANGUAGE = 'Gujerati' THEN 'Gujarati'
+WHEN dem.MAIN_LANGUAGE ILIKE '%sign language%' THEN 'Sign language'
+WHEN dem.MAIN_LANGUAGE = 'Norwegian Bokmål' THEN 'Norwegian'
+WHEN dem.MAIN_LANGUAGE = 'Not Recorded' THEN 'Unknown'
+ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 ,dem.BOROUGH_REGISTERED AS PRACTICE_BOROUGH 
 ,dem.NEIGHBOURHOOD_REGISTERED AS PRACTICE_NEIGHBOURHOOD
 ,dem.PCN_NAME AS PRIMARY_CARE_NETWORK
@@ -111,7 +113,6 @@ ELSE la.RESIDENT_FLAG END as RESIDENTIAL_LOC
 FROM {{ ref('dim_person_demographics') }} dem
 LEFT JOIN {{ ref('dim_person_age') }} age on age.PERSON_ID = dem.PERSON_ID
 LEFT JOIN {{ ref('dim_looked_after_child') }}  l on l.PERSON_ID = dem.PERSON_ID
-LEFT JOIN {{ ref('dim_person_main_language') }} m on m.PERSON_ID = dem.PERSON_ID
 LEFT JOIN DEV__MODELLING.LOOKUP_NCL.LSOA_2021_WARD_2025_LOCAL_AUTHORITY_2025 la on la.LSOA_2021_CODE = dem.LSOA_CODE_21
 WHERE dem.is_active = 'TRUE' 
 AND dem.IS_DECEASED = FALSE
