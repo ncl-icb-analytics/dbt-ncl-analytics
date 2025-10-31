@@ -1,6 +1,8 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        unique_key = 'row_id'
+        )
 }}
 
 /*
@@ -13,41 +15,69 @@ Clinical Purpose:
 
 */
 
-SELECT
+WITH base_join AS (
 
-    bridging.sk_patient_id,
-    contact.unique_service_request_identifier as referral_id,
-    contact.unique_care_contact_identifier AS contact_id,
+    SELECT
+        bridging.sk_patient_id,
+        contact.person_id,
+        contact.unique_service_request_identifier AS referral_id,
+        contact.unique_care_contact_identifier    AS contact_id,
+        activity.unique_care_activity_identifier,
+        activity.community_care_activity_type
 
-    -- count activities
-    COUNT(DISTINCT activity.unique_care_activity_identifier) AS total_activities_count,
-    COUNT_IF(activity.community_care_activity_type = '01') AS count_tests,
-    COUNT_IF(activity.community_care_activity_type = '02') AS count_assessments,
-    COUNT_IF(activity.community_care_activity_type = '03') AS count_clinical_interventions,
-    COUNT_IF(activity.community_care_activity_type = '04') AS count_advice,
-    COUNT_IF(activity.community_care_activity_type = '05') AS patient_health_promotion,
-    COUNT_IF(activity.community_care_activity_type = '06') AS count_mdt_review,
-    COUNT_IF(activity.community_care_activity_type = '07') AS count_clinician_support,
-    COUNT_IF(activity.community_care_activity_type IN ('08','09','10','11','12')) AS count_cyp_health_visitor,
-     
-FROM
-    {{ ref('stg_csds_cyp201carecontact') }} AS contact
-LEFT JOIN
-    {{ ref('stg_csds_cyp202careactivity') }} AS activity
-ON 
-    contact.unique_care_contact_identifier = activity.unique_care_contact_identifier
+    FROM {{ ref('stg_csds_cyp201carecontact') }} AS contact
 
-LEFT JOIN
-    {{ ref('stg_csds_cyp101referral')}} AS referral
-ON 
-    contact.unique_service_request_identifier = referral.unique_service_request_identifier
+    LEFT JOIN {{ ref('stg_csds_cyp202careactivity') }} AS activity
+        ON  contact.unique_care_contact_identifier = activity.unique_care_contact_identifier
+        AND contact.person_id = activity.person_id      
 
-LEFT JOIN
-    {{ ref('stg_csds_bridging') }} AS bridging 
-ON 
-        contact.person_id = bridging.person_id
+    LEFT JOIN {{ ref('stg_csds_cyp101referral') }} AS referral
+        ON  contact.unique_service_request_identifier = referral.unique_service_request_identifier
+        AND contact.person_id = referral.person_id
 
-GROUP BY
-    contact.unique_care_contact_identifier,
-    bridging.sk_patient_id,
-    contact.unique_service_request_identifier
+    LEFT JOIN {{ ref('stg_csds_bridging') }} AS bridging 
+        ON  contact.person_id = bridging.person_id
+),
+
+-- ==========================================================
+-- Aggregate to correct grain
+-- Each row = unique (patient, referral, contact)
+-- ==========================================================
+aggregated AS (
+
+    SELECT
+        sk_patient_id,
+        referral_id,
+        contact_id,
+
+        COUNT(DISTINCT unique_care_activity_identifier) AS total_activities_count,
+        COUNT_IF(community_care_activity_type = '01') AS count_tests,
+        COUNT_IF(community_care_activity_type = '02') AS count_assessments,
+        COUNT_IF(community_care_activity_type = '03') AS count_clinical_interventions,
+        COUNT_IF(community_care_activity_type = '04') AS count_advice,
+        COUNT_IF(community_care_activity_type = '05') AS patient_health_promotion,
+        COUNT_IF(community_care_activity_type = '06') AS count_mdt_review,
+        COUNT_IF(community_care_activity_type = '07') AS count_clinician_support,
+        COUNT_IF(community_care_activity_type IN ('08','09','10','11','12')) AS count_cyp_health_visitor
+
+    FROM base_join
+    GROUP BY sk_patient_id, referral_id, contact_id
+),
+
+-- ==========================================================
+-- Add surrogate key
+-- This step references column aliases safely.
+-- ==========================================================
+final AS (
+
+    SELECT
+        {{ dbt_utils.generate_surrogate_key([
+            "sk_patient_id",
+            "referral_id",
+            "contact_id"
+        ]) }} AS row_id,
+        *
+    FROM aggregated
+)
+
+SELECT * FROM final
