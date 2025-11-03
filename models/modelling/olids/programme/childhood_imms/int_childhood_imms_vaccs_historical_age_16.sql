@@ -182,6 +182,9 @@ p.ANALYSIS_MONTH
 ,p.ethcat_order
 ,p.imd_quintile
 ,p.imdquintile_order
+,p.RESIDENTIAL_BOROUGH
+,p.residential_neighbourhood
+,p.ward_name
 ,v.SIXIN1_COMP_BY_16
 ,v.FOURIN1_COMP_BY_16
 ,v.HPV_COMP_BY_16

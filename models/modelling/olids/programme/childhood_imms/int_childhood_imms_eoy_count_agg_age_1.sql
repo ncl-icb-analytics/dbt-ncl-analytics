@@ -29,8 +29,7 @@ FROM (
 select 
  '6-in-1 (dose 1) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, sixin1_dose1_sort as month_year, SIXIN1_DOSE1_MONTH_YEAR_LABEL as month_label, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 
 UNION
 
@@ -38,8 +37,7 @@ UNION
 select 
  '6-in-1 (dose 2) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, sixin1_dose2_sort as month_year, SIXIN1_DOSE2_MONTH_YEAR_LABEL as month_label, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 
 UNION
 
@@ -47,8 +45,7 @@ UNION
 select 
  '6-in-1 (dose 3) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, sixin1_dose3_sort as month_year, SIXIN1_DOSE3_MONTH_YEAR_LABEL as month_label, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 
 UNION
 
@@ -56,8 +53,7 @@ UNION
 select 
  'Rotavirus (dose 1) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, rota_dose1_sort as month_year, ROTA_DOSE1_MONTH_YEAR_LABEL as month_label, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 
 UNION
 
@@ -65,8 +61,7 @@ UNION
 select 
  'Rotavirus (dose 2) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, rota_dose2_sort as month_year, ROTA_DOSE2_MONTH_YEAR_LABEL as month_label, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 
 UNION
 
@@ -74,8 +69,7 @@ UNION
 select 
  'MenB (dose 1) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, menb_dose1_sort as month_year, MENB_DOSE1_MONTH_YEAR_LABEL as month_label, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 
 UNION
 
@@ -83,8 +77,7 @@ UNION
 select 
  'MenB (dose 2) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, menb_dose2_sort as month_year, MENB_DOSE2_MONTH_YEAR_LABEL as month_label,  count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 
 UNION
 
@@ -92,6 +85,5 @@ UNION
 select 
  'PCV (dose 1) 1 Year' as vaccination_dose, fiscal_year, gp_name, practice_code, pcv_dose1_sort as month_year, PCV_DOSE1_MONTH_YEAR_LABEL as month_label,  count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_eoy_age_1') }}
-group by
-1, 2, 3, 4, 5, 6
+group by all
 ) p
