@@ -151,6 +151,16 @@ def main():
     # Load source mappings
     mappings = load_source_mappings()
 
+    # Delete existing raw files
+    raw_files_path = os.path.join(PROJECT_DIR, 'models', 'raw')
+
+    for root, dirs, files in os.walk(raw_files_path):
+        for file in files:
+            if file.endswith(('.sql', '.yml')):
+                file_path = os.path.join(root, file)
+                os.remove(file_path)
+                print(f"Deleted raw model: {file_path}")
+
     # Load all source files from sources directory
     if not os.path.exists(SOURCES_DIR):
         print(f"Error: sources directory not found at {SOURCES_DIR}", file=sys.stderr)
