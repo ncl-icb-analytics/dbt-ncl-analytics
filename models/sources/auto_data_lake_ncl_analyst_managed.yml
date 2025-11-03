@@ -51,6 +51,35 @@ sources:
       data_type: NUMBER
     - name: BREACHES
       data_type: NUMBER
+  - name: CANCER__TRAJECTORY_SUBMISSIONS
+    identifier: '"CANCER__TRAJECTORY_SUBMISSIONS"'
+    columns:
+    - name: COLLECTIONID
+      data_type: NUMBER
+    - name: SELECTEDICB
+      data_type: TEXT
+    - name: ASSOCIATEDORG
+      data_type: TEXT
+    - name: SECONDARYASSOCORG
+      data_type: TEXT
+    - name: MEASUREID
+      data_type: NUMBER
+    - name: MEASURETYPE
+      data_type: TEXT
+    - name: MEASURESOURCE
+      data_type: TEXT
+    - name: MEASURENAME
+      data_type: TEXT
+    - name: DIMENSIONID
+      data_type: NUMBER
+    - name: DIMENSIONTYPE
+      data_type: TEXT
+    - name: DIMENSIONNAME
+      data_type: TEXT
+    - name: DATA
+      data_type: NUMBER
+    - name: COMMENTS
+      data_type: TEXT
   - name: COMMUNITY_P2_OCCUPANCY
     identifier: '"COMMUNITY_P2_OCCUPANCY"'
     columns:
@@ -1638,197 +1667,8 @@ sources:
       data_type: DATE
     - name: PRACTICE_COUNT
       data_type: NUMBER
-  - name: TURNAROUND_TIMES
-    identifier: '"TURNAROUND_TIMES"'
-    columns:
-    - name: DiagnosticTestDateTime
-      data_type: TIMESTAMP_NTZ
-    - name: PatientSourceTypeName
-      data_type: TEXT
-    - name: Modality
-      data_type: TEXT
-    - name: SiteName
-      data_type: TEXT
-    - name: SiteNameShort
-      data_type: TEXT
-    - name: ProviderTrust
-      data_type: TEXT
-    - name: ProviderTrustShort
-      data_type: TEXT
-    - name: PriorityTypeCode
-      data_type: TEXT
-    - name: CancerPathwayFlag
-      data_type: TEXT
-    - name: BreachScan
-      data_type: FLOAT
-    - name: BreachScan7Day
-      data_type: FLOAT
-    - name: TATScan
-      data_type: FLOAT
-    - name: BreachReportNCL
-      data_type: FLOAT
-    - name: BreachReportNCLCancer7Day
-      data_type: FLOAT
-    - name: BreachReport4Week
-      data_type: FLOAT
-    - name: BreachReportNHSE
-      data_type: FLOAT
-    - name: BreachReportNHSECancer7Day
-      data_type: FLOAT
-    - name: TATReport
-      data_type: FLOAT
-    - name: BreachOverall
-      data_type: FLOAT
-    - name: BreachOverallCancer7Day
-      data_type: FLOAT
-    - name: TATOverall
-      data_type: FLOAT
-    - name: TestAwaitingReport
-      data_type: FLOAT
-    - name: TestUnreported
-      data_type: FLOAT
-    - name: DataType
-      data_type: TEXT
   - name: TURNAROUND_TIMES_RAW
     identifier: '"TURNAROUND_TIMES_RAW"'
-    columns:
-    - name: submission_date
-      data_type: TIMESTAMP_NTZ
-    - name: data_type
-      data_type: TEXT
-    - name: month
-      data_type: TEXT
-    - name: year
-      data_type: TEXT
-    - name: ethnic_category
-      data_type: TEXT
-    - name: person_gender
-      data_type: FLOAT
-    - name: general_medical_practice
-      data_type: TEXT
-    - name: patient_source_type
-      data_type: NUMBER
-    - name: referrer_code
-      data_type: TEXT
-    - name: referring_org
-      data_type: TEXT
-    - name: diagnostic_test_request_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: diagnostic_test_request_received_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: diagnostic_test_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: service_report_issue_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: imaging_code_nicip
-      data_type: TEXT
-    - name: imaging_code_snomed
-      data_type: TEXT
-    - name: provider_site_code
-      data_type: TEXT
-    - name: priority_type_code
-      data_type: NUMBER
-    - name: cancer_pathway_flag
-      data_type: BOOLEAN
-    - name: file_name
-      data_type: TEXT
-    - name: month_year
-      data_type: TEXT
-    - name: submission_month
-      data_type: FLOAT
-    - name: submission_year
-      data_type: FLOAT
-    - name: data_period
-      data_type: TIMESTAMP_NTZ
-    - name: trust_code
-      data_type: TEXT
-    - name: combined_imaging_code
-      data_type: TEXT
-    - name: priority_type_code_routine_default
-      data_type: FLOAT
-    - name: TAT_scan
-      data_type: FLOAT
-    - name: TAT_report
-      data_type: FLOAT
-    - name: TAT_overall
-      data_type: FLOAT
-    - name: datedifftest
-      data_type: FLOAT
-    - name: cancer_pathway_flag_string
-      data_type: TEXT
-    - name: referring_organisation
-      data_type: TEXT
-  - name: TURNAROUND_TIMES_RAW_TEST
-    identifier: '"TURNAROUND_TIMES_RAW_TEST"'
-    columns:
-    - name: submission_date
-      data_type: TIMESTAMP_NTZ
-    - name: data_type
-      data_type: TEXT
-    - name: month
-      data_type: TEXT
-    - name: year
-      data_type: TEXT
-    - name: ethnic_category
-      data_type: TEXT
-    - name: person_gender
-      data_type: FLOAT
-    - name: general_medical_practice
-      data_type: TEXT
-    - name: patient_source_type
-      data_type: NUMBER
-    - name: referrer_code
-      data_type: TEXT
-    - name: referring_org
-      data_type: TEXT
-    - name: diagnostic_test_request_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: diagnostic_test_request_received_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: diagnostic_test_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: service_report_issue_date_time
-      data_type: TIMESTAMP_NTZ
-    - name: imaging_code_nicip
-      data_type: TEXT
-    - name: imaging_code_snomed
-      data_type: TEXT
-    - name: provider_site_code
-      data_type: TEXT
-    - name: priority_type_code
-      data_type: NUMBER
-    - name: cancer_pathway_flag
-      data_type: BOOLEAN
-    - name: file_name
-      data_type: TEXT
-    - name: month_year
-      data_type: TEXT
-    - name: submission_month
-      data_type: FLOAT
-    - name: submission_year
-      data_type: FLOAT
-    - name: data_period
-      data_type: TIMESTAMP_NTZ
-    - name: trust_code
-      data_type: TEXT
-    - name: combined_imaging_code
-      data_type: TEXT
-    - name: priority_type_code_routine_default
-      data_type: FLOAT
-    - name: TAT_scan
-      data_type: FLOAT
-    - name: TAT_report
-      data_type: FLOAT
-    - name: TAT_overall
-      data_type: FLOAT
-    - name: datedifftest
-      data_type: FLOAT
-    - name: cancer_pathway_flag_string
-      data_type: TEXT
-    - name: referring_organisation
-      data_type: TEXT
-  - name: TURNAROUND_TIMES_RAW_WRITE_TEST_BACKUP
-    identifier: '"TURNAROUND_TIMES_RAW_WRITE_TEST_BACKUP"'
     columns:
     - name: submission_date
       data_type: TEXT
@@ -2081,57 +1921,6 @@ sources:
       data_type: BOOLEAN
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
-  - name: turnaround_times_clean_write_test
-    identifier: '"turnaround_times_clean_write_test"'
-    columns:
-    - name: DiagnosticTestDateTime
-      data_type: TIMESTAMP_NTZ
-    - name: PatientSourceTypeName
-      data_type: TEXT
-    - name: Modality
-      data_type: TEXT
-    - name: SiteName
-      data_type: TEXT
-    - name: SiteNameShort
-      data_type: TEXT
-    - name: ProviderTrust
-      data_type: TEXT
-    - name: ProviderTrustShort
-      data_type: TEXT
-    - name: PriorityTypeCode
-      data_type: TEXT
-    - name: CancerPathwayFlag
-      data_type: TEXT
-    - name: BreachScan
-      data_type: FLOAT
-    - name: BreachScan7Day
-      data_type: FLOAT
-    - name: TATScan
-      data_type: FLOAT
-    - name: BreachReportNCL
-      data_type: FLOAT
-    - name: BreachReportNCLCancer7Day
-      data_type: FLOAT
-    - name: BreachReport4Week
-      data_type: FLOAT
-    - name: BreachReportNHSE
-      data_type: FLOAT
-    - name: BreachReportNHSECancer7Day
-      data_type: FLOAT
-    - name: TATReport
-      data_type: FLOAT
-    - name: BreachOverall
-      data_type: FLOAT
-    - name: BreachOverallCancer7Day
-      data_type: FLOAT
-    - name: TATOverall
-      data_type: FLOAT
-    - name: TestAwaitingReport
-      data_type: FLOAT
-    - name: TestUnreported
-      data_type: FLOAT
-    - name: DataType
-      data_type: TEXT
   - name: turnaround_times_raw_write_test
     identifier: '"turnaround_times_raw_write_test"'
     columns:

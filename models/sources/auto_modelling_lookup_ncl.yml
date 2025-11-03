@@ -411,6 +411,31 @@ sources:
       data_type: TEXT
     - name: AMENDED_RECORD_INDICATOR
       data_type: TEXT
+  - name: OUTPUT_AREA_2021_LSOA_MSOA_LAD_DEC_2021
+    identifier: '"OUTPUT_AREA_2021_LSOA_MSOA_LAD_DEC_2021"'
+    columns:
+    - name: OA21CD
+      data_type: TEXT
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: LSOA21NMW
+      data_type: TEXT
+    - name: MSOA21CD
+      data_type: TEXT
+    - name: MSOA21NM
+      data_type: TEXT
+    - name: MSOA21NMW
+      data_type: TEXT
+    - name: LAD22CD
+      data_type: TEXT
+    - name: LAD22NM
+      data_type: TEXT
+    - name: LAD22NMW
+      data_type: TEXT
+    - name: OBJECTID
+      data_type: NUMBER
   - name: POPULATION_SEGMENTATION_CODE_LOOKUP
     identifier: '"POPULATION_SEGMENTATION_CODE_LOOKUP"'
     columns:
