@@ -147,6 +147,9 @@ p.ANALYSIS_MONTH
 ,p.ethcat_order
 ,p.imd_quintile
 ,p.imdquintile_order
+,p.RESIDENTIAL_BOROUGH
+,p.residential_neighbourhood
+,p.ward_name
 ,v.sixin1_comp_by_2
 ,v.hibmc_comp_by_2
 ,v.mmr1_comp_by_2

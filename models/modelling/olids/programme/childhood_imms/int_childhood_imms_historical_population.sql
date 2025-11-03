@@ -52,8 +52,19 @@ SELECT
     END AS imdquintile_order,
     -- Practice
     pmab.borough_registered as practice_borough,
+    pmab.neighbourhood_resident as residential_neighbourhood,
     pmab.practice_name,
-    pmab.practice_code
+    pmab.practice_code,
+    CASE
+    WHEN pmab.LOCAL_AUTHORITY_NAME not in ('Barnet','Camden','Enfield','Haringey','Islington') 
+    THEN 'Outside NCL' 
+    WHEN pmab.LOCAL_AUTHORITY_NAME IS NULL THEN 'Unknown'
+    ELSE pmab.LOCAL_AUTHORITY_NAME END as RESIDENTIAL_BOROUGH,
+    CASE
+    WHEN pmab.LOCAL_AUTHORITY_NAME not in ('Barnet','Camden','Enfield','Haringey','Islington') 
+    THEN 'Outside NCL'
+    WHEN pmab.LOCAL_AUTHORITY_NAME IS NULL THEN 'Unknown'
+    ELSE pmab.ward_name END as WARD_NAME
 FROM {{ ref('person_month_analysis_base') }} pmab
 WHERE pmab.age IN (1, 2, 5, 11, 16)
     -- Exclude deceased patients (age frozen at death)

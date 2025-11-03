@@ -133,6 +133,9 @@ p.ANALYSIS_MONTH
 ,p.ethcat_order
 ,p.imd_quintile
 ,p.imdquintile_order
+,p.RESIDENTIAL_BOROUGH
+,p.residential_neighbourhood
+,p.ward_name
 ,v.sixin1_COMP_BY_11
 ,v.fourin1_COMP_BY_11
 ,v.hibmc_COMP_BY_11
