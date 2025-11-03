@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: int_csds_diagnosis
+    description: |
+      All diganoses associated with the community care services (CSDS) data set.
+      Contains primary and secondary diagnoses (cyp601 and cyp602).
+    tests:                                         
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - sk_patient_id
+          - referral_id
+          - diagnosis_date
+          - diagnostic_hierarchy
+          - source_concept_code
+        config:
+          severity: warn
+    
+    columns:
+      - name: record_id
+        data_type: varchar
+        description: "Unique row ID for the table"
+
+      - name: sk_patient_id
+        data_type: varchar
+        description: "Common commissioning patient identifier"
+      
+      - name: referral_id
+        data_type: varchar
+        description: the service_request_identifier that is associated with a referral
+
+      - name: diagnosis date
+        data_type: datetime
+        description: The date when the patient diagnosis was observed by a person.
+      
+      - name: diagnosis_source
+        data_type: varchar
+        description: data source of diagnosis (CSDS)
+      
+      - name: diagnostic_hierarchy
+        data_type: varchar
+        description: indicates whether it is a primary or secondary diagnosis (cyp601 or cyp602)
+      
+      - name: organisation_id
+        data_type: varchar
+        description: organisation Identifier of provider submitting the data to CSDS.
+
+      - name: organisation_name
+        data_type: varchar
+        description: name of organisation submitting the data to CSDS
+        
+      - name: source_concept_code
+        data_type: varchar
+        description: The coded clinical entry used to identify the diagnosis.
+
+      - name: concept_code
+        data_type: varchar
+
+      - name: concept_name
+        data_type: varchar
+        description: name of the diagnosis
+      
+      - name: concept_vocabularly
+        data_type: varchar
+        description: type of diagnostic coding used (SNOMED CT, ICD-10, etc)
