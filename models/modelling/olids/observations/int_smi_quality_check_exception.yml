@@ -1,0 +1,9 @@
+version: 1
+models:
+  - name: int_smi_quality_check_exception
+    description: 'Mental Health quality indicator care refused or patient not suitable
+      Latest value per Mental Health /SMI observation using MHPCADEC_COD, MHPCAPU_COD'
+      
+    tests:
+      - cluster_ids_exist:
+         cluster_ids: MHPCADEC_COD, MHPCAPU_COD
