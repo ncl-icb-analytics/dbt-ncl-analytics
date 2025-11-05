@@ -67,6 +67,14 @@ models:
         data_type: varchar
         description: "Point of delivery, based on admission method, patient classification and length of stay"
 
+      - name: spec_comm
+        data_type: varchar
+        description: "Specialised Commission Code"
+
+      - name: spec_comm_flag
+        data_type: varchar
+        description: "Specialised Commission Flag"
+
       - name: type
         data_type: varchar
         description: ""

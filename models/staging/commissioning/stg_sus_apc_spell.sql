@@ -34,6 +34,9 @@ select core.primarykey_id
     , core.spell_clinical_coding_grouper_derived_dominant_procedure
     , core.spell_admission_admission_sub_type
     , core.spell_admission_admission_type
+
+    //Added SpecComm
+    , core.spell_commissioning_pss_grouping_national_programme_code as spec_comm
     , core.spell_commissioning_tariff_calculation_final_price
 
 from core_data as core

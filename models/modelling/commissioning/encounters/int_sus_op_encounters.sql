@@ -51,6 +51,11 @@ select
         when core.appointment_commissioning_grouping_core_hrg is null then 'UNKNOWN'
         else 'OPPROC'
         end as pod
+   
+    -- Adding Spec_comm   
+    ,iff(core.spec_comm is null, 'N','Y') as spec_comm_flag
+    ,core.spec_comm as spec_comm
+
     -- TO DO: add pod and pod_group
     , core.appointment_commissioning_grouping_core_hrg as type -- consider changing to something more aligned with team understanding
     , dict_hrg.hrg_description as type_desc
