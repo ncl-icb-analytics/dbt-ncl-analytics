@@ -51,13 +51,36 @@ concept_display,
 result_value, 
 result_unit_display,
 CASE 
-WHEN (concept_display ilike ('Ex%') OR concept_display = 'Stopped drinking alcohol') AND result_value = 0 AND result_unit_display = 'U/week' THEN 'Ex-Drinker'
+WHEN (concept_display ILIKE ANY ('Ex%', '%Abstinent%') OR concept_display = 'Stopped drinking alcohol') AND result_value = 0 AND result_unit_display = 'U/week' THEN 'Ex-Drinker'
+WHEN (concept_display ILIKE ANY ('Ex%', '%Abstinent%') OR concept_display = 'Stopped drinking alcohol') AND result_value IS NULL THEN 'Ex-Drinker'
 WHEN concept_display in ('Alcohol units consumed per week','Alcoholic beverage intake','Alcohol intake') AND result_value = 0 AND result_unit_display = 'U/week' THEN 'Non-Drinker'
 WHEN concept_display in ('Non - drinker', 'Lifetime non-drinker of alcohol','Lifetime non-drinker') AND result_value = 0 AND result_unit_display = 'U/week' THEN 'Non-Drinker'
-WHEN concept_display in ('Alcohol units consumed per week','Alcoholic beverage intake','Alcohol intake') AND result_unit_display = 'U/week' AND result_value between 1 AND 14 THEN 'Low Risk'
-WHEN concept_display in ('Alcohol units consumed per week','Alcoholic beverage intake','Alcohol intake') AND result_unit_display = 'U/week' AND result_value between 15 AND 34 AND GENDER = 'Female' THEN 'Increasing Risk' 
-WHEN concept_display in ('Alcohol units consumed per week','Alcoholic beverage intake','Alcohol intake') AND result_unit_display = 'U/week' AND result_value between 15 AND 49 AND GENDER = 'Male' THEN 'Increasing Risk'
-WHEN concept_display in ('Alcohol units consumed per week','Alcoholic beverage intake','Alcohol intake') AND result_unit_display = 'U/week' AND result_value >= 35 AND GENDER = 'Female' THEN 'High Risk' 
-WHEN concept_display in ('Alcohol units consumed per week','Alcoholic beverage intake','Alcohol intake') AND result_unit_display = 'U/week' AND result_value >= 50 AND GENDER = 'Male' THEN 'High Risk' ELSE 'Unclear'
+WHEN concept_display in ('Non - drinker', 'Lifetime non-drinker of alcohol','Lifetime non-drinker') AND result_value IS NULL THEN 'Non-Drinker'
+WHEN concept_display ILIKE ANY ('%Harmful%', '%Heavy%', '%Hazard%','%Higher%') AND result_value IS NULL THEN 'Higher Risk'
+WHEN concept_display ILIKE ANY ('%binge%', '%Increasing%', '%Moderate%','%Unhealthy%','%Problem%') AND result_value IS NULL THEN 'Increasing Risk'
+WHEN concept_display in ('Alcohol intake above recommended sensible limits') AND result_value IS NULL THEN 'Increasing Risk' 
+WHEN concept_display ILIKE ANY ('%trivial%','%light%','%lower%') AND result_value IS NULL THEN 'Low Risk'
+WHEN concept_display in ('Alcohol intake within recommended sensible limits','Occasional drinker') AND result_value IS NULL THEN 'Low Risk' 
+WHEN concept_display in ('Alcohol units consumed per week','Heavy drinker - 7-9u/day','Light drinker - 1-2u/day','Increasing risk drinking','Moderate drinker - 3-6u/day','Trivial drinker - <1u/day','Very heavy drinker - greater than 9 units/day') 
+AND result_unit_display = 'U/week' AND result_value > 0 AND result_value < 15 THEN 'Low Risk'
+WHEN concept_display ILIKE ANY ('%drinker', 'Drinks%','%alcohol use','%intake','%limits') 
+AND result_unit_display = 'U/week' AND result_value > 0 AND result_value < 15 THEN 'Low Risk'
+WHEN concept_display in ('Alcohol units consumed per week','Heavy drinker - 7-9u/day','Light drinker - 1-2u/day','Increasing risk drinking','Moderate drinker - 3-6u/day','Trivial drinker - <1u/day','Very heavy drinker - greater than 9 units/day') 
+AND result_unit_display = 'U/week' AND result_value >= 15 AND result_value < 35 AND GENDER = 'Female' THEN 'Increasing Risk' 
+WHEN concept_display ILIKE ANY ('%drinker', 'Drinks%','%alcohol use','%intake','%limits') 
+AND result_unit_display = 'U/week' AND result_value >= 15 AND result_value < 35 AND GENDER = 'Female' THEN 'Increasing Risk' 
+WHEN concept_display ILIKE ANY ('%drinker', 'Drinks%','%alcohol use','%intake','%limits') 
+AND result_unit_display = 'U/week' AND result_value >= 15 AND result_value < 50 AND GENDER = 'Male' THEN 'Increasing Risk'
+WHEN concept_display in ('Alcohol units consumed per week','Heavy drinker - 7-9u/day','Light drinker - 1-2u/day','Increasing risk drinking','Moderate drinker - 3-6u/day','Trivial drinker - <1u/day','Very heavy drinker - greater than 9 units/day') 
+AND result_unit_display = 'U/week' AND result_value >= 15 AND result_value < 50 AND GENDER = 'Male' THEN 'Increasing Risk'
+WHEN concept_display in ('Alcohol units consumed per week','Heavy drinker - 7-9u/day','Light drinker - 1-2u/day','Increasing risk drinking','Moderate drinker - 3-6u/day','Trivial drinker - <1u/day','Very heavy drinker - greater than 9 units/day') 
+AND result_unit_display = 'U/week' AND result_value >= 35 AND GENDER = 'Female' THEN 'Higher Risk' 
+WHEN concept_display ILIKE ANY ('%drinker', 'Drinks%','%alcohol use','%intake','%limits') 
+AND result_unit_display = 'U/week' AND result_value >= 35 AND GENDER = 'Female' THEN 'Higher Risk' 
+WHEN concept_display in ('Alcohol units consumed per week','Heavy drinker - 7-9u/day','Light drinker - 1-2u/day','Increasing risk drinking','Moderate drinker - 3-6u/day','Trivial drinker - <1u/day','Very heavy drinker - greater than 9 units/day') 
+AND result_unit_display = 'U/week' AND result_value >= 50 AND GENDER = 'Male' THEN 'Higher Risk' 
+WHEN concept_display ILIKE ANY ('%drinker', 'Drinks%','%alcohol use','%intake','%limits') 
+AND result_unit_display = 'U/week' AND result_value >= 50 AND GENDER = 'Male' THEN 'Higher Risk' 
+ELSE 'Unclear'
 END AS alcohol_risk_category
 from observations_with_demographics

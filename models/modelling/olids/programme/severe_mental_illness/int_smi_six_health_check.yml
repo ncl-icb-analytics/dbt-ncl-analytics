@@ -1,0 +1,10 @@
+models:
+  - name: int_smi_six_health_check
+    description: Intermediate table holding core health checks for people on the SMI register
+    
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique

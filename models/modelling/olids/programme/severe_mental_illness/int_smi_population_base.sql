@@ -10,6 +10,7 @@
 WITH SMI_POP AS (
 select
 dem.PERSON_ID
+,dem.SK_PATIENT_ID
 ,dem.AGE
 ,dem.GENDER
 ,CASE
