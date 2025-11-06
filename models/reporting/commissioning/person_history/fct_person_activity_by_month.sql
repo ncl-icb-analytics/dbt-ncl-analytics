@@ -39,7 +39,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         e.sk_patient_id
         , d.month_start_date as activity_month
         , 'Inpatient' as activity_type
-        , e.admission_method_group as activity_subtype
+        , case when e.spec_comm_flag = 'Y' then 'spec_comm' else e.admission_method_group end as activity_subtype
         , sum(case when d.month_start_date = date_trunc('month', e.start_date) then 1 end) as encounters
         -- allocate cost and duration proportionally to days in month
         , sum(
@@ -63,14 +63,14 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     where 
         e.sk_patient_id is not null
     group by 
-        e.sk_patient_id, d.month_start_date, e.admission_method_group
+        e.sk_patient_id, d.month_start_date, case when e.spec_comm_flag = 'Y' then 'spec_comm' else e.admission_method_group end
 )
 , op_encounter_summary as(
     select
         sk_patient_id
         , date_trunc('month', start_date) as activity_month
         , 'Outpatient' as activity_type
-        , pod as activity_subtype
+        , case when spec_comm_flag = 'Y' then 'spec_comm' else pod end as activity_subtype
         , count(*) as encounters
         , sum(cost) as cost
         , sum(expected_duration) as duration
@@ -79,7 +79,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     where 
         sk_patient_id is not null
     group by 
-        sk_patient_id, date_trunc('month', start_date), pod
+        sk_patient_id, date_trunc('month', start_date), case when spec_comm_flag = 'Y' then 'spec_comm' else pod end
 )
 , gp_encounter_summary as(
     select
@@ -210,24 +210,36 @@ select
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - emergency' then encounters else 0 end) as ip_nel_emergency_encounters
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - Maternity' then encounters else 0 end) as ip_nel_maternity_encounters
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - Other' then encounters else 0 end) as ip_nel_other_encounters
+    , sum(case when activity_type = 'Inpatient' and activity_subtype = 'spec_comm' then encounters else 0 end) as ip_spec_comm_encounters
+
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Elective' then cost else 0 end) as ip_el_cost
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - emergency' then cost else 0 end) as ip_nel_emergency_cost
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - Maternity' then cost else 0 end) as ip_nel_maternity_cost
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - Other' then cost else 0 end) as ip_nel_other_cost
+    , sum(case when activity_type = 'Inpatient' and activity_subtype = 'spec_comm' then cost else 0 end) as ip_spec_comm_cost   
+
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Elective' then duration else 0 end) as ip_el_duration
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - emergency' then duration else 0 end) as ip_nel_emergency_duration
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - Maternity' then duration else 0 end) as ip_nel_maternity_duration
     , sum(case when activity_type = 'Inpatient' and activity_subtype = 'Non-elective - Other' then duration else 0 end) as ip_nel_other_duration
+    , sum(case when activity_type = 'Inpatient' and activity_subtype = 'spec_comm' then duration else 0 end) as ip_spec_comm_duration
     -- Outpatient
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFA-F2F', 'OPFA-NFTF') then encounters else 0 end) as op_fa_encounters
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFUP-F2F', 'OPFUP-NFTF') then encounters else 0 end) as op_fup_encounters
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPPROC') then encounters else 0 end) as op_proc_encounters
+    , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('spec_comm') then encounters else 0 end) as op_spec_comm_encounters
+
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFA-F2F', 'OPFA-NFTF') then cost else 0 end) as op_fa_cost
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFUP-F2F', 'OPFUP-NFTF') then cost else 0 end) as op_fup_cost
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPPROC') then cost else 0 end) as op_proc_cost
+    , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('spec_comm') then cost else 0 end) as op_spec_comm_cost
+
+
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFA-F2F', 'OPFA-NFTF') then duration else 0 end) as op_fa_duration
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPFUP-F2F', 'OPFUP-NFTF') then duration else 0 end) as op_fup_duration
     , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('OPPROC') then duration else 0 end) as op_proc_duration
+    , sum(case when activity_type = 'Outpatient'  and activity_subtype in ('spec_comm') then duration else 0 end) as op_spec_comm_duration
+
     -- MH
     , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'Spell' then encounters else 0 end) as mh_spell_encounters
     , sum(case when activity_type = 'MentalHealthServices' and activity_subtype = 'CareContact' then encounters else 0 end) as mh_contact_encounters

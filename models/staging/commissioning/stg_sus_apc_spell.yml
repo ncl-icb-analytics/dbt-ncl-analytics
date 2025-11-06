@@ -25,6 +25,8 @@ models:
   - name: spell_clinical_coding_grouper_derived_dominant_procedure
   - name: spell_admission_admission_sub_type
   - name: spell_admission_admission_type
+  # Spec Comm
+  - name: spec_comm
   - name: spell_commissioning_tariff_calculation_final_price
 
   tests:
