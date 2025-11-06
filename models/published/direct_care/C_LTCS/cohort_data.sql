@@ -17,13 +17,16 @@ Testing:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, pcn_code, pcn_name, age, main_language
+    select patient_id, olids_id, pcn_code, pcn_name, practice_code, practice_name, age, main_language
     from {{ ref('inclusion_cohort')}}
     where eligible = 1
 )
 
 select il.patient_id
     , il.pcn_code
+    , il.pcn_name
+    , il.practice_code
+    , il.practice_name
     , il.age
     , il.main_language as main_language
     , case when il.main_language in ('English', 'Not Recorded') then 0 else 1 end as main_language_flag -- TO DO: switch to interpreter flag
