@@ -5,6 +5,25 @@ sources:
   schema: '"TERMINOLOGY"'
   description: Reference terminology data including SNOMED, BNF, and other code sets
   tables:
+  - name: ADULT_IMMS_CODES
+    identifier: '"ADULT_IMMS_CODES"'
+    columns:
+    - name: VACCINE
+      data_type: TEXT
+    - name: DOSE
+      data_type: TEXT
+    - name: PROPOSEDCLUSTER
+      data_type: TEXT
+    - name: SOURCECLUSTERID
+      data_type: TEXT
+    - name: SOURCECLUSTERDESCRIPTION
+      data_type: TEXT
+    - name: SNOMEDCONCEPTID
+      data_type: NUMBER
+    - name: CODEDESCRIPTION
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
   - name: BNF_LATEST
     identifier: '"BNF_LATEST"'
     columns:

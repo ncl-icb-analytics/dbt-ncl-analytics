@@ -1,4 +1,4 @@
--- Raw layer model for reference_analyst_managed.DIAGNOSTICS_MONTHLY_DM01_Pre-release
+-- Raw layer model for reference_analyst_managed.DIAGNOSTICS_MONTHLY_DM01_PRE_RELEASE
 -- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
 -- Description: Analyst-managed reference datasets and business rules
 -- This is a 1:1 passthrough from source with standardized column names
@@ -35,4 +35,4 @@ select
     "Total Activity" as total_activity,
     "<6Weeks" as lt_6_weeks,
     "6+WW" as ww_6_plus
-from {{ source('reference_analyst_managed', 'DIAGNOSTICS_MONTHLY_DM01_Pre-release') }}
+from {{ source('reference_analyst_managed', 'DIAGNOSTICS_MONTHLY_DM01_PRE_RELEASE') }}
