@@ -1,0 +1,30 @@
+version: 1
+models:
+- name: stg_reference_imms_schedule_child_latest
+  description: Immunisation schedule with age eligibility and code cluster
+    mappings for children and adolescents
+  columns:
+  - name: vaccine_id
+    description: Primary key - unique vaccine identifier
+    tests:
+    - unique
+    - not_null
+  - name: vaccine_name
+    description: Vaccine name
+    tests:
+    - not_null
+  - name: dose_number
+    description: Dose number in schedule
+  - name: diseases_protected_against
+    description: Diseases this vaccine protects against
+  - name: eligible_age_from_days
+    description: Eligibility window start in days
+  - name: eligible_age_to_days
+    description: Eligibility window end in days
+  - name: administered_cluster_id
+    description: FK to combined_codesets cluster for administered codes
+  - name: drug_cluster_id
+    description: FK to combined_codesets cluster for drug codes
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

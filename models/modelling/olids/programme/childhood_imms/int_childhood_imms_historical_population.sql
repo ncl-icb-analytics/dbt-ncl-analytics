@@ -21,6 +21,9 @@ SELECT
     pmab.is_deceased,
     pmab.birth_date_approx,
     -- Born after specific dates flags
+    CASE WHEN pmab.birth_date_approx >= '2022-09-01' 
+    AND pmab.birth_date_approx < '2024-07-01' THEN 'Yes'
+        ELSE 'No' END AS born_sep_2022_flag,
     CASE WHEN pmab.birth_date_approx >= '2024-07-01' THEN 'Yes'
         ELSE 'No' END AS born_jul_2024_flag,
     CASE WHEN pmab.birth_date_approx >= '2025-01-01' THEN 'Yes'

@@ -246,7 +246,7 @@ sources:
     identifier: '"CONSULTANT_CONNECT_CALL_MESSAGES"'
     columns:
     - name: DATE
-      data_type: TEXT
+      data_type: DATE
     - name: TIME
       data_type: TIME
     - name: USER
@@ -260,9 +260,9 @@ sources:
     - name: PCN
       data_type: TEXT
     - name: SPECIALISM
-      data_type: NUMBER
-    - name: NO_OF_PHOTOS
       data_type: TEXT
+    - name: NO_OF_PHOTOS
+      data_type: NUMBER
     - name: CONSULTANT
       data_type: TEXT
     - name: TRUST
@@ -274,6 +274,10 @@ sources:
     - name: WAIT_TIME_SEC
       data_type: NUMBER
     - name: TALK_TIME_SEC
+      data_type: NUMBER
+    - name: RESPONSE_TIME
+      data_type: TEXT
+    - name: RESPONSE_TIME_SEC
       data_type: NUMBER
     - name: OUTCOME
       data_type: TEXT
@@ -1561,6 +1565,78 @@ sources:
       data_type: NUMBER
     - name: WORKING_AGE_POPULATION_18_TO_66_FOR_USE_WITH_EMPLOYMENT_DEPRIVATION_DOMAIN_MID_2022
       data_type: NUMBER
+  - name: IMMS_SCHEDULE_ADULT_LATEST
+    identifier: '"IMMS_SCHEDULE_ADULT_LATEST"'
+    columns:
+    - name: VACCINE_ORDER
+      data_type: NUMBER
+    - name: VACCINE_ID
+      data_type: TEXT
+    - name: VACCINE_NAME
+      data_type: TEXT
+    - name: DOSE_NUMBER
+      data_type: NUMBER
+    - name: DISEASES_PROTECTED_AGAINST
+      data_type: TEXT
+    - name: VACCINE_CODE
+      data_type: TEXT
+    - name: TRADE_NAME
+      data_type: TEXT
+    - name: ADMINISTRATION_ROUTE
+      data_type: TEXT
+    - name: SCHEDULE_AGE
+      data_type: TEXT
+    - name: MINIMUM_AGE_DAYS
+      data_type: NUMBER
+    - name: MAXIMUM_AGE_DAYS
+      data_type: NUMBER
+    - name: MINIMUM_INTERVAL_DAYS
+      data_type: NUMBER
+    - name: NEXT_DOSE_VACCINE_ID
+      data_type: TEXT
+    - name: ELIGIBLE_AGE_FROM_DAYS
+      data_type: NUMBER
+    - name: ELIGIBLE_AGE_TO_DAYS
+      data_type: NUMBER
+    - name: ADMINISTERED_CLUSTER_ID
+      data_type: TEXT
+    - name: DRUG_CLUSTER_ID
+      data_type: TEXT
+    - name: DECLINED_CLUSTER_ID
+      data_type: TEXT
+    - name: CONTRAINDICATED_CLUSTER_ID
+      data_type: TEXT
+  - name: IMMS_SCHEDULE_CHILD_LATEST
+    identifier: '"IMMS_SCHEDULE_CHILD_LATEST"'
+    columns:
+    - name: VACCINE_ORDER
+      data_type: NUMBER
+    - name: VACCINE_ID
+      data_type: TEXT
+    - name: VACCINE_NAME
+      data_type: TEXT
+    - name: DOSE_NUMBER
+      data_type: NUMBER
+    - name: DISEASES_PROTECTED_AGAINST
+      data_type: TEXT
+    - name: VACCINE_CODE
+      data_type: TEXT
+    - name: TRADE_NAME
+      data_type: TEXT
+    - name: SCHEDULE_AGE
+      data_type: TEXT
+    - name: ELIGIBLE_AGE_FROM_DAYS
+      data_type: NUMBER
+    - name: ELIGIBLE_AGE_TO_DAYS
+      data_type: NUMBER
+    - name: ADMINISTERED_CLUSTER_ID
+      data_type: TEXT
+    - name: DRUG_CLUSTER_ID
+      data_type: TEXT
+    - name: DECLINED_CLUSTER_ID
+      data_type: TEXT
+    - name: CONTRAINDICATED_CLUSTER_ID
+      data_type: TEXT
   - name: IMMS_SCHEDULE_LATEST
     identifier: '"IMMS_SCHEDULE_LATEST"'
     columns:
