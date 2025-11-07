@@ -13,6 +13,7 @@ select
     "SCHEDULE_AGE" as schedule_age,
     "ELIGIBLE_AGE_FROM_DAYS" as eligible_age_from_days,
     "ELIGIBLE_AGE_TO_DAYS" as eligible_age_to_days,
+    "MAXIMUM_AGE_DAYS" as maximum_age_days,
     "ADMINISTERED_CLUSTER_ID" as administered_cluster_id,
     "DRUG_CLUSTER_ID" as drug_cluster_id,
     "DECLINED_CLUSTER_ID" as declined_cluster_id,

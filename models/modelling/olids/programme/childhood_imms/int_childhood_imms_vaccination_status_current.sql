@@ -28,6 +28,8 @@ ec.PERSON_ID
 ,ec.DOSE_NUMBER
 ,ec.ELIGIBLE_FROM_DATE 
 ,ec.ELIGIBLE_TO_DATE
+,ec.VACCINE_ELIGIBLE
+,ec.MAXIMUM_AGE_DAYS
 ,CASE 
 WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
 WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'

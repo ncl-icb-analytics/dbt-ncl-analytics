@@ -9,6 +9,7 @@ select
     schedule_age,
     eligible_age_from_days,
     eligible_age_to_days,
+    maximum_age_days,
     administered_cluster_id,
     drug_cluster_id,
     declined_cluster_id,
