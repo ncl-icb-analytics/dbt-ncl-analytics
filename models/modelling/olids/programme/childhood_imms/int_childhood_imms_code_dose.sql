@@ -40,7 +40,7 @@ WHEN clut.VACCINE = 'Rotavirus' and clut.DOSE = '1,2' and sched.DOSE_NUMBER = '2
 WHEN clut.VACCINE = sched.VACCINE_NAME AND clut.DOSE = sched.DOSE_NUMBER THEN clut.DOSE
 END as DOSE_MATCH
 FROM {{ ref('stg_reference_childhood_imms_codes') }} clut
-INNER JOIN {{ ref('stg_reference_imms_schedule_latest') }} sched ON
+INNER JOIN {{ ref('stg_reference_imms_schedule_child_latest') }} sched ON
             (sched.administered_cluster_id = clut.proposedcluster OR
             sched.drug_cluster_id = clut.proposedcluster OR
             sched.declined_cluster_id = clut.proposedcluster OR

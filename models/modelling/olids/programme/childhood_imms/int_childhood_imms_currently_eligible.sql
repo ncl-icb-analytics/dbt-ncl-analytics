@@ -7,9 +7,9 @@
 SELECT 
 p.PERSON_ID,
 p.BIRTH_DATE_APPROX,
-p.dob_eom,
 p.AGE,
 p.AGE_DAYS_APPROX,
+p.BORN_SEP_2022_FLAG,
 p.BORN_JUL_2024_FLAG,
 p.BORN_JAN_2025_FLAG,
 p.FIRST_BDAY,
@@ -38,7 +38,7 @@ CASE
     END AS CURRENTLY_ELIGIBLE
 FROM {{ ref('int_childhood_imms_current_population') }} p
 CROSS JOIN 
-     {{ ref('stg_reference_imms_schedule_latest') }} sched
+     {{ ref('stg_reference_imms_schedule_child_latest') }} sched
 WHERE 
 AGE_DAYS_APPROX >= (select min(ELIGIBLE_AGE_FROM_DAYS) from {{ ref('stg_reference_imms_schedule_latest') }}) 
 order by vaccine_id

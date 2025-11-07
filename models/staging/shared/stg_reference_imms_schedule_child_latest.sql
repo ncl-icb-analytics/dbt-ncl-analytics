@@ -1,0 +1,16 @@
+select
+    vaccine_order,
+    vaccine_id,
+    vaccine_name,
+    dose_number,
+    diseases_protected_against,
+    vaccine_code,
+    trade_name,
+    schedule_age,
+    eligible_age_from_days,
+    eligible_age_to_days,
+    administered_cluster_id,
+    drug_cluster_id,
+    declined_cluster_id,
+    contraindicated_cluster_id,
+    from {{ ref('raw_reference_imms_schedule_child_latest') }}

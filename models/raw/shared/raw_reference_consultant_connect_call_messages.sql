@@ -18,6 +18,8 @@ select
     "ROTA_POSITION" as rota_position,
     "WAIT_TIME_SEC" as wait_time_sec,
     "TALK_TIME_SEC" as talk_time_sec,
+    "RESPONSE_TIME" as response_time,
+    "RESPONSE_TIME_SEC" as response_time_sec,
     "OUTCOME" as outcome,
     "DATE_CLOSED" as date_closed,
     "LAST_ACTIVITY" as last_activity,
