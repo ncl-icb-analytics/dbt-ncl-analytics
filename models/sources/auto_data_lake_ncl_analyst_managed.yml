@@ -1575,7 +1575,7 @@ sources:
     - name: VACCINE_NAME
       data_type: TEXT
     - name: DOSE_NUMBER
-      data_type: NUMBER
+      data_type: TEXT
     - name: DISEASES_PROTECTED_AGAINST
       data_type: TEXT
     - name: VACCINE_CODE
@@ -1616,7 +1616,7 @@ sources:
     - name: VACCINE_NAME
       data_type: TEXT
     - name: DOSE_NUMBER
-      data_type: NUMBER
+      data_type: TEXT
     - name: DISEASES_PROTECTED_AGAINST
       data_type: TEXT
     - name: VACCINE_CODE
@@ -1628,6 +1628,8 @@ sources:
     - name: ELIGIBLE_AGE_FROM_DAYS
       data_type: NUMBER
     - name: ELIGIBLE_AGE_TO_DAYS
+      data_type: NUMBER
+    - name: MAXIMUM_AGE_DAYS
       data_type: NUMBER
     - name: ADMINISTERED_CLUSTER_ID
       data_type: TEXT
