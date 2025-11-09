@@ -90,7 +90,7 @@
     CASE
         WHEN {{ birth_date_field }} IS NULL THEN 'Unknown'
         WHEN ({{ age_calc }}) < 0 THEN 'Unknown'
-        WHEN ({{ age_calc }}) >= 100 THEN '100+'
+        WHEN ({{ age_calc }}) >= 85 THEN '85+'
         ELSE TO_VARCHAR(FLOOR(({{ age_calc }}) / 5) * 5) || '-' || TO_VARCHAR(FLOOR(({{ age_calc }}) / 5) * 5 + 4)
     END AS age_band_5y,
 
@@ -98,7 +98,7 @@
     CASE
         WHEN {{ birth_date_field }} IS NULL THEN 'Unknown'
         WHEN ({{ age_calc }}) < 0 THEN 'Unknown'
-        WHEN ({{ age_calc }}) >= 100 THEN '100+'
+        WHEN ({{ age_calc }}) >= 80 THEN '80+'
         ELSE TO_VARCHAR(FLOOR(({{ age_calc }}) / 10) * 10) || '-' || TO_VARCHAR(FLOOR(({{ age_calc }}) / 10) * 10 + 9)
     END AS age_band_10y,
 
