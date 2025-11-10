@@ -31,8 +31,8 @@ select
     'OP_ATTENDANCE' as visit_occurrence_type,
     hgl.problem_order,
     sa.sk_patient_id,
-    sa.provider_id as organisation_id,
-    sa.provider_name as organisation_name,  
+    sa.organisation_id,
+    sa.organisation_name,  
     sa.site_id,
     sa.site_name,  -- join to reference
     hgl.code as source_concept_code,
@@ -42,7 +42,7 @@ select
     hg.hrg_subchapter
 from hrg_list hgl
 
-left join {{ ref("int_sus_op_encounters") }} sa on hgl.primarykey_id = sa.encounter_id
+left join {{ ref("int_sus_op_encounters") }} sa on hgl.primarykey_id = sa.visit_occurrence_id
 
 left join {{ ref("stg_dictionary_dbo_hrg") }} hg on hgl.code = hg.hrg_code
 
