@@ -3,9 +3,25 @@
 }}
 
 select  primarykey_id,
+
+    -- patient details at time
+    appointment_patient_identity_nhs_number_value_pseudo as sk_patient_id,
+    appointment_patient_residence_derived_postcode_district,
+    appointment_patient_residence_derived_lsoa_11,
+    appointment_patient_residence_derived_local_authority_district,
+    appointment_patient_identity_ethnic_category_2021,
+    appointment_patient_residence_derived_index_of_multiple_deprivation_decile,
+    appointment_patient_residence_derived_index_of_multiple_deprivation_decile_description,
+    appointment_patient_identity_gender,
+    appointment_patient_identity_ethnic_category,
+    appointment_patient_registration_general_practice,
+    appointment_patient_identity_birth_year,
+    appointment_patient_identity_birth_month,
+    appointment_patient_identity_age_at_cds_activity_date,
+
+    -- appointment information
     appointment_identifier, 
     appointment_date,
-    appointment_patient_identity_nhs_number_value_pseudo as sk_patient_id,
     appointment_commissioning_service_agreement_provider, 
     appointment_care_location_site_code_of_treatment,
     appointment_expected_duration,

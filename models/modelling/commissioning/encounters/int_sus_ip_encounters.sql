@@ -9,12 +9,23 @@ Clinical Purpose:
 Includes ALL persons (active, inactive, deceased) within 5 years following intermediate layer principles.
 
 */
-
+with ethnicity_codes as (
+    select distinct bk_ethnicity_code, ethnicity_desc 
+    from {{ref('stg_dictionary_dbo_ethnicity')}}
+    where ethnicity_code_type = 'Current' or bk_ethnicity_code = '99'
+    ),
+gender_codes as (
+    select distinct gender_code, gender
+    from {{ref('stg_dictionary_dbo_gender')}}
+    )
 select 
     /* Information needed to derive standard encounter information */
-    core.primarykey_id as encounter_id
+    core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
+    , core.SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER as organisation_id
+    , dict_provider.service_provider_name  as organisation_name
     , core.spell_care_location_site_code_of_treatment as site_id
+    , dict_org.organisation_name as site_name  
     , core.spell_admission_date as start_date
     , dict_adm_method.admission_method_name as admission_method
     , dict_adm_method.admission_method_group as admission_method_group
@@ -49,7 +60,19 @@ select
         else 'OTHER' end as pod
     , iff(core.spell_admission_admission_sub_type = 'NON', core.spell_admission_admission_type, core.spell_admission_admission_sub_type) as type
     , core.spell_commissioning_tariff_calculation_final_price as cost
-
+    
+    /* patient info at time of event  */
+    , core.spell_patient_identity_spell_age as age_at_event
+    , core.spell_patient_identity_gender as gender_at_event
+    , gen.gender as gender_desc_at_event
+    , core.spell_patient_identity_ethnic_category as ethnicity_at_event
+    , eth.ethnicity_desc as ethnicity_desc_at_event 
+    , core.spell_patient_residence_derived_postcode_district as postcode_district_at_event
+    , core.spell_patient_residence_derived_lsoa_11 as lsoa_11_at_event
+    , core.spell_patient_residence_derived_local_authority_district as lad_at_event
+    , core.spell_patient_residence_derived_index_of_multiple_deprivation_decile as imd_at_event
+    , core.spell_patient_registration_general_practice as reg_practice_at_event
+    , 'APC_SPELL' as visit_occurrence_type
 from {{ ref('stg_sus_apc_spell')}} as core
 
 left join {{ ref('stg_dictionary_ip_admissionmethods')}} as dict_adm_method
@@ -57,3 +80,15 @@ left join {{ ref('stg_dictionary_ip_admissionmethods')}} as dict_adm_method
 
 left join {{ ref('stg_dictionary_dbo_patientclassification')}} as dict_patient_class
     ON core.spell_admission_patient_classification = dict_patient_class.bk_patient_classification_code
+
+left join ethnicity_codes as eth
+    on core.spell_patient_identity_ethnic_category = eth.bk_ethnicity_code
+
+left join gender_codes as gen
+    on core.spell_patient_identity_gender = gen.gender_code
+
+LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
+    ON core.SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER = dict_provider.service_provider_full_code
+
+LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org 
+    ON core.spell_care_location_site_code_of_treatment = dict_org.organisation_code 
