@@ -10,6 +10,7 @@
 WITH SMI_POP AS (
 select
 dem.PERSON_ID
+,ID.HX_FLAKE
 ,dem.SK_PATIENT_ID
 ,dem.AGE
 ,dem.GENDER
@@ -55,6 +56,13 @@ WHEN dem.ETHNICITY_SUBCATEGORY = 'Recorded Not Known' THEN 19
 WHEN dem.ETHNICITY_SUBCATEGORY = 'Refused' THEN 19
 END AS ETHSUBCAT_ORDER
 ,dem.IMD_QUINTILE_19 AS IMD_QUINTILE
+,CASE 
+WHEN dem.IMD_QUINTILE_19 = 'Most Deprived' THEN 1
+WHEN dem.IMD_QUINTILE_19 = 'Second Most Deprived' THEN 2
+WHEN dem.IMD_QUINTILE_19 = 'Third Most Deprived' THEN 3
+WHEN dem.IMD_QUINTILE_19 = 'Second Least Deprived' THEN 4
+WHEN dem.IMD_QUINTILE_19 = 'Least Deprived' THEN 5
+ELSE 6 END AS IMDQUINTILE_ORDER
 ,dem.IMD_DECILE_19 AS IMD_DECILE
 ,CASE 
 WHEN dem.MAIN_LANGUAGE = 'Pushto' THEN 'Pashto' 
@@ -82,6 +90,7 @@ ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 FROM {{ ref('dim_person_demographics') }} dem 
 INNER JOIN {{ ref('fct_person_smi_register') }} smi using (PERSON_ID)
 LEFT JOIN {{ ref('dim_person_conditions') }} ltc using (PERSON_ID)
+LEFT JOIN {{ ref('person_pseudo') }} AS ID  using (PERSON_ID)
 where dem.is_active = TRUE
 )
 --CORE METRICS
