@@ -30,9 +30,13 @@ ec.PERSON_ID
 ,ec.ELIGIBLE_TO_DATE
 ,ec.NEW_VACCINE_APPLICABLE
 ,ec.MAXIMUM_AGE_DAYS
+--some children are coded incorrectly with MMRV when they should have MMR or have received MMRV out of schedule.
 ,CASE 
-WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
-WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'
+WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'No' and ec.VACCINE_ID in ('6IN1_4','MMRV_1B','MMRV_2B','MMRV_1','MMRV_2','MMRV_1C') AND ec.new_vaccine_applicable = 'Yes' THEN 'Completed' 
+WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'No' and ec.VACCINE_ID in ('6IN1_4','MMRV_1B','MMRV_2B','MMRV_1','MMRV_2','MMRV_1C') AND ec.new_vaccine_applicable = 'No' THEN 'OutofSchedule' 
+WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'Yes' and ec.VACCINE_ID in ('6IN1_4','MMRV_1B','MMRV_2B','MMRV_1','MMRV_2','MMRV_1C') AND ec.new_vaccine_applicable = 'No' THEN 'OutofSchedule'
+WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'No' and ec.VACCINE_ID not in ('6IN1_4','MMRV_1B','MMRV_2B','MMRV_1','MMRV_2','MMRV_1C') AND ec.new_vaccine_applicable = 'No' THEN 'Completed'
+WHEN ve.EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'Yes' and ec.VACCINE_ID not in ('6IN1_4','MMRV_1B','MMRV_2B','MMRV_1','MMRV_2','MMRV_1C') AND ec.new_vaccine_applicable = 'No' THEN 'OutofSchedule'
 WHEN ve.EVENT_TYPE = 'Declined' THEN 'Declined'  
 WHEN ve.EVENT_TYPE = 'Contraindicated' THEN 'Contraindicated' 
 WHEN ve.EVENT_DATE IS NULL and ec.VACCINE_ID in ('6IN1_4','MMRV_1B','MMRV_2B','MMRV_1','MMRV_2','MMRV_1C') AND ec.new_vaccine_applicable = 'Yes' AND DATE(ec.ELIGIBLE_FROM_DATE) < CURRENT_DATE THEN 'Overdue' 
