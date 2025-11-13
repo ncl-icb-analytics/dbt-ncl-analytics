@@ -70,6 +70,7 @@ CURRENT_DATE AS RUN_DATE
 ,p.ward_code
 ,p.ward_name
 ,p.lac_flag
+,p.LSOA_CODE_21
 ,v.sixin1_status_dose_1
 ,v.sixin1_date_dose_1
 ,v.sixin1_status_dose_2

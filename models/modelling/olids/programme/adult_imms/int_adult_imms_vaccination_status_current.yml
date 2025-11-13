@@ -1,0 +1,3 @@
+models:
+  - name: int_adult_imms_vaccination_status_current
+    description: Intermediate table holding vaccination Status for Adults. One line person
