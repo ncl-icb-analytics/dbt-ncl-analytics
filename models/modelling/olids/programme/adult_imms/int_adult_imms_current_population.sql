@@ -9,6 +9,11 @@ dem.PERSON_ID
 ,dem.BIRTH_DATE_APPROX
 ,dem.AGE 
 ,age.AGE_DAYS_APPROX
+--RSV catch up eligibility flag - turning 80 after 1st September 2024
+,CASE
+    WHEN DATEADD(year, 80, dem.BIRTH_DATE_APPROX) > '2024-09-01' 
+    THEN 'YES' ELSE 'NO' 
+END AS TURN_80_AFTER_SEP_2024
 ,dem.GENDER
 ,CASE
 WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 'Unknown'

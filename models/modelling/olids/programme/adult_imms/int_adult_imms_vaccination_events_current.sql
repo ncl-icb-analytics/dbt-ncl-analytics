@@ -13,7 +13,7 @@ SELECT DISTINCT
         clut.dose_match,
         DATE(o.clinical_effective_date) as EVENT_DATE,
         --o."age_at_event" is from EMIS. It either rounds years up or down
-        o.age_at_event AS AGE_AT_EVENT_OBS,
+        o.age_at_event,
          clut.administered_cluster_id, 
         clut.drug_cluster_id,
         clut.declined_cluster_id,
@@ -31,7 +31,7 @@ SELECT DISTINCT
 ,IMM_ADM as ( 
      SELECT distinct
         el.PERSON_ID,
-        clut.AGE_AT_EVENT_OBS,
+        clut.AGE_AT_EVENT,
 	    clut.VACCINE_ORDER,
         el.VACCINE_ID,
         el.VACCINE_NAME,
@@ -65,7 +65,7 @@ SELECT DISTINCT
 --IDENTIFY DUPLICATE ROWS WHERE DECLINED OR CONTRAINDICATED AND ADMINSTRATION ON THE SAME DATE
 SELECT 
     PERSON_ID,
-    AGE_AT_EVENT_OBS,
+    AGE_AT_EVENT,
     VACCINE_ORDER,
     VACCINE_ID,
     VACCINE_NAME,
@@ -88,7 +88,7 @@ QUALIFY r = 1
 ,IMM_ADM_RANKED as (
 SELECT 
 	PERSON_ID,
-	AGE_AT_EVENT_OBS,
+	AGE_AT_EVENT,
     VACCINE_ORDER,
 	VACCINE_ID,
 	VACCINE_NAME,
@@ -104,7 +104,7 @@ SELECT
 
  SELECT 
 	PERSON_ID,
-	AGE_AT_EVENT_OBS,
+	AGE_AT_EVENT,
     VACCINE_ORDER,
 	VACCINE_ID,
 	VACCINE_NAME,
