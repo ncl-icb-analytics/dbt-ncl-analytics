@@ -14,6 +14,11 @@ dem.PERSON_ID
     WHEN DATEADD(year, 80, dem.BIRTH_DATE_APPROX) > '2024-09-01' 
     THEN 'YES' ELSE 'NO' 
 END AS TURN_80_AFTER_SEP_2024
+--Shingles programme eligibility flag - turning 65 after 1st September 2023
+,CASE
+    WHEN DATEADD(year, 65, dem.BIRTH_DATE_APPROX) > '2023-09-01' 
+    THEN 'YES' ELSE 'NO' 
+END AS TURN_65_AFTER_SEP_2023
 ,dem.GENDER
 ,CASE
 WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 'Unknown'
