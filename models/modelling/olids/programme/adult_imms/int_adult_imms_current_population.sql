@@ -11,12 +11,12 @@ dem.PERSON_ID
 ,age.AGE_DAYS_APPROX
 --RSV catch up eligibility flag - turning 80 after 1st September 2024
 ,CASE
-    WHEN DATEADD(year, 80, dem.BIRTH_DATE_APPROX) > '2024-09-01' 
+    WHEN dem.BIRTH_DATE_APPROX >= '1944-09-01' AND dem.BIRTH_DATE_APPROX <='1945-08-31'
     THEN 'YES' ELSE 'NO' 
 END AS TURN_80_AFTER_SEP_2024
 --Shingles programme eligibility flag - turning 65 after 1st September 2023
 ,CASE
-    WHEN DATEADD(year, 65, dem.BIRTH_DATE_APPROX) > '2023-09-01' 
+    WHEN dem.BIRTH_DATE_APPROX >= '1958-09-01' AND dem.BIRTH_DATE_APPROX <= '1959-08-31'
     THEN 'YES' ELSE 'NO' 
 END AS TURN_65_AFTER_SEP_2023
 ,dem.GENDER
