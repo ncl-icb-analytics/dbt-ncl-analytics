@@ -5,8 +5,7 @@
 }}
 
 WITH IMMS_CODE_OBS as (
---deduplicate across clusters that use the same codes on the same date
-select * from (
+--deduplicate across vaccine_ids and clusters - order by select the latest
     SELECT
         dem.PERSON_ID,
         clut.VACCINE_ORDER,
@@ -17,14 +16,12 @@ select * from (
         clut.dose_match,
         DATE(o.clinical_effective_date) AS EVENT_DATE,
         o.age_at_event,
-        clut.administered_cluster_id, 
+         clut.administered_cluster_id, 
         clut.drug_cluster_id,
         clut.declined_cluster_id,
-        clut.contraindicated_cluster_id,      
-        ROW_NUMBER() OVER (
-            PARTITION BY dem.PERSON_ID, clut.CODECLUSTERID, DATE(o.clinical_effective_date)
-            ORDER BY clut.VACCINE_ORDER
-        ) AS rn
+        clut.contraindicated_cluster_id,  
+        --choose latest code grouped by person, vaccine_id and cluster
+        ROW_NUMBER() OVER (PARTITION BY dem.PERSON_ID, clut.vaccine_id, clut.CODECLUSTERID ORDER BY DATE(o.clinical_effective_date) DESC) AS rn
     FROM {{ ref('stg_olids_observation') }} o
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
     LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
@@ -32,8 +29,8 @@ select * from (
     JOIN {{ ref('int_adult_imms_code_dose') }} clut on o.mapped_concept_code  = CAST(clut.CODE AS VARCHAR) 
         WHERE o.clinical_effective_date <= CURRENT_DATE
         and o.mapped_concept_code  = clut.CODE
-        ) a
-WHERE rn = 1 
+ --choose latest code grouped by person, vaccine_id and cluster
+        QUALIFY ROW_NUMBER() OVER (PARTITION BY dem.PERSON_ID, clut.vaccine_id, clut.CODECLUSTERID ORDER BY DATE(o.clinical_effective_date) DESC) = 1
 )
 --Define Vaccination Events look for ADMIN CODES by matching IMMS_CODE_OBS to CURRENTLY ELIGIBLE 
 ,IMM_ADM as ( 
@@ -64,38 +61,39 @@ WHERE rn = 1
     INNER JOIN IMMS_CODE_OBS clut on clut.PERSON_ID = el.PERSON_ID
     AND el.DOSE_NUMBER = clut.DOSE_MATCH 
     and el.VACCINE_NAME = clut.VACCINE
-    and el.VACCINE_ID = clut.VACCINE_ID
-      --select only the latest event date in in each cluster chooses subsequently adminstered over declined
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY el.person_id, el.vaccine_name  ORDER BY clut.EVENT_DATE DESC) = 1
-    
+    and el.VACCINE_ID = clut.VACCINE_ID   
    )
-   --THIS CTE IS NO LONGER REQUIRED AS HANDLED IN IMM_ADM
--- ,IMM_ADM_CLUSTER as (
--- --IDENTIFY DUPLICATE ROWS WHERE DECLINED OR CONTRAINDICATED AND ADMINSTRATION ON THE SAME DATE
--- SELECT 
---     PERSON_ID,
---     AGE_AT_EVENT,
---     VACCINE_ORDER,
---     VACCINE_ID,
---     VACCINE_NAME,
---     DOSE_NUMBER,
---     EVENT_DATE,
---     EVENT_TYPE,
---     OUT_OF_SCHEDULE,
---     RANK() OVER (
---         PARTITION BY PERSON_ID, VACCINE_ID 
---         ORDER BY CASE 
---             WHEN EVENT_TYPE = 'Declined' THEN 0
---             WHEN EVENT_TYPE = 'Contraindicated' THEN 0
---             WHEN EVENT_TYPE = 'Administration' THEN 1
---         END DESC
---     ) AS r
--- FROM IMM_ADM
--- QUALIFY r = 1
---     ) 
+ ,IMM_ADM_CLUSTER as (
+-- --IDENTIFY ROWS WITH DECLINED AS WELL AS ADMINSTERED AND CHOOSE ADMINSTERED OVER DECLINED
+SELECT 
+    PERSON_ID,
+    AGE_AT_EVENT,
+    VACCINE_ORDER,
+    VACCINE_ID,
+    VACCINE_NAME,
+    DOSE_NUMBER,
+    EVENT_DATE,
+    EVENT_TYPE,
+    OUT_OF_SCHEDULE,
+    -- RANK() OVER (
+    --     PARTITION BY PERSON_ID, VACCINE_ID 
+    --     ORDER BY CASE 
+    --         WHEN EVENT_TYPE = 'Declined' THEN 0
+    --         WHEN EVENT_TYPE = 'Contraindicated' THEN 0
+    --         WHEN EVENT_TYPE = 'Administration' THEN 1
+    --     END DESC
+    -- ) AS r
+FROM IMM_ADM
+QUALIFY RANK() OVER (PARTITION BY PERSON_ID, VACCINE_ID 
+        ORDER BY CASE 
+            WHEN EVENT_TYPE = 'Declined' THEN 0
+            WHEN EVENT_TYPE = 'Contraindicated' THEN 0
+            WHEN EVENT_TYPE = 'Administration' THEN 1
+        END DESC) =1
+)
 --IDENTIFY DUPLICATE ROWS WHERE SAME CODE CAN BE USED FOR DIFFERENT DOSES
 ,IMM_ADM_RANKED as (
-SELECT 
+	SELECT 
 	PERSON_ID,
 	AGE_AT_EVENT,
     VACCINE_ORDER,
@@ -107,7 +105,7 @@ SELECT
 	OUT_OF_SCHEDULE,
        ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID ORDER BY EVENT_DATE ASC) AS row_num,
        COUNT(*) OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE) AS TOTAL_EVENTS
-    FROM IMM_ADM   
+    FROM IMM_ADM_CLUSTER     
       ) 
 --SELECT FINAL DATASET 
 
@@ -123,9 +121,8 @@ SELECT
 	OUT_OF_SCHEDULE
 	FROM IMM_ADM_RANKED
 WHERE 
---deduplicate where codes are non dose specific PCV, 6-in-1, MMR
+--deduplicate where codes are non dose specific RSV, PPV, SHINGLES
 (dose_number = 1 AND row_num = 1)
-OR (dose_number = 2 AND row_num = 2)  
-OR (dose_number = 3 AND row_num = 3) 
--- Include single-entry cases for dose specific Shingles
-OR (VACCINE_ID in ('SHING_1','SHING_1B','SHING_2','SHING_2B') AND total_events = 1)
+OR (dose_number = 2 AND row_num = 2)
+--to capture SHINGlES dose 2 where only one code exists
+OR (VACCINE_ID in ('SHING_2','SHING_2B') AND total_events = 1)
