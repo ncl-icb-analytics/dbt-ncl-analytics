@@ -74,10 +74,13 @@ ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 ,dem.PCN_NAME AS PRIMARY_CARE_NETWORK
 ,dem.PRACTICE_NAME 
 ,dem.PRACTICE_CODE
-,dem.BOROUGH_RESIDENT as RESIDENTIAL_BOROUGH
+,COALESCE(la.LAD25_NM,'Unknown') as RESIDENTIAL_BOROUGH
+,COALESCE(dem.NEIGHBOURHOOD_RESIDENT,'Unknown') as RESIDENTIAL_NEIGHBOURHOOD
 ,dem.WARD_CODE
 ,dem.WARD_NAME
 ,dem.LSOA_CODE_21
+,CASE WHEN la.RESIDENT_FLAG IS NULL THEN 'Unknown'
+ELSE la.RESIDENT_FLAG END as RESIDENTIAL_LOC
 ,ltc.HAS_CORONARY_HEART_DISEASE as HAS_CHD
 ,ltc.HAS_CHRONIC_KIDNEY_DISEASE as HAS_CKD
 ,ltc.HAS_DIABETES 
@@ -91,6 +94,7 @@ FROM {{ ref('dim_person_demographics') }} dem
 INNER JOIN {{ ref('fct_person_smi_register') }} smi using (PERSON_ID)
 LEFT JOIN {{ ref('dim_person_conditions') }} ltc using (PERSON_ID)
 LEFT JOIN {{ ref('person_pseudo') }} AS ID  using (PERSON_ID)
+LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
 where dem.is_active = TRUE
 )
 --CORE METRICS
