@@ -1,0 +1,3 @@
+models:
+  - name: int_adult_imms_rsv_vaccination_declined
+    description: Intermediate table holding RSV vaccinations that are declined in adults currently aged 65+. One line person
