@@ -8,4 +8,5 @@ select {{ dbt_utils.generate_surrogate_key(["primarykey_id", "episodes_id", "icd
     ,rownumber_id
     ,episodes_id
     ,code
+    ,present_on_admission
 from {{ ref('raw_sus_apc_spell_episodes_clinical_coding_diagnosis_icd') }}
