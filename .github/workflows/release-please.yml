@@ -44,7 +44,9 @@ jobs:
           echo "PR JSON: $PR_JSON"
           PR_NUMBER=$(echo "$PR_JSON" | jq -r '.number')
           echo "Enabling auto-merge for Release PR #$PR_NUMBER"
-          gh pr merge $PR_NUMBER --auto --squash --delete-branch
+          # Attempt to enable auto-merge, but don't fail the workflow if it can't be enabled
+          # This can happen if the PR is already mergeable (clean status) or due to GitHub API timing
+          gh pr merge $PR_NUMBER --auto --squash --delete-branch || echo "Warning: Could not enable auto-merge for PR #$PR_NUMBER. PR may already be mergeable or auto-merge may need to be enabled manually."
 
       # Checkout code if a release was created
       - name: Checkout code
