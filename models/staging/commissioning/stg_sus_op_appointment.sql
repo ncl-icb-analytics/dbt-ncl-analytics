@@ -22,7 +22,7 @@ select  primarykey_id,
     -- appointment information
     appointment_identifier, 
     appointment_date,
-    appointment_commissioning_service_agreement_provider, 
+    {{ clean_organisation_id('appointment_commissioning_service_agreement_provider') }} as appointment_commissioning_service_agreement_provider, 
     appointment_care_location_site_code_of_treatment,
     appointment_expected_duration,
     appointment_outcome,
