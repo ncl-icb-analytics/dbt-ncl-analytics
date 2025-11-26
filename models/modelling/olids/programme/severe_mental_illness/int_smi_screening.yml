@@ -1,0 +1,10 @@
+models:
+  - name: int_smi_screening
+    description: Intermediate table holding screening and vaccination status for people on the SMI register (person level)
+    
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique
