@@ -1,8 +1,0 @@
-version: 1
-models:
-  - name: int_cervical_smear_unsuitable
-    description: 'SMI Longer Lives Enhanced Health Check Cervical Smear Patient not Suitable
-      Latest value per Mental Health /SMI observation using CSPU_COD'
-    tests:
-      - cluster_ids_exist:
-          cluster_ids: CSPU_COD
