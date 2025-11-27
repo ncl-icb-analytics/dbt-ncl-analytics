@@ -24,7 +24,7 @@ select
     /* Information needed to derive standard encounter information */
     core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
-    , core.attendance_location_hes_provider_3 as organisation_id
+    ,  {{ clean_organisation_id('attendance_location_hes_provider_3') }} as organisation_id
     , dict_org.organisation_name as organisation_name
     , core.attendance_location_site as site_id
     , dict_site.organisation_name as site_name
