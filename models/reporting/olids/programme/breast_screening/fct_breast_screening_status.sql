@@ -28,7 +28,8 @@ WITH person_demographics AS (
         dpa.person_id,
         CASE WHEN dpa.gender = 'Female' THEN TRUE ELSE FALSE END AS is_female,
         dpa.age AS current_age,
-        
+        dpa.is_active,
+        dpa.is_deceased,
         -- Age-based screening eligibility
         CASE
             WHEN dpa.gender != 'Female' THEN FALSE
@@ -42,8 +43,8 @@ WITH person_demographics AS (
         -- Target screening frequency in days
         1095  AS screening_interval_days
         
-    --FROM {{ ref('dim_person_age') }} dpa
-    FROM REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dpa
+    FROM {{ ref('dim_person_demographics') }} dpa
+    --FROM REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dpa
         WHERE dpa.gender = 'Female'  -- Only include women
         AND dpa.age BETWEEN 50 AND 71  -- Only include eligible age range
 ),
@@ -78,6 +79,8 @@ programme_status AS (
     SELECT
         pd.person_id,
         pd.current_age,
+        pd.is_active,
+        pd.is_deceased,
         pd.is_screening_eligible,
         pd.screening_interval_years,
         pd.screening_interval_days,
@@ -141,6 +144,8 @@ programme_status AS (
 SELECT
     person_id,
     current_age,
+    is_active,
+    is_deceased,
     is_screening_eligible,
     screening_interval_years,
     
