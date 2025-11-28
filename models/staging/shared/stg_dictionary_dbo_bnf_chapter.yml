@@ -1,0 +1,13 @@
+version: 2
+models:
+- name: stg_dictionary_dbo_bnf_chapter
+  description: Dictionary for BNF chapters
+  columns:
+  - name: sk_bnf_chapter_id
+    description: Surrogate key for bnf chapter
+    tests:
+    - unique
+    - not_null
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
