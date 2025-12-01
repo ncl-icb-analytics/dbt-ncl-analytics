@@ -4,7 +4,7 @@
         tags=['adult_imms'],
         cluster_by=['person_id'])
 }}
---people aged 65+ who are eligible who have received RSV vaccine. Latest vaccination recorded
+--people aged 75+ who are eligible who have received RSV vaccine. Latest vaccination recorded
 --people eligible either turned 80 after Sept 2024 (RSV_1B) or are currently 75-79 for the Catch Up programme (RSV_1)
 SELECT 
          PERSON_ID 
