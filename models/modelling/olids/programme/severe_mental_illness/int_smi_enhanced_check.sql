@@ -41,28 +41,7 @@ FROM {{ ref('int_smi_illicit_drug_latest') }} i
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 )
 
---flu if eligible (morbidly obese etc) and covid (should be age 75+, Imm supp and care home only)
-,covidflu as (
-select distinct
-  s.person_id
-  ,CASE 
-  WHEN f.campaign_id ='Flu 2025-26' and f.person_id is not null then TRUE else FALSE end as ELIGIBLE_FLU
-  ,CASE 
-  WHEN c.campaign_id ='COVID Autumn 2025' and c.person_id is not null then TRUE else FALSE end as ELIGIBLE_COVID
-  ,CASE 
-  WHEN f.campaign_id ='Flu 2025-26' and f.person_id is not null THEN f.VACCINATION_STATUS END AS FLU_VACC_STATUS
-  ,CASE 
-  WHEN f.campaign_id ='Flu 2025-26' and f.person_id is not null THEN DATE(f.VACCINATION_DATE) END AS FLU_VACC_DATE
- ,CASE 
-  WHEN c.campaign_id ='COVID Autumn 2025' and c.person_id is not null THEN c.VACCINATION_STATUS END AS COVID_VACC_STATUS
-  ,CASE 
-  WHEN c.campaign_id ='COVID Autumn 2025' and c.person_id is not null THEN DATE(c.VACCINATION_DATE) END AS COVID_VACC_DATE
-  from {{ ref('int_smi_population_base')  }} s
-  left join {{ ref('covid_flu_dashboard_base') }} f on s.person_id = f.person_id
-  and F.campaign_id in ('Flu 2025-26') and F.is_active = true
-   left join {{ ref('covid_flu_dashboard_base') }} c on s.person_id = c.person_id
-        AND C.campaign_id in ('COVID Autumn 2025') and c.is_active = true
-)
+
 --Population demographics + enhanced metrics wide table
 select 
 p.PERSON_ID
@@ -96,4 +75,3 @@ from {{ ref('int_smi_population_base')  }} p
 LEFT JOIN latest_Care m using (person_id)
 LEFT JOIN qrisk q using (person_id)
 LEFT JOIN illicit i using (person_id)
--- LEFT JOIN covidflu cf using (person_id)

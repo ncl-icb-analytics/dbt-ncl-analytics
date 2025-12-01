@@ -1,0 +1,11 @@
+version: 1
+models:
+  - name: fct_pneumococcal_vaccination_status
+    description: 'Pneumococcal vaccination programme status for people aged 65+ as PPV or PCV (2026)
+      Single per person - dose 1 status only'
+    columns:
+      - name: person_id
+        description: 'Unique identifier for the person'
+        tests:
+          - not_null
+          - unique
