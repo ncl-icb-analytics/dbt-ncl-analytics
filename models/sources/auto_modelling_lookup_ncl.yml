@@ -17,6 +17,22 @@ sources:
       data_type: TEXT
     - name: ICB_NAME
       data_type: TEXT
+  - name: CONSULTANTCONNECT_ORG_GPCODE_LOOKUP
+    identifier: '"CONSULTANTCONNECT_ORG_GPCODE_LOOKUP"'
+    columns:
+    - name: CleanOrganisation
+      data_type: TEXT
+    - name: OrganisationCode
+      data_type: TEXT
+  - name: CONSULTANTCONNECT_ORG_TRUSTCODE_LOOKUP
+    identifier: '"CONSULTANTCONNECT_ORG_TRUSTCODE_LOOKUP"'
+    columns:
+    - name: Trust
+      data_type: TEXT
+    - name: Organisation_Name
+      data_type: TEXT
+    - name: Organisation_Code
+      data_type: TEXT
   - name: FIN_WEEK_NUMBER_2019_2031
     identifier: '"FIN_WEEK_NUMBER_2019_2031"'
     columns:
@@ -286,6 +302,21 @@ sources:
       data_type: TEXT
     - name: IMD_DECILE
       data_type: NUMBER
+  - name: LSOA21_MSOA_LOOKUP
+    identifier: '"LSOA21_MSOA_LOOKUP"'
+    columns:
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: MSOA21CD
+      data_type: TEXT
+    - name: MSOA21NM
+      data_type: TEXT
+    - name: LAD22CD
+      data_type: TEXT
+    - name: LAD22NM
+      data_type: TEXT
   - name: LSOA_2021_WARD_2025_LOCAL_AUTHORITY_2025
     identifier: '"LSOA_2021_WARD_2025_LOCAL_AUTHORITY_2025"'
     columns:
@@ -443,12 +474,14 @@ sources:
       data_type: TEXT
     - name: POPSEG_NAME
       data_type: TEXT
-  - name: PS_SEG_LKP
-    identifier: '"PS_SEG_LKP"'
+  - name: TFC_GROUPING
+    identifier: '"TFC_GROUPING"'
     columns:
-    - name: POPSEG
+    - name: CODE
+      data_type: NUMBER
+    - name: DESCRIPTION
       data_type: TEXT
-    - name: POPSEG_DESC
+    - name: GROUPING
       data_type: TEXT
   - name: WORKING_AND_CALENDAR_DAYS
     identifier: '"WORKING_AND_CALENDAR_DAYS"'

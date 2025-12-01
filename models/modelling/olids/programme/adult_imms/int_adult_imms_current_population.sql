@@ -1,0 +1,108 @@
+{{
+    config(
+        materialized='table',
+        tags=['adult_imms'],
+        cluster_by=['person_id'])
+}}
+SELECT DISTINCT
+dem.PERSON_ID
+,dem.BIRTH_DATE_APPROX
+,dem.AGE 
+,age.AGE_DAYS_APPROX
+--RSV catch up eligibility flag - turning 80 after 1st September 2024
+,CASE
+    WHEN dem.BIRTH_DATE_APPROX >= '1944-09-01' AND dem.BIRTH_DATE_APPROX <='1945-08-31'
+    THEN 'YES' ELSE 'NO' 
+END AS TURN_80_AFTER_SEP_2024
+--Shingles programme eligibility flag - turning 65 after 1st September 2023
+,CASE
+    WHEN dem.BIRTH_DATE_APPROX >= '1958-09-01' AND dem.BIRTH_DATE_APPROX <= '1959-08-31'
+    THEN 'YES' ELSE 'NO' 
+END AS TURN_65_AFTER_SEP_2023
+,dem.GENDER
+,CASE
+WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 'Unknown'
+ELSE dem.ETHNICITY_CATEGORY END AS ETHNICITY_CATEGORY
+,CASE 
+WHEN dem.ETHNICITY_CATEGORY = 'Asian' THEN 1
+WHEN dem.ETHNICITY_CATEGORY = 'Black' THEN 2
+WHEN dem.ETHNICITY_CATEGORY = 'Mixed' THEN 3
+WHEN dem.ETHNICITY_CATEGORY = 'Other' THEN 4
+WHEN dem.ETHNICITY_CATEGORY = 'White' THEN 5
+WHEN dem.ETHNICITY_CATEGORY = 'Unknown' THEN 6
+WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 6
+END AS ETHCAT_ORDER 
+,CASE
+WHEN dem.ETHNICITY_SUBCATEGORY in ('Not Recorded','Not stated','Not Stated','Recorded Not Known','Refused') THEN 'Unknown'
+ELSE dem.ETHNICITY_SUBCATEGORY END AS ETHNICITY_SUBCATEGORY
+,CASE 
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Asian: Bangladeshi' THEN 1
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Asian: Chinese' THEN 2
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Asian: Indian' THEN 3
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Asian: Pakistani' THEN 4
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Asian: Other Asian' THEN 5
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Black: African' THEN 6
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Black: Caribbean' THEN 7
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Black: Other Black' THEN 8
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Mixed: White and Asian' THEN 9
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Mixed: White and Black African' THEN 10
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Mixed: White and Black Caribbean' THEN 11
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Mixed: Other Mixed' THEN 12
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Other: Arab' THEN 13
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Other: Other' THEN 14
+WHEN dem.ETHNICITY_SUBCATEGORY = 'White: British' THEN 15
+WHEN dem.ETHNICITY_SUBCATEGORY = 'White: Irish' THEN 16
+WHEN dem.ETHNICITY_SUBCATEGORY = 'White: Traveller' THEN 17
+WHEN dem.ETHNICITY_SUBCATEGORY = 'White: Other White' THEN 18
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Unknown' THEN 19
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Not Recorded' THEN 19
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Not stated' THEN 19
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Not Stated' THEN 19
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Recorded Not Known' THEN 19
+WHEN dem.ETHNICITY_SUBCATEGORY = 'Refused' THEN 19
+END AS ETHSUBCAT_ORDER
+,CASE 
+WHEN dem.ETHNICITY_GRANULAR = 'MENA' THEN 'Middle East and North African'
+WHEN dem.ETHNICITY_GRANULAR in ('Muslim', 'Sikh') THEN 'Unknown'
+WHEN dem.ETHNICITY_GRANULAR in ('Recorded Not Known', 'Refused', 'Not stated', 'Not Recorded','Not Stated') THEN 'Unknown'
+WHEN dem.ETHNICITY_GRANULAR = 'Black - E.African Asian' THEN 'East African Asian'
+WHEN dem.ETHNICITY_GRANULAR = 'Indo-Caribbean' THEN 'Caribbean Asian'
+WHEN dem.ETHNICITY_GRANULAR = 'Cornish' THEN 'English'
+WHEN dem.ETHNICITY_GRANULAR in ('Gypsy or Irish Traveller','Gypsy','Irish Traveller') THEN 'Gypsy or Irish Traveller'
+WHEN dem.ETHNICITY_GRANULAR in ('Albanian/Serbian', 'Serbian') THEN 'Albanian or Serbian'
+ELSE dem.ETHNICITY_GRANULAR END AS ETHNICITY_GRANULAR
+,CASE WHEN dem.IMD_QUINTILE_19 IS NULL THEN 'Unknown' 
+ELSE dem.IMD_QUINTILE_19 END AS IMD_QUINTILE
+,CASE 
+WHEN dem.IMD_QUINTILE_19 = 'Most Deprived' THEN 1
+WHEN dem.IMD_QUINTILE_19 = 'Second Most Deprived' THEN 2
+WHEN dem.IMD_QUINTILE_19 = 'Third Most Deprived' THEN 3
+WHEN dem.IMD_QUINTILE_19 = 'Second Least Deprived' THEN 4
+WHEN dem.IMD_QUINTILE_19 = 'Least Deprived' THEN 5
+ELSE 6 END AS IMDQUINTILE_ORDER
+,dem.IMD_DECILE_19 AS IMD_DECILE
+,CASE 
+WHEN dem.MAIN_LANGUAGE = 'Pushto' THEN 'Pashto' 
+WHEN dem.MAIN_LANGUAGE = 'Gujerati' THEN 'Gujarati'
+WHEN dem.MAIN_LANGUAGE ILIKE '%sign language%' THEN 'Sign language'
+WHEN dem.MAIN_LANGUAGE = 'Norwegian Bokmål' THEN 'Norwegian'
+WHEN dem.MAIN_LANGUAGE = 'Not Recorded' THEN 'Unknown'
+ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
+,dem.BOROUGH_REGISTERED AS PRACTICE_BOROUGH 
+,dem.NEIGHBOURHOOD_REGISTERED AS PRACTICE_NEIGHBOURHOOD
+,dem.PCN_NAME AS PRIMARY_CARE_NETWORK
+,dem.PRACTICE_NAME AS GP_NAME
+,dem.PRACTICE_CODE
+,COALESCE(la.LAD25_NM,'Unknown') as RESIDENTIAL_BOROUGH
+,COALESCE(dem.NEIGHBOURHOOD_RESIDENT,'Unknown') as RESIDENTIAL_NEIGHBOURHOOD
+,CASE WHEN la.RESIDENT_FLAG IS NULL THEN 'Unknown'
+ELSE la.RESIDENT_FLAG END as RESIDENTIAL_LOC
+,dem.WARD_CODE
+,dem.WARD_NAME
+,dem.LSOA_CODE_21
+FROM {{ ref('dim_person_demographics') }} dem
+LEFT JOIN {{ ref('dim_person_age') }} age on age.PERSON_ID = dem.PERSON_ID
+LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
+WHERE dem.is_active = 'TRUE' 
+AND dem.IS_DECEASED = FALSE
+AND dem.age >= 65

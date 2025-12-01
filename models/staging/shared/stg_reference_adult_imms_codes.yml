@@ -1,0 +1,30 @@
+version: 2
+models:
+- name: stg_reference_adult_imms_codes
+  description: Adult immunisation SNOMED codes mapped to vaccine types and doses
+  tests:
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+      - vaccine
+      - dose
+      - snomedconceptid
+      - sourceclusterid
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
+  columns:
+  - name: vaccine
+    description: Vaccine type (Pneumoccocal, RSV, Shingles)
+    tests:
+    - not_null
+  - name: dose
+    description: Dose number/sequence
+    tests:
+    - not_null
+  - name: snomedconceptid
+    description: SNOMED concept ID for the immunisation code
+    tests:
+    - not_null
+  - name: codedescription
+    description: Description of the SNOMED code
+  - name: source
+    description: Source of the code mapping

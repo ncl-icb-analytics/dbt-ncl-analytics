@@ -18,15 +18,15 @@ select
     {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.rownumber_id", "f.icd_id"]) }} as diagnosis_id,
     sa.sk_patient_id,
     f.primarykey_id as visit_occurrence_id,
-    appointment_date as date,
+    sa.start_date as date,
     'OP_ATTENDANCE' as visit_occurrence_type,
     f.icd_id,
     f.rownumber_id,
-    sa.appointment_commissioning_service_agreement_provider as organisation_id,
-    dict_provider.service_provider_name as organisation_name,  
-    sa.appointment_care_location_site_code_of_treatment as site_id,
-    dict_org.organisation_name as site_name,
-    appointment_date as activity_date,
+    sa.organisation_id,
+    sa.organisation_name,  
+    sa.site_id,
+    sa.site_name,
+    sa.start_date as activity_date,
     f.concept_code as source_concept_code,
     c.concept_code,
     c.concept_name,  -- mapped concept name from the vocabulary
@@ -38,12 +38,6 @@ left join
     on c.concept_code = f.concept_code
     and c.vocabulary_id = 'ICD10'
 
-left join {{ ref("stg_sus_op_appointment") }} sa on sa.primarykey_id = f.primarykey_id
-
-LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
-    ON sa.appointment_commissioning_service_agreement_provider = dict_provider.service_provider_full_code
-
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON
-    sa.appointment_care_location_site_code_of_treatment = dict_org.organisation_code
+left join {{ ref("int_sus_op_encounters") }} sa on sa.visit_occurrence_id = f.primarykey_id
 
 where sa.sk_patient_id is not null

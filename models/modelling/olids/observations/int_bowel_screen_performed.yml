@@ -2,7 +2,7 @@ version: 1
 models:
   - name: int_bowel_screen_performed
     description: 'SMI Longer Lives Enhanced Health Check Bowel Cancer Screen PERFORMED
-      Latest value per Mental Health /SMI observation using COLCANSCREV_COD'
+      Latest value per Mental Health /SMI observation using COLCANSCREV_COD - SUPERSEDED BY int_bowel_screening_all'
     tests:
       - cluster_ids_exist:
           cluster_ids: COLCANSCREV_COD

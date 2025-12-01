@@ -1,0 +1,10 @@
+models:
+  - name: int_adult_imms_current_population
+    description: Intermediate table holding demographics for base adult imms population currently registered aged 65+
+    
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique

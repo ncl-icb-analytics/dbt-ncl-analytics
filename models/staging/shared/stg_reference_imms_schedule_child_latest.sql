@@ -6,19 +6,12 @@ select
     diseases_protected_against,
     vaccine_code,
     trade_name,
-    administration_route,
     schedule_age,
-    minimum_age_days,
-    maximum_age_days,
-    minimum_interval_days,
-    next_dose_vaccine_id,
     eligible_age_from_days,
     eligible_age_to_days,
+    maximum_age_days,
     administered_cluster_id,
     drug_cluster_id,
     declined_cluster_id,
     contraindicated_cluster_id,
-    incompatible_cluster_ids,
-    ineligibility_period_months,
-    incompatible_explanation
-from {{ ref('raw_reference_imms_schedule_latest') }}
+    from {{ ref('raw_reference_imms_schedule_child_latest') }}

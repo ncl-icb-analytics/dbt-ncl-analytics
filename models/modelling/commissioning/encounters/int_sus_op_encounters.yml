@@ -4,8 +4,8 @@ models:
   - name: int_sus_op_encounters
     description: "Event history for outpatient encounters from SUS data"
     columns:
-      - name: encounter_id
-        data_type: varchar
+      - name: visit_occurrence_id
+        data_type: number
         description: "Primary key for the encounter within SUS"
         tests:
           - unique

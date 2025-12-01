@@ -1,6 +1,8 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        tags=['screening_programme']
+        )
 }}
 
 /*
@@ -28,12 +30,14 @@ Clinical Purpose:
 WITH person_demographics AS (
     SELECT
         dpa.person_id,
-        CASE WHEN dps.gender = 'Female' THEN TRUE ELSE FALSE END AS is_female,
+        CASE WHEN dpa.gender = 'Female' THEN TRUE ELSE FALSE END AS is_female,
         dpa.age AS current_age,
+        dpa.is_active,
+        dpa.is_deceased,
         
         -- Age-based screening eligibility
         CASE
-            WHEN dps.gender != 'Female' THEN FALSE
+            WHEN dpa.gender != 'Female' THEN FALSE
             WHEN dpa.age BETWEEN 25 AND 64 THEN TRUE
             ELSE FALSE
         END AS is_screening_eligible,
@@ -52,9 +56,9 @@ WITH person_demographics AS (
             ELSE NULL
         END AS screening_interval_days
         
-    FROM {{ ref('dim_person_age') }} dpa
-    LEFT JOIN {{ ref('dim_person_gender') }} dps ON dpa.person_id = dps.person_id
-    WHERE dps.gender = 'Female'  -- Only include women
+    FROM {{ ref('dim_person_demographics') }} dpa
+    -- LEFT JOIN {{ ref('dim_person_gender') }} dps ON dpa.person_id = dps.person_id
+    WHERE dpa.gender = 'Female'  -- Only include women
         AND dpa.age BETWEEN 25 AND 64  -- Only include eligible age range
 ),
 
@@ -87,6 +91,8 @@ programme_status AS (
     SELECT
         pd.person_id,
         pd.current_age,
+        pd.is_active,
+        pd.is_deceased,
         pd.is_screening_eligible,
         pd.screening_interval_years,
         pd.screening_interval_days,
@@ -150,6 +156,8 @@ programme_status AS (
 SELECT
     person_id,
     current_age,
+    is_active,
+    is_deceased,
     is_screening_eligible,
     screening_interval_years,
     

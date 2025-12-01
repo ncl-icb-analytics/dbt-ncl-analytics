@@ -16,12 +16,23 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 
 */
 
+with 
+ethnicity_codes as (
+    select distinct bk_ethnicity_code, ethnicity_desc 
+    from {{ref('stg_dictionary_dbo_ethnicity')}}
+    where ethnicity_code_type = 'Current' or bk_ethnicity_code = '99'
+    ),
+gender_codes as (
+    select distinct gender_code, gender
+    from {{ref('stg_dictionary_dbo_gender')}}
+    )
+
 select 
     /* Information needed to derive standard encounter information */
-    core.primarykey_id as encounter_id
+    core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
-    , core.appointment_commissioning_service_agreement_provider as provider_id
-    , dict_provider.service_provider_name as provider_name
+    , core.appointment_commissioning_service_agreement_provider as organisation_id
+    , dict_provider.service_provider_name as organisation_name
     , core.appointment_care_location_site_code_of_treatment as site_id
     , dict_org.organisation_name as site_name
     , core.appointment_date as start_date
@@ -60,7 +71,18 @@ select
     , core.appointment_commissioning_grouping_core_hrg as type -- consider changing to something more aligned with team understanding
     , dict_hrg.hrg_description as type_desc
     , core.appointment_commissioning_tariff_calculation_final_price as cost
-
+    /* Patient details at time */
+    ,core.appointment_patient_identity_age_at_cds_activity_date as age_at_event
+    ,core.appointment_patient_identity_gender as gender_at_event
+    ,gen.gender as gender_desc_at_event
+    ,core.appointment_patient_identity_ethnic_category as ethnicity_at_event
+    ,eth.ethnicity_desc as ethnicity_desc_at_event
+    ,core.appointment_patient_residence_derived_postcode_district as postcode_district_at_event
+    ,core.appointment_patient_residence_derived_lsoa_11 as lsoa_11_at_event
+    ,core.appointment_patient_residence_derived_local_authority_district as lad_at_event
+    ,core.appointment_patient_residence_derived_index_of_multiple_deprivation_decile as imd_at_event
+    ,core.appointment_patient_registration_general_practice as reg_practice_at_event
+    ,'OP_ATTENDANCE' as visit_occurrence_type
 from {{ ref('stg_sus_op_appointment')}} as core -- TO DO: check if appointments and encounters can be used interchangeably in this context
 
 -- speciality and treatment descriptions
@@ -101,6 +123,12 @@ left join {{ ref('stg_dictionary_op_dnaindicators') }} as dict_att_dna
 
 left join {{ ref('stg_dictionary_op_attendancetypes') }} as dict_att_t 
     on core.appointment_first_attendance = dict_att_t.bk_attendance_type_code
+
+left join ethnicity_codes as eth
+    on core.appointment_patient_identity_ethnic_category = eth.bk_ethnicity_code
+
+left join gender_codes as gen
+    on core.appointment_patient_identity_gender = gen.gender_code
 
 where
     core.appointment_identifier is not null

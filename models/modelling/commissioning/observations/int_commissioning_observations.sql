@@ -157,14 +157,16 @@ with
 
 select
     -- changed key as removing definition store join
-    {{dbt_utils.generate_surrogate_key( ["event_id", "observation_concept_code", "visit_occurrence_id"] )}} as record_id,
-    sk_patient_id,
-    visit_occurrence_id,
-    visit_occurrence_type,
+    {{dbt_utils.generate_surrogate_key( ["event_id", "observation_concept_code", "ao.visit_occurrence_id"] )}} as record_id,
+    ao.sk_patient_id,
+    ao.organisation_id,
+    ao.organisation_name,
+    ao.visit_occurrence_id,
+    ao.visit_occurrence_type,
     date,
     clinical_end_date,
     problem_order,
     observation_concept_code,
     observation_concept_name,
     observation_vocabulary
-from all_observations
+from all_observations ao
