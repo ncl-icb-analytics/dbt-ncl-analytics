@@ -1,25 +1,25 @@
 with 
 base_encounters as (
     select *
-    from {{ ref('stg_sus_ae_emergency_care') }}
-    where attendance_arrival_date between dateadd(month, -12, current_date()) and current_date()
+    from {{ ref('int_sus_ae_encounters') }}
+    where start_date between dateadd(month, -12, current_date()) and current_date()
 ),  
 ae_encounter_summary as(
     select
         sk_patient_id
-        , count(distinct case when clinical_chief_complaint_is_injury_related = FALSE  -- Attended - not injury -- TO DO: stratify by department type
-                then primarykey_id end) as ae_ill_12mo
-        , count(distinct case when clinical_chief_complaint_is_injury_related = FALSE -- Attended - not injury
-                and attendance_arrival_date between dateadd(month, -3, current_date()) and current_date() 
-                then primarykey_id end) as ae_ill_3mo
-        , count(distinct case when clinical_chief_complaint_is_injury_related = FALSE  -- Attended - not injury
-                and attendance_arrival_date between dateadd(month, -1, current_date()) and current_date() 
-                then primarykey_id end) as ae_ill_1mo
-        , count(distinct primarykey_id) as ae_tot_12mo -- all attendances
-        , count(distinct case when clinical_chief_complaint_is_injury_related = TRUE-- all injuries
-                then primarykey_id end) as ae_inj_12mo
-        , count(distinct case when attendance_location_department_type = '01'  -- Type 1 A&E
-                then primarykey_id end) as ae_t1_12mo
+        , count(distinct case when is_injury_related = FALSE  -- Attended - not injury -- TO DO: stratify by department type
+                then visit_occurrence_id end) as ae_ill_12mo
+        , count(distinct case when is_injury_related = FALSE -- Attended - not injury
+                and start_date between dateadd(month, -3, current_date()) and current_date() 
+                then visit_occurrence_id end) as ae_ill_3mo
+        , count(distinct case when is_injury_related = FALSE  -- Attended - not injury
+                and start_date between dateadd(month, -1, current_date()) and current_date() 
+                then visit_occurrence_id end) as ae_ill_1mo
+        , count(distinct visit_occurrence_id) as ae_tot_12mo -- all attendances
+        , count(distinct case when is_injury_related = TRUE-- all injuries
+                then visit_occurrence_id end) as ae_inj_12mo
+        , count(distinct case when pod = 'AE-T1' -- Type 1 A&E
+                then visit_occurrence_id end) as ae_t1_12mo
     from base_encounters
     group by 
         sk_patient_id

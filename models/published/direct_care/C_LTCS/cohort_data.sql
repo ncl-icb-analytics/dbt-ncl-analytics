@@ -145,7 +145,7 @@ left join {{ref('fct_person_wl_current_count_total')}} wl
     on il.patient_id = wl.sk_patient_id
 left join {{ref('fct_person_sus_op_recent')}} opa
     on il.patient_id  = opa.sk_patient_id
-left join {{ref('fct_person_sus_apc_recent')}} apca
+left join {{ref('fct_person_sus_ip_recent')}} apca
     on il.patient_id  = apca.sk_patient_id
 left join {{ref('fct_person_sus_ae_recent')}} aea
     on il.patient_id  = aea.sk_patient_id

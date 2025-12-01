@@ -31,6 +31,7 @@ select
     , core.attendance_arrival_date as start_date
     , core.attendance_departure_time_since_arrival as duration
     , core.clinical_chief_complaint_code as primary_reason_for_encounter
+    , core.clinical_chief_complaint_is_injury_related as is_injury_related
     , core.clinical_acuity_code as acuity
     , diagnosis.flat_diagnosis_codes
     , treatments.code as primary_treatment

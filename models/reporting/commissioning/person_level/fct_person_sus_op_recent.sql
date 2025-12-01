@@ -23,19 +23,19 @@ with op_encounter_summary as(
     select
         sk_patient_id
         , count(distinct case when appointment_attended_or_dna in ('5', '6') -- Attended
-                then encounter_id end) as op_att_tot_12mo
+                then visit_occurrence_id end) as op_att_tot_12mo
         , count(distinct case when appointment_attended_or_dna in ('5', '6') -- Attended
                 and start_date between dateadd(month, -3, current_date()) and current_date() 
-                then encounter_id end) as op_att_tot_3mo
+                then visit_occurrence_id end) as op_att_tot_3mo
         , count(distinct case when appointment_attended_or_dna in ('5', '6') -- Attended
                 and start_date between dateadd(month, -1, current_date()) and current_date() 
-                then encounter_id end) as op_att_tot_1mo
-        , count(distinct encounter_id) as op_app_tot_12mo
+                then visit_occurrence_id end) as op_att_tot_1mo
+        , count(distinct visit_occurrence_id) as op_app_tot_12mo
         , count(distinct case when appointment_attended_or_dna in ('5', '6') -- Attended
                 and appointment_first_attendance IN ('1', '3') -- First Appointment
-                then encounter_id end) as op_att_first_12mo
+                then visit_occurrence_id end) as op_att_first_12mo
         , count(distinct primary_reason_for_encounter) as op_spec_12mo
-        , count(distinct provider_id) as op_prov_12mo
+        , count(distinct organisation_id) as op_prov_12mo
     from 
         {{ ref('int_sus_op_encounters') }}
     where 
@@ -47,13 +47,13 @@ count_of_prov_per_spec as(
     select
         sk_patient_id
         , primary_reason_for_encounter
-        , count(distinct provider_id) as op_prov_per_spec_12mo
+        , count(distinct organisation_id) as op_prov_per_spec_12mo
     from 
         {{ ref('int_sus_op_encounters') }}
     where 
         start_date between dateadd(month, -12, current_date()) and current_date()
         and primary_reason_for_encounter is not null 
-        and provider_id is not null
+        and organisation_id is not null
     group by 
         sk_patient_id, primary_reason_for_encounter
 ),
