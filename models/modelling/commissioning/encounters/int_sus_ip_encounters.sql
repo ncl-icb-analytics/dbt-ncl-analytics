@@ -58,6 +58,11 @@ select
         when core.spell_admission_method = '81' -- dict_adm_method.admission_method_name = 'Transfer'
             then 'TRANSFERS'
         else 'OTHER' end as pod
+
+     -- Adding Spec_comm   
+    ,iff(core.spec_comm is null, 'N','Y') as spec_comm_flag
+    ,core.spec_comm as spec_comm
+
     , iff(core.spell_admission_admission_sub_type = 'NON', core.spell_admission_admission_type, core.spell_admission_admission_sub_type) as type
     , core.spell_commissioning_tariff_calculation_final_price as cost
     

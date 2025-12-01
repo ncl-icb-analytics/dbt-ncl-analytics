@@ -65,6 +65,14 @@ models:
         data_type: varchar
         description: "Point of delivery, based on HRG code"
 
+      - name: spec_comm
+        data_type: varchar
+        description: "Specialised Commission Code"
+
+      - name: spec_comm_flag
+        data_type: varchar
+        description: "Specialised Commission Flag"
+
       - name: type
         data_type: varchar
         description: "HRG code type associated with the encounter"
