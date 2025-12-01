@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: fct_person_sus_apc_recent
+  - name: fct_person_sus_ip_recent
     description: ""
     columns:
       - name: sk_patient_id
