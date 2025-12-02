@@ -53,5 +53,6 @@ SELECT
 
 FROM ({{ get_observations("'SMEAR_COD', 'CSPU_COD', 'CSDEC_COD', 'CSPCAINVITE_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL
+AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 
 ORDER BY person_id, clinical_effective_date DESC, ID

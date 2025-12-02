@@ -1,0 +1,4 @@
+version: 1
+models:
+  - name: int_smi_longlives_smoking_intervention
+    description: 'Determine latest smoking cessation interventions for Longer Lives campaign using PCD REFSET SMOKINGINT_COD'

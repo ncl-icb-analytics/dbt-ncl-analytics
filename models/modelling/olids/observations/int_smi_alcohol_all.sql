@@ -22,7 +22,6 @@ SELECT
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 ),
-
 observations_with_demographics AS (
     SELECT DISTINCT
         bo.person_id,

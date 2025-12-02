@@ -1,0 +1,4 @@
+version: 1
+models:
+  - name: int_referral_ndpp_all
+    description: 'Determine NHS Diabetes Prevention Programme outcome using PCD REFSET DPPOFF_COD. Includes invitations and declines.'

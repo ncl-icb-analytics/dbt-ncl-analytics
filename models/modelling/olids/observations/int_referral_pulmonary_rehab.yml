@@ -1,0 +1,8 @@
+version: 1
+models:
+  - name: int_referral_pulmonary_rehab
+    description: 'Determine referral to pulmonary rehabilitation including declined, attendance and not suitable using PCD REFSET: PULRHBPU_COD - patient not suitable, PULRHBATT_COD attended, PULRHBOFF_COD referred, PULRHBDEC_COD declined.'
+    tests:
+      - cluster_ids_exist:
+         cluster_ids: PULRHBPU_COD, PULRHBATT_COD, PULRHBOFF_COD, PULRHBDEC_COD
+          

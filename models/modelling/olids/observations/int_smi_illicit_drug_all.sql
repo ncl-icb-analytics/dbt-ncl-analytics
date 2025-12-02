@@ -27,7 +27,7 @@ FROM ({{ get_observations("'ILLSUB_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 )
-
+--final select with categorisations
 select o.*
 ,CASE 
 WHEN CONCEPT_DISPLAY is null THEN 'Unknown'

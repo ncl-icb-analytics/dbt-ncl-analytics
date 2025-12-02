@@ -84,7 +84,7 @@ order by 1,3
 )
 
 select e.*
-,CASE WHEN c.campaign is null THEN 'NO_VAX_RECORD' ELSE c.campaign END AS campaign
+,CASE WHEN c.campaign is null THEN 'Shingles Dose 1' ELSE c.campaign END AS campaign 
 ,c.vaccination_date
 ,CASE
 WHEN c.vaccination_status is null THEN 'NO_VACCINATION_RECORD' ELSE c.vaccination_status END AS vaccination_status
