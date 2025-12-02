@@ -6,6 +6,7 @@
 }}
  --This model captures observations where Cholesterol measurement was declined by the patient.
  --This table is empty if there are no such observations in the source data. Maybe the concepts 
+ with QCHECK as (
 SELECT
     obs.id,
     obs.person_id,
@@ -16,3 +17,11 @@ SELECT
 FROM ({{ get_observations ("'MHPCADEC_COD', 'MHPCAPU_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
+)
+--select all to then deduplicate by person, code and date
+select person_id
+,clinical_effective_date
+,concept_code
+,concept_display
+from QCHECK
+QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1

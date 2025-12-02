@@ -1,0 +1,4 @@
+version: 1
+models:
+  - name: int_smi_longlives_alcohol_intervention
+    description: 'Determine latest alcohol education or referrals for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_ALCOHOL_EDUCATION cluster and PCD Refeset'

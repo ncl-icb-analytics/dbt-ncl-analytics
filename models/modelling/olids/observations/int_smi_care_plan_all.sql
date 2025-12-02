@@ -10,7 +10,7 @@
 MH/SMI comprehensive care plan QOF Indicator. Date of the mental health care plan code MHP_COD
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 */
-
+with planmh as (
 SELECT
     obs.id,
     obs.person_id,
@@ -29,4 +29,13 @@ SELECT
 
 FROM ({{ get_observations("'MHP_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
-ORDER BY person_id, clinical_effective_date DESC
+AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
+)
+--select all to then deduplicate by person, code and date
+select person_id
+,clinical_effective_date
+,concept_code
+,concept_display
+,MH_care_plan_current_12m
+from planmh
+QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1

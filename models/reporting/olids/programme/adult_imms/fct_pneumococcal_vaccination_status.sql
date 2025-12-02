@@ -45,7 +45,7 @@ order by 1,3
 ) 
 
 select e.*
-,CASE WHEN p.campaign is null THEN 'NO_VAX_RECORD' ELSE p.campaign END AS campaign
+,CASE WHEN p.campaign is null THEN 'Pneumococcal' ELSE p.campaign END AS campaign 
 ,p.vaccination_date
 ,CASE
 WHEN p.vaccination_status is null THEN 'NO_VACCINATION_RECORD' ELSE p.vaccination_status END AS vaccination_status

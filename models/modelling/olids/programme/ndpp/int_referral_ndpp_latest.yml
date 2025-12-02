@@ -1,0 +1,4 @@
+version: 1
+models:
+  - name: int_referral_ndpp_latest
+    description: 'Determine Latest National Diabetes Prevention Programme outcome using PCD REFSET DPPOFF_COD. Those that have stated a decline is preferred over the code for invitation'
