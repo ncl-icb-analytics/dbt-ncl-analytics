@@ -1,0 +1,7 @@
+version: 2
+models:
+- name: stg_epd_pc_meds
+  description: Prescribing and medications data from EPD for Primary Care
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
