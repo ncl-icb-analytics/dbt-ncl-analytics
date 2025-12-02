@@ -25,7 +25,3 @@ select
 
 from {{ ref('raw_olids_organisation') }}
 where coalesce(lds_is_deleted, false) = false
-qualify row_number() over (
-    partition by id
-    order by lds_start_date_time desc
-) = 1

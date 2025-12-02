@@ -17,7 +17,3 @@ select
     lds_start_date_time
 
 from {{ ref('raw_olids_postcode_hash') }}
-qualify row_number() over (
-    partition by postcode_hash
-    order by lds_start_date_time desc
-) = 1

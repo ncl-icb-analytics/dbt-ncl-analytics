@@ -19,7 +19,3 @@ select
     lds_record_id
 
 from {{ ref('raw_olids_patient_address') }}
-qualify row_number() over (
-    partition by id
-    order by lds_start_date_time desc
-) = 1
