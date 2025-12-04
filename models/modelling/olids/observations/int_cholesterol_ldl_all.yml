@@ -1,0 +1,15 @@
+version: 1
+models:
+  - name: int_cholesterol_ldl_all
+    description: 'LDL (bad) cholesterol measurements for cardiovascular risk assessment with clinical categorisation.
+
+      One row per cholesterol observation using LDLCCHOL_COD cluster '
+    tests:
+      - cluster_ids_exist:
+          cluster_ids: LDLCCHOL_COD
+    columns:
+      - name: id
+        description: Unique identifier for each cholesterol observation
+        tests:
+          - unique
+          - not_null
