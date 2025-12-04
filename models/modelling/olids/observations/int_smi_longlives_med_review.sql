@@ -28,5 +28,10 @@ select person_id
 ,clinical_effective_date
 ,concept_code
 ,concept_display
+ -- Med Rev  currency flags (standard intervals)
+    ,CASE
+        WHEN DATEDIFF(day, clinical_effective_date, CURRENT_DATE()) <= 365 THEN TRUE
+        ELSE FALSE
+    END AS MED_REV_LAST_12M
 from MED_REV
 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1

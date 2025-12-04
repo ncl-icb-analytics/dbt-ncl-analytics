@@ -31,6 +31,11 @@ select person_id
 ,DATE(clinical_effective_date) AS clinical_effective_date
 ,concept_code
 ,concept_display
-,pr_obs_type
+,CASE 
+WHEN source_cluster_id = 'PULRHBATT_COD' THEN 'Pulmonary Rehab Attended'
+WHEN source_cluster_id = 'PULRHBPU_COD' THEN 'Pulmonary Rehab Unsuitable'
+WHEN source_cluster_id = 'PULRHBDEC_COD' THEN 'Pulmonary Rehab Declined'
+WHEN source_cluster_id = 'PULRHBOFF_COD' THEN 'Pulmonary Rehab Offered'
+END AS pr_obs_type
 from PR 
 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1
