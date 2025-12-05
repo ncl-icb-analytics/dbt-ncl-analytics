@@ -1,5 +1,5 @@
 version: 1
 models:
   - name: int_smi_longlives_weight_mgmt
-    description: 'Determine latest weight management interventions for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_WEIGHT_MANAGEMENT cluster'
+    description: 'Determine weight management interventions for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_WEIGHT_MANAGEMENT cluster'
     

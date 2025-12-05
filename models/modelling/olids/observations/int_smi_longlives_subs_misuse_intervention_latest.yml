@@ -1,0 +1,4 @@
+version: 1
+models:
+  - name: int_smi_longlives_subs_misuse_intervention_latest
+    description: 'Determine latest substance misuse interventions for Longer Lives campaign using PCD REFSET ILLSUBINT_COD'
