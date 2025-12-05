@@ -1,0 +1,9 @@
+models:
+  - name: int_smi_ltc_profile
+    description: Person Level Intermediate table holding LTC data for people on the SMI register. This includes registers and associated tests
+     
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null

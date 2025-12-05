@@ -1,0 +1,5 @@
+version: 1
+models:
+  - name: int_smi_longlives_nutrition_review_latest
+    description: 'Determine latest nutrition & activity review for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_NUTRITION_ACTIVITY_COD'
+    
