@@ -17,7 +17,7 @@ Testing:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, pcn_code, pcn_name, practice_code, practice_name, age, main_language
+    select patient_id, olids_id, pcn_code, pcn_name, practice_code, practice_name, age, main_language, gender, ethnicity_category
     from {{ ref('inclusion_cohort')}}
     where eligible = 1
 )
@@ -29,6 +29,8 @@ select il.patient_id
     , il.practice_name
     , il.age
     , il.main_language as main_language
+    , il.gender
+    , il.ethnicity_category
     , case when il.main_language in ('English', 'Not Recorded') then 0 else 1 end as main_language_flag -- TO DO: switch to interpreter flag
     -- trajectories for sparkline visualisation [add other domains - GP, Community, MH, total?]
     , tr.ae_encounters_sl
