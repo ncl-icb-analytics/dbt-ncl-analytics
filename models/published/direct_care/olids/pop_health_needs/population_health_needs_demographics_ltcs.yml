@@ -63,7 +63,6 @@ models:
       - name: has_anxiety
       - name: has_cancer
       - name: has_epilepsy
-      - name: has_stroke_tia
       - name: has_parkinsons
       - name: has_cerebral_palsy
       - name: has_mnd
@@ -73,6 +72,7 @@ models:
       - name: has_familial_hypercholesterolaemia
       - name: has_frailty
       - name: has_learning_disability
+      - name: has_learning_disability_all_ages
       - name: has_osteoporosis
       - name: has_palliative_care
       - name: has_rheumatoid_arthritis

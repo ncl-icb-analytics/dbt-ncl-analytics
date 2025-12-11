@@ -135,11 +135,11 @@ SELECT
     
     -- Conditions: Neurology
     c.has_epilepsy,
-    c.has_stroke_tia,
     c.has_parkinsons,
     c.has_cerebral_palsy,
     c.has_mnd,
     c.has_multiple_sclerosis,
+    -- Note: has_stroke_tia is in Cardiovascular section above (QOF CHD register related)
     
     -- Conditions: Endocrine
     c.has_hypothyroidism,
