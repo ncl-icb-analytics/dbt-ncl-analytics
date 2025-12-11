@@ -11,6 +11,7 @@ gender_codes as (
 op_demo as(
     select primarykey_id,
     sk_patient_id,
+    appointment_date as code_date,
     appointment_patient_identity_age_at_cds_activity_date as age_at_event,
     appointment_patient_identity_gender as gender_at_event,
     appointment_patient_identity_ethnic_category as ethnicity_at_event,
@@ -25,6 +26,7 @@ op_demo as(
 apc_demo as (
     select primarykey_id
     , sk_patient_id
+    , spell_admission_date as code_date
     , spell_patient_identity_spell_age as age_at_event
     , spell_patient_identity_gender as gender_at_event
     , spell_patient_identity_ethnic_category as ethnicity_at_event
@@ -39,6 +41,7 @@ apc_demo as (
 ae_demo as (
     select primarykey_id
     , sk_patient_id
+    , attendance_arrival_date as code_date
     , patient_age_at_arrival as age_at_event
     , patient_stated_gender as gender_at_event
     , patient_ethnic_category as ethnicity_at_event
@@ -50,17 +53,38 @@ ae_demo as (
     , 'AE_ATTENDANCE' as visit_occurrence_type
     from {{ ref('stg_sus_ae_emergency_care') }} ),
 
+wl_demo as (
+    select submission_id as primarykey_id -- replace with referral? using submission as is numeric and linkable back
+    , sk_patient_id
+    , referral_request_received_date as code_date
+    , age_at_referral_to_treatment_period_start_date as age_at_event
+    , person_stated_gender_code as gender_at_event
+    , ethnic_category as ethnicity_at_event
+    , null::varchar as postcode_district_at_event
+    , null::varchar as lsoa_11_at_event
+    , null::varchar as lad_at_event
+    , null::varchar as imd_at_event
+    , practice_code as reg_practice_at_event
+    , 'WL_START' as visit_occurrence_type
+    from {{ ref('stg_wl_wl_openpathways_data') }} 
+    where week_ending_date is not null 
+    qualify row_number() over (partition by referral_identifier order by week_ending_date) = 1 -- take the first record per referral_identifier
+),
+
 all_demographics as (
     select * from op_demo
     union 
     select * from apc_demo
     union 
     select * from ae_demo
+    union 
+    select * from wl_demo
 )
 
 select primarykey_id as visit_occurrence_id
     , visit_occurrence_type
     , sk_patient_id
+    , code_date
     , age_at_event
     , gender_at_event
     , gen.gender as gender_desc_at_event
