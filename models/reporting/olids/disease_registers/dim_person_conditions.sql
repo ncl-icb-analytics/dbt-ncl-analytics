@@ -46,6 +46,13 @@ person_conditions AS (
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'RA' THEN TRUE END), FALSE) AS has_rheumatoid_arthritis,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'SMI' THEN TRUE END), FALSE) AS has_severe_mental_illness,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'STIA' THEN TRUE END), FALSE) AS has_stroke_tia,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'PD' THEN TRUE END), FALSE) AS has_parkinsons,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'CEREBRALP' THEN TRUE END), FALSE) AS has_cerebral_palsy,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'MND' THEN TRUE END), FALSE) AS has_mnd,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'MS' THEN TRUE END), FALSE) AS has_multiple_sclerosis,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'ANX' THEN TRUE END), FALSE) AS has_anxiety,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'THY' THEN TRUE END), FALSE) AS has_hypothyroidism,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'AUTISM' THEN TRUE END), FALSE) AS has_autism,
         
         -- Summary counts (0 for persons with no conditions)
         COALESCE(COUNT(DISTINCT ltc.condition_code), 0) AS total_conditions,

@@ -1,0 +1,31 @@
+version: 2
+models:
+  - name: fct_person_hypothyroidism_register
+    description: 'Hypothyroidism register for patients with hypothyroidism diagnosis.
+
+      One row per person with THY_COD present (non-QOF).'
+    
+    config:
+      meta:
+        indicator:
+          id: "HYPOTHYROIDISM"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Endocrine"
+          name_short: "Hypothyroidism"
+          description_short: "Hypothyroidism register (non-QOF)"
+          description_long: >
+            Hypothyroidism register for persons with hypothyroidism diagnosis. 
+            Includes active patients with hypothyroidism diagnosis using THY_COD cluster codes. 
+            No age restrictions or resolution codes applied. Used for endocrine care pathway 
+            monitoring, medication management (levothyroxine), thyroid function test monitoring, 
+            and care planning. Chronic endocrine condition requiring ongoing medication and monitoring.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_ENDOCRINE_HYPOTHYROIDISM"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "THY_COD"
+              category: "INCLUSION"
+

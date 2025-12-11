@@ -1,0 +1,35 @@
+version: 2
+models:
+  - name: fct_person_anxiety_register
+    description: 'Anxiety register for patients with active anxiety diagnosis.
+
+      One row per person with latest ANX_COD > latest ANXRES_COD (non-QOF).'
+    
+    config:
+      meta:
+        indicator:
+          id: "ANXIETY"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Mental Health"
+          name_short: "Anxiety"
+          description_short: "Anxiety register (non-QOF)"
+          description_long: >
+            Anxiety register for persons with active anxiety diagnosis where latest 
+            anxiety code is more recent than any resolution code. Includes active 
+            patients with anxiety diagnosis using ANX_COD for diagnosis codes and 
+            ANXRES_COD for resolution codes. No age restrictions or QOF date thresholds 
+            applied. Used for mental health care pathway monitoring, anxiety severity 
+            tracking, recovery planning, psychological therapy access, and medication 
+            management.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_MH_ANXIETY"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "ANX_COD"
+              category: "INCLUSION"
+            - cluster_id: "ANXRES_COD"
+              category: "RESOLUTION"
+

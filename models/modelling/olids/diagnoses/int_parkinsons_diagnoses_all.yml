@@ -1,0 +1,37 @@
+version: 2
+models:
+  - name: int_parkinsons_diagnoses_all
+    description: 'Parkinsons disease diagnosis observations for neurological condition register management.
+
+      Key Features:
+
+      • Uses PD_COD cluster for diagnosis identification
+
+      • Supports Parkinsons disease register data collection
+
+      • Enables neurological condition monitoring and care pathway tracking
+
+      • No resolution codes as Parkinsons is a progressive condition
+
+      Purpose: Provide observation-level data for Parkinsons disease tracking and care management.'
+    tests:
+      - cluster_ids_exist:
+          cluster_ids: PD_COD
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation'
+      - name: person_id
+        description: 'Unique identifier for the person'
+      - name: clinical_effective_date
+        description: 'Date when the Parkinsons disease observation was recorded'
+      - name: concept_code
+        description: 'Clinical code for the Parkinsons disease diagnosis'
+      - name: concept_display
+        description: 'Human-readable description of the Parkinsons disease diagnosis'
+      - name: source_cluster_id
+        description: 'Source cluster identifier (PD_COD for Parkinsons disease diagnoses)'
+      - name: is_diagnosis_code
+        description: 'Boolean flag indicating diagnosis code (always TRUE for Parkinsons observations)'
+      - name: parkinsons_observation_type
+        description: 'Type of Parkinsons observation (always "Parkinsons Disease Diagnosis")'
+
