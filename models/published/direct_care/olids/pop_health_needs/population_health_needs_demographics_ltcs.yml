@@ -60,11 +60,19 @@ models:
       - name: has_dementia
       - name: has_depression
       - name: has_severe_mental_illness
+      - name: has_anxiety
       - name: has_cancer
       - name: has_epilepsy
+      - name: has_parkinsons
+      - name: has_cerebral_palsy
+      - name: has_mnd
+      - name: has_multiple_sclerosis
+      - name: has_hypothyroidism
+      - name: has_autism
       - name: has_familial_hypercholesterolaemia
       - name: has_frailty
       - name: has_learning_disability
+      - name: has_learning_disability_all_ages
       - name: has_osteoporosis
       - name: has_palliative_care
       - name: has_rheumatoid_arthritis

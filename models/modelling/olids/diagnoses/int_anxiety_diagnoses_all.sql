@@ -46,6 +46,7 @@ SELECT
     END AS anxiety_observation_type
 
 FROM ({{ get_observations("'ANX_COD', 'ANXRES_COD'") }}) obs
+WHERE obs.clinical_effective_date IS NOT NULL
 
 ORDER BY person_id, clinical_effective_date, id
 
