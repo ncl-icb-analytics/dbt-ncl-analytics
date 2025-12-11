@@ -13,6 +13,7 @@ select
     diagnostic_order_id,
     referral_request_id,
     authorisation_type_concept_id,
+    authorisation_type_display,
     date_precision_concept_id,
     medication_statement_source_concept_id,
     clinical_effective_date,
