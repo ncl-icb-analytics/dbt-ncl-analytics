@@ -12,7 +12,6 @@ on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
 
-
 target-path: "target"
 clean-targets:
   - "target"
@@ -23,7 +22,7 @@ model-paths: ["models"]
 # Configure dbt audit schema naming
 vars:
   dbt_audit_schema: "test_audit"
-
+  
   # Schema generation configuration
   # Domains listed here will have schema names automatically derived from subdomain folder structure
   # Pattern: {DOMAIN}_{SUBDOMAIN} e.g. models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES
@@ -39,7 +38,13 @@ vars:
   covid_current_spring: "COVID Spring 2025"    # Current spring campaign
   covid_previous_autumn: "COVID Autumn 2024"   # Previous autumn campaign
   covid_previous_spring: "COVID Spring 2025"   # Previous spring campaign (for comparison)
-  covid_audit_end_date: "2025-06-30"           # End of last completed campaign (spring 2025)
+  covid_audit_end_date: "2025-06-30"    
+  
+  # Elementary configuration - disable upload of artifacts on run end for non-prod targets
+  disable_dbt_artifacts_autoupload: "{{ target.name != 'prod' }}"
+  disable_run_results: "{{ target.name != 'prod' }}"
+  disable_tests_results: "{{ target.name != 'prod' }}"
+  disable_dbt_invocation_autoupload: "{{ target.name != 'prod' }}"       # End of last completed campaign (spring 2025)
 
 # Configure test failure storage (only for failures)
 tests:
@@ -137,6 +142,12 @@ models:
             - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
         shared:
           +schema: "REFERENCE"
+
+  # Elementary observability configuration
+  elementary:
+    +enabled: "{{ target.name == 'prod' }}"  # Only run Elementary in prod
+    +database: "DATA_LAKE__NCL"
+    +schema: "DBT_OBSERVABILITY"
 
 seeds:
   ncl_analytics:

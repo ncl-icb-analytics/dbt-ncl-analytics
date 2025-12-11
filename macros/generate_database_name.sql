@@ -7,6 +7,13 @@
         {%- else -%}
             {{ custom_database_name | trim }}
         {%- endif -%}
+    {%- elif node.package_name == 'elementary' -%}
+        {#- Elementary models always use the literal database name without environment prefix (like seeds) -#}
+        {%- if custom_database_name is none -%}
+            {{ target.database }}
+        {%- else -%}
+            {{ custom_database_name | trim }}
+        {%- endif -%}
     {%- else -%}
         {#- All other resources use environment-prefixed database names -#}
         {%- if target.name is none or target.name == "prod" -%}
