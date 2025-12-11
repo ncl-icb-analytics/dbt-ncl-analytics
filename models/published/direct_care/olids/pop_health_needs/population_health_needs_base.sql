@@ -131,11 +131,25 @@ SELECT
     c.has_dementia,
     c.has_depression,
     c.has_severe_mental_illness,
+    c.has_anxiety,
+    
+    -- Conditions: Neurology
+    c.has_epilepsy,
+    c.has_stroke_tia,
+    c.has_parkinsons,
+    c.has_cerebral_palsy,
+    c.has_mnd,
+    c.has_multiple_sclerosis,
+    
+    -- Conditions: Endocrine
+    c.has_hypothyroidism,
+    
+    -- Conditions: Neurodevelopmental
+    c.has_autism,
     
     -- Conditions: Other
     c.has_cancer,
     c.has_chronic_kidney_disease,
-    c.has_epilepsy,
     c.has_familial_hypercholesterolaemia,
     c.has_frailty,
     c.has_learning_disability,

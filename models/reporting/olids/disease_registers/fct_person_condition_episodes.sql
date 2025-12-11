@@ -513,6 +513,14 @@ WITH all_condition_events AS (
     -- Learning Disability All Ages uses same diagnosis codes as regular LD - age filtering happens in QOF layer
 ),
 
+-- Filter out invalid dates (NULL or future dates) for data quality
+valid_condition_events AS (
+    SELECT *
+    FROM all_condition_events
+    WHERE event_date IS NOT NULL
+        AND event_date <= CURRENT_DATE
+),
+
 events_with_row_numbers AS (
     -- Add row numbers first
     SELECT 
@@ -525,7 +533,7 @@ events_with_row_numbers AS (
             PARTITION BY person_id, condition_name 
             ORDER BY event_date, event_type
         ) as prev_event_type
-    FROM all_condition_events
+    FROM valid_condition_events
 ),
 
 episode_starts AS (
