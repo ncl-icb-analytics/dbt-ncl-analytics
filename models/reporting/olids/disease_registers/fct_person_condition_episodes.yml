@@ -326,6 +326,148 @@ models:
             code_clusters:
               - cluster_id: "STIA_COD"
                 category: "INCLUSION"
+                
+          - id: "CONDITION_EPISODES_PD"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Neurology"
+            name_short: "Parkinsons Disease Episodes"
+            description_short: "Simplified Parkinsons condition episodes with diagnosis tracking only"
+            description_long: >
+              Episode tracking for Parkinsons disease using diagnosis codes only.
+              Progressive condition with no resolved state tracking - captures diagnosis events for
+              complete clinical history analysis without episode duration calculations.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_PD"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "PD_COD"
+                category: "INCLUSION"
+                
+          - id: "CONDITION_EPISODES_CEREBRALP"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Neurology"
+            name_short: "Cerebral Palsy Episodes"
+            description_short: "Simplified cerebral palsy condition episodes with diagnosis tracking only"
+            description_long: >
+              Episode tracking for cerebral palsy using diagnosis codes only.
+              Lifelong condition with no resolved state tracking - captures diagnosis events for
+              complete clinical history analysis without episode duration calculations.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_CEREBRALP"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "CEREBRALP_COD"
+                category: "INCLUSION"
+                
+          - id: "CONDITION_EPISODES_MND"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Neurology"
+            name_short: "Motor Neurone Disease Episodes"
+            description_short: "Simplified MND condition episodes with diagnosis tracking only"
+            description_long: >
+              Episode tracking for motor neurone disease using diagnosis codes only.
+              Progressive condition with no resolved state tracking - captures diagnosis events for
+              complete clinical history analysis without episode duration calculations.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_MND"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "MND_COD"
+                category: "INCLUSION"
+                
+          - id: "CONDITION_EPISODES_MS"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Neurology"
+            name_short: "Multiple Sclerosis Episodes"
+            description_short: "Simplified MS condition episodes with diagnosis tracking only"
+            description_long: >
+              Episode tracking for multiple sclerosis using diagnosis codes only.
+              Chronic condition with no resolved state tracking - captures diagnosis events for
+              complete clinical history analysis without episode duration calculations.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_MS"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "MS_COD"
+                category: "INCLUSION"
+                
+          - id: "CONDITION_EPISODES_ANX"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Mental Health"
+            name_short: "Anxiety Episodes"
+            description_short: "Simplified anxiety condition episodes with resolved state tracking"
+            description_long: >
+              Episode tracking for anxiety using diagnosis and resolved codes without QOF restrictions.
+              Captures multiple condition cycles per person for complete clinical history analysis.
+              Includes onset and resolved states enabling episode duration calculations.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_ANX"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "ANX_COD"
+                category: "INCLUSION"
+              - cluster_id: "ANXRES_COD"
+                category: "RESOLUTION"
+                
+          - id: "CONDITION_EPISODES_THY"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Endocrine"
+            name_short: "Hypothyroidism Episodes"
+            description_short: "Simplified hypothyroidism condition episodes with diagnosis tracking only"
+            description_long: >
+              Episode tracking for hypothyroidism using diagnosis codes only.
+              Chronic condition with no resolved state tracking - captures diagnosis events for
+              complete clinical history analysis without episode duration calculations.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_THY"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "THY_COD"
+                category: "INCLUSION"
+                
+          - id: "CONDITION_EPISODES_AUTISM"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Neurodevelopmental"
+            name_short: "Autism Episodes"
+            description_short: "Simplified autism condition episodes with diagnosis tracking only"
+            description_long: >
+              Episode tracking for autism spectrum disorder using diagnosis codes only.
+              Lifelong condition with no resolved state tracking - captures diagnosis events for
+              complete clinical history analysis without episode duration calculations.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_AUTISM"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "AUTISM_COD"
+                category: "INCLUSION"
           
           # Neurodevelopmental Conditions
           - id: "CONDITION_EPISODES_LD"
@@ -548,32 +690,6 @@ models:
         description: 'Human-readable condition name (e.g., "Depression", "Gestational Diabetes")'
         tests:
           - not_null
-          - accepted_values:
-              values:
-                - 'Asthma'
-                - 'Atrial Fibrillation'
-                - 'Cancer'
-                - 'Coronary Heart Disease'
-                - 'Chronic Kidney Disease'
-                - 'COPD'
-                - 'Dementia'
-                - 'Depression'
-                - 'Diabetes'
-                - 'Epilepsy'
-                - 'Familial Hypercholesterolaemia'
-                - 'Frailty'
-                - 'Gestational Diabetes'
-                - 'Heart Failure'
-                - 'Hypertension'
-                - 'Learning Disability'
-                - 'NAFLD'
-                - 'Non-Diabetic Hyperglycaemia'
-                - 'Osteoporosis'
-                - 'Peripheral Arterial Disease'
-                - 'Palliative Care'
-                - 'Rheumatoid Arthritis'
-                - 'Severe Mental Illness'
-                - 'Stroke and TIA'
 
       - name: condition_code
         description: 'Short condition code used in QOF registers'
@@ -605,6 +721,13 @@ models:
                 - 'RA'
                 - 'SMI'
                 - 'STIA'
+                - 'PD'
+                - 'CEREBRALP'
+                - 'MND'
+                - 'MS'
+                - 'ANX'
+                - 'THY'
+                - 'AUTISM'
 
       - name: clinical_domain
         description: 'Clinical specialty domain for the condition'

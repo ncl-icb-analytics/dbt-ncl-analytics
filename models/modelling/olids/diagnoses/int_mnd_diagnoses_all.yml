@@ -1,0 +1,37 @@
+version: 2
+models:
+  - name: int_mnd_diagnoses_all
+    description: 'Motor neurone disease diagnosis observations for neurological condition register management.
+
+      Key Features:
+
+      • Uses MND_COD cluster for diagnosis identification
+
+      • Supports motor neurone disease register data collection
+
+      • Enables neurological condition monitoring and care pathway tracking
+
+      • No resolution codes as MND is a progressive condition
+
+      Purpose: Provide observation-level data for motor neurone disease tracking and palliative care planning.'
+    tests:
+      - cluster_ids_exist:
+          cluster_ids: MND_COD
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation'
+      - name: person_id
+        description: 'Unique identifier for the person'
+      - name: clinical_effective_date
+        description: 'Date when the motor neurone disease observation was recorded'
+      - name: concept_code
+        description: 'Clinical code for the motor neurone disease diagnosis'
+      - name: concept_display
+        description: 'Human-readable description of the motor neurone disease diagnosis'
+      - name: source_cluster_id
+        description: 'Source cluster identifier (MND_COD for motor neurone disease diagnoses)'
+      - name: is_diagnosis_code
+        description: 'Boolean flag indicating diagnosis code (always TRUE for MND observations)'
+      - name: mnd_observation_type
+        description: 'Type of MND observation (always "Motor Neurone Disease Diagnosis")'
+
