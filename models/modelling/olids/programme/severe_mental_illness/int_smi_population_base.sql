@@ -13,6 +13,8 @@ dem.PERSON_ID
 ,ID.HX_FLAKE
 ,dem.SK_PATIENT_ID
 ,dem.AGE
+,dem.AGE_BAND_5Y
+,dem.AGE_BAND_NHS
 ,dem.GENDER
 ,CASE
 WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 'Unknown'
