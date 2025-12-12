@@ -40,6 +40,14 @@ models:
     description: Date the problem ended, if applicable
   - name: observation_source_concept_id
     description: Foreign key to concept.id - source concept for the observation type
+  - name: source_code
+    description: Source code for the observation concept
+  - name: source_display
+    description: Source display name for the observation concept
+  - name: source_system
+    description: Source system for the observation concept
+  - name: target_system
+    description: Target system for the mapped concept
   - name: age_at_event
     description: Patient age in years at time of observation
   - name: age_at_event_baby
@@ -57,6 +65,8 @@ models:
     description: Boolean indicating if the associated problem has been deleted
   - name: is_confidential
     description: Boolean indicating if the record is marked as confidential
+  - name: lds_is_deleted
+    description: Deletion flag from LDS
   - name: lds_id
     description: LDS system identifier
   - name: record_owner_organisation_code

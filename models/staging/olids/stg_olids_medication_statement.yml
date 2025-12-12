@@ -30,10 +30,30 @@ models:
   - name: authorisation_type_concept_id
     description: Foreign key to concept.id - type of authorisation (acute, repeat,
       automatic, etc.)
+  - name: authorisation_type_source_code
+    description: Source code for the authorisation type concept (from concept map)
+  - name: authorisation_type_source_display
+    description: Source display name for the authorisation type concept (from concept map)
   - name: date_precision_concept_id
     description: Foreign key to concept.id - precision of the clinical effective date
+  - name: date_precision_code
+    description: Code value for the date precision concept
+  - name: date_precision_display
+    description: Display name for the date precision concept
+  - name: date_precision_source_code
+    description: Source code for the date precision concept (from concept map)
+  - name: date_precision_source_display
+    description: Source display name for the date precision concept (from concept map)
   - name: medication_statement_source_concept_id
     description: Foreign key to concept.id - source concept for the medication
+  - name: source_code
+    description: Source code for the medication statement concept
+  - name: source_display
+    description: Source display name for the medication statement concept
+  - name: source_system
+    description: Source system for the medication statement concept
+  - name: target_system
+    description: Target system for the mapped concept
   - name: clinical_effective_date
     description: Date the medication statement was clinically effective
   - name: cancellation_date
