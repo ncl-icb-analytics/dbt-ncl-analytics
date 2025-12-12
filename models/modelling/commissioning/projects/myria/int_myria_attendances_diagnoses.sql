@@ -5,8 +5,8 @@ SELECT
         ip.VISIT_OCCURRENCE_ID AS primary_id,
         'IP' AS pod_group,
         ip.POD AS pod,
-        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(ip.START_DATE) AS FIN_YEAR,
-        MOD(MONTH(ip.START_DATE) + 8, 12) + 1 AS fin_month,
+        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(ip.END_DATE) AS FIN_YEAR,
+        MOD(MONTH(ip.END_DATE) + 8, 12) + 1 AS fin_month,
         ip.SK_PATIENT_ID AS patient_id,
         ip.REG_PRACTICE_AT_EVENT AS gp_code,
         ip.ORGANISATION_ID AS provider_code,
@@ -20,7 +20,7 @@ SELECT
     LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx -- DEV__MODELLING.COMMISSIONING_MODELLING.INT_SUS_IP_DIAGNOSIS AS dx
         ON ip.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE 
-        ip.START_DATE < '01-Apr-2025' -- only activity before April 2025
+        ip.END_DATE < '01-Apr-2025' -- only activity before April 2025
 
 UNION ALL
 
