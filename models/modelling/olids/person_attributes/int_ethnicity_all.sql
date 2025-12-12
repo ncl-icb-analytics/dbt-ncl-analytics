@@ -9,35 +9,21 @@
 -- Uses broader ethnicity mapping via ETHNICITY_CODES reference table`
 -- Includes ALL persons regardless of active status
 
-WITH ethnicity_source_concepts AS (
-    -- First identify all source concept IDs that map to ethnicity codes
-    SELECT DISTINCT
-        cm.source_code_id,
-        c.code AS concept_code,
-        c.display AS concept_display,
-        c.id AS concept_id
-    FROM {{ ref('stg_reference_ethnicity_codes') }} AS ec
-    INNER JOIN {{ ref('stg_olids_concept') }} AS c
-        ON ec.code = c.code
-    INNER JOIN {{ ref('stg_olids_concept_map') }} AS cm
-        ON c.id = cm.target_code_id
-),
-
-ethnicity_observations AS (
-    -- Now get only observations that have ethnicity-related source concepts
+WITH ethnicity_observations AS (
+    -- Get only observations that have ethnicity-related mapped concept codes (SNOMED-CT)
     SELECT
         o.id AS ID,
         o.patient_id,
         pp.person_id,
         p.sk_patient_id,
         o.clinical_effective_date,
-        esc.concept_id,
-        esc.concept_code,
-        esc.concept_display
+        o.mapped_concept_id AS concept_id,
+        o.mapped_concept_code AS concept_code,
+        o.mapped_concept_display AS concept_display
     FROM {{ ref('stg_olids_observation') }} AS o
-    -- Filter to only ethnicity observations
-    INNER JOIN ethnicity_source_concepts AS esc
-        ON o.observation_source_concept_id = esc.source_code_id
+    -- Filter to only ethnicity observations using premapped mapped_concept_code (SNOMED-CT)
+    INNER JOIN {{ ref('stg_reference_ethnicity_codes') }} AS ec
+        ON o.mapped_concept_code = ec.code
     -- Join to patient to get sk_patient_id
     INNER JOIN {{ ref('stg_olids_patient') }} AS p
         ON o.patient_id = p.id

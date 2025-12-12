@@ -17,6 +17,8 @@ select
     "AUTHORISATION_TYPE_CONCEPT_ID" as authorisation_type_concept_id,
     "AUTHORISATION_TYPE_SOURCE_CODE" as authorisation_type_source_code,
     "AUTHORISATION_TYPE_SOURCE_DISPLAY" as authorisation_type_source_display,
+    "AUTHORISATION_TYPE_CODE" as authorisation_type_code,
+    "AUTHORISATION_TYPE_DISPLAY" as authorisation_type_display,
     "DATE_PRECISION_CONCEPT_ID" as date_precision_concept_id,
     "DATE_PRECISION_SOURCE_CODE" as date_precision_source_code,
     "DATE_PRECISION_SOURCE_DISPLAY" as date_precision_source_display,
@@ -57,7 +59,5 @@ select
     "SOURCE_CODE" as source_code,
     "SOURCE_DISPLAY" as source_display,
     "SOURCE_SYSTEM" as source_system,
-    "TARGET_SYSTEM" as target_system,
-    "AUTHORISATION_TYPE_CODE" as authorisation_type_code,
-    "AUTHORISATION_TYPE_DISPLAY" as authorisation_type_display
+    "TARGET_SYSTEM" as target_system
 from {{ source('olids', 'MEDICATION_STATEMENT') }}

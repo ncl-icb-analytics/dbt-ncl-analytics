@@ -38,12 +38,8 @@ medication_periods AS (
     FROM {{ ref('stg_olids_medication_order') }} mo
     INNER JOIN {{ ref('stg_olids_medication_statement') }} ms
         ON mo.medication_statement_id = ms.id
-    INNER JOIN {{ ref('stg_olids_concept_map') }} cm
-        ON ms.authorisation_type_concept_id = cm.source_code_id
-    INNER JOIN {{ ref('stg_olids_concept') }} c
-        ON cm.target_code_id = c.id
     INNER JOIN repeat_prescription_codes rpc
-        ON c.code = rpc.code
+        ON ms.authorisation_type_code = rpc.code
     INNER JOIN {{ ref('int_patient_person_unique') }} pp
         ON mo.patient_id = pp.patient_id
     INNER JOIN {{ ref('int_polypharmacy_medications_list') }} bnf

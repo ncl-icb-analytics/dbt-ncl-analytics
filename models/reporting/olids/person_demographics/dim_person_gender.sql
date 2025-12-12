@@ -49,13 +49,19 @@ SELECT
 FROM (
     SELECT
         ap.person_id,
-        COALESCE(target_concept.display, source_concept.display, 'Unknown') AS gender,
+        COALESCE(p_best.gender_display, p_curr.gender_display, p_best.gender_source_display, p_curr.gender_source_display, 'Unknown') AS gender,
         ROW_NUMBER() OVER (
             PARTITION BY ap.person_id
             ORDER BY
-                CASE WHEN target_concept.display IS NOT NULL THEN 1 ELSE 2 END,
-                target_concept.display,
-                source_concept.display
+                CASE WHEN p_best.gender_display IS NOT NULL THEN 1 
+                     WHEN p_curr.gender_display IS NOT NULL THEN 2
+                     WHEN p_best.gender_source_display IS NOT NULL THEN 3
+                     WHEN p_curr.gender_source_display IS NOT NULL THEN 4
+                     ELSE 5 END,
+                p_best.gender_display,
+                p_curr.gender_display,
+                p_best.gender_source_display,
+                p_curr.gender_source_display
         ) AS rn
     FROM all_persons AS ap
     LEFT JOIN best_patient_with_gender AS bpg
@@ -67,6 +73,5 @@ FROM (
         ON bpg.patient_id = p_best.id
     LEFT JOIN {{ ref('stg_olids_patient') }} AS p_curr
         ON cpp.patient_id = p_curr.id
-    {{ join_concept_display('COALESCE(p_best.gender_concept_id, p_curr.gender_concept_id)') }}
 ) ranked
 WHERE rn = 1

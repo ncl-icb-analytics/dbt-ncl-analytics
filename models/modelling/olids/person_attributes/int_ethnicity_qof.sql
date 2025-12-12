@@ -18,7 +18,6 @@ WITH mapped_observations AS (
         pp.person_id,
         p.sk_patient_id,
         o.clinical_effective_date,
-        o.observation_source_concept_id,
         o.mapped_concept_id,
         o.mapped_concept_code,
         o.mapped_concept_display,

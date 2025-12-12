@@ -27,7 +27,6 @@
         o.is_problem,
         o.is_review,
         o.problem_end_date,
-        o.observation_source_concept_id,
         o.mapped_concept_id,
         o.mapped_concept_code,
         o.mapped_concept_display,
