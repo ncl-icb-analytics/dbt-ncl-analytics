@@ -25,7 +25,8 @@ SELECT
     CASE -- counts distinct attendance IDs and then flags as 1 if there is at least 1 non-elective attendance at non-Barnet Hospital site in the period
         WHEN COUNT(DISTINCT 
                     CASE 
-                        WHEN provider_site_name <> 'Barnet Hospital'
+                        WHEN provider_code IN ('RAL','RAP')
+                            AND provider_site_name <> 'Barnet Hospital'
                             AND fin_year = '2024/25'
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
@@ -35,7 +36,8 @@ SELECT
 
     COUNT(DISTINCT -- counts distinct attendance IDs for non-elective attendances at non-Barnet Hospital sites in the period
                     CASE 
-                        WHEN provider_site_name <> 'Barnet Hospital' 
+                        WHEN provider_code IN ('RAL','RAP')
+                            AND provider_site_name <> 'Barnet Hospital' 
                             AND fin_year = '2024/25'
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
@@ -135,7 +137,7 @@ SELECT
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('F00','F01','F02','F03','G30') THEN 1 ELSE 0 END) AS dementia,
 
     -- End Stage Renal Failure → N18.6 (ESRD) plus Z-code Z99.2 (dependence on dialysis). OPCS-4 dialysis also appears IN SUS APC (e.g., for haemodialysis/peritoneal dialysis—use a dialysis OPCS list). (DiseaseDB.com, ICDcodes.ai, opencodelists.org)
-    MAX(CASE WHEN LEFT(UPPER(diag_code), 4) IN ('N186','Z992') THEN 1 ELSE 0 END) AS end_stage_renal_failure,
+    MAX(CASE WHEN LEFT(UPPER(diag_code), 5) IN ('N18.6','Z99.2') THEN 1 ELSE 0 END) AS end_stage_renal_failure,
 
     -- Severe Interstitial Lung Disease → J84* (other interstitial pulmonary diseases) with IPF J84.1*. “Severe” proxy: concurrent J96.1* (chronic respiratory failure), long-term oxygen therapy, or frequent ILD admissions. (icdlist.com, ICDcodes.ai)
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('J84') THEN 1 ELSE 0 END) AS severe_interstitial_lung_disease,
@@ -147,10 +149,10 @@ SELECT
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('N18') THEN 1 ELSE 0 END) AS chronic_kidney_disease,
 
     -- Liver Failure → K72* (hepatic failure). Alcoholic hepatic failure specifically K70.4. (classbrowser.nhs.uk)
-    MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('K72') or LEFT(UPPER(diag_code), 4) IN ('K704') THEN 1 ELSE 0 END) AS liver_failure,
+    MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('K72') or LEFT(UPPER(diag_code), 5) IN ('K70.4') THEN 1 ELSE 0 END) AS liver_failure,
 
     -- Alcohol Dependence → F10.2* (alcohol dependence syndrome—use the 4th/5th-character subcodes where present). (classbrowser.nhs.uk, aapc.com)
-    MAX(CASE WHEN LEFT(UPPER(diag_code), 4) IN ('F102') THEN 1 ELSE 0 END) AS alcohol_dependence,
+    MAX(CASE WHEN LEFT(UPPER(diag_code), 4) IN ('F10.2') THEN 1 ELSE 0 END) AS alcohol_dependence,
 
     -- Bronchiectasis → J47*. (classbrowser.nhs.uk)
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('J47') THEN 1 ELSE 0 END) AS bronchiectasis,
@@ -165,7 +167,7 @@ SELECT
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('I60','I61','I62','I63','I64','I65','I66','I67','I68','I69') THEN 1 ELSE 0 END) AS cerebrovascular_disease,
 
     -- Peripheral Vascular Disease (PVD) → Often taken AS I70.2* (peripheral atherosclerosis), I73.* (other peripheral vascular diseases), I74.* (arterial embolism/thrombosis). Many studies use broader I70–I79 arterial disease block; be explicit. (classbrowser.nhs.uk)
-    MAX(CASE WHEN LEFT(UPPER(diag_code), 4) IN ('I702') OR LEFT (upper(diag_code), 3) IN ('I73','I74') THEN 1 ELSE 0 END) AS peripheral_vascular_disease,
+    MAX(CASE WHEN LEFT(UPPER(diag_code), 5) IN ('I70.2') OR LEFT (upper(diag_code), 3) IN ('I73','I74') THEN 1 ELSE 0 END) AS peripheral_vascular_disease,
 
     -- Pulmonary Heart Disease → I26*–I28* (PE, pulmonary hypertension, cor pulmonale). (classbrowser.nhs.uk, icdlist.com)
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('I26','I27','I28') THEN 1 ELSE 0 END) AS pulmonary_heart_disease,
