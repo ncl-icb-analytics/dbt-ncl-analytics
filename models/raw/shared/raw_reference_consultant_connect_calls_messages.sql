@@ -1,4 +1,4 @@
--- Raw layer model for reference_analyst_managed.CONSULTANT_CONNECT_CALL_MESSAGES
+-- Raw layer model for reference_analyst_managed.CONSULTANT_CONNECT_CALLS_MESSAGES
 -- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
 -- Description: Analyst-managed reference datasets and business rules
 -- This is a 1:1 passthrough from source with standardized column names
@@ -24,4 +24,4 @@ select
     "DATE_CLOSED" as date_closed,
     "LAST_ACTIVITY" as last_activity,
     "CONTACT_TYPE" as contact_type
-from {{ source('reference_analyst_managed', 'CONSULTANT_CONNECT_CALL_MESSAGES') }}
+from {{ source('reference_analyst_managed', 'CONSULTANT_CONNECT_CALLS_MESSAGES') }}

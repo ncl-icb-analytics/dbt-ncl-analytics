@@ -28,6 +28,7 @@ select
     "DATE_RECORDED" as date_recorded,
     "IS_PROBLEM_DELETED" as is_problem_deleted,
     "IS_CONFIDENTIAL" as is_confidential,
+    "LDS_IS_DELETED" as lds_is_deleted,
     "LDS_ID" as lds_id,
     "LDS_BUSINESS_KEY" as lds_business_key,
     "LDS_DATASET_ID" as lds_dataset_id,
@@ -42,6 +43,10 @@ select
     "MAPPED_CONCEPT_ID" as mapped_concept_id,
     "MAPPED_CONCEPT_CODE" as mapped_concept_code,
     "MAPPED_CONCEPT_DISPLAY" as mapped_concept_display,
+    "SOURCE_CODE" as source_code,
+    "SOURCE_DISPLAY" as source_display,
+    "SOURCE_SYSTEM" as source_system,
+    "TARGET_SYSTEM" as target_system,
     "RESULT_UNIT_CODE" as result_unit_code,
     "RESULT_UNIT_DISPLAY" as result_unit_display
 from {{ source('olids', 'OBSERVATION') }}

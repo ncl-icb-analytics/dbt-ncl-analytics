@@ -17,9 +17,25 @@ models:
     description: Foreign key to person.id - person-level identifier
   - name: episode_type_source_concept_id
     description: Foreign key to concept.id - type of episode of care
+  - name: episode_type_code
+    description: Code value for the episode type concept
+  - name: episode_type_display
+    description: Display name for the episode type concept
+  - name: episode_type_source_code
+    description: Source code for the episode type concept (from concept map)
+  - name: episode_type_source_display
+    description: Source display name for the episode type concept (from concept map)
   - name: episode_status_source_concept_id
     description: Foreign key to concept.id - status of the episode (planned, active,
       onhold, finished, cancelled)
+  - name: episode_status_code
+    description: Code value for the episode status concept
+  - name: episode_status_display
+    description: Display name for the episode status concept
+  - name: episode_status_source_code
+    description: Source code for the episode status concept (from concept map)
+  - name: episode_status_source_display
+    description: Source display name for the episode status concept (from concept map)
   - name: episode_of_care_start_date
     description: Start date of the episode of care
   - name: episode_of_care_end_date

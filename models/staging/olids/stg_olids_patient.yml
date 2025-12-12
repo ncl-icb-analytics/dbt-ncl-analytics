@@ -17,6 +17,14 @@ models:
     description: Patient title (Mr, Mrs, Dr, etc.)
   - name: gender_concept_id
     description: Foreign key to concept.id - patient gender
+  - name: gender_code
+    description: Code value for the gender concept
+  - name: gender_display
+    description: Display name for the gender concept
+  - name: gender_source_code
+    description: Source code for the gender concept (from concept map)
+  - name: gender_source_display
+    description: Source display name for the gender concept (from concept map)
   - name: registered_practice_id
     description: Foreign key to organisation.id - GP practice where patient is registered
   - name: birth_year

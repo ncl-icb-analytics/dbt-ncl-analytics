@@ -3,14 +3,14 @@
 -- Description: SUS outpatient appointments and activity
 -- This is a 1:1 passthrough from source with standardized column names
 select
-    "dmicImportLogId" as dmic_import_log_id,
-    "OPCS_ID" as opcs_id,
-    "code" as code,
-    "main_operating_professional.identifier" as main_operating_professional_identifier,
-    "main_operating_professional.registration_issuer" as main_operating_professional_registration_issuer,
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,
-    "responsible_anaesthetist.registration_issuer" as responsible_anaesthetist_registration_issuer,
+    "OPCS_ID" as opcs_id,
+    "code" as code,
+    "date" as date,
+    "main_operating_professional.identifier" as main_operating_professional_identifier,
+    "main_operating_professional.registration_issuer" as main_operating_professional_registration_issuer,
     "responsible_anaesthetist.identifier" as responsible_anaesthetist_identifier,
-    "date" as date
+    "responsible_anaesthetist.registration_issuer" as responsible_anaesthetist_registration_issuer,
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_op', 'appointment.clinical_coding.procedure.opcs') }}

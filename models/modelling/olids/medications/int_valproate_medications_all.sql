@@ -27,9 +27,9 @@ WITH valproate_from_prog_codes AS (
         mo.quantity_unit AS order_quantity_unit,
         mo.duration_days AS order_duration_days,
         NULL AS statement_medication_name,
-        mc.code AS mapped_concept_code,
-        mc.display AS mapped_concept_display,
-        mc.id AS mapped_concept_id,
+        mo.mapped_concept_code,
+        mo.mapped_concept_display,
+        mo.mapped_concept_id,
         vp.valproate_product_term,
         NULL AS bnf_code,
         NULL AS bnf_name,
@@ -37,13 +37,9 @@ WITH valproate_from_prog_codes AS (
     FROM {{ ref('stg_olids_medication_order') }} AS mo
     INNER JOIN {{ ref('int_patient_person_unique') }} AS pp
         ON mo.patient_id = pp.patient_id
-    LEFT JOIN {{ ref('stg_olids_concept_map') }} AS cm
-        ON mo.medication_order_source_concept_id = cm.source_code_id
-    LEFT JOIN {{ ref('stg_olids_concept') }} AS mc
-        ON cm.target_code_id = mc.id
     LEFT JOIN {{ ref('stg_reference_valproate_prog_codes') }} AS vp
         ON
-            mc.code = vp.code
+            mo.mapped_concept_code = vp.code
             AND vp.code_category = 'DRUG'
     WHERE (
         -- Name-based matching for valproate

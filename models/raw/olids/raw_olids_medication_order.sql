@@ -17,6 +17,10 @@ select
     "REFERRAL_REQUEST_ID" as referral_request_id,
     "CLINICAL_EFFECTIVE_DATE" as clinical_effective_date,
     "DATE_PRECISION_CONCEPT_ID" as date_precision_concept_id,
+    "DATE_PRECISION_SOURCE_CODE" as date_precision_source_code,
+    "DATE_PRECISION_SOURCE_DISPLAY" as date_precision_source_display,
+    "DATE_PRECISION_CODE" as date_precision_code,
+    "DATE_PRECISION_DISPLAY" as date_precision_display,
     "DOSE" as dose,
     "QUANTITY_VALUE" as quantity_value,
     "QUANTITY_UNIT" as quantity_unit,
@@ -48,5 +52,9 @@ select
     "STATEMENT_MEDICATION_NAME" as statement_medication_name,
     "MAPPED_CONCEPT_ID" as mapped_concept_id,
     "MAPPED_CONCEPT_CODE" as mapped_concept_code,
-    "MAPPED_CONCEPT_DISPLAY" as mapped_concept_display
+    "MAPPED_CONCEPT_DISPLAY" as mapped_concept_display,
+    "SOURCE_CODE" as source_code,
+    "SOURCE_DISPLAY" as source_display,
+    "SOURCE_SYSTEM" as source_system,
+    "TARGET_SYSTEM" as target_system
 from {{ source('olids', 'MEDICATION_ORDER') }}

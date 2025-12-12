@@ -28,6 +28,14 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: DATE_PRECISION_CONCEPT_ID
       data_type: TEXT
+    - name: DATE_PRECISION_SOURCE_CODE
+      data_type: TEXT
+    - name: DATE_PRECISION_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: DATE_PRECISION_CODE
+      data_type: TEXT
+    - name: DATE_PRECISION_DISPLAY
+      data_type: TEXT
     - name: IS_REVIEW
       data_type: BOOLEAN
     - name: MEDICATION_NAME
@@ -35,6 +43,20 @@ sources:
     - name: MULTI_LEX_ACTION
       data_type: TEXT
     - name: ALLERGY_INTOLERANCE_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: SOURCE_CODE
+      data_type: TEXT
+    - name: SOURCE_DISPLAY
+      data_type: TEXT
+    - name: SOURCE_SYSTEM
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_ID
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_CODE
+      data_type: TEXT
+    - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: TARGET_SYSTEM
       data_type: TEXT
     - name: AGE_AT_EVENT
       data_type: NUMBER
@@ -69,7 +91,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: APPOINTMENT
@@ -97,6 +119,14 @@ sources:
       data_type: NUMBER
     - name: APPOINTMENT_STATUS_CONCEPT_ID
       data_type: TEXT
+    - name: APPOINTMENT_STATUS_SOURCE_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_STATUS_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: APPOINTMENT_STATUS_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_STATUS_DISPLAY
+      data_type: TEXT
     - name: PATIENT_WAIT
       data_type: NUMBER
     - name: PATIENT_DELAY
@@ -119,7 +149,23 @@ sources:
       data_type: NUMBER
     - name: BOOKING_METHOD_CONCEPT_ID
       data_type: TEXT
+    - name: BOOKING_METHOD_SOURCE_CODE
+      data_type: TEXT
+    - name: BOOKING_METHOD_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: BOOKING_METHOD_CODE
+      data_type: TEXT
+    - name: BOOKING_METHOD_DISPLAY
+      data_type: TEXT
     - name: CONTACT_MODE_CONCEPT_ID
+      data_type: TEXT
+    - name: CONTACT_MODE_SOURCE_CODE
+      data_type: TEXT
+    - name: CONTACT_MODE_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: CONTACT_MODE_CODE
+      data_type: TEXT
+    - name: CONTACT_MODE_DISPLAY
       data_type: TEXT
     - name: IS_BLOCKED
       data_type: BOOLEAN
@@ -154,7 +200,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: APPOINTMENT_PRACTITIONER
@@ -193,7 +239,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: CONCEPT
@@ -232,11 +278,31 @@ sources:
       data_type: TEXT
     - name: CONCEPT_MAP_ID
       data_type: TEXT
+    - name: CONCEPT_MAP_RESOURCE_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_URL
+      data_type: TEXT
+    - name: CONCEPT_MAP_VERSION
+      data_type: TEXT
     - name: SOURCE_CODE_ID
+      data_type: TEXT
+    - name: SOURCE_SYSTEM
+      data_type: TEXT
+    - name: SOURCE_CODE
+      data_type: TEXT
+    - name: SOURCE_DISPLAY
       data_type: TEXT
     - name: TARGET_CODE_ID
       data_type: TEXT
+    - name: TARGET_SYSTEM
+      data_type: TEXT
+    - name: TARGET_CODE
+      data_type: TEXT
+    - name: TARGET_DISPLAY
+      data_type: TEXT
     - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: IS_ACTIVE
       data_type: BOOLEAN
     - name: EQUIVALENCE
       data_type: TEXT
@@ -312,7 +378,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: ENCOUNTER
@@ -379,7 +445,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: EPISODE_OF_CARE
@@ -397,7 +463,23 @@ sources:
       data_type: TEXT
     - name: EPISODE_TYPE_SOURCE_CONCEPT_ID
       data_type: TEXT
+    - name: EPISODE_TYPE_SOURCE_CODE
+      data_type: TEXT
+    - name: EPISODE_TYPE_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: EPISODE_TYPE_CODE
+      data_type: TEXT
+    - name: EPISODE_TYPE_DISPLAY
+      data_type: TEXT
     - name: EPISODE_STATUS_SOURCE_CONCEPT_ID
+      data_type: TEXT
+    - name: EPISODE_STATUS_SOURCE_CODE
+      data_type: TEXT
+    - name: EPISODE_STATUS_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: EPISODE_STATUS_CODE
+      data_type: TEXT
+    - name: EPISODE_STATUS_DISPLAY
       data_type: TEXT
     - name: EPISODE_OF_CARE_START_DATE
       data_type: TIMESTAMP_NTZ
@@ -426,7 +508,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: FLAG
@@ -469,7 +551,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: LOCATION
@@ -534,7 +616,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: LOCATION_CONTACT
@@ -573,7 +655,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: MEDICATION_ORDER
@@ -606,6 +688,14 @@ sources:
     - name: CLINICAL_EFFECTIVE_DATE
       data_type: TIMESTAMP_NTZ
     - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: DATE_PRECISION_SOURCE_CODE
+      data_type: TEXT
+    - name: DATE_PRECISION_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: DATE_PRECISION_CODE
+      data_type: TEXT
+    - name: DATE_PRECISION_DISPLAY
       data_type: TEXT
     - name: DOSE
       data_type: TEXT
@@ -658,7 +748,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
     - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
@@ -670,6 +760,14 @@ sources:
     - name: MAPPED_CONCEPT_CODE
       data_type: TEXT
     - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: SOURCE_CODE
+      data_type: TEXT
+    - name: SOURCE_DISPLAY
+      data_type: TEXT
+    - name: SOURCE_SYSTEM
+      data_type: TEXT
+    - name: TARGET_SYSTEM
       data_type: TEXT
   - name: MEDICATION_STATEMENT
     identifier: '"MEDICATION_STATEMENT"'
@@ -698,7 +796,19 @@ sources:
       data_type: TEXT
     - name: AUTHORISATION_TYPE_CONCEPT_ID
       data_type: TEXT
+    - name: AUTHORISATION_TYPE_SOURCE_CODE
+      data_type: TEXT
+    - name: AUTHORISATION_TYPE_SOURCE_DISPLAY
+      data_type: TEXT
     - name: DATE_PRECISION_CONCEPT_ID
+      data_type: TEXT
+    - name: DATE_PRECISION_SOURCE_CODE
+      data_type: TEXT
+    - name: DATE_PRECISION_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: DATE_PRECISION_CODE
+      data_type: TEXT
+    - name: DATE_PRECISION_DISPLAY
       data_type: TEXT
     - name: MEDICATION_STATEMENT_SOURCE_CONCEPT_ID
       data_type: TEXT
@@ -755,7 +865,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
     - name: MAPPED_CONCEPT_ID
@@ -763,6 +873,14 @@ sources:
     - name: MAPPED_CONCEPT_CODE
       data_type: TEXT
     - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: SOURCE_CODE
+      data_type: TEXT
+    - name: SOURCE_DISPLAY
+      data_type: TEXT
+    - name: SOURCE_SYSTEM
+      data_type: TEXT
+    - name: TARGET_SYSTEM
       data_type: TEXT
     - name: AUTHORISATION_TYPE_CODE
       data_type: TEXT
@@ -794,7 +912,7 @@ sources:
     - name: RESULT_VALUE_UNITS_CONCEPT_ID
       data_type: TEXT
     - name: RESULT_DATE
-      data_type: DATE
+      data_type: TIMESTAMP_NTZ
     - name: RESULT_TEXT
       data_type: TEXT
     - name: IS_PROBLEM
@@ -821,6 +939,8 @@ sources:
       data_type: BOOLEAN
     - name: IS_CONFIDENTIAL
       data_type: BOOLEAN
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
     - name: LDS_ID
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
@@ -840,7 +960,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
     - name: MAPPED_CONCEPT_ID
@@ -848,6 +968,14 @@ sources:
     - name: MAPPED_CONCEPT_CODE
       data_type: TEXT
     - name: MAPPED_CONCEPT_DISPLAY
+      data_type: TEXT
+    - name: SOURCE_CODE
+      data_type: TEXT
+    - name: SOURCE_DISPLAY
+      data_type: TEXT
+    - name: SOURCE_SYSTEM
+      data_type: TEXT
+    - name: TARGET_SYSTEM
       data_type: TEXT
     - name: RESULT_UNIT_CODE
       data_type: TEXT
@@ -901,7 +1029,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PATIENT
@@ -918,6 +1046,14 @@ sources:
     - name: TITLE
       data_type: TEXT
     - name: GENDER_CONCEPT_ID
+      data_type: TEXT
+    - name: GENDER_SOURCE_CODE
+      data_type: TEXT
+    - name: GENDER_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: GENDER_CODE
+      data_type: TEXT
+    - name: GENDER_DISPLAY
       data_type: TEXT
     - name: REGISTERED_PRACTICE_ID
       data_type: TEXT
@@ -956,7 +1092,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PATIENT_ADDRESS
@@ -997,7 +1133,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PATIENT_CONTACT
@@ -1016,9 +1152,9 @@ sources:
     - name: CONTACT_TYPE_CONCEPT_ID
       data_type: TEXT
     - name: START_DATE
-      data_type: TEXT
+      data_type: TIMESTAMP_NTZ
     - name: END_DATE
-      data_type: TEXT
+      data_type: TIMESTAMP_NTZ
     - name: LDS_ID
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
@@ -1040,32 +1176,40 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PATIENT_PERSON
     identifier: '"PATIENT_PERSON"'
     columns:
-    - name: LAKEHOUSEDATEPROCESSED
-      data_type: TEXT
-    - name: LAKEHOUSEDATETIMEUPDATED
-      data_type: TIMESTAMP_NTZ
     - name: LDS_RECORD_ID
       data_type: TEXT
-    - name: LDS_ID
+    - name: LDS_RECORD_ID_PERSON
       data_type: TEXT
     - name: ID
-      data_type: TEXT
-    - name: LDS_DATETIME_DATA_ACQUIRED
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_START_DATE_TIME
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_DATASET_ID
       data_type: TEXT
     - name: PATIENT_ID
       data_type: TEXT
     - name: PERSON_ID
       data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: DATE
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
   - name: PATIENT_REGISTERED_PRACTITIONER_IN_ROLE
     identifier: '"PATIENT_REGISTERED_PRACTITIONER_IN_ROLE"'
     columns:
@@ -1108,7 +1252,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PATIENT_UPRN
@@ -1161,7 +1305,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PERSON
@@ -1186,19 +1330,21 @@ sources:
   - name: POSTCODE_HASH
     identifier: '"POSTCODE_HASH"'
     columns:
+    - name: ID
+      data_type: BINARY
     - name: POSTCODE_HASH
       data_type: BINARY
     - name: PRIMARY_CARE_ORGANISATION
       data_type: TEXT
     - name: LOCAL_AUTHORITY_ORGANISATION
       data_type: TEXT
-    - name: YR_2011_LSOA
+    - name: YR2011_LSOA
       data_type: TEXT
-    - name: YR_2011_MSOA
+    - name: YR2011_MSOA
       data_type: TEXT
-    - name: YR_2021_LSOA
+    - name: YR2021_LSOA
       data_type: TEXT
-    - name: YR_2021_MSOA
+    - name: YR2021_MSOA
       data_type: TEXT
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
@@ -1206,7 +1352,13 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: IS_LATEST
       data_type: NUMBER
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
     - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LAKEHOUSE_DATE_PROCESSED
+      data_type: DATE
+    - name: HIGH_WATERMARK_DATE_TIME
       data_type: TIMESTAMP_NTZ
   - name: PRACTITIONER
     identifier: '"PRACTITIONER"'
@@ -1250,7 +1402,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PRACTITIONER_IN_ROLE
@@ -1293,7 +1445,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: PROCEDURE_REQUEST
@@ -1354,7 +1506,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: REFERRAL_REQUEST
@@ -1427,7 +1579,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: SCHEDULE
@@ -1474,7 +1626,7 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
   - name: SCHEDULE_PRACTITIONER
@@ -1509,6 +1661,6 @@ sources:
     - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: TEXT
+      data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ

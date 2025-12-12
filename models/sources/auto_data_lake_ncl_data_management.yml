@@ -37,3 +37,26 @@ sources:
       data_type: TEXT
     - name: PRACTICE_SHORT_NAME
       data_type: TEXT
+  - name: TABLE_SCHEMA_DATABASE
+    identifier: '"TABLE_SCHEMA_DATABASE"'
+    columns:
+    - name: DATABASE_NAME
+      data_type: TEXT
+    - name: TABLE_SCHEMA
+      data_type: TEXT
+    - name: TABLE_NAME
+      data_type: TEXT
+    - name: ROW_COUNT
+      data_type: NUMBER
+    - name: COMMENT
+      data_type: TEXT
+    - name: LAST_DDL_BY
+      data_type: TEXT
+    - name: TABLE_TYPE
+      data_type: TEXT
+    - name: CREATED
+      data_type: TIMESTAMP_LTZ
+    - name: LAST_ALTERED
+      data_type: TIMESTAMP_LTZ
+    - name: LAST_DDL
+      data_type: TIMESTAMP_LTZ
