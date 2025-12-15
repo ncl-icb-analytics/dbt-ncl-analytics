@@ -2,6 +2,7 @@
 
 select 
     patient_id,
+    hospital_number,
     local_authority,
     barnet_hospital_count,
     barnet_hospital_flag,
@@ -36,7 +37,38 @@ select
     chronic_liver_disease,
     --- The following are not high risk 'conditions' but helpful flags for risk and multimorbidity
     hypertension,
-    frailty_falls,
+    frailty_falls+
+        heart_failure+
+        copd+
+        dementia+
+        end_stage_renal_failure+
+        severe_interstitial_lung_disease+
+        parkinsons_disease+
+        chronic_kidney_disease+
+        liver_failure+
+        alcohol_dependence+
+        bronchiectasis+
+        atrial_fibrillation+
+        cerebrovascular_disease+
+        peripheral_vascular_disease+
+        pulmonary_heart_disease+
+        coronary_heart_disease+
+        osteoporosis+
+        rheumatoid_arthritis+
+        chronic_liver_disease+
+        --- The following are not high risk 'conditions' but helpful flags for risk and multimorbidity
+        hypertension+
+        frailty_falls as total_conditions,
+    -- information from most recent RFL visit
+    activity_date_most_recent,
+    provider_name_most_recent,
+    provider_site_name_most_recent,
+    gender_at_event_most_recent,
+    ethnicity_at_event_most_recent,
+    age_at_event_most_recent,
+    reg_practice_at_event_most_recent,
+    gp_name_at_event_most_recent,
+    la_most_recent_rfl_nel
 from 
     {{ ref("int_myria_conditions") }} 
 where
