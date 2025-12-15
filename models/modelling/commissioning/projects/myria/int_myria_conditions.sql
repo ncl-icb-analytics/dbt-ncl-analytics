@@ -1,7 +1,24 @@
 {{ config(materialized="table") }}
 
-SELECT 
+with recent_rfl_activity as (
+    select
     patient_id,
+    hospital_number,
+    primary_id as primary_id_most_recent,
+    activity_date as activity_date_most_recent,
+    provider_name as provider_name_most_recent,
+    provider_site_name as provider_site_name_most_recent,
+    gender_at_event as gender_at_event_most_recent,
+    ethnicity_at_event as ethnicity_at_event_most_recent,
+    age_at_event as age_at_event_most_recent,
+    reg_practice_at_event as reg_practice_at_event_most_recent,
+    ROW_NUMBER() OVER(PARTITION BY PATIENT_ID ORDER BY ACTIVITY_DATE DESC, diag_n ASC) as most_recent_activity_flag-- get most recent RFL activity
+    from {{ ref("int_myria_attendances_diagnoses") }} 
+    where provider_code IN ('RAL','RAP')
+    AND POD IN ('NEL-ZLOS', 'NEL-LOS+1') -- want to bring through the information from the most recent RFL NEL activity
+)
+SELECT 
+    att_dx.patient_id,
     TO_VARCHAR(ARRAY_AGG(NCL.LOCAL_AUTHORITY) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS local_authority, -- gets most recent registered local authority
     CASE -- counts distinct attendance IDs and then flags as 1 if there is at least 1 non-elective attendance at Barnet Hospital in the period
         WHEN COUNT(DISTINCT 
@@ -190,6 +207,17 @@ SELECT
     
     -- R54 - Age-related physical debility, Z91.81 - History of falling
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('R54') OR UPPER(diag_code) IN ('Z91.81', 'Z9181') THEN 1 ELSE 0 END) AS frailty_falls, 
+    
+    rr.hospital_number, -- information from most recent RFL visit
+    activity_date_most_recent,
+    provider_name_most_recent,
+    provider_site_name_most_recent,
+    g.gender as gender_at_event_most_recent,
+    eth.ethnicity_desc2 as ethnicity_at_event_most_recent,
+    age_at_event_most_recent,
+    reg_practice_at_event_most_recent,
+    ncl_rflnel.practice_name as gp_name_at_event_most_recent,
+    ncl_rflnel.LOCAL_AUTHORITY as la_most_recent_rfl_nel
 FROM 
     {{ ref("int_myria_attendances_diagnoses") }} att_dx
 INNER JOIN
@@ -199,8 +227,22 @@ LEFT JOIN
     {{ ref("stg_registries_deaths") }} death
     ON att_dx.patient_id = death.sk_patient_id
     AND date(death.reg_date_of_death) < '2025-04-01'
+LEFT JOIN -- join most recent rfl activity for demogs
+    recent_rfl_activity rr 
+    ON att_dx.patient_id = rr.patient_id
+    AND rr.most_recent_activity_flag = 1
+LEFT JOIN -- join gp/la on most recent gp code
+    {{ ref("dim_practice_neighbourhood") }} ncl_rflnel -- REPORTING.OLIDS_ORGANISATION.DIM_PRACTICE_NEIGHBOURHOOD AS ncl 
+    ON rr.reg_practice_at_event_most_recent = ncl_rflnel.PRACTICE_CODE
+LEFT JOIN -- join gp/la on most recent gp code
+    {{ ref("stg_dictionary_dbo_ethnicity") }} eth
+    ON ethnicity_at_event_most_recent = eth.bk_ethnicity_code
+    AND eth.ethnicity_code_type = 'Current'
+LEFT JOIN -- join gp/la on most recent gp code
+    {{ ref("stg_dictionary_dbo_gender") }} g
+    ON gender_at_event_most_recent = g.gender_code
 WHERE
     att_dx.patient_id IS NOT null
     AND death.sk_patient_id IS null -- remove patients who were not alive at end of 2025
 GROUP BY 
-patient_id
+    ALL
