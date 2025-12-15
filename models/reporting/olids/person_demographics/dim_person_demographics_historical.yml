@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 models:
   - name: dim_person_demographics_historical
@@ -234,6 +234,15 @@ models:
 
       - name: imd_quintile_numeric_19
         description: 'IMD 2019 numeric quintile (1=most deprived, 5=least deprived)'
+
+      - name: imd_decile_25
+        description: 'IMD 2025 decile (1=most deprived, 10=least deprived)'
+
+      - name: imd_quintile_25
+        description: 'IMD 2025 quintile text labels'
+
+      - name: imd_quintile_numeric_25
+        description: 'IMD 2025 numeric quintile (1=most deprived, 5=least deprived)'
 
       - name: neighbourhood_resident
         description: 'NCL neighbourhood classification'

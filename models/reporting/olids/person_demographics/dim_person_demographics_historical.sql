@@ -78,6 +78,9 @@ address_changes AS (
         imd_decile_19,
         imd_quintile_19,
         imd_quintile_numeric_19,
+        imd_decile_25,
+        imd_quintile_25,
+        imd_quintile_numeric_25,
         neighbourhood_resident
     FROM {{ ref('int_person_geography') }}
 ),
@@ -191,6 +194,9 @@ address_for_periods AS (
         ac.imd_decile_19,
         ac.imd_quintile_19,
         ac.imd_quintile_numeric_19,
+        ac.imd_decile_25,
+        ac.imd_quintile_25,
+        ac.imd_quintile_numeric_25,
         ac.neighbourhood_resident
     FROM change_periods cp
     LEFT JOIN address_changes ac
@@ -236,6 +242,9 @@ periods_with_attributes AS (
         ac.imd_decile_19,
         ac.imd_quintile_19,
         ac.imd_quintile_numeric_19,
+        ac.imd_decile_25,
+        ac.imd_quintile_25,
+        ac.imd_quintile_numeric_25,
         ac.neighbourhood_resident
 
     FROM change_periods cp
@@ -347,6 +356,9 @@ SELECT
     pwa.imd_decile_19,
     pwa.imd_quintile_19,
     pwa.imd_quintile_numeric_19,
+    pwa.imd_decile_25,
+    pwa.imd_quintile_25,
+    pwa.imd_quintile_numeric_25,
     pwa.neighbourhood_resident
 
 FROM periods_with_attributes pwa
