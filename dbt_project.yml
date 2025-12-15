@@ -160,3 +160,16 @@ seeds:
         bnf_chapter_code: varchar(10)
         chapter_name: varchar(200)
         is_excluded: boolean
+
+    ethnicity_snomed_ONS_NHS:
+      +column_types:
+        SNOMED_CODE: varchar
+        SNOMED_TERM: varchar
+        CATEGORY: varchar
+        SUBCATEGORY: varchar
+        GRANULAR: varchar
+        ONS_BRIDGE_CODE: varchar
+        ONS_BRIDGE_LABEL: varchar
+        BK_ETHNICITY_CODE: varchar
+        ETHNICITY_DESC: varchar
+
