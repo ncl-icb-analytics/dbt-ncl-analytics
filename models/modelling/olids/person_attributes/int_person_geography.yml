@@ -1,4 +1,4 @@
-version: 2
+version: 3
 models:
   - name: int_person_geography
     description: 'Person geography mapping using refactored intermediate geography tables.
@@ -11,7 +11,9 @@ models:
 
       • Maps to 2011 and 2021 census geographies via postcode hash
 
-      • Includes IMD data from dedicated IMD model
+      • Includes IMD 2019 data from dedicated IMD model
+
+      • Includes IMD 2025 data from dedicated IMD model
 
       • Maps to NCL neighbourhoods (via 2021 LSOA)
 
@@ -62,6 +64,14 @@ models:
       - name: imd_quintile_numeric_19
         description: 'IMD 2019 numeric quintile (1-5) from dedicated IMD model'
       - name: is_most_deprived_20pct
+        description: 'Flag for most deprived 20% areas (deciles 1-2) from dedicated IMD model'
+      - name: imd_decile_25
+        description: 'IMD 2025 decile from dedicated IMD model'
+      - name: imd_quintile_25
+        description: 'IMD 2025 quintile from dedicated IMD model'
+      - name: imd_quintile_numeric_25
+        description: 'IMD 2025 numeric quintile (1-5) from dedicated IMD model'
+      - name: is_most_deprived_20pct_25
         description: 'Flag for most deprived 20% areas (deciles 1-2) from dedicated IMD model'
       - name: is_london_resident
         description: 'Flag indicating if person resides in London (based on LSOA reference data)'

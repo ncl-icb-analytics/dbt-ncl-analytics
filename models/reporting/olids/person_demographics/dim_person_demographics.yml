@@ -249,5 +249,14 @@ models:
       - name: imd_quintile_numeric_19
         description: 'Index of Multiple Deprivation 2019 numeric quintile (1=most deprived, 5=least deprived)'
 
+      - name: imd_decile_25
+        description: 'Index of Multiple Deprivation 2025 decile (1=most deprived, 10=least deprived)'
+
+      - name: imd_quintile_25
+        description: 'Index of Multiple Deprivation 2025 quintile text labels (Most Deprived to Least Deprived)'
+
+      - name: imd_quintile_numeric_25
+        description: 'Index of Multiple Deprivation 2025 numeric quintile (1=most deprived, 5=least deprived)'
+
       - name: neighbourhood_resident
         description: 'NCL neighbourhood classification where patient resides (based on 2021 LSOA)'
