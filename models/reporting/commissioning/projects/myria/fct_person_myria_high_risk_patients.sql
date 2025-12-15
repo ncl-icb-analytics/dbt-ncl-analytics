@@ -37,7 +37,7 @@ select
     chronic_liver_disease,
     --- The following are not high risk 'conditions' but helpful flags for risk and multimorbidity
     hypertension,
-    frailty_falls+
+    frailty_falls,
         heart_failure+
         copd+
         dementia+
@@ -55,10 +55,7 @@ select
         coronary_heart_disease+
         osteoporosis+
         rheumatoid_arthritis+
-        chronic_liver_disease+
-        --- The following are not high risk 'conditions' but helpful flags for risk and multimorbidity
-        hypertension+
-        frailty_falls as total_conditions,
+        chronic_liver_disease as total_high_risk_conditions,
     -- information from most recent RFL visit
     activity_date_most_recent,
     provider_name_most_recent,
