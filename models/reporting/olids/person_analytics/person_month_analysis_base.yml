@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 models:
   - name: person_month_analysis_base
@@ -210,6 +210,12 @@ models:
         
       - name: imd_quintile_19
         description: Index of Multiple Deprivation quintile (2019)
+
+      - name: imd_decile_25
+        description: Index of Multiple Deprivation decile (2025)
+        
+      - name: imd_quintile_25
+        description: Index of Multiple Deprivation quintile (2025)
         
       - name: neighbourhood_resident
         description: Patient neighbourhood classification
