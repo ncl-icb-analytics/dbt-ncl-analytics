@@ -17,7 +17,7 @@ Write-Host ""
 Write-Host "Checking profiles.yml configuration..." -ForegroundColor Cyan
 if (-not (Test-Path "profiles.yml")) {
     Write-Host "[WARNING] No profiles.yml found" -ForegroundColor Yellow
-    Write-Host "  Copy profiles.yml.example to profiles.yml and configure your credentials" -ForegroundColor Gray
+    Write-Host "  Copy profiles.yml.template to profiles.yml and configure your credentials" -ForegroundColor Gray
     Write-Host "  For Snowflake native execution, profiles.yml is not required" -ForegroundColor Gray
     Write-Host ""
 } else {
