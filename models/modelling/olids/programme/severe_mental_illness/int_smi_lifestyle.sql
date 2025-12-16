@@ -1,0 +1,227 @@
+{{
+    config(
+        materialized='table',
+        cluster_by=['person_id'],
+        tags=['smi_registry']
+        )
+}}
+--COMPILE LIFESTYLE PERSON LEVEL DATA
+--illicit drug use LATEST EVER
+WITH illicit as (
+select 
+i.person_id
+,DATE(i.clinical_effective_date) as ILLICIT_DRUG_DATE
+,i.ILLICIT_DRUG_ASSESSED_LAST_12M
+,i.ILLICIT_DRUG_PATTERN
+,i.ILLICIT_DRUG_CLASS
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_illicit_drug_latest i
+FROM {{ ref('int_smi_illicit_drug_latest') }} i
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (person_id)
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+)
+--Subs misuse interventions lATEST EVER
+,SUBS_MISUSE_INT as (
+select 
+sm.person_id
+,DATE(sm.clinical_effective_date) as SM_INT_DATE
+,sm.CONCEPT_DISPLAY as SM_INT_TYPE
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_subs_misuse_intervention_latest sm 
+FROM {{ ref('int_smi_longlives_subs_misuse_intervention_latest') }} sm
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+)
+-- SMOKING STATUS LATEST EVER
+,SMOK_EVER as (
+SELECT * 
+FROM (
+select 
+s.person_id
+,DATE(s.LATEST_SMOKING_DATE) as smoking_date
+,s.SMOKING_STATUS
+--FROM REPORTING.OLIDS_PERSON_STATUS.FCT_PERSON_SMOKING_STATUS s
+FROM {{ ref('fct_person_smoking_status') }} s
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+
+UNION
+
+select 
+s.person_id
+,DATE(s.clinical_effective_date) as smoking_date
+,'Smoking Status Declined' AS SMOKING_STATUS
+--FROM MODELLING.OLIDS_OBSERVATIONS.INT_SMI_SMOKING_DECLINED s
+FROM {{ ref('int_smi_smoking_declined') }} s
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+QUALIFY ROW_NUMBER() OVER (PARTITION BY s.person_id ORDER BY s.clinical_effective_date DESC) = 1
+) a
+QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.SMOKING_date DESC, CASE WHEN a.SMOKING_STATUS <> 'Smoking Status Declined' THEN 1 ELSE 0 END DESC) = 1
+)
+--Smoking interventions LATEST EVER
+,SMOK_INT as (
+select 
+s.person_id
+,DATE(s.clinical_effective_date) as SMOK_INT_DATE
+,s.CONCEPT_DISPLAY as SMOK_INT_TYPE
+--FROM MODELLING.OLIDS_OBSERVATIONS.INT_SMI_LONGLIVES_SMOKING_INTERVENTION_latest s 
+FROM {{ ref('int_smi_longlives_smoking_intervention_latest') }} s 
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+)
+--ALCOHOL ASSESSMENT EITHER AUDIT C or UNITS PER WEEK EVER 
+,ALC_EVER as (
+SELECT * 
+FROM (
+select 
+a.person_id
+,DATE(a.LATEST_AUDIT_DATE) as alcohol_assessment_date
+,a.AUDIT_RISK_CATEGORY as ALCOHOL_RISK_CATEGORY
+,NULL as alcohol_units
+,NULL as unit_display
+--FROM REPORTING.OLIDS_PERSON_STATUS.fct_person_alcohol_status a
+FROM {{ ref('fct_person_alcohol_status') }} a
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+
+UNION
+
+select 
+a.person_id
+,a.clinical_effective_date as alcohol_assessment_date
+,a.alcohol_risk_category
+,a.result_value as alcohol_units
+,a.result_unit_display as unit_display
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_alcohol_latest a
+FROM {{ ref('int_smi_alcohol_latest') }} a
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+
+
+UNION
+
+select 
+s.person_id
+,DATE(s.clinical_effective_date) as alcohol_assessment_date
+,'Alcohol Status Declined' AS ALCOHOL_RISK_CATEGORY
+,NULL as alcohol_units
+,NULL as unit_display
+--FROM MODELLING.OLIDS_OBSERVATIONS.INT_SMI_ALCOHOL_DECLINED s
+FROM {{ ref('int_smi_alcohol_declined') }} s
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+QUALIFY ROW_NUMBER() OVER (PARTITION BY s.person_id ORDER BY s.clinical_effective_date DESC) = 1
+) a
+QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.alcohol_assessment_date DESC, 
+CASE WHEN ALCOHOL_RISK_CATEGORY NOT IN ('Unclear','Alcohol Status Declined') THEN 2 
+WHEN ALCOHOL_RISK_CATEGORY = 'Alcohol Status Declined' THEN 1 ELSE 0 END DESC) = 1
+)
+--ALCOHOL INTERVENTION LATEST EVER
+,ALCOHOL_INT as (
+select 
+ai.person_id
+,DATE(ai.clinical_effective_date) as ALC_INT_DATE
+,ai.CONCEPT_DISPLAY as ALC_INT_TYPE
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_alcohol_intervention_latest ai 
+FROM {{ ref('int_smi_longlives_alcohol_intervention_latest') }} ai
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+)
+--BMI latest EVER
+,BMI_EVER as (
+select * 
+FROM (
+--latest BMI code EVER
+select 
+b.person_id
+,DATE(b.clinical_effective_date) as BMI_date
+,b.bmi_category
+,b.BMI_VALUE
+,b.BMI_RISK_SORT_KEY
+--FROM MODELLING.OLIDS_OBSERVATIONS.INT_BMI_LATEST b
+FROM {{ ref('int_bmi_latest') }} b
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+
+UNION
+
+--latest BMI declined EVER
+select 
+b.person_id
+,DATE(b.clinical_effective_date) as BMI_DATE
+,'BMI Declined' as bmi_category
+,NULL as BMI_VALUE
+,7 as BMI_RISK_SORT_KEY
+--FROM DEV__MODELLING.OLIDS_OBSERVATIONS.INT_SMI_BMI_DECLINED b
+FROM {{ ref('int_smi_bmi_declined') }} b
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+QUALIFY ROW_NUMBER() OVER (PARTITION BY b.person_id ORDER BY b.clinical_effective_date DESC) = 1
+) a
+--select latest from BMI code or Declined LATEST EVER
+QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.bmi_date DESC, CASE WHEN a.bmi_category <> 'BMI Declined' THEN 1 ELSE 0 END DESC) = 1
+)
+--NUTRITION REVIEW LATEST EVER
+,NUT_REV as (
+select 
+n.person_id
+,DATE(n.clinical_effective_date) as NUTR_REV_DATE
+,n.CONCEPT_DISPLAY as NUTR_REV_OUTCOME
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_nutrition_review_latest n 
+FROM {{ ref('int_smi_longlives_nutrition_review_latest') }} n
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+)
+--WEIGHT MGMT INTERVENTION LATEST EVER
+,WT_MGMT as (
+select 
+w.person_id
+,DATE(w.clinical_effective_date) as WT_MGMT_DATE
+,w.CONCEPT_DISPLAY as WT_MGMT_TYPE
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_weight_mgmt_latest w
+FROM {{ ref('int_smi_longlives_weight_mgmt_latest') }} w
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+)
+
+--Population demographics and lifestyle factors
+SELECT
+p.PERSON_ID
+,p.HX_FLAKE
+,p.AGE
+,p.GENDER
+--latest illicit drug use and subs misuse service referrals
+,i.ILLICIT_DRUG_DATE
+,i.ILLICIT_DRUG_PATTERN
+,i.ILLICIT_DRUG_CLASS
+--smoking status ever and smoking cessation referrals
+,sm.SM_INT_DATE
+,sm.SM_INT_TYPE
+,ss.SMOKING_DATE as SMOK_STATUS_DATE
+,ss.SMOKING_STATUS
+,si.SMOK_INT_DATE
+,si.SMOK_INT_TYPE
+--alcohol use ever and alcohol interventions
+,a.alcohol_assessment_date as ALC_STAT_DATE
+,a.ALCOHOL_RISK_CATEGORY
+,a.ALCOHOL_UNITS
+,a.UNIT_DISPLAY
+,ai.ALC_INT_DATE
+,ai.ALC_INT_TYPE
+--weight management
+,b.BMI_DATE
+,b.BMI_CATEGORY
+,n.NUTR_REV_DATE
+,n.NUTR_REV_OUTCOME
+,w.WT_MGMT_DATE
+,w.WT_MGMT_TYPE
+--FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
+FROM {{ ref('int_smi_population_base')  }} p
+LEFT JOIN ILLICIT i using (person_id)
+LEFT JOIN SUBS_MISUSE_INT sm using (person_id)
+LEFT JOIN SMOK_EVER ss using (person_id)
+LEFT JOIN SMOK_INT si using (person_id)
+LEFT JOIN ALC_EVER a using (person_id)
+LEFT JOIN ALCOHOL_INT ai using (person_id)
+LEFT JOIN BMI_EVER b using (person_id)
+LEFT JOIN NUT_REV n using (person_id)
+LEFT JOIN WT_MGMT w using (person_id)
