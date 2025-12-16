@@ -6,7 +6,7 @@
 }}
 
 -- Intermediate Ethnicity QOF - QOF-specific ethnicity observations
--- Uses ETH2016*_COD cluster IDs only (QOF ethnicity codes) with LIKE pattern matching
+-- Uses ETH2016*_COD cluster IDs from combined_codesets (QOF ethnicity codes) with LIKE pattern matching
 -- Includes BAME classification for obesity register
 -- Includes ALL persons regardless of active status
 
@@ -21,16 +21,16 @@ WITH mapped_observations AS (
         o.mapped_concept_id,
         o.mapped_concept_code,
         o.mapped_concept_display,
-        ecl.cluster_id,
-        NULL AS cluster_description
+        ccs.cluster_id,
+        ccs.cluster_description
     FROM {{ ref('stg_olids_observation') }} AS o
     INNER JOIN {{ ref('stg_olids_patient') }} AS p
         ON o.patient_id = p.id
     INNER JOIN {{ ref('int_patient_person_unique') }} AS pp
         ON p.id = pp.patient_id
-    INNER JOIN {{ ref('stg_reference_ecl_cache') }} AS ecl
-        ON o.mapped_concept_code = ecl.code
-        AND ecl.cluster_id LIKE 'ETH2016%_COD'  -- Filter for ethnicity clusters
+    INNER JOIN {{ ref('stg_reference_combined_codesets') }} AS ccs
+        ON o.mapped_concept_code = ccs.code
+        AND ccs.cluster_id LIKE 'ETH2016%_COD'  -- Filter for ethnicity clusters
     WHERE o.clinical_effective_date IS NOT NULL
 ),
 
