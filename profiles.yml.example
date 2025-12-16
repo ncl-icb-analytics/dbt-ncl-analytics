@@ -1,0 +1,39 @@
+# profiles.yml.example
+# Copy this file to profiles.yml and configure with your credentials for local development
+
+ncl_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      authenticator: externalbrowser
+      role: "{{ env_var('SNOWFLAKE_ROLE') }}"
+      database: MODELLING  # Base database name - your macro will prepend DEV__
+      schema: DBT_STAGING    # Default schema (rarely used due to custom schemas)
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      threads: 8
+      client_session_keep_alive: true
+      connect_retries: 3
+      connect_timeout: 60
+      retry_on_database_errors: false
+      retry_all: false
+      query_tag: "dbt_dev"
+
+    prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      authenticator: externalbrowser
+      role: "{{ env_var('SNOWFLAKE_ROLE') }}"
+      database: MODELLING  # Base database name - no prefix for prod
+      schema: DBT_STAGING    # Default schema (rarely used due to custom schemas)
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      threads: 8
+      client_session_keep_alive: true
+      connect_retries: 3
+      connect_timeout: 60
+      retry_on_database_errors: false
+      retry_all: false
+      query_tag: "dbt_prod"

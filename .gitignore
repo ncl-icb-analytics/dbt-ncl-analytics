@@ -1,9 +1,10 @@
 # dbt
 target/
-# profiles.yml is tracked but developers should use skip-worktree for local changes
+profiles.yml
 logs/
 package-lock.yml
 dbt_internal_packages/
+dbt_packages/
 
 # Environment variables
 .env
