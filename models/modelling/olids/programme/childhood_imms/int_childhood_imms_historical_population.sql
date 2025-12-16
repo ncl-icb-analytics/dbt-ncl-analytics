@@ -43,19 +43,18 @@ SELECT
         WHEN pmab.ethnicity_category = 'Unknown' THEN 6
     END AS ethcat_order,
     -- IMD
-    CASE WHEN pmab.imd_quintile_19 IS NULL THEN 'Unknown'
-        ELSE pmab.imd_quintile_19 END AS imd_quintile,
-    CASE
-        WHEN pmab.imd_quintile_19 = 'Most Deprived' THEN 1
-        WHEN pmab.imd_quintile_19 = 'Second Most Deprived' THEN 2
-        WHEN pmab.imd_quintile_19 = 'Third Most Deprived' THEN 3
-        WHEN pmab.imd_quintile_19 = 'Second Least Deprived' THEN 4
-        WHEN pmab.imd_quintile_19 = 'Least Deprived' THEN 5
+    COALESCE(pmab.imd_quintile_25, 'Unknown') AS imd_quintile,
+        CASE
+        WHEN pmab.imd_quintile_25 = 'Most Deprived' THEN 1
+        WHEN pmab.imd_quintile_25 = 'Second Most Deprived' THEN 2
+        WHEN pmab.imd_quintile_25 = 'Third Most Deprived' THEN 3
+        WHEN pmab.imd_quintile_25 = 'Second Least Deprived' THEN 4
+        WHEN pmab.imd_quintile_25 = 'Least Deprived' THEN 5
         ELSE 6
     END AS imdquintile_order,
     -- Practice
     pmab.borough_registered as practice_borough,
-    pmab.neighbourhood_resident as residential_neighbourhood,
+    COALESCE(pmab.neighbourhood_resident,'Unknown') as residential_neighbourhood,
     pmab.practice_name,
     pmab.practice_code,
     CASE

@@ -123,6 +123,9 @@ SELECT
     d.imd_decile_19,
     d.imd_quintile_19,
     d.imd_quintile_numeric_19,
+    d.imd_decile_25,
+    d.imd_quintile_25,
+    d.imd_quintile_numeric_25,
     d.neighbourhood_resident,
     
     -- SCD2 metadata
