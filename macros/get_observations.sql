@@ -18,7 +18,7 @@
     SELECT
         o.id,
         o.patient_id,
-        pp.person_id,
+        o.person_id,
         COALESCE(o.clinical_effective_date, '1900-01-01') AS clinical_effective_date,
         o.result_value,
         o.result_value_units_concept_id,
@@ -27,7 +27,6 @@
         o.is_problem,
         o.is_review,
         o.problem_end_date,
-        o.observation_source_concept_id,
         o.mapped_concept_id,
         o.mapped_concept_code,
         o.mapped_concept_display,
@@ -35,8 +34,6 @@
         cc.cluster_description,
         cc.code_description
     FROM {{ ref('stg_olids_observation') }} o
-    JOIN {{ ref('int_patient_person_unique') }} pp
-        ON o.patient_id = pp.patient_id
     INNER JOIN cluster_codes cc
         ON o.mapped_concept_code = cc.mapped_concept_code
     -- Deduplicate: preserve legitimate cross-cluster duplicates but remove within-cluster duplicates

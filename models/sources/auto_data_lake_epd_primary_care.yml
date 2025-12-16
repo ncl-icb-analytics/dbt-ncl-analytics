@@ -132,7 +132,7 @@ sources:
     - name: ProcessedPeriod
       data_type: TEXT
     - name: ProcessingPeriodDate
-      data_type: TIMESTAMP_NTZ
+      data_type: DATE
     - name: dmicImportLogId
       data_type: NUMBER
     - name: dmicCostCentreODSCCGCode
@@ -159,9 +159,9 @@ sources:
     - name: OrgIdProvider
       data_type: TEXT
     - name: RPStartDate
-      data_type: TIMESTAMP_NTZ
+      data_type: DATE
     - name: RPEndDate
-      data_type: TIMESTAMP_NTZ
+      data_type: DATE
     - name: ReceivedDate
       data_type: TIMESTAMP_NTZ
     - name: FileType

@@ -21,6 +21,8 @@ Key Features:
 
 • Links to person and patient records
 
+• Note: Multiple person_ids may share the same hx_flake when they share the same sk_patient_id
+
 Data Source: sk_patient_id from stg_olids_patient via person relationships
 */
 
@@ -30,7 +32,7 @@ SELECT
     bd.sk_patient_id,
 
     -- HxFlake Pseudonym Generation (exact formula match)
-LEFT(
+    LEFT(
          SUBSTR(
              TRIM(
                  REVERSE(
