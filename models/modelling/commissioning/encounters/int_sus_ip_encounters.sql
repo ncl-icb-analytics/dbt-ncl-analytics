@@ -30,6 +30,7 @@ select
     /* Information needed to derive standard encounter information */
     core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
+    , 'SUS_APC' as source
 
     /* Location */
     , core.spell_commissioning_service_agreement_provider as organisation_id
@@ -76,7 +77,7 @@ select
     , core.spell_clinical_coding_grouper_derived_dominant_procedure as primary_treatment
     , dom_ep_info.care_professional_main_specialty as main_specialty_code
     , dict_spec.specialty_name as main_specialty_name
-    , 'SUS_APC' as source
+    , dict_spec.specialty_category as main_specialty_category
 
     /* Commissioning information */
     , core.spell_commissioning_grouping_core_hrg as hrg_code
@@ -97,6 +98,7 @@ select
     , core.spell_patient_residence_derived_index_of_multiple_deprivation_decile as imd_at_event
     , core.spell_patient_registration_general_practice as reg_practice_at_event
     , 'APC_SPELL' as visit_occurrence_type
+
 
 from {{ ref('stg_sus_apc_spell')}} as core
 
