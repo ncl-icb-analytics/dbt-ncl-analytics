@@ -84,5 +84,5 @@ from
 left join 
     potential_dup_provider as d 
     on a.sk_patient_id = d.sk_patient_id
-where sk_patient_id is not null and sk_patient_id != 1
+where a.sk_patient_id is not null and a.sk_patient_id != 1
 
