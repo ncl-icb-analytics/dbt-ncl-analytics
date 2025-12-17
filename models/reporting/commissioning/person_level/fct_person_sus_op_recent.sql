@@ -34,7 +34,7 @@ with op_encounter_summary as(
         , count(distinct case when appointment_attended_or_dna in ('5', '6') -- Attended
                 and appointment_first_attendance IN ('1', '3') -- First Appointment
                 then visit_occurrence_id end) as op_att_first_12mo
-        , count(distinct primary_reason_for_encounter) as op_spec_12mo
+        , count(distinct treatment_function_code) as op_spec_12mo
         , count(distinct organisation_id) as op_prov_12mo
     from 
         {{ ref('int_sus_op_encounters') }}
@@ -46,21 +46,21 @@ with op_encounter_summary as(
 count_of_prov_per_spec as(
     select
         sk_patient_id
-        , primary_reason_for_encounter
+        , treatment_function_code
         , count(distinct organisation_id) as op_prov_per_spec_12mo
     from 
         {{ ref('int_sus_op_encounters') }}
     where 
         start_date between dateadd(month, -12, current_date()) and current_date()
-        and primary_reason_for_encounter is not null 
+        and treatment_function_code is not null 
         and organisation_id is not null
     group by 
-        sk_patient_id, primary_reason_for_encounter
+        sk_patient_id, treatment_function_code
 ),
 potential_dup_provider as(
     select
         sk_patient_id
-        , count(distinct(primary_reason_for_encounter)) as op_num_spec_2_prov_12mo
+        , count(distinct(treatment_function_code)) as op_num_spec_2_prov_12mo
     from 
         count_of_prov_per_spec
     where 
@@ -84,4 +84,5 @@ from
 left join 
     potential_dup_provider as d 
     on a.sk_patient_id = d.sk_patient_id
+where sk_patient_id is not null and sk_patient_id != 1
 
