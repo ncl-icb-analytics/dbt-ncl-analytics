@@ -23,6 +23,7 @@ dominant_episode_information as (
     select 
         primarykey_id,
         care_professional_main_specialty,
+        care_professional_treatment_function
     from {{ ref('stg_sus_apc_spell_episodes') }}
     where dominant_episode_flag = '1'
 )
@@ -42,7 +43,7 @@ select
     , core.spell_admission_date as start_date
     , core.spell_discharge_date as end_date
     , core.spell_discharge_length_of_hospital_stay as duration
-    , datediff(day, core.spell_admission_date, coalesce(core.spell_discharge_date, current_date)) as duration_to_date
+    , datediff(day, core.spell_admission_date, coalesce(core.spell_discharge_date, current_date)) as duration_to_date -- inefficient? Change to calc only if no end date?
    
     /* Admission information */
     , dict_adm_method.admission_method_name as admission_method
@@ -75,12 +76,19 @@ select
     /* Clinical information */
     , core.spell_clinical_coding_grouper_derived_primary_diagnosis  || ', ' || core.spell_clinical_coding_grouper_derived_secondary_diagnosis  as flat_diagnosis_codes
     , core.spell_clinical_coding_grouper_derived_dominant_procedure as primary_treatment
+
+    /* Clinician information */
     , dom_ep_info.care_professional_main_specialty as main_specialty_code
     , dict_spec.specialty_name as main_specialty_name
     , dict_spec.specialty_category as main_specialty_category
+    , dom_ep_info.care_professional_treatment_function as treatment_function_code
+    , dict_treat.specialty_name as treatment_function_code_desc
 
     /* Commissioning information */
     , core.spell_commissioning_grouping_core_hrg as hrg_code
+    , dict_hrg.hrg_description as core_hrg_desc
+    , dict_hrg.hrg_chapter_key as core_hrg_chapter
+    , dict_hrg.hrg_chapter as core_hrg_chapter_desc
     , iff(core.spell_commissioning_pss_grouping_national_programme_code is null, 'N','Y') as spec_comm_flag
     , core.spell_commissioning_pss_grouping_national_programme_code as spec_comm
     , iff(core.spell_admission_admission_sub_type = 'NON', core.spell_admission_admission_type, core.spell_admission_admission_sub_type) as type
@@ -126,3 +134,13 @@ left join dominant_episode_information as dom_ep_info
 LEFT JOIN  {{ ref('stg_dictionary_dbo_specialties')}} as dict_spec
     ON  dom_ep_info.care_professional_main_specialty = dict_spec.bk_specialty_code
     and dict_spec.is_main_specialty = TRUE 
+
+left join {{ref('stg_dictionary_dbo_specialties')}} as dict_treat 
+    on dom_ep_info.care_professional_treatment_function = dict_treat.bk_specialty_code 
+    and dict_treat.is_treatment_function = TRUE
+
+left join
+    {{ ref('stg_dictionary_dbo_hrg') }} as dict_hrg 
+    on core.spell_commissioning_grouping_core_hrg = dict_hrg.hrg_code
+
+

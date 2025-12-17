@@ -86,6 +86,14 @@ models:
       - name: main_specialty_category
         data_type: varchar
         description: "The specialty (category) in which the consultant is contracted or recognised and the code identifies a specialty as designated by Royal Colleges derived from the dominant episode of the spell."
+     
+      - name: treatment_function_code
+        data_type: varchar
+        description: "TREATMENT FUNCTION CODE is recorded to report the specialised service within which the PATIENT is treated. It is based on MAIN SPECIALTY but also includes approved sub-specialties and treatment specialties used by lead CARE PROFESSIONALS including CONSULTANTS. TREATMENT FUNCTION, rather than the Royal College or Faculty specialty, is required on most activity returns and in the Commissioning Data Sets."
+
+      - name: treatment_function_code_desc
+        data_type: varchar
+        description: "TREATMENT FUNCTION CODE is recorded to report the specialised service within which the PATIENT is treated. It is based on MAIN SPECIALTY but also includes approved sub-specialties and treatment specialties used by lead CARE PROFESSIONALS including CONSULTANTS. TREATMENT FUNCTION, rather than the Royal College or Faculty specialty, is required on most activity returns and in the Commissioning Data Sets."
 
       - name: hrg_code
         data_type: varchar
