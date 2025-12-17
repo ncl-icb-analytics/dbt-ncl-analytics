@@ -7,8 +7,12 @@ models:
       - name: visit_occurrence_id
         data_type: number
         description: "Primary key for the encounter within SUS"
-        tests:
-          - unique
+        data_tests:
+          - unique:
+              config:
+                severity: error
+                error_if: ">100"
+                warn_if: ">10"        
           - not_null
 
       - name: sk_patient_id
