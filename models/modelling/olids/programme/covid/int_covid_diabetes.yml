@@ -5,7 +5,7 @@ models:
 
       Key Features:
 
-      • Single diagnosis pathway using DM_COV_COD codes
+      • Single diagnosis pathway using DIAB_COD and DMRES_COD codes
 
       • Earliest occurrence in medical history qualifies
 
@@ -31,7 +31,7 @@ models:
           name_short: "COVID Eligible Diabetes"
           description_short: "People with diabetes mellitus eligible for COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with diabetes mellitus using DM_COV_COD
+            COVID vaccination eligibility for people with diabetes mellitus using DIAB_COD and DMRES_COD
             cluster codes with earliest occurrence qualifying. Includes Type 1 and Type 2
             diabetes that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.

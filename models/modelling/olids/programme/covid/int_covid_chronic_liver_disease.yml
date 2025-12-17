@@ -5,7 +5,7 @@ models:
 
       Key Features:
 
-      • Single diagnosis pathway using CLD_COV_COD codes
+      • Single diagnosis pathway using CLD_COD codes
 
       • Earliest occurrence in medical history qualifies
 
@@ -31,7 +31,7 @@ models:
           name_short: "COVID Eligible Liver Disease"
           description_short: "People with chronic liver disease eligible for COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with chronic liver disease using CLD_COV_COD
+            COVID vaccination eligibility for people with chronic liver disease using CLD_COD
             cluster codes with earliest occurrence qualifying. Includes chronic hepatic conditions
             and liver dysfunction that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.

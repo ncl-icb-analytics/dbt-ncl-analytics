@@ -5,7 +5,7 @@ models:
 
       Key Features:
 
-      • Single diagnosis pathway using HOMLESS_COV_COD codes
+      • Single diagnosis pathway using HOMELESS_COD codes
 
       • Recent occurrence qualifying (lookback period from campaign)
 
@@ -31,7 +31,7 @@ models:
           name_short: "COVID Eligible Homeless"
           description_short: "People with homelessness eligible for COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with homelessness using HOMLESS_COV_COD
+            COVID vaccination eligibility for people with homelessness using HOMELESS_COD
             cluster codes with recent occurrence qualifying. Includes homeless status and
             accommodation codes that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.

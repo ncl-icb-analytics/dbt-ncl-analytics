@@ -42,6 +42,8 @@ models:
             - "COVID_AND_FLU_DASHBOARD"
             - "COVID_REPORTING"
           code_clusters:
+            - cluster_id: "CKD_COV_COD"
+              category: "INCLUSION"
             - cluster_id: "CKD15_COD"
               category: "INCLUSION"
             - cluster_id: "CKD35_COD"
