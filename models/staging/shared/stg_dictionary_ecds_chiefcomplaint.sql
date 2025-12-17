@@ -6,3 +6,4 @@ select
     ecds_description,
     ecds_group1
 from {{ ref('raw_dictionary_ecds_chiefcomplaint') }}
+--where ecds_unique_id != 'Code deprecated'

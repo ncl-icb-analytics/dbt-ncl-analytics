@@ -15,3 +15,4 @@ select
     -- Excluded (low analytical value):
     -- sort1, sort2, sort3, sort4, notes
 from {{ ref('raw_dictionary_ecds_investigation') }}
+-- where ecds_unique_id != 'Code deprecated'
