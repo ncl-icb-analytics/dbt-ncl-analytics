@@ -85,8 +85,6 @@ models:
       olids:
         +meta:
           custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
-      shared:
-        +schema: "REFERENCE"
 
     # Reporting layer - aggregated and analytical models
     reporting:
@@ -103,8 +101,6 @@ models:
         # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         definitions:
           +database: "{{ target.database.replace('MODELLING', 'REPORTING') }}"
-      shared:
-        +schema: "REFERENCE"
 
     # Published layer - production-ready datasets for end users
     published:
@@ -122,12 +118,8 @@ models:
           +meta:
             custom_message: "Requires access via application role - clinical programme team only."
           +schema: "C_LTCS"
-        shared:
-          +schema: "REFERENCE"
       secondary_use:
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
-        commissioning:
-          +schema: "COMMISSIONING_PUBLISHED"
         olids:
           +meta:
             custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
@@ -135,8 +127,6 @@ models:
           +post-hook:
             - "{{ add_model_comment() }}"
             - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
-        shared:
-          +schema: "REFERENCE"
 
 seeds:
   ncl_analytics:
