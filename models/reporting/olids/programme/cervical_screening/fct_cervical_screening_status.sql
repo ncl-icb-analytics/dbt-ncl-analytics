@@ -43,16 +43,22 @@ WITH person_demographics AS (
         END AS is_screening_eligible,
         
         -- Age-specific screening interval
+        --updated 17.12.25 to match QOF v50
         CASE
-            WHEN dpa.age BETWEEN 25 AND 49 THEN 3  -- 3-year interval
-            WHEN dpa.age BETWEEN 50 AND 64 THEN 5  -- 5-year interval
+           -- WHEN dpa.age BETWEEN 25 AND 49 THEN 3  -- 3-year interval
+            WHEN dpa.age BETWEEN 25 AND 49 THEN 3.5 -- 3.5-year interval (QOF)
+            --WHEN dpa.age BETWEEN 50 AND 64 THEN 5  -- 5-year interval
+            WHEN dpa.age BETWEEN 50 AND 64 THEN 5.5  -- 5.5-year interval (QOF)
             ELSE NULL
         END AS screening_interval_years,
         
         -- Target screening frequency in days
+        --updated 17.12.25 to match QOF v50
         CASE
-            WHEN dpa.age BETWEEN 25 AND 49 THEN 1095  -- 3 years
-            WHEN dpa.age BETWEEN 50 AND 64 THEN 1825  -- 5 years
+            --WHEN dpa.age BETWEEN 25 AND 49 THEN 1095  -- 3 years
+            WHEN dpa.age BETWEEN 25 AND 49 THEN 1277  -- 3.5 years (QOF)
+            --WHEN dpa.age BETWEEN 50 AND 64 THEN 1825  -- 5 years
+            WHEN dpa.age BETWEEN 50 AND 64 THEN 2007  -- 5.5 years (QOF)
             ELSE NULL
         END AS screening_interval_days
         
