@@ -6,8 +6,21 @@
         )
 }}
 --FIND ENHANCED LTC METRICS - WIDE TABLE - PERSON LEVEL
+--summarise all QOF LTCS exlcuding SMI,OB,Pallitive care PC and NDH (non diabetic hypo)
+with ltc_sum as (
+SELECT
+  l.PERSON_ID
+  ,LISTAGG(DISTINCT CONDITION_CODE, ',') AS ltc_summary
+   ,COUNT(DISTINCT CONDITION_CODE) AS ltc_count
+--FROM REPORTING.OLIDS_DISEASE_REGISTERS.FCT_PERSON_LTC_SUMMARY
+FROM {{ ref('fct_person_ltc_summary')  }} l
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+WHERE IS_QOF = TRUE AND CONDITION_CODE is not null AND condition_code not in ('OB','SMI','NDH','PC')
+GROUP BY l.PERSON_ID
+)
 --CARE PLAN
-WITH latest_Care as (
+,latest_Care as (
 select 
 m.person_id
 ,DATE(m.clinical_effective_date) as MH_CARE_PLAN_DATE
@@ -139,13 +152,10 @@ p.PERSON_ID
 ,m.MH_CARE_PLAN_CURRENT_12M
 ,mr.MED_REVIEW_DATE
 ,mr.MED_REV_LAST_12M
+,ltc.LTC_COUNT
+,ltc.LTC_SUMMARY
 --CVD
-,p.HAS_CHD
-,p.HAS_HYP
 ,h.HYP_BP_CONTROLLED
-,p.HAS_STIA
-,p.HAS_PAD
-,p.HAS_HF
 ,q.QRISK_DATE
 ,q.CVD_RISK_CATEGORY
 ,tc.TOTAL_CHOL_DATE
@@ -157,16 +167,14 @@ p.PERSON_ID
 --METABOLIC
 ,n.NDPP_DATE
 ,n.NDPP_STATUS
-,p.HAS_DIABETES 
 ,d.DM_TRIPLE_TARGET_MET
 ,d.DM_EIGHT_CARE_PROCESSES
-,p.HAS_CKD
 --respiratory
-,p.HAS_COPD
 ,pr.PUL_REHAB_DATE
 ,pr.PUL_REHAB_STATUS
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 FROM {{ ref('int_smi_population_base')  }} p
+LEFT JOIN LTC_SUM ltc using (person_id)
 LEFT JOIN latest_Care m using (person_id)
 LEFT JOIN qrisk q using (person_id)
 LEFT JOIN TCHOL_HH tc using (person_id)
