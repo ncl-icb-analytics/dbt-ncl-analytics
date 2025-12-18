@@ -1,7 +1,7 @@
 version: 2
 models:
-- name: stg_dictionary_ecds_investigation
-  description: ECDS investigation reference data with HRG grouping mappings
+- name: stg_dictionary_ecds_chiefcomplaint
+  description: ECDS chief complaint reference dictionary
   columns:
   - name: ecds_unique_id
     description: Primary key - ECDS unique identifier

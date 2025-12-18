@@ -1,16 +1,16 @@
 version: 2
 models:
-- name: stg_dictionary_ecds_investigation
-  description: ECDS investigation reference data with HRG grouping mappings
+- name: stg_dictionary_ecds_dischargedestination
+  description: ECDS discharge destination reference dictionary
   columns:
   - name: ecds_unique_id
     description: Primary key - ECDS unique identifier
     tests:
+    - unique
     - not_null
   - name: snomed_code
     description: SNOMED CT code
     tests:
-    - unique
     - not_null
   tests:
   - dbt_expectations.expect_table_row_count_to_be_between:

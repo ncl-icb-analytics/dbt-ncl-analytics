@@ -35,4 +35,4 @@ SELECT
     , zeroifnull(ae_t1_12mo) as ae_t1_12mo
 from 
     ae_encounter_summary as a
-where sk_patient_id is not null
+where sk_patient_id is not null and sk_patient_id != '1'

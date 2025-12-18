@@ -31,25 +31,27 @@ select
     /* Information needed to derive standard encounter information */
     core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
+    , 'SUS_OP' as source
+
+    /* Location */
     , core.appointment_commissioning_service_agreement_provider as organisation_id
     , dict_provider.service_provider_name as organisation_name
     , core.appointment_care_location_site_code_of_treatment as site_id
     , dict_org.organisation_name as site_name
+
+     /* Time and date */
     , core.appointment_date as start_date
     , core.appointment_expected_duration as expected_duration
+    
+    /* Outcome information */
     , core.appointment_outcome as appointment_outcome
     , dict_appt_outcome.attendance_outcome as outcome_desc
-    , dict_att_t.attendant_type_desc as first_attendance_desc
     , core.appointment_attended_or_dna as appointment_attended_or_dna
-    , dict_att_dna.dna_indicator_desc as appointment_outcome_desc
+    , dict_att_dna.dna_indicator_desc as appointment_attendance_outcome_desc
+
+    /* Appointment information */
     , core.appointment_first_attendance as appointment_first_attendance
-    , core.appointment_care_professional_main_specialty as primary_reason_for_encounter
-    , dict_spec.specialty_name as primary_reason_desc
-    , core.appointment_referral_priority_type as acuity -- proxy for acuity, change as poor
-    , dict_appt_priority.priority_type_desc as acuity_desc
-    , core.appointment_care_professional_treatment_function as primary_treatment
-    , dict_treat.specialty_name as treatment_desc
-    , 'SUS_OP' as source
+    , dict_att_t.attendant_type_desc as first_attendance_desc
     , case
         when core.appointment_commissioning_grouping_core_hrg in ('WF01A','WF02A') then 'OPFUP-F2F'
         when core.appointment_commissioning_grouping_core_hrg in ('WF01B','WF02B') then 'OPFA-F2F'
@@ -62,15 +64,27 @@ select
         when core.appointment_commissioning_grouping_core_hrg is null then 'UNKNOWN'
         else 'OPPROC'
         end as pod
-   
-    -- Adding Spec_comm   
-    ,iff(core.spec_comm is null, 'N','Y') as spec_comm_flag
-    ,core.spec_comm as spec_comm
 
-    -- TO DO: add pod and pod_group
-    , core.appointment_commissioning_grouping_core_hrg as type -- consider changing to something more aligned with team understanding
-    , dict_hrg.hrg_description as type_desc
+    /* Clinician information */
+    , core.appointment_care_professional_main_specialty as main_specialty_code
+    , dict_spec.specialty_name as main_specialty_name
+    , dict_spec.specialty_category as main_specialty_category
+    , core.appointment_care_professional_treatment_function as treatment_function_code
+    , dict_treat.specialty_name as treatment_function_code_desc
+
+    /* Referral information */
+    , core.appointment_referral_priority_type as referral_acuity -- proxy for acuity, change as poor
+    , dict_appt_priority.priority_type_desc as referral_acuity_desc
+
+    /* Commissioning information */
+    , iff(core.spec_comm is null, 'N','Y') as spec_comm_flag -- Adding Spec_comm   
+    , core.spec_comm as spec_comm
+    , core.appointment_commissioning_grouping_core_hrg as core_hrg_code -- consider changing to something more aligned with team understanding
+    , dict_hrg.hrg_description as core_hrg_desc
+    , dict_hrg.hrg_chapter_key as core_hrg_chapter
+    , dict_hrg.hrg_chapter as core_hrg_chapter_desc
     , core.appointment_commissioning_tariff_calculation_final_price as cost
+    
     /* Patient details at time */
     ,core.appointment_patient_identity_age_at_cds_activity_date as age_at_event
     ,core.appointment_patient_identity_gender as gender_at_event
@@ -83,18 +97,19 @@ select
     ,core.appointment_patient_residence_derived_index_of_multiple_deprivation_decile as imd_at_event
     ,core.appointment_patient_registration_general_practice as reg_practice_at_event
     ,'OP_ATTENDANCE' as visit_occurrence_type
+
 from {{ ref('stg_sus_op_appointment')}} as core -- TO DO: check if appointments and encounters can be used interchangeably in this context
 
 -- speciality and treatment descriptions
 left join 
     {{ref('stg_dictionary_dbo_specialties')}} as dict_spec 
     on core.appointment_care_professional_main_specialty = dict_spec.bk_specialty_code 
-    and dict_spec.is_main_specialty = 1
+    and dict_spec.is_main_specialty = TRUE
 
 left join 
     {{ref('stg_dictionary_dbo_specialties')}} as dict_treat 
     on core.appointment_care_professional_treatment_function = dict_treat.bk_specialty_code 
-    and dict_treat.is_treatment_function = 1
+    and dict_treat.is_treatment_function = TRUE
 
 left join
     {{ ref('stg_dictionary_dbo_hrg') }} as dict_hrg 
@@ -132,4 +147,3 @@ left join gender_codes as gen
 
 where
     core.appointment_identifier is not null
-    and core.sk_patient_id is not null
