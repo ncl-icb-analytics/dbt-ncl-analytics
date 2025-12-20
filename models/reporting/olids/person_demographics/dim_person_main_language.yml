@@ -19,6 +19,34 @@ models:
 
       Purpose: Supports accessibility planning, interpreter service allocation, and communication needs assessment.'
 
+    config:
+      meta:
+        indicator:
+          id: "DEMO_LANGUAGE"
+          type: "DEMOGRAPHIC_ATTRIBUTE"
+          category: "DEMOGRAPHICS"
+          clinical_domain: "Demographics"
+          name_short: "Main Language"
+          description_short: "Preferred language and interpreter needs from latest clinical recording"
+          description_long: >
+            Main language preference and interpreter requirements based on most recent clinical
+            observations from PREFLANG_COD (language preference) and REQINTERPRETER_COD (interpreter
+            needs). Includes language type classification (Spoken, Sign, Other Communication Method),
+            interpreter requirements, and communication support needs. Supports accessibility planning,
+            interpreter service allocation, and communication needs assessment.
+          is_qof: false
+          source_column: "language"
+          sort_order: "DEMO_2_LANGUAGE"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+            - "DEMOGRAPHICS"
+            - "ACCESSIBILITY"
+          code_clusters:
+            - cluster_id: "PREFLANG_COD"
+              category: "INCLUSION"
+            - cluster_id: "REQINTERPRETER_COD"
+              category: "INCLUSION"
+
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
