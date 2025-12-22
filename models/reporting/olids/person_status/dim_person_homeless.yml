@@ -1,0 +1,7 @@
+version: 1
+models:
+  - name: dim_person_homeless
+    description: Dimension table providing the latest recorded homeless status for persons who have a recorded residence status. Only includes persons with HOMELESS_COD records and/or those who are registered with the CHIP practice.
+    tests:
+      - cluster_ids_exist:
+          cluster_ids: RESIDE_COD, HOMELESS_COD
