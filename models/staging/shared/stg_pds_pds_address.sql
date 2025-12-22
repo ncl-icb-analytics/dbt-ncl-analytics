@@ -1,3 +1,19 @@
+--CTE to get all invalid row ids
+with invalid_residence_rows as (
+    select
+        row_id
+    from {{ref('raw_pds_pds_address')}}
+
+    qualify not(
+        coalesce(usual_address_business_effective_to_date, '9999-12-31') = 
+        max(coalesce(usual_address_business_effective_to_date, '9999-12-31'))
+        over (
+            partition by pseudo_nhs_number, 
+            usual_address_business_effective_from_date
+        )
+    )
+)
+
 select
     row_id,
     pseudo_nhs_number as sk_patient_id, 
@@ -7,3 +23,5 @@ select
     usual_address_business_effective_to_date as event_to_date
 
 from {{ref('raw_pds_pds_address')}}
+
+where row_id not in (select row_id from invalid_residence_rows)
