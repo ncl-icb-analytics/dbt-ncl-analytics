@@ -1,0 +1,9 @@
+models:
+  - name: int_smi_casefinding
+    description: Person Level Intermediate table holding Case Finding data for people on the SMI register. This includes number of checks missed and vulnerabilities.
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
