@@ -8,7 +8,7 @@ with pds_person as (
         death_status,
         preferred_language_code,
         interpreter_required_code
-    from {{stg_pds_pds_person}}
+    from {{ref('stg_pds_pds_person')}}
     
     qualify coalesce(event_to_date, '9999-12-31') = max(coalesce(event_to_date, '9999-12-31')) over (partition by sk_patient_id)
 ),
@@ -20,7 +20,7 @@ pds_address as (
         postcode_sector,
         lsoa_21
         
-    from {{stg_pds_pds_address}}
+    from {{ref('stg_pds_pds_address')}}
 
     qualify coalesce(event_to_date, '9999-12-31') = max(coalesce(event_to_date, '9999-12-31')) over (partition by sk_patient_id)
 ),
@@ -31,7 +31,7 @@ pds_registered as (
         event_to_date is null as current_record_registered,
         practice_code
         
-    from {{stg_pds_pds_patient_care_practice}}
+    from {{ref('stg_pds_pds_patient_care_practice')}}
 
     where reason_for_removal is null
 
