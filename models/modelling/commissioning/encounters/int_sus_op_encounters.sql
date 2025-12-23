@@ -65,6 +65,13 @@ select
         else 'OPPROC'
         end as pod
 
+    /* Clinical */
+    ,diag.code AS primary_diagnosis_code
+--    ,dict_diag.description AS primary_diagnosis_name
+    ,proc.code  AS primary_procedure_code
+--    ,dict_proc.category AS primary_procedure_category
+--    ,dict_proc.description AS primary_procedure_name
+
     /* Clinician information */
     , core.appointment_care_professional_main_specialty as main_specialty_code
     , dict_spec.specialty_name as main_specialty_name
@@ -114,6 +121,14 @@ left join
 left join
     {{ ref('stg_dictionary_dbo_hrg') }} as dict_hrg 
     on core.appointment_commissioning_grouping_core_hrg = dict_hrg.hrg_code
+
+-- diagnoses and procedures
+LEFT JOIN {{ ref("stg_sus_op_appointment_clinical_coding_diagnosis_icd") }} diag on core.PRIMARYKEY_ID = diag.PRIMARYKEY_ID and diag.ICD_ID = 1 
+--LEFT JOIN "Dictionary"."dbo"."Diagnosis" As Dia ON Dia."Code" = dg."code"
+-- need to stage diagnosis dictionary to get description
+LEFT JOIN {{ ref("stg_sus_op_appointment_clinical_coding_procedure_opcs") }} proc on core.PRIMARYKEY_ID = proc.PRIMARYKEY_ID and proc.OPCS_ID = 1 
+--LEFT JOIN "Dictionary"."dbo"."Procedure" As Proc ON Proc."Code" = pr."code"
+-- need to stage procedure dictionary to get description and category
 
 -- organisations
 left join 
