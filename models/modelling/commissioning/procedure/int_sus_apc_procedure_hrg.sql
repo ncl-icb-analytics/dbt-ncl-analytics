@@ -2,18 +2,22 @@
 
 -- note: using sk_patient_id as person_id
 with unbundled as(
-    select {{ dbt_utils.generate_surrogate_key(["primarykey_id", "episodes_id"]) }} as episode_key_id
-        , primarykey_id
+    select primarykey_id
         , episodes_id
         , unbundled_hrg_id as problem_order
+        , 'unbundled' as type
         , code
     from {{ref('stg_sus_apc_spell_episodes_commissioning_grouping_unbundled_hrg')}}
+    qualify row_number() over (
+        partition by primarykey_id, episodes_id, code
+        order by unbundled_hrg_id
+    ) = 1
 ),
 core as (
-    select {{ dbt_utils.generate_surrogate_key(["primarykey_id", "episodes_id"]) }} as episode_key_id
-        , primarykey_id
-        , episodes_id
+    select distinct primarykey_id
+        ,episodes_id
         ,0::number as problem_order 
+        , 'core' as type
         ,COMMISSIONING_GROUPING_CORE_HRG as code
     from {{ ref('stg_sus_apc_spell_episodes')}} 
 ),
@@ -22,13 +26,13 @@ hrg_list as(
     from unbundled
     union 
     select *
-    from core
-)
-select {{ dbt_utils.generate_surrogate_key(["hgl.episode_key_id", "hgl.problem_order", "hgl.code"]) }} as procedure_id,
-    see.start_date as date,
+    from core)
+
+select {{ dbt_utils.generate_surrogate_key(["hgl.primarykey_id", "hgl.episodes_id", "hgl.type", "hgl.code"]) }} as procedure_id,
+    see.start_date as date, -- using episode start date as procedure date
     hgl.primarykey_id as visit_occurrence_id,
     'APC_SPELL' as visit_occurrence_type,
-    see.episodes_id,
+    hgl.episodes_id,
     hgl.problem_order,
     se.sk_patient_id,
     se.organisation_id,

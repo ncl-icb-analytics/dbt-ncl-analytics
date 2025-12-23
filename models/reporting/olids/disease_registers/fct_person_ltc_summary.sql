@@ -411,6 +411,111 @@ WITH condition_union AS (
         FALSE AS is_qof
     FROM {{ ref('fct_person_frailty_register') }}
     WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Parkinson's Disease
+    SELECT
+        person_id,
+        'PD' AS condition_code,
+        'Parkinsons Disease' AS condition_name,
+        'Neurology' AS clinical_domain,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        FALSE AS is_qof
+    FROM {{ ref('fct_person_parkinsons_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Cerebral Palsy
+    SELECT
+        person_id,
+        'CEREBRALP' AS condition_code,
+        'Cerebral Palsy' AS condition_name,
+        'Neurology' AS clinical_domain,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        FALSE AS is_qof
+    FROM {{ ref('fct_person_cerebral_palsy_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Motor Neurone Disease
+    SELECT
+        person_id,
+        'MND' AS condition_code,
+        'Motor Neurone Disease' AS condition_name,
+        'Neurology' AS clinical_domain,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        FALSE AS is_qof
+    FROM {{ ref('fct_person_mnd_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Multiple Sclerosis
+    SELECT
+        person_id,
+        'MS' AS condition_code,
+        'Multiple Sclerosis' AS condition_name,
+        'Neurology' AS clinical_domain,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        FALSE AS is_qof
+    FROM {{ ref('fct_person_ms_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Anxiety
+    SELECT
+        person_id,
+        'ANX' AS condition_code,
+        'Anxiety' AS condition_name,
+        'Mental Health' AS clinical_domain,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        FALSE AS is_qof
+    FROM {{ ref('fct_person_anxiety_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Hypothyroidism
+    SELECT
+        person_id,
+        'THY' AS condition_code,
+        'Hypothyroidism' AS condition_name,
+        'Endocrine' AS clinical_domain,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        FALSE AS is_qof
+    FROM {{ ref('fct_person_hypothyroidism_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Autism Spectrum Disorder
+    SELECT
+        person_id,
+        'AUTISM' AS condition_code,
+        'Autism Spectrum Disorder' AS condition_name,
+        'Neurodevelopmental' AS clinical_domain,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        FALSE AS is_qof
+    FROM {{ ref('fct_person_autism_register') }}
+    WHERE is_on_register = TRUE
 )
 
 SELECT

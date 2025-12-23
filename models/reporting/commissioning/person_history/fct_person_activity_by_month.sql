@@ -30,7 +30,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     from 
         {{ ref('int_sus_ae_encounters') }}
     where 
-        sk_patient_id is not null
+        sk_patient_id is not null and sk_patient_id != '1'
     group by 
         sk_patient_id, date_trunc('month', start_date), pod
 )
@@ -61,7 +61,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         on d.month_start_date <= coalesce(e.end_date, current_date)
         and d.month_end_date >= e.start_date
     where 
-        e.sk_patient_id is not null
+        e.sk_patient_id is not null and e.sk_patient_id != '1'
     group by 
         e.sk_patient_id, d.month_start_date, case when e.spec_comm_flag = 'Y' then 'spec_comm' else e.admission_method_group end
 )
@@ -77,7 +77,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     from 
         {{ ref('int_sus_op_encounters') }}
     where 
-        sk_patient_id is not null
+        sk_patient_id is not null and sk_patient_id != '1'
     group by 
         sk_patient_id, date_trunc('month', start_date), case when spec_comm_flag = 'Y' then 'spec_comm' else pod end
 )
@@ -107,6 +107,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , sum(duration) as duration
     from 
         {{ ref('int_csds_encounters') }}
+    where sk_patient_id is not null and sk_patient_id != '1'
     group by
         sk_patient_id, date_trunc('month', start_date)
 )
@@ -137,7 +138,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         on d.month_start_date <= coalesce(e.end_date, current_date)
         and d.month_end_date >= e.start_date
     where 
-        e.sk_patient_id is not null
+        e.sk_patient_id is not null and e.sk_patient_id != '1'
     group by 
         e.sk_patient_id, d.month_start_date
 )
@@ -152,6 +153,8 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , sum(duration/1440) as duration -- convert to days from minutes to align with spells
     from 
         {{ ref('int_mhsds_carecontact_encounters') }}
+    where 
+        sk_patient_id is not null and sk_patient_id != '1'
     group by
         sk_patient_id, date_trunc('month', start_date)
 )

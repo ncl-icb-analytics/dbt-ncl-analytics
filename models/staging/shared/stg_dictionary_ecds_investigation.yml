@@ -6,11 +6,11 @@ models:
   - name: ecds_unique_id
     description: Primary key - ECDS unique identifier
     tests:
-    - unique
     - not_null
   - name: snomed_code
     description: SNOMED CT code
     tests:
+    - unique
     - not_null
   tests:
   - dbt_expectations.expect_table_row_count_to_be_between:

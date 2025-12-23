@@ -1,0 +1,40 @@
+-- Raw layer model for reference_analyst_managed.FA__MONTHLY_IAP_2526_ISP
+-- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
+-- Description: Analyst-managed reference datasets and business rules
+-- This is a 1:1 passthrough from source with standardized column names
+select
+    "METRIC" as metric,
+    "FINANCIAL_MONTH" as financial_month,
+    "FINANCIAL_YEAR" as financial_year,
+    "ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)" as organisation_identifier_code_of_provider,
+    "PROVIDER_NAME" as provider_name,
+    "ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)" as organisation_identifier_gp_practice_responsibility,
+    "ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)" as organisation_identifier_code_of_commissioner,
+    "GENERAL_MEDICAL_PRACTICE_CODE_(PATIENT_REGISTRATION)" as general_medical_practice_code_patient_registration,
+    "ACTIVITY_TREATMENT_FUNCTION_CODE" as activity_treatment_function_code,
+    "SPECIALTY_NAME" as specialty_name,
+    "COMMISSIONED_SERVICE_CATEGORY_CODE" as commissioned_service_category_code,
+    "POINT_OF_DELIVERY_CODE" as point_of_delivery_code,
+    "LOCAL_POD_CODE" as local_pod_code,
+    "LOCAL_POD_DESCRIPTION" as local_pod_description,
+    "TARIFF_CODE" as tariff_code,
+    "NATIONAL_TARIFF_INDICATOR" as national_tariff_indicator,
+    "CONTRACT_MONITORING_PLANNED_ACTIVITY" as contract_monitoring_planned_activity,
+    "CONTRACT_MONITORING_PLANNED_PRICE" as contract_monitoring_planned_price,
+    "CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR" as contract_monitoring_planned_market_forces_factor,
+    "CONTRACT_MONITORING_ACTUAL_ACTIVITY" as contract_monitoring_actual_activity,
+    "CONTRACT_MONITORING_ACTUAL_PRICE" as contract_monitoring_actual_price,
+    "CONTRACT_MONITORING_ACTUAL_MARKET_FORCES_FACTOR" as contract_monitoring_actual_market_forces_factor,
+    "ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)" as organisation_identifier_residence_responsibility,
+    "ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)" as organisation_site_identifier_of_treatment,
+    "MAIN_SPECIALTY_CODE" as main_specialty_code,
+    "MAIN_SPECIALTY_DESCRIPTION" as main_specialty_description,
+    "TARIFF_CODE_DESCRIPTION" as tariff_code_description,
+    "HEALTHCARE_RESOURCE_GROUP_CODE" as healthcare_resource_group_code,
+    "HRG_DESCRIPTION" as hrg_description,
+    "RECORD_IDENTIFIER" as record_identifier,
+    "REPORTING_TYPE" as reporting_type,
+    "DV_RECIPIENT_CODE" as dv_recipient_code,
+    "CCG_NAME" as ccg_name,
+    "LOCAL_POD_GROUPING" as local_pod_grouping
+from {{ source('reference_analyst_managed', 'FA__MONTHLY_IAP_2526_ISP') }}

@@ -1,9 +1,0 @@
-models:
-  - name: int_smi_enhanced_check
-    description: Intermediate table holding enhanced data for people on the SMI register
-    
-    columns:
-      - name: person_id
-        description: Unique identifier for the person
-        tests:
-          - not_null

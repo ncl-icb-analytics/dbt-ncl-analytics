@@ -1,0 +1,32 @@
+version: 2
+models:
+  - name: fct_person_parkinsons_register
+    description: 'Parkinsons disease register for patients with Parkinsons diagnosis.
+
+      One row per person with PD_COD present (non-QOF).'
+    
+    config:
+      meta:
+        indicator:
+          id: "PARKINSONS"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Neurology"
+          name_short: "Parkinsons Disease"
+          description_short: "Parkinsons disease register (non-QOF)"
+          description_long: >
+            Parkinsons disease register for persons with Parkinsons diagnosis. 
+            Includes active patients with Parkinsons diagnosis using PD_COD cluster codes. 
+            No age restrictions or resolution codes applied. Used for neurological care 
+            pathway monitoring, medication management, multidisciplinary team coordination, 
+            and symptom management. Progressive neurological condition requiring ongoing 
+            care and support.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_NEURO_PARKINSONS"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "PD_COD"
+              category: "INCLUSION"
+

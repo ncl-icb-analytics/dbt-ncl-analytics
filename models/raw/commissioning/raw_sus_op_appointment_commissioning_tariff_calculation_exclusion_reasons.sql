@@ -3,9 +3,9 @@
 -- Description: SUS outpatient appointments and activity
 -- This is a 1:1 passthrough from source with standardized column names
 select
+    "ROWNUMBER_ID" as rownumber_id,
+    "PRIMARYKEY_ID" as primarykey_id,
     "EXCLUSION_REASONS_ID" as exclusion_reasons_id,
     "exclusion_reasons" as exclusion_reasons,
-    "dmicImportLogId" as dmic_import_log_id,
-    "ROWNUMBER_ID" as rownumber_id,
-    "PRIMARYKEY_ID" as primarykey_id
+    "dmicImportLogId" as dmic_import_log_id
 from {{ source('sus_op', 'appointment.commissioning.tariff_calculation.exclusion_reasons') }}

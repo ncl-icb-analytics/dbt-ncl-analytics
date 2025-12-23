@@ -400,9 +400,125 @@ WITH all_condition_events AS (
     FROM {{ ref('int_stroke_tia_diagnoses_all') }}
     WHERE is_diagnosis_code
     
+    UNION ALL
+    
+    -- Parkinson's Disease events (diagnosis only)
+    SELECT 
+        person_id,
+        clinical_effective_date as event_date,
+        'Parkinsons Disease' as condition_name,
+        'PD' as condition_code,
+        'Neurology' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_parkinsons_diagnoses_all') }}
+    WHERE is_diagnosis_code
+    
+    UNION ALL
+    
+    -- Cerebral Palsy events (diagnosis only)
+    SELECT 
+        person_id,
+        clinical_effective_date as event_date,
+        'Cerebral Palsy' as condition_name,
+        'CEREBRALP' as condition_code,
+        'Neurology' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_cerebral_palsy_diagnoses_all') }}
+    WHERE is_diagnosis_code
+    
+    UNION ALL
+    
+    -- Motor Neurone Disease events (diagnosis only)
+    SELECT 
+        person_id,
+        clinical_effective_date as event_date,
+        'Motor Neurone Disease' as condition_name,
+        'MND' as condition_code,
+        'Neurology' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_mnd_diagnoses_all') }}
+    WHERE is_diagnosis_code
+    
+    UNION ALL
+    
+    -- Multiple Sclerosis events (diagnosis only)
+    SELECT 
+        person_id,
+        clinical_effective_date as event_date,
+        'Multiple Sclerosis' as condition_name,
+        'MS' as condition_code,
+        'Neurology' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_ms_diagnoses_all') }}
+    WHERE is_diagnosis_code
+    
+    UNION ALL
+    
+    -- Anxiety events
+    SELECT 
+        person_id,
+        clinical_effective_date as event_date,
+        'Anxiety' as condition_name,
+        'ANX' as condition_code,
+        'Mental Health' as clinical_domain,
+        CASE 
+            WHEN is_diagnosis_code THEN 'onset'
+            WHEN is_resolved_code THEN 'resolved'
+        END as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_anxiety_diagnoses_all') }}
+    WHERE is_diagnosis_code OR is_resolved_code
+    
+    UNION ALL
+    
+    -- Hypothyroidism events (diagnosis only)
+    SELECT 
+        person_id,
+        clinical_effective_date as event_date,
+        'Hypothyroidism' as condition_name,
+        'THY' as condition_code,
+        'Endocrine' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_hypothyroidism_diagnoses_all') }}
+    WHERE is_diagnosis_code
+    
+    UNION ALL
+    
+    -- Autism Spectrum Disorder events (diagnosis only)
+    SELECT 
+        person_id,
+        clinical_effective_date as event_date,
+        'Autism Spectrum Disorder' as condition_name,
+        'AUTISM' as condition_code,
+        'Neurodevelopmental' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_autism_diagnoses_all') }}
+    WHERE is_diagnosis_code
+    
     -- Note: Obesity register is BMI-based, not diagnosis code based
     -- CYP Asthma uses same diagnosis codes as regular asthma - age filtering happens in QOF layer
     -- Learning Disability All Ages uses same diagnosis codes as regular LD - age filtering happens in QOF layer
+),
+
+-- Filter out invalid dates (NULL or future dates) for data quality
+valid_condition_events AS (
+    SELECT *
+    FROM all_condition_events
+    WHERE event_date IS NOT NULL
+        AND event_date <= CURRENT_DATE
 ),
 
 events_with_row_numbers AS (
@@ -417,7 +533,7 @@ events_with_row_numbers AS (
             PARTITION BY person_id, condition_name 
             ORDER BY event_date, event_type
         ) as prev_event_type
-    FROM all_condition_events
+    FROM valid_condition_events
 ),
 
 episode_starts AS (

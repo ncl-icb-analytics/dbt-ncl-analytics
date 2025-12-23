@@ -39,14 +39,6 @@ patient_deceased_status AS (
     FROM {{ ref('stg_olids_patient') }} AS p
 ),
 
-episode_type_registration AS (
-    -- Get concept_id for 'Registration type' (code 24531000000104)
-    SELECT DISTINCT c.id AS concept_id
-    FROM {{ ref('stg_olids_concept') }} c
-    WHERE c.code = '24531000000104'
-        AND c.display = 'Registration type'
-),
-
 raw_registrations AS (
     -- Get registration episodes from EPISODE_OF_CARE filtered by registration type
     SELECT
@@ -68,11 +60,6 @@ raw_registrations AS (
     FROM {{ ref('stg_olids_episode_of_care') }} AS eoc
     INNER JOIN patient_to_person AS ptp
         ON eoc.patient_id = ptp.patient_id
-    -- Filter to registration type episodes only via concept map
-    LEFT JOIN {{ ref('stg_olids_concept_map') }} cm
-        ON eoc.episode_type_source_concept_id = cm.source_code_id
-    INNER JOIN episode_type_registration etr
-        ON cm.target_code_id = etr.concept_id
     LEFT JOIN {{ ref('dim_practice') }} AS dp
         ON eoc.record_owner_organisation_code = dp.practice_code
     LEFT JOIN {{ ref('stg_olids_patient') }} AS p
@@ -82,6 +69,8 @@ raw_registrations AS (
     WHERE eoc.episode_of_care_start_date IS NOT NULL
         AND eoc.patient_id IS NOT NULL
         AND eoc.organisation_id IS NOT NULL
+        -- Filter to registration type episodes only using premapped episode_type_code
+        AND eoc.episode_type_code = '24531000000104'
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
             ptp.person_id,

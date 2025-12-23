@@ -13,6 +13,8 @@ dem.PERSON_ID
 ,ID.HX_FLAKE
 ,dem.SK_PATIENT_ID
 ,dem.AGE
+,dem.AGE_BAND_5Y
+,dem.AGE_BAND_NHS
 ,dem.GENDER
 ,CASE
 WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 'Unknown'
@@ -55,20 +57,25 @@ WHEN dem.ETHNICITY_SUBCATEGORY = 'Not Stated' THEN 19
 WHEN dem.ETHNICITY_SUBCATEGORY = 'Recorded Not Known' THEN 19
 WHEN dem.ETHNICITY_SUBCATEGORY = 'Refused' THEN 19
 END AS ETHSUBCAT_ORDER
-,dem.IMD_QUINTILE_19 AS IMD_QUINTILE
+,dem.ETHNICITY_GRANULAR
+--switch to IMD25
+,COALESCE(dem.IMD_QUINTILE_25, 'Unknown') AS IMD_QUINTILE
 ,CASE 
-WHEN dem.IMD_QUINTILE_19 = 'Most Deprived' THEN 1
-WHEN dem.IMD_QUINTILE_19 = 'Second Most Deprived' THEN 2
-WHEN dem.IMD_QUINTILE_19 = 'Third Most Deprived' THEN 3
-WHEN dem.IMD_QUINTILE_19 = 'Second Least Deprived' THEN 4
-WHEN dem.IMD_QUINTILE_19 = 'Least Deprived' THEN 5
+WHEN dem.IMD_QUINTILE_25 = 'Most Deprived' THEN 1
+WHEN dem.IMD_QUINTILE_25 = 'Second Most Deprived' THEN 2
+WHEN dem.IMD_QUINTILE_25 = 'Third Most Deprived' THEN 3
+WHEN dem.IMD_QUINTILE_25 = 'Second Least Deprived' THEN 4
+WHEN dem.IMD_QUINTILE_25 = 'Least Deprived' THEN 5
 ELSE 6 END AS IMDQUINTILE_ORDER
-,dem.IMD_DECILE_19 AS IMD_DECILE
+,dem.IMD_DECILE_25 AS IMD_DECILE
 ,CASE 
 WHEN dem.MAIN_LANGUAGE = 'Pushto' THEN 'Pashto' 
 WHEN dem.MAIN_LANGUAGE in ('Makaton sign language','Sign language','British Sign Language') THEN 'Sign language'
 WHEN dem.MAIN_LANGUAGE = 'Not Recorded' THEN 'Unknown'
 ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
+,dem.INTERPRETER_NEEDED
+,dem.INTERPRETER_TYPE
+,CASE WHEN HOM.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_HOMELESS
 ,dem.BOROUGH_REGISTERED AS PRACTICE_BOROUGH 
 ,dem.NEIGHBOURHOOD_REGISTERED AS PRACTICE_NEIGHBOURHOOD
 ,dem.PCN_NAME AS PRIMARY_CARE_NETWORK
@@ -96,4 +103,5 @@ INNER JOIN {{ ref('fct_person_smi_register') }} smi using (PERSON_ID)
 LEFT JOIN {{ ref('dim_person_conditions') }} ltc using (PERSON_ID)
 LEFT JOIN {{ ref('person_pseudo') }} AS ID  using (PERSON_ID)
 LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
+LEFT JOIN {{ ref('dim_person_homeless') }} hom using (PERSON_ID)
 where dem.is_active = TRUE

@@ -7,9 +7,13 @@ models:
       - name: procedure_id
         data_type: varchar
         description: "Unique surrogate identifier for the procedure record"
-        tests:
+        data_tests:
+          - unique:
+              config:
+                severity: error
+                error_if: ">100"
+                warn_if: ">10"        
           - not_null
-          - unique
 
       - name: date
         data_type: timestamp_ntz

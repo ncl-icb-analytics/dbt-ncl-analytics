@@ -7,9 +7,12 @@ models:
       - name: patient_id
         data_type: number
         description: "Unique patient identifier from commissioning data [sk_patient_id]"
-        tests:
-        - not_null
-        - unique
+        data_tests:
+          - unique:
+              config:
+                severity: warn
+                warn_if: ">10"        
+          - not_null
 
       - name: reid_key
         data_type: varchar

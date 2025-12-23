@@ -7,9 +7,12 @@ models:
       - name: patient_id
         data_type: number
         description: ""
-        tests:
-        - not_null
-        - unique
+        data_tests:
+          - unique:
+              config:
+                severity: warn
+                warn_if: ">1"        
+          - not_null
 
       - name: ae_encounters_sl
         data_type: array

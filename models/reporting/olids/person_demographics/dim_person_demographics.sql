@@ -121,6 +121,9 @@ SELECT
     hist.imd_decile_19,
     hist.imd_quintile_19,
     hist.imd_quintile_numeric_19,
+    hist.imd_decile_25,
+    hist.imd_quintile_25,
+    hist.imd_quintile_numeric_25,
     hist.neighbourhood_resident
 
 FROM {{ ref('dim_person_demographics_historical') }} hist

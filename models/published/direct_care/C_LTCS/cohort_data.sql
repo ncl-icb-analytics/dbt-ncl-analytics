@@ -17,12 +17,14 @@ Testing:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, pcn_code, pcn_name, practice_code, practice_name, age, main_language, gender, ethnicity_category
+    select patient_id, olids_id, fragmented_sk_patient_id_flag, fragmented_person_id_flag, pcn_code, pcn_name, practice_code, practice_name, age, main_language, gender, ethnicity_category -- reduce to one GP per patient
     from {{ ref('inclusion_cohort')}}
-    where eligible = 1
+    where eligible = 1 and fragmented_sk_patient_id_flag = 0 and fragmented_person_id_flag = 0 -- exclude fragmented patients for now
 )
 
 select il.patient_id
+ --   , il.fragmented_sk_patient_id_flag -- include as DQ check later, excluded for now
+--  , il.fragmented_person_id_flag
     , il.pcn_code
     , il.pcn_name
     , il.practice_code

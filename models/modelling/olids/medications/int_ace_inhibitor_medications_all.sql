@@ -44,6 +44,6 @@ SELECT
     END AS is_recent_12m
 
 FROM (
-    {{ get_medication_orders(bnf_code='02050501') }}
+    {{ get_medication_orders(bnf_code='0205051') }}
 ) base_orders
 ORDER BY person_id, order_date DESC

@@ -6,6 +6,25 @@ sources:
   description: Analyst-managed reference datasets and business rules in the MODELLING
     environment
   tables:
+  - name: CAREHOME_TYPES
+    identifier: '"CAREHOME_TYPES"'
+    columns:
+    - name: CAREHOME_CODE
+      data_type: TEXT
+    - name: CAREHOME_NAME
+      data_type: TEXT
+    - name: CAREHOME_SERVICETYPE
+      data_type: TEXT
+    - name: CAREHOME_SPECIALISM
+      data_type: TEXT
+    - name: CAREHOME_LA
+      data_type: TEXT
+    - name: CAREHOME_REGION
+      data_type: TEXT
+    - name: CQC_LOCATION_ID
+      data_type: TEXT
+    - name: CQC_PROVIDER_ID
+      data_type: TEXT
   - name: CCG_ICB
     identifier: '"CCG_ICB"'
     columns:
@@ -16,6 +35,15 @@ sources:
     - name: ICB_CODE
       data_type: TEXT
     - name: ICB_NAME
+      data_type: TEXT
+  - name: COMMISSIONED_SERVICE_CATEGORY
+    identifier: '"COMMISSIONED_SERVICE_CATEGORY"'
+    columns:
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: FULL_DESCRIPTION
+      data_type: TEXT
+    - name: SHORTER_DESCRIPTION
       data_type: TEXT
   - name: CONSULTANTCONNECT_ORG_GPCODE_LOOKUP
     identifier: '"CONSULTANTCONNECT_ORG_GPCODE_LOOKUP"'
@@ -293,6 +321,49 @@ sources:
       data_type: NUMBER
     - name: INDEX_OF_MULTIPLE_DEPRIVATION_QUINTILE
       data_type: NUMBER
+  - name: IMD_2025
+    identifier: '"IMD_2025"'
+    columns:
+    - name: LSOA_CODE_2021
+      data_type: TEXT
+    - name: LSOA_NAME_2021
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_CODE_2024
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY_DISTRICT_NAME_2024
+      data_type: TEXT
+    - name: IMD25_DECILE
+      data_type: NUMBER
+    - name: INCOME_DOMAINEMPLOYMENT_DOMAIN_DECILE
+      data_type: NUMBER
+    - name: EMPLOYMENT_DOMAIN_DECILE
+      data_type: NUMBER
+    - name: EDUCATION_DOMAIN_DECILE
+      data_type: NUMBER
+    - name: HEALTH_DOMAIN_DECILE
+      data_type: NUMBER
+    - name: CRIME_DOMAIN_DECILE
+      data_type: NUMBER
+    - name: BARRIERS_TO_HOUSING_DOMAIN_DECILE
+      data_type: NUMBER
+    - name: LIVING_ENVIRONMENT_DOMAIN_DECILE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_SUBDOMAIN_DECILE
+      data_type: NUMBER
+    - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_SUBDOMAIN_DECILE
+      data_type: NUMBER
+    - name: CHILDREN_AND_YOUNG_PEOPLE_SUBDOMAIN_DECILE
+      data_type: NUMBER
+    - name: ADULT_SKILLS_SUBDOMAIN_DECILE
+      data_type: NUMBER
+    - name: GEOGRAPHICAL_BARRIERS_SUBDOMAIN_DECILE
+      data_type: NUMBER
+    - name: WIDER_BARRIERS_SUBDOMAIN_DECILE
+      data_type: NUMBER
+    - name: INDOORS_SUBDOMAIN_DECILE
+      data_type: NUMBER
+    - name: OUTDOORS_SUBDOMAIN_DECILE
+      data_type: NUMBER
   - name: IMD_PRACTICE
     identifier: '"IMD_PRACTICE"'
     columns:
@@ -351,6 +422,8 @@ sources:
     - name: NEIGHBOURHOOD_CODE
       data_type: TEXT
     - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: BOROUGH
       data_type: TEXT
   - name: NCL_NEIGHBOURHOOD_LSOA_2021_LATEST
     identifier: '"NCL_NEIGHBOURHOOD_LSOA_2021_LATEST"'

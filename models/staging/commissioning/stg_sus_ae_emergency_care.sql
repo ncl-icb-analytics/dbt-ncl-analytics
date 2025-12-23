@@ -14,13 +14,15 @@ select primarykey_id
     -- discharge
     , attendance_departure_date 
     , attendance_departure_time
-    , attendance_departure_time_since_arrival 
+    , attendance_departure_time_since_arrival
+    , attendance_discharge_destination_code 
     -- reasons for attendance
     , clinical_chief_complaint_code 
     , clinical_chief_complaint_is_injury_related
     , clinical_acuity_code 
     , attendance_location_department_type 
     -- cost
+    , commissioning_grouping_health_resource_group
     , commissioning_national_pricing_final_price 
     -- patient demographics at time for 2ndry care only analysis
     , patient_age_at_arrival

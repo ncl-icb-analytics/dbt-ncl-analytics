@@ -115,11 +115,17 @@ SELECT
     -- NCL Neighbourhood (from 2021 LSOA)
     nr.neighbourhood_name as neighbourhood_resident,
 
-    -- IMD data from dedicated IMD model
+    -- IMD 2019 data from dedicated IMD model
     imd.imd_decile_19,
     imd.imd_quintile_19,
     imd.imd_quintile_numeric_19,
     imd.is_most_deprived_20pct,
+
+    -- IMD 2025 data from dedicated IMD model
+    imd25.imd_decile_25,
+    imd25.imd_quintile_25,
+    imd25.imd_quintile_numeric_25,
+    imd25.is_most_deprived_20pct_25,
 
     -- London resident flag from LSOA reference (more reliable)
     COALESCE(la.is_london_resident, FALSE) as is_london_resident,
@@ -146,9 +152,13 @@ LEFT JOIN {{ ref('int_geography_mappings') }} lsoa_map
 LEFT JOIN london_areas la
     ON pg.yr_2021_lsoa = la.lsoa21_cd
 
--- Join IMD information
+-- Join IMD 2019 information
 LEFT JOIN {{ ref('int_geography_imd') }} imd
     ON pg.yr_2011_lsoa = imd.lsoa_code_2011
+
+-- Join IMD 2025 information
+LEFT JOIN {{ ref('int_geography_imd25') }} imd25
+    ON pg.yr_2021_lsoa = imd25.lsoa_code_2021
 
 -- Join neighbourhood reference
 LEFT JOIN neighbourhood_reference nr

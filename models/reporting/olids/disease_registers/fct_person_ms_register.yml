@@ -1,0 +1,32 @@
+version: 2
+models:
+  - name: fct_person_ms_register
+    description: 'Multiple sclerosis register for patients with MS diagnosis.
+
+      One row per person with MS_COD present (non-QOF).'
+    
+    config:
+      meta:
+        indicator:
+          id: "MS"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Neurology"
+          name_short: "Multiple Sclerosis"
+          description_short: "Multiple sclerosis register (non-QOF)"
+          description_long: >
+            Multiple sclerosis register for persons with MS diagnosis. 
+            Includes active patients with MS diagnosis using MS_COD cluster codes. 
+            No age restrictions or resolution codes applied. Used for neurological care 
+            pathway monitoring, disease-modifying therapy monitoring, multidisciplinary 
+            team coordination, and symptom management. Chronic neurological condition 
+            requiring ongoing care and support.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_NEURO_MS"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "MS_COD"
+              category: "INCLUSION"
+

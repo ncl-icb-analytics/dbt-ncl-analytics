@@ -13,62 +13,15 @@ if ($currentHooksPath -ne ".githooks") {
 }
 Write-Host ""
 
-# Ensure profiles.yml local changes are ignored by Git
-# This prevents accidental commits of local credentials
-Write-Host "Checking profiles.yml Git configuration..." -ForegroundColor Cyan
-$skipWorktreeStatus = git ls-files -v | Select-String -Pattern "^[sS] profiles\.yml"
-
-if (-not $skipWorktreeStatus) {
-    Write-Host "Setting up Git to ignore local profiles.yml changes..." -ForegroundColor Yellow
-    git update-index --skip-worktree profiles.yml 2>$null
-    
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "[OK] Git will now ignore your local profiles.yml changes" -ForegroundColor Green
-    } else {
-        Write-Host "Note: Could not set skip-worktree on profiles.yml (may not be tracked yet)" -ForegroundColor Gray
-    }
-} else {
-    Write-Host "[OK] Git is already ignoring local profiles.yml changes" -ForegroundColor Green
-}
-
-Write-Host "  To update the repo's profiles.yml (for Snowflake native execution): git update-index --no-skip-worktree profiles.yml" -ForegroundColor Gray
-Write-Host ""
-
-# Check if profiles.yml needs local configuration
+# Check if profiles.yml exists for local development
 Write-Host "Checking profiles.yml configuration..." -ForegroundColor Cyan
-$profilesPath = "profiles.yml"
-$profilesContent = Get-Content $profilesPath -Raw
-
-# Check for empty account fields in any profile
-$emptyAccounts = @()
-
-# Check each line for profile names and empty accounts
-$lines = $profilesContent -split "`n"
-$currentProfile = ""
-
-foreach ($line in $lines) {
-    # Check if this is a profile name (under outputs)
-    if ($line -match "^\s{4}(dev|prod):") {
-        $currentProfile = $Matches[1]
-    }
-    # Check if this line has an empty account field
-    elseif ($line -match "^\s+account:\s*''\s*(\#|$)" -and $currentProfile) {
-        $emptyAccounts += $currentProfile
-        $currentProfile = ""  # Reset to avoid duplicate entries
-    }
-}
-
-if ($emptyAccounts.Count -gt 0) {
-    Write-Host "[WARNING] The following profiles have empty credentials: $($emptyAccounts -join ', ')" -ForegroundColor Yellow
-    Write-Host "  These are configured for Snowflake native execution (runs inside Snowflake)" -ForegroundColor Yellow
-    Write-Host "  For local development, you need to add your Snowflake credentials:" -ForegroundColor Yellow
-    Write-Host "    - account: Your Snowflake account" -ForegroundColor Gray
-    Write-Host "    - user: Your username" -ForegroundColor Gray
-    Write-Host "    - authenticator: externalbrowser (for SSO)" -ForegroundColor Gray
-    Write-Host "  See profiles.yml.example for reference" -ForegroundColor Gray
+if (-not (Test-Path "profiles.yml")) {
+    Write-Host "[WARNING] No profiles.yml found" -ForegroundColor Yellow
+    Write-Host "  Copy profiles.yml.template to profiles.yml and configure your credentials" -ForegroundColor Gray
+    Write-Host "  For Snowflake native execution, profiles.yml is not required" -ForegroundColor Gray
     Write-Host ""
 } else {
-    Write-Host "[OK] profiles.yml appears to be fully configured" -ForegroundColor Green
+    Write-Host "[OK] profiles.yml found" -ForegroundColor Green
     Write-Host ""
 }
 

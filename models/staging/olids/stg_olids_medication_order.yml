@@ -33,6 +33,14 @@ models:
     description: Date the medication order was clinically effective
   - name: date_precision_concept_id
     description: Foreign key to concept.id - precision of the clinical effective date
+  - name: date_precision_code
+    description: Code value for the date precision concept
+  - name: date_precision_display
+    description: Display name for the date precision concept
+  - name: date_precision_source_code
+    description: Source code for the date precision concept (from concept map)
+  - name: date_precision_source_display
+    description: Source display name for the date precision concept (from concept map)
   - name: dose
     description: Dosage instructions as text
   - name: quantity_value
@@ -47,6 +55,14 @@ models:
     description: Name of the medication ordered
   - name: medication_order_source_concept_id
     description: Foreign key to concept.id - source concept for the medication
+  - name: source_code
+    description: Source code for the medication order concept
+  - name: source_display
+    description: Source display name for the medication order concept
+  - name: source_system
+    description: Source system for the medication order concept
+  - name: target_system
+    description: Target system for the mapped concept
   - name: bnf_reference
     description: British National Formulary reference code
   - name: age_at_event

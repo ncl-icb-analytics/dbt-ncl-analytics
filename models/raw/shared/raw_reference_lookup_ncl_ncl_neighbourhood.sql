@@ -4,5 +4,6 @@
 -- This is a 1:1 passthrough from source with standardized column names
 select
     "NEIGHBOURHOOD_CODE" as neighbourhood_code,
-    "NEIGHBOURHOOD_NAME" as neighbourhood_name
+    "NEIGHBOURHOOD_NAME" as neighbourhood_name,
+    "BOROUGH" as borough
 from {{ source('reference_lookup_ncl', 'NCL_NEIGHBOURHOOD') }}

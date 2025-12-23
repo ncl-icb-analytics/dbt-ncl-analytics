@@ -1,0 +1,288 @@
+﻿SNOMED_CODE,SNOMED_TERM,CATEGORY,SUBCATEGORY,GRANULAR,ONS_BRIDGE_CODE,ONS_BRIDGE_LABEL,BK_ETHNICITY_CODE,ETHNICITY_DESC
+88961000000104,Commonwealth of (Russian),White,White: Other White,Russian,C,Any other White background,C,WHITE: Any other White background
+286009,Czech,White,White: Other White,Czech,C,Any other White background,C,WHITE: Any other White background
+29343004,Bulgarian,White,White: Other White,Bulgarian,C,Any other White background,C,WHITE: Any other White background
+92411000000108,Other White,White,White: Other White,White - Other,C,Any other White background,C,WHITE: Any other White background
+92401000000106,Irish,White,White: Irish,Irish,B,Irish,B,WHITE: Irish
+315236000,White British,White,White: British,British,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+315237009,White Irish,White,White: Irish,Irish,B,Irish,B,WHITE: Irish
+315283003,Irish traveller,White,White: Traveller,Irish Traveller,T,Traveller,C,WHITE: Any other White background
+36329002,Slovak,White,White: Other White,Slovak,C,Any other White background,C,WHITE: Any other White background
+401213008,White Scottish,White,White: British,Scottish,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+401214002,Other white British ethnic grp,White,White: British,British - Other,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+88981000000108,Serbian - ethn cat 2001 census,White,White: Other White,Serbian,C,Any other White background,C,WHITE: Any other White background
+88971000000106,Albanian Serbian,White,White: Other White,Albanian/Serbian,C,Any other White background,C,WHITE: Any other White background
+275602002,Turkish Cypriot (NMO),White,White: Other White,Turkish Cypriot,S,Any other ethnic group,S,OTHER: Any other ethnic group
+88951000000102,Baltic Estonian/Latvian/Lithuanian - ethn categ 2001 census,White,White: Other White,Baltic,C,Any other White background,C,WHITE: Any other White background
+88941000000100,Polish,White,White: Other White,Polish,C,Any other White background,C,WHITE: Any other White background
+88931000000109,Gypsy/Romany,White,White: Traveller,Gypsy,T,Traveller,C,WHITE: Any other White background
+88921000000107,Traveller,White,White: Traveller,Traveller,T,Traveller,C,WHITE: Any other White background
+88911000000101,Irish Traveller,White,White: Traveller,Irish Traveller,T,Traveller,C,WHITE: Any other White background
+40182006,Traveller - gypsy,White,White: Traveller,Gypsy Traveller,S,Any other ethnic group,S,OTHER: Any other ethnic group
+494161000000100,White Irish - ethnic category 2001 census,White,White: Irish,Irish,B,Irish,B,WHITE: Irish
+494131000000105,White British - ethnic category 2001 census,White,White: British,British,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+445343003,Romanian,White,White: Other White,Romanian,C,Any other White background,C,WHITE: Any other White background
+718958002,Roma ethnic group,White,White: Roma,Roma,T,Traveller,C,WHITE: Any other White background
+718959005,Czech Roma,White,White: Roma,Czech Roma,C,Any other White background,C,WHITE: Any other White background
+110761000000106,English,White,White: British,English,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+976671000000104,White: Gypsy or Irish Traveller - England and Wales ethnic category 2011 census,White,White: Traveller,Gypsy or Irish Traveller,T,Traveller,C,WHITE: Any other White background
+977351000000100,White - Northern Ireland ethnic category 2011 census,White,White: British,Northern Irish,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+977371000000109,Irish Traveller - Northern Ireland ethnic category 2011 census,White,White: Traveller,Irish Traveller,T,Traveller,C,WHITE: Any other White background
+977911000000103,White: Scottish - Scotland ethnic category 2011 census,White,White: British,Scottish,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+977931000000106,White: other British - Scotland ethnic category 2011 census,White,White: British,British - Other,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+977951000000104,White: Irish - Scotland ethnic category 2011 census,White,White: Irish,Irish,B,Irish,B,WHITE: Irish
+977971000000108,White: Gypsy or Irish Traveller - Scotland ethnic category 2011 census,White,White: Traveller,Gypsy or Irish Traveller,T,Traveller,C,WHITE: Any other White background
+978011000000101,White: Polish - Scotland ethnic category 2011 census,White,White: Other White,Polish,C,Any other White background,C,WHITE: Any other White background
+978031000000109,White: any other White ethnic group - Scotland ethnic category 2011 census,White,White: Other White,White - Other,C,Any other White background,C,WHITE: Any other White background
+185984009,White / Other white ethnic group,White,White: Other White,White - Other,C,Any other White background,C,WHITE: Any other White background
+186014006,Irish NMO,White,White: Irish,Irish,B,Irish,B,WHITE: Irish
+186017004,Other European NMO,White,White: Other White,European,C,Any other White background,C,WHITE: Any other White background
+976691000000100,White: any other White background - England and Wales ethnic category 2011 census,White,White: Other White,White - Other,C,Any other White background,C,WHITE: Any other White background
+718960000,Romanian Roma,White,White: Roma,Romanian Roma,T,Traveller,C,WHITE: Any other White background
+976651000000108,White: Irish - England and Wales ethnic category 2011 census,White,White: Irish,Irish,B,Irish,B,WHITE: Irish
+976631000000101,White: English or Welsh or Scottish or Northern Irish or British - England and Wales ethnic category 2011 census,White,White: British,British,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+92551000000106,Welsh,White,White: British,Welsh,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+92541000000108,Scottish,White,White: British,Scottish,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+186036009,New Zealand European,White,White: Other White,New Zealander,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186037000,Other European in New Zealand,White,White: Other White,New Zealander,S,Any other ethnic group,S,OTHER: Any other ethnic group
+270466006,Greek/Greek Cypriot NMO,White,White: Other White,Greek,C,Any other White background,C,WHITE: Any other White background
+270467002,Turkish/Turkish Cypriot NMO,White,White: Other White,Turkish,S,Any other ethnic group,S,OTHER: Any other ethnic group
+275599007,Greek (NMO),White,White: Other White,Greek,C,Any other White background,C,WHITE: Any other White background
+275600005,Greek Cypriot (NMO),White,White: Other White,Greek Cypriot,C,Any other White background,C,WHITE: Any other White background
+275601009,Turkish (NMO),White,White: Other White,Turkish,S,Any other ethnic group,S,OTHER: Any other ethnic group
+2058241000000103,White: Scottish-Scotland ethnic category 2022 census,White,White: British,Scottish,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+94001000000108,Croatian - eth cat 2001 census,White,White: Other White,Croatian,C,Any other White background,C,WHITE: Any other White background
+93991000000103,Bosnian - ethn cat 2001 census,White,White: Other White,Bosnian,C,Any other White background,C,WHITE: Any other White background
+93981000000100,Kosovan,White,White: Other White,Kosovan,C,Any other White background,C,WHITE: Any other White background
+93961000000109,Italian,White,White: Other White,Italian,C,Any other White background,C,WHITE: Any other White background
+718961001,Slovak Roma,White,White: Roma,Slovak Roma,C,Any other White background,C,WHITE: Any other White background
+93941000000108,Greek Cypriot,White,White: Other White,Greek Cypriot,C,Any other White background,C,WHITE: Any other White background
+93931000000104,Greek,White,White: Other White,Greek,C,Any other White background,C,WHITE: Any other White background
+93921000000101,Ulster Scots - eth cat 2001cen,White,White: British,Ulster Scots,C,Any other White background,C,WHITE: Any other White background
+92791000000109,Cypriot part unsp,White,White: Other White,Cypriot,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+93951000000106,Turkish Cypriot,White,White: Other White,Turkish Cypriot,S,Any other ethnic group,S,OTHER: Any other ethnic group
+2078771000000100,White: Gypsy/Traveller-Scotland ethnic category 2022 census,White,White: Traveller,Gypsy or Irish Traveller,T,Traveller,C,WHITE: Any other White background
+2078821000000106,White: Other White ethnic group-Scotland ethnic category 2022 census,White,White: Other White,White - Other,C,Any other White background,C,WHITE: Any other White background
+2078781000000103,White: Roma-Scotland ethnic category 2022 census,White,White: Roma,Roma,T,Traveller,C,WHITE: Any other White background
+2078761000000107,White: Polish-Scotland ethnic category 2022 census,White,White: Other White,Polish,C,Any other White background,C,WHITE: Any other White background
+2078741000000106,White: Other British-Scotland ethnic category 2022 census,White,White: British,British - Other,C,Any other White background,C,WHITE: Any other White background
+2078751000000109,White: Irish-Scotland ethnic category 2022 census,White,White: Irish,Irish,B,Irish,B,WHITE: Irish
+92561000000109,Northern Irish - 2001 census,White,White: British,Northern Irish,C,Any other White background,C,WHITE: Any other White background
+92571000000102,Cornish - ethn cat 2001 census,White,White: British,Cornish,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+718964009,Polish Roma,White,White: Roma,Polish Roma,T,Traveller,C,WHITE: Any other White background
+413773004,RACE: Caucasian / RACE: White,White,White: Other White,White,C,Any other White background,C,WHITE: Any other White background
+94011000000105,oth repub Yugoslav,White,White: Other White,Yugoslavian,C,Any other White background,C,WHITE: Any other White background
+80208004,Portuguese,White,White: Other White,Portuguese,C,Any other White background,C,WHITE: Any other White background
+718963003,Hungarian Roma,White,White: Roma,Hungarian Roma,C,Any other White background,C,WHITE: Any other White background
+2078791000000101,White: Showman/Showwoman-Scotland ethnic category 2022 census,White,White: Traveller,Traveller,T,Traveller,C,WHITE: Any other White background
+718962008,Bulgarian Roma,White,White: Roma,Bulgarian Roma,C,Any other White background,C,WHITE: Any other White background
+94051000000109,Other White or White unspecified,White,White: Other White,White - Other,C,Any other White background,C,WHITE: Any other White background
+94041000000106,Oth White/unsp/Mix Eur,White,White: Other White,White - Other,C,Any other White background,C,WHITE: Any other White background
+110401000000103,Turkish,White,White: Other White,Turkish,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186034007,Ethnicity and other related nationality data,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+365456003,Ethnicity / related nationality data - finding,Unknown,Not Recorded,Not Recorded,Z,Not stated,Z,NOT STATED
+415226007,RACE: Not stated,Unknown,Not stated,Not stated,Z,Not stated,Z,NOT STATED
+763726001,Ethnic group not given - patient refused,Unknown,Refused,Refused,Z,Not stated,Z,NOT STATED
+UNKNOWN,Unknown,Unknown,Recorded Not Known,Unknown,Z,Not stated,Z,NOT STATED
+976591000000101,Ethnic category - 2011 census Northern Ireland,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+976611000000109,Ethnic category - 2011 census Scotland,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+V84AA,Not Known (Not Requested),Unknown,Not Recorded,Not Recorded,Z,Not stated,Z,NOT STATED
+V84AB,Not Known (Unable to Request),Unknown,Not Recorded,Not Recorded,Z,Not stated,Z,NOT STATED
+397731000,Ethnic Groups (Census) / Ethnic groups (census) NOS,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+976571000000100,Ethnic category - 2011 census England and Wales,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+2048001000000107,Ethnic category-2022 census Scotland,Unknown,Not Recorded,Not Recorded,Z,Not stated,Z,NOT STATED
+202171000000101,Not known,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+415794004,RACE: Unknown,Unknown,Recorded Not Known,Unknown,Z,Not stated,Z,NOT STATED
+92381000000106,Ethnic category - 2001 census,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+V84AD,Not Stated (Client unable to Choose),Unknown,Not Stated,Not Stated,Z,Not stated,Z,NOT STATED
+V84AC,Not Stated (Client Refused),Unknown,Refused,Refused,Z,Not stated,Z,NOT STATED
+312860002,Patient Refused,Unknown,Refused,Refused,Z,Not stated,Z,NOT STATED
+312861003,Ethnic group not recorded,Unknown,Not Recorded,Not Recorded,Z,Not stated,Z,NOT STATED
+398089004,Ethnic background,Unknown,Not Recorded,Not Recorded,Z,Not stated,Z,NOT STATED
+976551000000109,Ethnic category - 2011 census,Unknown,Recorded Not Known,Recorded Not Known,Z,Not stated,Z,NOT STATED
+92531000000104,Ethn cat not stated 2001census,Unknown,Not stated,Not stated,Z,Not stated,Z,NOT STATED
+1024701000000100,Ethnicity not stated,Unknown,Not Stated,Not Stated,Z,Not stated,Z,NOT STATED
+94131000000103,Buddhist - eth cat 2001 census,Other,Other: Other,Buddhist,S,Any other ethnic group,S,OTHER: Any other ethnic group
+976951000000102,Other ethnic group: Arab - England and Wales ethnic category 2011 census,Other,Other: Arab,Arab,W,Arab,S,OTHER: Any other ethnic group
+94141000000107,Sikh - ethnic category 2001 census,Other,Other: Other,Sikh,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+94151000000105,Any other - ethn categ,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+69865008,Fijian,Other,Other: Other,Fijian,S,Any other ethnic group,S,OTHER: Any other ethnic group
+110831000000107,Hindu - ethn categ 2001 census,Other,Other: Other,South Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+978381000000105,"Other ethnic group: Arab, Arab Scottish or Arab British - Scotland ethnic category 2011 census",Other,Other: Arab,Arab,W,Arab,S,OTHER: Any other ethnic group
+978401000000105,Other ethnic group: any other ethnic group - Scotland ethnic category 2011 census,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+88991000000105,Jewish - eth categ 2001 census,Other,Other: Other,Jewish,S,Any other ethnic group,S,OTHER: Any other ethnic group
+89001000000105,Arab,Other,Other: Arab,Arab,W,Arab,S,OTHER: Any other ethnic group
+89011000000107,Iranian,Other,Other: Other,Iranian,S,Any other ethnic group,S,OTHER: Any other ethnic group
+89021000000101,South/Central American,Other,Other: Other,Latin American,S,Any other ethnic group,S,OTHER: Any other ethnic group
+89031000000104,Muslim - ethnic category 2001 census,Other,Other: Other,Muslim,S,Any other ethnic group,S,OTHER: Any other ethnic group
+296841000000102,Yemeni,Other,Other: Arab,Yemeni,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+186005001,Other ethnic non-mixed NMO / Other ethnic NEC NMO,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186006000,Brit. ethnic minor. spec.(NMO),Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186007009,Brit. ethnic minor. unsp NMO,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+275595001,Iranian (NMO),Other,Other: Other,Iranian,S,Any other ethnic group,S,OTHER: Any other ethnic group
+275594002,North African Arab (NMO),Other,Other: Arab,North African Arab,S,Any other ethnic group,S,OTHER: Any other ethnic group
+270464009,N African Arab/Iranian NMO,Other,Other: Other,MENA,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186042008,Tokelauan,Other,Other: Other,Tokelauan,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186041001,Niuean,Other,Other: Other,Niuean,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186040000,Cook Island Maori,Other,Other: Other,Maori,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186039002,New Zealand Maori,Other,Other: Other,Maori,S,Any other ethnic group,S,OTHER: Any other ethnic group
+92521000000101,Other,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+186035008,New Zealand ethnic groups / Other New Zealand ethnic group,Other,Other: Other,New Zealander,S,Any other ethnic group,S,OTHER: Any other ethnic group
+86275006,Samoan,Other,Other: Other,Samoan,S,Any other ethnic group,S,OTHER: Any other ethnic group
+976971000000106,Other ethnic group: any other ethnic group - England and Wales ethnic category 2011 census,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+2078921000000101,Other ethnic group: Other-Scotland ethnic category 2022 census,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+103579009,RACE: Other,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+372148003,Other ethnic group,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+2078911000000107,"Other ethnic group: Arab, Scottish Arab or British Arab-Scotland ethnic category 2022 census",Other,Other: Arab,Arab,S,Any other ethnic group,S,OTHER: Any other ethnic group
+94061000000107,North African,Other,Other: Other,North African,N,African,N,BLACK: African
+977851000000109,Other ethnic group: Arab - Northern Ireland ethnic category 2011 census,Other,Other: Arab,Arab,W,Arab,S,OTHER: Any other ethnic group
+977871000000100,Other ethnic group: any other ethnic group - Northern Ireland ethnic category 2011 census,Other,Other: Other,Other,S,Any other ethnic group,S,OTHER: Any other ethnic group
+94071000000100,ME ex Isr/Iran/Arab,Other,Other: Other,Middle Eastern,S,Any other ethnic group,S,OTHER: Any other ethnic group
+94081000000103,Israeli - ethn cat 2001 census,Other,Other: Other,Israeli,S,Any other ethnic group,S,OTHER: Any other ethnic group
+94091000000101,Kurdish,Other,Other: Other,Kurdish,S,Any other ethnic group,S,OTHER: Any other ethnic group
+94101000000109,Moroccan - ethnic category 2001 census,Other,Other: Other,Moroccan,S,Any other ethnic group,S,OTHER: Any other ethnic group
+81560001,Tongan,Other,Other: Other,Tongan,S,Any other ethnic group,S,OTHER: Any other ethnic group
+90027003,RACE: Arab,Other,Other: Arab,Arab,W,Arab,S,OTHER: Any other ethnic group
+94111000000106,Latin American,Other,Other: Other,Latin American,S,Any other ethnic group,S,OTHER: Any other ethnic group
+94121000000100,Multi-ethnic islands: Maurit. or Seychel. or Maldiv. or St Helena,Other,Other: Other,Other Islander,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92441000000109,White & Asian,Mixed,Mixed: White and Asian,White & Asian,F,White and Asian,F,MIXED: White and Asian
+92581000000100,Black & Asian,Mixed,Mixed: Other Mixed,Mixed - Black and Asian,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+92451000000107,Other Mixed,Mixed,Mixed: Other Mixed,Other Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+414752008,RACE: Mixed,Mixed,Mixed: Other Mixed,Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+92631000000103,Mixed Asian,Mixed,Mixed: Other Mixed,Mixed - Asian,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+92621000000100,Other Mixed or Mixed unspecified ethnic category 2001 census,Mixed,Mixed: Other Mixed,Other Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+92611000000106,Asian & Chinese,Mixed,Mixed: Other Mixed,Mixed - Asian and Chinese,S,Any other ethnic group,S,OTHER: Any other ethnic group
+92601000000109,Chinese & White,Mixed,Mixed: White and Asian,Mixed - White and Chinese,S,Any other ethnic group,S,OTHER: Any other ethnic group
+92591000000103,Black & Chinese,Mixed,Mixed: Other Mixed,Mixed - Black and Chinese,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+413466005,RACE: Afro-caucasian,Mixed,Mixed: Other Mixed,Mixed - Black and White,E,White and Black African,E,MIXED: White and Black African
+92721000000106,Mixed Black - ethnic category 2001 census,Mixed,Mixed: Other Mixed,Mixed - Black,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+110771000000104,Black and White,Mixed,Mixed: Other Mixed,Mixed - Black and White,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+94021000000104,Mix Irish other White 2001cens,Mixed,Mixed: Other Mixed,Mixed - White and Irish,C,Any other White background,C,WHITE: Any other White background
+94031000000102,Oth mixed White,Mixed,Mixed: Other Mixed,Mixed - White,C,Any other White background,C,WHITE: Any other White background
+92431000000100,White and Black African,Mixed,Mixed: White and Black African,White & Black African,E,White and Black African,E,MIXED: White and Black African
+92421000000102,White & Black Caribbean,Mixed,Mixed: White and Black Caribbean,White & Black Caribbean,D,White and Black Caribbean,D,MIXED: White and Black Caribbean
+92391000000108,British or mixed British,Mixed,Mixed: Other Mixed,Mixed - British,A,British,A,"WHITE: British (English, Scottish, Welsh)"
+315239007,Mixed - Any Other Mixed Background,Mixed,Mixed: Other Mixed,Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+315239007,Multiple,Mixed,Mixed: Other Mixed,Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+2078831000000108,Mixed or multiple ethnic groups: any mixed or multiple ethnic groups-Scotland ethnic category 2022 census,Mixed,Mixed: Other Mixed,Other Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+315634007,Black Caribbean and White,Mixed,Mixed: White and Black Caribbean,White & Black Caribbean,D,White and Black Caribbean,D,MIXED: White and Black Caribbean
+315635008,Black African and White,Mixed,Mixed: White and Black African,White & Black African,E,White and Black African,E,MIXED: White and Black African
+186022004,"ethnic, mixed white orig",Mixed,Mixed: Other Mixed,Mixed - White,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+185998001,"Black - other, mixed",Mixed,Mixed: Other Mixed,Mixed - Black,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+185999009,Other Black ? Black/White orig,Mixed,Mixed: Other Mixed,Mixed - Black and White,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+186000006,Other Black - Black/Asian orig,Mixed,Mixed: Other Mixed,Mixed - Black and Asian,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+976751000000104,Mixed multiple ethnic groups: White and Asian - England and Wales ethnic category 2011 census,Mixed,Mixed: White and Asian,White & Asian,F,White and Asian,F,MIXED: White and Asian
+978051000000102,Mixed or multiple ethnic groups: any Mixed or multiple ethnic group - Scotland ethnic category 2011 census,Mixed,Mixed: Other Mixed,Other Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+976731000000106,Mixed multiple ethnic groups: White and Black African - England and Wales ethnic category 2011 census,Mixed,Mixed: White and Black African,White & Black African,E,White and Black African,E,MIXED: White and Black African
+976771000000108,Mixed multiple ethnic groups: any other Mixed or multiple ethnic background - England and Wales ethnic category 2011 census,Mixed,Mixed: Other Mixed,Other Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+977551000000106,Mixed multiple ethnic groups: any other Mixed or multiple ethnic background - Northern Ireland ethnic category 2011 census,Mixed,Mixed: Other Mixed,Other Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+977431000000100,Mixed multiple ethnic groups: White and Asian - Northern Ireland ethnic category 2011 census,Mixed,Mixed: White and Asian,White & Asian,F,White and Asian,F,MIXED: White and Asian
+977411000000108,Mixed multiple ethnic groups: White and Black African - Northern Ireland ethnic category 2011 census,Mixed,Mixed: White and Black African,White & Black African,E,White and Black African,E,MIXED: White and Black African
+977391000000108,Mixed multiple ethnic groups: White and Black Caribbean - Northern Ireland ethnic category 2011 census,Mixed,Mixed: White and Black Caribbean,White & Black Caribbean,D,White and Black Caribbean,D,MIXED: White and Black Caribbean
+976711000000103,Mixed multiple ethnic groups: White and Black Caribbean - England and Wales ethnic category 2011 census,Mixed,Mixed: White and Black Caribbean,White & Black Caribbean,D,White and Black Caribbean,D,MIXED: White and Black Caribbean
+186021006,"Other ethnic, Asian/White orig",Mixed,Mixed: White and Asian,Mixed - White and Asian,F,White and Asian,F,MIXED: White and Asian
+186020007,"Other ethnic, Black/White orig",Mixed,Mixed: Other Mixed,Mixed - Black and White,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+186023009,"Other ethnic, other mixed orig",Mixed,Mixed: Other Mixed,Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+186019001,"Other ethnic, mixed origin",Mixed,Mixed: Other Mixed,Mixed,G,Any other mixed background,G,"MIXED: Other Mixed, Mixed Unspecified"
+978341000000102,"Caribbean or Black: Black, Black Scottish or Black British - Scotland ethnic category 2011 census",Black,Black: Other Black,Black British/Scottish,M,Caribbean,M,BLACK: Caribbean
+315279003,Other black ethnic group,Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+978361000000101,Caribbean or Black: any other Black or Caribbean group - Scotland ethnic category 2011 census,Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+160531006,RACE: West indian,Black,Black: Caribbean,West Indian,M,Caribbean,M,BLACK: Caribbean
+413465009,RACE: Afro-caribbean,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+18167009,Black African,Black,Black: African,African,N,African,N,BLACK: African
+185988007,Black Caribbean,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+185989004,"Black, other, non-mixed origin / Black Black - other",Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+976931000000109,Black or African or Caribbean or Black British: other Black or African or Caribbean background - England and Wales ethnic category 2011 census,Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+185990008,Black British,Black,Black: Other Black,Black British,P,Any other Black background,P,BLACK: Any other Black background
+185993005,Black - other African country,Black,Black: African,African,N,African,N,BLACK: African
+110791000000100,Black British,Black,Black: Other Black,Black British,P,Any other Black background,P,BLACK: Any other Black background
+978271000000103,"Caribbean or Black: Caribbean, Caribbean Scottish or Caribbean British - Scotland ethnic category 2011 census",Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+107691000000105,Caribbean,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+978251000000107,African: any other African - Scotland ethnic category 2011 census,Black,Black: African,African - Other,P,Any other Black background,P,BLACK: Any other Black background
+978231000000100,"African: African, African Scottish or African British - Scotland ethnic category 2011 census",Black,Black: African,African,N,African,N,BLACK: African
+976911000000101,Black or African or Caribbean or Black British: Caribbean - England and Wales ethnic category 2011 census,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+2078901000000105,Caribbean or Black-Scotland ethnic category 2022 census,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+977831000000102,Black or African or Caribbean or Black British: other Black or African or Caribbean background - Northern Ireland ethnic category 2011 census,Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+977811000000105,Black or African or Caribbean or Black British: Caribbean - Northern Ireland ethnic category 2011 census,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+977791000000109,Black or African or Caribbean or Black British: African - Northern Ireland ethnic category 2011 census,Black,Black: African,African,N,African,N,BLACK: African
+92741000000104,Other Black or Black unspecified ethnic category 2001 census,Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+92731000000108,Nigerian,Black,Black: African,Nigerian,N,African,N,BLACK: African
+92711000000100,Somali,Black,Black: African,Somali,N,African,N,BLACK: African
+2078891000000109,"African, Scottish African or British African-Scotland ethnic category 2022 census",Black,Black: African,African,N,African,N,BLACK: African
+976891000000104,Black or African or Caribbean or Black British: African - England and Wales ethnic category 2011 census,Black,Black: African,African,N,African,N,BLACK: African
+275592003,West Indian (NMO),Black,Black: Caribbean,West Indian,M,Caribbean,M,BLACK: Caribbean
+275586009,Black North African,Black,Black: African,North African,P,Any other Black background,P,BLACK: Any other Black background
+275587000,Black Arab,Black,Black: Other Black,Black - Arab,P,Any other Black background,P,BLACK: Any other Black background
+92491000000104,African,Black,Black: African,African,N,African,N,BLACK: African
+275588005,Black Iranian,Black,Black: Other Black,Black - Iranian,P,Any other Black background,P,BLACK: Any other Black background
+275593008,Guyana (NMO),Black,Black: Caribbean,Guyanese,M,Caribbean,M,BLACK: Caribbean
+275589002,Black East African Asian,Black,Black: Other Black,Black - E.African Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+315240009,Black,Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+92501000000105,Other Black,Black,Black: Other Black,Black - Other,P,Any other Black background,P,BLACK: Any other Black background
+186010002,Other African countries NMO,Black,Black: African,African,N,African,N,BLACK: African
+275591005,Caribbean Island (NMO),Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+309643000,Black West Indian,Black,Black: Caribbean,West Indian,M,Caribbean,M,BLACK: Caribbean
+309644006,Black Guyana,Black,Black: Caribbean,Guyanese,M,Caribbean,M,BLACK: Caribbean
+275590006,Black Indo-Caribbean,Black,Black: Caribbean,Indo-Caribbean,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+270463003,Caribbean I./W.I./Guyana NMO,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+270462008,Black E Afric Asia/Indo-Caribb,Black,Black: Other Black,Black - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+185995003,Black Indian sub-continent,Black,Black: Other Black,Black - South Asian,H,Indian,H,ASIAN: Indian or British Indian
+270461001,Black N African/Arab/Iranian,Black,Black: Other Black,Black - MENA,P,Any other Black background,P,BLACK: Any other Black background
+270460000,Black Caribbean/W.I./Guyana,Black,Black: Caribbean,Caribbean,M,Caribbean,M,BLACK: Caribbean
+185996002,Black - other Asian,Black,Black: Other Black,Black - Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92781000000107,Malaysian,Asian,Asian: Other Asian,Malaysian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92701000000102,Other Asian or Asian unspecified ethnic category 2001 census,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92771000000105,Filipino,Asian,Asian: Other Asian,Filipino,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+977731000000108,Asian or Asian British: Bangladeshi - Northern Ireland ethnic category 2011 census,Asian,Asian: Bangladeshi,Bangladeshi,K,Bangladeshi,K,ASIAN: Bangladeshi or British Bangladeshi
+977751000000101,Asian or Asian British: Chinese - Northern Ireland ethnic category 2011 census,Asian,Asian: Chinese,Chinese,R,Chinese,R,OTHER: Chinese
+92751000000101,Vietnamese,Asian,Asian: Other Asian,Vietnamese,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92761000000103,Japanese,Asian,Asian: Other Asian,Japanese,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+977711000000100,Asian or Asian British: Pakistani - Northern Ireland ethnic category 2011 census,Asian,Asian: Pakistani,Pakistani,J,Pakistani,J,ASIAN: Pakistani or British Pakistani
+92691000000102,Carib Asian,Asian,Asian: Other Asian,Caribbean Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92681000000104,Briti Asian,Asian,Asian: Other Asian,British Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92671000000101,Tamil,Asian,Asian: Other Asian,Tamil,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92661000000108,East African Asian,Asian,Asian: Other Asian,East African Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+976871000000103,Asian or Asian British: any other Asian background - England and Wales ethnic category 2011 census,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+2078851000000101,"Asian, Scottish Asian or British Asian: Indian, Scottish Indian or British Indian-Scotland ethnic category 2022 census",Asian,Asian: Indian,Indian,H,Indian,H,ASIAN: Indian or British Indian
+2078871000000105,"Asian, Scottish Asian or British Asian: Chinese, Scottish Chinese or British Chinese-Scotland ethnic category 2022 census",Asian,Asian: Chinese,Chinese,R,Chinese,R,OTHER: Chinese
+92651000000105,Kashmiri - ethnic category 2001 census,Asian,Asian: Other Asian,Kashmiri,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92641000000107,Punjabi - ethn cat 2001 census,Asian,Asian: Other Asian,Punjabi,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+977591000000103,Asian or Asian British: Indian - Northern Ireland ethnic category 2011 census,Asian,Asian: Indian,Indian,H,Indian,H,ASIAN: Indian or British Indian
+2078861000000103,"Asian, Scottish Asian or British Asian: Bangladeshi, Scottish Bangladeshi or British Bangladeshi-Scotland ethnic category 2022 census",Asian,Asian: Bangladeshi,Bangladeshi,K,Bangladeshi,K,ASIAN: Bangladeshi or British Bangladeshi
+2078881000000107,"Asian, Scottish Asian or British Asian: other-Scotland ethnic category 2022 census",Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92511000000107,Chinese,Asian,Asian: Chinese,Chinese,R,Chinese,R,OTHER: Chinese
+270465005,E Afric Asian/Indo-Carib NMO,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+1745831000006108,Nepalese,Asian,Asian: Other Asian,Nepalese,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+186044009,South East Asian,Asian,Asian: Other Asian,South East Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+110781000000102,Sinhalese,Asian,Asian: Other Asian,Sinhalese,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+315280000,Other Asian,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+315281001,Other Asian ethnic group,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+186002003,Pakistani,Asian,Asian: Pakistani,Pakistani,J,Pakistani,J,ASIAN: Pakistani or British Pakistani
+33897005,Chinese,Asian,Asian: Chinese,Chinese,R,Chinese,R,OTHER: Chinese
+312859007,Vietnamese,Asian,Asian: Other Asian,Vietnamese,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+38361009,RACE: Korean,Asian,Asian: Other Asian,Korean,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+86461000000107,Sri Lankan,Asian,Asian: Other Asian,Sri Lankan,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+186003008,Bangladeshi,Asian,Asian: Bangladeshi,Bangladeshi,K,Bangladeshi,K,ASIAN: Bangladeshi or British Bangladeshi
+414481008,Indian,Asian,Asian: Indian,Indian,H,Indian,H,ASIAN: Indian or British Indian
+414551003,RACE: Japanese,Asian,Asian: Other Asian,Japanese,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+414978006,RACE: Oriental,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+186012005,Indian sub-continent NMO,Asian,Asian: Other Asian,Indian,H,Indian,H,ASIAN: Indian or British Indian
+92461000000105,Pakistani/Brit Pakists,Asian,Asian: Pakistani,Pakistani,J,Pakistani,J,ASIAN: Pakistani or British Pakistani
+718131000000106,Nepali,Asian,Asian: Other Asian,Nepali,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92471000000103,Bangladeshi/Brit Bangl,Asian,Asian: Bangladeshi,Bangladeshi,K,Bangladeshi,K,ASIAN: Bangladeshi or British Bangladeshi
+977771000000105,Asian or Asian British: any other Asian background - Northern Ireland ethnic category 2011 census,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+92481000000101,Other Asian,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+110751000000108,Indian/British Indians,Asian,Asian: Indian,Indian,H,Indian,H,ASIAN: Indian or British Indian
+275597009,Indo-Caribbean (NMO),Asian,Asian: Other Asian,Indo-Caribbean,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+275596000,East African Asian (NMO),Asian,Asian: Other Asian,East African Asian,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+978211000000108,Asian or Asian Scottish or Asian British: any other Asian group - Scotland ethnic category 2011 census,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+978191000000109,Asian or Asian Scottish or Asian British: Chinese - Scotland ethnic category 2011 census,Asian,Asian: Chinese,Chinese,R,Chinese,R,OTHER: Chinese
+978171000000105,"Asian or Asian Scottish or Asian British: Bangladeshi, Bangladeshi Scottish or Bangladeshi British - Scotland ethnic category 2011 census",Asian,Asian: Bangladeshi,Bangladeshi,K,Bangladeshi,K,ASIAN: Bangladeshi or British Bangladeshi
+978111000000100,"Asian or Asian Scottish or Asian British: Indian, Indian Scottish or Indian British - Scotland ethnic category 2011 census",Asian,Asian: Indian,Indian,H,Indian,H,ASIAN: Indian or British Indian
+978071000000106,"Asian or Asian Scottish or Asian British: Pakistani, Pakistani Scottish or Pakistani British - Scotland ethnic category 2011 census",Asian,Asian: Pakistani,Pakistani,J,Pakistani,J,ASIAN: Pakistani or British Pakistani
+186013000,Other Asian NMO,Asian,Asian: Other Asian,Asian - Other,L,Any other Asian background,L,"ASIAN: Other Asian, British Asian, Asian Unspecif"
+976791000000107,Asian or Asian British: Indian - England and Wales ethnic category 2011 census,Asian,Asian: Indian,Indian,H,Indian,H,ASIAN: Indian or British Indian
+976811000000108,Asian or Asian British: Pakistani - England and Wales ethnic category 2011 census,Asian,Asian: Pakistani,Pakistani,J,Pakistani,J,ASIAN: Pakistani or British Pakistani
+976831000000100,Asian or Asian British: Bangladeshi - England and Wales ethnic category 2011 census,Asian,Asian: Bangladeshi,Bangladeshi,K,Bangladeshi,K,ASIAN: Bangladeshi or British Bangladeshi
+976851000000107,Asian or Asian British: Chinese - England and Wales ethnic category 2011 census,Asian,Asian: Chinese,Chinese,R,Chinese,R,OTHER: Chinese
+2078841000000104,"Asian, Scottish Asian or British Asian: Pakistani, Scottish Pakistani or British Pakistani-Scotland ethnic category 2022 census",Asian,Asian: Pakistani,Pakistani,J,Pakistani,J,ASIAN: Pakistani or British Pakistani

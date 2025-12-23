@@ -1,0 +1,39 @@
+version: 2
+models:
+  - name: int_autism_diagnoses_all
+    description: 'Autism spectrum disorder diagnosis observations for neurodevelopmental condition register management.
+
+      Key Features:
+
+      • Uses AUTISM_COD cluster for diagnosis identification
+
+      • Supports autism register data collection
+
+      • Enables neurodevelopmental condition monitoring and care pathway tracking
+
+      • No resolution codes as autism is a lifelong condition
+
+      • Distinct from learning disability - can co-occur but tracked separately
+
+      Purpose: Provide observation-level data for autism tracking and complex needs identification.'
+    tests:
+      - cluster_ids_exist:
+          cluster_ids: AUTISM_COD
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation'
+      - name: person_id
+        description: 'Unique identifier for the person'
+      - name: clinical_effective_date
+        description: 'Date when the autism observation was recorded'
+      - name: concept_code
+        description: 'Clinical code for the autism spectrum disorder diagnosis'
+      - name: concept_display
+        description: 'Human-readable description of the autism diagnosis'
+      - name: source_cluster_id
+        description: 'Source cluster identifier (AUTISM_COD for autism diagnoses)'
+      - name: is_diagnosis_code
+        description: 'Boolean flag indicating diagnosis code (always TRUE for autism observations)'
+      - name: autism_observation_type
+        description: 'Type of autism observation (always "Autism Spectrum Disorder Diagnosis")'
+

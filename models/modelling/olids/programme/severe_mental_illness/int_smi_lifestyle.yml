@@ -1,0 +1,9 @@
+models:
+  - name: int_smi_lifestyle
+    description: Person Level Intermediate table holding Lifestyle data for people on the SMI register. This includes beahvourial risk factors and interventions received as latest ever recorded
+     
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null

@@ -53,3 +53,36 @@ models:
         description: Flag for areas in most deprived 20% (deciles 1-2)
         tests:
           - not_null
+
+  - name: int_geography_imd25
+    description: Index of Multiple Deprivation mappings and quintile calculations
+    columns:
+      - name: lsoa_code_2021
+        description: LSOA 2021 census code
+        tests:
+          - not_null
+          - unique
+      - name: imd_decile_25
+        description: IMD 2025 decile (1=most deprived, 10=least deprived)
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      - name: imd_quintile_25
+        description: IMD quintile text description
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Most Deprived', 'Second Most Deprived', 'Third Most Deprived', 'Second Least Deprived', 'Least Deprived']
+      - name: imd_quintile_numeric_25
+        description: IMD quintile as number (1-5)
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+      - name: imd_tertile_25
+        description: IMD tertile grouping
+      - name: is_most_deprived_20pct_25
+        description: Flag for areas in most deprived 20% (deciles 1-2)
+        tests:
+          - not_null
