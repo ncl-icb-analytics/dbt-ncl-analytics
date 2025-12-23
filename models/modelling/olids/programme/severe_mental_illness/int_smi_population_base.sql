@@ -57,7 +57,16 @@ WHEN dem.ETHNICITY_SUBCATEGORY = 'Not Stated' THEN 19
 WHEN dem.ETHNICITY_SUBCATEGORY = 'Recorded Not Known' THEN 19
 WHEN dem.ETHNICITY_SUBCATEGORY = 'Refused' THEN 19
 END AS ETHSUBCAT_ORDER
-,dem.ETHNICITY_GRANULAR
+,CASE 
+WHEN dem.ETHNICITY_GRANULAR = 'MENA' THEN 'Middle East and North African'
+WHEN dem.ETHNICITY_GRANULAR in ('Muslim', 'Sikh') THEN 'Unknown'
+WHEN dem.ETHNICITY_GRANULAR in ('Recorded Not Known', 'Refused', 'Not stated', 'Not Recorded','Not Stated') THEN 'Unknown'
+WHEN dem.ETHNICITY_GRANULAR = 'Black - E.African Asian' THEN 'East African Asian'
+WHEN dem.ETHNICITY_GRANULAR = 'Indo-Caribbean' THEN 'Caribbean Asian'
+WHEN dem.ETHNICITY_GRANULAR = 'Cornish' THEN 'English'
+WHEN dem.ETHNICITY_GRANULAR in ('Gypsy or Irish Traveller','Gypsy','Irish Traveller') THEN 'Gypsy or Irish Traveller'
+WHEN dem.ETHNICITY_GRANULAR in ('Albanian/Serbian', 'Serbian') THEN 'Albanian or Serbian'
+ELSE dem.ETHNICITY_GRANULAR END AS ETHNICITY_GRANULAR
 --switch to IMD25
 ,COALESCE(dem.IMD_QUINTILE_25, 'Unknown') AS IMD_QUINTILE
 ,CASE 
@@ -70,7 +79,9 @@ ELSE 6 END AS IMDQUINTILE_ORDER
 ,dem.IMD_DECILE_25 AS IMD_DECILE
 ,CASE 
 WHEN dem.MAIN_LANGUAGE = 'Pushto' THEN 'Pashto' 
-WHEN dem.MAIN_LANGUAGE in ('Makaton sign language','Sign language','British Sign Language') THEN 'Sign language'
+WHEN dem.MAIN_LANGUAGE = 'Gujerati' THEN 'Gujarati'
+WHEN dem.MAIN_LANGUAGE ILIKE '%sign language%' THEN 'Sign language'
+WHEN dem.MAIN_LANGUAGE = 'Norwegian Bokmål' THEN 'Norwegian'
 WHEN dem.MAIN_LANGUAGE = 'Not Recorded' THEN 'Unknown'
 ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 ,dem.INTERPRETER_NEEDED

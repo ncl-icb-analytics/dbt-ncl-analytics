@@ -41,6 +41,7 @@ current_smoking_status AS (
         {{ ref('int_smoking_status_latest') }} AS latest
         ON p.person_id = latest.person_id
     LEFT JOIN smoking_history AS hist ON p.person_id = hist.person_id
+    WHERE latest.clinical_effective_date IS NOT NULL AND latest.clinical_effective_date <= CURRENT_DATE
 )
 
 SELECT
