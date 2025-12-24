@@ -2,10 +2,10 @@ with pds_person as (
     select
         sk_patient_id,
         event_to_date is null as current_record_person,
+        event_to_date as record_end_date,
         year_month_of_birth,
         gender_code,
         date_of_death,
-        death_status,
         preferred_language_code,
         interpreter_required_code
     from {{ref('stg_pds_pds_person')}}
