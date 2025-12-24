@@ -15,6 +15,17 @@ dem.PERSON_ID
 ,dem.AGE
 ,dem.AGE_BAND_5Y
 ,dem.AGE_BAND_NHS
+,CASE
+WHEN dem.age_band_nhs = '5-14' THEN 1
+WHEN dem.age_band_nhs = '15-24' THEN 2
+WHEN dem.age_band_nhs = '25-34' THEN 3
+WHEN dem.age_band_nhs = '35-44' THEN 4
+WHEN dem.age_band_nhs = '45-54' THEN 5
+WHEN dem.age_band_nhs = '55-64' THEN 6
+WHEN dem.age_band_nhs = '65-74' THEN 7
+WHEN dem.age_band_nhs = '75-84' THEN 8
+WHEN dem.age_band_nhs = '85+' THEN 9
+END AS AGE_NHS_ORDER
 ,dem.GENDER
 ,CASE
 WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 'Unknown'
