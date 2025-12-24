@@ -1,3 +1,4 @@
+--CTEs to combine the 3 base PDS tables, only including the latest record for each patient
 with pds_person as (
     select
         sk_patient_id,
@@ -38,7 +39,7 @@ pds_registered as (
     qualify coalesce(event_to_date, '9999-12-31') = max(coalesce(event_to_date, '9999-12-31')) over (partition by sk_patient_id)
 )
 
-
+--Script to combine the 3 PDS data tables into a single wider table
 select 
     pds_person.*,
     pds_registered.* exclude (sk_patient_id), 
