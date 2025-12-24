@@ -25,3 +25,6 @@ select
 from {{ref('raw_pds_pds_address')}}
 
 where row_id not in (select row_id from invalid_residence_rows)
+
+--Qualify clause to remove duplicate records and only keep a single row
+qualify row_id = max(row_id) over (partition by sk_patient_id, event_to_date)
