@@ -6,7 +6,7 @@ select
     to_date(date_of_death) as date_of_death, 
     death_status, 
     preferred_language as preferred_language_code, 
-    interpreter_required as interpreter_required_code, 
+    interpreter_required, 
     to_date(person_business_effective_from_date) as event_from_date, 
     to_date(person_business_effective_to_date) as event_to_date
 

@@ -8,7 +8,7 @@ with pds_person as (
         gender_code,
         date_of_death,
         preferred_language_code,
-        interpreter_required_code
+        interpreter_required
     from {{ref('stg_pds_pds_person')}}
     
     qualify coalesce(event_to_date, '9999-12-31') = max(coalesce(event_to_date, '9999-12-31')) over (partition by sk_patient_id)
