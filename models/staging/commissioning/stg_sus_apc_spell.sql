@@ -24,7 +24,8 @@ select core.primarykey_id
     , core.spell_admission_date
     , core.spell_discharge_date
     , core.spell_discharge_length_of_hospital_stay
-    , core.spell_commissioning_tariff_calculation_pbr_length_of_stay_critical_care_days as length_of_stay_critical_care_days
+    , core.spell_commissioning_tariff_calculation_pbr_length_of_stay_critical_care_days as spell_length_of_stay_critical_care_days
+    , core.spell_discharge_destination
     
     /* Admission information */
     , core.spell_admission_method
