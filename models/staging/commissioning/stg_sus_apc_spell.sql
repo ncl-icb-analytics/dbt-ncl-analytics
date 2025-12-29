@@ -38,6 +38,8 @@ select core.primarykey_id
     , core.spell_clinical_coding_grouper_derived_primary_diagnosis
     , core.spell_clinical_coding_grouper_derived_secondary_diagnosis
     , core.spell_clinical_coding_grouper_derived_dominant_procedure
+    , core.spell_patient_identity_pds_date_of_death
+    , core.spell_patient_identity_pds_death_status
 
     -- commissioning and costing details
     , core.spell_commissioning_grouping_core_hrg
@@ -47,6 +49,7 @@ select core.primarykey_id
     /* patient info at time of event  */
     , core.spell_patient_residence_derived_postcode_district
     , core.spell_patient_residence_derived_lsoa_11
+    , core.spell_patient_residence_residence_ccg
     , core.spell_patient_residence_derived_local_authority_district
     , core.spell_patient_residence_derived_index_of_multiple_deprivation_decile
     , core.spell_patient_residence_derived_index_of_multiple_deprivation_decile_description
