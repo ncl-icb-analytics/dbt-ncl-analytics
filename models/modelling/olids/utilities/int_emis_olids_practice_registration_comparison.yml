@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: int_emis_olids_practice_registration_comparison
+    description: |
+      Compares OLIDS Regular registration counts against EMIS list size per practice.
+
+      Acceptance Criteria:
+      - Aggregate: <1% variance across all practices
+      - Per-practice: <2% variance OR fewer than 5 persons difference (whichever is greater)
+
+      Categorisation:
+      - Meets Criteria: <2% variance OR <5 persons difference
+      - 2-5% Variance: Between 2-5% variance
+      - 5-20% Variance: Between 5-20% variance
+      - 20%+ Variance: 20% or greater variance
+      - Missing Data: No EMIS or OLIDS data available
+
+      Data Sources:
+      - EMIS: Static extract (date from seed file)
+      - OLIDS: Regular episode types only, active as of EMIS extract date
+
+    columns:
+      - name: practice_code
+        description: GP practice ODS code
+
+      - name: practice_name
+        description: GP practice name
+
+      - name: borough
+        description: Borough name
+
+      - name: emis_list_size
+        description: Number of registered patients from EMIS extract
+
+      - name: olids_regular_count
+        description: Number of patients with Regular registration episodes in OLIDS
+
+      - name: difference
+        description: Difference between OLIDS and EMIS (signed, can be negative)
+
+      - name: absolute_difference
+        description: Absolute difference between OLIDS and EMIS
+
+      - name: percent_difference
+        description: Percentage difference (signed, can be negative)
+
+      - name: absolute_percent_difference
+        description: Absolute percentage difference
+
+      - name: extract_date
+        description: Date of EMIS extract (from seed file)
+
+      - name: meets_acceptance_criteria
+        description: Boolean flag indicating if practice meets acceptance criteria (<2% variance OR <5 persons difference)
+
+      - name: variance_category
+        description: Categorisation of variance (Meets Criteria, 2-5% Variance, 5-20% Variance, 20%+ Variance, Missing Data)
+
+      - name: validation_methodology
+        description: Description of the validation test applied (EMIS Regular Registration Comparison with thresholds)

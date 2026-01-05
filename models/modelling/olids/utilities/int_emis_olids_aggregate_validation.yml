@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: int_emis_olids_aggregate_validation
+    description: |
+      Aggregate-level validation of OLIDS Regular registrations against EMIS list size.
+
+      Calculates aggregate variance across all practices to validate against acceptance criteria.
+
+      Acceptance Criteria: <1% variance in aggregate across all practices
+      Snapshot Date: Dynamic (from EMIS extract date in seed file)
+
+      Returns a single row with aggregate statistics and PASS/FAIL status.
+
+    columns:
+      - name: practice_count
+        description: Number of practices included in aggregate calculation
+
+      - name: total_emis_list_size
+        description: Sum of all EMIS list sizes across practices
+
+      - name: total_olids_regular_count
+        description: Sum of all OLIDS Regular registration counts across practices
+
+      - name: aggregate_difference
+        description: Total difference between OLIDS and EMIS (signed)
+
+      - name: aggregate_percent_difference
+        description: Aggregate percentage difference (signed, 4 decimals)
+
+      - name: aggregate_absolute_percent_difference
+        description: Absolute aggregate percentage difference
+
+      - name: aggregate_acceptance_status
+        description: PASS if <1% variance, FAIL if ≥1% variance
+
+      - name: snapshot_date
+        description: Date of EMIS extract (from seed file)
+
+      - name: validation_timestamp
+        description: Timestamp when validation was run

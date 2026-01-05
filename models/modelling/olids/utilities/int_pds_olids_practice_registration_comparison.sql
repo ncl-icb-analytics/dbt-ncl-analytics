@@ -97,13 +97,32 @@ SELECT
             2
         )
     END AS percent_difference,
+    -- Calculate absolute difference for acceptance criteria
+    ABS(COALESCE(olids.olids_registered_patients, 0) - COALESCE(pds.pds_merged_persons, 0)) AS absolute_difference,
+    -- Calculate absolute percentage difference
+    ABS(COALESCE(
+        (COALESCE(olids.olids_registered_patients, 0) - pds.pds_merged_persons) * 100.0 / NULLIF(pds.pds_merged_persons, 0),
+        0
+    )) AS absolute_percent_difference,
+    -- New acceptance criteria: <2% variance OR <5 persons difference (same as EMIS)
+    CASE
+        WHEN pds.pds_merged_persons = 0 OR pds.pds_merged_persons IS NULL THEN FALSE
+        WHEN ABS(COALESCE(
+            (COALESCE(olids.olids_registered_patients, 0) - pds.pds_merged_persons) * 100.0 / NULLIF(pds.pds_merged_persons, 0),
+            0
+        )) < 2 THEN TRUE
+        WHEN ABS(COALESCE(olids.olids_registered_patients, 0) - COALESCE(pds.pds_merged_persons, 0)) < 5 THEN TRUE
+        ELSE FALSE
+    END AS meets_acceptance_criteria,
+    -- Legacy flag for backwards compatibility (will be deprecated)
     CASE
         WHEN ABS(COALESCE(
             (COALESCE(olids.olids_registered_patients, 0) - pds.pds_merged_persons) * 100.0 / NULLIF(pds.pds_merged_persons, 0),
             0
         )) >= 20 THEN TRUE
         ELSE FALSE
-    END AS has_significant_discrepancy
+    END AS has_significant_discrepancy,
+    'PDS All Registration Types Comparison: <2% variance OR <5 persons difference' AS validation_methodology
 FROM pds_counts pds
 FULL OUTER JOIN olids_counts olids
     ON pds.practice_code = olids.practice_code
