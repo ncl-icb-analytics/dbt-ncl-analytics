@@ -7,6 +7,18 @@
 }}
 
 /*
+DEPRECATED: This model is deprecated and will be removed in a future release.
+
+Please use the new models instead:
+- pds_olids_practices_validated: practices passing validation (<20% discrepancy)
+- pds_olids_practices_unvalidated: practices failing validation (>=20% discrepancy)
+- pds_olids_practice_comparison_all: all practices with categorization
+
+The new models use table materialization for better performance and follow
+inverted logic (validated/unvalidated) for easier filtering.
+
+---
+
 PDS/OLIDS Practice Registration Discrepancies - Suspect Practices (Direct Care)
 
 Shows practices with major discrepancies (>=20%) between PDS and OLIDS registration counts.

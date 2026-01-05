@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_olids_regular_registrations_at_point_in_time
+    description: |
+      OLIDS patients with Regular registration episodes active at fixed point in time.
+
+      Filters to Regular episode type only (excludes Temporary, Emergency, Private, etc.)
+      Used for EMIS list size comparison validation.
+
+      Snapshot Date: Dynamic (matches EMIS extract_date from seed file)
+      Episode Type: Regular only
+      Patient Counting: Deduplicated by person_id (handles patient ID mergers)
+      Deceased Handling: Excludes patients deceased on or before snapshot date
+
+    columns:
+      - name: practice_ods_code
+        description: GP practice ODS code
+
+      - name: regular_registered_patients
+        description: Count of distinct persons with Regular registration episodes active on snapshot date
+
+      - name: snapshot_date
+        description: Reference date for point-in-time calculation (from EMIS extract_date)

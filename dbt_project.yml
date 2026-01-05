@@ -163,3 +163,11 @@ seeds:
         BK_ETHNICITY_CODE: varchar
         ETHNICITY_DESC: varchar
 
+    emis_list_size:
+      +column_types:
+        BOROUGH: varchar(50)
+        CODE: varchar(10)
+        GP_PRACTICE: varchar(200)
+        LIST_SIZE: integer
+        EXTRACT_DATE: varchar(10)
+

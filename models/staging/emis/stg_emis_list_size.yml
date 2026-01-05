@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_emis_list_size
+    description: |
+      EMIS list size reference data with proper date type conversion.
+
+      Source: emis_list_size seed file
+      Extract Date: Dynamic (from seed file)
+
+      Converts EXTRACT_DATE from VARCHAR to DATE and standardises column naming.
+      Used as reference data for OLIDS Regular registration validation.
+
+      To update: Replace seed file with new EMIS extract and re-run models.
+
+    columns:
+      - name: borough
+        description: Borough name (e.g., Barnet, Camden, Enfield, Haringey, Islington)
+
+      - name: practice_code
+        description: GP practice ODS code
+
+      - name: practice_name
+        description: GP practice name
+
+      - name: list_size
+        description: Number of registered patients according to EMIS extract
+
+      - name: extract_date
+        description: Date the EMIS data was extracted, converted from DD/MM/YYYY VARCHAR to DATE
