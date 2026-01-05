@@ -1,0 +1,25 @@
+version: 2
+models:
+- name: stg_reference_ltc_lcs_exceptions
+  description: Exception codes that were excluded from valuesets
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
+  columns:
+  - name: exception_id
+    description: Unique identifier for this exception entry
+    tests:
+    - not_null
+    - unique
+  - name: valueset_id
+    description: Foreign key to associated valueset
+    tests:
+    - not_null
+  - name: original_excluded_code
+    description: Original code that was excluded
+  - name: translated_to_snomed_code
+    description: SNOMED code the excluded code translated to
+  - name: included_in_ecl
+    description: Flag indicating if code was included in ECL expression
+  - name: translation_error
+    description: Error message if translation failed
