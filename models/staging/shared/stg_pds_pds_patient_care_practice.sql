@@ -1,9 +1,9 @@
 select
     row_id,
     pseudo_nhs_number as sk_patient_id,
-    primary_care_provider,
-    primary_care_provider_business_effective_from_date,
-    primary_care_provider_business_effective_to_date,
+    primary_care_provider as practice_code,
+    to_date(primary_care_provider_business_effective_from_date) as event_from_date,
+    to_date(primary_care_provider_business_effective_to_date) as event_to_date,
     reason_for_removal,
     der_ccg_of_registration,
     der_current_ccg_of_registration,

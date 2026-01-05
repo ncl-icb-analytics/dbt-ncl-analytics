@@ -22,37 +22,43 @@ Discrepancies may indicate:
 WITH pds_registrations AS (
     -- Get current registrations from PDS with proper merger and death filtering
     SELECT
-        reg.primary_care_provider AS practice_code,
+        reg.practice_code,
         prac.organisation_name AS practice_name,
         reg.sk_patient_id,
         -- Handle NHS number mergers to get canonical person
         COALESCE(merg.sk_patient_id_superseded, reg.sk_patient_id) AS merged_sk_patient_id
     FROM {{ ref('stg_pds_pds_patient_care_practice') }} reg
+
     LEFT JOIN {{ ref('stg_pds_pds_person_merger') }} merg
         ON reg.sk_patient_id = merg.sk_patient_id
+
     LEFT JOIN {{ ref('stg_pds_pds_person') }} per
         ON reg.sk_patient_id = per.sk_patient_id
-        AND per.person_business_effective_from_date <= COALESCE(reg.primary_care_provider_business_effective_to_date, '9999-12-31')
-        AND COALESCE(per.person_business_effective_to_date, '9999-12-31') >= reg.primary_care_provider_business_effective_from_date
-        AND CURRENT_DATE() BETWEEN per.person_business_effective_from_date
-            AND COALESCE(per.person_business_effective_to_date, '9999-12-31')
+        AND per.event_from_date <= COALESCE(reg.event_to_date, '9999-12-31')
+        AND COALESCE(per.event_to_date, '9999-12-31') >= reg.event_from_date
+        AND CURRENT_DATE() BETWEEN per.event_from_date
+            AND COALESCE(per.event_to_date, '9999-12-31')
+
     LEFT JOIN {{ ref('stg_pds_pds_reason_for_removal') }} reas
         ON reg.sk_patient_id = reas.sk_patient_id
-        AND reas.reason_for_removal_business_effective_from_date <= COALESCE(reg.primary_care_provider_business_effective_to_date, '9999-12-31')
-        AND COALESCE(reas.reason_for_removal_business_effective_to_date, '9999-12-31') >= reg.primary_care_provider_business_effective_from_date
-        AND CURRENT_DATE() BETWEEN reas.reason_for_removal_business_effective_from_date
-            AND COALESCE(reas.reason_for_removal_business_effective_to_date, '9999-12-31')
+        AND reas.event_from_date <= COALESCE(reg.event_to_date, '9999-12-31')
+        AND COALESCE(reas.event_to_date, '9999-12-31') >= reg.event_from_date
+        AND CURRENT_DATE() BETWEEN reas.event_from_date
+            AND COALESCE(reas.event_to_date, '9999-12-31')
+
     INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} prac
-        ON reg.primary_care_provider = prac.organisation_code
+        ON reg.practice_code = prac.organisation_code
+
     INNER JOIN {{ ref('stg_dictionary_dbo_organisation') }} icb
         ON prac.sk_organisation_id_parent_org = icb.sk_organisation_id
         AND icb.organisation_code = '93C'
         AND prac.end_date IS NULL
+
     WHERE per.death_status IS NULL
         AND per.date_of_death IS NULL
         AND reg.sk_patient_id IS NOT NULL
-        AND CURRENT_DATE() BETWEEN reg.primary_care_provider_business_effective_from_date
-            AND COALESCE(reg.primary_care_provider_business_effective_to_date, '9999-12-31')
+        AND CURRENT_DATE() BETWEEN reg.event_from_date
+            AND COALESCE(reg.event_to_date, '9999-12-31')
         AND reas.reason_for_removal IS NULL
 ),
 
