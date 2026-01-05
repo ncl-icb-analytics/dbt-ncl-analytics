@@ -12,7 +12,11 @@ select
         dict_ir.interpreter_required,
     
         --Registered information
-        (dict_pcn.stp_code = 'QMJ') and (pds.current_record_registered) as ncl_registered_flag,
+        (
+                dict_pcn.stp_code = 'QMJ' and 
+                pds.current_record_registered and 
+                pds.current_record_person
+        ) as ncl_registered_flag,
         pds.practice_code,
         dict_gp.organisation_name as practice_name,
         dict_pcn.network_code as pcn_code,
@@ -21,7 +25,11 @@ select
         dict_pcn.stp_name as icb_name,
 
         --Resident information
-        (geo.resident_flag = 'NCL') and (pds.current_record_resident) as ncl_resident_flag,
+        (
+                geo.resident_flag = 'NCL' and 
+                pds.current_record_resident and
+                pds.current_record_person
+        ) as ncl_resident_flag,
         pds.postcode_sector,
         pds.lsoa_21,
         geo.ward_2025_code,

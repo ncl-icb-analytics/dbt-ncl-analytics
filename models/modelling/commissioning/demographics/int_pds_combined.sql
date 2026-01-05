@@ -2,7 +2,7 @@
 with pds_person as (
     select
         sk_patient_id,
-        event_to_date is null as current_record_person,
+        (event_to_date is null and date_of_death is null) as current_record_person,
         event_to_date as record_end_date,
         year_month_of_birth,
         gender_code,
