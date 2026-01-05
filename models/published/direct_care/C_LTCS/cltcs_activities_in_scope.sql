@@ -106,6 +106,7 @@ potential_dup_provider as(
 )
 
 SELECT a.sk_patient_id
+    , pis.PRIMARY_CARE_PROVIDER
     , CASE WHEN a.sk_patient_id IN (
             SELECT DISTINCT sk_patient_id 
             FROM op_flags
@@ -129,8 +130,10 @@ SELECT a.sk_patient_id
     , zeroifnull(d.op_num_spec_2_prov_12mo) as filt_op_num_spec_2_prov_12mo
 from 
     op_summ as a
+left join people_in_scope as pis on a.sk_patient_id = pis.sk_patient_id
 left join 
     potential_dup_provider as d 
     on a.sk_patient_id = d.sk_patient_id
 left join {{ref('fct_person_sus_op_recent')}} as op_rec on a.sk_patient_id = op_rec.sk_patient_id
 where a.sk_patient_id is not null and a.sk_patient_id != 1
+and op_rec.op_att_tot_12mo > 1
