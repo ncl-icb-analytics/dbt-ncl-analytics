@@ -47,7 +47,7 @@ left join dev__modelling.lookup_ncl.preferred_language as dict_pl
 on pds.preferred_language_code = dict_pl.code
 
 left join dev__modelling.lookup_ncl.interpreter_required as dict_ir
-on pds.interpreter_required_code = dict_ir.interpreter_required
+on pds.interpreter_required = dict_ir.interpreter_required
 
 left join modelling.lookup_ncl.lsoa_2021_ward_2025_local_authority_2025 geo
 on pds.lsoa_21 = geo.lsoa_2021_code
