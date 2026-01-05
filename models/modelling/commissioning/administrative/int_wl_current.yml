@@ -117,17 +117,17 @@ models:
         description: Timestamp of dataset creation
       - name: open_pathways
         description: Flag indicating open pathway (always 1)
-tests:
-- dbt_expectations.expect_table_row_count_to_be_between:
-    min_value: 1
-- dbt_utils.unique_combination_of_columns:
-    combination_of_columns:
-    - sk_patient_id
-    - referral_identifier
-    - patient_pathway_identifier
-    - treatment_function_code
-    - provider_code
-    - provider_site_code
-    - week_ending_date
-    - referral_to_treatment_period_start_date
-    severity: warn
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - sk_patient_id
+            - referral_identifier
+            - patient_pathway_identifier
+            - treatment_function_code
+            - provider_code
+            - provider_site_code
+            - week_ending_date
+            - referral_to_treatment_period_start_date
+          severity: warn
