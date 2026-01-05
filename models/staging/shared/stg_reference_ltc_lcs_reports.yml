@@ -1,0 +1,23 @@
+version: 2
+models:
+- name: stg_reference_ltc_lcs_reports
+  description: Reports from EMIS XML extracts processed through terminology server
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
+  columns:
+  - name: report_id
+    description: Unique identifier for each report
+    tests:
+    - not_null
+    - unique
+  - name: report_name
+    description: Name of the report
+  - name: search_name
+    description: Search name associated with the report
+  - name: folder_path
+    description: File system path to the report folder
+  - name: xml_file_name
+    description: Name of the source XML file
+  - name: parsed_at
+    description: Timestamp when the report was parsed

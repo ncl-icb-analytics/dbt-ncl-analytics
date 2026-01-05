@@ -210,6 +210,21 @@ sources:
       data_type: NUMBER
     - name: CCG
       data_type: TEXT
+  - name: COMMUNITY_SERVICE_MAPPING
+    identifier: '"COMMUNITY_SERVICE_MAPPING"'
+    columns:
+    - name: PROVIDER
+      data_type: TEXT
+    - name: ADULT_CYP
+      data_type: TEXT
+    - name: PROVIDER_SERVICE_TEAM_TYPE
+      data_type: TEXT
+    - name: SERVICE_TEAM_CODE
+      data_type: TEXT
+    - name: SERVICE_TEAM_DESCRIPTION
+      data_type: TEXT
+    - name: CHS_SITREP_SERVICE_DESCRIPTION
+      data_type: TEXT
   - name: COMMUNITY_WAITING_TIMES_LOCAL
     identifier: '"COMMUNITY_WAITING_TIMES_LOCAL"'
     columns:
@@ -223,22 +238,69 @@ sources:
       data_type: TEXT
     - name: SERVICE_LINE
       data_type: TEXT
-    - name: 0-6_WEEKS
+    - name: 0 - 6 weeks
+      data_type: FLOAT
+    - name: 6 - 12 weeks
+      data_type: FLOAT
+    - name: 12 - 16 weeks
+      data_type: FLOAT
+    - name: 16 - 18 weeks
+      data_type: FLOAT
+    - name: 18 - 30 weeks
+      data_type: FLOAT
+    - name: 30 - 40 weeks
+      data_type: FLOAT
+    - name: 40 - 52 weeks
+      data_type: FLOAT
+    - name: 52+ weeks
+      data_type: FLOAT
+    - name: TOTAL
+      data_type: FLOAT
+    - name: AVERAGE_WEEKS_WAITING
       data_type: NUMBER
-    - name: 6-12_WEEKS
-      data_type: NUMBER
-    - name: 12-16_WEEKS
-      data_type: NUMBER
-    - name: 16-18_WEEKS
-      data_type: NUMBER
-    - name: 18-30_WEEKS
-      data_type: NUMBER
-    - name: 30-40_WEEKS
-      data_type: NUMBER
-    - name: 40-52_WEEKS
-      data_type: NUMBER
-    - name: 52+_WEEKS
-      data_type: NUMBER
+    - name: SERVICE_LINE_GROUP
+      data_type: TEXT
+    - name: SERVICE_LINE_GROUP_2
+      data_type: TEXT
+    - name: AGE_GROUP
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: PROVIDER_SERVICE_LINE
+      data_type: TEXT
+    - name: IS_EXCLUDED
+      data_type: BOOLEAN
+    - name: EXCLUSION_GROUP
+      data_type: TEXT
+  - name: COMMUNITY_WAITING_TIMES_LOCAL_OLD
+    identifier: '"COMMUNITY_WAITING_TIMES_LOCAL_OLD"'
+    columns:
+    - name: SUBMITTED_MONTH
+      data_type: DATE
+    - name: REPORTED_MONTH
+      data_type: DATE
+    - name: PROVIDER
+      data_type: TEXT
+    - name: PROVIDER_SITE
+      data_type: TEXT
+    - name: SERVICE_LINE
+      data_type: TEXT
+    - name: 0 - 6 weeks
+      data_type: FLOAT
+    - name: 6 - 12 weeks
+      data_type: FLOAT
+    - name: 12 - 16 weeks
+      data_type: FLOAT
+    - name: 16 - 18 weeks
+      data_type: FLOAT
+    - name: 18 - 30 weeks
+      data_type: FLOAT
+    - name: 30 - 40 weeks
+      data_type: FLOAT
+    - name: 40 - 52 weeks
+      data_type: FLOAT
+    - name: 52+ weeks
+      data_type: FLOAT
     - name: TOTAL
       data_type: NUMBER
     - name: AVERAGE_WEEKS_WAITING
@@ -1163,6 +1225,17 @@ sources:
       data_type: NUMBER
     - name: Wait List-05<06 weeks
       data_type: NUMBER
+  - name: DIAGNOSTIC_MSK_FLAG
+    identifier: '"DIAGNOSTIC_MSK_FLAG"'
+    columns:
+    - name: NICIP_CODE
+      data_type: TEXT
+    - name: NICIP_DESCRIPTION
+      data_type: TEXT
+    - name: MODALITY
+      data_type: TEXT
+    - name: EXCLUDED
+      data_type: TEXT
   - name: EFI2_COEFFICIENTS
     identifier: '"EFI2_COEFFICIENTS"'
     columns:

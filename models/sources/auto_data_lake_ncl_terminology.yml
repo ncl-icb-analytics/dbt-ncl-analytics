@@ -224,6 +224,108 @@ sources:
       data_type: TEXT
     - name: SNOMED_DESCRIPTION
       data_type: TEXT
+  - name: LTC_LCS_EXCEPTIONS
+    identifier: '"LTC_LCS_EXCEPTIONS"'
+    columns:
+    - name: EXCEPTION_ID
+      data_type: TEXT
+    - name: VALUESET_ID
+      data_type: TEXT
+    - name: ORIGINAL_EXCLUDED_CODE
+      data_type: TEXT
+    - name: TRANSLATED_TO_SNOMED_CODE
+      data_type: TEXT
+    - name: INCLUDED_IN_ECL
+      data_type: BOOLEAN
+    - name: TRANSLATION_ERROR
+      data_type: TEXT
+  - name: LTC_LCS_EXPANDED_CONCEPTS
+    identifier: '"LTC_LCS_EXPANDED_CONCEPTS"'
+    columns:
+    - name: CONCEPT_ID
+      data_type: TEXT
+    - name: VALUESET_ID
+      data_type: TEXT
+    - name: SNOMED_CODE
+      data_type: TEXT
+    - name: DISPLAY
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
+    - name: EXCLUDE_CHILDREN
+      data_type: BOOLEAN
+    - name: IS_REFSET
+      data_type: BOOLEAN
+  - name: LTC_LCS_FAILED_CODES
+    identifier: '"LTC_LCS_FAILED_CODES"'
+    columns:
+    - name: FAILED_CODE_ID
+      data_type: TEXT
+    - name: VALUESET_ID
+      data_type: TEXT
+    - name: ORIGINAL_CODE
+      data_type: TEXT
+    - name: DISPLAY_NAME
+      data_type: TEXT
+    - name: CODE_SYSTEM
+      data_type: TEXT
+    - name: REASON
+      data_type: TEXT
+  - name: LTC_LCS_ORIGINAL_CODES
+    identifier: '"LTC_LCS_ORIGINAL_CODES"'
+    columns:
+    - name: ORIGINAL_CODE_ID
+      data_type: TEXT
+    - name: VALUESET_ID
+      data_type: TEXT
+    - name: ORIGINAL_CODE
+      data_type: TEXT
+    - name: DISPLAY_NAME
+      data_type: TEXT
+    - name: CODE_SYSTEM
+      data_type: TEXT
+    - name: INCLUDE_CHILDREN
+      data_type: BOOLEAN
+    - name: IS_REFSET
+      data_type: BOOLEAN
+    - name: TRANSLATED_TO_SNOMED_CODE
+      data_type: TEXT
+    - name: TRANSLATED_TO_DISPLAY
+      data_type: TEXT
+  - name: LTC_LCS_REPORTS
+    identifier: '"LTC_LCS_REPORTS"'
+    columns:
+    - name: REPORT_ID
+      data_type: TEXT
+    - name: REPORT_NAME
+      data_type: TEXT
+    - name: SEARCH_NAME
+      data_type: TEXT
+    - name: FOLDER_PATH
+      data_type: TEXT
+    - name: XML_FILE_NAME
+      data_type: TEXT
+    - name: PARSED_AT
+      data_type: TIMESTAMP_NTZ
+  - name: LTC_LCS_VALUESETS
+    identifier: '"LTC_LCS_VALUESETS"'
+    columns:
+    - name: VALUESET_ID
+      data_type: TEXT
+    - name: REPORT_ID
+      data_type: TEXT
+    - name: VALUESET_INDEX
+      data_type: NUMBER
+    - name: VALUESET_HASH
+      data_type: TEXT
+    - name: VALUESET_FRIENDLY_NAME
+      data_type: TEXT
+    - name: CODE_SYSTEM
+      data_type: TEXT
+    - name: EXPANSION_ERROR
+      data_type: TEXT
+    - name: EXPANDED_AT
+      data_type: TIMESTAMP_NTZ
   - name: PCD_REFSET_LATEST
     identifier: '"PCD_REFSET_LATEST"'
     columns:

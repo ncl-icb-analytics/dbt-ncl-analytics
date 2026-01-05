@@ -60,3 +60,30 @@ sources:
       data_type: TIMESTAMP_LTZ
     - name: LAST_DDL
       data_type: TIMESTAMP_LTZ
+  - name: TABLE_SCHEMA_DATABASE_MONTHLY
+    identifier: '"TABLE_SCHEMA_DATABASE_MONTHLY"'
+    columns:
+    - name: DATABASE_NAME
+      data_type: TEXT
+    - name: TABLE_SCHEMA
+      data_type: TEXT
+    - name: TABLE_NAME
+      data_type: TEXT
+    - name: ROW_COUNT
+      data_type: NUMBER
+    - name: COMMENT
+      data_type: TEXT
+    - name: LAST_DDL_BY
+      data_type: TEXT
+    - name: TABLE_TYPE
+      data_type: TEXT
+    - name: IS_TRANSIENT
+      data_type: TEXT
+    - name: CREATED
+      data_type: DATE
+    - name: LAST_ALTERED
+      data_type: DATE
+    - name: LAST_DDL
+      data_type: DATE
+    - name: RUN_DATE
+      data_type: DATE
