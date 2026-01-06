@@ -1,8 +1,8 @@
 select
         --Record information
         pds.sk_patient_id,
-        pds.current_record_person,
-        pds.record_end_date,
+        pds.record_registered_end_date is null as current_ncl_person_flag,
+        pds.record_person_end_date,
 
         --Person information
         pds.year_month_of_birth,
@@ -14,9 +14,11 @@ select
         --Registered information
         (
                 dict_pcn.stp_code = 'QMJ' and 
-                pds.current_record_registered and 
-                pds.current_record_person
-        ) as ncl_registered_flag,
+                pds.record_registered_end_date is null and
+                pds.date_of_death is null
+                and dict_gp.end_date is null
+        ) as current_ncl_registered_flag,
+        pds.record_registered_end_date,
         pds.practice_code,
         dict_gp.organisation_name as practice_name,
         dict_pcn.network_code as pcn_code,
@@ -27,9 +29,10 @@ select
         --Resident information
         (
                 geo.resident_flag = 'NCL' and 
-                pds.current_record_resident and
-                pds.current_record_person
-        ) as ncl_resident_flag,
+                pds.record_residence_end_date is null and
+                pds.date_of_death is null
+        ) as current_ncl_resident_flag,
+        pds.record_residence_end_date,
         pds.postcode_sector,
         pds.lsoa_21,
         geo.ward_2025_code,
@@ -46,7 +49,7 @@ select
         --Metadata information
         cast(current_timestamp as datetime) as _timestamp
         
-from {{ref('int_pds_combined')}} pds
+from {{ref('int_pds_latest_record')}} pds
 
 left join {{ref('stg_dictionary_dbo_gender')}} as dict_g
 on pds.gender_code = dict_g.gender_code
