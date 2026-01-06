@@ -87,8 +87,8 @@ patient_rules as (
         (r5.person_id is not null) as rule_5_hba1c_prerequisite,
         (r6.person_id is not null) as rule_6_passed,
         case
-            when r5.person_id is null then 'Excluded'  -- Rule 5 failed (HbA1c <= 75) - exclude immediately
-            when r1.person_id is not null or r2.person_id is not null or r3.person_id is not null or r4.person_id is not null or r6.person_id is not null then 'Included'
+            when r1.person_id is not null or r2.person_id is not null or r3.person_id is not null or r4.person_id is not null then 'Included'  -- Rules 1-4 are independent
+            when r5.person_id is not null and r6.person_id is not null then 'Included'  -- Rule 6 only applies if Rule 5 passes
             else 'Excluded'
         end as final_status
     from diabetes_register dr
