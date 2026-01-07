@@ -1,6 +1,6 @@
 version: 2
 models:
-- name: int_pds_latest_record
+- name: int_patient_pds_latest_record
   description: Personal Demographics Service latest record for each patient in a combined table.
   tests:
   - dbt_utils.at_least_one:
