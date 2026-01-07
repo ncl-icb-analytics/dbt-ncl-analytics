@@ -52,11 +52,18 @@ p.PERSON_ID
 ,IMDQUINTILE_ORDER
 ,CASE WHEN INTERPRETER_NEEDED = TRUE THEN 'Yes' ELSE 'No' END AS INTERPRETER_NEEDED
 ,CASE WHEN l.smoking_status = 'Current Smoker' THEN 'Yes' ELSE 'No' END AS IS_SMOKER
-,CASE
+,l.ILLICIT_DRUG_PATTERN
+,CASE 
 WHEN l.illicit_drug_pattern in ('Abstinence/Remission','Overdose or Poisoning','Dependence','Injecting drug user','Misuse/Harmful Use','Withdrawal/Treatment','Drug-Induced Mental Disorders') THEN 'Hx harmful use'
+WHEN l.illicit_drug_pattern = 'Does not misuse drugs' THEN 'Non-user'
 WHEN l.illicit_drug_pattern is NULL THEN 'Unknown' ELSE l.illicit_drug_pattern END as DRUG_USE
 ,l.illicit_drug_date AS LATEST_DRUG_DATE
 ,l.ALCOHOL_RISK_CATEGORY AS LATEST_ALCOHOL_EVER
+,CASE
+WHEN l.ALCOHOL_RISK_CATEGORY in ('Increasing Risk','Possible Dependence','Higher Risk') THEN 'Higher Risk'
+WHEN l.ALCOHOL_RISK_CATEGORY in ('Low Risk','Occasional Drinker','Non-Drinker','Lower Risk','Ex-Drinker') THEN 'Low risk/Non drinker'
+WHEN l.ALCOHOL_RISK_CATEGORY = 'Unclear' or l.ALCOHOL_RISK_CATEGORY is NULL THEN 'Unclear/Unknown' 
+WHEN l.ALCOHOL_RISK_CATEGORY = 'Alcohol Status Declined' THEN 'Status Declined' END AS ALCOHOL_USE
 ,l.alc_stat_date AS LATEST_ALCOHOL_DATE
 ,NVL(ltc.LTC_COUNT,0) AS LTC_COUNT
 ,CASE WHEN ltc.LTC_COUNT >= 2 THEN 'Yes' ELSE 'No' END AS LTC_2PLUS
