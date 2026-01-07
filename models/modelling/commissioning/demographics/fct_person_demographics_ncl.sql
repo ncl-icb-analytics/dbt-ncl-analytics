@@ -39,9 +39,12 @@ select
 
         --Resident information
         (
-                geo.resident_flag = 'NCL' and 
-                pds.record_residence_end_date is null and
-                pds.date_of_death is null
+                --NCL Address
+                geo.resident_flag = 'NCL' and
+                --No record of death
+                pds.date_of_death is null and
+                --The Address is still active
+                pds.record_residence_end_date is null
         ) as current_ncl_resident_flag,
         pds.record_residence_end_date,
         pds.postcode_sector,
