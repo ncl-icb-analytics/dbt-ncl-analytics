@@ -12,7 +12,7 @@ with snapshot_dates as (
 
     qualify row_number() over (
         order by "FullDate" desc
-    ) <= 10
+    ) <= 5
 ),
 pds_person as (
     select
