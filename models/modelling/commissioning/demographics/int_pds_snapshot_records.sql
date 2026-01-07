@@ -5,11 +5,14 @@ with snapshot_dates as (
     --Hardcoded as table not in staging
     from "Dictionary"."dbo"."Dates" ddd
     --Bound range of dates
-    where year("FullDate") >= 2020
-    and current_date() > "FullDate"
+    where current_date() > "FullDate"
     --Last day of Financial Year
     and month("FullDate") = 3
     and day("FullDate") = 31
+
+    qualify row_number() over (
+        order by "FullDate" desc
+    ) <= 10
 ),
 pds_person as (
     select
