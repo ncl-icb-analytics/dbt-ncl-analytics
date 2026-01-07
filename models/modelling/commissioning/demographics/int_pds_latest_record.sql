@@ -43,21 +43,31 @@ pds_address as (
 
 pds_registered as (
     select 
-        sk_patient_id,
-        event_from_date as record_registered_start_date,
-        event_to_date as record_registered_end_date,
+        pds.sk_patient_id,
+        pds.event_from_date as record_registered_start_date,
+        pds.event_to_date as record_registered_end_date,
         practice_code,
-        registered_reason_for_removal
+        rfr.reason_for_removal as registered_reason_for_removal
         
-    from {{ref('stg_pds_pds_patient_care_practice')}}
+    from {{ref('stg_pds_pds_patient_care_practice')}} pds
+
+    --Join to remove records
+    left join {{ref('stg_pds_pds_reason_for_removal')}} rfr
+    on rfr.sk_patient_id = pds.sk_patient_id
+    --Snapshot date
+    and coalesce(pds.event_to_date, '9999-12-31') between
+        rfr.event_from_date
+        and coalesce(rfr.event_to_date,'9999-12-31')
+    --Reason for removal must start after the record exists
+    and pds.event_from_date <= rfr.event_from_date
 
     --Get the latest record
     qualify row_number() over (
-        partition by sk_patient_id
+        partition by pds.sk_patient_id
         order by 
-            coalesce(event_to_date, '9999-12-31') desc,
-            event_from_date desc,
-            row_id desc
+            coalesce(pds.event_to_date, '9999-12-31') desc,
+            pds.event_from_date desc,
+            pds.row_id desc
     ) = 1
 )
 

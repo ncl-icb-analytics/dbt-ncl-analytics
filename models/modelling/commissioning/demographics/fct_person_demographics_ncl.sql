@@ -13,11 +13,19 @@ select
     
         --Registered information
         (
-                dict_pcn.stp_code = 'QMJ' and 
-                pds.record_registered_end_date is null and
-                pds.date_of_death is null
-                and dict_gp.end_date is null
+                --NCL Practice
+                dict_pcn.stp_code = 'QMJ' and
+                --The GP Practice is open
+                dict_gp.end_date is null and
+                --No record of death
+                pds.date_of_death is null and
+                --No record of the record being removed
+                pds.registered_reason_for_removal is null and
+                --The GP Registration is still active
+                pds.record_registered_end_date is null
+                
         ) as current_ncl_registered_flag,
+        pds.record_registered_start_date,
         pds.record_registered_end_date,
         pds.practice_code,
         dict_gp.organisation_name as practice_name,
