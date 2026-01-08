@@ -125,9 +125,8 @@ register_logic AS (
             -- Unknown: On register but no specific type codes
             ELSE 'Unknown'
         END AS diabetes_type
-    FROM {{ ref('dim_person') }} AS p
-    INNER JOIN {{ ref('dim_person_age') }} AS age ON p.person_id = age.person_id
-    LEFT JOIN diabetes_person_aggregates AS diag ON p.person_id = diag.person_id
+    FROM diabetes_person_aggregates AS diag
+    INNER JOIN {{ ref('dim_person_age') }} AS age ON diag.person_id = age.person_id
 )
 
 -- Final selection: Only individuals on diabetes register

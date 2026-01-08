@@ -50,7 +50,7 @@ WITH ckd_diagnoses AS (
 
 register_logic AS (
     SELECT
-        p.person_id,
+        diag.person_id,
 
         -- Age restriction: ≥18 years for CKD register
         diag.earliest_diagnosis_date,
@@ -75,9 +75,8 @@ register_logic AS (
             age.age >= 18
             AND diag.has_active_ckd_diagnosis = TRUE, FALSE
         ) AS is_on_register
-    FROM {{ ref('dim_person') }} AS p
-    INNER JOIN {{ ref('dim_person_age') }} AS age ON p.person_id = age.person_id
-    LEFT JOIN ckd_diagnoses AS diag ON p.person_id = diag.person_id
+    FROM ckd_diagnoses AS diag
+    INNER JOIN {{ ref('dim_person_age') }} AS age ON diag.person_id = age.person_id
 )
 
 -- Final selection: Only individuals with active CKD diagnosis

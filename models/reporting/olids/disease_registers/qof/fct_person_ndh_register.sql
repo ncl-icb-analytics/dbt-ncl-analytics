@@ -21,7 +21,7 @@ QOF Register Criteria (Complex Pattern):
 - Complex diabetes exclusion: never had diabetes OR diabetes is resolved
 - Important for diabetes prevention programmes
 
-Includes only active patients as per QOF population requirements.
+Includes all patients meeting clinical criteria (active, deceased, deducted).
 This table provides one row per person for analytical use.
 */
 
@@ -205,8 +205,6 @@ register_inclusion AS (
 
 
     FROM ndh_diagnoses AS nd
-    INNER JOIN {{ ref('dim_person_active_patients') }} AS ap
-        ON nd.person_id = ap.person_id
     INNER JOIN {{ ref('dim_person_age') }} AS age
         ON nd.person_id = age.person_id
     LEFT JOIN diabetes_status AS ds

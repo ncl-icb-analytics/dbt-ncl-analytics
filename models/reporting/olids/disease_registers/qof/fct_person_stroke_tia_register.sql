@@ -20,7 +20,7 @@ QOF Register Criteria:
 - No age restrictions
 - Lifelong condition register for secondary prevention
 
-Includes only active patients as per QOF population requirements.
+Includes all patients meeting clinical criteria (active, deceased, deducted).
 This table provides one row per person for analytical use.
 */
 
@@ -112,8 +112,6 @@ SELECT
     ri.stroke_tia_diagnosis_displays
 
 FROM register_inclusion AS ri
-INNER JOIN {{ ref('dim_person_active_patients') }} AS ap
-    ON ri.person_id = ap.person_id
 WHERE ri.is_on_register = TRUE
 
 ORDER BY ri.earliest_diagnosis_date DESC, ri.person_id ASC

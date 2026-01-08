@@ -21,7 +21,7 @@ QOF Register Criteria (Complex Pattern):
   2. Osteoporosis diagnosis (OSTEO_COD)
   3. DXA confirmation (DXA scan OR T-score ≤ -2.5)
 
-Includes only active patients as per QOF population requirements.
+Includes all patients meeting clinical criteria (active, deceased, deducted).
 This table provides one row per person for analytical use.
 */
 
@@ -129,7 +129,7 @@ fragility_fractures AS (
 
 register_logic AS (
     SELECT
-        p.person_id,
+        diag.person_id,
 
         -- Age restriction: 50-74 years for osteoporosis register
         diag.earliest_diagnosis_date,
@@ -203,11 +203,10 @@ register_logic AS (
                 )
             ), FALSE
         ) AS is_on_register
-    FROM {{ ref('dim_person_active_patients') }} AS p
-    INNER JOIN {{ ref('dim_person_age') }} AS age ON p.person_id = age.person_id
-    LEFT JOIN osteoporosis_diagnoses AS diag ON p.person_id = diag.person_id
-    LEFT JOIN dxa_data AS dxa ON p.person_id = dxa.person_id
-    LEFT JOIN fragility_fractures AS frac ON p.person_id = frac.person_id
+    FROM osteoporosis_diagnoses AS diag
+    INNER JOIN {{ ref('dim_person_age') }} AS age ON diag.person_id = age.person_id
+    LEFT JOIN dxa_data AS dxa ON diag.person_id = dxa.person_id
+    LEFT JOIN fragility_fractures AS frac ON diag.person_id = frac.person_id
 )
 
 -- Final selection: Only individuals meeting all osteoporosis register criteria

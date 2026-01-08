@@ -83,7 +83,7 @@ epilepsy_medications AS (
 
 register_logic AS (
     SELECT
-        p.person_id,
+        diag.person_id,
 
         -- Age restriction: ≥18 years for epilepsy register
         diag.earliest_diagnosis_date,
@@ -125,10 +125,9 @@ register_logic AS (
             AND med.latest_epilepsy_medication_date IS NOT NULL,
             FALSE
         ) AS is_on_register
-    FROM {{ ref('dim_person') }} AS p
-    INNER JOIN {{ ref('dim_person_age') }} AS age ON p.person_id = age.person_id
-    LEFT JOIN epilepsy_diagnoses AS diag ON p.person_id = diag.person_id
-    LEFT JOIN epilepsy_medications AS med ON p.person_id = med.person_id
+    FROM epilepsy_diagnoses AS diag
+    INNER JOIN {{ ref('dim_person_age') }} AS age ON diag.person_id = age.person_id
+    LEFT JOIN epilepsy_medications AS med ON diag.person_id = med.person_id
 )
 
 -- Final selection: Only individuals meeting ALL criteria for epilepsy register

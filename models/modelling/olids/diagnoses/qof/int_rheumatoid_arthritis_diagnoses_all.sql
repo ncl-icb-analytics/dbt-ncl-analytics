@@ -6,7 +6,7 @@
 
 /*
 All rheumatoid arthritis diagnoses from clinical records.
-Uses QOF cluster ID RA_COD for all forms of rheumatoid arthritis diagnosis.
+Uses QOF cluster ID RARTH_COD for all forms of rheumatoid arthritis diagnosis.
 
 Clinical Purpose:
 - RA register inclusion for QOF musculoskeletal disease management
@@ -32,11 +32,11 @@ SELECT
     obs.cluster_id AS source_cluster_id,
 
     -- RA-specific flags (observation-level only)
-    CASE WHEN obs.cluster_id = 'RA_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
+    CASE WHEN obs.cluster_id = 'RARTH_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
 
     -- Observation type determination
     CASE
-        WHEN obs.cluster_id = 'RA_COD' THEN 'Rheumatoid Arthritis Diagnosis'
+        WHEN obs.cluster_id = 'RARTH_COD' THEN 'Rheumatoid Arthritis Diagnosis'
         ELSE 'Unknown'
     END AS ra_observation_type
 
