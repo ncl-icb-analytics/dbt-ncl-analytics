@@ -1,0 +1,25 @@
+version: 2
+models:
+- name: stg_dictionary_dbo_postcode
+  description: Postcode reference data from Dictionary.dbo
+  columns:
+  - name: sk_postcode_id
+    description: Primary key - surrogate key for postcode
+    tests:
+    - unique
+    - not_null
+  - name: postcode
+    description: Full postcode
+  - name: postcode_8_chars
+    description: Postcode truncated/padded to 8 characters
+  - name: postcode_no_space
+    description: Postcode with no spaces
+  - name: postcode_single_space_e_gif
+    description: Postcode formatted with single space and special handling
+  - name: date_of_introduction
+    description: Date when postcode was introduced
+  - name: date_of_termination
+    description: Date when postcode was terminated (null if active)
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
