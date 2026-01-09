@@ -21,7 +21,7 @@ ncl_analytics:
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
       database: MODELLING
       schema: DBT_DEV
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'placeholder') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'NCL_ANALYTICS_M') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_ncl_analytics_dev
@@ -34,7 +34,7 @@ ncl_analytics:
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
       database: MODELLING
       schema: DBT_PROD
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'placeholder') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'NCL_ANALYTICS_M') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_ncl_analytics_prod
