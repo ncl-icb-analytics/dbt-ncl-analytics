@@ -21,7 +21,7 @@ QOF Register Criteria (Complex Pattern):
 - No age restrictions for palliative care register
 - Important for end-of-life care quality measures
 
-Includes only active patients as per QOF population requirements.
+Includes all patients meeting clinical criteria (active, deceased, deducted).
 This table provides one row per person for analytical use.
 */
 
@@ -129,8 +129,6 @@ register_inclusion AS (
 
 
     FROM palliative_care_diagnoses AS pc
-    INNER JOIN {{ ref('dim_person_active_patients') }} AS ap
-        ON pc.person_id = ap.person_id
 )
 
 SELECT

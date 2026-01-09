@@ -354,5 +354,6 @@ LEFT JOIN latest_spirometry_values AS lsv
     ON qfce.person_id = lsv.person_id
 LEFT JOIN unable_spirometry_summary AS uss
     ON qfce.person_id = uss.person_id
+WHERE COALESCE(aqp.qualifies_for_register, FALSE) = TRUE
 
 ORDER BY person_id
