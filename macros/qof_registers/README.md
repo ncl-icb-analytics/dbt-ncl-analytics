@@ -13,6 +13,7 @@ Each macro:
 
 ## Example Structure
 
+{% raw %}
 ```sql
 {% macro calculate_{condition}_register(reference_date_expr='CURRENT_DATE()') %}
     {#
@@ -52,6 +53,7 @@ Each macro:
 
 {% endmacro %}
 ```
+{% endraw %}
 
 ## Register Types
 
