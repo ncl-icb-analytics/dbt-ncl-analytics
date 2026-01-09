@@ -12,26 +12,26 @@ ncl_analytics:
   outputs:
     dev:
       type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
-      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
       authenticator: externalbrowser
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
-      database: "MODELLING"  # Base database for dev environment
-      schema: DBT_DEV  # Dev schema
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      database: "MODELLING"
+      schema: DBT_DEV
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', '') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: "dbt_ncl_analytics_dev"
-    
+
     prod:
       type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
-      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
       authenticator: externalbrowser
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
-      database: "MODELLING"  # Production database
+      database: "MODELLING"
       schema: DBT_PROD
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', '') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: "dbt_ncl_analytics_prod"
