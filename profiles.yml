@@ -1,27 +1,30 @@
 # dbt profiles for NCL Analytics project
 #
-# This file is tracked in git (uses env_var() - no secrets stored).
+# This file is tracked in git (uses env_var() with defaults - no secrets stored).
 # Set required environment variables in your .env file (see env.example).
 #
-# Profiles:
-#   ncl_analytics           - Local dev (uses env vars for credentials)
-#   ncl_analytics_snowflake - Snowflake native execution (empty credentials)
+# Targets:
+#   dev            - Local dev (uses env vars for credentials)
+#   prod           - Local prod (uses env vars for credentials)
+#   snowflake-dev  - Snowflake native execution (empty credentials)
+#   snowflake-prod - Snowflake native execution (empty credentials)
 
 ncl_analytics:
-  target: dev  # Default target - use wrapper scripts or --target for other environments
+  target: dev  # Default target for local dev
   outputs:
+    # Local development targets (require env vars)
     dev:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
       user: "{{ env_var('SNOWFLAKE_USER', '') }}"
       authenticator: externalbrowser
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
-      database: "MODELLING"
+      database: MODELLING
       schema: DBT_DEV
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', '') }}"
       threads: 16
       client_session_keep_alive: true
-      query_tag: "dbt_ncl_analytics_dev"
+      query_tag: dbt_ncl_analytics_dev
 
     prod:
       type: snowflake
@@ -29,38 +32,34 @@ ncl_analytics:
       user: "{{ env_var('SNOWFLAKE_USER', '') }}"
       authenticator: externalbrowser
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
-      database: "MODELLING"
+      database: MODELLING
       schema: DBT_PROD
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', '') }}"
       threads: 16
       client_session_keep_alive: true
-      query_tag: "dbt_ncl_analytics_prod"
+      query_tag: dbt_ncl_analytics_prod
 
-# Snowflake native execution profile
-# Used by Snowflake tasks via --profile ncl_analytics_snowflake
-ncl_analytics_snowflake:
-  target: prod
-  outputs:
-    dev:
+    # Snowflake native execution targets (empty credentials - runs in Snowflake context)
+    snowflake-dev:
       type: snowflake
       account: ''
       user: ''
-      role: 'DBT_ADMIN'
+      role: DBT_ADMIN
       database: MODELLING
       schema: DBT_DEV
       warehouse: NCL_ANALYTICS_M
       threads: 16
       client_session_keep_alive: false
-      query_tag: "dbt_ncl_analytics_dev"
+      query_tag: dbt_ncl_analytics_dev
 
-    prod:
+    snowflake-prod:
       type: snowflake
       account: ''
       user: ''
-      role: 'DBT_ADMIN'
+      role: DBT_ADMIN
       database: MODELLING
       schema: DBT_PROD
       warehouse: NCL_ANALYTICS_M
       threads: 16
       client_session_keep_alive: false
-      query_tag: "dbt_ncl_analytics_prod"
+      query_tag: dbt_ncl_analytics_prod
