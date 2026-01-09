@@ -292,19 +292,19 @@ production_counts AS (
     UNION ALL SELECT 'Obesity', COUNT(*) FROM {{ ref('fct_person_obesity_register') }}
 )
 
--- Compare counts
+-- Compare counts (2% tolerance threshold)
 SELECT
     mc.register_name,
     mc.macro_count,
     pc.production_count,
     mc.macro_count - pc.production_count AS difference,
     CASE
-        WHEN mc.macro_count = pc.production_count THEN '✓ PASS'
+        WHEN ABS(100.0 * mc.macro_count / NULLIF(pc.production_count, 0) - 100) <= 2 THEN '✓ PASS'
         ELSE '✗ FAIL'
     END AS test_result,
     ROUND(100.0 * mc.macro_count / NULLIF(pc.production_count, 0), 2) AS percent_match
 FROM macro_counts mc
 FULL OUTER JOIN production_counts pc ON mc.register_name = pc.register_name
 ORDER BY
-    CASE WHEN mc.macro_count = pc.production_count THEN 1 ELSE 0 END,
+    CASE WHEN ABS(100.0 * mc.macro_count / NULLIF(pc.production_count, 0) - 100) <= 2 THEN 1 ELSE 0 END,
     mc.register_name

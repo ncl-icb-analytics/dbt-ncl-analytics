@@ -3,7 +3,8 @@
     Calculates Cancer register status at a given reference date.
 
     Business Logic:
-    - Presence of cancer diagnosis = on register (lifelong condition, no resolution)
+    - Cancer diagnosis on/after 1 April 2003 (QOF start date)
+    - Lifelong condition, no resolution
     - No age restrictions
 
     Parameters:
@@ -19,6 +20,7 @@
             is_diagnosis_code
         FROM {{ ref('int_cancer_diagnoses_all') }}
         WHERE clinical_effective_date <= {{ reference_date_expr }}
+          AND clinical_effective_date >= '2003-04-01'
           AND is_diagnosis_code = TRUE
     ),
 

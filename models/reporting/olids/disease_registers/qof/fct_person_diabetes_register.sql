@@ -61,7 +61,7 @@ WITH diabetes_person_aggregates AS (
 
 register_logic AS (
     SELECT
-        p.person_id,
+        diag.person_id,
 
         -- Age restriction: ≥17 years for diabetes register
         diag.earliest_diagnosis_date,

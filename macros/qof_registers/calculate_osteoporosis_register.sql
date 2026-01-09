@@ -2,11 +2,16 @@
     {#
     Calculates Osteoporosis register status at a given reference date.
 
-    Business Logic:
-    - Age 50-74 years at reference date
-    - Fragility fracture after April 2012
-    - Osteoporosis diagnosis (OSTEO_COD)
+    QOF Business Rules:
+    OSTEO1_REG (Age 50-74):
+    - Fragility fracture on/after 1 April 2012
+    - Osteoporosis diagnosis
     - DXA confirmation (scan OR T-score ≤ -2.5)
+
+    OSTEO2_REG (Age 75+):
+    - Fragility fracture on/after 1 April 2014
+    - Osteoporosis diagnosis
+    - NO DXA requirement
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -32,19 +37,22 @@
         GROUP BY person_id
     ),
 
+    -- Fragility fractures with date for age-specific filtering
     fragility_fractures_filtered AS (
         SELECT
             person_id,
             clinical_effective_date
         FROM {{ ref('int_fragility_fractures_all') }}
         WHERE clinical_effective_date <= {{ reference_date_expr }}
-          AND clinical_effective_date >= '2012-04-01'
     ),
 
     fragility_person_aggregates AS (
         SELECT
             person_id,
-            COUNT(*) > 0 AS has_fragility_fracture
+            -- For OSTEO1_REG: fracture on/after 2012-04-01
+            MAX(CASE WHEN clinical_effective_date >= '2012-04-01' THEN 1 ELSE 0 END) = 1 AS has_fracture_post_2012,
+            -- For OSTEO2_REG: fracture on/after 2014-04-01
+            MAX(CASE WHEN clinical_effective_date >= '2014-04-01' THEN 1 ELSE 0 END) = 1 AS has_fracture_post_2014
         FROM fragility_fractures_filtered
         GROUP BY person_id
     ),
@@ -76,7 +84,6 @@
             DATEDIFF('year', birth_date_approx, {{ reference_date_expr }}) AS age
         FROM {{ ref('dim_person_birth_death') }}
         WHERE birth_date_approx IS NOT NULL
-          AND (death_date_approx IS NULL OR death_date_approx > {{ reference_date_expr }})
     ),
 
     osteoporosis_register_logic AS (
@@ -84,10 +91,20 @@
             diag.person_id,
             'Osteoporosis' AS register_name,
             COALESCE(
-                age.age BETWEEN 50 AND 74
-                AND frac.has_fragility_fracture = TRUE
-                AND diag.earliest_diagnosis_date IS NOT NULL
-                AND (dxa.has_dxa_scan = TRUE OR dxa.has_valid_t_score = TRUE),
+                -- OSTEO1_REG: Age 50-74 + fracture post-2012 + DXA confirmation
+                (
+                    age.age BETWEEN 50 AND 74
+                    AND frac.has_fracture_post_2012 = TRUE
+                    AND diag.earliest_diagnosis_date IS NOT NULL
+                    AND (dxa.has_dxa_scan = TRUE OR dxa.has_valid_t_score = TRUE)
+                )
+                OR
+                -- OSTEO2_REG: Age 75+ + fracture post-2014 (no DXA required)
+                (
+                    age.age >= 75
+                    AND frac.has_fracture_post_2014 = TRUE
+                    AND diag.earliest_diagnosis_date IS NOT NULL
+                ),
                 FALSE
             ) AS is_on_register
         FROM osteoporosis_person_aggregates diag

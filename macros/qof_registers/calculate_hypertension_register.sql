@@ -38,7 +38,6 @@
             DATEDIFF('year', birth_date_approx, {{ reference_date_expr }}) AS age
         FROM {{ ref('dim_person_birth_death') }}
         WHERE birth_date_approx IS NOT NULL
-          AND (death_date_approx IS NULL OR death_date_approx > {{ reference_date_expr }})
     ),
 
     hypertension_register_logic AS (
