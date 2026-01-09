@@ -15,26 +15,26 @@ ncl_analytics:
     # Local development targets (require env vars)
     dev:
       type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
-      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
       authenticator: externalbrowser
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
       database: MODELLING
       schema: DBT_DEV
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', '') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'placeholder') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_ncl_analytics_dev
 
     prod:
       type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
-      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
       authenticator: externalbrowser
       role: "{{ env_var('SNOWFLAKE_ROLE', 'ANALYST') }}"
       database: MODELLING
       schema: DBT_PROD
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', '') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'placeholder') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_ncl_analytics_prod
