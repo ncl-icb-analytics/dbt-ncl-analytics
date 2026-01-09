@@ -1,0 +1,22 @@
+version: 2
+models:
+- name: stg_ethnicity_national_data_sets
+  description: Ethnicity national datasets mapped for patient-level ethnicity information
+  columns:
+  - name: sk_patientid
+    description: Foreign key - patient surrogate key
+    tests:
+    - not_null
+  - name: ethnicity_code
+    description: Ethnicity code
+  - name: ethnicity_desc
+    description: Ethnicity description
+  - name: ethnicity
+    description: Ethnicity grouping
+  - name: ethnicity_detail
+    description: More granular ethnicity detail
+  - name: record_date
+    description: Date of the ethnicity record
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
