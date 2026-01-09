@@ -16,8 +16,10 @@
         {%- endif -%}
     {%- else -%}
         {#- All other resources use environment-prefixed database names -#}
-        {%- if target.name is none or target.name == "prod" -%}
+        {%- if target.name is none or target.name in ['prod', 'snowflake-prod'] -%}
             {%- set database_prefix = none -%}
+        {%- elif target.name in ['dev', 'snowflake-dev'] -%}
+            {%- set database_prefix = 'DEV' -%}
         {%- else -%}
             {%- set database_prefix = target.name | upper | trim -%}
         {%- endif -%}
