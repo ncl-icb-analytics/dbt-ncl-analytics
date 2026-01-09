@@ -55,3 +55,6 @@ models:
 
       - name: bnf_name
         description: BNF name/description of the medication
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: snomed_code

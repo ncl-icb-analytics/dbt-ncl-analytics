@@ -82,3 +82,6 @@ models:
           - not_null
           - dbt_utils.expression_is_true:
               expression: ">= 0"
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
