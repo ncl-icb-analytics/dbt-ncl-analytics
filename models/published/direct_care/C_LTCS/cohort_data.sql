@@ -119,7 +119,11 @@ select il.patient_id
     ,wl.same_tfc_multiple_providers_flag as has_same_tfc_multiple_providers_flag
     -- polypharmacy, high risk drugs, suspected non-adherence
     ,polyp.medication_count
-    ,polyp.medication_name_list
+    ,CASE 
+        WHEN polyp.medication_name_list IS NULL THEN NULL
+        WHEN ARRAY_SIZE(polyp.medication_name_list) = 0 THEN NULL
+        ELSE polyp.medication_name_list
+      END as medication_name_list
     ,polyp.is_polypharmacy_5plus
     , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability_all_ages) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
     -- Current referrals
