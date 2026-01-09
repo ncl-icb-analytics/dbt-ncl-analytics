@@ -69,3 +69,6 @@ models:
         description: Earliest order date among current medications
         data_tests:
           - not_null
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
