@@ -1,6 +1,7 @@
 # dbt
 target/
 profiles.yml
+!.snowflake/profiles.yml
 logs/
 package-lock.yml
 dbt_internal_packages/
