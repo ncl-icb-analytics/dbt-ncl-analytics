@@ -1,4 +1,4 @@
--- Raw layer model for reference_analyst_managed.COMMUNITY_WAITING_TIMES_LOCAL
+-- Raw layer model for reference_analyst_managed.COMMUNITY_WAITING_TIMES_LOCAL_OLD
 -- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
 -- Description: Analyst-managed reference datasets and business rules
 -- This is a 1:1 passthrough from source with standardized column names
@@ -25,4 +25,4 @@ select
     "PROVIDER_SERVICE_LINE" as provider_service_line,
     "IS_EXCLUDED" as is_excluded,
     "EXCLUSION_GROUP" as exclusion_group
-from {{ source('reference_analyst_managed', 'COMMUNITY_WAITING_TIMES_LOCAL') }}
+from {{ source('reference_analyst_managed', 'COMMUNITY_WAITING_TIMES_LOCAL_OLD') }}
