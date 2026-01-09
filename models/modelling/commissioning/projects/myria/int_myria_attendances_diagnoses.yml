@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_myria_attendances_diagnoses
+    description: "Gets list of attendances and diagnoses before fiscal year 2025/26 across IP, OP, and AE encounters for Project Myria. Output is one record per diagnosis per attendance per patient."
+    columns:
+      - name: primary_id
+        description: "Unique identifier for each visit occurrence. Maps to PRIMARYKEY_ID in SUS."
+        tests:
+          - not_null
+      - name: pod_group
+        description: "Point of delivery group (IP, OP, AE)."
+      - name: pod
+        description: "Point of delivery code."
+      - name: fin_year
+        description: "Fiscal year derived from the start date."
+      - name: fin_month
+        description: "Fiscal month derived from the start date."
+      - name: patient_id
+        description: "Unique patient identifier."
+        tests:
+          - not_null
+      - name: gp_code
+        description: "General practice code at event."
+      - name: provider_code
+        description: "Organisation code for provider."
+      - name: provider_name
+        description: "Organisation name for provider."
+      - name: provider_site_code
+        description: "Site code for provider."
+      - name: provider_site_name
+        description: "Site name for provider."
+      - name: diag_n
+        description: "Diagnosis position identifier."
+      - name: diag_code
+        description: "Diagnosis code (ICD10 or mapped code depending on pod group)."
