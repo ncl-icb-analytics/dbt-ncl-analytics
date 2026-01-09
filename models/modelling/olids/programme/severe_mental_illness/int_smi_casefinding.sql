@@ -10,10 +10,17 @@
 with healthcheck_sum as (
 SELECT DISTINCT
   PERSON_ID
+  ,MAX(CASE WHEN CHECK_TYPE = 'Smoking' AND check_status in ('Not Met','Declined') THEN 'Yes' ELSE 'No' END) as SMOK_MISS
+  ,MAX(CASE WHEN CHECK_TYPE = 'Blood Pressure' AND check_status in ('Not Met','Declined') THEN 'Yes' ELSE 'No' END) as BP_MISS
+  ,MAX(CASE WHEN CHECK_TYPE = 'Alcohol' AND check_status in ('Not Met','Declined') THEN 'Yes' ELSE 'No' END) as ALC_MISS
+  ,MAX(CASE WHEN CHECK_TYPE = 'Cholesterol' AND check_status in ('Not Met','Declined') THEN 'Yes' ELSE 'No' END) as CHOL_MISS
+  ,MAX(CASE WHEN CHECK_TYPE = 'BMI' AND check_status in ('Not Met','Declined') THEN 'Yes' ELSE 'No' END) as BMI_MISS
+  ,MAX(CASE WHEN CHECK_TYPE = 'HBA1C' AND check_status in ('Not Met','Declined') THEN 'Yes' ELSE 'No' END) as HBA1C_MISS
   ,LISTAGG(CASE 
   WHEN CHECK_TYPE = 'Smoking' THEN 'Smok'
   WHEN CHECK_TYPE = 'Blood Pressure' THEN 'BP'
   WHEN CHECK_TYPE = 'Alcohol' THEN 'Alc'
+  WHEN CHECK_TYPE = 'BMI' THEN 'BMI'
   WHEN CHECK_TYPE = 'Cholesterol' THEN 'Chol'
   WHEN CHECK_TYPE = 'HBA1C' THEN 'HbA1c'
   ELSE CHECK_TYPE END ,',') AS INCOMP12M_LIST
@@ -37,8 +44,15 @@ p.PERSON_ID
 ,p.PRACTICE_CODE
 ,hc.INCOMP12M_CT
 ,hc.INCOMP12M_LIST
+,hc.SMOK_MISS
+,hc.ALC_MISS
+,hc.BP_MISS
+,hc.CHOL_MISS
+,hc.BMI_MISS
+,hc.HBA1C_MISS
 ,CASE WHEN dc.PERSON_ID IS NOT NULL THEN 'Yes' ELSE 'No' END AS HAS_DECLINED
 ,AGE
+,AGE_BAND_5Y
 ,GENDER
 ,ETHNICITY_CATEGORY
 ,ETHCAT_ORDER
