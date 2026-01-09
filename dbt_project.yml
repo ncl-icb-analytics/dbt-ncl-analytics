@@ -22,7 +22,11 @@ model-paths: ["models"]
 # Configure dbt audit schema naming
 vars:
   dbt_audit_schema: "test_audit"
-  
+
+  # QOF reference date for point-in-time register calculations
+  # Set to match EMIS extract date for validation
+  qof_reference_date: "2025-11-04"
+
   # Schema generation configuration
   # Domains listed here will have schema names automatically derived from subdomain folder structure
   # Pattern: {DOMAIN}_{SUBDOMAIN} e.g. models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES
