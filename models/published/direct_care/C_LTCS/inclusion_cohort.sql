@@ -56,8 +56,8 @@ potentially_fragmented_sk_patient_ids as (
     p.sk_patient_id,
     COUNT(DISTINCT pp.person_id) as person_count,
     ARRAY_AGG(DISTINCT pp.person_id) as person_ids
-    FROM data_lake.olids.patient p
-    JOIN data_lake.olids.patient_person pp ON p.id = pp.patient_id
+    FROM {{ source('olids', 'PATIENT') }} p
+    JOIN {{ source('olids', 'PATIENT_PERSON') }} pp ON p.id = pp.patient_id
     GROUP BY p.sk_patient_id
     HAVING COUNT(DISTINCT pp.person_id) > 1
     ORDER BY person_count DESC
@@ -67,8 +67,8 @@ potentially_fragmented_person_ids as (
         pp.person_id,
         COUNT(DISTINCT p.sk_patient_id) as patient_count,
         ARRAY_AGG(DISTINCT p.sk_patient_id) as sk_patient_ids
-    FROM data_lake.olids.patient p
-    JOIN data_lake.olids.patient_person pp ON p.id = pp.patient_id
+    FROM {{ source('olids', 'PATIENT') }} p
+    JOIN {{ source('olids', 'PATIENT_PERSON') }} pp ON p.id = pp.patient_id
     GROUP BY pp.person_id
     HAVING COUNT(DISTINCT p.sk_patient_id) > 1
     ORDER BY patient_count DESC

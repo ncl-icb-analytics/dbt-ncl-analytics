@@ -575,3 +575,35 @@ sources:
       data_type: TEXT
     - name: FIN_YEAR_SHORT_DASH
       data_type: TEXT
+  - name: PREFERRED_LANGUAGE
+    identifier: '"PREFERRED_LANGUAGE"'
+    description: Language code lookup table
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: PREFERRED_LANGUAGE
+      data_type: TEXT
+  - name: INTERPRETER_REQUIRED
+    identifier: '"INTERPRETER_REQUIRED"'
+    description: Interpreter required flag lookup table
+    columns:
+    - name: INTERPRETER_REQUIRED
+      data_type: TEXT
+  - name: IMD25_IMD
+    identifier: '"IMD25_IMD"'
+    description: IMD 2025 lookup by LSOA
+    columns:
+    - name: LSOA_CODE_2021
+      data_type: TEXT
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_DECILE
+      data_type: NUMBER
+    - name: INDEX_OF_MULTIPLE_DEPRIVATION_SCORE
+      data_type: NUMBER
+  - name: ETHNICITY_NATIONAL_DATA_SETS
+    identifier: '"ETHNICITY_NATIONAL_DATA_SETS"'
+    description: Ethnicity lookup table from national data sets
+    columns:
+    - name: SK_PATIENTID
+      data_type: NUMBER
+    - name: RECORD_DATE
+      data_type: DATE

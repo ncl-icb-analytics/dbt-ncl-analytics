@@ -51,19 +51,19 @@ from {{ref('int_pds_combined')}} pds
 left join {{ref('stg_dictionary_dbo_gender')}} as dict_g
 on pds.gender_code = dict_g.gender_code
 
-left join dev__modelling.lookup_ncl.preferred_language as dict_pl
+left join {{ source('reference_lookup_ncl', 'PREFERRED_LANGUAGE') }} as dict_pl
 on pds.preferred_language_code = dict_pl.code
 
-left join dev__modelling.lookup_ncl.interpreter_required as dict_ir
+left join {{ source('reference_lookup_ncl', 'INTERPRETER_REQUIRED') }} as dict_ir
 on pds.interpreter_required = dict_ir.interpreter_required
 
-left join modelling.lookup_ncl.lsoa_2021_ward_2025_local_authority_2025 geo
+left join {{ ref('raw_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025') }} geo
 on pds.lsoa_21 = geo.lsoa_2021_code
 
 left join {{ref('raw_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021_latest')}} nb
 on pds.lsoa_21 = nb.lsoa_2021_code
 
-left join dev__modelling.lookup_ncl.imd25_imd imd
+left join {{ source('reference_lookup_ncl', 'IMD25_IMD') }} imd
 on pds.lsoa_21 = imd.lsoa_code_2021
 
 left join {{ref('stg_dictionary_dbo_organisation')}} dict_gp
@@ -72,5 +72,5 @@ on pds.practice_code = dict_gp.organisation_code
 left join {{ref('stg_dictionary_dbo_organisationmatrixpracticeview')}} as dict_pcn
 on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
 
-left join dev__modelling.lookup_ncl.ethnicity_national_data_sets eth
+left join {{ source('reference_lookup_ncl', 'ETHNICITY_NATIONAL_DATA_SETS') }} eth
 ON pds.sk_patient_id = eth.sk_patientid

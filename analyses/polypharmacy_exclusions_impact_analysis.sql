@@ -19,7 +19,7 @@ WITH old_scope AS (
         COUNT(DISTINCT snomed_code) AS snomed_code_count,
         COUNT(DISTINCT bnf_chapter) AS chapter_count,
         LISTAGG(DISTINCT bnf_chapter, ', ') WITHIN GROUP (ORDER BY bnf_chapter) AS chapters_included
-    FROM MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_medications_list
+    FROM {{ ref('int_polypharmacy_medications_list') }}
 ),
 
 new_scope AS (
@@ -28,7 +28,7 @@ new_scope AS (
         COUNT(DISTINCT snomed_code) AS snomed_code_count,
         COUNT(DISTINCT bnf_chapter) AS chapter_count,
         LISTAGG(DISTINCT bnf_chapter, ', ') WITHIN GROUP (ORDER BY bnf_chapter) AS chapters_included
-    FROM DEV__MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_medications_list
+    FROM {{ ref('int_polypharmacy_medications_list') }}
 ),
 
 scope_comparison AS (
@@ -64,11 +64,11 @@ SELECT
 FROM (
     WITH old_persons AS (
         SELECT DISTINCT person_id
-        FROM MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_medications_current
+        FROM {{ ref('int_polypharmacy_medications_current') }}
     ),
     new_persons AS (
         SELECT DISTINCT person_id
-        FROM DEV__MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_medications_current
+        FROM {{ ref('int_polypharmacy_medications_current') }}
     ),
     person_changes AS (
         SELECT
@@ -111,14 +111,14 @@ FROM (
     SELECT
         'OLD (chapters 1-4, 6-10)' AS version,
         COUNT(*) AS row_count
-    FROM MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_medications_current
+    FROM {{ ref('int_polypharmacy_medications_current') }}
 
     UNION ALL
 
     SELECT
         'NEW (exclusion-based)' AS version,
         COUNT(*) AS row_count
-    FROM DEV__MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_medications_current
+    FROM {{ ref('int_polypharmacy_medications_current') }}
 )
 
 UNION ALL
@@ -137,11 +137,11 @@ SELECT
 FROM (
     WITH old_persons AS (
         SELECT DISTINCT person_id
-        FROM MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
     ),
     new_persons AS (
         SELECT DISTINCT person_id
-        FROM DEV__MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
     ),
     person_changes AS (
         SELECT
@@ -154,7 +154,7 @@ FROM (
             COUNT(*) AS total_persons,
             SUM(CASE WHEN is_polypharmacy_5plus THEN 1 ELSE 0 END) AS count_5plus,
             SUM(CASE WHEN is_polypharmacy_10plus THEN 1 ELSE 0 END) AS count_10plus
-        FROM MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
     ),
     new_summary AS (
         SELECT
@@ -162,7 +162,7 @@ FROM (
             COUNT(*) AS total_persons,
             SUM(CASE WHEN is_polypharmacy_5plus THEN 1 ELSE 0 END) AS count_5plus,
             SUM(CASE WHEN is_polypharmacy_10plus THEN 1 ELSE 0 END) AS count_10plus
-        FROM DEV__MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
     )
     SELECT
         version,
@@ -202,12 +202,12 @@ SELECT
 FROM (
     WITH old_5plus AS (
         SELECT DISTINCT person_id
-        FROM MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
         WHERE is_polypharmacy_5plus = TRUE
     ),
     new_5plus AS (
         SELECT DISTINCT person_id
-        FROM DEV__MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
         WHERE is_polypharmacy_5plus = TRUE
     ),
     changes_5plus AS (
@@ -249,12 +249,12 @@ SELECT
 FROM (
     WITH old_10plus AS (
         SELECT DISTINCT person_id
-        FROM MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
         WHERE is_polypharmacy_10plus = TRUE
     ),
     new_10plus AS (
         SELECT DISTINCT person_id
-        FROM DEV__MODELLING.OLIDS_MEDICATIONS.int_polypharmacy_current
+        FROM {{ ref('int_polypharmacy_current') }}
         WHERE is_polypharmacy_10plus = TRUE
     ),
     changes_10plus AS (
@@ -302,7 +302,7 @@ FROM (
             '5+: ', SUM(CASE WHEN is_polypharmacy_5plus THEN 1 ELSE 0 END),
             ' | 10+: ', SUM(CASE WHEN is_polypharmacy_10plus THEN 1 ELSE 0 END)
         ) AS status_breakdown
-    FROM REPORTING.OLIDS_PERSON_STATUS.fct_person_polypharmacy_current
+    FROM {{ ref('fct_person_polypharmacy_current') }}
 
     UNION ALL
 
@@ -313,7 +313,7 @@ FROM (
             '5+: ', SUM(CASE WHEN is_polypharmacy_5plus THEN 1 ELSE 0 END),
             ' | 10+: ', SUM(CASE WHEN is_polypharmacy_10plus THEN 1 ELSE 0 END)
         ) AS status_breakdown
-    FROM DEV__REPORTING.OLIDS_PERSON_STATUS.fct_person_polypharmacy_current
+    FROM {{ ref('fct_person_polypharmacy_current') }}
 )
 
 ORDER BY section, version DESC;
