@@ -26,6 +26,10 @@ models:
         description: >
           Boolean flag indicating whether the patient has the same TFC code
           assigned to multiple providers.
+
+      - name: current_waiting_list_arrays
+        description: Array of waiting list objects for the patient, sorted by days on waiting list.
+    
     tests:
     - dbt_expectations.expect_table_row_count_to_be_between:
         min_value: 1

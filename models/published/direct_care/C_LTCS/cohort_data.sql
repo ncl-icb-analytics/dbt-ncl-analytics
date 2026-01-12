@@ -117,6 +117,7 @@ select il.patient_id
     ,zeroifnull(wl.wl_current_distinct_providers_count) as wl_provider_count
     ,zeroifnull(wl.wl_current_distinct_tfc_count) as wl_specialty_count
     ,wl.same_tfc_multiple_providers_flag as has_same_tfc_multiple_providers_flag
+    ,wl.current_waiting_list_arrays
     -- polypharmacy, high risk drugs, suspected non-adherence
     ,polyp.medication_count
     ,CASE 
