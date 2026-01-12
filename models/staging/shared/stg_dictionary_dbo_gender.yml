@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_dictionary_dbo_gender
+    description: Gender code dictionary from data warehouse. One row per gender code.

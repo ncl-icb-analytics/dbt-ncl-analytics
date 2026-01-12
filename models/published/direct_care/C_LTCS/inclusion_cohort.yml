@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: inclusion_cohort
-    description: ""
+    description: Patients eligible for C-LTCS based on multimorbidity and outpatient activity. One row per patient with eligibility flag.
     columns:
       - name: patient_id
         data_type: number

@@ -1,6 +1,6 @@
 models:
   - name: stg_sus_op_appointment_commissioning_grouping_unbundled_hrg
-    description: ""
+    description: Unbundled HRGs for outpatient appointments from SUS OP. One row per unbundled HRG per appointment.
     tests:
     - dbt_utils.unique_combination_of_columns:
         combination_of_columns:
