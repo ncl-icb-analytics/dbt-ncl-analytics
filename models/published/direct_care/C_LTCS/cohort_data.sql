@@ -126,6 +126,9 @@ select il.patient_id
       END as medication_name_list
     ,polyp.is_polypharmacy_5plus
     , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability_all_ages) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
+    -- Recent medications (last 30 days and last year)
+    ,rm.medications_recent_12mo
+    ,rm.unique_active_ingredient_count_12mo
     -- Current referrals
 
     -- Current risk scores?
@@ -159,5 +162,7 @@ left join {{ref('fct_person_sus_ae_recent')}} aea
     on il.patient_id  = aea.sk_patient_id
 left join {{ref('fct_person_gp_recent')}} gpa
     on il.patient_id  = gpa.sk_patient_id
+left join {{ref('fct_person_medications_recent_30d')}} rm
+    on il.olids_id = rm.person_id
 left join  {{source('c_ltcs','OP_OE_RATIO')}} rat
     on il.patient_id  = rat.patient_id 
