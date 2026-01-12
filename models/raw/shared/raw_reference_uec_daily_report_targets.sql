@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.UEC__DAILY__REPORT_TARGETS
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.UEC__DAILY__REPORT_TARGETS \ndbt: source(''reference_analyst_managed'', ''UEC__DAILY__REPORT_TARGETS'') \nColumns:\n  ID -> id\n  DATASET -> dataset\n  METRIC_NAME -> metric_name\n  TARGET_DESC -> target_desc\n  TARGET_VALUE -> target_value\n  TARGET_DIRECTION -> target_direction\n  TARGET_LENIENCE_AMOUNT -> target_lenience_amount\n  TARGET_LENIENCE_TYPE -> target_lenience_type\n  ACTIVE_FROM -> active_from\n  ACTIVE_UNTIL -> active_until\n  SITE -> site"
+    )
+}}
 select
     "ID" as id,
     "DATASET" as dataset,

@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.IA_NEW_USERS_MONTHLY
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.IA_NEW_USERS_MONTHLY \ndbt: source(''reference_analyst_managed'', ''IA_NEW_USERS_MONTHLY'') \nColumns:\n  Full name -> full_name\n  Username -> username\n  Trust / Hospital -> trust_hospital\n  What best describes your role? -> what_best_describes_your_role\n  Band/Grade -> band_grade\n  Date and time registered -> date_and_time_registered\n  Full name with link -> full_name_with_link\n  Full name 2 -> full_name_2"
+    )
+}}
 select
     "Full name" as full_name,
     "Username" as username,

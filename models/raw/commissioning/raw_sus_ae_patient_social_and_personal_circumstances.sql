@@ -1,7 +1,8 @@
--- Raw layer model for sus_ae.patient.social_and_personal_circumstances
--- Source: "DATA_LAKE"."SUS_UNIFIED_ECDS"
--- Description: SUS emergency care attendances and activity
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.patient.social_and_personal_circumstances \ndbt: source(''sus_ae'', ''patient.social_and_personal_circumstances'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  SOCIAL_AND_PERSONAL_CIRCUMSTANCES_ID -> social_and_personal_circumstances_id\n  code -> code\n  recorded_timestamp -> recorded_timestamp\n  dmicImportLogId -> dmic_import_log_id"
+    )
+}}
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,

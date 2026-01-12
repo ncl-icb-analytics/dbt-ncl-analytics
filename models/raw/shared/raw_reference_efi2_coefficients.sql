@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.EFI2_COEFFICIENTS
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.EFI2_COEFFICIENTS \ndbt: source(''reference_analyst_managed'', ''EFI2_COEFFICIENTS'') \nColumns:\n  MODEL_NAME -> model_name\n  VARIABLE_NAME -> variable_name\n  VARIABLE_CATEGORY -> variable_category\n  COEFFICIENT -> coefficient\n  TRANSFORMED_COEFFICIENT -> transformed_coefficient\n  DESCRIPTION -> description\n  VARIABLE_TYPE -> variable_type\n  MODEL_DESCRIPTION -> model_description"
+    )
+}}
 select
     "MODEL_NAME" as model_name,
     "VARIABLE_NAME" as variable_name,

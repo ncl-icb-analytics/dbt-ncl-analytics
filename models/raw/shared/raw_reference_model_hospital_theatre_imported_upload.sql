@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.model_hospital_theatre_imported_upload
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.model_hospital_theatre_imported_upload \ndbt: source(''reference_analyst_managed'', ''model_hospital_theatre_imported_upload'') \nColumns:\n  Compartment -> compartment\n  SubCompartment -> sub_compartment\n  Domain -> domain\n  Metric -> metric\n  ProviderCode -> provider_code\n  ProviderName -> provider_name\n  FilterName -> filter_name\n  ReportingDate -> reporting_date\n  ProviderValue -> provider_value\n  MedianValue -> median_value\n  MeanValue -> mean_value\n  BenchmarkValue -> benchmark_value\n  PeerValue -> peer_value\n  PeerMean -> peer_mean\n  MinValue -> min_value\n  MaxValue -> max_value\n  Numerator Description -> numerator_description\n  Num: ProviderValue -> num:_provider_value\n  Num: MedianValue -> num:_median_value\n  Denominator Description -> denominator_description\n  Denom: ProviderValue -> denom:_provider_value\n  Denom: MedianValue -> denom:_median_value"
+    )
+}}
 select
     "Compartment" as compartment,
     "SubCompartment" as sub_compartment,

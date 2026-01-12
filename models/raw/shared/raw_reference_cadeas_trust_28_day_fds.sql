@@ -1,7 +1,8 @@
--- Raw layer model for reference_cancer_cwt_alliance.CADEAS__TRUST__28_DAY_FDS
--- Source: "DATA_LAKE__NCL"."CANCER__CWT_ALLIANCE"
--- Description: Cancer waiting times alliance data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Cancer waiting times alliance data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.CANCER__CWT_ALLIANCE.CADEAS__TRUST__28_DAY_FDS \ndbt: source(''reference_cancer_cwt_alliance'', ''CADEAS__TRUST__28_DAY_FDS'') \nColumns:\n  Provider.Code.FDS -> provider_code_fds\n  Month.Number -> month_number\n  Month -> month\n  Year -> year\n  DCO -> dco\n  STP -> stp\n  CCG -> ccg\n  Provider.Code.DTT -> provider_code_dtt\n  Pathway.End.Reason -> pathway_end_reason\n  Priority.Type -> priority_type\n  Source.of.referral.for.outpatients -> source_of_referral_for_outpatients\n  Cancer.Report.Category -> cancer_report_category\n  Primary.Cancer.Site -> primary_cancer_site\n  Clock.Stop.Type -> clock_stop_type\n  Exclusion.Reason -> exclusion_reason\n  NoPatients -> no_patients\n  DaysWithin7 -> days_within7\n  Days8To14 -> days8_to14\n  Days15To21 -> days15_to21\n  Days22To28 -> days22_to28\n  Days29To35 -> days29_to35\n  Days36To42 -> days36_to42\n  Days43To49 -> days43_to49\n  Days50To62 -> days50_to62\n  Days63To76 -> days63_to76\n  Days77To90 -> days77_to90\n  Days91To104 -> days91_to104\n  DaysMoreThan104 -> days_more_than104\n  Trust_Name -> trust_name\n  Cancer_Alliance -> cancer_alliance\n  _TIMESTAMP -> timestamp"
+    )
+}}
 select
     "Provider.Code.FDS" as provider_code_fds,
     "Month.Number" as month_number,

@@ -1,7 +1,8 @@
--- Raw layer model for fact_practice.FactListSizeLocation
--- Source: "DATA_LAKE"."FACT_PRACTICE"
--- Description: Practice fact tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Practice fact tables). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.FACT_PRACTICE.FactListSizeLocation \ndbt: source(''fact_practice'', ''FactListSizeLocation'') \nColumns:\n  SK_ListSizeSourceID -> sk_list_size_source_id\n  SK_OrganisationID -> sk_organisation_id\n  SK_ListSizeAgeBandID -> sk_list_size_age_band_id\n  SK_GenderID -> sk_gender_id\n  Easting -> easting\n  Northing -> northing\n  Period -> period\n  Value -> value"
+    )
+}}
 select
     "SK_ListSizeSourceID" as sk_list_size_source_id,
     "SK_OrganisationID" as sk_organisation_id,

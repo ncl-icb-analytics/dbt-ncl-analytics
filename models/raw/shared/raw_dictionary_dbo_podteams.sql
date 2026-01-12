@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.PODTeams
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.PODTeams \ndbt: source(''dictionary_dbo'', ''PODTeams'') \nColumns:\n  SK_PODTeamID -> sk_pod_team_id\n  PODTeamCode -> pod_team_code\n  PODTeamName -> pod_team_name\n  SK_ServiceProviderGroupID -> sk_service_provider_group_id\n  IsTestOrganisation -> is_test_organisation\n  Region -> region"
+    )
+}}
 select
     "SK_PODTeamID" as sk_pod_team_id,
     "PODTeamCode" as pod_team_code,

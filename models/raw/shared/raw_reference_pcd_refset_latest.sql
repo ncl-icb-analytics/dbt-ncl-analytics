@@ -1,7 +1,8 @@
--- Raw layer model for reference_terminology.PCD_REFSET_LATEST
--- Source: "DATA_LAKE__NCL"."TERMINOLOGY"
--- Description: Reference terminology data including SNOMED, BNF, and other code sets
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference terminology data including SNOMED, BNF, and other code sets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.TERMINOLOGY.PCD_REFSET_LATEST \ndbt: source(''reference_terminology'', ''PCD_REFSET_LATEST'') \nColumns:\n  CLUSTER_ID -> cluster_id\n  CLUSTER_DESCRIPTION -> cluster_description\n  SNOMED_CODE -> snomed_code\n  SNOMED_CODE_DESCRIPTION -> snomed_code_description\n  PCD_REFSET_ID -> pcd_refset_id\n  SERVICE_AND_RULESET -> service_and_ruleset"
+    )
+}}
 select
     "CLUSTER_ID" as cluster_id,
     "CLUSTER_DESCRIPTION" as cluster_description,

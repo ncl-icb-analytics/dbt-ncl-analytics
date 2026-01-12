@@ -1,7 +1,8 @@
--- Raw layer model for reference_cancer_emis.FIT_MONTHLY
--- Source: "DATA_LAKE__NCL"."CANCER__EMIS"
--- Description: Cancer EMIS data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Cancer EMIS data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.CANCER__EMIS.FIT_MONTHLY \ndbt: source(''reference_cancer_emis'', ''FIT_MONTHLY'') \nColumns:\n  Organisation -> organisation\n  CDB -> cdb\n  Population Count -> population_count\n  Parent -> parent\n  % -> percent\n  Males -> males\n  Females -> females\n  Excluded -> excluded\n  Status -> status\n  _Year -> year\n  _Month -> month\n  _TIMESTAMP -> timestamp"
+    )
+}}
 select
     "Organisation" as organisation,
     "CDB" as cdb,

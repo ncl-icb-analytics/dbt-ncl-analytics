@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.UnitMapping
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.UnitMapping \ndbt: source(''dictionary_dbo'', ''UnitMapping'') \nColumns:\n  SK_UnitID -> sk_unit_id\n  UnitLabel -> unit_label"
+    )
+}}
 select
     "SK_UnitID" as sk_unit_id,
     "UnitLabel" as unit_label

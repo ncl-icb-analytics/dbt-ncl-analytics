@@ -1,7 +1,8 @@
--- Raw layer model for reference_data_management.TABLE_SCHEMA_DATABASE
--- Source: "DATA_LAKE__NCL"."DATA_MANAGEMENT"
--- Description: Data management reference datasets
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Data management reference datasets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.DATA_MANAGEMENT.TABLE_SCHEMA_DATABASE \ndbt: source(''reference_data_management'', ''TABLE_SCHEMA_DATABASE'') \nColumns:\n  DATABASE_NAME -> database_name\n  TABLE_SCHEMA -> table_schema\n  TABLE_NAME -> table_name\n  ROW_COUNT -> row_count\n  COMMENT -> comment\n  LAST_DDL_BY -> last_ddl_by\n  TABLE_TYPE -> table_type\n  CREATED -> created\n  LAST_ALTERED -> last_altered\n  LAST_DDL -> last_ddl"
+    )
+}}
 select
     "DATABASE_NAME" as database_name,
     "TABLE_SCHEMA" as table_schema,

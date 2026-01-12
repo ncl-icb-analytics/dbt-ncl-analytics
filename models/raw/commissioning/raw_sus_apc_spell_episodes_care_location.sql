@@ -1,7 +1,8 @@
--- Raw layer model for sus_apc.spell.episodes.care_location
--- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
--- Description: SUS admitted patient care episodes and procedures
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS admitted patient care episodes and procedures). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_APC.spell.episodes.care_location \ndbt: source(''sus_apc'', ''spell.episodes.care_location'') \nColumns:\n  end_date -> end_date\n  security_level -> security_level\n  start_time -> start_time\n  CARE_LOCATION_ID -> care_location_id\n  site_code_of_treatment -> site_code_of_treatment\n  class -> class\n  type -> type\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  EPISODES_ID -> episodes_id\n  night_period_availability -> night_period_availability\n  start_date -> start_date\n  end_time -> end_time\n  dmicImportLogId -> dmic_import_log_id\n  stage -> stage\n  ward_stay_sequence_number -> ward_stay_sequence_number\n  ward_code -> ward_code\n  intended_care_intensity -> intended_care_intensity\n  intended_age_group -> intended_age_group\n  sex_of_patients -> sex_of_patients\n  day_period_availability -> day_period_availability"
+    )
+}}
 select
     "end_date" as end_date,
     "security_level" as security_level,

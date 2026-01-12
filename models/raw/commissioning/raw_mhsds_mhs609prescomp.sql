@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS609PresComp
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS609PresComp \ndbt: source(''mhsds'', ''MHS609PresComp'') \nColumns:\n  SK -> sk\n  ServiceRequestID -> service_request_id\n  FindSchemeInUse -> find_scheme_in_use\n  PresComp -> pres_comp\n  PresCompCodSig -> pres_comp_cod_sig\n  PresCompDate -> pres_comp_date\n  RecordNumber -> record_number\n  MHS609UniqID -> mhs609_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqServReqID -> uniq_serv_req_id\n  UniqMonthID -> uniq_month_id\n  RecordStartDate -> record_start_date\n  RecordEndDate -> record_end_date\n  EFFECTIVE_FROM -> effective_from\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset\n  RowNumber -> row_number"
+    )
+}}
 select
     "SK" as sk,
     "ServiceRequestID" as service_request_id,

@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.OutputArea
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.OutputArea \ndbt: source(''dictionary_dbo'', ''OutputArea'') \nColumns:\n  SK_OutputAreaID -> sk_output_area_id\n  SK_OutputAreaParentID -> sk_output_area_parent_id\n  CensusYear -> census_year\n  OACode -> oa_code\n  OAName -> oa_name\n  OAType -> oa_type\n  GeoEasting -> geo_easting\n  GeoNorthing -> geo_northing\n  GeoLatitude -> geo_latitude\n  GeoLongitude -> geo_longitude\n  GeoCentroid_text -> geo_centroid_text\n  GeoCentroid -> geo_centroid\n  PopEasting -> pop_easting\n  PopNorthing -> pop_northing\n  PopLatitude -> pop_latitude\n  PopLongitude -> pop_longitude\n  PopCentroid_text -> pop_centroid_text\n  PopCentroid -> pop_centroid\n  OAShape_text -> oa_shape_text\n  OAShape -> oa_shape\n  TownsendScore -> townsend_score"
+    )
+}}
 select
     "SK_OutputAreaID" as sk_output_area_id,
     "SK_OutputAreaParentID" as sk_output_area_parent_id,

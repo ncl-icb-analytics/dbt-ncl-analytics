@@ -1,7 +1,8 @@
--- Raw layer model for sus_ae.clinical.diagnoses.snomed.max_core_diagnoses
--- Source: "DATA_LAKE"."SUS_UNIFIED_ECDS"
--- Description: SUS emergency care attendances and activity
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.clinical.diagnoses.snomed.max_core_diagnoses \ndbt: source(''sus_ae'', ''clinical.diagnoses.snomed.max_core_diagnoses'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  SNOMED_ID -> snomed_id\n  MAX_CORE_DIAGNOSES_ID -> max_core_diagnoses_id\n  code -> code\n  equivalent_ae_code -> equivalent_ae_code\n  is_injury_related -> is_injury_related\n  is_aec_related -> is_aec_related\n  is_allergy_related -> is_allergy_related\n  is_applicable_to_females -> is_applicable_to_females\n  is_applicable_to_males -> is_applicable_to_males\n  is_notifiable_disease -> is_notifiable_disease\n  dmicImportLogId -> dmic_import_log_id"
+    )
+}}
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,

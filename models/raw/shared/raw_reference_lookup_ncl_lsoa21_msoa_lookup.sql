@@ -1,7 +1,8 @@
--- Raw layer model for reference_lookup_ncl.LSOA21_MSOA_LOOKUP
--- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules in the MODELLING environment
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules in the MODELLING environment). 1:1 passthrough with cleaned column names. \nSource: MODELLING.LOOKUP_NCL.LSOA21_MSOA_LOOKUP \ndbt: source(''reference_lookup_ncl'', ''LSOA21_MSOA_LOOKUP'') \nColumns:\n  LSOA21CD -> lsoa21_cd\n  LSOA21NM -> lsoa21_nm\n  MSOA21CD -> msoa21_cd\n  MSOA21NM -> msoa21_nm\n  LAD22CD -> lad22_cd\n  LAD22NM -> lad22_nm"
+    )
+}}
 select
     "LSOA21CD" as lsoa21_cd,
     "LSOA21NM" as lsoa21_nm,

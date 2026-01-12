@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_snomed.Code
--- Source: "Dictionary"."Snomed"
--- Description: Reference data for snomed
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data for snomed). 1:1 passthrough with cleaned column names. \nSource: Dictionary.Snomed.Code \ndbt: source(''dictionary_snomed'', ''Code'') \nColumns:\n  SK_SnomedID -> sk_snomed_id\n  SnomedItemID -> snomed_item_id\n  SnomedNamespaceID -> snomed_namespace_id\n  SnomedPartitionID -> snomed_partition_id\n  SnomedCheckDigit -> snomed_check_digit\n  InNationalDataset -> in_national_dataset\n  SnomedCodeType -> snomed_code_type\n  SK_SnomedConceptID -> sk_snomed_concept_id\n  SK_SnomedDescriptionID -> sk_snomed_description_id\n  IsSensitive -> is_sensitive"
+    )
+}}
 select
     "SK_SnomedID" as sk_snomed_id,
     "SnomedItemID" as snomed_item_id,

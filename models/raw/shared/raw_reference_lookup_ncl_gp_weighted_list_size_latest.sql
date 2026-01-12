@@ -1,7 +1,8 @@
--- Raw layer model for reference_lookup_ncl.GP_WEIGHTED_LIST_SIZE_LATEST
--- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules in the MODELLING environment
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules in the MODELLING environment). 1:1 passthrough with cleaned column names. \nSource: MODELLING.LOOKUP_NCL.GP_WEIGHTED_LIST_SIZE_LATEST \ndbt: source(''reference_lookup_ncl'', ''GP_WEIGHTED_LIST_SIZE_LATEST'') \nColumns:\n  SITE -> site\n  FINANCIAL_QUARTER_DATE -> financial_quarter_date\n  PCT -> pct\n  PRACTICE_CODE -> practice_code\n  PRACTICE_NAME -> practice_name\n  GMS_PMS_FLAG -> gms_pms_flag\n  COMMISSIONER_CODE -> commissioner_code\n  COMMISSIONER_NAME -> commissioner_name\n  PRACTICE_LIST_SIZE -> practice_list_size\n  PRACTICE_NORMALISED_WEIGHTED_LIST_SIZE -> practice_normalised_weighted_list_size\n  REPORT_EXECUTION_DATETIME -> report_execution_datetime"
+    )
+}}
 select
     "SITE" as site,
     "FINANCIAL_QUARTER_DATE" as financial_quarter_date,

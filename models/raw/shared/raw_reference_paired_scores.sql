@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.Paired Scores
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.Paired Scores \ndbt: source(''reference_analyst_managed'', ''Paired Scores'') \nColumns:\n  Organisation Code -> organisation_code\n  Organisation Name -> organisation_name\n  Measure Name -> measure_name\n  Metric -> metric\n  April 2023 -> april_2023\n  May 2023 -> may_2023\n  June 2023 -> june_2023\n  July 2023 -> july_2023\n  August 2023 -> august_2023\n  September 2023 -> september_2023\n  October 2023 -> october_2023\n  November 2023 -> november_2023\n  December 2023 -> december_2023\n  January 2024 -> january_2024\n  February 2024 -> february_2024\n  March 2024 -> march_2024\n  April 2024 -> april_2024\n  May 2024 -> may_2024\n  June 2024 -> june_2024\n  July 2024 -> july_2024\n  August 2024 -> august_2024\n  September 2024 -> september_2024\n  October 2024 -> october_2024\n  November 2024 -> november_2024\n  December 2024 -> december_2024\n  January 2025 -> january_2025\n  February 2025 -> february_2025\n  March 2025 -> march_2025\n  April 2025 -> april_2025\n  May 2025 -> may_2025\n  June 2025 -> june_2025\n  July 2025 -> july_2025\n  August 2025 -> august_2025\n  September 2025 -> september_2025"
+    )
+}}
 select
     "Organisation Code" as organisation_code,
     "Organisation Name" as organisation_name,

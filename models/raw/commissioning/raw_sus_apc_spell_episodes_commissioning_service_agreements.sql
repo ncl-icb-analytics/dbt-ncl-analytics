@@ -1,7 +1,8 @@
--- Raw layer model for sus_apc.spell.episodes.commissioning.service_agreements
--- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
--- Description: SUS admitted patient care episodes and procedures
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS admitted patient care episodes and procedures). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_APC.spell.episodes.commissioning.service_agreements \ndbt: source(''sus_apc'', ''spell.episodes.commissioning.service_agreements'') \nColumns:\n  commissioner_assignment_period_end_date -> commissioner_assignment_period_end_date\n  commissioning_serial_number -> commissioning_serial_number\n  line_number -> line_number\n  commissioner_reference_number -> commissioner_reference_number\n  provider_reference_number -> provider_reference_number\n  service_code -> service_code\n  dmicImportLogId -> dmic_import_log_id\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  EPISODES_ID -> episodes_id\n  SERVICE_AGREEMENTS_ID -> service_agreements_id\n  commissioner -> commissioner\n  is_commissioner_recognised -> is_commissioner_recognised\n  commissioner_derived -> commissioner_derived\n  commissioner_assignment_period_start_date -> commissioner_assignment_period_start_date"
+    )
+}}
 select
     "commissioner_assignment_period_end_date" as commissioner_assignment_period_end_date,
     "commissioning_serial_number" as commissioning_serial_number,

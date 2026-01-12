@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024 \ndbt: source(''reference_analyst_managed'', ''ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024'') \nColumns:\n  LADCODE23 -> ladcode23\n  LANAME23 -> laname23\n  COUNTRY -> country\n  SEX -> sex\n  AGE -> age\n  POPULATION_2011 -> population_2011\n  POPULATION_2012 -> population_2012\n  POPULATION_2013 -> population_2013\n  POPULATION_2014 -> population_2014\n  POPULATION_2015 -> population_2015\n  POPULATION_2016 -> population_2016\n  POPULATION_2017 -> population_2017\n  POPULATION_2018 -> population_2018\n  POPULATION_2019 -> population_2019\n  POPULATION_2020 -> population_2020\n  POPULATION_2021 -> population_2021\n  POPULATION_2022 -> population_2022\n  POPULATION_2023 -> population_2023\n  POPULATION_2024 -> population_2024"
+    )
+}}
 select
     "LADCODE23" as ladcode23,
     "LANAME23" as laname23,

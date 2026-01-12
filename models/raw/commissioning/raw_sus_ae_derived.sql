@@ -1,7 +1,8 @@
--- Raw layer model for sus_ae.derived
--- Source: "DATA_LAKE"."SUS_UNIFIED_ECDS"
--- Description: SUS emergency care attendances and activity
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.derived \ndbt: source(''sus_ae'', ''derived'') \nColumns:\n  dmicSubICBRegistrationSubmitted -> dmic_sub_icb_registration_submitted\n  dmicElectoralWardCode -> dmic_electoral_ward_code\n  PRIMARYKEY_ID -> primarykey_id\n  dmicSubICBResidenceSubmitted -> dmic_sub_icb_residence_submitted\n  dmicCommissionerDerivationReason -> dmic_commissioner_derivation_reason\n  CqcCareHomeCode -> cqc_care_home_code\n  dmicICBCommissioner -> dmic_icb_commissioner\n  dmicSubICBCommissioner -> dmic_sub_icb_commissioner\n  dmicICBRegistrationSubmitted -> dmic_icb_registration_submitted\n  dmicICBResidenceSubmitted -> dmic_icb_residence_submitted\n  dmicImportLogId -> dmic_import_log_id\n  dmicLSOA2021 -> dmic_lsoa2021"
+    )
+}}
 select
     "dmicSubICBRegistrationSubmitted" as dmic_sub_icb_registration_submitted,
     "dmicElectoralWardCode" as dmic_electoral_ward_code,

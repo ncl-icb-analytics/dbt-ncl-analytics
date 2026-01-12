@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS801ClusterTool
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS801ClusterTool \ndbt: source(''mhsds'', ''MHS801ClusterTool'') \nColumns:\n  SK -> sk\n  ClustId -> clust_id\n  LocalPatientId -> local_patient_id\n  ClustCat -> clust_cat\n  AssToolCompDate -> ass_tool_comp_date\n  AssToolCompTime -> ass_tool_comp_time\n  ClustToolAssReason -> clust_tool_ass_reason\n  MHCareClusterSuperClass -> mh_care_cluster_super_class\n  AMHCareClustCodeInit -> amh_care_clust_code_init\n  LDCareClustInit -> ld_care_clust_init\n  FLDCareClustInit -> fld_care_clust_init\n  RecordNumber -> record_number\n  MHS801UniqID -> mhs801_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqClustID -> uniq_clust_id\n  UniqMonthID -> uniq_month_id\n  EFFECTIVE_FROM -> effective_from\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  Unique_LocalPatientId -> unique_local_patient_id\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "ClustId" as clust_id,

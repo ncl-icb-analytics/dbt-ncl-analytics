@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.CANCER__TRAJECTORY_SUBMISSIONS
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.CANCER__TRAJECTORY_SUBMISSIONS \ndbt: source(''reference_analyst_managed'', ''CANCER__TRAJECTORY_SUBMISSIONS'') \nColumns:\n  COLLECTIONID -> collectionid\n  SELECTEDICB -> selectedicb\n  ASSOCIATEDORG -> associatedorg\n  SECONDARYASSOCORG -> secondaryassocorg\n  MEASUREID -> measureid\n  MEASURETYPE -> measuretype\n  MEASURESOURCE -> measuresource\n  MEASURENAME -> measurename\n  DIMENSIONID -> dimensionid\n  DIMENSIONTYPE -> dimensiontype\n  DIMENSIONNAME -> dimensionname\n  DATA -> data\n  COMMENTS -> comments"
+    )
+}}
 select
     "COLLECTIONID" as collectionid,
     "SELECTEDICB" as selectedicb,

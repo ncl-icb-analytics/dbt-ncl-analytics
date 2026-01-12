@@ -1,7 +1,8 @@
--- Raw layer model for csds.CYP403CPP
--- Source: "DATA_LAKE"."CSDS"
--- Description: Community services dataset
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Community services dataset). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.CSDS.CYP403CPP \ndbt: source(''csds'', ''CYP403CPP'') \nColumns:\n  SK -> sk\n  LOCAL PATIENT IDENTIFIER (EXTENDED) -> local_patient_identifier_extended\n  CHILD PROTECTION PLAN REASON CODE -> child_protection_plan_reason_code\n  CHILD PROTECTION PLAN START DATE -> child_protection_plan_start_date\n  CHILD PROTECTION PLAN END DATE -> child_protection_plan_end_date\n  EFFECTIVE FROM -> effective_from\n  RECORD NUMBER -> record_number\n  CYP403 UNIQUE ID -> cyp403_unique_id\n  ORGANISATION IDENTIFIER (CODE OF PROVIDER) -> organisation_identifier_code_of_provider\n  PERSON ID -> person_id\n  UNIQUE SUBMISSION ID -> unique_submission_id\n  AGE AT CHILD PROTECTION PLAN START DATE -> age_at_child_protection_plan_start_date\n  AGE AT CHILD PROTECTION PLAN END DATE -> age_at_child_protection_plan_end_date\n  DURATION SPENT ON CHILD PROTECTION PLAN -> duration_spent_on_child_protection_plan\n  AGE AT CHILD PROTECTION PLAN START DATE (YEARS) -> age_at_child_protection_plan_start_date_years\n  AGE AT CHILD PROTECTION PLAN END DATE (YEARS) -> age_at_child_protection_plan_end_date_years\n  RECORD START DATE -> record_start_date\n  RECORD END DATE -> record_end_date\n  UNIQUE MONTH ID -> unique_month_id\n  AGE BAND (CHILD PROTECTION PLAN START DATE) -> age_band_child_protection_plan_start_date\n  AGE BAND (CHILD PROTECTION PLAN END DATE) -> age_band_child_protection_plan_end_date\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicCCG -> dmic_ccg\n  Unique_LocalPatientId -> unique_local_patient_id\n  UniqueCYPHS_ID_Patient -> unique_cyphs_id_patient\n  FILE TYPE -> file_type\n  REPORTING PERIOD START DATE -> reporting_period_start_date\n  REPORTING PERIOD END DATE -> reporting_period_end_date"
+    )
+}}
 select
     "SK" as sk,
     "LOCAL PATIENT IDENTIFIER (EXTENDED)" as local_patient_identifier_extended,

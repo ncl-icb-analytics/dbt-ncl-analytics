@@ -1,7 +1,8 @@
--- Raw layer model for reference_data_management.GP_WEIGHTED_LIST_SIZE
--- Source: "DATA_LAKE__NCL"."DATA_MANAGEMENT"
--- Description: Data management reference datasets
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Data management reference datasets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.DATA_MANAGEMENT.GP_WEIGHTED_LIST_SIZE \ndbt: source(''reference_data_management'', ''GP_WEIGHTED_LIST_SIZE'') \nColumns:\n  SITE -> site\n  FINANCIAL_QUARTER_DATE -> financial_quarter_date\n  PCT -> pct\n  PRACTICE_CODE -> practice_code\n  PRACTICE_NAME -> practice_name\n  GMS_PMS_FLAG -> gms_pms_flag\n  COMMISSIONER_CODE -> commissioner_code\n  COMMISSIONER_NAME -> commissioner_name\n  PRACTICE_LIST_SIZE -> practice_list_size\n  PRACTICE_NORMALISED_WEIGHTED_LIST_SIZE -> practice_normalised_weighted_list_size\n  REPORT_EXECUTION_DATETIME -> report_execution_datetime"
+    )
+}}
 select
     "SITE" as site,
     "FINANCIAL_QUARTER_DATE" as financial_quarter_date,

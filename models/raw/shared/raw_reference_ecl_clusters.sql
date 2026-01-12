@@ -1,7 +1,8 @@
--- Raw layer model for reference_terminology.ECL_CLUSTERS
--- Source: "DATA_LAKE__NCL"."TERMINOLOGY"
--- Description: Reference terminology data including SNOMED, BNF, and other code sets
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference terminology data including SNOMED, BNF, and other code sets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.TERMINOLOGY.ECL_CLUSTERS \ndbt: source(''reference_terminology'', ''ECL_CLUSTERS'') \nColumns:\n  CLUSTER_ID -> cluster_id\n  ECL_EXPRESSION -> ecl_expression\n  DESCRIPTION -> description\n  CREATED_AT -> created_at\n  UPDATED_AT -> updated_at\n  CREATED_BY -> created_by\n  UPDATED_BY -> updated_by\n  CLUSTER_TYPE -> cluster_type"
+    )
+}}
 select
     "CLUSTER_ID" as cluster_id,
     "ECL_EXPRESSION" as ecl_expression,

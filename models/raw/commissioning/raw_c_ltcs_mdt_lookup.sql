@@ -1,7 +1,8 @@
--- Raw layer model for c_ltcs.MDT_LOOKUP
--- Source: "DEV__PUBLISHED_REPORTING__DIRECT_CARE"."C_LTCS"
--- Description: C-LTCS tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (C-LTCS tables). 1:1 passthrough with cleaned column names. \nSource: DEV__PUBLISHED_REPORTING__DIRECT_CARE.C_LTCS.MDT_LOOKUP \ndbt: source(''c_ltcs'', ''MDT_LOOKUP'') \nColumns:\n  PCN_CODE -> pcn_code\n  MDT_DATE -> mdt_date"
+    )
+}}
 select
     "PCN_CODE" as pcn_code,
     "MDT_DATE" as mdt_date

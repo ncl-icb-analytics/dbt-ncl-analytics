@@ -1,7 +1,8 @@
--- Raw layer model for phenolab.ICB_DEFINITIONS
--- Source: "DATA_LAKE__NCL"."PHENOLAB_DEV"
--- Description: Phenolab supporting data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Phenolab supporting data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.PHENOLAB_DEV.ICB_DEFINITIONS \ndbt: source(''phenolab'', ''ICB_DEFINITIONS'') \nColumns:\n  CODE -> code\n  CODE_DESCRIPTION -> code_description\n  VOCABULARY -> vocabulary\n  CODELIST_ID -> codelist_id\n  CODELIST_NAME -> codelist_name\n  CODELIST_VERSION -> codelist_version\n  DEFINITION_ID -> definition_id\n  DEFINITION_NAME -> definition_name\n  DEFINITION_VERSION -> definition_version\n  DEFINITION_SOURCE -> definition_source\n  VERSION_DATETIME -> version_datetime\n  UPLOADED_DATETIME -> uploaded_datetime"
+    )
+}}
 select
     "CODE" as code,
     "CODE_DESCRIPTION" as code_description,

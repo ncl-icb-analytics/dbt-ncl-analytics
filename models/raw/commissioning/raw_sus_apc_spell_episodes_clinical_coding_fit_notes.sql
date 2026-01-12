@@ -1,7 +1,8 @@
--- Raw layer model for sus_apc.spell.episodes.clinical_coding.fit_notes
--- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
--- Description: SUS admitted patient care episodes and procedures
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS admitted patient care episodes and procedures). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_APC.spell.episodes.clinical_coding.fit_notes \ndbt: source(''sus_apc'', ''spell.episodes.clinical_coding.fit_notes'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  EPISODES_ID -> episodes_id\n  FIT_NOTES_ID -> fit_notes_id\n  condition -> condition\n  assessment_date -> assessment_date\n  diagnosis -> diagnosis\n  start_date -> start_date\n  end_date -> end_date\n  duration -> duration\n  recorded_date -> recorded_date\n  follow_up_assessment_required_indicator -> follow_up_assessment_required_indicator\n  issuer -> issuer\n  dmicImportLogId -> dmic_import_log_id"
+    )
+}}
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,

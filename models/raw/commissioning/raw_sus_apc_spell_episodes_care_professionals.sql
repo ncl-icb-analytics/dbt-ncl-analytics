@@ -1,7 +1,8 @@
--- Raw layer model for sus_apc.spell.episodes.care_professionals
--- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
--- Description: SUS admitted patient care episodes and procedures
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS admitted patient care episodes and procedures). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_APC.spell.episodes.care_professionals \ndbt: source(''sus_apc'', ''spell.episodes.care_professionals'') \nColumns:\n  professional_registration_identifier -> professional_registration_identifier\n  main_specialty -> main_specialty\n  treatment_function -> treatment_function\n  local_sub_specialty -> local_sub_specialty\n  clinical_responsibility_indicator -> clinical_responsibility_indicator\n  dmicImportLogId -> dmic_import_log_id\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  EPISODES_ID -> episodes_id\n  CARE_PROFESSIONALS_ID -> care_professionals_id\n  professional_registration_issuer -> professional_registration_issuer"
+    )
+}}
 select
     "professional_registration_identifier" as professional_registration_identifier,
     "main_specialty" as main_specialty,

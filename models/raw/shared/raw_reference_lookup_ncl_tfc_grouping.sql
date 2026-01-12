@@ -1,7 +1,8 @@
--- Raw layer model for reference_lookup_ncl.TFC_GROUPING
--- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules in the MODELLING environment
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules in the MODELLING environment). 1:1 passthrough with cleaned column names. \nSource: MODELLING.LOOKUP_NCL.TFC_GROUPING \ndbt: source(''reference_lookup_ncl'', ''TFC_GROUPING'') \nColumns:\n  CODE -> code\n  DESCRIPTION -> description\n  GROUPING -> grouping"
+    )
+}}
 select
     "CODE" as code,
     "DESCRIPTION" as description,

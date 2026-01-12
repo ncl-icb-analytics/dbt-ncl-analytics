@@ -1,7 +1,8 @@
--- Raw layer model for fact_patient.DimConditionType
--- Source: "DATA_LAKE"."FACT_PATIENT"
--- Description: Patient fact tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Patient fact tables). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.FACT_PATIENT.DimConditionType \ndbt: source(''fact_patient'', ''DimConditionType'') \nColumns:\n  SK_ConditionTypeID -> sk_condition_type_id\n  ConditionType -> condition_type\n  ConditionLifespan -> condition_lifespan\n  Description -> description\n  HasValue -> has_value\n  SK_UnitID -> sk_unit_id"
+    )
+}}
 select
     "SK_ConditionTypeID" as sk_condition_type_id,
     "ConditionType" as condition_type,

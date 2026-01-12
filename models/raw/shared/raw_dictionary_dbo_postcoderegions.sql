@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.PostcodeRegions
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.PostcodeRegions \ndbt: source(''dictionary_dbo'', ''PostcodeRegions'') \nColumns:\n  OSNorthing -> os_northing\n  Longitude -> longitude\n  Latitude -> latitude\n  GeoPoint_text -> geo_point_text\n  GeoPoint -> geo_point\n  LocalAuthority -> local_authority\n  SK_PostcodeID -> sk_postcode_id\n  Postcode -> postcode\n  PostcodeFixed -> postcode_fixed\n  PostcodeNoSpace -> postcode_no_space\n  OSEasting -> os_easting\n  WardCode -> ward_code\n  PostcodeUser -> postcode_user\n  SHA -> sha\n  Region -> region\n  Commissioner -> commissioner\n  PCT -> pct\n  LSOACode -> lsoa_code\n  MSOACode -> msoa_code\n  DateCreated -> date_created\n  DateUpdated -> date_updated"
+    )
+}}
 select
     "OSNorthing" as os_northing,
     "Longitude" as longitude,

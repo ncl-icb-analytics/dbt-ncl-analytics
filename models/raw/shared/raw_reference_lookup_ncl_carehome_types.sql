@@ -1,7 +1,8 @@
--- Raw layer model for reference_lookup_ncl.CAREHOME_TYPES
--- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules in the MODELLING environment
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules in the MODELLING environment). 1:1 passthrough with cleaned column names. \nSource: MODELLING.LOOKUP_NCL.CAREHOME_TYPES \ndbt: source(''reference_lookup_ncl'', ''CAREHOME_TYPES'') \nColumns:\n  CAREHOME_CODE -> carehome_code\n  CAREHOME_NAME -> carehome_name\n  CAREHOME_SERVICETYPE -> carehome_servicetype\n  CAREHOME_SPECIALISM -> carehome_specialism\n  CAREHOME_LA -> carehome_la\n  CAREHOME_REGION -> carehome_region\n  CQC_LOCATION_ID -> cqc_location_id\n  CQC_PROVIDER_ID -> cqc_provider_id"
+    )
+}}
 select
     "CAREHOME_CODE" as carehome_code,
     "CAREHOME_NAME" as carehome_name,

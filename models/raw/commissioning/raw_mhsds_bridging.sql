@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.bridging
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.bridging \ndbt: source(''mhsds'', ''bridging'') \nColumns:\n  Person_ID -> person_id\n  NHSNumber Pseudo -> nhs_number_pseudo\n  Person_Index_id -> person_index_id\n  Pseudo_NHS_Number -> pseudo_nhs_number"
+    )
+}}
 select
     "Person_ID" as person_id,
     "NHSNumber Pseudo" as nhs_number_pseudo,

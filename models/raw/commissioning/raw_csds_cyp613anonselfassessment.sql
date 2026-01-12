@@ -1,7 +1,8 @@
--- Raw layer model for csds.CYP613AnonSelfAssessment
--- Source: "DATA_LAKE"."CSDS"
--- Description: Community services dataset
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Community services dataset). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.CSDS.CYP613AnonSelfAssessment \ndbt: source(''csds'', ''CYP613AnonSelfAssessment'') \nColumns:\n  ASSESSMENT TOOL COMPLETION DATE -> assessment_tool_completion_date\n  CODED ASSESSMENT TOOL TYPE (SNOMED CT) -> coded_assessment_tool_type_snomed_ct\n  PERSON SCORE -> person_score\n  ACTIVITY LOCATION TYPE CODE -> activity_location_type_code\n  ORGANISATION IDENTIFIER (CODE OF COMMISSIONER) -> organisation_identifier_code_of_commissioner\n  ORGANISATION CODE (CODE OF COMMISSIONER) -> organisation_code_code_of_commissioner\n  EFFECTIVE FROM -> effective_from\n  CYP613 UNIQUE ID -> cyp613_unique_id\n  ORGANISATION IDENTIFIER (CODE OF PROVIDER) -> organisation_identifier_code_of_provider\n  ORGANISATION CODE (PROVIDER) -> organisation_code_provider\n  UNIQUE SUBMISSION ID -> unique_submission_id\n  BSP UNIQUE ID -> bsp_unique_id\n  UNIQUE MONTH ID -> unique_month_id\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicCCG -> dmic_ccg\n  FILE TYPE -> file_type\n  REPORTING PERIOD START DATE -> reporting_period_start_date\n  REPORTING PERIOD END DATE -> reporting_period_end_date"
+    )
+}}
 select
     "ASSESSMENT TOOL COMPLETION DATE" as assessment_tool_completion_date,
     "CODED ASSESSMENT TOOL TYPE (SNOMED CT)" as coded_assessment_tool_type_snomed_ct,

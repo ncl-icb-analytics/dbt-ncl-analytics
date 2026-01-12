@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_ecds.InterpreterLanguage
--- Source: "Dictionary"."ECDS_ETOS"
--- Description: Reference data for ECDS
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data for ECDS). 1:1 passthrough with cleaned column names. \nSource: Dictionary.ECDS_ETOS.InterpreterLanguage \ndbt: source(''dictionary_ecds'', ''InterpreterLanguage'') \nColumns:\n  ECDS_UniqueID -> ecds_unique_id\n  REFSET_UniqueID -> refset_unique_id\n  SNOMED_Code -> snomed_code\n  SNOMED_UK_Preferred_Term -> snomed_uk_preferred_term\n  SNOMED_Fully_Specified_Name -> snomed_fully_specified_name\n  ECDS_Description -> ecds_description\n  ECDS_Group1 -> ecds_group1\n  PbR_Category -> pb_r_category\n  CDS_Code_Mapping_Used_For_HRG_Grouping -> cds_code_mapping_used_for_hrg_grouping\n  CDS_Investigation_Mapping_That_Is_Used_For_HRG_Grouping -> cds_investigation_mapping_that_is_used_for_hrg_grouping\n  Sort1 -> sort1\n  Sort2 -> sort2\n  Sort3 -> sort3\n  Sort4 -> sort4\n  Notes -> notes\n  Valid_From -> valid_from\n  Valid_To -> valid_to\n  dv_IsActive -> dv_is_active"
+    )
+}}
 select
     "ECDS_UniqueID" as ecds_unique_id,
     "REFSET_UniqueID" as refset_unique_id,

@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.DIAGNOSTICS_WEEKLY_DM01_HISTORIC
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.DIAGNOSTICS_WEEKLY_DM01_HISTORIC \ndbt: source(''reference_analyst_managed'', ''DIAGNOSTICS_WEEKLY_DM01_HISTORIC'') \nColumns:\n  PROVIDER -> provider\n  SPECIALITY -> speciality\n  DATE -> date\n  WEEKNUMBER -> weeknumber\n  Diagnostic waiting list-With a TCI -> diagnostic_waiting_list_with_a_tci\n  Diagnostic waiting list-Without a TCI -> diagnostic_waiting_list_without_a_tci\n  Diagnostic waiting list-Total -> diagnostic_waiting_list_total\n  Waiting list -> waiting_list\n  PLANNED -> planned\n  UNSCHEDULED -> unscheduled\n  DM01-Total -> dm01_total\n  DNA -> dna\n  Patient Cancelled -> patient_cancelled\n  Patient Declined/Refused -> patient_declined_refused\n  Total DNA -> total_dna\n  Cancer 62day pathway - Total on waiting list -> cancer_62day_pathway_total_on_waiting_list\n  Cancer 62 day pathway - Activity in the week -> cancer_62_day_pathway_activity_in_the_week\n  Wait List-0<01 weeks -> wait_list_0_lt_01_weeks\n  Wait List-01<02 weeks -> wait_list_01_lt_02_weeks\n  Wait List-02<03 weeks -> wait_list_02_lt_03_weeks\n  Wait List-03<04 weeks -> wait_list_03_lt_04_weeks\n  Wait List-04<05 weeks -> wait_list_04_lt_05_weeks\n  Wait List-05<06 weeks -> wait_list_05_lt_06_weeks"
+    )
+}}
 select
     "PROVIDER" as provider,
     "SPECIALITY" as speciality,

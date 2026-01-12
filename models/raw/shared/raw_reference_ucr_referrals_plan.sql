@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.UCR_REFERRALS_PLAN
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.UCR_REFERRALS_PLAN \ndbt: source(''reference_analyst_managed'', ''UCR_REFERRALS_PLAN'') \nColumns:\n  FIN_YEAR -> fin_year\n  FIN_MONTH -> fin_month\n  FIN_MONTH_NO -> fin_month_no\n  UCR_REFERRALS -> ucr_referrals"
+    )
+}}
 select
     "FIN_YEAR" as fin_year,
     "FIN_MONTH" as fin_month,
