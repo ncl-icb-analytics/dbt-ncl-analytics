@@ -1,7 +1,8 @@
--- Raw layer model for csds.CYP609CodedAssessmentReferral
--- Source: "DATA_LAKE"."CSDS"
--- Description: Community services dataset
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Community services dataset). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.CSDS.CYP609CodedAssessmentReferral \ndbt: source(''csds'', ''CYP609CodedAssessmentReferral'') \nColumns:\n  SK -> sk\n  SERVICE REQUEST IDENTIFIER -> service_request_identifier\n  CODED ASSESSMENT TOOL TYPE (SNOMED CT) -> coded_assessment_tool_type_snomed_ct\n  PERSON SCORE -> person_score\n  ASSESSMENT TOOL COMPLETION DATE -> assessment_tool_completion_date\n  EFFECTIVE FROM -> effective_from\n  RECORD NUMBER -> record_number\n  CYP609 UNIQUE ID -> cyp609_unique_id\n  ORGANISATION IDENTIFIER (CODE OF PROVIDER) -> organisation_identifier_code_of_provider\n  ORGANISATION CODE (PROVIDER) -> organisation_code_provider\n  PERSON ID -> person_id\n  UNIQUE CSDS ID (PATIENT) -> unique_csds_id_patient\n  UNIQUE SUBMISSION ID -> unique_submission_id\n  BSP UNIQUE ID -> bsp_unique_id\n  UNIQUE SERVICE REQUEST IDENTIFIER -> unique_service_request_identifier\n  AGE AT ASSESSMENT TOOL (REFERRAL) COMPLETION DATE (DAYS) -> age_at_assessment_tool_referral_completion_date_days\n  AGE AT ASSESSMENT TOOL (REFERRAL) COMPLETION DATE (YEARS) -> age_at_assessment_tool_referral_completion_date_years\n  IC_AGE_AT_ASSESSMENT_TOLL_REFERRAL_COMPLETION_DATE -> ic_age_at_assessment_toll_referral_completion_date\n  RECORD START DATE -> record_start_date\n  RECORD END DATE -> record_end_date\n  UNIQUE MONTH ID -> unique_month_id\n  AGE GROUP (ASSESSMENT COMPLETION DATE) -> age_group_assessment_completion_date\n  AGE BAND (ASSESSMENT COMPLETION DATE) -> age_band_assessment_completion_date\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicCCG -> dmic_ccg\n  UniqueCYPHS_ID_Patient -> unique_cyphs_id_patient\n  FILE TYPE -> file_type\n  REPORTING PERIOD START DATE -> reporting_period_start_date\n  REPORTING PERIOD END DATE -> reporting_period_end_date"
+    )
+}}
 select
     "SK" as sk,
     "SERVICE REQUEST IDENTIFIER" as service_request_identifier,

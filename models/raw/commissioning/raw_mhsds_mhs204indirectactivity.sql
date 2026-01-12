@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS204IndirectActivity
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS204IndirectActivity \ndbt: source(''mhsds'', ''MHS204IndirectActivity'') \nColumns:\n  SK -> sk\n  ServiceRequestId -> service_request_id\n  IndirectActDate -> indirect_act_date\n  OtherCareProfTeamLocalID -> other_care_prof_team_local_id\n  CareProfTeamLocalId -> care_prof_team_local_id\n  IndirectActTime -> indirect_act_time\n  IndActPersCons -> ind_act_pers_cons\n  DurationIndirectAct -> duration_indirect_act\n  OrgIDComm -> org_id_comm\n  CareProfLocalId -> care_prof_local_id\n  IndActProcedure -> ind_act_procedure\n  CodeProcAndProcStatus -> code_proc_and_proc_status\n  CodeIndActProcAndProcStatus -> code_ind_act_proc_and_proc_status\n  FindSchemeInUse -> find_scheme_in_use\n  Finding -> finding\n  CodeFind -> code_find\n  RecordNumber -> record_number\n  MHS204UniqID -> mhs204_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqServReqID -> uniq_serv_req_id\n  UniqCareProfLocalID -> uniq_care_prof_local_id\n  UniqMonthID -> uniq_month_id\n  EFFECTIVE_FROM -> effective_from\n  MasterSnomedCTFindingCode -> master_snomed_ct_finding_code\n  AgeAtIndirectActivity -> age_at_indirect_activity\n  UniqOtherCareProfTeamLocalID -> uniq_other_care_prof_team_local_id\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  dmIcbCommissioner -> dm_icb_commissioner\n  dmSubIcbCommissioner -> dm_sub_icb_commissioner\n  dmCommissionerDerivationReason -> dm_commissioner_derivation_reason\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "ServiceRequestId" as service_request_id,

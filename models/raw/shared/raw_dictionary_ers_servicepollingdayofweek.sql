@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_eRS.ServicePollingDayOfWeek
--- Source: "Dictionary"."E-Referral"
--- Description: Primary care referrals lookups
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Primary care referrals lookups). 1:1 passthrough with cleaned column names. \nSource: Dictionary.E-Referral.ServicePollingDayOfWeek \ndbt: source(''dictionary_eRS'', ''ServicePollingDayOfWeek'') \nColumns:\n  Service_Id -> service_id\n  PollingDayOfWeek -> polling_day_of_week"
+    )
+}}
 select
     "Service_Id" as service_id,
     "PollingDayOfWeek" as polling_day_of_week

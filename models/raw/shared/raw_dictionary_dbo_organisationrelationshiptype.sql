@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.OrganisationRelationshipType
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.OrganisationRelationshipType \ndbt: source(''dictionary_dbo'', ''OrganisationRelationshipType'') \nColumns:\n  Code -> code\n  Name -> name"
+    )
+}}
 select
     "Code" as code,
     "Name" as name

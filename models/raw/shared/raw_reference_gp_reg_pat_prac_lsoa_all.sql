@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.GP_REG_PAT_PRAC_LSOA_ALL
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.GP_REG_PAT_PRAC_LSOA_ALL \ndbt: source(''reference_analyst_managed'', ''GP_REG_PAT_PRAC_LSOA_ALL'') \nColumns:\n  PUBLICATION -> publication\n  EXTRACT_DATE -> extract_date\n  PRACTICE_CODE -> practice_code\n  PRACTICE_NAME -> practice_name\n  LSOA_CODE -> lsoa_code\n  SEX -> sex\n  NUMBER_OF_PATIENTS -> number_of_patients"
+    )
+}}
 select
     "PUBLICATION" as publication,
     "EXTRACT_DATE" as extract_date,

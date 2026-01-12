@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.SR_SNOMED_ETHNICITY_2
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.SR_SNOMED_ETHNICITY_2 \ndbt: source(''reference_analyst_managed'', ''SR_SNOMED_ETHNICITY_2'') \nColumns:\n  SNOMED_CODE -> snomed_code\n  ETHNICITY -> ethnicity\n  GROUPING_16 -> grouping_16\n  GROUPING_6 -> grouping_6\n  SK_ETHNICITY_ID -> sk_ethnicity_id"
+    )
+}}
 select
     "SNOMED_CODE" as snomed_code,
     "ETHNICITY" as ethnicity,

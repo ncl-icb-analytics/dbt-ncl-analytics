@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.AllSPGs
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.AllSPGs \ndbt: source(''dictionary_dbo'', ''AllSPGs'') \nColumns:\n  SK_ServiceProviderGroupID -> sk_service_provider_group_id\n  Level -> level\n  Type -> type\n  OriginalID -> original_id\n  Code -> code\n  Name -> name\n  StartDate -> start_date\n  EndDate -> end_date\n  DateCreated -> date_created\n  DateUpdated -> date_updated\n  IsTestOrganisation -> is_test_organisation\n  IsDormant -> is_dormant\n  IsActive -> is_active"
+    )
+}}
 select
     "SK_ServiceProviderGroupID" as sk_service_provider_group_id,
     "Level" as level,

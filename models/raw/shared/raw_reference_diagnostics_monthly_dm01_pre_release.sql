@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.DIAGNOSTICS_MONTHLY_DM01_PRE_RELEASE
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.DIAGNOSTICS_MONTHLY_DM01_PRE_RELEASE \ndbt: source(''reference_analyst_managed'', ''DIAGNOSTICS_MONTHLY_DM01_PRE_RELEASE'') \nColumns:\n  PERIOD -> period\n  Provider Parent Org Code -> provider_parent_org_code\n  Provider Parent Name -> provider_parent_name\n  Provider Org Code -> provider_org_code\n  Provider Org Name -> provider_org_name\n  Commissioner Parent Org Code -> commissioner_parent_org_code\n  Commissioner Parent Name -> commissioner_parent_name\n  Commissioner Org Code -> commissioner_org_code\n  Commissioner Org Name -> commissioner_org_name\n  Diagnostic Tests Sort Order -> diagnostic_tests_sort_order\n  Diagnostic Tests -> diagnostic_tests\n  00 < 01 Week -> week_00_lt_01\n  01 < 02 Weeks -> weeks_01_lt_02\n  02 < 03 Weeks -> weeks_02_lt_03\n  03 < 04 Weeks -> weeks_03_lt_04\n  04 < 05 Weeks -> weeks_04_lt_05\n  05 < 06 Weeks -> weeks_05_lt_06\n  06 < 07 Weeks -> weeks_06_lt_07\n  07 < 08 Weeks -> weeks_07_lt_08\n  08 < 09 Weeks -> weeks_08_lt_09\n  09 < 10 Weeks -> weeks_09_lt_10\n  10 < 11 Weeks -> weeks_10_lt_11\n  11 < 12 Weeks -> weeks_11_lt_12\n  12 < 13 Weeks -> weeks_12_lt_13\n  13+ Weeks -> weeks_13_plus\n  Total WL -> total_wl\n  Waiting List Activity -> waiting_list_activity\n  Planned Activity -> planned_activity\n  Unscheduled Activity -> unscheduled_activity\n  Total Activity -> total_activity\n  <6Weeks -> lt_6_weeks\n  6+WW -> ww_6_plus"
+    )
+}}
 select
     "PERIOD" as period,
     "Provider Parent Org Code" as provider_parent_org_code,

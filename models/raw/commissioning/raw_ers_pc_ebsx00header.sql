@@ -1,7 +1,8 @@
--- Raw layer model for eRS_primary_care.ebsx00Header
--- Source: "DATA_LAKE"."ERS"
--- Description: Primary care referrals data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Primary care referrals data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.ERS.ebsx00Header \ndbt: source(''eRS_primary_care'', ''ebsx00Header'') \nColumns:\n  Version -> version\n  OrgID_Referrer -> org_id_referrer\n  UniqSubmissionID -> uniq_submission_id\n  ebsx00_ID -> ebsx00_id\n  File_Type -> file_type\n  RP_StartDate -> rp_start_date\n  RP_EndDate -> rp_end_date\n  Unique_MonthID -> unique_month_id\n  Total_ebsx02 -> total_ebsx02\n  TotalRecords -> total_records\n  dmicImportLogId -> dmic_import_log_id\n  dmicMonthId -> dmic_month_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCodeReferrer -> dmic_ccg_code_referrer\n  dmicDSCRO -> dmic_dscro\n  dmicDateAdded -> dmic_date_added"
+    )
+}}
 select
     "Version" as version,
     "OrgID_Referrer" as org_id_referrer,

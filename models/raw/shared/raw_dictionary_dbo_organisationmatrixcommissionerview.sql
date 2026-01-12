@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.OrganisationMatrixCommissionerView
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.OrganisationMatrixCommissionerView \ndbt: source(''dictionary_dbo'', ''OrganisationMatrixCommissionerView'') \nColumns:\n  SK_OrganisationID_Commissioner -> sk_organisation_id_commissioner\n  CommissionerCode -> commissioner_code\n  CommissionerName -> commissioner_name\n  SK_OrganisationID_STP -> sk_organisation_id_stp\n  STPCode -> stp_code\n  STPName -> stp_name"
+    )
+}}
 select
     "SK_OrganisationID_Commissioner" as sk_organisation_id_commissioner,
     "CommissionerCode" as commissioner_code,

@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.EthnicityCode
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.EthnicityCode \ndbt: source(''dictionary_dbo'', ''EthnicityCode'') \nColumns:\n  SK_EthnicityID -> sk_ethnicity_id\n  EthnicityCodeType -> ethnicity_code_type\n  EthnicCategoryCode -> ethnic_category_code\n  EthnicGroupCode -> ethnic_group_code\n  ICCode -> ic_code\n  PDSEthnicCategoryCode -> pds_ethnic_category_code\n  ReadCode -> read_code\n  SDECode -> sde_code\n  Description -> description\n  Priority -> priority\n  Snomed -> snomed"
+    )
+}}
 select
     "SK_EthnicityID" as sk_ethnicity_id,
     "EthnicityCodeType" as ethnicity_code_type,

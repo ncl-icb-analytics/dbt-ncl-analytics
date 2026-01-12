@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.CSDS_LOOKUP
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.CSDS_LOOKUP \ndbt: source(''reference_analyst_managed'', ''CSDS_LOOKUP'') \nColumns:\n  CSDS_FIELDNAME -> csds_fieldname\n  SIMPLETABLE_FIELDNAME -> simpletable_fieldname\n  CODE -> code\n  DESCRIPTION -> description"
+    )
+}}
 select
     "CSDS_FIELDNAME" as csds_fieldname,
     "SIMPLETABLE_FIELDNAME" as simpletable_fieldname,

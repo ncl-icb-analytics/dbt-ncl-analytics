@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.LSOA2011_LSOA2021
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.LSOA2011_LSOA2021 \ndbt: source(''reference_analyst_managed'', ''LSOA2011_LSOA2021'') \nColumns:\n  LSOA11CD -> lsoa11_cd\n  LSOA11NM -> lsoa11_nm\n  LSOA21CD -> lsoa21_cd\n  LSOA21NM -> lsoa21_nm\n  CHGIND -> chgind\n  LAD22CD -> lad22_cd\n  LAD22NM -> lad22_nm\n  LAD22NMW -> lad22_nmw\n  OBJECTID -> objectid"
+    )
+}}
 select
     "LSOA11CD" as lsoa11_cd,
     "LSOA11NM" as lsoa11_nm,

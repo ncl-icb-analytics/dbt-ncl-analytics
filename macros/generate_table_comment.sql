@@ -1,6 +1,6 @@
 {% macro generate_table_comment() %}
   {%- if execute -%}
-    {%- set model_description = model.description or "" -%}
+    {%- set model_description = model.description or config.get('description') or "" -%}
     {%- set current_user = target.user | default('SYSTEM') -%}
 
     {#- Convert UTC to Europe/London timezone -#}

@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.EFI2_RULES
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.EFI2_RULES \ndbt: source(''reference_analyst_managed'', ''EFI2_RULES'') \nColumns:\n  CODE -> code\n  DEFICIT -> deficit\n  DEFICIT_TYPE -> deficit_type\n  TIME_CONSTRAINT_DAYS -> time_constraint_days\n  TIME_CONSTRAINT_TYPE -> time_constraint_type\n  TIME_CONSTRAINT_DESCRIPTION -> time_constraint_description\n  MIN_AGE -> min_age\n  AGE_RESTRICTION_DESCRIPTION -> age_restriction_description\n  CATEGORY_NAME -> category_name\n  CATEGORY_ORDER -> category_order\n  CATEGORY_RANGE_START -> category_range_start\n  CATEGORY_RANGE_END -> category_range_end\n  CATEGORY_DESCRIPTION -> category_description\n  THRESHOLD_VALUE -> threshold_value\n  THRESHOLD_COMPARATOR -> threshold_comparator\n  THRESHOLD_DESCRIPTION -> threshold_description\n  THRESHOLD_UNIT -> threshold_unit\n  THRESHOLD_TYPE -> threshold_type\n  READINGS_REQUIRED -> readings_required\n  READINGS_TIMEFRAME -> readings_timeframe\n  SUPERSEDES -> supersedes\n  SUPERSEDED_BY -> superseded_by\n  HIERARCHY_LEVEL -> hierarchy_level\n  RESOLUTION_TEST -> resolution_test\n  RESOLUTION_THRESHOLD -> resolution_threshold\n  RESOLUTION_UNIT -> resolution_unit\n  RESOLUTION_GENDER_SPECIFIC -> resolution_gender_specific\n  RESOLUTION_MALE_THRESHOLD -> resolution_male_threshold\n  RESOLUTION_FEMALE_THRESHOLD -> resolution_female_threshold\n  VALIDATION_RULE -> validation_rule\n  VALIDATION_DESCRIPTION -> validation_description\n  EFI2_COEFFICIENT -> efi2_coefficient\n  EFI2_TRANSFORMED_COEFFICIENT -> efi2_transformed_coefficient\n  EFI_PLUS_FALLS_COEFFICIENT -> efi_plus_falls_coefficient\n  EFI_PLUS_CARE_HOME_COEFFICIENT -> efi_plus_care_home_coefficient\n  EFI_PLUS_MORTALITY_COEFFICIENT -> efi_plus_mortality_coefficient\n  EFI_PLUS_HOME_CARE_COEFFICIENT -> efi_plus_home_care_coefficient\n  SOURCE_INSTRUCTION -> source_instruction\n  RULE_PRIORITY -> rule_priority"
+    )
+}}
 select
     "CODE" as code,
     "DEFICIT" as deficit,

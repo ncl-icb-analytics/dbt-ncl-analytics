@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.UEC__DAILY__TRACKER_P2_CAPACITY
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.UEC__DAILY__TRACKER_P2_CAPACITY \ndbt: source(''reference_analyst_managed'', ''UEC__DAILY__TRACKER_P2_CAPACITY'') \nColumns:\n  DATE_DATA -> date_data\n  PROVIDER -> provider\n  UNIT -> unit\n  BEDS_AVAILABLE -> beds_available\n  BEDS_OCCUPIED -> beds_occupied\n  _TIMESTAMP -> timestamp"
+    )
+}}
 select
     "DATE_DATA" as date_data,
     "PROVIDER" as provider,

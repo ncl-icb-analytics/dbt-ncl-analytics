@@ -1,7 +1,8 @@
--- Raw layer model for csds.CYP006SocPerCircumstances
--- Source: "DATA_LAKE"."CSDS"
--- Description: Community services dataset
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Community services dataset). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.CSDS.CYP006SocPerCircumstances \ndbt: source(''csds'', ''CYP006SocPerCircumstances'') \nColumns:\n  SK -> sk\n  LOCAL PATIENT IDENTIFIER (EXTENDED) -> local_patient_identifier_extended\n  SOCIAL AND PERSONAL CIRCUMSTANCE (SNOMED CT) -> social_and_personal_circumstance_snomed_ct\n  SOCIAL AND PERSONAL CIRCUMSTANCE RECORDED DATE -> social_and_personal_circumstance_recorded_date\n  EFFECTIVE FROM -> effective_from\n  RECORD NUMBER -> record_number\n  CYP006 UNIQUE ID -> cyp006_unique_id\n  ORGANISATION IDENTIFIER (CODE OF PROVIDER) -> organisation_identifier_code_of_provider\n  PERSON ID -> person_id\n  UNIQUE SUBMISSION ID -> unique_submission_id\n  RECORD START DATE -> record_start_date\n  RECORD END DATE -> record_end_date\n  UNIQUE MONTH ID -> unique_month_id\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicCCG -> dmic_ccg\n  Unique_LocalPatientId -> unique_local_patient_id\n  UniqueCYPHS_ID_Patient -> unique_cyphs_id_patient\n  FILE TYPE -> file_type\n  REPORTING PERIOD START DATE -> reporting_period_start_date\n  REPORTING PERIOD END DATE -> reporting_period_end_date"
+    )
+}}
 select
     "SK" as sk,
     "LOCAL PATIENT IDENTIFIER (EXTENDED)" as local_patient_identifier_extended,

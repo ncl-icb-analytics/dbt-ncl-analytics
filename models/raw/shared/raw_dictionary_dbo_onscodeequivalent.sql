@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.ONSCodeEquivalent
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.ONSCodeEquivalent \ndbt: source(''dictionary_dbo'', ''ONSCodeEquivalent'') \nColumns:\n  Geography_Code -> geography_code\n  Geography_Name -> geography_name\n  Geography_Name_Welsh -> geography_name_welsh\n  ONS_Geography_Code -> ons_geography_code\n  ONS_Geography_Name -> ons_geography_name\n  DCLG_Geography_Code -> dclg_geography_code\n  DCLG_Geography_Name -> dclg_geography_name\n  DH_Geography_Code -> dh_geography_code\n  DH_Geography_Name -> dh_geography_name\n  Scottish_Geography_Code -> scottish_geography_code\n  Scottish_Geography_Name -> scottish_geography_name\n  NI_Geography_Code -> ni_geography_code\n  NI_Geography_Name -> ni_geography_name\n  WG_Geography_Code -> wg_geography_code\n  WG_Geography_Name -> wg_geography_name\n  WG_Geography_Name_Welsh -> wg_geography_name_welsh\n  Entity_Code -> entity_code\n  Status -> status\n  Date_Of_Introduction -> date_of_introduction\n  Date_Of_Termination -> date_of_termination\n  Created_Date -> created_date\n  Import_Date -> import_date"
+    )
+}}
 select
     "Geography_Code" as geography_code,
     "Geography_Name" as geography_name,

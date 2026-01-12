@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_ip.AdmissionType
--- Source: "Dictionary"."IP"
--- Description: Reference data for inpatient procedures and treatments
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data for inpatient procedures and treatments). 1:1 passthrough with cleaned column names. \nSource: Dictionary.IP.AdmissionType \ndbt: source(''dictionary_ip'', ''AdmissionType'') \nColumns:\n  SK_AdmissionTypeID -> sk_admission_type_id\n  admission_type -> admission_type\n  admission_type_group -> admission_type_group\n  admission_type_description -> admission_type_description"
+    )
+}}
 select
     "SK_AdmissionTypeID" as sk_admission_type_id,
     "admission_type" as admission_type,

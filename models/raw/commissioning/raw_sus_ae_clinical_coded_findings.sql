@@ -1,7 +1,8 @@
--- Raw layer model for sus_ae.clinical.coded_findings
--- Source: "DATA_LAKE"."SUS_UNIFIED_ECDS"
--- Description: SUS emergency care attendances and activity
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.clinical.coded_findings \ndbt: source(''sus_ae'', ''clinical.coded_findings'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  CODED_FINDINGS_ID -> coded_findings_id\n  code -> code\n  is_code_approved -> is_code_approved\n  timestamp -> timestamp\n  dmicImportLogId -> dmic_import_log_id"
+    )
+}}
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,

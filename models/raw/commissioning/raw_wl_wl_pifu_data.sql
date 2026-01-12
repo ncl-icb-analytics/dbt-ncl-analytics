@@ -1,7 +1,8 @@
--- Raw layer model for wl.WL_PIFU_Data
--- Source: "DATA_LAKE"."WL"
--- Description: Waiting lists and patient pathway data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Waiting lists and patient pathway data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.WL.WL_PIFU_Data \ndbt: source(''wl'', ''WL_PIFU_Data'') \nColumns:\n  DATE_AND_TIME_DATA_SET_CREATED -> date_and_time_data_set_created\n  Week_Ending_Date -> week_ending_date\n  Pseudo NHS_NUMBER -> pseudo_nhs_number\n  PATIENT_PATHWAY_IDENTIFIER -> patient_pathway_identifier\n  ORGANISATION_CODE_PATIENT_PATHWAY_IDENTIFIER_ISSUER -> organisation_code_patient_pathway_identifier_issuer\n  ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER -> organisation_identifier_code_of_provider\n  ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT -> organisation_site_identifier_of_treatment\n  ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER -> organisation_identifier_code_of_commissioner\n  ACTIVITY_TREATMENT_FUNCTION_CODE -> activity_treatment_function_code\n  Waiting_List_Type -> waiting_list_type\n  Initiation_Date -> initiation_date\n  Expiry_Date -> expiry_date\n  der_Age_WeekEndingDate -> der_age_week_ending_date\n  der_AgeBand_WeekEndingDate -> der_age_band_week_ending_date\n  derSubmissionId -> der_submission_id\n  derRowId -> der_row_id\n  derCCGofPractice -> der_ccg_of_practice\n  derCCGofResidence -> der_ccg_of_residence\n  derPracticeCode -> der_practice_code\n  derLSOA -> der_lsoa\n  derLSOA2021 -> der_lsoa2021"
+    )
+}}
 select
     "DATE_AND_TIME_DATA_SET_CREATED" as date_and_time_data_set_created,
     "Week_Ending_Date" as week_ending_date,

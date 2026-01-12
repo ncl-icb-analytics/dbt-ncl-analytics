@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.CANCER__FDS_OUTCOMES
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.CANCER__FDS_OUTCOMES \ndbt: source(''reference_analyst_managed'', ''CANCER__FDS_OUTCOMES'') \nColumns:\n  PERIOD -> period\n  YEAR -> year\n  MONTH -> month\n  STANDARD -> standard\n  ORG_CODE -> org_code\n  STAGE_ROUTE -> stage_route\n  FDS_END_REASON -> fds_end_reason\n  CANCER_TYPE -> cancer_type\n  TOTAL_TREATED -> total_treated\n  WITHIN_STANDARD -> within_standard\n  BREACHES -> breaches"
+    )
+}}
 select
     "PERIOD" as period,
     "YEAR" as year,

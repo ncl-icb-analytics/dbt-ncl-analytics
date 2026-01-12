@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.CONSULTANT_CONNECT_CALLS_MESSAGES
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.CONSULTANT_CONNECT_CALLS_MESSAGES \ndbt: source(''reference_analyst_managed'', ''CONSULTANT_CONNECT_CALLS_MESSAGES'') \nColumns:\n  DATE -> date\n  TIME -> time\n  USER -> user\n  ORGANISATION -> organisation\n  LOCALITY -> locality\n  ICS -> ics\n  PCN -> pcn\n  SPECIALISM -> specialism\n  NO_OF_PHOTOS -> no_of_photos\n  CONSULTANT -> consultant\n  TRUST -> trust\n  SERVICE_TYPE -> service_type\n  ROTA_POSITION -> rota_position\n  WAIT_TIME_SEC -> wait_time_sec\n  TALK_TIME_SEC -> talk_time_sec\n  RESPONSE_TIME -> response_time\n  RESPONSE_TIME_SEC -> response_time_sec\n  OUTCOME -> outcome\n  DATE_CLOSED -> date_closed\n  LAST_ACTIVITY -> last_activity\n  CONTACT_TYPE -> contact_type"
+    )
+}}
 select
     "DATE" as date,
     "TIME" as time,

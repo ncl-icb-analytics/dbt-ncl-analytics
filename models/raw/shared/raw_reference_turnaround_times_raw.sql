@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.TURNAROUND_TIMES_RAW
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.TURNAROUND_TIMES_RAW \ndbt: source(''reference_analyst_managed'', ''TURNAROUND_TIMES_RAW'') \nColumns:\n  submission_date -> submission_date\n  data_type -> data_type\n  month -> month\n  year -> year\n  ethnic_category -> ethnic_category\n  person_gender -> person_gender\n  general_medical_practice -> general_medical_practice\n  patient_source_type -> patient_source_type\n  referrer_code -> referrer_code\n  referring_org -> referring_org\n  diagnostic_test_request_date_time -> diagnostic_test_request_date_time\n  diagnostic_test_request_received_date_time -> diagnostic_test_request_received_date_time\n  diagnostic_test_date_time -> diagnostic_test_date_time\n  service_report_issue_date_time -> service_report_issue_date_time\n  imaging_code_nicip -> imaging_code_nicip\n  imaging_code_snomed -> imaging_code_snomed\n  provider_site_code -> provider_site_code\n  priority_type_code -> priority_type_code\n  cancer_pathway_flag -> cancer_pathway_flag\n  file_name -> file_name\n  month_year -> month_year\n  submission_month -> submission_month\n  submission_year -> submission_year\n  data_period -> data_period\n  trust_code -> trust_code\n  combined_imaging_code -> combined_imaging_code\n  priority_type_code_routine_default -> priority_type_code_routine_default\n  TAT_scan -> tat_scan\n  TAT_report -> tat_report\n  TAT_overall -> tat_overall\n  datedifftest -> datedifftest\n  cancer_pathway_flag_string -> cancer_pathway_flag_string\n  referring_organisation -> referring_organisation"
+    )
+}}
 select
     "submission_date" as submission_date,
     "data_type" as data_type,

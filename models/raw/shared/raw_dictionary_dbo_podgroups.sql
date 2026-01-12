@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.PODGroups
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.PODGroups \ndbt: source(''dictionary_dbo'', ''PODGroups'') \nColumns:\n  SK_PodGroupID -> sk_pod_group_id\n  PodDisplay -> pod_display\n  PodDataset -> pod_dataset\n  PodMainGroup -> pod_main_group\n  PodSubGroup -> pod_sub_group\n  DateCreated -> date_created\n  DateUpdated -> date_updated"
+    )
+}}
 select
     "SK_PodGroupID" as sk_pod_group_id,
     "PodDisplay" as pod_display,

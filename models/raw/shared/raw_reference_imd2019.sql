@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.IMD2019
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.IMD2019 \ndbt: source(''reference_analyst_managed'', ''IMD2019'') \nColumns:\n  LSOACODE -> lsoacode\n  IMDDECILE -> imddecile"
+    )
+}}
 select
     "LSOACODE" as lsoacode,
     "IMDDECILE" as imddecile

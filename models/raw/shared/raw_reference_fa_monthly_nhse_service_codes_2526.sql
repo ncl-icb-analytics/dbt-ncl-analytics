@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.FA__MONTHLY_NHSE_SERVICE_CODES_2526
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.FA__MONTHLY_NHSE_SERVICE_CODES_2526 \ndbt: source(''reference_analyst_managed'', ''FA__MONTHLY_NHSE_SERVICE_CODES_2526'') \nColumns:\n  SERVICE_CODE -> service_code\n  SERVICE_CODE_DESCRIPTION -> service_code_description\n  SERVICE_CODE_INCLUDING_DESCRIPTION -> service_code_including_description\n  SERVICE_CATEGORY_DESCRIPTION -> service_category_description\n  National_Programme_of_Care_(NPoC)_Category_and_Clinical_Reference_Group_(CRG) -> national_programme_of_care_npo_c_category_and_clinical_reference_group_crg\n  HIGHLY_SPECIALISED_SERVICE -> highly_specialised_service\n  Identified_by_PS_Operational_Tool_2024/25 -> identified_by_ps_operational_tool_2024_25\n  NOTES -> notes\n  EFFECTIVE_FROM -> effective_from\n  EFFECTIVE_TO -> effective_to\n  IS_CURRENT -> is_current\n  2024/25_ICB_Delegation_Status -> status_2024_25_icb_delegation\n  2025/26_ICB_Delegation_Status -> status_2025_26_icb_delegation\n  DELEGATION_STATUS_CHANGE -> delegation_status_change\n  GROUPING -> grouping\n  AMENDED_RECORD_INDICATOR -> amended_record_indicator"
+    )
+}}
 select
     "SERVICE_CODE" as service_code,
     "SERVICE_CODE_DESCRIPTION" as service_code_description,

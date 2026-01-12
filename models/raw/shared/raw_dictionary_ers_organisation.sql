@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_eRS.Organisation
--- Source: "Dictionary"."E-Referral"
--- Description: Primary care referrals lookups
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Primary care referrals lookups). 1:1 passthrough with cleaned column names. \nSource: Dictionary.E-Referral.Organisation \ndbt: source(''dictionary_eRS'', ''Organisation'') \nColumns:\n  OrganisationID -> organisation_id\n  ParentOrganisationID -> parent_organisation_id\n  OrganisationRoleCode -> organisation_role_code\n  OrganisationName -> organisation_name\n  Postcode -> postcode\n  SK_OrganisationID -> sk_organisation_id\n  SK_OrganisationID_Parent -> sk_organisation_id_parent\n  SK_PostcodeID -> sk_postcode_id"
+    )
+}}
 select
     "OrganisationID" as organisation_id,
     "ParentOrganisationID" as parent_organisation_id,

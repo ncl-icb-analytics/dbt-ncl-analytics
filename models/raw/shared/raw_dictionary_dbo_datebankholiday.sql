@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.DateBankHoliday
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.DateBankHoliday \ndbt: source(''dictionary_dbo'', ''DateBankHoliday'') \nColumns:\n  SK_Date -> sk_date\n  FullDate -> full_date\n  Holiday -> holiday\n  InEnglandAndWales -> in_england_and_wales\n  InNorthernIreland -> in_northern_ireland\n  InScotland -> in_scotland"
+    )
+}}
 select
     "SK_Date" as sk_date,
     "FullDate" as full_date,

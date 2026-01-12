@@ -1,7 +1,8 @@
--- Raw layer model for csds.CYP105OnwardReferral
--- Source: "DATA_LAKE"."CSDS"
--- Description: Community services dataset
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Community services dataset). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.CSDS.CYP105OnwardReferral \ndbt: source(''csds'', ''CYP105OnwardReferral'') \nColumns:\n  SK -> sk\n  SERVICE REQUEST IDENTIFIER -> service_request_identifier\n  ONWARD REFERRAL DATE -> onward_referral_date\n  ONWARD REFERRAL REASON (COMMUNITY CARE) -> onward_referral_reason_community_care\n  ONWARD REFERRAL REASON -> onward_referral_reason\n  ORGANISATION IDENTIFIER (RECEIVING ORGANISATION) -> organisation_identifier_receiving_organisation\n  ORGANISATION IDENTIFIER (RECEIVING) -> organisation_identifier_receiving\n  ORGANISATION CODE (RECEIVING) -> organisation_code_receiving\n  EFFECTIVE FROM -> effective_from\n  RECORD NUMBER -> record_number\n  CYP105 UNIQUE ID -> cyp105_unique_id\n  ORGANISATION IDENTIFIER (CODE OF PROVIDER) -> organisation_identifier_code_of_provider\n  ORGANISATION CODE (PROVIDER) -> organisation_code_provider\n  PERSON ID -> person_id\n  UNIQUE CSDS ID (PATIENT) -> unique_csds_id_patient\n  UNIQUE SUBMISSION ID -> unique_submission_id\n  BSP UNIQUE ID -> bsp_unique_id\n  UNIQUE SERVICE REQUEST IDENTIFIER -> unique_service_request_identifier\n  RECORD START DATE -> record_start_date\n  RECORD END DATE -> record_end_date\n  UNIQUE MONTH ID -> unique_month_id\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicCCG -> dmic_ccg\n  UniqueCYPHS_ID_Patient -> unique_cyphs_id_patient\n  FILE TYPE -> file_type\n  REPORTING PERIOD START DATE -> reporting_period_start_date\n  REPORTING PERIOD END DATE -> reporting_period_end_date"
+    )
+}}
 select
     "SK" as sk,
     "SERVICE REQUEST IDENTIFIER" as service_request_identifier,

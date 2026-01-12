@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.OverseasVisitorStatusClassification
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.OverseasVisitorStatusClassification \ndbt: source(''dictionary_dbo'', ''OverseasVisitorStatusClassification'') \nColumns:\n  SK_OverseasVisitorStatusClassificationID -> sk_overseas_visitor_status_classification_id\n  BK_OverseasVisitorStatusClassification -> bk_overseas_visitor_status_classification\n  OverseasVisitorStatusClassification -> overseas_visitor_status_classification"
+    )
+}}
 select
     "SK_OverseasVisitorStatusClassificationID" as sk_overseas_visitor_status_classification_id,
     "BK_OverseasVisitorStatusClassification" as bk_overseas_visitor_status_classification,

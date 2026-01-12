@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS503AssignedCareProf
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS503AssignedCareProf \ndbt: source(''mhsds'', ''MHS503AssignedCareProf'') \nColumns:\n  SK -> sk\n  HospProvSpellID -> hosp_prov_spell_id\n  HospProvSpellNum -> hosp_prov_spell_num\n  CareProfLocalId -> care_prof_local_id\n  StartDateAssCareProf -> start_date_ass_care_prof\n  EndDateAssCareProf -> end_date_ass_care_prof\n  TreatFuncCodeMH -> treat_func_code_mh\n  RecordNumber -> record_number\n  MHS503UniqID -> mhs503_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqServReqID -> uniq_serv_req_id\n  UniqHospProvSpellID -> uniq_hosp_prov_spell_id\n  UniqHospProvSpellNum -> uniq_hosp_prov_spell_num\n  UniqCareProfLocalID -> uniq_care_prof_local_id\n  UniqMonthID -> uniq_month_id\n  RecordStartDate -> record_start_date\n  RecordEndDate -> record_end_date\n  EFFECTIVE_FROM -> effective_from\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "HospProvSpellID" as hosp_prov_spell_id,

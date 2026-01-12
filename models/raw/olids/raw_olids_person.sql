@@ -1,7 +1,8 @@
--- Raw layer model for olids.PERSON
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS.PERSON \ndbt: source(''olids'', ''PERSON'') \nColumns:\n  ID -> id\n  NHS_NUMBER_HASH -> nhs_number_hash\n  TITLE -> title\n  GENDER_CONCEPT_ID -> gender_concept_id\n  BIRTH_YEAR -> birth_year\n  BIRTH_MONTH -> birth_month\n  DEATH_YEAR -> death_year\n  DEATH_MONTH -> death_month"
+    )
+}}
 select
     "ID" as id,
     "NHS_NUMBER_HASH" as nhs_number_hash,

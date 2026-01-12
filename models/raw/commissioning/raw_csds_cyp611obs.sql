@@ -1,7 +1,8 @@
--- Raw layer model for csds.CYP611Obs
--- Source: "DATA_LAKE"."CSDS"
--- Description: Community services dataset
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Community services dataset). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.CSDS.CYP611Obs \ndbt: source(''csds'', ''CYP611Obs'') \nColumns:\n  SK -> sk\n  CARE ACTIVITY IDENTIFIER -> care_activity_identifier\n  PERSON WEIGHT -> person_weight\n  PERSON HEIGHT IN METRES -> person_height_in_metres\n  PERSON LENGTH IN CENTIMETRES -> person_length_in_centimetres\n  EFFECTIVE FROM -> effective_from\n  RECORD NUMBER -> record_number\n  CYP611 UNIQUE ID -> cyp611_unique_id\n  ORGANISATION IDENTIFIER (CODE OF PROVIDER) -> organisation_identifier_code_of_provider\n  ORGANISATION CODE (PROVIDER) -> organisation_code_provider\n  PERSON ID -> person_id\n  UNIQUE CSDS ID (PATIENT) -> unique_csds_id_patient\n  UNIQUE SUBMISSION ID -> unique_submission_id\n  BSP UNIQUE ID -> bsp_unique_id\n  UNIQUE CARE ACTIVITY IDENTIFIER -> unique_care_activity_identifier\n  AGE AT BMI OBSERVATION (DAYS) -> age_at_bmi_observation_days\n  AGE AT BMI OBSERVATION (YEARS) -> age_at_bmi_observation_years\n  IC_AGE_AT_BMI_OBSERVATION -> ic_age_at_bmi_observation\n  SCHOOL YEAR AT BMI OBSERVATION -> school_year_at_bmi_observation\n  UNIQUE MONTH ID -> unique_month_id\n  AGE GROUP (BMI OBSERVATION) -> age_group_bmi_observation\n  AGE BAND (BMI OBSERVATION) -> age_band_bmi_observation\n  dmicImportLogId -> dmic_import_log_id\n  dmicObservationDate -> dmic_observation_date\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicCCG -> dmic_ccg\n  UniqueCYPHS_ID_Patient -> unique_cyphs_id_patient\n  FILE TYPE -> file_type\n  REPORTING PERIOD START DATE -> reporting_period_start_date\n  REPORTING PERIOD END DATE -> reporting_period_end_date"
+    )
+}}
 select
     "SK" as sk,
     "CARE ACTIVITY IDENTIFIER" as care_activity_identifier,

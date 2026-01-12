@@ -1,7 +1,8 @@
--- Raw layer model for reference_cancer_screening.SCREENING_LOCAL
--- Source: "DATA_LAKE__NCL"."CANCER__SCREENING"
--- Description: Cancer screening data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Cancer screening data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.CANCER__SCREENING.SCREENING_LOCAL \ndbt: source(''reference_cancer_screening'', ''SCREENING_LOCAL'') \nColumns:\n  Organisation Code -> organisation_code\n  Organisation Name -> organisation_name\n  Programme -> programme\n  Month of Date -> month_of_date\n  Cohort Age Range -> cohort_age_range\n  Cohort Description -> cohort_description\n  Denominator Name -> denominator_name\n  Denominator -> denominator\n  Numerator -> numerator\n  Performance -> performance\n  Acceptable -> acceptable\n  Achievable -> achievable\n  _TIMESTAMP -> timestamp"
+    )
+}}
 select
     "Organisation Code" as organisation_code,
     "Organisation Name" as organisation_name,

@@ -1,7 +1,8 @@
--- Raw layer model for olids.OBSERVATION
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS.OBSERVATION \ndbt: source(''olids'', ''OBSERVATION'') \nColumns:\n  LDS_RECORD_ID -> lds_record_id\n  ID -> id\n  PATIENT_ID -> patient_id\n  PERSON_ID -> person_id\n  ENCOUNTER_ID -> encounter_id\n  PRACTITIONER_ID -> practitioner_id\n  PARENT_OBSERVATION_ID -> parent_observation_id\n  CLINICAL_EFFECTIVE_DATE -> clinical_effective_date\n  DATE_PRECISION_CONCEPT_ID -> date_precision_concept_id\n  RESULT_VALUE -> result_value\n  RESULT_VALUE_UNITS_CONCEPT_ID -> result_value_units_concept_id\n  RESULT_DATE -> result_date\n  RESULT_TEXT -> result_text\n  IS_PROBLEM -> is_problem\n  IS_REVIEW -> is_review\n  PROBLEM_END_DATE -> problem_end_date\n  OBSERVATION_SOURCE_CONCEPT_ID -> observation_source_concept_id\n  AGE_AT_EVENT -> age_at_event\n  AGE_AT_EVENT_BABY -> age_at_event_baby\n  AGE_AT_EVENT_NEONATE -> age_at_event_neonate\n  EPISODICITY_CONCEPT_ID -> episodicity_concept_id\n  IS_PRIMARY -> is_primary\n  DATE_RECORDED -> date_recorded\n  IS_PROBLEM_DELETED -> is_problem_deleted\n  IS_CONFIDENTIAL -> is_confidential\n  LDS_IS_DELETED -> lds_is_deleted\n  LDS_ID -> lds_id\n  LDS_BUSINESS_KEY -> lds_business_key\n  LDS_DATASET_ID -> lds_dataset_id\n  LDS_CDM_EVENT_ID -> lds_cdm_event_id\n  LDS_VERSIONER_EVENT_ID -> lds_versioner_event_id\n  RECORD_OWNER_ORGANISATION_CODE -> record_owner_organisation_code\n  LDS_DATETIME_DATA_ACQUIRED -> lds_datetime_data_acquired\n  LDS_INITIAL_DATA_RECEIVED_DATE -> lds_initial_data_received_date\n  LDS_START_DATE_TIME -> lds_start_date_time\n  LDS_LAKEHOUSE_DATE_PROCESSED -> lds_lakehouse_date_processed\n  LDS_LAKEHOUSE_DATETIME_UPDATED -> lds_lakehouse_datetime_updated\n  MAPPED_CONCEPT_ID -> mapped_concept_id\n  MAPPED_CONCEPT_CODE -> mapped_concept_code\n  MAPPED_CONCEPT_DISPLAY -> mapped_concept_display\n  SOURCE_CODE -> source_code\n  SOURCE_DISPLAY -> source_display\n  SOURCE_SYSTEM -> source_system\n  TARGET_SYSTEM -> target_system\n  RESULT_UNIT_CODE -> result_unit_code\n  RESULT_UNIT_DISPLAY -> result_unit_display"
+    )
+}}
 select
     "LDS_RECORD_ID" as lds_record_id,
     "ID" as id,
