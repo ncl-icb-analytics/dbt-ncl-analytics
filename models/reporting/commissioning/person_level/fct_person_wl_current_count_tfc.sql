@@ -30,7 +30,7 @@ PIVOT
     SUM(open_pathways) FOR treatment_function_code IN (
         SELECT
         bk_specialty_code
-        from {{ ref('raw_dictionary_dbo_specialties') }}
+        from {{ ref('stg_dictionary_dbo_specialties') }}
         WHERE
         is_treatment_function = TRUE
         )

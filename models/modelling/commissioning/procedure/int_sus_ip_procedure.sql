@@ -21,7 +21,7 @@ select
     'OPCS4' as concept_vocabulary
 from {{ ref("stg_sus_apc_spell_episodes_clinical_coding_procedure_opcs") }} f
 left join
-    {{ source('aic', 'BASE_ATHENA__CONCEPT') }} c
+    {{ ref('stg_aic_base_athena_concept') }} c
     on replace(c.concept_code, '.', '') = f.code
     and c.vocabulary_id = 'OPCS4'
 left join {{ ref("int_sus_ip_encounters") }} se on se.visit_occurrence_id = f.primarykey_id

@@ -164,5 +164,5 @@ left join {{ref('fct_person_gp_recent')}} gpa
     on il.patient_id  = gpa.sk_patient_id
 left join {{ref('fct_person_medications_recent')}} rm
     on il.olids_id = rm.person_id
-left join  {{source('c_ltcs','OP_OE_RATIO')}} rat
+left join  {{ ref('stg_c_ltcs_op_oe_ratio') }} rat
     on il.patient_id  = rat.patient_id 

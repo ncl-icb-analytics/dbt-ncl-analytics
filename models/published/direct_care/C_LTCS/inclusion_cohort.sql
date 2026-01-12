@@ -95,6 +95,6 @@ left join op_inclusion op
 left join {{ref('dim_person_demographics')}} pd
     on pd.person_id = pp.person_id
 where pd.is_deceased = FALSE 
-    and pcn_code in (select distinct pcn_code from {{source('c_ltcs','MDT_LOOKUP')}} )
+    and pcn_code in (select distinct pcn_code from {{ ref('stg_c_ltcs_mdt_lookup') }} )
   --  and fragmented_sk_patient_id_flag = 0 -- keep warning for awareness of person/patient mapping issues
 -- and fragmented_person_id_flag = 0

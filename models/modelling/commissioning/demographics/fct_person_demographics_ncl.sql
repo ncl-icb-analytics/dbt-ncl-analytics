@@ -60,7 +60,7 @@ on pds.interpreter_required = dict_ir.interpreter_required
 left join modelling.lookup_ncl.lsoa_2021_ward_2025_local_authority_2025 geo
 on pds.lsoa_21 = geo.lsoa_2021_code
 
-left join {{ref('raw_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021_latest')}} nb
+left join {{ref('stg_reference_ncl_neighbourhood_lsoa_2021')}} nb
 on pds.lsoa_21 = nb.lsoa_2021_code
 
 left join dev__modelling.lookup_ncl.imd25_imd imd
