@@ -18,12 +18,12 @@ models:
     - not_null
   - name: primary_care_provider
     description: GP practice code
-  - name: primary_care_provider_business_effective_from_date
+  - name: event_from_date
     description: Registration effective from date
-  - name: primary_care_provider_business_effective_to_date
+  - name: event_to_date
     description: Registration effective to date (null if current)
-  - name: reason_for_removal
-    description: Reason for removal from practice list
+  - name: registered_reason_for_removal
+    description: Reason for removal from practice list (sourced from stg_pds_pds_reason_for_removal)
   - name: der_ccg_of_registration
     description: CCG of registration
   - name: der_current_ccg_of_registration
