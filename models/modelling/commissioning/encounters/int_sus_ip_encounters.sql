@@ -74,7 +74,8 @@ select
     /* Discharge information */
     
     /* Clinical information */
-    , core.spell_clinical_coding_grouper_derived_primary_diagnosis  || ', ' || core.spell_clinical_coding_grouper_derived_secondary_diagnosis  as flat_diagnosis_codes
+    , core.spell_clinical_coding_grouper_derived_primary_diagnosis  as primary_diagnosis_code
+    , core.spell_clinical_coding_grouper_derived_secondary_diagnosis  as secondary_diagnosis_code
     , core.spell_clinical_coding_grouper_derived_dominant_procedure as primary_treatment
 
     /* Clinician information */
