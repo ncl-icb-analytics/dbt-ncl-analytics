@@ -25,7 +25,10 @@ jobs:
           echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(sql)$' | grep -E '^(models|macros|analyses)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
-        run: python scripts/ci/check_hardcoded_refs.py ${{ steps.changed.outputs.files }}
+        run: |
+          python scripts/ci/check_hardcoded_refs.py ${{ steps.changed.outputs.files }} | tee result.txt
+          cat result.txt >> $GITHUB_STEP_SUMMARY
+          grep -q "^FAILED" result.txt && exit 1 || exit 0
 
   staging-references:
     name: Raw/Source References Only in Staging
@@ -43,7 +46,10 @@ jobs:
           echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
-        run: python scripts/ci/check_staging_refs.py ${{ steps.changed.outputs.files }}
+        run: |
+          python scripts/ci/check_staging_refs.py ${{ steps.changed.outputs.files }} | tee result.txt
+          cat result.txt >> $GITHUB_STEP_SUMMARY
+          grep -q "^FAILED" result.txt && exit 1 || exit 0
 
   model-descriptions:
     name: Model Descriptions
@@ -62,7 +68,10 @@ jobs:
           echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
-        run: python scripts/ci/check_model_descriptions.py ${{ steps.changed.outputs.files }}
+        run: |
+          python scripts/ci/check_model_descriptions.py ${{ steps.changed.outputs.files }} | tee result.txt
+          cat result.txt >> $GITHUB_STEP_SUMMARY
+          grep -q "^FAILED" result.txt && exit 1 || exit 0
 
   model-tests:
     name: Model Test Coverage
@@ -81,4 +90,7 @@ jobs:
           echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
-        run: python scripts/ci/check_model_tests.py ${{ steps.changed.outputs.files }}
+        run: |
+          python scripts/ci/check_model_tests.py ${{ steps.changed.outputs.files }} | tee result.txt
+          cat result.txt >> $GITHUB_STEP_SUMMARY
+          grep -q "^FAILED" result.txt && exit 1 || exit 0
