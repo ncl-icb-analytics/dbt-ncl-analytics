@@ -253,26 +253,52 @@ def main():
 
             # Column mappings with uniqueness tracking
             column_mappings = []
+            column_name_mappings = []  # For description
             used_names = set()
 
             for col in columns:
                 # All columns need quoting and safe transformations
                 safe_col = sanitise_column_name(col, apply_transformations=True, used_names=used_names)
                 column_mappings.append(f'"{col}" as {safe_col}')
+                column_name_mappings.append(f"{col} -> {safe_col}")
 
             column_list = ',\n    '.join(column_mappings)
+            column_map_str = "\\n  ".join(column_name_mappings)
 
-            # Add description if available
-            description_comment = ""
-            if source.get('description'):
-                description_comment = f"-- Description: {source.get('description')}\n"
+            # Build fully qualified table name
+            db_name = source['database'].strip('"')
+            schema_name = source.get('schema', '').strip('"')
+            table_identifier = table.get('identifier', table_name).strip('"')
+            if schema_name:
+                fq_table = f"{db_name}.{schema_name}.{table_identifier}"
+            else:
+                fq_table = f"{db_name}.{table_identifier}"
 
-            schema_info = f".{source['schema']}" if 'schema' in source else ""
+            # Build description including source references
+            table_desc = table.get('description', '')
+            source_desc = source.get('description', '')
+
+            if table_desc:
+                desc_parts = [f"Raw layer: {table_desc}."]
+            elif source_desc:
+                desc_parts = [f"Raw layer ({source_desc})."]
+            else:
+                desc_parts = ["Raw layer."]
+
+            desc_parts.append(f"1:1 passthrough with cleaned column names.")
+            desc_parts.append(f"\\nSource: {fq_table}")
+            desc_parts.append(f"\\ndbt: source(''{source_ref_name}'', ''{table_name}'')")
+            desc_parts.append(f"\\nColumns:\\n  {column_map_str}")
+
+            description = " ".join(desc_parts)
+
             # Use source_ref_name (prefixed for auto, original for manual) in source() call
             # But keep raw model names unchanged (using prefix from mappings)
-            model_sql = f"""-- Raw layer model for {source_ref_name}.{table_name}
--- Source: {source['database']}{schema_info}
-{description_comment}-- This is a 1:1 passthrough from source with standardized column names
+            model_sql = f"""{{{{
+    config(
+        description="{description}"
+    )
+}}}}
 select
     {column_list}
 from {{{{ source('{source_ref_name}', '{table_name}') }}}}"""

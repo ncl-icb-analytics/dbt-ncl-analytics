@@ -1,0 +1,84 @@
+name: dbt Code Quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'macros/**'
+      - 'analyses/**'
+
+jobs:
+  hardcoded-references:
+    name: No Hardcoded Table References
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Get changed files
+        id: changed
+        run: |
+          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(sql)$' | grep -E '^(models|macros|analyses)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+      - name: Run check
+        if: steps.changed.outputs.files != ''
+        run: python scripts/ci/check_hardcoded_refs.py ${{ steps.changed.outputs.files }}
+
+  staging-references:
+    name: Raw/Source References Only in Staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Get changed files
+        id: changed
+        run: |
+          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+      - name: Run check
+        if: steps.changed.outputs.files != ''
+        run: python scripts/ci/check_staging_refs.py ${{ steps.changed.outputs.files }}
+
+  model-descriptions:
+    name: Model Descriptions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pyyaml
+      - name: Get changed files
+        id: changed
+        run: |
+          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+      - name: Run check
+        if: steps.changed.outputs.files != ''
+        run: python scripts/ci/check_model_descriptions.py ${{ steps.changed.outputs.files }}
+
+  model-tests:
+    name: Model Test Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pyyaml
+      - name: Get changed files
+        id: changed
+        run: |
+          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+      - name: Run check
+        if: steps.changed.outputs.files != ''
+        run: python scripts/ci/check_model_tests.py ${{ steps.changed.outputs.files }}
