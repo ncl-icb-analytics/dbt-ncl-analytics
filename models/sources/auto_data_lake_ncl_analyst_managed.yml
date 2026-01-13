@@ -1355,6 +1355,33 @@ sources:
       data_type: FLOAT
     - name: OTHERINSTRUCTIONS
       data_type: TEXT
+  - name: EMIS_QOF_V50_REGISTER_COUNTS
+    identifier: '"EMIS_QOF_V50_REGISTER_COUNTS"'
+    columns:
+    - name: REFERENCE_DATE
+      data_type: DATE
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: INDICATOR_DESCRIPTION
+      data_type: TEXT
+    - name: ORGANISATION
+      data_type: TEXT
+    - name: CDB
+      data_type: TEXT
+    - name: POPULATION_COUNT
+      data_type: NUMBER
+    - name: PARENT_POPULATION
+      data_type: NUMBER
+    - name: PERCENTAGE
+      data_type: TEXT
+    - name: MALES
+      data_type: NUMBER
+    - name: FEMALES
+      data_type: NUMBER
+    - name: EXCLUDED
+      data_type: NUMBER
+    - name: STATUS
+      data_type: TEXT
   - name: FA_MONTHLY_IAP_2526_UCLH_211125
     identifier: '"FA_MONTHLY_IAP_2526_UCLH_211125"'
     columns:

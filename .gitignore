@@ -60,5 +60,6 @@ snowflake_cache/
 keyring.cfg
 
 # Claude Code
+CLAUDE.md
 .claude/
 tmpclaude-*
