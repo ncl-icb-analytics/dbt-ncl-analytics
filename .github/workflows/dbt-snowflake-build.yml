@@ -1,0 +1,130 @@
+name: Trigger Snowflake dbt Build
+
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'macros/**'
+
+jobs:
+  trigger-dbt-build:
+    name: Trigger Snowflake dbt Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for diff
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install snowflake-connector-python
+
+      - name: Get changed models
+        id: changes
+        run: |
+          # Get changed .sql files in models/ directory
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.sql' | tr '\n' ' ')
+          COUNT=$(echo "$CHANGED" | wc -w)
+          echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
+          echo "file_count=$COUNT" >> $GITHUB_OUTPUT
+          echo "Found $COUNT changed model files"
+
+      - name: Setup Snowflake credentials
+        run: |
+          mkdir -p ~/.snowflake
+          echo "${{ secrets.SNOWFLAKE__PRIVATE_KEY }}" > ~/.snowflake/rsa_key.p8
+          chmod 600 ~/.snowflake/rsa_key.p8
+
+      - name: Trigger Snowflake dbt build
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
+          SNOWFLAKE_PRIVATE_KEY_PATH: ~/.snowflake/rsa_key.p8
+          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE__PASSPHRASE }}
+          CHANGED_FILES: ${{ steps.changes.outputs.changed_files }}
+          FILE_COUNT: ${{ steps.changes.outputs.file_count }}
+        run: |
+          python << 'EOF'
+          import os
+          import snowflake.connector
+          from cryptography.hazmat.primitives import serialization
+          from cryptography.hazmat.backends import default_backend
+
+          # Load private key
+          with open(os.path.expanduser(os.environ['SNOWFLAKE_PRIVATE_KEY_PATH']), 'rb') as key_file:
+              p_key = serialization.load_pem_private_key(
+                  key_file.read(),
+                  password=os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', '').encode(),
+                  backend=default_backend()
+              )
+
+          pkb = p_key.private_bytes(
+              encoding=serialization.Encoding.DER,
+              format=serialization.PrivateFormat.PKCS8,
+              encryption_algorithm=serialization.NoEncryption()
+          )
+
+          conn = snowflake.connector.connect(
+              account=os.environ['SNOWFLAKE_ACCOUNT'],
+              user=os.environ['SNOWFLAKE_USER'],
+              private_key=pkb,
+              database='ACCOUNT_ADMIN',
+              schema='DBT_MANAGEMENT',
+              warehouse='WH_NCL_ENGINEERING_XS'
+          )
+
+          cur = conn.cursor()
+
+          # Fetch latest from git
+          print("Fetching git repository...")
+          cur.execute("ALTER GIT REPOSITORY REPO__GITHUB__DBT_NCL_ANALYTICS FETCH")
+
+          # Update dbt project version
+          print("Updating dbt project version...")
+          cur.execute("""
+              ALTER DBT PROJECT DBT_NCL_ANALYTICS__MAIN
+              ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/main'
+          """)
+
+          # Determine build args
+          file_count = int(os.environ.get('FILE_COUNT', 0))
+          changed_files = os.environ.get('CHANGED_FILES', '').strip()
+
+          if file_count == 0 or file_count > 50:
+              # Full build
+              print(f"Running full build ({file_count} files changed)")
+              args = "build --target snowflake-prod"
+          else:
+              # Build changed models + downstream
+              # Convert file paths to model names
+              models = []
+              for f in changed_files.split():
+                  # models/staging/foo/stg_bar.sql -> stg_bar
+                  model_name = f.split('/')[-1].replace('.sql', '')
+                  models.append(model_name + '+')  # + for downstream
+
+              select = ' '.join(models)
+              print(f"Building {file_count} changed models + downstream: {select}")
+              args = f"build --target snowflake-prod --select {select}"
+
+          # Execute dbt build
+          print(f"Executing: dbt {args}")
+          cur.execute(f"""
+              EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__MAIN
+              ARGS = '{args}'
+          """)
+
+          # Get execution results
+          results = cur.fetchall()
+          for row in results:
+              print(row)
+
+          cur.close()
+          conn.close()
+          print("Done!")
+          EOF
