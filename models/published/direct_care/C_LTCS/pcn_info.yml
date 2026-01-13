@@ -3,3 +3,8 @@ version: 2
 models:
   - name: pcn_info
     description: PCN and practice information for C-LTCS participating PCNs. One row per practice.
+    columns:
+    - name: practice_code
+      data_tests:
+      - unique
+      - not_null

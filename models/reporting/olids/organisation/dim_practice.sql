@@ -125,7 +125,7 @@ LEFT JOIN (
         "LastUpdated" as last_updated,
         "SK_PostcodeID" as sk_postcode_id,  -- Use the first SK_PostcodeID explicitly
         "SK_OrganisationID" as sk_organisation_id  -- Add the organisation ID
-    FROM {{ source('dictionary_dbo', 'Organisation') }}
+    FROM {{ ref('stg_dictionary_dbo_organisation') }}
     QUALIFY ROW_NUMBER() OVER (PARTITION BY "Organisation_Code" ORDER BY "Organisation_Code") = 1
 ) AS dict_org
     ON dict.practice_code = dict_org.organisation_code
@@ -137,7 +137,7 @@ LEFT JOIN (
         "MSOA" as msoa,
         "Latitude" as latitude,
         "Longitude" as longitude
-    FROM {{ source('dictionary_dbo', 'Postcode') }}
+    FROM {{ ref('stg_dictionary_dbo_postcode') }}
 ) AS dict_pc
     ON dict_org.sk_postcode_id = dict_pc.sk_postcode_id
 LEFT JOIN {{ ref('int_organisation_borough_mapping') }} AS borough_map

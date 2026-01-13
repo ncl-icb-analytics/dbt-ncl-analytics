@@ -1,0 +1,22 @@
+version: 2
+models:
+- name: stg_reference_ncl_lsoa_2021_ward_2025
+  description: LSOA 2021 to ward 2025 and local authority 2025 mapping
+  columns:
+  - name: lsoa_2021_code
+    description: Primary key - LSOA 2021 code
+    data_tests:
+    - unique
+    - not_null
+  - name: lsoa_2021_name
+    description: LSOA 2021 name
+  - name: ward_2025_code
+    description: Ward 2025 code
+  - name: ward_2025_name
+    description: Ward 2025 name
+  - name: local_authority_2025_code
+    description: Local authority 2025 code
+  - name: local_authority_2025_name
+    description: Local authority 2025 name
+  - name: resident_flag
+    description: NCL resident flag

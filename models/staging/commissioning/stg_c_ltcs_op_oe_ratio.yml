@@ -1,0 +1,16 @@
+version: 2
+models:
+- name: stg_c_ltcs_op_oe_ratio
+  description: C-LTCS outpatient observed/expected ratio by patient
+  columns:
+  - name: patient_id
+    description: Primary key - patient identifier
+    data_tests:
+    - unique
+    - not_null
+  - name: oe_ratio
+    description: Observed/expected ratio
+  - name: predicted
+    description: Predicted value
+  - name: op_att_tot_12_mo
+    description: Total outpatient attendances in 12 months

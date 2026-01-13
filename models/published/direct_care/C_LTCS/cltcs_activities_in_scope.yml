@@ -7,6 +7,9 @@ models:
       - name: sk_patient_id
         data_type: varchar
         description: "unique patient identifier"
+        data_tests:
+        - unique
+        - not_null
 
       - name: cancer
         data_type: number

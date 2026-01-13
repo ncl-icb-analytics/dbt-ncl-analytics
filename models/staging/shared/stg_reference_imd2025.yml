@@ -1,17 +1,16 @@
-version: 1
+version: 2
 models:
 - name: stg_reference_imd2025
-  description: Index of Multiple Deprivation 2025 deciles by LSOA (2021)
+  description: Index of Multiple Deprivation 2025 by LSOA 2021
   columns:
-  - name: lsoacode
-    description: Primary key - LSOA code
-    tests:
+  - name: lsoa_code_2021
+    description: Primary key - LSOA 2021 code
+    data_tests:
     - unique
     - not_null
-  - name: imddecile
+  - name: index_of_multiple_deprivation_decile
     description: IMD decile (1 = most deprived, 10 = least deprived)
-    tests:
+    data_tests:
     - not_null
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+  - name: index_of_multiple_deprivation_score
+    description: IMD score

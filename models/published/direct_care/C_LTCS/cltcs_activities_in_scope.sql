@@ -33,7 +33,7 @@ with exclusion_activities as (
 ),
 people_in_scope as (
     SELECT PSEUDO_NHS_NUMBER as sk_patient_id, PRIMARY_CARE_PROVIDER
-    FROM {{ref('raw_pds_pds_patient_care_practice')}} -- whilst waiting for PDS stg to be finished
+    FROM {{ ref('stg_pds_pds_patient_care_practice') }}
     WHERE REASON_FOR_REMOVAL IS NULL
     AND PRIMARY_CARE_PROVIDER_BUSINESS_EFFECTIVE_TO_DATE IS NULL
     AND PRIMARY_CARE_PROVIDER in ('F83023','F83677','F83632','F83018','F83022','F83057','F85682','F85043','F85023','F85634','F85654','F85072','F85025','Y03402','F85039','E83049','E83053','E83016','E83030')

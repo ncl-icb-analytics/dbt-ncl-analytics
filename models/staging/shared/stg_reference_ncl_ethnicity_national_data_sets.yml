@@ -1,0 +1,12 @@
+version: 2
+models:
+- name: stg_reference_ncl_ethnicity_national_data_sets
+  description: Patient ethnicity derived from national data sets
+  columns:
+  - name: sk_patientid
+    description: Primary key - patient surrogate key
+    data_tests:
+    - unique
+    - not_null
+  - name: record_date
+    description: Date of the ethnicity record

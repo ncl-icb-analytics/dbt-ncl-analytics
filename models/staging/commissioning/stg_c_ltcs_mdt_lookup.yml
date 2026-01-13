@@ -1,0 +1,12 @@
+version: 2
+models:
+- name: stg_c_ltcs_mdt_lookup
+  description: C-LTCS MDT PCN lookup
+  columns:
+  - name: pcn_code
+    description: Primary key - PCN code
+    data_tests:
+    - unique
+    - not_null
+  - name: mdt_date
+    description: MDT date

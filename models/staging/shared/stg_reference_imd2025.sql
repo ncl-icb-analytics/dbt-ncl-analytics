@@ -1,5 +1,5 @@
-
-SELECT 
-LSOA_CODE_2021 as lsoacode
-,INDEX_OF_MULTIPLE_DEPRIVATION_IMD_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT_OF_LSOAS as imddecile 
-FROM {{ ref('raw_reference_imd_2025') }}
+select
+    lsoa_code_2021,
+    index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_percent_of_lsoas as index_of_multiple_deprivation_decile,
+    index_of_multiple_deprivation_imd_score as index_of_multiple_deprivation_score
+from {{ ref('raw_reference_imd_2025') }}
