@@ -1,7 +1,24 @@
+# dbt Deploy to Production Workflow
+#
+# Deploys changed dbt models + downstream to Snowflake PROD.
+# Triggered on merge to main or manual dispatch.
+#
+# Prerequisites:
+#   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
+#     SNOWFLAKE__PRIVATE_KEY, SNOWFLAKE__PASSPHRASE
+#   - DBT_DEPLOYMENT_TESTER role with: USAGE on warehouse, DBT_ADMIN role granted
+#
+# Snowflake objects:
+#   - Role: DBT_DEPLOYMENT_TESTER
+#   - Warehouse: WH_NCL_ENGINEERING_XS
+#   - Database/Schema: ACCOUNT_ADMIN.DBT_MANAGEMENT
+#   - Git repo: REPO__GITHUB__DBT_NCL_ANALYTICS
+#   - dbt project: DBT_NCL_ANALYTICS__MAIN
+
 name: dbt Deploy to Production
 
 on:
-  workflow_dispatch:  # Manual only until Snowflake permissions configured
+  workflow_dispatch:
   # TODO: Enable after permissions granted:
   # push:
   #   branches: [main]
@@ -28,12 +45,10 @@ jobs:
       - name: Get changed models
         id: changes
         run: |
-          # For push events, compare with previous commit
           if [ "${{ github.event_name }}" = "push" ]; then
             CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.sql' | tr '\n' ' ')
           else
-            # For manual trigger, default to empty (will trigger full build)
-            CHANGED=""
+            CHANGED=""  # Manual trigger = full build
           fi
           COUNT=$(echo "$CHANGED" | wc -w)
           echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
@@ -50,80 +65,80 @@ jobs:
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
-          SNOWFLAKE_PRIVATE_KEY_PATH: ~/.snowflake/rsa_key.p8
           SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE__PASSPHRASE }}
           CHANGED_FILES: ${{ steps.changes.outputs.changed_files }}
           FILE_COUNT: ${{ steps.changes.outputs.file_count }}
         run: |
           python << 'EOF'
           import os
+          import re
+          import sys
           import snowflake.connector
-          from cryptography.hazmat.primitives import serialization
-          from cryptography.hazmat.backends import default_backend
 
-          with open(os.path.expanduser(os.environ['SNOWFLAKE_PRIVATE_KEY_PATH']), 'rb') as key_file:
-              p_key = serialization.load_pem_private_key(
-                  key_file.read(),
-                  password=os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', '').encode(),
-                  backend=default_backend()
+          def validate_identifier(value, pattern=r'^[a-zA-Z0-9_\-/]+$'):
+              """Validate identifier to prevent injection."""
+              if not value or not re.match(pattern, value):
+                  raise ValueError(f"Invalid identifier: {value}")
+              return value
+
+          def get_model_name(filepath):
+              """Extract and validate model name from filepath."""
+              name = filepath.split('/')[-1].replace('.sql', '')
+              return validate_identifier(name, r'^[a-zA-Z0-9_]+$')
+
+          try:
+              conn = snowflake.connector.connect(
+                  account=os.environ['SNOWFLAKE_ACCOUNT'],
+                  user=os.environ['SNOWFLAKE_USER'],
+                  private_key_path=os.path.expanduser('~/.snowflake/rsa_key.p8'),
+                  private_key_passphrase=os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', ''),
+                  role='DBT_DEPLOYMENT_TESTER',
+                  database='ACCOUNT_ADMIN',
+                  schema='DBT_MANAGEMENT',
+                  warehouse='WH_NCL_ENGINEERING_XS'
               )
 
-          pkb = p_key.private_bytes(
-              encoding=serialization.Encoding.DER,
-              format=serialization.PrivateFormat.PKCS8,
-              encryption_algorithm=serialization.NoEncryption()
-          )
+              cur = conn.cursor()
+              cur.execute("USE WAREHOUSE WH_NCL_ENGINEERING_XS")
 
-          conn = snowflake.connector.connect(
-              account=os.environ['SNOWFLAKE_ACCOUNT'],
-              user=os.environ['SNOWFLAKE_USER'],
-              private_key=pkb,
-              role='DBT_DEPLOYMENT_TESTER',
-              database='ACCOUNT_ADMIN',
-              schema='DBT_MANAGEMENT',
-              warehouse='WH_NCL_ENGINEERING_XS'
-          )
+              print("Fetching git repository...")
+              cur.execute("ALTER GIT REPOSITORY REPO__GITHUB__DBT_NCL_ANALYTICS FETCH")
 
-          cur = conn.cursor()
-          cur.execute("USE WAREHOUSE WH_NCL_ENGINEERING_XS")
+              print("Updating project to main branch...")
+              cur.execute("""
+                  ALTER DBT PROJECT DBT_NCL_ANALYTICS__MAIN
+                  ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/main'
+              """)
 
-          print("Fetching git repository...")
-          cur.execute("ALTER GIT REPOSITORY REPO__GITHUB__DBT_NCL_ANALYTICS FETCH")
+              file_count = int(os.environ.get('FILE_COUNT', 0))
+              changed_files = os.environ.get('CHANGED_FILES', '').strip()
 
-          print("Updating project to main branch...")
-          cur.execute("""
-              ALTER DBT PROJECT DBT_NCL_ANALYTICS__MAIN
-              ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/main'
-          """)
+              if file_count == 0 or file_count > 50:
+                  print(f"Running full build ({file_count} files changed or manual trigger)")
+                  args = "build --target snowflake-prod"
+              else:
+                  # Changed models + downstream (append +)
+                  models = [get_model_name(f) + '+' for f in changed_files.split() if f]
+                  select = ' '.join(models)
+                  print(f"Deploying {file_count} changed models + downstream: {select}")
+                  args = f"build --target snowflake-prod --select {select}"
 
-          # Build selection from changed files
-          file_count = int(os.environ.get('FILE_COUNT', 0))
-          changed_files = os.environ.get('CHANGED_FILES', '').strip()
+              print(f"Executing: dbt {args}")
+              cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__MAIN ARGS = '{args}'")
 
-          if file_count == 0 or file_count > 50:
-              print(f"Running full build ({file_count} files changed or manual trigger)")
-              args = "build --target snowflake-prod"
-          else:
-              # Build changed models + downstream
-              models = []
-              for f in changed_files.split():
-                  model_name = f.split('/')[-1].replace('.sql', '')
-                  models.append(model_name + '+')  # + for downstream
-              select = ' '.join(models)
-              print(f"Deploying {file_count} changed models + downstream: {select}")
-              args = f"build --target snowflake-prod --select {select}"
+              for row in cur.fetchall():
+                  print(row)
 
-          print(f"Executing: dbt {args}")
-          cur.execute(f"""
-              EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__MAIN
-              ARGS = '{args}'
-          """)
+              print("Deployment complete!")
 
-          results = cur.fetchall()
-          for row in results:
-              print(row)
-
-          cur.close()
-          conn.close()
-          print("Deployment complete!")
+          except Exception as e:
+              print(f"Error: {e}", file=sys.stderr)
+              sys.exit(1)
+          finally:
+              if 'cur' in locals(): cur.close()
+              if 'conn' in locals(): conn.close()
           EOF
+
+      - name: Cleanup credentials
+        if: always()
+        run: rm -f ~/.snowflake/rsa_key.p8
