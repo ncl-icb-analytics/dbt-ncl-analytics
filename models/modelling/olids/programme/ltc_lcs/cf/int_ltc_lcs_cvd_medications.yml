@@ -5,5 +5,11 @@ models:
 
       One row per medication order for statin medications using cluster ID: LCS_STAT_COD_CVD.'
     tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
       - cluster_ids_exist:
           cluster_ids: LCS_STAT_COD_CVD
+    columns:
+      - name: person_id
+        tests:
+          - not_null

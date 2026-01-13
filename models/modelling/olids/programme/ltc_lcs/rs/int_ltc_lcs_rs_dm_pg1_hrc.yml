@@ -1,0 +1,19 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_dm_pg1_hrc
+    description: |
+      Diabetes Register Priority Group 1 - High Risk Cohort identification.
+
+      Patients on the diabetes register are included if ANY of the following apply:
+      - Rule 1: HbA1c > 90
+      - Rule 2: eGFR < 15
+      - Rule 3: Albumin:creatinine ratio > 250
+      - Rule 4: Enhanced Liver Fibrosis score > 9.8
+      - Rule 5+6: HbA1c > 75 AND (cardiac condition OR GLP-1/insulin in last 6 months)
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        tests:
+          - not_null

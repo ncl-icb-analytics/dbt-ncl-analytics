@@ -4,7 +4,13 @@ models:
     description: 'Base population for Long Term Conditions case finding indicators with appropriate exclusions.
 
       One row per eligible person excluding patients already in LTC programmes and those with NHS health checks in last 24 months to prevent duplicate programme targeting.'
-    
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        tests:
+          - not_null
     config:
       meta:
         indicator:
