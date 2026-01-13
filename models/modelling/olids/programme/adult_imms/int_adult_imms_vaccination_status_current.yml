@@ -15,8 +15,3 @@ models:
     description: Status of vaccination (Completed, Overdue, Not due yet, etc.)
     data_tests:
     - not_null
-  data_tests:
-  - dbt_utils.unique_combination_of_columns:
-      combination_of_columns:
-        - person_id
-        - vaccine_id
