@@ -5,5 +5,11 @@ models:
 
       One row per medication order including asthma medications, prednisolone (oral steroids), and montelukast (leukotriene receptor antagonist) using cluster IDs: ASTHMA_MEDICATIONS, ASTHMA_PREDNISOLONE, MONTELUKAST_MEDICATIONS.'
     tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
       - cluster_ids_exist:
           cluster_ids: ASTHMA_MEDICATIONS,ASTHMA_PREDNISOLONE,MONTELUKAST_MEDICATIONS
+    columns:
+      - name: person_id
+        tests:
+          - not_null

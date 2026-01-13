@@ -4,3 +4,10 @@ models:
     description: 'Children and young people asthma-relevant observations for Long Term Conditions case finding measures.
 
       One row per clinical observation including suspected asthma, viral wheeze, asthma diagnosis, and asthma resolved observations using cluster IDs: SUSPECTED_ASTHMA, VIRAL_WHEEZE, ASTHMA_DIAGNOSIS, ASTHMA_RESOLVED.'
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        tests:
+          - not_null

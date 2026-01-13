@@ -5,5 +5,11 @@ models:
 
       One row per NHS health check completion observation using cluster ID HEALTH_CHECK_COMP for tracking recent health checks to avoid duplication in case finding programmes.'
     tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
       - cluster_ids_exist:
           cluster_ids: HEALTH_CHECK_COMP
+    columns:
+      - name: person_id
+        tests:
+          - not_null
