@@ -1,12 +1,13 @@
 name: dbt Deploy to Production
 
 on:
-  workflow_dispatch:  # Manual trigger
-  push:
-    branches: [main]
-    paths:
-      - 'models/**'
-      - 'macros/**'
+  workflow_dispatch:  # Manual only until Snowflake permissions configured
+  # TODO: Enable after permissions granted:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'models/**'
+  #     - 'macros/**'
 
 jobs:
   deploy-models:
