@@ -1,0 +1,54 @@
+name: Test Snowflake Connection
+
+on:
+  workflow_dispatch:  # Manual trigger from GitHub UI or CLI
+
+jobs:
+  test-connection:
+    name: Test Snowflake Connection
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: |
+          pip install dbt-snowflake==1.9.4
+
+      - name: Setup Snowflake credentials
+        run: |
+          mkdir -p ~/.snowflake
+          echo "${{ secrets.SNOWFLAKE__PRIVATE_KEY }}" > ~/.snowflake/rsa_key.p8
+          chmod 600 ~/.snowflake/rsa_key.p8
+
+      - name: Create profiles.yml for CI
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << 'EOF'
+          ncl_analytics:
+            target: ci
+            outputs:
+              ci:
+                type: snowflake
+                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.SNOWFLAKE__USERNAME }}
+                private_key_path: ~/.snowflake/rsa_key.p8
+                private_key_passphrase: ${{ secrets.SNOWFLAKE__PASSPHRASE }}
+                role: DBT_ADMIN
+                database: MODELLING
+                schema: DBT_DEV
+                warehouse: NCL_ANALYTICS_M
+                threads: 4
+          EOF
+
+      - name: Show configured username
+        run: |
+          echo "Configured username: ${{ secrets.SNOWFLAKE__USERNAME }}"
+
+      - name: Test connection with dbt debug
+        run: |
+          dbt deps
+          dbt debug
