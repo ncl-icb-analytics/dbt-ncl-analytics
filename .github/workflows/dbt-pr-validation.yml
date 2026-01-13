@@ -13,7 +13,7 @@
 #   - Warehouse: WH_NCL_ENGINEERING_XS
 #   - Database/Schema: ACCOUNT_ADMIN.DBT_MANAGEMENT
 #   - Git repo: REPO__GITHUB__DBT_NCL_ANALYTICS
-#   - dbt project: DBT_NCL_ANALYTICS__MAIN
+#   - dbt project: DBT_NCL_ANALYTICS__CI
 
 name: dbt PR Validation
 
@@ -109,7 +109,7 @@ jobs:
 
               print(f"Setting project to PR branch: {pr_branch}")
               cur.execute(f"""
-                  ALTER DBT PROJECT DBT_NCL_ANALYTICS__MAIN
+                  ALTER DBT PROJECT DBT_NCL_ANALYTICS__CI
                   ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/{pr_branch}'
               """)
 
@@ -126,7 +126,7 @@ jobs:
                   args = f"build --target snowflake-dev --fail-fast --select {select}"
 
               print(f"Executing: dbt {args}")
-              cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__MAIN ARGS = '{args}'")
+              cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__CI ARGS = '{args}'")
 
               for row in cur.fetchall():
                   print(row)
