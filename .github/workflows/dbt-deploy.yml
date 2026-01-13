@@ -7,7 +7,6 @@
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
 #     SNOWFLAKE__PRIVATE_KEY, SNOWFLAKE__PASSPHRASE
 #   - DBT_DEPLOYMENT_TESTER role with: USAGE on warehouse, DBT_ADMIN role granted
-#   - GitHub environment 'production' configured (optional, for required reviewers)
 #
 # Snowflake objects:
 #   - Role: DBT_DEPLOYMENT_TESTER
@@ -31,7 +30,6 @@ jobs:
   deploy-models:
     name: Deploy Changed Models + Downstream
     runs-on: ubuntu-latest
-    environment: production
     permissions:
       contents: read
     steps:
