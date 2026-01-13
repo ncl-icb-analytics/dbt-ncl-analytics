@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: int_opt_out_type_1_all
+    description: Type 1 opt-out observations for dissent from secondary use of primary care data. One row per opt-out event per person.

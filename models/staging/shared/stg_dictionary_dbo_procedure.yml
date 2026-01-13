@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_dictionary_dbo_procedure
+    description: OPCS procedure code dictionary from data warehouse. One row per procedure code.

@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: int_flu_vaccination_given
+    description: Persons with flu vaccination records including LAIV. One row per person per campaign with most recent vaccination date.

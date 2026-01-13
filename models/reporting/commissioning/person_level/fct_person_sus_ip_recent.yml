@@ -2,27 +2,27 @@ version: 2
 
 models:
   - name: fct_person_sus_ip_recent
-    description: ""
+    description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
     columns:
       - name: sk_patient_id
         data_type: varchar
-        description: ""
+        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
         tests:
           - not_null
           - unique
 
       - name: apc_3mo
         data_type: number
-        description: ""
+        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
 
       - name: apc_1mo
         data_type: number
-        description: ""
+        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
 
       - name: apc_12mo
         data_type: number
-        description: ""
+        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
 
       - name: apc_los_12mo
         data_type: number
-        description: ""
+        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.

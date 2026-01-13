@@ -1,6 +1,6 @@
 models:
   - name: stg_sus_apc_spell_episodes_commissioning_grouping_unbundled_hrg
-    description: ""
+    description: Unbundled HRGs for inpatient episodes from SUS APC. One row per unbundled HRG per episode.
     tests:
     - dbt_utils.unique_combination_of_columns:
         combination_of_columns:

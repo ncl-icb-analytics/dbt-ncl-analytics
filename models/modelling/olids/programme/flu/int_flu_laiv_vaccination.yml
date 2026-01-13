@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: int_flu_laiv_vaccination
+    description: Persons with LAIV (nasal spray) flu vaccination records. One row per person per campaign with most recent vaccination date.
