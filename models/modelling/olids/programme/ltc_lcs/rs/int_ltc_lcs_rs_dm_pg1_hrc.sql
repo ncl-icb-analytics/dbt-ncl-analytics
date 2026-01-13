@@ -1,5 +1,5 @@
--- LTC LCS: Diabetes Register - Priority Group 1 (HRC)
--- Implements inclusion/exclusion rules for high-risk patient identification
+-- LTC LCS: Diabetes Register - Priority Group 1 (High Risk & Complex)
+-- Implements inclusion/exclusion rules for high-risk & complex patient identification
 -- Parent population: Diabetes register
 
 with

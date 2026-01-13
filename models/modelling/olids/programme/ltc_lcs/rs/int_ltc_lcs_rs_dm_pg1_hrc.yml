@@ -2,7 +2,7 @@ version: 2
 models:
   - name: int_ltc_lcs_rs_dm_pg1_hrc
     description: |
-      Diabetes Register Priority Group 1 - High Risk Cohort identification.
+      Diabetes Register Priority Group 1 - High Risk & Complex identification.
 
       Patients on the diabetes register are included if ANY of the following apply:
       - Rule 1: HbA1c > 90
@@ -17,3 +17,4 @@ models:
       - name: person_id
         tests:
           - not_null
+          - unique
