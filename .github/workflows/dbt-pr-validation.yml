@@ -1,11 +1,13 @@
 name: dbt PR Validation
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'models/**'
-      - 'macros/**'
+  workflow_dispatch:  # Manual only until Snowflake permissions configured
+  # TODO: Enable after permissions granted:
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - 'models/**'
+  #     - 'macros/**'
 
 jobs:
   validate-models:
