@@ -1,5 +1,6 @@
--- Gets list of attendances and diagnoses before 2025/26.
-{{ config(materialized="table") }}
+-- Gets list of attendances and diagnoses in last 12 months (monthly grain)
+ {{ config(materialized="table") }}
+--{{ config(materialized = 'incremental') }}
 
 SELECT
         ip.VISIT_OCCURRENCE_ID AS primary_id,
@@ -16,19 +17,21 @@ SELECT
         ip.SITE_NAME AS provider_site_name,
         ip.END_DATE AS ACTIVITY_DATE,            
         dx.ICD_ID AS diag_n,
-        dx.CONCEPT_CODE AS diag_code,
+        dx.SOURCE_CONCEPT_CODE AS diag_code,
         ip.gender_at_event,
         ip.ethnicity_at_event,
         ip.age_at_event,
-        ip.reg_practice_at_event
+        ip.reg_practice_at_event,
+        DATEDIFF(MM,ip.END_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago -- use this in int_myria_conditions to flag 6 mth/1 year/2 year periods
+        -- add col for how many months ago
     FROM
-       {{ ref("int_sus_ip_encounters") }} ip --DEV__MODELLING.COMMISSIONING_MODELLING.INT_SUS_IP_ENCOUNTERS AS ip
-    LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx -- DEV__MODELLING.COMMISSIONING_MODELLING.INT_SUS_IP_DIAGNOSIS AS dx
+       {{ ref("int_sus_ip_encounters") }} ip
+    LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx
         ON ip.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
-    LEFT JOIN {{ ref("raw_sus_apc_spell") }} r --DEV__MODELLING.DBT_RAW.RAW_SUS_APC_SPELL
+    LEFT JOIN {{ ref("raw_sus_apc_spell") }} r
             ON ip.VISIT_OCCURRENCE_ID = r.primarykey_id
      WHERE 
-        ip.END_DATE < '01-Apr-2025' -- only activity before April 2025
+        ip.END_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month
 
 UNION ALL
 
@@ -47,19 +50,20 @@ SELECT
         op.SITE_NAME AS provider_site_name,    
         op.START_DATE AS ACTIVITY_DATE,         
         dx.ICD_ID AS diag_n,
-        dx.CONCEPT_CODE AS diag_code,
+        dx.SOURCE_CONCEPT_CODE AS diag_code,
         op.gender_at_event,
         op.ethnicity_at_event,
         op.age_at_event,
-        op.reg_practice_at_event
+        op.reg_practice_at_event,
+        DATEDIFF(MM,op.START_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago
     FROM 
-       {{ ref("int_sus_op_encounters") }} op -- DEV__MODELLING.COMMISSIONING_MODELLING.INT_SUS_OP_ENCOUNTERS AS op
-    LEFT JOIN {{ ref("int_sus_op_diagnosis") }} dx -- DEV__MODELLING.COMMISSIONING_MODELLING.INT_SUS_OP_DIAGNOSIS AS dx
+       {{ ref("int_sus_op_encounters") }} op
+    LEFT JOIN {{ ref("int_sus_op_diagnosis") }} dx
         ON op.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
     LEFT JOIN {{ ref("raw_sus_op_appointment") }}  r
             ON op.VISIT_OCCURRENCE_ID = r.primarykey_id
      WHERE
-        op.START_DATE < '01-Apr-2025' -- only activity before April 2025
+        op.START_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month
         
     
 UNION ALL
@@ -83,12 +87,13 @@ SELECT
         ae.gender_at_event,
         ae.ethnicity_at_event,
         ae.age_at_event,
-        ae.reg_practice_at_event
+        ae.reg_practice_at_event,
+        DATEDIFF(MM,ae.START_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago
     FROM 
-       {{ ref("int_sus_ae_encounters") }} ae -- DEV__MODELLING.COMMISSIONING_MODELLING.INT_SUS_AE_ENCOUNTERS AS ae
-    LEFT JOIN {{ ref("int_sus_ae_diagnosis") }} dx -- DEV__MODELLING.COMMISSIONING_MODELLING.INT_SUS_AE_DIAGNOSIS AS dx
+       {{ ref("int_sus_ae_encounters") }} ae
+    LEFT JOIN {{ ref("int_sus_ae_diagnosis") }} dx
         ON ae.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
-    LEFT JOIN {{ ref("raw_sus_ae_emergency_care") }} r --DEV__MODELLING.DBT_RAW.RAW_SUS_AE_EMERGENCY_CARE r
+    LEFT JOIN {{ ref("raw_sus_ae_emergency_care") }} r
         ON ae.VISIT_OCCURRENCE_ID = r.primarykey_id
      WHERE
-        ae.START_DATE < '01-Apr-2025' -- only activity before April 2025
+        ae.START_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month

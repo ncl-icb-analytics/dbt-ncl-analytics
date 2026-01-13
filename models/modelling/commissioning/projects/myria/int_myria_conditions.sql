@@ -1,30 +1,16 @@
 {{ config(materialized="table") }}
 
-with recent_rfl_activity as (
-    select
-    patient_id,
-    hospital_number,
-    primary_id as primary_id_most_recent,
-    activity_date as activity_date_most_recent,
-    provider_name as provider_name_most_recent,
-    provider_site_name as provider_site_name_most_recent,
-    gender_at_event as gender_at_event_most_recent,
-    ethnicity_at_event as ethnicity_at_event_most_recent,
-    age_at_event as age_at_event_most_recent,
-    reg_practice_at_event as reg_practice_at_event_most_recent,
-    ROW_NUMBER() OVER(PARTITION BY PATIENT_ID ORDER BY ACTIVITY_DATE DESC, diag_n ASC) as most_recent_activity_flag-- get most recent RFL activity
-    from {{ ref("int_myria_attendances_diagnoses") }} 
-    where provider_code IN ('RAL','RAP')
-    AND POD IN ('NEL-ZLOS', 'NEL-LOS+1') -- want to bring through the information from the most recent RFL NEL activity
-)
-SELECT 
+ SELECT 
     att_dx.patient_id,
     TO_VARCHAR(ARRAY_AGG(NCL.LOCAL_AUTHORITY) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS local_authority, -- gets most recent registered local authority
+    TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_CODE) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS gp_code,
+    TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_NAME) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS gp_name,
     CASE -- counts distinct attendance IDs and then flags as 1 if there is at least 1 non-elective attendance at Barnet Hospital in the period
         WHEN COUNT(DISTINCT 
                     CASE 
                         WHEN provider_site_name = 'Barnet Hospital' 
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -34,7 +20,8 @@ SELECT
     COUNT(DISTINCT -- counts distinct attendance IDs for non-elective attendances at Barnet Hospital in the period
                     CASE 
                         WHEN provider_site_name = 'Barnet Hospital' 
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) as barnet_hospital_count,
@@ -44,7 +31,8 @@ SELECT
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
                             AND provider_site_name <> 'Barnet Hospital'
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -55,7 +43,8 @@ SELECT
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
                             AND provider_site_name <> 'Barnet Hospital' 
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS RFL_ex_BH_count,
@@ -64,7 +53,8 @@ SELECT
         WHEN COUNT(DISTINCT 
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
-                            AND fin_year = '2024/25'
+                            ---AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -74,7 +64,8 @@ SELECT
     COUNT(DISTINCT -- counts distinct attendance IDs at RFL in the period
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS RFL_count,
@@ -83,7 +74,8 @@ SELECT
         WHEN COUNT(DISTINCT 
                     CASE 
                         WHEN provider_code IN ('RAL','RAP','RKE','RRV')
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -93,7 +85,8 @@ SELECT
     COUNT(DISTINCT -- counts distinct attendance IDs at NCL providers in the period
                     CASE 
                         WHEN provider_code IN ('RAL','RAP','RKE','RRV')
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS NCLProvider_count,
@@ -102,7 +95,8 @@ SELECT
         WHEN COUNT(DISTINCT
                     CASE
                         WHEN provider_code NOT IN ('RAL','RAP','RKE','RRV')
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -112,28 +106,32 @@ SELECT
     COUNT(DISTINCT -- counts distinct attendance IDs non-NCL providers in the period
                     CASE
                         WHEN provider_code NOT IN ('RAL','RAP','RKE','RRV')
-                            AND fin_year = '2024/25'
+                            --AND fin_year = '2024/25'
+                            AND activity_months_ago between 0 and 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1')
                         THEN primary_id
                         END) AS Non_NCLProvider_count,
     -- activity counts for tiering
     COUNT(DISTINCT 
                     CASE
-                        WHEN fin_year IN ('2023/24','2024/25')
+                        WHEN activity_months_ago between 0 and 24
+                        --fin_year IN ('2023/24','2024/25')
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS nel_ip_admissions_last_24_months,
     
     COUNT(DISTINCT 
                     CASE
-                        WHEN fin_year IN ('2024/25')
+                        WHEN activity_months_ago between 0 and 12
+                        -- fin_year IN ('2024/25')
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS nel_ip_admissions_last_12_months,
         
     COUNT(DISTINCT 
                     CASE
-                        WHEN fin_year IN ('2024/25') AND fin_month BETWEEN 7 AND 12
+                        WHEN activity_months_ago between 0 and 6
+                        --fin_year IN ('2024/25') AND fin_month BETWEEN 7 AND 12
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS nel_ip_admissions_last_6_months,
@@ -169,7 +167,7 @@ SELECT
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('K72') or LEFT(UPPER(diag_code), 5) IN ('K70.4') THEN 1 ELSE 0 END) AS liver_failure,
 
     -- Alcohol Dependence → F10.2* (alcohol dependence syndrome—use the 4th/5th-character subcodes where present). (classbrowser.nhs.uk, aapc.com)
-    MAX(CASE WHEN LEFT(UPPER(diag_code), 4) IN ('F10.2') THEN 1 ELSE 0 END) AS alcohol_dependence,
+    MAX(CASE WHEN LEFT(UPPER(diag_code), 5) IN ('F10.2') THEN 1 ELSE 0 END) AS alcohol_dependence,
 
     -- Bronchiectasis → J47*. (classbrowser.nhs.uk)
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('J47') THEN 1 ELSE 0 END) AS bronchiectasis,
@@ -207,17 +205,8 @@ SELECT
     
     -- R54 - Age-related physical debility, Z91.81 - History of falling
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('R54') OR UPPER(diag_code) IN ('Z91.81', 'Z9181') THEN 1 ELSE 0 END) AS frailty_falls, 
-    
-    rr.hospital_number, -- information from most recent RFL visit
-    activity_date_most_recent,
-    provider_name_most_recent,
-    provider_site_name_most_recent,
-    g.gender as gender_at_event_most_recent,
-    eth.ethnicity_desc2 as ethnicity_at_event_most_recent,
-    age_at_event_most_recent,
-    reg_practice_at_event_most_recent,
-    ncl_rflnel.practice_name as gp_name_at_event_most_recent,
-    ncl_rflnel.LOCAL_AUTHORITY as la_most_recent_rfl_nel
+
+    CURRENT_TIMESTAMP() AS refresh_date
 FROM 
     {{ ref("int_myria_attendances_diagnoses") }} att_dx
 INNER JOIN
@@ -225,24 +214,9 @@ INNER JOIN
     ON att_dx.gp_code = ncl.PRACTICE_CODE
 LEFT JOIN
     {{ ref("stg_registries_deaths") }} death
-    ON att_dx.patient_id = death.sk_patient_id
-    AND date(death.reg_date_of_death) < '2025-04-01'
-LEFT JOIN -- join most recent rfl activity for demogs
-    recent_rfl_activity rr 
-    ON att_dx.patient_id = rr.patient_id
-    AND rr.most_recent_activity_flag = 1
-LEFT JOIN -- join gp/la on most recent gp code
-    {{ ref("dim_practice_neighbourhood") }} ncl_rflnel -- REPORTING.OLIDS_ORGANISATION.DIM_PRACTICE_NEIGHBOURHOOD AS ncl 
-    ON rr.reg_practice_at_event_most_recent = ncl_rflnel.PRACTICE_CODE
-LEFT JOIN -- join gp/la on most recent gp code
-    {{ ref("stg_dictionary_dbo_ethnicity") }} eth
-    ON ethnicity_at_event_most_recent = eth.bk_ethnicity_code
-    AND eth.ethnicity_code_type = 'Current'
-LEFT JOIN -- join gp/la on most recent gp code
-    {{ ref("stg_dictionary_dbo_gender") }} g
-    ON gender_at_event_most_recent = g.gender_code
+    ON att_dx.patient_id = death.sk_patient_id -- check whether patient dead as of running model
 WHERE
     att_dx.patient_id IS NOT null
-    AND death.sk_patient_id IS null -- remove patients who were not alive at end of 2025
+    AND death.sk_patient_id IS null -- remove dead patients
 GROUP BY 
     ALL

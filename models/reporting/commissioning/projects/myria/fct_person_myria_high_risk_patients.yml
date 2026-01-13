@@ -8,7 +8,7 @@ models:
       Includes count of non-elective admissions with a focus on RFL.
       Restricted to patients alive at end of FY2025.
     columns:
-      - name: patient_id
+      - name: patient_id 
         description: "Unique patient identifier."
         tests:
           - not_null

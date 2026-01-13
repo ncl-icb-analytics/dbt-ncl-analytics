@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: int_myria_attendances_diagnoses
-    description: "Gets list of attendances and diagnoses before fiscal year 2025/26 across IP, OP, and AE encounters for Project Myria. Output is one record per diagnosis per attendance per patient."
+    description: "Gets list of attendances and diagnoses before current month across IP, OP, and AE encounters for Project Myria. Output is one record per diagnosis per attendance per patient."
     columns:
       - name: primary_id
         description: "Unique identifier for each visit occurrence. Maps to PRIMARYKEY_ID in SUS."

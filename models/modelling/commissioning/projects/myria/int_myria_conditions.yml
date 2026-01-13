@@ -5,8 +5,8 @@ models:
     description: >
       For project Myria.
       Aggregates patient-level activity flags for non-elective inpatient admissions
-      in 2023/24 and 2024/25, with site- and provider-specific indicators. Excludes
-      patients who died before April 2025. Flags patients that have received
+      in past two years with site- and provider-specific indicators. Excludes
+      patients who died before the start of this month. Flags patients that have received
       diagnoses for certain conditions.
     columns:
       - name: patient_id
@@ -18,43 +18,43 @@ models:
         description: "Most recent registered local authority based on GP practice."
 
       - name: barnet_hospital_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at Barnet Hospital in 2024/25."
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at Barnet Hospital in last 12 months."
 
       - name: barnet_hospital_count
-        description: "Count of distinct non-elective admissions at Barnet Hospital in 2024/25."
+        description: "Count of distinct non-elective admissions at Barnet Hospital in last 12 months."
 
       - name: RFL_ex_BH_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal Free London sites excluding Barnet Hospital in 2024/25."
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal Free London sites excluding Barnet Hospital in last 12 months."
 
       - name: RFL_ex_BH_count
-        description: "Count of distinct non-elective admissions at Royal Free London sites excluding Barnet Hospital in 2024/25."
+        description: "Count of distinct non-elective admissions at Royal Free London sites excluding Barnet Hospital in last 12 months."
 
       - name: RFL_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal Free London (RAL, RAP) in 2024/25."
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal Free London (RAL, RAP) in last 12 months."
 
       - name: RFL_count
-        description: "Count of distinct non-elective admissions at Royal Free London (RAL, RAP) in 2024/25."
+        description: "Count of distinct non-elective admissions at Royal Free London (RAL, RAP) in last 12 months."
 
       - name: NCLProvider_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at NCL providers (RAL, RAP, RKE, RRV) in 2024/25."
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at NCL providers (RAL, RAP, RKE, RRV) in last 12 months."
 
       - name: NCLProvider_count
-        description: "Count of distinct non-elective admissions at NCL providers (RAL, RAP, RKE, RRV) in 2024/25."
+        description: "Count of distinct non-elective admissions at NCL providers (RAL, RAP, RKE, RRV) in last 12 months."
 
       - name: Non_NCLProvider_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at non-NCL providers in 2024/25."
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at non-NCL providers in last 12 months."
 
       - name: Non_NCLProvider_count
-        description: "Count of distinct non-elective admissions at non-NCL providers in 2024/25."
+        description: "Count of distinct non-elective admissions at non-NCL providers in last 12 months."
 
       - name: nel_ip_admissions_last_24_months
-        description: "Count of distinct non-elective inpatient admissions in 2023/24 and 2024/25."
+        description: "Count of distinct non-elective inpatient admissions in last 2 years."
 
       - name: nel_ip_admissions_last_12_months
-        description: "Count of distinct non-elective inpatient admissions in 2024/25."
+        description: "Count of distinct non-elective inpatient admissions in last 12 months."
 
       - name: nel_ip_admissions_last_6_months
-        description: "Count of distinct non-elective inpatient admissions in 2024/25 between July and December."
+        description: "Count of distinct non-elective inpatient admissions in last 6 months."
 
       - name: heart_failure
         description: >

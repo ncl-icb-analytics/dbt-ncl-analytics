@@ -2,7 +2,8 @@
 
 select 
     patient_id,
-    hospital_number,
+    gp_code,
+    gp_name,
     local_authority,
     barnet_hospital_count,
     barnet_hospital_flag,
@@ -56,19 +57,14 @@ select
         osteoporosis+
         rheumatoid_arthritis+
         chronic_liver_disease as total_high_risk_conditions,
-    -- information from most recent RFL visit
-    activity_date_most_recent,
-    provider_name_most_recent,
-    provider_site_name_most_recent,
-    gender_at_event_most_recent,
-    ethnicity_at_event_most_recent,
-    age_at_event_most_recent,
-    reg_practice_at_event_most_recent,
-    gp_name_at_event_most_recent,
-    la_most_recent_rfl_nel
+    refresh_date as data_source_refresh_date,
+    CURRENT_TIMESTAMP() as table_refresh_date
 from 
     {{ ref("int_myria_conditions") }} 
 where
+    barnet_hospital_count >= 1
+    AND local_authority IN ('Barnet','Enfield')
+    AND
     (heart_failure = 1 
     or copd = 1 
     or dementia = 1 
