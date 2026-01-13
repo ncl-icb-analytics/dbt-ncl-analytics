@@ -20,6 +20,16 @@ ae_encounter_summary as(
                 then visit_occurrence_id end) as ae_inj_12mo
         , count(distinct case when pod = 'AE-T1' -- Type 1 A&E
                 then visit_occurrence_id end) as ae_t1_12mo
+        , count(distinct case when 
+        -- respiratory complaints
+                        (chief_complaint_ecds_group1 like 'Airway / breathing' and 
+                         chief_complaint_code not in ('13094009', -- aponea in newborns
+                                                        '70407001', -- stridor
+                                                        '262599003')) -- foreign body in resp tract
+                        -- respiratory primary diagnosis
+                                or
+                        primary_diagnosis in (select distinct snomed_code from {{ref('stg_dictionary_ecds_diagnosis')}} where ecds_group2 like 'Respiratory')  
+                then visit_occurrence_id end) as ae_respiratory_complaint_12mo
     from base_encounters
     group by 
         sk_patient_id
@@ -33,6 +43,7 @@ SELECT
     , zeroifnull(ae_tot_12mo) as ae_tot_12mo
     , zeroifnull(ae_inj_12mo) as ae_inj_12mo
     , zeroifnull(ae_t1_12mo) as ae_t1_12mo
+    , zeroifnull(ae_respiratory_complaint_12mo) as ae_respiratory_complaint_12mo
 from 
     ae_encounter_summary as a
 where sk_patient_id is not null and sk_patient_id != '1'
