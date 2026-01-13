@@ -8,8 +8,9 @@ with diabetes_register as (
     from {{ ref('fct_person_diabetes_register') }}
 ),
 
-latest_hba1c as (
+latest_hba1c as (     -- find latest hba1c values for each person
     {{ get_ltc_lcs_observations_latest("on_dm_reg_pg1_hrc_vs1") }}
+
 )
 
 select
