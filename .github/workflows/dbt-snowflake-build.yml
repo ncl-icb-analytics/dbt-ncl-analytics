@@ -73,6 +73,7 @@ jobs:
               account=os.environ['SNOWFLAKE_ACCOUNT'],
               user=os.environ['SNOWFLAKE_USER'],
               private_key=pkb,
+              role='DBT_DEPLOYMENT_TESTER',
               database='ACCOUNT_ADMIN',
               schema='DBT_MANAGEMENT',
               warehouse='WH_NCL_ENGINEERING_XS'
