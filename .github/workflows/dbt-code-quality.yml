@@ -3,10 +3,6 @@ name: dbt Code Quality
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'models/**'
-      - 'macros/**'
-      - 'analyses/**'
 
 jobs:
   hardcoded-references:
