@@ -61,6 +61,10 @@ jobs:
 
           cur = conn.cursor()
 
+          # Activate warehouse
+          print("Setting warehouse...")
+          cur.execute("USE WAREHOUSE WH_NCL_ENGINEERING_XS")
+
           # Skip ALTER - just execute directly
           print("Executing dbt project (execute only, no alter)...")
           cur.execute("""
