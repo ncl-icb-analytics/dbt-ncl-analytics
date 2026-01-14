@@ -2,33 +2,35 @@
 --- Created by: J.Linney | dbt summary model for missing provider activity
 
 --- Select the number of missing days per provider per dataset (APC, OP, ECDS)
---- note: the 'missing' also includes submissions that exist but with zero rows
+
 
 {{ config(
-    materialized='view',
+    materialized='table',
     post_hook=[
-      "COMMENT ON VIEW {{ this }} IS 'Created by: J.Linney | dbt summary model for missing provider activity'"
+      "COMMENT ON TABLE {{ this }} IS 'Created by: J.Linney | dbt summary model for missing provider activity'"
     ]
 ) }}
 
 WITH 
--- Get the raw data with records count (same as what Python queries)
 apc_raw AS (
     SELECT PROVIDER, ACTIVITY_DATE, RECORDS
     FROM {{ ref('provider_daily_apc_activity_DBT') }}
-    WHERE ACTIVITY_DATE >= DATEADD(day, -20, CURRENT_DATE)
+    WHERE ACTIVITY_DATE >= DATEADD(day, -744, CURRENT_DATE)  -- 2 years monitoring window
+    --AND ACTIVITY_DATE < DATEADD(day, -14, CURRENT_DATE)     -- Exclude last 2 weeks
 ),
 
 op_raw AS (
     SELECT PROVIDER, ACTIVITY_DATE, RECORDS
     FROM {{ ref('provider_daily_op_activity_DBT') }}
-    WHERE ACTIVITY_DATE >= DATEADD(day, -20, CURRENT_DATE)
+    WHERE ACTIVITY_DATE >= DATEADD(day, -744, CURRENT_DATE)  -- 2 years monitoring window
+    --AND ACTIVITY_DATE < DATEADD(day, -14, CURRENT_DATE)     -- Exclude last 2 weeks
 ),
 
 ecds_raw AS (
     SELECT PROVIDER, ACTIVITY_DATE, RECORDS
     FROM {{ ref('provider_daily_ecds_activity_DBT') }}
-    WHERE ACTIVITY_DATE >= DATEADD(day, -20, CURRENT_DATE)
+    WHERE ACTIVITY_DATE >= DATEADD(day, -744, CURRENT_DATE)  -- 2 years monitoring window
+    --AND ACTIVITY_DATE < DATEADD(day, -14, CURRENT_DATE)     -- Exclude last 2 weeks
 ),
 
 -- Get all unique dates that appear in each dataset
@@ -41,8 +43,8 @@ apc_providers AS (SELECT DISTINCT PROVIDER FROM apc_raw),
 op_providers AS (SELECT DISTINCT PROVIDER FROM op_raw),
 ecds_providers AS (SELECT DISTINCT PROVIDER FROM ecds_raw),
 
--- Create the expected grid (same as Python's pivot structure)
--- For APC: all APC providers × all APC dates
+-- Create the expected grid (same as Python's Excel pivot structure)
+-- Example for APC: all APC providers × all APC dates
 apc_expected AS (
     SELECT p.PROVIDER, d.ACTIVITY_DATE, 'APC' AS dataset
     FROM apc_providers p
@@ -63,7 +65,8 @@ ecds_expected AS (
 
 -- Find missing...
 -- The logic is where provider submission is expected (ie. submissions have come in for other providers that day) 
---- so Day x Provider grid includes that date. Records = 0 is a placeholder in case source is aggregated to 0 instead of missing
+--- so Day x Provider grid includes that date. Records = 0 is a future placeholder in case source is aggregated to 0 instead of being missing.
+apc_missing AS (
     SELECT e.PROVIDER, e.ACTIVITY_DATE, e.dataset
     FROM apc_expected e
     LEFT JOIN apc_raw a 

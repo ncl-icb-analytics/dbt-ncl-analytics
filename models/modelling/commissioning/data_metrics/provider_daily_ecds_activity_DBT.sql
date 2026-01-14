@@ -2,21 +2,22 @@
 --- Created by: J.Linney | dbt test file for ECDS provider daily activity
 
 -- Add config overrides in here, eg. comment added to snowflake model metadata
--- and materialization type - although technically redundant here if declared in dbt_project.yml 
+-- and materialisation type - although technically redundant here if declared in dbt_project.yml 
 -- so just including it for clarity whilst testing
+-- NOTE (18/12/25): Changed materialization now from view to table to as missing_summary test running too early on blank views, reulting in it being empty
 
 {{ config(
-    materialized='view',
+    materialized='table',
     post_hook=[
-      "COMMENT ON VIEW {{ this }} IS 'Created by: J.Linney | dbt test file for ECDS provider daily activity'"
+      "COMMENT ON TABLE {{ this }} IS 'Created by: J.Linney | dbt test file for ECDS provider daily activity'"
     ]
 ) }}
 
 WITH base AS (
     SELECT
-        attendance_location_hes_provider_3 AS provider_code,
-        DATE_TRUNC('day', attendance_arrival_date) AS activity_date
-    FROM {{ ref('stg_sus_ae_emergency_care') }}
+        "system.record.provider" AS provider_code,
+        DATE_TRUNC('day', "attendance.arrival.date") AS activity_date
+    FROM {{ source('sus_unified_ecds','emergency_care') }}
 ),
 provider_lookup AS (
     SELECT 
@@ -30,6 +31,7 @@ SELECT
     COUNT(*) AS records
 FROM base b
 LEFT JOIN provider_lookup p ON b.provider_code = p.REPORTING_CODE
-WHERE b.activity_date >= DATEADD(day, -30, CURRENT_DATE)
+WHERE b.activity_date >= DATEADD(day, -744, CURRENT_DATE)  -- 2 years monitoring window
+--AND b.activity_date < DATEADD(day, -14, CURRENT_DATE)     -- Exclude last 2 weeks
 AND b.provider_code IN ('RRV', 'RKE', 'RAP','RAL','RP4','RP6','RAN')
 GROUP BY provider, activity_date

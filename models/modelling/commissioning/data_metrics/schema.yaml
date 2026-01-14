@@ -1,21 +1,88 @@
 version: 2
 
+### Description: Schema tests for provider daily activity models:
+### - No null provider names
+### - Only valid NCL providers (catches typos, unexpected providers, missing lookups)
+### - No null dates
+### - No null record counts
+
 models:
-  - name: provider_monthly_activity_DBT
-    description: "Monthly activity by provider"
+  - name: provider_daily_apc_activity_DBT
+    description: "Daily Admitted Patient Care (APC) activity by provider"
     columns:
-
       - name: provider
-        description: "Provider identifier"
+        description: "Provider name from lookup"
         tests:
           - not_null
-          - unique
+          - accepted_values:
+              values: 
+                - 'Great Ormond Street Hospital for Children NHS Foundation Trust'
+                - 'Moorfields Eye Hospital NHS Foundation Trust'
+                - 'Royal Free London NHS Foundation Trust'
+                - 'Royal National Orthopaedic Hospital NHS Trust'
+                - 'University College London Hospitals NHS Foundation Trust'
+                - 'Whittington Health NHS Trust'
+              quote: true
 
-      - name: activity_month
-        description: "Month of activity"
+      - name: activity_date
+        description: "Date of activity"
         tests:
           - not_null
-          
+
+      - name: records
+        description: "Count of records"
+        tests:
+          - not_null
+
+  - name: provider_daily_op_activity_DBT
+    description: "Daily Outpatient (OP) activity by provider"
+    columns:
+      - name: provider
+        description: "Provider name from lookup"
+        tests:
+          - not_null
+          - accepted_values:
+              values: 
+                - 'Great Ormond Street Hospital for Children NHS Foundation Trust'
+                - 'Moorfields Eye Hospital NHS Foundation Trust'
+                - 'Royal Free London NHS Foundation Trust'
+                - 'Royal National Orthopaedic Hospital NHS Trust'
+                - 'University College London Hospitals NHS Foundation Trust'
+                - 'Whittington Health NHS Trust'
+              quote: true
+
+      - name: activity_date
+        description: "Date of activity"
+        tests:
+          - not_null
+
+      - name: records
+        description: "Count of records"
+        tests:
+          - not_null
+
+  - name: provider_daily_ecds_activity_DBT
+    description: "Daily Emergency Care Data Set (ECDS) activity by provider"
+    columns:
+      - name: provider
+        description: "Provider name from lookup"
+        tests:
+          - not_null
+          - accepted_values:
+              values: 
+                - 'Great Ormond Street Hospital for Children NHS Foundation Trust'
+                - 'Moorfields Eye Hospital NHS Foundation Trust'
+                - 'Royal Free London NHS Foundation Trust'
+                - 'Royal National Orthopaedic Hospital NHS Trust'
+                - 'University College London Hospitals NHS Foundation Trust'
+                - 'Whittington Health NHS Trust'
+              quote: true
+
+      - name: activity_date
+        description: "Date of activity"
+        tests:
+          - not_null
+
       - name: records
         description: "Count of records"
         tests:
