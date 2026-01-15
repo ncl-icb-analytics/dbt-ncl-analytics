@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 models:
   - name: int_mhsds_carecontact_encounters
@@ -11,6 +11,15 @@ models:
           - not_null
       - name: sk_patient_id
         description: pseudo NHS number
+      - name: org_id_prov
+        description: Provider organisation ID
+      - name: attend_or_dna_code
+        description: Attendance or Did Not Attend code for the care contact
+      - name: attendance_status
+        description: Description of the attendance status for the care contact
+      - name: provider_name
+        description: Name of the provider organisation
+      - name: provider_short_name
       - name: start_date
         description: Date of the care contact
       - name: proxy_cost
