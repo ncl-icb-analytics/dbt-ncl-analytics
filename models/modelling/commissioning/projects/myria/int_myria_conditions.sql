@@ -1,7 +1,21 @@
 {{ config(materialized="table") }}
 
+with most_recent_bh_admission as -- gets most recent non-elective BH admission for local patient identifier
+(
+    SELECT
+    a.patient_id,
+    a.local_patient_identifier,
+    a.primary_id as most_recent_bh_primary_id,
+    ROW_NUMBER() OVER(PARTITION BY a.patient_id ORDER BY a.activity_date desc, a.diag_n desc) as appt_order
+    FROM {{ ref("int_myria_attendances_diagnoses") }} a
+    WHERE
+    a.provider_site_code = 'RAL26' -- Barnet Hospital
+    AND a.POD IN ('NEL-ZLOS','NEL-LOS+1')
+    )
+
  SELECT 
     att_dx.patient_id,
+    bh.local_patient_identifier as hospital_number,
     TO_VARCHAR(ARRAY_AGG(NCL.LOCAL_AUTHORITY) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS local_authority, -- gets most recent registered local authority
     TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_CODE) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS gp_code,
     TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_NAME) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS gp_name,
@@ -215,6 +229,8 @@ INNER JOIN
 LEFT JOIN
     {{ ref("stg_registries_deaths") }} death
     ON att_dx.patient_id = death.sk_patient_id -- check whether patient dead as of running model
+LEFT JOIN most_recent_bh_admission bh ON att_dx.patient_id = bh.patient_id
+    AND bh.appt_order = 1
 WHERE
     att_dx.patient_id IS NOT null
     AND death.sk_patient_id IS null -- remove dead patients

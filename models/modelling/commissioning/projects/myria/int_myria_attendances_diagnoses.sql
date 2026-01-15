@@ -1,6 +1,5 @@
 -- Gets list of attendances and diagnoses in last 12 months (monthly grain)
  {{ config(materialized="table") }}
---{{ config(materialized = 'incremental') }}
 
 SELECT
         ip.VISIT_OCCURRENCE_ID AS primary_id,
@@ -9,7 +8,7 @@ SELECT
         REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(ip.END_DATE) AS FIN_YEAR,
         MOD(MONTH(ip.END_DATE) + 8, 12) + 1 AS fin_month,
         ip.SK_PATIENT_ID AS patient_id,
-        r.spell_patient_identity_local_patient_identifier_value as hospital_number,
+        ip.local_patient_identifier,
         ip.REG_PRACTICE_AT_EVENT AS gp_code,
         ip.ORGANISATION_ID AS provider_code,
         ip.ORGANISATION_NAME AS provider_name,
@@ -28,8 +27,6 @@ SELECT
        {{ ref("int_sus_ip_encounters") }} ip
     LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx
         ON ip.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
-    LEFT JOIN {{ ref("raw_sus_apc_spell") }} r
-            ON ip.VISIT_OCCURRENCE_ID = r.primarykey_id
      WHERE 
         ip.END_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month
 
@@ -42,7 +39,7 @@ SELECT
         REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(op.START_DATE) AS FIN_YEAR,
         MOD(MONTH(op.START_DATE) + 8, 12) + 1 AS fin_month,
         op.SK_PATIENT_ID AS patient_id,
-        r.appointment_patient_identity_local_patient_identifier_value as hospital_number,
+        op.local_patient_identifier,
         op.REG_PRACTICE_AT_EVENT AS gp_code,
         op.ORGANISATION_ID AS provider_code,
         op.ORGANISATION_NAME AS provider_name,
@@ -60,8 +57,6 @@ SELECT
        {{ ref("int_sus_op_encounters") }} op
     LEFT JOIN {{ ref("int_sus_op_diagnosis") }} dx
         ON op.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
-    LEFT JOIN {{ ref("raw_sus_op_appointment") }}  r
-            ON op.VISIT_OCCURRENCE_ID = r.primarykey_id
      WHERE
         op.START_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month
         
@@ -75,7 +70,7 @@ SELECT
         REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(ae.START_DATE) AS FIN_YEAR,
         MOD(MONTH(ae.START_DATE) + 8, 12) + 1 AS fin_month,
         ae.SK_PATIENT_ID AS patient_id,
-        r.patient_local_patient_identifier_value as hospital_number,
+        ae.local_patient_identifier,
         ae.REG_PRACTICE_AT_EVENT AS gp_code,
         ae.ORGANISATION_ID AS provider_code,
         ae.ORGANISATION_NAME AS provider_name,
@@ -93,7 +88,5 @@ SELECT
        {{ ref("int_sus_ae_encounters") }} ae
     LEFT JOIN {{ ref("int_sus_ae_diagnosis") }} dx
         ON ae.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
-    LEFT JOIN {{ ref("raw_sus_ae_emergency_care") }} r
-        ON ae.VISIT_OCCURRENCE_ID = r.primarykey_id
      WHERE
         ae.START_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month

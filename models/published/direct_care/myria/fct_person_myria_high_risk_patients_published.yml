@@ -1,12 +1,12 @@
 version: 2
 
 models:
-  - name: fct_person_myria_high_risk_patients
+  - name: fct_person_myria_high_risk_patients_published
     description: >
       Patient-level dataset identifying individuals with at least one high-risk condition
       (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity flags.
       Includes count of non-elective admissions with a focus on RFL.
-      Restricted to patients alive at time of running.
+      Restricted to patients alive at time of running/
     columns:
       - name: patient_id 
         description: "Unique patient identifier."
@@ -14,7 +14,7 @@ models:
           - not_null
 
       - name: hospital_number
-        description: "Trust-provided patient identifier. (local patient identifier)"
+        description: "Local patient identifier."
 
       - name: local_authority
         description: "Most recent registered local authority based on GP practice neighbourhood."

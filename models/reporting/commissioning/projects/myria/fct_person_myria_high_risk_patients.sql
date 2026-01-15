@@ -2,6 +2,7 @@
 
 select 
     patient_id,
+    hospital_number,
     gp_code,
     gp_name,
     local_authority,

@@ -20,6 +20,8 @@ models:
         description: "Unique patient identifier."
         tests:
           - not_null
+      - name: local_patient_identifier
+        description: "Trust-provided patient identifier."
       - name: gp_code
         description: "General practice code at event."
       - name: provider_code

@@ -14,6 +14,9 @@ models:
         tests:
           - not_null
 
+      - name: hospital_number
+        description: "Trust-provided patient identifier. (local patient identifier)"
+
       - name: local_authority
         description: "Most recent registered local authority based on GP practice."
 
