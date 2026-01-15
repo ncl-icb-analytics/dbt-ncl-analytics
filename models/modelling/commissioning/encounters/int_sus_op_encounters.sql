@@ -32,6 +32,7 @@ select
     core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
     , 'SUS_OP' as source
+    , core.local_patient_identifier
 
     /* Location */
     , core.appointment_commissioning_service_agreement_provider as organisation_id

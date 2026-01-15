@@ -19,6 +19,10 @@ models:
         data_type: varchar
         description: "Common commissioning patient identifier"
 
+      - name: local_patient_identifier
+        data_type: varchar
+        description: "Trust-provided patient id."
+
       - name: source
         data_type: varchar
         description: "Commissioning data source"

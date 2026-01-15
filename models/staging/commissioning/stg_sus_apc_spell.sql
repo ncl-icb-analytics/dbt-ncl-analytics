@@ -13,7 +13,7 @@ with core_data as(
 
 select core.primarykey_id
     , core.spell_patient_identity_nhs_number_value_pseudo as sk_patient_id
-  
+    , spell_patient_identity_local_patient_identifier_value as local_patient_identifier
 
     /* spell details */
     -- location
@@ -27,7 +27,7 @@ select core.primarykey_id
     , core.spell_commissioning_tariff_calculation_pbr_length_of_stay_critical_care_days as spell_length_of_stay_critical_care_days
     , core.spell_discharge_destination
     , core.spell_discharge_method
-    
+
     /* Admission information */
     , core.spell_admission_method
     , core.spell_admission_admission_type
