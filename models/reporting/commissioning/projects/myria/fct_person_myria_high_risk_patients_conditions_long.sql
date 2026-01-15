@@ -3,7 +3,7 @@ PATIENT_ID,
 HOSPITAL_NUMBER,
 CONDITION,
 FLAG AS CONDITION_COUNT
-from DEV__REPORTING.COMMISSIONING_REPORTING.fct_person_myria_high_risk_patients
+from {{ ref('fct_person_myria_high_risk_patients') }}
 UNPIVOT (flag for condition in (heart_failure as "Heart Failure",
                                 copd as "COPD",
                                 dementia as "Dementia",
