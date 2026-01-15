@@ -1,0 +1,198 @@
+version: 2
+sources:
+- name: registries_deaths
+  database: '"DATA_LAKE"'
+  schema: '"DEATHS"'
+  description: Register of deaths
+  tables:
+  - name: Deaths
+    identifier: '"Deaths"'
+    columns:
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: DMIC_DEC_MONTH_OF_BIRTH
+      data_type: TEXT
+    - name: DEC_SEX
+      data_type: TEXT
+    - name: DEC_MARITAL_STATUS
+      data_type: TEXT
+    - name: DEC_AGEC
+      data_type: NUMBER
+    - name: REG_DATE_OF_DEATH
+      data_type: TIMESTAMP_NTZ
+    - name: REG_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: REG_DISTRICT_CODE
+      data_type: TEXT
+    - name: REG_SUB_DISTRICT_CODE
+      data_type: TEXT
+    - name: REG_NUMBER
+      data_type: TEXT
+    - name: REG_ENTRY_NUMBER
+      data_type: TEXT
+    - name: REG_TYPE
+      data_type: TEXT
+    - name: COR_DESIGNATION
+      data_type: TEXT
+    - name: COR_AREA_NAME
+      data_type: TEXT
+    - name: COR_INQ_DATES
+      data_type: TEXT
+    - name: DEC_OCC_TYPE
+      data_type: TEXT
+    - name: OUT_SECCATDM
+      data_type: TEXT
+    - name: OUT_SECCATHF
+      data_type: TEXT
+    - name: SOC2KDM
+      data_type: TEXT
+    - name: DMIC_SOC2KDM_Group_Description
+      data_type: TEXT
+    - name: SOC2KHF
+      data_type: TEXT
+    - name: DMIC_SOC2KHF_Group_Description
+      data_type: TEXT
+    - name: DEC_RETIRED_IND
+      data_type: TEXT
+    - name: DMIC_DECAD_POSTCODE_SECTOR
+      data_type: TEXT
+    - name: DMIC_DECAD_STAT_POSTCODE_SECTOR
+      data_type: TEXT
+    - name: DEC_BIRTH_COUNTRY_CODE
+      data_type: TEXT
+    - name: DMIC_POD_STAT_POSTCODE_SECTOR
+      data_type: TEXT
+    - name: POD_NHS_ESTABLISHMENT
+      data_type: TEXT
+    - name: POD_ESTABLISHMENT_TYPE
+      data_type: TEXT
+    - name: POD_CODE
+      data_type: TEXT
+    - name: S_UNDERLYING_COD_ICD10
+      data_type: TEXT
+    - name: DMIC_S_UNDERLYING_COD_ICD10_CHAPTER
+      data_type: TEXT
+    - name: S_COD_CODE_1
+      data_type: TEXT
+    - name: S_COD_CODE_2
+      data_type: TEXT
+    - name: S_COD_CODE_3
+      data_type: TEXT
+    - name: S_COD_CODE_4
+      data_type: TEXT
+    - name: S_COD_CODE_5
+      data_type: TEXT
+    - name: S_COD_CODE_6
+      data_type: TEXT
+    - name: S_COD_CODE_7
+      data_type: TEXT
+    - name: S_COD_CODE_8
+      data_type: TEXT
+    - name: S_COD_CODE_9
+      data_type: TEXT
+    - name: S_COD_CODE_10
+      data_type: TEXT
+    - name: S_COD_CODE_11
+      data_type: TEXT
+    - name: S_COD_CODE_12
+      data_type: TEXT
+    - name: S_COD_CODE_13
+      data_type: TEXT
+    - name: S_COD_CODE_14
+      data_type: TEXT
+    - name: S_COD_CODE_15
+      data_type: TEXT
+    - name: S_INJURY_EXTERNAL
+      data_type: TEXT
+    - name: DMIC_S_INJURY_EXTERNAL_ICD10_CHAPTER
+      data_type: TEXT
+    - name: S_COD_LINE_1
+      data_type: TEXT
+    - name: S_COD_LINE_2
+      data_type: TEXT
+    - name: S_COD_LINE_3
+      data_type: TEXT
+    - name: S_COD_LINE_4
+      data_type: TEXT
+    - name: S_COD_LINE_5
+      data_type: TEXT
+    - name: S_COD_LINE_6
+      data_type: TEXT
+    - name: S_COD_LINE_7
+      data_type: TEXT
+    - name: S_COD_LINE_8
+      data_type: TEXT
+    - name: S_COD_LINE_9
+      data_type: TEXT
+    - name: S_COD_LINE_10
+      data_type: TEXT
+    - name: S_COD_LINE_11
+      data_type: TEXT
+    - name: S_COD_LINE_12
+      data_type: TEXT
+    - name: S_COD_LINE_13
+      data_type: TEXT
+    - name: S_COD_LINE_14
+      data_type: TEXT
+    - name: S_COD_LINE_15
+      data_type: TEXT
+    - name: RECORD_TYPE
+      data_type: TEXT
+    - name: NEO_NATE_FLAG
+      data_type: TEXT
+    - name: Cancelled_Flag
+      data_type: TEXT
+    - name: CCG_OF_REGISTRATION_CODE
+      data_type: TEXT
+    - name: PLACE_OF_DEATH_CCG_CODE
+      data_type: TEXT
+    - name: PLACE_OF_DEATH_ORG_CODE
+      data_type: TEXT
+    - name: PLACE_OF_DEATH_ULA_CODE
+      data_type: TEXT
+    - name: ULA_OF_RESIDENCE_CODE
+      data_type: TEXT
+    - name: WARD_OF_RESIDENCE_CODE
+      data_type: TEXT
+    - name: CCG_OF_RESIDENCE_CODE
+      data_type: TEXT
+    - name: COUNTY_DISTRICT_OF_RES_CODE
+      data_type: TEXT
+    - name: COUNTY_OF_RESIDENCE_CODE
+      data_type: TEXT
+    - name: GOR_OF_RESIDENCE_CODE
+      data_type: TEXT
+    - name: LSOA_OF_RESIDENCE_CODE
+      data_type: TEXT
+    - name: PCO_OF_RESIDENCE_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: DMIC_FILENAME
+      data_type: TEXT
+    - name: DMIC_OPERATOR
+      data_type: TEXT
+    - name: DMIC_RECORD_VALID_DATE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: DMIC_RECORD_VALID_DATE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: DMIC_RECORD_VALID_IS_LATEST
+      data_type: BOOLEAN
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: DMIC_ROW_ID
+      data_type: NUMBER
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmSubIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmSubIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT

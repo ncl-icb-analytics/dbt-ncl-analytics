@@ -105,6 +105,20 @@ sources:
     raw_prefix: raw_dictionary_ip
     domain: shared
 
+    # Registry Data (Births/Deaths)
+  - source_name: registries_deaths
+    database: DATA_LAKE
+    schema: DEATHS
+    description: Register of deaths
+    raw_prefix: raw_registries_deaths
+    domain: shared
+
+  - source_name: registries_births
+    database: DATA_LAKE
+    schema: BIRTHS
+    description: Register of births
+    raw_prefix: raw_registries_births
+    domain: shared
   # ========================================
   # OLIDS DATA SOURCES
   # ========================================

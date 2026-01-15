@@ -23,6 +23,10 @@ models:
         data_type: varchar
         description: "Commissioning data source of record"
 
+      - name: local_patient_identifier
+        data_type: varchar
+        description: "Trust-provided patient id."
+
       - name: organisation_id
         data_type: varchar
         description: "Provider organisation identifier"
