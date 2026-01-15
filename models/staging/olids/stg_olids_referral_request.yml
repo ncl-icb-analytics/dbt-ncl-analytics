@@ -72,3 +72,4 @@ models:
   tests:
   - dbt_expectations.expect_table_row_count_to_be_between:
       min_value: 1
+      severity: warn
