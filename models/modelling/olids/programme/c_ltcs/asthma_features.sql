@@ -4,6 +4,12 @@
         tags=['cltcs'])    
 }}
 
+{# 
+   ----------------------------
+   Code lists
+   ---------------------------- 
+#}
+
 {% set asthma_code_list = dbt_utils.get_column_values(
     ref('raw_phenolab_aic_definitions'),
     'code',
@@ -32,7 +38,7 @@ with persons as (
 ),
 
 diagnosis_no_testing_ids as (
-
+     -- Persons with asthma diagnosis but no spirometry / PEFR testing
     {{ get_persons_subset(
         inclusion_code_list = asthma_code_list,
         exclusion_code_list = tests_code_list,
@@ -42,7 +48,7 @@ diagnosis_no_testing_ids as (
 ),
 
 testing_no_diagnosis_ids as (
-
+    -- Persons with spirometry / PEFR testing but no asthma diagnosis
     {{ get_persons_subset(
         inclusion_code_list = tests_code_list,
         exclusion_code_list = asthma_code_list,
@@ -52,7 +58,7 @@ testing_no_diagnosis_ids as (
 ),
 
 diagnosis_no_act_ids as (
-
+     -- Persons with asthma diagnosis but no asthma control test
     {{ get_persons_subset(
         inclusion_code_list = asthma_code_list,
         exclusion_code_list = act_code_list,
@@ -62,7 +68,7 @@ diagnosis_no_act_ids as (
 )
 
 select
-    p.id,
+    p.id as person_id,
 
     case 
         when d.person_id is not null then true
