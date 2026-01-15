@@ -17,9 +17,7 @@ models:
       - name: fin_month
         description: "Fiscal month derived from the start date."
       - name: patient_id
-        description: "Unique patient identifier."
-        tests:
-          - not_null
+        description: "Unique patient identifier. May be null when NHS number is not available in source data."
       - name: local_patient_identifier
         description: "Trust-provided patient identifier."
       - name: gp_code
