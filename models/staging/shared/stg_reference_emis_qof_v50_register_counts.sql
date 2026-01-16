@@ -7,6 +7,7 @@ with source as (
             or indicator_code = 'DEP1_REG'
             or indicator_code = 'HF1 Register'
         )
+        and cdb is not null
 ),
 
 mapped as (

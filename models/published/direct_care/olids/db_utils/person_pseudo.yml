@@ -32,7 +32,9 @@ models:
           - not_null
 
       - name: hx_flake
-        description: 'Pseudonymized hex key in format XX-XXX-XXX for patient re-identification'
+        description: 'Pseudonymized hex key in format XX-XXX-XXX for patient re-identification. Note: Multiple person_ids may share the same hx_flake when they share the same sk_patient_id (patient fragmentation).'
         tests:
           - not_null
-          - unique
+          - unique:
+              severity: warn
+              warn_if: ">100"

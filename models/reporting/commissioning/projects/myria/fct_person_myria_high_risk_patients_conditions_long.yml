@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_person_myria_high_risk_patients_conditions_long
+    description: >
+      Patient-level dataset identifying individuals with at least one high-risk condition
+      (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity flags.
+      Includes hypertension and frailty/falls which are not high risk 'conditions' but 
+      helpful flags for risk and multimorbidity.
+      Unpivoted from fct_person_myria_high_risk_patients.
+      One row per patient per diagnosed condition.
+    columns:
+      - name: patient_id
+        description: "Unique patient identifier."
+        tests:
+          - not_null
+
+      - name: hospital_number
+        description: "Local patient identifier."
+
+      - name: condition
+        description: "Patient has been identified as having this condition diagnosed at previous secondary care activity."
+      
+      - name: condition_count
+        description: "Always 1. Used for aggregation."

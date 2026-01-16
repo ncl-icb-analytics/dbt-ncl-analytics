@@ -85,8 +85,8 @@ def sanitise_column_name(col_name, apply_transformations=True, used_names=None):
                 safe_name = safe_name.replace('@', '_at_')
                 safe_name = safe_name.replace('$', '')
                 safe_name = safe_name.replace('|', '_or_')
-                # Then replace dots, slashes, hyphens, spaces, and other problematic characters
-                safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]]+', '_', safe_name)
+                # Then replace dots, slashes, hyphens, spaces, colons, and other problematic characters
+                safe_name = re.sub(r'[\.\/\&\-\s\(\)\[\]:]+', '_', safe_name)
 
             # Remove multiple consecutive underscores
             safe_name = re.sub(r'_+', '_', safe_name)

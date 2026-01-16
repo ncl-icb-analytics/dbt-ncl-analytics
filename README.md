@@ -97,13 +97,6 @@ See [Development Guide](docs/development-guide.md) for more commands and pattern
 
 Uses **ANALYST** role with access to all project databases. Role hierarchy: ANALYST → ENGINEER → DATA_PLATFORM_MANAGER. All dbt objects owned by ANALYST with inherited permissions.
 
-## Release Management
-
-Automated semantic versioning with [release-please](https://github.com/googleapis/release-please):
-- Releases created from conventional commit messages
-- Changelog automatically generated
-- Release PRs auto-merge when created
-
 ## Getting Help
 
 - **New contributor?** [CONTRIBUTING.md](CONTRIBUTING.md)
