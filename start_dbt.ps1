@@ -67,6 +67,9 @@ if (Test-Path $envPath) {
     if ($env:SNOWFLAKE_ROLE) {
         Write-Host "  SNOWFLAKE_ROLE: $env:SNOWFLAKE_ROLE" -ForegroundColor Gray
     }
+    if ($env:SNOWFLAKE_WAREHOUSE) {
+        Write-Host "  SNOWFLAKE_WAREHOUSE: $env:SNOWFLAKE_WAREHOUSE" -ForegroundColor Gray
+    }
 } else {
     Write-Host "[WARNING] No .env file found" -ForegroundColor Yellow
     Write-Host "  Copy env.example to .env and add your credentials" -ForegroundColor Gray
