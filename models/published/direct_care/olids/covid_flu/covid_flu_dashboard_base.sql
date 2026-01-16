@@ -73,16 +73,17 @@ WITH uptake_with_demographics AS (
         d.borough_registered,
         d.neighbourhood_registered,
         
-        -- School information from dim_person_age (now handles NULL for non-school ages upstream)
+        -- School information from dim_person_age (Early Years for ages 2-3, Reception+ for school ages)
         pa.age_school_stage AS school_year,
+        pa.is_early_years_age,
         pa.is_primary_school_age,
         pa.is_secondary_school_age,
 
-        -- Flu vaccination setting (Early Years at GP, School-based for Reception-Year 11)
+        -- Flu vaccination setting (Early Years at GP for ages 2-3, School-based for Reception-Year 11)
         CASE
             WHEN u.programme_type = 'FLU' THEN
                 CASE
-                    WHEN pa.age < 4 THEN 'Early Years (GP)'  -- Pre-school and Nursery ages
+                    WHEN pa.age >= 2 AND pa.age < 4 THEN 'Early Years (GP)'  -- Ages 2-3
                     WHEN pa.age_school_stage IN ('Reception', 'Year 1', 'Year 2', 'Year 3', 'Year 4',
                                                   'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9',
                                                   'Year 10', 'Year 11') THEN 'School-based'

@@ -65,10 +65,15 @@ models:
         description: 'Age in days (approximate calculation)'
 
       - name: age_school_stage
-        description: 'School year classification (Pre-school, Nursery, Reception, Year 1-13, Post-secondary)'
+        description: 'School year classification (Early Years for ages 2-3, Reception, Year 1-13, or NULL for under 2/post-secondary)'
 
       - name: age_education_level
         description: 'Education level classification (Pre-school, Nursery, Primary School, Secondary School - KS3/KS4, Secondary School - Sixth Form, Post-secondary)'
+
+      - name: is_early_years_age
+        description: 'Flag indicating early years age (ages 2-3, eligible for GP-based flu vaccination)'
+        tests:
+          - not_null
 
       - name: is_primary_school_age
         description: 'Flag indicating primary school age (Reception to Year 6)'

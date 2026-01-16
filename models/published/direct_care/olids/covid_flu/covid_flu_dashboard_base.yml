@@ -178,6 +178,21 @@ models:
         
       - name: laiv_given
         description: Whether LAIV was administered (flu only)
-        
+
+      - name: school_year
+        description: School year stage (Early Years, Reception, Year 1-13)
+
+      - name: is_early_years_age
+        description: Flag indicating early years age (ages 2-3)
+
+      - name: is_primary_school_age
+        description: Flag indicating primary school age (Reception to Year 6)
+
+      - name: is_secondary_school_age
+        description: Flag indicating secondary school age (Year 7 to Year 13)
+
+      - name: flu_vaccination_setting
+        description: Vaccination setting for flu (Early Years (GP) for ages 2-3, School-based for Reception-Year 11)
+
       - name: campaign_start_date
         description: Campaign start date
