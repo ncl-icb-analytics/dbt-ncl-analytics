@@ -34,8 +34,14 @@ try {
     }
 
     # Get changed SQL and YAML files in models/ directory
-    $changedSqlFiles = git diff --name-only $mergeBase HEAD -- "models/*.sql"
-    $changedYmlFiles = git diff --name-only $mergeBase HEAD -- "models/*.yml"
+    # Include both committed changes (vs merge-base) and uncommitted working directory changes
+    $committedSqlFiles = git diff --name-only $mergeBase HEAD -- "models/*.sql"
+    $uncommittedSqlFiles = git diff --name-only HEAD -- "models/*.sql"
+    $changedSqlFiles = ($committedSqlFiles + $uncommittedSqlFiles) | Sort-Object -Unique
+
+    $committedYmlFiles = git diff --name-only $mergeBase HEAD -- "models/*.yml"
+    $uncommittedYmlFiles = git diff --name-only HEAD -- "models/*.yml"
+    $changedYmlFiles = ($committedYmlFiles + $uncommittedYmlFiles) | Sort-Object -Unique
 
     # Extract model names from SQL files
     $models = @()
@@ -47,8 +53,9 @@ try {
     foreach ($ymlFile in $changedYmlFiles) {
         if (Test-Path $ymlFile) {
             $content = Get-Content $ymlFile -Raw
-            # Match model names under "models:" section (- name: model_name)
-            $ymlMatches = [regex]::Matches($content, '(?m)^\s+-\s+name:\s+(\w+)')
+            # Match only top-level model names (exactly 2 spaces before dash)
+            # This avoids matching column names which have more indentation
+            $ymlMatches = [regex]::Matches($content, '(?m)^  - name:\s+(\w+)')
             foreach ($match in $ymlMatches) {
                 $models += $match.Groups[1].Value
             }

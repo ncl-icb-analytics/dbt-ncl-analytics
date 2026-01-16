@@ -5,24 +5,21 @@
 }}
 
 /*
-Index of Multiple Deprivation (IMD) Mappings and Calculations
-Provides LSOA-to-IMD mappings and quintile calculations from deciles.
-Based on IMD 2019 data which uses 2011 LSOA boundaries.
+LSOA 2021 geography with IMD 2025 deprivation data.
 */
 
-WITH imd_2019_data AS (
-    -- IMD 2019 reference data
+WITH imd_2025_data AS (
     SELECT
-        lsoacode AS lsoa_code_2011,
-        imddecile AS imd_decile
-    FROM {{ ref('stg_reference_imd2019') }}
-    WHERE lsoacode IS NOT NULL
-        AND imddecile IS NOT NULL
+        lsoa_code_2021,
+        index_of_multiple_deprivation_decile AS imd_decile
+    FROM {{ ref('stg_reference_imd2025') }}
+    WHERE lsoa_code_2021 IS NOT NULL
+        AND index_of_multiple_deprivation_decile IS NOT NULL
 )
 
 SELECT
-    lsoa_code_2011,
-    imd_decile AS imd_decile_19,
+    lsoa_code_2021,
+    imd_decile AS imd_decile_25,
 
     -- IMD Quintile calculation from deciles
     CASE
@@ -32,7 +29,7 @@ SELECT
         WHEN imd_decile IN (7, 8) THEN 'Second Least Deprived'
         WHEN imd_decile IN (9, 10) THEN 'Least Deprived'
         ELSE NULL
-    END AS imd_quintile_19,
+    END AS imd_quintile_25,
 
     -- Numeric quintile for easier filtering/sorting
     CASE
@@ -42,7 +39,7 @@ SELECT
         WHEN imd_decile IN (7, 8) THEN 4
         WHEN imd_decile IN (9, 10) THEN 5
         ELSE NULL
-    END AS imd_quintile_numeric_19,
+    END AS imd_quintile_numeric_25,
 
     -- IMD Tertile calculation for additional grouping options
     CASE
@@ -50,13 +47,13 @@ SELECT
         WHEN imd_decile IN (4, 5, 6, 7) THEN 'Middle Third'
         WHEN imd_decile IN (8, 9, 10) THEN 'Least Deprived Third'
         ELSE NULL
-    END AS imd_tertile_19,
+    END AS imd_tertile_25,
 
     -- Binary deprivation flag (most deprived 20% - top 2 deciles)
     CASE
         WHEN imd_decile IN (1, 2) THEN TRUE
         ELSE FALSE
-    END AS is_most_deprived_20pct
+    END AS is_most_deprived_20pct_25
 
-FROM imd_2019_data
-ORDER BY lsoa_code_2011
+FROM imd_2025_data
+ORDER BY lsoa_code_2021

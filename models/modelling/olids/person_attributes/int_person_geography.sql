@@ -152,12 +152,12 @@ LEFT JOIN {{ ref('int_geography_mappings') }} lsoa_map
 LEFT JOIN london_areas la
     ON pg.yr_2021_lsoa = la.lsoa21_cd
 
--- Join IMD 2019 information
-LEFT JOIN {{ ref('int_geography_imd') }} imd
+-- Join IMD 2019 information (via 2011 LSOA)
+LEFT JOIN {{ ref('int_geography_lsoa_2011') }} imd
     ON pg.yr_2011_lsoa = imd.lsoa_code_2011
 
--- Join IMD 2025 information
-LEFT JOIN {{ ref('int_geography_imd25') }} imd25
+-- Join IMD 2025 information (via 2021 LSOA)
+LEFT JOIN {{ ref('int_geography_lsoa_2021') }} imd25
     ON pg.yr_2021_lsoa = imd25.lsoa_code_2021
 
 -- Join neighbourhood reference
