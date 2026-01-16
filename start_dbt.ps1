@@ -27,7 +27,15 @@ if (-not (Test-Path "profiles.yml")) {
 
 # Activate virtual environment
 Write-Host "Activating Python virtual environment..." -ForegroundColor Cyan
-$venvPath = "venv\Scripts\Activate.ps1"
+if (Test-Path ".venv\Scripts\Activate.ps1") {
+    $venvPath = ".venv\Scripts\Activate.ps1"
+} elseif (Test-Path "venv\Scripts\Activate.ps1") {
+    $venvPath = "venv\Scripts\Activate.ps1"
+} else {
+    Write-Host "[ERROR] No virtual environment found" -ForegroundColor Red
+    Write-Host "  Run 'uv sync' or 'python -m venv venv' to create one" -ForegroundColor Yellow
+    exit 1
+}
 & $venvPath
 
 if ($LASTEXITCODE -eq 0) {
@@ -35,7 +43,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "  Python: $(python --version 2>&1)" -ForegroundColor Gray
 } else {
     Write-Host "[ERROR] Failed to activate virtual environment" -ForegroundColor Red
-    Write-Host "  Run 'python -m venv venv' to create it first" -ForegroundColor Yellow
+    Write-Host "  Run 'uv sync' or 'python -m venv venv' to create one" -ForegroundColor Yellow
     exit 1
 }
 Write-Host ""
