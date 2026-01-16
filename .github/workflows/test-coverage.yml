@@ -1,0 +1,143 @@
+# Test Coverage Workflow
+#
+# Checks test coverage for dbt models and updates the coverage badge.
+# Models in models/ (excluding raw/) must have at least one test.
+
+name: Test Coverage
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'scripts/ci/audit_model_tests.py'
+  workflow_dispatch:
+
+jobs:
+  check-coverage:
+    name: Check Model Test Coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Check test coverage
+        id: coverage
+        run: |
+          python << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+
+          import yaml
+
+
+          def find_yaml_files(model_path: Path) -> list[Path]:
+              """Find YAML files that might contain the model definition."""
+              model_dir = model_path.parent
+              yaml_files = []
+              yaml_files.extend(model_dir.glob('*.yml'))
+              yaml_files.extend(model_dir.glob('*.yaml'))
+              if model_dir.parent.exists():
+                  yaml_files.extend(model_dir.parent.glob('*.yml'))
+                  yaml_files.extend(model_dir.parent.glob('*.yaml'))
+              return yaml_files
+
+
+          def model_has_tests(model_name: str, yaml_files: list[Path]) -> bool:
+              """Check if model has at least one test in any of the YAML files."""
+              for yaml_file in yaml_files:
+                  try:
+                      content = yaml.safe_load(yaml_file.read_text(encoding='utf-8'))
+                      if not content or 'models' not in content:
+                          continue
+                      for model in content.get('models', []):
+                          if model.get('name') == model_name:
+                              if model.get('tests') or model.get('data_tests'):
+                                  return True
+                              for column in model.get('columns', []):
+                                  if column.get('tests') or column.get('data_tests'):
+                                      return True
+                  except (yaml.YAMLError, Exception):
+                      continue
+              return False
+
+
+          models_dir = Path('models')
+          total = 0
+          with_tests = 0
+          missing = []
+
+          for sql_file in models_dir.rglob('*.sql'):
+              path_str = str(sql_file).replace('\\', '/')
+              if 'dbt_packages' in path_str or '/raw/' in path_str:
+                  continue
+
+              total += 1
+              model_name = sql_file.stem
+              yaml_files = find_yaml_files(sql_file)
+
+              if model_has_tests(model_name, yaml_files):
+                  with_tests += 1
+              else:
+                  missing.append(path_str)
+
+          pct = round(with_tests / total * 100) if total > 0 else 0
+
+          print(f"Models with tests: {with_tests}/{total} ({pct}%)")
+          if missing:
+              print(f"\nModels missing tests ({len(missing)}):")
+              for m in sorted(missing)[:20]:
+                  print(f"  - {m}")
+              if len(missing) > 20:
+                  print(f"  ... and {len(missing) - 20} more")
+
+          # Output for badge
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"total={total}\n")
+              f.write(f"covered={with_tests}\n")
+              f.write(f"percentage={pct}\n")
+
+          # Determine badge color
+          if pct >= 80:
+              color = "brightgreen"
+          elif pct >= 60:
+              color = "green"
+          elif pct >= 40:
+              color = "yellow"
+          else:
+              color = "red"
+
+          badge = {
+              "schemaVersion": 1,
+              "label": "test coverage",
+              "message": f"{pct}%",
+              "color": color
+          }
+
+          with open('coverage-badge.json', 'w') as f:
+              json.dump(badge, f)
+
+          print(f"\nBadge: {pct}% ({color})")
+          EOF
+
+      - name: Update coverage badge gist
+        if: github.ref == 'refs/heads/main'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: fe9920551839b7a85d0f47dfd527e62b
+          filename: coverage.json
+          label: test coverage
+          message: ${{ steps.coverage.outputs.percentage }}%
+          valColorRange: ${{ steps.coverage.outputs.percentage }}
+          maxColorRange: 100
+          minColorRange: 0
