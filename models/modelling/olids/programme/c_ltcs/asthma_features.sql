@@ -17,18 +17,36 @@
 ) %}
 
 {% set tests_code_list = dbt_utils.get_column_values(
-    ref('asthma_testing_codelist'),
+    ref('asthma_features_codelist'),
     'code',
     where="definition_name IN ('spirometry_SNOMED', 'peak_expiratory_flow_rate_SNOMED')"
     )
 %}
 
 {% set act_code_list = dbt_utils.get_column_values(
-    ref('asthma_testing_codelist'),
+    ref('asthma_features_codelist'),
     'code',
     where="definition_name = 'asthma_control_test_SNOMED'"
     )
 %}
+
+{%
+    set salbutamol_code_list = dbt_utils.get_column_values(
+        ref('asthma_features_codelist'),
+        'code',
+        where="definition_name = 'salbutamol_inhaler_medication_SNOMED'"
+    )
+%}
+
+{%
+    set preventor_code_list = dbt_utils.get_column_values(
+        ref('asthma_features_codelist'),
+        'code',
+        where="definition_name = 'non_salbutamol_inhaler_medication_SNOMED'"
+    )
+
+%}
+
 
 with persons as (
 
@@ -65,6 +83,15 @@ diagnosis_no_act_ids as (
         date_from = '2023-01-01'
     ) }}
 
+),
+
+salbutamol_only_ids as (
+    -- Persons with only salbutamol prescriptions (no preventer medications)
+    {{ get_persons_subset(
+        inclusion_code_list = salbutamol_code_list,
+        exclusion_code_list = preventor_code_list,
+        date_from = '2023-01-01'
+    ) }}
 )
 
 select
@@ -83,7 +110,12 @@ select
     case 
         when act.person_id is not null then true
         else false
-    end as diagnosis_no_act
+    end as diagnosis_no_act,
+
+    case 
+        when s.person_id is not null then true
+        else false
+    end as salbutamol_only
 
 from persons p
 left join diagnosis_no_testing_ids d
@@ -92,3 +124,5 @@ left join testing_no_diagnosis_ids t
     on p.id = t.person_id
 left join diagnosis_no_act_ids act
     on p.id = act.person_id
+left join salbutamol_only_ids s
+    on p.id = s.person_id   

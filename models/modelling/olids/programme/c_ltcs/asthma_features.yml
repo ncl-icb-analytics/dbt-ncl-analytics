@@ -26,3 +26,8 @@ models:
         description: >
           True if the person has an asthma diagnosis but no asthma control test
           since 2023-01-01
+
+      - name: salbutamol_only
+        description: >
+          True if the person has been prescribed only salbutamol inhalers but
+          no other asthma inhalers since 2023-01-01
