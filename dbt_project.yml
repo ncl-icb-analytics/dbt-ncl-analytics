@@ -174,4 +174,20 @@ seeds:
         GP_PRACTICE: varchar(200)
         LIST_SIZE: integer
         EXTRACT_DATE: varchar(10)
+    
+    asthma_testing_codelist:
+      +column_types:
+        CODE: varchar(50)
+        CODE_DESCRIPTION: varchar(200)
+        VOCABULARY: varchar(200)
+        CODELIST_ID: varchar(200)
+        CODELIST_NAME: varchar(200)
+        CODELIST_VERSION: varchar(200)
+        DEFINITION_NAME: varchar(200)
+        DEFINITION_VERSION: varchar(200)
+        DEFINITION_SOURCE: varchar(200)
+        VERSION_DATETIME:	varchar(200)
+        UPLOADED_DATETIME: varchar(200)
+
+
 
