@@ -1,108 +1,120 @@
 # NCL Analytics dbt Project
 
-dbt (data build tool) project for NCL ICB Analytics, transforming healthcare data into actionable insights across North Central London.
+[![Last Commit](https://img.shields.io/github/last-commit/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/commits/main)
+[![Commit Activity](https://img.shields.io/github/commit-activity/m/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulse)
+[![Open PRs](https://img.shields.io/github/issues-pr/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls)
+[![Merged PRs](https://badgen.net/github/merged-prs/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls?q=is%3Amerged)
 
-## What We Build
+dbt project for NCL ICB Analytics, transforming healthcare data into actionable insights across North Central London.
 
-This project transforms healthcare data into analytical datasets across two main domains:
+## Quick Start
 
-**Commissioning analytics** - Secondary care activity, waiting lists, community and mental health services
-
-**OLIDS analytics** - QOF disease registers, clinical programmes, population health metrics
-
-Data sources include OLIDS (GP data via FHIR), SUS Unified (secondary care), Waiting Lists, Community Services (CSDS/MHSDS), EPD Primary Care (prescribing), eRS (referrals), and Dictionary (reference data).
-
-## Getting Started
-
-**New to the project?** See [CONTRIBUTING.md](CONTRIBUTING.md) for complete setup instructions.
-
-**Already set up?** See [Development Guide](docs/development-guide.md) for daily workflows and advanced patterns.
-
-## Architecture
-
-### Data Flow
-
-```
-DATA_LAKE → Raw → Staging → Modelling → Reporting → Published
-           (views) (views)   (tables)    (tables)    (tables)
+```bash
+git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics && cd dbt-ncl-analytics
+python -m venv venv && venv\Scripts\activate
+pip install -r requirements.txt
+cp env.example .env   # Edit with your Snowflake credentials
+.\start_dbt.ps1 && dbt deps && dbt debug
 ```
 
-### Layer Organisation
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signing.
+
+## What This Project Does
+
+Transforms healthcare data into analytical datasets across two domains:
+
+- **Commissioning** - Secondary care activity, waiting lists, community and mental health services
+- **OLIDS** - QOF disease registers, clinical programmes, population health metrics
+
+Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, EPD (prescribing), eRS (referrals).
+
+## Helper Scripts
+
+| Script | Description |
+|--------|-------------|
+| `.\start_dbt.ps1` | **Run first** - Loads `.env` credentials into your session |
+| `.\build_changed` | Build only changed models (auto-detects from git diff) |
+
+**Flags for `build_changed`:**
+- `-u` upstream dependencies
+- `-d` downstream dependents
+- `-r` run only (no tests)
+- `-t` test only
+
+## Common Commands
+
+Always run `.\start_dbt.ps1` first in each terminal session.
+
+| Command | Description |
+|---------|-------------|
+| `dbt build` | Build all models and run tests |
+| `dbt run -s model_name` | Run a specific model |
+| `dbt run -s +model_name` | Run model with upstream dependencies |
+| `dbt run -s tag:qof` | Run models by tag |
+| `dbt test -s model_name` | Test a specific model |
+| `dbt docs generate && dbt docs serve` | Generate and view documentation |
+
+## Project Structure
 
 ```
 models/
 ├── raw/           # 1:1 views of source data
-├── staging/       # Cleaned and standardised source mappings
-├── modelling/     # Modular transformations and building blocks
+├── staging/       # Cleaned and standardised
+├── modelling/     # Business logic and transformations
 │   ├── commissioning/
 │   ├── olids/
 │   └── shared/
 ├── reporting/     # Analytics-ready datasets
-│   ├── commissioning/
-│   ├── olids/
-│   └── shared/
-└── published/     # Objects feeding external reports and dashboards
-    ├── direct_care/
-    └── secondary_use/
+└── published/     # External reports and dashboards
 ```
 
-Each domain is further organised into subdomains (e.g., `diagnoses/`, `medications/`, `observations/`) with automatic schema generation for configured domains.
-
-### Database Layers
-
-- **DATA_LAKE** - Raw data repository with 1:1 views of external sources
-- **MODELLING** - Initial transformations: filter, reshape, categorise, and link data sources
-- **REPORTING** - Analytics-ready datasets with business metrics and KPIs
-- **PUBLISHED_REPORTING__SECONDARY_USE** - Standard reporting layer for population health and operational analytics
-- **PUBLISHED_REPORTING__DIRECT_CARE** - Restricted layer for individual patient care (consent-based access)
-
-Development uses DEV__ prefixed variants (e.g., DEV__MODELLING, DEV__REPORTING) for safe development before promotion to production.
+Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Published`
 
 ## Documentation
 
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Complete onboarding for new contributors
-- **[docs/development-guide.md](docs/development-guide.md)** - Daily workflows, commands, and advanced patterns
-- **[docs/working-with-sources.md](docs/working-with-sources.md)** - Source generation workflow
-- **[CHANGELOG.md](CHANGELOG.md)** - Release history
+| Resource | Description |
+|----------|-------------|
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, commit signing, workflow |
+| [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
+| [Working with Sources](docs/working-with-sources.md) | Source generation workflow |
+| [CHANGELOG.md](CHANGELOG.md) | Release history |
 
-## Key Features
+## Learning dbt
 
-- **Configuration-driven sources** - Automated generation of dbt sources and staging models
-- **Automatic schema generation** - Schemas derived from folder structure for configured domains
-- **Conventional commits** - Semantic versioning with automated releases
-- **Branch protection** - Signed commits required, all changes via pull requests
-- **Comprehensive testing** - dbt tests and expectations for data quality
+New to dbt? Here's a recommended learning path:
 
-## Common Commands
+**Prerequisites**: Basic SQL, Git fundamentals
 
-```bash
-dbt run                    # Build all models
-dbt test                   # Run data quality tests
-dbt run -s olids           # Build all OLIDS models
-dbt run -s +model_name     # Build model with dependencies
-dbt docs generate          # Generate documentation
-dbt docs serve             # View documentation
-```
+**Start here**:
+- [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals) - Free official course
+- [dbt Documentation](https://docs.getdbt.com/) - Reference docs
 
-See [Development Guide](docs/development-guide.md) for more commands and patterns.
+**Go deeper**:
+- [DataCamp - Introduction to dbt](https://www.datacamp.com/courses/introduction-to-dbt)
+- [Start Data Engineering - dbt Tutorial](https://www.startdataengineering.com/post/dbt-data-build-tool-tutorial/)
+- [roadmap.sh Data Engineer](https://roadmap.sh/data-engineer) - Where dbt fits in data engineering
 
-## Technology Stack
+**Get help**: [dbt Community Slack](https://www.getdbt.com/community/)
 
-- **dbt-core 1.9.4** - Data transformation framework (do not upgrade to 1.10+)
+## Architecture
+
+### Database Layers
+
+| Layer | Purpose |
+|-------|---------|
+| DATA_LAKE | Raw data with 1:1 views of external sources |
+| MODELLING | Transformations: filter, reshape, categorise, link |
+| REPORTING | Analytics-ready datasets with business metrics |
+| PUBLISHED_REPORTING__SECONDARY_USE | Population health and operational analytics |
+| PUBLISHED_REPORTING__DIRECT_CARE | Individual patient care (consent-based access) |
+
+Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
+
+### Technology Stack
+
+- **dbt-core 1.9.4** - Do not upgrade to 1.10+
 - **Snowflake** - Cloud data warehouse
 - **Python 3.8+** - Scripting and automation
-- **dbt packages** - dbt_utils, dbt_expectations, dbt_date, codegen
-
-## Roles and Permissions
-
-Uses **ANALYST** role with access to all project databases. Role hierarchy: ANALYST → ENGINEER → DATA_PLATFORM_MANAGER. All dbt objects owned by ANALYST with inherited permissions.
-
-## Getting Help
-
-- **New contributor?** [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Need workflows?** [Development Guide](docs/development-guide.md)
-- **Working with sources?** [Working with Sources](docs/working-with-sources.md)
-- **Found a bug?** [Open an issue](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/issues)
 
 ## License
 

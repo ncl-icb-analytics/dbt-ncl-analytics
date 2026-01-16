@@ -72,10 +72,6 @@ pip install -r requirements.txt
 
 ### Step 3: Configure Snowflake Connection
 
-You need to create two configuration files:
-
-#### 3a. Create .env file
-
 ```bash
 cp env.example .env
 ```
@@ -89,13 +85,7 @@ SNOWFLAKE_WAREHOUSE=ANALYST_WH
 SNOWFLAKE_ROLE=ANALYST
 ```
 
-#### 3b. Create profiles.yml file
-
-```bash
-cp profiles.yml.template profiles.yml
-```
-
-The template is pre-configured to read from your `.env` file, so no editing needed.
+The `profiles.yml` is already configured to read from your `.env` file.
 
 ### Step 4: Initialise Your Development Environment
 
@@ -105,11 +95,7 @@ Run the setup script:
 .\start_dbt.ps1
 ```
 
-This script:
-- Loads your .env variables into the session
-- Configures git to ignore local changes to profiles.yml
-
-Run this script once before your first commit, then each time you open a new terminal session.
+**Important**: Run this script each time you open a new terminal. It loads your `.env` credentials into the session - dbt commands won't work without it.
 
 ### Step 5: Verify Installation
 
@@ -119,6 +105,23 @@ dbt debug   # Test connection
 ```
 
 Your browser will open for Snowflake authentication. Look for "All checks passed!" in the output.
+
+### Helper Scripts
+
+Two scripts in the project root make development easier:
+
+| Script | Description |
+|--------|-------------|
+| `.\start_dbt.ps1` | Loads `.env` credentials - **run first in each terminal** |
+| `.\build_changed` | Builds only models changed on your branch |
+
+**build_changed flags:**
+- `-u` include upstream dependencies
+- `-d` include downstream dependents
+- `-r` run only (skip tests)
+- `-t` test only (skip run)
+
+Example: `.\build_changed -u -d` builds changed models with all dependencies.
 
 ## Setting Up Commit Signing
 
@@ -305,12 +308,7 @@ If a hook fails, fix the reported issue and commit again.
 
 ## Working with dbt Packages
 
-This repository commits `dbt_packages/` and `profiles.yml` (required for Snowflake native execution).
-
-**Important:**
-- The `start_dbt.ps1` script uses git skip-worktree to prevent committing your local `profiles.yml` changes
-- When `dbt deps` shows changes in `dbt_packages/`, only commit if you're intentionally updating packages
-- If you see `profiles.yml` in `git status`, run `start_dbt.ps1` again
+This repository commits `dbt_packages/` to ensure consistent package versions. When `dbt deps` shows changes in `dbt_packages/`, only commit if you're intentionally updating packages.
 
 ## Common Issues
 
@@ -328,7 +326,6 @@ This repository commits `dbt_packages/` and `profiles.yml` (required for Snowfla
 
 **dbt authentication fails:**
 - Check your `.env` file has correct values
-- Ensure you're using `externalbrowser` authenticator in `profiles.yml`
 - Try running `dbt debug` to see detailed error
 
 ## Getting Help
