@@ -1,0 +1,10 @@
+version: 2
+models:
+- name: stg_reference_ncl_interpreter_required
+  description: Interpreter required flag lookup
+  columns:
+  - name: interpreter_required
+    description: Primary key - interpreter required flag value
+    data_tests:
+    - unique
+    - not_null

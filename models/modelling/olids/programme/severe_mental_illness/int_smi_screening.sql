@@ -83,6 +83,6 @@ p.person_id
 ,c.never_had_screen
 ,c.last_completed_date
 
-FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
+FROM {{ ref('int_smi_population_base') }} p
 LEFT JOIN COMBINED c using (person_id)
    

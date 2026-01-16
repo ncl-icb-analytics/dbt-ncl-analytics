@@ -52,23 +52,23 @@ op_inclusion as(
 -- )
 -- ,
 potentially_fragmented_sk_patient_ids as (
-    SELECT 
+    SELECT
     p.sk_patient_id,
     COUNT(DISTINCT pp.person_id) as person_count,
     ARRAY_AGG(DISTINCT pp.person_id) as person_ids
-    FROM data_lake.olids.patient p
-    JOIN data_lake.olids.patient_person pp ON p.id = pp.patient_id
+    FROM {{ ref('stg_olids_patient') }} p
+    JOIN {{ ref('stg_olids_patient_person') }} pp ON p.id = pp.patient_id
     GROUP BY p.sk_patient_id
     HAVING COUNT(DISTINCT pp.person_id) > 1
     ORDER BY person_count DESC
 ),
 potentially_fragmented_person_ids as (
-    SELECT 
+    SELECT
         pp.person_id,
         COUNT(DISTINCT p.sk_patient_id) as patient_count,
         ARRAY_AGG(DISTINCT p.sk_patient_id) as sk_patient_ids
-    FROM data_lake.olids.patient p
-    JOIN data_lake.olids.patient_person pp ON p.id = pp.patient_id
+    FROM {{ ref('stg_olids_patient') }} p
+    JOIN {{ ref('stg_olids_patient_person') }} pp ON p.id = pp.patient_id
     GROUP BY pp.person_id
     HAVING COUNT(DISTINCT p.sk_patient_id) > 1
     ORDER BY patient_count DESC
@@ -95,6 +95,6 @@ left join op_inclusion op
 left join {{ref('dim_person_demographics')}} pd
     on pd.person_id = pp.person_id
 where pd.is_deceased = FALSE 
-    and pcn_code in (select distinct pcn_code from {{source('c_ltcs','MDT_LOOKUP')}} )
+    and pcn_code in (select distinct pcn_code from {{ ref('stg_c_ltcs_mdt_lookup') }})
   --  and fragmented_sk_patient_id_flag = 0 -- keep warning for awareness of person/patient mapping issues
 -- and fragmented_person_id_flag = 0

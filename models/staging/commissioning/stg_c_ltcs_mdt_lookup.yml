@@ -1,0 +1,18 @@
+version: 2
+models:
+- name: stg_c_ltcs_mdt_lookup
+  description: C-LTCS MDT PCN lookup. One row per PCN per MDT date.
+  columns:
+  - name: pcn_code
+    description: PCN code
+    data_tests:
+    - not_null
+  - name: mdt_date
+    description: MDT date
+    data_tests:
+    - not_null
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+        - pcn_code
+        - mdt_date

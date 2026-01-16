@@ -1,0 +1,12 @@
+version: 2
+models:
+- name: stg_reference_ncl_preferred_language
+  description: Language code to preferred language name lookup
+  columns:
+  - name: code
+    description: Primary key - language code
+    data_tests:
+    - unique
+    - not_null
+  - name: preferred_language
+    description: Preferred language name

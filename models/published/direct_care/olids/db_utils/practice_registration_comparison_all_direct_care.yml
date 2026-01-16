@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: practice_registration_comparison_all_direct_care
+    description: PDS vs OLIDS practice registration comparison for all practices. One row per practice with match category.

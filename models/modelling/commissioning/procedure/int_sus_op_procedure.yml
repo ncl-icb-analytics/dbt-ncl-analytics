@@ -7,6 +7,9 @@ models:
       - name: procedure_id
         data_type: varchar
         description: "Unique identifier for the procedure record"
+        data_tests:
+        - unique
+        - not_null
 
       - name: date
         data_type: timestamp_ntz
