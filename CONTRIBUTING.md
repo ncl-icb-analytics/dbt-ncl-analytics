@@ -95,7 +95,7 @@ Run the setup script:
 .\start_dbt.ps1
 ```
 
-This script loads your `.env` variables into the session. Run it each time you open a new terminal.
+**Important**: Run this script each time you open a new terminal. It loads your `.env` credentials into the session - dbt commands won't work without it.
 
 ### Step 5: Verify Installation
 
@@ -105,6 +105,23 @@ dbt debug   # Test connection
 ```
 
 Your browser will open for Snowflake authentication. Look for "All checks passed!" in the output.
+
+### Helper Scripts
+
+Two scripts in the project root make development easier:
+
+| Script | Description |
+|--------|-------------|
+| `.\start_dbt.ps1` | Loads `.env` credentials - **run first in each terminal** |
+| `.\build_changed` | Builds only models changed on your branch |
+
+**build_changed flags:**
+- `-u` include upstream dependencies
+- `-d` include downstream dependents
+- `-r` run only (skip tests)
+- `-t` test only (skip run)
+
+Example: `.\build_changed -u -d` builds changed models with all dependencies.
 
 ## Setting Up Commit Signing
 

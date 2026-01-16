@@ -28,7 +28,22 @@ Transforms healthcare data into analytical datasets across two domains:
 
 Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, EPD (prescribing), eRS (referrals).
 
+## Helper Scripts
+
+| Script | Description |
+|--------|-------------|
+| `.\start_dbt.ps1` | **Run first** - Loads `.env` credentials into your session |
+| `.\build_changed` | Build only changed models (auto-detects from git diff) |
+
+**Flags for `build_changed`:**
+- `-u` upstream dependencies
+- `-d` downstream dependents
+- `-r` run only (no tests)
+- `-t` test only
+
 ## Common Commands
+
+Always run `.\start_dbt.ps1` first in each terminal session.
 
 | Command | Description |
 |---------|-------------|
@@ -38,7 +53,6 @@ Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, 
 | `dbt run -s tag:qof` | Run models by tag |
 | `dbt test -s model_name` | Test a specific model |
 | `dbt docs generate && dbt docs serve` | Generate and view documentation |
-| `./build_changed -d` | Build changed models + downstream |
 
 ## Project Structure
 
