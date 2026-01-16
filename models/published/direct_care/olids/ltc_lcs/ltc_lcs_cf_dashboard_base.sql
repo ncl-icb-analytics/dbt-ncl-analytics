@@ -95,7 +95,7 @@ base_data AS (
         cond.has_severe_mental_illness,
         COALESCE(preg.is_currently_pregnant, FALSE) AS is_currently_pregnant
     FROM {{ ref('dim_ltc_lcs_cf_summary') }} cf
-    LEFT JOIN {{ ref('dim_person_demographics') }} d ON cf.person_id = d.person_id
+    INNER JOIN {{ ref('dim_person_demographics') }} d ON cf.person_id = d.person_id
     LEFT JOIN {{ ref('dim_person_conditions') }} cond ON cf.person_id = cond.person_id
     LEFT JOIN {{ ref('fct_person_pregnancy_status') }} preg ON cf.person_id = preg.person_id
 ),
