@@ -53,6 +53,26 @@ cd dbt-ncl-analytics
 
 ### Step 2: Set Up Python Environment
 
+#### Using uv (Recommended)
+
+[uv](https://docs.astral.sh/uv/) is a fast Python package manager. Install it first:
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Then set up the project:
+
+```bash
+uv sync
+.venv\Scripts\activate
+```
+
+This creates the virtual environment and installs all dependencies automatically.
+
+<details>
+<summary>Alternative: Using pip and venv</summary>
+
 Create and activate a virtual environment:
 
 ```bash
@@ -67,6 +87,8 @@ Install project dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+</details>
 
 **Important**: This project uses dbt-core 1.9.4 for Snowflake compatibility. Do not upgrade dbt packages.
 
