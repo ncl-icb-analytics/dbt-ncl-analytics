@@ -81,7 +81,7 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 
 ## Learning dbt
 
-New to dbt? Start with [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals) or browse the [dbt Learn catalog](https://learn.getdbt.com/catalog).
+New to dbt? Start with [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals-vs-code) or browse the [dbt Learn catalog](https://learn.getdbt.com/catalog).
 
 See also: [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)
 
