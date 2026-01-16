@@ -5,7 +5,7 @@
 [![Open PRs](https://img.shields.io/github/issues-pr/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls)
 [![Merged PRs](https://badgen.net/github/merged-prs/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls?q=is%3Amerged)
 
-dbt project for NCL ICB Analytics, transforming healthcare data into actionable insights across North Central London.
+dbt project for NCL ICB Analytics healthcare data transformations.
 
 ## Quick Start
 
@@ -81,20 +81,9 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 
 ## Learning dbt
 
-New to dbt? Here's a recommended learning path:
+New to dbt? Start with [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals) or browse the [dbt Learn catalog](https://learn.getdbt.com/catalog).
 
-**Prerequisites**: Basic SQL, Git fundamentals
-
-**Start here**:
-- [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals) - Free official course
-- [dbt Documentation](https://docs.getdbt.com/) - Reference docs
-
-**Go deeper**:
-- [DataCamp - Introduction to dbt](https://www.datacamp.com/courses/introduction-to-dbt)
-- [Start Data Engineering - dbt Tutorial](https://www.startdataengineering.com/post/dbt-data-build-tool-tutorial/)
-- [roadmap.sh Data Engineer](https://roadmap.sh/data-engineer) - Where dbt fits in data engineering
-
-**Get help**: [dbt Community Slack](https://www.getdbt.com/community/)
+See also: [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)
 
 ## Architecture
 
