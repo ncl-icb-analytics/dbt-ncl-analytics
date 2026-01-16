@@ -1,11 +1,11 @@
 # NCL Analytics dbt Project
 
-[![License](https://img.shields.io/badge/license-OGL%20v3%20|%20MIT-blue)](LICENSE)
-[![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/EddieDavison92/fe9920551839b7a85d0f47dfd527e62b/raw/coverage.json)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/actions/workflows/test-coverage.yml)
 [![Last Commit](https://img.shields.io/github/last-commit/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/commits/main)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulse)
 [![Open PRs](https://img.shields.io/github/issues-pr/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls)
 [![Merged PRs](https://badgen.net/github/merged-prs/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls?q=is%3Amerged)
+[![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/EddieDavison92/fe9920551839b7a85d0f47dfd527e62b/raw/coverage.json)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/actions/workflows/test-coverage.yml)
+[![License](https://img.shields.io/badge/license-OGL%20v3%20|%20MIT-blue)](LICENSE)
 
 dbt project for NCL ICB Analytics healthcare data transformations.
 
