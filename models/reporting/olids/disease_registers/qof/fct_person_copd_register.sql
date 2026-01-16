@@ -14,13 +14,13 @@ RULE 1: If EUNRESCOPD_DAT < 01/04/2023 → SELECT
 
 RULE 2: If EUNRESCOPD_DAT >= 01/04/2023 AND spirometry within timeframe → SELECT
 - FEV1/FVC <0.7 within 93 days before and 186 days after EUNRESCOPD_DAT
-- Uses FEV1FVCDIAG_DAT or FEV1FVCL70DIAG_DAT
 
-RULE 3: Simplified spirometry check (ignoring registration logic)
-- Additional spirometry pathway for post-April 2023 patients
+RULE 3: If EUNRESCOPD_DAT >= 01/04/2023 AND newly registered (last 12 months) AND spirometry → SELECT
+- FEV1/FVC <0.7 within 93 days before and 186 days after REG_DAT
+- For patients who registered recently and already have spirometry from before registration
 
-RULE 4: If EUNRESCOPD_DAT >= 01/04/2023 → SELECT, else REJECT
-- Final filter based on earliest unresolved diagnosis date
+RULE 4: If EUNRESCOPD_DAT >= 01/04/2023 AND unable to perform spirometry → SELECT
+- Patients with SPIRPU_COD code (unable to undertake spirometry)
 
 EUNRESCOPD_DAT Calculation (per QOF Field 22):
 - If COPDRES_DAT = NULL AND COPDRES1_DAT = NULL → RETURN COPD_DAT
@@ -213,37 +213,88 @@ qof_rule_2_spirometry_timeframe AS (
             AND s.spirometry_date <= DATEADD('day', 186, pfr.eunrescopd_dat)   -- 186 days after
 ),
 
-qof_rule_3_additional_spirometry AS (
-    -- RULE 3: Additional spirometry pathway (simplified, ignoring registration logic)
+-- RULE 3: Newly registered patients (last 12 months) with spirometry within -93 to +186 days of registration
+newly_registered_patients AS (
+    SELECT
+        person_id,
+        registration_start_date AS reg_dat
+    FROM {{ ref('dim_person_historical_practice') }}
+    WHERE is_current_registration = TRUE
+      AND registration_start_date > CURRENT_DATE() - INTERVAL '12 months'
+      AND registration_start_date <= CURRENT_DATE()
+),
+
+qof_rule_3_newly_registered AS (
     SELECT DISTINCT
         pfr.person_id,
         pfr.eunrescopd_dat AS diagnosis_date,
-        'Rule 3: Additional Spirometry' AS qof_rule_applied,
+        'Rule 3: Newly Registered + Spirometry' AS qof_rule_applied,
         TRUE AS qualifies_for_register,
-        'Additional spirometry confirmation pathway' AS qualification_reason,
+        'Newly registered patient with spirometry <0.7 within 93 days before to 186 days after registration'
+            AS qualification_reason,
         s.spirometry_date AS relevant_spirometry_date,
         s.fev1_fvc_ratio AS relevant_spirometry_ratio
     FROM patients_for_rule_2_3_4 AS pfr
+    INNER JOIN newly_registered_patients AS nrp
+        ON pfr.person_id = nrp.person_id
     INNER JOIN spirometry_tests AS s
         ON
             pfr.person_id = s.person_id
-            AND s.is_below_0_7 = TRUE  -- FEV1/FVC <0.7
-            -- Extended timeframe for additional pathway
-            AND s.spirometry_date >= DATEADD('day', -186, pfr.eunrescopd_dat)   -- 6 months before
-            AND s.spirometry_date <= DATEADD('day', 365, pfr.eunrescopd_dat)    -- 12 months after
+            AND s.is_below_0_7 = TRUE
+            AND s.spirometry_date >= DATEADD('day', -93, nrp.reg_dat)
+            AND s.spirometry_date <= DATEADD('day', 186, nrp.reg_dat)
     WHERE
         pfr.person_id NOT IN (
             SELECT person_id FROM qof_rule_2_spirometry_timeframe
         )
 ),
 
--- Combine all qualifying patients
-all_qualifying_patients AS (
+-- RULE 4: Unable to perform spirometry pathway
+qof_rule_4_unable_spirometry AS (
+    SELECT DISTINCT
+        pfr.person_id,
+        pfr.eunrescopd_dat AS diagnosis_date,
+        'Rule 4: Unable to Perform Spirometry' AS qof_rule_applied,
+        TRUE AS qualifies_for_register,
+        'Unable to perform spirometry (SPIRPU_COD)' AS qualification_reason,
+        NULL AS relevant_spirometry_date,
+        NULL AS relevant_spirometry_ratio
+    FROM patients_for_rule_2_3_4 AS pfr
+    INNER JOIN {{ ref('int_unable_spirometry_all') }} AS us
+        ON pfr.person_id = us.person_id
+    WHERE
+        pfr.person_id NOT IN (SELECT person_id FROM qof_rule_2_spirometry_timeframe)
+        AND pfr.person_id NOT IN (SELECT person_id FROM qof_rule_3_newly_registered)
+),
+
+-- Combine all qualifying patients (deduplicated to one row per person)
+all_qualifying_patients_raw AS (
     SELECT * FROM qof_rule_1_pre_april_2023
     UNION ALL
     SELECT * FROM qof_rule_2_spirometry_timeframe
     UNION ALL
-    SELECT * FROM qof_rule_3_additional_spirometry
+    SELECT * FROM qof_rule_3_newly_registered
+    UNION ALL
+    SELECT * FROM qof_rule_4_unable_spirometry
+),
+
+all_qualifying_patients AS (
+    SELECT *
+    FROM all_qualifying_patients_raw
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY person_id
+        ORDER BY
+            -- Prioritize by rule number (Rule 1 > Rule 2 > Rule 3 > Rule 4)
+            CASE qof_rule_applied
+                WHEN 'Rule 1: Pre-April 2023' THEN 1
+                WHEN 'Rule 2: Post-April 2023 + Spirometry' THEN 2
+                WHEN 'Rule 3: Newly Registered + Spirometry' THEN 3
+                WHEN 'Rule 4: Unable to Perform Spirometry' THEN 4
+                ELSE 5
+            END,
+            -- Then by earliest spirometry date for tie-breaking
+            relevant_spirometry_date NULLS LAST
+    ) = 1
 ),
 
 -- Get latest spirometry for reporting
@@ -311,9 +362,9 @@ SELECT
     qfce.all_copd_concept_displays,
     COALESCE(aqp.qualifies_for_register, FALSE) AS is_on_register,
     COALESCE(
-        aqp.qof_rule_applied, 'Rule 4: Failed - EUNRESCOPD_DAT < 01/04/2023'
+        aqp.qof_rule_applied, 'Not Qualified'
     ) AS qof_rule_applied,
-    COALESCE(aqp.qualification_reason, 'Failed Rule 4 filter')
+    COALESCE(aqp.qualification_reason, 'Post-April 2023 without spirometry confirmation or unable-to-spirometry code')
         AS qualification_reason,
     COALESCE(qfce.eunrescopd_dat < '2023-04-01', FALSE)
         AS is_pre_april_2023_diagnosis,
@@ -341,9 +392,13 @@ SELECT
         FALSE
     ) AS qualified_rule_2,
     COALESCE(
-        aqp.qof_rule_applied = 'Rule 3: Additional Spirometry',
+        aqp.qof_rule_applied = 'Rule 3: Newly Registered + Spirometry',
         FALSE
-    ) AS qualified_rule_3
+    ) AS qualified_rule_3,
+    COALESCE(
+        aqp.qof_rule_applied = 'Rule 4: Unable to Perform Spirometry',
+        FALSE
+    ) AS qualified_rule_4
 
 FROM qof_field_calculations_extended AS qfce
 LEFT JOIN all_qualifying_patients AS aqp
