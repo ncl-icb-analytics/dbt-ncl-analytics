@@ -4,9 +4,9 @@
 
     Implements full QOF COPD Rules 1-4:
     - Rule 1: EUNRESCOPD_DAT < 01/04/2023 → automatic inclusion
-    - Rule 2: EUNRESCOPD_DAT >= 01/04/2023 + spirometry <0.7 within -93 to +186 days
-    - Rule 3: Additional spirometry pathway (-186 to +365 days)
-    - Rule 4: Based on EUNRESCOPD_DAT threshold
+    - Rule 2: EUNRESCOPD_DAT >= 01/04/2023 + spirometry <0.7 within -93 to +186 days of diagnosis
+    - Rule 3: EUNRESCOPD_DAT >= 01/04/2023 + newly registered (last 12 months) + spirometry <0.7 within -93 to +186 days of registration
+    - Rule 4: EUNRESCOPD_DAT >= 01/04/2023 + unable to perform spirometry (SPIRPU_COD)
 
     EUNRESCOPD_DAT (Field 22):
     - If no resolved codes → COPD_DAT (earliest diagnosis)
@@ -117,9 +117,9 @@
           AND eunrescopd_dat >= '2023-04-01'
     ),
 
-    -- Rule 2: Spirometry within -93 to +186 days
+    -- Rule 2: Spirometry within -93 to +186 days of diagnosis
     rule_2_qualifiers AS (
-        SELECT
+        SELECT DISTINCT
             pap.person_id,
             pap.eunrescopd_dat,
             2 AS rule_number
@@ -130,18 +130,51 @@
             AND sf.spirometry_date <= DATEADD('day', 186, pap.eunrescopd_dat)
     ),
 
-    -- Rule 3: Extended spirometry pathway (-186 to +365 days)
-    rule_3_qualifiers AS (
+    -- Rule 3: Newly registered patients (last 12 months) with spirometry within -93 to +186 days of registration
+    newly_registered_patients AS (
         SELECT
+            person_id,
+            registration_start_date AS reg_dat
+        FROM {{ ref('dim_person_historical_practice') }}
+        WHERE is_current_registration = TRUE
+          AND registration_start_date > {{ reference_date_expr }} - INTERVAL '12 months'
+          AND registration_start_date <= {{ reference_date_expr }}
+    ),
+
+    rule_3_qualifiers AS (
+        SELECT DISTINCT
             pap.person_id,
             pap.eunrescopd_dat,
             3 AS rule_number
         FROM post_april_patients pap
+        INNER JOIN newly_registered_patients nrp
+            ON pap.person_id = nrp.person_id
         INNER JOIN spirometry_filtered sf
             ON pap.person_id = sf.person_id
-            AND sf.spirometry_date >= DATEADD('day', -186, pap.eunrescopd_dat)
-            AND sf.spirometry_date <= DATEADD('day', 365, pap.eunrescopd_dat)
+            AND sf.spirometry_date >= DATEADD('day', -93, nrp.reg_dat)
+            AND sf.spirometry_date <= DATEADD('day', 186, nrp.reg_dat)
         WHERE pap.person_id NOT IN (SELECT person_id FROM rule_2_qualifiers)
+    ),
+
+    -- Rule 4: Unable to perform spirometry pathway
+    unable_spirometry_filtered AS (
+        SELECT
+            person_id,
+            clinical_effective_date
+        FROM {{ ref('int_unable_spirometry_all') }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }}
+    ),
+
+    rule_4_qualifiers AS (
+        SELECT DISTINCT
+            pap.person_id,
+            pap.eunrescopd_dat,
+            4 AS rule_number
+        FROM post_april_patients pap
+        INNER JOIN unable_spirometry_filtered usf
+            ON pap.person_id = usf.person_id
+        WHERE pap.person_id NOT IN (SELECT person_id FROM rule_2_qualifiers)
+          AND pap.person_id NOT IN (SELECT person_id FROM rule_3_qualifiers)
     ),
 
     all_qualifiers AS (
@@ -150,6 +183,8 @@
         SELECT person_id, eunrescopd_dat, rule_number FROM rule_2_qualifiers
         UNION ALL
         SELECT person_id, eunrescopd_dat, rule_number FROM rule_3_qualifiers
+        UNION ALL
+        SELECT person_id, eunrescopd_dat, rule_number FROM rule_4_qualifiers
     ),
 
     copd_register_logic AS (
