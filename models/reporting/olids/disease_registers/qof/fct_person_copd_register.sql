@@ -267,8 +267,8 @@ qof_rule_4_unable_spirometry AS (
         AND pfr.person_id NOT IN (SELECT person_id FROM qof_rule_3_newly_registered)
 ),
 
--- Combine all qualifying patients
-all_qualifying_patients AS (
+-- Combine all qualifying patients (deduplicated to one row per person)
+all_qualifying_patients_raw AS (
     SELECT * FROM qof_rule_1_pre_april_2023
     UNION ALL
     SELECT * FROM qof_rule_2_spirometry_timeframe
@@ -276,6 +276,25 @@ all_qualifying_patients AS (
     SELECT * FROM qof_rule_3_newly_registered
     UNION ALL
     SELECT * FROM qof_rule_4_unable_spirometry
+),
+
+all_qualifying_patients AS (
+    SELECT *
+    FROM all_qualifying_patients_raw
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY person_id
+        ORDER BY
+            -- Prioritize by rule number (Rule 1 > Rule 2 > Rule 3 > Rule 4)
+            CASE qof_rule_applied
+                WHEN 'Rule 1: Pre-April 2023' THEN 1
+                WHEN 'Rule 2: Post-April 2023 + Spirometry' THEN 2
+                WHEN 'Rule 3: Newly Registered + Spirometry' THEN 3
+                WHEN 'Rule 4: Unable to Perform Spirometry' THEN 4
+                ELSE 5
+            END,
+            -- Then by earliest spirometry date for tie-breaking
+            relevant_spirometry_date NULLS LAST
+    ) = 1
 ),
 
 -- Get latest spirometry for reporting
