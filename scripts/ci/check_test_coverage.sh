@@ -59,13 +59,13 @@ while IFS= read -r -d '' file; do
     [[ "$file" == *dbt_packages* ]] && continue
     [[ "$file" == */raw/* ]] && continue
 
-    ((total++))
+    ((total++)) || true
 
     model_name=$(basename "$file" .sql)
     model_dir=$(dirname "$file")
 
     if model_has_tests "$model_name" "$model_dir"; then
-        ((with_tests++))
+        ((with_tests++)) || true
     else
         missing+=("$file")
     fi
@@ -85,7 +85,7 @@ if [[ ${#missing[@]} -gt 0 ]]; then
     count=0
     for file in "${missing[@]}"; do
         echo "  - $file"
-        ((count++))
+        ((count++)) || true
         if [[ $count -ge 20 ]]; then
             remaining=$((${#missing[@]} - 20))
             if [[ $remaining -gt 0 ]]; then
