@@ -3,7 +3,18 @@ models:
     description: 'QOF heart failure register for patients with active heart failure diagnosis.
 
       One row per person with latest HF_COD > latest HFRES_COD or no resolution, including subtype classification (General HF vs HF with LVSD/Reduced EF).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

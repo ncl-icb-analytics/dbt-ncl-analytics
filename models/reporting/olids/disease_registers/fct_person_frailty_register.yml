@@ -4,7 +4,11 @@ models:
     description: 'Frailty register for patients with frailty diagnosis tracking latest severity levels.
 
       One row per person with FRAILTY_DX present including severity classification (mild, moderate, severe).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -30,3 +34,10 @@ models:
           code_clusters:
             - cluster_id: "FRAILTY_DX"
               category: "INCLUSION"
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

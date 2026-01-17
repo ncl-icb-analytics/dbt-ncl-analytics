@@ -4,7 +4,18 @@ models:
     description: 'QOF palliative care register for patients receiving end-of-life care.
 
       One row per person with PALLCARE_COD present (palliative care status maintained).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

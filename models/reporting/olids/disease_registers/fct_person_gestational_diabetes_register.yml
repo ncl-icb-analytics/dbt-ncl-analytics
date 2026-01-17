@@ -4,7 +4,11 @@ models:
     description: 'Gestational diabetes register for patients with pregnancy-related diabetes diagnosis history.
 
       One row per active patient with GESTDIAB_COD present (permanent record for postpartum diabetes risk monitoring).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -30,3 +34,10 @@ models:
           code_clusters:
             - cluster_id: "GESTDIAB_COD"
               category: "INCLUSION"
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

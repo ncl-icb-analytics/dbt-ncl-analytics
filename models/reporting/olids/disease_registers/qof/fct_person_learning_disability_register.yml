@@ -4,7 +4,18 @@ models:
     description: 'QOF learning disability register for patients aged 14+ with learning disability diagnosis.
 
       One row per person with LD_COD present (learning disability is permanent condition).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

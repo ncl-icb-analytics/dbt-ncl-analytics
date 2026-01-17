@@ -3,7 +3,11 @@ models:
     description: 'Children and young people asthma register for paediatric asthma management.
 
       One row per person under 18 years with latest AST_COD > latest ASTRES_COD and asthma medication prescribed within last 12 months.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -32,3 +36,10 @@ models:
               category: "RESOLUTION"
             - cluster_id: "ASTTRT_COD"
               category: "INCLUSION"
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

@@ -6,7 +6,9 @@ models:
       One row per observation using HF_COD, HFRES_COD, HFLVSD_COD, and REDEJCFRAC_COD clusters with ejection fraction tracking.'
     columns:
       - name: id
-        description: 'Unique identifier for the clinical observation'
+        description: 'Observation identifier (not unique - same observation may appear for multiple cluster matches)'
+        tests:
+          - not_null
 
       - name: person_id
         description: 'Patient identifier'
@@ -39,5 +41,7 @@ models:
         description: 'Categorised heart failure observation type (diagnosis, LVSD, reduced EF, or resolved)'
 
     tests:
+      - dbt_utils.at_least_one:
+          column_name: id
       - cluster_ids_exist:
           cluster_ids: HFLVSD_COD, HFRES_COD, HF_COD, REDEJCFRAC_COD

@@ -4,7 +4,18 @@ models:
     description: 'QOF cancer register for patients with cancer diagnosis from 1 April 2003 onwards.
 
       One row per person with CAN_COD diagnosis (excludes non-melanotic skin cancers).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

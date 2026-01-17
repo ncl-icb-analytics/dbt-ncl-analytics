@@ -4,7 +4,11 @@ models:
     description: 'Non-alcoholic fatty liver disease register for patients with NAFLD diagnosis.
 
       One row per active patient with NAFLD diagnosis (currently using hardcoded SNOMED codes - awaiting NAFLD_COD cluster).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -31,3 +35,10 @@ models:
           code_clusters:
             - cluster_id: "HARDCODED_NAFLD"
               category: "INCLUSION"
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

@@ -3,7 +3,18 @@ models:
     description: 'QOF asthma register for patients aged 6+ with active asthma diagnosis.
 
       One row per person with latest AST_COD > latest ASTRES_COD and asthma medication prescribed within last 12 months.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

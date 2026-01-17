@@ -4,7 +4,11 @@ models:
     description: 'QOF atrial fibrillation register for patients with active AF diagnosis.
 
       One row per person with latest AFIB_COD > latest AFIBRES_COD or no resolution recorded.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -35,6 +39,9 @@ models:
     columns:
       - name: person_id
         description: 'Patient identifier'
+        tests:
+          - unique
+          - not_null
 
       - name: age
         description: 'Current age of the patient'

@@ -3,7 +3,18 @@ models:
     description: 'QOF non-diabetic hyperglycaemia register for patients with pre-diabetes diagnosis.
 
       One row per person with NDH_COD present (elevated glucose but not diabetic), excluding those with diabetes diagnosis.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

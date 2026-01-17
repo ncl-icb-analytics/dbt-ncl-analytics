@@ -4,7 +4,11 @@ models:
     description: 'QOF hypertension register for patients aged 18+ with active hypertension diagnosis.
 
       One row per person with latest HTN_COD > latest HTNRES_COD, including clinical staging based on NICE-aligned BP thresholds.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -35,6 +39,9 @@ models:
     columns:
       - name: person_id
         description: 'Patient identifier'
+        tests:
+          - unique
+          - not_null
 
       - name: age
         description: 'Current age of the patient'

@@ -4,7 +4,11 @@ models:
     description: 'Parkinsons disease register for patients with Parkinsons diagnosis.
 
       One row per person with PD_COD present (non-QOF).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -30,3 +34,9 @@ models:
             - cluster_id: "PD_COD"
               category: "INCLUSION"
 
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
