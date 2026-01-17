@@ -26,11 +26,14 @@ jobs:
           version: "0.6.x"
 
       - name: Install dependencies
-        run: uv pip install --system --break-system-packages pyyaml
+        run: |
+          uv venv
+          uv pip install pyyaml
 
       - name: Check test coverage
         id: coverage
         run: |
+          source .venv/bin/activate
           python << 'EOF'
           import os
           from pathlib import Path
