@@ -12,9 +12,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
       - name: Get changed files
         id: changed
         run: |
@@ -22,7 +19,7 @@ jobs:
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
-          python scripts/ci/check_hardcoded_refs.py ${{ steps.changed.outputs.files }} | tee result.txt
+          bash scripts/ci/check_hardcoded_refs.sh ${{ steps.changed.outputs.files }} | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
 
@@ -33,9 +30,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
       - name: Get changed files
         id: changed
         run: |
@@ -43,7 +37,7 @@ jobs:
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
-          python scripts/ci/check_staging_refs.py ${{ steps.changed.outputs.files }} | tee result.txt
+          bash scripts/ci/check_staging_refs.sh ${{ steps.changed.outputs.files }} | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
 
@@ -54,10 +48,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install pyyaml
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
       - name: Get changed files
         id: changed
         run: |
@@ -65,7 +59,7 @@ jobs:
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
-          python scripts/ci/check_model_descriptions.py ${{ steps.changed.outputs.files }} | tee result.txt
+          bash scripts/ci/check_model_descriptions.sh ${{ steps.changed.outputs.files }} | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
 
@@ -76,10 +70,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install pyyaml
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
       - name: Get changed files
         id: changed
         run: |
@@ -87,6 +81,6 @@ jobs:
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
-          python scripts/ci/check_model_tests.py ${{ steps.changed.outputs.files }} | tee result.txt
+          bash scripts/ci/check_model_tests.sh ${{ steps.changed.outputs.files }} | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
