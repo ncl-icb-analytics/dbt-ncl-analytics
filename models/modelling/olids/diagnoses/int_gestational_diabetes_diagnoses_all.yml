@@ -16,9 +16,17 @@ models:
       • No resolution codes as condition is pregnancy-specific
 
       Purpose: Provide observation-level data for gestational diabetes monitoring and future diabetes prevention planning.'
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+      - cluster_ids_exist:
+          cluster_ids: GESTDIAB_COD
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
+        tests:
+          - unique
+          - not_null
       - name: person_id
         description: 'Unique identifier for the person'
       - name: clinical_effective_date

@@ -4,7 +4,11 @@ models:
     description: 'Autism spectrum disorder register for patients with autism diagnosis.
 
       One row per person with AUTISM_COD present (non-QOF).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -31,3 +35,9 @@ models:
             - cluster_id: "AUTISM_COD"
               category: "INCLUSION"
 
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

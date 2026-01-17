@@ -13,7 +13,11 @@ models:
       • Active diagnosis required (not historical)
 
       Purpose: Supports comprehensive learning disability population analysis across all age groups, complementing the age-restricted QOF register.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -44,7 +48,10 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        
+        tests:
+          - unique
+          - not_null
+
       - name: is_on_register
         description: Whether person is on the learning disability register
         

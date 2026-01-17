@@ -8,8 +8,10 @@ models:
       - name: person_id
         description: 'Patient identifier'
 
-      - name: id
+      - name: observation_id
         description: 'Unique identifier for the clinical observation'
+        tests:
+          - not_null
 
       - name: clinical_effective_date
         description: 'Date when palliative care observation was clinically effective'
@@ -36,5 +38,7 @@ models:
         description: 'Flag indicating palliative care resolution code'
 
     tests:
+      - dbt_utils.at_least_one:
+          column_name: observation_id
       - cluster_ids_exist:
           cluster_ids: PALCARENI_COD, PALCARE_COD

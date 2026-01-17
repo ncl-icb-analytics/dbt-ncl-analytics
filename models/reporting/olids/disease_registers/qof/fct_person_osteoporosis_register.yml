@@ -4,7 +4,18 @@ models:
     description: 'QOF osteoporosis register for fracture prevention in at-risk patients aged 50-74.
 
       One row per person with fragility fracture after April 2012, OSTEO_COD present, and DXA confirmation (DXA scan or T-score ≤ -2.5).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:
