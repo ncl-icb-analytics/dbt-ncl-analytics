@@ -4,3 +4,19 @@ models:
     description: 'Long-term conditions summary combining all QOF and clinical disease registers.
 
       One row per person per condition with standardised condition codes, clinical domains, diagnosis dates and QOF status.'
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - condition_code
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+      - name: condition_code
+        tests:
+          - not_null

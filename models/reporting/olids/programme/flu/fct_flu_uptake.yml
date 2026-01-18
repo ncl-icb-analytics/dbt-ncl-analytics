@@ -57,10 +57,29 @@ models:
               description: "High-risk group coverage target"
               sort_order: 2
     
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - campaign_id
+            - person_id
+            - risk_group
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
+      - name: campaign_id
+        description: Flu campaign identifier
+        tests:
+          - not_null
+
+      - name: person_id
+        description: Unique person identifier
+        tests:
+          - not_null
+
       - name: campaign_year
         description: Flu campaign year
-        
+
       - name: geography_type
         description: Geographic aggregation level (practice, PCN, borough)
         

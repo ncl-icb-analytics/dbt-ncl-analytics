@@ -3,3 +3,7 @@ version: 2
 models:
   - name: cltcs_ltc_summary
     description: Long-term condition summary for C-LTCS eligible patients. One row per patient per condition.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

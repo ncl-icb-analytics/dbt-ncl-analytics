@@ -1,5 +1,15 @@
-version: 1
+version: 2
 models:
   - name: int_smi_longlives_nutrition_review_latest
     description: 'Determine latest nutrition & activity review for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_NUTRITION_ACTIVITY_COD'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null
     

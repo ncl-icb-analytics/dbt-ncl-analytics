@@ -4,3 +4,13 @@ models:
     description: 'Diabetes foot examination status for QOF reporting with Townson scale risk assessment.
 
       One row per person on diabetes register with foot examination completion status and risk level assessment.'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

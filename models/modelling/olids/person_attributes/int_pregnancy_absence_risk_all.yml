@@ -4,3 +4,12 @@ models:
     description: 'Observations indicating permanent absence of pregnancy risk for valproate medication safety monitoring.
 
       One row per pregnancy absence risk observation using PREGRISK category codes with permanent pregnancy risk absence indicators for teratogenic medication prescribing decisions.'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null

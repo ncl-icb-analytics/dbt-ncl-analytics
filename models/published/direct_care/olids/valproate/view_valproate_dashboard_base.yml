@@ -1,4 +1,15 @@
 version: 2
+
 models:
   - name: view_valproate_dashboard_base
     description: Valproate base population for dashboard one row per person as VIEW
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

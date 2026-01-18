@@ -12,3 +12,7 @@ models:
       Table timestamps are retrieved from Snowflake's INFORMATION_SCHEMA, ensuring accuracy regardless of partial dbt runs.
 
       See metadata_refresh_dates in published_reporting_direct_care for column documentation.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

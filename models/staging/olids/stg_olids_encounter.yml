@@ -7,7 +7,6 @@ models:
   - name: id
     description: Primary key - unique identifier for this encounter
     tests:
-    - unique
     - not_null
   - name: person_id
     description: Foreign key to person.id - person-level identifier

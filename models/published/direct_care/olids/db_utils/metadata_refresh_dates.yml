@@ -11,6 +11,10 @@ models:
 
       Table timestamps are retrieved from Snowflake's INFORMATION_SCHEMA, ensuring accuracy regardless of partial dbt runs.
 
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: metric_type
         description: Type of metric (global_data_refresh or table_refresh)

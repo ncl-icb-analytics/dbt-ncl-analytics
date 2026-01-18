@@ -4,3 +4,13 @@ models:
     description: 'Most recent completed diabetes retinal screening per person for diabetes care monitoring and QOF reporting.
 
       One row per person with their latest retinal screening including currency flags (12m, 24m) and completion status for diabetes care pathway compliance.'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

@@ -4,3 +4,19 @@ models:
     description: 'ARAF events from observations using valproate programme codes.
 
       One row per ARAF observation with person, date, concept details for ARAF form code identification and lookback logic.'
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - araf_ID
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+      - name: araf_ID
+        tests:
+          - not_null

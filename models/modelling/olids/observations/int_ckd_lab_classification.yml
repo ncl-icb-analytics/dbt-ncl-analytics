@@ -16,9 +16,17 @@ models:
       • Person-level aggregation for case finding and audit
 
       Purpose: Identify people whose laboratory results meet CKD criteria regardless of clinical diagnosis.'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
+        tests:
+          - unique
+          - not_null
       - name: latest_egfr_value
         description: 'Most recent estimated glomerular filtration rate value (mL/min/1.73m²)'
       - name: latest_egfr_date

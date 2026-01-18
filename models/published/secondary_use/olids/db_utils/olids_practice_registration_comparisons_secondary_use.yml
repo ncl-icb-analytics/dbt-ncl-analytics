@@ -12,6 +12,11 @@ models:
       Methodology: PDS All Registration Types Comparison
       Includes: validation_methodology column describing the test
 
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+          severity: warn
+
   - name: pds_olids_reg_fail_secondary_use
     description: |
       Practices failing PDS registration count validation (Secondary Use).
@@ -22,6 +27,10 @@ models:
       Validation: ≥2% variance AND ≥5 persons difference
       Methodology: PDS All Registration Types Comparison
       Includes: validation_methodology column and issue_category (2-5%, 5-20%, 20%+)
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
 
   - name: pds_olids_reg_comparison_all_secondary_use
     description: |
@@ -34,3 +43,7 @@ models:
 
       Note: EMIS comparisons are NOT available in secondary_use layer as EMIS data
       cannot be joined to opt-out tables (no sk_patient_id).
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

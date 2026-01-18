@@ -14,7 +14,11 @@ models:
       • Total cholesterol <5 mmol/L (cardiovascular risk management)
 
       Purpose: Supports diabetes care quality assessment and identification of patients requiring intensified management to achieve clinical targets.'
-    
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     config:
       meta:
         indicator:
@@ -82,7 +86,10 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        
+        tests:
+          - unique
+          - not_null
+
       - name: diabetes_type
         description: Diabetes type classification (Type 1, Type 2, Unknown)
         

@@ -4,3 +4,12 @@ models:
     description: 'GP appointment activity tracking over 12-month period for capacity planning.
 
       One row per person per organisation with appointment count, earliest and latest appointment dates (minimum 1 appointment).'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
