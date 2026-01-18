@@ -4,3 +4,13 @@ models:
     description: 'Most recent diabetic foot examination status per person for diabetes care monitoring and QOF reporting.
 
       One row per person with their latest foot examination including completion status and current foot risk level assessment.'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

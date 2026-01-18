@@ -38,3 +38,13 @@ models:
       9. **LOW RISK** - Age 0-6 or permanent absence of pregnancy risk, minimal monitoring
       
       One row per person in valproate cohort (non-males aged 0-55 with recent valproate orders).
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

@@ -4,3 +4,19 @@ models:
     description: 'ARAF referral events from observations using valproate programme codes.
 
       One row per ARAF referral observation with person, date, concept details filtered to REFERRAL code category only.'
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - araf_referral_ID
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+      - name: araf_referral_ID
+        tests:
+          - not_null

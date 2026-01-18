@@ -4,3 +4,19 @@ models:
     description: 'Pregnancy Prevention Programme status events for valproate patient safety monitoring.
 
       One row per PPP status observation including enrolled, discontinued, not needed, and declined status events for women of childbearing potential on valproate therapy.'
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - ppp_ID
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+      - name: ppp_ID
+        tests:
+          - not_null

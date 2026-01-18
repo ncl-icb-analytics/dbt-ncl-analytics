@@ -50,15 +50,27 @@ models:
               description: "Minimum age for flu vaccination"
               sort_order: 1
     
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - campaign_id
+            - person_id
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
+        tests:
+          - not_null
       - name: campaign_category
         description: 'Category of eligibility criteria (always "Clinical Condition")'
       - name: risk_group
         description: 'Risk group classification (always "Chronic Liver Disease")'
       - name: person_id
         description: 'Unique identifier for the person'
+        tests:
+          - not_null
       - name: qualifying_event_date
         description: 'Date of qualifying diagnosis (earliest liver disease diagnosis)'
       - name: reference_date

@@ -1,3 +1,9 @@
+version: 2
+
 models:
   - name: childhood_imms_ts_res_child_dm
     description: Final data model table holding aggregated completion metrics by residential location for historical children aged 1,2 and 5 on analysis month
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

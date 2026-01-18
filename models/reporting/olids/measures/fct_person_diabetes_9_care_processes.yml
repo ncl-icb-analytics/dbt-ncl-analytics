@@ -4,7 +4,17 @@ models:
     description: 'Diabetes 9 care processes achievement for QOF reporting.
 
       One row per person on diabetes register with completion status for all 9 care processes (8 standard plus retinal screening) within 12 months.'
-    
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

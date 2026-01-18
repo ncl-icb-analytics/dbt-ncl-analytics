@@ -4,10 +4,16 @@ models:
   - name: view_population_health_needs_base
     description: |
       Population health needs person level view for both LTC and non-LTC patients.
-      
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: person_id
         description: 'Unique patient identifier'
+        tests:
+          - not_null
         
       - name: gender
         description: 'Patient gender'

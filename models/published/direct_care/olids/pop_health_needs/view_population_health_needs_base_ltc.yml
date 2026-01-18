@@ -6,6 +6,10 @@ models:
       Population health needs view for LTC patients only.
       Unpivots conditions to show one row per patient-condition combination.
 
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: keyid
         description: 'Composite key from gender, age band, ethnicity, language, and practice code'

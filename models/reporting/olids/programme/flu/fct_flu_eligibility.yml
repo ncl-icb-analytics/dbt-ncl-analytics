@@ -54,12 +54,25 @@ models:
               description: "Age-based eligibility threshold"
               sort_order: 2
     
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - campaign_id
+            - person_id
+            - risk_group
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: person_id
         description: Unique person identifier
-        
+        tests:
+          - not_null
+
       - name: campaign_id
         description: Flu campaign identifier (e.g., flu_2024_25)
+        tests:
+          - not_null
         
       - name: campaign_year
         description: Campaign year for reporting
