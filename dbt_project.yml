@@ -11,6 +11,7 @@ flags:
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
+  - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
 target-path: "target"
 clean-targets:
@@ -88,7 +89,9 @@ models:
       +materialized: table
       +database: "MODELLING"
       +tags: ["modelling"]
-      +post-hook: ["{{ add_model_comment() }}"]
+      +post-hook:
+        - "{{ add_model_comment() }}"
+        - "{{ log_row_count() }}"
       commissioning:
         +schema: "COMMISSIONING_MODELLING"
       olids:
@@ -101,7 +104,9 @@ models:
       +materialized: table
       +database: "REPORTING"
       +tags: ["reporting"]
-      +post-hook: ["{{ add_model_comment() }}"]
+      +post-hook:
+        - "{{ add_model_comment() }}"
+        - "{{ log_row_count() }}"
       commissioning:
         +schema: "COMMISSIONING_REPORTING"
       olids:
@@ -116,7 +121,9 @@ models:
       +enabled: true
       +materialized: table
       +tags: ["published_reporting"]
-      +post-hook: ["{{ add_model_comment() }}"]
+      +post-hook:
+        - "{{ add_model_comment() }}"
+        - "{{ log_row_count() }}"
       direct_care:
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         olids:
@@ -136,6 +143,7 @@ models:
           +post-hook:
             - "{{ add_model_comment() }}"
             - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+            - "{{ log_row_count() }}"
 
   # Elementary observability configuration
   elementary:
