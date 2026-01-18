@@ -139,7 +139,7 @@ models:
 
   # Elementary observability configuration
   elementary:
-    +enabled: "{{ target.name == 'prod' }}"  # Only run Elementary in prod
+    +enabled: "{{ target.name in ['prod', 'snowflake-prod'] }}"  # Only run Elementary in prod
     +database: "DATA_LAKE__NCL"
     +schema: "DBT_OBSERVABILITY"
 
