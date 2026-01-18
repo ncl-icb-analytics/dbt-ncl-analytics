@@ -1,4 +1,11 @@
 {% macro calculate_school_age_flags(birth_date_field, reference_date_field) %}
+    -- Early years age flag (ages 2-3): children eligible for GP-based flu vaccination
+    CASE
+        WHEN {{ birth_date_field }} IS NOT NULL
+             AND DATEDIFF(year, {{ birth_date_field }}, {{ reference_date_field }}) BETWEEN 2 AND 3 THEN TRUE
+        ELSE FALSE
+    END AS is_early_years_age,
+
     -- Primary school age flag (Reception to Year 6): born Sept 2013 to Aug 2020 for 2024-25 academic year
     CASE
         WHEN {{ birth_date_field }} IS NOT NULL 
