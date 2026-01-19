@@ -52,8 +52,7 @@ select
         geo.local_authority_2025_name as residence_borough,
         nb_res.neighbourhood_code as residence_neighbourhood_code,
         nb_res.neighbourhood_name as residence_neighbourhood_name,
-        imd.index_of_multiple_deprivation_decile as residence_imd_decile,
-        imd.index_of_multiple_deprivation_score as residence_imd_score,
+        imd.imd25_decile as residence_imd_decile,
 
         --Ethnicity information
         eth.* EXCLUDE (sk_patientid, record_date),
@@ -78,7 +77,7 @@ on pds.lsoa_21 = geo.lsoa_2021_code
 left join {{ref('raw_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021_latest')}} nb_res
 on pds.lsoa_21 = nb_res.lsoa_2021_code
 
-left join dev__modelling.lookup_ncl.imd25_imd imd
+left join {{ref('stg_reference_lookup_ncl_imd_2025')}} imd
 on pds.lsoa_21 = imd.lsoa_code_2021
 
 left join {{ref('stg_dictionary_dbo_organisation')}} dict_gp
