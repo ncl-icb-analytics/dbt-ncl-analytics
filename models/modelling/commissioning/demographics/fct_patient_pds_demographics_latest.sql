@@ -68,13 +68,13 @@ from {{ref('int_patient_pds_latest_record')}} pds
 left join {{ref('stg_dictionary_dbo_gender')}} as dict_g
 on pds.gender_code = dict_g.gender_code
 
-left join dev__modelling.lookup_ncl.preferred_language as dict_pl
+left join {{ref('stg_reference_lookup_ncl_preferred_language')}} as dict_pl
 on pds.preferred_language_code = dict_pl.code
 
-left join dev__modelling.lookup_ncl.interpreter_required as dict_ir
+left join {{ref('stg_reference_lookup_ncl_interpreter_required')}} as dict_ir
 on pds.interpreter_required = dict_ir.interpreter_required
 
-left join modelling.lookup_ncl.lsoa_2021_ward_2025_local_authority_2025 geo
+left join {{ref('stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025')}} geo
 on pds.lsoa_21 = geo.lsoa_2021_code
 
 left join {{ref('raw_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021_latest')}} nb_res
@@ -89,15 +89,15 @@ on pds.practice_code = dict_gp.organisation_code
 left join {{ref('stg_dictionary_dbo_organisationmatrixpracticeview')}} as dict_pcn
 on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
 
-left join "Dictionary"."dbo"."Postcode" gp_pc
-on dict_gp.sk_postcode_id = gp_pc."SK_Postcode_ID"
+left join {{ref('stg_dictionary_dbo_postcode')}} gp_pc
+on dict_gp.sk_postcode_id = gp_pc.sk_postcode_id
 
 left join dev__modelling.lookup_ncl.gp_practices gp_lu
 on pds.practice_code = gp_lu.gp_practice_code
 and gp_lu.list_size_source = 'NHAIS - National PMI Derived List Size per Practice'
 
-left join {{ref('raw_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021_latest')}} nb_reg
-on gp_pc.lsoa = nb_reg.lsoa_2021_code
+left join {{ref('stg_reference_lookup_ncl_ncl_gp_practice_neighbourhood')}} nb_reg
+on pds.practice_code = nb_reg.practice_code
 
-left join dev__modelling.lookup_ncl.ethnicity_national_data_sets eth
+left join {{ref('stg_reference_lookup_ncl_ethnicity_national_data_sets')}} eth
 ON pds.sk_patient_id = eth.sk_patientid
