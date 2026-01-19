@@ -183,6 +183,17 @@ FROM {{ ref('int_smi_longlives_weight_mgmt_latest') }} w
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
 
+--DENTAL INSPECTION LATEST EVER
+,DENTAL_INSPECTION as (
+select 
+d.person_id
+,DATE(d.clinical_effective_date) as DENTAL_DATE
+,d.CONCEPT_DISPLAY as DENTAL_TYPE
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_dental_inspection_latest d
+FROM {{ ref('int_smi_longlives_dental_inspection_latest') }} d
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+)
 --Population demographics and lifestyle factors
 SELECT
 p.PERSON_ID
@@ -214,6 +225,8 @@ p.PERSON_ID
 ,n.NUTR_REV_OUTCOME
 ,w.WT_MGMT_DATE
 ,w.WT_MGMT_TYPE
+,d.DENTAL_DATE
+,d.DENTAL_TYPE
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 FROM {{ ref('int_smi_population_base')  }} p
 LEFT JOIN ILLICIT i using (person_id)
@@ -225,3 +238,4 @@ LEFT JOIN ALCOHOL_INT ai using (person_id)
 LEFT JOIN BMI_EVER b using (person_id)
 LEFT JOIN NUT_REV n using (person_id)
 LEFT JOIN WT_MGMT w using (person_id)
+LEFT JOIN DENTAL_INSPECTION d using (person_id)
