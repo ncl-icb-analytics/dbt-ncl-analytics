@@ -1,0 +1,13 @@
+version: 1
+models:
+  - name: int_smi_longlives_dental_inspection
+    description: 'Determine dental or mouth inspection for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_DENTAL'
+
+# tests:
+#       - dbt_expectations.expect_table_row_count_to_be_between:
+#           min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
