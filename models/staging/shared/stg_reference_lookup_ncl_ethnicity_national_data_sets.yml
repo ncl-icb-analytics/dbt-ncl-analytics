@@ -1,6 +1,6 @@
 version: 2
 models:
-- name: stg_ethnicity_national_data_sets
+- name: stg_reference_lookup_ncl_ethnicity_national_data_sets
   description: Ethnicity national datasets mapped for patient-level ethnicity information
   columns:
   - name: sk_patientid
