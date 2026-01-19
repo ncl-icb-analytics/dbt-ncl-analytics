@@ -8,13 +8,24 @@ Make sure you have these prerequisites installed and configured on your Windows 
 
 ### 1. Install Required Software
 
-- **Python 3.8 or higher** - [Download from python.org](https://www.python.org/downloads/)
-  - **Important**: During installation, check "Add Python to PATH"
-  - If you forget, see troubleshooting below for how to add it manually
+- **uv** - Fast Python package manager (recommended)
+  ```powershell
+  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+  uv handles Python installation automatically - no separate Python install needed.
 - **Git for Windows** - [Download from git-scm.com](https://git-scm.com/download/win)
   - Minimum version 2.34 required for SSH commit signing
 - **A text editor** - We recommend [VS Code](https://code.visualstudio.com/)
 - **Access to Snowflake** with the ANALYST role
+
+<details>
+<summary>Alternative: Using pip (legacy method)</summary>
+
+If you prefer pip over uv, install Python 3.8+ from [python.org](https://www.python.org/downloads/).
+- **Important**: During installation, check "Add Python to PATH"
+- If you forget, see troubleshooting below for how to add it manually
+
+</details>
 
 ### 2. Enable PowerShell Script Execution
 
@@ -53,16 +64,6 @@ cd dbt-ncl-analytics
 
 ### Step 2: Set Up Python Environment
 
-#### Using uv (Recommended)
-
-[uv](https://docs.astral.sh/uv/) is a fast Python package manager. Install it first:
-
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-Then set up the project:
-
 ```bash
 uv sync
 .venv\Scripts\activate
@@ -71,7 +72,7 @@ uv sync
 This creates the virtual environment and installs all dependencies automatically.
 
 <details>
-<summary>Alternative: Using pip and venv</summary>
+<summary>Alternative: Using pip and venv (legacy method)</summary>
 
 Create and activate a virtual environment:
 
