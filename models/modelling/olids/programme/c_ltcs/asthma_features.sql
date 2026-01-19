@@ -6,7 +6,7 @@
 
 {# 
    ----------------------------
-   Code lists
+   Code lists - get the snomed codes that are used to define our features
    ---------------------------- 
 #}
 
@@ -92,18 +92,26 @@ salbutamol_only_ids as (
         exclusion_code_list = preventor_code_list,
         date_from = '2023-01-01'
     ) }}
+),
+
+salbutamol_repeats as (
+    -- Persons with only > 3 salbutamol prescriptions in 12 months
+    select distinct person_id
+    from {{ ref('int_asthma_medications_12m') }}
+    where mapped_concept_code in {{ to_sql_list(salbutamol_code_list) }}
+    and recent_order_count_12m > 3
 )
 
 select
     p.id as person_id,
 
     case 
-        when d.person_id is not null then true
+        when dnt.person_id is not null then true
         else false
     end as testing_no_diagnosis,
 
     case 
-        when t.person_id is not null then true
+        when tnd.person_id is not null then true
         else false
     end as diagnosis_no_testing,
 
@@ -113,16 +121,23 @@ select
     end as diagnosis_no_act,
 
     case 
-        when s.person_id is not null then true
+        when so.person_id is not null then true
         else false
-    end as salbutamol_only
+    end as salbutamol_only,
+
+    case 
+        when sr.person_id is not null then true
+        else false
+    end as salbutamol_repeats
 
 from persons p
-left join diagnosis_no_testing_ids d
-    on p.id = d.person_id
-left join testing_no_diagnosis_ids t
-    on p.id = t.person_id
+left join diagnosis_no_testing_ids dnt
+    on p.id = dnt.person_id
+left join testing_no_diagnosis_ids tnd
+    on p.id = tnd.person_id
 left join diagnosis_no_act_ids act
     on p.id = act.person_id
-left join salbutamol_only_ids s
-    on p.id = s.person_id   
+left join salbutamol_only_ids so
+    on p.id = so.person_id   
+left join salbutamol_repeats sr
+    on p.id = sr.person_id 
