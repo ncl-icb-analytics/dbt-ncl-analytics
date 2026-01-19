@@ -1,17 +1,17 @@
 with snapshot_dates as (
     select 
-        cast("FullDate" as date) as snapshot_date,
+        cast(full_date as date) as snapshot_date,
         concat(year(snapshot_date) - 1, '/', year(snapshot_date) - 2000) as snapshot_year
     --Hardcoded as table not in staging
-    from "Dictionary"."dbo"."Dates" ddd
+    from {{ref('stg_dictionary_dbo_dates')}} ddd
     --Bound range of dates
-    where current_date() > "FullDate"
+    where current_date() > full_date
     --Last day of Financial Year
-    and month("FullDate") = 3
-    and day("FullDate") = 31
+    and month(full_date) = 3
+    and day(full_date) = 31
 
     qualify row_number() over (
-        order by "FullDate" desc
+        order by full_date desc
     ) <= 5
 ),
 pds_person as (
@@ -60,7 +60,7 @@ pds_registered as (
         coalesce(pds.event_to_date, '9999-12-31')
 
     --Join to get reason for removal
-    left join dev__modelling.dbt_staging.stg_pds_pds_reason_for_removal rfr
+    left join {{ref('stg_pds_pds_reason_for_removal')}} rfr
     on rfr.sk_patient_id = pds.sk_patient_id
     --Snapshot date
     and sd.snapshot_date between
