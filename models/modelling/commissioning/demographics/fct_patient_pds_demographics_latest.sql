@@ -33,7 +33,7 @@ select
         dict_pcn.network_name as pcn_name,
         dict_pcn.stp_code as icb_code,
         dict_pcn.stp_name as icb_name,
-        geo_reg.local_authority_2025_name as registered_borough,
+        gp_lu.borough as registered_borough,
         nb_reg.neighbourhood_code as registered_neighbourhood_code,
         nb_reg.neighbourhood_name as registered_neighbourhood_name,
 
@@ -92,8 +92,9 @@ on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
 left join "Dictionary"."dbo"."Postcode" gp_pc
 on dict_gp.sk_postcode_id = gp_pc."SK_Postcode_ID"
 
-left join modelling.lookup_ncl.lsoa_2021_ward_2025_local_authority_2025 geo_reg
-on gp_pc.lsoa = geo_reg.lsoa_2021_code
+left join dev__modelling.lookup_ncl.gp_practices gp_lu
+on pds.practice_code = gp_lu.gp_practice_code
+and gp_lu.list_size_source = 'NHAIS - National PMI Derived List Size per Practice'
 
 left join {{ref('raw_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021_latest')}} nb_reg
 on gp_pc.lsoa = nb_reg.lsoa_2021_code
