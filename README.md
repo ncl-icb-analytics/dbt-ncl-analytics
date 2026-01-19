@@ -12,13 +12,15 @@ dbt project for NCL ICB Analytics healthcare data transformations.
 ## Quick Start
 
 ```bash
+# Install uv if you don't have it
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Clone and setup
 git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics && cd dbt-ncl-analytics
-uv sync                # Or: python -m venv venv && venv\Scripts\activate && pip install -r requirements.txt
+uv sync
 cp env.example .env    # Edit with your Snowflake credentials
 .\start_dbt.ps1 && dbt deps && dbt debug
 ```
-
-Don't have uv? Install it: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signing.
 
