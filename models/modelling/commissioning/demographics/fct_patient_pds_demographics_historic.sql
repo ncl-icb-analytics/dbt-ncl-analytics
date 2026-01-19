@@ -91,7 +91,6 @@ on dict_gp.sk_postcode_id = gp_pc.sk_postcode_id
 
 left join {{ref('stg_reference_lookup_ncl_gp_practice')}} gp_lu
 on pds.practice_code = gp_lu.gp_practice_code
-and gp_lu.list_size_source = 'NHAIS - National PMI Derived List Size per Practice'
 
 left join {{ref('stg_reference_lookup_ncl_ncl_gp_practice_neighbourhood')}} nb_reg
 on pds.practice_code = nb_reg.practice_code
