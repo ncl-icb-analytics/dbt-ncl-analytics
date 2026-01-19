@@ -3,7 +3,7 @@ select
         pds.snapshot_year,
         pds.snapshot_date,
         pds.sk_patient_id,
-        pds.record_registered_end_date is null as current_ncl_person_flag,
+        pds.record_registered_end_date is null as ncl_person_flag,
         pds.record_person_end_date,
 
         --Person information
