@@ -46,10 +46,10 @@ vars:
   covid_audit_end_date: "2025-06-30"    
   
   # Elementary configuration - disable upload of artifacts on run end for non-prod targets
-  disable_dbt_artifacts_autoupload: "{{ target.name != 'prod' }}"
-  disable_run_results: "{{ target.name != 'prod' }}"
-  disable_tests_results: "{{ target.name != 'prod' }}"
-  disable_dbt_invocation_autoupload: "{{ target.name != 'prod' }}"       # End of last completed campaign (spring 2025)
+  disable_dbt_artifacts_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_run_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_tests_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_dbt_invocation_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
 
 # Configure test failure storage (only for failures)
 tests:
