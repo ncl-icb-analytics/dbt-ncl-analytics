@@ -32,6 +32,7 @@ select
     core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
     , 'SUS_OP' as source
+    , core.local_patient_identifier
 
     /* Location */
     , core.appointment_commissioning_service_agreement_provider as organisation_id
@@ -64,6 +65,13 @@ select
         when core.appointment_commissioning_grouping_core_hrg is null then 'UNKNOWN'
         else 'OPPROC'
         end as pod
+
+    /* Clinical */
+    ,diag.code AS primary_diagnosis_code
+    ,dict_diag.description AS primary_diagnosis_name
+    ,proc.code  AS primary_procedure_code
+    ,dict_proc.category AS primary_procedure_category
+    ,dict_proc.description AS primary_procedure_name
 
     /* Clinician information */
     , core.appointment_care_professional_main_specialty as main_specialty_code
@@ -114,6 +122,15 @@ left join
 left join
     {{ ref('stg_dictionary_dbo_hrg') }} as dict_hrg 
     on core.appointment_commissioning_grouping_core_hrg = dict_hrg.hrg_code
+
+-- diagnoses and procedures
+LEFT JOIN {{ ref("stg_sus_op_appointment_clinical_coding_diagnosis_icd") }} diag on core.PRIMARYKEY_ID = diag.PRIMARYKEY_ID and diag.ICD_ID = 1 
+LEFT JOIN {{ ref('stg_dictionary_dbo_diagnosis')}} As dict_diag ON diag.code = dict_diag.code
+
+-- need to stage diagnosis dictionary to get description
+LEFT JOIN {{ ref("stg_sus_op_appointment_clinical_coding_procedure_opcs") }} proc on core.PRIMARYKEY_ID = proc.PRIMARYKEY_ID and proc.OPCS_ID = 1 
+LEFT JOIN {{ ref('stg_dictionary_dbo_procedure')}} As dict_proc ON proc.code = dict_proc.code
+-- need to stage procedure dictionary to get description and category
 
 -- organisations
 left join 

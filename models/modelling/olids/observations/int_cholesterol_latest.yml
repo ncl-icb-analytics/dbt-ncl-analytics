@@ -4,7 +4,17 @@ models:
     description: 'Most recent valid cholesterol measurement per person for cardiovascular risk assessment and statin therapy decision-making.
 
       One row per person with their latest cholesterol including clinical cholesterol categorisation and data quality validation.'
-    
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

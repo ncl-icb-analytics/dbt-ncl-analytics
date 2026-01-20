@@ -1,7 +1,8 @@
--- Raw layer model for csds.CYP502Imm
--- Source: "DATA_LAKE"."CSDS"
--- Description: Community services dataset
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Community services dataset). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.CSDS.CYP502Imm \ndbt: source(''csds'', ''CYP502Imm'') \nColumns:\n  SK -> sk\n  LOCAL PATIENT IDENTIFIER (EXTENDED) -> local_patient_identifier_extended\n  IMMUNISATION DATE -> immunisation_date\n  CHILDHOOD IMMUNISATION TYPE (CHILDREN AND YOUNG PEOPLES HEALTH SERVICES) -> childhood_immunisation_type_children_and_young_peoples_health_services\n  ORGANISATION IDENTIFIER (IMMUNISATION RESPONSIBLE ORGANISATION) -> organisation_identifier_immunisation_responsible_organisation\n  ORGANISATION CODE (IMMUNISATION RESPONSIBLE ORGANISATION) -> organisation_code_immunisation_responsible_organisation\n  EFFECTIVE FROM -> effective_from\n  RECORD NUMBER -> record_number\n  CYP502 UNIQUE ID -> cyp502_unique_id\n  ORGANISATION IDENTIFIER (CODE OF PROVIDER) -> organisation_identifier_code_of_provider\n  ORGANISATION CODE (PROVIDER) -> organisation_code_provider\n  PERSON ID -> person_id\n  UNIQUE CSDS ID (PATIENT) -> unique_csds_id_patient\n  UNIQUE SUBMISSION ID -> unique_submission_id\n  BSP UNIQUE ID -> bsp_unique_id\n  AGE AT IMMUNISATION DATE -> age_at_immunisation_date\n  SCHOOL YEAR AT IMMUNISATION DATE -> school_year_at_immunisation_date\n  AGE AT IMMUNISATION DATE (YEARS) -> age_at_immunisation_date_years\n  IC_AGE_AT_IMMUNISATION_DATE -> ic_age_at_immunisation_date\n  RECORD START DATE -> record_start_date\n  RECORD END DATE -> record_end_date\n  UNIQUE MONTH ID -> unique_month_id\n  AGE BAND (IMMUNISATION DATE) -> age_band_immunisation_date\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicCCG -> dmic_ccg\n  Unique_LocalPatientId -> unique_local_patient_id\n  UniqueCYPHS_ID_Patient -> unique_cyphs_id_patient\n  FILE TYPE -> file_type\n  REPORTING PERIOD START DATE -> reporting_period_start_date\n  REPORTING PERIOD END DATE -> reporting_period_end_date"
+    )
+}}
 select
     "SK" as sk,
     "LOCAL PATIENT IDENTIFIER (EXTENDED)" as local_patient_identifier_extended,

@@ -1,7 +1,8 @@
--- Raw layer model for c_ltcs.OP_OE_RATIO
--- Source: "DEV__PUBLISHED_REPORTING__DIRECT_CARE"."C_LTCS"
--- Description: C-LTCS tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (C-LTCS tables). 1:1 passthrough with cleaned column names. \nSource: DEV__PUBLISHED_REPORTING__DIRECT_CARE.C_LTCS.OP_OE_RATIO \ndbt: source(''c_ltcs'', ''OP_OE_RATIO'') \nColumns:\n  PATIENT_ID -> patient_id\n  OE_RATIO -> oe_ratio\n  PREDICTED -> predicted\n  OP_ATT_TOT_12MO -> op_att_tot_12_mo"
+    )
+}}
 select
     "PATIENT_ID" as patient_id,
     "OE_RATIO" as oe_ratio,

@@ -26,7 +26,9 @@ WITH current_medication_details AS (
         person_id,
         COUNT(DISTINCT mapped_concept_code) AS medication_count,
         ARRAY_AGG(DISTINCT bnf_code) WITHIN GROUP (ORDER BY bnf_code) AS medication_bnf_list,
-        ARRAY_AGG(DISTINCT bnf_name) WITHIN GROUP (ORDER BY bnf_name) AS medication_name_list,
+        -- Filter out NULL bnf_name values to ensure array contains only valid strings
+        -- Using ARRAY_COMPACT to remove NULLs after aggregation
+        ARRAY_COMPACT(ARRAY_AGG(DISTINCT bnf_name) WITHIN GROUP (ORDER BY bnf_name)) AS medication_name_list,
         MIN(latest_order_date) AS earliest_current_order_date
     FROM {{ ref('int_polypharmacy_medications_current') }}
     GROUP BY person_id

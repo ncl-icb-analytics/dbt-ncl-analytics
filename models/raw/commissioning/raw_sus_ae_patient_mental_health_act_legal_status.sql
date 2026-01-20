@@ -1,7 +1,8 @@
--- Raw layer model for sus_ae.patient.mental_health_act_legal_status
--- Source: "DATA_LAKE"."SUS_UNIFIED_ECDS"
--- Description: SUS emergency care attendances and activity
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.patient.mental_health_act_legal_status \ndbt: source(''sus_ae'', ''patient.mental_health_act_legal_status'') \nColumns:\n  start_time -> start_time\n  expiry_date -> expiry_date\n  expiry_time -> expiry_time\n  dmicImportLogId -> dmic_import_log_id\n  assignment_timestamp -> assignment_timestamp\n  expiry_timestamp -> expiry_timestamp\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  MENTAL_HEALTH_ACT_LEGAL_STATUS_ID -> mental_health_act_legal_status_id\n  classification -> classification\n  start_date -> start_date"
+    )
+}}
 select
     "start_time" as start_time,
     "expiry_date" as expiry_date,

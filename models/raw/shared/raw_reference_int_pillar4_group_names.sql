@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.INT_PILLAR4_GROUP_NAMES
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.INT_PILLAR4_GROUP_NAMES \ndbt: source(''reference_analyst_managed'', ''INT_PILLAR4_GROUP_NAMES'') \nColumns:\n  P4_GROUP_KEY -> p4_group_key\n  P4_GROUP_NAME -> p4_group_name\n  LTC_COUNT -> ltc_count"
+    )
+}}
 select
     "P4_GROUP_KEY" as p4_group_key,
     "P4_GROUP_NAME" as p4_group_name,

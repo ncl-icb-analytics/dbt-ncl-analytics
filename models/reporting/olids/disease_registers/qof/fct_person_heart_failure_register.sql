@@ -113,7 +113,7 @@ WITH heart_failure_diagnoses AS (
 
 register_logic AS (
     SELECT
-        p.person_id,
+        diag.person_id,
         age.age,
 
         -- No age restrictions for HF register
@@ -151,9 +151,8 @@ register_logic AS (
                 OR diag.has_reduced_ef_diagnosis = TRUE
             ), FALSE
         ) AS is_on_hf_lvsd_reduced_ef_register
-    FROM {{ ref('dim_person') }} AS p
-    INNER JOIN {{ ref('dim_person_age') }} AS age ON p.person_id = age.person_id
-    LEFT JOIN heart_failure_diagnoses AS diag ON p.person_id = diag.person_id
+    FROM heart_failure_diagnoses AS diag
+    INNER JOIN {{ ref('dim_person_age') }} AS age ON diag.person_id = age.person_id
 )
 
 -- Final selection: Only individuals on heart failure register

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: int_flu_laiv_vaccination
+    description: Persons with LAIV (nasal spray) flu vaccination records. One row per person per campaign with most recent vaccination date.
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - campaign_id
+            - person_id
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: campaign_id
+        tests:
+          - not_null
+      - name: person_id
+        tests:
+          - not_null

@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS202CareActivity
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS202CareActivity \ndbt: source(''mhsds'', ''MHS202CareActivity'') \nColumns:\n  SK -> sk\n  CareActId -> care_act_id\n  CareContactId -> care_contact_id\n  CareProfLocalId -> care_prof_local_id\n  ClinContactDurOfCareAct -> clin_contact_dur_of_care_act\n  Procedure -> procedure\n  CodeProcAndProcStatus -> code_proc_and_proc_status\n  FindSchemeInUse -> find_scheme_in_use\n  Finding -> finding\n  CodeFind -> code_find\n  Observation -> observation\n  CodeObs -> code_obs\n  ObsValue -> obs_value\n  UnitOfMeasurement_UCUM -> unit_of_measurement_ucum\n  UnitMeasure -> unit_measure\n  RecordNumber -> record_number\n  MHS202UniqID -> mhs202_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqServReqID -> uniq_serv_req_id\n  UniqCareContID -> uniq_care_cont_id\n  UniqCareActID -> uniq_care_act_id\n  UniqCareProfLocalID -> uniq_care_prof_local_id\n  UniqMonthID -> uniq_month_id\n  EFFECTIVE_FROM -> effective_from\n  MasterSnomedCTFindingCode -> master_snomed_ct_finding_code\n  MasterSnomedCTObsCode -> master_snomed_ct_obs_code\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicActivityDate -> dmic_activity_date\n  ServiceRequestId -> service_request_id\n  ObsSchemeInUse -> obs_scheme_in_use\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "CareActId" as care_act_id,

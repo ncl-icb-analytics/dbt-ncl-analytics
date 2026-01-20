@@ -1,7 +1,8 @@
--- Raw layer model for pds.PDS_Patient_Care_Practice
--- Source: "DATA_LAKE"."PDS"
--- Description: Personal Demographics Service data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Personal Demographics Service data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.PDS.PDS_Patient_Care_Practice \ndbt: source(''pds'', ''PDS_Patient_Care_Practice'') \nColumns:\n  RowID -> row_id\n  Pseudo NHS Number -> pseudo_nhs_number\n  Primary Care Provider -> primary_care_provider\n  Primary Care Provider Business Effective From Date -> primary_care_provider_business_effective_from_date\n  Primary Care Provider Business Effective To Date -> primary_care_provider_business_effective_to_date\n  Reason for Removal -> reason_for_removal\n  derCcgOfRegistration -> der_ccg_of_registration\n  derCurrentCcgOfRegistration -> der_current_ccg_of_registration\n  derIcbOfRegistration -> der_icb_of_registration\n  derCurrentIcbOfRegistration -> der_current_icb_of_registration"
+    )
+}}
 select
     "RowID" as row_id,
     "Pseudo NHS Number" as pseudo_nhs_number,

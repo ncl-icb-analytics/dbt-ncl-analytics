@@ -2,3 +2,12 @@ version: 2
 models:
   - name: int_patient_registrations
     description: Intermediate table containing clean patient registration periods derived from episode_of_care. Each row represents a registration period at a specific practice, with proper handling of overlapping periods and current registrations.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: patient_id
+        tests:
+          - not_null

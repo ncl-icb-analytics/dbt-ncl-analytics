@@ -1,3 +1,9 @@
+version: 2
+
 models:
   - name: childhood_imms_overview_adolescent_dm
     description: Final data model table holding UNIONED aggregated completion metrics for currently registered children aged 11 and 16 on current date.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

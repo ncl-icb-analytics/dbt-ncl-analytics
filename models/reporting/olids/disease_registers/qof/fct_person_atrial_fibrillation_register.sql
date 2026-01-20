@@ -50,7 +50,7 @@ WITH af_diagnoses AS (
 
 register_logic AS (
     SELECT
-        p.person_id,
+        diag.person_id,
         age.age,
 
         -- No age restrictions for AF register
@@ -70,9 +70,8 @@ register_logic AS (
         -- Traceability
         COALESCE(diag.has_active_af_diagnosis, FALSE) AS has_active_diagnosis,
         COALESCE(diag.has_active_af_diagnosis = TRUE, FALSE) AS is_on_register
-    FROM {{ ref('dim_person') }} AS p
-    INNER JOIN {{ ref('dim_person_age') }} AS age ON p.person_id = age.person_id
-    LEFT JOIN af_diagnoses AS diag ON p.person_id = diag.person_id
+    FROM af_diagnoses AS diag
+    INNER JOIN {{ ref('dim_person_age') }} AS age ON diag.person_id = age.person_id
 )
 
 -- Final selection: Only individuals with active AF diagnosis

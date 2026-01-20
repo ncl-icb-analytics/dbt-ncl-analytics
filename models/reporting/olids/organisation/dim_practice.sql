@@ -112,32 +112,32 @@ INNER JOIN (
     ON dict.practice_code = org.organisation_code
 LEFT JOIN (
     SELECT
-        "Organisation_Code" as organisation_code,
-        "Organisation_Name" as organisation_name,
-        "StartDate" as start_date,
-        "EndDate" as end_date,
-        "Address_Line_1" as address_line_1,
-        "Address_Line_2" as address_line_2,
-        "Address_Line_3" as address_line_3,
-        "Address_Line_4" as address_line_4,
-        "Address_Line_5" as address_line_5,
-        "FirstCreated" as first_created,
-        "LastUpdated" as last_updated,
-        "SK_PostcodeID" as sk_postcode_id,  -- Use the first SK_PostcodeID explicitly
-        "SK_OrganisationID" as sk_organisation_id  -- Add the organisation ID
-    FROM {{ source('dictionary_dbo', 'Organisation') }}
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY "Organisation_Code" ORDER BY "Organisation_Code") = 1
+        organisation_code,
+        organisation_name,
+        start_date,
+        end_date,
+        address_line_1,
+        address_line_2,
+        address_line_3,
+        address_line_4,
+        address_line_5,
+        first_created,
+        last_updated,
+        sk_postcode_id,
+        sk_organisation_id
+    FROM {{ ref('stg_dictionary_dbo_organisation') }}
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY organisation_code ORDER BY organisation_code) = 1
 ) AS dict_org
     ON dict.practice_code = dict_org.organisation_code
 LEFT JOIN (
     SELECT
-        "SK_PostcodeID" as sk_postcode_id,
-        "Postcode" as postcode,
-        "LSOA" as lsoa,
-        "MSOA" as msoa,
-        "Latitude" as latitude,
-        "Longitude" as longitude
-    FROM {{ source('dictionary_dbo', 'Postcode') }}
+        sk_postcode_id,
+        postcode,
+        lsoa,
+        msoa,
+        latitude,
+        longitude
+    FROM {{ ref('stg_dictionary_dbo_postcode') }}
 ) AS dict_pc
     ON dict_org.sk_postcode_id = dict_pc.sk_postcode_id
 LEFT JOIN {{ ref('int_organisation_borough_mapping') }} AS borough_map

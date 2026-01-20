@@ -15,12 +15,12 @@ Clinical Purpose:
 - Inflammatory arthritis care pathway
 
 QOF Register Criteria:
-- Any RA diagnosis code (RA_COD)
+- Any RA diagnosis code (RARTH_COD)
 - Age ≥16 years at diagnosis (applied in this fact table)
 - No resolution codes (simple diagnosis-based register)
 - Lifelong condition register for ongoing disease management
 
-Includes only active patients as per QOF population requirements.
+Includes all patients meeting clinical criteria (active, deceased, deducted).
 This table provides one row per person for analytical use.
 */
 
@@ -97,8 +97,6 @@ register_inclusion AS (
 
 
     FROM ra_diagnoses AS rd
-    INNER JOIN {{ ref('dim_person_active_patients') }} AS ap
-        ON rd.person_id = ap.person_id
     INNER JOIN {{ ref('dim_person_age') }} AS age
         ON rd.person_id = age.person_id
 )

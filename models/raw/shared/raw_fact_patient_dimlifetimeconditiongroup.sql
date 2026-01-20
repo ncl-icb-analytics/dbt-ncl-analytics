@@ -1,7 +1,8 @@
--- Raw layer model for fact_patient.DimLifetimeConditionGroup
--- Source: "DATA_LAKE"."FACT_PATIENT"
--- Description: Patient fact tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Patient fact tables). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.FACT_PATIENT.DimLifetimeConditionGroup \ndbt: source(''fact_patient'', ''DimLifetimeConditionGroup'') \nColumns:\n  SK_LifetimeConditionGroupID -> sk_lifetime_condition_group_id\n  LifetimeConditionGroup -> lifetime_condition_group"
+    )
+}}
 select
     "SK_LifetimeConditionGroupID" as sk_lifetime_condition_group_id,
     "LifetimeConditionGroup" as lifetime_condition_group

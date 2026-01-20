@@ -1,7 +1,8 @@
--- Raw layer model for fact_patient.MetaConditionCodeMaskICD10
--- Source: "DATA_LAKE"."FACT_PATIENT"
--- Description: Patient fact tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Patient fact tables). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.FACT_PATIENT.MetaConditionCodeMaskICD10 \ndbt: source(''fact_patient'', ''MetaConditionCodeMaskICD10'') \nColumns:\n  SK_ConditionTypeID -> sk_condition_type_id\n  CodeMask -> code_mask\n  IsExclude -> is_exclude"
+    )
+}}
 select
     "SK_ConditionTypeID" as sk_condition_type_id,
     "CodeMask" as code_mask,

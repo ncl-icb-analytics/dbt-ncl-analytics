@@ -4,7 +4,11 @@ models:
     description: 'Familial hypercholesterolaemia register for patients with genetic lipid disorder diagnosed at age 20+.
 
       One row per active patient with FHYP_COD present and age at first diagnosis 20+ years (genetic condition is lifelong).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -29,3 +33,10 @@ models:
           code_clusters:
             - cluster_id: "FHYP_COD"
               category: "INCLUSION"
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

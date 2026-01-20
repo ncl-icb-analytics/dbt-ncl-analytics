@@ -1,0 +1,150 @@
+# dbt PR Validation Workflow
+#
+# Validates changed dbt models in Snowflake DEV environment before merge.
+# Runs dbt build with --fail-fast to catch errors early.
+#
+# Prerequisites:
+#   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
+#     SNOWFLAKE__PRIVATE_KEY, SNOWFLAKE__PASSPHRASE
+#   - DBT_DEPLOYMENT_TESTER role with: USAGE on warehouse, DBT_ADMIN role granted
+#
+# Snowflake objects:
+#   - Role: DBT_DEPLOYMENT_TESTER
+#   - Warehouse: WH_NCL_ENGINEERING_XS
+#   - Database/Schema: ACCOUNT_ADMIN.DBT_MANAGEMENT
+#   - Git repo: REPO__GITHUB__DBT_NCL_ANALYTICS
+#   - dbt project: DBT_NCL_ANALYTICS__CI
+
+name: dbt PR Validation
+
+on:
+  workflow_dispatch:
+  # TODO: Enable after permissions granted:
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - 'models/**'
+  #     - 'macros/**'
+
+jobs:
+  validate-models:
+    name: Validate Changed Models
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
+        with:
+          version: "0.6.x"
+
+      - name: Install dependencies
+        run: uv pip install --system snowflake-connector-python
+
+      - name: Get changed models
+        id: changes
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'models/**/*.sql' | tr '\n' ' ')
+          COUNT=$(echo "$CHANGED" | wc -w)
+          echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
+          echo "file_count=$COUNT" >> $GITHUB_OUTPUT
+          echo "Found $COUNT changed model files"
+
+      - name: Setup Snowflake credentials
+        if: steps.changes.outputs.file_count != '0'
+        run: |
+          mkdir -p ~/.snowflake
+          echo "${{ secrets.SNOWFLAKE__PRIVATE_KEY }}" > ~/.snowflake/rsa_key.p8
+          chmod 600 ~/.snowflake/rsa_key.p8
+
+      - name: Validate in Snowflake DEV
+        if: steps.changes.outputs.file_count != '0'
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
+          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE__PASSPHRASE }}
+          CHANGED_FILES: ${{ steps.changes.outputs.changed_files }}
+          FILE_COUNT: ${{ steps.changes.outputs.file_count }}
+          PR_BRANCH: ${{ github.head_ref }}
+        run: |
+          python << 'EOF'
+          import os
+          import re
+          import sys
+          import snowflake.connector
+
+          def validate_identifier(value, pattern=r'^[a-zA-Z0-9_\-/]+$'):
+              """Validate identifier to prevent injection."""
+              if not value or not re.match(pattern, value):
+                  raise ValueError(f"Invalid identifier: {value}")
+              return value
+
+          def get_model_name(filepath):
+              """Extract and validate model name from filepath."""
+              name = filepath.split('/')[-1].replace('.sql', '')
+              return validate_identifier(name, r'^[a-zA-Z0-9_]+$')
+
+          try:
+              conn = snowflake.connector.connect(
+                  account=os.environ['SNOWFLAKE_ACCOUNT'],
+                  user=os.environ['SNOWFLAKE_USER'],
+                  private_key_path=os.path.expanduser('~/.snowflake/rsa_key.p8'),
+                  private_key_passphrase=os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', ''),
+                  role='DBT_DEPLOYMENT_TESTER',
+                  database='ACCOUNT_ADMIN',
+                  schema='DBT_MANAGEMENT',
+                  warehouse='WH_NCL_ENGINEERING_XS'
+              )
+
+              cur = conn.cursor()
+              cur.execute("USE WAREHOUSE WH_NCL_ENGINEERING_XS")
+
+              pr_branch = validate_identifier(os.environ['PR_BRANCH'])
+
+              print("Fetching git repository...")
+              cur.execute("ALTER GIT REPOSITORY REPO__GITHUB__DBT_NCL_ANALYTICS FETCH")
+
+              print(f"Setting project to PR branch: {pr_branch}")
+              cur.execute(f"""
+                  ALTER DBT PROJECT DBT_NCL_ANALYTICS__CI
+                  ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/{pr_branch}'
+              """)
+
+              file_count = int(os.environ.get('FILE_COUNT', 0))
+              changed_files = os.environ.get('CHANGED_FILES', '').strip()
+
+              if file_count > 50:
+                  print(f"Large changeset ({file_count} files) - running full build")
+                  args = "build --target snowflake-dev --fail-fast"
+              else:
+                  models = [get_model_name(f) for f in changed_files.split() if f]
+                  select = ' '.join(models)
+                  print(f"Validating {file_count} changed models: {select}")
+                  args = f"build --target snowflake-dev --fail-fast --select {select}"
+
+              print(f"Executing: dbt {args}")
+              cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__CI ARGS = '{args}'")
+
+              for row in cur.fetchall():
+                  print(row)
+
+              print("Validation complete!")
+
+          except Exception as e:
+              print(f"Error: {e}", file=sys.stderr)
+              sys.exit(1)
+          finally:
+              if 'cur' in locals(): cur.close()
+              if 'conn' in locals(): conn.close()
+          EOF
+
+      - name: Cleanup credentials
+        if: always()
+        run: rm -f ~/.snowflake/rsa_key.p8
+
+      - name: Skip message
+        if: steps.changes.outputs.file_count == '0'
+        run: echo "No model changes detected - skipping validation"

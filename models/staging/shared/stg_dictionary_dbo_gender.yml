@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_dictionary_dbo_gender
+    description: Gender code dictionary from data warehouse. One row per gender code.
+    columns:
+      - name: sk_gender_id
+        description: Surrogate key for the gender
+        tests:
+          - unique
+          - not_null
+      - name: gender_code
+        description: Gender code
+        tests:
+          - not_null

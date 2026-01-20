@@ -1,0 +1,258 @@
+version: 2
+sources:
+- name: registries_births
+  database: '"DATA_LAKE"'
+  schema: '"BIRTHS"'
+  description: Register of births
+  tables:
+  - name: Births
+    identifier: '"Births"'
+    columns:
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: ADMINAREA
+      data_type: TEXT
+    - name: DMIC_BABY_MONTH_OF_BIRTH
+      data_type: TEXT
+    - name: BABY_SEX
+      data_type: TEXT
+    - name: BIRTH_DOR
+      data_type: TIMESTAMP_NTZ
+    - name: BIRTH_INMARRIAGE
+      data_type: TEXT
+    - name: BIRTH_REGDIST
+      data_type: TEXT
+    - name: BIRTH_REGNUM
+      data_type: TEXT
+    - name: BIRTH_REGSUBDIST
+      data_type: TEXT
+    - name: BIRTH_REREGIND
+      data_type: TEXT
+    - name: BIRTH_ENTRYNUM
+      data_type: TEXT
+    - name: CANCELLED_FLAG
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_1
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_10
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_11
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_12
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_13
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_14
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_15
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_2
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_3
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_4
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_5
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_6
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_7
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_8
+      data_type: TEXT
+    - name: CAUSESTILLBIRTH_ROWPOS_9
+      data_type: TEXT
+    - name: DEATH_LAB
+      data_type: TEXT
+    - name: DEL_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: FATHER_CCPOB
+      data_type: TEXT
+    - name: DMIC_FATHER_MONTH_OF_BIRTH
+      data_type: TEXT
+    - name: DMIC_FATHER_AGE_AT_BIRTH
+      data_type: NUMBER
+    - name: FATHER_NSSEC
+      data_type: TEXT
+    - name: DMIC_FATHER_NSSEC_Description
+      data_type: TEXT
+    - name: FATHER_SOC
+      data_type: TEXT
+    - name: DMIC_FATHER_SOC_Group_Description
+      data_type: TEXT
+    - name: MOTHER_AGEATBIRTH
+      data_type: TEXT
+    - name: MOTHER_CCPOB
+      data_type: TEXT
+    - name: DMIC_MOTHER_MONTH_OF_BIRTH
+      data_type: TEXT
+    - name: DMIC_MOTHER_AGE_AT_BIRTH
+      data_type: NUMBER
+    - name: MOTHER_MARRIAGEDATE
+      data_type: TEXT
+    - name: MOTHER_NSSEC
+      data_type: TEXT
+    - name: DMIC_MOTHER_NSSEC_Description
+      data_type: TEXT
+    - name: MOTHER_PREVLIVECHILD
+      data_type: TEXT
+    - name: MOTHER_PREVSBCHILD
+      data_type: TEXT
+    - name: MOTHER_SOC
+      data_type: TEXT
+    - name: DMIC_MOTHER_SOC_Group_Description
+      data_type: TEXT
+    - name: DMIC_MOTHER_POSTCODE_SECTOR
+      data_type: TEXT
+    - name: DMIC_MOTHER_STAT_POSTCODE_SECTOR
+      data_type: TEXT
+    - name: MOTHER_TOTALBIRTHS
+      data_type: TEXT
+    - name: MULTIPLE_INDICATOR
+      data_type: TEXT
+    - name: MULTIPLE_TYPE
+      data_type: TEXT
+    - name: NUMBER_LIVE_BIRTHS
+      data_type: TEXT
+    - name: NUMBER_STILL_BIRTHS
+      data_type: TEXT
+    - name: POB_COMMEST
+      data_type: TEXT
+    - name: POB_ESTTYPE
+      data_type: TEXT
+    - name: DMIC_POB_POSTCODE_SECTOR
+      data_type: TEXT
+    - name: POSTMORT_IND
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_1
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_10
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_11
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_12
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_2
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_3
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_4
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_5
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_6
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_7
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_8
+      data_type: TEXT
+    - name: SIBLING_ENTRYNUM_9
+      data_type: TEXT
+    - name: SIBLING_SBSUF_1
+      data_type: TEXT
+    - name: SIBLING_SBSUF_10
+      data_type: TEXT
+    - name: SIBLING_SBSUF_11
+      data_type: TEXT
+    - name: SIBLING_SBSUF_12
+      data_type: TEXT
+    - name: SIBLING_SBSUF_2
+      data_type: TEXT
+    - name: SIBLING_SBSUF_3
+      data_type: TEXT
+    - name: SIBLING_SBSUF_4
+      data_type: TEXT
+    - name: SIBLING_SBSUF_5
+      data_type: TEXT
+    - name: SIBLING_SBSUF_6
+      data_type: TEXT
+    - name: SIBLING_SBSUF_7
+      data_type: TEXT
+    - name: SIBLING_SBSUF_8
+      data_type: TEXT
+    - name: SIBLING_SBSUF_9
+      data_type: TEXT
+    - name: STILLBIRTH_CERTTYPEIND
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_1
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_10
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_11
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_12
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_13
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_14
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_15
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_2
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_3
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_4
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_5
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_6
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_7
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_8
+      data_type: TEXT
+    - name: STILLBIRTH_ICD10_9
+      data_type: TEXT
+    - name: BIRTHPLACE_CCG
+      data_type: TEXT
+    - name: BIRTHPLACE_COUNTY
+      data_type: TEXT
+    - name: CCG_CODE_BIRTH_PLACE
+      data_type: TEXT
+    - name: CCG_CODE_RES_MOTHER
+      data_type: TEXT
+    - name: CCG_MOTHER
+      data_type: TEXT
+    - name: COUNTY_MOTHER
+      data_type: TEXT
+    - name: GOR_MOTHER
+      data_type: TEXT
+    - name: LA_CODE_BIRTH_PLACE
+      data_type: TEXT
+    - name: LA_CODE_RES_MOTHER
+      data_type: TEXT
+    - name: LSOA_MOTHER
+      data_type: TEXT
+    - name: MOTHER_GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: WARD_MOTHER
+      data_type: TEXT
+    - name: DMIC_FILENAME
+      data_type: TEXT
+    - name: DMIC_OPERATOR
+      data_type: TEXT
+    - name: DMIC_RECORD_VALID_DATE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: DMIC_RECORD_VALID_DATE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: DMIC_RECORD_VALID_IS_LATEST
+      data_type: BOOLEAN
+    - name: DMIC_IMPORT_LOG_ID
+      data_type: NUMBER
+    - name: DMIC_ROW_ID
+      data_type: NUMBER
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmSubIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmSubIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT

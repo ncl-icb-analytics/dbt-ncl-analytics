@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_sus_apc_spell_episodes
-    description: ""
+    description: Episode-level inpatient data from SUS APC spells. One row per episode per spell, deduplicated by latest transaction date.
     tests:
     - dbt_utils.unique_combination_of_columns:
         combination_of_columns:

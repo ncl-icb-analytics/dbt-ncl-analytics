@@ -7,6 +7,9 @@ models:
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
+        tests:
+          - unique
+          - not_null
 
       - name: person_id
         description: 'Patient identifier'
@@ -33,5 +36,7 @@ models:
         description: 'Categorised depression observation type (Depression Diagnosis or Depression Resolved)'
 
     tests:
+      - dbt_utils.at_least_one:
+          column_name: id
       - cluster_ids_exist:
           cluster_ids: DEPRES_COD, DEPR_COD

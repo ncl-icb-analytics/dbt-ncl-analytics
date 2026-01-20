@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.Postcode
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.Postcode \ndbt: source(''dictionary_dbo'', ''Postcode'') \nColumns:\n  SK_PostcodeID -> sk_postcode_id\n  Postcode_8_chars -> postcode_8_chars\n  Postcode_single_space_e_Gif -> postcode_single_space_e_gif\n  Postcode_no_space -> postcode_no_space\n  Date_of_Introduction -> date_of_introduction\n  Date_of_Termination -> date_of_termination\n  Grid_Ref_Easting -> grid_ref_easting\n  Grid_Ref_Northing -> grid_ref_northing\n  Local_Authority_District_Unitary_Authority -> local_authority_district_unitary_authority\n  Electoral_Ward_or_Division -> electoral_ward_or_division\n  Strategic_Health_Authority -> strategic_health_authority\n  Primary_Care_Organisation -> primary_care_organisation\n  yr1998_Ward_Code -> yr1998_ward_code\n  Old_PCT -> old_pct\n  yr2001_LSOA -> yr2001_lsoa\n  yr2001_MSOA -> yr2001_msoa\n  yr2011_OA -> yr2011_oa\n  yr2011_LSOA -> yr2011_lsoa\n  yr2011_MSOA -> yr2011_msoa\n  Latitude -> latitude\n  Longitude -> longitude\n  FirstCreated -> first_created\n  LastUpdated -> last_updated\n  GOR_Code -> gor_code\n  Postcode_Usertype -> postcode_usertype\n  Area_Team_Code -> area_team_code\n  Postcode -> postcode\n  LSOA -> lsoa\n  MSOA -> msoa\n  SK_PseudoPostcodeID -> sk_pseudo_postcode_id\n  SK_Postcode_ID -> sk_postcode_id_1"
+    )
+}}
 select
     "SK_PostcodeID" as sk_postcode_id,
     "Postcode_8_chars" as postcode_8_chars,

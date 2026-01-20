@@ -1,7 +1,8 @@
--- Raw layer model for sus_op.appointment.commissioning.service_agreements
--- Source: "DATA_LAKE"."SUS_UNIFIED_OP"
--- Description: SUS outpatient appointments and activity
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS outpatient appointments and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_OP.appointment.commissioning.service_agreements \ndbt: source(''sus_op'', ''appointment.commissioning.service_agreements'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  SERVICE_AGREEMENTS_ID -> service_agreements_id\n  commissioner -> commissioner\n  is_commissioner_recognised -> is_commissioner_recognised\n  commissioner_derived -> commissioner_derived\n  commissioner_assignment_period_start_date -> commissioner_assignment_period_start_date\n  commissioner_assignment_period_end_date -> commissioner_assignment_period_end_date\n  commissioning_serial_number -> commissioning_serial_number\n  line_number -> line_number\n  commissioner_reference_number -> commissioner_reference_number\n  provider_reference_number -> provider_reference_number\n  service_code -> service_code\n  dmicImportLogId -> dmic_import_log_id"
+    )
+}}
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,

@@ -1,3 +1,17 @@
+version: 2
 models:
-  - name: int_adult_imms_vaccination_status_current
-    description: Intermediate table holding vaccination Status for Adults. One line person
+- name: int_adult_imms_vaccination_status_current
+  description: Vaccination status for adults. One row per person per vaccine.
+  columns:
+  - name: person_id
+    description: Person identifier
+    data_tests:
+    - not_null
+  - name: vaccine_id
+    description: Vaccine identifier
+    data_tests:
+    - not_null
+  - name: vaccination_status
+    description: Status of vaccination (Completed, Overdue, Not due yet, etc.)
+    data_tests:
+    - not_null

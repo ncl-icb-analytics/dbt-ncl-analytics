@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: dim_person_secondary_use_allowed
+    description: Persons allowed for secondary use (excludes Type 1 opt-outs). One row per person for use as opt-out filter.

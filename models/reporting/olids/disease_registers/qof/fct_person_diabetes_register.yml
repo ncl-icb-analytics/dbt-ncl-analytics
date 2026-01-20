@@ -13,7 +13,11 @@ models:
       • Type classification: Type 1, Type 2, or Unknown (Type 1 takes precedence)
 
       Purpose: Supports QOF reporting and diabetes care management with accurate type classification for treatment planning.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -49,7 +53,10 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        
+        tests:
+          - unique
+          - not_null
+
       - name: is_on_register
         description: Whether person meets QOF diabetes register criteria
         

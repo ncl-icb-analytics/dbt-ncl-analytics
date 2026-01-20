@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.Organisation
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.Organisation \ndbt: source(''dictionary_dbo'', ''Organisation'') \nColumns:\n  SK_OrganisationID -> sk_organisation_id\n  Organisation_Code -> organisation_code\n  Organisation_Name -> organisation_name\n  SK_OrganisationTypeID -> sk_organisation_type_id\n  SK_OrganisationID_NationalGrouping -> sk_organisation_id_national_grouping\n  SK_OrganisationID_HealthAuthority -> sk_organisation_id_health_authority\n  SK_OrganisationID_CurrentCareOrg -> sk_organisation_id_current_care_org\n  SK_PostcodeID -> sk_postcode_id\n  StartDate -> start_date\n  EndDate -> end_date\n  SK_OrganisationID_ParentOrg -> sk_organisation_id_parent_org\n  Join_Parent_Date -> join_parent_date\n  Left_Parent_Date -> left_parent_date\n  FirstCreated -> first_created\n  LastUpdated -> last_updated\n  SK_PrescribingSettingID -> sk_prescribing_setting_id\n  SK_OrganisationStatusID -> sk_organisation_status_id\n  Address_Line_1 -> address_line_1\n  Address_Line_2 -> address_line_2\n  Address_Line_3 -> address_line_3\n  Address_Line_4 -> address_line_4\n  Address_Line_5 -> address_line_5\n  SK_Organisation_ID -> sk_organisation_id_1\n  SK_OrganisationType_ID -> sk_organisation_type_id_1\n  SK_NationalGrouping_ID -> sk_national_grouping_id\n  SK_HealthAuthority_ID -> sk_health_authority_id\n  SK_CurrentCareOrg_ID -> sk_current_care_org_id\n  SK_Postcode_ID -> sk_postcode_id_1\n  SK_ParentOrg_ID -> sk_parent_org_id\n  SK_PrescribingSetting_ID -> sk_prescribing_setting_id_1\n  Country -> country\n  CodeAssignedBy -> code_assigned_by\n  UPRN -> uprn\n  LastChangeDate -> last_change_date\n  OrganisationPrimaryRole -> organisation_primary_role\n  StartDate_Legal -> start_date_legal\n  EndDate_Legal -> end_date_legal\n  StartDate_Operational -> start_date_operational\n  EndDate_Operational -> end_date_operational\n  Status -> status"
+    )
+}}
 select
     "SK_OrganisationID" as sk_organisation_id,
     "Organisation_Code" as organisation_code,

@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: dim_person_opt_out_type_1_status
+    description: Latest Type 1 opt-out status per person. Only includes persons with active opt-out. One row per person.

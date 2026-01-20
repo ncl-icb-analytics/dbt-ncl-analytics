@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS104RTT
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS104RTT \ndbt: source(''mhsds'', ''MHS104RTT'') \nColumns:\n  SK -> sk\n  ServiceRequestId -> service_request_id\n  PatPathId Pseudo -> pat_path_id_pseudo\n  WaitTimeMeasureType -> wait_time_measure_type\n  OrgIDPatPathIdIssuer -> org_id_pat_path_id_issuer\n  ReferToTreatPeriodStartDate -> refer_to_treat_period_start_date\n  ReferToTreatPeriodEndDate -> refer_to_treat_period_end_date\n  ReferToTreatPeriodStatus -> refer_to_treat_period_status\n  RecordNumber -> record_number\n  MHS104UniqID -> mhs104_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqServReqID -> uniq_serv_req_id\n  AgeReferTreatStartDate -> age_refer_treat_start_date\n  AgeReferTreatEndDate -> age_refer_treat_end_date\n  TimeReferStartAndEndDate -> time_refer_start_and_end_date\n  UniqMonthID -> uniq_month_id\n  EFFECTIVE_FROM -> effective_from\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "ServiceRequestId" as service_request_id,

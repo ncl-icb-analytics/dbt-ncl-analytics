@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: cltcs_activities_in_scope
+    description: "Table for identifying people with OP activities bringing them in scope for C-LTCS direct care."
+    columns:
+      - name: sk_patient_id
+        data_type: varchar
+        description: "unique patient identifier"
+        data_tests:
+        - unique
+        - not_null
+
+      - name: cancer
+        data_type: number
+        description: "Flag for potential cancer OP activity in the last 12 months"
+
+      - name: dialysis
+        data_type: number
+        description: "Flag for potential dialysis OP activity in the last 12 months"
+
+      - name: maternity
+        data_type: number
+        description: "Flag for potential maternity OP activity in the last 12 months"
+
+      - name: tfc_array
+        data_type: array
+        description: "Treatment function code array for OP activities in the last 12 months [excluding activity flagged as cancer, dialysis, or maternity]"
+
+      - name: op_att_tot_12mo
+        data_type: number
+        description: "Count of all outpatient attendances in the last 12 months"
+
+      - name: filt_op_att_tot_12mo
+        data_type: number
+        description: "Count of outpatient attendances in the last 12 months excluding encounters those flagged as cancer, dialysis, or maternity"
+
+      - name: filt_op_spec_12mo
+        data_type: number
+        description: "Count of distinct outpatient specialties from appointment (not attendances) in the last 12 months excluding encounters flagged as cancer, dialysis, or maternity"
+
+      - name: filt_op_prov_12mo
+        data_type: number
+        description: "Count of distinct outpatient providers from appointment (not attendances) in the last 12 months excluding encounters flagged as cancer, dialysis, or maternity"
+
+      - name: filt_op_num_spec_2_prov_12mo
+        data_type: number
+        description: "Count of distinct outpatient specialties from appointment (not attendances) in the last 12 months where there are 2 or more providers for that specialty, excluding encounters flagged as cancer, dialysis, or maternity"

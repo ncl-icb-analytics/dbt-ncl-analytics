@@ -1,5 +1,14 @@
-version: 1
+version: 2
 models:
   - name: int_smi_longlives_weight_mgmt
     description: 'Determine weight management interventions for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_WEIGHT_MANAGEMENT cluster'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
     

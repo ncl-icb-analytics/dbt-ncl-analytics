@@ -38,7 +38,11 @@ models:
       • Stage 3 - Severe: ≥180/120 mmHg
 
       Purpose: Supports hypertension management and QOF reporting with personalised BP targets based on patient comorbidities.'
-    
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     config:
       meta:
         indicator:
@@ -137,7 +141,10 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        
+        tests:
+          - unique
+          - not_null
+
       - name: age
         description: Person's current age
         

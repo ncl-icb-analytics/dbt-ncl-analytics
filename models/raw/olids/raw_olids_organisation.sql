@@ -1,7 +1,8 @@
--- Raw layer model for olids.ORGANISATION
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS.ORGANISATION \ndbt: source(''olids'', ''ORGANISATION'') \nColumns:\n  LDS_RECORD_ID -> lds_record_id\n  ID -> id\n  ORGANISATION_CODE -> organisation_code\n  ASSIGNING_AUTHORITY_CODE -> assigning_authority_code\n  NAME -> name\n  TYPE_CODE -> type_code\n  TYPE_DESC -> type_desc\n  POSTCODE -> postcode\n  PARENT_ORGANISATION_ID -> parent_organisation_id\n  OPEN_DATE -> open_date\n  CLOSE_DATE -> close_date\n  IS_OBSOLETE -> is_obsolete\n  LDS_ID -> lds_id\n  LDS_BUSINESS_KEY -> lds_business_key\n  LDS_DATASET_ID -> lds_dataset_id\n  LDS_CDM_EVENT_ID -> lds_cdm_event_id\n  LDS_VERSIONER_EVENT_ID -> lds_versioner_event_id\n  RECORD_OWNER_ORGANISATION_CODE -> record_owner_organisation_code\n  LDS_DATETIME_DATA_ACQUIRED -> lds_datetime_data_acquired\n  LDS_INITIAL_DATA_RECEIVED_DATE -> lds_initial_data_received_date\n  LDS_IS_DELETED -> lds_is_deleted\n  LDS_START_DATE_TIME -> lds_start_date_time\n  LDS_LAKEHOUSE_DATE_PROCESSED -> lds_lakehouse_date_processed\n  LDS_LAKEHOUSE_DATETIME_UPDATED -> lds_lakehouse_datetime_updated"
+    )
+}}
 select
     "LDS_RECORD_ID" as lds_record_id,
     "ID" as id,

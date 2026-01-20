@@ -1,7 +1,8 @@
--- Raw layer model for sus_apc.spell.episodes.clinical_coding.diagnosis.icd
--- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
--- Description: SUS admitted patient care episodes and procedures
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS admitted patient care episodes and procedures). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_APC.spell.episodes.clinical_coding.diagnosis.icd \ndbt: source(''sus_apc'', ''spell.episodes.clinical_coding.diagnosis.icd'') \nColumns:\n  present_on_admission -> present_on_admission\n  dmicImportLogId -> dmic_import_log_id\n  ICD_ID -> icd_id\n  code -> code\n  PRIMARYKEY_ID -> primarykey_id\n  EPISODES_ID -> episodes_id\n  ROWNUMBER_ID -> rownumber_id"
+    )
+}}
 select
     "present_on_admission" as present_on_admission,
     "dmicImportLogId" as dmic_import_log_id,

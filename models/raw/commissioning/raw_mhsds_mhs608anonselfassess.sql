@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS608AnonSelfAssess
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS608AnonSelfAssess \ndbt: source(''mhsds'', ''MHS608AnonSelfAssess'') \nColumns:\n  AssToolCompTimestamp -> ass_tool_comp_timestamp\n  AssToolCompDate -> ass_tool_comp_date\n  CodedAssToolType -> coded_ass_tool_type\n  PersScore -> pers_score\n  ActLocTypeCode -> act_loc_type_code\n  OrgIDComm -> org_id_comm\n  MHS608UniqID -> mhs608_uniq_id\n  OrgIDProv -> org_id_prov\n  UniqSubmissionID -> uniq_submission_id\n  UniqMonthID -> uniq_month_id\n  EFFECTIVE_FROM -> effective_from\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "AssToolCompTimestamp" as ass_tool_comp_timestamp,
     "AssToolCompDate" as ass_tool_comp_date,

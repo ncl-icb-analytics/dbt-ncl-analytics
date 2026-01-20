@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.ActiveSubmission
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.ActiveSubmission \ndbt: source(''mhsds'', ''ActiveSubmission'') \nColumns:\n  OrgIDProvider -> org_id_provider\n  UniqSubmissionID -> uniq_submission_id\n  ReportingPeriodEndDate -> reporting_period_end_date"
+    )
+}}
 select
     "OrgIDProvider" as org_id_provider,
     "UniqSubmissionID" as uniq_submission_id,

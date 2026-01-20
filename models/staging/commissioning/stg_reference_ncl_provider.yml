@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_reference_ncl_provider
+    description: NCL provider reference data with provider codes and reporting hierarchies. One row per provider.
+    columns:
+      - name: sk_organisation_id
+        description: Surrogate key for the organisation
+        tests:
+          - unique
+          - not_null
+      - name: provider_code
+        description: Provider ODS code
+        tests:
+          - not_null

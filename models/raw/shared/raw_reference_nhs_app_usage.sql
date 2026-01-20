@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.NHS_APP_USAGE
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.NHS_APP_USAGE \ndbt: source(''reference_analyst_managed'', ''NHS_APP_USAGE'') \nColumns:\n  Date -> date\n  Logins -> logins\n  Appointments Booked -> appointments_booked\n  Appointments Cancelled -> appointments_cancelled\n  Repeat Prescriptions -> repeat_prescriptions\n  Organ Donation Registrations -> organ_donation_registrations\n  Organ Donation Withdrawals -> organ_donation_withdrawals\n  Organ Donation Updates -> organ_donation_updates\n  Organ Donation Lookup -> organ_donation_lookup\n  Record Views -> record_views\n  Summary Care Record Views -> summary_care_record_views\n  Detail Coded Record Views -> detail_coded_record_views\n  Usage Practice Code -> usage_practice_code"
+    )
+}}
 select
     "Date" as date,
     "Logins" as logins,

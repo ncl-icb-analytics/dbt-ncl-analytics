@@ -19,6 +19,9 @@ models:
 
       - name: practice_code
         description: GP practice ODS code
+        tests:
+          - unique
+          - not_null
 
       - name: practice_name
         description: GP practice name

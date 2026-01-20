@@ -1,7 +1,8 @@
--- Raw layer model for reference_cancer_cwt_alliance.CADEAS__TRUST__2WW
--- Source: "DATA_LAKE__NCL"."CANCER__CWT_ALLIANCE"
--- Description: Cancer waiting times alliance data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Cancer waiting times alliance data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.CANCER__CWT_ALLIANCE.CADEAS__TRUST__2WW \ndbt: source(''reference_cancer_cwt_alliance'', ''CADEAS__TRUST__2WW'') \nColumns:\n  ProviderCode -> provider_code\n  Month.Number -> month_number\n  Month -> month\n  Year -> year\n  DCO -> dco\n  CCG -> ccg\n  CancerReportCategory -> cancer_report_category\n  NoSeen -> no_seen\n  DaysWithin14 -> days_within14\n  Days15to16 -> days15to16\n  Days17to21 -> days17to21\n  Days22to28 -> days22to28\n  DaysMoreThan28 -> days_more_than28\n  STP -> stp\n  Trust_Name -> trust_name\n  Cancer_Alliance -> cancer_alliance\n  _TIMESTAMP -> timestamp"
+    )
+}}
 select
     "ProviderCode" as provider_code,
     "Month.Number" as month_number,

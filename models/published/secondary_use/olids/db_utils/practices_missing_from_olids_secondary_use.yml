@@ -5,3 +5,7 @@ models:
     description: |
       Published view showing practices in the reference lookup with no registered
       patients in OLIDS demographics.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS302MHDropInContact
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS302MHDropInContact \ndbt: source(''mhsds'', ''MHS302MHDropInContact'') \nColumns:\n  SK -> sk\n  MHDropInContactId -> mh_drop_in_contact_id\n  CareContactDateMHDropInContact -> care_contact_date_mh_drop_in_contact\n  OrgIDComm -> org_id_comm\n  MHDropInContactServiceType -> mh_drop_in_contact_service_type\n  StartTimeDropInContact -> start_time_drop_in_contact\n  EndTimeDropInContact -> end_time_drop_in_contact\n  LocalPatientId -> local_patient_id\n  NHSNumber Pseudo -> nhs_number_pseudo\n  PersonBirthDate Pseudo -> person_birth_date_pseudo\n  GenderIDCode -> gender_id_code\n  GenderSameAtBirth -> gender_same_at_birth\n  EthnicCategory -> ethnic_category\n  EthnicCategory2021 -> ethnic_category2021\n  ConsMechanismMH -> cons_mechanism_mh\n  CareProfLocalId -> care_prof_local_id\n  MHDropInContactOutcome -> mh_drop_in_contact_outcome\n  OrgIDReceiving -> org_id_receiving\n  MHS302UniqID -> mhs302_uniq_id\n  OrgIDProv -> org_id_prov\n  UniqSubmissionID -> uniq_submission_id\n  UniqCareProfLocalID -> uniq_care_prof_local_id\n  AgeRepPeriodStart -> age_rep_period_start\n  AgeRepPeriodEnd -> age_rep_period_end\n  UniqMonthID -> uniq_month_id\n  NHSDEthnicity -> nhsd_ethnicity\n  EFFECTIVE_FROM -> effective_from\n  UniqMHDropInContactId -> uniq_mh_drop_in_contact_id\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  Unique_LocalPatientId -> unique_local_patient_id\n  dmIcbCommissioner -> dm_icb_commissioner\n  dmSubIcbCommissioner -> dm_sub_icb_commissioner\n  dmCommissionerDerivationReason -> dm_commissioner_derivation_reason\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "MHDropInContactId" as mh_drop_in_contact_id,

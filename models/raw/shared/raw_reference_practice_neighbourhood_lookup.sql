@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.PRACTICE_NEIGHBOURHOOD_LOOKUP
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.PRACTICE_NEIGHBOURHOOD_LOOKUP \ndbt: source(''reference_analyst_managed'', ''PRACTICE_NEIGHBOURHOOD_LOOKUP'') \nColumns:\n  PRACTICECODE -> practicecode\n  PRACTICENAME -> practicename\n  PCNCODE -> pcncode\n  LOCALAUTHORITY -> localauthority\n  PRACTICENEIGHBOURHOOD -> practiceneighbourhood"
+    )
+}}
 select
     "PRACTICECODE" as practicecode,
     "PRACTICENAME" as practicename,

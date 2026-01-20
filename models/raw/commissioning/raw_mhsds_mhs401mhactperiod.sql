@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS401MHActPeriod
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS401MHActPeriod \ndbt: source(''mhsds'', ''MHS401MHActPeriod'') \nColumns:\n  SK -> sk\n  MHActLegalStatusClassPeriodId -> mh_act_legal_status_class_period_id\n  LocalPatientId -> local_patient_id\n  StartDateMHActLegalStatusClass -> start_date_mh_act_legal_status_class\n  StartTimeMHActLegalStatusClass -> start_time_mh_act_legal_status_class\n  LegalStatusClassPeriodStartReason -> legal_status_class_period_start_reason\n  ExpiryDateMHActLegalStatusClass -> expiry_date_mh_act_legal_status_class\n  ExpiryTimeMHActLegalStatusClass -> expiry_time_mh_act_legal_status_class\n  EndDateMHActLegalStatusClass -> end_date_mh_act_legal_status_class\n  EndTimeMHActLegalStatusClass -> end_time_mh_act_legal_status_class\n  LegalStatusClassPeriodEndReason -> legal_status_class_period_end_reason\n  LegalStatusCode -> legal_status_code\n  MentalCat -> mental_cat\n  RecordNumber -> record_number\n  MHS401UniqID -> mhs401_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqMHActEpisodeID -> uniq_mh_act_episode_id\n  UniqMonthID -> uniq_month_id\n  NHSDLegalStatus -> nhsd_legal_status\n  RecordStartDate -> record_start_date\n  RecordEndDate -> record_end_date\n  InactTimeMHAPeriod -> inact_time_mha_period\n  EFFECTIVE_FROM -> effective_from\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  Unique_LocalPatientId -> unique_local_patient_id\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "MHActLegalStatusClassPeriodId" as mh_act_legal_status_class_period_id,

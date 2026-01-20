@@ -1,7 +1,8 @@
--- Raw layer model for reference_cancer_cwt_alliance.CADEAS__TRUST__24_DAY_CLASSIC
--- Source: "DATA_LAKE__NCL"."CANCER__CWT_ALLIANCE"
--- Description: Cancer waiting times alliance data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Cancer waiting times alliance data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.CANCER__CWT_ALLIANCE.CADEAS__TRUST__24_DAY_CLASSIC \ndbt: source(''reference_cancer_cwt_alliance'', ''CADEAS__TRUST__24_DAY_CLASSIC'') \nColumns:\n  AccountableProvider.24.day.wait.treatment.phase -> accountable_provider_24_day_wait_treatment_phase\n  Month.Number -> month_number\n  Month -> month\n  Year -> year\n  DCO -> dco\n  STP -> stp\n  CCG -> ccg\n  AdmittedCare -> admitted_care\n  TreatmentModality -> treatment_modality\n  CancerReportCategory -> cancer_report_category\n  NoPatients...AccountableProvider.24.day.wait -> no_patients_accountable_provider_24_day_wait\n  DaysWithin24...AccountableProvider.24.day.wait -> days_within24_accountable_provider_24_day_wait\n  Days25To31...AccountableProvider.24.day.wait -> days25_to31_accountable_provider_24_day_wait\n  DaysMoreThan31...AccountableProvider.24.day.wait -> days_more_than31_accountable_provider_24_day_wait\n  Trust_Name -> trust_name\n  Cancer_Alliance -> cancer_alliance\n  _TIMESTAMP -> timestamp"
+    )
+}}
 select
     "AccountableProvider.24.day.wait.treatment.phase" as accountable_provider_24_day_wait_treatment_phase,
     "Month.Number" as month_number,

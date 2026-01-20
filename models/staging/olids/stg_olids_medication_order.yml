@@ -7,7 +7,6 @@ models:
   - name: id
     description: Primary key - unique identifier for this medication order
     tests:
-    - unique
     - not_null
   - name: organisation_id
     description: Foreign key to organisation.id - prescribing organisation

@@ -23,6 +23,9 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier'
+        tests:
+          - not_null
+          - unique
       - name: postcode_hash
         description: 'Hashed postcode value for privacy protection'
       - name: address_start_date

@@ -1,7 +1,8 @@
--- Raw layer model for eRS_primary_care.ActiveSubmission
--- Source: "DATA_LAKE"."ERS"
--- Description: Primary care referrals data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Primary care referrals data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.ERS.ActiveSubmission \ndbt: source(''eRS_primary_care'', ''ActiveSubmission'') \nColumns:\n  UniqSubmissionID -> uniq_submission_id"
+    )
+}}
 select
     "UniqSubmissionID" as uniq_submission_id
 from {{ source('eRS_primary_care', 'ActiveSubmission') }}

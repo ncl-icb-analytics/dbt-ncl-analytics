@@ -1,7 +1,8 @@
--- Raw layer model for reference_analyst_managed.CANCER__RCRD_NATIONAL
--- Source: "DATA_LAKE__NCL"."ANALYST_MANAGED"
--- Description: Analyst-managed reference datasets and business rules
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.ANALYST_MANAGED.CANCER__RCRD_NATIONAL \ndbt: source(''reference_analyst_managed'', ''CANCER__RCRD_NATIONAL'') \nColumns:\n  GEOGRAPHY_TYPE -> geography_type\n  GEOGRAPHY -> geography\n  YEAR -> year\n  MONTH -> month\n  DATE -> date\n  CANCER_GROUP -> cancer_group\n  Cancer group (broad) -> cancer_group_broad\n  Cancer group (detailed) -> cancer_group_detailed\n  METRIC -> metric\n  BREAKDOWN -> breakdown\n  DEMOGRAPHIC -> demographic\n  Completeness treatment follow-up -> completeness_treatment_follow_up\n  NUMERATOR -> numerator\n  DENOMINATOR -> denominator\n  STATISTIC -> statistic\n  Numerator (12m) -> numerator_12m\n  Denominator (12m) -> denominator_12m\n  Statistic (12m) -> statistic_12m"
+    )
+}}
 select
     "GEOGRAPHY_TYPE" as geography_type,
     "GEOGRAPHY" as geography,

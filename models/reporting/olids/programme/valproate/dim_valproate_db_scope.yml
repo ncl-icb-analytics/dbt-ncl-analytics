@@ -4,3 +4,13 @@ models:
     description: 'Valproate monitoring dashboard scope for child-bearing age cohort with recent prescriptions.
 
       One row per non-male person aged 0-55 years with valproate prescriptions in last 6 months.'
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

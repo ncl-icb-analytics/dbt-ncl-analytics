@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS702CPAReview
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS702CPAReview \ndbt: source(''mhsds'', ''MHS702CPAReview'') \nColumns:\n  SK -> sk\n  CPAEpisodeId -> cpa_episode_id\n  CPAReviewDate -> cpa_review_date\n  CPARevAbuseQuestAskInd -> cpa_rev_abuse_quest_ask_ind\n  CareProfLocalId -> care_prof_local_id\n  RecordNumber -> record_number\n  MHS702UniqID -> mhs702_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqCPAEpisodeID -> uniq_cpa_episode_id\n  UniqCareProfLocalID -> uniq_care_prof_local_id\n  UniqMonthID -> uniq_month_id\n  EFFECTIVE_FROM -> effective_from\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "CPAEpisodeId" as cpa_episode_id,

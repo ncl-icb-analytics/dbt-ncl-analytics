@@ -5,3 +5,7 @@ models:
     description: |
       Published view showing practices with significant discrepancies (>=20%) between
       PDS and OLIDS registration counts.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

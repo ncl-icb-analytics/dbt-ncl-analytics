@@ -1,7 +1,8 @@
--- Raw layer model for reference_terminology.LTC_LCS_REPORTS
--- Source: "DATA_LAKE__NCL"."TERMINOLOGY"
--- Description: Reference terminology data including SNOMED, BNF, and other code sets
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference terminology data including SNOMED, BNF, and other code sets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.TERMINOLOGY.LTC_LCS_REPORTS \ndbt: source(''reference_terminology'', ''LTC_LCS_REPORTS'') \nColumns:\n  REPORT_ID -> report_id\n  REPORT_NAME -> report_name\n  SEARCH_NAME -> search_name\n  FOLDER_PATH -> folder_path\n  XML_FILE_NAME -> xml_file_name\n  PARSED_AT -> parsed_at"
+    )
+}}
 select
     "REPORT_ID" as report_id,
     "REPORT_NAME" as report_name,

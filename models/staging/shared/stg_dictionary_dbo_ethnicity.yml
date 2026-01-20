@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: stg_dictionary_dbo_ethnicity
+    description: Ethnicity code dictionary with HES and NHS codes. One row per ethnicity code.
+    columns:
+      - name: sk_ethnicity_id
+        description: Surrogate key for the ethnicity
+        tests:
+          - unique
+          - not_null
+      - name: bk_ethnicity_code
+        description: Business key ethnicity code (may be null for unknown)

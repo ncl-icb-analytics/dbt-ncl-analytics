@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_dbo.SUSTariffTypes
--- Source: "Dictionary"."dbo"
--- Description: Reference data including PDS and lookup tables
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference data including PDS and lookup tables). 1:1 passthrough with cleaned column names. \nSource: Dictionary.dbo.SUSTariffTypes \ndbt: source(''dictionary_dbo'', ''SUSTariffTypes'') \nColumns:\n  SK_TariffTypeID -> sk_tariff_type_id\n  BK_TariffType -> bk_tariff_type\n  TariffDescription -> tariff_description\n  DateCreated -> date_created\n  DateUpdated -> date_updated"
+    )
+}}
 select
     "SK_TariffTypeID" as sk_tariff_type_id,
     "BK_TariffType" as bk_tariff_type,

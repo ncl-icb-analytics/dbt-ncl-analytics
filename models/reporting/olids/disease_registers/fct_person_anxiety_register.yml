@@ -4,7 +4,11 @@ models:
     description: 'Anxiety register for patients with active anxiety diagnosis.
 
       One row per person with latest ANX_COD > latest ANXRES_COD (non-QOF).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:
@@ -33,3 +37,9 @@ models:
             - cluster_id: "ANXRES_COD"
               category: "RESOLUTION"
 
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

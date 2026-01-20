@@ -1,7 +1,8 @@
--- Raw layer model for aic.BASE_CCMS_SNOMED_CODES
--- Source: "DATA_LAKE__NCL"."AIC_DEV"
--- Description: AIC pipelines
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (AIC pipelines). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.AIC_DEV.BASE_CCMS_SNOMED_CODES \ndbt: source(''aic'', ''BASE_CCMS_SNOMED_CODES'') \nColumns:\n  CONDITIONID -> conditionid\n  CONDITIONNAME -> conditionname\n  CONCEPTID -> conceptid\n  PRIMARYTERM -> primaryterm"
+    )
+}}
 select
     "CONDITIONID" as conditionid,
     "CONDITIONNAME" as conditionname,

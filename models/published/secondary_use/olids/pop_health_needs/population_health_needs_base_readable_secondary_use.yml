@@ -6,3 +6,13 @@ models:
       Population health needs base readable table for secondary use.
       Filtered to exclude patients with Type 1 opt-outs via dim_person_secondary_use_allowed.
       See population_health_needs_base_readable in published_reporting_direct_care for full details.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

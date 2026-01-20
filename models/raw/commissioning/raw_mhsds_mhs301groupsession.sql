@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS301GroupSession
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS301GroupSession \ndbt: source(''mhsds'', ''MHS301GroupSession'') \nColumns:\n  SK -> sk\n  GroupSessId -> group_sess_id\n  GroupSessDate -> group_sess_date\n  OrgIDComm -> org_id_comm\n  ClinContDurOfGroupSess -> clin_cont_dur_of_group_sess\n  GroupSessType -> group_sess_type\n  NumberOfGroupSessParticip -> number_of_group_sess_particip\n  ActLocTypeCode -> act_loc_type_code\n  SiteIDOfTreat -> site_id_of_treat\n  CareProfLocalId -> care_prof_local_id\n  ServTeamTypeRefToMH -> serv_team_type_ref_to_mh\n  NHSServAgreeLineID -> nhs_serv_agree_line_id\n  NHSServAgreeLineNum -> nhs_serv_agree_line_num\n  MHS301UniqID -> mhs301_uniq_id\n  OrgIDProv -> org_id_prov\n  UniqSubmissionID -> uniq_submission_id\n  UniqCareProfLocalID -> uniq_care_prof_local_id\n  UniqMonthID -> uniq_month_id\n  EFFECTIVE_FROM -> effective_from\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  UniqGroupSessId -> uniq_group_sess_id\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  dmIcbCommissioner -> dm_icb_commissioner\n  dmSubIcbCommissioner -> dm_sub_icb_commissioner\n  dmCommissionerDerivationReason -> dm_commissioner_derivation_reason\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "GroupSessId" as group_sess_id,

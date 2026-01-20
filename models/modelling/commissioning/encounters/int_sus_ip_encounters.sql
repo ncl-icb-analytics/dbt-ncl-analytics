@@ -32,6 +32,7 @@ select
     core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
     , 'SUS_APC' as source
+    , core.local_patient_identifier
 
     /* Location */
     , core.spell_commissioning_service_agreement_provider as organisation_id
@@ -74,7 +75,8 @@ select
     /* Discharge information */
     
     /* Clinical information */
-    , core.spell_clinical_coding_grouper_derived_primary_diagnosis  || ', ' || core.spell_clinical_coding_grouper_derived_secondary_diagnosis  as flat_diagnosis_codes
+    , core.spell_clinical_coding_grouper_derived_primary_diagnosis  as primary_diagnosis_code
+    , core.spell_clinical_coding_grouper_derived_secondary_diagnosis  as secondary_diagnosis_code
     , core.spell_clinical_coding_grouper_derived_dominant_procedure as primary_treatment
 
     /* Clinician information */

@@ -1,7 +1,8 @@
--- Raw layer model for sus_apc.system.transaction.cds_recipients
--- Source: "DATA_LAKE"."SUS_UNIFIED_APC"
--- Description: SUS admitted patient care episodes and procedures
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (SUS admitted patient care episodes and procedures). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_APC.system.transaction.cds_recipients \ndbt: source(''sus_apc'', ''system.transaction.cds_recipients'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  dmicImportLogId -> dmic_import_log_id\n  CDS_RECIPIENTS_ID -> cds_recipients_id\n  cds_recipients -> cds_recipients"
+    )
+}}
 select
     "ROWNUMBER_ID" as rownumber_id,
     "PRIMARYKEY_ID" as primarykey_id,

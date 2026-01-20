@@ -4,7 +4,18 @@ models:
     description: 'QOF peripheral arterial disease register for patients with peripheral vascular disease.
 
       One row per person with PAD_COD present (PAD is permanent condition).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

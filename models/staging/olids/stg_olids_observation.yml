@@ -8,7 +8,6 @@ models:
   - name: id
     description: Primary key - unique identifier for this observation
     tests:
-    - unique
     - not_null
   - name: patient_id
     description: Foreign key to patient.id

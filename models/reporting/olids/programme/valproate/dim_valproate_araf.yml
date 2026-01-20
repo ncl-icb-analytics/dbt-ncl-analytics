@@ -31,3 +31,13 @@ models:
       - All observation IDs, concept codes, and displays preserved for audit trail
       
       One row per person with any ARAF events meeting programme criteria.
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

@@ -4,7 +4,18 @@ models:
     description: 'QOF chronic kidney disease register for patients aged 18+ with active CKD diagnosis.
 
       One row per person with latest CKD_COD > latest CKDRES_COD or no resolution recorded.'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
+
     config:
       meta:
         indicator:

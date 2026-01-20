@@ -1,7 +1,8 @@
--- Raw layer model for mhsds.MHS102ServiceTypeReferredTo
--- Source: "DATA_LAKE"."MHSDS"
--- Description: Mental Health Services Data Set (MHSDS)
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Mental Health Services Data Set (MHSDS)). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.MHSDS.MHS102ServiceTypeReferredTo \ndbt: source(''mhsds'', ''MHS102ServiceTypeReferredTo'') \nColumns:\n  SK -> sk\n  ServiceRequestId -> service_request_id\n  OtherCareProfTeamLocalID -> other_care_prof_team_local_id\n  CareProfTeamLocalId -> care_prof_team_local_id\n  ReferClosureDate -> refer_closure_date\n  ReferClosureTime -> refer_closure_time\n  ReferRejectionDate -> refer_rejection_date\n  ReferRejectionTime -> refer_rejection_time\n  ReferRejectReason -> refer_reject_reason\n  ReferClosReason -> refer_clos_reason\n  RecordNumber -> record_number\n  MHS102UniqID -> mhs102_uniq_id\n  OrgIDProv -> org_id_prov\n  Person_ID -> person_id\n  UniqSubmissionID -> uniq_submission_id\n  UniqServReqID -> uniq_serv_req_id\n  AgeServReferClosure -> age_serv_refer_closure\n  AgeServReferRejection -> age_serv_refer_rejection\n  UniqMonthID -> uniq_month_id\n  RecordStartDate -> record_start_date\n  RecordEndDate -> record_end_date\n  InactTimeST -> inact_time_st\n  EFFECTIVE_FROM -> effective_from\n  TeamTypePredominantAgeU18 -> team_type_predominant_age_u18\n  ServTeamTypeRefToMH -> serv_team_type_ref_to_mh\n  ServiceTypeName -> service_type_name\n  UniqOtherCareProfTeamLocalId -> uniq_other_care_prof_team_local_id\n  UniqCareProfTeamID -> uniq_care_prof_team_id\n  ServTeamIntAgeGroup -> serv_team_int_age_group\n  RowNumber -> row_number\n  dmicImportLogId -> dmic_import_log_id\n  dmicIsCYPServiceTypeIndicator -> dmic_is_cyp_service_type_indicator\n  dmicIsLDAServiceTypeIndicator -> dmic_is_lda_service_type_indicator\n  dmicIsAMHServiceTypeIndicator -> dmic_is_amh_service_type_indicator\n  dmicUniqCareProfTeamIdPercentUnder18 -> dmic_uniq_care_prof_team_id_percent_under18\n  CAMHSTier -> camhs_tier\n  dmicSystemId -> dmic_system_id\n  dmicCCGCode -> dmic_ccg_code\n  dmicDateAdded -> dmic_date_added\n  FileType -> file_type\n  ReportingPeriodStartDate -> reporting_period_start_date\n  ReportingPeriodEndDate -> reporting_period_end_date\n  dmicDataset -> dmic_dataset"
+    )
+}}
 select
     "SK" as sk,
     "ServiceRequestId" as service_request_id,

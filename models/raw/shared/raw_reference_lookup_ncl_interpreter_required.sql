@@ -1,7 +1,8 @@
--- Raw layer model for reference_lookup_ncl.INTERPRETER_REQUIRED
--- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules in the MODELLING environment
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules in the MODELLING environment). 1:1 passthrough with cleaned column names. \nSource: MODELLING.LOOKUP_NCL.INTERPRETER_REQUIRED \ndbt: source(''reference_lookup_ncl'', ''INTERPRETER_REQUIRED'') \nColumns:\n  ID -> id\n  INTERPRETER_REQUIRED -> interpreter_required\n  INTERPRETER_REQUIRED_FLAG -> interpreter_required_flag"
+    )
+}}
 select
     "ID" as id,
     "INTERPRETER_REQUIRED" as interpreter_required,

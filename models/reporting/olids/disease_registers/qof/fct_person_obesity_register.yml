@@ -4,7 +4,11 @@ models:
     description: 'QOF obesity register for patients aged 18+ using ethnicity-specific BMI thresholds.
 
       One row per person with BMI ≥30 (all ethnicities) or BMI ≥27.5 (BAME populations).'
-    
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
     config:
       meta:
         indicator:

@@ -1,7 +1,8 @@
--- Raw layer model for dictionary_eRS.Gender
--- Source: "Dictionary"."E-Referral"
--- Description: Primary care referrals lookups
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Primary care referrals lookups). 1:1 passthrough with cleaned column names. \nSource: Dictionary.E-Referral.Gender \ndbt: source(''dictionary_eRS'', ''Gender'') \nColumns:\n  Code -> code\n  Meaning -> meaning\n  Display -> display"
+    )
+}}
 select
     "Code" as code,
     "Meaning" as meaning,

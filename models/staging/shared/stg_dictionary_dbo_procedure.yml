@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_dictionary_dbo_procedure
+    description: OPCS procedure code dictionary from data warehouse. One row per procedure code.
+    columns:
+      - name: sk_procedure_code
+        description: Surrogate key for the procedure
+        tests:
+          - unique
+          - not_null
+      - name: code
+        description: OPCS procedure code
+        tests:
+          - not_null

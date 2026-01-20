@@ -1,7 +1,8 @@
--- Raw layer model for reference_terminology.LTC_LCS_VALUESETS
--- Source: "DATA_LAKE__NCL"."TERMINOLOGY"
--- Description: Reference terminology data including SNOMED, BNF, and other code sets
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference terminology data including SNOMED, BNF, and other code sets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.TERMINOLOGY.LTC_LCS_VALUESETS \ndbt: source(''reference_terminology'', ''LTC_LCS_VALUESETS'') \nColumns:\n  VALUESET_ID -> valueset_id\n  REPORT_ID -> report_id\n  VALUESET_INDEX -> valueset_index\n  VALUESET_HASH -> valueset_hash\n  VALUESET_FRIENDLY_NAME -> valueset_friendly_name\n  CODE_SYSTEM -> code_system\n  EXPANSION_ERROR -> expansion_error\n  EXPANDED_AT -> expanded_at"
+    )
+}}
 select
     "VALUESET_ID" as valueset_id,
     "REPORT_ID" as report_id,

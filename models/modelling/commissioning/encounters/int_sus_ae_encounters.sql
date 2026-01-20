@@ -26,6 +26,7 @@ select
     core.primarykey_id as visit_occurrence_id
     , core.sk_patient_id
     , 'SUS_ECDS' as source
+    , core.local_patient_identifier
 
     /* Location */
     ,  {{ clean_organisation_id('attendance_location_hes_provider_3') }} as organisation_id

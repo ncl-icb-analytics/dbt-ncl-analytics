@@ -8,13 +8,24 @@ Make sure you have these prerequisites installed and configured on your Windows 
 
 ### 1. Install Required Software
 
-- **Python 3.8 or higher** - [Download from python.org](https://www.python.org/downloads/)
-  - **Important**: During installation, check "Add Python to PATH"
-  - If you forget, see troubleshooting below for how to add it manually
+- **uv** - Fast Python package manager (recommended)
+  ```powershell
+  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+  uv handles Python installation automatically - no separate Python install needed.
 - **Git for Windows** - [Download from git-scm.com](https://git-scm.com/download/win)
   - Minimum version 2.34 required for SSH commit signing
 - **A text editor** - We recommend [VS Code](https://code.visualstudio.com/)
 - **Access to Snowflake** with the ANALYST role
+
+<details>
+<summary>Alternative: Using pip (legacy method)</summary>
+
+If you prefer pip over uv, install Python 3.8+ from [python.org](https://www.python.org/downloads/).
+- **Important**: During installation, check "Add Python to PATH"
+- If you forget, see troubleshooting below for how to add it manually
+
+</details>
 
 ### 2. Enable PowerShell Script Execution
 
@@ -53,6 +64,16 @@ cd dbt-ncl-analytics
 
 ### Step 2: Set Up Python Environment
 
+```bash
+uv sync
+.venv\Scripts\activate
+```
+
+This creates the virtual environment and installs all dependencies automatically.
+
+<details>
+<summary>Alternative: Using pip and venv (legacy method)</summary>
+
 Create and activate a virtual environment:
 
 ```bash
@@ -68,13 +89,11 @@ Install project dependencies:
 pip install -r requirements.txt
 ```
 
+</details>
+
 **Important**: This project uses dbt-core 1.9.4 for Snowflake compatibility. Do not upgrade dbt packages.
 
 ### Step 3: Configure Snowflake Connection
-
-You need to create two configuration files:
-
-#### 3a. Create .env file
 
 ```bash
 cp env.example .env
@@ -89,13 +108,7 @@ SNOWFLAKE_WAREHOUSE=ANALYST_WH
 SNOWFLAKE_ROLE=ANALYST
 ```
 
-#### 3b. Create profiles.yml file
-
-```bash
-cp profiles.yml.template profiles.yml
-```
-
-The template is pre-configured to read from your `.env` file, so no editing needed.
+The `profiles.yml` is already configured to read from your `.env` file.
 
 ### Step 4: Initialise Your Development Environment
 
@@ -105,11 +118,7 @@ Run the setup script:
 .\start_dbt.ps1
 ```
 
-This script:
-- Loads your .env variables into the session
-- Configures git to ignore local changes to profiles.yml
-
-Run this script once before your first commit, then each time you open a new terminal session.
+**Important**: Run this script each time you open a new terminal. It loads your `.env` credentials into the session - dbt commands won't work without it.
 
 ### Step 5: Verify Installation
 
@@ -119,6 +128,23 @@ dbt debug   # Test connection
 ```
 
 Your browser will open for Snowflake authentication. Look for "All checks passed!" in the output.
+
+### Helper Scripts
+
+Two scripts in the project root make development easier:
+
+| Script | Description |
+|--------|-------------|
+| `.\start_dbt.ps1` | Loads `.env` credentials - **run first in each terminal** |
+| `.\build_changed` | Builds only models changed on your branch |
+
+**build_changed flags:**
+- `-u` include upstream dependencies
+- `-d` include downstream dependents
+- `-r` run only (skip tests)
+- `-t` test only (skip run)
+
+Example: `.\build_changed -u -d` builds changed models with all dependencies.
 
 ## Setting Up Commit Signing
 
@@ -305,12 +331,7 @@ If a hook fails, fix the reported issue and commit again.
 
 ## Working with dbt Packages
 
-This repository commits `dbt_packages/` and `profiles.yml` (required for Snowflake native execution).
-
-**Important:**
-- The `start_dbt.ps1` script uses git skip-worktree to prevent committing your local `profiles.yml` changes
-- When `dbt deps` shows changes in `dbt_packages/`, only commit if you're intentionally updating packages
-- If you see `profiles.yml` in `git status`, run `start_dbt.ps1` again
+This repository commits `dbt_packages/` to ensure consistent package versions. When `dbt deps` shows changes in `dbt_packages/`, only commit if you're intentionally updating packages.
 
 ## Common Issues
 
@@ -328,7 +349,6 @@ This repository commits `dbt_packages/` and `profiles.yml` (required for Snowfla
 
 **dbt authentication fails:**
 - Check your `.env` file has correct values
-- Ensure you're using `externalbrowser` authenticator in `profiles.yml`
 - Try running `dbt debug` to see detailed error
 
 ## Getting Help

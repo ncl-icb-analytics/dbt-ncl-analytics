@@ -15,4 +15,4 @@ select
     
 from {{ref('dim_practice')}} dp
 left join {{ref('fct_organisation_active_patients')}} ap on dp.organisation_id = ap.organisation_id 
-where pcn_code in (select distinct pcn_code from {{source('c_ltcs','MDT_LOOKUP')}} )
+where pcn_code in (select distinct pcn_code from {{ ref('stg_c_ltcs_mdt_lookup') }} )

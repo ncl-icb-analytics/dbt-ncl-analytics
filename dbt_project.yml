@@ -11,6 +11,7 @@ flags:
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
+  - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
 target-path: "target"
 clean-targets:
@@ -22,7 +23,11 @@ model-paths: ["models"]
 # Configure dbt audit schema naming
 vars:
   dbt_audit_schema: "test_audit"
-  
+
+  # QOF reference date for point-in-time register calculations
+  # Set to match EMIS extract date for validation
+  qof_reference_date: "2025-11-04"
+
   # Schema generation configuration
   # Domains listed here will have schema names automatically derived from subdomain folder structure
   # Pattern: {DOMAIN}_{SUBDOMAIN} e.g. models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES
@@ -41,10 +46,10 @@ vars:
   covid_audit_end_date: "2025-06-30"    
   
   # Elementary configuration - disable upload of artifacts on run end for non-prod targets
-  disable_dbt_artifacts_autoupload: "{{ target.name != 'prod' }}"
-  disable_run_results: "{{ target.name != 'prod' }}"
-  disable_tests_results: "{{ target.name != 'prod' }}"
-  disable_dbt_invocation_autoupload: "{{ target.name != 'prod' }}"       # End of last completed campaign (spring 2025)
+  disable_dbt_artifacts_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_run_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_tests_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_dbt_invocation_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
 
 # Configure test failure storage (only for failures)
 tests:
@@ -84,7 +89,9 @@ models:
       +materialized: table
       +database: "MODELLING"
       +tags: ["modelling"]
-      +post-hook: ["{{ add_model_comment() }}"]
+      +post-hook:
+        - "{{ add_model_comment() }}"
+        - "{{ log_row_count() }}"
       commissioning:
         +schema: "COMMISSIONING_MODELLING"
       olids:
@@ -97,7 +104,9 @@ models:
       +materialized: table
       +database: "REPORTING"
       +tags: ["reporting"]
-      +post-hook: ["{{ add_model_comment() }}"]
+      +post-hook:
+        - "{{ add_model_comment() }}"
+        - "{{ log_row_count() }}"
       commissioning:
         +schema: "COMMISSIONING_REPORTING"
       olids:
@@ -112,7 +121,9 @@ models:
       +enabled: true
       +materialized: table
       +tags: ["published_reporting"]
-      +post-hook: ["{{ add_model_comment() }}"]
+      +post-hook:
+        - "{{ add_model_comment() }}"
+        - "{{ log_row_count() }}"
       direct_care:
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         olids:
@@ -132,10 +143,11 @@ models:
           +post-hook:
             - "{{ add_model_comment() }}"
             - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+            - "{{ log_row_count() }}"
 
   # Elementary observability configuration
   elementary:
-    +enabled: "{{ target.name == 'prod' }}"  # Only run Elementary in prod
+    +enabled: "{{ target.name in ['prod', 'snowflake-prod'] }}"  # Only run Elementary in prod
     +database: "DATA_LAKE__NCL"
     +schema: "DBT_OBSERVABILITY"
 

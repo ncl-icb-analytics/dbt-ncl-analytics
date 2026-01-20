@@ -6,7 +6,9 @@ models:
       One row per stroke or TIA diagnosis observation using STRK_COD and TIA_COD clusters with permanent cardiovascular event tracking and no age restrictions.'
     columns:
       - name: id
-        description: 'Unique identifier for the clinical observation'
+        description: 'Observation identifier (not unique - same observation may appear for multiple cluster matches)'
+        tests:
+          - not_null
 
       - name: person_id
         description: 'Patient identifier'
@@ -36,5 +38,7 @@ models:
         description: 'Categorised stroke/TIA observation type (Stroke Diagnosis or TIA Diagnosis)'
 
     tests:
+      - dbt_utils.at_least_one:
+          column_name: id
       - cluster_ids_exist:
           cluster_ids: STRK_COD, TIA_COD

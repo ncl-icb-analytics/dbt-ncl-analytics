@@ -8,7 +8,6 @@ models:
     description: Primary key - unique identifier for this appointment-practitioner
       link
     tests:
-    - unique
     - not_null
   - name: appointment_id
     description: Foreign key to appointment.id

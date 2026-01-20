@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: stg_registries_deaths
+    description: "Staged ONS deaths register with standardised patient identifier"
+    columns:
+      - name: dmic_row_id
+        description: "Unique row identifier"
+        data_tests:
+          - unique
+          - not_null

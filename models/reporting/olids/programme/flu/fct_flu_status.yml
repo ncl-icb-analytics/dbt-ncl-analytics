@@ -53,12 +53,25 @@ models:
               description: "Campaign period for vaccination timing"
               sort_order: 1
     
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - campaign_id
+            - person_id
+            - status_type
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: person_id
         description: Unique person identifier
-        
+        tests:
+          - not_null
+
       - name: campaign_id
         description: Flu campaign identifier
+        tests:
+          - not_null
         
       - name: campaign_year
         description: Campaign year

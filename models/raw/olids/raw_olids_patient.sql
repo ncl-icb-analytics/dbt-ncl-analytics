@@ -1,7 +1,8 @@
--- Raw layer model for olids.PATIENT
--- Source: "DATA_LAKE"."OLIDS"
--- Description: OLIDS stable layer - cleaned and filtered patient records
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS.PATIENT \ndbt: source(''olids'', ''PATIENT'') \nColumns:\n  LDS_RECORD_ID -> lds_record_id\n  ID -> id\n  NHS_NUMBER_HASH -> nhs_number_hash\n  SK_PATIENT_ID -> sk_patient_id\n  TITLE -> title\n  GENDER_CONCEPT_ID -> gender_concept_id\n  GENDER_SOURCE_CODE -> gender_source_code\n  GENDER_SOURCE_DISPLAY -> gender_source_display\n  GENDER_CODE -> gender_code\n  GENDER_DISPLAY -> gender_display\n  REGISTERED_PRACTICE_ID -> registered_practice_id\n  BIRTH_YEAR -> birth_year\n  BIRTH_MONTH -> birth_month\n  DEATH_YEAR -> death_year\n  DEATH_MONTH -> death_month\n  IS_SPINE_SENSITIVE -> is_spine_sensitive\n  IS_CONFIDENTIAL -> is_confidential\n  IS_DUMMY_PATIENT -> is_dummy_patient\n  RECORD_OWNER_ORGANISATION_CODE -> record_owner_organisation_code\n  LDS_ID -> lds_id\n  LDS_BUSINESS_KEY -> lds_business_key\n  LDS_DATASET_ID -> lds_dataset_id\n  LDS_CDM_EVENT_ID -> lds_cdm_event_id\n  LDS_VERSIONER_EVENT_ID -> lds_versioner_event_id\n  LDS_DATETIME_DATA_ACQUIRED -> lds_datetime_data_acquired\n  LDS_INITIAL_DATA_RECEIVED_DATE -> lds_initial_data_received_date\n  LDS_IS_DELETED -> lds_is_deleted\n  LDS_START_DATE_TIME -> lds_start_date_time\n  LDS_LAKEHOUSE_DATE_PROCESSED -> lds_lakehouse_date_processed\n  LDS_LAKEHOUSE_DATETIME_UPDATED -> lds_lakehouse_datetime_updated"
+    )
+}}
 select
     "LDS_RECORD_ID" as lds_record_id,
     "ID" as id,

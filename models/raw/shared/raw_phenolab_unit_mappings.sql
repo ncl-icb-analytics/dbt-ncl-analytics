@@ -1,7 +1,8 @@
--- Raw layer model for phenolab.UNIT_MAPPINGS
--- Source: "DATA_LAKE__NCL"."PHENOLAB_DEV"
--- Description: Phenolab supporting data
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Phenolab supporting data). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.PHENOLAB_DEV.UNIT_MAPPINGS \ndbt: source(''phenolab'', ''UNIT_MAPPINGS'') \nColumns:\n  DEFINITION_ID -> definition_id\n  DEFINITION_NAME -> definition_name\n  CONFIG_ID -> config_id\n  CONFIG_VERSION -> config_version\n  SOURCE_UNIT -> source_unit\n  STANDARD_UNIT -> standard_unit\n  SOURCE_UNIT_COUNT -> source_unit_count\n  SOURCE_UNIT_LQ -> source_unit_lq\n  SOURCE_UNIT_MEDIAN -> source_unit_median\n  SOURCE_UNIT_UQ -> source_unit_uq"
+    )
+}}
 select
     "DEFINITION_ID" as definition_id,
     "DEFINITION_NAME" as definition_name,

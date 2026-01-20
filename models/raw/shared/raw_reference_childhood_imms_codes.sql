@@ -1,7 +1,8 @@
--- Raw layer model for reference_terminology.CHILDHOOD_IMMS_CODES
--- Source: "DATA_LAKE__NCL"."TERMINOLOGY"
--- Description: Reference terminology data including SNOMED, BNF, and other code sets
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Reference terminology data including SNOMED, BNF, and other code sets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.TERMINOLOGY.CHILDHOOD_IMMS_CODES \ndbt: source(''reference_terminology'', ''CHILDHOOD_IMMS_CODES'') \nColumns:\n  VACCINE -> vaccine\n  DOSE -> dose\n  PROPOSEDCLUSTER -> proposedcluster\n  SOURCECLUSTERID -> sourceclusterid\n  SOURCECLUSTERDESCRIPTION -> sourceclusterdescription\n  SNOMEDCONCEPTID -> snomedconceptid\n  CODEDESCRIPTION -> codedescription\n  SOURCE -> source"
+    )
+}}
 select
     "VACCINE" as vaccine,
     "DOSE" as dose,

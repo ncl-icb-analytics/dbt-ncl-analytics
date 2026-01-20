@@ -1,7 +1,8 @@
--- Raw layer model for aic.BASE_ATHENA__CONCEPT
--- Source: "DATA_LAKE__NCL"."AIC_DEV"
--- Description: AIC pipelines
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (AIC pipelines). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.AIC_DEV.BASE_ATHENA__CONCEPT \ndbt: source(''aic'', ''BASE_ATHENA__CONCEPT'') \nColumns:\n  CONCEPT_ID -> concept_id\n  CONCEPT_NAME -> concept_name\n  DOMAIN_ID -> domain_id\n  VOCABULARY_ID -> vocabulary_id\n  CONCEPT_CLASS_ID -> concept_class_id\n  STANDARD_CONCEPT -> standard_concept\n  CONCEPT_CODE -> concept_code\n  VALID_START_DATE -> valid_start_date\n  VALID_END_DATE -> valid_end_date\n  INVALID_REASON -> invalid_reason"
+    )
+}}
 select
     "CONCEPT_ID" as concept_id,
     "CONCEPT_NAME" as concept_name,

@@ -1,4 +1,4 @@
-version: 2
+version: 3
 models:
 - name: stg_mhsds_carecontact
   description:  'Mental Health Services Data Set (MHSDS) care contacts'

@@ -1,7 +1,8 @@
--- Raw layer model for reference_lookup_ncl.GP_PRACTICE
--- Source: "MODELLING"."LOOKUP_NCL"
--- Description: Analyst-managed reference datasets and business rules in the MODELLING environment
--- This is a 1:1 passthrough from source with standardized column names
+{{
+    config(
+        description="Raw layer (Analyst-managed reference datasets and business rules in the MODELLING environment). 1:1 passthrough with cleaned column names. \nSource: MODELLING.LOOKUP_NCL.GP_PRACTICE \ndbt: source(''reference_lookup_ncl'', ''GP_PRACTICE'') \nColumns:\n  SK_ORGANISATION_ID -> sk_organisation_id\n  PRACTICE_CODE -> practice_code\n  PRACTICE_NAME -> practice_name\n  PRACTICE_NAME_SHORT -> practice_name_short\n  BOROUGH -> borough\n  PCN_CODE -> pcn_code\n  PCN_NAME -> pcn_name\n  NEIGHBOURHOOD_CODE -> neighbourhood_code\n  NEIGHBOURHOOD_NAME -> neighbourhood_name"
+    )
+}}
 select
     "SK_ORGANISATION_ID" as sk_organisation_id,
     "PRACTICE_CODE" as practice_code,
