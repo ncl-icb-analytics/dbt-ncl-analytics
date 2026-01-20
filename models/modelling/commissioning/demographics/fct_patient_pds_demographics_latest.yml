@@ -1,6 +1,6 @@
 version: 2
 models:
-- name: fct_patient_person_demographics_ncl
+- name: fct_patient_pds_demographics_latest
   description: Demographic lookup table for the current population based on the PDS dataset. Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
   tests:
   - dbt_utils.at_least_one:
