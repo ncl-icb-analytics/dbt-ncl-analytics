@@ -14,6 +14,14 @@ models:
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_dm_reg_pg2_hr_vs1
+            - on_dm_reg_pg2_hr_vs2
+            - on_dm_reg_pg2_hr_vs3
+            - on_dm_reg_pg2_hr_vs4
+            - on_dm_reg_pg2_hr_vs5
+            - on_dm_reg_pg2_hr_vs6
     columns:
       - name: person_id
         tests:

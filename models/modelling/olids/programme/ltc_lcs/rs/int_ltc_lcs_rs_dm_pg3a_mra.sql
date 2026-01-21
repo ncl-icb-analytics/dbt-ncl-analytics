@@ -81,7 +81,10 @@ rule_5_acr_high as (
 ),
 
 -- Rule 6: ABPM BP ≥140 systolic OR ≥90 diastolic (latest ABPM reading)
--- EMIS logic filters to ABPMs only, checking 140/90 threshold
+-- EMIS logic: gets latest 1000 BP readings, filters to ABPM codes on matching dates,
+-- then checks latest ABPM value against 140/90 threshold.
+-- Simplified implementation: directly get latest ABPM reading and check threshold.
+-- Logically equivalent but more readable.
 rule_6_bp_high as (
     select person_id
     from {{ ref('int_blood_pressure_all') }}
