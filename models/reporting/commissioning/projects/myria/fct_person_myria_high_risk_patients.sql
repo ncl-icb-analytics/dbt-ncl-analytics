@@ -5,6 +5,8 @@ select
     hospital_number,
     gp_code,
     gp_name,
+    age_at_most_recent_nel_admission,
+    most_recent_nel_admission_date,
     local_authority,
     barnet_hospital_count,
     barnet_hospital_flag,
@@ -65,6 +67,7 @@ from
 where
     barnet_hospital_count >= 1
     AND local_authority IN ('Barnet','Enfield')
+    AND age_at_most_recent_nel_admission >= 18
     AND
     (heart_failure = 1 
     or copd = 1 
