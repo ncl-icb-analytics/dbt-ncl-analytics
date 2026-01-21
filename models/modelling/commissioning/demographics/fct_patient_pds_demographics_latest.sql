@@ -89,9 +89,6 @@ on pds.practice_code = dict_gp.organisation_code
 left join {{ref('stg_dictionary_dbo_organisationmatrixpracticeview')}} as dict_pcn
 on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
 
-left join {{ref('stg_dictionary_dbo_postcode')}} gp_pc
-on dict_gp.sk_postcode_id = gp_pc.sk_postcode_id
-
 left join {{ref('stg_reference_lookup_ncl_gp_practice')}} gp_lu
 on pds.practice_code = gp_lu.gp_practice_code
 
