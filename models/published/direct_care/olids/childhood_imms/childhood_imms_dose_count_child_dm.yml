@@ -3,4 +3,8 @@ version: 1
 models:
   - name: childhood_imms_dose_count_child_dm
     description: Final view holding historical imms population (in the last 48 mths) under the age of 10 and any vaccinations associated with them.
+     
+tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
     
