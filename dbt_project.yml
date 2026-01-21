@@ -185,5 +185,5 @@ seeds:
 
 snapshots:
   ncl_analytics:
-    +database: "{{ 'MODELLING' if target.name in ['prod', 'snowflake-prod'] else 'DEV__MODELLING' }}"
+    +database: "MODELLING"
     +schema: "DBT_SNAPSHOTS"
