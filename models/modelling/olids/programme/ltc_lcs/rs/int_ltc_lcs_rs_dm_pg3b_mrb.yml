@@ -1,0 +1,41 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_dm_pg3b_mrb
+    description: |
+      Diabetes Register Priority Group 3B - Moderate Risk B identification.
+
+      Patients on the diabetes register (excluding PG1, PG2, PG3A) are included if:
+      - Rule 2: HbA1c 58-75 (direct inclusion)
+      - OR Rule 3+4-7: HbA1c 48-58 AND any of:
+        - Erectile dysfunction, diabetic retinopathy, BMI >35, diabetic neuropathy
+        - Diabetic foot at moderate/high risk, heart failure (first episode)
+        - GLP-1/insulin medications in last 6 months, claudication/atherosclerosis
+        - eGFR 45-49, ACR 3-30, ABPM BP ≥140/90
+
+      Note: BP logic simplified from EMIS implementation. EMIS anchors to the date of the
+      latest 1000 BP readings then checks for ABPM codes on that date. This implementation
+      directly checks the latest ABPM reading against the 140/90 threshold, which is
+      logically equivalent but more readable.
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_dm_reg_priority_group_3b_mrb_vs1
+            - on_dm_reg_priority_group_3b_mrb_vs2
+            - on_dm_reg_priority_group_3b_mrb_vs3
+            - on_dm_reg_priority_group_3b_mrb_vs4
+            - on_dm_reg_priority_group_3b_mrb_vs5
+            - on_dm_reg_priority_group_3b_mrb_vs6
+            - on_dm_reg_priority_group_3b_mrb_vs7
+            - on_dm_reg_priority_group_3b_mrb_vs8
+            # vs9 excluded - Insulins drug group has no SNOMED mapping, using BNF 060101 fallback
+            - on_dm_reg_priority_group_3b_mrb_vs10
+            - on_dm_reg_priority_group_3b_mrb_vs11
+            - on_dm_reg_priority_group_3b_mrb_vs12
+            - on_dm_reg_priority_group_3b_mrb_vs13
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

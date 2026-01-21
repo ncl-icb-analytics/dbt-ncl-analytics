@@ -1,0 +1,16 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_dm_pg3_mr
+    description: |
+      Diabetes Register Priority Group 3 - Moderate Risk identification.
+      Combines Priority Group 3A (MRa) and Priority Group 3B (MRb).
+
+      Patients are included if they are in either MRa or MRb subgroup.
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

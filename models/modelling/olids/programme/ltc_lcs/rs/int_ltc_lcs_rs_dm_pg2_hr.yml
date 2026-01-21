@@ -1,0 +1,29 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_dm_pg2_hr
+    description: |
+      Diabetes Register Priority Group 2 - High Risk identification.
+
+      Patients on the diabetes register (excluding PG1) are included if ANY of the following apply:
+      - Rule 2: HbA1c 75-90
+      - Rule 3: Diabetic foot ulceration in last 3 years
+      - Rule 4: MI (first episode) in last 1 year
+      - Rule 5: Cerebral artery thrombosis (first episode) in last 1 year
+      - Rule 6: eGFR 15-29
+      - Rule 7: ACR > 70
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_dm_reg_pg2_hr_vs1
+            - on_dm_reg_pg2_hr_vs2
+            - on_dm_reg_pg2_hr_vs3
+            - on_dm_reg_pg2_hr_vs4
+            - on_dm_reg_pg2_hr_vs5
+            - on_dm_reg_pg2_hr_vs6
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

@@ -1,0 +1,19 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_dm_pg4_lr
+    description: |
+      Diabetes Register Priority Group 4 - Low Risk identification.
+
+      All patients on the diabetes register who are not in:
+      - Priority Group 1 (HRC)
+      - Priority Group 2 (HR)
+      - Priority Group 3A (MRa)
+      - Priority Group 3B (MRb)
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
