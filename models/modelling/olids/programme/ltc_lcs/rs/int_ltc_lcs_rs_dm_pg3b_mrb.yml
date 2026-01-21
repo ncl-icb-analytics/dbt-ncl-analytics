@@ -29,7 +29,7 @@ models:
             - on_dm_reg_priority_group_3b_mrb_vs6
             - on_dm_reg_priority_group_3b_mrb_vs7
             - on_dm_reg_priority_group_3b_mrb_vs8
-            - on_dm_reg_priority_group_3b_mrb_vs9
+            # vs9 excluded - Insulins drug group has no SNOMED mapping, using BNF 060101 fallback
             - on_dm_reg_priority_group_3b_mrb_vs10
             - on_dm_reg_priority_group_3b_mrb_vs11
             - on_dm_reg_priority_group_3b_mrb_vs12

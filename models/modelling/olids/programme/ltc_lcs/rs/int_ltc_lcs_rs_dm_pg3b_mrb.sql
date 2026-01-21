@@ -7,8 +7,9 @@
 -- - Rule 3: HbA1c 48-58 (cascade - go to next rule if passed, exclude if failed)
 -- - Rule 4: Erectile dysfunction (vs3) OR diabetic retinopathy (vs4) OR BMI >35 (vs5)
 --           OR diabetic neuropathy (vs6) OR diabetic foot moderate/high risk (vs7)
---           OR heart failure first episode (vs8) OR GLP-1/insulin in last 6 months (vs9, vs10, BNF 060101)
+--           OR heart failure first episode (vs8) OR GLP-1/insulin in last 6 months (vs10, BNF 060101)
 --           OR claudication/atherosclerosis (vs11) (include)
+--   Note: vs9 (Insulins) has no SNOMED mapping, using BNF 060101 fallback
 -- - Rule 5: eGFR 45-49 (vs12) (include)
 -- - Rule 6: ACR 3-30 (vs13) (include)
 -- - Rule 7: ABPM BP ≥140/90 (include, if failed → exclude)
@@ -93,13 +94,10 @@ rule_4_heart_failure as (
       and coalesce(is_review, false) = false
 ),
 
--- vs9 + vs10 = GLP-1 medications in last 6 months
--- Plus BNF 060101 for Insulins
+-- GLP-1 medications (vs10) and Insulins in last 6 months
+-- Note: vs9 (Insulins drug group) has no SNOMED mapping from terminology server,
+-- using BNF 060101 as fallback instead
 rule_4_glp1_medications as (
-    select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_dm_reg_priority_group_3b_mrb_vs9") }})
-    where order_date >= dateadd(month, -6, current_date())
-    union
     select person_id
     from ({{ get_ltc_lcs_medication_orders_latest("on_dm_reg_priority_group_3b_mrb_vs10") }})
     where order_date >= dateadd(month, -6, current_date())
