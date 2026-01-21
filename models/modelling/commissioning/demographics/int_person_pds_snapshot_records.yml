@@ -1,16 +1,27 @@
 version: 2
 models:
-- name: int_patient_pds_latest_record
-  description: Personal Demographics Service latest record for each patient in a combined table.
+- name: int_person_pds_snapshot_records
+  description: Personal Demographics Service snapshot records for each patient in a combined table.
   tests:
   - dbt_utils.at_least_one:
       column_name: sk_patient_id
+  - dbt_utils.unique_combination_of_columns:
+      combination_of_columns:
+      - snapshot_date
+      - sk_patient_id
   columns:
+  - name: snapshot_year
+    description: Financial year that the record corresponds to
+    tests:
+    - not_null
+  - name: snapshot_date
+    description: Date of the snapshot the record corresponds to
+    tests:
+    - not_null
   - name: sk_patient_id
     description: Surrogate key patient identifier (pseudonymised NHS number)
     tests:
     - not_null
-    - unique
   - name: record_person_start_date
     data_type: date
     description: Date that the latest record from the PDS Person table is valid from
@@ -32,6 +43,15 @@ models:
   - name: interpreter_required
     data_type: varchar
     description: Flag variable if the person requires an intepreter for appointments
+  - name: record_registered_start_date
+    data_type: date
+    description: Date that the latest record from the PDS Registered table is valid from
+  - name: record_registered_end_date
+    data_type: date
+    description: Date that the latest record from the PDS Registered table is valid until, NULL if still active
+  - name: practice_code
+    data_type: varchar
+    description: Organisation code of the person's registered GP Practice, NULL implies not registered to any practice
   - name: record_residence_start_date
     data_type: date
     description: Date that the latest record from the PDS Residence table is valid from
@@ -44,13 +64,3 @@ models:
   - name: lsoa_21
     data_type: varchar
     description: LSOA code of residence using the 2021 LSOA definitions, NULL implies no known residence
-  - name: practice_code
-    data_type: varchar
-    description: Organisation code of the person's registered GP Practice, NULL implies not registered to any practice
-  - name: record_registered_start_date
-    data_type: date
-    description: Date that the latest record from the PDS Registered table is valid from
-  - name: record_registered_end_date
-    data_type: date
-    description: Date that the latest record from the PDS Registered table is valid until, NULL if still active
-  
