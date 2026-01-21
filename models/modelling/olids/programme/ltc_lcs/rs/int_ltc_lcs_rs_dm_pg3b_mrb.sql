@@ -199,6 +199,11 @@ patient_rules as (
       and pg3a.person_id is null
 )
 
-select *
+select
+    person_id,
+    final_status,
+    'Diabetes' as condition,
+    '3b' as priority_group,
+    'MRb' as risk_group
 from patient_rules
 where final_status = 'Included'

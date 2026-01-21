@@ -101,6 +101,11 @@ patient_rules as (
 )
 
 -- Final result: included patients only
-select *
+select
+    person_id,
+    final_status,
+    'Diabetes' as condition,
+    '1' as priority_group,
+    'HRC' as risk_group
 from patient_rules
 where final_status = 'Included'
