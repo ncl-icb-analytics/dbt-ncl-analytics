@@ -6,6 +6,7 @@ select
 
         --Person information
         pds.year_month_of_birth,
+        pds.gender_code,
         dict_g.gender,
         pds.date_of_death,
         dict_pl.preferred_language,
