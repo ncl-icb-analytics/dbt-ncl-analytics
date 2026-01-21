@@ -1,0 +1,14 @@
+snapshots:
+  - name: fct_person_myria_high_risk_patients_published_snapshot
+    relation: ref("fct_person_myria_high_risk_patients_published")
+    description: >
+     Patient-level dataset identifying individuals with at least one high-risk condition
+      (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity flags.
+      Includes count of non-elective admissions with a focus on RFL.
+      Restricted to patients alive at time of running, >=18 years of age at last admission 
+      and at least one NEL admission at Barnet Hospital in the last 12 months.
+    config:
+      strategy: timestamp
+      unique_key: [patient_id]
+      updated_at: updated_at
+      hard_deletes: new_record 

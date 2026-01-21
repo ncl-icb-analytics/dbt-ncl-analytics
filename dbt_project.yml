@@ -183,3 +183,7 @@ seeds:
         LIST_SIZE: integer
         EXTRACT_DATE: varchar(10)
 
+snapshots:
+  ncl_analytics:
+    +database: "{{ 'MODELLING' if target.name in ['prod', 'snowflake-prod'] else 'DEV__MODELLING' }}"
+    +schema: "DBT_SNAPSHOTS"
