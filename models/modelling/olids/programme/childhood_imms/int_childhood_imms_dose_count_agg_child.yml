@@ -1,3 +1,7 @@
 models:
   - name: int_childhood_imms_dose_count_agg_child
     description: Intermediate table for aggregate counts of vaccinations by month for historical population aged under 10 years old.
+
+tests:
+    - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
