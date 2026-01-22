@@ -1,3 +1,7 @@
+{{
+    config(materialized = 'table')
+}}
+
 --CTE to get all invalid row ids
 with invalid_residence_rows as (
     select

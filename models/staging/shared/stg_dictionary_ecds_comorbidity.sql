@@ -1,3 +1,7 @@
+{{
+    config(materialized = 'table')
+}}
+
 select
     ecds_unique_id,
     refset_unique_id,

@@ -1,5 +1,5 @@
 {{
-    config(materialized = 'view')
+    config(materialized = 'table')
 }}
 
 WITH deduplication AS ( -- looks for expected unique columns and finds the maximum submission id for said unique columns

@@ -1,5 +1,5 @@
 {{
-    config(materialized = 'view')
+    config(materialized = 'table')
 }}
 
 with core_data as(
@@ -58,7 +58,6 @@ select core.primarykey_id
     , core.spell_patient_identity_ethnic_category
     , core.spell_patient_registration_general_practice
     , core.spell_patient_identity_spell_age
-    , core.spell_patient_identity_age_on_admission
     , core.spell_patient_identity_birth_year
     , core.spell_patient_identity_birth_month
 
