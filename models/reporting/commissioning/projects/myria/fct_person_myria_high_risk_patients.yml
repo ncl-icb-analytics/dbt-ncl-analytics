@@ -25,6 +25,15 @@ models:
 
       - name: gp_name
         description: "Registered GP practice name at most recent acute activity."
+      
+      - name: local_authority_pds
+        description: "Registered local authority on PDS."
+
+      - name: gp_code_pds
+        description: "Registered GP practice code on PDS."
+
+      - name: gp_name_pds
+        description: "Registered GP practice name on PDS."
 
       - name: age_at_most_recent_nel_admission
         description: "Age at most recent non-elective admission."
@@ -130,3 +139,6 @@ models:
 
       - name: frailty_falls
         description: "Flag (1/0) if patient has frailty or history of falls (ICD-10 R54, Z91.81)."
+
+      - name: is_on_pds
+        description: "Binary flag for whether patient is registered at an NCL GP on PDS at time of running (1 if yes, 0 if no)."
