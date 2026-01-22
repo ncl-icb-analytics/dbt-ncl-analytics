@@ -38,15 +38,25 @@
     )
 %}
 
-{%
+{% 
     set preventor_code_list = dbt_utils.get_column_values(
         ref('asthma_features_codelist'),
         'code',
         where="definition_name = 'non_salbutamol_inhaler_medication_SNOMED'"
     )
-
 %}
 
+{%
+    set date_from = "ADD_YEARS(CURRENT_DATE, -3), 'YYYY-MM-DD"
+%}
+
+
+
+{# 
+   ----------------------------
+   person ids - get person ids that match the inclusion/exclusion criteria
+   ---------------------------- 
+#}
 
 with persons as (
 
