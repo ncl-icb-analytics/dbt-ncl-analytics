@@ -63,7 +63,7 @@ select
         --Metadata information
         cast(current_timestamp as datetime) as _timestamp
         
-from {{ref('int_patient_pds_latest_record')}} pds
+from {{ref('int_person_pds_latest_record')}} pds
 
 left join {{ref('stg_dictionary_dbo_gender')}} as dict_g
 on pds.gender_code = dict_g.gender_code
