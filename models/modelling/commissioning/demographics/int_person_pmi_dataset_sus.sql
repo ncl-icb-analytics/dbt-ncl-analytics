@@ -142,11 +142,12 @@ lsoa_event as (
         ) as lsoa_field_rank
     
     from base
-    where code_date::date <= current_date()
     
     --Join to map LSOA 2011 codes to LSOA 2021
-    left join modelling.dbt_staging.stg_reference_lsoa2011_lsoa2021 map_lsoa
+    left join {{ref('stg_reference_lsoa2011_lsoa2021')}} map_lsoa
     on base.lsoa_11_at_event = map_lsoa.lsoa11_cd
+
+    where code_date::date <= current_date()
 
     qualify lsoa_field_rank = 1
 ),
