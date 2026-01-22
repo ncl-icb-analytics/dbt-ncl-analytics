@@ -10,27 +10,30 @@
    ---------------------------- 
 #}
 
-{% set asthma_code_list = dbt_utils.get_column_values(
+{% 
+    set asthma_code_list = dbt_utils.get_column_values(
     ref('raw_phenolab_aic_definitions'),
     'code',
     where="definition_name = 'asthma_SNOMED'"
 ) %}
 
-{% set tests_code_list = dbt_utils.get_column_values(
+{% 
+    set tests_code_list = dbt_utils.get_column_values(
     ref('asthma_features_codelist'),
     'code',
     where="definition_name IN ('spirometry_SNOMED', 'peak_expiratory_flow_rate_SNOMED')"
     )
 %}
 
-{% set act_code_list = dbt_utils.get_column_values(
+{% 
+    set act_code_list = dbt_utils.get_column_values(
     ref('asthma_features_codelist'),
     'code',
     where="definition_name = 'asthma_control_test_SNOMED'"
     )
 %}
 
-{%
+{%  
     set salbutamol_code_list = dbt_utils.get_column_values(
         ref('asthma_features_codelist'),
         'code',
@@ -112,6 +115,12 @@ salbutamol_repeats_id as (
     and recent_order_count_12m > 3
 )
 
+{# 
+   ----------------------------
+   generate feature flags - build boolean feature flags for every person in olids
+   ---------------------------- 
+#}
+
 select
     p.id as person_id,
 
@@ -149,5 +158,5 @@ left join diagnosis_no_act_ids act
     on p.id = act.person_id
 left join salbutamol_only_ids so
     on p.id = so.person_id   
-left join salbutamol_repeats sr
+left join salbutamol_repeats_id sr
     on p.id = sr.person_id 
