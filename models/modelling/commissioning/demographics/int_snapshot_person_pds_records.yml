@@ -1,6 +1,6 @@
 version: 2
 models:
-- name: int_person_pds_snapshot_records
+- name: int_snapshot_person_pds_records
   description: Personal Demographics Service snapshot records for each patient in a combined table.
   tests:
   - dbt_utils.at_least_one:
