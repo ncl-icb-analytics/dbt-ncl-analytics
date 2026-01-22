@@ -1,3 +1,4 @@
+-- depends_on: {{ ref('stg_olids_observation') }}
 {{
     config(
         materialized='table',
@@ -50,7 +51,7 @@
 %}
 
 {%
-    set date_from = "ADD_YEARS(CURRENT_DATE, -3), 'YYYY-MM-DD"
+    set date_from = "DATEADD(year, -3, CURRENT_DATE)"
 %}
 
 
@@ -73,7 +74,7 @@ diagnosis_no_testing_ids as (
     {{ get_olids_obs_persons_subset(
         inclusion_code_list = asthma_code_list,
         exclusion_code_list = tests_code_list,
-        date_from = {{ date_from }}
+        date_from = date_from
     ) }}
 
 ),
@@ -83,7 +84,7 @@ testing_no_diagnosis_ids as (
     {{ get_olids_obs_persons_subset(
         inclusion_code_list = tests_code_list,
         exclusion_code_list = asthma_code_list,
-        date_from = {{ date_from }}
+        date_from = date_from
     ) }}
 
 ),
@@ -93,7 +94,7 @@ diagnosis_no_act_ids as (
     {{ get_olids_obs_persons_subset(
         inclusion_code_list = asthma_code_list,
         exclusion_code_list = act_code_list,
-        date_from = {{ date_from }}
+        date_from = date_from
     ) }}
 
 ),
@@ -103,7 +104,7 @@ salbutamol_only_ids as (
     {{ get_olids_obs_persons_subset(
         inclusion_code_list = salbutamol_code_list,
         exclusion_code_list = preventor_code_list,
-        date_from = {{ date_from }}
+        date_from = date_from
     ) }}
 ),
 

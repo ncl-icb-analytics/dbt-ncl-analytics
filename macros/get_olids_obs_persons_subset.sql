@@ -1,4 +1,4 @@
-{% macro get_persons_subset(inclusion_code_list,
+{% macro get_olids_obs_persons_subset(inclusion_code_list,
                             exclusion_code_list,
                             date_from) %}
 
@@ -17,8 +17,10 @@
             Codes defining the exclusion criteria.
             If empty or null, no persons will be excluded.
 
-        date_from (string, YYYY-MM-DD):
-            Earliest clinical_effective_date to consider.
+        date_from (SQL expression):
+            A SQL date or timestamp expression used as the lower bound for
+            clinical_effective_date (e.g. DATEADD(year, -3, CURRENT_DATE)).
+            For earliest clinical_effective_date to consider.
 
       Output:
         A query returning a single column:
@@ -32,7 +34,7 @@
         from {{ ref('stg_olids_observation') }}
         {% if exclusion_code_list %}
             where mapped_concept_code in {{ to_sql_list(exclusion_code_list) }}
-            and clinical_effective_date >= '{{ date_from }}'
+            and clinical_effective_date >= {{ date_from }}
         {% else %}
         --No exclusions gives the empty set
             where 1 = 0
@@ -44,7 +46,7 @@
         from {{ ref('stg_olids_observation') }}
         {% if inclusion_code_list %}
             where mapped_concept_code in {{ to_sql_list(inclusion_code_list) }}
-            and clinical_effective_date >= '{{ date_from }}'
+            and clinical_effective_date >= {{ date_from }}
         {% else %}
         --No inclusions gives the empty set
             where 1 = 0
