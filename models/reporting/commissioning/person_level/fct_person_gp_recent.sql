@@ -11,7 +11,7 @@ base_encounters as (
         , code
         , display
     from {{ ref('int_gp_encounters_appt') }} gpa
-    left join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
+    inner join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
     where start_date between dateadd(month, -12, current_date()) and current_date()
 ), 
 gp_encounter_summary as(
