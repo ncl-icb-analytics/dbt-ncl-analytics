@@ -6,7 +6,8 @@
 -- `<CHAR><NUM><NUM>` or `<CHAR><NUM><NUM>.<NUM>`
 with
     final_icd_codes as (
-        select primarykey_id
+        select  diagnosis_id
+            ,primarykey_id
             ,icd_id 
             ,rownumber_id 
             ,episodes_id
@@ -16,7 +17,7 @@ with
 )
 
 select 
-    {{dbt_utils.generate_surrogate_key( ["f.primarykey_id", "f.rownumber_id", "f.episodes_id", "f.icd_id"])}} as diagnosis_id,
+    f.diagnosis_id,
     se.sk_patient_id,
     se.start_date as date,
     f.primarykey_id as visit_occurrence_id,
@@ -38,4 +39,4 @@ left join  {{ ref('stg_aic_base_athena_concept') }} c
     and c.vocabulary_id = 'ICD10'
 left join {{ ref("int_sus_ip_encounters") }} se on se.visit_occurrence_id = f.primarykey_id
 
-where se.sk_patient_id is not null
+where se.sk_patient_id is not null and se.sk_patient_id != '1'

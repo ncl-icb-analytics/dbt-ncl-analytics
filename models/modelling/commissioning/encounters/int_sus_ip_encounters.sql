@@ -26,6 +26,10 @@ dominant_episode_information as (
         care_professional_treatment_function
     from {{ ref('stg_sus_apc_spell_episodes') }}
     where dominant_episode_flag = '1'
+    qualify row_number() over (
+        partition by primarykey_id 
+        order by episodes_id -- TODO: check if this is correct, if multiple dominant episodes, should we take the first?
+    ) = 1
 )
 select 
     /* Information needed to derive standard encounter information */
@@ -47,7 +51,8 @@ select
     , datediff(day, core.spell_admission_date, coalesce(core.spell_discharge_date, current_date)) as duration_to_date -- inefficient? Change to calc only if no end date?
    
     /* Admission information */
-    , dict_adm_method.admission_method_name as admission_method
+    , core.spell_admission_method as spell_admission_method 
+    , dict_adm_method.admission_method_name as admission_method_name
     , dict_adm_method.admission_method_group as admission_method_group
     , dict_patient_class.patient_classification_name as admission_patient_classification
     , case 

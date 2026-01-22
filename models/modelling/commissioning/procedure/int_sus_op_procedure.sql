@@ -27,4 +27,4 @@ left join
     on replace(c.concept_code, '.', '') = f.code
     and c.vocabulary_id = 'OPCS4'
 
-left join {{ ref("int_sus_op_encounters") }} sa on sa.visit_occurrence_id = f.primarykey_id
+left join {{ ref("int_sus_op_appointments") }} sa on sa.visit_occurrence_id = f.primarykey_id

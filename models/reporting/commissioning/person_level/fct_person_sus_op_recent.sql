@@ -37,7 +37,7 @@ with op_encounter_summary as(
         , count(distinct treatment_function_code) as op_spec_12mo
         , count(distinct organisation_id) as op_prov_12mo
     from 
-        {{ ref('int_sus_op_encounters') }}
+        {{ ref('int_sus_op_appointments') }}
     where 
         start_date between dateadd(month, -12, current_date()) and current_date()
     group by 
@@ -49,7 +49,7 @@ count_of_prov_per_spec as(
         , treatment_function_code
         , count(distinct organisation_id) as op_prov_per_spec_12mo
     from 
-        {{ ref('int_sus_op_encounters') }}
+        {{ ref('int_sus_op_appointments') }}
     where 
         start_date between dateadd(month, -12, current_date()) and current_date()
         and treatment_function_code is not null 

@@ -42,7 +42,7 @@ select
     hg.hrg_subchapter
 from hrg_list hgl
 
-left join {{ ref("int_sus_op_encounters") }} sa on hgl.primarykey_id = sa.visit_occurrence_id
+left join {{ ref("int_sus_op_appointments") }} sa on hgl.primarykey_id = sa.visit_occurrence_id
 
 left join {{ ref("stg_dictionary_dbo_hrg") }} hg on hgl.code = hg.hrg_code
 

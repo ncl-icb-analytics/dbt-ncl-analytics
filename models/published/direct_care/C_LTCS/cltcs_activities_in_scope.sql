@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='view')
+        materialized='view',
+        enabled=false)
 }}
 
 
@@ -41,7 +42,7 @@ people_in_scope as (
 op_cohort as (
     select * 
     from 
-        {{ ref('int_sus_op_encounters') }} 
+        {{ ref('int_sus_op_appointments') }} 
     where 
         start_date between dateadd(month, -12, current_date()) and current_date()
         and sk_patient_id is not null

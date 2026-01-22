@@ -30,6 +30,6 @@ select
     , e.core_hrg_code
     , e.core_hrg_desc
     , e.core_hrg_chapter_desc
-from {{ ref('int_sus_op_encounters')}} e
+from {{ ref('int_sus_op_appointments')}} e
 inner join dialysis_encounters m 
     on e.visit_occurrence_id = m.visit_occurrence_id

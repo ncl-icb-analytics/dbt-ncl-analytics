@@ -1,8 +1,8 @@
 version: 2
 
 models:
-  - name: int_sus_op_encounters
-    description: "Event history for attended outpatient appointments from SUS data"
+  - name: int_sus_op_appointments
+    description: "Event history for outpatient encounters from SUS data"
     columns:
       - name: visit_occurrence_id
         data_type: number

@@ -1,7 +1,7 @@
 with specialty_filters as (
     -- Combine filter conditions to avoid repetition
     select distinct visit_occurrence_id
-    from {{ ref('int_sus_op_encounters')}}
+    from {{ ref('int_sus_op_appointments')}}
     WHERE (LEFT(core_hrg_code, 2) IN ('SB', 'SC')
         OR main_specialty_code IN ('800', '370')
         OR treatment_function_code IN ('800', '370'))
@@ -40,6 +40,6 @@ select
     , e.core_hrg_code
     , e.core_hrg_desc
     , e.core_hrg_chapter_desc
-from {{ ref('int_sus_op_encounters')}} e
+from {{ ref('int_sus_op_appointments')}} e
 inner join cancer_encounters m 
     on e.visit_occurrence_id = m.visit_occurrence_id
