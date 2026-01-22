@@ -1,0 +1,55 @@
+version: 2
+models:
+- name: int_person_pmi_dataset_pds
+  description: Intermediate table containing the demographic dimensions from the PDS dataset, one per patient based on most recent information
+  tests:
+  - dbt_utils.at_least_one:
+      column_name: pds_sk_patient_id
+  columns:
+  - name: pds_sk_patient_id
+    description: Surrogate key patient identifier (pseudonymised NHS number)
+    tests:
+    - not_null
+    - unique
+  - name: pds_gender_code
+    data_type: varchar
+    description: Gender code
+  - name: pds_gender_event_date
+    data_type: date
+    description: Record date from the PDS person table
+  - name: pds_date_of_birth
+    data_type: date
+    description: The month the person was born, set to the 1st of the month
+  - name: pds_dob_event_date
+    data_type: date
+    description: Record date from the PDS person table
+  - name: pds_date_of_death
+    data_type: date
+    description: Date the person died, NULL if no record of death
+  - name: pds_death_event_date
+    data_type: date
+    description: Record date from the pds person table
+  - name: pds_preferred_language_code
+    data_type: varchar
+    description: Shorthand code for preferred language if on record
+  - name: pds_preferred_language_event_date
+    data_type: date
+    description: Record date from the PDS person table
+  - name: pds_interpreter_required
+    data_type: varchar
+    description: Flag variable if the person requires an interpreter for appointments
+  - name: pds_interpreter_event_date
+    data_type: date
+    description: Record date from the PDS person table
+  - name: pds_lsoa_21
+    data_type: varchar
+    description: LSOA code of residence using the 2021 LSOA definitions, NULL implies no known residence or no residence
+  - name: pds_residence_event_date
+    data_type: date
+    description: Record date from the PDS address table
+  - name: pds_practice_code
+    data_type: varchar
+    description: Organisation code of the person's registered GP Practice, NULL implies not registered to any practice
+  - name: pds_registered_event_date
+    data_type: date
+    description: Record date from the PDS patient care practice table

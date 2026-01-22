@@ -1,0 +1,43 @@
+version: 2
+models:
+- name: int_person_pmi_dataset_sus
+  description: Intermediate table containing the demographic dimensions from the SUS dataset, one per patient
+  tests:
+  - dbt_utils.at_least_one:
+      column_name: sus_sk_patient_id
+  columns:
+  - name: sus_sk_patient_id
+    description: Surrogate key patient identifier (pseudonymised NHS number)
+    tests:
+    - not_null
+    - unique
+  - name: sus_gender_code
+    data_type: varchar
+    description: Gender code, prioritising non-unknown and more recent values
+  - name: sus_gender_event_date
+    data_type: date
+    description: Date of the event that this field value was taken from
+  - name: sus_date_of_birth
+    data_type: date
+    description: Estimated (month of) date of birth by using the date of the earliest record at the patient's current age
+  - name: sus_dob_event_date
+    data_type: date
+    description: Date of the event that this field value was taken from
+  - name: sus_ethnicity_code
+    data_type: varchar
+    description: Code for the person's ethnicity
+  - name: sus_ethnicity_event_date
+    data_type: date
+    description: Date of the event that this field value was taken from
+  - name: sus_lsoa_21
+    data_type: varchar
+    description: LSOA code of residence using the 2021 LSOA definitions, NULL implies no known residence
+  - name: sus_residence_event_date
+    data_type: date
+    description: Date of the event that this field value was taken from
+  - name: sus_practice_code
+    data_type: varchar
+    description: Organisation code of the person's registered GP Practice, NULL implies not registered to any practice
+  - name: sus_registered_event_date
+    data_type: date
+    description: Date of the event that this field value was taken from

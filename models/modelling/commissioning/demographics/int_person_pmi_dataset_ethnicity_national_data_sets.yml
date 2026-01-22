@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: int_person_pmi_dataset_ethnicity_national_data_sets
+    description: >
+      Reduces the existing ethnicity national data sets to the required fields for integration into int_person_pmi_combined file
+    columns:
+      - name: eth_sk_patient_id
+        description: Surrogate key for patient
+        data_tests:
+          - not_null
+          - unique
+
+      - name: eth_ethnicity_code
+        description: Ethnicity code from national data sets
+
+      - name: eth_ethnicity_event_date
+        description: Date of record in source dataset
