@@ -1,7 +1,7 @@
 with specialty_filters as (
     -- Combine filter conditions to avoid repetition
     select visit_occurrence_id
-    from {{ ref('int_commissioning_observations')}}
+    from {{ ref('int_sus_op_appointments')}}
     where 
         (observation_vocabulary = 'HRG' and 
             (observation_concept_code in ('LA08E', 'LE01A', 'LE01B', 'LE02A',  'LE02B'))) -- latter are acute injury diaysys? 
@@ -30,6 +30,6 @@ select
     , e.core_hrg_code
     , e.core_hrg_desc
     , e.core_hrg_chapter_desc
-from {{ ref('int_sus_op_encounters')}} e
+from {{ ref('int_sus_op_appointments')}} e
 inner join dialysis_encounters m 
     on e.visit_occurrence_id = m.visit_occurrence_id
