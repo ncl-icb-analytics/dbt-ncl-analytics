@@ -254,8 +254,6 @@ sources:
       data_type: TEXT
     - name: EXCLUDE_CHILDREN
       data_type: BOOLEAN
-    - name: IS_REFSET
-      data_type: BOOLEAN
   - name: LTC_LCS_FAILED_CODES
     identifier: '"LTC_LCS_FAILED_CODES"'
     columns:

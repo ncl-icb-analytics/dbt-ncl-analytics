@@ -9,6 +9,5 @@ select
     "SNOMED_CODE" as snomed_code,
     "DISPLAY" as display,
     "SOURCE" as source,
-    "EXCLUDE_CHILDREN" as exclude_children,
-    "IS_REFSET" as is_refset
+    "EXCLUDE_CHILDREN" as exclude_children
 from {{ source('reference_terminology', 'LTC_LCS_EXPANDED_CONCEPTS') }}
