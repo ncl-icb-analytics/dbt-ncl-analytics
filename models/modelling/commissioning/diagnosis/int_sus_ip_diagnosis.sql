@@ -6,7 +6,8 @@
 -- `<CHAR><NUM><NUM>` or `<CHAR><NUM><NUM>.<NUM>`
 with
     final_icd_codes as (
-        select primarykey_id
+        select  diagnosis_id
+            ,primarykey_id
             ,icd_id 
             ,rownumber_id 
             ,episodes_id
@@ -16,7 +17,7 @@ with
 )
 
 select 
-    {{dbt_utils.generate_surrogate_key( ["f.primarykey_id", "f.rownumber_id", "f.episodes_id", "f.icd_id"])}} as diagnosis_id,
+    f.diagnosis_id,
     se.sk_patient_id,
     se.start_date as date,
     f.primarykey_id as visit_occurrence_id,
