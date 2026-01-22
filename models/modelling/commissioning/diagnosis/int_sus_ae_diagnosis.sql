@@ -6,12 +6,14 @@
 -- `<CHAR><NUM><NUM>` or `<CHAR><NUM><NUM>.<NUM>`
 with
     diag_codes as (
-        select primarykey_id
-            ,snomed_id
-            ,rownumber_id 
-            ,code
+        select diagnosis_id
+        , primarykey_id
+        , snomed_id
+        , rownumber_id 
+        , code
         from {{ ref("stg_sus_ae_clinical_diagnoses_snomed") }} 
         where code is not null 
+        qualify row_number() over (partition by primarykey_id, snomed_id, code order by rownumber_id) = 1
 ),
     final_icd_codes as (
         select snomed_code as code
@@ -23,8 +25,7 @@ with
         from {{ ref('stg_dictionary_ecds_diagnosis')}} )
     
 
-select 
- {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.rownumber_id", "f.snomed_id"]) }} as diagnosis_id,
+select f.diagnosis_id,
     sa.sk_patient_id,
     f.primarykey_id as visit_occurrence_id,
     sa.start_date as date,
