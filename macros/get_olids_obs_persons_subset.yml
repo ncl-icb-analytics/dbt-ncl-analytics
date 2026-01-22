@@ -1,0 +1,14 @@
+version: 2
+
+macros:
+  - name: get_olids_obs_persons_subset
+    description: >
+      Returns a set of person_ids who meet inclusion criteria
+      and do not meet exclusion criteria based on clinical observations from olids_observation table.
+    arguments:
+      - name: inclusion_code_list
+        description: List of concept codes defining inclusion criteria
+      - name: exclusion_code_list
+        description: List of concept codes defining exclusion criteria
+      - name: date_from
+        description: Earliest clinical_effective_date to consider (YYYY-MM-DD)

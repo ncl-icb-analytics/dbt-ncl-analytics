@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: int_asthma_management
+    description: >
+      Feature table containing person-level flags identifying gaps
+      between asthma diagnosis, respiratory testing, and asthma control testing. 
+      Looks back three years from todays date.
+    columns:
+      - name: person_id
+        description: Unique identifier for a person
+        tests:
+          - not_null
+          - unique
+
+      - name: testing_no_diagnosis
+        description: >
+          True if the person has respiratory testing but no asthma diagnosis
+          
+
+      - name: diagnosis_no_testing
+        description: >
+          True if the person has an asthma diagnosis but no respiratory testing
+          
+
+      - name: diagnosis_no_act
+        description: >
+          True if the person has an asthma diagnosis but no asthma control test
+          
+
+      - name: salbutamol_only
+        description: >
+          True if the person has been prescribed only salbutamol inhalers but
+          no other asthma inhalers 
