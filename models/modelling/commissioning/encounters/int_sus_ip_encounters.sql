@@ -47,7 +47,8 @@ select
     , datediff(day, core.spell_admission_date, coalesce(core.spell_discharge_date, current_date)) as duration_to_date -- inefficient? Change to calc only if no end date?
    
     /* Admission information */
-    , dict_adm_method.admission_method_name as admission_method
+    , core.spell_admission_method as spell_admission_method 
+    , dict_adm_method.admission_method_name as admission_method_name
     , dict_adm_method.admission_method_group as admission_method_group
     , dict_patient_class.patient_classification_name as admission_patient_classification
     , case 

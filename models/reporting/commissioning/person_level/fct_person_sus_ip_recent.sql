@@ -13,6 +13,8 @@ apc_encounter_summary as(
                 then visit_occurrence_id end) as apc_1mo
         , count(distinct visit_occurrence_id) as apc_12mo 
         , sum(duration) as apc_los_12mo -- TO DO: add inferred los to open spells in int_table
+        , count(distinct case when left(spell_admission_method, 1) = '2' -- Non-elective - emergency
+                then visit_occurrence_id end) as apc_nel_12mo
     from base_encounters
     group by 
         sk_patient_id
@@ -24,6 +26,7 @@ SELECT
     , zeroifnull(apc_1mo) as apc_1mo
     , zeroifnull(apc_12mo) as apc_12mo
     , zeroifnull(apc_los_12mo) as apc_los_12mo
+    , zeroifnull(apc_nel_12mo) as apc_nel_12mo
 from 
     apc_encounter_summary as a
 

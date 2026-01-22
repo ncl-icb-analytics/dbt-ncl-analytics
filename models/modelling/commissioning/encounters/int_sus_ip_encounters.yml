@@ -58,10 +58,14 @@ models:
       - name: duration_to_date
         data_type: number
         description: "Length of stay in days, including ongoing stays calculated to current date"
-
+     
       - name: admission_method
         data_type: varchar
-        description: "Method of admission"
+        description: "Method of admission of the spell (code)"
+      
+      - name: admission_method
+        data_type: varchar
+        description: "Method of admission of the spell (name)"
 
       - name: admission_method_group
         data_type: varchar
