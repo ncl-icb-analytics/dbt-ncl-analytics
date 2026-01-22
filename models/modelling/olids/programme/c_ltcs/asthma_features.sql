@@ -57,44 +57,44 @@ with persons as (
 
 diagnosis_no_testing_ids as (
      -- Persons with asthma diagnosis but no spirometry / PEFR testing
-    {{ get_persons_subset(
+    {{ get_olids_obs_persons_subset(
         inclusion_code_list = asthma_code_list,
         exclusion_code_list = tests_code_list,
-        date_from = '2023-01-01'
+        date_from = {{ date_from }}
     ) }}
 
 ),
 
 testing_no_diagnosis_ids as (
     -- Persons with spirometry / PEFR testing but no asthma diagnosis
-    {{ get_persons_subset(
+    {{ get_olids_obs_persons_subset(
         inclusion_code_list = tests_code_list,
         exclusion_code_list = asthma_code_list,
-        date_from = '2023-01-01'
+        date_from = {{ date_from }}
     ) }}
 
 ),
 
 diagnosis_no_act_ids as (
      -- Persons with asthma diagnosis but no asthma control test
-    {{ get_persons_subset(
+    {{ get_olids_obs_persons_subset(
         inclusion_code_list = asthma_code_list,
         exclusion_code_list = act_code_list,
-        date_from = '2023-01-01'
+        date_from = {{ date_from }}
     ) }}
 
 ),
 
 salbutamol_only_ids as (
     -- Persons with only salbutamol prescriptions (no preventer medications)
-    {{ get_persons_subset(
+    {{ get_olids_obs_persons_subset(
         inclusion_code_list = salbutamol_code_list,
         exclusion_code_list = preventor_code_list,
-        date_from = '2023-01-01'
+        date_from = {{ date_from }}
     ) }}
 ),
 
-salbutamol_repeats as (
+salbutamol_repeats_id as (
     -- Persons with only > 3 salbutamol prescriptions in 12 months
     select distinct person_id
     from {{ ref('int_asthma_medications_12m') }}
