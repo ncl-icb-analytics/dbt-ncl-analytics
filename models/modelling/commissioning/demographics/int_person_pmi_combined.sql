@@ -78,8 +78,8 @@ date_of_death_field as (
             when pds_date_of_death is not null then 'pds'
             else null
         end as death_source,
-        pds_date_of_death,
-        pds_death_event_date
+        pds_date_of_death as date_of_death,
+        pds_death_event_date as death_event_date
         
     from combined
 ),
@@ -126,8 +126,8 @@ interpreter_required_field as (
             when pds_interpreter_required is not null then 'pds'
             else null
         end as interpreter_required_source,
-        pds_interpreter_required,
-        pds_interpreter_event_date
+        pds_interpreter_required as interpreter_required,
+        pds_interpreter_event_date as interpreter_event_date
         
     from combined
 ),
@@ -185,8 +185,8 @@ select
     dob_field.date_of_birth,
     dob_field.dob_event_date,
     date_of_death_field.death_source,
-    date_of_death_field.pds_date_of_death,
-    date_of_death_field.pds_death_event_date,
+    date_of_death_field.date_of_death,
+    date_of_death_field.death_event_date,
     ethnicity_field.ethnicity_source,
     ethnicity_field.ethnicity_code,
     ethnicity_field.ethnicity_event_date,
@@ -194,14 +194,18 @@ select
     preferred_language_field.preferred_language_code,
     preferred_language_field.preferred_language_event_date,
     interpreter_required_field.interpreter_required_source,
-    interpreter_required_field.pds_interpreter_required,
-    interpreter_required_field.pds_interpreter_event_date,
+    interpreter_required_field.interpreter_required,
+    interpreter_required_field.interpreter_event_date,
     lsoa_field.lsoa_source,
     lsoa_field.lsoa_21,
     lsoa_field.residence_event_date,
     practice_code_field.practice_source,
     practice_code_field.practice_code,
-    practice_code_field.registered_event_date
+    practice_code_field.registered_event_date,
+    ncl_flags.flag_current_ncl_registered,
+    ncl_flags.record_registered_start_date,
+    ncl_flags.flag_current_ncl_residence,
+    ncl_flags.record_residence_start_date
 
 from ids
 
@@ -228,3 +232,6 @@ on ids.sk_patient_id = lsoa_field.sk_patient_id
 
 left join practice_code_field
 on ids.sk_patient_id = practice_code_field.sk_patient_id
+
+left join {{ref('int_person_pds_ncl_population_flags')}} ncl_flags
+on ids.sk_patient_id = ncl_flags.sk_patient_id

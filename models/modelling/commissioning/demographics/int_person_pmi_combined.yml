@@ -32,10 +32,10 @@ models:
       - name: death_source
         description: Dataset used for field
 
-      - name: pds_date_of_death
+      - name: date_of_death
         description: Date of death (NULL if no recorded death or unknown)
 
-      - name: pds_death_event_date
+      - name: death_event_date
         description: Date of record in source dataset
 
       - name: ethnicity_source
@@ -59,10 +59,10 @@ models:
       - name: interpreter_required_source
         description: Dataset used for field
 
-      - name: pds_interpreter_required
+      - name: interpreter_required
         description: Whether interpreter is required
 
-      - name: pds_interpreter_event_date
+      - name: interpreter_event_date
         description: Date of record in source dataset
 
       - name: lsoa_source
