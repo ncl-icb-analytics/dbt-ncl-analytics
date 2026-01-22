@@ -1,6 +1,6 @@
 version: 2
 models:
-- name: fct_snapshot_person_pds_demographics
+- name: dim_snapshot_person_pds_demographics
   description: Annual snapshots to create a demographic lookup table for the population based on the PDS dataset. Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
   tests:
   - dbt_utils.at_least_one:
