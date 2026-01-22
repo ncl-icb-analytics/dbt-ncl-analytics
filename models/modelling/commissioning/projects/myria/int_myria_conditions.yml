@@ -15,10 +15,31 @@ models:
           - not_null
 
       - name: hospital_number
-        description: "Trust-provided patient identifier. (local patient identifier)"
+        description: "Trust-provided patient identifier. (local patient identifier). Taken from most recent BH admission."
 
       - name: local_authority
         description: "Most recent registered local authority based on GP practice."
+
+      - name: gp_code
+        description: "Registered GP practice code at most recent acute activity."
+
+      - name: gp_name
+        description: "Registered GP practice name at most recent acute activity."
+
+      - name: local_authority_pds
+        description: "Registered local authority on PDS."
+
+      - name: gp_code_pds
+        description: "Registered GP practice code on PDS."
+
+      - name: gp_name_pds
+        description: "Registered GP practice name on PDS."
+
+      - name: age_at_most_recent_nel_admission
+        description: "Age at most recent non-elective admission."
+
+      - name: most_recent_nel_admission_date
+        description: "Date of most recent non-elective admission."
 
       - name: barnet_hospital_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at Barnet Hospital in last 12 months."
@@ -120,3 +141,6 @@ models:
 
       - name: frailty_falls
         description: "Flag (1/0) if patient has frailty or history of falls (ICD-10 R54, Z91.81)."
+      
+      - name: is_on_pds
+        description: "Binary flag for whether patient is registered at an NCL GP on PDS at time of running (1 if yes, 0 if no)."

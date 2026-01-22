@@ -6,19 +6,57 @@ with most_recent_bh_admission as -- gets most recent non-elective BH admission f
     a.patient_id,
     a.local_patient_identifier,
     a.primary_id as most_recent_bh_primary_id,
-    ROW_NUMBER() OVER(PARTITION BY a.patient_id ORDER BY a.activity_date desc, a.diag_n desc) as appt_order
+    ROW_NUMBER() OVER(PARTITION BY a.patient_id ORDER BY a.activity_date desc, a.diag_n asc) as appt_order
     FROM {{ ref("int_myria_attendances_diagnoses") }} a
     WHERE
     a.provider_site_code = 'RAL26' -- Barnet Hospital
     AND a.POD IN ('NEL-ZLOS','NEL-LOS+1')
+    ),
+most_recent_nel_admission as
+(
+    SELECT
+    a.patient_id,
+    a.local_patient_identifier,
+    a.activity_date,
+    a.age_at_event,
+    a.primary_id as most_recent_nel_primary_id,
+    ROW_NUMBER() OVER(PARTITION BY a.patient_id ORDER BY a.activity_date desc, a.diag_n asc) as appt_order
+    FROM {{ ref("int_myria_attendances_diagnoses") }} a
+    WHERE
+    a.POD IN ('NEL-ZLOS','NEL-LOS+1')
+    ),
+pds_patient_check as
+(
+    SELECT
+    pp.*,
+    gp.practice_code,
+    gp.practice_name,
+    gp.local_authority
+    FROM {{ ref("stg_pds_pds_person") }} pp
+    LEFT JOIN {{ref('stg_pds_pds_reason_for_removal')}} rfr
+        ON rfr.sk_patient_id = pp.sk_patient_id 
+        AND pp.event_from_date <= rfr.event_from_date -- Reason for removal must start after the record exists
+    INNER JOIN {{ ref("stg_pds_pds_patient_care_practice") }} pc
+        ON pp.sk_patient_id = pc.sk_patient_id
+        AND pp.date_of_death IS NULL -- patient not dead
+        AND pp.event_to_date IS NULL
+        AND pc.event_to_date IS NULL
+    LEFT JOIN {{ ref("dim_practice_neighbourhood") }} gp ON pc.practice_code = gp.practice_code -- find most recent practice information
+    WHERE
+    rfr.reason_for_removal IS NULL
+    AND gp.practice_code IS NOT NULL
     )
-
  SELECT 
     att_dx.patient_id,
     bh.local_patient_identifier as hospital_number,
     TO_VARCHAR(ARRAY_AGG(NCL.LOCAL_AUTHORITY) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS local_authority, -- gets most recent registered local authority
     TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_CODE) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS gp_code,
     TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_NAME) WITHIN GROUP (ORDER BY fin_year DESC, fin_month DESC)[0]) AS gp_name,
+    ppc.local_authority as local_authority_pds,
+    ppc.practice_code as gp_code_pds,
+    ppc.practice_name as gp_name_pds,
+    nel.age_at_event AS age_at_most_recent_nel_admission,
+    nel.activity_date AS most_recent_nel_admission_date,
     CASE -- counts distinct attendance IDs and then flags as 1 if there is at least 1 non-elective attendance at Barnet Hospital in the period
         WHEN COUNT(DISTINCT 
                     CASE 
@@ -218,7 +256,9 @@ with most_recent_bh_admission as -- gets most recent non-elective BH admission f
     MAX(CASE WHEN LEFT(UPPER(diag_code), 2) IN ('I1') THEN 1 ELSE 0 END) AS hypertension, 
     
     -- R54 - Age-related physical debility, Z91.81 - History of falling
-    MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('R54') OR UPPER(diag_code) IN ('Z91.81', 'Z9181') THEN 1 ELSE 0 END) AS frailty_falls, 
+    MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('R54') OR UPPER(diag_code) IN ('Z91.81', 'Z9181') THEN 1 ELSE 0 END) AS frailty_falls,
+
+    CASE WHEN ppc.sk_patient_id IS NULL THEN 0 ELSE 1 END AS is_on_pds,
 
     CURRENT_TIMESTAMP() AS refresh_date
 FROM 
@@ -231,6 +271,9 @@ LEFT JOIN
     ON att_dx.patient_id = death.sk_patient_id -- check whether patient dead as of running model
 LEFT JOIN most_recent_bh_admission bh ON att_dx.patient_id = bh.patient_id
     AND bh.appt_order = 1
+LEFT JOIN most_recent_nel_admission nel ON att_dx.patient_id = nel.patient_id
+    AND nel.appt_order = 1
+LEFT JOIN pds_patient_check ppc ON att_dx.patient_id = ppc.sk_patient_id
 WHERE
     att_dx.patient_id IS NOT null
     AND death.sk_patient_id IS null -- remove dead patients

@@ -3,9 +3,14 @@
 select 
     patient_id,
     hospital_number,
+    local_authority,
     gp_code,
     gp_name,
-    local_authority,
+    local_authority_pds,
+    gp_code_pds,
+    gp_name_pds,
+    age_at_most_recent_nel_admission,
+    most_recent_nel_admission_date,
     barnet_hospital_count,
     barnet_hospital_flag,
     RFL_ex_BH_count,
@@ -58,6 +63,7 @@ select
         osteoporosis+
         rheumatoid_arthritis+
         chronic_liver_disease as total_high_risk_conditions,
+    is_on_pds,
     refresh_date as data_source_refresh_date,
     CURRENT_TIMESTAMP() as table_refresh_date
 from 
@@ -65,6 +71,7 @@ from
 where
     barnet_hospital_count >= 1
     AND local_authority IN ('Barnet','Enfield')
+    AND age_at_most_recent_nel_admission >= 18
     AND
     (heart_failure = 1 
     or copd = 1 
