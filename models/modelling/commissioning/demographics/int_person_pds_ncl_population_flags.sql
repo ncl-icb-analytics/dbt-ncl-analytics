@@ -14,6 +14,7 @@ select
         --The GP registration has no end date (active)
         pds.record_registered_end_date is null
     ) as flag_current_ncl_registered,
+    pds.record_registered_start_date as record_registered_start_date,
 
     --Flag for current NCL Resident population
     (
@@ -25,7 +26,8 @@ select
 
         --The residence record has no end date (active)
         pds.record_residence_end_date is null
-    ) as flag_current_ncl_residence
+    ) as flag_current_ncl_residence,
+    pds.record_residence_start_date as record_residence_start_date
     
 from {{ref('int_person_pds_latest_record')}} pds
 
@@ -33,4 +35,4 @@ left join {{ref('stg_reference_lookup_ncl_gp_practice')}} gp_lu
 on pds.practice_code = gp_lu.gp_practice_code
 
 left join {{ref('stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025')}} geo
-on pds.lsoa_21 = geo.lsoa_2021_code;
+on pds.lsoa_21 = geo.lsoa_2021_code
