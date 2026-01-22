@@ -3,13 +3,14 @@ models:
 - name: stg_sus_ae_clinical_diagnoses_snomed
   description: SUS A&E clinical diagnoses (SNOMED CT)
   tests:
-  - dbt_utils.unique_combination_of_columns:
-      combination_of_columns:
-      - primarykey_id
-      - snomed_id
   - dbt_expectations.expect_table_row_count_to_be_between:
       min_value: 1
   columns:
+  - name: diagnosis_id
+    description: Unique identifier for this diagnosis entry
+    tests:
+    - not_null
+    - unique
   - name: primarykey_id
     description: Primary key from main A&E attendance (FK)
     tests:
