@@ -87,5 +87,5 @@ SELECT
      ) AS hx_flake
 
 FROM {{ ref('dim_person_birth_death') }} bd
-
+WHERE bd.sk_patient_id IS NOT NULL
 ORDER BY bd.person_id
