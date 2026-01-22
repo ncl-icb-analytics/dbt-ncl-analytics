@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: asthma_features
+  - name: int_asthma_management
     description: >
       Feature table containing person-level flags identifying gaps
       between asthma diagnosis, respiratory testing, and asthma control testing. 
