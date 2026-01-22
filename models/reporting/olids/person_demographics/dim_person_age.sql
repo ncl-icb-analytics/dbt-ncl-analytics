@@ -156,8 +156,9 @@ SELECT
     END AS age_life_stage,
 
     -- UK school year/stage based on age at academic year start
-    -- Shows Reception to Year 13 (all school years), excludes pre-school and post-secondary
+    -- Shows Early Years (ages 2-3), Reception to Year 13, excludes under 2 and post-secondary
     CASE
+        WHEN ac.age >= 2 AND ac.age < 4 THEN 'Early Years'
         WHEN ac.age = 4 OR (ac.age = 5 AND DATEDIFF(month, ac.birth_date_approx, DATE_FROM_PARTS(ac.academic_year_start, 9, 1)) < 60) THEN 'Reception'
         WHEN ac.age = 5 OR (ac.age = 6 AND DATEDIFF(month, ac.birth_date_approx, DATE_FROM_PARTS(ac.academic_year_start, 9, 1)) < 72) THEN 'Year 1'
         WHEN ac.age = 6 OR (ac.age = 7 AND DATEDIFF(month, ac.birth_date_approx, DATE_FROM_PARTS(ac.academic_year_start, 9, 1)) < 84) THEN 'Year 2'
@@ -172,7 +173,7 @@ SELECT
         WHEN ac.age = 15 OR (ac.age = 16 AND DATEDIFF(month, ac.birth_date_approx, DATE_FROM_PARTS(ac.academic_year_start, 9, 1)) < 192) THEN 'Year 11'
         WHEN ac.age = 16 OR (ac.age = 17 AND DATEDIFF(month, ac.birth_date_approx, DATE_FROM_PARTS(ac.academic_year_start, 9, 1)) < 204) THEN 'Year 12'
         WHEN ac.age = 17 OR (ac.age = 18 AND DATEDIFF(month, ac.birth_date_approx, DATE_FROM_PARTS(ac.academic_year_start, 9, 1)) < 216) THEN 'Year 13'
-        ELSE NULL  -- Pre-school, Nursery, Post-secondary, Unknown all become NULL
+        ELSE NULL  -- Under 2, Post-secondary, Unknown all become NULL
     END AS age_school_stage,
 
     -- Broader education level category
