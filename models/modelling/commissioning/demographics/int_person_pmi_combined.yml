@@ -56,7 +56,7 @@ models:
       - name: preferred_language_event_date
         description: Date of record in source dataset
 
-      - name: interpreter_source
+      - name: interpreter_required_source
         description: Dataset used for field
 
       - name: pds_interpreter_required
