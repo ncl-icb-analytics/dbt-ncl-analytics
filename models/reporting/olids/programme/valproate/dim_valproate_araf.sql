@@ -14,7 +14,7 @@ WITH person_level_araf_aggregation AS (
             CASE WHEN araf_concept_code = '1366401000000107' THEN araf_event_date END
         ) AS latest_old_araf_date,
         max(
-            CASE WHEN araf_event_date >= '2024-02-01' THEN araf_event_date END
+            CASE WHEN araf_event_date >= DATE '2024-02-01' THEN araf_event_date END
         ) AS latest_new_araf_date,
         boolor_agg(is_specific_araf_form_code)
             AS has_specific_araf_form_meeting_lookback,
