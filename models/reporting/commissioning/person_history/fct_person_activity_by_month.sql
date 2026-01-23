@@ -158,6 +158,20 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     group by
         sk_patient_id, date_trunc('month', start_date)
 )
+, epd_pc_meds_summary as(
+    select
+        sk_patient_id
+        , date_trunc('month', processing_period_date) as activity_month
+        , 'Meds' as activity_type
+        , null::varchar as activity_subtype
+        , count(*) as encounters
+        , sum(item_actual_cost) as cost
+        , null::varchar as duration 
+    from 
+        {{ ref('int_epd_pc_meds') }}
+    group by
+        sk_patient_id, date_trunc('month', processing_period_date)
+)
 , combined as(
     select * from ae_encounter_summary
     union all
@@ -172,6 +186,8 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     select * from mhsds_spell_encounter_summary
     union all
     select * from mhsds_carecontact_encounter_summary
+    union all
+    select * from epd_pc_meds_summary
 )
 
 select 
@@ -187,12 +203,14 @@ select
     , sum(case when activity_type = 'PrimaryCare' then encounters else 0 end) as gp_encounters
     , sum(case when activity_type = 'CommunityCareContact' then encounters else 0 end) as cc_encounters
     , sum(case when activity_type = 'MentalHealthServices' then encounters else 0 end) as mh_encounters
+    , sum(case when activity_type = 'Meds' then encounters else 0 end) as meds_encounters
     -- cost
     , sum(case when activity_type = 'A&E' then cost else 0 end) as ae_cost
     , sum(case when activity_type = 'Inpatient' then cost else 0 end) as ip_cost
     , sum(case when activity_type = 'Outpatient' then cost else 0 end) as op_cost
     , sum(case when activity_type = 'CommunityCareContact' then cost else 0 end) as cc_cost
     , sum(case when activity_type = 'MentalHealthServices' then cost else 0 end) as mh_cost
+    , sum(case when activity_type = 'Meds' then cost else 0 end) as meds_cost
     -- duration
     , sum(case when activity_type = 'A&E' then duration else 0 end) as ae_duration
     , sum(case when activity_type = 'Inpatient' then duration else 0 end) as ip_duration
