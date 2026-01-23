@@ -14,3 +14,6 @@ models:
     description: LSOA code
   - name: msoa
     description: MSOA code
+  tests:
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1

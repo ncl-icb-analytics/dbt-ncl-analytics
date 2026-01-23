@@ -1,0 +1,56 @@
+version: 2
+models:
+- name: int_person_pds_latest_record
+  description: Personal Demographics Service latest record for each patient in a combined table.
+  tests:
+  - dbt_utils.at_least_one:
+      column_name: sk_patient_id
+  columns:
+  - name: sk_patient_id
+    description: Surrogate key patient identifier (pseudonymised NHS number)
+    tests:
+    - not_null
+    - unique
+  - name: record_person_start_date
+    data_type: date
+    description: Date that the latest record from the PDS Person table is valid from
+  - name: record_person_end_date
+    data_type: date
+    description: Date that the latest record from the PDS Person table is valid until, NULL if still active
+  - name: year_month_of_birth
+    data_type: date
+    description: The month the person was born, set to the 1st of the month to save as a DATE variable
+  - name: gender_code
+    data_type: varchar
+    description: Code for the person's gender, map using the dictionary.dbo tables
+  - name: date_of_death
+    data_type: date
+    description: Date the person died, NULL if no record of death
+  - name: preferred_language_code
+    data_type: varchar
+    description: Shorthand name for preferred language if on record
+  - name: interpreter_required
+    data_type: varchar
+    description: Flag variable if the person requires an intepreter for appointments
+  - name: record_residence_start_date
+    data_type: date
+    description: Date that the latest record from the PDS Residence table is valid from
+  - name: record_residence_end_date
+    data_type: date
+    description: Date that the latest record from the PDS Residence table is valid until, NULL if still active
+  - name: postcode_sector
+    data_type: varchar
+    description: First half of the postcode for the person's residence, NULL implies no known residence
+  - name: lsoa_21
+    data_type: varchar
+    description: LSOA code of residence using the 2021 LSOA definitions, NULL implies no known residence
+  - name: practice_code
+    data_type: varchar
+    description: Organisation code of the person's registered GP Practice, NULL implies not registered to any practice
+  - name: record_registered_start_date
+    data_type: date
+    description: Date that the latest record from the PDS Registered table is valid from
+  - name: record_registered_end_date
+    data_type: date
+    description: Date that the latest record from the PDS Registered table is valid until, NULL if still active
+  

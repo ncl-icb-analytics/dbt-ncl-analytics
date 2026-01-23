@@ -3,8 +3,8 @@ select
     postcode_8_chars,
     postcode_single_space_e_gif,
     postcode_no_space,
-    date_of_introduction,
-    date_of_termination,
+    cast(date_of_introduction as date) as date_of_introduction,
+    cast(date_of_termination as date) as date_of_termination,
     grid_ref_easting,
     grid_ref_northing,
     local_authority_district_unitary_authority,
@@ -28,6 +28,5 @@ select
     postcode,
     lsoa,
     msoa,
-    sk_pseudo_postcode_id,
-    sk_postcode_id_1
+    sk_pseudo_postcode_id
 from {{ ref('raw_dictionary_dbo_postcode') }}

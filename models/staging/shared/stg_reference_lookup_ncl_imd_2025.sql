@@ -1,0 +1,22 @@
+select
+    lsoa_code_2021,
+    lsoa_name_2021,
+    local_authority_district_code_2024,
+    local_authority_district_name_2024,
+    imd25_decile,
+    income_domainemployment_domain_decile,
+    employment_domain_decile,
+    education_domain_decile,
+    health_domain_decile,
+    crime_domain_decile,
+    barriers_to_housing_domain_decile,
+    living_environment_domain_decile,
+    income_deprivation_affecting_children_subdomain_decile,
+    income_deprivation_affecting_older_people_subdomain_decile,
+    children_and_young_people_subdomain_decile,
+    adult_skills_subdomain_decile,
+    geographical_barriers_subdomain_decile,
+    wider_barriers_subdomain_decile,
+    indoors_subdomain_decile,
+    outdoors_subdomain_decile
+from {{ ref('raw_reference_lookup_ncl_imd_2025') }}
