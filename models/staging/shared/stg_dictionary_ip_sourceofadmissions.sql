@@ -1,3 +1,7 @@
+{{
+    config(materialized = 'table')
+}}
+
 select
     sk_source_of_admission_id,
     bk_source_of_admission_code,

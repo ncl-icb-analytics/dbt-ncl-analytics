@@ -1,3 +1,7 @@
+{{
+    config(materialized = 'table')
+}}
+
 select
     lsoa11_cd,
     lsoa11_nm,
