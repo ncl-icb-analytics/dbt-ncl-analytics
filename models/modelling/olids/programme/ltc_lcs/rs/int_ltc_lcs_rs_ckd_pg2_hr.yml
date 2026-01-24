@@ -1,0 +1,25 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_ckd_pg2_hr
+    description: |
+      CKD Register Priority Group 2 - High Risk.
+      Patients on CKD register (excluding PG1 HRC) meeting any inclusion rule:
+      - Rule 2: eGFR 45-59 AND ACR > 30
+      - Rule 3: eGFR 30-44 AND ACR > 3
+      - Rule 4: eGFR 15-29
+      - Rule 5: ACR 70-250
+      - Rule 6: 3+ repeat antihypertensive prescriptions in last 3 months
+      - Rule 7: Latest BP in last 12 months with diastolic > 90
+      - Rule 8: Latest BP in last 12 months with systolic > 150
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_ckd_reg_pg2_hr_vs1
+            - on_ckd_reg_pg2_hr_vs2
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
