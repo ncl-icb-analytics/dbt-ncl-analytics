@@ -5,10 +5,6 @@ models:
       Antihypertensive medication orders for blood pressure management.
       Uses ANTIHYPERTENSIVE_MEDICATIONS cluster from combined codesets.
       One row per medication order.
-    config:
-      meta:
-        owner:
-          name: Eddie Davison
     tests:
       - cluster_ids_exist:
           cluster_ids: ANTIHYPERTENSIVE_MEDICATIONS

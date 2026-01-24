@@ -7,10 +7,6 @@ models:
       Patients on the CKD register are included if ANY of the following apply:
       - Rule 1: eGFR < 15 (latest value)
       - Rule 2: Albumin:creatinine ratio > 250 (latest value)
-    config:
-      meta:
-        owner:
-          name: Eddie Davison
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id
