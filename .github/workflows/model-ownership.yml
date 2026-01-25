@@ -33,7 +33,8 @@ jobs:
             --base-branch "origin/$BASE_REF" \
             --output suggestions.json
 
-          if [ -f suggestions.json ] && [ -s suggestions.json ]; then
+          # Check if suggestions array has items (not just empty [])
+          if [ -f suggestions.json ] && [ "$(cat suggestions.json)" != "[]" ]; then
             echo "has_suggestions=true" >> $GITHUB_OUTPUT
           else
             echo "has_suggestions=false" >> $GITHUB_OUTPUT
@@ -46,6 +47,11 @@ jobs:
           script: |
             const fs = require('fs');
             const suggestions = JSON.parse(fs.readFileSync('suggestions.json', 'utf8'));
+
+            if (suggestions.length === 0) {
+              console.log('No suggestions to post');
+              return;
+            }
 
             // Build review comments array for batch submission
             const comments = suggestions.map(suggestion => ({
