@@ -3,6 +3,10 @@ version: 2
 models:
   - name: stg_registries_deaths
     description: "Staged ONS deaths register with standardised patient identifier"
+    config:
+      meta:
+        owner:
+          name: PeterSNHS
     columns:
       - name: dmic_row_id
         description: "Unique row identifier"

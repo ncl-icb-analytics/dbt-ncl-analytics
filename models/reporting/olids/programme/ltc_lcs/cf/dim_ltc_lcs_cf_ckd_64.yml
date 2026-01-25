@@ -1,19 +1,23 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_64
-    description: 'Case finding for patients with specific conditions requiring eGFR monitoring who lack recent kidney function assessment.
+    description: 'Case finding for patients with specific conditions requiring eGFR
+      monitoring who lack recent kidney function assessment.
 
 
       Business Logic:
 
-      • Identifies patients aged 17+ with high-risk conditions but no eGFR test in last 12 months
+      • Identifies patients aged 17+ with high-risk conditions but no eGFR test in
+      last 12 months
 
-      • Targets patients with AKI (last 3 years), BPH/gout, lithium/nephrotoxic medications (last 6 months), or validated microhaematuria
+      • Targets patients with AKI (last 3 years), BPH/gout, lithium/nephrotoxic medications
+      (last 6 months), or validated microhaematuria
 
-      • Uses complex microhaematuria validation with UACR correlation and negative urine test exclusion
+      • Uses complex microhaematuria validation with UACR correlation and negative
+      urine test exclusion
 
-      • One row per person meeting specific condition criteria without recent eGFR monitoring'
-    
+      • One row per person meeting specific condition criteria without recent eGFR
+      monitoring'
     config:
       meta:
         indicator:
@@ -81,3 +85,5 @@ models:
               threshold_unit: "months"
               description: "Lithium/nephrotoxic medications within 6 months"
               sort_order: 3
+        owner:
+          name: EddieDavison92

@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_hba1c_latest
-    description: 'Intermediate: Latest HbA1c Observations - Most recent valid HbA1c measurement per person.
+    description: 'Intermediate: Latest HbA1c Observations - Most recent valid HbA1c
+      measurement per person.
 
       Clinical Logic:
 
@@ -49,13 +50,19 @@ models:
           category: "LABORATORY_RESULT"
           clinical_domain: "Cardiometabolic"
           name_short: "Latest HbA1c"
-          description_short: "Most recent HbA1c measurement for glycaemic control assessment"
+          description_short: "Most recent HbA1c measurement for glycaemic control
+            assessment"
           description_long: >
-            Latest valid HbA1c measurement per person supporting diabetes management and care pathway
-            decisions. Provides current glycaemic control status with both IFCC and DCCT measurement
-            format support. Includes clinical categorisation for diabetes control assessment (≤48 mmol/mol
-            excellent, ≤58 mmol/mol adequate, >75 mmol/mol poor), QOF target achievement flags (≤58 mmol/mol),
-            and diagnostic indicators (≥48 mmol/mol diabetes, ≥42 mmol/mol prediabetes). Key biomarker
+            Latest valid HbA1c measurement per person supporting diabetes management
+            and care pathway
+            decisions. Provides current glycaemic control status with both IFCC and
+            DCCT measurement
+            format support. Includes clinical categorisation for diabetes control
+            assessment (≤48 mmol/mol
+            excellent, ≤58 mmol/mol adequate, >75 mmol/mol poor), QOF target achievement
+            flags (≤58 mmol/mol),
+            and diagnostic indicators (≥48 mmol/mol diabetes, ≥42 mmol/mol prediabetes).
+            Key biomarker
             for diabetes care quality monitoring and treatment optimisation.
           is_qof: false
           source_column: "hba1c_value"
@@ -110,3 +117,5 @@ models:
               threshold_unit: "mmol/mol"
               description: "Lower threshold for prediabetes (NDH) diagnosis"
               sort_order: 6
+        owner:
+          name: EddieDavison92

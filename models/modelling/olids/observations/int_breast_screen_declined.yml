@@ -3,6 +3,10 @@ models:
   - name: int_breast_screen_declined
     description: 'SMI Longer Lives Enhanced Health Check Breast Cancer Screen DECLINED
       Latest value per Mental Health /SMI observation using BRCANSCRDEC_COD'
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - cluster_ids_exist:
           cluster_ids: BRCANSCRDEC_COD

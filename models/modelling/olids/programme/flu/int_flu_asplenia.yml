@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_asplenia
-    description: 'Flu vaccination eligibility for people with asplenia or dysfunction of the spleen.
+    description: 'Flu vaccination eligibility for people with asplenia or dysfunction
+      of the spleen.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to asplenia or spleen dysfunction requiring immunisation.'
-    
+      Purpose: Identify people eligible for flu vaccination due to asplenia or spleen
+      dysfunction requiring immunisation.'
     config:
       meta:
         indicator:
@@ -25,10 +26,13 @@ models:
           category: "FLU"
           clinical_domain: "Immunology"
           name_short: "Flu Eligible Asplenia"
-          description_short: "People with asplenia or spleen dysfunction eligible for flu vaccination"
+          description_short: "People with asplenia or spleen dysfunction eligible
+            for flu vaccination"
           description_long: >
-            Flu vaccination eligibility for people with asplenia (absent spleen) or dysfunction
-            of the spleen. Uses PNSPLEEN_COD cluster codes with earliest occurrence qualifying.
+            Flu vaccination eligibility for people with asplenia (absent spleen) or
+            dysfunction
+            of the spleen. Uses PNSPLEEN_COD cluster codes with earliest occurrence
+            qualifying.
             These conditions increase infection risk requiring immunisation
             protection. Minimum age requirement of 6 months for flu vaccination.
           is_qof: false
@@ -48,7 +52,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -71,7 +77,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest asplenia/spleen dysfunction diagnosis)'
+        description: 'Date of qualifying diagnosis (earliest asplenia/spleen dysfunction
+          diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

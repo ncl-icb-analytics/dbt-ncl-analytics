@@ -15,12 +15,12 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to chronic heart disease requiring immunisation.'
-    
+      Purpose: Identify people eligible for COVID vaccination due to chronic heart
+      disease requiring immunisation.'
     tests:
       - cluster_ids_exist:
           cluster_ids: CHD_COV_COD
-    
+
     config:
       meta:
         indicator:
@@ -29,10 +29,13 @@ models:
           category: "COVID"
           clinical_domain: "Cardiovascular"
           name_short: "COVID Eligible Heart Disease"
-          description_short: "People with chronic heart disease eligible for COVID vaccination"
+          description_short: "People with chronic heart disease eligible for COVID
+            vaccination"
           description_long: >
-            COVID vaccination eligibility for people with chronic heart disease using CHD_COV_COD
-            cluster codes with earliest occurrence qualifying. Includes structural heart conditions
+            COVID vaccination eligibility for people with chronic heart disease using
+            CHD_COV_COD
+            cluster codes with earliest occurrence qualifying. Includes structural
+            heart conditions
             and chronic cardiac conditions that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.
           is_qof: false
@@ -52,7 +55,9 @@ models:
               threshold_unit: "years"
               description: "Minimum age for COVID vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'
@@ -67,7 +72,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest chronic heart disease diagnosis)'
+        description: 'Date of qualifying diagnosis (earliest chronic heart disease
+          diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

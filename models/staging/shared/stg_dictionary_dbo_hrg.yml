@@ -1,26 +1,30 @@
 version: 2
 models:
-- name: stg_dictionary_dbo_hrg
-  description: Healthcare Resource Groups (HRG) reference data for procedure and diagnosis
-    groupings
-  columns:
-  - name: sk_hrgid
-    description: Primary key - surrogate key for HRG
+  - name: stg_dictionary_dbo_hrg
+    description: Healthcare Resource Groups (HRG) reference data for procedure 
+      and diagnosis groupings
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: sk_hrgid
+        description: Primary key - surrogate key for HRG
+        tests:
+          - unique
+          - not_null
+      - name: hrg_code
+        description: HRG code
+        tests:
+          - not_null
+      - name: hrg_description
+        description: Description of the HRG
+      - name: hrg_chapter
+        description: HRG chapter classification
+      - name: hrg_subchapter
+        description: HRG subchapter classification
+      - name: hrg_version
+        description: HRG version
     tests:
-    - unique
-    - not_null
-  - name: hrg_code
-    description: HRG code
-    tests:
-    - not_null
-  - name: hrg_description
-    description: Description of the HRG
-  - name: hrg_chapter
-    description: HRG chapter classification
-  - name: hrg_subchapter
-    description: HRG subchapter classification
-  - name: hrg_version
-    description: HRG version
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

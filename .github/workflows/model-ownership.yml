@@ -1,0 +1,53 @@
+name: Model Ownership
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'models/**/*.sql'
+
+jobs:
+  set-ownership:
+    name: Set Model Ownership
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml ruamel.yaml
+
+      - name: Set owner for new models
+        id: ownership
+        run: |
+          python scripts/ownership/set_owner_for_new_models.py \
+            --author-name "${{ github.event.pull_request.user.login }}" \
+            --base-branch "origin/${{ github.base_ref }}" | tee result.txt
+
+          # Check if any files were updated
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit ownership changes
+        if: steps.ownership.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: add model ownership metadata [skip ci]"
+          git push

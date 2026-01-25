@@ -1,19 +1,21 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_63
-    description: 'Case finding for patients with significantly elevated single UACR reading indicating substantial kidney damage.
+    description: 'Case finding for patients with significantly elevated single UACR
+      reading indicating substantial kidney damage.
 
 
       Business Logic:
 
-      • Identifies patients aged 17+ with latest UACR reading > 70 (excludes patients from CKD_62)
+      • Identifies patients aged 17+ with latest UACR reading > 70 (excludes patients
+      from CKD_62)
 
-      • Targets patients with severe proteinuria requiring immediate clinical attention and nephrology referral
+      • Targets patients with severe proteinuria requiring immediate clinical attention
+      and nephrology referral
 
       • Takes maximum UACR value per day to handle multiple readings on same date
 
       • One row per person with clinically significant single elevated UACR reading'
-    
     config:
       meta:
         indicator:
@@ -47,3 +49,5 @@ models:
               threshold_unit: "mg/mmol"
               description: "Single UACR above 70 mg/mmol (severe proteinuria)"
               sort_order: 1
+        owner:
+          name: EddieDavison92

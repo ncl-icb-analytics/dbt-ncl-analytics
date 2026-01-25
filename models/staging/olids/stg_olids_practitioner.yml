@@ -1,47 +1,53 @@
 version: 2
 models:
-- name: stg_olids_practitioner
-  description: Healthcare practitioners including GPs, nurses, and other clinical
-    staff. Deduplicated by id and filtered to exclude deleted records.
-  columns:
-  - name: id
-    description: Primary key - unique identifier for this practitioner
+  - name: stg_olids_practitioner
+    description: Healthcare practitioners including GPs, nurses, and other 
+      clinical staff. Deduplicated by id and filtered to exclude deleted 
+      records.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: id
+        description: Primary key - unique identifier for this practitioner
+        tests:
+          - unique
+          - not_null
+      - name: gmc_code
+        description: General Medical Council registration code
+      - name: title
+        description: Practitioner title (Dr, Prof, etc.)
+      - name: first_name
+        description: Practitioner first name
+      - name: last_name
+        description: Practitioner last name
+      - name: name
+        description: Full name of the practitioner
+      - name: is_obsolete
+        description: Boolean indicating if the practitioner record is obsolete
+      - name: lds_end_date_time
+        description: End datetime for this practitioner record
+      - name: lds_id
+        description: LDS system identifier
+      - name: record_owner_organisation_code
+        description: Organisation code of the record owner
+      - name: lds_datetime_data_acquired
+        description: Datetime when data was acquired by LDS
+      - name: lds_initial_data_received_date
+        description: Date when data was initially received by LDS
+      - name: lds_start_date_time
+        description: LDS datetime stamp from which the record version was 
+          correct - used for deduplication to get the latest record
+      - name: lds_is_deleted
+        description: Deletion flag - records with TRUE are filtered out in this 
+          staging layer
+      - name: lds_record_id
+        description: LDS assigned unique identifier for the source record 
+          version
     tests:
-    - unique
-    - not_null
-  - name: gmc_code
-    description: General Medical Council registration code
-  - name: title
-    description: Practitioner title (Dr, Prof, etc.)
-  - name: first_name
-    description: Practitioner first name
-  - name: last_name
-    description: Practitioner last name
-  - name: name
-    description: Full name of the practitioner
-  - name: is_obsolete
-    description: Boolean indicating if the practitioner record is obsolete
-  - name: lds_end_date_time
-    description: End datetime for this practitioner record
-  - name: lds_id
-    description: LDS system identifier
-  - name: record_owner_organisation_code
-    description: Organisation code of the record owner
-  - name: lds_datetime_data_acquired
-    description: Datetime when data was acquired by LDS
-  - name: lds_initial_data_received_date
-    description: Date when data was initially received by LDS
-  - name: lds_start_date_time
-    description: LDS datetime stamp from which the record version was correct - used
-      for deduplication to get the latest record
-  - name: lds_is_deleted
-    description: Deletion flag - records with TRUE are filtered out in this staging
-      layer
-  - name: lds_record_id
-    description: LDS assigned unique identifier for the source record version
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
-      config:
-        warn_if: "< 1"
-        error_if: "< 0"
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+          config:
+            warn_if: "< 1"
+            error_if: "< 0"

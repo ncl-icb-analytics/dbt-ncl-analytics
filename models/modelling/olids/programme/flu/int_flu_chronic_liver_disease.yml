@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_chronic_liver_disease
-    description: 'Flu vaccination eligibility for people with chronic liver disease conditions.
+    description: 'Flu vaccination eligibility for people with chronic liver disease
+      conditions.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to chronic liver disease conditions.'
-    
+      Purpose: Identify people eligible for flu vaccination due to chronic liver disease
+      conditions.'
     config:
       meta:
         indicator:
@@ -27,10 +28,13 @@ models:
           name_short: "Flu Eligible Chronic Liver Disease"
           description_short: "People with chronic liver disease eligible for flu vaccination"
           description_long: >
-            Flu vaccination eligibility for people with chronic liver disease including cirrhosis,
+            Flu vaccination eligibility for people with chronic liver disease including
+            cirrhosis,
             chronic hepatitis, and other liver conditions. Uses CLD_COD cluster codes
-            with earliest occurrence qualifying. Minimum age requirement of 6 months for flu vaccination.
-            Straightforward single diagnosis pathway for hepatological conditions requiring increased
+            with earliest occurrence qualifying. Minimum age requirement of 6 months
+            for flu vaccination.
+            Straightforward single diagnosis pathway for hepatological conditions
+            requiring increased
             vaccination protection.
           is_qof: false
           source_column: "person_id"
@@ -49,7 +53,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

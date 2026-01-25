@@ -22,6 +22,10 @@ models:
 
       Enriched with BNF details for medication identification and categorization.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Person identifier
@@ -39,7 +43,8 @@ models:
           - not_null
 
       - name: bnf_chapter
-        description: BNF chapter (2-digit code) - varies based on polypharmacy scope exclusions
+        description: BNF chapter (2-digit code) - varies based on polypharmacy 
+          scope exclusions
         data_tests:
           - not_null
 

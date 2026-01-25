@@ -1,25 +1,30 @@
 version: 2
 models:
-- name: stg_dictionary_dbo_specialties
-  description: Medical specialties reference data including treatment functions
-  columns:
-  - name: sk_specialty_id
-    description: Primary key - surrogate key for specialty
+  - name: stg_dictionary_dbo_specialties
+    description: Medical specialties reference data including treatment 
+      functions
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: sk_specialty_id
+        description: Primary key - surrogate key for specialty
+        tests:
+          - unique
+          - not_null
+      - name: bk_specialty_code
+        description: Business key - specialty code
+        tests:
+          - not_null
+      - name: specialty_name
+        description: Specialty name
+      - name: specialty_category
+        description: Specialty category grouping
+      - name: is_treatment_function
+        description: Whether this is a treatment function code
+      - name: is_main_specialty
+        description: Whether this is a main specialty code
     tests:
-    - unique
-    - not_null
-  - name: bk_specialty_code
-    description: Business key - specialty code
-    tests:
-    - not_null
-  - name: specialty_name
-    description: Specialty name
-  - name: specialty_category
-    description: Specialty category grouping
-  - name: is_treatment_function
-    description: Whether this is a treatment function code
-  - name: is_main_specialty
-    description: Whether this is a main specialty code
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

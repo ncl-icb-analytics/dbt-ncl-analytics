@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_practice
-    description: 'Practice dimension with organisational hierarchy spanning multiple London ICBs.
+    description: 'Practice dimension with organisational hierarchy spanning multiple
+      London ICBs.
 
       Key Features:
 
@@ -15,10 +16,16 @@ models:
 
       • Complete organisational hierarchy (Practice > PCN > Commissioner > STP)
 
-      • Filtered to London ICBs: North Central, North East, North West, South East, South West
+      • Filtered to London ICBs: North Central, North East, North West, South East,
+      South West
 
-      Purpose: Supports practice-level reporting, geographic analysis, and organisational hierarchy navigation.'
+      Purpose: Supports practice-level reporting, geographic analysis, and organisational
+      hierarchy navigation.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: organisation_id
         description: 'OLIDS internal organisation ID for practice'
@@ -49,7 +56,8 @@ models:
         description: 'Borough where practice is located'
 
       - name: pcn_borough
-        description: 'Borough where practices PCN is located (may differ from practice borough)'
+        description: 'Borough where practices PCN is located (may differ from practice
+          borough)'
 
       - name: practice_historic_ccg
         description: 'Historic CCG association for temporal analysis'

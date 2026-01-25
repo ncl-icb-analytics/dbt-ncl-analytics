@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_covid_asplenia
-    description: 'COVID vaccination eligibility for people with asplenia or dysfunction of the spleen.
+    description: 'COVID vaccination eligibility for people with asplenia or dysfunction
+      of the spleen.
 
       Key Features:
 
@@ -17,12 +18,12 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to asplenia or spleen dysfunction requiring immunisation.'
-    
+      Purpose: Identify people eligible for COVID vaccination due to asplenia or spleen
+      dysfunction requiring immunisation.'
     tests:
       - cluster_ids_exist:
           cluster_ids: SPLN_COV_COD
-    
+
     config:
       meta:
         indicator:
@@ -31,12 +32,16 @@ models:
           category: "COVID"
           clinical_domain: "Immunology"
           name_short: "COVID Eligible Asplenia"
-          description_short: "People with asplenia or spleen dysfunction eligible for COVID vaccination"
+          description_short: "People with asplenia or spleen dysfunction eligible
+            for COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with asplenia (absent spleen) or dysfunction
-            of the spleen. Uses SPLN_COV_COD cluster codes with earliest occurrence qualifying.
+            COVID vaccination eligibility for people with asplenia (absent spleen)
+            or dysfunction
+            of the spleen. Uses SPLN_COV_COD cluster codes with earliest occurrence
+            qualifying.
             These conditions increase infection risk requiring immunisation
-            protection. Minimum age requirement of 5 years for COVID vaccination. Only eligible
+            protection. Minimum age requirement of 5 years for COVID vaccination.
+            Only eligible
             in broader 2024/25 campaigns, not in restricted 2025/26 campaigns.
           is_qof: false
           source_column: "person_id"
@@ -55,7 +60,9 @@ models:
               threshold_unit: "years"
               description: "Minimum age for COVID vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'
@@ -70,7 +77,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest asplenia/spleen dysfunction diagnosis)'
+        description: 'Date of qualifying diagnosis (earliest asplenia/spleen dysfunction
+          diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

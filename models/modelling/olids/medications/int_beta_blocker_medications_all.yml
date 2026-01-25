@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_beta_blocker_medications_all
-    description: 'Beta blocker medication orders using BNF classification for cardiovascular protection.'
+    description: 'Beta blocker medication orders using BNF classification for cardiovascular
+      protection.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

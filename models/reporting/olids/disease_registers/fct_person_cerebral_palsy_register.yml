@@ -19,12 +19,12 @@ models:
           name_short: "Cerebral Palsy"
           description_short: "Cerebral palsy register (non-QOF)"
           description_long: >
-            Cerebral palsy register for persons with cerebral palsy diagnosis. 
-            Includes active patients with cerebral palsy diagnosis using CEREBRALP_COD 
-            cluster codes. No age restrictions or resolution codes applied. Used for 
-            neurological care pathway monitoring, multidisciplinary team coordination, 
-            support services planning, and mobility and function support. Lifelong 
-            neurological condition requiring ongoing care and support throughout life.
+            Cerebral palsy register for persons with cerebral palsy diagnosis.  Includes
+            active patients with cerebral palsy diagnosis using CEREBRALP_COD  cluster
+            codes. No age restrictions or resolution codes applied. Used for  neurological
+            care pathway monitoring, multidisciplinary team coordination,  support
+            services planning, and mobility and function support. Lifelong  neurological
+            condition requiring ongoing care and support throughout life.
           is_qof: false
           source_column: "is_on_register"
           sort_order: "COND_NEURO_CEREBRALPALSY"
@@ -34,6 +34,8 @@ models:
             - cluster_id: "CEREBRALP_COD"
               category: "INCLUSION"
 
+        owner:
+          name: Eddie Davison
     columns:
       - name: person_id
         description: Unique identifier for the person

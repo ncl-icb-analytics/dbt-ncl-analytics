@@ -13,12 +13,18 @@ models:
       Patient Counting: Deduplicated by person_id (handles patient ID mergers)
       Deceased Handling: Excludes patients deceased on or before snapshot date
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     columns:
       - name: practice_ods_code
         description: GP practice ODS code
 
       - name: regular_registered_patients
-        description: Count of distinct persons with Regular registration episodes active on snapshot date
+        description: Count of distinct persons with Regular registration 
+          episodes active on snapshot date
 
       - name: snapshot_date
-        description: Reference date for point-in-time calculation (from EMIS extract_date)
+        description: Reference date for point-in-time calculation (from EMIS 
+          extract_date)

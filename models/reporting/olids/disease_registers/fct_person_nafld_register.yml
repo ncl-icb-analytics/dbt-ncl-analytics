@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: fct_person_nafld_register
-    description: 'Non-alcoholic fatty liver disease register for patients with NAFLD diagnosis.
+    description: 'Non-alcoholic fatty liver disease register for patients with NAFLD
+      diagnosis.
 
-      One row per active patient with NAFLD diagnosis (currently using hardcoded SNOMED codes - awaiting NAFLD_COD cluster).'
+      One row per active patient with NAFLD diagnosis (currently using hardcoded SNOMED
+      codes - awaiting NAFLD_COD cluster).'
 
     tests:
       - dbt_utils.at_least_one:
@@ -19,14 +21,13 @@ models:
           name_short: "NAFLD"
           description_short: "Non-alcoholic fatty liver disease register (non-QOF)"
           description_long: >
-            Non-alcoholic fatty liver disease register for persons with NAFLD diagnosis. 
-            Includes active patients with NAFLD diagnosis using hardcoded SNOMED concept 
-            codes (awaiting formal NAFLD_COD cluster implementation). No age restrictions 
-            or resolution codes applied. Used for liver health assessment, cardiovascular 
-            risk stratification, and potential metabolic syndrome monitoring. Critical for 
-            identifying patients requiring hepatic monitoring and lifestyle interventions 
-            for liver health. Currently uses hardcoded NAFLD concepts pending cluster 
-            development.
+            Non-alcoholic fatty liver disease register for persons with NAFLD diagnosis.  Includes
+            active patients with NAFLD diagnosis using hardcoded SNOMED concept  codes
+            (awaiting formal NAFLD_COD cluster implementation). No age restrictions  or
+            resolution codes applied. Used for liver health assessment, cardiovascular  risk
+            stratification, and potential metabolic syndrome monitoring. Critical
+            for  identifying patients requiring hepatic monitoring and lifestyle interventions  for
+            liver health. Currently uses hardcoded NAFLD concepts pending cluster  development.
           is_qof: false
           source_column: "is_on_register"
           sort_order: "COND_HEPAT_NAFLD"
@@ -36,6 +37,8 @@ models:
             - cluster_id: "HARDCODED_NAFLD"
               category: "INCLUSION"
 
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Unique identifier for the person

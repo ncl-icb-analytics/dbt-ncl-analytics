@@ -2,9 +2,14 @@ version: 2
 
 models:
   - name: pcn_info
-    description: PCN and practice information for C-LTCS participating PCNs. One row per practice.
+    description: PCN and practice information for C-LTCS participating PCNs. One
+      row per practice.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
-    - name: practice_code
-      data_tests:
-      - unique
-      - not_null
+      - name: practice_code
+        data_tests:
+          - unique
+          - not_null

@@ -1,3 +1,8 @@
 models:
   - name: childhood_imms_time_series_child_dm_tab
-    description: Final data model table holding UNIONED aggregated completion metrics for historical children aged 1,2 and 5 on analysis month
+    description: Final data model table holding UNIONED aggregated completion 
+      metrics for historical children aged 1,2 and 5 on analysis month
+    config:
+      meta:
+        owner:
+          name: KatsplatH

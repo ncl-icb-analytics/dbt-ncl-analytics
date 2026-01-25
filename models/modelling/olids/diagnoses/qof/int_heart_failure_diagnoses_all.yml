@@ -1,12 +1,19 @@
 version: 2
 models:
   - name: int_heart_failure_diagnoses_all
-    description: 'Heart failure diagnosis and resolution observations for QOF register management.
+    description: 'Heart failure diagnosis and resolution observations for QOF register
+      management.
 
-      One row per observation using HF_COD, HFRES_COD, HFLVSD_COD, and REDEJCFRAC_COD clusters with ejection fraction tracking.'
+      One row per observation using HF_COD, HFRES_COD, HFLVSD_COD, and REDEJCFRAC_COD
+      clusters with ejection fraction tracking.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
-        description: 'Observation identifier (not unique - same observation may appear for multiple cluster matches)'
+        description: 'Observation identifier (not unique - same observation may appear
+          for multiple cluster matches)'
         tests:
           - not_null
 
@@ -35,10 +42,12 @@ models:
         description: 'Flag indicating heart failure with LVSD code (HFLVSD_COD cluster)'
 
       - name: is_reduced_ef_code
-        description: 'Flag indicating reduced ejection fraction code (REDEJCFRAC_COD cluster)'
+        description: 'Flag indicating reduced ejection fraction code (REDEJCFRAC_COD
+          cluster)'
 
       - name: heart_failure_observation_type
-        description: 'Categorised heart failure observation type (diagnosis, LVSD, reduced EF, or resolved)'
+        description: 'Categorised heart failure observation type (diagnosis, LVSD,
+          reduced EF, or resolved)'
 
     tests:
       - dbt_utils.at_least_one:

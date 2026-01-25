@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_ckd_diagnoses_all
-    description: 'Chronic kidney disease diagnosis and resolution observations for QOF register management.
+    description: 'Chronic kidney disease diagnosis and resolution observations for
+      QOF register management.
 
-      One row per observation using CKD_COD (diagnosis) and CKDRES_COD (resolved) clusters. Age restrictions ≥18 years typically applied downstream.'
+      One row per observation using CKD_COD (diagnosis) and CKDRES_COD (resolved)
+      clusters. Age restrictions ≥18 years typically applied downstream.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'

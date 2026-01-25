@@ -3,10 +3,14 @@ version: 2
 models:
   - name: fct_person_wl_current_count_tfc
     description: >
-      Pivoted summary of open pathways per patient across TFCs (treatment function codes).
+      Pivoted summary of open pathways per patient across TFCs (treatment function
+      codes).
       Each column represents the sum of open pathways for a specific TFC.
     config:
       materialized: view
+      meta:
+        owner:
+          name: PeterSNHS
     columns:
       - name: sk_patient_id
         description: Unique identifier for each patient.
@@ -14,5 +18,5 @@ models:
           - not_null
           - unique
     tests:
-    - dbt_expectations.expect_table_row_count_to_be_between:
-        min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

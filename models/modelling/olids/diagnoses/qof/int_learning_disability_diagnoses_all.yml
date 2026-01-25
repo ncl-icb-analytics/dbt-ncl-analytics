@@ -3,7 +3,12 @@ models:
   - name: int_learning_disability_diagnoses_all
     description: 'Learning disability diagnosis observations for QOF register management.
 
-      One row per diagnosis observation using LD_COD cluster. Annual health check eligibility typically ≥14 years.'
+      One row per diagnosis observation using LD_COD cluster. Annual health check
+      eligibility typically ≥14 years.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -21,7 +26,8 @@ models:
         description: 'Clinical code for learning disability diagnosis'
 
       - name: concept_display
-        description: 'Human-readable description of the learning disability clinical code'
+        description: 'Human-readable description of the learning disability clinical
+          code'
 
       - name: source_cluster_id
         description: 'QOF cluster identifier (LD_COD)'
@@ -30,7 +36,8 @@ models:
         description: 'Flag indicating learning disability diagnosis code (LD_COD cluster)'
 
       - name: learning_disability_observation_type
-        description: 'Categorised learning disability observation type (Learning Disability Diagnosis)'
+        description: 'Categorised learning disability observation type (Learning Disability
+          Diagnosis)'
 
     tests:
       - dbt_utils.at_least_one:

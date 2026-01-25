@@ -8,6 +8,10 @@ models:
       - Rule 3: On Diabetes Register AND eGFR > 60 AND ACR >= 3
       - Rule 4: eGFR 45-59 AND ACR 3-30
       - Rule 5: eGFR 30-44 AND ACR < 3
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id

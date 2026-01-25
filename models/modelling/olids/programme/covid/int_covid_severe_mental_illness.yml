@@ -15,12 +15,12 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to severe mental illness requiring immunisation.'
-    
+      Purpose: Identify people eligible for COVID vaccination due to severe mental
+      illness requiring immunisation.'
     tests:
       - cluster_ids_exist:
           cluster_ids: SEV_MENTAL_COD,SMHRES_COD
-    
+
     config:
       meta:
         indicator:
@@ -29,10 +29,13 @@ models:
           category: "COVID"
           clinical_domain: "Psychiatry"
           name_short: "COVID Eligible Severe Mental Illness"
-          description_short: "People with severe mental illness eligible for COVID vaccination"
+          description_short: "People with severe mental illness eligible for COVID
+            vaccination"
           description_long: >
-            COVID vaccination eligibility for people with severe mental illness using SMI_COV_COD
-            cluster codes with earliest occurrence qualifying. Includes severe mental illness
+            COVID vaccination eligibility for people with severe mental illness using
+            SMI_COV_COD
+            cluster codes with earliest occurrence qualifying. Includes severe mental
+            illness
             and psychiatric conditions that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.
           is_qof: false
@@ -54,7 +57,9 @@ models:
               threshold_unit: "years"
               description: "Minimum age for COVID vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'
@@ -69,7 +74,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest severe mental illness diagnosis)'
+        description: 'Date of qualifying diagnosis (earliest severe mental illness
+          diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

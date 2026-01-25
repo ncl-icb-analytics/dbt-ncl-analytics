@@ -3,10 +3,10 @@ models:
   - name: dim_ltc_lcs_cf_cvd_64
     description: 'CVD case finding priority (d): Patients with QRisk ≥10% not on statins.
 
-      Age 40-84 with QRISK2 ≥10%, not on statins (12 months), no statin allergies or decisions (60 months).
+      Age 40-84 with QRISK2 ≥10%, not on statins (12 months), no statin allergies
+      or decisions (60 months).
 
       One row per person meeting criteria for statin initiation.'
-    
     config:
       meta:
         indicator:
@@ -52,3 +52,5 @@ models:
               threshold_unit: "percentage"
               description: "QRISK2 ≥10%"
               sort_order: 2
+        owner:
+          name: EddieDavison92

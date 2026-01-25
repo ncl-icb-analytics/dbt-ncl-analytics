@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_active_asthma_management
-    description: 'Flu vaccination eligibility for people with active asthma management requiring diagnosis plus medication evidence.
+    description: 'Flu vaccination eligibility for people with active asthma management
+      requiring diagnosis plus medication evidence.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to actively managed asthma.'
-    
+      Purpose: Identify people eligible for flu vaccination due to actively managed
+      asthma.'
     config:
       meta:
         indicator:
@@ -25,12 +26,17 @@ models:
           category: "FLU"
           clinical_domain: "Respiratory"
           name_short: "Flu Eligible Active Asthma"
-          description_short: "People with actively managed asthma eligible for flu vaccination"
+          description_short: "People with actively managed asthma eligible for flu
+            vaccination"
           description_long: >
-            Flu vaccination eligibility for people with actively managed asthma requiring both
-            asthma diagnosis (AST_COD) and evidence of recent medication (ASTMED_COD admin codes
-            or ASTRX_COD prescriptions within 12 months). Uses 12-month lookback period from
-            campaign audit date to capture current treatment. Minimum age requirement of 6 months.
+            Flu vaccination eligibility for people with actively managed asthma requiring
+            both
+            asthma diagnosis (AST_COD) and evidence of recent medication (ASTMED_COD
+            admin codes
+            or ASTRX_COD prescriptions within 12 months). Uses 12-month lookback period
+            from
+            campaign audit date to capture current treatment. Minimum age requirement
+            of 6 months.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_13_ACTIVE_ASTHMA"
@@ -59,7 +65,9 @@ models:
               threshold_unit: "months"
               description: "Lookback period for asthma medication evidence"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

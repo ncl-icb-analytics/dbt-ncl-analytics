@@ -19,12 +19,12 @@ models:
           name_short: "Motor Neurone Disease"
           description_short: "Motor neurone disease register (non-QOF)"
           description_long: >
-            Motor neurone disease register for persons with MND diagnosis. 
-            Includes active patients with MND diagnosis using MND_COD cluster codes. 
-            No age restrictions or resolution codes applied. Used for neurological care 
-            pathway monitoring, palliative care planning, multidisciplinary team coordination, 
-            and symptom management. Progressive neurological condition requiring specialised 
-            care and support.
+            Motor neurone disease register for persons with MND diagnosis.  Includes
+            active patients with MND diagnosis using MND_COD cluster codes.  No age
+            restrictions or resolution codes applied. Used for neurological care  pathway
+            monitoring, palliative care planning, multidisciplinary team coordination,  and
+            symptom management. Progressive neurological condition requiring specialised  care
+            and support.
           is_qof: false
           source_column: "is_on_register"
           sort_order: "COND_NEURO_MND"
@@ -34,6 +34,8 @@ models:
             - cluster_id: "MND_COD"
               category: "INCLUSION"
 
+        owner:
+          name: Eddie Davison
     columns:
       - name: person_id
         description: Unique identifier for the person
