@@ -19,13 +19,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install pyyaml
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Check for missing ownership
         id: check
@@ -33,12 +28,13 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           BASE_REF: ${{ github.base_ref }}
         run: |
-          python scripts/ownership/check_model_ownership.py \
+          uv run --with pyyaml scripts/ownership/check_model_ownership.py \
             --author-name "$PR_AUTHOR" \
             --base-branch "origin/$BASE_REF" \
             --output suggestions.json
 
-          if [ -f suggestions.json ] && [ -s suggestions.json ]; then
+          # Check if suggestions array has items (not just empty [])
+          if [ -f suggestions.json ] && [ "$(cat suggestions.json)" != "[]" ]; then
             echo "has_suggestions=true" >> $GITHUB_OUTPUT
           else
             echo "has_suggestions=false" >> $GITHUB_OUTPUT
@@ -52,14 +48,24 @@ jobs:
             const fs = require('fs');
             const suggestions = JSON.parse(fs.readFileSync('suggestions.json', 'utf8'));
 
-            for (const suggestion of suggestions) {
-              await github.rest.pulls.createReviewComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.issue.number,
-                commit_id: context.payload.pull_request.head.sha,
-                path: suggestion.file,
-                line: suggestion.line,
-                body: `### 📝 Missing model ownership\n\nThis model is missing owner metadata. Add the following after the description:\n\n\`\`\`suggestion\n${suggestion.suggestion}\n\`\`\``
-              });
+            if (suggestions.length === 0) {
+              console.log('No suggestions to post');
+              return;
             }
+
+            // Build review comments array for batch submission
+            const comments = suggestions.map(suggestion => ({
+              path: suggestion.file,
+              line: suggestion.line,
+              body: `### 📝 Missing model ownership\n\nThis model is missing owner metadata. Add the following after the description:\n\n\`\`\`suggestion\n${suggestion.suggestion}\n\`\`\``
+            }));
+
+            // Submit all suggestions as a single review
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              commit_id: context.payload.pull_request.head.sha,
+              event: 'COMMENT',
+              comments: comments
+            });
