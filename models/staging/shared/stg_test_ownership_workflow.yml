@@ -1,8 +1,0 @@
-version: 2
-
-models:
-  - name: stg_test_ownership_workflow
-    description: "Test model to verify ownership CI workflow"
-    columns:
-      - name: test_column
-        description: "Test column"
