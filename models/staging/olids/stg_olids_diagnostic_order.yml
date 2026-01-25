@@ -1,77 +1,85 @@
 version: 2
 models:
-- name: stg_olids_diagnostic_order
-  description: Diagnostic test orders and requests from GP systems. Deduplicated by
-    id and filtered to exclude deleted records.
-  columns:
-  - name: id
-    description: Primary key - unique identifier for this diagnostic order
+  - name: stg_olids_diagnostic_order
+    description: Diagnostic test orders and requests from GP systems. 
+      Deduplicated by id and filtered to exclude deleted records.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: id
+        description: Primary key - unique identifier for this diagnostic order
+        tests:
+          - unique
+          - not_null
+      - name: patient_id
+        description: Foreign key to patient.id
+      - name: encounter_id
+        description: Foreign key to encounter.id - encounter when order was made
+      - name: practitioner_id
+        description: Foreign key to practitioner.id - practitioner who ordered 
+          the test
+      - name: parent_observation_id
+        description: Foreign key to observation.id - parent observation if this 
+          is a sub-order
+      - name: clinical_effective_date
+        description: Date the diagnostic order was clinically effective
+      - name: date_precision_concept_id
+        description: Foreign key to concept.id - precision of the clinical 
+          effective date
+      - name: result_value
+        description: Numeric result value of the diagnostic test
+      - name: result_value_units
+        description: Units for the result value
+      - name: result_date
+        description: Date the result was obtained
+      - name: result_text
+        description: Text description of the result
+      - name: is_problem
+        description: Boolean indicating if this diagnostic order is associated 
+          with a problem
+      - name: is_review
+        description: Boolean indicating if this is a review record
+      - name: problem_end_date
+        description: Date the associated problem ended, if applicable
+      - name: diagnostic_order_source_concept_id
+        description: Foreign key to concept.id - source concept for the 
+          diagnostic test type
+      - name: age_at_event
+        description: Patient age in years at time of diagnostic order
+      - name: age_at_event_baby
+        description: Patient age in months for babies (0-24 months)
+      - name: age_at_event_neonate
+        description: Patient age in days for neonates (0-28 days)
+      - name: episodicity_concept_id
+        description: Foreign key to concept.id - episodicity classification 
+          (first, new, review)
+      - name: is_primary
+        description: Boolean indicating if this is the primary diagnostic order
+      - name: date_recorded
+        description: Date the record was entered into the system
+      - name: is_deleted
+        description: Boolean indicating if the clinical record has been deleted
+      - name: person_id
+        description: Foreign key to person.id - person-level identifier
+      - name: lds_id
+        description: LDS system identifier
+      - name: record_owner_organisation_code
+        description: Organisation code of the record owner
+      - name: lds_datetime_data_acquired
+        description: Datetime when data was acquired by LDS
+      - name: lds_initial_data_received_date
+        description: Date when data was initially received by LDS
+      - name: lds_start_date_time
+        description: LDS datetime stamp from which the record version was 
+          correct - used for deduplication to get the latest record
+      - name: lds_is_deleted
+        description: Deletion flag - records with TRUE are filtered out in this 
+          staging layer
+      - name: lds_record_id
+        description: LDS assigned unique identifier for the source record 
+          version
     tests:
-    - unique
-    - not_null
-  - name: patient_id
-    description: Foreign key to patient.id
-  - name: encounter_id
-    description: Foreign key to encounter.id - encounter when order was made
-  - name: practitioner_id
-    description: Foreign key to practitioner.id - practitioner who ordered the test
-  - name: parent_observation_id
-    description: Foreign key to observation.id - parent observation if this is a sub-order
-  - name: clinical_effective_date
-    description: Date the diagnostic order was clinically effective
-  - name: date_precision_concept_id
-    description: Foreign key to concept.id - precision of the clinical effective date
-  - name: result_value
-    description: Numeric result value of the diagnostic test
-  - name: result_value_units
-    description: Units for the result value
-  - name: result_date
-    description: Date the result was obtained
-  - name: result_text
-    description: Text description of the result
-  - name: is_problem
-    description: Boolean indicating if this diagnostic order is associated with a
-      problem
-  - name: is_review
-    description: Boolean indicating if this is a review record
-  - name: problem_end_date
-    description: Date the associated problem ended, if applicable
-  - name: diagnostic_order_source_concept_id
-    description: Foreign key to concept.id - source concept for the diagnostic test
-      type
-  - name: age_at_event
-    description: Patient age in years at time of diagnostic order
-  - name: age_at_event_baby
-    description: Patient age in months for babies (0-24 months)
-  - name: age_at_event_neonate
-    description: Patient age in days for neonates (0-28 days)
-  - name: episodicity_concept_id
-    description: Foreign key to concept.id - episodicity classification (first, new,
-      review)
-  - name: is_primary
-    description: Boolean indicating if this is the primary diagnostic order
-  - name: date_recorded
-    description: Date the record was entered into the system
-  - name: is_deleted
-    description: Boolean indicating if the clinical record has been deleted
-  - name: person_id
-    description: Foreign key to person.id - person-level identifier
-  - name: lds_id
-    description: LDS system identifier
-  - name: record_owner_organisation_code
-    description: Organisation code of the record owner
-  - name: lds_datetime_data_acquired
-    description: Datetime when data was acquired by LDS
-  - name: lds_initial_data_received_date
-    description: Date when data was initially received by LDS
-  - name: lds_start_date_time
-    description: LDS datetime stamp from which the record version was correct - used
-      for deduplication to get the latest record
-  - name: lds_is_deleted
-    description: Deletion flag - records with TRUE are filtered out in this staging
-      layer
-  - name: lds_record_id
-    description: LDS assigned unique identifier for the source record version
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

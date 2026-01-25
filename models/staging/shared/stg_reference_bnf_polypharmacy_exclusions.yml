@@ -12,6 +12,10 @@ models:
       Source: Meds Ops team specification (2025-10-27)
       Reference: GitHub issue #158
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 40

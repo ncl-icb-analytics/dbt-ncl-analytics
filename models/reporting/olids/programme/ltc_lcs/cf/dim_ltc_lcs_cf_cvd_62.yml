@@ -1,12 +1,13 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_62
-    description: 'CVD case finding priority (b): Patients with moderate cardiovascular risk not on statins.
+    description: 'CVD case finding priority (b): Patients with moderate cardiovascular
+      risk not on statins.
 
-      Age 40-84 with QRISK2 15-19.99%, not on statins (12 months), no statin allergies or decisions (60 months).
+      Age 40-84 with QRISK2 15-19.99%, not on statins (12 months), no statin allergies
+      or decisions (60 months).
 
       One row per person meeting criteria for statin initiation.'
-    
     config:
       meta:
         indicator:
@@ -59,3 +60,5 @@ models:
               threshold_unit: "percentage"
               description: "QRISK2 <20%"
               sort_order: 3
+        owner:
+          name: EddieDavison92

@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_allergy_medications_all
-    description: 'Allergy medication orders using BNF classification for antihistamines and allergy treatments.'
+    description: 'Allergy medication orders using BNF classification for antihistamines
+      and allergy treatments.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id
@@ -35,7 +40,8 @@ models:
       - name: bnf_name
         description: 'BNF classification name'
       - name: allergy_medication_type
-        description: 'BNF-based allergy medication type (antihistamines, immunotherapy, emergencies)'
+        description: 'BNF-based allergy medication type (antihistamines, immunotherapy,
+          emergencies)'
       - name: is_antihistamine
         description: 'Flag for antihistamine medications'
       - name: is_allergen_immunotherapy

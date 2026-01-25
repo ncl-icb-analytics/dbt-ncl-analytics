@@ -2,10 +2,16 @@ version: 2
 
 models:
   - name: int_alcohol_misuse_disorders
-    description: 'Alcohol misuse, abuse, and dependence diagnoses for addiction services planning.
+    description: 'Alcohol misuse, abuse, and dependence diagnoses for addiction services
+      planning.
 
-      One row per alcohol disorder observation using ALCOHOL_MISUSE_DISORDERS cluster with disorder categorisation and severity assessment.'
+      One row per alcohol disorder observation using ALCOHOL_MISUSE_DISORDERS cluster
+      with disorder categorisation and severity assessment.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: ALCOHOL_MISUSE_DISORDERS

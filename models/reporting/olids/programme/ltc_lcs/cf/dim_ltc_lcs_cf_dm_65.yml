@@ -1,19 +1,22 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_65
-    description: 'Case finding for diabetes screening in patients with moderate-high BMI using ethnicity-specific thresholds.
+    description: 'Case finding for diabetes screening in patients with moderate-high
+      BMI using ethnicity-specific thresholds.
 
 
       Business Logic:
 
-      • Identifies patients with moderate BMI requiring diabetes screening (BAME: 27.5-32.5, non-BAME: 30-35)
+      • Identifies patients with moderate BMI requiring diabetes screening (BAME:
+      27.5-32.5, non-BAME: 30-35)
 
       • Targets patients lacking HbA1c assessment in the last 24 months
 
-      • Uses ethnicity-specific BMI thresholds recognising different diabetes risk profiles
+      • Uses ethnicity-specific BMI thresholds recognising different diabetes risk
+      profiles
 
-      • One row per eligible person with BMI, ethnicity data, and HbA1c monitoring gap'
-    
+      • One row per eligible person with BMI, ethnicity data, and HbA1c monitoring
+      gap'
     config:
       meta:
         indicator:
@@ -22,7 +25,8 @@ models:
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
           name_short: "BMI diabetes screen"
-          description_short: "Moderate-high BMI patients requiring diabetes screening (ethnicity-specific)"
+          description_short: "Moderate-high BMI patients requiring diabetes screening
+            (ethnicity-specific)"
           description_long: >
             Moderate BMI, ethnicity-specific thresholds (BAME: 27.5-32.5 kg/m²,
             non-BAME: 30-35 kg/m²), no HbA1c 24m.
@@ -63,3 +67,5 @@ models:
               threshold_unit: "months"
               description: "No HbA1c assessment in last 24 months"
               sort_order: 3
+        owner:
+          name: EddieDavison92

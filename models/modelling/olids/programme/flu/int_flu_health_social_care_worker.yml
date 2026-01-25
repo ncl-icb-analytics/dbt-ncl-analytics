@@ -1,13 +1,15 @@
 version: 2
 models:
   - name: int_flu_health_social_care_worker
-    description: 'Flu vaccination eligibility for health and social care workers with direct patient contact.
+    description: 'Flu vaccination eligibility for health and social care workers with
+      direct patient contact.
 
       Key Features:
 
       • Care setting codes: CAREHOME_COD, NURSEHOME_COD, DOMCARE_COD
 
-      • Age restrictions: 16-64 years (under 65 as over 65s eligible via age-based rule)
+      • Age restrictions: 16-64 years (under 65 as over 65s eligible via age-based
+      rule)
 
       • Latest occurrence in medical history qualifies
 
@@ -15,8 +17,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify healthcare workers eligible for flu vaccination due to occupational exposure risk.'
-    
+      Purpose: Identify healthcare workers eligible for flu vaccination due to occupational
+      exposure risk.'
     config:
       meta:
         indicator:
@@ -27,10 +29,14 @@ models:
           name_short: "Flu Eligible Healthcare Worker"
           description_short: "Health and social care workers eligible for flu vaccination"
           description_long: >
-            Flu vaccination eligibility for health and social care workers with direct patient
-            contact roles. Uses CAREHOME_COD, NURSEHOME_COD, and DOMCARE_COD cluster codes
-            indicating employment in care settings. Age restriction of 16-64 years (over 65s
-            captured by age-based eligibility). Focuses on occupational infection risk.
+            Flu vaccination eligibility for health and social care workers with direct
+            patient
+            contact roles. Uses CAREHOME_COD, NURSEHOME_COD, and DOMCARE_COD cluster
+            codes
+            indicating employment in care settings. Age restriction of 16-64 years
+            (over 65s
+            captured by age-based eligibility). Focuses on occupational infection
+            risk.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_17_HEALTHCARE_WORKER"
@@ -57,9 +63,12 @@ models:
               threshold_value: "65"
               threshold_operator: "UNDER"
               threshold_unit: "years"
-              description: "Maximum age for healthcare worker eligibility (over 65s use age-based rule)"
+              description: "Maximum age for healthcare worker eligibility (over 65s
+                use age-based rule)"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -82,7 +91,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying employment indicator (latest care setting code)'
+        description: 'Date of qualifying employment indicator (latest care setting
+          code)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

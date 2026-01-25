@@ -1,3 +1,8 @@
 models:
   - name: int_adult_imms_person_level
-    description: Intermediate table holding vaccination Status for Adults. Multiple lines per person, one for each vaccine dose received
+    description: Intermediate table holding vaccination Status for Adults. 
+      Multiple lines per person, one for each vaccine dose received
+    config:
+      meta:
+        owner:
+          name: KatsplatH

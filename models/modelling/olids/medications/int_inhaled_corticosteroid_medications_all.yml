@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_inhaled_corticosteroid_medications_all
-    description: 'Inhaled corticosteroid medication orders using BNF classification for respiratory conditions.'
+    description: 'Inhaled corticosteroid medication orders using BNF classification
+      for respiratory conditions.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

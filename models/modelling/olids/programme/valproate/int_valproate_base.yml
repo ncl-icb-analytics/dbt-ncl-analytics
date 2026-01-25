@@ -3,6 +3,10 @@ models:
   - name: int_valproate_base
     description: Valproate base population for dashboard one row per person
 
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

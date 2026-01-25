@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: int_cholesterol_latest
-    description: 'Most recent valid cholesterol measurement per person for cardiovascular risk assessment and statin therapy decision-making.
+    description: 'Most recent valid cholesterol measurement per person for cardiovascular
+      risk assessment and statin therapy decision-making.
 
-      One row per person with their latest cholesterol including clinical cholesterol categorisation and data quality validation.'
+      One row per person with their latest cholesterol including clinical cholesterol
+      categorisation and data quality validation.'
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
@@ -23,13 +25,19 @@ models:
           category: "LABORATORY_RESULT"
           clinical_domain: "Cardiometabolic"
           name_short: "Latest Cholesterol"
-          description_short: "Most recent total cholesterol measurement for cardiovascular risk assessment"
+          description_short: "Most recent total cholesterol measurement for cardiovascular
+            risk assessment"
           description_long: >
-            Latest valid total cholesterol measurement per person supporting cardiovascular risk assessment
-            and statin therapy decision-making. Provides current lipid profile status with clinical
-            categorisation for cardiovascular risk stratification (<5 mmol/L desirable, <4 mmol/L secondary
-            prevention target, ≥6.2 mmol/L high requiring intervention). Key biomarker for primary and
-            secondary cardiovascular prevention programmes, diabetes care pathways, and lipid management
+            Latest valid total cholesterol measurement per person supporting cardiovascular
+            risk assessment
+            and statin therapy decision-making. Provides current lipid profile status
+            with clinical
+            categorisation for cardiovascular risk stratification (<5 mmol/L desirable,
+            <4 mmol/L secondary
+            prevention target, ≥6.2 mmol/L high requiring intervention). Key biomarker
+            for primary and
+            secondary cardiovascular prevention programmes, diabetes care pathways,
+            and lipid management
             protocols. Supports QOF reporting and clinical guideline compliance monitoring.
           is_qof: false
           source_column: "cholesterol_value"
@@ -52,7 +60,8 @@ models:
               threshold_value: "4"
               threshold_operator: "BELOW"
               threshold_unit: "mmol/L"
-              description: "Secondary prevention cholesterol target for established CVD"
+              description: "Secondary prevention cholesterol target for established
+                CVD"
               sort_order: 2
             - population_group: "DIABETES"
               threshold_type: "DIABETES_TARGET"
@@ -83,3 +92,5 @@ models:
               threshold_unit: "mmol/L"
               description: "High cholesterol requiring intervention"
               sort_order: 6
+        owner:
+          name: EddieDavison92

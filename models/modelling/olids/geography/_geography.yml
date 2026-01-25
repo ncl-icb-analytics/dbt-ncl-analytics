@@ -3,11 +3,17 @@ version: 2
 models:
   - name: int_geography_mappings
     description: Single source of truth for geography code-to-name mappings
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: mapping_category
-        description: Category of mapping (ORGANISATION, GEOGRAPHY, GEOGRAPHY_MAPPING)
+        description: Category of mapping (ORGANISATION, GEOGRAPHY, 
+          GEOGRAPHY_MAPPING)
       - name: mapping_type
-        description: Type of mapping (PRIMARY_CARE, LOCAL_AUTHORITY, LSOA_2021, etc.)
+        description: Type of mapping (PRIMARY_CARE, LOCAL_AUTHORITY, LSOA_2021, 
+          etc.)
       - name: code
         description: Geographic or organisation code
       - name: name
@@ -40,7 +46,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Most Deprived', 'Second Most Deprived', 'Third Most Deprived', 'Second Least Deprived', 'Least Deprived']
+              values: ['Most Deprived', 'Second Most Deprived', 'Third Most Deprived',
+                'Second Least Deprived', 'Least Deprived']
       - name: imd_quintile_numeric_19
         description: IMD quintile as number (1-5)
         tests:
@@ -73,7 +80,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Most Deprived', 'Second Most Deprived', 'Third Most Deprived', 'Second Least Deprived', 'Least Deprived']
+              values: ['Most Deprived', 'Second Most Deprived', 'Third Most Deprived',
+                'Second Least Deprived', 'Least Deprived']
       - name: imd_quintile_numeric_25
         description: IMD quintile as number (1-5)
         tests:
@@ -87,4 +95,9 @@ models:
         tests:
           - not_null
   - name: int_geography_london_areas
-    description: London area classifications by Local Authority District. One row per LAD with NCL, Other London, and Outside London classification.
+    description: London area classifications by Local Authority District. One 
+      row per LAD with NCL, Other London, and Outside London classification.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92

@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_diuretic_medications_all
-    description: 'Diuretic medication orders using BNF classification for cardiovascular and fluid management.'
+    description: 'Diuretic medication orders using BNF classification for cardiovascular
+      and fluid management.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

@@ -2,4 +2,9 @@ version: 2
 
 models:
   - name: dim_person_ethnicity_combi
-    description: Latest ethnicity per patient combining GP and event-level records. One row per patient with most recent valid ethnicity.
+    description: Latest ethnicity per patient combining GP and event-level 
+      records. One row per patient with most recent valid ethnicity.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin

@@ -1,7 +1,12 @@
 models:
   - name: smi_six_health_check_dm
-    description: Database model view holding six core health checks for people on the SMI register and demographics
-        
+    description: Database model view holding six core health checks for people 
+      on the SMI register and demographics
+
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: Unique identifier for the person

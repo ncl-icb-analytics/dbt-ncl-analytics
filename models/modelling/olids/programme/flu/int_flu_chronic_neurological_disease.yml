@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_chronic_neurological_disease
-    description: 'Flu vaccination eligibility for people with chronic neurological conditions including stroke/TIA, cerebral palsy, and MS.
+    description: 'Flu vaccination eligibility for people with chronic neurological
+      conditions including stroke/TIA, cerebral palsy, and MS.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to chronic neurological conditions.'
-    
+      Purpose: Identify people eligible for flu vaccination due to chronic neurological
+      conditions.'
     config:
       meta:
         indicator:
@@ -25,9 +26,11 @@ models:
           category: "FLU"
           clinical_domain: "Neurology"
           name_short: "Flu Eligible Chronic Neurological"
-          description_short: "People with chronic neurological disease eligible for flu vaccination"
+          description_short: "People with chronic neurological disease eligible for
+            flu vaccination"
           description_long: >
-            Flu vaccination eligibility for people with chronic neurological conditions including
+            Flu vaccination eligibility for people with chronic neurological conditions
+            including
             stroke/TIA, cerebral palsy, multiple sclerosis, and other neurological
             diseases. Uses CNSGROUP_COD cluster codes with earliest occurrence qualifying.
             Minimum age requirement of 6 months for flu vaccination.
@@ -48,7 +51,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

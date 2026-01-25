@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_anxiety_diagnoses_all
-    description: 'Anxiety diagnosis and resolution observations for mental health register management.
+    description: 'Anxiety diagnosis and resolution observations for mental health
+      register management.
 
-      One row per observation using ANX_COD (diagnosis) and ANXRES_COD (resolution) clusters.'
+      One row per observation using ANX_COD (diagnosis) and ANXRES_COD (resolution)
+      clusters.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -33,7 +39,8 @@ models:
         description: 'Flag indicating anxiety resolution code (ANXRES_COD cluster)'
 
       - name: anxiety_observation_type
-        description: 'Categorised anxiety observation type (Anxiety Diagnosis or Anxiety Resolved)'
+        description: 'Categorised anxiety observation type (Anxiety Diagnosis or Anxiety
+          Resolved)'
 
     tests:
       - dbt_utils.at_least_one:

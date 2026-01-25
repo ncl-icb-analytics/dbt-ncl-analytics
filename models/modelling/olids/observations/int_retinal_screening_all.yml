@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_retinal_screening_all
-    description: 'Completed diabetes retinal screening procedures for eye care monitoring and QOF reporting.
+    description: 'Completed diabetes retinal screening procedures for eye care monitoring
+      and QOF reporting.
 
-      One row per completed retinal screening using RETSCREN_COD cluster with result categorisation and diabetic retinopathy risk assessment.'
+      One row per completed retinal screening using RETSCREN_COD cluster with result
+      categorisation and diabetic retinopathy risk assessment.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: RETSCREN_COD

@@ -1,7 +1,12 @@
 models:
   - name: int_childhood_imms_current_population
-    description: Intermediate table holding demographics for base childhood imms population currently registered under the age of 20
-    
+    description: Intermediate table holding demographics for base childhood imms
+      population currently registered under the age of 20
+
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: Unique identifier for the person

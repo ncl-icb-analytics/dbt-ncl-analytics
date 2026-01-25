@@ -1,3 +1,9 @@
 models:
   - name: int_childhood_imms_ts_agg_res_age_16
-    description: Intermediate table holding aggregated completion metrics by residential location for historical children aged 16 at each analysis month.
+    description: Intermediate table holding aggregated completion metrics by 
+      residential location for historical children aged 16 at each analysis 
+      month.
+    config:
+      meta:
+        owner:
+          name: KatsplatH

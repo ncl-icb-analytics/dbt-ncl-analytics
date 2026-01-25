@@ -2,8 +2,13 @@ version: 2
 
 models:
   - name: childhood_imms_overview_child_dm
-    description: Final data model table holding UNIONED aggregated completion metrics for currently registered children aged 1,2 and 5 on current date.
+    description: Final data model table holding UNIONED aggregated completion 
+      metrics for currently registered children aged 1,2 and 5 on current date.
 
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

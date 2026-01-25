@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: int_commissioning_observations
-    description: "Observations derived from SUS AE, SUS OP, SUS APC, CSDS (to be added), and MHDS (to be added). Diagnosis and procedure codes in ICD10 or snomed codes as indicated. No measurement data"
+    description: "Observations derived from SUS AE, SUS OP, SUS APC, CSDS (to be added),
+      and MHDS (to be added). Diagnosis and procedure codes in ICD10 or snomed codes
+      as indicated. No measurement data"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: diagnosis_id
         data_type: varchar
@@ -18,7 +24,8 @@ models:
 
       - name: visit_occurrence_type
         data_type: varchar
-        description: "Clinical setting of the visit occurrence (e.g., inpatient, outpatient, emergency)."
+        description: "Clinical setting of the visit occurrence (e.g., inpatient, outpatient,
+          emergency)."
 
       - name: date
         data_type: timestamp_ntz

@@ -5,7 +5,8 @@ models:
 
       Identifies CYP aged 18 months to <18 years with asthma indicators but no diagnosis.
 
-      One row per child with asthma medications, suspected asthma codes, or viral wheeze (age 6+).'
+      One row per child with asthma medications, suspected asthma codes, or viral
+      wheeze (age 6+).'
 
     config:
       meta:
@@ -15,9 +16,11 @@ models:
           category: "CYP_AST"
           clinical_domain: "Children and Young People Asthma Case Finding"
           name_short: "Possible asthma"
-          description_short: "Children 18 months-<18 years with asthma indicators, no diagnosis"
+          description_short: "Children 18 months-<18 years with asthma indicators,
+            no diagnosis"
           description_long: >
-            Age 18m-<18y with inhalers, oral prednisolone, montelukast, or suspected asthma in last 12m,
+            Age 18m-<18y with inhalers, oral prednisolone, montelukast, or suspected
+            asthma in last 12m,
             or age 6+ with viral induced wheeze in last 12m, no asthma diagnosis.
           is_qof: false
           source_column: "person_id"
@@ -63,3 +66,5 @@ models:
               threshold_unit: "months"
               description: "Medications or observations in last 12 months"
               sort_order: 3
+        owner:
+          name: EddieDavison92

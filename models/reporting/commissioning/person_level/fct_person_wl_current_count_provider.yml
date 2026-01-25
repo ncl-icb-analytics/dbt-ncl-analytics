@@ -7,6 +7,9 @@ models:
       Each column represents the sum of open pathways for a specific provider.
     config:
       materialized: view
+      meta:
+        owner:
+          name: PeterSNHS
     columns:
       - name: sk_patient_id
         description: Unique identifier for each patient.
@@ -14,6 +17,6 @@ models:
           - not_null
           - unique
     tests:
-    - dbt_expectations.expect_table_row_count_to_be_between:
-        min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
 

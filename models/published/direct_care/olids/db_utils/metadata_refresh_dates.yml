@@ -11,6 +11,10 @@ models:
 
       Table timestamps are retrieved from Snowflake's INFORMATION_SCHEMA, ensuring accuracy regardless of partial dbt runs.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -29,7 +33,9 @@ models:
         description: Table name (NULL for global metrics)
 
       - name: refresh_date
-        description: Date when data was last refreshed (date portion of last_altered_timestamp for tables)
+        description: Date when data was last refreshed (date portion of 
+          last_altered_timestamp for tables)
 
       - name: last_altered_timestamp
-        description: Timestamp when table was last modified (from Snowflake metadata, NULL for global metrics)
+        description: Timestamp when table was last modified (from Snowflake 
+          metadata, NULL for global metrics)

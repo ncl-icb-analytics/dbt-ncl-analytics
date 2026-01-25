@@ -2,31 +2,43 @@ version: 2
 
 models:
   - name: fct_person_sus_ip_recent
-    description: "Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient. Note: likely needs window shift to account for reporting delay.  Warning:needs expert analyst review."
+    description: "Recent inpatient spell counts and length of stay per patient (12mo
+      rolling). One row per patient. Note: likely needs window shift to account for
+      reporting delay.  Warning:needs expert analyst review."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: sk_patient_id
         data_type: varchar
-        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
+        description: Recent inpatient spell counts and length of stay per 
+          patient (12mo rolling). One row per patient.
         tests:
           - not_null
           - unique
 
       - name: apc_3mo
         data_type: number
-        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
+        description: Recent inpatient spell counts and length of stay per 
+          patient (12mo rolling). One row per patient.
 
       - name: apc_1mo
         data_type: number
-        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
+        description: Recent inpatient spell counts and length of stay per 
+          patient (12mo rolling). One row per patient.
 
       - name: apc_12mo
         data_type: number
-        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
+        description: Recent inpatient spell counts and length of stay per 
+          patient (12mo rolling). One row per patient.
 
       - name: apc_los_12mo
         data_type: number
-        description: Recent inpatient spell counts and length of stay per patient (12mo rolling). One row per patient.
+        description: Recent inpatient spell counts and length of stay per 
+          patient (12mo rolling). One row per patient.
 
       - name: apc_nel_12mo
         data_type: number
-        description: Recent inpatient spell counts of non-elective emergency admissions.
+        description: Recent inpatient spell counts of non-elective emergency 
+          admissions.

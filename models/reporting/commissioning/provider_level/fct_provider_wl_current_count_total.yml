@@ -7,6 +7,9 @@ models:
       Derived from `int_wl_current`.
     config:
       materialized: view
+      meta:
+        owner:
+          name: PeterSNHS
     columns:
       - name: provider_code
         description: Identifier for each provider.
@@ -19,9 +22,9 @@ models:
       - name: wl_current_total_count
         description: Total number of open waiting lists for the provider/site.
     tests:
-    - dbt_expectations.expect_table_row_count_to_be_between:
-        min_value: 1
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-        - provider_code
-        - provider_site_code
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - provider_code
+            - provider_site_code

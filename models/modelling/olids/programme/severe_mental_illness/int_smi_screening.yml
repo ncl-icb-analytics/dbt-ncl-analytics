@@ -1,10 +1,14 @@
 models:
   - name: int_smi_screening
-    description: Intermediate table holding screening status for people on the SMI register multiple lines per person
-    
+    description: Intermediate table holding screening status for people on the 
+      SMI register multiple lines per person
+
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
-          

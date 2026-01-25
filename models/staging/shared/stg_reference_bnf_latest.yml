@@ -1,32 +1,38 @@
 version: 2
 models:
-- name: stg_reference_bnf_latest
-  description: British National Formulary (BNF) reference data mapping medication codes to SNOMED and dm+d. Contains both Presentation (AMP) and Pack (AMPP) level records for each medication.
-  columns:
-  - name: presentation_pack_level
-    description: Level of the record (Presentation or Pack)
+  - name: stg_reference_bnf_latest
+    description: British National Formulary (BNF) reference data mapping 
+      medication codes to SNOMED and dm+d. Contains both Presentation (AMP) and 
+      Pack (AMPP) level records for each medication.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: presentation_pack_level
+        description: Level of the record (Presentation or Pack)
+        tests:
+          - not_null
+      - name: vmp_vmpp_amp_ampp
+        description: dm+d code type (AMP for presentation, AMPP for pack)
+        tests:
+          - not_null
+      - name: bnf_code
+        description: BNF code for medication
+        tests:
+          - not_null
+      - name: bnf_name
+        description: BNF name for medication
+      - name: snomed_code
+        description: SNOMED CT code for medication
+        tests:
+          - not_null
+      - name: dm_d_product_description
+        description: dm+d product description
+      - name: vtm
+        description: Virtual Therapeutic Moiety code
+      - name: vtm_name
+        description: Virtual Therapeutic Moiety name
     tests:
-    - not_null
-  - name: vmp_vmpp_amp_ampp
-    description: dm+d code type (AMP for presentation, AMPP for pack)
-    tests:
-    - not_null
-  - name: bnf_code
-    description: BNF code for medication
-    tests:
-    - not_null
-  - name: bnf_name
-    description: BNF name for medication
-  - name: snomed_code
-    description: SNOMED CT code for medication
-    tests:
-    - not_null
-  - name: dm_d_product_description
-    description: dm+d product description
-  - name: vtm
-    description: Virtual Therapeutic Moiety code
-  - name: vtm_name
-    description: Virtual Therapeutic Moiety name
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

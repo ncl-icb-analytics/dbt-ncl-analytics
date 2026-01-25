@@ -2,18 +2,16 @@ version: 2
 
 models:
   - name: fct_flu_eligibility
-    description: 'Flu vaccination eligibility determination across all eligibility pathways.
+    description: 'Flu vaccination eligibility determination across all eligibility
+      pathways.
 
       Grain: One row per person per campaign per risk group they qualify for
 
-      Contains:
-      • Person demographics and age calculations
-      • Eligibility category and specific risk group
-      • Qualifying event dates and priority ranking
-      • Campaign-specific eligibility rules
+      Contains: • Person demographics and age calculations • Eligibility category
+      and specific risk group • Qualifying event dates and priority ranking • Campaign-specific
+      eligibility rules
 
       Note: People eligible for multiple risk groups appear in multiple rows'
-    
     config:
       meta:
         indicator:
@@ -25,10 +23,14 @@ models:
           description_short: "Overall flu vaccination eligibility across all pathways"
           description_long: >
             Flu vaccination eligibility determination combining all eligibility
-            pathways including age-based criteria (≥65 years, children), clinical conditions
-            (respiratory, cardiovascular, diabetes, etc.), at-risk groups (pregnancy, immunosuppression,
-            care home residents), and occupational groups (healthcare workers, unpaid carers).
-            Provides single source of truth for flu programme planning and vaccination delivery.
+            pathways including age-based criteria (≥65 years, children), clinical
+            conditions
+            (respiratory, cardiovascular, diabetes, etc.), at-risk groups (pregnancy,
+            immunosuppression,
+            care home residents), and occupational groups (healthcare workers, unpaid
+            carers).
+            Provides single source of truth for flu programme planning and vaccination
+            delivery.
           is_qof: false
           source_column: "is_eligible"
           sort_order: "FLU_100_ELIGIBILITY_OVERALL"
@@ -53,7 +55,9 @@ models:
               threshold_unit: "years"
               description: "Age-based eligibility threshold"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -73,30 +77,30 @@ models:
         description: Flu campaign identifier (e.g., flu_2024_25)
         tests:
           - not_null
-        
+
       - name: campaign_year
         description: Campaign year for reporting
-        
+
       - name: campaign_category
         description: Eligibility category for this person
-        
+
       - name: is_eligible
         description: Whether person is eligible for flu vaccination
-        
+
       - name: eligibility_reason
         description: Primary reason for eligibility
-        
+
       - name: age_at_campaign_start
         description: Person's age at campaign start date
-        
+
       - name: has_clinical_condition
         description: Whether person has qualifying clinical condition
-        
+
       - name: is_pregnant
         description: Whether person is pregnant during campaign
-        
+
       - name: is_healthcare_worker
         description: Whether person is a healthcare worker
-        
+
       - name: is_care_home_resident
         description: Whether person is a care home resident

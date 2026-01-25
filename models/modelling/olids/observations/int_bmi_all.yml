@@ -1,27 +1,40 @@
 version: 2
 models:
   - name: int_bmi_all
-    description: 'BMI measurements for adults aged 18+ with ethnicity-adjusted categorisation per NICE NG246.
+    description: 'BMI measurements for adults aged 18+ with ethnicity-adjusted categorisation
+      per NICE NG246.
 
-      One row per BMI observation for adults aged 18+ using BMIVAL_COD cluster with plausible range filtering (10-150). Uses ethnicity-adjusted BMI thresholds for cardiometabolic risk populations (South Asian, Chinese, other Asian, Middle Eastern, Black African, African-Caribbean). Avoids calculating BMI on dates where recorded BMI already exists.
+      One row per BMI observation for adults aged 18+ using BMIVAL_COD cluster with
+      plausible range filtering (10-150). Uses ethnicity-adjusted BMI thresholds for
+      cardiometabolic risk populations (South Asian, Chinese, other Asian, Middle
+      Eastern, Black African, African-Caribbean). Avoids calculating BMI on dates
+      where recorded BMI already exists.
 
       Key Features:
 
-      • Age restriction: Adults 18+ only (pediatric BMI requires age/gender-specific percentiles)
+      • Age restriction: Adults 18+ only (pediatric BMI requires age/gender-specific
+      percentiles)
 
-      • Ethnicity-adjusted BMI categories per NICE NG246 (lower thresholds for at-risk populations)
+      • Ethnicity-adjusted BMI categories per NICE NG246 (lower thresholds for at-risk
+      populations)
 
       • Prevents BMI over-calculation by excluding dates with existing recorded BMI
 
       • Combines recorded and calculated BMI observations
 
-      Purpose: Provides clinically appropriate adult BMI categorisation accounting for ethnic differences in cardiometabolic risk.'
+      Purpose: Provides clinically appropriate adult BMI categorisation accounting
+      for ethnic differences in cardiometabolic risk.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: BMIVAL_COD
     columns:
       - name: id
-        description: Unique identifier for each BMI observation (recorded or calculated)
+        description: Unique identifier for each BMI observation (recorded or 
+          calculated)
         tests:
           - unique
           - not_null
@@ -60,7 +73,8 @@ models:
           - accepted_values:
               values: ['recorded', 'calculated']
       - name: requires_lower_bmi_thresholds
-        description: 'Flag indicating if person requires lower BMI thresholds per NICE NG246'
+        description: 'Flag indicating if person requires lower BMI thresholds per
+          NICE NG246'
       - name: cardiometabolic_risk_ethnicity_group
         description: 'Ethnicity group classification for cardiometabolic risk assessment'
       - name: is_valid_bmi
@@ -68,13 +82,16 @@ models:
         tests:
           - not_null
       - name: bmi_category
-        description: 'BMI categorisation using ethnicity-adjusted thresholds per NICE NG246'
+        description: 'BMI categorisation using ethnicity-adjusted thresholds per NICE
+          NG246'
         tests:
           - not_null
           - accepted_values:
-              values: ['Invalid', 'Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
+              values: ['Invalid', 'Underweight', 'Normal', 'Overweight', 'Obese Class
+                    I', 'Obese Class II', 'Obese Class III']
       - name: bmi_risk_sort_key
-        description: 'BMI risk sort key using ethnicity-adjusted thresholds (higher = higher risk)'
+        description: 'BMI risk sort key using ethnicity-adjusted thresholds (higher
+          = higher risk)'
         tests:
           - not_null
           - dbt_utils.accepted_range:

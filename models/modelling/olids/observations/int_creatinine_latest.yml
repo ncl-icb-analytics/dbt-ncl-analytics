@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: int_creatinine_latest
-    description: 'Most recent valid serum creatinine measurement per person for kidney function assessment.
+    description: 'Most recent valid serum creatinine measurement per person for kidney
+      function assessment.
 
-      One row per person with their latest creatinine including clinical creatinine categorisation and elevated creatinine flags.'
+      One row per person with their latest creatinine including clinical creatinine
+      categorisation and elevated creatinine flags.'
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
@@ -23,13 +25,18 @@ models:
           category: "LABORATORY_RESULT"
           clinical_domain: "Nephrology"
           name_short: "Latest Creatinine"
-          description_short: "Most recent serum creatinine measurement for kidney function assessment"
+          description_short: "Most recent serum creatinine measurement for kidney
+            function assessment"
           description_long: >
-            Latest valid serum creatinine measurement per person supporting kidney function assessment
-            and chronic kidney disease monitoring. Provides current renal function status with clinical
-            categorisation (normal ≤125 μmol/L males/≤110 μmol/L females, elevated >150 μmol/L suggesting
-            CKD Stage 3+, significantly elevated >200 μmol/L requiring investigation). Key biomarker for 
-            CKD pathway management, medication dosing adjustments, and cardiovascular risk assessment.
+            Latest valid serum creatinine measurement per person supporting kidney
+            function assessment
+            and chronic kidney disease monitoring. Provides current renal function
+            status with clinical
+            categorisation (normal ≤125 μmol/L males/≤110 μmol/L females, elevated
+            >150 μmol/L suggesting
+            CKD Stage 3+, significantly elevated >200 μmol/L requiring investigation).
+            Key biomarker for  CKD pathway management, medication dosing adjustments,
+            and cardiovascular risk assessment.
             Supports QOF diabetes care processes and nephrology referral pathways.
           is_qof: false
           source_column: "creatinine_value"
@@ -84,3 +91,5 @@ models:
               threshold_unit: "μmol/L"
               description: "Creatinine level suggesting possible CKD Stage 3+"
               sort_order: 6
+        owner:
+          name: EddieDavison92

@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_antidepressant_medications_all
-    description: 'Antidepressant medication orders using BNF classification for mental health treatment.'
+    description: 'Antidepressant medication orders using BNF classification for mental
+      health treatment.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

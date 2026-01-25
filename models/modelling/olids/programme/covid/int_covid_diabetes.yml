@@ -15,12 +15,12 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to diabetes mellitus requiring immunisation.'
-    
+      Purpose: Identify people eligible for COVID vaccination due to diabetes mellitus
+      requiring immunisation.'
     tests:
       - cluster_ids_exist:
           cluster_ids: DIAB_COD,DMRES_COD,ADDIS_COD
-    
+
     config:
       meta:
         indicator:
@@ -31,8 +31,10 @@ models:
           name_short: "COVID Eligible Diabetes"
           description_short: "People with diabetes mellitus eligible for COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with diabetes mellitus using DIAB_COD and DMRES_COD
-            cluster codes with earliest occurrence qualifying. Includes Type 1 and Type 2
+            COVID vaccination eligibility for people with diabetes mellitus using
+            DIAB_COD and DMRES_COD
+            cluster codes with earliest occurrence qualifying. Includes Type 1 and
+            Type 2
             diabetes that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.
           is_qof: false
@@ -56,7 +58,9 @@ models:
               threshold_unit: "years"
               description: "Minimum age for COVID vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'

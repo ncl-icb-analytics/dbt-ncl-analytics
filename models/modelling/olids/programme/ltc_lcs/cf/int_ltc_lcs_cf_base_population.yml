@@ -1,9 +1,12 @@
 version: 2
 models:
   - name: int_ltc_lcs_cf_base_population
-    description: 'Base population for Long Term Conditions case finding indicators with appropriate exclusions.
+    description: 'Base population for Long Term Conditions case finding indicators
+      with appropriate exclusions.
 
-      One row per eligible person excluding patients already in LTC programmes and those with NHS health checks in last 24 months to prevent duplicate programme targeting.'
+      One row per eligible person excluding patients already in LTC programmes and
+      those with NHS health checks in last 24 months to prevent duplicate programme
+      targeting.'
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id
@@ -19,12 +22,13 @@ models:
           category: "CASE_FINDING"
           clinical_domain: "Population Health Management"
           name_short: "LTC/LCS base population"
-          description_short: "Eligible population for LTC/LCS case finding with exclusions applied"
+          description_short: "Eligible population for LTC/LCS case finding with exclusions
+            applied"
           description_long: >
-            Active patients with practice registration, excluding existing LTC programme 
-            participants (CKD, AF, COPD, HTN, CHD, STIA, PAD, HF, DM2, FHYP, NAF, AST, CYP_AST) 
-            and recent NHS health check recipients (24m) to prevent duplicate targeting. 
-            Forms foundation for all case finding indicators.
+            Active patients with practice registration, excluding existing LTC programme  participants
+            (CKD, AF, COPD, HTN, CHD, STIA, PAD, HF, DM2, FHYP, NAF, AST, CYP_AST)  and
+            recent NHS health check recipients (24m) to prevent duplicate targeting.  Forms
+            foundation for all case finding indicators.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_BASE_001"
@@ -68,3 +72,5 @@ models:
               threshold_unit: "months"
               description: "Exclude patients with NHS health checks in last 24 months"
               sort_order: 1
+        owner:
+          name: EddieDavison92

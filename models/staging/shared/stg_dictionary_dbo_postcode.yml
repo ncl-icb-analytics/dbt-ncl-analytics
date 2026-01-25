@@ -1,19 +1,23 @@
 version: 2
 models:
-- name: stg_dictionary_dbo_postcode
-  description: UK postcode reference data with geographic mappings
-  columns:
-  - name: sk_postcode_id
-    description: Primary key - postcode surrogate key
-    data_tests:
-    - unique
-    - not_null
-  - name: postcode
-    description: Postcode
-  - name: lsoa
-    description: LSOA code
-  - name: msoa
-    description: MSOA code
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+  - name: stg_dictionary_dbo_postcode
+    description: UK postcode reference data with geographic mappings
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: sk_postcode_id
+        description: Primary key - postcode surrogate key
+        data_tests:
+          - unique
+          - not_null
+      - name: postcode
+        description: Postcode
+      - name: lsoa
+        description: LSOA code
+      - name: msoa
+        description: MSOA code
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

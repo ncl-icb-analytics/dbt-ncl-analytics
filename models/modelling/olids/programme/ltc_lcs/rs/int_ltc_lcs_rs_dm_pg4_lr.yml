@@ -9,6 +9,10 @@ models:
       - Priority Group 2 (HR)
       - Priority Group 3A (MRa)
       - Priority Group 3B (MRb)
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id

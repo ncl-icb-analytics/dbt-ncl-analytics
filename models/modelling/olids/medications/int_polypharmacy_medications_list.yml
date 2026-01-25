@@ -36,6 +36,10 @@ models:
 
       Reference: GitHub issue #158
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: snomed_code
         description: SNOMED CT code for the medication
@@ -49,7 +53,8 @@ models:
           - not_null
 
       - name: bnf_chapter
-        description: First 2 characters of BNF code indicating chapter (01-04, 06-10)
+        description: First 2 characters of BNF code indicating chapter (01-04, 
+          06-10)
         data_tests:
           - not_null
 

@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_statin_medications_all
-    description: 'Statin medication orders using BNF classification for cholesterol management and cardiovascular risk reduction.'
+    description: 'Statin medication orders using BNF classification for cholesterol
+      management and cardiovascular risk reduction.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

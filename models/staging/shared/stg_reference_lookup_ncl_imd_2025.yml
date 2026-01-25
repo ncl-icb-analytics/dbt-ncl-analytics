@@ -1,51 +1,56 @@
 version: 2
 models:
-- name: stg_reference_lookup_ncl_imd_2025
-  description: IMD 2025 (Index of Multiple Deprivation) reference data mapped to LSOA 2021 and Local Authority District 2024
-  columns:
-  - name: lsoa_code_2021
-    description: Primary key - LSOA 2021 code
+  - name: stg_reference_lookup_ncl_imd_2025
+    description: IMD 2025 (Index of Multiple Deprivation) reference data mapped 
+      to LSOA 2021 and Local Authority District 2024
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
+    columns:
+      - name: lsoa_code_2021
+        description: Primary key - LSOA 2021 code
+        tests:
+          - unique
+          - not_null
+      - name: lsoa_name_2021
+        description: LSOA 2021 name
+      - name: local_authority_district_code_2024
+        description: Local Authority District code 2024
+      - name: local_authority_district_name_2024
+        description: Local Authority District name 2024
+      - name: imd25_decile
+        description: IMD 2025 overall deprivation decile (1-10, 1 most deprived)
+      - name: income_domainemployment_domain_decile
+        description: Income and Employment domain deprivation decile
+      - name: employment_domain_decile
+        description: Employment domain deprivation decile
+      - name: education_domain_decile
+        description: Education domain deprivation decile
+      - name: health_domain_decile
+        description: Health domain deprivation decile
+      - name: crime_domain_decile
+        description: Crime domain deprivation decile
+      - name: barriers_to_housing_domain_decile
+        description: Barriers to Housing domain deprivation decile
+      - name: living_environment_domain_decile
+        description: Living Environment domain deprivation decile
+      - name: income_deprivation_affecting_children_subdomain_decile
+        description: Income Deprivation Affecting Children subdomain decile
+      - name: income_deprivation_affecting_older_people_subdomain_decile
+        description: Income Deprivation Affecting Older People subdomain decile
+      - name: children_and_young_people_subdomain_decile
+        description: Children and Young People subdomain decile
+      - name: adult_skills_subdomain_decile
+        description: Adult Skills subdomain decile
+      - name: geographical_barriers_subdomain_decile
+        description: Geographical Barriers subdomain decile
+      - name: wider_barriers_subdomain_decile
+        description: Wider Barriers subdomain decile
+      - name: indoors_subdomain_decile
+        description: Indoors subdomain decile
+      - name: outdoors_subdomain_decile
+        description: Outdoors subdomain decile
     tests:
-    - unique
-    - not_null
-  - name: lsoa_name_2021
-    description: LSOA 2021 name
-  - name: local_authority_district_code_2024
-    description: Local Authority District code 2024
-  - name: local_authority_district_name_2024
-    description: Local Authority District name 2024
-  - name: imd25_decile
-    description: IMD 2025 overall deprivation decile (1-10, 1 most deprived)
-  - name: income_domainemployment_domain_decile
-    description: Income and Employment domain deprivation decile
-  - name: employment_domain_decile
-    description: Employment domain deprivation decile
-  - name: education_domain_decile
-    description: Education domain deprivation decile
-  - name: health_domain_decile
-    description: Health domain deprivation decile
-  - name: crime_domain_decile
-    description: Crime domain deprivation decile
-  - name: barriers_to_housing_domain_decile
-    description: Barriers to Housing domain deprivation decile
-  - name: living_environment_domain_decile
-    description: Living Environment domain deprivation decile
-  - name: income_deprivation_affecting_children_subdomain_decile
-    description: Income Deprivation Affecting Children subdomain decile
-  - name: income_deprivation_affecting_older_people_subdomain_decile
-    description: Income Deprivation Affecting Older People subdomain decile
-  - name: children_and_young_people_subdomain_decile
-    description: Children and Young People subdomain decile
-  - name: adult_skills_subdomain_decile
-    description: Adult Skills subdomain decile
-  - name: geographical_barriers_subdomain_decile
-    description: Geographical Barriers subdomain decile
-  - name: wider_barriers_subdomain_decile
-    description: Wider Barriers subdomain decile
-  - name: indoors_subdomain_decile
-    description: Indoors subdomain decile
-  - name: outdoors_subdomain_decile
-    description: Outdoors subdomain decile
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

@@ -4,12 +4,13 @@ models:
   - name: dim_person_age_historical
     description: 'Historical Person Age Dimension Table (Type 2 SCD)
 
-      Calculates age and age bands using modern Type 2 slowly changing dimensions approach.
-      Only creates rows when age bands actually change.
+      Calculates age and age bands using modern Type 2 slowly changing dimensions
+      approach. Only creates rows when age bands actually change.
 
       Key Features:
 
-      • Type 2 SCD with effective_start_date and effective_end_date (NULL = current period)
+      • Type 2 SCD with effective_start_date and effective_end_date (NULL = current
+      period)
 
       • 5-year rolling history window for performance optimisation
 
@@ -25,11 +26,16 @@ models:
 
       • Limited to last 5 years of data to balance completeness with performance
 
-      • Change points triggered by: age milestones at 5-year intervals (0, 5, 10, 15, etc.)
+      • Change points triggered by: age milestones at 5-year intervals (0, 5, 10,
+      15, etc.)
 
-      For analysis queries, join using:
-      WHERE analysis_date >= effective_start_date AND (effective_end_date IS NULL OR analysis_date < effective_end_date)'
+      For analysis queries, join using: WHERE analysis_date >= effective_start_date
+      AND (effective_end_date IS NULL OR analysis_date < effective_end_date)'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique person identifier'
@@ -42,7 +48,8 @@ models:
           - not_null
 
       - name: effective_end_date
-        description: 'SCD2: Period end date for temporal tracking (NULL = current period)'
+        description: 'SCD2: Period end date for temporal tracking (NULL = current
+          period)'
 
       - name: period_sequence
         description: 'SCD2: Sequential number for each temporal period per person'
@@ -89,4 +96,5 @@ models:
 
       - dbt_utils.expression_is_true:
           name: dim_person_age_historical_current_period_consistency
-          expression: "(effective_end_date IS NULL AND is_current_period = true) OR (effective_end_date IS NOT NULL)"
+          expression: "(effective_end_date IS NULL AND is_current_period = true) OR
+            (effective_end_date IS NOT NULL)"

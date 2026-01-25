@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: int_comm_maternity
-    description: "Activities considered as maternity related for commissioning analysis. Currently limited to OP encounters and requires expert review to determine if maternity-related."
+    description: "Activities considered as maternity related for commissioning analysis.
+      Currently limited to OP encounters and requires expert review to determine if
+      maternity-related."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: visit_occurrence_id
         data_type: number
@@ -12,7 +18,7 @@ models:
               config:
                 severity: error
                 error_if: ">100"
-                warn_if: ">10"        
+                warn_if: ">10"
           - not_null
 
       - name: start_date

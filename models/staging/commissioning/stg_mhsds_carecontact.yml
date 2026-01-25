@@ -1,13 +1,17 @@
 version: 3
 models:
-- name: stg_mhsds_carecontact
-  description:  'Mental Health Services Data Set (MHSDS) care contacts'
-  columns:
-  - name: uniq_care_cont_id
-    description: MHSDS care contact identifier
+  - name: stg_mhsds_carecontact
+    description: 'Mental Health Services Data Set (MHSDS) care contacts'
+    config:
+      meta:
+        owner:
+          name: Jessica Roberts
+    columns:
+      - name: uniq_care_cont_id
+        description: MHSDS care contact identifier
+        tests:
+          - unique
+          - not_null
     tests:
-    - unique
-    - not_null
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

@@ -1,21 +1,25 @@
 version: 2
 models:
-- name: stg_reference_practice_neighbourhood_lookup
-  description: GP practice to neighbourhood, PCN, and local authority mapping
-  columns:
-  - name: practicecode
-    description: Primary key - GP practice code
+  - name: stg_reference_practice_neighbourhood_lookup
+    description: GP practice to neighbourhood, PCN, and local authority mapping
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: practicecode
+        description: Primary key - GP practice code
+        tests:
+          - unique
+          - not_null
+      - name: practicename
+        description: GP practice name
+      - name: pcncode
+        description: Primary Care Network code
+      - name: localauthority
+        description: Local authority
+      - name: practiceneighbourhood
+        description: NCL practice neighbourhood
     tests:
-    - unique
-    - not_null
-  - name: practicename
-    description: GP practice name
-  - name: pcncode
-    description: Primary Care Network code
-  - name: localauthority
-    description: Local authority
-  - name: practiceneighbourhood
-    description: NCL practice neighbourhood
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

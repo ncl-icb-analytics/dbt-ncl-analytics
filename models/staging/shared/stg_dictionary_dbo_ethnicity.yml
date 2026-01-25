@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: stg_dictionary_dbo_ethnicity
-    description: Ethnicity code dictionary with HES and NHS codes. One row per ethnicity code.
+    description: Ethnicity code dictionary with HES and NHS codes. One row per 
+      ethnicity code.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: sk_ethnicity_id
         description: Surrogate key for the ethnicity

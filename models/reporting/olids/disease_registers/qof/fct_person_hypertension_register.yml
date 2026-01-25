@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: fct_person_hypertension_register
-    description: 'QOF hypertension register for patients aged 18+ with active hypertension diagnosis.
+    description: 'QOF hypertension register for patients aged 18+ with active hypertension
+      diagnosis.
 
-      One row per person with latest HTN_COD > latest HTNRES_COD, including clinical staging based on NICE-aligned BP thresholds.'
+      One row per person with latest HTN_COD > latest HTNRES_COD, including clinical
+      staging based on NICE-aligned BP thresholds.'
 
     tests:
       - dbt_utils.at_least_one:
@@ -19,11 +21,11 @@ models:
           name_short: "Hypertension"
           description_short: "QOF hypertension register"
           description_long: >
-            Hypertension diagnosed using QOF criteria: Age ≥18 years with active hypertension 
-            diagnosis where latest HTN code is more recent than any resolution code. Includes 
-            clinical staging based on NICE-aligned BP thresholds with context-specific measurement 
-            criteria (Home/ABPM vs Clinic readings). Maps to QOF indicator HTN005 (Hypertension 
-            Register). Uses HTN_COD for diagnosis codes and HTNRES_COD for resolution codes.
+            Hypertension diagnosed using QOF criteria: Age ≥18 years with active hypertension  diagnosis
+            where latest HTN code is more recent than any resolution code. Includes  clinical
+            staging based on NICE-aligned BP thresholds with context-specific measurement  criteria
+            (Home/ABPM vs Clinic readings). Maps to QOF indicator HTN005 (Hypertension  Register).
+            Uses HTN_COD for diagnosis codes and HTNRES_COD for resolution codes.
           is_qof: true
           qof_indicator: "HTN005"
           source_column: "is_on_register"
@@ -36,6 +38,8 @@ models:
             - cluster_id: "HTNRES_COD"
               category: "RESOLUTION"
 
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Patient identifier'
@@ -65,7 +69,8 @@ models:
         description: 'Array of all hypertension concept displays for this patient'
 
       - name: meets_age_criteria
-        description: 'Flag indicating patient meets age criteria (≥18 years for hypertension register)'
+        description: 'Flag indicating patient meets age criteria (≥18 years for hypertension
+          register)'
 
       - name: has_active_diagnosis
         description: 'Flag indicating patient has an active hypertension diagnosis'
