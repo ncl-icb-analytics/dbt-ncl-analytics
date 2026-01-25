@@ -11,6 +11,10 @@ models:
       - Rule 6: 3+ repeat antihypertensive prescriptions in last 3 months
       - Rule 7: Latest BP in last 12 months with diastolic > 90
       - Rule 8: Latest BP in last 12 months with systolic > 150
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id
