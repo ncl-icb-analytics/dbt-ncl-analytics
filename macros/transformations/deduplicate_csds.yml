@@ -7,21 +7,6 @@ macros:
       Joins to active submissions to filter inactive records.
 
 
-      Usage:
-
-      ```sql
-
-      {{ deduplicate_csds(
-          ref('raw_csds_cyp101referral'),
-          ['unique_service_request_identifier']
-      ) }}
-
-      {{ deduplicate_csds(
-          'my_schema.my_table',
-          ['unique_service_request_identifier', 'unique_care_contact_identifier']
-      ) }}
-
-      ```
     arguments:
       - name: csds_table
         type: string

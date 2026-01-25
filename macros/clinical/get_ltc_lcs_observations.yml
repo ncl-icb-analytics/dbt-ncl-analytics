@@ -7,15 +7,6 @@ macros:
       Joins to expanded concepts and valuesets reference data.
 
 
-      Usage:
-
-      ```sql
-
-      {{ get_ltc_lcs_observations('on_dm_reg_priority_group_3b_mrb_vs3') }}
-
-      {{ get_ltc_lcs_observations('on_ckd_reg_acr_latest,on_ckd_reg_egfr_latest') }}
-
-      ```
     arguments:
       - name: valuesets
         type: string

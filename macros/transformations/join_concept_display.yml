@@ -7,20 +7,6 @@ macros:
       Creates aliases: source_concept, concept_map, target_concept (with optional prefix).
 
 
-      Usage:
-
-      ```sql
-
-      FROM observations o
-      {{ join_concept_display('o.concept_id') }}
-
-      -- With alias prefix for multiple joins:
-
-      FROM medications m
-      {{ join_concept_display('m.drug_concept_id', alias_prefix='drug_') }}
-      {{ join_concept_display('m.route_concept_id', alias_prefix='route_') }}
-
-      ```
     arguments:
       - name: source_column
         type: string

@@ -6,19 +6,6 @@ macros:
       Validates organisation codes against reference data. Returns full code if valid, otherwise truncates to 3 characters.
 
 
-      Usage:
-
-      ```sql
-
-      SELECT
-          {{ clean_organisation_id('org_code') }} AS organisation_code
-      FROM referrals
-
-      -- With custom org type:
-
-      {{ clean_organisation_id('provider_code', org_type_id=42) }}
-
-      ```
     arguments:
       - name: column_name
         type: string

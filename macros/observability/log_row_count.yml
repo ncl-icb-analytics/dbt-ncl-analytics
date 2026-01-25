@@ -7,16 +7,6 @@ macros:
       Only runs in prod targets for table/incremental materializations.
 
 
-      Usage:
-
-      ```yaml
-
-      # In dbt_project.yml:
-      models:
-        +post-hook:
-          - "{{ log_row_count() }}"
-
-      ```
 
 
       Logs to: DATA_LAKE__NCL.DBT_OBSERVABILITY.ROW_COUNT_LOG

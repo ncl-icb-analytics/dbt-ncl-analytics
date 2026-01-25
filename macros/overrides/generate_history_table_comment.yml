@@ -7,16 +7,6 @@ macros:
       Similar format to generate_table_comment but for dynamically created history tables.
 
 
-      Usage:
-
-      ```sql
-
-      COMMENT ON TABLE {{ history_table }} IS '{{ generate_history_table_comment(
-          "def_indicator",
-          "Historical versions of indicator definitions with daily granularity."
-      ) }}';
-
-      ```
     arguments:
       - name: table_name
         type: string

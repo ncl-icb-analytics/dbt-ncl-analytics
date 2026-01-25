@@ -7,13 +7,3 @@ macros:
       Uses generate_table_comment() for content. Skips ephemeral models.
 
 
-      Usage:
-
-      ```yaml
-
-      # In dbt_project.yml:
-      models:
-        +post-hook:
-          - "{{ add_model_comment() }}"
-
-      ```

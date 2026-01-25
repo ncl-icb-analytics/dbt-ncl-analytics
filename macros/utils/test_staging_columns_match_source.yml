@@ -8,19 +8,6 @@ macros:
       Not a standalone test - called by the generic test.
 
 
-      Usage:
-
-      ```sql
-
-      -- Called internally by test_all_source_columns_in_staging:
-      {{ test_staging_columns_match_source(
-          source_database,
-          source_schema,
-          table_name,
-          staging_model
-      ) }}
-
-      ```
     arguments:
       - name: source_database
         type: string

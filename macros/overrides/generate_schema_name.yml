@@ -7,20 +7,6 @@ macros:
       For domains in var('auto_schema_domains'), derives DOMAIN_SUBDOMAIN from path.
 
 
-      Usage:
-
-      ```yaml
-
-      # In dbt_project.yml:
-      vars:
-        auto_schema_domains: ['olids']
-
-      # Then folder structure determines schema:
-      # models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES
-      # models/reporting/olids/person_analytics/ → OLIDS_PERSON_ANALYTICS
-      # models/published/direct_care/olids/childhood_imms/ → OLIDS_CHILDHOOD_IMMS
-
-      ```
 
 
       Behavior:

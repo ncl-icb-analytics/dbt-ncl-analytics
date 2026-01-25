@@ -7,19 +7,6 @@ macros:
       Returns a SELECT with all campaign-specific configuration values.
 
 
-      Usage:
-
-      ```sql
-
-      -- Get current campaign config (uses var('covid_current_campaign')):
-      WITH config AS ({{ covid_campaign_config() }})
-      SELECT * FROM config
-
-      -- Get specific campaign:
-      WITH config AS ({{ covid_campaign_config('COVID Autumn 2024') }})
-      SELECT campaign_start_date FROM config
-
-      ```
 
 
       Available campaigns: COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025
@@ -36,13 +23,6 @@ macros:
       Helper to get a specific date field from campaign config.
 
 
-      Usage:
-
-      ```sql
-
-      WHERE vaccination_date >= {{ covid_get_campaign_date('campaign_start_date') }}
-
-      ```
     arguments:
       - name: date_name
         type: string

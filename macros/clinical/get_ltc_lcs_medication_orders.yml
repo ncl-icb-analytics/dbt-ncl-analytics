@@ -7,15 +7,6 @@ macros:
       Joins to expanded concepts, valuesets, patient mapping, and BNF reference data.
 
 
-      Usage:
-
-      ```sql
-
-      {{ get_ltc_lcs_medication_orders('on_dm_reg_priority_group_3b_mrb_vs5') }}
-
-      {{ get_ltc_lcs_medication_orders('on_ckd_reg_acr_rx,on_ckd_reg_acr_atorvastatin') }}
-
-      ```
     arguments:
       - name: valuesets
         type: string

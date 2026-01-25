@@ -7,18 +7,6 @@ macros:
       Matches records where fact date falls within dimension's effective date range.
 
 
-      Usage:
-
-      ```sql
-
-      FROM {{ temporal_join(
-          ref('fct_appointments'),
-          'appointment_date',
-          ref('dim_patient_scd'),
-          join_key='person_id'
-      ) }}
-
-      ```
     arguments:
       - name: fact_table
         type: string

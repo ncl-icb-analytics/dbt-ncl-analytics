@@ -7,22 +7,6 @@ macros:
       Includes custom warning messages from meta.custom_message config.
 
 
-      Usage:
-
-      ```yaml
-
-      # In dbt_project.yml:
-      models:
-        +post-hook:
-          - "{{ add_model_comment() }}"  # calls generate_table_comment internally
-
-      # In model config for custom warnings:
-      models:
-        my_model:
-          +meta:
-            custom_message: "Contains sensitive data - do not share externally"
-
-      ```
 
 
       Output format:

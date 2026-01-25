@@ -7,15 +7,6 @@ macros:
       Filters by LTC/LCS valueset IDs or friendly names, ordered by clinical_effective_date desc.
 
 
-      Usage:
-
-      ```sql
-
-      {{ get_ltc_lcs_medication_orders_latest('on_dm_reg_priority_group_3b_mrb_vs5') }}
-
-      {{ get_ltc_lcs_medication_orders_latest('on_ckd_reg_acr_rx,on_ckd_reg_acr_atorvastatin') }}
-
-      ```
     arguments:
       - name: valuesets
         type: string

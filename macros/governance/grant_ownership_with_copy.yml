@@ -7,21 +7,6 @@ macros:
       Skips ephemeral models. Handles tables, views, incremental, snapshots, and seeds.
 
 
-      Usage:
-
-      ```yaml
-
-      # In dbt_project.yml:
-      models:
-        +post-hook:
-          - "{{ grant_ownership_with_copy() }}"
-
-      # With custom role:
-      models:
-        +post-hook:
-          - "{{ grant_ownership_with_copy(role='ANALYST') }}"
-
-      ```
     arguments:
       - name: role
         type: string

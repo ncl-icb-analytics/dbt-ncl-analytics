@@ -7,15 +7,6 @@ macros:
       Adds DEV__/TEST__ prefix for non-prod targets. Seeds and Elementary models use literal names.
 
 
-      Usage:
-
-      ```yaml
-
-      # Automatically invoked by dbt. In dbt_project.yml:
-      models:
-        +database: "MODELLING"  # Becomes DEV__MODELLING in dev target
-
-      ```
 
 
       Behavior:

@@ -6,15 +6,6 @@ macros:
       Check if person has a diagnosis from a code cluster.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_has_diagnosis('CKD_COD') }}
-
-      {{ flu_has_diagnosis('ASTHMA_COD', date_qualifier='LATEST_SINCE', reference_date='campaign_start') }}
-
-      ```
     arguments:
       - name: cluster_id
         type: string
@@ -37,13 +28,6 @@ macros:
       Check if person has medication orders from a cluster.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_has_medication('ASTHMA_RX', since_date='asthma_medication_lookback_date') }}
-
-      ```
     arguments:
       - name: cluster_id
         type: string
@@ -66,13 +50,6 @@ macros:
       Filter persons by age range.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_age_between(min_months=6, max_years=65) }}
-
-      ```
     arguments:
       - name: min_months
         type: integer
@@ -91,13 +68,6 @@ macros:
       Filter persons born within a date range.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_birth_date_between('child_preschool_birth_start', 'child_preschool_birth_end') }}
-
-      ```
     arguments:
       - name: start_date
         type: string
@@ -112,13 +82,6 @@ macros:
       Get the most recent code from a set of observation clusters.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_latest_code_from_set(['CKD_RESOLVED_COD', 'CKD15_COD', 'CKD_COD']) }}
-
-      ```
     arguments:
       - name: cluster_ids
         type: list
@@ -137,13 +100,6 @@ macros:
       Check if one code is more recent than another (for resolved conditions).
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_code_more_recent_than('CKD_RESOLVED_COD', 'CKD_COD') }}
-
-      ```
     arguments:
       - name: code_a_cluster
         type: string
@@ -166,13 +122,6 @@ macros:
       Check if person has BMI over a threshold.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_has_bmi_over(40) }}
-
-      ```
     arguments:
       - name: threshold
         type: number
@@ -191,13 +140,6 @@ macros:
       Combine evidence from multiple CTEs with OR/AND logic.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_combine_evidence(['diagnosis_cte', 'medication_cte'], combination_logic='OR') }}
-
-      ```
     arguments:
       - name: ctes
         type: list
@@ -205,20 +147,13 @@ macros:
 
       - name: combination_logic
         type: string
-        description: 'OR' (any match) or 'AND' (all must match). Default 'OR'
+        description: OR (any match) or AND (all must match). Default OR
 
   - name: flu_apply_date_qualifier
     description: >
       Apply EARLIEST/LATEST aggregation to evidence CTE.
 
 
-      Usage:
-
-      ```sql
-
-      {{ flu_apply_date_qualifier('evidence_cte', date_qualifier='EARLIEST') }}
-
-      ```
     arguments:
       - name: cte_name
         type: string

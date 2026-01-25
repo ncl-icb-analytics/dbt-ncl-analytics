@@ -7,16 +7,6 @@ macros:
       Returns: is_early_years_age (2-3), is_primary_school_age (Reception-Year 6), is_secondary_school_age (Year 7-13).
 
 
-      Usage:
-
-      ```sql
-
-      SELECT
-          person_id,
-          {{ calculate_school_age_flags('birth_date', 'CURRENT_DATE') }}
-      FROM patients
-
-      ```
     arguments:
       - name: birth_date_field
         type: string

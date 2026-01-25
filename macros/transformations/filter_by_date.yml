@@ -6,19 +6,6 @@ macros:
       Generates date filter conditions. Supports relative dates (months/years back) or absolute date ranges.
 
 
-      Usage:
-
-      ```sql
-
-      WHERE {{ filter_by_date('event_date', months_back=6) }}
-
-      WHERE {{ filter_by_date('created_at', years_back=2) }}
-
-      WHERE {{ filter_by_date('order_date', start_date='2024-01-01', end_date='2024-12-31') }}
-
-      WHERE {{ filter_by_date('admission_date', start_date='2024-01-01') }}
-
-      ```
     arguments:
       - name: date_column
         type: string

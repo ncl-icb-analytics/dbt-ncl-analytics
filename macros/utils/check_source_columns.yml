@@ -7,10 +7,3 @@ macros:
       Outputs to dbt log. Used for development inspection.
 
 
-      Usage:
-
-      ```bash
-
-      dbt run-operation check_source_columns
-
-      ```

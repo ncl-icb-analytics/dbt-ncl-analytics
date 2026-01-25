@@ -7,12 +7,3 @@ macros:
       Only runs in prod targets. Called in on-run-start.
 
 
-      Usage:
-
-      ```yaml
-
-      # In dbt_project.yml:
-      on-run-start:
-        - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
-
-      ```

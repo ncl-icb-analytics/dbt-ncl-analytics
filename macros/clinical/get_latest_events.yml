@@ -6,17 +6,6 @@ macros:
       Returns the most recent event per partition using Snowflake QUALIFY.
 
 
-      Usage:
-
-      ```sql
-
-      {{ get_latest_events('my_cte') }}
-
-      {{ get_latest_events('observations', partition_by=['person_id', 'concept_code']) }}
-
-      {{ get_latest_events(ref('stg_events'), order_by='event_date', direction='ASC') }}
-
-      ```
     arguments:
       - name: from_table
         type: string

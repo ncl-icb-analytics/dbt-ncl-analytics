@@ -7,16 +7,6 @@ macros:
       Used in post-hooks to conditionally apply governance tags.
 
 
-      Usage:
-
-      ```yaml
-
-      # In dbt_project.yml:
-      models:
-        +post-hook:
-          - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
-
-      ```
     arguments:
       - name: dbt_tag
         type: string
