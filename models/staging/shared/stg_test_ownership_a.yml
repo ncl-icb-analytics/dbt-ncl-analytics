@@ -1,10 +1,7 @@
 version: 2
 
 models:
-    config:
-      meta:
-        owner:
-          name: EddieDavison92
+  - name: stg_test_ownership_a
     description: "Test model A"
     columns:
       - name: test_column
