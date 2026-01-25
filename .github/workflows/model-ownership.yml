@@ -53,8 +53,30 @@ jobs:
               return;
             }
 
+            // Get existing review comments to avoid duplicates
+            const existingComments = await github.rest.pulls.listReviewComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            // Build set of files already commented on by this bot
+            const commentedFiles = new Set(
+              existingComments.data
+                .filter(c => c.user.login === 'github-actions[bot]' && c.body.includes('Missing model ownership'))
+                .map(c => c.path)
+            );
+
+            // Filter out suggestions for files we've already commented on
+            const newSuggestions = suggestions.filter(s => !commentedFiles.has(s.file));
+
+            if (newSuggestions.length === 0) {
+              console.log('All models already have ownership suggestions posted');
+              return;
+            }
+
             // Build review comments array for batch submission
-            const comments = suggestions.map(suggestion => ({
+            const comments = newSuggestions.map(suggestion => ({
               path: suggestion.file,
               line: suggestion.line,
               body: `### 📝 Missing model ownership\n\nThis model is missing owner metadata. Add the following after the description:\n\n\`\`\`suggestion\n${suggestion.suggestion}\n\`\`\``
