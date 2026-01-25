@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: stg_test_multi_desc
+    description: >
+      This is a multiline description
+      that spans multiple lines
+      to test the workflow.
+    columns:
+      - name: test_column
+        description: "Test column"

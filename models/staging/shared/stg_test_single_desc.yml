@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: stg_test_single_desc
+    description: "Single line description"
+    columns:
+      - name: test_column
+        description: "Test column"
