@@ -112,6 +112,7 @@ def find_insertion_line(yaml_path: Path, model_name: str) -> tuple[int, str, str
                 model_indent = current_indent
                 name_line = i + 1  # 1-indexed for GitHub
                 name_content = line
+                continue  # Don't check this line again
             else:
                 in_target_model = False
 
@@ -120,6 +121,26 @@ def find_insertion_line(yaml_path: Path, model_name: str) -> tuple[int, str, str
             if stripped.startswith('description:'):
                 description_line = i + 1
                 description_content = line
+                desc_indent = current_indent
+                # Check if multiline (ends with > or | or doesn't close quote on same line)
+                is_multiline = (
+                    stripped.endswith('>') or
+                    stripped.endswith('|') or
+                    (stripped.count('"') == 1) or
+                    (stripped.count("'") == 1)
+                )
+                if is_multiline:
+                    # Find the last line of the multiline description
+                    for j in range(i + 1, len(lines)):
+                        next_line = lines[j]
+                        next_stripped = next_line.lstrip()
+                        next_indent = len(next_line) - len(next_stripped)
+                        # Description ends when we return to same or lesser indent with content
+                        if next_stripped and next_indent <= desc_indent:
+                            # Previous line was the last of description
+                            description_line = j  # j is 0-indexed, but we want line before
+                            description_content = lines[j - 1]
+                            break
             # If we hit columns or another top-level key, stop
             elif stripped.startswith('columns:') or stripped.startswith('config:'):
                 break
