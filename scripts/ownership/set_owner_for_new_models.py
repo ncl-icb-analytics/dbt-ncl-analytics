@@ -73,7 +73,7 @@ def find_yaml_for_model(sql_path: Path) -> Path | None:
 
 
 def model_has_owner(yaml_path: Path, model_name: str) -> bool:
-    """Check if model already has owner metadata."""
+    """Check if model already has owner metadata in config.meta.owner."""
     try:
         data = yaml.safe_load(yaml_path.read_text(encoding='utf-8'))
         if not data or 'models' not in data:
@@ -81,17 +81,25 @@ def model_has_owner(yaml_path: Path, model_name: str) -> bool:
 
         for model in data.get('models', []):
             if model.get('name') == model_name:
-                return bool(model.get('meta', {}).get('owner'))
+                config = model.get('config', {})
+                meta = config.get('meta', {}) if config else {}
+                return bool(meta and meta.get('owner'))
     except (yaml.YAMLError, Exception):
         pass
     return False
 
 
 def add_owner_to_yaml(yaml_path: Path, model_name: str, owner: dict) -> bool:
-    """Add owner metadata to a model in a YAML file."""
+    """Add owner metadata to a model under config.meta in a YAML file."""
     try:
-        content = yaml_path.read_text(encoding='utf-8')
-        data = yaml.safe_load(content)
+        from ruamel.yaml import YAML
+        from ruamel.yaml.comments import CommentedMap
+        ruamel = YAML()
+        ruamel.preserve_quotes = True
+        ruamel.indent(mapping=2, sequence=4, offset=2)
+
+        with open(yaml_path, 'r', encoding='utf-8') as f:
+            data = ruamel.load(f)
 
         if not data or 'models' not in data:
             return False
@@ -99,27 +107,40 @@ def add_owner_to_yaml(yaml_path: Path, model_name: str, owner: dict) -> bool:
         modified = False
         for model in data.get('models', []):
             if model.get('name') == model_name:
-                if 'meta' not in model:
-                    model['meta'] = {}
-                if 'owner' not in model['meta']:
-                    model['meta']['owner'] = owner
-                    modified = True
+                # Ensure config exists
+                if 'config' not in model:
+                    new_config = CommentedMap()
+                    new_config['meta'] = CommentedMap([('owner', CommentedMap([('name', owner['name'])]))])
+
+                    # Insert config after description (or after name if no description)
+                    keys = list(model.keys())
+                    insert_after = 'description' if 'description' in keys else 'name'
+                    insert_idx = keys.index(insert_after) + 1
+
+                    items = list(model.items())
+                    items.insert(insert_idx, ('config', new_config))
+                    model.clear()
+                    for k, v in items:
+                        model[k] = v
+                else:
+                    # config exists, ensure meta exists
+                    if 'meta' not in model['config']:
+                        model['config']['meta'] = CommentedMap()
+                    if 'owner' not in model['config']['meta']:
+                        model['config']['meta']['owner'] = CommentedMap([('name', owner['name'])])
+
+                modified = True
                 break
 
         if modified:
-            try:
-                from ruamel.yaml import YAML
-                ruamel = YAML()
-                ruamel.preserve_quotes = True
-                ruamel.indent(mapping=2, sequence=4, offset=2)
-                with open(yaml_path, 'w', encoding='utf-8') as f:
-                    ruamel.dump(data, f)
-            except ImportError:
-                with open(yaml_path, 'w', encoding='utf-8') as f:
-                    yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+            with open(yaml_path, 'w', encoding='utf-8') as f:
+                ruamel.dump(data, f)
 
         return modified
 
+    except ImportError:
+        print("  Error: ruamel.yaml is required. Install with: pip install ruamel.yaml")
+        return False
     except (yaml.YAMLError, Exception) as e:
         print(f"Error updating {yaml_path}: {e}")
         return False
