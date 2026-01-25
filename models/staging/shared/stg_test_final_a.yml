@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: stg_test_final_a
+    description: "Test model A for final workflow test"
+    columns:
+      - name: test_column
+        description: "Test column"
