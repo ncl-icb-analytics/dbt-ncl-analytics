@@ -47,14 +47,19 @@ jobs:
             const fs = require('fs');
             const suggestions = JSON.parse(fs.readFileSync('suggestions.json', 'utf8'));
 
-            for (const suggestion of suggestions) {
-              await github.rest.pulls.createReviewComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.issue.number,
-                commit_id: context.payload.pull_request.head.sha,
-                path: suggestion.file,
-                line: suggestion.line,
-                body: `### 📝 Missing model ownership\n\nThis model is missing owner metadata. Add the following after the description:\n\n\`\`\`suggestion\n${suggestion.suggestion}\n\`\`\``
-              });
-            }
+            // Build review comments array for batch submission
+            const comments = suggestions.map(suggestion => ({
+              path: suggestion.file,
+              line: suggestion.line,
+              body: `### 📝 Missing model ownership\n\nThis model is missing owner metadata. Add the following after the description:\n\n\`\`\`suggestion\n${suggestion.suggestion}\n\`\`\``
+            }));
+
+            // Submit all suggestions as a single review
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              commit_id: context.payload.pull_request.head.sha,
+              event: 'COMMENT',
+              comments: comments
+            });
