@@ -1,0 +1,76 @@
+version: 2
+
+macros:
+  - name: archive_definitions
+    description: >
+      SCD Type 2 archiving for indicator definitions with daily granularity.
+      Creates/updates history table tracking changes to indicator metadata.
+
+
+      Usage:
+
+      ```yaml
+
+      # In model config:
+      models:
+        - name: def_indicator
+          config:
+            post-hook:
+              - "{{ archive_definitions() }}"
+
+      ```
+
+  - name: archive_usage
+    description: >
+      SCD Type 2 archiving for indicator usage contexts with daily granularity.
+      Tracks where indicators are used over time.
+
+
+      Usage:
+
+      ```yaml
+
+      # In model config:
+      models:
+        - name: def_indicator_usage
+          config:
+            post-hook:
+              - "{{ archive_usage() }}"
+
+      ```
+
+  - name: archive_codes
+    description: >
+      SCD Type 2 archiving for indicator code mappings with daily granularity.
+      Tracks code cluster assignments to indicators.
+
+
+      Usage:
+
+      ```yaml
+
+      models:
+        - name: def_indicator_codes
+          config:
+            post-hook:
+              - "{{ archive_codes() }}"
+
+      ```
+
+  - name: archive_thresholds
+    description: >
+      SCD Type 2 archiving for indicator thresholds with daily granularity.
+      Tracks threshold values and operators for population groups.
+
+
+      Usage:
+
+      ```yaml
+
+      models:
+        - name: def_indicator_thresholds
+          config:
+            post-hook:
+              - "{{ archive_thresholds() }}"
+
+      ```

@@ -1,0 +1,28 @@
+version: 2
+
+macros:
+  - name: grant_ownership_with_copy
+    description: >
+      Grants ownership of dbt-created objects to a specified role, preserving existing grants.
+      Skips ephemeral models. Handles tables, views, incremental, snapshots, and seeds.
+
+
+      Usage:
+
+      ```yaml
+
+      # In dbt_project.yml:
+      models:
+        +post-hook:
+          - "{{ grant_ownership_with_copy() }}"
+
+      # With custom role:
+      models:
+        +post-hook:
+          - "{{ grant_ownership_with_copy(role='ANALYST') }}"
+
+      ```
+    arguments:
+      - name: role
+        type: string
+        description: Snowflake role to grant ownership to. Default 'ANALYST'

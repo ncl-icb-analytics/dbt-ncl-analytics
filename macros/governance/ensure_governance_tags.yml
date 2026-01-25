@@ -1,0 +1,18 @@
+version: 2
+
+macros:
+  - name: ensure_governance_tags
+    description: >
+      Creates DATA_CATEGORY Snowflake tags in schemas containing models tagged with 'secondary_use_opt_out'.
+      Called in on-run-start to ensure tags exist before models apply them.
+
+
+      Usage:
+
+      ```yaml
+
+      # In dbt_project.yml:
+      on-run-start:
+        - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
+
+      ```

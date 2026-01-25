@@ -1,0 +1,53 @@
+version: 2
+
+macros:
+  - name: flu_campaign_config
+    description: >
+      Single source of truth for flu vaccination campaign dates and parameters.
+      Returns a SELECT with all campaign-specific configuration values.
+
+
+      Usage:
+
+      ```sql
+
+      -- Get current campaign config (uses var('flu_current_campaign')):
+      WITH config AS ({{ flu_campaign_config() }})
+      SELECT * FROM config
+
+      -- Get specific campaign:
+      WITH config AS ({{ flu_campaign_config('Flu 2024-25') }})
+      SELECT campaign_start_date FROM config
+
+      ```
+
+
+      Available campaigns: Flu 2023-24, Flu 2024-25, Flu 2025-26
+
+
+      Configure via dbt_project.yml vars: flu_current_campaign, flu_previous_campaign
+    arguments:
+      - name: campaign_id
+        type: string
+        description: Campaign identifier. Default 'Flu 2024-25'
+
+  - name: flu_get_campaign_date
+    description: >
+      Helper to get a specific date field from campaign config.
+
+
+      Usage:
+
+      ```sql
+
+      WHERE vaccination_date >= {{ flu_get_campaign_date('campaign_start_date') }}
+
+      ```
+    arguments:
+      - name: date_name
+        type: string
+        description: Name of the date field to retrieve
+
+      - name: campaign_id
+        type: string
+        description: Optional campaign ID. Defaults to var('flu_current_campaign')

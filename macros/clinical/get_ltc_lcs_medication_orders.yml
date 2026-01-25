@@ -1,0 +1,24 @@
+version: 2
+
+macros:
+  - name: get_ltc_lcs_medication_orders
+    description: >
+      Retrieves medication orders filtered by LTC/LCS valueset IDs or friendly names.
+      Joins to expanded concepts, valuesets, patient mapping, and BNF reference data.
+
+
+      Usage:
+
+      ```sql
+
+      {{ get_ltc_lcs_medication_orders('on_dm_reg_priority_group_3b_mrb_vs5') }}
+
+      {{ get_ltc_lcs_medication_orders('on_ckd_reg_acr_rx,on_ckd_reg_acr_atorvastatin') }}
+
+      ```
+    arguments:
+      - name: valuesets
+        type: string
+        description: >
+          Comma-separated valueset IDs or friendly names to filter by.
+          Can be passed as 'VS001,VS002' or "'VS001','VS002'"

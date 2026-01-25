@@ -1,0 +1,42 @@
+version: 2
+
+macros:
+  - name: generate_table_comment
+    description: >
+      Generates Snowflake table/view comments with model description, run metadata, and GitHub links.
+      Includes custom warning messages from meta.custom_message config.
+
+
+      Usage:
+
+      ```yaml
+
+      # In dbt_project.yml:
+      models:
+        +post-hook:
+          - "{{ add_model_comment() }}"  # calls generate_table_comment internally
+
+      # In model config for custom warnings:
+      models:
+        my_model:
+          +meta:
+            custom_message: "Contains sensitive data - do not share externally"
+
+      ```
+
+
+      Output format:
+
+      ```
+
+      ⚠️ {custom_message if set}
+
+      {model description}
+
+      🤖 Last ran on 25th January 2025 at 14:30:00 GMT by USER (target: dev)
+
+      📄 Model source: https://github.com/.../models/path/model.sql
+
+      📖 Documentation: https://github.com/ncl-icb-analytics/dbt-ncl-analytics
+
+      ```

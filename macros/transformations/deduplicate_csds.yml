@@ -1,0 +1,32 @@
+version: 2
+
+macros:
+  - name: deduplicate_csds
+    description: >
+      Deduplicates CSDS tables by keeping the most recent record (by effective_from) within each partition.
+      Joins to active submissions to filter inactive records.
+
+
+      Usage:
+
+      ```sql
+
+      {{ deduplicate_csds(
+          ref('raw_csds_cyp101referral'),
+          ['unique_service_request_identifier']
+      ) }}
+
+      {{ deduplicate_csds(
+          'my_schema.my_table',
+          ['unique_service_request_identifier', 'unique_care_contact_identifier']
+      ) }}
+
+      ```
+    arguments:
+      - name: csds_table
+        type: string
+        description: CSDS table to deduplicate (can be ref() or string)
+
+      - name: partition_cols
+        type: list
+        description: Columns to partition by for deduplication. At least one required.

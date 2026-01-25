@@ -1,0 +1,25 @@
+version: 2
+
+macros:
+  - name: clean_practice_name
+    description: >
+      Cleans practice names by applying proper case and preserving medical acronyms (GP, NHS, PMS, CCG, ICB, PCN, etc.).
+
+
+      Usage:
+
+      ```sql
+
+      SELECT
+          {{ clean_practice_name('organisation_name', 'practice_code') }} AS practice_name
+      FROM practices
+
+      ```
+    arguments:
+      - name: organisation_name_field
+        type: string
+        description: Primary name field (preserves existing casing)
+
+      - name: fallback_field
+        type: string
+        description: Fallback field to use if primary is null (converted to proper case)

@@ -1,0 +1,39 @@
+version: 2
+
+macros:
+  - name: test_staging_columns_match_source
+    description: >
+      Helper macro for test_all_source_columns_in_staging generic test.
+      Compares source table columns to staging model columns via information_schema.
+      Not a standalone test - called by the generic test.
+
+
+      Usage:
+
+      ```sql
+
+      -- Called internally by test_all_source_columns_in_staging:
+      {{ test_staging_columns_match_source(
+          source_database,
+          source_schema,
+          table_name,
+          staging_model
+      ) }}
+
+      ```
+    arguments:
+      - name: source_database
+        type: string
+        description: Source database name
+
+      - name: source_schema
+        type: string
+        description: Source schema name (quoted)
+
+      - name: source_table
+        type: string
+        description: Source table name
+
+      - name: staging_model
+        type: string
+        description: Staging model name to compare against

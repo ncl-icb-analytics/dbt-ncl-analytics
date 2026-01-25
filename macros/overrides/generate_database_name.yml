@@ -1,0 +1,39 @@
+version: 2
+
+macros:
+  - name: generate_database_name
+    description: >
+      dbt override for database name generation with environment prefixes.
+      Adds DEV__/TEST__ prefix for non-prod targets. Seeds and Elementary models use literal names.
+
+
+      Usage:
+
+      ```yaml
+
+      # Automatically invoked by dbt. In dbt_project.yml:
+      models:
+        +database: "MODELLING"  # Becomes DEV__MODELLING in dev target
+
+      ```
+
+
+      Behavior:
+
+      - prod/snowflake-prod: No prefix (uses literal database name)
+
+      - dev/snowflake-dev: DEV__ prefix
+
+      - Other targets: {TARGET_NAME}__ prefix
+
+      - Seeds: Always literal (no prefix)
+
+      - Elementary: Always literal (no prefix)
+    arguments:
+      - name: custom_database_name
+        type: string
+        description: Custom database name from config
+
+      - name: node
+        type: object
+        description: dbt node object (provided by dbt)

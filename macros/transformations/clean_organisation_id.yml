@@ -1,0 +1,29 @@
+version: 2
+
+macros:
+  - name: clean_organisation_id
+    description: >
+      Validates organisation codes against reference data. Returns full code if valid, otherwise truncates to 3 characters.
+
+
+      Usage:
+
+      ```sql
+
+      SELECT
+          {{ clean_organisation_id('org_code') }} AS organisation_code
+      FROM referrals
+
+      -- With custom org type:
+
+      {{ clean_organisation_id('provider_code', org_type_id=42) }}
+
+      ```
+    arguments:
+      - name: column_name
+        type: string
+        description: Column containing the organisation code
+
+      - name: org_type_id
+        type: integer
+        description: Organisation type ID to validate against. Default 41 (GP practices)
