@@ -1,0 +1,10 @@
+version: 2
+
+macros:
+  - name: extract_indicator_metadata
+    description: >
+      Extracts indicator metadata from model configs across the dbt graph.
+      Returns dict with 'indicators', 'codes', 'usage', and 'thresholds' lists.
+      Supports both model-level (meta.indicator) and column-level metadata.
+
+
