@@ -5,7 +5,8 @@ models:
     description: 'Current Person Demographics Dimension Table
 
       Provides current demographic snapshot for ALL persons with registration history.
-      Thin wrapper over dim_person_demographics_historical selecting only current periods.
+      Thin wrapper over dim_person_demographics_historical selecting only current
+      periods.
 
       Grain: One row per person (current demographics only)
 
@@ -15,7 +16,8 @@ models:
 
       • Includes ALL persons with registration history (active and inactive)
 
-      • Age calculated dynamically for current date using calculate_age_attributes macro
+      • Age calculated dynamically for current date using calculate_age_attributes
+      macro
 
       • is_active flag shows current registration status
 
@@ -27,9 +29,13 @@ models:
 
       • Must have registration history (practice_code IS NOT NULL in historical)
 
-      For historical change tracking, use dim_person_demographics_historical.
-      For monthly snapshots with conditions, use person_month_analysis_base.'
+      For historical change tracking, use dim_person_demographics_historical. For
+      monthly snapshots with conditions, use person_month_analysis_base.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique person identifier'
@@ -56,7 +62,8 @@ models:
           - not_null
 
       - name: inactive_reason
-        description: 'Reason for inactive status (Deceased, Registration ended, No registration history, or NULL)'
+        description: 'Reason for inactive status (Deceased, Registration ended, No
+          registration history, or NULL)'
 
       - name: birth_year
         description: 'Birth year'
@@ -88,13 +95,16 @@ models:
         description: '10-year age bands (0-9, 10-19, 20-29, ..., 70-79, 80+)'
 
       - name: age_band_nhs
-        description: 'NHS Digital age bands (0-4, 5-14, 15-24, 25-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+)'
+        description: 'NHS Digital age bands (0-4, 5-14, 15-24, 25-34, 35-44, 45-54,
+          55-64, 65-74, 75-84, 85+)'
 
       - name: age_band_ons
-        description: 'ONS age bands (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, ..., 80-84, 85+)'
+        description: 'ONS age bands (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, ..., 80-84,
+          85+)'
 
       - name: age_life_stage
-        description: 'Life stage categories (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Senior, Elderly, Very Elderly)'
+        description: 'Life stage categories (Infant, Toddler, Child, Adolescent, Young
+          Adult, Adult, Senior, Elderly, Very Elderly)'
 
       - name: is_primary_school_age
         description: 'Flag indicating primary school age (Reception to Year 6)'
@@ -111,7 +121,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Male', 'Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']
+              values: ['Male', 'Female', 'Unknown', 'Indeterminate sex', 'Finding
+                    related to biological sex']
 
       - name: ethnicity_category
         description: 'Ethnicity category from latest recording'
@@ -160,7 +171,8 @@ models:
         description: 'Start date of current or latest registration'
 
       - name: registration_end_date
-        description: 'End date of current or latest registration (NULL if currently active)'
+        description: 'End date of current or latest registration (NULL if currently
+          active)'
 
       - name: pcn_code
         description: 'Primary Care Network code'
@@ -172,10 +184,12 @@ models:
         description: 'PCN name with borough prefix'
 
       - name: icb_code
-        description: 'Integrated Care Board (ICB) code where patient is registered (practice-based)'
+        description: 'Integrated Care Board (ICB) code where patient is registered
+          (practice-based)'
 
       - name: icb_name
-        description: 'Integrated Care Board (ICB) name where patient is registered (practice-based)'
+        description: 'Integrated Care Board (ICB) name where patient is registered
+          (practice-based)'
 
       - name: borough_registered
         description: 'Practice borough where patient is registered'
@@ -202,16 +216,20 @@ models:
         description: 'Patient residential address postcode hash for privacy protection'
 
       - name: uprn_hash
-        description: 'Patient address Unique Property Reference Number hash (placeholder for future use)'
+        description: 'Patient address Unique Property Reference Number hash (placeholder
+          for future use)'
 
       - name: household_id
-        description: 'Household identifier linking persons at same address (placeholder for future use)'
+        description: 'Household identifier linking persons at same address (placeholder
+          for future use)'
 
       - name: icb_code_resident
-        description: 'Integrated Care Board (ICB) code where patient resides (from postcode lookup)'
+        description: 'Integrated Care Board (ICB) code where patient resides (from
+          postcode lookup)'
 
       - name: icb_resident
-        description: 'Integrated Care Board (ICB) name where patient resides (distinct from registration ICB)'
+        description: 'Integrated Care Board (ICB) name where patient resides (distinct
+          from registration ICB)'
 
       - name: local_authority_code
         description: 'Local Authority District 2025 code (LAD25CD) where patient resides'
@@ -229,10 +247,12 @@ models:
         description: 'London area classification (NCL, Other London, Outside London)'
 
       - name: lsoa_code_21
-        description: 'Lower Layer Super Output Area 2021 census code where patient resides'
+        description: 'Lower Layer Super Output Area 2021 census code where patient
+          resides'
 
       - name: lsoa_name_21
-        description: 'Lower Layer Super Output Area 2021 census name where patient resides'
+        description: 'Lower Layer Super Output Area 2021 census name where patient
+          resides'
 
       - name: ward_code
         description: 'Electoral Ward 2025 code (WD25CD) where patient resides'
@@ -241,22 +261,29 @@ models:
         description: 'Electoral Ward 2025 name (WD25NM) where patient resides'
 
       - name: imd_decile_19
-        description: 'Index of Multiple Deprivation 2019 decile (1=most deprived, 10=least deprived)'
+        description: 'Index of Multiple Deprivation 2019 decile (1=most deprived,
+          10=least deprived)'
 
       - name: imd_quintile_19
-        description: 'Index of Multiple Deprivation 2019 quintile text labels (Most Deprived to Least Deprived)'
+        description: 'Index of Multiple Deprivation 2019 quintile text labels (Most
+          Deprived to Least Deprived)'
 
       - name: imd_quintile_numeric_19
-        description: 'Index of Multiple Deprivation 2019 numeric quintile (1=most deprived, 5=least deprived)'
+        description: 'Index of Multiple Deprivation 2019 numeric quintile (1=most
+          deprived, 5=least deprived)'
 
       - name: imd_decile_25
-        description: 'Index of Multiple Deprivation 2025 decile (1=most deprived, 10=least deprived)'
+        description: 'Index of Multiple Deprivation 2025 decile (1=most deprived,
+          10=least deprived)'
 
       - name: imd_quintile_25
-        description: 'Index of Multiple Deprivation 2025 quintile text labels (Most Deprived to Least Deprived)'
+        description: 'Index of Multiple Deprivation 2025 quintile text labels (Most
+          Deprived to Least Deprived)'
 
       - name: imd_quintile_numeric_25
-        description: 'Index of Multiple Deprivation 2025 numeric quintile (1=most deprived, 5=least deprived)'
+        description: 'Index of Multiple Deprivation 2025 numeric quintile (1=most
+          deprived, 5=least deprived)'
 
       - name: neighbourhood_resident
-        description: 'NCL neighbourhood classification where patient resides (based on 2021 LSOA)'
+        description: 'NCL neighbourhood classification where patient resides (based
+          on 2021 LSOA)'

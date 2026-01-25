@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: cohort_data
-    description: "Trajectories and disease flags for CLTCS cohort. One row per person from dim_person_demographics (persons with recorded birth dates) with TRUE/FALSE flags for all conditions, eliminating null-handling complexity.'"
+    description: "Trajectories and disease flags for CLTCS cohort. One row per person
+      from dim_person_demographics (persons with recorded birth dates) with TRUE/FALSE
+      flags for all conditions, eliminating null-handling complexity.'"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: patient_id
         data_type: number
@@ -11,7 +17,7 @@ models:
           - unique:
               config:
                 severity: warn
-                warn_if: ">1"        
+                warn_if: ">1"
           - not_null
 
       - name: ae_encounters_sl

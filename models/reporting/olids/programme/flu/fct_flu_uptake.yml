@@ -6,15 +6,12 @@ models:
 
       Grain: One row per person per campaign per risk group they qualify for
 
-      Contains:
-      • Eligibility status and reasons
-      • Vaccination status (vaccinated, declined, no record)
-      • Uptake category and timing metrics
-      • Campaign reference dates
-      • LAIV administration tracking
+      Contains: • Eligibility status and reasons • Vaccination status (vaccinated,
+      declined, no record) • Uptake category and timing metrics • Campaign reference
+      dates • LAIV administration tracking
 
-      Purpose: Core uptake facts for flu programme monitoring. Join with dim_person_demographics for demographic analysis.'
-    
+      Purpose: Core uptake facts for flu programme monitoring. Join with dim_person_demographics
+      for demographic analysis.'
     config:
       meta:
         indicator:
@@ -26,10 +23,14 @@ models:
           description_short: "Flu vaccination uptake facts without demographics"
           description_long: >
             Flu vaccination uptake fact table combining eligibility determination
-            with vaccination status to provide core uptake metrics including LAIV tracking.
-            Focused on uptake business process without demographics. Supports programme monitoring
-            and performance assessment. Join with dim_person_demographics for demographic analysis
-            and published_reporting_direct_care.covid_flu_dashboard_base for dashboard consumption.
+            with vaccination status to provide core uptake metrics including LAIV
+            tracking.
+            Focused on uptake business process without demographics. Supports programme
+            monitoring
+            and performance assessment. Join with dim_person_demographics for demographic
+            analysis
+            and published_reporting_direct_care.covid_flu_dashboard_base for dashboard
+            consumption.
           is_qof: false
           source_column: "uptake_rate"
           sort_order: "FLU_102_UPTAKE_COVERAGE"
@@ -56,7 +57,9 @@ models:
               threshold_unit: "percentage"
               description: "High-risk group coverage target"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -82,24 +85,24 @@ models:
 
       - name: geography_type
         description: Geographic aggregation level (practice, PCN, borough)
-        
+
       - name: geography_code
         description: Geographic area identifier
-        
+
       - name: geography_name
         description: Geographic area name
-        
+
       - name: demographic_group
         description: Demographic grouping (age band, ethnicity, etc.)
-        
+
       - name: eligible_population
         description: Total eligible population
-        
+
       - name: vaccinated_population
         description: Total vaccinated population
-        
+
       - name: uptake_rate
         description: Vaccination coverage percentage
-        
+
       - name: unvaccinated_population
         description: Eligible but unvaccinated population

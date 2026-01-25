@@ -1,12 +1,13 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_65
-    description: 'CVD case finding priority (e): Patients with QRisk ≥10% not on high-intensity statins.
+    description: 'CVD case finding priority (e): Patients with QRisk ≥10% not on high-intensity
+      statins.
 
-      Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12 months), no statin allergies or decisions (60 months).
+      Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12 months), no statin
+      allergies or decisions (60 months).
 
       One row per person requiring high-intensity statin initiation or escalation.'
-    
     config:
       meta:
         indicator:
@@ -17,7 +18,8 @@ models:
           name_short: "QRisk ≥10% no high-intensity statin"
           description_short: "Patients with QRisk ≥10% not on high-intensity statins"
           description_long: >
-            Age 40-84, QRISK2 ≥10%, not on high-intensity statins. Priority (e) for high-intensity statin therapy.
+            Age 40-84, QRISK2 ≥10%, not on high-intensity statins. Priority (e) for
+            high-intensity statin therapy.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_65"
@@ -52,3 +54,5 @@ models:
               threshold_unit: "percentage"
               description: "QRISK2 ≥10%"
               sort_order: 2
+        owner:
+          name: EddieDavison92

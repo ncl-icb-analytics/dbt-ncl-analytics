@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_66
-    description: 'Case finding for patients with pre-diabetic HbA1c levels needing recheck.
+    description: 'Case finding for patients with pre-diabetic HbA1c levels needing
+      recheck.
 
-      Identifies patients with latest HbA1c 42-45 mmol/mol with no HbA1c in last 12 months.
+      Identifies patients with latest HbA1c 42-45 mmol/mol with no HbA1c in last 12
+      months.
 
       One row per person with old HbA1c reading in pre-diabetic range.'
 
@@ -51,3 +53,5 @@ models:
               threshold_unit: "months"
               description: "No HbA1c in last 12 months"
               sort_order: 3
+        owner:
+          name: EddieDavison92

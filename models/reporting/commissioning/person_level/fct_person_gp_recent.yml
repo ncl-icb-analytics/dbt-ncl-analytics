@@ -3,13 +3,17 @@ version: 2
 models:
   - name: fct_person_gp_recent
     description: "Summary of recent clinical appointment encounters per person"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: sk_patient_id
         data_type: number
         description: ""
         tests:
-        - not_null
-        - unique
+          - not_null
+          - unique
 
       - name: gp_att_tot_12mo
         data_type: number

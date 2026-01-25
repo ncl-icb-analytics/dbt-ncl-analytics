@@ -1,48 +1,54 @@
 version: 2
 models:
-- name: stg_reference_emis_qof_v50_register_counts
-  description: QOF v50 register counts from EMIS as of 2025-11-04. Filtered to disease registers only and mapped to OLIDS register names for comparison.
-  tests:
-  - dbt_utils.unique_combination_of_columns:
-      combination_of_columns:
-      - register_name
-      - practice_code
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
-  columns:
-  - name: reference_date
-    description: Reference date for the QOF extract (2025-11-04)
+  - name: stg_reference_emis_qof_v50_register_counts
+    description: QOF v50 register counts from EMIS as of 2025-11-04. Filtered to
+      disease registers only and mapped to OLIDS register names for comparison.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
-    - not_null
-  - name: indicator_code
-    description: Original EMIS QOF indicator code
-    tests:
-    - not_null
-  - name: indicator_description
-    description: Original EMIS indicator description
-  - name: practice_code
-    description: GP practice code (from cdb column)
-    tests:
-    - not_null
-  - name: practice_name
-    description: GP practice name
-  - name: register_name
-    description: Standardized register name mapped to match OLIDS pit_ register definitions
-    tests:
-    - not_null
-  - name: population_count
-    description: Count of patients on this register
-    tests:
-    - not_null
-  - name: parent_population
-    description: Parent population for this indicator
-  - name: percentage
-    description: Percentage of parent population
-  - name: males
-    description: Count of male patients
-  - name: females
-    description: Count of female patients
-  - name: excluded
-    description: Count of excluded patients
-  - name: status
-    description: Status of the indicator
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - register_name
+            - practice_code
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: reference_date
+        description: Reference date for the QOF extract (2025-11-04)
+        tests:
+          - not_null
+      - name: indicator_code
+        description: Original EMIS QOF indicator code
+        tests:
+          - not_null
+      - name: indicator_description
+        description: Original EMIS indicator description
+      - name: practice_code
+        description: GP practice code (from cdb column)
+        tests:
+          - not_null
+      - name: practice_name
+        description: GP practice name
+      - name: register_name
+        description: Standardized register name mapped to match OLIDS pit_ 
+          register definitions
+        tests:
+          - not_null
+      - name: population_count
+        description: Count of patients on this register
+        tests:
+          - not_null
+      - name: parent_population
+        description: Parent population for this indicator
+      - name: percentage
+        description: Percentage of parent population
+      - name: males
+        description: Count of male patients
+      - name: females
+        description: Count of female patients
+      - name: excluded
+        description: Count of excluded patients
+      - name: status
+        description: Status of the indicator

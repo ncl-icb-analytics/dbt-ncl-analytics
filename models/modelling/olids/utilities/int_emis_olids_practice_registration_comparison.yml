@@ -20,6 +20,10 @@ models:
       - EMIS: Static extract (date from seed file)
       - OLIDS: Regular episode types only, active as of EMIS extract date
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     columns:
       - name: practice_code
         description: GP practice ODS code
@@ -34,7 +38,8 @@ models:
         description: Number of registered patients from EMIS extract
 
       - name: olids_regular_count
-        description: Number of patients with Regular registration episodes in OLIDS
+        description: Number of patients with Regular registration episodes in 
+          OLIDS
 
       - name: difference
         description: Difference between OLIDS and EMIS (signed, can be negative)
@@ -52,10 +57,13 @@ models:
         description: Date of EMIS extract (from seed file)
 
       - name: meets_acceptance_criteria
-        description: Boolean flag indicating if practice meets acceptance criteria (<2% variance OR <5 persons difference)
+        description: Boolean flag indicating if practice meets acceptance 
+          criteria (<2% variance OR <5 persons difference)
 
       - name: variance_category
-        description: Categorisation of variance (Meets Criteria, 2-5% Variance, 5-20% Variance, 20%+ Variance, Missing Data)
+        description: Categorisation of variance (Meets Criteria, 2-5% Variance, 
+          5-20% Variance, 20%+ Variance, Missing Data)
 
       - name: validation_methodology
-        description: Description of the validation test applied (EMIS Regular Registration Comparison with thresholds)
+        description: Description of the validation test applied (EMIS Regular 
+          Registration Comparison with thresholds)

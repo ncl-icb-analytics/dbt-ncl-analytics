@@ -26,6 +26,10 @@ models:
 
       Person-level snapshot for reporting. Join to demographic tables for population analysis.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Person identifier
@@ -71,7 +75,8 @@ models:
               values: [true, false]
 
       - name: medication_count_band
-        description: Medication count grouped into reporting bands (1-4, 5-9, 10-14, 15+)
+        description: Medication count grouped into reporting bands (1-4, 5-9, 
+          10-14, 15+)
         data_tests:
           - not_null
           - accepted_values:

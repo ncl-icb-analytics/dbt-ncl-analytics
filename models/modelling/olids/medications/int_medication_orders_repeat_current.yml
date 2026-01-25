@@ -16,6 +16,10 @@ models:
 
       Uses medication_order table as source of truth for dispensing events and duration.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Person identifier
@@ -33,4 +37,5 @@ models:
           - not_null
 
       - name: latest_duration
-        description: Duration in days for most recent order (NULL defaults to 28 days in currency calculation)
+        description: Duration in days for most recent order (NULL defaults to 28
+          days in currency calculation)

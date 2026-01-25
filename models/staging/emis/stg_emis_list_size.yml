@@ -13,9 +13,14 @@ models:
 
       To update: Replace seed file with new EMIS extract and re-run models.
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     columns:
       - name: borough
-        description: Borough name (e.g., Barnet, Camden, Enfield, Haringey, Islington)
+        description: Borough name (e.g., Barnet, Camden, Enfield, Haringey, 
+          Islington)
 
       - name: practice_code
         description: GP practice ODS code
@@ -30,4 +35,5 @@ models:
         description: Number of registered patients according to EMIS extract
 
       - name: extract_date
-        description: Date the EMIS data was extracted, converted from DD/MM/YYYY VARCHAR to DATE
+        description: Date the EMIS data was extracted, converted from DD/MM/YYYY
+          VARCHAR to DATE

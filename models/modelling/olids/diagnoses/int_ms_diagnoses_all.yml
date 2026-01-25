@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_ms_diagnoses_all
-    description: 'Multiple sclerosis diagnosis observations for neurological condition register management.
+    description: 'Multiple sclerosis diagnosis observations for neurological condition
+      register management.
 
       Key Features:
 
@@ -13,7 +14,12 @@ models:
 
       • No resolution codes as MS is a chronic condition
 
-      Purpose: Provide observation-level data for multiple sclerosis tracking and disease-modifying therapy monitoring.'
+      Purpose: Provide observation-level data for multiple sclerosis tracking and
+      disease-modifying therapy monitoring.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_utils.at_least_one:
           column_name: id

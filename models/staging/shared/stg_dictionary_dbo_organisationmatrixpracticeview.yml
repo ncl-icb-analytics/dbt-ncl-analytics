@@ -1,31 +1,35 @@
 version: 2
 models:
-- name: stg_dictionary_dbo_organisationmatrixpracticeview
-  description: Practice to network/commissioner/STP mapping matrix
-  columns:
-  - name: sk_organisation_id_practice
-    description: Primary key - practice organisation ID
+  - name: stg_dictionary_dbo_organisationmatrixpracticeview
+    description: Practice to network/commissioner/STP mapping matrix
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: sk_organisation_id_practice
+        description: Primary key - practice organisation ID
+        tests:
+          - unique
+          - not_null
+      - name: practice_code
+        description: Practice code
+        tests:
+          - not_null
+      - name: practice_name
+        description: Practice name
+      - name: sk_organisation_id_network
+        description: FK to network (PCN) organisation
+      - name: network_code
+        description: Network (PCN) code
+      - name: sk_organisation_id_commissioner
+        description: FK to commissioner organisation
+      - name: commissioner_code
+        description: Commissioner code
+      - name: sk_organisation_id_stp
+        description: FK to STP/ICS organisation
+      - name: stp_code
+        description: STP/ICS code
     tests:
-    - unique
-    - not_null
-  - name: practice_code
-    description: Practice code
-    tests:
-    - not_null
-  - name: practice_name
-    description: Practice name
-  - name: sk_organisation_id_network
-    description: FK to network (PCN) organisation
-  - name: network_code
-    description: Network (PCN) code
-  - name: sk_organisation_id_commissioner
-    description: FK to commissioner organisation
-  - name: commissioner_code
-    description: Commissioner code
-  - name: sk_organisation_id_stp
-    description: FK to STP/ICS organisation
-  - name: stp_code
-    description: STP/ICS code
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

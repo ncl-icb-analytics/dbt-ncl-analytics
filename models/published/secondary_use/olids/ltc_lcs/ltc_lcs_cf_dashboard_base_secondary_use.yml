@@ -7,6 +7,10 @@ models:
       Filtered to exclude patients with Type 1 opt-outs via dim_person_secondary_use_allowed.
       See ltc_lcs_cf_dashboard_base in published_reporting_direct_care for full details.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

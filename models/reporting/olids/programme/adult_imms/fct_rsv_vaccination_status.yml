@@ -1,8 +1,13 @@
 version: 1
 models:
   - name: fct_rsv_vaccination_status
-    description: 'Respiratory Syncytial Virus (RSV) vaccination programme status for people aged 75+ from 1st Sept 2024 or are currently aged 75-79 years for a catch-up campaign
-      Single per person - dose 1 status only'
+    description: 'Respiratory Syncytial Virus (RSV) vaccination programme status for
+      people aged 75+ from 1st Sept 2024 or are currently aged 75-79 years for a catch-up
+      campaign Single per person - dose 1 status only'
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: 'Unique identifier for the person'

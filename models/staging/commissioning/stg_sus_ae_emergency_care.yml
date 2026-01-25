@@ -1,16 +1,20 @@
 models:
-- name: stg_sus_ae_emergency_care
-  description: 'Urgent and Emergency Care (UEC) attendances from SUS data.
+  - name: stg_sus_ae_emergency_care
+    description: 'Urgent and Emergency Care (UEC) attendances from SUS data.
 
-    One row per attendance.
+      One row per attendance.
 
-    '
-  columns:
-  - name: primarykey_id
-    description: Unique identifier for the attendance (PRIMARYKEY_ID)
+      '
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: primarykey_id
+        description: Unique identifier for the attendance (PRIMARYKEY_ID)
+        tests:
+          - not_null
+          - unique
     tests:
-    - not_null
-    - unique
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

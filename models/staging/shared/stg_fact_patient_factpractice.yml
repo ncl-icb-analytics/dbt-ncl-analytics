@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: stg_fact_patient_factpractice
-    description: Patient GP practice registrations from Fact Patient database. More reliable than PDS for registration tracking.
+    description: Patient GP practice registrations from Fact Patient database. 
+      More reliable than PDS for registration tracking.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -43,7 +48,8 @@ models:
         description: Date the join to practice was detected in source data
 
       - name: date_detected_left
-        description: Date the departure from practice was detected in source data
+        description: Date the departure from practice was detected in source 
+          data
 
       - name: sk_data_source_id
         description: Data source identifier

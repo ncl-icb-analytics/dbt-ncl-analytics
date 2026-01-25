@@ -2,10 +2,17 @@ version: 2
 
 models:
   - name: int_myria_attendances_diagnoses
-    description: "Gets list of attendances and diagnoses before current month across IP, OP, and AE encounters for Project Myria. Output is one record per diagnosis per attendance per patient."
+    description: "Gets list of attendances and diagnoses before current month across
+      IP, OP, and AE encounters for Project Myria. Output is one record per diagnosis
+      per attendance per patient."
+    config:
+      meta:
+        owner:
+          name: PeterSNHS
     columns:
       - name: primary_id
-        description: "Unique identifier for each visit occurrence. Maps to PRIMARYKEY_ID in SUS."
+        description: "Unique identifier for each visit occurrence. Maps to PRIMARYKEY_ID
+          in SUS."
         tests:
           - not_null
       - name: pod_group
@@ -17,7 +24,8 @@ models:
       - name: fin_month
         description: "Fiscal month derived from the start date."
       - name: patient_id
-        description: "Unique patient identifier. May be null when NHS number is not available in source data."
+        description: "Unique patient identifier. May be null when NHS number is not
+          available in source data."
       - name: local_patient_identifier
         description: "Trust-provided patient identifier."
       - name: gp_code

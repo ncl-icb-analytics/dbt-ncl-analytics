@@ -1,29 +1,35 @@
 version: 2
 models:
-- name: stg_reference_ltc_lcs_valuesets
-  description: Valuesets containing metadata and friendly names for code groupings
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
-  columns:
-  - name: valueset_id
-    description: Unique identifier for the valueset
+  - name: stg_reference_ltc_lcs_valuesets
+    description: Valuesets containing metadata and friendly names for code 
+      groupings
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
-    - not_null
-    - unique
-  - name: report_id
-    description: Foreign key to associated report
-    tests:
-    - not_null
-  - name: valueset_index
-    description: Index of valueset within the report
-  - name: valueset_hash
-    description: Hash of valueset contents for change detection
-  - name: valueset_friendly_name
-    description: Human-readable name for the valueset (used in macro lookups)
-  - name: code_system
-    description: Primary code system used in this valueset
-  - name: expansion_error
-    description: Error message if valueset expansion failed
-  - name: expanded_at
-    description: Timestamp when valueset was expanded
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: valueset_id
+        description: Unique identifier for the valueset
+        tests:
+          - not_null
+          - unique
+      - name: report_id
+        description: Foreign key to associated report
+        tests:
+          - not_null
+      - name: valueset_index
+        description: Index of valueset within the report
+      - name: valueset_hash
+        description: Hash of valueset contents for change detection
+      - name: valueset_friendly_name
+        description: Human-readable name for the valueset (used in macro 
+          lookups)
+      - name: code_system
+        description: Primary code system used in this valueset
+      - name: expansion_error
+        description: Error message if valueset expansion failed
+      - name: expanded_at
+        description: Timestamp when valueset was expanded

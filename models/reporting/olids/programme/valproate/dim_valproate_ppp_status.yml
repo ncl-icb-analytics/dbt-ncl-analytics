@@ -1,10 +1,16 @@
 version: 2
 models:
   - name: dim_valproate_ppp_status
-    description: 'Pregnancy Prevention Programme (PPP) events aggregation for valproate monitoring.
+    description: 'Pregnancy Prevention Programme (PPP) events aggregation for valproate
+      monitoring.
 
-      One row per person with PPP events determining latest enrollment status and providing current PPP status with dates.'
+      One row per person with PPP events determining latest enrollment status and
+      providing current PPP status with dates.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

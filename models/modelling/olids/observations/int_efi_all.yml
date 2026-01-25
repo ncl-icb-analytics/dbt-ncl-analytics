@@ -16,6 +16,10 @@ models:
         - Mildly Frail: 0.09 ≤ score < 0.16
         - Moderately Frail: 0.16 ≤ score < 0.24
         - Severely Frail: score ≥ 0.24
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: EFI_SCORE, EFI2_SCORE

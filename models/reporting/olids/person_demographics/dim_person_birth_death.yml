@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_person_birth_death
-    description: 'Person vital statistics with birth and death information using statistical midpoint methodology.
+    description: 'Person vital statistics with birth and death information using statistical
+      midpoint methodology.
 
       Key Features:
 
@@ -15,8 +16,12 @@ models:
 
       • Fallback to current registration patient for surrogate key consistency
 
-      Purpose: Foundation for age calculations, demographic analysis, and mortality tracking.'
-    
+      Purpose: Foundation for age calculations, demographic analysis, and mortality
+      tracking.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
@@ -26,12 +31,11 @@ models:
 
       - name: sk_patient_id
         description: 'Surrogate key from current registration or best mapped patient'
-      
       - name: birth_year
         description: 'Year of birth'
         tests:
           - not_null
-      
+
       - name: birth_month
         description: 'Month of birth (1-12)'
         tests:
@@ -39,7 +43,7 @@ models:
           - dbt_utils.accepted_range:
               min_value: 1
               max_value: 12
-      
+
       - name: birth_date_approx
         description: 'Approximate birth date using statistical midpoint of birth month'
         tests:
@@ -50,10 +54,9 @@ models:
 
       - name: death_month
         description: 'Month of death (NULL if still living)'
-      
       - name: death_date_approx
-        description: 'Approximate death date using statistical midpoint of death month (NULL if still living)'
-      
+        description: 'Approximate death date using statistical midpoint of death month
+          (NULL if still living)'
       - name: is_deceased
         description: 'Flag indicating if person is deceased'
         tests:

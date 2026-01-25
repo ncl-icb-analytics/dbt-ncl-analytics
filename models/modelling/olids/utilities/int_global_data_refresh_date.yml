@@ -12,8 +12,13 @@ models:
 
       Returns a single row with one column: global_data_refresh_date.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: global_data_refresh_date
-        description: Most recent date where ≥150 practices have uploaded data (excludes future dates)
+        description: Most recent date where ≥150 practices have uploaded data 
+          (excludes future dates)
         tests:
           - not_null

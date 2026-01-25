@@ -11,6 +11,10 @@ models:
       - Rule 5: Cerebral artery thrombosis (first episode) in last 1 year
       - Rule 6: eGFR 15-29
       - Rule 7: ACR > 70
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id

@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_af_61
-    description: 'AF case finding for patients on cardiac medications without AF/HF diagnosis.
+    description: 'AF case finding for patients on cardiac medications without AF/HF
+      diagnosis.
 
-      One row per person on digoxin, flecainide, propafenone, or anticoagulant without AF/HF diagnosis or DVT/PE in last year.'
+      One row per person on digoxin, flecainide, propafenone, or anticoagulant without
+      AF/HF diagnosis or DVT/PE in last year.'
 
     config:
       meta:
@@ -15,7 +17,8 @@ models:
           name_short: "Cardiac meds no AF"
           description_short: "Patients on cardiac medications without AF/HF diagnosis"
           description_long: >
-            Patients on digoxin, flecainide, propafenone, or anticoagulant not on AF or heart failure registers,
+            Patients on digoxin, flecainide, propafenone, or anticoagulant not on
+            AF or heart failure registers,
             no DVT/PE in last year.
           is_qof: false
           source_column: "person_id"
@@ -53,3 +56,5 @@ models:
               threshold_unit: "boolean"
               description: "Any cardiac medication prescription"
               sort_order: 1
+        owner:
+          name: EddieDavison92

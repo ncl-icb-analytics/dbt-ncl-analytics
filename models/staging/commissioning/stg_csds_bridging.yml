@@ -1,15 +1,20 @@
 version: 2
 models:
-- name: stg_csds_bridging
-  description: Bridging table linking CSDS person identifiers to Pseudonymised NHS numbers
-  columns:
-  - name: person_id
-    description: CSDS person identifier
+  - name: stg_csds_bridging
+    description: Bridging table linking CSDS person identifiers to Pseudonymised
+      NHS numbers
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: person_id
+        description: CSDS person identifier
+        tests:
+          - unique
+          - not_null
+      - name: sk_patient_id
+        description: Pseudonymised NHS number (surrogate key for patient)
     tests:
-    - unique
-    - not_null
-  - name: sk_patient_id
-    description: Pseudonymised NHS number (surrogate key for patient)
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_diabetes_medications_all
-    description: 'Diabetes medication orders using BNF classification for insulin and antidiabetic drugs.'
+    description: 'Diabetes medication orders using BNF classification for insulin
+      and antidiabetic drugs.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id
@@ -35,7 +40,8 @@ models:
       - name: bnf_name
         description: 'BNF classification name'
       - name: diabetes_medication_type
-        description: 'BNF-based diabetes medication type (insulin, antidiabetic, hypoglycaemia treatment)'
+        description: 'BNF-based diabetes medication type (insulin, antidiabetic, hypoglycaemia
+          treatment)'
       - name: antidiabetic_drug_class
         description: 'Antidiabetic drug class (sulphonylureas, biguanides, other)'
       - name: insulin_type

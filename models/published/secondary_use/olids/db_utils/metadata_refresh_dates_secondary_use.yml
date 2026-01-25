@@ -13,6 +13,10 @@ models:
 
       See metadata_refresh_dates in published_reporting_direct_care for column documentation.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

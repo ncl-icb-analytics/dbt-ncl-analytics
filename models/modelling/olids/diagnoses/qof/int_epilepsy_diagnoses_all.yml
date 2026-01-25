@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_epilepsy_diagnoses_all
-    description: 'Epilepsy diagnosis and resolution observations for QOF register management.
+    description: 'Epilepsy diagnosis and resolution observations for QOF register
+      management.
 
-      One row per observation using EPIL_COD (diagnosis) and EPILRES_COD (resolution) clusters.'
+      One row per observation using EPIL_COD (diagnosis) and EPILRES_COD (resolution)
+      clusters.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -33,7 +39,8 @@ models:
         description: 'Flag indicating epilepsy resolved code (EPILRES_COD cluster)'
 
       - name: epilepsy_observation_type
-        description: 'Categorised epilepsy observation type (Epilepsy Diagnosis or Epilepsy Resolved)'
+        description: 'Categorised epilepsy observation type (Epilepsy Diagnosis or
+          Epilepsy Resolved)'
 
     tests:
       - dbt_utils.at_least_one:

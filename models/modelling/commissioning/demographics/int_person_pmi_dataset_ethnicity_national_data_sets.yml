@@ -3,7 +3,12 @@ version: 2
 models:
   - name: int_person_pmi_dataset_ethnicity_national_data_sets
     description: >
-      Reduces the existing ethnicity national data sets to the required fields for integration into int_person_pmi_combined file
+      Reduces the existing ethnicity national data sets to the required fields for
+      integration into int_person_pmi_combined file
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
     columns:
       - name: dataset_source
         description: Source dataset name (eth)

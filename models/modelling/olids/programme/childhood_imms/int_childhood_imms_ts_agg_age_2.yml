@@ -1,3 +1,8 @@
 models:
   - name: int_childhood_imms_ts_agg_age_2
-    description: Intermediate table holding aggregated completion metrics for historical children aged 2 at each analysis month.
+    description: Intermediate table holding aggregated completion metrics for 
+      historical children aged 2 at each analysis month.
+    config:
+      meta:
+        owner:
+          name: KatsplatH

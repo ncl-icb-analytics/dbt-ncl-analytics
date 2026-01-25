@@ -1,25 +1,29 @@
 version: 2
 models:
-- name: stg_reference_ltc_lcs_failed_codes
-  description: Codes that failed translation or expansion during processing
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
-  columns:
-  - name: failed_code_id
-    description: Unique identifier for this failed code entry
+  - name: stg_reference_ltc_lcs_failed_codes
+    description: Codes that failed translation or expansion during processing
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
-    - not_null
-    - unique
-  - name: valueset_id
-    description: Foreign key to associated valueset
-    tests:
-    - not_null
-  - name: original_code
-    description: Code that failed processing
-  - name: display_name
-    description: Display name for the failed code
-  - name: code_system
-    description: Code system of the failed code
-  - name: reason
-    description: Reason for failure (debugging aid)
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: failed_code_id
+        description: Unique identifier for this failed code entry
+        tests:
+          - not_null
+          - unique
+      - name: valueset_id
+        description: Foreign key to associated valueset
+        tests:
+          - not_null
+      - name: original_code
+        description: Code that failed processing
+      - name: display_name
+        description: Display name for the failed code
+      - name: code_system
+        description: Code system of the failed code
+      - name: reason
+        description: Reason for failure (debugging aid)

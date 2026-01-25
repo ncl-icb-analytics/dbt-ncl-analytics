@@ -11,6 +11,10 @@ models:
       Methodology: PDS All Registration Types Comparison
       Includes: validation_methodology column describing the test
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -26,6 +30,10 @@ models:
       Methodology: PDS All Registration Types Comparison
       Includes: validation_methodology column and issue_category (2-5%, 5-20%, 20%+)
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -38,6 +46,10 @@ models:
 
       Methodology: PDS All Registration Types Comparison using merged NHS numbers
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -52,6 +64,10 @@ models:
       Snapshot: Dynamic (from EMIS extract date)
       Registration Type: Regular only (excludes Temporary, Emergency, etc.)
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -68,6 +84,10 @@ models:
       Snapshot: Dynamic (from EMIS extract date)
       Registration Type: Regular only
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -85,6 +105,10 @@ models:
       Snapshot: Dynamic (from EMIS extract date)
       Registration Type: Regular only
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -98,6 +122,10 @@ models:
       Acceptance Criteria: <1% variance in aggregate across all practices
       Snapshot: Dynamic (from EMIS extract date)
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

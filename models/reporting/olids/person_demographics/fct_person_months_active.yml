@@ -2,7 +2,8 @@ version: 2
 
 models:
   - name: fct_person_months_active
-    description: 'Monthly active patient spine table providing foundation for temporal analysis.
+    description: 'Monthly active patient spine table providing foundation for temporal
+      analysis.
 
       Key Features:
 
@@ -14,30 +15,35 @@ models:
 
       • Eliminates repetitive spine logic in analysis queries
 
-      Purpose: Foundation for temporal analysis enabling direct joins to demographics, conditions, and clinical data by person-month.'
-    
+      Purpose: Foundation for temporal analysis enabling direct joins to demographics,
+      conditions, and clinical data by person-month.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - person_id
             - analysis_month
-    
+
     columns:
       - name: analysis_month
         description: First day of the analysis month
         tests:
           - not_null
-      
+
       - name: person_id
         description: Unique person identifier
         tests:
           - not_null
-      
+
       - name: current_practice_id
-        description: Practice where person was registered this month (most recent if multiple)
+        description: Practice where person was registered this month (most 
+          recent if multiple)
         tests:
           - not_null
-      
+
       - name: current_practice_name
         description: Name of practice where person was registered this month
         tests:

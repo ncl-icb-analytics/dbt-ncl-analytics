@@ -1,16 +1,20 @@
 models:
-- name: stg_sus_op_appointment
-  description: 'Outpatient appointments from SUS data.
+  - name: stg_sus_op_appointment
+    description: 'Outpatient appointments from SUS data.
 
-    One row per appointment.
+      One row per appointment.
 
-    '
-  columns:
-  - name: primarykey_id
-    description: Unique identifier for the appointment (PRIMARYKEY_ID)
+      '
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: primarykey_id
+        description: Unique identifier for the appointment (PRIMARYKEY_ID)
+        tests:
+          - not_null
+          - unique
     tests:
-    - not_null
-    - unique
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

@@ -2,8 +2,13 @@ version: 2
 
 models:
   - name: practice_registration_comparison_all_secondary_use
-    description: PDS vs OLIDS practice registration comparison for all practices (secondary use layer). One row per practice with match category.
+    description: PDS vs OLIDS practice registration comparison for all practices
+      (secondary use layer). One row per practice with match category.
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

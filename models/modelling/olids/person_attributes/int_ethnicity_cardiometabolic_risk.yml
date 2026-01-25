@@ -1,9 +1,12 @@
 version: 2
 models:
   - name: int_ethnicity_cardiometabolic_risk
-    description: 'Ethnicity classifications for populations requiring lower BMI thresholds per NICE guidance.
+    description: 'Ethnicity classifications for populations requiring lower BMI thresholds
+      per NICE guidance.
 
-      Identifies South Asian, Chinese, other Asian, Middle Eastern, Black African, or African-Caribbean populations who have increased cardiometabolic risk at lower BMI levels.
+      Identifies South Asian, Chinese, other Asian, Middle Eastern, Black African,
+      or African-Caribbean populations who have increased cardiometabolic risk at
+      lower BMI levels.
 
       Key Features:
 
@@ -14,9 +17,16 @@ models:
       • One row per person with latest ethnicity observation
 
       Purpose: Supports ethnicity-adjusted BMI categorisation and clinical risk assessment.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
-          cluster_ids: ETH2016AI_COD, ETH2016AP_COD, ETH2016AB_COD, ETH2016AC_COD, ETH2016AO_COD, ETH2016MWA_COD, ETH2016OA_COD, ETH2016BA_COD, ETH2016MWBA_COD, ETH2016BC_COD, ETH2016MWBC_COD, ETH2016BO_COD
+          cluster_ids: ETH2016AI_COD, ETH2016AP_COD, ETH2016AB_COD, 
+            ETH2016AC_COD, ETH2016AO_COD, ETH2016MWA_COD, ETH2016OA_COD, 
+            ETH2016BA_COD, ETH2016MWBA_COD, ETH2016BC_COD, ETH2016MWBC_COD, 
+            ETH2016BO_COD
     columns:
       - name: person_id
         description: Person identifier
@@ -53,7 +63,8 @@ models:
         tests:
           - not_null
       - name: is_other_asian
-        description: 'Flag indicating other Asian ethnicity (including mixed Asian backgrounds)'
+        description: 'Flag indicating other Asian ethnicity (including mixed Asian
+          backgrounds)'
         tests:
           - not_null
       - name: is_middle_eastern
@@ -61,15 +72,18 @@ models:
         tests:
           - not_null
       - name: is_black_african
-        description: 'Flag indicating Black African ethnicity (including mixed Black African backgrounds)'
+        description: 'Flag indicating Black African ethnicity (including mixed Black
+          African backgrounds)'
         tests:
           - not_null
       - name: is_african_caribbean
-        description: 'Flag indicating African-Caribbean ethnicity (including mixed Caribbean backgrounds)'
+        description: 'Flag indicating African-Caribbean ethnicity (including mixed
+          Caribbean backgrounds)'
         tests:
           - not_null
       - name: requires_lower_bmi_thresholds
-        description: 'Composite flag indicating if person requires lower BMI thresholds per NICE guidance'
+        description: 'Composite flag indicating if person requires lower BMI thresholds
+          per NICE guidance'
         tests:
           - not_null
       - name: cardiometabolic_risk_ethnicity_group
@@ -77,12 +91,15 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['South Asian', 'Chinese', 'Other Asian', 'Middle Eastern', 'Black African', 'African-Caribbean', 'Other/White']
+              values: ['South Asian', 'Chinese', 'Other Asian', 'Middle Eastern',
+                'Black African', 'African-Caribbean', 'Other/White']
       - name: latest_ethnicity_date
         description: Date of most recent ethnicity observation for this person
       - name: all_ethnicity_groups
         description: Array of all ethnicity groups recorded for this person
       - name: all_ethnicity_concept_codes
-        description: Array of all ethnicity concept codes recorded for this person
+        description: Array of all ethnicity concept codes recorded for this 
+          person
       - name: all_ethnicity_concept_displays
-        description: Array of all ethnicity concept displays recorded for this person
+        description: Array of all ethnicity concept displays recorded for this 
+          person

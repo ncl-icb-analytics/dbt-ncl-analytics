@@ -1,10 +1,16 @@
 version: 2
 models:
   - name: int_valproate_medications_6m_latest
-    description: 'Most recent valproate medication order per person from the last 6 months for pregnancy safety monitoring.
+    description: 'Most recent valproate medication order per person from the last
+      6 months for pregnancy safety monitoring.
 
-      One row per person with latest valproate order, including product classification and recency tracking for teratogenicity risk assessment.'
+      One row per person with latest valproate order, including product classification
+      and recency tracking for teratogenicity risk assessment.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Patient identifier'
@@ -43,7 +49,9 @@ models:
         description: 'Human-readable description of the valproate medication code'
 
       - name: valproate_product_term
-        description: 'Valproate product classification (EPILIM, CONVULEX, DEPAKOTE, EPISENTA, VALPROATE_GENERIC, OTHER_VALPROATE)'
+        description: 'Valproate product classification (EPILIM, CONVULEX, DEPAKOTE,
+          EPISENTA, VALPROATE_GENERIC, OTHER_VALPROATE)'
 
       - name: recent_order_count
-        description: 'Total number of valproate orders for this person in the last 6 months'
+        description: 'Total number of valproate orders for this person in the last
+          6 months'

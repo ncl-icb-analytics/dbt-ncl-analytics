@@ -2,35 +2,47 @@ version: 2
 
 models:
   - name: fct_person_sus_ae_recent
-    description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+    description: Recent A&E attendance counts per patient (12mo rolling). One 
+      row per patient with illness, injury, and Type 1 A&E counts.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: sk_patient_id
         data_type: varchar
-        description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+        description: Recent A&E attendance counts per patient (12mo rolling). 
+          One row per patient with illness, injury, and Type 1 A&E counts.
         tests:
           - not_null
           - unique
 
       - name: ae_ill_12mo
         data_type: number
-        description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+        description: Recent A&E attendance counts per patient (12mo rolling). 
+          One row per patient with illness, injury, and Type 1 A&E counts.
 
       - name: ae_ill_3mo
         data_type: number
-        description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+        description: Recent A&E attendance counts per patient (12mo rolling). 
+          One row per patient with illness, injury, and Type 1 A&E counts.
 
       - name: ae_ill_1mo
         data_type: number
-        description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+        description: Recent A&E attendance counts per patient (12mo rolling). 
+          One row per patient with illness, injury, and Type 1 A&E counts.
 
       - name: ae_tot_12mo
         data_type: number
-        description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+        description: Recent A&E attendance counts per patient (12mo rolling). 
+          One row per patient with illness, injury, and Type 1 A&E counts.
 
       - name: ae_inj_12mo
         data_type: number
-        description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+        description: Recent A&E attendance counts per patient (12mo rolling). 
+          One row per patient with illness, injury, and Type 1 A&E counts.
 
       - name: ae_t1_12mo
         data_type: number
-        description: Recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts.
+        description: Recent A&E attendance counts per patient (12mo rolling). 
+          One row per patient with illness, injury, and Type 1 A&E counts.

@@ -1,17 +1,21 @@
 version: 2
 models:
-- name: stg_dictionary_ecds_investigation
-  description: ECDS investigation reference data with HRG grouping mappings
-  columns:
-  - name: ecds_unique_id
-    description: Primary key - ECDS unique identifier
+  - name: stg_dictionary_ecds_investigation
+    description: ECDS investigation reference data with HRG grouping mappings
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: ecds_unique_id
+        description: Primary key - ECDS unique identifier
+        tests:
+          - not_null
+      - name: snomed_code
+        description: SNOMED CT code
+        tests:
+          - unique
+          - not_null
     tests:
-    - not_null
-  - name: snomed_code
-    description: SNOMED CT code
-    tests:
-    - unique
-    - not_null
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

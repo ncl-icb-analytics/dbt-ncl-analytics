@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_frailty_diagnoses_all
-    description: 'Frailty diagnosis observations with severity classification for care planning and risk assessment.
+    description: 'Frailty diagnosis observations with severity classification for
+      care planning and risk assessment.
 
       Key Features:
 
@@ -13,7 +14,12 @@ models:
 
       • Enables care planning for frail elderly populations
 
-      Purpose: Provide observation-level data for frailty assessment and intervention tracking.'
+      Purpose: Provide observation-level data for frailty assessment and intervention
+      tracking.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
           column_name: id
@@ -36,8 +42,10 @@ models:
       - name: source_cluster_id
         description: 'Source cluster identifier (FRAILTY_DX for frailty diagnoses)'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating diagnosis code (always TRUE for frailty observations)'
+        description: 'Boolean flag indicating diagnosis code (always TRUE for frailty
+          observations)'
       - name: frailty_severity
-        description: 'Severity classification: Mild (925791000000100), Moderate (925831000000107), Severe (925861000000102), or Unknown'
+        description: 'Severity classification: Mild (925791000000100), Moderate (925831000000107),
+          Severe (925861000000102), or Unknown'
       - name: frailty_observation_type
         description: 'Type of frailty observation (always "Frailty Diagnosis")'

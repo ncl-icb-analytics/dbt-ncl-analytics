@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_over_65
-    description: 'Flu vaccination eligibility for people aged 65 and over based on age criteria.
+    description: 'Flu vaccination eligibility for people aged 65 and over based on
+      age criteria.
 
       Key Features:
 
@@ -13,8 +14,8 @@ models:
 
       • Uses birth_date_approx for age calculation
 
-      Purpose: Identify people eligible for flu vaccination based on age threshold alone.'
-    
+      Purpose: Identify people eligible for flu vaccination based on age threshold
+      alone.'
     config:
       meta:
         indicator:
@@ -25,9 +26,11 @@ models:
           name_short: "Flu Eligible Over 65"
           description_short: "Adults aged 65+ eligible for flu vaccination"
           description_long: >
-            Adults aged 65 years and over eligible for annual flu vaccination as part of the 
-            NHS flu immunisation programme. Age calculated at campaign reference date (31st March).
-            All adults in this age group are eligible regardless of clinical risk factors.
+            Adults aged 65 years and over eligible for annual flu vaccination as part
+            of the  NHS flu immunisation programme. Age calculated at campaign reference
+            date (31st March).
+            All adults in this age group are eligible regardless of clinical risk
+            factors.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_1_OVER_65"
@@ -45,6 +48,8 @@ models:
               threshold_unit: "years"
               description: "Minimum age for eligibility"
               sort_order: 1
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

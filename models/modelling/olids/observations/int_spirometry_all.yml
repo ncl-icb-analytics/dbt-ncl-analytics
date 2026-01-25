@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_spirometry_all
-    description: 'Spirometry test results (FEV1/FVC ratios) for COPD diagnosis and respiratory disease monitoring.
+    description: 'Spirometry test results (FEV1/FVC ratios) for COPD diagnosis and
+      respiratory disease monitoring.
 
-      One row per spirometry observation using FEV1FVC_COD and FEV1FVCL70_COD clusters with COPD diagnostic threshold assessment (FEV1/FVC <0.7).'
+      One row per spirometry observation using FEV1FVC_COD and FEV1FVCL70_COD clusters
+      with COPD diagnostic threshold assessment (FEV1/FVC <0.7).'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: FEV1FVCL70_COD, FEV1FVC_COD

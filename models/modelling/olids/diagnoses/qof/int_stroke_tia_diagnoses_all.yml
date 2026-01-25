@@ -1,12 +1,19 @@
 version: 2
 models:
   - name: int_stroke_tia_diagnoses_all
-    description: 'Stroke and TIA diagnosis observations for QOF register data collection and cerebrovascular secondary prevention.
+    description: 'Stroke and TIA diagnosis observations for QOF register data collection
+      and cerebrovascular secondary prevention.
 
-      One row per stroke or TIA diagnosis observation using STRK_COD and TIA_COD clusters with permanent cardiovascular event tracking and no age restrictions.'
+      One row per stroke or TIA diagnosis observation using STRK_COD and TIA_COD clusters
+      with permanent cardiovascular event tracking and no age restrictions.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
-        description: 'Observation identifier (not unique - same observation may appear for multiple cluster matches)'
+        description: 'Observation identifier (not unique - same observation may appear
+          for multiple cluster matches)'
         tests:
           - not_null
 
@@ -35,7 +42,8 @@ models:
         description: 'Flag indicating any stroke or TIA diagnosis code'
 
       - name: stroke_tia_observation_type
-        description: 'Categorised stroke/TIA observation type (Stroke Diagnosis or TIA Diagnosis)'
+        description: 'Categorised stroke/TIA observation type (Stroke Diagnosis or
+          TIA Diagnosis)'
 
     tests:
       - dbt_utils.at_least_one:

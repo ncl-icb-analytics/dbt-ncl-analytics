@@ -1,11 +1,13 @@
 version: 2
 models:
   - name: int_flu_learning_disability
-    description: 'Flu vaccination eligibility for people with learning disabilities using severity classification.
+    description: 'Flu vaccination eligibility for people with learning disabilities
+      using severity classification.
 
       Key Features:
 
-      • Two pathway logic: severe learning disability (SEV_LRNDIS_COD) or general learning disability (LEARNDIS_COD)
+      • Two pathway logic: severe learning disability (SEV_LRNDIS_COD) or general
+      learning disability (LEARNDIS_COD)
 
       • Earliest occurrence in medical history qualifies
 
@@ -15,8 +17,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to learning disability conditions.'
-    
+      Purpose: Identify people eligible for flu vaccination due to learning disability
+      conditions.'
     config:
       meta:
         indicator:
@@ -27,10 +29,14 @@ models:
           name_short: "Flu Eligible Learning Disability"
           description_short: "People with learning disabilities eligible for flu vaccination"
           description_long: >
-            Flu vaccination eligibility for people with learning disabilities of any severity.
-            Uses both severe learning disability codes (SEV_LRNDIS_COD) and general learning
-            disability codes (LEARNDIS_COD) with earliest occurrence qualifying. Minimum age
-            requirement of 6 months for flu vaccination. Supports vulnerable population protection.
+            Flu vaccination eligibility for people with learning disabilities of any
+            severity.
+            Uses both severe learning disability codes (SEV_LRNDIS_COD) and general
+            learning
+            disability codes (LEARNDIS_COD) with earliest occurrence qualifying. Minimum
+            age
+            requirement of 6 months for flu vaccination. Supports vulnerable population
+            protection.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_12_LEARNING_DISABILITY"
@@ -50,7 +56,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

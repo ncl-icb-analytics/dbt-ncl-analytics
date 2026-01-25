@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_children_school_age
-    description: 'Flu vaccination eligibility for children of school age based on campaign birth date ranges.
+    description: 'Flu vaccination eligibility for children of school age based on
+      campaign birth date ranges.
 
       Key Features:
 
@@ -13,8 +14,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify school-aged children eligible for flu vaccination within campaign-defined age parameters.'
-    
+      Purpose: Identify school-aged children eligible for flu vaccination within campaign-defined
+      age parameters.'
     config:
       meta:
         indicator:
@@ -26,9 +27,11 @@ models:
           description_short: "School-age children eligible for flu vaccination"
           description_long: >
             Children of school age eligible for flu vaccination based on campaign
-            birth date ranges (typically 4-11 years old). Uses child_school_birth_start and
+            birth date ranges (typically 4-11 years old). Uses child_school_birth_start
+            and
             child_school_birth_end dates from flu campaign configuration. No clinical
-            conditions required - pure age-based eligibility for school immunisation programmes.
+            conditions required - pure age-based eligibility for school immunisation
+            programmes.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_3_CHILDREN_SCHOOL"
@@ -48,7 +51,9 @@ models:
               threshold_unit: "dates"
               description: "Campaign school age birth date range"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

@@ -12,6 +12,10 @@ models:
       Methodology: PDS All Registration Types Comparison
       Includes: validation_methodology column describing the test
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -28,6 +32,10 @@ models:
       Methodology: PDS All Registration Types Comparison
       Includes: validation_methodology column and issue_category (2-5%, 5-20%, 20%+)
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -44,6 +52,10 @@ models:
       Note: EMIS comparisons are NOT available in secondary_use layer as EMIS data
       cannot be joined to opt-out tables (no sk_patient_id).
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

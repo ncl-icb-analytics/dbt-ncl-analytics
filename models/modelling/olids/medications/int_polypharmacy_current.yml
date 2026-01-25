@@ -24,6 +24,10 @@ models:
 
       Enriched with BNF codes and medication names for current medications.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Person identifier

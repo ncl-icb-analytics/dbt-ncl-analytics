@@ -5,18 +5,15 @@ models:
 
       Grain: One row per person per campaign who meets immunosuppression criteria
 
-      Identifies people:
-      • Diagnosed with immunosuppression (any time)
-      • Recent immunosuppressant medication (6 months)
-      • Recent chemotherapy/radiotherapy (6 months)
-      • Age varies by campaign (any age 2024/25, 6 months-74 years 2025/26)
+      Identifies people: • Diagnosed with immunosuppression (any time) • Recent immunosuppressant
+      medication (6 months) • Recent chemotherapy/radiotherapy (6 months) • Age varies
+      by campaign (any age 2024/25, 6 months-74 years 2025/26)
 
       Used by: Mart models for eligibility determination'
-    
     tests:
       - cluster_ids_exist:
           cluster_ids: IMMDX_COV_COD,IMMRX_COD,IMM_ADM_COD,DXT_CHEMO_COD
-    
+
     config:
       meta:
         indicator:
@@ -27,11 +24,16 @@ models:
           name_short: "COVID Eligible Immunosuppression"
           description_short: "People with immunosuppression eligible for COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with immunosuppression from any cause including
-            diagnosis codes (IMMDX_COV_COD), recent immunosuppressant medications (IMMRX_COD within 6 months),
-            recent admin codes indicating immunosuppression (IMMADM_COD within 3 years), or
-            recent chemotherapy/radiotherapy (DXT_CHEMO_COD within 6 months). Uses different
-            lookback periods for medication/treatment pathways to capture currently immunosuppressed patients.
+            COVID vaccination eligibility for people with immunosuppression from any
+            cause including
+            diagnosis codes (IMMDX_COV_COD), recent immunosuppressant medications
+            (IMMRX_COD within 6 months),
+            recent admin codes indicating immunosuppression (IMMADM_COD within 3 years),
+            or
+            recent chemotherapy/radiotherapy (DXT_CHEMO_COD within 6 months). Uses
+            different
+            lookback periods for medication/treatment pathways to capture currently
+            immunosuppressed patients.
             Age eligibility varies by campaign type.
           is_qof: false
           source_column: "person_id"
@@ -84,7 +86,9 @@ models:
               threshold_unit: "years"
               description: "Lookback period for administration codes"
               sort_order: 5
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'
@@ -99,7 +103,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying immunosuppression event (diagnosis, medication, admin, or treatment)'
+        description: 'Date of qualifying immunosuppression event (diagnosis, medication,
+          admin, or treatment)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description
@@ -109,6 +114,7 @@ models:
       - name: age_months_at_ref_date
         description: 'Age in months at campaign reference date'
       - name: age_years_at_ref_date
-        description: 'Age in years at campaign reference date (eligibility varies by campaign)'
+        description: 'Age in years at campaign reference date (eligibility varies
+          by campaign)'
       - name: created_at
         description: 'Audit timestamp for record creation (campaign audit end date)'

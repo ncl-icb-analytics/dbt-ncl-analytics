@@ -1,88 +1,103 @@
 version: 2
 models:
-- name: stg_olids_allergy_intolerance
-  description: Allergy and intolerance records from GP systems. Deduplicated by id
-    and filtered to exclude deleted records.
-  columns:
-  - name: id
-    description: Primary key - unique identifier for this allergy intolerance record
+  - name: stg_olids_allergy_intolerance
+    description: Allergy and intolerance records from GP systems. Deduplicated 
+      by id and filtered to exclude deleted records.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: id
+        description: Primary key - unique identifier for this allergy 
+          intolerance record
+        tests:
+          - unique
+          - not_null
+      - name: patient_id
+        description: Foreign key to patient.id
+      - name: practitioner_id
+        description: Foreign key to practitioner.id - practitioner who recorded 
+          the allergy
+      - name: encounter_id
+        description: Foreign key to encounter.id - encounter when allergy was 
+          recorded
+      - name: clinical_status
+        description: Clinical status of the allergy (active, inactive, resolved)
+      - name: verification_status
+        description: Verification status (unconfirmed, confirmed, refuted, 
+          entered-in-error)
+      - name: category
+        description: Category of allergy (food, medication, environment, 
+          biologic)
+      - name: clinical_effective_date
+        description: Date the allergy was clinically effective or recorded
+      - name: date_precision_concept_id
+        description: Foreign key to concept.id - precision of the clinical 
+          effective date
+      - name: date_precision_code
+        description: Code value for the date precision concept
+      - name: date_precision_display
+        description: Display name for the date precision concept
+      - name: date_precision_source_code
+        description: Source code for the date precision concept (from concept 
+          map)
+      - name: date_precision_source_display
+        description: Source display name for the date precision concept (from 
+          concept map)
+      - name: is_review
+        description: Boolean indicating if this is a review record
+      - name: medication_name
+        description: Name of the medication causing the allergy, if applicable
+      - name: multi_lex_action
+        description: Multi-lex action code
+      - name: allergy_intolerance_source_concept_id
+        description: Foreign key to concept.id - source concept for the allergy 
+          type
+      - name: source_code
+        description: Source code for the allergy intolerance concept
+      - name: source_display
+        description: Source display name for the allergy intolerance concept
+      - name: source_system
+        description: Source system for the allergy intolerance concept
+      - name: mapped_concept_id
+        description: Mapped concept identifier (target concept from concept map)
+      - name: mapped_concept_code
+        description: Mapped concept code (target concept code from concept map)
+      - name: mapped_concept_display
+        description: Mapped concept display name (target concept display from 
+          concept map)
+      - name: target_system
+        description: Target system for the mapped concept
+      - name: age_at_event
+        description: Patient age in years at time of event
+      - name: age_at_event_baby
+        description: Patient age in months for babies (0-24 months)
+      - name: age_at_event_neonate
+        description: Patient age in days for neonates (0-28 days)
+      - name: date_recorded
+        description: Date the record was entered into the system
+      - name: is_confidential
+        description: Boolean indicating if the record is marked as confidential
+      - name: person_id
+        description: Foreign key to person.id - person-level identifier
+      - name: lds_id
+        description: LDS system identifier
+      - name: record_owner_organisation_code
+        description: Organisation code of the record owner
+      - name: lds_datetime_data_acquired
+        description: Datetime when data was acquired by LDS
+      - name: lds_initial_data_received_date
+        description: Date when data was initially received by LDS
+      - name: lds_start_date_time
+        description: LDS datetime stamp from which the record version was 
+          correct - used for deduplication to get the latest record
+      - name: lds_is_deleted
+        description: Deletion flag - records with TRUE are filtered out in this 
+          staging layer
+      - name: lds_record_id
+        description: LDS assigned unique identifier for the source record 
+          version
     tests:
-    - unique
-    - not_null
-  - name: patient_id
-    description: Foreign key to patient.id
-  - name: practitioner_id
-    description: Foreign key to practitioner.id - practitioner who recorded the allergy
-  - name: encounter_id
-    description: Foreign key to encounter.id - encounter when allergy was recorded
-  - name: clinical_status
-    description: Clinical status of the allergy (active, inactive, resolved)
-  - name: verification_status
-    description: Verification status (unconfirmed, confirmed, refuted, entered-in-error)
-  - name: category
-    description: Category of allergy (food, medication, environment, biologic)
-  - name: clinical_effective_date
-    description: Date the allergy was clinically effective or recorded
-  - name: date_precision_concept_id
-    description: Foreign key to concept.id - precision of the clinical effective date
-  - name: date_precision_code
-    description: Code value for the date precision concept
-  - name: date_precision_display
-    description: Display name for the date precision concept
-  - name: date_precision_source_code
-    description: Source code for the date precision concept (from concept map)
-  - name: date_precision_source_display
-    description: Source display name for the date precision concept (from concept map)
-  - name: is_review
-    description: Boolean indicating if this is a review record
-  - name: medication_name
-    description: Name of the medication causing the allergy, if applicable
-  - name: multi_lex_action
-    description: Multi-lex action code
-  - name: allergy_intolerance_source_concept_id
-    description: Foreign key to concept.id - source concept for the allergy type
-  - name: source_code
-    description: Source code for the allergy intolerance concept
-  - name: source_display
-    description: Source display name for the allergy intolerance concept
-  - name: source_system
-    description: Source system for the allergy intolerance concept
-  - name: mapped_concept_id
-    description: Mapped concept identifier (target concept from concept map)
-  - name: mapped_concept_code
-    description: Mapped concept code (target concept code from concept map)
-  - name: mapped_concept_display
-    description: Mapped concept display name (target concept display from concept map)
-  - name: target_system
-    description: Target system for the mapped concept
-  - name: age_at_event
-    description: Patient age in years at time of event
-  - name: age_at_event_baby
-    description: Patient age in months for babies (0-24 months)
-  - name: age_at_event_neonate
-    description: Patient age in days for neonates (0-28 days)
-  - name: date_recorded
-    description: Date the record was entered into the system
-  - name: is_confidential
-    description: Boolean indicating if the record is marked as confidential
-  - name: person_id
-    description: Foreign key to person.id - person-level identifier
-  - name: lds_id
-    description: LDS system identifier
-  - name: record_owner_organisation_code
-    description: Organisation code of the record owner
-  - name: lds_datetime_data_acquired
-    description: Datetime when data was acquired by LDS
-  - name: lds_initial_data_received_date
-    description: Date when data was initially received by LDS
-  - name: lds_start_date_time
-    description: LDS datetime stamp from which the record version was correct - used
-      for deduplication to get the latest record
-  - name: lds_is_deleted
-    description: Deletion flag - records with TRUE are filtered out in this staging
-      layer
-  - name: lds_record_id
-    description: LDS assigned unique identifier for the source record version
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

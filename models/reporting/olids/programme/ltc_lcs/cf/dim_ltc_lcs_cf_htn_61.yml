@@ -1,19 +1,21 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_htn_61
-    description: 'Case finding for severe hypertension requiring urgent blood pressure management.
+    description: 'Case finding for severe hypertension requiring urgent blood pressure
+      management.
 
 
       Business Logic:
 
-      • Identifies patients with severe hypertension (clinic BP ≥180/120, home/ABPM ≥170/115)
+      • Identifies patients with severe hypertension (clinic BP ≥180/120, home/ABPM
+      ≥170/115)
 
       • Targets patients requiring immediate clinical intervention and treatment escalation
 
-      • Highest priority hypertension category requiring urgent cardiovascular risk management
+      • Highest priority hypertension category requiring urgent cardiovascular risk
+      management
 
       • One row per person with latest blood pressure readings meeting severe criteria'
-    
     config:
       meta:
         indicator:
@@ -68,3 +70,5 @@ models:
               threshold_unit: "mmHg"
               description: "Home/ABPM diastolic BP ≥115 mmHg (severe)"
               sort_order: 4
+        owner:
+          name: EddieDavison92

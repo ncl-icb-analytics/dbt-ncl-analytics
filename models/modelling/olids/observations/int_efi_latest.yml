@@ -10,6 +10,10 @@ models:
 
       Algorithm-specific latest (if present):
       - `latest_efi_score` for EFI, `latest_efi2_score` for EFI2.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Person identifier
@@ -19,12 +23,15 @@ models:
       - name: latest_efi_date
         description: Observation date of the preferred latest eFI
       - name: latest_efi_score_preferred
-        description: Preferred latest eFI score (value) from the most recent observation
+        description: Preferred latest eFI score (value) from the most recent 
+          observation
       - name: latest_efi_type_preferred
         description: Algorithm type (EFI or EFI2) for the preferred latest score
       - name: latest_efi_category_preferred
-        description: Frailty category corresponding to the preferred latest score
+        description: Frailty category corresponding to the preferred latest 
+          score
       - name: latest_efi_score
-        description: Latest eFI score using the original EFI algorithm, if available
+        description: Latest eFI score using the original EFI algorithm, if 
+          available
       - name: latest_efi2_score
         description: Latest eFI2 score using the EFI2 algorithm, if available

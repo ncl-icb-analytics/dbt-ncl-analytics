@@ -2,10 +2,16 @@ version: 2
 
 models:
   - name: int_alcohol_audit_scores
-    description: 'AUDIT and AUDIT-C alcohol screening assessments with UK-specific risk thresholds.
+    description: 'AUDIT and AUDIT-C alcohol screening assessments with UK-specific
+      risk thresholds.
 
-      One row per AUDIT/AUDIT-C observation using AUDITC_COD and AUDIT_COD clusters with detailed categorisation and intervention flags.'
+      One row per AUDIT/AUDIT-C observation using AUDITC_COD and AUDIT_COD clusters
+      with detailed categorisation and intervention flags.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: AUDITC_COD, AUDIT_COD
@@ -21,7 +27,8 @@ models:
           - not_null
 
       - name: id
-        description: Identifier for the observation (may not be unique due to multiple concept mappings)
+        description: Identifier for the observation (may not be unique due to 
+          multiple concept mappings)
         tests:
           - not_null
 
@@ -37,22 +44,27 @@ models:
         description: Type of AUDIT assessment (AUDIT-C or Full AUDIT)
 
       - name: is_valid_score
-        description: Flag indicating if score is within valid range for the instrument
+        description: Flag indicating if score is within valid range for the 
+          instrument
 
       - name: risk_category
         description: Clinical risk category based on score thresholds
 
       - name: auditc_positive_screen
-        description: Flag for AUDIT-C scores ≥5 indicating positive screen for potential harm
+        description: Flag for AUDIT-C scores ≥5 indicating positive screen for 
+          potential harm
 
       - name: requires_specialist_intervention
-        description: Flag for scores indicating need for specialist clinical intervention
+        description: Flag for scores indicating need for specialist clinical 
+          intervention
 
       - name: brief_intervention_indicated
         description: Flag for scores meeting threshold for brief intervention
 
       - name: simplified_risk_level
-        description: Simplified risk categorisation (Low/Moderate/High) for aggregation
+        description: Simplified risk categorisation (Low/Moderate/High) for 
+          aggregation
 
       - name: gender
-        description: Person's gender used for risk stratification (where applicable)
+        description: Person's gender used for risk stratification (where 
+          applicable)

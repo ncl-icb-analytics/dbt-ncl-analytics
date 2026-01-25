@@ -1,51 +1,57 @@
 version: 2
 models:
-- name: stg_olids_organisation
-  description: Healthcare organisations including GP practices, hospitals, and other
-    providers. Deduplicated by id and filtered to exclude deleted records.
-  columns:
-  - name: id
-    description: Primary key - unique identifier for this organisation
+  - name: stg_olids_organisation
+    description: Healthcare organisations including GP practices, hospitals, and
+      other providers. Deduplicated by id and filtered to exclude deleted 
+      records.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: id
+        description: Primary key - unique identifier for this organisation
+        tests:
+          - unique
+          - not_null
+      - name: organisation_code
+        description: Organisation code (e.g., ODS code)
+      - name: assigning_authority_code
+        description: Code of the authority that assigned the organisation code
+      - name: name
+        description: Name of the organisation
+      - name: type_code
+        description: Type code for the organisation
+      - name: type_desc
+        description: Type description for the organisation
+      - name: postcode
+        description: Postcode of the organisation
+      - name: parent_organisation_id
+        description: Foreign key to organisation.id - parent organisation if 
+          part of a hierarchy
+      - name: open_date
+        description: Date the organisation opened
+      - name: close_date
+        description: Date the organisation closed
+      - name: is_obsolete
+        description: Boolean indicating if the organisation record is obsolete
+      - name: lds_id
+        description: LDS system identifier
+      - name: record_owner_organisation_code
+        description: Organisation code of the record owner
+      - name: lds_datetime_data_acquired
+        description: Datetime when data was acquired by LDS
+      - name: lds_initial_data_received_date
+        description: Date when data was initially received by LDS
+      - name: lds_start_date_time
+        description: LDS datetime stamp from which the record version was 
+          correct - used for deduplication to get the latest record
+      - name: lds_is_deleted
+        description: Deletion flag - records with TRUE are filtered out in this 
+          staging layer
+      - name: lds_record_id
+        description: LDS assigned unique identifier for the source record 
+          version
     tests:
-    - unique
-    - not_null
-  - name: organisation_code
-    description: Organisation code (e.g., ODS code)
-  - name: assigning_authority_code
-    description: Code of the authority that assigned the organisation code
-  - name: name
-    description: Name of the organisation
-  - name: type_code
-    description: Type code for the organisation
-  - name: type_desc
-    description: Type description for the organisation
-  - name: postcode
-    description: Postcode of the organisation
-  - name: parent_organisation_id
-    description: Foreign key to organisation.id - parent organisation if part of a
-      hierarchy
-  - name: open_date
-    description: Date the organisation opened
-  - name: close_date
-    description: Date the organisation closed
-  - name: is_obsolete
-    description: Boolean indicating if the organisation record is obsolete
-  - name: lds_id
-    description: LDS system identifier
-  - name: record_owner_organisation_code
-    description: Organisation code of the record owner
-  - name: lds_datetime_data_acquired
-    description: Datetime when data was acquired by LDS
-  - name: lds_initial_data_received_date
-    description: Date when data was initially received by LDS
-  - name: lds_start_date_time
-    description: LDS datetime stamp from which the record version was correct - used
-      for deduplication to get the latest record
-  - name: lds_is_deleted
-    description: Deletion flag - records with TRUE are filtered out in this staging
-      layer
-  - name: lds_record_id
-    description: LDS assigned unique identifier for the source record version
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

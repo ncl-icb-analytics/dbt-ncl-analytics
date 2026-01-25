@@ -2,7 +2,12 @@ version: 2
 models:
   - name: int_breast_screening_all
     description: 'NHS breast screening programme observations from clinical records.
-      One row per breast screening observation using BRCANSCR_COD, BRCANSCRDEC_COD PCD Refset clusters for core programme tracking.'
+      One row per breast screening observation using BRCANSCR_COD, BRCANSCRDEC_COD
+      PCD Refset clusters for core programme tracking.'
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - cluster_ids_exist:
           cluster_ids: BRCANSCR_COD, BRCANSCRDEC_COD
@@ -25,4 +30,3 @@ models:
         description: 'Flag indicating if this is a completed screening (BRCANSCR_COD)'
       - name: is_declined_screening
         description: 'Flag indicating if screening was declined (BRCANSCRDEC_COD)'
-     
