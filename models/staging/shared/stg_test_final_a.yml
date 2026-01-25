@@ -2,6 +2,10 @@ version: 2
 
 models:
   - name: stg_test_final_a
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     description: "Test model A for final workflow test"
     columns:
       - name: test_column
