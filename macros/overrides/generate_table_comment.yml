@@ -17,6 +17,8 @@ macros:
 
       {model description}
 
+      👤 Owner: {meta.owner.name if set}
+
       🤖 Last ran on 25th January 2025 at 14:30:00 GMT by USER (target: dev)
 
       📄 Model source: https://github.com/.../models/path/model.sql
