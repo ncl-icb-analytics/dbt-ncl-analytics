@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: stg_test_ownership_ci
+    description: "Test model to verify ownership CI workflow - delete after testing"
+    columns:
+      - name: test_column
+        description: "Test column"
