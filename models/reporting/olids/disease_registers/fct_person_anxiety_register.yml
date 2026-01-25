@@ -19,13 +19,12 @@ models:
           name_short: "Anxiety"
           description_short: "Anxiety register (non-QOF)"
           description_long: >
-            Anxiety register for persons with active anxiety diagnosis where latest 
-            anxiety code is more recent than any resolution code. Includes active 
-            patients with anxiety diagnosis using ANX_COD for diagnosis codes and 
-            ANXRES_COD for resolution codes. No age restrictions or QOF date thresholds 
-            applied. Used for mental health care pathway monitoring, anxiety severity 
-            tracking, recovery planning, psychological therapy access, and medication 
-            management.
+            Anxiety register for persons with active anxiety diagnosis where latest  anxiety
+            code is more recent than any resolution code. Includes active  patients
+            with anxiety diagnosis using ANX_COD for diagnosis codes and  ANXRES_COD
+            for resolution codes. No age restrictions or QOF date thresholds  applied.
+            Used for mental health care pathway monitoring, anxiety severity  tracking,
+            recovery planning, psychological therapy access, and medication  management.
           is_qof: false
           source_column: "is_on_register"
           sort_order: "COND_MH_ANXIETY"
@@ -37,6 +36,8 @@ models:
             - cluster_id: "ANXRES_COD"
               category: "RESOLUTION"
 
+        owner:
+          name: Eddie Davison
     columns:
       - name: person_id
         description: Unique identifier for the person

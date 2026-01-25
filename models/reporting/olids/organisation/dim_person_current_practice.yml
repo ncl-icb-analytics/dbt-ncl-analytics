@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_person_current_practice
-    description: 'Current practice registration snapshot for each person with registration history and practice context.
+    description: 'Current practice registration snapshot for each person with registration
+      history and practice context.
 
       Key Features:
 
@@ -15,8 +16,13 @@ models:
 
       • Age at registration start for demographic analysis
 
-      Purpose: Supports current state analysis, practice population profiling, and patient registration tracking.'
+      Purpose: Supports current state analysis, practice population profiling, and
+      patient registration tracking.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique person identifier'
@@ -78,7 +84,8 @@ models:
         description: 'Duration of current registration in days'
 
       - name: registration_sequence
-        description: 'Sequential number of this registration for the person (1st, 2nd, 3rd, etc.)'
+        description: 'Sequential number of this registration for the person (1st,
+          2nd, 3rd, etc.)'
         tests:
           - not_null
           - dbt_utils.accepted_range:
@@ -92,7 +99,8 @@ models:
               min_value: 1
 
       - name: has_changed_practice
-        description: 'Flag indicating if person has ever changed practice (based on total registrations)'
+        description: 'Flag indicating if person has ever changed practice (based on
+          total registrations)'
         tests:
           - not_null
 

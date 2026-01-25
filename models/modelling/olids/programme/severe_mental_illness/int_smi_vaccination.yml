@@ -1,7 +1,12 @@
 models:
   - name: int_smi_vaccination
-    description: Intermediate table holding vaccination status for people on the SMI register multiple lines per person
-    
+    description: Intermediate table holding vaccination status for people on the
+      SMI register multiple lines per person
+
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: Unique identifier for the person

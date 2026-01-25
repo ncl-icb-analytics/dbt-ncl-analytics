@@ -1,8 +1,13 @@
 version: 1
 models:
   - name: int_smi_care_plan_latest
-    description: 'Mental Health /SMI care pan for SMI registry replacement/QOF indicator MH002.
-      Latest value for Mental Health /SMI care pan observation using MHP_COD cluster with currency flag in last 12 months'
+    description: 'Mental Health /SMI care pan for SMI registry replacement/QOF indicator
+      MH002. Latest value for Mental Health /SMI care pan observation using MHP_COD
+      cluster with currency flag in last 12 months'
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - cluster_ids_exist:
           cluster_ids: MHP_COD

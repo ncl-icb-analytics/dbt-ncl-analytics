@@ -2,8 +2,14 @@ version: 2
 
 models:
   - name: childhood_imms_ts_res_adolescent_dm
-    description: Final data model table holding aggregated completion metrics by residential location for historical children aged 11 and 16 on analysis month
+    description: Final data model table holding aggregated completion metrics by
+      residential location for historical children aged 11 and 16 on analysis 
+      month
 
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

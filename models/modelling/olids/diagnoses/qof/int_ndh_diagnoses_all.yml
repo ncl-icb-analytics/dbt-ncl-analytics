@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_ndh_diagnoses_all
-    description: 'Non-diabetic hyperglycaemia diagnosis observations for QOF register data collection and diabetes prevention pathway coordination.
+    description: 'Non-diabetic hyperglycaemia diagnosis observations for QOF register
+      data collection and diabetes prevention pathway coordination.
 
-      One row per NDH, IGT, or pre-diabetes diagnosis observation using NDH_COD, IGT_COD, and PRD_COD clusters with age restrictions (≥18 years).'
+      One row per NDH, IGT, or pre-diabetes diagnosis observation using NDH_COD, IGT_COD,
+      and PRD_COD clusters with age restrictions (≥18 years).'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'

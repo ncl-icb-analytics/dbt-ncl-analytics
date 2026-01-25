@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_parkinsons_diagnoses_all
-    description: 'Parkinsons disease diagnosis observations for neurological condition register management.
+    description: 'Parkinsons disease diagnosis observations for neurological condition
+      register management.
 
       Key Features:
 
@@ -13,7 +14,12 @@ models:
 
       • No resolution codes as Parkinsons is a progressive condition
 
-      Purpose: Provide observation-level data for Parkinsons disease tracking and care management.'
+      Purpose: Provide observation-level data for Parkinsons disease tracking and
+      care management.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_utils.at_least_one:
           column_name: id
@@ -36,7 +42,8 @@ models:
       - name: source_cluster_id
         description: 'Source cluster identifier (PD_COD for Parkinsons disease diagnoses)'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating diagnosis code (always TRUE for Parkinsons observations)'
+        description: 'Boolean flag indicating diagnosis code (always TRUE for Parkinsons
+          observations)'
       - name: parkinsons_observation_type
         description: 'Type of Parkinsons observation (always "Parkinsons Disease Diagnosis")'
 

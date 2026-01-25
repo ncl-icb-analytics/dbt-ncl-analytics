@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: fct_person_bp_control
-    description: 'Blood pressure control assessment using NICE NG136 guidelines with patient-specific targets.
+    description: 'Blood pressure control assessment using NICE NG136 guidelines with
+      patient-specific targets.
 
       One row per person that has a blood pressure recording.
 
@@ -37,7 +38,8 @@ models:
 
       • Stage 3 - Severe: ≥180/120 mmHg
 
-      Purpose: Supports hypertension management and QOF reporting with personalised BP targets based on patient comorbidities.'
+      Purpose: Supports hypertension management and QOF reporting with personalised
+      BP targets based on patient comorbidities.'
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
@@ -53,10 +55,11 @@ models:
           name_short: "Blood Pressure Control"
           description_short: "NICE NG136 blood pressure targets and diagnostic criteria"
           description_long: >
-            Complete NICE NG136 hypertension guidance including treatment targets for different 
-            patient populations and diagnostic thresholds for hypertension staging. Treatment 
-            targets vary by age, diabetes status, and CKD severity. Diagnostic criteria use 
-            different thresholds for clinic vs ABPM/HBPM measurements across 3 severity stages.
+            Complete NICE NG136 hypertension guidance including treatment targets
+            for different  patient populations and diagnostic thresholds for hypertension
+            staging. Treatment  targets vary by age, diabetes status, and CKD severity.
+            Diagnostic criteria use  different thresholds for clinic vs ABPM/HBPM
+            measurements across 3 severity stages.
           is_qof: false
           source_column: "bp_controlled"
           usage_contexts:
@@ -137,7 +140,9 @@ models:
               threshold_unit: "mmHg"
               description: "Severe hypertension diagnosis"
               sort_order: 10
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Unique person identifier
@@ -147,43 +152,43 @@ models:
 
       - name: age
         description: Person's current age
-        
+
       - name: latest_bp_date
         description: Date of most recent blood pressure measurement
-        
+
       - name: latest_systolic
         description: Most recent systolic blood pressure (mmHg)
-        
+
       - name: latest_diastolic
         description: Most recent diastolic blood pressure (mmHg)
-        
+
       - name: has_diabetes
         description: Whether person has Type 2 diabetes
-        
+
       - name: has_ckd
         description: Whether person has chronic kidney disease
-        
+
       - name: has_high_acr
         description: Whether person has ACR ≥30 (kidney damage indicator)
-        
+
       - name: systolic_target
-        description: "Patient-specific systolic BP target - 140 (standard/diabetes/CKD), 150 (age 80+), 130 (CKD with high ACR)"
-        
+        description: "Patient-specific systolic BP target - 140 (standard/diabetes/CKD),
+          150 (age 80+), 130 (CKD with high ACR)"
       - name: diastolic_target
-        description: "Patient-specific diastolic BP target - 90 (standard/age 80+), 80 (CKD with high ACR)"
-        
+        description: "Patient-specific diastolic BP target - 90 (standard/age 80+),
+          80 (CKD with high ACR)"
       - name: target_rationale
-        description: "NICE NG136 rationale - Standard (<140/90), Age 80+ (<150/90), CKD high ACR (<130/80)"
-        
+        description: "NICE NG136 rationale - Standard (<140/90), Age 80+ (<150/90),
+          CKD high ACR (<130/80)"
       - name: systolic_controlled
-        description: "Whether systolic BP below target (varies: 140/150/130 per NICE NG136)"
-        
+        description: "Whether systolic BP below target (varies: 140/150/130 per NICE
+          NG136)"
       - name: diastolic_controlled
-        description: "Whether diastolic BP below target (90 standard, 80 for CKD high ACR)"
-        
+        description: "Whether diastolic BP below target (90 standard, 80 for CKD high
+          ACR)"
       - name: bp_controlled
-        description: "Overall BP control per NICE NG136 - both systolic and diastolic below patient-specific targets"
-        
+        description: "Overall BP control per NICE NG136 - both systolic and diastolic
+          below patient-specific targets"
       - name: systolic_excess
         description: mmHg above systolic target (negative if below target)
 
@@ -194,4 +199,5 @@ models:
         description: Months since most recent BP measurement
 
       - name: is_latest_bp_within_recommended_interval
-        description: "Whether BP reading is within recommended interval: 12 months for T2DM/CKD/HTN, 60 months for age ≥40, NULL for age <40"
+        description: "Whether BP reading is within recommended interval: 12 months
+          for T2DM/CKD/HTN, 60 months for age ≥40, NULL for age <40"

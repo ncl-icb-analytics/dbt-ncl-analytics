@@ -3,8 +3,13 @@ version: 2
 models:
   - name: population_health_needs_base_readable
     description: >
-      Turns base table into readable names for fields that will be directly in Power BI.
+      Turns base table into readable names for fields that will be directly in Power
+      BI.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

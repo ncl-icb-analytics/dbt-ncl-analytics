@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_ltc_lcs_nhs_health_checks
-    description: 'NHS health check completion observations for Long Term Conditions case finding exclusion logic.
+    description: 'NHS health check completion observations for Long Term Conditions
+      case finding exclusion logic.
 
-      One row per NHS health check completion observation using cluster ID HEALTH_CHECK_COMP for tracking recent health checks to avoid duplication in case finding programmes.'
+      One row per NHS health check completion observation using cluster ID HEALTH_CHECK_COMP
+      for tracking recent health checks to avoid duplication in case finding programmes.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id

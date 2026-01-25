@@ -1,19 +1,30 @@
 version: 2
 models:
   - name: fct_ltc_lcs_person_dashboard
-    description: 'Person-level LTC case finding data with demographics for PowerBI analytics.
+    description: 'Person-level LTC case finding data with demographics for PowerBI
+      analytics.
 
-      One row per person meeting any LTC case finding criteria with demographic enrichment and practice context.'
+      One row per person meeting any LTC case finding criteria with demographic enrichment
+      and practice context.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Unique person identifier
 
       - name: has_learning_disability
-        description: QOF Learning Disability register flag (age ≥14 years with LD diagnosis). For population health inclusion group filtering.
+        description: QOF Learning Disability register flag (age ≥14 years with 
+          LD diagnosis). For population health inclusion group filtering.
 
       - name: has_severe_mental_illness
-        description: QOF Severe Mental Illness register flag (active SMI diagnosis or recent lithium therapy). For population health inclusion group filtering.
+        description: QOF Severe Mental Illness register flag (active SMI 
+          diagnosis or recent lithium therapy). For population health inclusion 
+          group filtering.
 
       - name: is_currently_pregnant
-        description: Currently pregnant flag (non-male, pregnancy code within last 9 months, no delivery code after). For population health inclusion group filtering.
+        description: Currently pregnant flag (non-male, pregnancy code within 
+          last 9 months, no delivery code after). For population health 
+          inclusion group filtering.

@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: stg_reference_ncl_provider
-    description: NCL provider reference data with provider codes and reporting hierarchies. One row per provider.
+    description: NCL provider reference data with provider codes and reporting 
+      hierarchies. One row per provider.
+    config:
+      meta:
+        owner:
+          name: PeterSNHS
     columns:
       - name: sk_organisation_id
         description: Surrogate key for the organisation

@@ -1,10 +1,16 @@
 version: 2
 models:
   - name: int_arb_medications_all
-    description: 'Angiotensin receptor blocker medication orders for cardiovascular and renal protection.
+    description: 'Angiotensin receptor blocker medication orders for cardiovascular
+      and renal protection.
 
-      One row per medication order with specific ARB type classification and clinical trial evidence mapping.'
+      One row per medication order with specific ARB type classification and clinical
+      trial evidence mapping.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Patient identifier'

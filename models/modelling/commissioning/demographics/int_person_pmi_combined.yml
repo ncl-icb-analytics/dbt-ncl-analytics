@@ -3,7 +3,12 @@ version: 2
 models:
   - name: int_person_pmi_combined
     description: >
-      Combines available int_person_pmi_dataset tables into single combined table. Each field has its own criteria for prioritising datasets.
+      Combines available int_person_pmi_dataset tables into single combined table.
+      Each field has its own criteria for prioritising datasets.
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
     columns:
       - name: sk_patient_id
         description: Surrogate key for patient

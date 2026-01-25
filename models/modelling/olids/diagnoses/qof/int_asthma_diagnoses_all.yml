@@ -15,7 +15,12 @@ models:
 
       • Age restrictions (typically 6+ years) applied in fact layer
 
-      Purpose: Provide observation-level data for asthma register inclusion and respiratory care pathway monitoring.'
+      Purpose: Provide observation-level data for asthma register inclusion and respiratory
+      care pathway monitoring.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
           column_name: id
@@ -36,8 +41,11 @@ models:
       - name: concept_display
         description: 'Human-readable description of the asthma concept'
       - name: source_cluster_id
-        description: 'Source cluster identifier (AST_COD for diagnosis, ASTRES_COD for resolution)'
+        description: 'Source cluster identifier (AST_COD for diagnosis, ASTRES_COD
+          for resolution)'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating if the code represents an asthma diagnosis (TRUE for AST_COD cluster)'
+        description: 'Boolean flag indicating if the code represents an asthma diagnosis
+          (TRUE for AST_COD cluster)'
       - name: is_resolved_code
-        description: 'Boolean flag indicating if the code represents asthma resolution (TRUE for ASTRES_COD cluster)'
+        description: 'Boolean flag indicating if the code represents asthma resolution
+          (TRUE for ASTRES_COD cluster)'

@@ -2,7 +2,12 @@ version: 1
 models:
   - name: int_smi_care_plan_all
     description: 'Mental Health /SMI care pan for SMI registry replacement/QOF indicator.
-      One row per Mental Health /SMI care pan observation using MHP_COD cluster with currency flag in last 12 months'
+      One row per Mental Health /SMI care pan observation using MHP_COD cluster with
+      currency flag in last 12 months'
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - cluster_ids_exist:
           cluster_ids: MHP_COD

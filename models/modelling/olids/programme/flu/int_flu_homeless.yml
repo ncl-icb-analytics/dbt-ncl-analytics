@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_homeless
-    description: 'Flu vaccination eligibility for people in precarious accommodation using residential status logic.
+    description: 'Flu vaccination eligibility for people in precarious accommodation
+      using residential status logic.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify homeless people eligible for flu vaccination due to precarious housing infection risk.'
-    
+      Purpose: Identify homeless people eligible for flu vaccination due to precarious
+      housing infection risk.'
     config:
       meta:
         indicator:
@@ -28,7 +29,8 @@ models:
           description_short: "Homeless people eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for people in precarious accommodation using
-            residential status logic where latest residence code (RESIDE_COD) must be
+            residential status logic where latest residence code (RESIDE_COD) must
+            be
             from homeless cluster (HOMELESS_COD) to qualify. Minimum age requirement
             of 16 years. Captures current housing status to identify vulnerable populations
             with increased infection risk.
@@ -51,7 +53,9 @@ models:
               threshold_unit: "years"
               description: "Minimum age for homeless eligibility"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

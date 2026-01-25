@@ -3,6 +3,10 @@ models:
     description: |
       Summary of the number and types of contacts per referral.
       One row per referral per patient (SERVICE_REQUEST_IDENTIFIER + NHS_NUMBER).
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns: [referral_id, sk_patient_id]

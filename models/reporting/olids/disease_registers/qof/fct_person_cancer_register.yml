@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: fct_person_cancer_register
-    description: 'QOF cancer register for patients with cancer diagnosis from 1 April 2003 onwards.
+    description: 'QOF cancer register for patients with cancer diagnosis from 1 April
+      2003 onwards.
 
       One row per person with CAN_COD diagnosis (excludes non-melanotic skin cancers).'
 
@@ -26,11 +27,11 @@ models:
           name_short: "Cancer"
           description_short: "QOF cancer register"
           description_long: >
-            Cancer diagnosed using QOF criteria: Any cancer diagnosis from 1 April 2003 
-            onwards. Cancer is considered a permanent condition with no resolution codes. 
-            Excludes non-melanotic skin cancers. Used for survivorship care and follow-up 
-            monitoring. Maps to QOF indicator CAN001 (Cancer Register). Uses CAN_COD for 
-            diagnosis codes.
+            Cancer diagnosed using QOF criteria: Any cancer diagnosis from 1 April
+            2003  onwards. Cancer is considered a permanent condition with no resolution
+            codes.  Excludes non-melanotic skin cancers. Used for survivorship care
+            and follow-up  monitoring. Maps to QOF indicator CAN001 (Cancer Register).
+            Uses CAN_COD for  diagnosis codes.
           is_qof: true
           qof_indicator: "CAN001"
           source_column: "is_on_register"
@@ -40,3 +41,5 @@ models:
           code_clusters:
             - cluster_id: "CAN_COD"
               category: "INCLUSION"
+        owner:
+          name: EddieDavison92

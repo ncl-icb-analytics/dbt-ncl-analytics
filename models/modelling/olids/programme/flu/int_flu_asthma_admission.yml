@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_asthma_admission
-    description: 'Flu vaccination eligibility for people with emergency asthma admission history.
+    description: 'Flu vaccination eligibility for people with emergency asthma admission
+      history.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to severe asthma history requiring emergency care.'
-    
+      Purpose: Identify people eligible for flu vaccination due to severe asthma history
+      requiring emergency care.'
     config:
       meta:
         indicator:
@@ -25,12 +26,16 @@ models:
           category: "FLU"
           clinical_domain: "Respiratory"
           name_short: "Flu Eligible Asthma Admission"
-          description_short: "People with asthma admission history eligible for flu vaccination"
+          description_short: "People with asthma admission history eligible for flu
+            vaccination"
           description_long: >
-            Flu vaccination eligibility for people with emergency asthma admission history.
-            Uses ASTADM_COD cluster codes with any historical admission qualifying (no time
+            Flu vaccination eligibility for people with emergency asthma admission
+            history.
+            Uses ASTADM_COD cluster codes with any historical admission qualifying
+            (no time
             restrictions). This pathway recognises severe asthma risk without requiring
-            ongoing diagnosis or medication evidence. Minimum age requirement of 6 months.
+            ongoing diagnosis or medication evidence. Minimum age requirement of 6
+            months.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_14_ASTHMA_ADMISSION"
@@ -48,7 +53,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

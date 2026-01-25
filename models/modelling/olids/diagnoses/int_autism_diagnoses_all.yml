@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_autism_diagnoses_all
-    description: 'Autism spectrum disorder diagnosis observations for neurodevelopmental condition register management.
+    description: 'Autism spectrum disorder diagnosis observations for neurodevelopmental
+      condition register management.
 
       Key Features:
 
@@ -15,7 +16,12 @@ models:
 
       • Distinct from learning disability - can co-occur but tracked separately
 
-      Purpose: Provide observation-level data for autism tracking and complex needs identification.'
+      Purpose: Provide observation-level data for autism tracking and complex needs
+      identification.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_utils.at_least_one:
           column_name: id
@@ -38,7 +44,9 @@ models:
       - name: source_cluster_id
         description: 'Source cluster identifier (AUTISM_COD for autism diagnoses)'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating diagnosis code (always TRUE for autism observations)'
+        description: 'Boolean flag indicating diagnosis code (always TRUE for autism
+          observations)'
       - name: autism_observation_type
-        description: 'Type of autism observation (always "Autism Spectrum Disorder Diagnosis")'
+        description: 'Type of autism observation (always "Autism Spectrum Disorder
+          Diagnosis")'
 

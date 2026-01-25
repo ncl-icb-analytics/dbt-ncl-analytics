@@ -1,12 +1,13 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_66
-    description: 'CVD case finding priority (f): Patients aged 75-84 requiring cardiovascular risk assessment.
+    description: 'CVD case finding priority (f): Patients aged 75-84 requiring cardiovascular
+      risk assessment.
 
-      Age 75-84, not on statins (12 months), no QRISK2 in 60 months, no statin allergies or decisions (60 months), no health checks (24 months).
+      Age 75-84, not on statins (12 months), no QRISK2 in 60 months, no statin allergies
+      or decisions (60 months), no health checks (24 months).
 
       One row per person requiring cardiovascular risk assessment.'
-    
     config:
       meta:
         indicator:
@@ -17,7 +18,8 @@ models:
           name_short: "Elderly CVD screen"
           description_short: "Patients aged 75-84 without recent QRISK2"
           description_long: >
-            Age 75-84, no QRISK2 in 60 months, not on statins. Priority (f) for cardiovascular risk assessment.
+            Age 75-84, no QRISK2 in 60 months, not on statins. Priority (f) for cardiovascular
+            risk assessment.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_66"
@@ -44,3 +46,5 @@ models:
               threshold_unit: "years"
               description: "Age 75-84 years"
               sort_order: 1
+        owner:
+          name: EddieDavison92

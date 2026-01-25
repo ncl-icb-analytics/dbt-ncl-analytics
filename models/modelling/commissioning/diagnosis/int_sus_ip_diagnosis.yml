@@ -2,14 +2,19 @@ version: 2
 
 models:
   - name: int_sus_ip_diagnosis
-    description: "ICD-10 diagnosis codes associated with SUS admitted patient records. For use in secondary care diagnosis table and phenolab"
+    description: "ICD-10 diagnosis codes associated with SUS admitted patient records.
+      For use in secondary care diagnosis table and phenolab"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: diagnosis_id
         data_type: number
         description: "Unique ID for each admitted patient diagnosis record"
         data_tests:
-        - unique
-        - not_null
+          - unique
+          - not_null
 
       - name: sk_patient_id
         data_type: varchar

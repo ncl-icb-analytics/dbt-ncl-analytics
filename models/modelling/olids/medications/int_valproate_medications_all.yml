@@ -1,10 +1,16 @@
 version: 2
 models:
   - name: int_valproate_medications_all
-    description: 'Valproate medication orders for seizure management and bipolar disorder with pregnancy safety monitoring.
+    description: 'Valproate medication orders for seizure management and bipolar disorder
+      with pregnancy safety monitoring.
 
-      One row per medication order with dual matching logic, high teratogenic risk flagging, and dose categorisation for bioequivalence monitoring.'
+      One row per medication order with dual matching logic, high teratogenic risk
+      flagging, and dose categorisation for bioequivalence monitoring.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: medication_order_id
         description: 'Unique identifier for the medication order'
@@ -61,19 +67,22 @@ models:
         description: 'Flag indicating medication matched on concept ID'
 
       - name: valproate_product_type
-        description: 'Valproate product type (SODIUM_VALPROATE, VALPROIC_ACID, EPILIM, DEPAKOTE, OTHER_VALPROATE)'
+        description: 'Valproate product type (SODIUM_VALPROATE, VALPROIC_ACID, EPILIM,
+          DEPAKOTE, OTHER_VALPROATE)'
 
       - name: is_high_teratogenic_risk
         description: 'Flag indicating high teratogenic risk (always true for valproate)'
 
       - name: clinical_indication
-        description: 'Clinical indication category (ANTI_EPILEPTIC, MOOD_STABILISER, UNSPECIFIED)'
+        description: 'Clinical indication category (ANTI_EPILEPTIC, MOOD_STABILISER,
+          UNSPECIFIED)'
 
       - name: dose_category
         description: 'Dose categorisation (LOW_DOSE, MODERATE_DOSE, HIGH_DOSE, UNKNOWN_DOSE)'
 
       - name: formulation_type
-        description: 'Formulation type (TABLET, CAPSULE, LIQUID, MODIFIED_RELEASE, UNKNOWN_FORMULATION)'
+        description: 'Formulation type (TABLET, CAPSULE, LIQUID, MODIFIED_RELEASE,
+          UNKNOWN_FORMULATION)'
 
       - name: is_recent_3m
         description: 'Flag indicating order within the last 3 months'

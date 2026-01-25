@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_qrisk_all
-    description: 'QRISK cardiovascular risk scores for cardiovascular disease risk assessment and statin therapy decision-making.
+    description: 'QRISK cardiovascular risk scores for cardiovascular disease risk
+      assessment and statin therapy decision-making.
 
-      One row per QRISK observation using QRISKSCORE_COD cluster with QRISK type identification (QRISK2, QRISK3) and clinical risk categorisation.'
+      One row per QRISK observation using QRISKSCORE_COD cluster with QRISK type identification
+      (QRISK2, QRISK3) and clinical risk categorisation.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: QRISKSCORE_COD

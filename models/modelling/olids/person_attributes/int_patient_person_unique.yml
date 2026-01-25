@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_patient_person_unique
-    description: 'Deduplicated patient-person mappings ensuring one-to-one relationships for consistent data linking.
+    description: 'Deduplicated patient-person mappings ensuring one-to-one relationships
+      for consistent data linking.
 
       Key Features:
 
@@ -15,15 +16,21 @@ models:
 
       • Ensures consistent mapping for downstream models
 
-      Purpose: Prevent duplicate persons in models that join observations and medications to person data.'
+      Purpose: Prevent duplicate persons in models that join observations and medications
+      to person data.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
 
     columns:
       - name: patient_id
-        description: 'Unique patient identifier (lowest patient_id when multiple exist for same person)'
+        description: 'Unique patient identifier (lowest patient_id when multiple exist
+          for same person)'
         tests:
           - unique
           - not_null

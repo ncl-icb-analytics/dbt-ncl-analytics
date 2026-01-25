@@ -4,8 +4,13 @@ models:
   - name: int_rockwood_all
     description: 'Rockwood Clinical Frailty Scale assessments with clinical categorisation.
 
-      One row per Rockwood observation using ROCKWOOD_SCORES cluster with scores 1-9 mapped to frailty categories.'
+      One row per Rockwood observation using ROCKWOOD_SCORES cluster with scores 1-9
+      mapped to frailty categories.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: ROCKWOOD_SCORES
@@ -52,10 +57,12 @@ models:
         description: Clinical description of the Rockwood score level
 
       - name: frailty_level
-        description: Specific Rockwood frailty level (Level 1-9 with description)
+        description: Specific Rockwood frailty level (Level 1-9 with 
+          description)
 
       - name: frailty_category
-        description: Grouped frailty categories (Fit, Vulnerable, Mild Frailty, Moderate Frailty, Severe Frailty)
+        description: Grouped frailty categories (Fit, Vulnerable, Mild Frailty, 
+          Moderate Frailty, Severe Frailty)
 
       - name: is_valid_rockwood_code
         description: Flag indicating if concept code is a valid Rockwood score

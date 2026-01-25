@@ -3,8 +3,8 @@ models:
   - name: dim_person_pseudo
     description: 'Person Pseudonym Dimension Table.
 
-      Provides pseudonymized hex keys for patient re-identification.
-      Generates HxFlake format from sk_patient_id using standardized transformation.
+      Provides pseudonymized hex keys for patient re-identification. Generates HxFlake
+      format from sk_patient_id using standardized transformation.
 
       Key Features:
 
@@ -14,8 +14,13 @@ models:
 
       - Reversible transformation for re-identification
 
-      - Note: Multiple person_ids may share the same hx_flake when they share the same sk_patient_id'
+      - Note: Multiple person_ids may share the same hx_flake when they share the
+      same sk_patient_id'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique person identifier'

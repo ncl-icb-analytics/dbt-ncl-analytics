@@ -1,12 +1,17 @@
 models:
-- name: stg_mhsds_spell
-  description: 'Mental Health Services Data Set (MHSDS) spells'
-  columns:
-  - name: uniq_hosp_prov_spell_num
-    description: A unique identifier for each Hospital Provider Spell for a Health Care Provider
+  - name: stg_mhsds_spell
+    description: 'Mental Health Services Data Set (MHSDS) spells'
+    config:
+      meta:
+        owner:
+          name: Jessica Roberts
+    columns:
+      - name: uniq_hosp_prov_spell_num
+        description: A unique identifier for each Hospital Provider Spell for a 
+          Health Care Provider
+        tests:
+          - not_null
+          - unique
     tests:
-    - not_null
-    - unique
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

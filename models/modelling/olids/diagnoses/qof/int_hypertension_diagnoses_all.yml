@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_hypertension_diagnoses_all
-    description: 'Hypertension diagnosis and resolution observations for QOF register management.
+    description: 'Hypertension diagnosis and resolution observations for QOF register
+      management.
 
-      One row per observation using HYP_COD (diagnosis) and HYPRES_COD (resolved) clusters.'
+      One row per observation using HYP_COD (diagnosis) and HYPRES_COD (resolved)
+      clusters.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -33,7 +39,8 @@ models:
         description: 'Flag indicating hypertension resolution code (HYPRES_COD cluster)'
 
       - name: hypertension_observation_type
-        description: 'Categorised hypertension observation type (Hypertension Diagnosis or Hypertension Resolved)'
+        description: 'Categorised hypertension observation type (Hypertension Diagnosis
+          or Hypertension Resolved)'
 
     tests:
       - dbt_utils.at_least_one:
