@@ -1,0 +1,17 @@
+version: 2
+
+macros:
+  - name: generate_history_table_comment
+    description: >
+      Generates Snowflake table comments for SCD history tables.
+      Similar format to generate_table_comment but for dynamically created history tables.
+
+
+    arguments:
+      - name: table_name
+        type: string
+        description: Name of the source table this history tracks
+
+      - name: description
+        type: string
+        description: Description of the history table purpose

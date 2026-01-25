@@ -1,0 +1,17 @@
+version: 2
+
+macros:
+  - name: join_concept_display
+    description: >
+      Generates LEFT JOINs to concept and concept_map tables for resolving source/target display values.
+      Creates aliases: source_concept, concept_map, target_concept (with optional prefix).
+
+
+    arguments:
+      - name: source_column
+        type: string
+        description: Column containing the concept ID to resolve
+
+      - name: alias_prefix
+        type: string
+        description: Optional prefix for table aliases (for multiple joins)

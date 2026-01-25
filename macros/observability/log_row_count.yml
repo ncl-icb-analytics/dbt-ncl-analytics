@@ -1,0 +1,12 @@
+version: 2
+
+macros:
+  - name: log_row_count
+    description: >
+      Logs row count for the model to ROW_COUNT_LOG table.
+      Only runs in prod targets for table/incremental materializations.
+
+
+
+
+      Logs to: DATA_LAKE__NCL.DBT_OBSERVABILITY.ROW_COUNT_LOG

@@ -1,0 +1,15 @@
+version: 2
+
+macros:
+  - name: get_ltc_lcs_observations_latest
+    description: >
+      Returns the most recent observation per person and valueset.
+      Filters by LTC/LCS valueset IDs or friendly names, ordered by clinical_effective_date desc.
+
+
+    arguments:
+      - name: valuesets
+        type: string
+        description: >
+          Comma-separated valueset IDs or friendly names to filter by.
+          Can be passed as 'VS001,VS002' or "'VS001','VS002'"

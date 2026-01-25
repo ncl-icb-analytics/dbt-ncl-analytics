@@ -104,6 +104,22 @@ See also: [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](
 
 Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
 
+### Where Models Land in Snowflake
+
+| Model Folder | Dev | Prod |
+|--------------|-----|------|
+| `models/staging/` | `DEV__MODELLING.DBT_STAGING` | `MODELLING.DBT_STAGING` |
+| `models/modelling/olids/diagnoses/` | `DEV__MODELLING.OLIDS_DIAGNOSES` | `MODELLING.OLIDS_DIAGNOSES` |
+| `models/modelling/commissioning/` | `DEV__MODELLING.COMMISSIONING_MODELLING` | `MODELLING.COMMISSIONING_MODELLING` |
+| `models/reporting/olids/indicators/` | `DEV__REPORTING.OLIDS_INDICATORS` | `REPORTING.OLIDS_INDICATORS` |
+| `models/published/direct_care/olids/` | `DEV__PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_*` | `PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_*` |
+
+**How it works:**
+- **Database**: Set by `+database` in `dbt_project.yml`, prefixed with `DEV__` in dev
+- **Schema**: Either explicit (`+schema`) or auto-derived from folder path for `olids` domain
+
+The naming logic is in `macros/overrides/generate_database_name.sql` and `generate_schema_name.sql`.
+
 ### Technology Stack
 
 - **dbt-core 1.9.4** - Do not upgrade to 1.10+

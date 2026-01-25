@@ -1,0 +1,28 @@
+version: 2
+
+macros:
+  - name: generate_table_comment
+    description: >
+      Generates Snowflake table/view comments with model description, run metadata, and GitHub links.
+      Includes custom warning messages from meta.custom_message config.
+
+
+
+
+      Output format:
+
+      ```
+
+      ⚠️ {custom_message if set}
+
+      {model description}
+
+      👤 Owner: {meta.owner.name if set}
+
+      🤖 Last ran on 25th January 2025 at 14:30:00 GMT by USER (target: dev)
+
+      📄 Model source: https://github.com/.../models/path/model.sql
+
+      📖 Documentation: https://github.com/ncl-icb-analytics/dbt-ncl-analytics
+
+      ```
