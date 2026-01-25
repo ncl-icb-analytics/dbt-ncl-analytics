@@ -85,14 +85,20 @@ def model_has_owner(yaml_path: Path, model_name: str) -> bool:
     return False
 
 
-def find_insertion_line(yaml_path: Path, model_name: str) -> tuple[int, str]:
-    """Find the line number where config should be inserted and the current indentation."""
+def find_insertion_line(yaml_path: Path, model_name: str) -> tuple[int, str, str]:
+    """Find the line number where config should be inserted.
+
+    Returns (line_number, indent, original_line) - original_line must be preserved
+    since GitHub suggestions replace rather than insert.
+    """
     lines = yaml_path.read_text(encoding='utf-8').split('\n')
 
     in_target_model = False
     model_indent = 0
     description_line = None
+    description_content = None
     name_line = None
+    name_content = None
 
     for i, line in enumerate(lines):
         stripped = line.lstrip()
@@ -105,6 +111,7 @@ def find_insertion_line(yaml_path: Path, model_name: str) -> tuple[int, str]:
                 in_target_model = True
                 model_indent = current_indent
                 name_line = i + 1  # 1-indexed for GitHub
+                name_content = line
             else:
                 in_target_model = False
 
@@ -112,6 +119,7 @@ def find_insertion_line(yaml_path: Path, model_name: str) -> tuple[int, str]:
         if in_target_model:
             if stripped.startswith('description:'):
                 description_line = i + 1
+                description_content = line
             # If we hit columns or another top-level key, stop
             elif stripped.startswith('columns:') or stripped.startswith('config:'):
                 break
@@ -120,13 +128,18 @@ def find_insertion_line(yaml_path: Path, model_name: str) -> tuple[int, str]:
                 break
 
     # Return line after description, or after name if no description
-    target_line = description_line if description_line else name_line
-    return target_line, ' ' * (model_indent + 2)  # Indent for properties under model
+    if description_line:
+        return description_line, ' ' * (model_indent + 2), description_content
+    return name_line, ' ' * (model_indent + 2), name_content
 
 
-def generate_suggestion(author_name: str, indent: str) -> str:
-    """Generate the YAML suggestion for owner metadata."""
-    return f"""{indent}config:
+def generate_suggestion(author_name: str, indent: str, original_line: str) -> str:
+    """Generate the YAML suggestion for owner metadata.
+
+    Includes original line since GitHub suggestions replace rather than insert.
+    """
+    return f"""{original_line}
+{indent}config:
 {indent}  meta:
 {indent}    owner:
 {indent}      name: {author_name}"""
@@ -154,12 +167,12 @@ def main() -> int:
             print(f"Skipping {model_name}: already has owner")
             continue
 
-        line, indent = find_insertion_line(yaml_path, model_name)
-        if not line:
+        line, indent, original_line = find_insertion_line(yaml_path, model_name)
+        if not line or not original_line:
             print(f"Warning: Could not find insertion point for {model_name}")
             continue
 
-        suggestion_text = generate_suggestion(args.author_name, indent)
+        suggestion_text = generate_suggestion(args.author_name, indent, original_line)
 
         suggestions.append({
             'file': str(yaml_path).replace('\\', '/'),
