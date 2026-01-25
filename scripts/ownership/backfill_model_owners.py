@@ -2,7 +2,7 @@
 """Backfill model ownership from git history.
 
 For each model YAML file, finds the original author of the corresponding SQL file
-and adds meta.owner with their name.
+and adds config.meta.owner with their name.
 
 Usage:
     python scripts/ownership/backfill_model_owners.py [--dry-run]
@@ -11,129 +11,142 @@ Usage:
 import argparse
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import yaml
 
 
-def get_original_author(file_path: Path) -> dict | None:
-    """Get the original author of a file from git history."""
+def get_all_file_authors() -> dict[str, str]:
+    """Get original authors for all files in one git command.
+
+    Returns a dict mapping filename (not full path) to author name.
+    Uses filename-only matching since files may have been moved.
+    """
     try:
-        # --diff-filter=A shows only the commit that added the file
-        # --follow tracks renames
+        # Get all SQL files with their first commit author
         result = subprocess.run(
-            ['git', 'log', '--diff-filter=A', '--follow', '--format=%an', '--', str(file_path)],
+            ['git', 'log', '--diff-filter=A', '--name-only', '--format=%an', '--', 'models/**/*.sql'],
             capture_output=True,
             text=True,
             check=True
         )
-        output = result.stdout.strip()
-        if output:
-            # Take the last line (oldest commit that added the file)
-            lines = output.strip().split('\n')
-            name = lines[-1].strip() if lines else None
-            if name:
-                return {'name': name}
+
+        authors = {}
+        current_author = None
+
+        for line in result.stdout.strip().split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+            if line.endswith('.sql'):
+                if current_author:
+                    # Use filename only since files may have moved
+                    filename = line.split('/')[-1]
+                    # Always overwrite - git log is newest-first, so last entry is oldest (original author)
+                    authors[filename] = current_author
+            else:
+                current_author = line
+
+        return authors
     except subprocess.CalledProcessError:
-        pass
-    return None
+        return {}
 
 
 def find_sql_file(yaml_path: Path, model_name: str) -> Path | None:
     """Find the SQL file for a model."""
-    # Check same directory first
     sql_path = yaml_path.parent / f"{model_name}.sql"
     if sql_path.exists():
         return sql_path
 
-    # Check subdirectories
     for sql_file in yaml_path.parent.rglob(f"{model_name}.sql"):
         return sql_file
 
     return None
 
 
-def update_yaml_with_owner(yaml_path: Path, model_name: str, owner: dict, dry_run: bool = False) -> bool:
-    """Update a YAML file to add owner metadata for a model."""
-    try:
-        content = yaml_path.read_text(encoding='utf-8')
-        data = yaml.safe_load(content)
-
-        if not data or 'models' not in data:
-            return False
-
-        modified = False
-        for model in data.get('models', []):
-            if model.get('name') == model_name:
-                if 'meta' not in model:
-                    model['meta'] = {}
-
-                # Skip if owner already set
-                if 'owner' in model['meta']:
-                    return False
-
-                model['meta']['owner'] = owner
-                modified = True
-                break
-
-        if modified and not dry_run:
-            # Use ruamel.yaml to preserve formatting if available, otherwise standard yaml
-            try:
-                from ruamel.yaml import YAML
-                ruamel = YAML()
-                ruamel.preserve_quotes = True
-                ruamel.indent(mapping=2, sequence=4, offset=2)
-                with open(yaml_path, 'w', encoding='utf-8') as f:
-                    ruamel.dump(data, f)
-            except ImportError:
-                with open(yaml_path, 'w', encoding='utf-8') as f:
-                    yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
-
-        return modified
-
-    except (yaml.YAMLError, Exception) as e:
-        print(f"  Error processing {yaml_path}: {e}")
-        return False
-
-
-def process_yaml_file(yaml_path: Path, dry_run: bool = False) -> int:
-    """Process a single YAML file, updating owner for all models."""
+def process_yaml_file(yaml_path: Path, authors: dict[str, str], dry_run: bool = False) -> list[tuple[str, str]]:
+    """Process a single YAML file, returns list of (model_name, owner) tuples that were updated."""
     try:
         data = yaml.safe_load(yaml_path.read_text(encoding='utf-8'))
         if not data or 'models' not in data:
-            return 0
+            return []
     except (yaml.YAMLError, Exception):
-        return 0
+        return []
 
-    updated = 0
+    updates = []
     for model in data.get('models', []):
         model_name = model.get('name')
         if not model_name:
             continue
 
         # Skip if already has owner
-        if model.get('meta', {}).get('owner'):
+        config = model.get('config', {})
+        meta = config.get('meta', {}) if config else {}
+        if meta and meta.get('owner'):
             continue
 
         # Find the SQL file
         sql_path = find_sql_file(yaml_path, model_name)
         if not sql_path:
-            print(f"  Warning: No SQL file found for {model_name}")
             continue
 
-        # Get the original author
-        owner = get_original_author(sql_path)
-        if not owner:
-            print(f"  Warning: Could not determine author for {sql_path}")
+        # Look up author from pre-built cache (by filename only)
+        filename = sql_path.name
+        owner_name = authors.get(filename)
+        if not owner_name:
             continue
 
-        # Update the YAML
-        if update_yaml_with_owner(yaml_path, model_name, owner, dry_run):
-            action = "Would add" if dry_run else "Added"
-            print(f"  {action} owner for {model_name}: {owner['name']}")
-            updated += 1
+        updates.append((model_name, owner_name))
 
-    return updated
+    # Apply all updates to this YAML file at once
+    if updates and not dry_run:
+        try:
+            from ruamel.yaml import YAML
+            from ruamel.yaml.comments import CommentedMap
+            ruamel = YAML()
+            ruamel.preserve_quotes = True
+            ruamel.indent(mapping=2, sequence=4, offset=2)
+
+            with open(yaml_path, 'r', encoding='utf-8') as f:
+                data = ruamel.load(f)
+
+            models_to_update = {name for name, _ in updates}
+            for model in data.get('models', []):
+                if model.get('name') not in models_to_update:
+                    continue
+
+                owner_name = next(o for n, o in updates if n == model.get('name'))
+
+                if 'config' not in model:
+                    new_config = CommentedMap()
+                    new_config['meta'] = CommentedMap([('owner', CommentedMap([('name', owner_name)]))])
+
+                    keys = list(model.keys())
+                    insert_after = 'description' if 'description' in keys else 'name'
+                    insert_idx = keys.index(insert_after) + 1
+
+                    items = list(model.items())
+                    items.insert(insert_idx, ('config', new_config))
+                    model.clear()
+                    for k, v in items:
+                        model[k] = v
+                else:
+                    if 'meta' not in model['config']:
+                        model['config']['meta'] = CommentedMap()
+                    model['config']['meta']['owner'] = CommentedMap([('name', owner_name)])
+
+            with open(yaml_path, 'w', encoding='utf-8') as f:
+                ruamel.dump(data, f)
+
+        except ImportError:
+            print("  Error: ruamel.yaml is required. Install with: pip install ruamel.yaml")
+            return []
+        except Exception as e:
+            print(f"  Error processing {yaml_path}: {e}")
+            return []
+
+    return updates
 
 
 def main() -> int:
@@ -148,18 +161,22 @@ def main() -> int:
         print("No models directory found.")
         return 1
 
+    print("Loading git history...")
+    authors = get_all_file_authors()
+    print(f"Found authors for {len(authors)} SQL files\n")
+
+    yaml_files = [f for f in list(models_dir.rglob('*.yml')) + list(models_dir.rglob('*.yaml'))
+                  if 'dbt_packages' not in str(f)]
+
+    print(f"Processing {len(yaml_files)} YAML files...\n")
+
     total_updated = 0
-    yaml_files = list(models_dir.rglob('*.yml')) + list(models_dir.rglob('*.yaml'))
-
-    print(f"Scanning {len(yaml_files)} YAML files...\n")
-
     for yaml_path in sorted(yaml_files):
-        if 'dbt_packages' in str(yaml_path):
-            continue
-
-        updated = process_yaml_file(yaml_path, args.dry_run)
-        if updated:
-            total_updated += updated
+        updates = process_yaml_file(yaml_path, authors, args.dry_run)
+        for model_name, owner_name in updates:
+            action = "Would add" if args.dry_run else "Added"
+            print(f"  {action} owner for {model_name}: {owner_name}")
+            total_updated += 1
 
     print(f"\n{'Would update' if args.dry_run else 'Updated'} {total_updated} models with owner metadata.")
 
