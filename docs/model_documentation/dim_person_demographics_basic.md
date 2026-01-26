@@ -11,7 +11,7 @@ Currently the following datasets are used in the Demographics Basic table:
 - SUS ([INT_PERSON_PMI_DATASET_SUS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_SUS))
 - Ethnicity National Data Sets ([INT_PERSON_PMI_DATASET_ETHNICITY_NATIONAL_DATA_SETS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_ETHNICITY_NATIONAL_DATA_SETS))
 
-Note that the logic for the PDS Snapshot table largely follows the same logic as the Demographics Basic table but is limited to data available in PDS only ([DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/REPORTING/schemas/COMMISSIONING_REPORTING/table/DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS)).
+Note that the logic for the PDS Snapshot table largely follows the same logic as the Demographics Basic table but is limited to data available in PDS only (with ethnicity data supplemented using Ethnicity National Data Sets) ([DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/REPORTING/schemas/COMMISSIONING_REPORTING/table/DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS)).
 
 ## Version History
 ### V1.0 - 22/01/2026
