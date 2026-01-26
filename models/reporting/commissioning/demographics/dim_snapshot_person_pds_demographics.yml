@@ -1,7 +1,11 @@
 version: 2
 models:
 - name: dim_snapshot_person_pds_demographics
-  description: Annual snapshots to create a demographic lookup table for the population based on the PDS dataset. Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
+  description: >
+    Annual snapshots to create a demographic lookup table for the population based on the PDS dataset. 
+    Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
+
+    Documentation available: https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/docs/model_documentation/dim_person_demographics_basic.md
   data_tests:
   - dbt_utils.at_least_one:
       column_name: sk_patient_id
