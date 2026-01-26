@@ -1,0 +1,52 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        // dbt warnings filter - dbt0102 deprecation warnings are false positives for Snowflake
+        "problems.defaultSeverityFilter": "warning",
+
+        // Windows: auto-run start_dbt.ps1 when opening a terminal
+        "terminal.integrated.profiles.windows": {
+            "dbt": {
+                "source": "PowerShell",
+                "args": ["-NoExit", "-File", "${workspaceFolder}/start_dbt.ps1"]
+            }
+        },
+        "terminal.integrated.defaultProfile.windows": "dbt",
+
+        // macOS: auto-run start_dbt.sh when opening a terminal
+        "terminal.integrated.profiles.osx": {
+            "dbt": {
+                "path": "zsh",
+                "args": ["-c", "source ${workspaceFolder}/start_dbt.sh && exec zsh"]
+            }
+        },
+        "terminal.integrated.defaultProfile.osx": "dbt",
+
+        // Linux: auto-run start_dbt.sh when opening a terminal
+        "terminal.integrated.profiles.linux": {
+            "dbt": {
+                "path": "bash",
+                "args": ["-c", "source ${workspaceFolder}/start_dbt.sh && exec bash"]
+            }
+        },
+        "terminal.integrated.defaultProfile.linux": "dbt",
+
+        // Python - let the extension auto-detect the .venv (works cross-platform)
+        "python.venvPath": "${workspaceFolder}",
+
+        // dbt SQL files
+        "files.associations": {
+            "*.sql": "jinja-sql"
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "dbtLabsInc.dbt",
+            "ms-python.python"
+        ]
+    }
+}
