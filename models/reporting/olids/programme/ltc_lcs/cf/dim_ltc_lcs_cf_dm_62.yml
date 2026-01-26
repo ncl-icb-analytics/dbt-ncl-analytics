@@ -1,26 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_62
-    description: 'Mart: LTC LCS Case Finding DM_62 - Identifies patients with gestational
-      diabetes history requiring ongoing diabetes surveillance.
+    description: 'Patients aged 17+ with gestational diabetes history and no HbA1c
+      in 12 months.
 
-
-      Population Scope:
-
-      • Patients aged 17+ from LTC case finding base population
-
-      • Gestational diabetes and pregnancy risk history
-
-      • No HbA1c assessment within 12 months
-
-
-      Key Features:
-
-      • Gestational diabetes history identification
-
-      • HbA1c surveillance gap detection
-
-      • Evidence-based case finding for post-pregnancy diabetes risk management'
+      One row per person with gestational diabetes/pregnancy risk codes and
+      HbA1c monitoring gap.'
     config:
       meta:
         indicator:
@@ -33,7 +18,6 @@ models:
             in 12 months"
           description_long: >
             Age 17+, gestational diabetes history, no HbA1c in 12m.
-            High T2DM risk requires monitoring.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_DM_62"

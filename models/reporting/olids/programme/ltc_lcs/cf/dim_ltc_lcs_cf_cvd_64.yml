@@ -3,10 +3,10 @@ models:
   - name: dim_ltc_lcs_cf_cvd_64
     description: 'CVD case finding priority (d): Patients with QRisk ≥10% not on statins.
 
-      Age 40-84 with QRISK2 ≥10%, not on statins (12 months), no statin allergies
-      or decisions (60 months).
+      Uses CVD base population (age 40-84, excludes statin users in 12m,
+      statin allergies, and statin decisions in 60m). QRISK2 ≥10%.
 
-      One row per person meeting criteria for statin initiation.'
+      One row per person with QRISK2 ≥10% and no statin use.'
     config:
       meta:
         indicator:
@@ -17,7 +17,8 @@ models:
           name_short: "QRisk ≥10% no statin"
           description_short: "Patients with QRisk ≥10% not on statins"
           description_long: >
-            Age 40-84, QRISK2 ≥10%, not on statins. Priority (d) for statin initiation.
+            CVD base population (age 40-84, no statins/allergies/decisions),
+            QRISK2 ≥10%. Priority (d).
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_64"
