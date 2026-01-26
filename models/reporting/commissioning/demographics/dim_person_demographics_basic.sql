@@ -14,7 +14,8 @@ select
         --Residence information
         pmi.flag_current_ncl_residence,
         pmi.record_residence_start_date,
-        pmi.lsoa_21,
+        geo.lsoa_2021_code,
+        geo.lsoa_2021_name,
         geo.ward_2025_code,
         geo.ward_2025_name,
         geo.local_authority_2025_name as residence_borough,
@@ -53,13 +54,13 @@ left join {{ref('stg_reference_lookup_ncl_interpreter_required')}} as dict_ir
 on pmi.interpreter_required = dict_ir.interpreter_required
 
 left join {{ref('stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025')}} geo
-on pmi.lsoa_21 = geo.lsoa_2021_code
+on pmi.lsoa21_code = geo.lsoa_2021_code
 
 left join {{ref('stg_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021')}} nb_res
-on pmi.lsoa_21 = nb_res.lsoa_2021_code
+on pmi.lsoa21_code = nb_res.lsoa_2021_code
 
 left join {{ref('stg_reference_lookup_ncl_imd_2025')}} imd
-on pmi.lsoa_21 = imd.lsoa_code_2021
+on pmi.lsoa21_code = imd.lsoa_code_2021
 
 left join {{ref('stg_dictionary_dbo_organisation')}} dict_gp
 on pmi.practice_code = dict_gp.organisation_code
