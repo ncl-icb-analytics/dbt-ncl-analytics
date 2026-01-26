@@ -188,7 +188,7 @@ select
     eth.ethnicity_code,
     eth.ethnicity_event_date,
     res.lsoa_21 as lsoa21_code,
-    res.residence_event_date,
+    res.lsoa_event_date,
     reg.practice_code,
     reg.registered_event_date
     

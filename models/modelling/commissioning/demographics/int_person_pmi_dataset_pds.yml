@@ -46,7 +46,7 @@ models:
   - name: lsoa21_code
     data_type: varchar
     description: LSOA code of residence using the 2021 LSOA definitions, NULL implies no known residence or no residence
-  - name: residence_event_date
+  - name: lsoa_event_date
     data_type: date
     description: Record date from the PDS address table
   - name: practice_code

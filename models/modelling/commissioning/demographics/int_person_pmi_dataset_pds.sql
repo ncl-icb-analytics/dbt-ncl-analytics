@@ -13,7 +13,7 @@ select
     interpreter_required,
     coalesce(record_person_end_date, current_date()) as interpreter_event_date,
     lsoa_21 as lsoa21_code,
-    coalesce(record_residence_end_date, current_date()) as residence_event_date,
+    coalesce(record_residence_end_date, current_date()) as lsoa_event_date,
     practice_code,
     coalesce(record_registered_end_date, current_date()) as registered_event_date
     
