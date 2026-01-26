@@ -6,14 +6,14 @@ models:
 
       Business Logic:
 
-      • Identifies patients with stage 2 hypertension (clinic BP 160-179/100-109, home/ABPM 150-164/95-99)
+      • Identifies patients with stage 2 hypertension (clinic BP 160-179/100-109,
+      home/ABPM 150-164/95-99)
 
       • Excludes patients already captured in severe hypertension category (HTN_61)
 
       • Targets patients requiring clinical intervention and cardiovascular risk assessment
 
       • One row per person with latest blood pressure readings meeting stage 2 criteria'
-    
     config:
       meta:
         indicator:
@@ -68,3 +68,5 @@ models:
               threshold_unit: "mmHg"
               description: "Home/ABPM diastolic BP 95-99 mmHg (stage 2)"
               sort_order: 4
+        owner:
+          name: EddieDavison92

@@ -1,0 +1,26 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_ckd_pg3_mr
+    description: |
+      CKD Register Priority Group 3 - Moderate Risk.
+      Patients on CKD register (excluding PG1 HRC and PG2 HR) meeting any inclusion rule:
+      - Rule 2: eGFR > 60 AND ACR >= 30
+      - Rule 3: On Diabetes Register AND eGFR > 60 AND ACR >= 3
+      - Rule 4: eGFR 45-59 AND ACR 3-30
+      - Rule 5: eGFR 30-44 AND ACR < 3
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_ckd_reg_pg3_mr_vs1
+            - on_ckd_reg_pg3_mr_vs2
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

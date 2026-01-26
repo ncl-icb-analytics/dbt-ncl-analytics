@@ -1,13 +1,15 @@
 version: 2
 models:
   - name: dim_person_main_language
-    description: 'Latest recorded preferred language and interpreter needs with communication support requirements.
+    description: 'Latest recorded preferred language and interpreter needs with communication
+      support requirements.
 
       Key Features:
 
       • One row per person with most recent language preference
 
-      • Language extraction from preference codes (PREFLANG_COD) and interpreter requirements (REQINTERPRETER_COD)
+      • Language extraction from preference codes (PREFLANG_COD) and interpreter requirements
+      (REQINTERPRETER_COD)
 
       • Language type classification: Spoken, Sign, Other Communication Method
 
@@ -17,7 +19,8 @@ models:
 
       • Defaults to "Not Recorded" for persons without language data
 
-      Purpose: Supports accessibility planning, interpreter service allocation, and communication needs assessment.'
+      Purpose: Supports accessibility planning, interpreter service allocation, and
+      communication needs assessment.'
 
     config:
       meta:
@@ -27,12 +30,17 @@ models:
           category: "DEMOGRAPHICS"
           clinical_domain: "Demographics"
           name_short: "Main Language"
-          description_short: "Preferred language and interpreter needs from latest clinical recording"
+          description_short: "Preferred language and interpreter needs from latest
+            clinical recording"
           description_long: >
-            Main language preference and interpreter requirements based on most recent clinical
-            observations from PREFLANG_COD (language preference) and REQINTERPRETER_COD (interpreter
-            needs). Includes language type classification (Spoken, Sign, Other Communication Method),
-            interpreter requirements, and communication support needs. Supports accessibility planning,
+            Main language preference and interpreter requirements based on most recent
+            clinical
+            observations from PREFLANG_COD (language preference) and REQINTERPRETER_COD
+            (interpreter
+            needs). Includes language type classification (Spoken, Sign, Other Communication
+            Method),
+            interpreter requirements, and communication support needs. Supports accessibility
+            planning,
             interpreter service allocation, and communication needs assessment.
           is_qof: false
           source_column: "language"
@@ -47,6 +55,8 @@ models:
             - cluster_id: "REQINTERPRETER_COD"
               category: "INCLUSION"
 
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
@@ -61,46 +71,55 @@ models:
         description: 'Clinical effective date of latest language recording'
 
       - name: concept_id
-        description: 'SNOMED concept ID for language preference ("Not Recorded" if none available)'
+        description: 'SNOMED concept ID for language preference ("Not Recorded" if
+          none available)'
         tests:
           - not_null
 
       - name: concept_code
-        description: 'SNOMED concept code for language preference ("Not Recorded" if none available)'
+        description: 'SNOMED concept code for language preference ("Not Recorded"
+          if none available)'
         tests:
           - not_null
 
       - name: term
-        description: 'SNOMED term description for language preference ("Not Recorded" if none available)'
+        description: 'SNOMED term description for language preference ("Not Recorded"
+          if none available)'
         tests:
           - not_null
 
       - name: language
-        description: 'Clean language name extracted from clinical terms ("Not Recorded" if none available)'
+        description: 'Clean language name extracted from clinical terms ("Not Recorded"
+          if none available)'
         tests:
           - not_null
 
       - name: language_type
-        description: 'Type classification: Spoken, Sign, Other Communication Method ("Not Recorded" if none available)'
+        description: 'Type classification: Spoken, Sign, Other Communication Method
+          ("Not Recorded" if none available)'
         tests:
           - not_null
           - accepted_values:
               values: ['Spoken', 'Sign', 'Other Communication Method', 'Not Recorded']
 
       - name: language_source
-        description: 'Source of language data: PREFLANG_COD (preference) or REQINTERPRETER_COD (interpreter requirement)'
+        description: 'Source of language data: PREFLANG_COD (preference) or REQINTERPRETER_COD
+          (interpreter requirement)'
 
       - name: interpreter_needed
         description: 'Flag indicating if interpreter services are needed'
 
       - name: interpreter_type
-        description: 'Specific type of interpreter required (e.g., British Sign Language, Arabic)'
+        description: 'Specific type of interpreter required (e.g., British Sign Language,
+          Arabic)'
 
       - name: communication_support_needed
-        description: 'Flag indicating if additional communication support is needed (lipspeaker, note taker, etc.)'
+        description: 'Flag indicating if additional communication support is needed
+          (lipspeaker, note taker, etc.)'
 
       - name: communication_support_type
-        description: 'Type of communication support needed (e.g., Lipspeaker, Note Taker, Speech to Text)'
+        description: 'Type of communication support needed (e.g., Lipspeaker, Note
+          Taker, Speech to Text)'
 
     tests:
       - cluster_ids_exist:

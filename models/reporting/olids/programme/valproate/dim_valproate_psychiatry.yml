@@ -3,8 +3,13 @@ models:
   - name: dim_valproate_psychiatry
     description: 'Psychiatry-related events aggregation for valproate monitoring.
 
-      One row per person with psychiatry events including earliest and latest dates and observation traceability.'
+      One row per person with psychiatry events including earliest and latest dates
+      and observation traceability.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

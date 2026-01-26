@@ -1,13 +1,16 @@
 version: 2
 models:
   - name: int_flu_chronic_respiratory_disease
-    description: 'Flu vaccination eligibility for people with chronic respiratory conditions combining asthma and other lung diseases.
+    description: 'Flu vaccination eligibility for people with chronic respiratory
+      conditions combining asthma and other lung diseases.
 
       Key Features:
 
-      • Three eligibility pathways: active asthma management, asthma admission, or chronic respiratory diagnosis (RESP_COD)
+      • Three eligibility pathways: active asthma management, asthma admission, or
+      chronic respiratory diagnosis (RESP_COD)
 
-      • Combines existing asthma eligibility rules with additional respiratory disease codes
+      • Combines existing asthma eligibility rules with additional respiratory disease
+      codes
 
       • Age restriction: minimum 6 months for flu vaccination
 
@@ -15,8 +18,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to chronic respiratory conditions including asthma and COPD.'
-    
+      Purpose: Identify people eligible for flu vaccination due to chronic respiratory
+      conditions including asthma and COPD.'
     config:
       meta:
         indicator:
@@ -25,12 +28,17 @@ models:
           category: "FLU"
           clinical_domain: "Respiratory"
           name_short: "Flu Eligible Chronic Respiratory"
-          description_short: "People with chronic respiratory disease eligible for flu vaccination"
+          description_short: "People with chronic respiratory disease eligible for
+            flu vaccination"
           description_long: >
-            Flu vaccination eligibility for people with chronic respiratory conditions including
-            asthma, COPD, cystic fibrosis and other chronic lung diseases. Combines three pathways:
-            active asthma management (AST_GROUP), asthma admission history (AST_ADM_GROUP), or
-            chronic respiratory disease diagnosis (RESP_COD). Minimum age requirement of 6 months.
+            Flu vaccination eligibility for people with chronic respiratory conditions
+            including
+            asthma, COPD, cystic fibrosis and other chronic lung diseases. Combines
+            three pathways:
+            active asthma management (AST_GROUP), asthma admission history (AST_ADM_GROUP),
+            or
+            chronic respiratory disease diagnosis (RESP_COD). Minimum age requirement
+            of 6 months.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_8_CHRONIC_RESPIRATORY"
@@ -56,7 +64,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -79,7 +89,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying respiratory event (latest asthma management, admission, or earliest respiratory diagnosis)'
+        description: 'Date of qualifying respiratory event (latest asthma management,
+          admission, or earliest respiratory diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

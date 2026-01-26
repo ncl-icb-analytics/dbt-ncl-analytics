@@ -3,8 +3,13 @@ models:
   - name: int_valproate_araf_events
     description: 'ARAF events from observations using valproate programme codes.
 
-      One row per ARAF observation with person, date, concept details for ARAF form code identification and lookback logic.'
+      One row per ARAF observation with person, date, concept details for ARAF form
+      code identification and lookback logic.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

@@ -1,7 +1,13 @@
 version: 2
 models:
   - name: int_blood_pressure_latest
-    description: 'Latest blood pressure event per person with paired systolic/diastolic values, clinical context flags (Home/ABPM), and hypertensive range indicator. One row per person containing their most recent BP event.'
+    description: 'Latest blood pressure event per person with paired systolic/diastolic
+      values, clinical context flags (Home/ABPM), and hypertensive range indicator.
+      One row per person containing their most recent BP event.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Person identifier
@@ -21,8 +27,11 @@ models:
         tests:
           - not_null
       - name: is_home_bp_event
-        description: 'Boolean flag indicating if this BP was recorded as home blood pressure'
+        description: 'Boolean flag indicating if this BP was recorded as home blood
+          pressure'
       - name: is_abpm_bp_event
-        description: 'Boolean flag indicating if this BP was recorded as ambulatory blood pressure monitoring'
+        description: 'Boolean flag indicating if this BP was recorded as ambulatory
+          blood pressure monitoring'
       - name: is_hypertensive_range
-        description: 'Boolean flag for stage 1 hypertension threshold: ≥140/90 mmHg (clinic) or ≥135/85 mmHg (home/ABPM)'
+        description: 'Boolean flag for stage 1 hypertension threshold: ≥140/90 mmHg
+          (clinic) or ≥135/85 mmHg (home/ABPM)'

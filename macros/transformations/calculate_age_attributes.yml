@@ -1,0 +1,33 @@
+version: 2
+
+macros:
+  - name: calculate_age_attributes
+    description: >
+      Calculates age and related attributes for a person at a reference date.
+      Returns: age, age_at_least, age_band_5y, age_band_10y, age_band_nhs, age_band_ons, age_life_stage, and school age flags.
+
+
+    arguments:
+      - name: birth_date_field
+        type: string
+        description: Approximate birth date field name
+
+      - name: reference_date_field
+        type: string
+        description: Date to calculate age at (e.g., 'CURRENT_DATE' or 'analysis_month')
+
+      - name: birth_year_field
+        type: string
+        description: Optional. Birth year field for age_at_least calculation
+
+      - name: birth_month_field
+        type: string
+        description: Optional. Birth month field for age_at_least calculation
+
+      - name: is_deceased_field
+        type: string
+        description: Optional. Boolean field indicating if person is deceased
+
+      - name: death_date_field
+        type: string
+        description: Optional. Date field for age at death calculations

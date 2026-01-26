@@ -3,7 +3,12 @@ models:
   - name: int_chd_diagnoses_all
     description: 'Coronary heart disease diagnosis observations for QOF register management.
 
-      One row per diagnosis observation using CHD_COD cluster. No resolution codes as this is a lifelong condition.'
+      One row per diagnosis observation using CHD_COD cluster. No resolution codes
+      as this is a lifelong condition.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'

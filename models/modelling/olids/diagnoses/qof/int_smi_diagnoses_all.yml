@@ -1,12 +1,19 @@
 version: 2
 models:
   - name: int_smi_diagnoses_all
-    description: 'Serious mental illness diagnosis and remission observations for QOF register management.
+    description: 'Serious mental illness diagnosis and remission observations for
+      QOF register management.
 
-      One row per observation using MH_COD (diagnosis) and MHREM_COD (remission) clusters. Age restrictions ≥18 years typically applied downstream.'
+      One row per observation using MH_COD (diagnosis) and MHREM_COD (remission) clusters.
+      Age restrictions ≥18 years typically applied downstream.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
-        description: 'Observation identifier (not unique - same observation may appear for multiple cluster matches)'
+        description: 'Observation identifier (not unique - same observation may appear
+          for multiple cluster matches)'
         tests:
           - not_null
 

@@ -1,0 +1,15 @@
+version: 2
+
+macros:
+  - name: get_ltc_lcs_observations
+    description: >
+      Retrieves observations filtered by LTC/LCS valueset IDs or friendly names.
+      Joins to expanded concepts and valuesets reference data.
+
+
+    arguments:
+      - name: valuesets
+        type: string
+        description: >
+          Comma-separated valueset IDs or friendly names to filter by.
+          Can be passed as 'VS001,VS002' or "'VS001','VS002'"

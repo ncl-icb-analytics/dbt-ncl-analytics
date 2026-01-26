@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: stg_dictionary_dbo_gender
-    description: Gender code dictionary from data warehouse. One row per gender code.
+    description: Gender code dictionary from data warehouse. One row per gender 
+      code.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: sk_gender_id
         description: Surrogate key for the gender

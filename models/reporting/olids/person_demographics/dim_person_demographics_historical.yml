@@ -4,22 +4,26 @@ models:
   - name: dim_person_demographics_historical
     description: 'Historical Person Demographics - SCD Type 2
 
-      Tracks changes to demographic attributes over time using SCD-2 pattern.
-      Pure assembly model joining upstream building blocks without duplicating calculations.
+      Tracks changes to demographic attributes over time using SCD-2 pattern. Pure
+      assembly model joining upstream building blocks without duplicating calculations.
 
       Grain: One row per person per change period (not per month)
 
       Key Features:
 
-      • SCD-2 structure with effective_start_date, effective_end_date, is_current, period_sequence
+      • SCD-2 structure with effective_start_date, effective_end_date, is_current,
+      period_sequence
 
       • Tracks changes in: practice registration, ethnicity, address/geography
 
-      • No age fields (age is derived, not an attribute - calculate in consuming models using calculate_age_attributes macro)
+      • No age fields (age is derived, not an attribute - calculate in consuming models
+      using calculate_age_attributes macro)
 
-      • Change detection: new period created when practice OR ethnicity OR address changes
+      • Change detection: new period created when practice OR ethnicity OR address
+      changes
 
-      • Pure assembly: joins from int_patient_registrations, int_ethnicity_all, int_person_geography, dim_person_birth_death, etc.
+      • Pure assembly: joins from int_patient_registrations, int_ethnicity_all, int_person_geography,
+      dim_person_birth_death, etc.
 
       Storage Efficiency:
 
@@ -29,17 +33,23 @@ models:
 
       Inclusion Criteria:
 
-      • Must have valid birth_date_approx (required for age calculations in consuming models)
+      • Must have valid birth_date_approx (required for age calculations in consuming
+      models)
 
       • Must have registration history (practice_code IS NOT NULL)
 
       Known Limitations:
 
-      • Address fields use current address for all periods (address SCD dates not yet populated in int_person_geography)
+      • Address fields use current address for all periods (address SCD dates not
+      yet populated in int_person_geography)
 
-      For monthly snapshots with conditions, use person_month_analysis_base.
-      For current state only, use dim_person_demographics.'
+      For monthly snapshots with conditions, use person_month_analysis_base. For current
+      state only, use dim_person_demographics.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique person identifier'
@@ -58,7 +68,8 @@ models:
         description: 'End date of this demographic period (NULL if current, SCD-2)'
 
       - name: is_current
-        description: 'Flag indicating if this is the current period for the person (SCD-2)'
+        description: 'Flag indicating if this is the current period for the person
+          (SCD-2)'
         tests:
           - not_null
 
@@ -83,7 +94,8 @@ models:
           - not_null
 
       - name: inactive_reason
-        description: 'Reason for inactive status (Deceased, Registration ended, or NULL)'
+        description: 'Reason for inactive status (Deceased, Registration ended, or
+          NULL)'
 
       - name: birth_year
         description: 'Birth year'
@@ -92,7 +104,8 @@ models:
         description: 'Birth month'
 
       - name: birth_date_approx
-        description: 'Approximate birth date (use this with effective_start_date to calculate age)'
+        description: 'Approximate birth date (use this with effective_start_date to
+          calculate age)'
 
       - name: birth_date_approx_end_of_month
         description: 'Birth date approximated to end of birth month'
@@ -158,10 +171,12 @@ models:
         description: 'PCN name with borough prefix'
 
       - name: icb_code
-        description: 'Integrated Care Board (ICB) code where patient was registered (practice-based)'
+        description: 'Integrated Care Board (ICB) code where patient was registered
+          (practice-based)'
 
       - name: icb_name
-        description: 'Integrated Care Board (ICB) name where patient was registered (practice-based)'
+        description: 'Integrated Care Board (ICB) name where patient was registered
+          (practice-based)'
 
       - name: borough_registered
         description: 'Practice borough where patient was registered'

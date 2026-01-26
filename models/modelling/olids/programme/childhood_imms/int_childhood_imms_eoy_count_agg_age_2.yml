@@ -1,3 +1,8 @@
 models:
   - name: int_childhood_imms_eoy_count_agg_age_2
-    description: Intermediate table holding aggregated dose counts per month for historical children aged 2 at the end of each fiscal year
+    description: Intermediate table holding aggregated dose counts per month for
+      historical children aged 2 at the end of each fiscal year
+    config:
+      meta:
+        owner:
+          name: KatsplatH

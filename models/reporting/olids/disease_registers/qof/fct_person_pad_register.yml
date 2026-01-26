@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: fct_person_pad_register
-    description: 'QOF peripheral arterial disease register for patients with peripheral vascular disease.
+    description: 'QOF peripheral arterial disease register for patients with peripheral
+      vascular disease.
 
       One row per person with PAD_COD present (PAD is permanent condition).'
 
@@ -26,10 +27,11 @@ models:
           name_short: "Peripheral Arterial Disease"
           description_short: "QOF peripheral arterial disease register"
           description_long: >
-            Peripheral arterial disease diagnosed using QOF criteria: Any PAD diagnosis code 
-            qualifies for register inclusion. PAD is considered a permanent condition with no 
-            resolution codes. Used for cardiovascular risk management and secondary prevention. 
-            Maps to QOF indicator PAD002 (PAD Register). Uses PAD_COD for diagnosis codes.
+            Peripheral arterial disease diagnosed using QOF criteria: Any PAD diagnosis
+            code  qualifies for register inclusion. PAD is considered a permanent
+            condition with no  resolution codes. Used for cardiovascular risk management
+            and secondary prevention.  Maps to QOF indicator PAD002 (PAD Register).
+            Uses PAD_COD for diagnosis codes.
           is_qof: true
           qof_indicator: "PAD002"
           source_column: "is_on_register"
@@ -39,3 +41,5 @@ models:
           code_clusters:
             - cluster_id: "PAD_COD"
               category: "INCLUSION"
+        owner:
+          name: EddieDavison92

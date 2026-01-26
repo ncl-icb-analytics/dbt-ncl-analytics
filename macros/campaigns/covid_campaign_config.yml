@@ -1,0 +1,33 @@
+version: 2
+
+macros:
+  - name: covid_campaign_config
+    description: >
+      Single source of truth for COVID vaccination campaign dates and eligibility parameters.
+      Returns a SELECT with all campaign-specific configuration values.
+
+
+
+
+      Available campaigns: COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025
+
+
+      Configure via dbt_project.yml vars: covid_current_campaign, covid_previous_campaign
+    arguments:
+      - name: campaign_id
+        type: string
+        description: Campaign identifier. Default 'COVID Autumn 2025'
+
+  - name: covid_get_campaign_date
+    description: >
+      Helper to get a specific date field from campaign config.
+
+
+    arguments:
+      - name: date_name
+        type: string
+        description: Name of the date field to retrieve
+
+      - name: campaign_id
+        type: string
+        description: Optional campaign ID. Defaults to var('covid_current_campaign')

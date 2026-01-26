@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_nsaid_medications_all
-    description: 'NSAID medication orders using BNF classification for pain and inflammation management.'
+    description: 'NSAID medication orders using BNF classification for pain and inflammation
+      management.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

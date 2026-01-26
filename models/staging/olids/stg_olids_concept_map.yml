@@ -1,43 +1,48 @@
 version: 2
 models:
-- name: stg_olids_concept_map
-  description: Mappings between different coding systems and terminologies. Deduplicated
-    on business key.
-  columns:
-  - name: source_code_id
-    description: Foreign key to concept.id - source concept being mapped from
-  - name: target_code_id
-    description: Foreign key to concept.id - target concept being mapped to
+  - name: stg_olids_concept_map
+    description: Mappings between different coding systems and terminologies. 
+      Deduplicated on business key.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: source_code_id
+        description: Foreign key to concept.id - source concept being mapped 
+          from
+      - name: target_code_id
+        description: Foreign key to concept.id - target concept being mapped to
+        tests:
+          - relationships:
+              to: ref('stg_olids_concept')
+              field: id
+      - name: is_primary
+        description: Boolean indicating if this is the primary mapping for the 
+          source concept
+      - name: equivalence
+        description: Mapping equivalence type (equivalent, equal, wider, 
+          subsumes, narrower, specializes, inexact, unmatched, disjoint)
+      - name: concept_map_resource_id
+        description: Resource identifier for the concept map
+      - name: concept_map_url
+        description: URL for the concept map resource
+      - name: concept_map_version
+        description: Version of the concept map
+      - name: is_active
+        description: Boolean indicating if the concept map is active
+      - name: source_code
+        description: Source concept code
+      - name: source_display
+        description: Source concept display name
+      - name: source_system
+        description: Source concept system
+      - name: target_code
+        description: Target concept code
+      - name: target_display
+        description: Target concept display name
+      - name: target_system
+        description: Target concept system
     tests:
-    - relationships:
-        to: ref('stg_olids_concept')
-        field: id
-  - name: is_primary
-    description: Boolean indicating if this is the primary mapping for the source
-      concept
-  - name: equivalence
-    description: Mapping equivalence type (equivalent, equal, wider, subsumes, narrower,
-      specializes, inexact, unmatched, disjoint)
-  - name: concept_map_resource_id
-    description: Resource identifier for the concept map
-  - name: concept_map_url
-    description: URL for the concept map resource
-  - name: concept_map_version
-    description: Version of the concept map
-  - name: is_active
-    description: Boolean indicating if the concept map is active
-  - name: source_code
-    description: Source concept code
-  - name: source_display
-    description: Source concept display name
-  - name: source_system
-    description: Source concept system
-  - name: target_code
-    description: Target concept code
-  - name: target_display
-    description: Target concept display name
-  - name: target_system
-    description: Target concept system
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

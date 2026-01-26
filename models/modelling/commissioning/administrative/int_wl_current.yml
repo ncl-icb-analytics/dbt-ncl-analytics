@@ -3,12 +3,17 @@ version: 2
 models:
   - name: int_wl_current
     description: >
-      All active waiting lists from WLMDS as of most recent census date (corrected to Sunday census dates). Used for care coordination across providers.
+      All active waiting lists from WLMDS as of most recent census date (corrected
+      to Sunday census dates). Used for care coordination across providers.
     config:
       materialized: view
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: week_ending_date
-        description: Week ending (census) date aligned to Sunday (e.g. if occurs on Monday, is moved to previous Sunday)
+        description: Week ending (census) date aligned to Sunday (e.g. if occurs
+          on Monday, is moved to previous Sunday)
       - name: sk_patient_id
         description: Surrogate key for patient identifier
       - name: local_patient_identifier

@@ -1,8 +1,11 @@
 models:
   - name: int_mapped_concepts
-    description: 'Lookup table mapping clinical codes to concepts and source code identifiers.
+    description: 'Lookup table mapping clinical codes to concepts and source code
+      identifiers.
 
-      Creates relationships between raw clinical codes and standardised terminology concepts, enabling efficient early filtering by source_code_id. Combines reference codesets with OLIDS terminology mappings to provide a unified lookup structure.
+      Creates relationships between raw clinical codes and standardised terminology
+      concepts, enabling efficient early filtering by source_code_id. Combines reference
+      codesets with OLIDS terminology mappings to provide a unified lookup structure.
 
       Key Features:
 
@@ -14,7 +17,12 @@ models:
 
       • Optimised for early filtering operations
 
-      Purpose: Support efficient clinical code lookups and concept mapping across the OLIDS system.'
+      Purpose: Support efficient clinical code lookups and concept mapping across
+      the OLIDS system.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: source_code_id
         description: 'Unique identifier for the source clinical code'

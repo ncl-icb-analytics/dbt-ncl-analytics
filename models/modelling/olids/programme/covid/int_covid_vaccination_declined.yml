@@ -5,17 +5,14 @@ models:
 
       Grain: One row per person per campaign who declined vaccination
 
-      Identifies people:
-      • Vaccination decline codes (COVDECL_COD)
-      • Within campaign tracking period
-      • All ages eligible
+      Identifies people: • Vaccination decline codes (COVDECL_COD) • Within campaign
+      tracking period • All ages eligible
 
       Used by: Mart models for uptake and status determination'
-    
     tests:
       - cluster_ids_exist:
           cluster_ids: COVDECL_COD
-    
+
     config:
       meta:
         indicator:
@@ -26,7 +23,8 @@ models:
           name_short: "COVID Vaccination Declined"
           description_short: "People who declined COVID vaccination"
           description_long: >
-            COVID vaccination decline tracking for people who refused vaccination using COVDEC_COD
+            COVID vaccination decline tracking for people who refused vaccination
+            using COVDEC_COD
             cluster codes within campaign tracking period. Used for monitoring vaccination
             uptake and identifying populations requiring outreach. No age restrictions
             as refusal can occur at any age. Tracks by campaign period for reporting.
@@ -39,7 +37,8 @@ models:
           code_clusters:
             - cluster_id: "COVDECL_COD"
               category: "INCLUSION"
-    
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'

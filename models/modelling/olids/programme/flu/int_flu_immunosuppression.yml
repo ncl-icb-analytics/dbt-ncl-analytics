@@ -1,11 +1,13 @@
 version: 2
 models:
   - name: int_flu_immunosuppression
-    description: 'Flu vaccination eligibility for people with immunosuppression using pathway logic.
+    description: 'Flu vaccination eligibility for people with immunosuppression using
+      pathway logic.
 
       Key Features:
 
-      • Four eligibility pathways: diagnosis (IMMDX_COD), medication (IMMRX_COD), admin codes (IMMADM_COD), or chemotherapy/radiotherapy (DXT_CHEMO_COD)
+      • Four eligibility pathways: diagnosis (IMMDX_COD), medication (IMMRX_COD),
+      admin codes (IMMADM_COD), or chemotherapy/radiotherapy (DXT_CHEMO_COD)
 
       • Time-limited medication and treatment pathways (6 months lookback from campaign)
 
@@ -15,8 +17,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to immunosuppression from causes.'
-    
+      Purpose: Identify people eligible for flu vaccination due to immunosuppression
+      from causes.'
     config:
       meta:
         indicator:
@@ -27,11 +29,16 @@ models:
           name_short: "Flu Eligible Immunosuppression"
           description_short: "People with immunosuppression eligible for flu vaccination"
           description_long: >
-            Flu vaccination eligibility for people with immunosuppression from any cause including
-            diagnosis codes (IMMDX_COD), recent immunosuppressant medications (IMMRX_COD within 6 months),
-            recent admin codes indicating immunosuppression (IMMADM_COD within 6 months), or
-            recent chemotherapy/radiotherapy (DXT_CHEMO_COD within 6 months). Uses 6-month
-            lookback period for medication/treatment pathways to capture currently immunosuppressed patients.
+            Flu vaccination eligibility for people with immunosuppression from any
+            cause including
+            diagnosis codes (IMMDX_COD), recent immunosuppressant medications (IMMRX_COD
+            within 6 months),
+            recent admin codes indicating immunosuppression (IMMADM_COD within 6 months),
+            or
+            recent chemotherapy/radiotherapy (DXT_CHEMO_COD within 6 months). Uses
+            6-month
+            lookback period for medication/treatment pathways to capture currently
+            immunosuppressed patients.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_5_IMMUNOSUPPRESSION"
@@ -62,7 +69,9 @@ models:
               threshold_unit: "months"
               description: "Lookback period for medication and treatment codes"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -85,7 +94,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying immunosuppression event (diagnosis, medication, or treatment)'
+        description: 'Date of qualifying immunosuppression event (diagnosis, medication,
+          or treatment)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

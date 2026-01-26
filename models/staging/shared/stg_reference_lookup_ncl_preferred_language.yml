@@ -1,17 +1,22 @@
 version: 2
 models:
-- name: stg_reference_lookup_ncl_preferred_language
-  description: Preferred language reference data from lookup with ISO origin codes
-  columns:
-  - name: code
-    description: Primary key - language code
+  - name: stg_reference_lookup_ncl_preferred_language
+    description: Preferred language reference data from lookup with ISO origin 
+      codes
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
+    columns:
+      - name: code
+        description: Primary key - language code
+        tests:
+          - unique
+          - not_null
+      - name: preferred_language
+        description: Preferred language name
+      - name: iso_origin
+        description: ISO origin code
     tests:
-    - unique
-    - not_null
-  - name: preferred_language
-    description: Preferred language name
-  - name: iso_origin
-    description: ISO origin code
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

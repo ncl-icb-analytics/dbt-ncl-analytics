@@ -3,8 +3,8 @@ models:
   - name: dim_ltc_lcs_cf_htn_65
     description: 'Case finding for stage 1 hypertension with cardiovascular risk factors.
 
-      One row per eligible person with BP readings and risk factor status. Targets higher-risk patients requiring management rather than lifestyle-only interventions.'
-    
+      One row per eligible person with BP readings and risk factor status. Targets
+      higher-risk patients requiring management rather than lifestyle-only interventions.'
     config:
       meta:
         indicator:
@@ -13,7 +13,8 @@ models:
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
           name_short: "Stage 1 + CVD risk"
-          description_short: "Patients with stage 1 hypertension and cardiovascular risk factors"
+          description_short: "Patients with stage 1 hypertension and cardiovascular
+            risk factors"
           description_long: >
             Stage 1 HTN with CVD risk factors. Requires antihypertensive
             treatment plus lifestyle modifications.
@@ -52,7 +53,8 @@ models:
               threshold_value: "135-149"
               threshold_operator: "WITHIN"
               threshold_unit: "mmHg"
-              description: "Home/ABPM systolic BP 135-149 mmHg (stage 1) with CVD risk"
+              description: "Home/ABPM systolic BP 135-149 mmHg (stage 1) with CVD
+                risk"
               sort_order: 3
             - population_group: "ALL_ADULTS"
               threshold_type: "HOME_ABPM_DIASTOLIC_BP"
@@ -61,3 +63,5 @@ models:
               threshold_unit: "mmHg"
               description: "Home/ABPM diastolic BP 85-94 mmHg (stage 1) with CVD risk"
               sort_order: 4
+        owner:
+          name: EddieDavison92

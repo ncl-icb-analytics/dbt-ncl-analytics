@@ -1,10 +1,16 @@
 version: 2
 models:
   - name: int_epilepsy_medications_6m
-    description: 'Anti-epileptic drug medication orders from the last 6 months for seizure management.
+    description: 'Anti-epileptic drug medication orders from the last 6 months for
+      seizure management.
 
-      One row per medication order using EPILDRUG_COD cluster with AED generation classification, therapeutic drug monitoring flags, and teratogenicity risk assessment.'
+      One row per medication order using EPILDRUG_COD cluster with AED generation
+      classification, therapeutic drug monitoring flags, and teratogenicity risk assessment.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Patient identifier'

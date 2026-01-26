@@ -2,8 +2,13 @@ version: 2
 
 models:
   - name: childhood_imms_person_level_child_dm
-    description: Final data model table holding vaccination detail by dose and demographics for children under 11. Person level data.
+    description: Final data model table holding vaccination detail by dose and 
+      demographics for children under 11. Person level data.
 
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

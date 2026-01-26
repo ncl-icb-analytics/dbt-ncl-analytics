@@ -6,6 +6,10 @@ models:
       Combines Priority Group 3A (MRa) and Priority Group 3B (MRb).
 
       Patients are included if they are in either MRa or MRb subgroup.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id

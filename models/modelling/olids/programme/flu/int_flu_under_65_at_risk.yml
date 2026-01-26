@@ -1,13 +1,14 @@
 version: 2
 models:
   - name: int_flu_under_65_at_risk
-    description: 'Flu vaccination eligibility parent category for people under 65 years with clinical risk factors.
+    description: 'Flu vaccination eligibility parent category for people under 65
+      years with clinical risk factors.
 
       Key Features:
 
       • Aggregates all clinical condition-based eligibility for under 65s
 
-      • Age restriction: under 65 years at campaign reference date  
+      • Age restriction: under 65 years at campaign reference date
 
       • Includes all clinical conditions: diabetes, heart disease, respiratory, etc.
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Provides single view of under 65 at-risk cohort whilst preserving individual condition details for analysis.'
-    
+      Purpose: Provides single view of under 65 at-risk cohort whilst preserving individual
+      condition details for analysis.'
     config:
       meta:
         indicator:
@@ -25,13 +26,18 @@ models:
           category: "FLU"
           clinical_domain: "Programme Management"
           name_short: "Flu Eligible Under 65 At Risk"
-          description_short: "People under 65 with clinical risk factors eligible for flu vaccination"
+          description_short: "People under 65 with clinical risk factors eligible
+            for flu vaccination"
           description_long: >
             Flu vaccination eligibility parent category combining all clinical condition-based
-            eligibility for people under 65 years. Aggregates diabetes, heart disease, respiratory
-            conditions, kidney disease, neurological conditions, and other clinical risk factors.
-            Age restriction applied to complement age-based eligibility (65+) and provide clear
-            view of under 65 clinical risk cohort. One row per person with best qualifying condition.
+            eligibility for people under 65 years. Aggregates diabetes, heart disease,
+            respiratory
+            conditions, kidney disease, neurological conditions, and other clinical
+            risk factors.
+            Age restriction applied to complement age-based eligibility (65+) and
+            provide clear
+            view of under 65 clinical risk cohort. One row per person with best qualifying
+            condition.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_0_UNDER_65_AT_RISK"
@@ -72,13 +78,15 @@ models:
               description: "Minimum age for flu vaccination"
               sort_order: 1
             - population_group: "UNDER_65"
-              threshold_type: "AGE_ELIGIBILITY" 
+              threshold_type: "AGE_ELIGIBILITY"
               threshold_value: "65"
               threshold_operator: "UNDER"
               threshold_unit: "years"
               description: "Maximum age for under 65 at-risk classification"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

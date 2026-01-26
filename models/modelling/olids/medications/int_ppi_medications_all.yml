@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_ppi_medications_all
-    description: 'PPI medication orders using BNF classification for gastric acid suppression.'
+    description: 'PPI medication orders using BNF classification for gastric acid
+      suppression.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

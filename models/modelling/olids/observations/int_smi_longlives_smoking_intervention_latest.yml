@@ -1,8 +1,13 @@
 version: 2
 models:
   - name: int_smi_longlives_smoking_intervention_latest
-    description: 'Determine latest smoking intervention for Longer Lives campaign using PCD REFSET SMOKINGINT_COD'
+    description: 'Determine latest smoking intervention for Longer Lives campaign
+      using PCD REFSET SMOKINGINT_COD'
 
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -12,6 +17,6 @@ models:
         tests:
           - unique
           - not_null
-    
+
 
 

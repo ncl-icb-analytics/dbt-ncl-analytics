@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_long_term_residential_care
-    description: 'Flu vaccination eligibility for people in long-term residential care settings.
+    description: 'Flu vaccination eligibility for people in long-term residential
+      care settings.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify care home residents eligible for flu vaccination due to communal living infection risk.'
-    
+      Purpose: Identify care home residents eligible for flu vaccination due to communal
+      living infection risk.'
     config:
       meta:
         indicator:
@@ -28,9 +29,11 @@ models:
           description_short: "Care home residents eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for people in long-term residential care settings.
-            Uses residential status logic where latest residence code (RESIDE_COD) must be
+            Uses residential status logic where latest residence code (RESIDE_COD)
+            must be
             from long-term care cluster (LONGRES_COD) to qualify. Minimum age requirement
-            of 6 months. Captures current residential status to identify communal living
+            of 6 months. Captures current residential status to identify communal
+            living
             infection risks.
           is_qof: false
           source_column: "person_id"
@@ -51,7 +54,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_cardiac_glycoside_medications_all
-    description: 'Cardiac glycoside medication orders using BNF classification for heart failure and arrhythmia management.'
+    description: 'Cardiac glycoside medication orders using BNF classification for
+      heart failure and arrhythmia management.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

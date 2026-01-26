@@ -25,10 +25,13 @@ models:
       • Excludes deceased patients (age frozen at death)
 
       • Limited to last 48 months'
-    
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: identifier for the person ()
-        
+
       - name: is_fiscal_year_end
         description: Flag to identify the 31st March of each year as FISCAL year

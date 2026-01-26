@@ -5,18 +5,14 @@ models:
 
       Grain: One row per person per campaign who received vaccination
 
-      Identifies people:
-      • Vaccination administration codes (COVADM_COD)
-      • OR medication orders (COVRX_COD)
-      • Within campaign tracking period
-      • All ages eligible
+      Identifies people: • Vaccination administration codes (COVADM_COD) • OR medication
+      orders (COVRX_COD) • Within campaign tracking period • All ages eligible
 
       Used by: Mart models for uptake and status determination'
-    
     tests:
       - cluster_ids_exist:
           cluster_ids: COVADM_COD,COVRX_COD
-    
+
     config:
       meta:
         indicator:
@@ -27,8 +23,10 @@ models:
           name_short: "COVID Vaccination Given"
           description_short: "People who received COVID vaccination"
           description_long: >
-            COVID vaccination administration tracking for people who received vaccination using
-            COVADM_COD administration codes or COVRX_COD medication orders within campaign
+            COVID vaccination administration tracking for people who received vaccination
+            using
+            COVADM_COD administration codes or COVRX_COD medication orders within
+            campaign
             tracking period. Used for monitoring vaccination uptake and coverage analysis.
             No age restrictions as vaccination can occur at any age. Combines multiple
             evidence sources for comprehensive vaccination tracking by campaign period.
@@ -43,7 +41,8 @@ models:
               category: "INCLUSION"
             - cluster_id: "COVRX_COD"
               category: "INCLUSION"
-    
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'

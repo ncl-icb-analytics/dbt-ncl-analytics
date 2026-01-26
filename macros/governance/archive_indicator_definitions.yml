@@ -1,0 +1,30 @@
+version: 2
+
+macros:
+  - name: archive_definitions
+    description: >
+      SCD Type 2 archiving for indicator definitions with daily granularity.
+      Creates/updates history table tracking changes to indicator metadata.
+
+
+
+  - name: archive_usage
+    description: >
+      SCD Type 2 archiving for indicator usage contexts with daily granularity.
+      Tracks where indicators are used over time.
+
+
+
+  - name: archive_codes
+    description: >
+      SCD Type 2 archiving for indicator code mappings with daily granularity.
+      Tracks code cluster assignments to indicators.
+
+
+
+  - name: archive_thresholds
+    description: >
+      SCD Type 2 archiving for indicator thresholds with daily granularity.
+      Tracks threshold values and operators for population groups.
+
+

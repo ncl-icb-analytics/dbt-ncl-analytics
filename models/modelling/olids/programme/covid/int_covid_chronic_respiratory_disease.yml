@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_covid_chronic_respiratory_disease
-    description: 'COVID vaccination eligibility for people with chronic respiratory disease.
+    description: 'COVID vaccination eligibility for people with chronic respiratory
+      disease.
 
       Key Features:
 
@@ -15,12 +16,12 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to chronic respiratory disease requiring immunisation.'
-    
+      Purpose: Identify people eligible for COVID vaccination due to chronic respiratory
+      disease requiring immunisation.'
     tests:
       - cluster_ids_exist:
           cluster_ids: AST_COD,ASTRXM1_COD,ASTRXM2_COD,ASTADM_COD,RESP_COV_COD
-    
+
     config:
       meta:
         indicator:
@@ -29,10 +30,13 @@ models:
           category: "COVID"
           clinical_domain: "Respiratory"
           name_short: "COVID Eligible Respiratory Disease"
-          description_short: "People with chronic respiratory disease eligible for COVID vaccination"
+          description_short: "People with chronic respiratory disease eligible for
+            COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with chronic respiratory disease using CRD_COV_COD
-            cluster codes with earliest occurrence qualifying. Includes chronic pulmonary conditions
+            COVID vaccination eligibility for people with chronic respiratory disease
+            using CRD_COV_COD
+            cluster codes with earliest occurrence qualifying. Includes chronic pulmonary
+            conditions
             and respiratory dysfunction that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.
           is_qof: false
@@ -52,7 +56,9 @@ models:
               threshold_unit: "years"
               description: "Minimum age for COVID vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'
@@ -67,7 +73,8 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest chronic respiratory disease diagnosis)'
+        description: 'Date of qualifying diagnosis (earliest chronic respiratory disease
+          diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

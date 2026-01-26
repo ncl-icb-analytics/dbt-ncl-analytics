@@ -1,10 +1,11 @@
 version: 2
 models:
   - name: fct_person_smoking_status
-    description: 'Current and historical smoking status based on most recent clinical observations.
+    description: 'Current and historical smoking status based on most recent clinical
+      observations.
 
-      One row per person with recorded smoking observations including earliest and all recorded smoking history.'
-    
+      One row per person with recorded smoking observations including earliest and
+      all recorded smoking history.'
     config:
       meta:
         indicator:
@@ -15,12 +16,13 @@ models:
           name_short: "Smoking Status"
           description_short: "Smoking status classification using QOF codes"
           description_long: >
-            Smoking status classification based on most recent clinical observations using 
-            QOF-defined cluster codes (LSMOK_COD, EXSMOK_COD, NSMOK_COD). Categories include 
-            Never Smoked, Ex-Smoker, and Current Smoker. Differs from QOF smoking register which 
-            focuses on current smokers and recent ex-smokers needing clinical intervention - this 
-            model provides population smoking classification for population health analysis 
-            and smoking cessation programme planning.
+            Smoking status classification based on most recent clinical observations
+            using  QOF-defined cluster codes (LSMOK_COD, EXSMOK_COD, NSMOK_COD). Categories
+            include  Never Smoked, Ex-Smoker, and Current Smoker. Differs from QOF
+            smoking register which  focuses on current smokers and recent ex-smokers
+            needing clinical intervention - this  model provides population smoking
+            classification for population health analysis  and smoking cessation programme
+            planning.
           is_qof: false
           source_column: "smoking_status"
           sort_order: "BRF_2_SMOKING"
@@ -55,47 +57,50 @@ models:
               threshold_unit: "status"
               description: "Never smoking status - lowest risk"
               sort_order: 3
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
           - unique
-          
+
       - name: age
         description: Person's current age
-        
+
       - name: smoking_status
-        description: Current smoking status (Never Smoked, Ex-Smoker, Current Smoker, Unknown)
+        description: Current smoking status (Never Smoked, Ex-Smoker, Current 
+          Smoker, Unknown)
         tests:
           - accepted_values:
               values: ['Never Smoked', 'Ex-Smoker', 'Current Smoker', 'Unknown']
-                
       - name: smoking_risk_sort_key
-        description: Smoking risk level (1=Never, 2=Ex-smoker, 3=Current smoker, 0=Unknown)
+        description: Smoking risk level (1=Never, 2=Ex-smoker, 3=Current smoker,
+          0=Unknown)
         tests:
           - dbt_utils.accepted_range:
               min_value: 0
               max_value: 3
-        
+
       - name: latest_smoking_date
         description: Date of most recent smoking status observation
-        
+
       - name: earliest_smoking_date
         description: Date of earliest smoking status observation
-        
+
       - name: latest_concept_code
         description: SNOMED concept code for most recent smoking observation
-        
+
       - name: latest_code_description
         description: Description of most recent smoking concept code
-        
+
       - name: latest_cluster_id
         description: Code cluster ID for most recent smoking observation
-        
+
       - name: all_smoking_concept_codes
         description: Array of all smoking concept codes for this person
-        
+
       - name: all_smoking_concept_displays
         description: Array of all smoking concept display terms for this person

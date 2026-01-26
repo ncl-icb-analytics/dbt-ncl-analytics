@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_systemic_corticosteroid_medications_all
-    description: 'Systemic corticosteroid medication orders using BNF classification for inflammatory conditions.'
+    description: 'Systemic corticosteroid medication orders using BNF classification
+      for inflammatory conditions.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

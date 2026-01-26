@@ -1,10 +1,16 @@
 version: 2
 models:
   - name: fct_person_diabetes_foot_check
-    description: 'Diabetes foot examination status for QOF reporting with Townson scale risk assessment.
+    description: 'Diabetes foot examination status for QOF reporting with Townson
+      scale risk assessment.
 
-      One row per person on diabetes register with foot examination completion status and risk level assessment.'
+      One row per person on diabetes register with foot examination completion status
+      and risk level assessment.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

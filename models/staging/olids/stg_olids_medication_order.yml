@@ -1,111 +1,124 @@
 version: 2
 models:
-- name: stg_olids_medication_order
-  description: Medication orders and prescriptions issued in GP systems. Deduplicated
-    by id and filtered to exclude deleted records.
-  columns:
-  - name: id
-    description: Primary key - unique identifier for this medication order
+  - name: stg_olids_medication_order
+    description: Medication orders and prescriptions issued in GP systems. 
+      Deduplicated by id and filtered to exclude deleted records.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: id
+        description: Primary key - unique identifier for this medication order
+        tests:
+          - not_null
+      - name: organisation_id
+        description: Foreign key to organisation.id - prescribing organisation
+      - name: person_id
+        description: Foreign key to person.id - person-level identifier
+      - name: patient_id
+        description: Foreign key to patient.id
+      - name: medication_statement_id
+        description: Foreign key to medication_statement.id - associated 
+          medication statement
+      - name: encounter_id
+        description: Foreign key to encounter.id - encounter when medication was
+          ordered
+      - name: practitioner_id
+        description: Foreign key to practitioner.id - prescriber
+      - name: observation_id
+        description: Foreign key to observation.id - related observation
+      - name: allergy_intolerance_id
+        description: Foreign key to allergy_intolerance.id - related allergy
+      - name: diagnostic_order_id
+        description: Foreign key to diagnostic_order.id - related diagnostic 
+          order
+      - name: referral_request_id
+        description: Foreign key to referral_request.id - related referral
+      - name: clinical_effective_date
+        description: Date the medication order was clinically effective
+      - name: date_precision_concept_id
+        description: Foreign key to concept.id - precision of the clinical 
+          effective date
+      - name: date_precision_code
+        description: Code value for the date precision concept
+      - name: date_precision_display
+        description: Display name for the date precision concept
+      - name: date_precision_source_code
+        description: Source code for the date precision concept (from concept 
+          map)
+      - name: date_precision_source_display
+        description: Source display name for the date precision concept (from 
+          concept map)
+      - name: dose
+        description: Dosage instructions as text
+      - name: quantity_value
+        description: Numeric quantity value
+      - name: quantity_unit
+        description: Unit of measure for the quantity
+      - name: duration_days
+        description: Duration of the medication order in days
+      - name: estimated_cost
+        description: Estimated cost of the medication
+      - name: medication_name
+        description: Name of the medication ordered
+      - name: medication_order_source_concept_id
+        description: Foreign key to concept.id - source concept for the 
+          medication
+      - name: source_code
+        description: Source code for the medication order concept
+      - name: source_display
+        description: Source display name for the medication order concept
+      - name: source_system
+        description: Source system for the medication order concept
+      - name: target_system
+        description: Target system for the mapped concept
+      - name: bnf_reference
+        description: British National Formulary reference code
+      - name: age_at_event
+        description: Patient age in years at time of order
+      - name: age_at_event_baby
+        description: Patient age in months for babies (0-24 months)
+      - name: age_at_event_neonate
+        description: Patient age in days for neonates (0-28 days)
+      - name: issue_method
+        description: Method of issue (acute, repeat, etc.)
+      - name: date_recorded
+        description: Date the record was entered into the system
+      - name: is_confidential
+        description: Boolean indicating if the record is marked as confidential
+      - name: is_deleted
+        description: Boolean indicating if the clinical record has been deleted
+      - name: issue_method_description
+        description: Description of the issue method
+      - name: lds_id
+        description: LDS system identifier
+      - name: record_owner_organisation_code
+        description: Organisation code of the record owner
+      - name: lds_datetime_data_acquired
+        description: Datetime when data was acquired by LDS
+      - name: lds_initial_data_received_date
+        description: Date when data was initially received by LDS
+      - name: medication_statement_source_concept_id
+        description: Foreign key to concept.id - source concept for associated 
+          statement
+      - name: statement_medication_name
+        description: Medication name from the associated statement
+      - name: mapped_concept_id
+        description: Foreign key to concept.id - mapped standardized concept
+      - name: mapped_concept_code
+        description: Code of the mapped concept
+      - name: mapped_concept_display
+        description: Display text of the mapped concept
+      - name: lds_start_date_time
+        description: LDS datetime stamp from which the record version was 
+          correct - used for deduplication to get the latest record
+      - name: lds_is_deleted
+        description: Deletion flag - records with TRUE are filtered out in this 
+          staging layer
+      - name: lds_record_id
+        description: LDS assigned unique identifier for the source record 
+          version
     tests:
-    - not_null
-  - name: organisation_id
-    description: Foreign key to organisation.id - prescribing organisation
-  - name: person_id
-    description: Foreign key to person.id - person-level identifier
-  - name: patient_id
-    description: Foreign key to patient.id
-  - name: medication_statement_id
-    description: Foreign key to medication_statement.id - associated medication statement
-  - name: encounter_id
-    description: Foreign key to encounter.id - encounter when medication was ordered
-  - name: practitioner_id
-    description: Foreign key to practitioner.id - prescriber
-  - name: observation_id
-    description: Foreign key to observation.id - related observation
-  - name: allergy_intolerance_id
-    description: Foreign key to allergy_intolerance.id - related allergy
-  - name: diagnostic_order_id
-    description: Foreign key to diagnostic_order.id - related diagnostic order
-  - name: referral_request_id
-    description: Foreign key to referral_request.id - related referral
-  - name: clinical_effective_date
-    description: Date the medication order was clinically effective
-  - name: date_precision_concept_id
-    description: Foreign key to concept.id - precision of the clinical effective date
-  - name: date_precision_code
-    description: Code value for the date precision concept
-  - name: date_precision_display
-    description: Display name for the date precision concept
-  - name: date_precision_source_code
-    description: Source code for the date precision concept (from concept map)
-  - name: date_precision_source_display
-    description: Source display name for the date precision concept (from concept map)
-  - name: dose
-    description: Dosage instructions as text
-  - name: quantity_value
-    description: Numeric quantity value
-  - name: quantity_unit
-    description: Unit of measure for the quantity
-  - name: duration_days
-    description: Duration of the medication order in days
-  - name: estimated_cost
-    description: Estimated cost of the medication
-  - name: medication_name
-    description: Name of the medication ordered
-  - name: medication_order_source_concept_id
-    description: Foreign key to concept.id - source concept for the medication
-  - name: source_code
-    description: Source code for the medication order concept
-  - name: source_display
-    description: Source display name for the medication order concept
-  - name: source_system
-    description: Source system for the medication order concept
-  - name: target_system
-    description: Target system for the mapped concept
-  - name: bnf_reference
-    description: British National Formulary reference code
-  - name: age_at_event
-    description: Patient age in years at time of order
-  - name: age_at_event_baby
-    description: Patient age in months for babies (0-24 months)
-  - name: age_at_event_neonate
-    description: Patient age in days for neonates (0-28 days)
-  - name: issue_method
-    description: Method of issue (acute, repeat, etc.)
-  - name: date_recorded
-    description: Date the record was entered into the system
-  - name: is_confidential
-    description: Boolean indicating if the record is marked as confidential
-  - name: is_deleted
-    description: Boolean indicating if the clinical record has been deleted
-  - name: issue_method_description
-    description: Description of the issue method
-  - name: lds_id
-    description: LDS system identifier
-  - name: record_owner_organisation_code
-    description: Organisation code of the record owner
-  - name: lds_datetime_data_acquired
-    description: Datetime when data was acquired by LDS
-  - name: lds_initial_data_received_date
-    description: Date when data was initially received by LDS
-  - name: medication_statement_source_concept_id
-    description: Foreign key to concept.id - source concept for associated statement
-  - name: statement_medication_name
-    description: Medication name from the associated statement
-  - name: mapped_concept_id
-    description: Foreign key to concept.id - mapped standardized concept
-  - name: mapped_concept_code
-    description: Code of the mapped concept
-  - name: mapped_concept_display
-    description: Display text of the mapped concept
-  - name: lds_start_date_time
-    description: LDS datetime stamp from which the record version was correct - used
-      for deduplication to get the latest record
-  - name: lds_is_deleted
-    description: Deletion flag - records with TRUE are filtered out in this staging
-      layer
-  - name: lds_record_id
-    description: LDS assigned unique identifier for the source record version
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

@@ -1,4 +1,9 @@
-version: 1
+version: 2
 models:
   - name: int_referral_ndpp_all
-    description: 'Determine NHS Diabetes Prevention Programme outcome using PCD REFSET DPPOFF_COD. Includes invitations and declines.'
+    description: 'Determine NHS Diabetes Prevention Programme outcome using PCD REFSET
+      DPPOFF_COD. Includes invitations and declines.'
+    config:
+      meta:
+        owner:
+          name: KatsplatH

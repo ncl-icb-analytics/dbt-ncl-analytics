@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_chronic_kidney_disease
-    description: 'Flu vaccination eligibility for people with chronic kidney disease using complex staging logic.
+    description: 'Flu vaccination eligibility for people with chronic kidney disease
+      using complex staging logic.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to chronic kidney disease with staging criteria.'
-    
+      Purpose: Identify people eligible for flu vaccination due to chronic kidney
+      disease with staging criteria.'
     config:
       meta:
         indicator:
@@ -25,11 +26,15 @@ models:
           category: "FLU"
           clinical_domain: "Nephrology"
           name_short: "Flu Eligible Chronic Kidney Disease"
-          description_short: "People with chronic kidney disease eligible for flu vaccination"
+          description_short: "People with chronic kidney disease eligible for flu
+            vaccination"
           description_long: >
-            Flu vaccination eligibility for people with chronic kidney disease using QOF-aligned
-            staging logic. Includes general CKD diagnosis (CKD_COD) or stage codes where
-            latest stage 3-5 code (CKD35_COD) is more recent than general stage code (CKD15_COD).
+            Flu vaccination eligibility for people with chronic kidney disease using
+            QOF-aligned
+            staging logic. Includes general CKD diagnosis (CKD_COD) or stage codes
+            where
+            latest stage 3-5 code (CKD35_COD) is more recent than general stage code
+            (CKD15_COD).
             Minimum age requirement of 6 months. Eligibility logic ensures
             staging classification following clinical guidelines.
           is_qof: false
@@ -53,7 +58,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

@@ -1,0 +1,9 @@
+version: 2
+
+macros:
+  - name: check_source_columns
+    description: >
+      Debug utility to list all tables and columns in OLIDS_MASKED schema.
+      Outputs to dbt log. Used for development inspection.
+
+

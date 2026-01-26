@@ -1,25 +1,30 @@
 version: 2
 models:
-- name: stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025
-  description: Mapping between LSOA 2021, Ward 2025, and Local Authority 2025 codes from reference lookup
-  columns:
-  - name: lsoa_2021_code
-    description: Primary key - LSOA 2021 code
+  - name: stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025
+    description: Mapping between LSOA 2021, Ward 2025, and Local Authority 2025 
+      codes from reference lookup
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
+    columns:
+      - name: lsoa_2021_code
+        description: Primary key - LSOA 2021 code
+        tests:
+          - unique
+          - not_null
+      - name: lsoa_2021_name
+        description: LSOA 2021 name
+      - name: ward_2025_code
+        description: Ward 2025 code
+      - name: ward_2025_name
+        description: Ward 2025 name
+      - name: local_authority_2025_code
+        description: Local Authority 2025 code
+      - name: local_authority_2025_name
+        description: Local Authority 2025 name
+      - name: resident_flag
+        description: Resident flag indicator
     tests:
-    - unique
-    - not_null
-  - name: lsoa_2021_name
-    description: LSOA 2021 name
-  - name: ward_2025_code
-    description: Ward 2025 code
-  - name: ward_2025_name
-    description: Ward 2025 name
-  - name: local_authority_2025_code
-    description: Local Authority 2025 code
-  - name: local_authority_2025_name
-    description: Local Authority 2025 name
-  - name: resident_flag
-    description: Resident flag indicator
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

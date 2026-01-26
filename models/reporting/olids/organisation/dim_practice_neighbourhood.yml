@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_practice_neighbourhood
-    description: 'Practice geographic context with local authority and neighbourhood classifications.
+    description: 'Practice geographic context with local authority and neighbourhood
+      classifications.
 
       Key Features:
 
@@ -13,8 +14,13 @@ models:
 
       • Working with dummy data - geographic information may be limited
 
-      Purpose: Supports geographic analysis, local authority reporting, and neighbourhood-based population health assessments.'
+      Purpose: Supports geographic analysis, local authority reporting, and neighbourhood-based
+      population health assessments.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: practice_code
         description: 'Practice ODS code'
@@ -28,7 +34,9 @@ models:
           - not_null
 
       - name: local_authority
-        description: 'Local authority where practice is located for administrative boundary analysis'
+        description: 'Local authority where practice is located for administrative
+          boundary analysis'
 
       - name: neighbourhood_registered
-        description: 'Practice neighbourhood classification for community context analysis'
+        description: 'Practice neighbourhood classification for community context
+          analysis'

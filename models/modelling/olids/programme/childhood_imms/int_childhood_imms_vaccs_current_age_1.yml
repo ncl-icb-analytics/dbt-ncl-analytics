@@ -1,7 +1,13 @@
 models:
   - name: int_childhood_imms_vaccs_current_age_1
-    description: Intermediate table for eligble population aged 1 year old by current time_stamp and who have complete or outofschedule vaccinations (declined, contraindicated and overdue excluded). Person level data.
+    description: Intermediate table for eligble population aged 1 year old by 
+      current time_stamp and who have complete or outofschedule vaccinations 
+      (declined, contraindicated and overdue excluded). Person level data.
 
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: Unique identifier for the person

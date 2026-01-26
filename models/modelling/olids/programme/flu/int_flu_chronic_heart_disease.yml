@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_chronic_heart_disease
-    description: 'Flu vaccination eligibility for people with chronic heart disease conditions.
+    description: 'Flu vaccination eligibility for people with chronic heart disease
+      conditions.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to chronic cardiovascular conditions.'
-    
+      Purpose: Identify people eligible for flu vaccination due to chronic cardiovascular
+      conditions.'
     config:
       meta:
         indicator:
@@ -27,9 +28,12 @@ models:
           name_short: "Flu Eligible Chronic Heart Disease"
           description_short: "People with chronic heart disease eligible for flu vaccination"
           description_long: >
-            Flu vaccination eligibility for people with chronic cardiovascular conditions including
-            coronary heart disease, heart failure, and stroke. Uses CHD_COD cluster codes with
-            earliest occurrence qualifying. Minimum age requirement of 6 months for flu vaccination.
+            Flu vaccination eligibility for people with chronic cardiovascular conditions
+            including
+            coronary heart disease, heart failure, and stroke. Uses CHD_COD cluster
+            codes with
+            earliest occurrence qualifying. Minimum age requirement of 6 months for
+            flu vaccination.
             Straightforward single diagnosis pathway without complex eligibility logic.
           is_qof: false
           source_column: "person_id"
@@ -48,7 +52,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

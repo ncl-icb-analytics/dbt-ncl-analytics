@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: fct_person_depression_register
-    description: 'QOF depression register for patients aged 18+ with active depression diagnosis.
+    description: 'QOF depression register for patients aged 18+ with active depression
+      diagnosis.
 
-      One row per person with latest DEP_COD > latest DEPRES_COD or no resolution recorded.'
+      One row per person with latest DEP_COD > latest DEPRES_COD or no resolution
+      recorded.'
 
     tests:
       - dbt_utils.at_least_one:
@@ -26,12 +28,12 @@ models:
           name_short: "Depression"
           description_short: "QOF depression register"
           description_long: >
-            Depression diagnosed using QOF criteria: Age ≥18 years with latest depression 
-            episode on/after 1 April 2006, where latest depression code is more recent than 
-            any resolution code, or no resolved code present. Used for depression care pathways, 
-            treatment monitoring, recovery planning, and psychological therapy access. Maps to 
-            QOF indicator DEP001 (Depression Register). Uses DEP_COD for diagnosis codes and 
-            DEPRES_COD for resolution codes.
+            Depression diagnosed using QOF criteria: Age ≥18 years with latest depression  episode
+            on/after 1 April 2006, where latest depression code is more recent than  any
+            resolution code, or no resolved code present. Used for depression care
+            pathways,  treatment monitoring, recovery planning, and psychological
+            therapy access. Maps to  QOF indicator DEP001 (Depression Register). Uses
+            DEP_COD for diagnosis codes and  DEPRES_COD for resolution codes.
           is_qof: true
           qof_indicator: "DEP001"
           source_column: "is_on_register"
@@ -43,3 +45,5 @@ models:
               category: "INCLUSION"
             - cluster_id: "DEPRES_COD"
               category: "RESOLUTION"
+        owner:
+          name: EddieDavison92

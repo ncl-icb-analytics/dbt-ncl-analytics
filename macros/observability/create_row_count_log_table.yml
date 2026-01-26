@@ -1,0 +1,9 @@
+version: 2
+
+macros:
+  - name: create_row_count_log_table
+    description: >
+      Creates the ROW_COUNT_LOG table in DATA_LAKE__NCL.DBT_OBSERVABILITY if it doesn't exist.
+      Only runs in prod targets. Called in on-run-start.
+
+

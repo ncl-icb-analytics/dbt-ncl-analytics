@@ -50,3 +50,5 @@ models:
               threshold_unit: "months"
               description: "No pulse check in last year"
               sort_order: 2
+        owner:
+          name: EddieDavison92

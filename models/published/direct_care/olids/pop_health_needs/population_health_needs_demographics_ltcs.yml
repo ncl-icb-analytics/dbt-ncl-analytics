@@ -2,12 +2,16 @@ version: 2
 
 models:
   - name: population_health_needs_demographics_ltcs
-    description: 'Aggregate patient counts by age, ethnicity, PCN, neighbourhood, IMD quintile, LTCs for population health needs dashboard.'
+    description: 'Aggregate patient counts by age, ethnicity, PCN, neighbourhood,
+      IMD quintile, LTCs for population health needs dashboard.'
     tests:
       - dbt_utils.expression_is_true:
           expression: "patient_count >= 1"
     config:
       materialized: view
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: is_active
         description: Indicates if the patient is currently active.
@@ -40,9 +44,11 @@ models:
       - name: borough_registered
         description: Borough of the patient's GP practice.
       - name: practice_imd_quintile_19
-        description: Index of Multiple Deprivation quintile (2019) of the patient's GP practice.
+        description: Index of Multiple Deprivation quintile (2019) of the 
+          patient's GP practice.
       - name: patient_imd_quintile_19
-        description: Index of Multiple Deprivation quintile (2019) of the patient.
+        description: Index of Multiple Deprivation quintile (2019) of the 
+          patient.
       - name: has_atrial_fibrillation
       - name: has_coronary_heart_disease
       - name: has_heart_failure
