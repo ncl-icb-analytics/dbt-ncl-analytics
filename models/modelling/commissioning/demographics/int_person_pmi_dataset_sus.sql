@@ -124,7 +124,7 @@ lsoa_event as (
     select
         sk_patient_id,
         lsoa21_cd as lsoa_21,
-        code_date::date as residence_event_date,
+        code_date::date as lsoa_event_date,
         
         --Rank rows for this field to identify which to use
         row_number() over (
