@@ -94,7 +94,7 @@ if (Test-Path $envPath) {
     $hasPlaceholders = (Get-Content $envPath | Where-Object { $_ -match '^[^#].*=.*your-.*-here' } | Measure-Object).Count -gt 0
     if ($hasPlaceholders) {
         Write-Host "[WARNING] .env still contains placeholder values" -ForegroundColor Yellow
-        $actions += "Update credentials in .env, then open a new terminal (Ctrl+``)"
+        $actions += 'Update credentials in .env, then open a new terminal (Ctrl+`)'
     } else {
         # Show key variables (without exposing sensitive values)
         if ($env:SNOWFLAKE_ACCOUNT) {
@@ -117,7 +117,7 @@ if (Test-Path $envPath) {
     } else {
         Write-Host "[WARNING] No .env file found and no env.example template" -ForegroundColor Yellow
     }
-    $actions += "Update credentials in .env, then open a new terminal (Ctrl+``)"
+    $actions += 'Update credentials in .env, then open a new terminal (Ctrl+`)'
 }
 Write-Host ""
 
