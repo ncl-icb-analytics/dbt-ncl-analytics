@@ -82,9 +82,12 @@ columns:
   - name: postcode_sector
     data_type: varchar
     description: First half of the postcode for the person's residence, NULL implies no known residence
-  - name: lsoa_21
+  - name: lsoa_2021_code
     data_type: varchar
     description: LSOA code of residence using the 2021 LSOA definitions, NULL implies no known residence
+  - name: lsoa_2021_name
+    data_type: varchar
+    description: LSOA name of residence using the 2021 LSOA definitions, NULL implies no known residence
   - name: ward_2025_code
     data_type: varchar
     description: Ward code of residence using the 2025 ward definitions
