@@ -1,5 +1,6 @@
 --Script to get key information from pds data
 select
+    'pds' as field_source,
     sk_patient_id,
     gender_code,
     coalesce(record_person_end_date, current_date()) as gender_event_date,
