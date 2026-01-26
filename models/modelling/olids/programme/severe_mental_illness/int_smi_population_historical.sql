@@ -10,17 +10,19 @@
 
 SELECT
     pmab.analysis_month    -- -- Fiscal year end flag
+    pmab.analysis_month    -- -- Fiscal year end flag
     -- CASE
     --     WHEN EXTRACT(MONTH FROM pmab.analysis_month) = 3
     --          AND EXTRACT(DAY FROM pmab.analysis_month) = 31
     --     THEN 1
     --     ELSE 0
     -- END AS is_fiscal_year_end
+    -- END AS is_fiscal_year_end
     -- Fiscal year label (use existing field from person_month_analysis_base)
     ,pmab.financial_year as fiscal_year_label
     ,pmab.person_id
     ,pmab.age
-    ,pmab.gender
+    ,pmab.AGE_BAND_5Y
     ,pmab.AGE_BAND_NHS
     ,CASE
         WHEN pmab.age_band_nhs = '5-14' THEN 1
@@ -36,6 +38,8 @@ SELECT
     ,pmab.is_deceased
     ,pmab.birth_date_approx
     -- Ethnicity
+    ,pmab.ethnicity_category
+    ,CASE
     ,pmab.ethnicity_category
     ,CASE
         WHEN pmab.ethnicity_category = 'Asian' THEN 1
@@ -75,7 +79,40 @@ SELECT
         WHEN pmab.ETHNICITY_SUBCATEGORY = 'Recorded Not Known' THEN 19
         WHEN pmab.ETHNICITY_SUBCATEGORY = 'Refused' THEN 19
         END AS ETHSUBCAT_ORDER
+    END AS ethcat_order
+    --ETHSUBCATEGORY
+    ,CASE
+        WHEN pmab.ETHNICITY_SUBCATEGORY in ('Not Recorded','Not stated','Not Stated','Recorded Not Known','Refused') THEN 'Unknown'
+        ELSE pmab.ETHNICITY_SUBCATEGORY END AS ETHNICITY_SUBCATEGORY
+    ,CASE 
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Asian: Bangladeshi' THEN 1
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Asian: Chinese' THEN 2
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Asian: Indian' THEN 3
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Asian: Pakistani' THEN 4
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Asian: Other Asian' THEN 5
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Black: African' THEN 6
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Black: Caribbean' THEN 7
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Black: Other Black' THEN 8
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Mixed: White and Asian' THEN 9
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Mixed: White and Black African' THEN 10
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Mixed: White and Black Caribbean' THEN 11
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Mixed: Other Mixed' THEN 12
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Other: Arab' THEN 13
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Other: Other' THEN 14
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'White: British' THEN 15
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'White: Irish' THEN 16
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'White: Traveller' THEN 17
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'White: Other White' THEN 18
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Unknown' THEN 19
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Not Recorded' THEN 19
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Not stated' THEN 19
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Not Stated' THEN 19
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Recorded Not Known' THEN 19
+        WHEN pmab.ETHNICITY_SUBCATEGORY = 'Refused' THEN 19
+        END AS ETHSUBCAT_ORDER
     -- IMD
+    ,COALESCE(pmab.imd_quintile_25, 'Unknown') AS imd_quintile
+    ,CASE
     ,COALESCE(pmab.imd_quintile_25, 'Unknown') AS imd_quintile
     ,CASE
         WHEN pmab.imd_quintile_25 = 'Most Deprived' THEN 1
@@ -85,7 +122,13 @@ SELECT
         WHEN pmab.imd_quintile_25 = 'Least Deprived' THEN 5
         ELSE 6
     END AS imdquintile_order
+    END AS imdquintile_order
     -- Practice
+    ,pmab.borough_registered as practice_borough
+    ,COALESCE(pmab.neighbourhood_resident,'Unknown') as residential_neighbourhood
+    ,pmab.practice_name
+    ,pmab.practice_code
+    ,CASE
     ,pmab.borough_registered as practice_borough
     ,COALESCE(pmab.neighbourhood_resident,'Unknown') as residential_neighbourhood
     ,pmab.practice_name
@@ -94,6 +137,8 @@ SELECT
     WHEN pmab.LOCAL_AUTHORITY_NAME not in ('Barnet','Camden','Enfield','Haringey','Islington') 
     THEN 'Outside NCL' 
     WHEN pmab.LOCAL_AUTHORITY_NAME IS NULL THEN 'Unknown'
+    ELSE pmab.LOCAL_AUTHORITY_NAME END as RESIDENTIAL_BOROUGH
+    ,CASE
     ELSE pmab.LOCAL_AUTHORITY_NAME END as RESIDENTIAL_BOROUGH
     ,CASE
     WHEN pmab.LOCAL_AUTHORITY_NAME not in ('Barnet','Camden','Enfield','Haringey','Islington') 
