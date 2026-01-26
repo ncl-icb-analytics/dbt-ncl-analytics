@@ -2,26 +2,26 @@ version: 2
 models:
 - name: dim_snapshot_person_pds_demographics
   description: Annual snapshots to create a demographic lookup table for the population based on the PDS dataset. Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
-  tests:
+  data_tests:
   - dbt_utils.at_least_one:
       column_name: sk_patient_id
   - dbt_utils.unique_combination_of_columns:
       combination_of_columns:
-      - snapshot_date
-      - sk_patient_id
-  columns:
+        - snapshot_date
+        - sk_patient_id
+columns:
   - name: snapshot_year
     description: Financial year that the record corresponds to
-    tests:
-    - not_null
+    data_tests:
+      - not_null
   - name: snapshot_date
     description: Date of the snapshot the record corresponds to
-    tests:
-    - not_null
+    data_tests:
+      - not_null
   - name: sk_patient_id
     description: Surrogate key patient identifier (pseudonymised NHS number)
-    tests:
-    - not_null
+    data_tests:
+      - not_null
   - name: current_ncl_person_flag
     data_type: boolean
     description: TRUE if the person appears in DATA_LAKE.PDS.PDS_PERSON with no defined end date
