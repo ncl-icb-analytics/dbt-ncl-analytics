@@ -33,8 +33,8 @@ select
         dict_pcn.stp_name as icb_name,
         ----Note NCL only for fields below----
         gp_lu.borough as registered_borough,
-        nb_reg.neighbourhood_code as registered_neighbourhood_code,
-        nb_reg.neighbourhood_name as registered_neighbourhood_name,
+        gp_lu.neighbourhood_code as registered_neighbourhood_code,
+        gp_lu.neighbourhood_name as registered_neighbourhood_name,
         --------------------------------------
 
         --Language information
@@ -69,9 +69,6 @@ on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
 
 left join {{ref('stg_reference_lookup_ncl_gp_practice')}} gp_lu
 on pmi.practice_code = gp_lu.gp_practice_code
-
-left join {{ref('stg_reference_lookup_ncl_ncl_gp_practice_neighbourhood')}} nb_reg
-on pmi.practice_code = nb_reg.practice_code
 
 left join (
     select distinct
