@@ -49,8 +49,11 @@ models:
       - name: record_residence_start_date
         description: Start date of current residence record
 
-      - name: lsoa_21
+      - name: lsoa_2021_code
         description: Lower Super Output Area code (2021 Census)
+
+      - name: lsoa_2021_name
+        description: Lower Super Output Area name (2021 Census)
 
       - name: ward_2025_code
         description: Ward code (2025)
