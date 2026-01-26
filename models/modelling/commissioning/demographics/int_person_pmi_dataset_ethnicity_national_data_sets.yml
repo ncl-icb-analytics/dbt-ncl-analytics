@@ -10,6 +10,8 @@ models:
         owner:
           name: Jake Kealey
     columns:
+      - name: dataset_source
+        description: Source dataset name (eth)
       - name: sk_patient_id
         description: Surrogate key for patient
         data_tests:
