@@ -5,6 +5,8 @@ models:
     description: >
       Reduces the existing ethnicity national data sets to the required fields for integration into int_person_pmi_combined file
     columns:
+      - name: dataset_source
+        description: Source dataset name (eth)
       - name: sk_patient_id
         description: Surrogate key for patient
         data_tests:

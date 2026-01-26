@@ -6,6 +6,8 @@ models:
   - dbt_utils.at_least_one:
       column_name: sk_patient_id
   columns:
+  - name: dataset_source
+    description: Source dataset name (pds)
   - name: sk_patient_id
     description: Surrogate key patient identifier (pseudonymised NHS number)
     tests:
