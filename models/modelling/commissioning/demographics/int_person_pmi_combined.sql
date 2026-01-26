@@ -1,179 +1,152 @@
-with ids as (
-    select distinct sk_patient_id
-    from (
-        select pds_sk_patient_id as sk_patient_id from {{ref('int_person_pmi_dataset_pds')}}
-        union
-        select sus_sk_patient_id from {{ref('int_person_pmi_dataset_sus')}}
-        union
-        select eth_sk_patient_id from {{ref('int_person_pmi_dataset_ethnicity_national_data_sets')}}
-    )
+--When expanding this change int tables to use the same names and then union by name
+with combined as (
+    select * from {{ref('int_person_pmi_dataset_pds')}}
+    union by name
+    select * from {{ref('int_person_pmi_dataset_sus')}}
+    union by name
+    select * from {{ref('int_person_pmi_dataset_ethnicity_national_data_sets')}}
 ),
 
-combined as (
-    select 
-        ids.sk_patient_id,
-        pds.*,
-        sus.*,
-        eth.*
-    from ids
-
-    left join {{ref('int_person_pmi_dataset_pds')}} pds
-    on ids.sk_patient_id = pds_sk_patient_id
-    
-    left join {{ref('int_person_pmi_dataset_sus')}} sus
-    on ids.sk_patient_id = sus_sk_patient_id 
-
-    left join {{ref('int_person_pmi_dataset_ethnicity_national_data_sets')}} eth
-    on ids.sk_patient_id = eth_sk_patient_id
+ids as (
+    select distinct sk_patient_id
+    from combined
 ),
 
 gender_field as (
-    select 
+    select
         sk_patient_id,
-        case 
-            when pds_gender_code is not null then 'pds'
-            when sus_gender_code is not null then 'sus'
-            else null
-        end as gender_source,
-        case 
-            when gender_source = 'pds' then pds_gender_code
-            when gender_source = 'sus' then sus_gender_code
-            else null
-        end as gender_code,
-        case 
-            when gender_source = 'pds' then pds_gender_event_date
-            when gender_source = 'sus' then sus_gender_event_date
-            else null
-        end as gender_event_date
+        dataset_source as gender_source,
+        gender_code,
+        gender_event_date
         
     from combined
+
+    where dataset_source in ('pds', 'sus')
+    
+    qualify row_number () over (
+        partition by sk_patient_id
+        order by 
+            gender_code in ('1','2','9') desc,
+            gender_event_date desc,
+            dataset_source = 'pds' desc
+    ) = 1
 ),
 
 dob_field as (
     select 
         sk_patient_id,
-        case 
-            when pds_date_of_birth is not null then 'pds'
-            when sus_date_of_birth is not null then 'sus'
-            else null
-        end as dob_source,
-        case 
-            when dob_source = 'pds' then pds_date_of_birth
-            when dob_source = 'sus' then sus_date_of_birth
-            else null
-        end as date_of_birth,
-        case 
-            when dob_source = 'pds' then pds_dob_event_date
-            when dob_source = 'sus' then sus_dob_event_date
-            else null
-        end as dob_event_date
+        dataset_source as dob_source,
+        date_of_birth,
+        dob_event_date
         
     from combined
+
+    where dataset_source in ('pds', 'sus')
+
+    qualify row_number () over (
+        partition by sk_patient_id
+        order by 
+            date_of_birth is not null desc,
+            dataset_source = 'pds' desc,
+            dob_event_date desc
+    ) = 1
 ),
 
 date_of_death_field as (
-    select 
+    select
         sk_patient_id,
-        case 
-            when pds_date_of_death is not null then 'pds'
-            else null
-        end as death_source,
-        pds_date_of_death as date_of_death,
-        pds_death_event_date as death_event_date
+        dataset_source as death_source,
+        date_of_death,
+        death_event_date
         
     from combined
+    where dataset_source = 'pds'
 ),
 
 ethnicity_field as (
     select 
+
         sk_patient_id,
-        case 
-            when eth_ethnicity_code is not null then 'ethnicity national data sets'
-            when sus_ethnicity_code is not null then 'sus'
-            else null
-        end as ethnicity_source,
-        case 
-            when ethnicity_source = 'ethnicity national data sets' then eth_ethnicity_code
-            when ethnicity_source = 'sus' then sus_ethnicity_code
-            else null
-        end as ethnicity_code,
-        case 
-            when ethnicity_source = 'ethnicity national data sets' then eth_ethnicity_event_date
-            when ethnicity_source = 'sus' then sus_ethnicity_event_date
-            else null
-        end as ethnicity_event_date
+        dataset_source as ethnicity_source,
+        ethnicity_code,
+        ethnicity_event_date
         
     from combined
+
+    where dataset_source in ('eth', 'sus')
+
+    qualify row_number () over (
+        partition by sk_patient_id
+        order by 
+            ethnicity_code is not null desc,
+            ethnicity_code not in ('X','Z','99') desc,
+            dataset_source = 'eth' desc,
+            ethnicity_event_date desc
+    ) = 1
 ),
 
 preferred_language_field as (
-    select 
+    select
         sk_patient_id,
-        case 
-            when pds_preferred_language_code is not null then 'pds'
-            else null
-        end as preferred_language_source,
-        pds_preferred_language_code as preferred_language_code,
-        pds_preferred_language_event_date as preferred_language_event_date
+        dataset_source as preferred_language_source,
+        preferred_language_code,
+        preferred_language_event_date
         
     from combined
+    where dataset_source = 'pds'
 ),
 
 interpreter_required_field as (
-    select 
+
+    select
         sk_patient_id,
-        case 
-            when pds_interpreter_required is not null then 'pds'
-            else null
-        end as interpreter_required_source,
-        pds_interpreter_required as interpreter_required,
-        pds_interpreter_event_date as interpreter_event_date
+        dataset_source as interpreter_required_source,
+        interpreter_required,
+        interpreter_event_date
         
     from combined
+    where dataset_source = 'pds'
 ),
 
 lsoa_field as (
     select 
+
         sk_patient_id,
-        case 
-            when pds_lsoa_21 is not null then 'pds'
-            when sus_lsoa_21 is not null then 'sus'
-            else null
-        end as lsoa_source,
-        case 
-            when lsoa_source = 'pds' then pds_lsoa_21
-            when lsoa_source = 'sus' then sus_lsoa_21
-            else null
-        end as lsoa_21,
-        case 
-            when lsoa_source = 'pds' then pds_residence_event_date
-            when lsoa_source = 'sus' then sus_residence_event_date
-            else null
-        end as residence_event_date
+        dataset_source as lsoa_source,
+        lsoa21_code,
+        lsoa_event_date
         
     from combined
-),
 
+    where dataset_source in ('pds', 'sus')
+
+    qualify row_number () over (
+        partition by sk_patient_id
+        order by 
+            lsoa21_code is not null desc,
+            lsoa_event_date desc,
+            dataset_source = 'pds' desc
+    ) = 1
+),
 practice_code_field as (
     select 
+
         sk_patient_id,
-        case 
-            when pds_practice_code is not null then 'pds'
-            when sus_practice_code is not null then 'sus'
-            else null
-        end as practice_source,
-        case 
-            when practice_source = 'pds' then pds_practice_code
-            when practice_source = 'sus' then sus_practice_code
-            else null
-        end as practice_code,
-        case 
-            when practice_source = 'pds' then pds_registered_event_date
-            when practice_source = 'sus' then sus_registered_event_date
-            else null
-        end as registered_event_date
+        dataset_source as practice_source,
+        practice_code,
+        registered_event_date
         
     from combined
+
+    where dataset_source in ('pds', 'sus')
+
+    qualify row_number () over (
+        partition by sk_patient_id
+        order by 
+            practice_code is not null desc,
+            registered_event_date desc,
+            dataset_source = 'pds' desc
+    ) = 1
 )
 
 select
@@ -197,8 +170,8 @@ select
     interpreter_required_field.interpreter_required,
     interpreter_required_field.interpreter_event_date,
     lsoa_field.lsoa_source,
-    lsoa_field.lsoa_21,
-    lsoa_field.residence_event_date,
+    lsoa_field.lsoa21_code,
+    lsoa_field.lsoa_event_date,
     practice_code_field.practice_source,
     practice_code_field.practice_code,
     practice_code_field.registered_event_date,
