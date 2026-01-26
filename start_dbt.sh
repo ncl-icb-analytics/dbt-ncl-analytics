@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # start_dbt.sh - macOS/Linux equivalent of start_dbt.ps1
 
-has_warnings=false
+actions=()
 
 # Configure Git hooks
 echo "Configuring Git hooks..."
@@ -26,7 +26,7 @@ else
     echo "  This repository requires signed commits for branch protection."
     echo "  You can run dbt commands, but commits will be rejected without signing."
     echo "  See CONTRIBUTING.md 'Setting Up Commit Signing' for setup instructions."
-    has_warnings=true
+    actions+=("Set up commit signing (see CONTRIBUTING.md)")
 fi
 echo ""
 
@@ -86,8 +86,7 @@ if [ -f ".env" ]; then
     # Detect placeholder credentials — check uncommented KEY=value lines for template values
     if grep -v '^#' ".env" | grep -q '^[^=]*=.*your-.*-here'; then
         echo "[WARNING] .env still contains placeholder values"
-        echo "  Update your Snowflake credentials in .env, then open a new terminal (Ctrl+\`)."
-        has_warnings=true
+        actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
     else
         # Show key variables (without exposing sensitive values)
         [ -n "$SNOWFLAKE_ACCOUNT" ] && echo "  SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT:0:10}..."
@@ -96,29 +95,29 @@ if [ -f ".env" ]; then
         [ -n "$SNOWFLAKE_WAREHOUSE" ] && echo "  SNOWFLAKE_WAREHOUSE: $SNOWFLAKE_WAREHOUSE"
     fi
 else
-    echo "[INFO] No .env file found — creating from template"
     if [ -f "env.example" ]; then
         cp env.example .env
-        echo "[OK] Created .env from env.example"
-        echo "  Edit .env with your Snowflake credentials, then open a new terminal (Ctrl+\`)."
+        echo "[WARNING] No .env file found — created from template"
     else
-        echo "[WARNING] No env.example found either"
-        echo "  Create a .env file with your Snowflake credentials"
+        echo "[WARNING] No .env file found and no env.example template"
     fi
-    has_warnings=true
+    actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
 fi
 echo ""
 
 # Check for dbt packages
 if [ ! -d "dbt_packages" ]; then
     echo "[WARNING] No dbt_packages directory found"
-    echo "  Run 'dbt deps' to install dbt packages."
+    actions+=("Run 'dbt deps' to install dbt packages")
     echo ""
-    has_warnings=true
 fi
 
-if [ "$has_warnings" = true ]; then
-    echo "Setup incomplete — resolve the warnings above before running dbt."
+# Summary
+if [ ${#actions[@]} -gt 0 ]; then
+    echo "To finish setup:"
+    for action in "${actions[@]}"; do
+        echo "  -> $action"
+    done
 else
     echo "Ready! You can now run dbt commands."
     echo "Try: dbt debug (to test your connection)"

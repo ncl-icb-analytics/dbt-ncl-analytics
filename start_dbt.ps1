@@ -1,6 +1,6 @@
 # start_dbt.ps1
 
-$hasWarnings = $false
+$actions = @()
 
 # Configure Git hooks for additional safety
 Write-Host "Configuring Git hooks..." -ForegroundColor Cyan
@@ -26,7 +26,7 @@ if ($gpgFormat -eq "ssh" -and $signingKey -and $autoSign -eq "true") {
     Write-Host "  This repository requires signed commits for branch protection." -ForegroundColor Gray
     Write-Host "  You can run dbt commands, but commits will be rejected without signing." -ForegroundColor Gray
     Write-Host "  See CONTRIBUTING.md 'Setting Up Commit Signing' for setup instructions." -ForegroundColor Gray
-    $hasWarnings = $true
+    $actions += "Set up commit signing (see CONTRIBUTING.md)"
 }
 Write-Host ""
 
@@ -94,8 +94,7 @@ if (Test-Path $envPath) {
     $hasPlaceholders = (Get-Content $envPath | Where-Object { $_ -match '^[^#].*=.*your-.*-here' } | Measure-Object).Count -gt 0
     if ($hasPlaceholders) {
         Write-Host "[WARNING] .env still contains placeholder values" -ForegroundColor Yellow
-        Write-Host "  Update your Snowflake credentials in .env, then open a new terminal (Ctrl+``)." -ForegroundColor Gray
-        $hasWarnings = $true
+        $actions += "Update credentials in .env, then open a new terminal (Ctrl+``)"
     } else {
         # Show key variables (without exposing sensitive values)
         if ($env:SNOWFLAKE_ACCOUNT) {
@@ -112,29 +111,29 @@ if (Test-Path $envPath) {
         }
     }
 } else {
-    Write-Host "[INFO] No .env file found — creating from template" -ForegroundColor Cyan
     if (Test-Path "env.example") {
         Copy-Item "env.example" ".env"
-        Write-Host "[OK] Created .env from env.example" -ForegroundColor Green
-        Write-Host "  Edit .env with your Snowflake credentials, then open a new terminal (Ctrl+``)." -ForegroundColor Gray
+        Write-Host "[WARNING] No .env file found — created from template" -ForegroundColor Yellow
     } else {
-        Write-Host "[WARNING] No env.example found either" -ForegroundColor Yellow
-        Write-Host "  Create a .env file with your Snowflake credentials" -ForegroundColor Gray
+        Write-Host "[WARNING] No .env file found and no env.example template" -ForegroundColor Yellow
     }
-    $hasWarnings = $true
+    $actions += "Update credentials in .env, then open a new terminal (Ctrl+``)"
 }
 Write-Host ""
 
 # Check for dbt packages
 if (-not (Test-Path "dbt_packages")) {
     Write-Host "[WARNING] No dbt_packages directory found" -ForegroundColor Yellow
-    Write-Host "  Run 'dbt deps' to install dbt packages." -ForegroundColor Gray
+    $actions += "Run 'dbt deps' to install dbt packages"
     Write-Host ""
-    $hasWarnings = $true
 }
 
-if ($hasWarnings) {
-    Write-Host "Setup incomplete — resolve the warnings above before running dbt." -ForegroundColor Yellow
+# Summary
+if ($actions.Count -gt 0) {
+    Write-Host "To finish setup:" -ForegroundColor Yellow
+    foreach ($action in $actions) {
+        Write-Host "  -> $action" -ForegroundColor Gray
+    }
 } else {
     Write-Host "Ready! You can now run dbt commands." -ForegroundColor Green
     Write-Host "Try: dbt debug (to test your connection)" -ForegroundColor Gray
