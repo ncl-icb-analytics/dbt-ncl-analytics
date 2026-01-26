@@ -2,9 +2,13 @@ version: 2
 
 models:
   - name: int_practices_missing_from_olids
-    description: Practices present in reference lookup but with no patients in 
-      OLIDS demographics. One row per practice for data quality monitoring.
+    description: Practices present in reference lookup but with no patients in OLIDS demographics. One row per practice for data quality monitoring.
     config:
       meta:
         owner:
           name: EddieDavison92
+    columns:
+      - name: practice_code
+        data_tests:
+          - unique
+
