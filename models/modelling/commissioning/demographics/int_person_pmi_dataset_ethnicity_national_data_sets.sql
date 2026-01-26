@@ -1,4 +1,5 @@
 select
+    'eth' as field_source,
     sk_patientid as sk_patient_id,
     --Trim to fix records with trailing spaces
     trim(ethnicity_code) as ethnicity_code,

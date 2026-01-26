@@ -179,6 +179,7 @@ registered_event as (
 )
 
 select
+    'sus' as field_source,
     base.sk_patient_id,
     gen.gender_code,
     gen.gender_event_date,
