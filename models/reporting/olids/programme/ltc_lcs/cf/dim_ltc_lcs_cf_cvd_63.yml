@@ -6,7 +6,7 @@ models:
 
       Age 40-84 with QRISK2 ≥10%, on statins (6 months), non-HDL >2.5 mmol/L.
 
-      One row per person requiring statin dose escalation or therapy review.'
+      One row per person on statins with persistently elevated non-HDL.'
     config:
       meta:
         indicator:
@@ -17,8 +17,8 @@ models:
           name_short: "High lipids on statin"
           description_short: "QRisk ≥10%, on statins with non-HDL >2.5 mmol/L"
           description_long: >
-            Age 40-84, QRISK2 ≥10%, on statins (6 months), non-HDL >2.5 mmol/L. Priority
-            (c) for statin dose review.
+            Age 40-84, QRISK2 ≥10%, on statins (6m), non-HDL >2.5 mmol/L.
+            Priority (c).
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_63"

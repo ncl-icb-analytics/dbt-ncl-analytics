@@ -7,7 +7,7 @@ models:
       Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12 months), no statin
       allergies or decisions (60 months).
 
-      One row per person requiring high-intensity statin initiation or escalation.'
+      One row per person with QRISK2 ≥10% not on high-intensity statins.'
     config:
       meta:
         indicator:
@@ -18,8 +18,8 @@ models:
           name_short: "QRisk ≥10% no high-intensity statin"
           description_short: "Patients with QRisk ≥10% not on high-intensity statins"
           description_long: >
-            Age 40-84, QRISK2 ≥10%, not on high-intensity statins. Priority (e) for
-            high-intensity statin therapy.
+            Age 40-84, QRISK2 ≥10%, not on high-intensity statins (12m),
+            no statin allergies or decisions (60m). Priority (e).
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_65"

@@ -1,19 +1,12 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_htn_62
-    description: 'Case finding for stage 2 hypertension requiring blood pressure management.
+    description: 'Case finding for stage 2 hypertension.
 
+      Clinic BP ≥160 systolic or ≥100 diastolic, home/ABPM ≥150 systolic or ≥95
+      diastolic. Excludes patients in HTN_61 (severe hypertension).
 
-      Business Logic:
-
-      • Identifies patients with stage 2 hypertension (clinic BP 160-179/100-109,
-      home/ABPM 150-164/95-99)
-
-      • Excludes patients already captured in severe hypertension category (HTN_61)
-
-      • Targets patients requiring clinical intervention and cardiovascular risk assessment
-
-      • One row per person with latest blood pressure readings meeting stage 2 criteria'
+      One row per person with latest blood pressure readings meeting stage 2 criteria.'
     config:
       meta:
         indicator:
@@ -22,10 +15,10 @@ models:
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
           name_short: "Stage 2 HTN"
-          description_short: "Patients with stage 2 hypertension requiring management"
+          description_short: "Patients with clinic BP ≥160/100 or home/ABPM ≥150/95"
           description_long: >
-            Stage 2 HTN: clinic 160-179/100-109 mmHg, home/ABPM
-            150-164/95-99 mmHg. Excludes HTN_61. Requires intervention.
+            Stage 2 HTN: clinic ≥160/100 mmHg or home/ABPM ≥150/95 mmHg.
+            Excludes HTN_61 (severe). Upper bounds via HTN_61 exclusion.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_HTN_62"
@@ -42,31 +35,31 @@ models:
           thresholds:
             - population_group: "ALL_ADULTS"
               threshold_type: "CLINIC_SYSTOLIC_BP"
-              threshold_value: "160-179"
-              threshold_operator: "WITHIN"
+              threshold_value: "160"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Clinic systolic BP 160-179 mmHg (stage 2)"
+              description: "Clinic systolic BP ≥160 mmHg (stage 2)"
               sort_order: 1
             - population_group: "ALL_ADULTS"
               threshold_type: "CLINIC_DIASTOLIC_BP"
-              threshold_value: "100-109"
-              threshold_operator: "WITHIN"
+              threshold_value: "100"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Clinic diastolic BP 100-109 mmHg (stage 2)"
+              description: "Clinic diastolic BP ≥100 mmHg (stage 2)"
               sort_order: 2
             - population_group: "ALL_ADULTS"
               threshold_type: "HOME_ABPM_SYSTOLIC_BP"
-              threshold_value: "150-164"
-              threshold_operator: "WITHIN"
+              threshold_value: "150"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Home/ABPM systolic BP 150-164 mmHg (stage 2)"
+              description: "Home/ABPM systolic BP ≥150 mmHg (stage 2)"
               sort_order: 3
             - population_group: "ALL_ADULTS"
               threshold_type: "HOME_ABPM_DIASTOLIC_BP"
-              threshold_value: "95-99"
-              threshold_operator: "WITHIN"
+              threshold_value: "95"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Home/ABPM diastolic BP 95-99 mmHg (stage 2)"
+              description: "Home/ABPM diastolic BP ≥95 mmHg (stage 2)"
               sort_order: 4
         owner:
           name: EddieDavison92

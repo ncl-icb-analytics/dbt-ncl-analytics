@@ -1,21 +1,13 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_htn_63
-    description: 'Case finding for hypertension in Black and South Asian patients
-      with cardiovascular risk factors.
+    description: 'Case finding for Black/South Asian patients with CVD risk factors
+      and elevated BP.
 
+      Clinic BP ≥140/90 or home/ABPM ≥135/85. Risk factors: myocardial disease,
+      cerebral disease, claudication, eGFR <60, diabetes, or BMI >35.
 
-      Business Logic:
-
-      • Targets Black and South Asian patients with elevated blood pressure and cardiovascular
-      risk factors
-
-      • Uses ethnicity-specific risk thresholds recognising higher cardiovascular
-      risk in these populations
-
-      • Identifies patients requiring culturally appropriate hypertension intervention
-
-      • One row per eligible person with ethnicity, BP readings, and risk factor assessment'
+      One row per eligible BSA person with BP readings and risk factor status.'
     config:
       meta:
         indicator:
@@ -27,8 +19,9 @@ models:
           description_short: "Black and South Asian patients with elevated BP and
             cardiovascular risk"
           description_long: >
-            Black/South Asian ethnicity, elevated BP, CVD risk factors.
-            Ethnicity-specific thresholds for higher CVD risk populations.
+            Black/South Asian with CVD risk factors. Clinic ≥140/90 or
+            home/ABPM ≥135/85. Risk factors: myocardial, cerebral,
+            claudication, eGFR <60, diabetes, BMI >35.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_HTN_63"
@@ -36,25 +29,48 @@ models:
             - "LTC_LCS_DASHBOARD"
             - "CASE_FINDING_PROGRAMME"
           code_clusters:
-            - cluster_id: "BLACK_ETHNICITY_CODES"
+            - cluster_id: "ETHNICITY_BAME"
               category: "INCLUSION"
-            - cluster_id: "SOUTH_ASIAN_ETHNICITY_CODES"
-              category: "INCLUSION"
-            - cluster_id: "BLOOD_PRESSURE_CLINIC"
-              category: "INCLUSION"
-            - cluster_id: "BLOOD_PRESSURE_HOME_ABPM"
-              category: "INCLUSION"
-            - cluster_id: "CVD_RISK_FACTORS"
-              category: "INCLUSION"
-            - cluster_id: "HYPERTENSION_REGISTER_CODES"
-              category: "EXCLUSION"
+            - cluster_id: "HYPERTENSION_MYOCARDIAL"
+              category: "RISK_FACTOR"
+            - cluster_id: "HYPERTENSION_CEREBRAL"
+              category: "RISK_FACTOR"
+            - cluster_id: "HYPERTENSION_CLAUDICATION"
+              category: "RISK_FACTOR"
+            - cluster_id: "HYPERTENSION_EGFR"
+              category: "RISK_FACTOR"
+            - cluster_id: "HYPERTENSION_DIABETES"
+              category: "RISK_FACTOR"
+            - cluster_id: "HYPERTENSION_BMI"
+              category: "RISK_FACTOR"
           thresholds:
             - population_group: "BLACK_SOUTH_ASIAN"
-              threshold_type: "ETHNICITY_SPECIFIC_BP"
-              threshold_value: "ELEVATED"
-              threshold_operator: "EQUALS"
-              threshold_unit: "categorical"
-              description: "Elevated BP with ethnicity-specific risk assessment"
+              threshold_type: "CLINIC_SYSTOLIC_BP"
+              threshold_value: "140"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
+              threshold_unit: "mmHg"
+              description: "Clinic systolic BP ≥140 mmHg"
               sort_order: 1
+            - population_group: "BLACK_SOUTH_ASIAN"
+              threshold_type: "CLINIC_DIASTOLIC_BP"
+              threshold_value: "90"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
+              threshold_unit: "mmHg"
+              description: "Clinic diastolic BP ≥90 mmHg"
+              sort_order: 2
+            - population_group: "BLACK_SOUTH_ASIAN"
+              threshold_type: "HOME_ABPM_SYSTOLIC_BP"
+              threshold_value: "135"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
+              threshold_unit: "mmHg"
+              description: "Home/ABPM systolic BP ≥135 mmHg"
+              sort_order: 3
+            - population_group: "BLACK_SOUTH_ASIAN"
+              threshold_type: "HOME_ABPM_DIASTOLIC_BP"
+              threshold_value: "85"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
+              threshold_unit: "mmHg"
+              description: "Home/ABPM diastolic BP ≥85 mmHg"
+              sort_order: 4
         owner:
           name: EddieDavison92
