@@ -22,7 +22,7 @@ FROM {{ ref('int_bmi_all') }} b
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_BMI_ALL b
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-WHERE clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
 QUALIFY row_num = 1
 )
 --TEST 2 GLUCOSE HBA1C
@@ -42,7 +42,7 @@ FROM {{ ref('int_hba1c_all') }} b
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_HBA1C_ALL b
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
 QUALIFY row_num = 1
 )
 --TEST 3 CHOLESTEROL
@@ -62,7 +62,7 @@ FROM {{ ref('int_cholesterol_all') }} c
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_cholesterol_all c
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
 QUALIFY row_num = 1
 )
 --TEST 4 BLOOD PRESSURE
@@ -81,7 +81,7 @@ FROM {{ ref('int_blood_pressure_all') }} bp
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_BLOOD_PRESSURE_ALL bp
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
 QUALIFY row_num = 1
 )
 -- # TEST 5 SMOKING STATUS
@@ -99,7 +99,7 @@ FROM {{ ref('int_smoking_status_all') }} s
 --FROM MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_SMOKING_STATUS_ALL s
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
 QUALIFY row_num = 1
 )
 
@@ -132,7 +132,7 @@ WITH all_audit_scores AS (
         INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
         --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
         WHERE is_valid_score = TRUE 
-        AND clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+        AND clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
         QUALIFY rn = 1               
     ) a
      QUALIFY row_num = 1
@@ -159,7 +159,7 @@ WITH all_audit_scores AS (
     --FROM MODELLING.OLIDS_OBSERVATIONS.int_alcohol_misuse_disorders d
     INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
     --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-    WHERE clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+    where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
       ) a
    QUALIFY row_num = 1
     )
@@ -187,7 +187,7 @@ WITH all_audit_scores AS (
     --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_alcohol_all a
     INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
     --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-    WHERE clinical_effective_date <= (select MAX(analysis_month) from MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL)
+    where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
    ) a
      QUALIFY row_num = 1
     )
