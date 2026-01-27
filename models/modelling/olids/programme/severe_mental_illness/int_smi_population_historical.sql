@@ -20,7 +20,7 @@ SELECT
     ,pmab.financial_year as fiscal_year_label
     ,pmab.person_id
     ,pmab.age
-    ,pmab.AGE_BAND_5Y
+    ,pmab.gender
     ,pmab.AGE_BAND_NHS
     ,CASE
         WHEN pmab.age_band_nhs = '5-14' THEN 1
