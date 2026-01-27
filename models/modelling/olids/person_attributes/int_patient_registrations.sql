@@ -22,21 +22,10 @@ WITH patient_to_person AS (
 
 patient_deceased_status AS (
     SELECT
-        p.id AS patient_id,
-        p.death_year,
-        p.death_month,
-        p.death_year IS NOT NULL AS is_deceased,
-        CASE
-            WHEN p.death_year IS NOT NULL AND p.death_month IS NOT NULL
-                THEN DATEADD(
-                    DAY,
-                    FLOOR(
-                        DAY(LAST_DAY(TO_DATE(p.death_year || '-' || p.death_month || '-01'))) / 2
-                    ),
-                    TO_DATE(p.death_year || '-' || p.death_month || '-01')
-                )
-        END AS death_date_approx
-    FROM {{ ref('stg_olids_patient') }} AS p
+        patient_id,
+        is_deceased,
+        death_date_approx
+    FROM {{ ref('int_patient_deceased_status') }}
 ),
 
 raw_registrations AS (
