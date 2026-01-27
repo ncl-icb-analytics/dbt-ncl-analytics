@@ -276,11 +276,13 @@ SELECT
     pwa.is_current,
     pwa.period_sequence,
 
-    -- Status flags (temporal: was the registration active during this period?)
+    -- Status flags (temporal: was the registration active at the END of this period?)
+    -- Uses effective_end_date (SCD2 period end) to determine if still registered
+    -- For current periods (effective_end_date IS NULL), checks against CURRENT_DATE()
     CASE
         WHEN pwa.practice_code IS NULL THEN FALSE
         WHEN pwa.registration_effective_end_date IS NULL THEN TRUE
-        WHEN pwa.registration_effective_end_date >= pwa.effective_start_date THEN TRUE
+        WHEN pwa.registration_effective_end_date >= COALESCE(pwa.effective_end_date, CURRENT_DATE()) THEN TRUE
         ELSE FALSE
     END AS is_active,
     bd.is_deceased,
@@ -289,10 +291,10 @@ SELECT
         WHEN pwa.practice_code IS NULL THEN 'No registration history'
         WHEN bd.is_deceased
             AND bd.death_date_approx IS NOT NULL
-            AND pwa.effective_start_date >= bd.death_date_approx
+            AND bd.death_date_approx < COALESCE(pwa.effective_end_date, CURRENT_DATE())
             THEN 'Deceased'
         WHEN pwa.registration_effective_end_date IS NOT NULL
-            AND pwa.effective_start_date >= pwa.registration_effective_end_date
+            AND pwa.registration_effective_end_date < COALESCE(pwa.effective_end_date, CURRENT_DATE())
             THEN 'Registration ended'
         ELSE NULL
     END AS inactive_reason,
