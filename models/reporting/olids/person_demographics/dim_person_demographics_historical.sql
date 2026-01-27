@@ -39,6 +39,7 @@ WITH person_registrations AS (
         practice_name,
         registration_start_date,
         registration_end_date,
+        effective_end_date,
         is_current_registration
     FROM {{ ref('int_patient_registrations') }}
 ),
@@ -134,6 +135,7 @@ change_periods AS (
 
 registrations_for_periods AS (
     -- Get latest registration active for each period
+    -- Uses effective_end_date (accounts for death) rather than registration_end_date
     SELECT
         cp.person_id,
         cp.effective_start_date,
@@ -141,6 +143,7 @@ registrations_for_periods AS (
         pr.practice_name,
         pr.registration_start_date,
         pr.registration_end_date,
+        pr.effective_end_date as registration_effective_end_date,
         pr.is_current_registration,
         ROW_NUMBER() OVER (
             PARTITION BY cp.person_id, cp.effective_start_date
@@ -150,7 +153,7 @@ registrations_for_periods AS (
     LEFT JOIN person_registrations pr
         ON cp.person_id = pr.person_id
         AND pr.registration_start_date <= cp.effective_start_date
-        AND (pr.registration_end_date IS NULL OR pr.registration_end_date >= cp.effective_start_date)
+        AND (pr.effective_end_date IS NULL OR pr.effective_end_date >= cp.effective_start_date)
 ),
 
 ethnicity_for_periods AS (
@@ -217,6 +220,7 @@ periods_with_attributes AS (
         pr.practice_name,
         pr.registration_start_date,
         pr.registration_end_date,
+        pr.registration_effective_end_date,
         pr.is_current_registration,
 
         -- Ethnicity
@@ -272,14 +276,26 @@ SELECT
     pwa.is_current,
     pwa.period_sequence,
 
-    -- Status flags
-    COALESCE(pwa.is_current_registration, FALSE) AS is_active,
+    -- Status flags (temporal: was the registration active at the END of this period?)
+    -- Uses effective_end_date (SCD2 period end) to determine if still registered
+    -- For current periods (effective_end_date IS NULL), checks against CURRENT_DATE()
+    CASE
+        WHEN pwa.practice_code IS NULL THEN FALSE
+        WHEN pwa.registration_effective_end_date IS NULL THEN TRUE
+        WHEN pwa.registration_effective_end_date >= COALESCE(pwa.effective_end_date, CURRENT_DATE()) THEN TRUE
+        ELSE FALSE
+    END AS is_active,
     bd.is_deceased,
     bd.is_dummy_patient,
     CASE
-        WHEN bd.is_deceased THEN 'Deceased'
-        WHEN pwa.is_current_registration = FALSE THEN 'Registration ended'
         WHEN pwa.practice_code IS NULL THEN 'No registration history'
+        WHEN bd.is_deceased
+            AND bd.death_date_approx IS NOT NULL
+            AND bd.death_date_approx < COALESCE(pwa.effective_end_date, CURRENT_DATE())
+            THEN 'Deceased'
+        WHEN pwa.registration_effective_end_date IS NOT NULL
+            AND pwa.registration_effective_end_date < COALESCE(pwa.effective_end_date, CURRENT_DATE())
+            THEN 'Registration ended'
         ELSE NULL
     END AS inactive_reason,
 

@@ -37,13 +37,17 @@ patient_candidates AS (
         p.sk_patient_id,
         p.birth_year,
         p.birth_month,
-        p.death_year,
-        p.death_month,
+        pds.death_year,
+        pds.death_month,
+        pds.is_deceased,
+        pds.death_date_approx,
         p.is_dummy_patient,
         CASE WHEN p.birth_year IS NOT NULL AND p.birth_month IS NOT NULL THEN 1 ELSE 0 END AS has_dob
     FROM {{ ref('int_patient_person_unique') }} AS pp
     INNER JOIN {{ ref('stg_olids_patient') }} AS p
         ON pp.patient_id = p.id
+    LEFT JOIN {{ ref('int_patient_deceased_status') }} AS pds
+        ON p.id = pds.patient_id
 ),
 
 best_patient AS (
@@ -82,25 +86,8 @@ SELECT
                 TO_DATE(bp.birth_year || '-' || bp.birth_month || '-01')
             )
     END AS birth_date_approx,
-    -- Calculate approximate death date using exact midpoint of the month
-    CASE
-        WHEN bp.death_year IS NOT NULL AND bp.death_month IS NOT NULL
-            THEN DATEADD(
-                DAY,
-                FLOOR(
-                    DAY(
-                        LAST_DAY(
-                            TO_DATE(
-                                bp.death_year || '-' || bp.death_month || '-01'
-                            )
-                        )
-                    )
-                    / 2
-                ),
-                TO_DATE(bp.death_year || '-' || bp.death_month || '-01')
-            )
-    END AS death_date_approx,
-    bp.death_year IS NOT NULL AS is_deceased,
+    bp.death_date_approx,
+    bp.is_deceased,
     COALESCE(bp.is_dummy_patient, FALSE) AS is_dummy_patient
 FROM persons_with_patients AS ap
 INNER JOIN best_patient AS bp

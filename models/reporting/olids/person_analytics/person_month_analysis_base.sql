@@ -19,7 +19,8 @@
 
 WITH active_person_months AS (
     -- Generate person-months for registered patients
-    -- Excludes periods with no active registration
+    -- Uses effective_end_date (accounts for death and deregistration) and registration
+    -- date ranges to determine temporal activity, not the point-in-time registration_status
     SELECT DISTINCT
         ds.month_end_date as analysis_month,
         hr.person_id,
@@ -28,10 +29,9 @@ WITH active_person_months AS (
     FROM {{ ref('dim_person_historical_practice') }} hr
     INNER JOIN {{ ref('int_date_spine') }} ds
         ON hr.registration_start_date <= ds.month_end_date
-        AND (hr.registration_end_date IS NULL OR hr.registration_end_date >= ds.month_start_date)
-        AND ds.month_end_date >= DATEADD('month', -60, CURRENT_DATE)  -- 5 year limit: complete left/died history available
+        AND (hr.effective_end_date IS NULL OR hr.effective_end_date >= ds.month_start_date)
+        AND ds.month_end_date >= DATEADD('month', -60, CURRENT_DATE)  -- 5 year limit
         AND ds.month_end_date <= LAST_DAY(CURRENT_DATE)    -- Don't create future months
-    WHERE hr.registration_status = 'Active'
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY ds.month_end_date, hr.person_id
         ORDER BY hr.registration_start_date DESC, hr.is_current_registration DESC

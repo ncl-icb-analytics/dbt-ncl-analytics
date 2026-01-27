@@ -1,0 +1,27 @@
+version: 2
+models:
+  - name: int_patient_deceased_status
+    description: Patient-level deceased status with approximate death date.
+      Uses midpoint of death month, or July 1st if only death year is known.
+
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+
+    columns:
+      - name: patient_id
+        description: Patient identifier
+        tests:
+          - not_null
+          - unique
+      - name: death_year
+        description: Year of death (NULL if alive)
+      - name: death_month
+        description: Month of death (NULL if alive or unknown)
+      - name: is_deceased
+        description: TRUE if death_year is populated
+      - name: death_date_approx
+        description: >
+          Approximate death date. Midpoint of death month if month known,
+          July 1st of death year if only year known, NULL if alive.

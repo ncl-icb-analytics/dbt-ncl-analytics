@@ -22,21 +22,10 @@ WITH patient_to_person AS (
 
 patient_deceased_status AS (
     SELECT
-        p.id AS patient_id,
-        p.death_year,
-        p.death_month,
-        p.death_year IS NOT NULL AS is_deceased,
-        CASE
-            WHEN p.death_year IS NOT NULL AND p.death_month IS NOT NULL
-                THEN DATEADD(
-                    DAY,
-                    FLOOR(
-                        DAY(LAST_DAY(TO_DATE(p.death_year || '-' || p.death_month || '-01'))) / 2
-                    ),
-                    TO_DATE(p.death_year || '-' || p.death_month || '-01')
-                )
-        END AS death_date_approx
-    FROM {{ ref('stg_olids_patient') }} AS p
+        patient_id,
+        is_deceased,
+        death_date_approx
+    FROM {{ ref('int_patient_deceased_status') }}
 ),
 
 raw_registrations AS (
@@ -69,8 +58,10 @@ raw_registrations AS (
     WHERE eoc.episode_of_care_start_date IS NOT NULL
         AND eoc.patient_id IS NOT NULL
         AND eoc.organisation_id IS NOT NULL
-        -- Filter to registration type episodes only using premapped episode_type_code
-        AND eoc.episode_type_code = '24531000000104'
+        -- Regular episodes only (excludes Temporary, Emergency, etc.)
+        AND eoc.episode_type_source_code = 'Regular'
+        -- Exclude Left episodes with no end date (DQ issue: marked Left but never closed)
+        AND NOT (eoc.episode_status_source_code = 'Left' AND eoc.episode_of_care_end_date IS NULL)
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
             ptp.person_id,

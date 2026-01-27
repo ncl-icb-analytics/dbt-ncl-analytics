@@ -36,23 +36,11 @@ patient_to_person as (
 ),
 
 patient_deceased_status as (
-    -- Calculate approximate death date from year/month
     select
-        p.id as patient_id,
-        p.death_year,
-        p.death_month,
-        p.death_year is not null as is_deceased,
-        case
-            when p.death_year is not null and p.death_month is not null
-                then dateadd(
-                    day,
-                    floor(
-                        day(last_day(to_date(p.death_year || '-' || p.death_month || '-01'))) / 2
-                    ),
-                    to_date(p.death_year || '-' || p.death_month || '-01')
-                )
-        end as death_date_approx
-    from {{ ref('stg_olids_patient') }} as p
+        patient_id,
+        is_deceased,
+        death_date_approx
+    from {{ ref('int_patient_deceased_status') }}
 ),
 
 regular_episodes as (
@@ -63,17 +51,17 @@ regular_episodes as (
         eoc.organisation_id,
         eoc.record_owner_organisation_code as practice_ods_code,
         eoc.episode_of_care_start_date,
-        eoc.episode_of_care_end_date,
-        eoc.episode_type_source_display
+        eoc.episode_of_care_end_date
     from {{ ref('stg_olids_episode_of_care') }} as eoc
     cross join emis_extract_date as ed
-    where eoc.episode_type_code = '24531000000104'  -- Registration type
-        and eoc.episode_type_source_display = 'Regular'
-        -- Episode active on reference date
+    where eoc.episode_type_source_code = 'Regular'
+        -- Exclude Left episodes with no end date (DQ issue: marked Left but never closed)
+        and not (eoc.episode_status_source_code = 'Left' and eoc.episode_of_care_end_date is null)
+        -- Episode active on reference date (inclusive end date boundary)
         and eoc.episode_of_care_start_date <= ed.reference_date
         and (
             eoc.episode_of_care_end_date is null
-            or eoc.episode_of_care_end_date > ed.reference_date
+            or eoc.episode_of_care_end_date >= ed.reference_date
         )
 ),
 
