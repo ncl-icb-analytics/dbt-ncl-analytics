@@ -1,22 +1,12 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_htn_66
-    description: 'Case finding for stage 1 hypertension without cardiovascular risk
-      factors.
+    description: 'Stage 1 hypertension without CVD risk factors.
 
+      Age-specific thresholds: <80y clinic ≥140/90, home ≥135/85;
+      ≥80y clinic ≥150/90, home ≥145/85.
 
-      Business Logic:
-
-      • Identifies patients with stage 1 hypertension without cardiovascular risk
-      factors
-
-      • Age-based thresholds: <80 years (clinic ≥140/90, home ≥135/85), ≥80 years
-      (clinic ≥150/90, home ≥145/85)
-
-      • Excludes patients with CVD risk factors and higher priority HTN categories
-
-      • One row per eligible person with latest blood pressure readings and risk factor
-      status'
+      One row per person. Excludes HTN_61, HTN_62, HTN_63, HTN_65.'
     config:
       meta:
         indicator:
@@ -24,12 +14,12 @@ models:
           type: "CASE_FINDING"
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
-          name_short: "Stage 1 low risk"
-          description_short: "Patients with stage 1 hypertension without cardiovascular
-            risk factors"
+          name_short: "HTN_66: Stage 1 HTN, no CVD risk"
+          description_short: "Stage 1 HTN, no CVD risk factors"
           description_long: >
             Stage 1 HTN without CVD risk factors. Age-specific thresholds:
-            <80y: clinic ≥140/90, home ≥135/85; ≥80y: clinic ≥150/90, home ≥145/85.
+            <80y: clinic ≥140/90, home ≥135/85; ≥80y: clinic ≥150/90,
+            home ≥145/85. Excludes HTN_61, HTN_62, HTN_63, HTN_65.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_HTN_66"

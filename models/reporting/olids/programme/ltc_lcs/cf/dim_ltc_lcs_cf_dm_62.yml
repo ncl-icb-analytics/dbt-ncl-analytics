@@ -13,9 +13,8 @@ models:
           type: "CASE_FINDING"
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
-          name_short: "Post-GDM screen"
-          description_short: "Gestational diabetes patients without HbA1c monitoring
-            in 12 months"
+          name_short: "DM_62: Gestational DM, no HbA1c in 12m"
+          description_short: "Gestational diabetes, no HbA1c in 12m"
           description_long: >
             Age 17+, gestational diabetes history, no HbA1c in 12m.
           is_qof: false

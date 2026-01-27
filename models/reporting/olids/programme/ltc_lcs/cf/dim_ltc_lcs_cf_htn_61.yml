@@ -13,10 +13,10 @@ models:
           type: "CASE_FINDING"
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
-          name_short: "Severe HTN"
-          description_short: "Patients with clinic BP ≥180/120 or home/ABPM ≥170/115"
+          name_short: "HTN_61: BP ≥180/120 or home ≥170/115"
+          description_short: "Clinic BP ≥180/120 or home/ABPM ≥170/115"
           description_long: >
-            Severe HTN: clinic ≥180/120 mmHg or home/ABPM ≥170/115 mmHg.
+            Clinic BP ≥180/120 mmHg or home/ABPM ≥170/115 mmHg.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_HTN_61"

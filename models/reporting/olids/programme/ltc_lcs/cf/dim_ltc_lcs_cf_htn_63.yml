@@ -15,9 +15,8 @@ models:
           type: "CASE_FINDING"
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
-          name_short: "Ethnic high risk"
-          description_short: "Black and South Asian patients with elevated BP and
-            cardiovascular risk"
+          name_short: "HTN_63: BSA, elevated BP + CVD risk"
+          description_short: "BSA ethnicity, elevated BP + CVD risk"
           description_long: >
             Black/South Asian with CVD risk factors. Clinic ≥140/90 or
             home/ABPM ≥135/85. Risk factors: myocardial, cerebral,
@@ -32,17 +31,17 @@ models:
             - cluster_id: "ETHNICITY_BAME"
               category: "INCLUSION"
             - cluster_id: "HYPERTENSION_MYOCARDIAL"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_CEREBRAL"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_CLAUDICATION"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_EGFR"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_DIABETES"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_BMI"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
           thresholds:
             - population_group: "BLACK_SOUTH_ASIAN"
               threshold_type: "CLINIC_SYSTOLIC_BP"

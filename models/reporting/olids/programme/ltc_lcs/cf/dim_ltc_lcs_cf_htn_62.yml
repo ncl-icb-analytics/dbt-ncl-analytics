@@ -14,11 +14,11 @@ models:
           type: "CASE_FINDING"
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
-          name_short: "Stage 2 HTN"
-          description_short: "Patients with clinic BP ≥160/100 or home/ABPM ≥150/95"
+          name_short: "HTN_62: BP ≥160/100 or home ≥150/95"
+          description_short: "Clinic BP ≥160/100 or home/ABPM ≥150/95"
           description_long: >
-            Stage 2 HTN: clinic ≥160/100 mmHg or home/ABPM ≥150/95 mmHg.
-            Excludes HTN_61 (severe). Upper bounds via HTN_61 exclusion.
+            Clinic BP ≥160/100 mmHg or home/ABPM ≥150/95 mmHg.
+            Excludes HTN_61.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_HTN_62"

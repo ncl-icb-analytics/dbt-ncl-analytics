@@ -12,12 +12,11 @@ models:
           type: "CASE_FINDING"
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
-          name_short: "High BMI screen"
-          description_short: "High BMI patients with no HbA1c in 24m (ethnicity-specific
-            thresholds)"
+          name_short: "DM_64: High BMI, no HbA1c in 24m"
+          description_short: "High BMI, no HbA1c in 24m"
           description_long: >
-            High BMI, ethnicity-specific thresholds (BAME: ≥32.5 kg/m²,
-            non-BAME: ≥35 kg/m²), no HbA1c 24m.
+            Age 17+, high BMI, ethnicity-specific thresholds (BAME: ≥32.5 kg/m²,
+            non-BAME: ≥35 kg/m²), no HbA1c in 24m.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_DM_64"

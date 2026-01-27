@@ -15,8 +15,8 @@ models:
           type: "CASE_FINDING"
           category: "CKD"
           clinical_domain: "Chronic Kidney Disease Case Finding"
-          name_short: "Overdue eGFR"
-          description_short: "High-risk patients without eGFR monitoring in 12 months"
+          name_short: "CKD_64: High-risk, no eGFR in 12m"
+          description_short: "High-risk conditions, no eGFR in 12m"
           description_long: >
             Age 17+, high-risk conditions without eGFR in 12m. AKI (3y),
             BPH/gout, lithium/nephrotoxics (6m), or microhaematuria.

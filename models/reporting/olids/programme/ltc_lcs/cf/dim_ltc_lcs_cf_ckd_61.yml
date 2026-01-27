@@ -12,8 +12,8 @@ models:
           type: "CASE_FINDING"
           category: "CKD"
           clinical_domain: "Chronic Kidney Disease Case Finding"
-          name_short: "Consecutive low eGFR"
-          description_short: "Patients with two consecutive eGFR readings <60"
+          name_short: "CKD_61: Two consecutive eGFR <60"
+          description_short: "Two consecutive eGFR readings <60"
           description_long: >
             Age 17+, two consecutive eGFR <60 ml/min/1.73m². Excludes existing
             CKD or diabetes registers.
