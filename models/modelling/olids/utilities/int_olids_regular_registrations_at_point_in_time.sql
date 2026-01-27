@@ -36,23 +36,11 @@ patient_to_person as (
 ),
 
 patient_deceased_status as (
-    -- Calculate approximate death date from year/month
     select
-        p.id as patient_id,
-        p.death_year,
-        p.death_month,
-        p.death_year is not null as is_deceased,
-        case
-            when p.death_year is not null and p.death_month is not null
-                then dateadd(
-                    day,
-                    floor(
-                        day(last_day(to_date(p.death_year || '-' || p.death_month || '-01'))) / 2
-                    ),
-                    to_date(p.death_year || '-' || p.death_month || '-01')
-                )
-        end as death_date_approx
-    from {{ ref('stg_olids_patient') }} as p
+        patient_id,
+        is_deceased,
+        death_date_approx
+    from {{ ref('int_patient_deceased_status') }}
 ),
 
 regular_episodes as (
