@@ -58,8 +58,9 @@ raw_registrations AS (
     WHERE eoc.episode_of_care_start_date IS NOT NULL
         AND eoc.patient_id IS NOT NULL
         AND eoc.organisation_id IS NOT NULL
-        -- Filter to registration type episodes only using premapped episode_type_code
-        AND eoc.episode_type_code = '24531000000104'
+        -- Regular registered episodes only (excludes Temporary, Emergency, Left, etc.)
+        AND eoc.episode_type_source_code = 'Regular'
+        AND eoc.episode_status_source_code = 'Registered'
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
             ptp.person_id,

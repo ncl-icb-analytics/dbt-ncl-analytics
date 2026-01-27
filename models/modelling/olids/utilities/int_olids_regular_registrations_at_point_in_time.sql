@@ -51,12 +51,11 @@ regular_episodes as (
         eoc.organisation_id,
         eoc.record_owner_organisation_code as practice_ods_code,
         eoc.episode_of_care_start_date,
-        eoc.episode_of_care_end_date,
-        eoc.episode_type_source_display
+        eoc.episode_of_care_end_date
     from {{ ref('stg_olids_episode_of_care') }} as eoc
     cross join emis_extract_date as ed
-    where eoc.episode_type_code = '24531000000104'  -- Registration type
-        and eoc.episode_type_source_display = 'Regular'
+    where eoc.episode_type_source_code = 'Regular'
+        and eoc.episode_status_source_code = 'Registered'
         -- Episode active on reference date
         and eoc.episode_of_care_start_date <= ed.reference_date
         and (
