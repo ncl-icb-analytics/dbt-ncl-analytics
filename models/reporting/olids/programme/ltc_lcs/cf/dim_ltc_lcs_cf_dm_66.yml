@@ -13,10 +13,10 @@ models:
           type: "CASE_FINDING"
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
-          name_short: "HbA1c 42-45 old"
-          description_short: "Patients with HbA1c 42-45 mmol/mol, no recheck in 12m"
+          name_short: "DM_66: HbA1c 42-45, no recheck in 12m"
+          description_short: "HbA1c 42-45 mmol/mol, no recheck in 12m"
           description_long: >
-            Latest HbA1c 42-45 mmol/mol, no HbA1c in last 12 months.
+            Age 17+, latest HbA1c 42-45 mmol/mol, no HbA1c in last 12 months.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_DM_66"

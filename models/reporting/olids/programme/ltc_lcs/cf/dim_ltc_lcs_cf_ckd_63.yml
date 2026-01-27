@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_63
-    description: 'Case finding for patients with a single elevated UACR >70 mg/mmol.
+    description: 'Case finding for patients with latest UACR >70 mg/mmol.
 
       Age 17+, latest UACR >70, max value per day. Excludes CKD_62 patients.
 
@@ -13,11 +13,11 @@ models:
           type: "CASE_FINDING"
           category: "CKD"
           clinical_domain: "Chronic Kidney Disease Case Finding"
-          name_short: "Severe proteinuria"
-          description_short: "Patients with single UACR reading >70 mg/mmol"
+          name_short: "CKD_63: Latest UACR >70"
+          description_short: "Latest UACR >70 mg/mmol"
           description_long: >
-            Age 17+, latest UACR >70 mg/mmol. Excludes CKD_62 patients
-            and existing registers.
+            Age 17+, latest UACR >70 mg/mmol. Excludes CKD_62.
+            Excludes existing CKD or diabetes registers.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CKD_63"
@@ -37,7 +37,7 @@ models:
               threshold_value: "70"
               threshold_operator: "GREATER_THAN"
               threshold_unit: "mg/mmol"
-              description: "Single UACR above 70 mg/mmol (severe proteinuria)"
+              description: "Latest UACR above 70 mg/mmol"
               sort_order: 1
         owner:
           name: EddieDavison92

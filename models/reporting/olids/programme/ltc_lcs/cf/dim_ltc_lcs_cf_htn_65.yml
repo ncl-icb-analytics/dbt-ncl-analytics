@@ -15,12 +15,12 @@ models:
           type: "CASE_FINDING"
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
-          name_short: "Stage 1 + CVD risk"
-          description_short: "Patients with stage 1 hypertension and cardiovascular
-            risk factors"
+          name_short: "HTN_65: Stage 1 HTN + CVD risk"
+          description_short: "Stage 1 HTN with CVD risk factors"
           description_long: >
             Stage 1 HTN: clinic ≥140/90 or home/ABPM ≥135/85 with CVD
-            risk factors (incl. BSA ethnicity). Excludes HTN_61/62/63.
+            risk factors (incl. BSA ethnicity). Excludes HTN_61, HTN_62,
+            HTN_63.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_HTN_65"
@@ -29,19 +29,19 @@ models:
             - "CASE_FINDING_PROGRAMME"
           code_clusters:
             - cluster_id: "HYPERTENSION_MYOCARDIAL"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_CEREBRAL"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_CLAUDICATION"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_EGFR"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_DIABETES"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_BMI"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
             - cluster_id: "ETHNICITY_BAME"
-              category: "RISK_FACTOR"
+              category: "INCLUSION"
           thresholds:
             - population_group: "ALL_ADULTS"
               threshold_type: "CLINIC_SYSTOLIC_BP"

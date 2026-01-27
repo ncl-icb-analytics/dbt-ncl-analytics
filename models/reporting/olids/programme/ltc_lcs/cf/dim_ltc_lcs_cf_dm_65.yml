@@ -16,12 +16,12 @@ models:
           type: "CASE_FINDING"
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
-          name_short: "BMI diabetes screen"
-          description_short: "Moderate-high BMI patients with no HbA1c in 24m
-            (ethnicity-specific)"
+          name_short: "DM_65: Moderate BMI, no HbA1c in 24m"
+          description_short: "Moderate BMI, no HbA1c in 24m"
           description_long: >
-            Moderate BMI, ethnicity-specific thresholds (BAME: 27.5-<32.5 kg/m²,
-            non-BAME: 30-<35 kg/m²), no HbA1c 24m. Excludes DM_64 patients.
+            Age 17+, moderate BMI, ethnicity-specific thresholds (BAME:
+            27.5-<32.5 kg/m², non-BAME: 30-<35 kg/m²), no HbA1c in 24m.
+            Excludes DM_64.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_DM_65"

@@ -1,13 +1,10 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_61
-    description: 'CVD case finding priority (a): Patients with high cardiovascular
-      risk not on statins.
+    description: 'Age 40-84 with QRISK2 ≥20%, not on statins (12m). Excludes
+      statin allergies/adverse reactions, not indicated, and declines (60m).
 
-      Age 40-84 with QRISK2 ≥20%, not on statins (12 months), no statin allergies
-      or decisions (60 months).
-
-      One row per person meeting criteria for statin initiation.'
+      One row per person.'
     config:
       meta:
         indicator:
@@ -15,10 +12,11 @@ models:
           type: "CASE_FINDING"
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
-          name_short: "High CVD risk"
-          description_short: "Patients with QRISK2 ≥20% not on statins"
+          name_short: "CVD_61: QRISK2 ≥20%, no statins"
+          description_short: "QRISK2 ≥20%, no statins"
           description_long: >
-            Age 40-84, QRISK2 ≥20%, not on statins. Priority (a) for statin initiation.
+            Age 40-84, QRISK2 ≥20%, not on statins (12m). Excludes statin
+            allergies/adverse reactions, not indicated, and declines (60m).
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_61"

@@ -12,8 +12,8 @@ models:
           type: "CASE_FINDING"
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
-          name_short: "Borderline HbA1c"
-          description_short: "Patients with old borderline HbA1c ≥46 <48 mmol/mol"
+          name_short: "DM_63: HbA1c 46-47, reading >12m old"
+          description_short: "HbA1c 46-47 mmol/mol, reading >12m old"
           description_long: >
             Age 17+, HbA1c ≥46 <48 mmol/mol, reading >12 months old.
           is_qof: false

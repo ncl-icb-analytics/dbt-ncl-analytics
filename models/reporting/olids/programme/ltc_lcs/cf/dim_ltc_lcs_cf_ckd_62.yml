@@ -13,8 +13,8 @@ models:
           type: "CASE_FINDING"
           category: "CKD"
           clinical_domain: "Chronic Kidney Disease Case Finding"
-          name_short: "Consecutive high UACR"
-          description_short: "Patients with two consecutive UACR readings >4"
+          name_short: "CKD_62: Two consecutive UACR >4"
+          description_short: "Two consecutive UACR readings >4"
           description_long: >
             Age 17+, two consecutive UACR >4 mg/mmol. Excludes existing
             CKD or diabetes registers.
