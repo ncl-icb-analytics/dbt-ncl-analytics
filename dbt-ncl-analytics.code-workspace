@@ -40,13 +40,14 @@
 
         // dbt SQL files
         "files.associations": {
-            "*.sql": "jinja-sql"
+            "*.sql": "snowflake-sql"
         }
     },
     "extensions": {
         "recommendations": [
             "dbtLabsInc.dbt",
-            "ms-python.python"
+            "ms-python.python",
+            "snowflake.snowflake-vsc"
         ]
     }
 }
