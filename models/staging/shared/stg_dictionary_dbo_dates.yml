@@ -1,15 +1,19 @@
 version: 2
 models:
-- name: stg_dictionary_dbo_dates
-  description: Date dimension / dictionary reference data from Dictionary.dbo
-  columns:
-  - name: sk_date
-    description: Number representing the date in YYYYMMDD format
+  - name: stg_dictionary_dbo_dates
+    description: Date dimension / dictionary reference data from Dictionary.dbo
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
+    columns:
+      - name: sk_date
+        description: Number representing the date in YYYYMMDD format
+        tests:
+          - unique
+          - not_null
+      - name: full_date
+        description: Date object representing the full date
     tests:
-    - unique
-    - not_null
-  - name: full_date
-    description: Date object representing the full date
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

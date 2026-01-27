@@ -19,11 +19,12 @@ models:
           name_short: "Hypothyroidism"
           description_short: "Hypothyroidism register (non-QOF)"
           description_long: >
-            Hypothyroidism register for persons with hypothyroidism diagnosis. 
-            Includes active patients with hypothyroidism diagnosis using THY_COD cluster codes. 
-            No age restrictions or resolution codes applied. Used for endocrine care pathway 
-            monitoring, medication management (levothyroxine), thyroid function test monitoring, 
-            and care planning. Chronic endocrine condition requiring ongoing medication and monitoring.
+            Hypothyroidism register for persons with hypothyroidism diagnosis.  Includes
+            active patients with hypothyroidism diagnosis using THY_COD cluster codes.  No
+            age restrictions or resolution codes applied. Used for endocrine care
+            pathway  monitoring, medication management (levothyroxine), thyroid function
+            test monitoring,  and care planning. Chronic endocrine condition requiring
+            ongoing medication and monitoring.
           is_qof: false
           source_column: "is_on_register"
           sort_order: "COND_ENDOCRINE_HYPOTHYROIDISM"
@@ -33,6 +34,8 @@ models:
             - cluster_id: "THY_COD"
               category: "INCLUSION"
 
+        owner:
+          name: Eddie Davison
     columns:
       - name: person_id
         description: Unique identifier for the person

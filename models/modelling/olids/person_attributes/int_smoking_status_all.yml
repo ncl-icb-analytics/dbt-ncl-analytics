@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_smoking_status_all
-    description: 'Smoking status observations for QOF tracking and cardiovascular risk stratification.
+    description: 'Smoking status observations for QOF tracking and cardiovascular
+      risk stratification.
 
-      One row per smoking status observation using LSMOK_COD, EXSMOK_COD, and NSMOK_COD clusters with current, ex-smoker, and never-smoked classification.'
+      One row per smoking status observation using LSMOK_COD, EXSMOK_COD, and NSMOK_COD
+      clusters with current, ex-smoker, and never-smoked classification.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: EXSMOK_COD, LSMOK_COD, NSMOK_COD

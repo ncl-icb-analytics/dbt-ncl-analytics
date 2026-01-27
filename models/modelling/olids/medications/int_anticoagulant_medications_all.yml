@@ -1,7 +1,12 @@
 version: 2
 models:
   - name: int_anticoagulant_medications_all
-    description: 'Oral anticoagulant medication orders using BNF classification for thrombosis prevention.'
+    description: 'Oral anticoagulant medication orders using BNF classification for
+      thrombosis prevention.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests: []
     columns:
       - name: person_id

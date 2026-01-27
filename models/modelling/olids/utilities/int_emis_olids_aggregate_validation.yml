@@ -12,6 +12,10 @@ models:
 
       Returns a single row with aggregate statistics and PASS/FAIL status.
 
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     columns:
       - name: practice_count
         description: Number of practices included in aggregate calculation
@@ -20,7 +24,8 @@ models:
         description: Sum of all EMIS list sizes across practices
 
       - name: total_olids_regular_count
-        description: Sum of all OLIDS Regular registration counts across practices
+        description: Sum of all OLIDS Regular registration counts across 
+          practices
 
       - name: aggregate_difference
         description: Total difference between OLIDS and EMIS (signed)

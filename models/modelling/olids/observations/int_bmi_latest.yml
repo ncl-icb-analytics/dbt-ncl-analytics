@@ -1,9 +1,12 @@
 version: 2
 models:
   - name: int_bmi_latest
-    description: 'Most recent valid BMI measurement per person with ethnicity-adjusted categorisation.
+    description: 'Most recent valid BMI measurement per person with ethnicity-adjusted
+      categorisation.
 
-      One row per person with their latest BMI including ethnicity-adjusted clinical categorisation per NICE NG246. Uses lower BMI thresholds for cardiometabolic risk populations.
+      One row per person with their latest BMI including ethnicity-adjusted clinical
+      categorisation per NICE NG246. Uses lower BMI thresholds for cardiometabolic
+      risk populations.
 
       Key Features:
 
@@ -13,8 +16,8 @@ models:
 
       • Provides ethnicity context for clinical decision-making
 
-      Purpose: Supports clinical assessment and population health monitoring with appropriate ethnic considerations.'
-    
+      Purpose: Supports clinical assessment and population health monitoring with
+      appropriate ethnic considerations.'
     config:
       meta:
         indicator:
@@ -23,14 +26,19 @@ models:
           category: "BEHAVIOURAL_RISK_FACTOR"
           clinical_domain: "Lifestyle"
           name_short: "Adult BMI Categories"
-          description_short: "Adult BMI categories with ethnicity-adjusted thresholds for cardiometabolic risk"
+          description_short: "Adult BMI categories with ethnicity-adjusted thresholds
+            for cardiometabolic risk"
           description_long: >
-            Adult BMI categorisation (age 18+) using ethnicity-adjusted thresholds per NICE NG246.
-            Standard populations use conventional BMI categories (overweight ≥25, obese ≥30).
-            Populations with increased cardiometabolic risk (South Asian, Chinese, other Asian, 
-            Middle Eastern, Black African, African-Caribbean) use lower thresholds 
-            (overweight ≥23, obese ≥27.5) to reflect increased risk at lower BMI levels.
-            Age restriction: Adult BMI categories are only clinically appropriate for ages 18+.
+            Adult BMI categorisation (age 18+) using ethnicity-adjusted thresholds
+            per NICE NG246.
+            Standard populations use conventional BMI categories (overweight ≥25,
+            obese ≥30).
+            Populations with increased cardiometabolic risk (South Asian, Chinese,
+            other Asian,  Middle Eastern, Black African, African-Caribbean) use lower
+            thresholds  (overweight ≥23, obese ≥27.5) to reflect increased risk at
+            lower BMI levels.
+            Age restriction: Adult BMI categories are only clinically appropriate
+            for ages 18+.
           is_qof: false
           source_column: "bmi_category"
           sort_order: "BRF_1_BMI_CATEGORIES"
@@ -119,37 +127,44 @@ models:
               threshold_value: "18.5-22.9"
               threshold_operator: "BETWEEN"
               threshold_unit: "kg/m²"
-              description: "Normal BMI range for populations with increased cardiometabolic risk"
+              description: "Normal BMI range for populations with increased cardiometabolic
+                risk"
               sort_order: 7
             - population_group: "CARDIOMETABOLIC_RISK"
               threshold_type: "OVERWEIGHT"
               threshold_value: "23-27.4"
               threshold_operator: "BETWEEN"
               threshold_unit: "kg/m²"
-              description: "Overweight range for populations with increased cardiometabolic risk"
+              description: "Overweight range for populations with increased cardiometabolic
+                risk"
               sort_order: 8
             - population_group: "CARDIOMETABOLIC_RISK"
               threshold_type: "OBESE_CLASS_I"
               threshold_value: "27.5-32.4"
               threshold_operator: "BETWEEN"
               threshold_unit: "kg/m²"
-              description: "Obese Class I range for populations with increased cardiometabolic risk"
+              description: "Obese Class I range for populations with increased cardiometabolic
+                risk"
               sort_order: 9
             - population_group: "CARDIOMETABOLIC_RISK"
               threshold_type: "OBESE_CLASS_II"
               threshold_value: "32.5-37.4"
               threshold_operator: "BETWEEN"
               threshold_unit: "kg/m²"
-              description: "Obese Class II range for populations with increased cardiometabolic risk"
+              description: "Obese Class II range for populations with increased cardiometabolic
+                risk"
               sort_order: 10
             - population_group: "CARDIOMETABOLIC_RISK"
               threshold_type: "OBESE_CLASS_III"
               threshold_value: "37.5"
               threshold_operator: "AT_OR_ABOVE"
               threshold_unit: "kg/m²"
-              description: "Obese Class III threshold for populations with increased cardiometabolic risk"
+              description: "Obese Class III threshold for populations with increased
+                cardiometabolic risk"
               sort_order: 11
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Unique identifier for the person
@@ -183,7 +198,8 @@ models:
           - accepted_values:
               values: ['recorded', 'calculated']
       - name: requires_lower_bmi_thresholds
-        description: 'Flag indicating if person requires lower BMI thresholds per NICE NG246'
+        description: 'Flag indicating if person requires lower BMI thresholds per
+          NICE NG246'
       - name: cardiometabolic_risk_ethnicity_group
         description: 'Ethnicity group classification for cardiometabolic risk assessment'
       - name: is_valid_bmi
@@ -193,13 +209,16 @@ models:
           - accepted_values:
               values: [true]
       - name: bmi_category
-        description: 'BMI categorisation using ethnicity-adjusted thresholds per NICE NG246'
+        description: 'BMI categorisation using ethnicity-adjusted thresholds per NICE
+          NG246'
         tests:
           - not_null
           - accepted_values:
-              values: ['Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
+              values: ['Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese
+                    Class II', 'Obese Class III']
       - name: bmi_risk_sort_key
-        description: 'BMI risk sort key using ethnicity-adjusted thresholds (higher = higher risk)'
+        description: 'BMI risk sort key using ethnicity-adjusted thresholds (higher
+          = higher risk)'
         tests:
           - not_null
           - dbt_utils.accepted_range:

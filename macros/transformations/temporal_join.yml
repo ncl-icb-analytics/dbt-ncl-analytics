@@ -1,0 +1,25 @@
+version: 2
+
+macros:
+  - name: temporal_join
+    description: >
+      Generates a temporal (point-in-time) join between a fact table and a slowly changing dimension.
+      Matches records where fact date falls within dimension's effective date range.
+
+
+    arguments:
+      - name: fact_table
+        type: string
+        description: Fact table reference
+
+      - name: fact_date_column
+        type: string
+        description: Date column in fact table to match against dimension validity
+
+      - name: dimension_table
+        type: string
+        description: SCD dimension table reference (must have effective_start_date and effective_end_date)
+
+      - name: join_key
+        type: string
+        description: Column to join on. Default 'person_id'

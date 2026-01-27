@@ -11,6 +11,10 @@ models:
       Uses PDS merger handling to account for NHS number changes.
       Includes all registration types (not filtered to Regular only like EMIS).
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: practice_code
         description: GP practice ODS code
@@ -22,10 +26,12 @@ models:
         description: Count of distinct persons in PDS before merger handling
 
       - name: pds_merged_persons
-        description: Count of distinct persons in PDS after NHS number merger handling (recommended for comparison)
+        description: Count of distinct persons in PDS after NHS number merger 
+          handling (recommended for comparison)
 
       - name: olids_patient_count
-        description: Count of distinct patients with registration episodes in OLIDS
+        description: Count of distinct patients with registration episodes in 
+          OLIDS
 
       - name: difference
         description: Difference between OLIDS and PDS (signed, can be negative)
@@ -40,10 +46,13 @@ models:
         description: Absolute percentage difference
 
       - name: meets_acceptance_criteria
-        description: Boolean flag indicating if practice meets acceptance criteria (<2% variance OR <5 persons difference)
+        description: Boolean flag indicating if practice meets acceptance 
+          criteria (<2% variance OR <5 persons difference)
 
       - name: has_significant_discrepancy
-        description: Legacy flag for >=20% discrepancy (deprecated, kept for backwards compatibility)
+        description: Legacy flag for >=20% discrepancy (deprecated, kept for 
+          backwards compatibility)
 
       - name: validation_methodology
-        description: Description of the validation test applied (PDS All Registration Types Comparison with thresholds)
+        description: Description of the validation test applied (PDS All 
+          Registration Types Comparison with thresholds)

@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_hypothyroidism_diagnoses_all
-    description: 'Hypothyroidism diagnosis observations for endocrine condition register management.
+    description: 'Hypothyroidism diagnosis observations for endocrine condition register
+      management.
 
       Key Features:
 
@@ -13,7 +14,12 @@ models:
 
       • No resolution codes as hypothyroidism is a chronic condition
 
-      Purpose: Provide observation-level data for hypothyroidism tracking and medication management.'
+      Purpose: Provide observation-level data for hypothyroidism tracking and medication
+      management.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
     tests:
       - dbt_utils.at_least_one:
           column_name: id
@@ -36,7 +42,8 @@ models:
       - name: source_cluster_id
         description: 'Source cluster identifier (THY_COD for hypothyroidism diagnoses)'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating diagnosis code (always TRUE for hypothyroidism observations)'
+        description: 'Boolean flag indicating diagnosis code (always TRUE for hypothyroidism
+          observations)'
       - name: hypothyroidism_observation_type
         description: 'Type of hypothyroidism observation (always "Hypothyroidism Diagnosis")'
 

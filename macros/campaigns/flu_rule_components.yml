@@ -1,0 +1,164 @@
+version: 2
+
+macros:
+  - name: flu_has_diagnosis
+    description: >
+      Check if person has a diagnosis from a code cluster.
+
+
+    arguments:
+      - name: cluster_id
+        type: string
+        description: Code cluster ID (e.g., 'CKD_COD', 'ASTHMA_COD')
+
+      - name: date_qualifier
+        type: string
+        description: EARLIEST, LATEST, LATEST_SINCE, or LATEST_AFTER. Default 'EARLIEST'
+
+      - name: reference_date
+        type: string
+        description: Reference date for LATEST_SINCE/LATEST_AFTER qualifiers
+
+      - name: source
+        type: string
+        description: Source system. Default 'UKHSA_FLU'
+
+  - name: flu_has_medication
+    description: >
+      Check if person has medication orders from a cluster.
+
+
+    arguments:
+      - name: cluster_id
+        type: string
+        description: Medication cluster ID
+
+      - name: since_date
+        type: string
+        description: Include orders on or after this date
+
+      - name: after_date
+        type: string
+        description: Include orders strictly after this date
+
+      - name: source
+        type: string
+        description: Source system. Default 'UKHSA_FLU'
+
+  - name: flu_age_between
+    description: >
+      Filter persons by age range.
+
+
+    arguments:
+      - name: min_months
+        type: integer
+        description: Minimum age in months
+
+      - name: max_years
+        type: integer
+        description: Maximum age in years (exclusive)
+
+      - name: reference_date
+        type: string
+        description: Date to calculate age at. Default 'CURRENT_DATE'
+
+  - name: flu_birth_date_between
+    description: >
+      Filter persons born within a date range.
+
+
+    arguments:
+      - name: start_date
+        type: string
+        description: Start of birth date range
+
+      - name: end_date
+        type: string
+        description: End of birth date range
+
+  - name: flu_latest_code_from_set
+    description: >
+      Get the most recent code from a set of observation clusters.
+
+
+    arguments:
+      - name: cluster_ids
+        type: list
+        description: List of cluster IDs to search
+
+      - name: reference_date
+        type: string
+        description: Only include codes up to this date. Default 'CURRENT_DATE'
+
+      - name: source
+        type: string
+        description: Source system. Default 'UKHSA_FLU'
+
+  - name: flu_code_more_recent_than
+    description: >
+      Check if one code is more recent than another (for resolved conditions).
+
+
+    arguments:
+      - name: code_a_cluster
+        type: string
+        description: First cluster ID
+
+      - name: code_b_cluster
+        type: string
+        description: Second cluster ID to compare against
+
+      - name: reference_date
+        type: string
+        description: Only include codes up to this date. Default 'CURRENT_DATE'
+
+      - name: source
+        type: string
+        description: Source system. Default 'UKHSA_FLU'
+
+  - name: flu_has_bmi_over
+    description: >
+      Check if person has BMI over a threshold.
+
+
+    arguments:
+      - name: threshold
+        type: number
+        description: BMI threshold value
+
+      - name: reference_date
+        type: string
+        description: Only include readings up to this date. Default 'CURRENT_DATE'
+
+      - name: source
+        type: string
+        description: Source system. Default 'UKHSA_FLU'
+
+  - name: flu_combine_evidence
+    description: >
+      Combine evidence from multiple CTEs with OR/AND logic.
+
+
+    arguments:
+      - name: ctes
+        type: list
+        description: List of CTE names to combine
+
+      - name: combination_logic
+        type: string
+        description: OR (any match) or AND (all must match). Default OR
+
+  - name: flu_apply_date_qualifier
+    description: >
+      Apply EARLIEST/LATEST aggregation to evidence CTE.
+
+
+    arguments:
+      - name: cte_name
+        type: string
+        description: Name of CTE containing evidence
+
+      - name: date_qualifier
+        type: string
+        description: EARLIEST or LATEST. Default 'LATEST'

@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_person_historical_practice
-    description: 'Complete practice registration history tracking patient mobility and practice transitions.
+    description: 'Complete practice registration history tracking patient mobility
+      and practice transitions.
 
       Key Features:
 
@@ -17,8 +18,13 @@ models:
 
       • Current and latest registration flags for filtering
 
-      Purpose: Supports patient mobility analysis, practice transition tracking, and continuity of care assessment.'
+      Purpose: Supports patient mobility analysis, practice transition tracking, and
+      continuity of care assessment.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique person identifier'
@@ -98,7 +104,8 @@ models:
           - not_null
 
       - name: is_latest_registration
-        description: 'Flag indicating if this is the most recent registration (current or last)'
+        description: 'Flag indicating if this is the most recent registration (current
+          or last)'
         tests:
           - not_null
 

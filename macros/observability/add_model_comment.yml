@@ -1,0 +1,9 @@
+version: 2
+
+macros:
+  - name: add_model_comment
+    description: >
+      Adds a Snowflake COMMENT to the model object (table, view, materialized view).
+      Uses generate_table_comment() for content. Skips ephemeral models.
+
+

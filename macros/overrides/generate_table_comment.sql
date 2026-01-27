@@ -28,15 +28,24 @@
       {%- set custom_message = "⚠️ " + custom_message + "\n\n" -%}
     {%- endif -%}
 
+    {#- Get owner from meta config -#}
+    {%- set owner = model_meta.get('owner', {}) -%}
+    {%- set owner_name = owner.get('name', '') if owner else '' -%}
+    {%- set owner_line = '' -%}
+    {%- if owner_name -%}
+      {%- set owner_line = "
+👤 Owner: " + owner_name -%}
+    {%- endif -%}
+
     {%- if model_description or custom_message -%}
       {%- set clean_description = (custom_message + model_description) | replace("'", "''") -%}
-      {%- set footer = "
-
+      {%- set footer = owner_line + "
 🤖 Last ran on " + run_timestamp + " by " + current_user + " (target: " + target_name + ")
 📄 Model source: " + github_file_url + "
 📖 Documentation: https://github.com/ncl-icb-analytics/dbt-ncl-analytics" -%}
       {{- clean_description + footer | replace("'", "''") -}}
     {%- else -%}
+{{- owner_line -}}
 🤖 Last ran on {{ run_timestamp }} by {{ current_user }} (target: {{ target_name }})
 📄 Model source: {{ github_file_url }}
 📖 Documentation: https://github.com/ncl-icb-analytics/dbt-ncl-analytics

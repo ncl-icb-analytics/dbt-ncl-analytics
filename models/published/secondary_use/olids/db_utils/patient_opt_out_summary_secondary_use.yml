@@ -9,6 +9,10 @@ models:
       Future-proof design: As new opt-out types are added to dim_person_secondary_use_allowed,
       the counts automatically adjust without code changes.
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

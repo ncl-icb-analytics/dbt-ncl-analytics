@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_carer
-    description: 'Flu vaccination eligibility for carers using carer status logic with exclusion criteria.
+    description: 'Flu vaccination eligibility for carers using carer status logic
+      with exclusion criteria.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify carers eligible for flu vaccination due to caring role infection risk.'
-    
+      Purpose: Identify carers eligible for flu vaccination due to caring role infection
+      risk.'
     config:
       meta:
         indicator:
@@ -28,8 +29,10 @@ models:
           description_short: "Carers eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for carers using carer status logic where
-            latest carer code (CARER_COD) must be more recent than any 'no longer carer'
-            code (NOTCARER_COD). Age restrictions of 5-64 years with exclusions for those
+            latest carer code (CARER_COD) must be more recent than any 'no longer
+            carer'
+            code (NOTCARER_COD). Age restrictions of 5-64 years with exclusions for
+            those
             eligible via clinical conditions, pregnancy, or obesity pathways.
           is_qof: false
           source_column: "person_id"
@@ -55,9 +58,12 @@ models:
               threshold_value: "65"
               threshold_operator: "UNDER"
               threshold_unit: "years"
-              description: "Maximum age for carer eligibility (over 65s use age-based rule)"
+              description: "Maximum age for carer eligibility (over 65s use age-based
+                rule)"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

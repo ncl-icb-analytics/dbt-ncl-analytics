@@ -8,6 +8,10 @@ models:
       reference data lookups.
 
       Documentation available: https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/docs/model_documentation/dim_person_demographics_basic.md
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
     columns:
       - name: sk_patient_id
         description: Surrogate key for patient
@@ -25,7 +29,8 @@ models:
         description: Patient date of birth (rounded to 1st of month)
 
       - name: date_of_death
-        description: Patient date of death (NULL if no recorded death or unknown)
+        description: Patient date of death (NULL if no recorded death or 
+          unknown)
 
       - name: ethnicity_code
         description: Ethnicity (BK) code
@@ -40,7 +45,8 @@ models:
         description: Ethnicity group description
 
       - name: flag_current_ncl_residence
-        description: Flag indicating if patient is part of current NCL resident population
+        description: Flag indicating if patient is part of current NCL resident 
+          population
 
       - name: record_residence_start_date
         description: Start date of current residence record
@@ -70,7 +76,8 @@ models:
         description: Index of Multiple Deprivation decile for residence location
 
       - name: flag_current_ncl_registered
-        description: Flag indicating if patient is part of current NCL registered population
+        description: Flag indicating if patient is part of current NCL 
+          registered population
 
       - name: record_registered_start_date
         description: Start date of current registration record

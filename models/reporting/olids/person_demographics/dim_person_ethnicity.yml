@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_person_ethnicity
-    description: 'Latest recorded ethnicity for all persons with three-level classification hierarchy.
+    description: 'Latest recorded ethnicity for all persons with three-level classification
+      hierarchy.
 
       Key Features:
 
@@ -9,13 +10,15 @@ models:
 
       • Three-tier classification: Category > Subcategory > Granular detail
 
-      • Prioritisation logic: non-deprioritised records, higher specificity, then most recent
+      • Prioritisation logic: non-deprioritised records, higher specificity, then
+      most recent
 
       • Defaults to "Not Recorded" for persons without ethnicity data
 
       • Includes sorting helpers for consistent display ordering
 
-      Purpose: Supports ethnicity analysis, health equity monitoring, and demographic profiling.'
+      Purpose: Supports ethnicity analysis, health equity monitoring, and demographic
+      profiling.'
 
     config:
       meta:
@@ -25,12 +28,16 @@ models:
           category: "DEMOGRAPHICS"
           clinical_domain: "Demographics"
           name_short: "Ethnicity"
-          description_short: "Three-tier ethnicity classification from latest clinical recording"
+          description_short: "Three-tier ethnicity classification from latest clinical
+            recording"
           description_long: >
-            Ethnicity classification based on most recent clinical observations with three-tier
-            hierarchy: Category > Subcategory > Granular detail. Uses ETHNICITY_CODES reference
+            Ethnicity classification based on most recent clinical observations with
+            three-tier
+            hierarchy: Category > Subcategory > Granular detail. Uses ETHNICITY_CODES
+            reference
             table mapping to NHS Digital 2016+ ethnicity categories. Prioritises non-deprioritised
-            records and higher specificity, then most recent date. Supports health equity monitoring,
+            records and higher specificity, then most recent date. Supports health
+            equity monitoring,
             population analysis, and demographic profiling.
           is_qof: false
           source_column: "ethnicity_category"
@@ -65,6 +72,8 @@ models:
             - cluster_id: "ETH2016BO_COD"
               category: "INCLUSION"
 
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
@@ -74,7 +83,6 @@ models:
 
       - name: sk_patient_id
         description: 'Surrogate key for patient record (NULL if no ethnicity recorded)'
-      
       - name: latest_ethnicity_date
         description: 'Clinical effective date of latest ethnicity recording'
 
@@ -89,10 +97,11 @@ models:
           - not_null
 
       - name: term
-        description: 'SNOMED term description for ethnicity ("Not Recorded" if none available)'
+        description: 'SNOMED term description for ethnicity ("Not Recorded" if none
+          available)'
         tests:
           - not_null
-      
+
       - name: ethnicity_category
         description: 'Main ethnicity category (e.g., White, Asian, Black, Mixed, Other)'
         tests:
@@ -109,10 +118,12 @@ models:
           - not_null
 
       - name: deprioritise_flag
-        description: 'Flag indicating if this ethnicity record should be deprioritised in selection'
+        description: 'Flag indicating if this ethnicity record should be deprioritised
+          in selection'
 
       - name: preference_rank
-        description: 'Preference ranking for ethnicity record selection (lower = higher priority)'
+        description: 'Preference ranking for ethnicity record selection (lower = higher
+          priority)'
 
       - name: category_sort
         description: 'Sort order for ethnicity category display'

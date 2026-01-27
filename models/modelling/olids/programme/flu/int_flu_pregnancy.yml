@@ -1,11 +1,13 @@
 version: 2
 models:
   - name: int_flu_pregnancy
-    description: 'Flu vaccination eligibility for pregnant women using campaign timing logic.
+    description: 'Flu vaccination eligibility for pregnant women using campaign timing
+      logic.
 
       Key Features:
 
-      • Two eligibility scenarios: pregnant at campaign start (9 months before) or became pregnant during campaign
+      • Two eligibility scenarios: pregnant at campaign start (9 months before) or
+      became pregnant during campaign
 
       • Campaign timing logic for flu season protection
 
@@ -15,8 +17,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify pregnant women eligible for flu vaccination during flu season timing.'
-    
+      Purpose: Identify pregnant women eligible for flu vaccination during flu season
+      timing.'
     config:
       meta:
         indicator:
@@ -28,9 +30,12 @@ models:
           description_short: "Pregnant women eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for pregnant women using campaign timing logic.
-            Two scenarios: women pregnant 9 months before campaign start (with no subsequent delivery)
-            or women who became pregnant between campaign start and reference date. Uses PREG_COD
-            and PREGDEL_COD codes. Minimum age requirement of 12 years for pregnancy vaccination.
+            Two scenarios: women pregnant 9 months before campaign start (with no
+            subsequent delivery)
+            or women who became pregnant between campaign start and reference date.
+            Uses PREG_COD
+            and PREGDEL_COD codes. Minimum age requirement of 12 years for pregnancy
+            vaccination.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_16_PREGNANCY"
@@ -57,7 +62,9 @@ models:
               threshold_unit: "months"
               description: "Pregnancy eligibility lookback period from campaign start"
               sort_order: 2
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

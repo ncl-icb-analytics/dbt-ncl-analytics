@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: inclusion_cohort
-    description: Patients eligible for C-LTCS based on multimorbidity and outpatient activity. One row per patient with eligibility flag.
+    description: Patients eligible for C-LTCS based on multimorbidity and 
+      outpatient activity. One row per patient with eligibility flag.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: patient_id
         data_type: number
@@ -11,12 +16,13 @@ models:
           - unique:
               config:
                 severity: warn
-                warn_if: ">10"        
+                warn_if: ">10"
           - not_null
 
       - name: reid_key
         data_type: varchar
-        description: "Unique patient identified for LDS re-identification service [hx_flake]"
+        description: "Unique patient identified for LDS re-identification service
+          [hx_flake]"
 
       - name: olids_id
         data_type: varchar
@@ -56,4 +62,5 @@ models:
 
       - name: eligible
         data_type: number
-        description: "Flag for eligibility for inclusion in the C-LTCS cohort (1=eligible, 0=not eligible)"
+        description: "Flag for eligibility for inclusion in the C-LTCS cohort (1=eligible,
+          0=not eligible)"

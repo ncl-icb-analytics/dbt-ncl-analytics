@@ -4,8 +4,9 @@ models:
   - name: fct_person_alcohol_status
     description: 'Combined alcohol risk assessment from screening and diagnoses.
 
-      One row per person with any alcohol-related data, integrating AUDIT/AUDIT-C scores with alcohol disorder diagnoses using 12-month recency window for conflict resolution.'
-    
+      One row per person with any alcohol-related data, integrating AUDIT/AUDIT-C
+      scores with alcohol disorder diagnoses using 12-month recency window for conflict
+      resolution.'
     config:
       meta:
         indicator:
@@ -14,12 +15,15 @@ models:
           category: "BEHAVIOURAL_RISK_FACTOR"
           clinical_domain: "Lifestyle"
           name_short: "Alcohol Status"
-          description_short: "Population alcohol status combining AUDIT screening and clinical diagnoses"
+          description_short: "Population alcohol status combining AUDIT screening
+            and clinical diagnoses"
           description_long: >
             Population alcohol status combining AUDIT/AUDIT-C screening scores with
-            clinical diagnoses of alcohol misuse disorders. Includes non-drinkers through
+            clinical diagnoses of alcohol misuse disorders. Includes non-drinkers
+            through
             to alcohol dependence, integrating screening tools and formal diagnoses.
-            Uses AUDIT thresholds alongside disorder diagnoses with 12-month recency window
+            Uses AUDIT thresholds alongside disorder diagnoses with 12-month recency
+            window
             for conflict resolution. Supports population health monitoring, intervention
             planning, and clinical care pathways.
           is_qof: false
@@ -30,7 +34,7 @@ models:
           code_clusters:
             - cluster_id: "ALCOHOL_AUDIT_COD"
               category: "INCLUSION"
-            - cluster_id: "ALCOHOL_DISORDER_COD" 
+            - cluster_id: "ALCOHOL_DISORDER_COD"
               category: "INCLUSION"
           thresholds:
             # AUDIT-C Risk Categories
@@ -149,6 +153,8 @@ models:
               description: "Full AUDIT specialist intervention threshold"
               sort_order: 16
 
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: Unique identifier for the person
@@ -157,19 +163,23 @@ models:
           - unique
 
       - name: latest_assessment_date
-        description: Most recent date of any alcohol assessment (AUDIT or disorder diagnosis)
+        description: Most recent date of any alcohol assessment (AUDIT or 
+          disorder diagnosis)
 
       - name: alcohol_status
-        description: Combined alcohol status considering both AUDIT scores and disorder diagnoses
+        description: Combined alcohol status considering both AUDIT scores and 
+          disorder diagnoses
 
       - name: alcohol_risk_sort_key
-        description: Numeric sort key for ordering from lowest (1) to highest (6) risk, with historical disorders as (7)
+        description: Numeric sort key for ordering from lowest (1) to highest 
+          (6) risk, with historical disorders as (7)
 
       - name: audit_score
         description: Most recent AUDIT or AUDIT-C score
 
       - name: audit_type
-        description: Type of most recent AUDIT assessment (AUDIT-C or Full AUDIT)
+        description: Type of most recent AUDIT assessment (AUDIT-C or Full 
+          AUDIT)
 
       - name: audit_risk_category
         description: Risk category from most recent AUDIT assessment
@@ -190,13 +200,16 @@ models:
         description: Flag for persons requiring clinical intervention
 
       - name: conflicting_assessment_flag
-        description: Flag for conflicting AUDIT and disorder assessments requiring review
+        description: Flag for conflicting AUDIT and disorder assessments 
+          requiring review
 
       - name: brief_intervention_indicated
         description: Flag indicating brief intervention threshold met
 
       - name: audit_data_recency
-        description: Recency classification of AUDIT data (Current, Recent, Historical, No AUDIT)
+        description: Recency classification of AUDIT data (Current, Recent, 
+          Historical, No AUDIT)
 
       - name: disorder_data_recency
-        description: Recency classification of disorder data (Current, Recent, Historical, No Disorder Record)
+        description: Recency classification of disorder data (Current, Recent, 
+          Historical, No Disorder Record)

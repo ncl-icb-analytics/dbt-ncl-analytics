@@ -1,6 +1,12 @@
 version: 2
 models:
   - name: int_waist_circumference_latest
-    description: 'Most recent valid waist circumference measurement per person for cardiovascular risk assessment and metabolic syndrome screening.
+    description: 'Most recent valid waist circumference measurement per person for
+      cardiovascular risk assessment and metabolic syndrome screening.
 
-      One row per person with their latest waist circumference including clinical risk categorisation and high-risk threshold flags.'
+      One row per person with their latest waist circumference including clinical
+      risk categorisation and high-risk threshold flags.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92

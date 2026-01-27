@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: int_sus_ae_procedure
-    description: "Obervations from A&E attendances from SUS data limited to investigations, treatments, comorbidities and coded findings"
+    description: "Obervations from A&E attendances from SUS data limited to investigations,
+      treatments, comorbidities and coded findings"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: event_id
         data_type: varchar
@@ -18,7 +23,8 @@ models:
 
       - name: observation_type
         data_type: varchar
-        description: "Type of observation (e.g., investigation, treatment, comorbidities, findings)"
+        description: "Type of observation (e.g., investigation, treatment, comorbidities,
+          findings)"
 
       - name: date
         data_type: timestamp_ntz
@@ -30,7 +36,8 @@ models:
 
       - name: organisation_id
         data_type: varchar
-        description: "Unique identifier for the provider organisation providing the service"
+        description: "Unique identifier for the provider organisation providing the
+          service"
 
       - name: organisation_name
         data_type: varchar

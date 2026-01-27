@@ -19,12 +19,12 @@ models:
           name_short: "Parkinsons Disease"
           description_short: "Parkinsons disease register (non-QOF)"
           description_long: >
-            Parkinsons disease register for persons with Parkinsons diagnosis. 
-            Includes active patients with Parkinsons diagnosis using PD_COD cluster codes. 
-            No age restrictions or resolution codes applied. Used for neurological care 
-            pathway monitoring, medication management, multidisciplinary team coordination, 
-            and symptom management. Progressive neurological condition requiring ongoing 
-            care and support.
+            Parkinsons disease register for persons with Parkinsons diagnosis.  Includes
+            active patients with Parkinsons diagnosis using PD_COD cluster codes.  No
+            age restrictions or resolution codes applied. Used for neurological care  pathway
+            monitoring, medication management, multidisciplinary team coordination,  and
+            symptom management. Progressive neurological condition requiring ongoing  care
+            and support.
           is_qof: false
           source_column: "is_on_register"
           sort_order: "COND_NEURO_PARKINSONS"
@@ -34,6 +34,8 @@ models:
             - cluster_id: "PD_COD"
               category: "INCLUSION"
 
+        owner:
+          name: Eddie Davison
     columns:
       - name: person_id
         description: Unique identifier for the person

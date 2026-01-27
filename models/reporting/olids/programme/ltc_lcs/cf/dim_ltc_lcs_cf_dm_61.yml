@@ -1,9 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_61
-    description: 'Diabetes case finding for patients aged 17+ with HbA1c in diabetic range.
+    description: 'Diabetes case finding for patients aged 17+ with HbA1c in diabetic
+      range.
 
-      One row per person with latest HbA1c ≥48 mmol/mol without diabetes diagnosis or remission/resolved codes.'
+      One row per person with latest HbA1c ≥48 mmol/mol without diabetes diagnosis
+      or remission/resolved codes.'
 
     config:
       meta:
@@ -15,7 +17,8 @@ models:
           name_short: "HbA1c ≥48"
           description_short: "Patients with HbA1c ≥48 mmol/mol without diabetes diagnosis"
           description_long: >
-            Age 17+, latest HbA1c ≥48 mmol/mol, no diabetes diagnosis or diabetes in remission/resolved.
+            Age 17+, latest HbA1c ≥48 mmol/mol, no diabetes diagnosis or diabetes
+            in remission/resolved.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_DM_61"
@@ -41,3 +44,5 @@ models:
               threshold_unit: "mmol/mol"
               description: "HbA1c ≥48 mmol/mol"
               sort_order: 1
+        owner:
+          name: EddieDavison92

@@ -19,13 +19,13 @@ models:
           name_short: "Autism Spectrum Disorder"
           description_short: "Autism register (non-QOF)"
           description_long: >
-            Autism spectrum disorder register for persons with autism diagnosis. 
-            Includes active patients with autism diagnosis using AUTISM_COD cluster codes. 
-            No age restrictions or resolution codes applied. Used for neurodevelopmental care 
-            pathway monitoring, complex needs identification, care coordination, mental health 
-            co-morbidity monitoring, and healthcare access support. Lifelong neurodevelopmental 
-            condition requiring ongoing support and care coordination. Distinct from learning 
-            disability though can co-occur.
+            Autism spectrum disorder register for persons with autism diagnosis.  Includes
+            active patients with autism diagnosis using AUTISM_COD cluster codes.  No
+            age restrictions or resolution codes applied. Used for neurodevelopmental
+            care  pathway monitoring, complex needs identification, care coordination,
+            mental health  co-morbidity monitoring, and healthcare access support.
+            Lifelong neurodevelopmental  condition requiring ongoing support and care
+            coordination. Distinct from learning  disability though can co-occur.
           is_qof: false
           source_column: "is_on_register"
           sort_order: "COND_NEURODEV_AUTISM"
@@ -35,6 +35,8 @@ models:
             - cluster_id: "AUTISM_COD"
               category: "INCLUSION"
 
+        owner:
+          name: Eddie Davison
     columns:
       - name: person_id
         description: Unique identifier for the person

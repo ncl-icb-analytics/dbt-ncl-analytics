@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: int_sus_apc_procedure_hrg
-    description: "A table of APC procedures with HRG coding details for commissioning analysis includes the unbundled HRGs for each episode and the core HRG for the episode."
+    description: "A table of APC procedures with HRG coding details for commissioning
+      analysis includes the unbundled HRGs for each episode and the core HRG for the
+      episode."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: procedure_id
         data_type: varchar
@@ -12,7 +18,7 @@ models:
               config:
                 severity: error
                 error_if: ">100"
-                warn_if: ">10"        
+                warn_if: ">10"
           - not_null
 
       - name: date
@@ -33,7 +39,8 @@ models:
 
       - name: problem_order
         data_type: number
-        description: "Order of the unbundled HRG within the episode, 0 indicates the core HRG."
+        description: "Order of the unbundled HRG within the episode, 0 indicates the
+          core HRG."
 
       - name: sk_patient_id
         data_type: varchar
@@ -41,7 +48,8 @@ models:
 
       - name: organisation_id
         data_type: varchar
-        description: "ODS organisation code of the service provider (limited to type 41)."
+        description: "ODS organisation code of the service provider (limited to type
+          41)."
 
       - name: organisation_name
         data_type: varchar

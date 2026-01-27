@@ -1,10 +1,17 @@
 version: 2
 models:
   - name: int_ppp_status_all
-    description: 'Pregnancy Prevention Programme status events for valproate patient safety monitoring.
+    description: 'Pregnancy Prevention Programme status events for valproate patient
+      safety monitoring.
 
-      One row per PPP status observation including enrolled, discontinued, not needed, and declined status events for women of childbearing potential on valproate therapy.'
+      One row per PPP status observation including enrolled, discontinued, not needed,
+      and declined status events for women of childbearing potential on valproate
+      therapy.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

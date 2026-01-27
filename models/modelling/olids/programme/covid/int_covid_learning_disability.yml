@@ -15,12 +15,12 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to learning disability requiring immunisation.'
-    
+      Purpose: Identify people eligible for COVID vaccination due to learning disability
+      requiring immunisation.'
     tests:
       - cluster_ids_exist:
           cluster_ids: LEARNDIS_COD
-    
+
     config:
       meta:
         indicator:
@@ -31,7 +31,8 @@ models:
           name_short: "COVID Eligible Learning Disability"
           description_short: "People with learning disability eligible for COVID vaccination"
           description_long: >
-            COVID vaccination eligibility for people with learning disability using LD_COV_COD
+            COVID vaccination eligibility for people with learning disability using
+            LD_COV_COD
             cluster codes with earliest occurrence qualifying. Includes learning disability
             and intellectual disability that increase COVID risk requiring immunisation
             protection. Minimum age requirement of 5 years for COVID vaccination.
@@ -52,7 +53,9 @@ models:
               threshold_unit: "years"
               description: "Minimum age for COVID vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'

@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_rheumatoid_arthritis_diagnoses_all
-    description: 'Rheumatoid arthritis diagnosis observations for QOF register data collection and inflammatory arthritis care pathway management.
+    description: 'Rheumatoid arthritis diagnosis observations for QOF register data
+      collection and inflammatory arthritis care pathway management.
 
-      One row per rheumatoid arthritis diagnosis observation using RARTH_COD cluster with lifelong condition tracking and no resolution codes.'
+      One row per rheumatoid arthritis diagnosis observation using RARTH_COD cluster
+      with lifelong condition tracking and no resolution codes.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -27,7 +33,8 @@ models:
         description: 'QOF cluster identifier (RARTH_COD)'
 
       - name: is_diagnosis_code
-        description: 'Flag indicating rheumatoid arthritis diagnosis code (RARTH_COD cluster)'
+        description: 'Flag indicating rheumatoid arthritis diagnosis code (RARTH_COD
+          cluster)'
 
       - name: ra_observation_type
         description: 'Categorised RA observation type (Rheumatoid Arthritis Diagnosis)'

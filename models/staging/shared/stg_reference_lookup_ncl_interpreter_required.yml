@@ -1,16 +1,20 @@
 version: 2
 models:
-- name: stg_reference_lookup_ncl_interpreter_required
-  description: Interpreter required reference data from lookup
-  columns:
-  - name: id
-  - name: interpreter_required
-    description: Interpreter required code
+  - name: stg_reference_lookup_ncl_interpreter_required
+    description: Interpreter required reference data from lookup
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
+    columns:
+      - name: id
+      - name: interpreter_required
+        description: Interpreter required code
+        tests:
+          - unique
+          - not_null
+      - name: interpreter_required_flag
+        description: Boolean flag for interpreter required
     tests:
-    - unique
-    - not_null
-  - name: interpreter_required_flag
-    description: Boolean flag for interpreter required
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

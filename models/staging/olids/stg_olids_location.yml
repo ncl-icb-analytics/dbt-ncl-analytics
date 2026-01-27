@@ -1,64 +1,70 @@
 version: 2
 models:
-- name: stg_olids_location
-  description: Physical locations where healthcare services are provided. Deduplicated
-    by id and filtered to exclude deleted records.
-  columns:
-  - name: id
-    description: Primary key - unique identifier for this location
+  - name: stg_olids_location
+    description: Physical locations where healthcare services are provided. 
+      Deduplicated by id and filtered to exclude deleted records.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: id
+        description: Primary key - unique identifier for this location
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: Name of the location
+      - name: type_code
+        description: Type code for the location
+      - name: type_desc
+        description: Type description for the location
+      - name: is_primary_location
+        description: Boolean indicating if this is the primary location
+      - name: house_name
+        description: House name component of address
+      - name: house_number
+        description: House number component of address
+      - name: house_name_flat_number
+        description: Flat number component of address
+      - name: street
+        description: Street name
+      - name: address_line_1
+        description: First line of address
+      - name: address_line_2
+        description: Second line of address
+      - name: address_line_3
+        description: Third line of address
+      - name: address_line_4
+        description: Fourth line of address
+      - name: postcode
+        description: Postcode of the location
+      - name: managing_organisation_id
+        description: Foreign key to organisation.id - organisation managing this
+          location
+      - name: open_date
+        description: Date the location opened
+      - name: close_date
+        description: Date the location closed
+      - name: is_obsolete
+        description: Boolean indicating if the location record is obsolete
+      - name: lds_id
+        description: LDS system identifier
+      - name: record_owner_organisation_code
+        description: Organisation code of the record owner
+      - name: lds_datetime_data_acquired
+        description: Datetime when data was acquired by LDS
+      - name: lds_initial_data_received_date
+        description: Date when data was initially received by LDS
+      - name: lds_start_date_time
+        description: LDS datetime stamp from which the record version was 
+          correct - used for deduplication to get the latest record
+      - name: lds_is_deleted
+        description: Deletion flag - records with TRUE are filtered out in this 
+          staging layer
+      - name: lds_record_id
+        description: LDS assigned unique identifier for the source record 
+          version
     tests:
-    - unique
-    - not_null
-  - name: name
-    description: Name of the location
-  - name: type_code
-    description: Type code for the location
-  - name: type_desc
-    description: Type description for the location
-  - name: is_primary_location
-    description: Boolean indicating if this is the primary location
-  - name: house_name
-    description: House name component of address
-  - name: house_number
-    description: House number component of address
-  - name: house_name_flat_number
-    description: Flat number component of address
-  - name: street
-    description: Street name
-  - name: address_line_1
-    description: First line of address
-  - name: address_line_2
-    description: Second line of address
-  - name: address_line_3
-    description: Third line of address
-  - name: address_line_4
-    description: Fourth line of address
-  - name: postcode
-    description: Postcode of the location
-  - name: managing_organisation_id
-    description: Foreign key to organisation.id - organisation managing this location
-  - name: open_date
-    description: Date the location opened
-  - name: close_date
-    description: Date the location closed
-  - name: is_obsolete
-    description: Boolean indicating if the location record is obsolete
-  - name: lds_id
-    description: LDS system identifier
-  - name: record_owner_organisation_code
-    description: Organisation code of the record owner
-  - name: lds_datetime_data_acquired
-    description: Datetime when data was acquired by LDS
-  - name: lds_initial_data_received_date
-    description: Date when data was initially received by LDS
-  - name: lds_start_date_time
-    description: LDS datetime stamp from which the record version was correct - used
-      for deduplication to get the latest record
-  - name: lds_is_deleted
-    description: Deletion flag - records with TRUE are filtered out in this staging
-      layer
-  - name: lds_record_id
-    description: LDS assigned unique identifier for the source record version
-  tests:
-  - dbt_expectations.expect_table_row_count_to_be_between:
-      min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

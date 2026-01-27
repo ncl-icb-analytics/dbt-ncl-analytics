@@ -1,0 +1,25 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_ckd_pg1_hrc
+    description: |
+      CKD Register Priority Group 1 - High Risk & Complex identification.
+
+      Patients on the CKD register are included if ANY of the following apply:
+      - Rule 1: eGFR < 15 (latest value)
+      - Rule 2: Albumin:creatinine ratio > 250 (latest value)
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_ckd_reg_pg1_hrc_vs1
+            - on_ckd_reg_pg1_hrc_vs2
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

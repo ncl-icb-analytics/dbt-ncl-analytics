@@ -1,7 +1,15 @@
 version: 2
 models:
   - name: dim_person_is_carer
-    description: Dimension table providing the latest recorded carer status for persons who have a carer status record. Only includes persons with a record in ISACARER_COD, NOTACARER_COD, or UNPAIDCARER_COD clusters. This table specifically tracks patients who are carers themselves, not patients who have carers.
+    description: Dimension table providing the latest recorded carer status for 
+      persons who have a carer status record. Only includes persons with a 
+      record in ISACARER_COD, NOTACARER_COD, or UNPAIDCARER_COD clusters. This 
+      table specifically tracks patients who are carers themselves, not patients
+      who have carers.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: ISACARER_COD, NOTACARER_COD, UNPAIDCARER_COD

@@ -10,6 +10,10 @@ models:
       - Rule 3: Albumin:creatinine ratio > 250
       - Rule 4: Enhanced Liver Fibrosis score > 9.8
       - Rule 5+6: HbA1c > 75 AND (cardiac condition OR GLP-1/insulin in last 6 months)
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id

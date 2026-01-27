@@ -1,10 +1,16 @@
 version: 2
 models:
   - name: int_foot_examination_latest
-    description: 'Most recent diabetic foot examination status per person for diabetes care monitoring and QOF reporting.
+    description: 'Most recent diabetic foot examination status per person for diabetes
+      care monitoring and QOF reporting.
 
-      One row per person with their latest foot examination including completion status and current foot risk level assessment.'
+      One row per person with their latest foot examination including completion status
+      and current foot risk level assessment.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

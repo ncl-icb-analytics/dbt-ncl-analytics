@@ -3,10 +3,15 @@ version: 2
 models:
   - name: fct_person_wl_current_count_total
     description: >
-      Count of open waiting lists per person (patient_id), count of distinct TFC open waiting lists per person, count of distinct provider open waiting lists per person.
+      Count of open waiting lists per person (patient_id), count of distinct TFC open
+      waiting lists per person, count of distinct provider open waiting lists per
+      person.
       Derived from `int_wl_current`.
     config:
       materialized: view
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: sk_patient_id
         description: Unique identifier for each patient.
@@ -17,10 +22,12 @@ models:
         description: Total number of open waiting lists for the patient.
 
       - name: wl_current_distinct_providers_count
-        description: Number of distinct providers that the patient has open waiting lists on.
+        description: Number of distinct providers that the patient has open 
+          waiting lists on.
 
       - name: wl_current_distinct_tfc_count
-        description: Number of distinct Treatment Function Codes (TFCs) that the patient has open waiting lists on.
+        description: Number of distinct Treatment Function Codes (TFCs) that the
+          patient has open waiting lists on.
 
       - name: same_tfc_multiple_providers_flag
         description: >
@@ -28,8 +35,9 @@ models:
           assigned to multiple providers.
 
       - name: current_waiting_list_arrays
-        description: Array of waiting list objects for the patient, sorted by days on waiting list.
-    
+        description: Array of waiting list objects for the patient, sorted by 
+          days on waiting list.
+
     tests:
-    - dbt_expectations.expect_table_row_count_to_be_between:
-        min_value: 1
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1

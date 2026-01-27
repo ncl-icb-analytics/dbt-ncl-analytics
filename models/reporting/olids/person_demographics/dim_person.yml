@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_person
-    description: 'Core person identity dimension aggregating multiple patient IDs and practice relationships per person.
+    description: 'Core person identity dimension aggregating multiple patient IDs
+      and practice relationships per person.
 
       Key Features:
 
@@ -15,8 +16,12 @@ models:
 
       • Patient relationship counts for data quality assessment
 
-      Purpose: Central person registry for linking across all patient-level data and practice relationships.'
-    
+      Purpose: Central person registry for linking across all patient-level data and
+      practice relationships.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
@@ -25,7 +30,8 @@ models:
           - unique
 
       - name: sk_patient_ids
-        description: 'Array of all surrogate patient keys mapped to this person for cross-referencing'
+        description: 'Array of all surrogate patient keys mapped to this person for
+          cross-referencing'
         tests:
           - not_null
 
@@ -44,7 +50,8 @@ models:
         description: 'Name of current practice (if person has active registration)'
 
       - name: total_patients
-        description: 'Number of patient IDs mapped to this person (typically 1, >1 indicates merges)'
+        description: 'Number of patient IDs mapped to this person (typically 1, >1
+          indicates merges)'
         tests:
           - not_null
           - dbt_utils.accepted_range:
@@ -56,17 +63,20 @@ models:
           - not_null
 
       - name: practice_codes
-        description: 'Array of all practice codes this person has been registered with'
+        description: 'Array of all practice codes this person has been registered
+          with'
         tests:
           - not_null
 
       - name: practice_names
-        description: 'Array of all practice names this person has been registered with'
+        description: 'Array of all practice names this person has been registered
+          with'
         tests:
           - not_null
 
       - name: total_practices
-        description: 'Number of different practices this person has been registered with'
+        description: 'Number of different practices this person has been registered
+          with'
         tests:
           - not_null
           - dbt_utils.accepted_range:

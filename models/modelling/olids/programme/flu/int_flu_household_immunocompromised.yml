@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: int_flu_household_immunocompromised
-    description: 'Flu vaccination eligibility for household contacts of immunocompromised individuals.
+    description: 'Flu vaccination eligibility for household contacts of immunocompromised
+      individuals.
 
       Key Features:
 
@@ -15,8 +16,8 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify household contacts eligible for flu vaccination to protect vulnerable immunocompromised family members.'
-    
+      Purpose: Identify household contacts eligible for flu vaccination to protect
+      vulnerable immunocompromised family members.'
     config:
       meta:
         indicator:
@@ -25,11 +26,15 @@ models:
           category: "FLU"
           clinical_domain: "Social Care"
           name_short: "Flu Eligible Household Immunocompromised Contact"
-          description_short: "Household contacts of immunocompromised people eligible for flu vaccination"
+          description_short: "Household contacts of immunocompromised people eligible
+            for flu vaccination"
           description_long: >
-            Flu vaccination eligibility for household contacts of immunocompromised individuals.
-            Uses HHLD_IMDEF_COD cluster codes with latest occurrence qualifying. Minimum age
-            requirement of 6 months. This pathway protects vulnerable immunocompromised people
+            Flu vaccination eligibility for household contacts of immunocompromised
+            individuals.
+            Uses HHLD_IMDEF_COD cluster codes with latest occurrence qualifying. Minimum
+            age
+            requirement of 6 months. This pathway protects vulnerable immunocompromised
+            people
             by creating household immunity barriers to infection transmission.
           is_qof: false
           source_column: "person_id"
@@ -48,7 +53,9 @@ models:
               threshold_unit: "months"
               description: "Minimum age for flu vaccination"
               sort_order: 1
-    
+
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

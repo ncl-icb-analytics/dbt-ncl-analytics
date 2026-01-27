@@ -1,7 +1,12 @@
 models:
   - name: int_smi_population_base
-    description: Intermediate table holding demographics and core metrics for people on the SMI register
-    
+    description: Intermediate table holding demographics and core metrics for 
+      people on the SMI register
+
+    config:
+      meta:
+        owner:
+          name: KatsplatH
     columns:
       - name: person_id
         description: Unique identifier for the person

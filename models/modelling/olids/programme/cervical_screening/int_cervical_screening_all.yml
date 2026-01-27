@@ -3,7 +3,12 @@ models:
   - name: int_cervical_screening_all
     description: 'NHS cervical screening programme observations from clinical records.
 
-      One row per cervical screening observation using SMEAR_COD, CSPU_COD, CSDEC_COD, and CSPCAINVITE_COD clusters for core programme tracking.'
+      One row per cervical screening observation using SMEAR_COD, CSPU_COD, CSDEC_COD,
+      and CSPCAINVITE_COD clusters for core programme tracking.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: SMEAR_COD,CSPU_COD,CSDEC_COD,CSPCAINVITE_COD

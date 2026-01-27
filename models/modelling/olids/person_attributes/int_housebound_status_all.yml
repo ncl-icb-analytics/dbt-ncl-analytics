@@ -3,7 +3,12 @@ models:
   - name: int_housebound_status_all
     description: 'Housebound status observations from ECL source.
 
-      One row per housebound status observation using HOUSEBOUND and NO_LONGER_HOUSEBOUND clusters.'
+      One row per housebound status observation using HOUSEBOUND and NO_LONGER_HOUSEBOUND
+      clusters.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: HOUSEBOUND, NO_LONGER_HOUSEBOUND

@@ -3,7 +3,12 @@ models:
   - name: int_cervical_screening_latest
     description: 'Most recent cervical screening observation per person.
 
-      One row per person representing their latest cervical screening observation for programme tracking.'
+      One row per person representing their latest cervical screening observation
+      for programme tracking.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: id
         description: 'Unique identifier for the observation'

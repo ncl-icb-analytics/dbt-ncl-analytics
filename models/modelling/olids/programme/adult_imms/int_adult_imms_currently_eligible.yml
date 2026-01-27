@@ -1,3 +1,8 @@
 models:
   - name: int_adult_imms_currently_eligible
-    description: Intermediate table to cross join currentl adult imms population with Imms Schedule to get eligibility window. Multiple lines per person
+    description: Intermediate table to cross join currentl adult imms population
+      with Imms Schedule to get eligibility window. Multiple lines per person
+    config:
+      meta:
+        owner:
+          name: KatsplatH

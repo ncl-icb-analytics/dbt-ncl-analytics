@@ -1,0 +1,12 @@
+version: 2
+
+macros:
+  - name: to_sql_list
+    description: >
+      Converts a Jinja list to SQL IN clause format with quoted values.
+
+
+    arguments:
+      - name: values
+        type: list
+        description: List of values to convert. Returns (NULL) if empty or none.

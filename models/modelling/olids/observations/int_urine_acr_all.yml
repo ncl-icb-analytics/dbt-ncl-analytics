@@ -1,9 +1,15 @@
 version: 2
 models:
   - name: int_urine_acr_all
-    description: 'Albumin-to-creatinine ratio measurements for kidney function assessment and diabetic nephropathy screening.
+    description: 'Albumin-to-creatinine ratio measurements for kidney function assessment
+      and diabetic nephropathy screening.
 
-      One row per ACR observation using UACR_TESTING cluster with plausible range filtering (0-1000 mg/mmol) and clinical ACR categorisation.'
+      One row per ACR observation using UACR_TESTING cluster with plausible range
+      filtering (0-1000 mg/mmol) and clinical ACR categorisation.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - cluster_ids_exist:
           cluster_ids: UACR_TESTING

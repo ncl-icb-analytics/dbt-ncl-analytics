@@ -1,13 +1,15 @@
 version: 2
 models:
   - name: int_ckd_lab_classification
-    description: 'Laboratory-based CKD staging and criteria assessment using latest eGFR and ACR results.
+    description: 'Laboratory-based CKD staging and criteria assessment using latest
+      eGFR and ACR results.
 
       Key Features:
 
       • CKD staging using G-stage (G1-G5) and A-stage (A1-A3) classification
 
-      • Persistent abnormal result confirmation (two abnormal results 90-730 days apart)
+      • Persistent abnormal result confirmation (two abnormal results 90-730 days
+      apart)
 
       • CKD criteria assessment: eGFR <60 or (eGFR ≥60 and ACR ≥3)
 
@@ -15,8 +17,13 @@ models:
 
       • Person-level aggregation for case finding and audit
 
-      Purpose: Identify people whose laboratory results meet CKD criteria regardless of clinical diagnosis.'
+      Purpose: Identify people whose laboratory results meet CKD criteria regardless
+      of clinical diagnosis.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -40,12 +47,17 @@ models:
       - name: latest_acr_stage
         description: 'CKD A-stage classification based on latest ACR (A1-A3)'
       - name: has_confirmed_low_egfr
-        description: 'Boolean flag indicating persistent low eGFR (<60) confirmed by two measurements 90-730 days apart'
+        description: 'Boolean flag indicating persistent low eGFR (<60) confirmed
+          by two measurements 90-730 days apart'
       - name: has_confirmed_high_acr
-        description: 'Boolean flag indicating persistent high ACR (≥3) confirmed by two measurements 90-730 days apart'
+        description: 'Boolean flag indicating persistent high ACR (≥3) confirmed by
+          two measurements 90-730 days apart'
       - name: latest_ckd_stage_inferred
-        description: 'Combined CKD stage inference using latest G-stage and A-stage (e.g., "G3a A2")'
+        description: 'Combined CKD stage inference using latest G-stage and A-stage
+          (e.g., "G3a A2")'
       - name: latest_labs_meet_ckd_criteria
-        description: 'Boolean flag indicating if latest laboratory results meet CKD criteria (eGFR <60 or eGFR ≥60 and ACR ≥3)'
+        description: 'Boolean flag indicating if latest laboratory results meet CKD
+          criteria (eGFR <60 or eGFR ≥60 and ACR ≥3)'
       - name: has_confirmed_ckd_by_labs
-        description: 'Boolean flag indicating confirmed CKD based on persistent abnormal laboratory results'
+        description: 'Boolean flag indicating confirmed CKD based on persistent abnormal
+          laboratory results'

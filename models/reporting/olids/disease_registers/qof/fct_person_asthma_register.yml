@@ -2,7 +2,8 @@ models:
   - name: fct_person_asthma_register
     description: 'QOF asthma register for patients aged 6+ with active asthma diagnosis.
 
-      One row per person with latest AST_COD > latest ASTRES_COD and asthma medication prescribed within last 12 months.'
+      One row per person with latest AST_COD > latest ASTRES_COD and asthma medication
+      prescribed within last 12 months.'
 
     tests:
       - dbt_utils.at_least_one:
@@ -25,11 +26,11 @@ models:
           name_short: "Asthma"
           description_short: "QOF asthma register"
           description_long: >
-            Asthma diagnosed using QOF criteria: Age ≥6 years with active asthma diagnosis 
-            where latest asthma code is more recent than any resolution code, plus asthma 
-            medication prescribed within last 12 months for medication validation. Maps to 
-            QOF indicator AST006 (Asthma Register). Uses AST_COD for diagnosis codes and 
-            ASTRES_COD for resolution codes.
+            Asthma diagnosed using QOF criteria: Age ≥6 years with active asthma diagnosis  where
+            latest asthma code is more recent than any resolution code, plus asthma  medication
+            prescribed within last 12 months for medication validation. Maps to  QOF
+            indicator AST006 (Asthma Register). Uses AST_COD for diagnosis codes and  ASTRES_COD
+            for resolution codes.
           is_qof: true
           qof_indicator: "AST006"
           source_column: "is_on_register"
@@ -41,3 +42,5 @@ models:
               category: "INCLUSION"
             - cluster_id: "ASTRES_COD"
               category: "RESOLUTION"
+        owner:
+          name: EddieDavison92

@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_61
-    description: 'Mart: LTC LCS Case Finding CKD_61 - Identifies patients with two consecutive low eGFR readings suggesting undiagnosed chronic kidney disease.
+    description: 'Mart: LTC LCS Case Finding CKD_61 - Identifies patients with two
+      consecutive low eGFR readings suggesting undiagnosed chronic kidney disease.
 
 
       Population Scope:
@@ -18,7 +19,6 @@ models:
       • Complete eGFR testing history with latest and previous readings
 
       • Evidence-based case finding criteria for early CKD detection'
-    
     config:
       meta:
         indicator:
@@ -61,3 +61,5 @@ models:
               threshold_unit: "count"
               description: "Two consecutive low eGFR readings required"
               sort_order: 2
+        owner:
+          name: EddieDavison92

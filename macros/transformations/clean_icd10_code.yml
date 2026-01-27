@@ -1,0 +1,13 @@
+version: 2
+
+macros:
+  - name: clean_icd10_code
+    description: >
+      Standardizes ICD-10 codes by removing trailing characters, adding decimal after 3rd character.
+      Handles various formats: 'A01', 'A01.1', 'A011', 'A01X', 'A01-1'.
+
+
+    arguments:
+      - name: code_column
+        type: string
+        description: Column containing the ICD-10 code to clean

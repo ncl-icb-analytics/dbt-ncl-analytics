@@ -1,7 +1,8 @@
 version: 2
 models:
   - name: dim_pcn
-    description: 'Primary Care Network dimension with comprehensive PCN details and member practice information.
+    description: 'Primary Care Network dimension with comprehensive PCN details and
+      member practice information.
 
       Key Features:
 
@@ -15,8 +16,13 @@ models:
 
       • Address and operational details from Dictionary sources
 
-      Purpose: Supports PCN-level reporting, network membership tracking, and organisational hierarchy analysis.'
+      Purpose: Supports PCN-level reporting, network membership tracking, and organisational
+      hierarchy analysis.'
 
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: pcn_code
         description: 'Primary Care Network code'
@@ -30,7 +36,8 @@ models:
           - not_null
 
       - name: pcn_name_with_borough
-        description: 'PCN name prefixed with borough (e.g., "Camden: Example PCN") for geographic identification'
+        description: 'PCN name prefixed with borough (e.g., "Camden: Example PCN")
+          for geographic identification'
         tests:
           - not_null
 

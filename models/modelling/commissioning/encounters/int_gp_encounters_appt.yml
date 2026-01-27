@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: int_gp_encounters_appt
-    description: "GP encounters from OLIDS appointments filtered to include only relevant 'Care Related Encounter' appointment context types"
+    description: "GP encounters from OLIDS appointments filtered to include only relevant
+      'Care Related Encounter' appointment context types"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: person_id
         data_type: varchar

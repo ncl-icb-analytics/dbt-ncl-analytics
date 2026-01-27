@@ -1,0 +1,16 @@
+version: 2
+
+macros:
+  - name: clean_organisation_id
+    description: >
+      Validates organisation codes against reference data. Returns full code if valid, otherwise truncates to 3 characters.
+
+
+    arguments:
+      - name: column_name
+        type: string
+        description: Column containing the organisation code
+
+      - name: org_type_id
+        type: integer
+        description: Organisation type ID to validate against. Default 41 (GP practices)
