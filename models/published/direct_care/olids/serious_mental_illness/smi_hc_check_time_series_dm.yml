@@ -1,0 +1,13 @@
+models:
+  - name: smi_hc_check_time_series_dm
+    description: Intermediate table holding aggregated completied health check metrics by 
+      for the SMI population each analysis month. Multiple lines per person
+    config:
+      meta:
+        owner:
+          name: KatsplatH
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
