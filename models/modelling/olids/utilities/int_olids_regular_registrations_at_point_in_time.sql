@@ -55,12 +55,13 @@ regular_episodes as (
     from {{ ref('stg_olids_episode_of_care') }} as eoc
     cross join emis_extract_date as ed
     where eoc.episode_type_source_code = 'Regular'
-        and eoc.episode_status_source_code = 'Registered'
-        -- Episode active on reference date
+        -- Exclude Left episodes with no end date (DQ issue: marked Left but never closed)
+        and not (eoc.episode_status_source_code = 'Left' and eoc.episode_of_care_end_date is null)
+        -- Episode active on reference date (inclusive end date boundary)
         and eoc.episode_of_care_start_date <= ed.reference_date
         and (
             eoc.episode_of_care_end_date is null
-            or eoc.episode_of_care_end_date > ed.reference_date
+            or eoc.episode_of_care_end_date >= ed.reference_date
         )
 ),
 

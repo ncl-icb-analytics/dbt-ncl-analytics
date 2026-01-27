@@ -58,9 +58,10 @@ raw_registrations AS (
     WHERE eoc.episode_of_care_start_date IS NOT NULL
         AND eoc.patient_id IS NOT NULL
         AND eoc.organisation_id IS NOT NULL
-        -- Regular registered episodes only (excludes Temporary, Emergency, Left, etc.)
+        -- Regular episodes only (excludes Temporary, Emergency, etc.)
         AND eoc.episode_type_source_code = 'Regular'
-        AND eoc.episode_status_source_code = 'Registered'
+        -- Exclude Left episodes with no end date (DQ issue: marked Left but never closed)
+        AND NOT (eoc.episode_status_source_code = 'Left' AND eoc.episode_of_care_end_date IS NULL)
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
             ptp.person_id,
