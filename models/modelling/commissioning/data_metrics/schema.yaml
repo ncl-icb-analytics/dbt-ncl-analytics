@@ -8,7 +8,11 @@ version: 2
 
 models:
   - name: provider_daily_apc_activity_DBT
-    description: "Created by: J.Linney | dbt test file for APC provider daily activity"
+    description: "Daily Admitted Patient Care (APC) activity by provider"
+    config:
+      meta:
+        owner:
+          name: JonathanLinney
     columns:
       - name: provider
         description: "Provider name from lookup"
@@ -35,7 +39,11 @@ models:
           - not_null
 
   - name: provider_daily_op_activity_DBT
-    description: "Created by: J.Linney | dbt test file for OP provider daily activity"
+    description: "Daily Outpatient (OP) activity by provider"
+    config:
+      meta:
+        owner:
+          name: JonathanLinney
     columns:
       - name: provider
         description: "Provider name from lookup"
@@ -62,7 +70,11 @@ models:
           - not_null
 
   - name: provider_daily_ecds_activity_DBT
-    description: "Created by: J.Linney | dbt test file for ECDS provider daily activity"
+    description: "Daily Emergency Care Data Set (ECDS) activity by provider"
+    config:
+      meta:
+        owner:
+          name: JonathanLinney
     columns:
       - name: provider
         description: "Provider name from lookup"
@@ -89,3 +101,17 @@ models:
           - not_null
   - name: provider_missing_DBT
     description: "Created by: J.Linney | dbt test pivot table for missing provider records"
+    columns:
+      - name: provider
+        description: "Provider name from lookup"
+        tests:
+          - not_null
+          - accepted_values:
+              values: 
+                - 'Great Ormond Street Hospital for Children NHS Foundation Trust'
+                - 'Moorfields Eye Hospital NHS Foundation Trust'
+                - 'Royal Free London NHS Foundation Trust'
+                - 'Royal National Orthopaedic Hospital NHS Trust'
+                - 'University College London Hospitals NHS Foundation Trust'
+                - 'Whittington Health NHS Trust'
+              quote: true
