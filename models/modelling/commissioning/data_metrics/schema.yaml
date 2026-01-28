@@ -103,7 +103,7 @@ models:
   - name: provider_missing_summary
     description: "Created by: J.Linney | dbt test pivot table for missing provider records"
     columns:
-      - name: provider
+      - name: PROVIDER  # case-sensitive - must match the case used in the model
         description: "Provider name from lookup"
         tests:
           - not_null
