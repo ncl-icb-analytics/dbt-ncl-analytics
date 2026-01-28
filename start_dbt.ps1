@@ -59,7 +59,8 @@ if (Test-Path ".venv\Scripts\Activate.ps1") {
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "[OK] Virtual environment activated" -ForegroundColor Green
-    Write-Host "  Python: $(python --version 2>&1)" -ForegroundColor Gray
+    $pythonVersion = python --version 2>&1
+    Write-Host "  Python: $pythonVersion" -ForegroundColor Gray
 } else {
     Write-Host "[ERROR] Failed to activate virtual environment" -ForegroundColor Red
     Write-Host "  Run 'uv sync' or 'python -m venv venv' to create one" -ForegroundColor Yellow
@@ -90,15 +91,16 @@ if (Test-Path $envPath) {
     }
     Write-Host "[OK] Loaded $envCount environment variables" -ForegroundColor Green
 
-    # Detect placeholder credentials — check uncommented KEY=value lines for template values
+    # Detect placeholder credentials - check uncommented KEY=value lines for template values
     $hasPlaceholders = (Get-Content $envPath | Where-Object { $_ -match '^[^#].*=.*your-.*-here' } | Measure-Object).Count -gt 0
     if ($hasPlaceholders) {
         Write-Host "[WARNING] .env still contains placeholder values" -ForegroundColor Yellow
-        $actions += 'Update credentials in .env, then open a new terminal (Ctrl+`)'
+        $actions += 'Update credentials in .env, then open a new terminal'
     } else {
         # Show key variables (without exposing sensitive values)
         if ($env:SNOWFLAKE_ACCOUNT) {
-            Write-Host "  SNOWFLAKE_ACCOUNT: $($env:SNOWFLAKE_ACCOUNT.Substring(0, [Math]::Min(10, $env:SNOWFLAKE_ACCOUNT.Length)))..." -ForegroundColor Gray
+            $accountPrefix = $env:SNOWFLAKE_ACCOUNT.Substring(0, [Math]::Min(10, $env:SNOWFLAKE_ACCOUNT.Length))
+            Write-Host "  SNOWFLAKE_ACCOUNT: $accountPrefix..." -ForegroundColor Gray
         }
         if ($env:SNOWFLAKE_USER) {
             Write-Host "  SNOWFLAKE_USER: $env:SNOWFLAKE_USER" -ForegroundColor Gray
@@ -113,11 +115,11 @@ if (Test-Path $envPath) {
 } else {
     if (Test-Path "env.example") {
         Copy-Item "env.example" ".env"
-        Write-Host "[WARNING] No .env file found — created from template" -ForegroundColor Yellow
+        Write-Host "[WARNING] No .env file found - created from template" -ForegroundColor Yellow
     } else {
         Write-Host "[WARNING] No .env file found and no env.example template" -ForegroundColor Yellow
     }
-    $actions += 'Update credentials in .env, then open a new terminal (Ctrl+`)'
+    $actions += 'Update credentials in .env, then open a new terminal'
 }
 Write-Host ""
 
@@ -132,9 +134,10 @@ if (-not (Test-Path "dbt_packages")) {
 if ($actions.Count -gt 0) {
     Write-Host "To finish setup:" -ForegroundColor Yellow
     foreach ($action in $actions) {
-        Write-Host "  -> $action" -ForegroundColor Gray
+        Write-Host "  - $action" -ForegroundColor Gray
     }
 } else {
     Write-Host "Ready! You can now run dbt commands." -ForegroundColor Green
-    Write-Host "Try: dbt debug (to test your connection)" -ForegroundColor Gray
+    Write-Host "Try: dbt debug" -ForegroundColor Gray
 }
+
