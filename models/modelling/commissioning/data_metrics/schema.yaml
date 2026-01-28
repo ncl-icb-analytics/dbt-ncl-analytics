@@ -71,6 +71,10 @@ models:
 
   - name: provider_daily_ecds_activity_DBT
     description: "Daily Emergency Care Data Set (ECDS) activity by provider"
+    config:
+      meta:
+        owner:
+          name: JonathanLinney
     columns:
       - name: provider
         description: "Provider name from lookup"
