@@ -9,6 +9,10 @@ version: 2
 models:
   - name: provider_daily_apc_activity_DBT
     description: "Daily Admitted Patient Care (APC) activity by provider"
+    config:
+      meta:
+        owner:
+          name: JonathanLinney
     columns:
       - name: provider
         description: "Provider name from lookup"
