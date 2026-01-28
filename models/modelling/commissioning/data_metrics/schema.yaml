@@ -99,7 +99,8 @@ models:
         description: "Count of records"
         tests:
           - not_null
-  - name: provider_missing_DBT
+
+  - name: provider_missing_summary_DBT
     description: "Created by: J.Linney | dbt test pivot table for missing provider records"
     columns:
       - name: provider
