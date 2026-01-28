@@ -1,9 +1,7 @@
-
 --- provider_daily_apc_activity_DBT.sql
 --- Created by: J.Linney | dbt test file for APC provider daily activity
 
 -- Add config overrides in here, eg. comment added to snowflake model metatadata
-
 -- and materialisation type -  technically redundant here if declared in dbt_project.yml so just including it for clarity whilst testing
 -- NOTE (18/12/25): Changed materialization now from view to table to as missing_summary test running too early on blank views, reulting in it being empty
 
@@ -18,13 +16,13 @@ WITH base AS (
     SELECT
         "spell.commissioning.service_agreement.provider" AS provider_code,
         DATE_TRUNC('day', "spell.discharge.date") AS activity_date
-    FROM {{ source('sus_unified_apc','spell') }}
+    FROM {{ ref('stg_sus_apc_spell.sql') }}
 ),
 provider_lookup AS (
     SELECT 
         REPORTING_CODE,
         PROVIDER_NAME
-    FROM MODELLING.LOOKUP_NCL.NCL_PROVIDER
+    from {{ ref('stg_reference_ncl_provider') }}
 )
 SELECT
     COALESCE(p.PROVIDER_NAME, b.provider_code) AS provider,
