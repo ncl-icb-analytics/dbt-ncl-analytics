@@ -41,7 +41,9 @@ WITH base_observations AS (
         END AS measurement_type
     FROM ({{ get_observations("'IFCCHBAM_COD', 'DCCTHBA1C_COD'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
+    AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
       AND obs.result_value IS NOT NULL
+      
 )
 
 ,

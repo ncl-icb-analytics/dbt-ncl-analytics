@@ -24,6 +24,7 @@ WITH base_observations AS (
 
     FROM ({{ get_observations("'CRE_COD'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
+    AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
       AND obs.result_value IS NOT NULL
 )
 

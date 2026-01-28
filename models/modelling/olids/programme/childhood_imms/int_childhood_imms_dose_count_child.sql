@@ -4,37 +4,16 @@
         tags=['childhood_imms'])
 
 }}
---Using the historic population anyone under the age of 10 who has been registered with an NCL practice in the last 48 months Rolling
-WITH VACCBASE AS (
-select distinct
-p.PERSON_ID
-,p.practice_name as GP_NAME
-,p.practice_code
-,v.VACCINE_ID
-,v.VACCINE_NAME
-,v.VACCINE_ORDER
-,v.EVENT_DATE
-,v.EVENT_TYPE
-,IFF(MONTH(v.event_date) >= 4, YEAR(v.event_date), YEAR(v.event_date) - 1)
-  || '/'
-  || LPAD(RIGHT(TO_VARCHAR(IFF(MONTH(v.event_date) >= 4, YEAR(v.event_date) + 1, YEAR(v.event_date))), 2), 2, '0')
-    AS FISCAL_YEAR
-FROM {{ ref('int_childhood_imms_historical_population') }} p
---FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_POPULATION p
-LEFT JOIN {{ ref('int_childhood_imms_vaccination_events_historical') }} v using (PERSON_ID)
---LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_VACCINATION_EVENTS_HISTORICAL v using (PERSON_ID)
---restrict by AGE to less than 10
-WHERE p.age <10 
-)
+--This table creates dose count and date labels for childhood immunisations for children aged under 11 years old using a base table
 -- Creating CTE for 6in1 DOSE 1
-,SIXIN1_DOSE1 AS (
+WITH SIXIN1_DOSE1 AS (
        SELECT 
         v.PERSON_ID,
         v.EVENT_DATE AS sixin1_dose1_date, 
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose1_sort,
         v.FISCAL_YEAR as sixin1_dose1_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose1_label,
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = '6IN1_1'  AND v.EVENT_TYPE = 'Administration'
 )
@@ -46,7 +25,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose2_sort,
        v.FISCAL_YEAR as sixin1_dose2_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose2_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = '6IN1_2'  AND v.EVENT_TYPE = 'Administration'
 )
@@ -58,7 +37,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose3_sort,
        v.FISCAL_YEAR as sixin1_dose3_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose3_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = '6IN1_3'  AND v.EVENT_TYPE = 'Administration'
 )
@@ -70,7 +49,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS rota_dose1_sort,
         v.FISCAL_YEAR as rota_dose1_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS rota_dose1_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = 'ROTA_1' AND v.EVENT_TYPE = 'Administration'
 )
@@ -82,7 +61,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS rota_dose2_sort,
         v.FISCAL_YEAR as rota_dose2_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS rota_dose2_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
         WHERE v.VACCINE_ID = 'ROTA_2' AND v.EVENT_TYPE = 'Administration'
 )  
@@ -94,7 +73,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS menb_dose1_sort,
         v.FISCAL_YEAR as menb_dose1_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose1_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
         WHERE v.VACCINE_ID = 'MENB_1' and v.EVENT_TYPE = 'Administration'
 )
@@ -106,7 +85,7 @@ WHERE p.age <10
        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS menb_dose2_sort,
         v.FISCAL_YEAR as menb_dose2_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose2_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
         WHERE v.VACCINE_ID = 'MENB_2' AND v.EVENT_TYPE = 'Administration'
 )
@@ -118,7 +97,7 @@ WHERE p.age <10
        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS menb_dose3_sort,
         v.FISCAL_YEAR as menb_dose3_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose3_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
         WHERE v.VACCINE_ID = 'MENB_3' AND v.EVENT_TYPE = 'Administration'
 )
@@ -130,7 +109,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS pcv_dose1_sort,
         v.FISCAL_YEAR as pcv_dose1_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS pcv_dose1_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = 'PCV_1' AND v.EVENT_TYPE = 'Administration'
          )
@@ -142,7 +121,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS pcv_dose2_sort,
         v.FISCAL_YEAR as pcv_dose2_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS pcv_dose2_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = 'PCV_2' AND v.EVENT_TYPE = 'Administration'
          )
@@ -154,7 +133,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS hibmc_dose1_sort,
         v.FISCAL_YEAR as hibmc_dose1_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS hibmc_dose1_label
-        FROM VACCBASE v
+       FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = 'HIBMENC_1' AND v.EVENT_TYPE = 'Administration'
 )
@@ -166,7 +145,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS  mmr_dose1_sort,
         v.FISCAL_YEAR as mmr_dose1_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS  mmr_dose1_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
         WHERE v.VACCINE_ID = 'MMR_1' AND v.EVENT_TYPE = 'Administration'
 )  
@@ -178,7 +157,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS mmr_dose2_sort,
         v.FISCAL_YEAR as mmr_dose2_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS mmr_dose2_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
         WHERE v.VACCINE_ID = 'MMR_2' AND v.EVENT_TYPE = 'Administration'
 )
@@ -191,7 +170,7 @@ WHERE p.age <10
         TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS fourin1_dose1_sort,
         v.FISCAL_YEAR as fourin1_dose1_fiscal,
         MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS fourin1_dose1_label
-        FROM VACCBASE v
+        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --restrict to administered doses only
        WHERE v.VACCINE_ID = '4IN1_1' AND v.EVENT_TYPE = 'Administration'
          )
@@ -243,7 +222,7 @@ v.PERSON_ID
 ,fourin1_dose1_label
 ,fourin1_dose1_fiscal
 ,fourin1_dose1_sort
-FROM VACCBASE v 
+FROM {{ ref('int_childhood_imms_dose_base_child') }} v
 left join SIXIN1_DOSE1 s1 using (PERSON_ID)
 left join SIXIN1_DOSE2 s2 using (PERSON_ID)
 left join SIXIN1_DOSE3 s3 using (PERSON_ID)

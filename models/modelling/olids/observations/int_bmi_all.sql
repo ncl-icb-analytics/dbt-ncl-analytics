@@ -28,8 +28,10 @@ WITH recorded_bmi AS (
 
     FROM ({{ get_observations("'BMIVAL_COD'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
+    AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
       AND obs.result_value IS NOT NULL
       AND TRY_CAST(obs.result_value AS FLOAT) IS NOT NULL
+      
 ),
 
 height_measurements AS (
@@ -42,6 +44,7 @@ height_measurements AS (
         obs.result_unit_display AS height_unit
     FROM ({{ get_observations("'HEIGHT'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
+    AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
       AND obs.result_value IS NOT NULL
       AND TRY_CAST(obs.result_value AS FLOAT) IS NOT NULL
       AND TRY_CAST(obs.result_value AS FLOAT) BETWEEN 50 AND 250  -- Valid height range in cm
@@ -57,6 +60,7 @@ weight_measurements AS (
         obs.result_unit_display AS weight_unit
     FROM ({{ get_observations("'WEIGHT'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
+    AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
       AND obs.result_value IS NOT NULL
       AND TRY_CAST(obs.result_value AS FLOAT) IS NOT NULL
       AND TRY_CAST(obs.result_value AS FLOAT) BETWEEN 10 AND 500  -- Valid weight range in kg

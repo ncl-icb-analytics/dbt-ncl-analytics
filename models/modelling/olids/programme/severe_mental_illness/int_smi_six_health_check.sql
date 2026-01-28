@@ -96,7 +96,7 @@ c.person_id
 ,DATE(c.clinical_effective_date) as Cholesterol_date
 ,'Cholesterol Declined' as CHOLESTEROL_CATEGORY
 ,NULL as CHOLESTEROL_VALUE
-FROM {{ ref('int_smi_cholesterol_declined') }} c
+FROM {{ ref('int_cholesterol_declined') }} c
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where c.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY c.person_id ORDER BY c.clinical_effective_date DESC) = 1
