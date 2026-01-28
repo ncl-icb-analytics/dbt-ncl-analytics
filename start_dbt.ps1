@@ -57,7 +57,7 @@ if (Test-Path ".venv\Scripts\Activate.ps1") {
 }
 & $venvPath
 
-if ($LASTEXITCODE -eq 0) {
+if ($env:VIRTUAL_ENV) {
     Write-Host "[OK] Virtual environment activated" -ForegroundColor Green
     $pythonVersion = python --version 2>&1
     Write-Host "  Python: $pythonVersion" -ForegroundColor Gray
