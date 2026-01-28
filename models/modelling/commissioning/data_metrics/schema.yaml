@@ -36,6 +36,10 @@ models:
 
   - name: provider_daily_op_activity_DBT
     description: "Daily Outpatient (OP) activity by provider"
+    config:
+      meta:
+        owner:
+          name: JonathanLinney
     columns:
       - name: provider
         description: "Provider name from lookup"
