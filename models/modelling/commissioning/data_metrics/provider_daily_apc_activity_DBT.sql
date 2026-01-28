@@ -6,10 +6,7 @@
 -- NOTE (18/12/25): Changed materialization now from view to table to as missing_summary test running too early on blank views, reulting in it being empty
 
 {{ config(
-    materialized='table',
-    post_hook=[
-      "COMMENT ON TABLE {{ this }} IS 'Created by: J.Linney | dbt test file for APC provider daily activity'"
-    ]
+    materialized='table'
 ) }}
 
 WITH base AS (
