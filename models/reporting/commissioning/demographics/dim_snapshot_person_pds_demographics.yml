@@ -6,7 +6,7 @@ models:
     Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
 
     Documentation available: https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/docs/model_documentation/dim_person_demographics_basic.md
-  data_tests:
+  tests:
   - dbt_utils.at_least_one:
       column_name: sk_patient_id
   - dbt_utils.unique_combination_of_columns:
@@ -16,15 +16,15 @@ models:
   columns:
     - name: snapshot_year
       description: Financial year that the record corresponds to
-      data_tests:
+      tests:
         - not_null
     - name: snapshot_date
       description: Date of the snapshot the record corresponds to
-      data_tests:
+      tests:
         - not_null
     - name: sk_patient_id
       description: Surrogate key patient identifier (pseudonymised NHS number)
-      data_tests:
+      tests:
         - not_null
     - name: current_ncl_person_flag
       data_type: boolean
