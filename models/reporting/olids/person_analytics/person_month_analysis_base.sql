@@ -25,6 +25,7 @@ WITH active_person_months AS (
         ds.month_end_date as analysis_month,
         hr.person_id,
         hr.practice_id,
+        hr.practice_code,
         hr.practice_name
     FROM {{ ref('dim_person_historical_practice') }} hr
     INNER JOIN {{ ref('int_date_spine') }} ds
@@ -34,7 +35,7 @@ WITH active_person_months AS (
         AND ds.month_end_date <= LAST_DAY(CURRENT_DATE)    -- Don't create future months
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY ds.month_end_date, hr.person_id
-        ORDER BY hr.registration_start_date DESC, hr.is_current_registration DESC
+        ORDER BY hr.is_current_registration DESC, hr.registration_start_date DESC
     ) = 1
 )
 
@@ -91,7 +92,7 @@ SELECT
     ) }},
     
     -- Practice and geography
-    d.practice_code,
+    apm.practice_code,
     d.borough_registered,
     d.practice_postcode,
     d.practice_lsoa,
