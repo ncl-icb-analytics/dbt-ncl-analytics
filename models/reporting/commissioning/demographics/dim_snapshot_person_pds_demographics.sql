@@ -1,3 +1,9 @@
+{{
+    config(
+        tags=['daily']
+    )
+}}
+
 select
         --Record information
         pds.snapshot_year,

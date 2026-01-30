@@ -1,3 +1,9 @@
+{{
+    config(
+        tags=['daily']
+    )
+}}
+
 select
     --Record information
         pmi.sk_patient_id,
