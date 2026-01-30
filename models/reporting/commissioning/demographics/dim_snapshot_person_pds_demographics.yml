@@ -1,6 +1,10 @@
 version: 2
 models:
 - name: dim_snapshot_person_pds_demographics
+  config:
+      meta:
+        owner:
+          name: Jake Kealey
   description: >
     Annual snapshots to create a demographic lookup table for the population based on the PDS dataset. 
     Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
