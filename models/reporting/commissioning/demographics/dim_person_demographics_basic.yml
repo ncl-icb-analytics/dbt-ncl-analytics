@@ -12,6 +12,10 @@ models:
       reference data lookups.
 
       Documentation available: https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/docs/model_documentation/dim_person_demographics_basic.md
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
     columns:
       - name: sk_patient_id
         description: Surrogate key for patient
