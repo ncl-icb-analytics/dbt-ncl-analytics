@@ -1,0 +1,14 @@
+models:
+  - name: int_childhood_imms_historical_mmrv_dose2
+    description: Intermediate table holding mmrv dose 2 vaccination events for the historical population aged under 11. Officially introduced from January 2026. Person level
+
+    config:
+      meta:
+        owner:
+          name: KatsplatH
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique

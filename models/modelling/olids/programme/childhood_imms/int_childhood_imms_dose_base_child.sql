@@ -4,11 +4,11 @@
         tags=['childhood_imms'])
 
 }}
---Using the historic population anyone under the age of 111 who has been registered with an NCL practice in the last 48 months Rolling
---Creating a base table for vaccinations
+--Using the person_demographics for anyone under the age of 11 who has been ever been registered with an NCL practice (active or inactive) n~200,000
+--Creating a base table for vaccinations for this population to be joined against in further analysis n~2.5 million rows 
 SELECT DISTINCT
 p.PERSON_ID
-,p.practice_name as GP_NAME
+--,p.practice_name as GP_NAME
 ,p.practice_code
 ,v.VACCINE_ID
 ,v.VACCINE_NAME
@@ -19,8 +19,8 @@ p.PERSON_ID
   || '/'
   || LPAD(RIGHT(TO_VARCHAR(IFF(MONTH(v.event_date) >= 4, YEAR(v.event_date) + 1, YEAR(v.event_date))), 2), 2, '0')
     AS FISCAL_YEAR
-FROM {{ ref('int_childhood_imms_historical_population') }} p
---FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_POPULATION p
+FROM {{ ref('dim_person_demographics') }} p
+--FROM REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS p
 LEFT JOIN {{ ref('int_childhood_imms_vaccination_events_historical') }} v using (PERSON_ID)
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_VACCINATION_EVENTS_HISTORICAL v using (PERSON_ID)
 --restrict by AGE to less than 11

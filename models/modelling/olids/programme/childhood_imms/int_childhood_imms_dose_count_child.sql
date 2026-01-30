@@ -5,180 +5,9 @@
 
 }}
 --This table creates dose count and date labels for childhood immunisations for children aged under 11 years old using a base table
--- Creating CTE for 6in1 DOSE 1
-WITH SIXIN1_DOSE1 AS (
-       SELECT 
-        v.PERSON_ID,
-        v.EVENT_DATE AS sixin1_dose1_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose1_sort,
-        v.FISCAL_YEAR as sixin1_dose1_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose1_label,
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = '6IN1_1'  AND v.EVENT_TYPE = 'Administration'
-)
--- Creating CTE for 6in1 DOSE 2
-,SIXIN1_DOSE2 AS (
-       SELECT 
-        v.PERSON_ID,
-        v.EVENT_DATE AS sixin1_dose2_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose2_sort,
-       v.FISCAL_YEAR as sixin1_dose2_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose2_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = '6IN1_2'  AND v.EVENT_TYPE = 'Administration'
-)
--- Creating CTE for 6in1 DOSE 3
-,SIXIN1_DOSE3 AS (
-       SELECT 
-        v.PERSON_ID,
-        v.EVENT_DATE AS sixin1_dose3_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose3_sort,
-       v.FISCAL_YEAR as sixin1_dose3_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS sixin1_dose3_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = '6IN1_3'  AND v.EVENT_TYPE = 'Administration'
-)
- -- Creating CTE for Rotavirus DOSE 1
-,ROTA_DOSE1 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS rota_dose1_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS rota_dose1_sort,
-        v.FISCAL_YEAR as rota_dose1_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS rota_dose1_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = 'ROTA_1' AND v.EVENT_TYPE = 'Administration'
-)
--- Creating CTE for Rotavirus DOSE 2
-,ROTA_DOSE2 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS rota_dose2_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS rota_dose2_sort,
-        v.FISCAL_YEAR as rota_dose2_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS rota_dose2_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-        WHERE v.VACCINE_ID = 'ROTA_2' AND v.EVENT_TYPE = 'Administration'
-)  
- -- Creating CTE for MenB DOSE 1
-,MENB_DOSE1 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS menb_dose1_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS menb_dose1_sort,
-        v.FISCAL_YEAR as menb_dose1_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose1_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-        WHERE v.VACCINE_ID = 'MENB_1' and v.EVENT_TYPE = 'Administration'
-)
- -- Creating CTE for MenB DOSE 1
-,MENB_DOSE2 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS menb_dose2_date, 
-       TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS menb_dose2_sort,
-        v.FISCAL_YEAR as menb_dose2_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose2_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-        WHERE v.VACCINE_ID = 'MENB_2' AND v.EVENT_TYPE = 'Administration'
-)
- -- Creating CTE for MenB DOSE 1
-,MENB_DOSE3 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS menb_dose3_date, 
-       TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS menb_dose3_sort,
-        v.FISCAL_YEAR as menb_dose3_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS menb_dose3_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-        WHERE v.VACCINE_ID = 'MENB_3' AND v.EVENT_TYPE = 'Administration'
-)
--- Creating CTE for PCV DOSE 1
-,PCV_DOSE1 AS (
-    SELECT 
-        v.PERSON_ID,
-        v.EVENT_DATE AS pcv_dose1_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS pcv_dose1_sort,
-        v.FISCAL_YEAR as pcv_dose1_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS pcv_dose1_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = 'PCV_1' AND v.EVENT_TYPE = 'Administration'
-         )
--- Creating CTE for PCV DOSE 2
-,PCV_DOSE2 AS (
-    SELECT 
-        v.PERSON_ID,
-        v.EVENT_DATE AS pcv_dose2_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS pcv_dose2_sort,
-        v.FISCAL_YEAR as pcv_dose2_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS pcv_dose2_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = 'PCV_2' AND v.EVENT_TYPE = 'Administration'
-         )
- -- Creating CTE for HIBMENC DOSE 1
-,HIBMENC_DOSE1 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS hibmc_dose1_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS hibmc_dose1_sort,
-        v.FISCAL_YEAR as hibmc_dose1_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS hibmc_dose1_label
-       FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = 'HIBMENC_1' AND v.EVENT_TYPE = 'Administration'
-)
--- Creating CTE for MMR Dose 1
-,MMR_DOSE1 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS mmr_dose1_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS  mmr_dose1_sort,
-        v.FISCAL_YEAR as mmr_dose1_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS  mmr_dose1_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-        WHERE v.VACCINE_ID = 'MMR_1' AND v.EVENT_TYPE = 'Administration'
-)  
--- Creating CTE for MMR DOSE 2
-,MMR_DOSE2 AS (
-    SELECT 
-       v.PERSON_ID,
-        v.EVENT_DATE AS mmr_dose2_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS mmr_dose2_sort,
-        v.FISCAL_YEAR as mmr_dose2_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS mmr_dose2_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-        WHERE v.VACCINE_ID = 'MMR_2' AND v.EVENT_TYPE = 'Administration'
-)
-
--- Creating CTE for FOURIN1 DOSE 1
-,FOURIN1_DOSE1 AS (
-    SELECT 
-        v.PERSON_ID,
-        v.EVENT_DATE AS fourin1_dose1_date, 
-        TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS fourin1_dose1_sort,
-        v.FISCAL_YEAR as fourin1_dose1_fiscal,
-        MONTHNAME(v.EVENT_DATE) || '-' || YEAR(v.EVENT_DATE) AS fourin1_dose1_label
-        FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-        --restrict to administered doses only
-       WHERE v.VACCINE_ID = '4IN1_1' AND v.EVENT_TYPE = 'Administration'
-         )
-        
 
 SELECT DISTINCT
 v.PERSON_ID 
-,v.GP_NAME
 ,v.practice_code
 ,sixin1_dose1_label
 ,sixin1_dose1_fiscal
@@ -222,18 +51,44 @@ v.PERSON_ID
 ,fourin1_dose1_label
 ,fourin1_dose1_fiscal
 ,fourin1_dose1_sort
+,mmrv_dose1_label
+,mmrv_dose1_fiscal
+,mmrv_dose1_sort
+,mmrv_dose2_label
+,mmrv_dose2_fiscal
+,mmrv_dose2_sort
+--6-in-1 dose 4 no records yet
 FROM {{ ref('int_childhood_imms_dose_base_child') }} v
-left join SIXIN1_DOSE1 s1 using (PERSON_ID)
-left join SIXIN1_DOSE2 s2 using (PERSON_ID)
-left join SIXIN1_DOSE3 s3 using (PERSON_ID)
-left join ROTA_DOSE1 r1 using (PERSON_ID)
-left join ROTA_DOSE2 r2 using (PERSON_ID)
-left join MENB_DOSE1 m1 using (PERSON_ID)
-left join MENB_DOSE2 m2 using (PERSON_ID)
-left join MENB_DOSE3 m3 using (PERSON_ID)
-left join PCV_DOSE1 p1 using (PERSON_ID) 
-left join PCV_DOSE2 p2 using (PERSON_ID) 
-left join HIBMENC_DOSE1 h using (PERSON_ID)
-left join MMR_DOSE1 mr1 using (PERSON_ID)
-left join MMR_DOSE2 mr2 using (PERSON_ID)
-left join FOURIN1_DOSE1 f using (PERSON_ID)
+--from DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_BASE_CHILD v
+LEFT JOIN {{ ref('int_childhood_imms_historical_sixin1_dose1') }} s1 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_SIXIN1_DOSE1 s1 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_sixin1_dose2') }} s2 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_SIXIN1_DOSE2 s2 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_sixin1_dose3') }} s3 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_SIXIN1_DOSE3 s3 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_rota_dose1') }} r1 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_ROTA_DOSE1 r1 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_rota_dose2') }} r2 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_ROTA_DOSE2 r2 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_menb_dose1') }} m1 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_MENB_DOSE1 m1 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_menb_dose2') }} m2 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_MENB_DOSE2 m2 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_menb_dose3') }} m3 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_MENB_DOSE3 m3 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_pcv_dose1') }} p1 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_PCV_DOSE1 p1 using (PERSON_ID) 
+LEFT JOIN {{ ref('int_childhood_imms_historical_pcv_dose2') }} p2 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_PCV_DOSE2 p2 using (PERSON_ID) 
+LEFT JOIN {{ ref('int_childhood_imms_historical_hibmenc_dose1') }} h using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_HIBMENC_DOSE1 h using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_mmr_dose1') }} mr1 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_MMR_DOSE1 mr1 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_mmr_dose2') }} mr2 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_MMR_DOSE2 mr2 using (PERSON_ID)
+left join {{ ref('int_childhood_imms_historical_fourin1_dose1') }} f1 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_FOURIN1_DOSE1 f using (PERSON_ID)
+left join {{ ref('int_childhood_imms_historical_mmrv_dose1') }} mv1 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_MMRV_DOSE1 mv1 using (PERSON_ID)
+left join {{ ref('int_childhood_imms_historical_mmrv_dose2') }} mv2 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_MMRV_DOSE2 mv2 using (PERSON_ID)
