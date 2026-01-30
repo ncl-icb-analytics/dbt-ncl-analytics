@@ -124,7 +124,7 @@ lsoa_event as (
     select
         sk_patient_id,
         lsoa21_cd as lsoa_21,
-        code_date::date as residence_event_date,
+        code_date::date as lsoa_event_date,
         
         --Rank rows for this field to identify which to use
         row_number() over (
@@ -179,17 +179,18 @@ registered_event as (
 )
 
 select
-    base.sk_patient_id as sus_sk_patient_id,
-    gen.gender_code as sus_gender_code,
-    gen.gender_event_date as sus_gender_event_date,
-    age.date_of_birth as sus_date_of_birth,
-    age.dob_event_date as sus_dob_event_date,
-    eth.ethnicity_code as sus_ethnicity_code,
-    eth.ethnicity_event_date as sus_ethnicity_event_date,
-    res.lsoa_21 as sus_lsoa_21,
-    res.residence_event_date as sus_residence_event_date,
-    reg.practice_code as sus_practice_code,
-    reg.registered_event_date as sus_registered_event_date
+    'sus' as dataset_source,
+    base.sk_patient_id,
+    gen.gender_code,
+    gen.gender_event_date,
+    age.date_of_birth,
+    age.dob_event_date,
+    eth.ethnicity_code,
+    eth.ethnicity_event_date,
+    res.lsoa_21 as lsoa21_code,
+    res.lsoa_event_date,
+    reg.practice_code,
+    reg.registered_event_date
     
 from (select distinct sk_patient_id from base) as base
 
