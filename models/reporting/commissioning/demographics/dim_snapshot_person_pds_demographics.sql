@@ -4,6 +4,10 @@
     )
 }}
 
+{%
+    set self_icb_code = 'QMJ'
+%}
+
 select
         --Record information
         pds.snapshot_year,
@@ -23,7 +27,7 @@ select
         --Registered information
         (
                 --NCL Practice
-                dict_pcn.stp_code = 'QMJ' and
+                dict_pcn.stp_code = '{{self_icb_code}}' and
                 --The GP Practice is open (at time of snapshot)
                 coalesce(dict_gp.end_date, '9999-12-31') >= snapshot_date and
                 --No record of death
@@ -41,13 +45,13 @@ select
         dict_pcn.stp_code as icb_code,
         dict_pcn.stp_name as icb_name,
         case 
-            when (icb_code != 'QMJ' and gp_lu.borough is null) then 'Non-NCL Borough'
-            when (icb_code = 'QMJ' and dict_gp.end_date is not null) then 'Unknown due to closed practice'
+            when (icb_code != '{{self_icb_code}}' and gp_lu.borough is null) then 'Non-NCL Borough'
+            when (icb_code = '{{self_icb_code}}' and dict_gp.end_date is not null) then 'Unknown due to closed practice'
             else coalesce(gp_lu.borough, reg_bor_backup.borough, 'Unknown')
         end as registered_borough,
         nb_reg.neighbourhood_code as registered_neighbourhood_code,
         case
-            when (icb_code != 'QMJ' and nb_reg.neighbourhood_code is null) then 'Non-NCL Neighbourhood'
+            when (icb_code != '{{self_icb_code}}' and nb_reg.neighbourhood_code is null) then 'Non-NCL Neighbourhood'
             else coalesce(nb_reg.neighbourhood_name, 'Unknown')
         end as registered_neighbourhood_name,
 

@@ -4,6 +4,10 @@
     )
 }}
 
+{%
+    set self_icb_code = 'QMJ'
+%}
+
 select
     --Record information
         pmi.sk_patient_id,
@@ -40,13 +44,13 @@ select
         dict_pcn.stp_name as icb_name,
         ----Note NCL only for fields below----
         case 
-            when (icb_code != 'QMJ' and gp_lu.borough is null) then 'Non-NCL Borough'
-            when (icb_code = 'QMJ' and dict_gp.end_date is not null) then 'Unknown due to closed practice'
+            when (icb_code != '{{self_icb_code}}' and gp_lu.borough is null) then 'Non-NCL Borough'
+            when (icb_code = '{{self_icb_code}}' and dict_gp.end_date is not null) then 'Unknown due to closed practice'
             else coalesce(gp_lu.borough, reg_bor_backup.borough, 'Unknown')
         end as registered_borough,
         nb_reg.neighbourhood_code as registered_neighbourhood_code,
         case
-            when (icb_code != 'QMJ' and nb_reg.neighbourhood_code is null) then 'Non-NCL Neighbourhood'
+            when (icb_code != '{{self_icb_code}}' and nb_reg.neighbourhood_code is null) then 'Non-NCL Neighbourhood'
             else coalesce(nb_reg.neighbourhood_name, 'Unknown')
         end as registered_neighbourhood_name,
         --------------------------------------
