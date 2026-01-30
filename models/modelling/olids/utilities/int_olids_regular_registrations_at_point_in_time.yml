@@ -17,6 +17,10 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
     columns:
       - name: practice_ods_code
         description: GP practice ODS code
@@ -25,9 +29,13 @@ models:
           - unique
 
       - name: regular_registered_patients
-        description: Count of distinct persons with Regular registration 
+        description: Count of distinct persons with Regular registration
           episodes active on snapshot date
+        tests:
+          - not_null
 
       - name: snapshot_date
-        description: Reference date for point-in-time calculation (from EMIS 
+        description: Reference date for point-in-time calculation (from EMIS
           extract_date)
+        tests:
+          - not_null

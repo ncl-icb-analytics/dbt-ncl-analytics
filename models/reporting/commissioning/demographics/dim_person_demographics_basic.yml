@@ -2,16 +2,14 @@ version: 2
 
 models:
   - name: dim_person_demographics_basic
-    config:
-      meta:
-        owner:
-          name: Jake Kealey
     description: >
       Dimensional table providing comprehensive demographic information for persons,
       including gender, ethnicity, residence and registration details enriched with
       reference data lookups.
-
-      Documentation available: https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/docs/model_documentation/dim_person_demographics_basic.md
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
     columns:
       - name: sk_patient_id
         description: Surrogate key for patient
@@ -51,11 +49,8 @@ models:
       - name: record_residence_start_date
         description: Start date of current residence record
 
-      - name: lsoa_2021_code
+      - name: lsoa_21
         description: Lower Super Output Area code (2021 Census)
-
-      - name: lsoa_2021_name
-        description: Lower Super Output Area name (2021 Census)
 
       - name: ward_2025_code
         description: Ward code (2025)

@@ -5,7 +5,8 @@
         }
     ],
     "settings": {
-        // dbt warnings filter - dbt0102 deprecation warnings are false positives for Snowflake
+        // dbt fusion flags yml files as false positive errors; hide error decorations in explorer
+        "problems.decorations.enabled": false,
         "problems.defaultSeverityFilter": "warning",
 
         // Windows: auto-run start_dbt.ps1 when opening a terminal
@@ -40,13 +41,14 @@
 
         // dbt SQL files
         "files.associations": {
-            "*.sql": "jinja-sql"
+            "*.sql": "snowflake-sql"
         }
     },
     "extensions": {
         "recommendations": [
             "dbtLabsInc.dbt",
-            "ms-python.python"
+            "ms-python.python",
+            "snowflake.snowflake-vsc"
         ]
     }
 }
