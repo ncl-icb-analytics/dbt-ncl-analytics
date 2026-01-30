@@ -10,16 +10,14 @@ models:
         owner:
           name: Jake Kealey
     columns:
-      - name: dataset_source
-        description: Source dataset name (eth)
-      - name: sk_patient_id
+      - name: eth_sk_patient_id
         description: Surrogate key for patient
         data_tests:
           - not_null
           - unique
 
-      - name: ethnicity_code
+      - name: eth_ethnicity_code
         description: Ethnicity code from national data sets
 
-      - name: ethnicity_event_date
+      - name: eth_ethnicity_event_date
         description: Date of record in source dataset
