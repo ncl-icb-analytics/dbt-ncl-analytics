@@ -1,8 +1,7 @@
 models:
   - name: int_childhood_imms_dose_count_child
-    description: Intermediate table holding historical imms population (in the 
-      last 48 mths) under the age of 10 and any vaccinations associated with 
-      them.
+    description: Intermediate table holding historical imms population under the age of 11 and any vaccinations associated with 
+      them and the practice they were registered with n~200k.
 
     config:
       meta:

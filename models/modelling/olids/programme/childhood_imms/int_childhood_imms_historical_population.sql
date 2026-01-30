@@ -68,8 +68,10 @@ SELECT
     WHEN pmab.LOCAL_AUTHORITY_NAME IS NULL THEN 'Unknown'
     ELSE pmab.ward_name END as WARD_NAME
 FROM {{ ref('person_month_analysis_base') }} pmab
+--FROM REPORTING.OLIDS_PERSON_ANALYTICS.PERSON_MONTH_ANALYSIS_BASE pmab
 WHERE pmab.age IN (1, 2, 5, 11, 16)
     -- Exclude deceased patients (age frozen at death)
     AND pmab.is_deceased = FALSE
     -- Limit to last 48 months (4 years)
+    AND IS_ACTIVE
     AND pmab.analysis_month >= DATEADD('month', -48, CURRENT_DATE)
