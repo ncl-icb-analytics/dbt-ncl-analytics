@@ -152,9 +152,11 @@ jobs:
 
               print("Fetching git repository...")
               cur.execute("ALTER GIT REPOSITORY REPO__GITHUB__DBT_NCL_ANALYTICS FETCH")
+              print("Git fetch complete")
 
               print(f"Setting project to PR branch: {pr_branch}")
               cur.execute(f'ALTER DBT PROJECT DBT_NCL_ANALYTICS__CI ADD VERSION FROM \'@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/"{pr_branch}"\'')
+              print("Project branch set")
 
               file_count = int(os.environ.get('FILE_COUNT', 0))
               changed_files = os.environ.get('CHANGED_FILES', '').strip()
@@ -171,8 +173,17 @@ jobs:
               print(f"Executing: dbt {args}")
               cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__CI ARGS = '{args}'")
 
-              for row in cur.fetchall():
-                  print(row)
+              results = cur.fetchall()
+              print("\n--- dbt execution results ---")
+              for row in results:
+                  print(row[0] if len(row) == 1 else row)
+              print("--- end results ---\n")
+
+              # Check for failures in results
+              result_text = str(results)
+              if 'failed' in result_text.lower() or 'error' in result_text.lower():
+                  print("dbt build reported failures", file=sys.stderr)
+                  sys.exit(1)
 
               print("Validation complete!")
 
