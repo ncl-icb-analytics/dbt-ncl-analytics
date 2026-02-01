@@ -48,7 +48,8 @@ jobs:
         id: changes
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.sql' | tr '\n' ' ')
+            # --diff-filter=d excludes deleted files (only include added/modified/renamed)
+            CHANGED=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.sql' | tr '\n' ' ')
           else
             CHANGED=""  # Manual trigger = full build
           fi
@@ -166,9 +167,9 @@ jobs:
                   print(row[0] if len(row) == 1 else row)
               print("--- end results ---\n")
 
-              # Check for failures in results
+              # Check for failures in results (avoid false positives from "ERROR=0")
               result_text = str(results)
-              if 'failed' in result_text.lower() or 'error' in result_text.lower():
+              if 'job failed' in result_text.lower() or '"command_success": false' in result_text.lower():
                   print("dbt build reported failures", file=sys.stderr)
                   sys.exit(1)
 

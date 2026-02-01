@@ -60,7 +60,8 @@ jobs:
       - name: Get changed models
         id: changes
         run: |
-          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'models/**/*.sql' | tr '\n' ' ')
+          # --diff-filter=d excludes deleted files (only include added/modified/renamed)
+          CHANGED=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'models/**/*.sql' | tr '\n' ' ')
           COUNT=$(echo "$CHANGED" | wc -w)
           echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
           echo "file_count=$COUNT" >> $GITHUB_OUTPUT
@@ -179,9 +180,9 @@ jobs:
                   print(row[0] if len(row) == 1 else row)
               print("--- end results ---\n")
 
-              # Check for failures in results
+              # Check for failures in results (avoid false positives from "ERROR=0")
               result_text = str(results)
-              if 'failed' in result_text.lower() or 'error' in result_text.lower():
+              if 'job failed' in result_text.lower() or '"command_success": false' in result_text.lower():
                   print("dbt build reported failures", file=sys.stderr)
                   sys.exit(1)
 
