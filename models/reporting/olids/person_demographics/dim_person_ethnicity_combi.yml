@@ -8,3 +8,9 @@ models:
       meta:
         owner:
           name: Emily Baldwin
+    columns:
+      - name: sk_patient_id
+        description: 'Surrogate key for patient - primary key'
+        tests:
+          - unique
+          - not_null

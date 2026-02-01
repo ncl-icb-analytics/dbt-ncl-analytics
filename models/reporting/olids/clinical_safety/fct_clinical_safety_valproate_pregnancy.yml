@@ -24,7 +24,10 @@ models:
           name: EddieDavison92
     columns:
       - name: person_id
-        description: Unique person identifier
+        description: 'Unique person identifier - primary key'
+        tests:
+          - unique
+          - not_null
 
       - name: age
         description: Person's current age
