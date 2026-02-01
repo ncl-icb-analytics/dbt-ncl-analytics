@@ -6,7 +6,7 @@
 
 -- Blood Pressure Control Status (Matching Legacy Superior Design)
 -- Applies patient-specific BP thresholds with priority ranking
--- Includes clinical context and risk-based timeliness assessment
+-- Includes clinical context, risk-based timeliness assessment, and hypertension staging
 
 WITH latest_bp AS (
     -- Get most recent BP event (paired systolic/diastolic) for each person
@@ -107,90 +107,172 @@ ranked_thresholds AS (
     QUALIFY
         ROW_NUMBER() OVER (PARTITION BY pc.person_id ORDER BY priority_rank ASC)
         = 1
+),
+
+with_staging AS (
+    -- Add hypertension staging based on NICE NG136 diagnostic thresholds
+    -- Uses ABPM/HBPM thresholds if reading is from home/ABPM, otherwise clinic thresholds
+    SELECT
+        rt.*,
+
+        -- Determine if using ABPM/HBPM thresholds (more lenient) or clinic thresholds
+        COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) AS is_ambulatory_reading,
+
+        -- Systolic stage (using appropriate thresholds)
+        CASE
+            WHEN rt.latest_systolic_value >= 180 THEN 3  -- Stage 3: ≥180 (same for both)
+            WHEN COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) THEN
+                CASE
+                    WHEN rt.latest_systolic_value >= 150 THEN 2  -- Stage 2 ABPM/HBPM: ≥150
+                    WHEN rt.latest_systolic_value >= 135 THEN 1  -- Stage 1 ABPM/HBPM: ≥135
+                    ELSE 0  -- Normal
+                END
+            ELSE
+                CASE
+                    WHEN rt.latest_systolic_value >= 160 THEN 2  -- Stage 2 Clinic: ≥160
+                    WHEN rt.latest_systolic_value >= 140 THEN 1  -- Stage 1 Clinic: ≥140
+                    ELSE 0  -- Normal
+                END
+        END AS systolic_stage,
+
+        -- Diastolic stage (using appropriate thresholds)
+        CASE
+            WHEN rt.latest_diastolic_value >= 120 THEN 3  -- Stage 3: ≥120 (same for both)
+            WHEN COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) THEN
+                CASE
+                    WHEN rt.latest_diastolic_value >= 95 THEN 2  -- Stage 2 ABPM/HBPM: ≥95
+                    WHEN rt.latest_diastolic_value >= 85 THEN 1  -- Stage 1 ABPM/HBPM: ≥85
+                    ELSE 0  -- Normal
+                END
+            ELSE
+                CASE
+                    WHEN rt.latest_diastolic_value >= 100 THEN 2  -- Stage 2 Clinic: ≥100
+                    WHEN rt.latest_diastolic_value >= 90 THEN 1   -- Stage 1 Clinic: ≥90
+                    ELSE 0  -- Normal
+                END
+        END AS diastolic_stage
+
+    FROM ranked_thresholds AS rt
 )
 
--- Final output: BP control status with applied thresholds and timeliness
+-- Final output: BP control status with applied thresholds, staging, and timeliness
 SELECT
-    rt.person_id,
+    ws.person_id,
 
     -- Latest BP event details
-    rt.latest_bp_date,
-    rt.latest_systolic_value,
-    rt.latest_diastolic_value,
-    rt.is_home_bp_event,
-    rt.is_abpm_bp_event,
+    ws.latest_bp_date,
+    ws.latest_systolic_value,
+    ws.latest_diastolic_value,
+    ws.is_home_bp_event,
+    ws.is_abpm_bp_event,
 
     -- Patient characteristics
-    rt.age,
-    rt.has_ckd,
-    rt.is_diagnosed_htn,
-    rt.latest_acr_value,
-    rt.threshold_rule_id AS applied_threshold_rule_id,
+    ws.age,
+    ws.has_ckd,
+    ws.is_diagnosed_htn,
+    ws.latest_acr_value,
+    ws.threshold_rule_id AS applied_threshold_rule_id,
 
     -- Applied threshold details
-    rt.patient_group AS applied_patient_group,
-    rt.systolic_threshold AS applied_systolic_threshold,
-    rt.diastolic_threshold AS applied_diastolic_threshold,
-    (rt.is_on_dm_register AND rt.diabetes_type = 'Type 2') AS has_t2dm,
+    ws.patient_group AS applied_patient_group,
+    ws.systolic_threshold AS applied_systolic_threshold,
+    ws.diastolic_threshold AS applied_diastolic_threshold,
+    (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2') AS has_t2dm,
 
     -- BP control status calculations
     COALESCE(
-        rt.latest_systolic_value IS NOT NULL
-        AND rt.latest_systolic_value < rt.systolic_threshold,
+        ws.latest_systolic_value IS NOT NULL
+        AND ws.latest_systolic_value < ws.systolic_threshold,
         FALSE
     ) AS is_systolic_controlled,
 
     COALESCE(
-        rt.latest_diastolic_value IS NOT NULL
-        AND rt.latest_diastolic_value < rt.diastolic_threshold,
+        ws.latest_diastolic_value IS NOT NULL
+        AND ws.latest_diastolic_value < ws.diastolic_threshold,
         FALSE
     ) AS is_diastolic_controlled,
 
     -- Overall control: both systolic AND diastolic must be controlled
     COALESCE((
-        rt.latest_systolic_value IS NOT NULL
-        AND rt.latest_systolic_value < rt.systolic_threshold
+        ws.latest_systolic_value IS NOT NULL
+        AND ws.latest_systolic_value < ws.systolic_threshold
     )
     AND (
-        rt.latest_diastolic_value IS NOT NULL
-        AND rt.latest_diastolic_value < rt.diastolic_threshold
+        ws.latest_diastolic_value IS NOT NULL
+        AND ws.latest_diastolic_value < ws.diastolic_threshold
     ), FALSE) AS is_overall_bp_controlled,
 
+    -- Hypertension staging (NICE NG136 diagnostic thresholds)
+    -- Uses highest stage between systolic and diastolic
+    GREATEST(ws.systolic_stage, ws.diastolic_stage) AS hypertension_stage_number,
+
+    CASE GREATEST(ws.systolic_stage, ws.diastolic_stage)
+        WHEN 3 THEN 'Stage 3 (Severe)'
+        WHEN 2 THEN 'Stage 2'
+        WHEN 1 THEN 'Stage 1'
+        ELSE 'Normal'
+    END AS hypertension_stage,
+
+    -- Which measurement type determined the staging thresholds
+    CASE
+        WHEN ws.is_ambulatory_reading THEN 'ABPM/HBPM'
+        ELSE 'Clinic'
+    END AS staging_threshold_basis,
+
+    -- Case-finding helper: elevated BP but not on hypertension register
+    CASE
+        WHEN GREATEST(ws.systolic_stage, ws.diastolic_stage) >= 1
+            AND NOT ws.is_diagnosed_htn
+        THEN TRUE
+        ELSE FALSE
+    END AS is_case_finding_candidate,
+
     -- BP reading timeliness assessment
-    DATEDIFF(MONTH, rt.latest_bp_date, CURRENT_DATE())
+    DATEDIFF(MONTH, ws.latest_bp_date, CURRENT_DATE())
         AS latest_bp_reading_age_months,
+
+    -- Recommended monitoring interval with description
+    CASE
+        WHEN (
+            (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2')
+            OR ws.has_ckd
+            OR ws.is_diagnosed_htn
+        ) THEN '12 months'
+        WHEN ws.age >= 40 THEN '5 years'
+        ELSE 'No routine screening'
+    END AS recommended_monitoring_interval,
 
     -- Risk-based timeliness: higher risk = more frequent monitoring
     CASE
         -- High risk (T2DM OR CKD OR diagnosed HTN) - check within 12 months
         WHEN
             (
-                (rt.is_on_dm_register AND rt.diabetes_type = 'Type 2')
-                OR rt.has_ckd
-                OR rt.is_diagnosed_htn
+                (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2')
+                OR ws.has_ckd
+                OR ws.is_diagnosed_htn
             )
             THEN
                 COALESCE(
-                    DATEDIFF(MONTH, rt.latest_bp_date, CURRENT_DATE())
+                    DATEDIFF(MONTH, ws.latest_bp_date, CURRENT_DATE())
                     <= 12,
                     FALSE
                 )
 
         -- Standard monitoring (age ≥40, no high-risk conditions) - check within 5 years
         WHEN (
-            NOT (rt.is_on_dm_register AND rt.diabetes_type = 'Type 2')
-            AND NOT rt.has_ckd AND NOT rt.is_diagnosed_htn AND rt.age >= 40
+            NOT (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2')
+            AND NOT ws.has_ckd AND NOT ws.is_diagnosed_htn AND ws.age >= 40
         )
             THEN
                 COALESCE(
-                    DATEDIFF(MONTH, rt.latest_bp_date, CURRENT_DATE())
+                    DATEDIFF(MONTH, ws.latest_bp_date, CURRENT_DATE())
                     <= 60,
                     FALSE
                 )
 
-        -- Age <40 with no high-risk conditions - no threshold
+        -- Age <40 with no high-risk conditions - no routine screening recommended
         ELSE NULL
     END AS is_latest_bp_within_recommended_interval
 
-FROM ranked_thresholds AS rt
-ORDER BY rt.person_id
+FROM with_staging AS ws
+ORDER BY ws.person_id
