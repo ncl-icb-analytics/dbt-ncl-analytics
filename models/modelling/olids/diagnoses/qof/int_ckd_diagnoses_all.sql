@@ -39,6 +39,9 @@ SELECT
     CASE WHEN obs.cluster_id = 'CKD_COD' THEN TRUE ELSE FALSE END AS is_stage_3_5_code,
     CASE WHEN obs.cluster_id = 'CKD1AND2_COD' THEN TRUE ELSE FALSE END AS is_stage_1_2_code,
     CASE WHEN obs.cluster_id = 'CKDRES_COD' THEN TRUE ELSE FALSE END AS is_resolved_code,
+    
+    -- Backward compatibility alias (used by calculate_ckd_register macro and fct_person_condition_episodes)
+    CASE WHEN obs.cluster_id = 'CKD_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
 
     -- CKD observation type determination
     CASE
