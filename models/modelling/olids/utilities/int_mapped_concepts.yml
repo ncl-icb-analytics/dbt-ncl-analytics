@@ -1,3 +1,4 @@
+version: 2
 models:
   - name: int_mapped_concepts
     description: 'Lookup table mapping clinical codes to concepts and source code
@@ -19,6 +20,11 @@ models:
 
       Purpose: Support efficient clinical code lookups and concept mapping across
       the OLIDS system.'
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - source_code_id
+            - cluster_id
     config:
       meta:
         owner:

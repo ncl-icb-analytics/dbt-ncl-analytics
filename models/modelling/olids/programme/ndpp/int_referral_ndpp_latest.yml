@@ -1,11 +1,15 @@
-﻿version: 1
+version: 2
 models:
   - name: int_referral_ndpp_latest
-    description: 'Determine Latest National Diabetes Prevention Programme outcome
-      using PCD REFSET DPPOFF_COD. Those that have stated a decline is preferred over
-      the code for invitation'
+    description: 'Latest NDPP outcome per person. One row per person with most recent NDPP event.
+      Decline is preferred over invitation where both exist on the same date.'
     config:
       meta:
         owner:
           name: KateHomer55
-
+    columns:
+      - name: person_id
+        description: 'Patient identifier - primary key (one row per person)'
+        tests:
+          - unique
+          - not_null

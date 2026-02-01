@@ -1,0 +1,21 @@
+version: 2
+models:
+  - name: int_geography_london_areas
+    description: 'London area identification using LSOA reference data.
+      One row per Local Authority District (LAD) with London classification.'
+    columns:
+      - name: lad25_cd
+        description: 'Local Authority District 2025 code - primary key'
+        tests:
+          - unique
+          - not_null
+      - name: lad25_nm
+        description: 'Local Authority District name'
+      - name: london_classification
+        description: 'NCL, Other London, Outside London, or Unknown'
+      - name: is_london_area
+        description: 'TRUE if NCL or Other London'
+      - name: is_ncl_area
+        description: 'TRUE if NCL area'
+      - name: borough_name
+        description: 'Borough name for London areas only'

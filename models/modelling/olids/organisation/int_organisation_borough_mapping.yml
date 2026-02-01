@@ -27,7 +27,10 @@ models:
           name: EddieDavison92
     columns:
       - name: practice_code
-        description: 'Unique identifier for the GP practice'
+        description: 'Unique identifier for the GP practice - primary key'
+        tests:
+          - unique
+          - not_null
       - name: borough_registered
         description: 'Borough assignment for the practice based on historic CCG relationships'
       - name: practice_historic_ccg
