@@ -1,13 +1,10 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_65
-    description: 'CVD case finding priority (e): Patients with QRisk ≥10% not on high-intensity
-      statins.
+    description: 'Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12m).
+      Excludes statin allergies/adverse reactions, not indicated, and declines (60m).
 
-      Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12 months), no statin
-      allergies or decisions (60 months).
-
-      One row per person requiring high-intensity statin initiation or escalation.'
+      One row per person.'
     config:
       meta:
         indicator:
@@ -15,11 +12,12 @@ models:
           type: "CASE_FINDING"
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
-          name_short: "QRisk ≥10% no high-intensity statin"
-          description_short: "Patients with QRisk ≥10% not on high-intensity statins"
+          name_short: "CVD_65: QRISK2 ≥10%, no high-intensity statin"
+          description_short: "QRISK2 ≥10%, no high-intensity statin"
           description_long: >
-            Age 40-84, QRISK2 ≥10%, not on high-intensity statins. Priority (e) for
-            high-intensity statin therapy.
+            Age 40-84, QRISK2 ≥10%, not on high-intensity statins (12m).
+            Excludes statin allergies/adverse reactions, not indicated,
+            and declines (60m).
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_65"
