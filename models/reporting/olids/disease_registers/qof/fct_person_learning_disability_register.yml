@@ -22,17 +22,8 @@ models:
           - unique
           - not_null
 
-      - name: latest_exclusion_date
-        description: Date of most recent LD exclusion code (for tracking)
-
-      - name: all_exclusion_concept_codes
-        description: Array of all LD exclusion concept codes for traceability
-
       - name: is_age_14_or_over
         description: Flag indicating patient is 14+ (for annual health check eligibility)
-
-      - name: was_excluded
-        description: Flag indicating patient has exclusion code after latest diagnosis
 
     config:
       meta:

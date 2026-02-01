@@ -29,8 +29,6 @@ WITH learning_disability_diagnoses AS (
             AS earliest_diagnosis_date,
         MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END)
             AS latest_diagnosis_date,
-        MAX(CASE WHEN is_exclusion_code THEN clinical_effective_date END)
-            AS latest_exclusion_date,
 
         -- QOF register logic: LD diagnosis without subsequent exclusion
         COALESCE(
@@ -51,10 +49,7 @@ WITH learning_disability_diagnoses AS (
         ) AS all_ld_concept_codes,
         ARRAY_AGG(
             DISTINCT CASE WHEN is_diagnosis_code THEN concept_display END
-        ) AS all_ld_concept_displays,
-        ARRAY_AGG(
-            DISTINCT CASE WHEN is_exclusion_code THEN concept_code END
-        ) AS all_exclusion_concept_codes
+        ) AS all_ld_concept_displays
 
     FROM {{ ref('int_learning_disability_diagnoses_all') }}
     GROUP BY person_id
@@ -68,25 +63,13 @@ register_logic AS (
         -- Clinical dates
         ld.earliest_diagnosis_date,
         ld.latest_diagnosis_date,
-        ld.latest_exclusion_date,
 
         -- Traceability arrays
         ld.all_ld_concept_codes,
         ld.all_ld_concept_displays,
-        ld.all_exclusion_concept_codes,
-
-        -- Criteria flags for transparency
-        COALESCE(ld.has_active_ld_diagnosis, FALSE) AS has_active_diagnosis,
 
         -- Age flag for downstream use (annual health checks typically 14+)
         COALESCE(age.age >= 14, FALSE) AS is_age_14_or_over,
-
-        -- Exclusion flag: TRUE if patient has exclusion code after latest diagnosis
-        COALESCE(
-            ld.latest_exclusion_date IS NOT NULL
-            AND ld.latest_exclusion_date >= ld.latest_diagnosis_date,
-            FALSE
-        ) AS was_excluded,
 
         -- QOF Register: Active LD diagnosis (no age restriction per QOF v50)
         COALESCE(ld.has_active_ld_diagnosis, FALSE) AS is_on_register
@@ -105,17 +88,13 @@ SELECT
     -- Clinical dates
     earliest_diagnosis_date,
     latest_diagnosis_date,
-    latest_exclusion_date,
 
     -- Traceability for audit
     all_ld_concept_codes,
     all_ld_concept_displays,
-    all_exclusion_concept_codes,
 
-    -- Criteria flags
-    has_active_diagnosis,
-    is_age_14_or_over,
-    was_excluded
+    -- Criteria flag
+    is_age_14_or_over
 
 FROM register_logic
 WHERE is_on_register = TRUE
