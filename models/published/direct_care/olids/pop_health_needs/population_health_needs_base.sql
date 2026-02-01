@@ -153,7 +153,7 @@ SELECT
     c.has_familial_hypercholesterolaemia,
     c.has_frailty,
     c.has_learning_disability,
-    c.has_learning_disability_all_ages,
+    c.has_learning_disability_under_14,
     c.has_osteoporosis,
     c.has_palliative_care,
     c.has_rheumatoid_arthritis,

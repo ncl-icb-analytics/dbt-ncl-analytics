@@ -1,46 +1,47 @@
 version: 2
 models:
   - name: int_learning_disability_diagnoses_all
-    description: 'Learning disability diagnosis observations for QOF register management.
-
-      One row per diagnosis observation using LD_COD cluster. Annual health check
-      eligibility typically ≥14 years.'
+    description: >
+      Learning disability diagnosis and exclusion observations for QOF register management.
+      One row per observation using LD_COD (diagnosis) and LDREM_COD (exclusion) clusters.
+      No age restriction in QOF v50 spec.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
       - name: id
-        description: 'Unique identifier for the clinical observation'
+        description: Unique identifier for the clinical observation
         tests:
           - unique
           - not_null
 
       - name: person_id
-        description: 'Patient identifier'
+        description: Patient identifier
 
       - name: clinical_effective_date
-        description: 'Date when learning disability diagnosis was clinically effective'
+        description: Date when learning disability observation was clinically effective
 
       - name: concept_code
-        description: 'Clinical code for learning disability diagnosis'
+        description: Clinical code for learning disability diagnosis or exclusion
 
       - name: concept_display
-        description: 'Human-readable description of the learning disability clinical
-          code'
+        description: Human-readable description of the clinical code
 
       - name: source_cluster_id
-        description: 'QOF cluster identifier (LD_COD)'
+        description: QOF cluster identifier (LD_COD or LDREM_COD)
 
       - name: is_diagnosis_code
-        description: 'Flag indicating learning disability diagnosis code (LD_COD cluster)'
+        description: Flag indicating learning disability diagnosis code (LD_COD cluster)
+
+      - name: is_exclusion_code
+        description: Flag indicating learning disability exclusion code (LDREM_COD cluster)
 
       - name: learning_disability_observation_type
-        description: 'Categorised learning disability observation type (Learning Disability
-          Diagnosis)'
+        description: Categorised observation type (Learning Disability Diagnosis or Exclusion)
 
     tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: LD_COD
+          cluster_ids: LD_COD, LDREM_COD
