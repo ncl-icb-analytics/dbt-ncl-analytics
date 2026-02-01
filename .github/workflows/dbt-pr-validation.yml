@@ -44,14 +44,24 @@ jobs:
         contains(github.event.pull_request.labels.*.name, '❄️snowflake-ci')
       ))
     concurrency:
-      group: snowflake-dbt-project
-      cancel-in-progress: false
+      # Per-PR concurrency: new commits to same PR cancel old runs
+      group: pr-validation-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     permissions:
       contents: read
+      actions: read  # Required for turnstyle to check workflow runs
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
+
+      # Queue across different PRs - Snowflake dbt project can only run one branch at a time
+      - name: Wait for other PR validations
+        uses: softprops/turnstyle@v2
+        with:
+          same-branch-only: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
         with:
