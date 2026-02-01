@@ -1,0 +1,34 @@
+version: 2
+models:
+  - name: int_geography_mappings
+    description: 'Geographic code to name mappings for ICBs, local authorities, LSOAs, and MSOAs.
+      One row per unique combination of mapping category, type, and code.'
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - mapping_category
+            - mapping_type
+            - code
+    columns:
+      - name: mapping_category
+        description: 'ORGANISATION, GEOGRAPHY, or GEOGRAPHY_MAPPING'
+        tests:
+          - not_null
+      - name: mapping_type
+        description: 'Type within category (e.g., PRIMARY_CARE, LSOA_2021)'
+        tests:
+          - not_null
+      - name: code
+        description: 'Geographic or organisation code'
+        tests:
+          - not_null
+      - name: name
+        description: 'Name or mapped value for the code'
+      - name: start_date
+        description: 'Start date for organisations'
+      - name: end_date
+        description: 'End date for organisations'
+      - name: parent_code
+        description: 'Parent code for hierarchical mappings'
+      - name: parent_name
+        description: 'Parent name for hierarchical mappings'

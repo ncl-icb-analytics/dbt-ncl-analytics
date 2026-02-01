@@ -10,3 +10,9 @@ models:
       meta:
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        description: 'Patient identifier - primary key (one row per person)'
+        tests:
+          - unique
+          - not_null
