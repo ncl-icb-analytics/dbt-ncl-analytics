@@ -172,10 +172,18 @@ jobs:
 
               print(f"Executing: dbt {args}")
               cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__CI ARGS = '{args}'")
-              print("dbt execution complete")
 
-              for row in cur.fetchall():
-                  print(row)
+              results = cur.fetchall()
+              print("\n--- dbt execution results ---")
+              for row in results:
+                  print(row[0] if len(row) == 1 else row)
+              print("--- end results ---\n")
+
+              # Check for failures in results
+              result_text = str(results)
+              if 'failed' in result_text.lower() or 'error' in result_text.lower():
+                  print("dbt build reported failures", file=sys.stderr)
+                  sys.exit(1)
 
               print("Validation complete!")
 
