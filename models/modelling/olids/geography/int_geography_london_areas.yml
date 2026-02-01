@@ -3,6 +3,10 @@ models:
   - name: int_geography_london_areas
     description: 'London area identification using LSOA reference data.
       One row per Local Authority District (LAD) with London classification.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: lad25_cd
         description: 'Local Authority District 2025 code - primary key'

@@ -94,10 +94,3 @@ models:
         description: Flag for areas in most deprived 20% (deciles 1-2)
         tests:
           - not_null
-  - name: int_geography_london_areas
-    description: London area classifications by Local Authority District. One 
-      row per LAD with NCL, Other London, and Outside London classification.
-    config:
-      meta:
-        owner:
-          name: EddieDavison92
