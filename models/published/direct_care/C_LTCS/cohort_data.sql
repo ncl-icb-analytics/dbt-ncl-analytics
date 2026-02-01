@@ -57,7 +57,7 @@ select il.patient_id
     , pc.has_heart_failure
     , pc.has_hypertension
     , pc.has_learning_disability
-    , pc.has_learning_disability_all_ages as has_learning_disability_all_ages
+    , pc.has_learning_disability_under_14 as has_learning_disability_under_14
     , pc.has_nafld
     , pc.has_non_diabetic_hyperglycaemia
     , pc.has_obesity
@@ -126,7 +126,7 @@ select il.patient_id
         ELSE polyp.medication_name_list
       END as medication_name_list
     ,polyp.is_polypharmacy_5plus
-    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability_all_ages) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
+    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
     -- Recent medications (last 30 days and last year)
     ,rm.medications_recent_12mo
     ,rm.unique_active_ingredient_count_12mo

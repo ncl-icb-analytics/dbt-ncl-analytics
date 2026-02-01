@@ -36,7 +36,7 @@ person_conditions AS (
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'HF' THEN TRUE END), FALSE) AS has_heart_failure,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'HTN' THEN TRUE END), FALSE) AS has_hypertension,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'LD' THEN TRUE END), FALSE) AS has_learning_disability,
-        COALESCE(MAX(CASE WHEN ltc.condition_code = 'LD_ALL' THEN TRUE END), FALSE) AS has_learning_disability_all_ages,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'LD_U14' THEN TRUE END), FALSE) AS has_learning_disability_under_14,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'NAFLD' THEN TRUE END), FALSE) AS has_nafld,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'NDH' THEN TRUE END), FALSE) AS has_non_diabetic_hyperglycaemia,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'OB' THEN TRUE END), FALSE) AS has_obesity,
