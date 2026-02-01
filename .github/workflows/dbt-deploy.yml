@@ -19,17 +19,20 @@ name: dbt Deploy to Production
 
 on:
   workflow_dispatch:
-  # TODO: Enable after permissions granted:
-  # push:
-  #   branches: [main]
-  #   paths:
-  #     - 'models/**'
-  #     - 'macros/**'
+  push:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'macros/**'
 
 jobs:
   deploy-models:
     name: Deploy Changed Models + Downstream
     runs-on: ubuntu-latest
+    # Queue deploys sequentially - don't cancel, wait for previous to finish
+    concurrency:
+      group: dbt-deploy-prod
+      cancel-in-progress: false
     permissions:
       contents: read
     steps:
