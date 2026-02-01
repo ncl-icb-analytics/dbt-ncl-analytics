@@ -1,32 +1,6 @@
 version: 2
 
 models:
-  - name: int_geography_mappings
-    description: Single source of truth for geography code-to-name mappings
-    config:
-      meta:
-        owner:
-          name: EddieDavison92
-    columns:
-      - name: mapping_category
-        description: Category of mapping (ORGANISATION, GEOGRAPHY, 
-          GEOGRAPHY_MAPPING)
-      - name: mapping_type
-        description: Type of mapping (PRIMARY_CARE, LOCAL_AUTHORITY, LSOA_2021, 
-          etc.)
-      - name: code
-        description: Geographic or organisation code
-      - name: name
-        description: Geographic or organisation name
-      - name: start_date
-        description: Start date for organisation records
-      - name: end_date
-        description: End date for organisation records
-      - name: parent_code
-        description: Parent geography code for hierarchical mappings
-      - name: parent_name
-        description: Parent geography name for hierarchical mappings
-
   - name: int_geography_lsoa_2011
     description: LSOA 2011 geography with IMD 2019 deprivation data
     columns:

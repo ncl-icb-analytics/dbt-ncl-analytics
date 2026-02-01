@@ -3,6 +3,10 @@ models:
   - name: int_geography_mappings
     description: 'Geographic code to name mappings for ICBs, local authorities, LSOAs, and MSOAs.
       One row per unique combination of mapping category, type, and code.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
