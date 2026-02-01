@@ -154,10 +154,7 @@ jobs:
               cur.execute("ALTER GIT REPOSITORY REPO__GITHUB__DBT_NCL_ANALYTICS FETCH")
 
               print(f"Setting project to PR branch: {pr_branch}")
-              cur.execute(f"""
-                  ALTER DBT PROJECT DBT_NCL_ANALYTICS__CI
-                  ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/{pr_branch}'
-              """)
+              cur.execute(f'ALTER DBT PROJECT DBT_NCL_ANALYTICS__CI ADD VERSION FROM \'@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/"{pr_branch}"\'')
 
               file_count = int(os.environ.get('FILE_COUNT', 0))
               changed_files = os.environ.get('CHANGED_FILES', '').strip()
