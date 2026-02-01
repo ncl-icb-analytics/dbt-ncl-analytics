@@ -19,12 +19,11 @@ name: dbt Deploy to Production
 
 on:
   workflow_dispatch:
-  # TODO: Enable after permissions granted:
-  # push:
-  #   branches: [main]
-  #   paths:
-  #     - 'models/**'
-  #     - 'macros/**'
+  push:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'macros/**'
 
 jobs:
   deploy-models:
