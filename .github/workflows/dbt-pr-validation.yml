@@ -38,10 +38,10 @@ jobs:
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event.action == 'review_requested' ||
-      (github.event.action == 'labeled' && github.event.label.name == 'snowflake-ci') ||
+      (github.event.action == 'labeled' && github.event.label.name == '❄️snowflake-ci') ||
       (github.event.action == 'synchronize' && (
         github.event.pull_request.requested_reviewers[0] != null ||
-        contains(github.event.pull_request.labels.*.name, 'snowflake-ci')
+        contains(github.event.pull_request.labels.*.name, '❄️snowflake-ci')
       ))
     concurrency:
       group: snowflake-ci-${{ github.head_ref || github.ref }}
