@@ -52,3 +52,9 @@ models:
               sort_order: 2
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
