@@ -44,8 +44,8 @@ jobs:
         contains(github.event.pull_request.labels.*.name, '❄️snowflake-ci')
       ))
     concurrency:
-      group: snowflake-ci-${{ github.head_ref || github.ref }}
-      cancel-in-progress: true
+      group: snowflake-dbt-project
+      cancel-in-progress: false
     permissions:
       contents: read
     steps:
