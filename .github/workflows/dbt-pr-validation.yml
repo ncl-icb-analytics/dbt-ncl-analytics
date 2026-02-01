@@ -60,12 +60,35 @@ jobs:
       - name: Get changed models
         id: changes
         run: |
-          # --diff-filter=d excludes deleted files (only include added/modified/renamed)
-          CHANGED=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'models/**/*.sql' | tr '\n' ' ')
+          # Get changed .sql files directly
+          SQL_FILES=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'models/**/*.sql')
+          
+          # Get changed .yml/.yaml files and find associated .sql models
+          YML_FILES=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'models/**/*.yml' 'models/**/*.yaml')
+          
+          # For each yml file, find corresponding sql file(s) in same directory
+          YML_DERIVED_SQL=""
+          for yml in $YML_FILES; do
+            dir=$(dirname "$yml")
+            # Check if a .sql file with same base name exists
+            base=$(basename "$yml" .yml)
+            base=$(basename "$base" .yaml)
+            if [ -f "$dir/$base.sql" ]; then
+              YML_DERIVED_SQL="$YML_DERIVED_SQL $dir/$base.sql"
+            fi
+            # Also include all .sql files in same directory (yml may define multiple models)
+            for sql in "$dir"/*.sql; do
+              [ -f "$sql" ] && YML_DERIVED_SQL="$YML_DERIVED_SQL $sql"
+            done
+          done
+          
+          # Combine and deduplicate
+          CHANGED=$(echo "$SQL_FILES $YML_DERIVED_SQL" | tr ' ' '\n' | sort -u | tr '\n' ' ')
           COUNT=$(echo "$CHANGED" | wc -w)
           echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
           echo "file_count=$COUNT" >> $GITHUB_OUTPUT
           echo "Found $COUNT changed model files"
+          [ -n "$YML_FILES" ] && echo "YML changes detected - included associated models"
 
       - name: Setup Snowflake credentials
         if: steps.changes.outputs.file_count != '0'
