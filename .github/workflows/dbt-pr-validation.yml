@@ -19,17 +19,28 @@ name: dbt PR Validation
 
 on:
   workflow_dispatch:
-  # TODO: Enable after permissions granted:
-  # pull_request:
-  #   branches: [main]
-  #   paths:
-  #     - 'models/**'
-  #     - 'macros/**'
+  pull_request:
+    types: [labeled, review_requested, synchronize]
+    branches: [main]
+
+concurrency:
+  group: snowflake-ci-${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   validate-models:
     name: Validate Changed Models
     runs-on: ubuntu-latest
+    # Run on: manual dispatch, reviewer assigned, snowflake-ci label added,
+    # or new commits when reviewer/label already present
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event.action == 'review_requested' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'snowflake-ci') ||
+      (github.event.action == 'synchronize' && (
+        github.event.pull_request.requested_reviewers[0] != null ||
+        contains(github.event.pull_request.labels.*.name, 'snowflake-ci')
+      ))
     permissions:
       contents: read
     steps:
