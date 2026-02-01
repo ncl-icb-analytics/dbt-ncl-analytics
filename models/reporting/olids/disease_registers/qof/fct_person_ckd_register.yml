@@ -1,13 +1,11 @@
 version: 2
 models:
   - name: fct_person_ckd_register
-    description: >
-      QOF chronic kidney disease register for patients aged 18+ with active CKD Stage 3-5 diagnosis.
-      
-      One row per person meeting QOF v50 criteria:
-      - Has CKD Stage 3-5 diagnosis (CKD_COD)
-      - NOT downstaged to Stage 1-2 (no CKD1AND2_COD after latest CKD_COD)
-      - NOT resolved (no CKDRES_COD after latest CKD_COD)
+    description: 'QOF chronic kidney disease register for patients aged 18+ with active
+      CKD diagnosis.
+
+      One row per person with latest CKD_COD > latest CKDRES_COD or no resolution
+      recorded.'
 
     tests:
       - dbt_utils.at_least_one:
@@ -20,15 +18,6 @@ models:
           - unique
           - not_null
 
-      - name: latest_stage_1_2_date
-        description: Date of most recent CKD Stage 1-2 code (for downstaging tracking)
-
-      - name: all_stage_1_2_concept_codes
-        description: Array of all CKD Stage 1-2 concept codes for traceability
-
-      - name: was_downstaged
-        description: Flag indicating patient has Stage 1-2 code after latest Stage 3-5 (excluded from register)
-
     config:
       meta:
         indicator:
@@ -39,10 +28,11 @@ models:
           name_short: "Chronic Kidney Disease"
           description_short: "QOF chronic kidney disease register"
           description_long: >
-            Chronic kidney disease diagnosed using QOF v50 criteria: Age ≥18 years with
-            active CKD Stage 3-5 diagnosis where patient has not been downstaged to Stage 1-2
-            or resolved. Lab data available separately for clinical monitoring.
-            Maps to QOF indicator CKD005 (CKD Register).
+            Chronic kidney disease diagnosed using QOF criteria: Age ≥18 years with
+            active  CKD diagnosis where latest CKD code is more recent than any resolution
+            code, or  no resolution recorded. Lab data available separately for clinical
+            monitoring.  Maps to QOF indicator CKD005 (CKD Register). Uses CKD_COD
+            for diagnosis codes  and CKDRES_COD for resolution codes.
           is_qof: true
           qof_indicator: "CKD005"
           source_column: "is_on_register"
@@ -52,8 +42,6 @@ models:
           code_clusters:
             - cluster_id: "CKD_COD"
               category: "INCLUSION"
-            - cluster_id: "CKD1AND2_COD"
-              category: "EXCLUSION"
             - cluster_id: "CKDRES_COD"
               category: "RESOLUTION"
         owner:

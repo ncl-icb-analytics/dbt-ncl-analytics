@@ -1,13 +1,11 @@
 version: 2
 models:
   - name: int_ckd_diagnoses_all
-    description: >
-      Chronic kidney disease diagnosis and resolution observations for QOF register management.
-      One row per observation using CKD_COD (Stage 3-5), CKD1AND2_COD (Stage 1-2), and 
-      CKDRES_COD (resolved) clusters. Age restrictions ≥18 years applied downstream.
-      
-      QOF v50 register logic excludes patients who have been downstaged to Stage 1-2 or 
-      resolved after their latest Stage 3-5 diagnosis.
+    description: 'Chronic kidney disease diagnosis and resolution observations for
+      QOF register management.
+
+      One row per observation using CKD_COD (diagnosis) and CKDRES_COD (resolved)
+      clusters. Age restrictions ≥18 years typically applied downstream.'
     config:
       meta:
         owner:
@@ -26,28 +24,25 @@ models:
         description: 'Date when CKD observation was clinically effective'
 
       - name: concept_code
-        description: 'Clinical code for CKD diagnosis, staging, or resolution'
+        description: 'Clinical code for CKD diagnosis or resolution'
 
       - name: concept_display
         description: 'Human-readable description of the clinical code'
 
       - name: source_cluster_id
-        description: 'QOF cluster identifier (CKD_COD, CKD1AND2_COD, or CKDRES_COD)'
+        description: 'QOF cluster identifier (CKD_COD or CKDRES_COD)'
 
-      - name: is_stage_3_5_code
-        description: 'Flag indicating CKD Stage 3-5 diagnosis code (CKD_COD cluster)'
-
-      - name: is_stage_1_2_code
-        description: 'Flag indicating CKD Stage 1-2 code (CKD1AND2_COD cluster) - used for downstaging exclusion'
+      - name: is_diagnosis_code
+        description: 'Flag indicating CKD diagnosis code (CKD_COD cluster)'
 
       - name: is_resolved_code
         description: 'Flag indicating CKD resolution code (CKDRES_COD cluster)'
 
       - name: ckd_observation_type
-        description: 'Categorised CKD observation type (CKD Stage 3-5, CKD Stage 1-2, or CKD Resolved)'
+        description: 'Categorised CKD observation type (CKD Diagnosis or CKD Resolved)'
 
     tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: CKD_COD, CKD1AND2_COD, CKDRES_COD
+          cluster_ids: CKDRES_COD, CKD_COD
