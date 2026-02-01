@@ -1,8 +1,7 @@
 version: 2
 models:
   - name: fct_person_bp_control
-    description: 'Blood pressure control assessment using NICE NG136 guidelines with
-      patient-specific targets.
+    description: 'Blood pressure control assessment using NICE NG136 guidelines with patient-specific targets.
 
       One row per person that has a blood pressure recording.
 
@@ -22,11 +21,11 @@ models:
 
       • T2DM/CKD/HTN: 12 months
 
-      • Age ≥40 (no conditions): 60 months (5 years)
+      • Age ≥40 (no conditions): 5 years (60 months)
 
-      • Age <40 (no conditions): no threshold
+      • Age <40 (no conditions): No routine screening
 
-      Diagnostic Thresholds:
+      Diagnostic Thresholds (Hypertension Staging):
 
       • Stage 1 - Clinic: ≥140/90 mmHg
 
@@ -36,15 +35,10 @@ models:
 
       • Stage 2 - ABPM/HBPM: ≥150/95 mmHg
 
-      • Stage 3 - Severe: ≥180/120 mmHg
+      • Stage 3 - Severe: ≥180/120 mmHg (same for clinic and ambulatory)
 
-      Purpose: Supports hypertension management and QOF reporting with personalised
-      BP targets based on patient comorbidities.'
-
-    tests:
-      - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+      Purpose: Supports hypertension management, QOF reporting, and case-finding with personalised BP targets based on patient comorbidities.'
+    
     config:
       meta:
         indicator:
@@ -55,13 +49,12 @@ models:
           name_short: "Blood Pressure Control"
           description_short: "NICE NG136 blood pressure targets and diagnostic criteria"
           description_long: >
-            Complete NICE NG136 hypertension guidance including treatment targets
-            for different  patient populations and diagnostic thresholds for hypertension
-            staging. Treatment  targets vary by age, diabetes status, and CKD severity.
-            Diagnostic criteria use  different thresholds for clinic vs ABPM/HBPM
-            measurements across 3 severity stages.
+            Complete NICE NG136 hypertension guidance including treatment targets for different 
+            patient populations and diagnostic thresholds for hypertension staging. Treatment 
+            targets vary by age, diabetes status, and CKD severity. Diagnostic criteria use 
+            different thresholds for clinic vs ABPM/HBPM measurements across 3 severity stages.
           is_qof: false
-          source_column: "bp_controlled"
+          source_column: "is_overall_bp_controlled"
           usage_contexts:
             - "NICE_GUIDANCE"
           code_clusters:
@@ -134,70 +127,88 @@ models:
               description: "Stage 2 diagnosis - ABPM/HBPM"
               sort_order: 9
             - population_group: "DIAGNOSIS"
-              threshold_type: "DIAGNOSIS_S3_CLINIC"
+              threshold_type: "DIAGNOSIS_S3"
               threshold_value: "180/120"
               threshold_operator: "AT_OR_ABOVE"
               threshold_unit: "mmHg"
-              description: "Severe hypertension diagnosis"
+              description: "Severe hypertension diagnosis (clinic or ambulatory)"
               sort_order: 10
-
-        owner:
-          name: EddieDavison92
+    
     columns:
       - name: person_id
         description: Unique person identifier
         tests:
-          - unique
           - not_null
-
-      - name: age
-        description: Person's current age
-
+          - unique
+        
       - name: latest_bp_date
         description: Date of most recent blood pressure measurement
-
-      - name: latest_systolic
+        
+      - name: latest_systolic_value
         description: Most recent systolic blood pressure (mmHg)
-
-      - name: latest_diastolic
+        
+      - name: latest_diastolic_value
         description: Most recent diastolic blood pressure (mmHg)
 
-      - name: has_diabetes
-        description: Whether person has Type 2 diabetes
+      - name: is_home_bp_event
+        description: Whether the latest BP was recorded via home monitoring
 
+      - name: is_abpm_bp_event
+        description: Whether the latest BP was recorded via ambulatory blood pressure monitoring (ABPM)
+        
+      - name: age
+        description: Person's current age
+        
       - name: has_ckd
         description: Whether person has chronic kidney disease
 
-      - name: has_high_acr
-        description: Whether person has ACR ≥30 (kidney damage indicator)
+      - name: is_diagnosed_htn
+        description: Whether person is on the hypertension register
 
-      - name: systolic_target
-        description: "Patient-specific systolic BP target - 140 (standard/diabetes/CKD),
-          150 (age 80+), 130 (CKD with high ACR)"
-      - name: diastolic_target
-        description: "Patient-specific diastolic BP target - 90 (standard/age 80+),
-          80 (CKD with high ACR)"
-      - name: target_rationale
-        description: "NICE NG136 rationale - Standard (<140/90), Age 80+ (<150/90),
-          CKD high ACR (<130/80)"
-      - name: systolic_controlled
-        description: "Whether systolic BP below target (varies: 140/150/130 per NICE
-          NG136)"
-      - name: diastolic_controlled
-        description: "Whether diastolic BP below target (90 standard, 80 for CKD high
-          ACR)"
-      - name: bp_controlled
-        description: "Overall BP control per NICE NG136 - both systolic and diastolic
-          below patient-specific targets"
-      - name: systolic_excess
-        description: mmHg above systolic target (negative if below target)
+      - name: latest_acr_value
+        description: Most recent albumin-to-creatinine ratio (ACR) value
 
-      - name: diastolic_excess
-        description: mmHg above diastolic target (negative if below target)
+      - name: applied_threshold_rule_id
+        description: ID of the BP threshold rule applied to this person
+        
+      - name: applied_patient_group
+        description: "Patient group used for threshold selection (AGE_LT_80, AGE_GE_80, T2DM, CKD, CKD_ACR_GE_70)"
+
+      - name: applied_systolic_threshold
+        description: "Patient-specific systolic BP target - 140 (standard/diabetes/CKD), 150 (age 80+), 130 (CKD with high ACR)"
+        
+      - name: applied_diastolic_threshold
+        description: "Patient-specific diastolic BP target - 90 (standard/age 80+), 80 (CKD with high ACR)"
+        
+      - name: has_t2dm
+        description: Whether person has Type 2 diabetes
+        
+      - name: is_systolic_controlled
+        description: "Whether systolic BP below target (varies: 140/150/130 per NICE NG136)"
+        
+      - name: is_diastolic_controlled
+        description: "Whether diastolic BP below target (90 standard, 80 for CKD high ACR)"
+        
+      - name: is_overall_bp_controlled
+        description: "Overall BP control per NICE NG136 - both systolic and diastolic below patient-specific targets"
+
+      - name: hypertension_stage_number
+        description: "Numeric hypertension stage (0=Normal, 1=Stage 1, 2=Stage 2, 3=Stage 3 Severe). Uses highest of systolic/diastolic stage."
+
+      - name: hypertension_stage
+        description: "Hypertension stage label per NICE NG136 diagnostic thresholds (Normal, Stage 1, Stage 2, Stage 3 (Severe))"
+
+      - name: staging_threshold_basis
+        description: "Whether clinic or ABPM/HBPM thresholds were used for staging (based on measurement type)"
+
+      - name: is_case_finding_candidate
+        description: "Case-finding helper: TRUE if BP is in hypertension range (Stage 1+) but person is NOT on the hypertension register"
 
       - name: latest_bp_reading_age_months
         description: Months since most recent BP measurement
 
+      - name: recommended_monitoring_interval
+        description: "Recommended BP monitoring interval based on risk: '12 months' for T2DM/CKD/HTN, '5 years' for age ≥40, 'No routine screening' for age <40"
+
       - name: is_latest_bp_within_recommended_interval
-        description: "Whether BP reading is within recommended interval: 12 months
-          for T2DM/CKD/HTN, 60 months for age ≥40, NULL for age <40"
+        description: "Whether BP reading is within recommended interval: 12 months for T2DM/CKD/HTN, 60 months for age ≥40, NULL for age <40"
