@@ -6,10 +6,10 @@
 # Prerequisites:
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
 #     SNOWFLAKE__PRIVATE_KEY, SNOWFLAKE__PASSPHRASE
-#   - DBT_DEPLOYMENT_TESTER role with: USAGE on warehouse, DBT_ADMIN role granted
+#   - DBT_ADMIN role with: USAGE on warehouse, DBT_ADMIN role granted
 #
 # Snowflake objects:
-#   - Role: DBT_DEPLOYMENT_TESTER
+#   - Role: DBT_ADMIN
 #   - Warehouse: WH_NCL_ENGINEERING_XS
 #   - Database/Schema: ACCOUNT_ADMIN.DBT_MANAGEMENT
 #   - Git repo: REPO__GITHUB__DBT_NCL_ANALYTICS
@@ -139,7 +139,7 @@ jobs:
                   account=os.environ['SNOWFLAKE_ACCOUNT'],
                   user=os.environ['SNOWFLAKE_USER'],
                   private_key=pkb,
-                  role='DBT_DEPLOYMENT_TESTER',
+                  role='DBT_ADMIN',
                   database='ACCOUNT_ADMIN',
                   schema='DBT_MANAGEMENT',
                   warehouse='WH_NCL_ENGINEERING_XS'
