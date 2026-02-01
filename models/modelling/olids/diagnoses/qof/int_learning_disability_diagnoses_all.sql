@@ -8,17 +8,16 @@
 All learning disability diagnosis observations from clinical records.
 Uses QOF learning disability cluster IDs:
 - LD_COD: Learning disability diagnoses
+- LDREM_COD: Learning disability exclusion codes (removed from register)
 
 Clinical Purpose:
 - QOF learning disability register data collection
 - Learning disability support and monitoring
 - Annual health checks eligibility
-- Resolution status tracking
 
-QOF Context:
-Learning disability register includes persons with learning disability diagnosis codes
-who have not been resolved. Resolution logic applied in downstream fact models.
-Age restrictions typically ≥14 years applied in fact layer.
+QOF Context (v50):
+Learning disability register includes persons with LD diagnosis who have not been
+excluded (LDREM_COD after LD_COD). No age restriction in QOF spec.
 
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 This is OBSERVATION-LEVEL data - one row per learning disability observation.
@@ -35,13 +34,15 @@ SELECT
 
     -- Learning disability-specific flags (observation-level only)
     CASE WHEN obs.cluster_id = 'LD_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
+    CASE WHEN obs.cluster_id = 'LDREM_COD' THEN TRUE ELSE FALSE END AS is_exclusion_code,
 
     -- Learning disability observation type determination
     CASE
         WHEN obs.cluster_id = 'LD_COD' THEN 'Learning Disability Diagnosis'
+        WHEN obs.cluster_id = 'LDREM_COD' THEN 'Learning Disability Exclusion'
         ELSE 'Unknown'
     END AS learning_disability_observation_type
 
-FROM ({{ get_observations("'LD_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'LD_COD', 'LDREM_COD'", source='PCD') }}) obs
 
 ORDER BY person_id, clinical_effective_date, id
