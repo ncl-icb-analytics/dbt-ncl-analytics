@@ -78,7 +78,7 @@ models:
       - name: has_familial_hypercholesterolaemia
       - name: has_frailty
       - name: has_learning_disability
-      - name: has_learning_disability_all_ages
+      - name: has_learning_disability_under_14
       - name: has_osteoporosis
       - name: has_palliative_care
       - name: has_rheumatoid_arthritis

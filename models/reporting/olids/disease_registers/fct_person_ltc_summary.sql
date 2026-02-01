@@ -234,17 +234,17 @@ WITH condition_union AS (
 
     UNION ALL
 
-    -- Learning Disability (All Ages)
+    -- Learning Disability (Under 14)
     SELECT
         person_id,
-        'LD_ALL' AS condition_code,
-        'Learning Disability (All Ages)' AS condition_name,
+        'LD_U14' AS condition_code,
+        'Learning Disability (Under 14)' AS condition_name,
         'Neurodevelopmental' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
         latest_diagnosis_date,
         FALSE AS is_qof
-    FROM {{ ref('fct_person_learning_disability_register_all_ages') }}
+    FROM {{ ref('fct_person_learning_disability_register_under_14') }}
     WHERE is_on_register = TRUE
 
     UNION ALL

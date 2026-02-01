@@ -100,9 +100,9 @@ models:
         data_type: boolean
         description: ""
 
-      - name: has_learning_disability_all_ages
+      - name: has_learning_disability_under_14
         data_type: boolean
-        description: ""
+        description: "Learning disability for children under 14 (specialist settings cohort)"
 
       - name: has_nafld
         data_type: boolean

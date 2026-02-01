@@ -1,0 +1,71 @@
+version: 2
+
+models:
+  - name: fct_person_learning_disability_register_under_14
+    description: >
+      Learning disability register for children under 14 years.
+      
+      Inclusion Criteria:
+      - Has learning disability diagnosis (LD_COD)
+      - NOT excluded (no LDREM_COD after latest diagnosis)
+      - Age < 14 years
+      
+      Clinical Context:
+      Children under 14 with learning disabilities typically have their care
+      managed in specialist paediatric settings rather than general practice.
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    config:
+      meta:
+        indicator:
+          id: "LD_U14"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Neurodevelopmental"
+          name_short: "Learning Disability (Under 14)"
+          description_short: "Learning disability register for children under 14"
+          description_long: >
+            Learning disability register for children under 14 years with active LD
+            diagnosis. Uses LD_COD for diagnosis and LDREM_COD for exclusion codes.
+            This cohort typically has care managed in specialist paediatric settings.
+            Complements the QOF register which includes all ages.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_NEURODEV_LD_U14"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "LD_COD"
+              category: "INCLUSION"
+            - cluster_id: "LDREM_COD"
+              category: "EXCLUSION"
+        owner:
+          name: EddieDavison92
+
+    columns:
+      - name: person_id
+        description: Unique person identifier
+        tests:
+          - unique
+          - not_null
+
+      - name: age
+        description: Patient age in years
+
+      - name: is_on_register
+        description: Whether person is on the learning disability register
+
+      - name: earliest_diagnosis_date
+        description: Date of earliest learning disability diagnosis
+
+      - name: latest_diagnosis_date
+        description: Date of most recent learning disability diagnosis
+
+      - name: all_ld_concept_codes
+        description: All learning disability concept codes for this person
+
+      - name: all_ld_concept_displays
+        description: All learning disability concept display names for this person

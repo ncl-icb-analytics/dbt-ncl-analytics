@@ -7,7 +7,8 @@
 /*
 All chronic kidney disease (CKD) diagnosis observations from clinical records.
 Uses QOF CKD cluster IDs:
-- CKD_COD: CKD diagnoses
+- CKD_COD: CKD Stage 3-5 diagnoses (register inclusion)
+- CKD1AND2_COD: CKD Stage 1-2 diagnoses (downstaging exclusion)
 - CKDRES_COD: CKD resolved/remission codes
 
 Clinical Purpose:
@@ -16,10 +17,10 @@ Clinical Purpose:
 - CKD staging and progression tracking
 - Resolution status monitoring
 
-QOF Context:
-CKD register includes persons with CKD diagnosis codes who have not
-been resolved. Resolution logic applied in downstream fact models.
-Age restrictions typically ≥18 years applied in fact layer.
+QOF Context (v50):
+CKD register includes persons aged 18+ with CKD Stage 3-5 diagnosis who have not:
+- Been resolved (CKDRES_COD after CKD_COD)
+- Been downstaged to Stage 1-2 (CKD1AND2_COD after CKD_COD)
 
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 This is OBSERVATION-LEVEL data - one row per CKD observation.
@@ -35,16 +36,18 @@ SELECT
     obs.cluster_id AS source_cluster_id,
 
     -- CKD-specific flags (observation-level only)
-    CASE WHEN obs.cluster_id = 'CKD_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
+    CASE WHEN obs.cluster_id = 'CKD_COD' THEN TRUE ELSE FALSE END AS is_stage_3_5_code,
+    CASE WHEN obs.cluster_id = 'CKD1AND2_COD' THEN TRUE ELSE FALSE END AS is_stage_1_2_code,
     CASE WHEN obs.cluster_id = 'CKDRES_COD' THEN TRUE ELSE FALSE END AS is_resolved_code,
 
     -- CKD observation type determination
     CASE
-        WHEN obs.cluster_id = 'CKD_COD' THEN 'CKD Diagnosis'
+        WHEN obs.cluster_id = 'CKD_COD' THEN 'CKD Stage 3-5'
+        WHEN obs.cluster_id = 'CKD1AND2_COD' THEN 'CKD Stage 1-2'
         WHEN obs.cluster_id = 'CKDRES_COD' THEN 'CKD Resolved'
         ELSE 'Unknown'
     END AS ckd_observation_type
 
-FROM ({{ get_observations("'CKD_COD', 'CKDRES_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'CKD_COD', 'CKD1AND2_COD', 'CKDRES_COD'", source='PCD') }}) obs
 
 ORDER BY person_id, clinical_effective_date, id
