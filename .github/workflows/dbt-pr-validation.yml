@@ -57,9 +57,6 @@ jobs:
         with:
           version: "0.6.x"
 
-      - name: Install dependencies
-        run: uv pip install --system snowflake-connector-python
-
       - name: Get changed models
         id: changes
         run: |
@@ -86,7 +83,7 @@ jobs:
           FILE_COUNT: ${{ steps.changes.outputs.file_count }}
           PR_BRANCH: ${{ github.head_ref }}
         run: |
-          python << 'EOF'
+          uv run --with snowflake-connector-python python << 'EOF'
           import os
           import re
           import sys
