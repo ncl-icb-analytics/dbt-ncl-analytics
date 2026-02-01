@@ -68,9 +68,11 @@ jobs:
 
       - name: Setup Snowflake credentials
         if: steps.changes.outputs.file_count != '0'
+        env:
+          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE__PRIVATE_KEY }}
         run: |
           mkdir -p ~/.snowflake
-          printf '%s\n' "${{ secrets.SNOWFLAKE__PRIVATE_KEY }}" > ~/.snowflake/rsa_key.p8
+          printf '%s\n' "$SNOWFLAKE_PRIVATE_KEY" > ~/.snowflake/rsa_key.p8
           chmod 600 ~/.snowflake/rsa_key.p8
           echo "Key file created: $(wc -c < ~/.snowflake/rsa_key.p8) bytes"
           head -1 ~/.snowflake/rsa_key.p8
@@ -85,7 +87,7 @@ jobs:
           FILE_COUNT: ${{ steps.changes.outputs.file_count }}
           PR_BRANCH: ${{ github.head_ref }}
         run: |
-          uv run --with snowflake-connector-python python << 'EOF'
+          uv run --with snowflake-connector-python --with cryptography python << 'EOF'
           import os
           import re
           import sys
@@ -102,22 +104,41 @@ jobs:
               name = filepath.split('/')[-1].replace('.sql', '')
               return validate_identifier(name, r'^[a-zA-Z0-9_]+$')
 
-          # Debug: check key file and env vars
+          from cryptography.hazmat.backends import default_backend
+          from cryptography.hazmat.primitives import serialization
+
+          # Load and validate private key
           key_path = os.path.expanduser('~/.snowflake/rsa_key.p8')
           print(f"Key file exists: {os.path.exists(key_path)}")
           if os.path.exists(key_path):
               print(f"Key file size: {os.path.getsize(key_path)} bytes")
-          print(f"SNOWFLAKE_ACCOUNT set: {'SNOWFLAKE_ACCOUNT' in os.environ}")
-          print(f"SNOWFLAKE_USER set: {'SNOWFLAKE_USER' in os.environ}")
-          print(f"Passphrase set: {'SNOWFLAKE_PRIVATE_KEY_PASSPHRASE' in os.environ}")
-          print(f"Passphrase length: {len(os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', ''))}")
+              with open(key_path, 'rb') as f:
+                  key_data = f.read()
+              print(f"Key looks valid: {key_data.startswith(b'-----BEGIN')}")
+          else:
+              print("ERROR: Key file not found!")
+              sys.exit(1)
+
+          passphrase = os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', '')
+          print(f"Passphrase length: {len(passphrase)}")
+
+          # Load private key with cryptography library
+          p_key = serialization.load_pem_private_key(
+              key_data,
+              password=passphrase.encode() if passphrase else None,
+              backend=default_backend()
+          )
+          pkb = p_key.private_bytes(
+              encoding=serialization.Encoding.DER,
+              format=serialization.PrivateFormat.PKCS8,
+              encryption_algorithm=serialization.NoEncryption()
+          )
 
           try:
               conn = snowflake.connector.connect(
                   account=os.environ['SNOWFLAKE_ACCOUNT'],
                   user=os.environ['SNOWFLAKE_USER'],
-                  private_key_path=key_path,
-                  private_key_passphrase=os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', ''),
+                  private_key=pkb,
                   role='DBT_DEPLOYMENT_TESTER',
                   database='ACCOUNT_ADMIN',
                   schema='DBT_MANAGEMENT',
