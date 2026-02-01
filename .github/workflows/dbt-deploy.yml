@@ -30,6 +30,10 @@ jobs:
   deploy-models:
     name: Deploy Changed Models + Downstream
     runs-on: ubuntu-latest
+    # Queue deploys sequentially - don't cancel, wait for previous to finish
+    concurrency:
+      group: dbt-deploy-prod
+      cancel-in-progress: false
     permissions:
       contents: read
     steps:
