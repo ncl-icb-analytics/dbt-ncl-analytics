@@ -31,7 +31,7 @@ models:
       - name: effective_date
         description: |
           Effective date for the BP reading. Uses clinical_effective_date unless it's
-          in the future, in which case date_recorded is used as fallback.
+          after date_recorded, in which case date_recorded is used as fallback.
       - name: clinical_effective_date_raw
         description: Original clinical_effective_date before future date correction
       - name: date_recorded
@@ -63,6 +63,6 @@ models:
       - name: is_abpm_bp_row
         description: True if observation is from ambulatory BP monitoring
       - name: had_future_date
-        description: True if clinical_effective_date was in the future (corrected)
+        description: True if clinical_effective_date was after date_recorded (corrected)
       - name: had_null_date
         description: True if clinical_effective_date was null

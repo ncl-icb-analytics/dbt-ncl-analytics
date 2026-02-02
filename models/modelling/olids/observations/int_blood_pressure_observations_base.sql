@@ -18,8 +18,8 @@ Incremental Strategy:
 - Merge on id to handle updates
 
 Future Date Handling:
-- If clinical_effective_date > today, use date_recorded as fallback
-- Blood pressure readings cannot be postdated
+- If clinical_effective_date > date_recorded, use date_recorded as fallback
+- Clinical date cannot be after the date it was recorded
 */
 
 WITH base_observations AS (
@@ -46,7 +46,7 @@ SELECT
     
     -- Effective date with future date fallback
     CASE 
-        WHEN clinical_effective_date_raw > CURRENT_DATE() THEN date_recorded
+        WHEN clinical_effective_date_raw > date_recorded THEN date_recorded
         ELSE clinical_effective_date_raw
     END AS effective_date,
     
@@ -73,7 +73,7 @@ SELECT
     (source_cluster_id = 'ABPM_COD') AS is_abpm_bp_row,
     
     -- DQ flags for downstream filtering
-    (clinical_effective_date_raw > CURRENT_DATE()) AS had_future_date,
+    (clinical_effective_date_raw > date_recorded) AS had_future_date,
     (clinical_effective_date_raw IS NULL) AS had_null_date
 
 FROM base_observations
