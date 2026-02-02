@@ -13,7 +13,7 @@ WITH base AS (
     SELECT
         "spell.commissioning.service_agreement.provider" AS provider_code,
         DATE_TRUNC('day', "spell.discharge.date") AS activity_date
-    FROM {{ ref('stg_sus_apc_spell.sql') }}
+    FROM {{ ref('stg_sus_apc_spell') }}
 ),
 provider_lookup AS (
     SELECT 

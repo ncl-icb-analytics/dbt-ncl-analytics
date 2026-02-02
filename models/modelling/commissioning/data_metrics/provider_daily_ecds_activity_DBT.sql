@@ -13,7 +13,7 @@ WITH base AS (
     SELECT
         "system.record.provider" AS provider_code,
         DATE_TRUNC('day', "attendance.arrival.date") AS activity_date
-    FROM {{ ref('stg_sus_ae_emergency_care.sql') }}  
+    FROM {{ ref('stg_sus_ae_emergency_care') }}  
 ),
 provider_lookup AS (
     SELECT 

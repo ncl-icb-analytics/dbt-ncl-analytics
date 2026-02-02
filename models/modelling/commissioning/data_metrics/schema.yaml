@@ -91,5 +91,11 @@ models:
         description: "Count of records"
         tests:
           - not_null
-  - name: provider_missing_DBT
-    description: "Created by: J.Linney | dbt test pivot table for missing provider records"
+
+  - name: provider_missing_summary  
+    description: "Pivot table summarising missing provider records across APC, OP, and ECDS."
+    columns:
+      - name: provider
+        description: "The name of the NHS Provider"
+        tests:
+          - not_null

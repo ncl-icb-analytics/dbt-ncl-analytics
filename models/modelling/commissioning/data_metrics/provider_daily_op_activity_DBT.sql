@@ -13,7 +13,7 @@ WITH base AS (
     SELECT
         "appointment.commissioning.service_agreement.provider_derived" AS provider_code,
         DATE_TRUNC('day', "appointment.date") AS activity_date
-    FROM {{ ref('stg_sus_op_appointment.sql') }}
+    FROM {{ ref('stg_sus_op_appointment') }}
 ),
 provider_lookup AS (
     SELECT 
