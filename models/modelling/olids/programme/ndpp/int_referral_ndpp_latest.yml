@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: int_referral_ndpp_latest
     description: 'Determine Latest National Diabetes Prevention Programme outcome
@@ -7,4 +7,5 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+

@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: dim_looked_after_child
     description: Dimension table providing people under 25 who have a looked 
       after child code
@@ -6,11 +6,12 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
           - unique
+
 

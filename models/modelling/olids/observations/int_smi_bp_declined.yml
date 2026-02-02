@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: int_smi_bp_declined
     description: 'Mental Health Blood Pressure REFUSED for 6 Health Checks Latest
@@ -6,7 +6,8 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: BPDEC_COD
+

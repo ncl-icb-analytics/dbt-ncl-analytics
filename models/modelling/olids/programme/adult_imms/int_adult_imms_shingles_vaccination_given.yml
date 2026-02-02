@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_adult_imms_shingles_vaccination_given
     description: Intermediate table holding Shingles vaccinations (2 doses) that
       are completed (including out of schedule) in adults currently aged 65+. 
@@ -8,4 +8,5 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+

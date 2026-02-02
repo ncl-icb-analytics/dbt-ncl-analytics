@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: fct_shingles_vaccination_status
     description: 'Shingles vaccination programme status for people aged 65+ from 1st
@@ -7,9 +7,10 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
         tests:
           - not_null
+

@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: stg_reference_imms_schedule_child_latest
     description: Immunisation schedule with age eligibility and code cluster 
@@ -6,7 +6,7 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: vaccine_id
         description: Primary key - unique vaccine identifier
@@ -32,3 +32,4 @@ models:
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
+

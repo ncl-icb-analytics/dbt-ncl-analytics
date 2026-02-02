@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: int_cholesterol_ldl_latest
     description: 'Latest LDL (bad) cholesterol measurements for cardiovascular risk
@@ -8,7 +8,7 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: LDLCCHOL_COD
@@ -18,3 +18,4 @@ models:
         tests:
           - unique
           - not_null
+

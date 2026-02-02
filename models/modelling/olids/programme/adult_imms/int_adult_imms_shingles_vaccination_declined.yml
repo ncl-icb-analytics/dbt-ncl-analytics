@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_adult_imms_shingles_vaccination_declined
     description: Intermediate table holding Shingles vaccinations (2 doses) that
       are declined in adults currently aged 65+. One line person
@@ -7,4 +7,5 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+

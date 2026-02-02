@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: int_smi_care_plan_latest
     description: 'Mental Health /SMI care pan for SMI registry replacement/QOF indicator
@@ -7,7 +7,8 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: MHP_COD
+

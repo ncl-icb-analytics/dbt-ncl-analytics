@@ -1,11 +1,12 @@
-version: 1
+﻿version: 1
 models:
   - name: int_cholesterol_declined
     description: 'Cholesterol Test REFUSED - Latest value. The purpose for this table is for the six core Health Checks for SMI Patients. USES CHOLDEC_COD'
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: CHOLDEC_COD
+
