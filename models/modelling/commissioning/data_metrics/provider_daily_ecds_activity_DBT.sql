@@ -3,7 +3,6 @@
 
 -- Add config overrides in here, eg. comment added to snowflake model metadata
 -- and materialisation type - although technically redundant here if declared in dbt_project.yml 
--- so just including it for clarity whilst testing
 -- NOTE (18/12/25): Changed materialization now from view to table to as missing_summary test running too early on blank views, reulting in it being empty
 
 {{ config(
@@ -17,13 +16,13 @@ WITH base AS (
     SELECT
         "system.record.provider" AS provider_code,
         DATE_TRUNC('day', "attendance.arrival.date") AS activity_date
-    FROM {{ source('sus_unified_ecds','emergency_care') }}
+    FROM {{ ref('stg_sus_ae_emergency_care.sql') }}  
 ),
 provider_lookup AS (
     SELECT 
         REPORTING_CODE,
         PROVIDER_NAME
-    FROM MODELLING.LOOKUP_NCL.NCL_PROVIDER
+    from {{ ref('stg_reference_ncl_provider') }}
 )
 SELECT
     COALESCE(p.PROVIDER_NAME, b.provider_code) AS provider,
