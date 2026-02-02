@@ -8,7 +8,7 @@ version: 2
 
 models:
   - name: provider_daily_apc_activity_DBT
-    description: "Daily Admitted Patient Care (APC) activity by provider"
+    description: "Created by: J.Linney | dbt test file for APC provider daily activity"
     columns:
       - name: provider
         description: "Provider name from lookup"
@@ -36,6 +36,10 @@ models:
 
   - name: provider_daily_op_activity_DBT
     description: "Daily Outpatient (OP) activity by provider"
+    config:
+      meta:
+        owner:
+          name: JonathanLinney
     columns:
       - name: provider
         description: "Provider name from lookup"
@@ -62,7 +66,7 @@ models:
           - not_null
 
   - name: provider_daily_ecds_activity_DBT
-    description: "Daily Emergency Care Data Set (ECDS) activity by provider"
+    description: "Created by: J.Linney | dbt test file for ECDS provider daily activity"
     columns:
       - name: provider
         description: "Provider name from lookup"
@@ -87,3 +91,5 @@ models:
         description: "Count of records"
         tests:
           - not_null
+  - name: provider_missing_DBT
+    description: "Created by: J.Linney | dbt test pivot table for missing provider records"

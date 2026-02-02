@@ -5,10 +5,7 @@
 
 
 {{ config(
-    materialized='table',
-    post_hook=[
-      "COMMENT ON TABLE {{ this }} IS 'Created by: J.Linney | dbt summary model for missing provider activity'"
-    ]
+    materialized='table'
 ) }}
 
 WITH 
