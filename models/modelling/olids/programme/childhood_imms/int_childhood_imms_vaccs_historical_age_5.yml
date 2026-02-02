@@ -1,9 +1,13 @@
 models:
   - name: int_childhood_imms_vaccs_historical_age_5
-    description: Intermediate table for historical population aged 5 years old 
-      at each analysis month and who have complete or outofschedule vaccinations
-      (declined
+    description: Intermediate table for historical population aged 5 years old at each analysis month and who have complete or outofschedule vaccinations
+      (declined, contraindicated and overdue excluded). Multiple lines per person
     config:
       meta:
         owner:
           name: KatsplatH
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
