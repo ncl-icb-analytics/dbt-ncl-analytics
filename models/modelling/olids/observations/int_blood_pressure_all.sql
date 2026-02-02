@@ -2,56 +2,35 @@
     config(
         materialized='table',
         tags=['intermediate', 'clinical', 'blood_pressure'],
-        cluster_by=['person_id', 'clinical_effective_date'])
+        cluster_by=['person_id', 'effective_date'])
 }}
 
--- Blood Pressure Events - Event-based consolidation (one row per person per date)
--- Superior design for clinical analysis and BP control assessment
+/*
+Blood Pressure Events - Event-based consolidation (one row per person per date)
+===============================================================================
+Aggregates from int_blood_pressure_observations_base for valid BP events.
 
-WITH base_observations_and_clusters AS (
-    -- Get all BP-related observations with terminology mapping
-    SELECT
-        obs.id,
-        obs.person_id,
-        obs.clinical_effective_date,
-        obs.result_value,
-        'mmHg' AS result_unit_display, -- Default unit for BP readings
-        obs.mapped_concept_code AS concept_code,
-        obs.mapped_concept_display AS concept_display,
-        obs.cluster_id AS source_cluster_id
-    FROM ({{ get_observations("'BP_COD', 'SYSBP_COD', 'DIASBP_COD', 'HOMEAMBBP_COD', 'ABPM_COD', 'HOMEBP_COD'") }}) obs
-    WHERE obs.result_value IS NOT NULL
-      AND obs.clinical_effective_date IS NOT NULL
-      AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
-      -- Apply broad plausible value filter (refined later per BP type)
-      AND obs.result_value > 20  -- Low threshold for either SBP or DBP
-      AND obs.result_value < 350 -- High threshold applied broadly
-),
+Clinical validation:
+- Both systolic and diastolic values present
+- Systolic: 40-350 mmHg
+- Diastolic: 20-200 mmHg
+- Initial broad filter: 20-350 applied in base
+*/
 
-row_flags AS (
-    -- Determine BP type and clinical context for each observation
-    SELECT
-        *,
-        -- Flag for Systolic readings: specific cluster or display text contains 'systolic'
-        (source_cluster_id = 'SYSBP_COD' OR
-         (source_cluster_id = 'BP_COD' AND concept_display ILIKE '%systolic%')) AS is_systolic_row,
-
-        -- Flag for Diastolic readings: specific cluster or display text contains 'diastolic'
-        (source_cluster_id = 'DIASBP_COD' OR
-         (source_cluster_id = 'BP_COD' AND concept_display ILIKE '%diastolic%')) AS is_diastolic_row,
-
-        -- Flag for Home BP context
-        (source_cluster_id IN ('HOMEBP_COD', 'HOMEAMBBP_COD')) AS is_home_bp_row,
-
-        -- Flag for ABPM context
-        (source_cluster_id = 'ABPM_COD') AS is_abpm_bp_row
-    FROM base_observations_and_clusters
+WITH valid_observations AS (
+    SELECT *
+    FROM {{ ref('int_blood_pressure_observations_base') }}
+    WHERE effective_date IS NOT NULL
+      -- Apply broad plausible value filter
+      AND result_value > 20
+      AND result_value < 350
 )
 
 -- Event-level aggregation: one row per person per date with paired values
-SELECT DISTINCT
+SELECT
     person_id,
-    clinical_effective_date,
+    effective_date,
+    effective_date AS clinical_effective_date,  -- Backward compatibility alias
 
     -- Consolidated BP values: pivot systolic/diastolic for the event date
     MAX(CASE WHEN is_systolic_row THEN result_value ELSE NULL END) AS systolic_value,
@@ -79,13 +58,15 @@ SELECT DISTINCT
     ARRAY_AGG(DISTINCT concept_display) WITHIN GROUP (ORDER BY concept_display) AS all_concept_displays,
     ARRAY_AGG(DISTINCT source_cluster_id) WITHIN GROUP (ORDER BY source_cluster_id) AS all_source_cluster_ids
 
-FROM row_flags
-GROUP BY person_id, clinical_effective_date
+FROM valid_observations
+GROUP BY person_id, effective_date
 
 -- Clinical validation: ensure we have valid paired BP events with plausible ranges
-HAVING systolic_value IS NOT NULL
-   AND diastolic_value IS NOT NULL
-   AND systolic_value >= 40 AND systolic_value <= 350
-   AND diastolic_value >= 20 AND diastolic_value <= 200
+HAVING MAX(CASE WHEN is_systolic_row THEN result_value ELSE NULL END) IS NOT NULL
+   AND MAX(CASE WHEN is_diastolic_row THEN result_value ELSE NULL END) IS NOT NULL
+   AND MAX(CASE WHEN is_systolic_row THEN result_value ELSE NULL END) >= 40 
+   AND MAX(CASE WHEN is_systolic_row THEN result_value ELSE NULL END) <= 350
+   AND MAX(CASE WHEN is_diastolic_row THEN result_value ELSE NULL END) >= 20 
+   AND MAX(CASE WHEN is_diastolic_row THEN result_value ELSE NULL END) <= 200
 
-ORDER BY person_id, clinical_effective_date DESC
+ORDER BY person_id, effective_date DESC

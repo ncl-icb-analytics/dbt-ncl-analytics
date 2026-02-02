@@ -14,7 +14,7 @@ models:
         tests:
           - not_null
           - unique
-      - name: clinical_effective_date
+      - name: effective_date
         description: Date of most recent blood pressure measurement
         tests:
           - not_null
