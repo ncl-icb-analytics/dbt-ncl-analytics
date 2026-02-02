@@ -54,6 +54,9 @@ jobs:
             # Get changed .yml/.yaml files and find associated .sql models
             YML_FILES=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.yml' 'models/**/*.yaml')
             
+            # Get changed macro files
+            MACRO_FILES=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} -- 'macros/**/*.sql')
+            
             # For each yml file, find corresponding sql file(s) in same directory
             YML_DERIVED_SQL=""
             for yml in $YML_FILES; do
@@ -70,9 +73,24 @@ jobs:
               done
             done
             
+            # For each changed macro, find models that reference it
+            MACRO_DERIVED_SQL=""
+            for macro_file in $MACRO_FILES; do
+              # Extract macro name from filename (e.g., calculate_ckd_register.sql -> calculate_ckd_register)
+              macro_name=$(basename "$macro_file" .sql)
+              echo "Searching for models using macro: $macro_name"
+              # Find models that call this macro (search for {{ macro_name( pattern)
+              matching_models=$(grep -rl "{{ *$macro_name(" models/ --include="*.sql" 2>/dev/null || true)
+              if [ -n "$matching_models" ]; then
+                MACRO_DERIVED_SQL="$MACRO_DERIVED_SQL $matching_models"
+                echo "  Found: $matching_models"
+              fi
+            done
+            
             # Combine and deduplicate
-            CHANGED=$(echo "$SQL_FILES $YML_DERIVED_SQL" | tr ' ' '\n' | sort -u | tr '\n' ' ')
-            [ -n "$YML_FILES" ] && echo "YML changes detected - included associated models"
+            CHANGED=$(echo "$SQL_FILES $YML_DERIVED_SQL $MACRO_DERIVED_SQL" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+            [ -n "$YML_FILES" ] && echo "YML changes detected - included associated models" || true
+            [ -n "$MACRO_FILES" ] && echo "Macro changes detected - included models that use them" || true
           else
             CHANGED=""  # Manual trigger = full build
           fi
