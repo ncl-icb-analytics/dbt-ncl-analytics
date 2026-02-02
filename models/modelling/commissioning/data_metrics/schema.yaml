@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: provider_monthly_activity_DBT
+    description: "Monthly activity by provider"
+    columns:
+
+      - name: provider
+        description: "Provider identifier"
+        tests:
+          - not_null
+          - unique
+
+      - name: activity_month
+        description: "Month of activity"
+        tests:
+          - not_null
+          
+      - name: records
+        description: "Count of records"
+        tests:
+          - not_null
