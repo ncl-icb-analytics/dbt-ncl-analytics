@@ -1,11 +1,11 @@
-version: 2
+﻿version: 2
 models:
   - name: stg_reference_imd2025
     description: Index of Multiple Deprivation 2025 by LSOA 2021
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: lsoa_code_2021
         description: Primary key - LSOA 2021 code
@@ -18,3 +18,4 @@ models:
           - not_null
       - name: index_of_multiple_deprivation_score
         description: IMD score
+

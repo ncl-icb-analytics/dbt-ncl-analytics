@@ -1,11 +1,12 @@
-version: 1
+﻿version: 1
 models:
   - name: int_smi_illicit_drug_latest
     description: 'Determine latest illicit drug use using PCD Ref ILLSUB_COD'
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: ILLSUB_COD
+

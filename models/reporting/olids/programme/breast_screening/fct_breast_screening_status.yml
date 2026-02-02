@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 models:
   - name: fct_breast_screening_status
     description: 'Breast screening programme status for eligible females aged 50-71
@@ -10,7 +10,7 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
@@ -55,3 +55,4 @@ models:
         description: 'Total count of declined screening records'
       # - name: total_non_response_records
       #   description: 'Total count of non-response to invitation records'
+

@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 models:
   - name: int_referral_ndpp_all
     description: 'Determine NHS Diabetes Prevention Programme outcome using PCD REFSET
@@ -6,4 +6,5 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+

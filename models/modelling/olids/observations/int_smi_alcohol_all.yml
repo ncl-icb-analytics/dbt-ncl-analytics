@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: int_smi_alcohol_all
     description: 'Mental Health /ALCOHOL CONSUMPTIONS for SMI registry replacement/QOF
@@ -6,7 +6,8 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: ALC_COD
+

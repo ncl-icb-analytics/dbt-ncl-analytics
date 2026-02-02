@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: int_breast_screen_declined
     description: 'SMI Longer Lives Enhanced Health Check Breast Cancer Screen DECLINED
@@ -6,7 +6,8 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: BRCANSCRDEC_COD
+

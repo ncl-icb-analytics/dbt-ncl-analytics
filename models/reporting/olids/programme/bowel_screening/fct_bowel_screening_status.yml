@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 models:
   - name: fct_bowel_screening_status
     description: 'Bowel screening programme status for people aged 50-74 years only.
@@ -8,7 +8,7 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
@@ -53,3 +53,4 @@ models:
         description: 'Total count of declined screening records'
       # - name: total_non_response_records
       #   description: 'Total count of non-response to invitation records'
+
