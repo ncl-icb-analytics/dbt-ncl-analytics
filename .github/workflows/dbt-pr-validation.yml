@@ -1,7 +1,7 @@
 # dbt PR Validation Workflow
 #
 # Validates changed dbt models in Snowflake DEV environment before merge.
-# Runs dbt build with --fail-fast to catch errors early.
+# Runs full build to report all errors (no fail-fast).
 #
 # Prerequisites:
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
@@ -195,14 +195,14 @@ jobs:
               file_count = int(os.environ.get('FILE_COUNT', 0))
               changed_files = os.environ.get('CHANGED_FILES', '').strip()
 
-              if file_count > 50:
+              if file_count > 100:
                   print(f"Large changeset ({file_count} files) - running full build")
-                  args = "build --target snowflake-dev --fail-fast"
+                  args = "build --target snowflake-dev"
               else:
                   models = [get_model_name(f) for f in changed_files.split() if f]
                   select = ' '.join(models)
                   print(f"Validating {file_count} changed models: {select}")
-                  args = f"build --target snowflake-dev --fail-fast --select {select}"
+                  args = f"build --target snowflake-dev --select {select}"
 
               print(f"Executing: dbt {args}")
               cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__CI ARGS = '{args}'")
