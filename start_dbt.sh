@@ -76,8 +76,11 @@ if [ -f ".env" ]; then
     while IFS= read -r line || [ -n "$line" ]; do
         # Skip comments and empty lines
         [[ "$line" =~ ^#.*$ || -z "$line" ]] && continue
-        if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
-            export "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
+        # Extract key=value (compatible with both bash and zsh)
+        if [[ "$line" == *"="* ]]; then
+            key="${line%%=*}"
+            value="${line#*=}"
+            export "$key=$value"
             ((env_count++))
         fi
     done < ".env"
