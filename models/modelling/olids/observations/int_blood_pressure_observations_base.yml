@@ -18,11 +18,15 @@ models:
       meta:
         owner:
           name: EddieDavison92
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - id
+            - source_cluster_id
     columns:
       - name: id
-        description: Unique observation identifier
+        description: Observation identifier (unique per cluster)
         tests:
-          - unique
           - not_null
       - name: person_id
         description: Person identifier

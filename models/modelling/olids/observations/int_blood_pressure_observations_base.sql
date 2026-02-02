@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id',
+        unique_key=['id', 'source_cluster_id'],
         incremental_strategy='merge',
         tags=['intermediate', 'clinical', 'blood_pressure', 'incremental'],
         cluster_by=['person_id', 'effective_date'])
