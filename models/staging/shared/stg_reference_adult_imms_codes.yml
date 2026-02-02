@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 models:
   - name: stg_reference_adult_imms_codes
     description: Adult immunisation SNOMED codes mapped to vaccine types and 
@@ -6,7 +6,7 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -33,3 +33,4 @@ models:
         description: Description of the SNOMED code
       - name: source
         description: Source of the code mapping
+

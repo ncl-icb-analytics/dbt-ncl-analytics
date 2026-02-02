@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_childhood_imms_person_level_adolescent
     description: Final data model table holding vaccination detail by dose and 
       demographics for adolescents aged 11-17. Person level data.
@@ -6,10 +6,11 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
           - unique
+
