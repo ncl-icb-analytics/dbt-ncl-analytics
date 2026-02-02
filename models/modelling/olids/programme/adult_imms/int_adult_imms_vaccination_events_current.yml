@@ -2,8 +2,14 @@
   - name: int_adult_imms_vaccination_events_current
     description: Intermediate table holding vaccination events for currently 
       registered adult imms population. Multiple lines per person
+
     config:
       meta:
         owner:
           name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
 
