@@ -17,16 +17,16 @@ Incremental Strategy:
 - Uses lds_start_date_time (LDS processing timestamp) to catch late-arriving data
 - Merge on id to handle updates
 
-Future Date Handling:
-- If clinical_effective_date > date_recorded, use date_recorded as fallback
-- Clinical date cannot be after the date it was recorded
+Note: Future date handling (clinical_effective_date > date_recorded) is applied
+in the get_observations macro, benefiting all models that use it.
 */
 
 WITH base_observations AS (
     SELECT
         obs.id,
         obs.person_id,
-        obs.clinical_effective_date AS clinical_effective_date_raw,
+        obs.clinical_effective_date,  -- Already corrected by macro if needed
+        obs.clinical_effective_date_raw,  -- Original value from macro
         obs.date_recorded,
         obs.lds_start_date_time,
         obs.result_value,
@@ -43,12 +43,7 @@ WITH base_observations AS (
 SELECT
     id,
     person_id,
-    
-    -- Effective date with future date fallback
-    CASE 
-        WHEN clinical_effective_date_raw > date_recorded THEN date_recorded
-        ELSE clinical_effective_date_raw
-    END AS effective_date,
+    clinical_effective_date AS effective_date,
     
     -- Keep original values for audit/DQ
     clinical_effective_date_raw,
