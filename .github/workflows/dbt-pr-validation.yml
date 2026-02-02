@@ -79,20 +79,15 @@ jobs:
           # Get changed macro files
           MACRO_FILES=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'macros/**/*.sql')
           
-          # For each yml file, find corresponding sql file(s) in same directory
+          # For each yml file, find corresponding sql file with same base name
           YML_DERIVED_SQL=""
           for yml in $YML_FILES; do
             dir=$(dirname "$yml")
-            # Check if a .sql file with same base name exists
             base=$(basename "$yml" .yml)
             base=$(basename "$base" .yaml)
             if [ -f "$dir/$base.sql" ]; then
               YML_DERIVED_SQL="$YML_DERIVED_SQL $dir/$base.sql"
             fi
-            # Also include all .sql files in same directory (yml may define multiple models)
-            for sql in "$dir"/*.sql; do
-              [ -f "$sql" ] && YML_DERIVED_SQL="$YML_DERIVED_SQL $sql"
-            done
           done
           
           # For each changed macro, find models that reference it
