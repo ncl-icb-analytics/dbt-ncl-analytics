@@ -1,21 +1,11 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_63
-    description: 'Case finding for patients with significantly elevated single UACR
-      reading indicating substantial kidney damage.
+    description: 'Case finding for patients with latest UACR >70 mg/mmol.
 
+      Age 17+, latest UACR >70, max value per day. Excludes CKD_62 patients.
 
-      Business Logic:
-
-      • Identifies patients aged 17+ with latest UACR reading > 70 (excludes patients
-      from CKD_62)
-
-      • Targets patients with severe proteinuria requiring immediate clinical attention
-      and nephrology referral
-
-      • Takes maximum UACR value per day to handle multiple readings on same date
-
-      • One row per person with clinically significant single elevated UACR reading'
+      One row per person with latest UACR reading and codes.'
     config:
       meta:
         indicator:
@@ -23,11 +13,11 @@ models:
           type: "CASE_FINDING"
           category: "CKD"
           clinical_domain: "Chronic Kidney Disease Case Finding"
-          name_short: "Severe proteinuria"
-          description_short: "Patients with single UACR reading >70 mg/mmol"
+          name_short: "CKD_63: Latest UACR >70"
+          description_short: "Latest UACR >70 mg/mmol"
           description_long: >
-            Age 17+, latest UACR >70 mg/mmol. Excludes CKD_62 patients
-            and existing registers. Requires immediate clinical attention.
+            Age 17+, latest UACR >70 mg/mmol. Excludes CKD_62.
+            Excludes existing CKD or diabetes registers.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CKD_63"
@@ -47,7 +37,7 @@ models:
               threshold_value: "70"
               threshold_operator: "GREATER_THAN"
               threshold_unit: "mg/mmol"
-              description: "Single UACR above 70 mg/mmol (severe proteinuria)"
+              description: "Latest UACR above 70 mg/mmol"
               sort_order: 1
         owner:
           name: EddieDavison92

@@ -14,8 +14,8 @@ models:
           type: "CASE_FINDING"
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
-          name_short: "HbA1c ≥48"
-          description_short: "Patients with HbA1c ≥48 mmol/mol without diabetes diagnosis"
+          name_short: "DM_61: HbA1c ≥48, no diabetes dx"
+          description_short: "HbA1c ≥48 mmol/mol, no diabetes diagnosis"
           description_long: >
             Age 17+, latest HbA1c ≥48 mmol/mol, no diabetes diagnosis or diabetes
             in remission/resolved.

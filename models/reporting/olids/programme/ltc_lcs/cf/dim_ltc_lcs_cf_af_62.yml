@@ -14,8 +14,8 @@ models:
           type: "CASE_FINDING"
           category: "AF"
           clinical_domain: "Cardiovascular Case Finding"
-          name_short: "65+ no pulse check"
-          description_short: "Patients 65+ without pulse check in last year"
+          name_short: "AF_62: 65+, no pulse check"
+          description_short: "65+ without pulse check in last year"
           description_long: >
             Age 65+, no pulse rate/rhythm check in last year.
           is_qof: false
@@ -52,3 +52,9 @@ models:
               sort_order: 2
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

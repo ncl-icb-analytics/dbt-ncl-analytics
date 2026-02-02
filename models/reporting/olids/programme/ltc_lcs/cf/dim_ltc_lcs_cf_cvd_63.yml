@@ -1,12 +1,9 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_63
-    description: 'CVD case finding priority (c): Patients on statins with elevated
-      non-HDL cholesterol.
+    description: 'Age 40-84 with QRISK2 ≥10%, on statins (6m), non-HDL >2.5 mmol/L.
 
-      Age 40-84 with QRISK2 ≥10%, on statins (6 months), non-HDL >2.5 mmol/L.
-
-      One row per person requiring statin dose escalation or therapy review.'
+      One row per person on statins with elevated non-HDL cholesterol.'
     config:
       meta:
         indicator:
@@ -14,11 +11,11 @@ models:
           type: "CASE_FINDING"
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
-          name_short: "High lipids on statin"
-          description_short: "QRisk ≥10%, on statins with non-HDL >2.5 mmol/L"
+          name_short: "CVD_63: On statins, non-HDL >2.5"
+          description_short: "On statins, non-HDL >2.5 mmol/L"
           description_long: >
-            Age 40-84, QRISK2 ≥10%, on statins (6 months), non-HDL >2.5 mmol/L. Priority
-            (c) for statin dose review.
+            Age 40-84, QRISK2 ≥10%, on statins (6m), non-HDL cholesterol
+            >2.5 mmol/L.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_63"

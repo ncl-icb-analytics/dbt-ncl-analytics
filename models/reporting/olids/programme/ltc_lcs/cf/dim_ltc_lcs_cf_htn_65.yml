@@ -3,8 +3,11 @@ models:
   - name: dim_ltc_lcs_cf_htn_65
     description: 'Case finding for stage 1 hypertension with cardiovascular risk factors.
 
-      One row per eligible person with BP readings and risk factor status. Targets
-      higher-risk patients requiring management rather than lifestyle-only interventions.'
+      Clinic BP ≥140/90 or home/ABPM ≥135/85 with risk factors (myocardial,
+      cerebral, claudication, eGFR <60, diabetes, BMI >35, or BSA ethnicity).
+      Excludes patients in HTN_61, HTN_62, HTN_63.
+
+      One row per eligible person with BP readings and risk factor status.'
     config:
       meta:
         indicator:
@@ -12,12 +15,12 @@ models:
           type: "CASE_FINDING"
           category: "HTN"
           clinical_domain: "Hypertension Case Finding"
-          name_short: "Stage 1 + CVD risk"
-          description_short: "Patients with stage 1 hypertension and cardiovascular
-            risk factors"
+          name_short: "HTN_65: Stage 1 HTN + CVD risk"
+          description_short: "Stage 1 HTN with CVD risk factors"
           description_long: >
-            Stage 1 HTN with CVD risk factors. Requires antihypertensive
-            treatment plus lifestyle modifications.
+            Stage 1 HTN: clinic ≥140/90 or home/ABPM ≥135/85 with CVD
+            risk factors (incl. BSA ethnicity). Excludes HTN_61, HTN_62,
+            HTN_63.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_HTN_65"
@@ -25,43 +28,48 @@ models:
             - "LTC_LCS_DASHBOARD"
             - "CASE_FINDING_PROGRAMME"
           code_clusters:
-            - cluster_id: "BLOOD_PRESSURE_CLINIC"
+            - cluster_id: "HYPERTENSION_MYOCARDIAL"
               category: "INCLUSION"
-            - cluster_id: "BLOOD_PRESSURE_HOME_ABPM"
+            - cluster_id: "HYPERTENSION_CEREBRAL"
               category: "INCLUSION"
-            - cluster_id: "CVD_RISK_FACTORS"
+            - cluster_id: "HYPERTENSION_CLAUDICATION"
               category: "INCLUSION"
-            - cluster_id: "HYPERTENSION_REGISTER_CODES"
-              category: "EXCLUSION"
+            - cluster_id: "HYPERTENSION_EGFR"
+              category: "INCLUSION"
+            - cluster_id: "HYPERTENSION_DIABETES"
+              category: "INCLUSION"
+            - cluster_id: "HYPERTENSION_BMI"
+              category: "INCLUSION"
+            - cluster_id: "ETHNICITY_BAME"
+              category: "INCLUSION"
           thresholds:
             - population_group: "ALL_ADULTS"
               threshold_type: "CLINIC_SYSTOLIC_BP"
-              threshold_value: "140-159"
-              threshold_operator: "WITHIN"
+              threshold_value: "140"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Clinic systolic BP 140-159 mmHg (stage 1) with CVD risk"
+              description: "Clinic systolic BP ≥140 mmHg (stage 1) with CVD risk"
               sort_order: 1
             - population_group: "ALL_ADULTS"
               threshold_type: "CLINIC_DIASTOLIC_BP"
-              threshold_value: "90-99"
-              threshold_operator: "WITHIN"
+              threshold_value: "90"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Clinic diastolic BP 90-99 mmHg (stage 1) with CVD risk"
+              description: "Clinic diastolic BP ≥90 mmHg (stage 1) with CVD risk"
               sort_order: 2
             - population_group: "ALL_ADULTS"
               threshold_type: "HOME_ABPM_SYSTOLIC_BP"
-              threshold_value: "135-149"
-              threshold_operator: "WITHIN"
+              threshold_value: "135"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Home/ABPM systolic BP 135-149 mmHg (stage 1) with CVD
-                risk"
+              description: "Home/ABPM systolic BP ≥135 mmHg (stage 1) with CVD risk"
               sort_order: 3
             - population_group: "ALL_ADULTS"
               threshold_type: "HOME_ABPM_DIASTOLIC_BP"
-              threshold_value: "85-94"
-              threshold_operator: "WITHIN"
+              threshold_value: "85"
+              threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "mmHg"
-              description: "Home/ABPM diastolic BP 85-94 mmHg (stage 1) with CVD risk"
+              description: "Home/ABPM diastolic BP ≥85 mmHg (stage 1) with CVD risk"
               sort_order: 4
         owner:
           name: EddieDavison92

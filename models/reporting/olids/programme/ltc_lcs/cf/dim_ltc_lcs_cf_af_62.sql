@@ -65,3 +65,4 @@ FROM base_population AS bp
 LEFT JOIN pulse_check_summary AS pcs ON bp.person_id = pcs.person_id
 LEFT JOIN health_checks AS hc ON bp.person_id = hc.person_id
 LEFT JOIN exclusions AS ex ON bp.person_id = ex.person_id
+WHERE coalesce(pcs.has_pulse_check, FALSE) = FALSE

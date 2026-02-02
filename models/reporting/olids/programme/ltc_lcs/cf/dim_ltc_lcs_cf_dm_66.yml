@@ -1,13 +1,10 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_66
-    description: 'Case finding for patients with pre-diabetic HbA1c levels needing
-      recheck.
-
-      Identifies patients with latest HbA1c 42-45 mmol/mol with no HbA1c in last 12
+    description: 'Patients with latest HbA1c 42-45 mmol/mol and no HbA1c in last 12
       months.
 
-      One row per person with old HbA1c reading in pre-diabetic range.'
+      One row per person with pre-diabetic HbA1c reading and monitoring gap.'
 
     config:
       meta:
@@ -16,10 +13,10 @@ models:
           type: "CASE_FINDING"
           category: "DM"
           clinical_domain: "Diabetes Mellitus Case Finding"
-          name_short: "HbA1c 42-45 old"
-          description_short: "Patients with HbA1c 42-45 mmol/mol needing recheck"
+          name_short: "DM_66: HbA1c 42-45, no recheck in 12m"
+          description_short: "HbA1c 42-45 mmol/mol, no recheck in 12m"
           description_long: >
-            Latest HbA1c 42-45 mmol/mol, no HbA1c in last 12 months.
+            Age 17+, latest HbA1c 42-45 mmol/mol, no HbA1c in last 12 months.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_DM_66"
