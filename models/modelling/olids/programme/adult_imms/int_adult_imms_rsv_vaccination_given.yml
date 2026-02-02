@@ -1,10 +1,16 @@
 ﻿models:
   - name: int_adult_imms_rsv_vaccination_given
-    description: Intermediate table holding RSV vaccinations that are completed 
-      (including those that are out of schedule) in adults currently aged 65+. 
-      One line person
+    description: Intermediate table holding RSV vaccinations that are completed (including those that are out of schedule) in adults currently aged 65+. 
+      One line per person
+
     config:
       meta:
         owner:
           name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique
 

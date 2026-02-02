@@ -6,4 +6,10 @@
       meta:
         owner:
           name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique
 

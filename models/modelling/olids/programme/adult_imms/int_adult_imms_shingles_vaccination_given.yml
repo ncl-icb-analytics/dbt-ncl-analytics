@@ -2,11 +2,17 @@
   - name: int_adult_imms_shingles_vaccination_given
     description: Intermediate table holding Shingles vaccinations (2 doses) that
       are completed (including out of schedule) in adults currently aged 65+. 
-      One line person
+      One line per person
 
 
     config:
       meta:
         owner:
           name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique
 
