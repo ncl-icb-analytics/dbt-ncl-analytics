@@ -1,31 +1,30 @@
 /*
-Flu Campaign Selection Configuration
-
-Centralizes campaign selection logic in one place.
-Change these values when switching to a new campaign year.
-
-Previously these were scattered across dbt_project.yml vars.
-Now they live here for better organization and documentation.
+Flu Campaign Selection
 
 Usage in models:
-  {{ flu_campaign_config(get_flu_current_campaign()) }}
-  {{ flu_campaign_config(get_flu_previous_campaign()) }}
+  SELECT * FROM ({{ flu_current_config() }})
+  SELECT * FROM ({{ flu_previous_config() }})
+
+Override at runtime:
+  dbt run --vars '{"flu_current_campaign": "Flu 2024-25"}'
 */
 
-{% macro get_flu_current_campaign() %}
-    {#- Returns the current flu campaign identifier -#}
-    {#- Override via dbt var: --vars '{"flu_current_campaign": "Flu 2024-25"}' -#}
-    {{ return(var('flu_current_campaign', 'Flu 2025-26')) }}
+{# ===== Campaign ID getters (return string) ===== #}
+
+{% macro flu_current_campaign() %}
+    {{- var('flu_current_campaign', 'Flu 2025-26') -}}
 {% endmacro %}
 
-{% macro get_flu_previous_campaign() %}
-    {#- Returns the previous flu campaign identifier (for YoY comparison) -#}
-    {#- Override via dbt var: --vars '{"flu_previous_campaign": "Flu 2023-24"}' -#}
-    {{ return(var('flu_previous_campaign', 'Flu 2024-25')) }}
+{% macro flu_previous_campaign() %}
+    {{- var('flu_previous_campaign', 'Flu 2024-25') -}}
 {% endmacro %}
 
-{% macro get_flu_audit_end_date() %}
-    {#- Returns the audit end date for flu campaign reporting -#}
-    {#- Override via dbt var: --vars '{"flu_audit_end_date": "2025-03-31"}' -#}
-    {{ return(var('flu_audit_end_date', 'CURRENT_DATE')) }}
+{# ===== Config CTE shortcuts (return full campaign config) ===== #}
+
+{% macro flu_current_config() %}
+    {{ flu_campaign_config(flu_current_campaign()) }}
+{% endmacro %}
+
+{% macro flu_previous_config() %}
+    {{ flu_campaign_config(flu_previous_campaign()) }}
 {% endmacro %}

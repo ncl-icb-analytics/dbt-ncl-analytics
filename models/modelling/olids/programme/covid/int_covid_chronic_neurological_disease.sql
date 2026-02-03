@@ -15,9 +15,9 @@ This condition is NOT eligible in 2025/26 restricted campaigns.
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ covid_campaign_config(get_covid_current_autumn()) }})
+    SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
-    SELECT * FROM ({{ covid_campaign_config(get_covid_previous_autumn()) }})
+    SELECT * FROM ({{ covid_previous_autumn_config() }})
 ),
 
 -- Step 1: Find people with chronic neurological disease diagnosis (for all campaigns)

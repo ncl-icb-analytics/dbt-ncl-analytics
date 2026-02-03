@@ -1,14 +1,9 @@
 /*
-DEPRECATED: Use macros/config/qof_config.sql instead.
+DEPRECATED: Use {{ qof_reference_date() }} instead.
 
-This macro is maintained for backward compatibility but simply delegates
-to get_qof_reference_date() in the config module.
-
-Migration:
-  Old: {{ get_reference_date() }}
-  New: {{ get_qof_reference_date() }}
+This macro is maintained for backward compatibility.
 */
 
 {% macro get_reference_date() %}
-    {{ get_qof_reference_date() }}
+    {{ qof_reference_date() }}
 {% endmacro %}

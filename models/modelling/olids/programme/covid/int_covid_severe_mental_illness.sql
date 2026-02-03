@@ -14,9 +14,9 @@ This condition is eligible in both 2024/25 AND 2025/26 campaigns.
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ covid_campaign_config(get_covid_current_autumn()) }})
+    SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
-    SELECT * FROM ({{ covid_campaign_config(get_covid_previous_autumn()) }})
+    SELECT * FROM ({{ covid_previous_autumn_config() }})
 ),
 
 -- Step 1: Find people with severe mental illness diagnosis (for all campaigns)

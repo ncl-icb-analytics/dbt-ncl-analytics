@@ -12,9 +12,9 @@ Simple diagnosis rule - single code with age restrictions.
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ flu_campaign_config(get_flu_current_campaign()) }})
+    SELECT * FROM ({{ flu_current_config() }})
     UNION ALL
-    SELECT * FROM ({{ flu_campaign_config(get_flu_previous_campaign()) }})
+    SELECT * FROM ({{ flu_previous_config() }})
 ),
 
 -- Step 1: Find people with chronic neurological disease diagnosis (for all campaigns)

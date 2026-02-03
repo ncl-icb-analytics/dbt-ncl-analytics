@@ -1,40 +1,30 @@
 # Configuration Macros
 
-This directory contains centralised configuration macros that were previously scattered across `dbt_project.yml` vars.
+Centralised configuration for campaigns, QOF, and observability settings.
 
-## Why Macros Instead of Vars?
+## Quick Reference
 
-1. **Documentation**: Macros can have detailed docstrings explaining each setting
-2. **Defaults**: Default values are clearly visible in the macro definition
-3. **Discoverability**: All campaign/config settings are in one searchable place
-4. **Override flexibility**: Can still be overridden via `--vars` when needed
+| Macro | Returns | Example |
+|-------|---------|---------|
+| `flu_current_config()` | Full campaign config CTE | `SELECT * FROM ({{ flu_current_config() }})` |
+| `flu_previous_config()` | Previous campaign config CTE | `SELECT * FROM ({{ flu_previous_config() }})` |
+| `covid_autumn_config()` | Current autumn config CTE | `SELECT * FROM ({{ covid_autumn_config() }})` |
+| `covid_spring_config()` | Current spring config CTE | `SELECT * FROM ({{ covid_spring_config() }})` |
+| `covid_previous_autumn_config()` | Previous autumn config CTE | `SELECT * FROM ({{ covid_previous_autumn_config() }})` |
+| `qof_reference_date()` | Reference date for QOF | `WHERE date <= {{ qof_reference_date() }}` |
 
-## Files
-
-| File | Purpose |
-|------|---------|
-| `flu_campaign_selection.sql` | Current/previous flu campaign identifiers |
-| `covid_campaign_selection.sql` | Current/previous COVID campaign identifiers (autumn/spring) |
-| `qof_config.sql` | QOF reference date and related settings |
-| `schema_config.sql` | Auto-schema generation domains, audit schema |
-| `elementary_config.sql` | Elementary observability package settings |
-
-## Usage Examples
-
-### In Models
+## Usage in Models
 
 ```sql
--- Instead of: var('flu_current_campaign', 'Flu 2024-25')
--- Use:
-{{ flu_campaign_config(get_flu_current_campaign()) }}
-
--- QOF reference date
-WHERE clinical_effective_date <= {{ get_qof_reference_date() }}
+WITH all_campaigns AS (
+    SELECT * FROM ({{ flu_current_config() }})
+    UNION ALL
+    SELECT * FROM ({{ flu_previous_config() }})
+),
+...
 ```
 
-### Override at Runtime
-
-All macros still support runtime override via `--vars`:
+## Override at Runtime
 
 ```bash
 dbt run --vars '{"flu_current_campaign": "Flu 2024-25"}'
@@ -43,8 +33,6 @@ dbt run --vars '{"qof_reference_date": "2025-03-31"}'
 
 ## Changing Campaign Years
 
-To switch to a new campaign year:
-
-1. Update the default value in the relevant macro (e.g., `flu_campaign_selection.sql`)
-2. Add any new campaign definitions to `campaigns/flu_campaign_config.sql` or `campaigns/covid_campaign_config.sql`
-3. Run `dbt run` - all downstream models will use the new campaign
+1. Update defaults in `flu_campaign_selection.sql` or `covid_campaign_selection.sql`
+2. Add new campaign definitions in `campaigns/flu_campaign_config.sql` if needed
+3. Run `dbt run`
