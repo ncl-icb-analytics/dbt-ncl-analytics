@@ -14,8 +14,24 @@ version: 1
 
 sources:
   # ========================================
-  # COMMISSIONING DATA SOURCES
+  # COMMISSIONING DATA SOURCES [DSCRO, national]
   # ========================================
+  
+  # Personal Demographics Service
+  - source_name: pds
+    database: DATA_LAKE
+    schema: PDS
+    description: Personal Demographics Service data
+    staging_prefix: stg_pds
+    domain: shared
+  
+  # Community services dataset
+  - source_name: csds
+    database: DATA_LAKE
+    schema: CSDS
+    description: Community services dataset
+    raw_prefix: raw_csds
+    domain: commissioning
   
   # Waiting Lists Data
   - source_name: wl
@@ -72,7 +88,26 @@ sources:
     description: Mental Health Services Data Set (MHSDS)
     raw_prefix: raw_mhsds
     domain: commissioning
-  
+
+  # Registry Data (Births/Deaths)
+  - source_name: registries_deaths
+    database: DATA_LAKE
+    schema: DEATHS
+    description: Register of deaths
+    raw_prefix: raw_registries_deaths
+    domain: shared
+
+  - source_name: registries_births
+    database: DATA_LAKE
+    schema: BIRTHS
+    description: Register of births
+    raw_prefix: raw_registries_births
+    domain: shared
+
+  # ========================================
+  # COMMISSIONING DICTIONARIES [DSCRO, national]
+  # ========================================
+    
   # Dictionary/Reference Data dbo
   - source_name: dictionary_dbo
     database: Dictionary
@@ -105,20 +140,15 @@ sources:
     raw_prefix: raw_dictionary_ip
     domain: shared
 
-    # Registry Data (Births/Deaths)
-  - source_name: registries_deaths
-    database: DATA_LAKE
-    schema: DEATHS
-    description: Register of deaths
-    raw_prefix: raw_registries_deaths
+    # eRS dictionary
+  - source_name: dictionary_eRS
+    database: Dictionary
+    schema: E-Referral
+    description: Primary care referrals lookups
+    raw_prefix: raw_dictionary_ers
     domain: shared
 
-  - source_name: registries_births
-    database: DATA_LAKE
-    schema: BIRTHS
-    description: Register of births
-    raw_prefix: raw_registries_births
-    domain: shared
+
   # ========================================
   # OLIDS DATA SOURCES
   # ========================================
@@ -139,23 +169,8 @@ sources:
     raw_prefix: raw_dictionary_snomed
     domain: shared
 
-  # eRS dictionary
-  - source_name: dictionary_eRS
-    database: Dictionary
-    schema: E-Referral
-    description: Primary care referrals lookups
-    raw_prefix: raw_dictionary_ers
-    domain: shared
-
-  # Community services dataset
-  - source_name: csds
-    database: DATA_LAKE
-    schema: CSDS
-    description: Community services dataset
-    raw_prefix: raw_csds
-    domain: commissioning
   # ========================================
-  # DATA_LAKE__NCL REFERENCE DATA SOURCES
+  # DATA_LAKE__NCL [NCL locally managed data sources]
   # ========================================
 
   # TERMINOLOGY schema in DATA_LAKE__NCL
@@ -226,16 +241,16 @@ sources:
   # Additional OLIDS sources can be added here if needed
 
   # ========================================
-  # PDS DATA SOURCES
+  # MESH IN-FLOW Via PID Environment
   # ========================================
 
-  # Personal Demographics Service
-  - source_name: pds
+  # Local Providers Flows
+  - source_name: local_provider_flows
     database: DATA_LAKE
-    schema: PDS
-    description: Personal Demographics Service data
-    staging_prefix: stg_pds
-    domain: shared
+    schema: LOCAL_PROVIDER_FLOWS
+    description: Providers submissions from PID environment via MESH
+    raw_prefix: raw_lpf
+    domain: pid_env
 
   # ========================================
   # FACT SCHEMAS IN DATA_LAKE
@@ -277,4 +292,12 @@ sources:
     schema: C_LTCS
     description: C-LTCS tables
     raw_prefix: raw_c_ltcs
+    domain: commissioning
+
+  # Central Performance Analytics Team (CPAT PMCT)
+  - source_name: pmct
+    database: DATA_LAKE
+    schema: PMCT
+    description: Central Performance Analytics Team (PMCT)
+    raw_prefix: raw_pmct
     domain: commissioning
