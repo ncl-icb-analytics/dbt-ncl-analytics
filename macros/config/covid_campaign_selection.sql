@@ -5,8 +5,7 @@ Usage:
   WHERE observation_date >= {{ covid_autumn_campaign_start_date() }}
     AND observation_date <= {{ covid_autumn_campaign_end_date() }}
 
-Override campaign at runtime:
-  dbt run --vars '{"covid_current_autumn": "COVID Autumn 2024"}'
+To change campaign year, update the defaults in covid_current_autumn() etc below.
 */
 
 {# ===== Campaign definitions (single source of truth) ===== #}
@@ -62,22 +61,22 @@ Override campaign at runtime:
     {{ return(campaigns) }}
 {% endmacro %}
 
-{# ===== Campaign ID selectors ===== #}
+{# ===== Campaign ID selectors (edit these to change campaign year) ===== #}
 
 {% macro covid_current_autumn() %}
-    {{- var('covid_current_autumn', 'COVID Autumn 2025') -}}
+    {{- 'COVID Autumn 2025' -}}
 {% endmacro %}
 
 {% macro covid_current_spring() %}
-    {{- var('covid_current_spring', 'COVID Spring 2025') -}}
+    {{- 'COVID Spring 2025' -}}
 {% endmacro %}
 
 {% macro covid_previous_autumn() %}
-    {{- var('covid_previous_autumn', 'COVID Autumn 2024') -}}
+    {{- 'COVID Autumn 2024' -}}
 {% endmacro %}
 
 {% macro covid_previous_spring() %}
-    {{- var('covid_previous_spring', 'COVID Spring 2025') -}}
+    {{- 'COVID Spring 2025' -}}
 {% endmacro %}
 
 {# ===== Current autumn campaign field accessors ===== #}

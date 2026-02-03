@@ -5,8 +5,7 @@ Usage:
   WHERE observation_date >= {{ flu_current_campaign_start_date() }}
     AND observation_date <= {{ flu_current_campaign_end_date() }}
 
-Override campaign at runtime:
-  dbt run --vars '{"flu_current_campaign": "Flu 2024-25"}'
+To change campaign year, update the defaults in flu_current_campaign() below.
 */
 
 {# ===== Campaign definitions (single source of truth) ===== #}
@@ -62,14 +61,14 @@ Override campaign at runtime:
     {{ return(campaigns) }}
 {% endmacro %}
 
-{# ===== Campaign ID selectors ===== #}
+{# ===== Campaign ID selectors (edit these to change campaign year) ===== #}
 
 {% macro flu_current_campaign() %}
-    {{- var('flu_current_campaign', 'Flu 2025-26') -}}
+    {{- 'Flu 2025-26' -}}
 {% endmacro %}
 
 {% macro flu_previous_campaign() %}
-    {{- var('flu_previous_campaign', 'Flu 2024-25') -}}
+    {{- 'Flu 2024-25' -}}
 {% endmacro %}
 
 {# ===== Current campaign field accessors ===== #}

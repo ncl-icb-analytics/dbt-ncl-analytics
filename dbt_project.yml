@@ -20,55 +20,12 @@ clean-targets:
 
 model-paths: ["models"]
 
-# ============================================================================
-# CONFIGURATION VARIABLES
-# ============================================================================
-# Most configuration has been moved to macros/config/ for better organization.
-# See macros/config/README.md for details.
-#
-# Variables below can still be overridden via --vars at runtime:
-#   dbt run --vars '{"qof_reference_date": "2025-03-31"}'
-#   dbt run --vars '{"flu_current_campaign": "Flu 2024-25"}'
-# ============================================================================
-
+# Configuration moved to macros/config/ - see macros/config/README.md
 vars:
-  # Test audit schema (required by dbt for store_failures)
   dbt_audit_schema: "test_audit"
-
-  # ---------------------------------------------------------------------
-  # QOF Configuration (defaults in macros/config/qof_config.sql)
-  # ---------------------------------------------------------------------
-  # Override to set a specific reference date for point-in-time calculations
-  # qof_reference_date: "2025-11-04"
-
-  # ---------------------------------------------------------------------
-  # Schema Configuration (defaults in macros/config/schema_config.sql)
-  # ---------------------------------------------------------------------
-  # Domains with auto-generated schema names from folder structure
   auto_schema_domains: ['olids']
-
-  # ---------------------------------------------------------------------
-  # Flu Campaign (defaults in macros/config/flu_campaign_selection.sql)
-  # ---------------------------------------------------------------------
-  # Uncomment to override campaign selection:
-  # flu_current_campaign: "Flu 2025-26"
-  # flu_previous_campaign: "Flu 2024-25"
-  # flu_audit_end_date: "CURRENT_DATE"
-
-  # ---------------------------------------------------------------------
-  # COVID Campaign (defaults in macros/config/covid_campaign_selection.sql)
-  # ---------------------------------------------------------------------
-  # Uncomment to override campaign selection:
-  # covid_current_autumn: "COVID Autumn 2025"
-  # covid_current_spring: "COVID Spring 2025"
-  # covid_previous_autumn: "COVID Autumn 2024"
-  # covid_previous_spring: "COVID Spring 2025"
-  # covid_audit_end_date: "2025-06-30"
   
-  # ---------------------------------------------------------------------
-  # Elementary (defaults in macros/config/elementary_config.sql)
-  # ---------------------------------------------------------------------
-  # These use Jinja to evaluate at runtime based on target
+  # Elementary observability
   disable_dbt_artifacts_autoupload: "{{ should_disable_dbt_artifacts_autoupload() }}"
   disable_run_results: "{{ should_disable_run_results() }}"
   disable_tests_results: "{{ should_disable_tests_results() }}"
