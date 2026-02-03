@@ -211,7 +211,7 @@ def main():
         all_sources.append(source)
 
     total_models = 0
-    models_by_domain = {'commissioning': 0, 'olids': 0, 'shared': 0, 'phenolab': 0}
+    models_by_domain = {'commissioning': 0, 'olids': 0, 'shared': 0, 'phenolab': 0, 'pid_env': 0}
 
     for source in all_sources:
         source_name = source['name']
