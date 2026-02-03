@@ -1,8 +1,8 @@
 /*
 Schema Configuration
 
-Usage:
-  {% if domain in auto_schema_domains() %}
+Usage in generate_schema_name.sql:
+  if domain in auto_schema_domains()
 */
 
 {% macro auto_schema_domains() %}
