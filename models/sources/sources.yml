@@ -126,3 +126,75 @@ sources:
     - name: OP_ATT_TOT_12MO
       data_type: NUMBER
 
+
+- name: pmct
+  database: '"DATA_LAKE"'
+  schema: '"PMCT"'
+  description: Central Performance Analytics Team (PMCT)
+  tables:
+    - name: 'DiagnosticsMonthlySourceAppendReviseProvComm'
+      identifier: '"DiagnosticsMonthlySourceAppendReviseProvComm"'
+      columns:
+      - name: 'Period'
+        data_type: TEXT
+      - name: 'Provider Parent Org Code'
+        data_type: TEXT
+      - name: 'Provider Parent Name'
+        data_type: TEXT
+      - name: 'Provider Org Code'
+        data_type: TEXT
+      - name: 'Provider Org Name'
+        data_type: TEXT
+      - name: 'Commissioner Parent Org Code'
+        data_type: TEXT
+      - name: 'Commissioner Parent Name'
+        data_type: TEXT
+      - name: 'Commissioner Org Code'
+        data_type: TEXT
+      - name: 'Commissioner Org Name'
+        data_type: TEXT
+      - name: 'Diagnostic Tests Sort Order'
+        data_type: NUMBER
+      - name: 'Diagnostic Tests'
+        data_type: TEXT
+      - name: '00 < 01 Week'
+        data_type: NUMBER
+      - name: '01 < 02 Weeks'
+        data_type: NUMBER
+      - name: '02 < 03 Weeks'
+        data_type: NUMBER
+      - name: '03 < 04 Weeks'
+        data_type: NUMBER
+      - name: '04 < 05 Weeks'
+        data_type: NUMBER
+      - name: '05 < 06 Weeks'
+        data_type: NUMBER
+      - name: '06 < 07 Weeks'
+        data_type: NUMBER
+      - name: '07 < 08 Weeks'
+        data_type: NUMBER
+      - name: '08 < 09 Weeks'
+        data_type: NUMBER
+      - name: '09 < 10 Weeks'
+        data_type: NUMBER
+      - name: '10 < 11 Weeks'
+        data_type: NUMBER
+      - name: '11 < 12 Weeks'
+        data_type: NUMBER
+      - name: '12 < 13 Weeks'
+        data_type: NUMBER
+      - name: '13+ Weeks'
+        data_type: NUMBER
+      - name: 'Total WL'
+        data_type: NUMBER
+      - name: 'Waiting List Activity'
+        data_type: NUMBER
+      - name: 'Planned Activity'
+        data_type: NUMBER
+      - name: 'Unscheduled Activity'
+        data_type: NUMBER
+      - name: 'Total Activity'
+        data_type: NUMBER
+      - name: 'CreateTS'
+        data_type: TIMESTAMP_NTZ
+
