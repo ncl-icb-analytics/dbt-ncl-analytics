@@ -11,9 +11,19 @@ models:
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - concept_code
+            - clinical_effective_date
 
     columns:
       - name: person_id
         tests:
-          - unique
+          - not_null
+      - name: concept_code
+        tests:
+          - not_null
+      - name: clinical_effective_date
+        tests:
           - not_null

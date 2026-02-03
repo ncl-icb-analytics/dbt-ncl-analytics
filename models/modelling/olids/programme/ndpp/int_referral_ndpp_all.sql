@@ -30,8 +30,9 @@ QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECT
 -- prioritising declines over invitations where both exist on the same date
 select *
 from dedup_ndpp
-QUALIFY RANK() OVER (PARTITION BY PERSON_ID, CLINICAL_EFFECTIVE_DATE 
-        ORDER BY CASE 
+QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CLINICAL_EFFECTIVE_DATE
+        ORDER BY CASE
             WHEN CONCEPT_DISPLAY = 'NHS Diabetes Prevention Programme invitation' THEN 0
             WHEN CONCEPT_DISPLAY = 'Referral to NHS Diabetes Prevention Programme declined' THEN 1
-            END DESC) =1
+            ELSE -1
+            END DESC) = 1
