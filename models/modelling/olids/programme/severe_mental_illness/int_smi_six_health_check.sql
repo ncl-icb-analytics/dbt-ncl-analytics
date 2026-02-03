@@ -5,7 +5,7 @@
         tags=['smi_registry']
         )
 }}
--- Intermediate table holding core health checks for people on the SMI register
+-- Intermediate table holding core health checks for people on the SMI register but not for people who are on lithium alone. MH1_REG only
 /* Intermediate Model to capture 6 measurements including exceptions and declined */
 WITH EXCEPTIONS AS (
 select 
@@ -119,6 +119,7 @@ ELSE Null END AS BP_CATEGORY,
 FROM {{ ref('fct_person_bp_control') }} bp
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where LATEST_BP_DATE  >= DATEADD('month', -12, CURRENT_DATE)
+And bp.LATEST_BP_DATE <= CURRENT_DATE()
 
 UNION
 
@@ -313,6 +314,8 @@ FROM {{ ref('int_smi_population_base')  }} p
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 LEFT JOIN EXCEPTIONS e USING (PERSON_ID)
 LEFT JOIN COMBINED hc USING (PERSON_ID)
+--include only people with active SMI diagnosis as eligible for a health check- they might also be on lithium
+WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
 )
 ,MET_COUNT as (
 SELECT DISTINCT

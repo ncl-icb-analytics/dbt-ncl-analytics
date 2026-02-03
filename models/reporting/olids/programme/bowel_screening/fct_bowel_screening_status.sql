@@ -16,7 +16,7 @@ Clinical Purpose:
 - Foundation data for programme analysis
 
 Key Business Rules:
-- People aged 50 to 74 : invited every 2 years
+- People aged 50 to 74 : invited every 2 years (amend to 2.5 years from june 2025)
 - Declined/non-response status: valid for 12 months only - NON RESPONSE NOT AVAIALBLE IN PCD REFSETS
 - Unsuitable status: permanent unless superseded by completed screening - NOT AVAIALBLE IN PCD REFSETS
 
@@ -37,10 +37,12 @@ WITH person_demographics AS (
         END AS is_screening_eligible,
         
         -- Screening interval
-        2 AS screening_interval_years,
+       -- 2 AS screening_interval_years,
+        2.5 AS screening_interval_years,
         
         -- Target screening frequency in days
-        730  AS screening_interval_days
+        --730  AS screening_interval_days
+        913  AS screening_interval_days
         
     FROM {{ ref('dim_person_demographics') }} dpa
     --FROM REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dpa
