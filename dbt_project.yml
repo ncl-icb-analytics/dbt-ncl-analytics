@@ -24,6 +24,7 @@ model-paths: ["models"]
 vars:
   dbt_audit_schema: "test_audit"
   auto_schema_domains: ['olids']
+  qof_reference_date: "CURRENT_DATE"  # Used in yml descriptions + can override via --vars
   
   # Elementary observability
   disable_dbt_artifacts_autoupload: "{{ should_disable_dbt_artifacts_autoupload() }}"
