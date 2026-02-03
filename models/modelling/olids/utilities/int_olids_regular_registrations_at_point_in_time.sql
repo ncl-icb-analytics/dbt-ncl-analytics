@@ -9,15 +9,13 @@
 OLIDS Regular Registrations at Point in Time
 
 Counts OLIDS patients with Regular registration episodes active at a fixed point in time.
+Filters to Regular episode type only (excludes Temporary, Emergency, Private, etc.)
 Used for EMIS list size comparison validation.
 
-Filters:
-- Episode Type: Regular only (excludes Temporary, Emergency, Private, etc.)
-- Episode Status: Registered only (excludes Left, NULL, other values)
-- Patient Counting: Deduplicated by person_id (handles patient ID mergers)
-- Deceased Handling: Excludes patients deceased on or before snapshot date
-
 Snapshot Date: 04/11/2025 (from EMIS extract)
+Episode Type: Regular only
+Patient Counting: Deduplicated by person_id (handles patient ID mergers)
+Deceased Handling: Excludes patients deceased on or before snapshot date
 */
 
 with emis_extract_date as (
@@ -46,7 +44,7 @@ patient_deceased_status as (
 ),
 
 regular_episodes as (
-    -- Get Regular registration episodes with Registered status
+    -- Get Regular registration episodes
     select
         eoc.id,
         eoc.patient_id,
@@ -57,8 +55,8 @@ regular_episodes as (
     from {{ ref('stg_olids_episode_of_care') }} as eoc
     cross join emis_extract_date as ed
     where eoc.episode_type_source_code = 'Regular'
-        -- Require Registered status explicitly (excludes Left, NULL, other values)
-        and eoc.episode_status_source_code = 'Registered'
+        -- Exclude Left episodes with no end date (DQ issue: marked Left but never closed)
+        and not (eoc.episode_status_source_code = 'Left' and eoc.episode_of_care_end_date is null)
         -- Episode active on reference date (inclusive end date boundary)
         and eoc.episode_of_care_start_date <= ed.reference_date
         and (
