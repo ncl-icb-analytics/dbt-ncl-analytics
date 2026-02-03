@@ -6,10 +6,10 @@
 }}
 
 -- Patient Registrations - Uses episode_of_care with registration type filtering
--- Processes episode_of_care filtered to registration episodes only (concept code 24531000000104)
+-- Processes episode_of_care filtered to Regular registration episodes only
+-- Requires Registered status (excludes Left, NULL, other values)
 -- Uses PATIENT_PERSON bridge table to get canonical person_id
 -- Handles deceased patients and active registration determination
--- Aligns with PDS comparison methodology
 
 WITH patient_to_person AS (
     SELECT
@@ -60,8 +60,8 @@ raw_registrations AS (
         AND eoc.organisation_id IS NOT NULL
         -- Regular episodes only (excludes Temporary, Emergency, etc.)
         AND eoc.episode_type_source_code = 'Regular'
-        -- Exclude Left episodes with no end date (DQ issue: marked Left but never closed)
-        AND NOT (eoc.episode_status_source_code = 'Left' AND eoc.episode_of_care_end_date IS NULL)
+        -- Require Registered status explicitly (excludes Left, NULL, other values)
+        AND eoc.episode_status_source_code = 'Registered'
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
             ptp.person_id,
