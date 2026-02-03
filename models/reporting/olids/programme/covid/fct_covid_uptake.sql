@@ -169,13 +169,13 @@ final_uptake AS (
     LEFT JOIN (
         -- Include all defined COVID campaigns using variables like flu models
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
-        FROM ({{ covid_campaign_config(var('covid_current_autumn', 'covid_2025_autumn')) }})
+        FROM ({{ covid_campaign_config(get_covid_current_autumn()) }})
         UNION ALL
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date  
-        FROM ({{ covid_campaign_config(var('covid_current_spring', 'covid_2025_spring')) }})
+        FROM ({{ covid_campaign_config(get_covid_current_spring()) }})
         UNION ALL
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
-        FROM ({{ covid_campaign_config(var('covid_previous_autumn', 'covid_2024_autumn')) }})
+        FROM ({{ covid_campaign_config(get_covid_previous_autumn()) }})
     ) cc
         ON cd.campaign_id = cc.campaign_id
 )

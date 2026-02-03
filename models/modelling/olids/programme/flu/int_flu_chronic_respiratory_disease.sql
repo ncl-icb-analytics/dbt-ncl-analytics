@@ -15,9 +15,9 @@ Combination rule - combines existing asthma eligibility with additional respirat
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ flu_campaign_config(var('flu_current_campaign', 'flu_2024_25')) }})
+    SELECT * FROM ({{ flu_campaign_config(get_flu_current_campaign()) }})
     UNION ALL
-    SELECT * FROM ({{ flu_campaign_config(var('flu_previous_campaign', 'flu_2023_24')) }})
+    SELECT * FROM ({{ flu_campaign_config(get_flu_previous_campaign()) }})
 ),
 
 -- Step 1: Get people eligible via active asthma management (for all campaigns)

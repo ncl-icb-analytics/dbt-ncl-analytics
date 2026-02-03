@@ -15,9 +15,9 @@ This condition is NOT eligible in 2025/26 restricted campaigns.
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ covid_campaign_config(var('covid_current_campaign', 'covid_2025_autumn')) }})
+    SELECT * FROM ({{ covid_campaign_config(get_covid_current_autumn()) }})
     UNION ALL
-    SELECT * FROM ({{ covid_campaign_config(var('covid_previous_campaign', 'covid_2024_autumn')) }})
+    SELECT * FROM ({{ covid_campaign_config(get_covid_previous_autumn()) }})
 ),
 
 -- Step 1: Find people with CKD diagnosis (for all campaigns)

@@ -1,11 +1,14 @@
+/*
+DEPRECATED: Use macros/config/qof_config.sql instead.
+
+This macro is maintained for backward compatibility but simply delegates
+to get_qof_reference_date() in the config module.
+
+Migration:
+  Old: {{ get_reference_date() }}
+  New: {{ get_qof_reference_date() }}
+*/
+
 {% macro get_reference_date() %}
-    {#
-    Returns reference date for QOF register calculations.
-    Override via dbt var: --vars '{"qof_reference_date": "2024-03-31"}'
-    #}
-    {% if var('qof_reference_date', none) %}
-        '{{ var('qof_reference_date') }}'::DATE
-    {% else %}
-        CURRENT_DATE()
-    {% endif %}
+    {{ get_qof_reference_date() }}
 {% endmacro %}
