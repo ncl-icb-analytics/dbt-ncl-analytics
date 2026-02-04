@@ -8,6 +8,32 @@
 --   4. Export results as CSV to table_metadata.csv
 
 WITH schema_metadata AS (
+    -- pds: Personal Demographics Service data
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'PDS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'PDS'
+  
+  UNION ALL
+  
+    -- csds: Community services dataset
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'CSDS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'CSDS'
+  
+  UNION ALL
+  
     -- wl: Waiting lists and patient pathway data
   SELECT 
     'DATA_LAKE' as database_name,
@@ -99,6 +125,45 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- registries_deaths: Register of deaths
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'DEATHS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'DEATHS'
+  
+  UNION ALL
+  
+    -- registries_births: Register of births
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'BIRTHS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'BIRTHS'
+  
+  UNION ALL
+  
+    -- adult_social_care_cld: National submission from local authorities for adult social care (client level dataset)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'SOCIAL_CARE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SOCIAL_CARE'
+  
+  UNION ALL
+  
     -- dictionary_dbo: Reference data including PDS and lookup tables
   SELECT 
     'Dictionary' as database_name,
@@ -151,6 +216,19 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- dictionary_eRS: Primary care referrals lookups
+  SELECT 
+    'Dictionary' as database_name,
+    'E-Referral' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'E-Referral'
+  
+  UNION ALL
+  
     -- olids: OLIDS stable layer - cleaned and filtered patient records
   SELECT 
     'DATA_LAKE' as database_name,
@@ -177,32 +255,6 @@ WITH schema_metadata AS (
   
   UNION ALL
   
-    -- dictionary_eRS: Primary care referrals lookups
-  SELECT 
-    'Dictionary' as database_name,
-    'E-Referral' as schema_name,
-    table_name,
-    column_name,
-    data_type,
-    ordinal_position
-  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'E-Referral'
-  
-  UNION ALL
-  
-    -- csds: Community services dataset
-  SELECT 
-    'DATA_LAKE' as database_name,
-    'CSDS' as schema_name,
-    table_name,
-    column_name,
-    data_type,
-    ordinal_position
-  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'CSDS'
-  
-  UNION ALL
-  
     -- reference_terminology: Reference terminology data including SNOMED, BNF, and other code sets
   SELECT 
     'DATA_LAKE__NCL' as database_name,
@@ -213,6 +265,19 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'TERMINOLOGY'
+  
+  UNION ALL
+  
+    -- ptl: ptl data
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'PTL' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'PTL'
   
   UNION ALL
   
@@ -307,16 +372,16 @@ WITH schema_metadata AS (
   
   UNION ALL
   
-    -- pds: Personal Demographics Service data
+    -- local_provider_flows: Providers submissions from PID environment via MESH
   SELECT 
     'DATA_LAKE' as database_name,
-    'PDS' as schema_name,
+    'LOCAL_PROVIDER_FLOWS' as schema_name,
     table_name,
     column_name,
     data_type,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'PDS'
+  WHERE table_schema = 'LOCAL_PROVIDER_FLOWS'
   
   UNION ALL
   
@@ -369,6 +434,19 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DEV__PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'C_LTCS'
+  
+  UNION ALL
+  
+    -- pmct: Central Performance Analytics Team (PMCT)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'PMCT' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'PMCT'
 )
 
 SELECT 
