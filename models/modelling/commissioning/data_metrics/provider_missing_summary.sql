@@ -5,7 +5,8 @@
 
 
 {{ config(
-    materialized='table'
+    materialized='table',
+    description='Pivot table summarising missing provider records across APC, OP, and ECDS over a 2-year monitoring window'
 ) }}
 
 WITH 
