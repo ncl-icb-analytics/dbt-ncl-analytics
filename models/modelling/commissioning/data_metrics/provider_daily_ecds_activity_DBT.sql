@@ -1,4 +1,4 @@
---- provider_daily_ecds_activity_DBT.sql
+--- provider_daily_ecds_activity.sql
 --- Created by: J.Linney | dbt test file for ECDS provider daily activity
 
 -- Add config overrides in here, eg. comment added to snowflake model metadata
@@ -11,8 +11,8 @@
 
 WITH base AS (
     SELECT
-        "system.record.provider" AS provider_code,
-        DATE_TRUNC('day', "attendance.arrival.date") AS activity_date
+        system_record_provider AS provider_code,
+        DATE_TRUNC('day', attendance_arrival_date) AS activity_date
     FROM {{ ref('stg_sus_ae_emergency_care') }}  
 ),
 provider_lookup AS (

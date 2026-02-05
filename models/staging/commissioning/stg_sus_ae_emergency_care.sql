@@ -7,6 +7,7 @@ select primarykey_id
     ,  {{ clean_organisation_id('attendance_location_hes_provider_3') }} as attendance_location_hes_provider_3
     , attendance_location_site 
     , attendance_location_department_type
+    , system_record_provider
     -- arrival
     , attendance_arrival_date 
     , attendance_arrival_time
