@@ -35,6 +35,7 @@ WITH base_observations AS (
         obs.cluster_id AS source_cluster_id
     FROM ({{ get_observations("'BP_COD', 'SYSBP_COD', 'DIASBP_COD', 'HOMEAMBBP_COD', 'ABPM_COD', 'HOMEBP_COD'") }}) obs
     WHERE obs.result_value IS NOT NULL
+      AND obs.person_id IS NOT NULL
     {% if is_incremental() %}
       AND obs.lds_start_date_time > (SELECT MAX(lds_start_date_time) FROM {{ this }})
     {% endif %}
