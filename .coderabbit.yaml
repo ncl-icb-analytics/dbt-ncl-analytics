@@ -94,7 +94,7 @@ reviews:
         - Each model should serve a single clear purpose
         - Include ALL persons (active, inactive, deceased) — filtering happens downstream
         - Watch for fan-out joins or accidental row duplication
-        - Each model should a clear grain
+        - Each model should have a clear grain
         - Filenames start with int_ prefix; paired .yml with owner metadata
         - OLIDS models get auto-derived schemas from folder structure (OLIDS_{SUBDOMAIN})
         - OLIDS data carries governance restrictions with applied custom message tags
