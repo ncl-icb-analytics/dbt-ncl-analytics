@@ -109,11 +109,12 @@ salbutamol_only_ids as (
 ),
 
 salbutamol_repeats_id as (
-    -- Persons with only > 3 salbutamol prescriptions in 12 months
-    select distinct person_id
+    -- Persons with 3+ salbutamol prescriptions in 12 months
+    select person_id
     from {{ ref('int_asthma_medications_12m') }}
     where mapped_concept_code in {{ to_sql_list(salbutamol_code_list) }}
-    and recent_order_count_12m > 3
+    group by person_id
+    having count(*) >= 3  
 )
 
 {# 
@@ -124,31 +125,11 @@ salbutamol_repeats_id as (
 
 select
     p.id as person_id,
-
-    case 
-        when dnt.person_id is not null then true
-        else false
-    end as testing_no_diagnosis,
-
-    case 
-        when tnd.person_id is not null then true
-        else false
-    end as diagnosis_no_testing,
-
-    case 
-        when act.person_id is not null then true
-        else false
-    end as diagnosis_no_act,
-
-    case 
-        when so.person_id is not null then true
-        else false
-    end as salbutamol_only,
-
-    case 
-        when sr.person_id is not null then true
-        else false
-    end as salbutamol_repeats
+    dnt.person_id is not null as testing_no_diagnosis,
+    tnd.person_id is not null as diagnosis_no_testing,
+    act.person_id is not null  as diagnosis_no_act,
+    so.person_id is not null  as salbutamol_only,
+    sr.person_id is not null as salbutamol_repeats
 
 from persons p
 left join diagnosis_no_testing_ids dnt
