@@ -21,7 +21,7 @@ WITH base_observations AS (
             WHEN TRY_CAST(obs.result_value AS FLOAT) > 1000 THEN NULL  -- Likely data error
             WHEN TRY_CAST(obs.result_value AS FLOAT) < 0 THEN NULL     -- Negative values invalid
             ELSE CAST(obs.result_value AS NUMBER(10,2))
-        END AS hba1c_value,
+        END AS hba1c_original_value,
         obs.result_unit_display,
         obs.mapped_concept_code AS concept_code,
         obs.mapped_concept_display AS concept_display,
@@ -60,15 +60,15 @@ standardised AS (
     SELECT
         bo.*,
         CASE
-            WHEN bo.measurement_type = 'IFCC' THEN bo.hba1c_value
-            WHEN bo.measurement_type = 'DCCT' THEN ROUND(10.929 * bo.hba1c_value - 23.5, 0)
+            WHEN bo.measurement_type = 'IFCC' THEN bo.hba1c_original_value
+            WHEN bo.measurement_type = 'DCCT' THEN ROUND(10.929 * bo.hba1c_original_value - 23.5, 0)
             ELSE NULL
-        END AS hba1c_value_ifcc_standardised,
+        END AS hba1c_ifcc,
         CASE
-            WHEN bo.measurement_type = 'DCCT' THEN bo.hba1c_value
-            WHEN bo.measurement_type = 'IFCC' THEN ROUND((0.09148 * bo.hba1c_value) + 2.152, 1)
+            WHEN bo.measurement_type = 'DCCT' THEN bo.hba1c_original_value
+            WHEN bo.measurement_type = 'IFCC' THEN ROUND((0.09148 * bo.hba1c_original_value) + 2.152, 1)
             ELSE NULL
-        END AS hba1c_dcct_value
+        END AS hba1c_dcct
     FROM base_observations bo
 )
 
@@ -76,9 +76,9 @@ SELECT
     person_id,
     ID,
     clinical_effective_date,
-    hba1c_value,
-    hba1c_value_ifcc_standardised,
-    hba1c_dcct_value,
+    hba1c_original_value,
+    hba1c_ifcc,
+    hba1c_dcct,
     /* Canonicalise units by measurement type: IFCC → mmol/mol, DCCT → %.
        Override NULL/blank/UNKNOWN/HbA1c or mismatched units. */
     CASE
@@ -95,37 +95,37 @@ SELECT
     original_result_value,
 
     -- Display both standardised values with units
-    CAST(hba1c_value_ifcc_standardised AS VARCHAR) || ' mmol/mol (' ||
-        CAST(hba1c_dcct_value AS VARCHAR) || '%)' AS hba1c_result_display,
+    CAST(hba1c_ifcc AS VARCHAR) || ' mmol/mol (' ||
+        CAST(hba1c_dcct AS VARCHAR) || '%)' AS hba1c_display,
 
     -- Data quality validation (enhanced range checks)
     CASE
-        WHEN measurement_type = 'IFCC' AND hba1c_value BETWEEN 20 AND 200 THEN TRUE  -- IFCC: mmol/mol (expanded range)
-        WHEN measurement_type = 'DCCT' AND hba1c_value BETWEEN 3 AND 20 THEN TRUE    -- DCCT: %
+        WHEN measurement_type = 'IFCC' AND hba1c_original_value BETWEEN 20 AND 200 THEN TRUE  -- IFCC: mmol/mol
+        WHEN measurement_type = 'DCCT' AND hba1c_original_value BETWEEN 3 AND 20 THEN TRUE    -- DCCT: %
         ELSE FALSE
     END AS is_valid_hba1c,
 
     -- NICE-aligned clinical categorisation using standardised IFCC value
     CASE
-        WHEN hba1c_value_ifcc_standardised IS NULL THEN 'Invalid'
-        WHEN hba1c_value_ifcc_standardised < 42 THEN 'Normal'                -- < 6.0%
-        WHEN hba1c_value_ifcc_standardised >= 42 AND hba1c_value_ifcc_standardised < 48 THEN 'Prediabetes' -- 42.0–47.9
-        WHEN hba1c_value_ifcc_standardised >= 48 AND hba1c_value_ifcc_standardised < 54 THEN 'Diabetes - At NICE Target' -- 48.0–53.9
-        WHEN hba1c_value_ifcc_standardised >= 54 AND hba1c_value_ifcc_standardised < 58 THEN 'Diabetes - Acceptable (within QOF)' -- 54.0–57.9
-        WHEN hba1c_value_ifcc_standardised >= 58 AND hba1c_value_ifcc_standardised < 75 THEN 'Diabetes - Above Target' -- 58.0–74.9
-        WHEN hba1c_value_ifcc_standardised >= 75 AND hba1c_value_ifcc_standardised < 86 THEN 'Diabetes - High Risk' -- 75.0–85.9
-        WHEN hba1c_value_ifcc_standardised >= 86 THEN 'Diabetes - Very High Risk'
+        WHEN hba1c_ifcc IS NULL THEN 'Invalid'
+        WHEN hba1c_ifcc < 42 THEN 'Normal'                -- < 6.0%
+        WHEN hba1c_ifcc >= 42 AND hba1c_ifcc < 48 THEN 'Prediabetes' -- 42.0–47.9
+        WHEN hba1c_ifcc >= 48 AND hba1c_ifcc < 54 THEN 'Diabetes - At NICE Target' -- 48.0–53.9
+        WHEN hba1c_ifcc >= 54 AND hba1c_ifcc < 58 THEN 'Diabetes - Acceptable (within QOF)' -- 54.0–57.9
+        WHEN hba1c_ifcc >= 58 AND hba1c_ifcc < 75 THEN 'Diabetes - Above Target' -- 58.0–74.9
+        WHEN hba1c_ifcc >= 75 AND hba1c_ifcc < 86 THEN 'Diabetes - High Risk' -- 75.0–85.9
+        WHEN hba1c_ifcc >= 86 THEN 'Diabetes - Very High Risk'
         ELSE 'Invalid'
     END AS hba1c_category,
 
     -- Diabetes diagnostic flag
     CASE
-        WHEN hba1c_value_ifcc_standardised >= 48 THEN TRUE ELSE FALSE
+        WHEN hba1c_ifcc >= 48 THEN TRUE ELSE FALSE
     END AS indicates_diabetes,
 
     -- Target achievement flags for QOF
     CASE
-        WHEN hba1c_value_ifcc_standardised < 58 THEN TRUE ELSE FALSE
+        WHEN hba1c_ifcc < 58 THEN TRUE ELSE FALSE
     END AS meets_qof_target
 
 FROM standardised
