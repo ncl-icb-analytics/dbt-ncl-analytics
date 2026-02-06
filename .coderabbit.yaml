@@ -43,7 +43,7 @@ reviews:
       instructions: |
         This is an NHS dbt analytics project on Snowflake. Focus reviews on
         functional correctness, data quality, and dbt best practices — not
-        cosmetic style issues. Don't comment oncasing, whitespace, comma placement, or line length.
+        cosmetic style issues. Don't comment on casing, whitespace, comma placement, or line length.
 
         **Focus areas:**
         - Correctness of joins, filters, and business logic
