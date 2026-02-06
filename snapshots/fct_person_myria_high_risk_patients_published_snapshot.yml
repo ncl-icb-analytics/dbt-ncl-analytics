@@ -3,10 +3,12 @@ snapshots:
     relation: ref("fct_person_myria_high_risk_patients_published")
     description: >
      Patient-level dataset identifying individuals with at least one high-risk condition
-      (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity flags.
-      Includes count of non-elective admissions with a focus on RFL.
-      Restricted to patients alive at time of running, >=18 years of age at last admission 
-      and at least one NEL admission at Barnet Hospital in the last 12 months.
+      (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity
+      flags.
+      Includes count of non-elective admissions with a focus on RFL. (Time periods for NEL
+      counts and flags are based on discharge date).
+      Restricted to Barnet or Enfield reigstered patients alive at time of running, >=18 years of age at last discharge and
+      at least one NEL admission at Barnet Hospital since 1-Jan-2025.
     config:
       strategy: check
       check_cols: ['patient_id',

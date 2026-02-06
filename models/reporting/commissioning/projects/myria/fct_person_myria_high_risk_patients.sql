@@ -2,7 +2,7 @@
 
 select 
     patient_id,
-    hospital_number,
+    hospital_number_most_recent_nel_bh as hospital_number,
     local_authority,
     gp_code,
     gp_name,
@@ -11,6 +11,9 @@ select
     gp_name_pds,
     age_at_most_recent_nel_admission,
     most_recent_nel_admission_date,
+    most_recent_nel_discharge_date,
+    most_recent_nel_admission_date_bh,
+    most_recent_nel_discharge_date_bh,
     barnet_hospital_count,
     barnet_hospital_flag,
     RFL_ex_BH_count,

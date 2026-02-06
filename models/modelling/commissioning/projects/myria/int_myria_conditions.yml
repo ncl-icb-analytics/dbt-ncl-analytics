@@ -5,9 +5,10 @@ models:
     description: >
       For project Myria.
       Aggregates patient-level activity flags for non-elective inpatient admissions
-      in past two years with site- and provider-specific indicators. Excludes
-      patients who died before the start of this month. Flags patients that have received
-      diagnoses for certain conditions.
+      in past two years with site- and provider-specific indicators. (Time periods for NEL
+      counts and flags are based on discharge date).
+      Excludes patients who died before the start of this month. Flags patients that have received
+      diagnoses for certain conditions in any POD.
     config:
       meta:
         owner:
@@ -45,58 +46,61 @@ models:
 
       - name: most_recent_nel_admission_date
         description: "Date of most recent non-elective admission."
+      
+      - name: most_recent_nel_discharge_date
+        description: "Date of most recent non-elective discharge."
 
       - name: barnet_hospital_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at Barnet
-          Hospital in last 12 months."
+          Hospital between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: barnet_hospital_count
         description: "Count of distinct non-elective admissions at Barnet Hospital
-          in last 12 months."
+          between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: RFL_ex_BH_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal
-          Free London sites excluding Barnet Hospital in last 12 months."
+          Free London sites excluding Barnet Hospital between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: RFL_ex_BH_count
         description: "Count of distinct non-elective admissions at Royal Free London
-          sites excluding Barnet Hospital in last 12 months."
+          sites excluding Barnet Hospital between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: RFL_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal
-          Free London (RAL, RAP) in last 12 months."
+          Free London (RAL, RAP) between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: RFL_count
         description: "Count of distinct non-elective admissions at Royal Free London
-          (RAL, RAP) in last 12 months."
+          (RAL, RAP) between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: NCLProvider_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at NCL providers
-          (RAL, RAP, RKE, RRV) in last 12 months."
+          (RAL, RAP, RKE, RRV) between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: NCLProvider_count
         description: "Count of distinct non-elective admissions at NCL providers (RAL,
-          RAP, RKE, RRV) in last 12 months."
+          RAP, RKE, RRV) between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: Non_NCLProvider_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at non-NCL
-          providers in last 12 months."
+          providers between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: Non_NCLProvider_count
         description: "Count of distinct non-elective admissions at non-NCL providers
-          in last 12 months."
+          between 01-Jan-2025 and start of current month (based on discharge date)."
 
       - name: nel_ip_admissions_last_24_months
         description: "Count of distinct non-elective inpatient admissions in last
-          2 years."
+          2 years (based on discharge date)."
 
       - name: nel_ip_admissions_last_12_months
         description: "Count of distinct non-elective inpatient admissions in last
-          12 months."
+          12 months (based on discharge date)."
 
       - name: nel_ip_admissions_last_6_months
         description: "Count of distinct non-elective inpatient admissions in last
-          6 months."
+          6 months (based on discharge date)."
 
       - name: heart_failure
         description: >
