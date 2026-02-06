@@ -53,9 +53,9 @@ pds_patient_check as
     att_dx.patient_id,
     bh.local_patient_identifier as hospital_number_most_recent_nel_bh,
     nel.local_patient_identifier as hospital_number_most_recent_nel_any_provider,
-    TO_VARCHAR(ARRAY_AGG(NCL.LOCAL_AUTHORITY) WITHIN GROUP (ORDER BY nel.activity_date desc)[0]) AS local_authority, -- gets most recent registered local authority
-    TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_CODE) WITHIN GROUP (ORDER BY nel.activity_date desc)[0]) AS gp_code,
-    TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_NAME) WITHIN GROUP (ORDER BY nel.activity_date desc)[0]) AS gp_name,
+    TO_VARCHAR(ARRAY_AGG(NCL.LOCAL_AUTHORITY) WITHIN GROUP (ORDER BY att_dx.activity_date desc)[0]) AS local_authority, -- gets most recent registered local authority
+    TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_CODE) WITHIN GROUP (ORDER BY att_dx.activity_date desc)[0]) AS gp_code,
+    TO_VARCHAR(ARRAY_AGG(NCL.PRACTICE_NAME) WITHIN GROUP (ORDER BY att_dx.activity_date desc)[0]) AS gp_name,
     ppc.local_authority as local_authority_pds,
     ppc.practice_code as gp_code_pds,
     ppc.practice_name as gp_name_pds,
@@ -68,7 +68,7 @@ pds_patient_check as
         WHEN COUNT(DISTINCT 
                     CASE 
                         WHEN provider_site_name = 'Barnet Hospital' 
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE) -- activity between 1 Jan 2025 and start of current month
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE) -- activity between 1 Jan 2025 and start of current month
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -78,7 +78,7 @@ pds_patient_check as
     COUNT(DISTINCT -- counts distinct attendance IDs for non-elective attendances at Barnet Hospital in the period
                     CASE 
                         WHEN provider_site_name = 'Barnet Hospital' 
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) as barnet_hospital_count,
@@ -88,7 +88,7 @@ pds_patient_check as
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
                             AND provider_site_name <> 'Barnet Hospital'
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -99,7 +99,7 @@ pds_patient_check as
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
                             AND provider_site_name <> 'Barnet Hospital' 
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS RFL_ex_BH_count,
@@ -108,7 +108,7 @@ pds_patient_check as
         WHEN COUNT(DISTINCT 
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -118,7 +118,7 @@ pds_patient_check as
     COUNT(DISTINCT -- counts distinct attendance IDs at RFL in the period
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS RFL_count,
@@ -127,7 +127,7 @@ pds_patient_check as
         WHEN COUNT(DISTINCT 
                     CASE 
                         WHEN provider_code IN ('RAL','RAP','RKE','RRV')
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -137,7 +137,7 @@ pds_patient_check as
     COUNT(DISTINCT -- counts distinct attendance IDs at NCL providers in the period
                     CASE 
                         WHEN provider_code IN ('RAL','RAP','RKE','RRV')
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) AS NCLProvider_count,
@@ -146,7 +146,7 @@ pds_patient_check as
         WHEN COUNT(DISTINCT
                     CASE
                         WHEN provider_code NOT IN ('RAL','RAP','RKE','RRV')
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
                         END) >= 1 
@@ -156,7 +156,7 @@ pds_patient_check as
     COUNT(DISTINCT -- counts distinct attendance IDs non-NCL providers in the period
                     CASE
                         WHEN provider_code NOT IN ('RAL','RAP','RKE','RRV')
-                            AND nel.activity_date >= '01-Jan-2025' AND nel.activity_date < DATE_TRUNC('month',CURRENT_DATE)
+                            AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1')
                         THEN primary_id
                         END) AS Non_NCLProvider_count,
