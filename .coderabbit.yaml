@@ -56,7 +56,7 @@ reviews:
         - Booleans prefixed with is_ or has_
         - Dates suffixed with _date, timestamps with _at
         - IDs suffixed with _id
-        - Snake_case for all column names
+        - snake_case for all column names
 
     # ── Raw layer ──
     - path: "models/raw/**"
