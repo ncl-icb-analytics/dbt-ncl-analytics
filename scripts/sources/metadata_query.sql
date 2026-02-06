@@ -151,6 +151,19 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- adult_social_care_cld: National submission from local authorities for adult social care (client level dataset)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'SOCIAL_CARE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SOCIAL_CARE'
+  
+  UNION ALL
+  
     -- dictionary_dbo: Reference data including PDS and lookup tables
   SELECT 
     'Dictionary' as database_name,
@@ -252,6 +265,19 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'TERMINOLOGY'
+  
+  UNION ALL
+  
+    -- ptl: ptl data
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'PTL' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'PTL'
   
   UNION ALL
   

@@ -24,6 +24,7 @@ WITH valid_observations AS (
       -- Apply broad plausible value filter
       AND result_value > 20
       AND result_value < 350
+      AND effective_date <= CURRENT_DATE() -- Exclude future dates
 )
 
 -- Event-level aggregation: one row per person per date with paired values

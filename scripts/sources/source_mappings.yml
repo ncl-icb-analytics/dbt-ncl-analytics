@@ -104,6 +104,15 @@ sources:
     raw_prefix: raw_registries_births
     domain: shared
 
+    # Adult social care (CLD)
+  - source_name: adult_social_care_cld
+    database: DATA_LAKE
+    schema: SOCIAL_CARE
+    description: National submission from local authorities for adult social care (client level dataset)
+    raw_prefix: raw_asc_cld
+    domain: shared
+
+
   # ========================================
   # COMMISSIONING DICTIONARIES [DSCRO, national]
   # ========================================
@@ -180,6 +189,14 @@ sources:
     description: Reference terminology data including SNOMED, BNF, and other code sets
     raw_prefix: raw_reference
     domain: shared
+
+    # PTL
+  - source_name: ptl
+    database: DATA_LAKE__NCL
+    schema: PTL
+    description: ptl data
+    raw_prefix: raw_ptl
+    domain: commissioning
 
   # ANALYST_MANAGED schema in DATA_LAKE__NCL
   - source_name: reference_analyst_managed
