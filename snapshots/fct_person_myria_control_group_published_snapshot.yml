@@ -20,6 +20,7 @@ snapshots:
                     'gp_name_pds',
                     'age_at_most_recent_nel_admission',
                     'most_recent_nel_admission_date',
+                    'most_recent_nel_discharge_date',
                     'local_authority',
                     'barnet_hospital_count',
                     'barnet_hospital_flag',
