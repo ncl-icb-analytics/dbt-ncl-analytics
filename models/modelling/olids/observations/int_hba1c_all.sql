@@ -29,14 +29,17 @@ WITH base_observations AS (
         obs.result_value AS original_result_value,
 
         -- Single measurement type determination - mutually exclusive
-        -- Priority: 1) Cluster ID (most reliable), 2) Unit display, 3) Value range
+        -- Unambiguous ranges determined by value: DCCT is always <20%, IFCC is always >25 mmol/mol.
+        -- The 20-25 zone is ambiguous (could be low-normal IFCC or extreme DCCT),
+        -- so falls back to cluster ID and unit display.
         CASE
+            WHEN TRY_CAST(obs.result_value AS FLOAT) > 25 THEN 'IFCC'
+            WHEN TRY_CAST(obs.result_value AS FLOAT) < 20 THEN 'DCCT'
+            -- Ambiguous 20-25 range: fall back to concept code then unit
             WHEN obs.cluster_id = 'IFCCHBAM_COD' THEN 'IFCC'
             WHEN obs.cluster_id = 'DCCTHBA1C_COD' THEN 'DCCT'
             WHEN obs.result_unit_display ILIKE '%mmol/mol%' THEN 'IFCC'
             WHEN obs.result_unit_display ILIKE '%\%%' THEN 'DCCT'
-            WHEN obs.result_value > 25 THEN 'IFCC'  -- IFCC values typically >25
-            WHEN obs.result_value <= 25 THEN 'DCCT' -- DCCT values typically <=25
             ELSE 'UNKNOWN'
         END AS measurement_type
     FROM ({{ get_observations("'IFCCHBAM_COD', 'DCCTHBA1C_COD'") }}) obs
