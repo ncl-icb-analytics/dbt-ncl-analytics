@@ -94,15 +94,9 @@ SELECT
     (measurement_type = 'DCCT') AS is_dcct,
     original_result_value,
 
-    -- Use actual result unit display from source data (enhanced macro)
-
-    -- Enhanced result string for reporting (value + unit from source)
-    CAST(hba1c_value AS VARCHAR) || ' ' ||
-        CASE
-            WHEN measurement_type = 'IFCC' THEN 'mmol/mol'
-            WHEN measurement_type = 'DCCT' THEN '%'
-            ELSE COALESCE(NULLIF(TRIM(result_unit_display), ''), 'UNKNOWN')
-        END AS hba1c_result_display,
+    -- Display both standardised values with units
+    CAST(hba1c_value_ifcc_standardised AS VARCHAR) || ' mmol/mol (' ||
+        CAST(hba1c_dcct_value AS VARCHAR) || '%)' AS hba1c_result_display,
 
     -- Data quality validation (enhanced range checks)
     CASE
