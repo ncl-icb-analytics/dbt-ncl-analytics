@@ -125,8 +125,8 @@ salbutamol_repeats_id as (
 
 select
     p.id as person_id,
-    dnt.person_id is not null as testing_no_diagnosis,
-    tnd.person_id is not null as diagnosis_no_testing,
+    dnt.person_id is not null as diagnosis_no_testing,
+    tnd.person_id is not null as testing_no_diagnosis ,
     act.person_id is not null  as diagnosis_no_act,
     so.person_id is not null  as salbutamol_only,
     sr.person_id is not null as salbutamol_repeats
