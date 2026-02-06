@@ -34,13 +34,16 @@ SELECT DISTINCT
 ,IMM_ADM as ( 
      SELECT distinct
         el.PERSON_ID,
+        el.BORN_SEP_2022_FLAG,
+        el.BORN_JUL_2024_FLAG,
+        el.BORN_JAN_2025_FLAG,
         clut.AGE_AT_EVENT_OBS,
 	    clut.VACCINE_ORDER,
         el.VACCINE_ID,
         el.VACCINE_NAME,
         el.DOSE_NUMBER,
         clut.EVENT_DATE,
-            CASE 
+        CASE 
             WHEN clut.codeclusterid = clut.administered_cluster_id THEN 'Administration'
             WHEN clut.codeclusterid = clut.drug_cluster_id THEN 'Administration'
             WHEN clut.codeclusterid = clut.Contraindicated_Cluster_ID THEN 'Contraindicated'
@@ -68,6 +71,9 @@ SELECT DISTINCT
 --IDENTIFY DUPLICATE ROWS WHERE DECLINED OR CONTRAINDICATED AND ADMINSTRATION ON THE SAME DATE
 SELECT 
     PERSON_ID,
+    BORN_SEP_2022_FLAG,
+    BORN_JUL_2024_FLAG,
+    BORN_JAN_2025_FLAG,
     AGE_AT_EVENT_OBS,
     VACCINE_ORDER,
     VACCINE_ID,
@@ -91,6 +97,9 @@ QUALIFY r = 1
 ,IMM_ADM_RANKED as (
 SELECT 
 	PERSON_ID,
+    BORN_SEP_2022_FLAG,
+    BORN_JUL_2024_FLAG,
+    BORN_JAN_2025_FLAG,
 	AGE_AT_EVENT_OBS,
     VACCINE_ORDER,
 	VACCINE_ID,
@@ -107,6 +116,9 @@ SELECT
 
  SELECT 
 	PERSON_ID,
+    BORN_SEP_2022_FLAG,
+    BORN_JUL_2024_FLAG,
+    BORN_JAN_2025_FLAG,
 	AGE_AT_EVENT_OBS,
     VACCINE_ORDER,
 	VACCINE_ID,
