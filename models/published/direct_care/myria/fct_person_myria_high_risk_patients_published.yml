@@ -7,8 +7,8 @@ models:
       (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity
       flags.
       Includes count of non-elective admissions with a focus on RFL. (Time periods for NEL
-      counts and flags are based on discharge date).
-      Restricted to Barnet or Enfield reigstered patients alive at time of running, >=18 years of age at last discharge and
+      counts, flags and inclusion criteria are based on discharge date).
+      Restricted to Barnet or Enfield registered patients alive at time of running, >=18 years of age at last discharge and
       at least one NEL admission at Barnet Hospital since 1-Jan-2025 (based on discharge date).
     config:
       meta:
@@ -177,6 +177,17 @@ models:
       - name: frailty_falls
         description: "Flag (1/0) if patient has frailty or history of falls (ICD-10
           R54, Z91.81)."
+
       - name: is_on_pds
         description: "Binary flag for whether patient is registered at an NCL GP on
           PDS at time of running (1 if yes, 0 if no)."
+      
+      - name: total_high_risk_conditions
+        description: "Sum of all high-risk conditions flags."
+
+      - name: data_source_refresh_date
+        description: "Refresh datetime of the int_myria_conditions table. This is when the death status and PDS are checked."
+      
+      - name: table_refresh_date
+        description: "Refresh datetime of this table. Will usually be the same as data_source_refresh_date in normal dbt scheduling."
+

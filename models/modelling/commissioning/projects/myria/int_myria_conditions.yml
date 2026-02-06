@@ -19,9 +19,13 @@ models:
         tests:
           - not_null
 
-      - name: hospital_number
+      - name: hospital_number_most_recent_nel_bh
         description: "Trust-provided patient identifier. (local patient identifier).
-          Taken from most recent BH admission."
+          Taken from most recent BH NEL admission."
+      
+      - name: hospital_number_most_recent_nel_any_provider
+        description: "Trust-provided patient identifier. (local patient identifier).
+          Taken from most recent NEL admission from any provider."
 
       - name: local_authority
         description: "Most recent registered local authority based on GP practice."
@@ -49,6 +53,12 @@ models:
       
       - name: most_recent_nel_discharge_date
         description: "Date of most recent non-elective discharge."
+
+      - name: most_recent_nel_admission_date_bh
+        description: "Date of most recent non-elective admission at Barnet Hospital."
+      
+      - name: most_recent_nel_discharge_date_bh
+        description: "Date of most recent non-elective discharge at Barnet Hospital."
 
       - name: barnet_hospital_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at Barnet

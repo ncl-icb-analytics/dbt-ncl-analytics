@@ -1,4 +1,4 @@
--- Gets list of attendances and diagnoses in last 12 months (monthly grain)
+-- Gets list of attendances and diagnoses before the start of current month
  {{ config(materialized="table") }}
 
 SELECT
