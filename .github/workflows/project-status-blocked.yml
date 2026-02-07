@@ -1,0 +1,90 @@
+name: Project Status - Blocked
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  update-project-status:
+    name: Set Project Status to Blocked
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'Blocked'
+    steps:
+      - name: Update project status to Blocked
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          script: |
+            const projectNumber = 3;
+            const org = 'ncl-icb-analytics';
+            const targetStatus = 'Blocked';
+            const issueNodeId = context.payload.issue.node_id;
+
+            // Get project ID
+            const { organization } = await github.graphql(`
+              query($org: String!, $number: Int!) {
+                organization(login: $org) {
+                  projectV2(number: $number) {
+                    id
+                  }
+                }
+              }
+            `, { org, number: projectNumber });
+
+            const projectId = organization.projectV2.id;
+
+            // Get Status field and "Blocked" option
+            const { node: project } = await github.graphql(`
+              query($projectId: ID!) {
+                node(id: $projectId) {
+                  ... on ProjectV2 {
+                    field(name: "Status") {
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        options { id name }
+                      }
+                    }
+                  }
+                }
+              }
+            `, { projectId });
+
+            const statusField = project.field;
+            if (!statusField?.id) {
+              core.setFailed('Status field not found in project');
+              return;
+            }
+
+            const option = statusField.options.find(o => o.name === targetStatus);
+            if (!option) {
+              const available = statusField.options.map(o => o.name).join(', ');
+              core.setFailed(`"${targetStatus}" option not found. Available: ${available}`);
+              return;
+            }
+
+            // Add issue to project (idempotent)
+            const { addProjectV2ItemById } = await github.graphql(`
+              mutation($projectId: ID!, $contentId: ID!) {
+                addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+                  item { id }
+                }
+              }
+            `, { projectId, contentId: issueNodeId });
+
+            const itemId = addProjectV2ItemById.item.id;
+
+            // Set status to "Blocked"
+            await github.graphql(`
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $projectId
+                  itemId: $itemId
+                  fieldId: $fieldId
+                  value: { singleSelectOptionId: $optionId }
+                }) {
+                  projectV2Item { id }
+                }
+              }
+            `, { projectId, itemId, fieldId: statusField.id, optionId: option.id });
+
+            core.info(`Issue #${context.payload.issue.number} status set to "${targetStatus}"`);
