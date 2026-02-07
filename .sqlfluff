@@ -1,15 +1,12 @@
 [sqlfluff]
 dialect = snowflake
 templater = dbt
+max_line_length = 200
 # Formatting and capitalisation only - skip opinionated rules
 rules = layout, capitalisation
 
 [sqlfluff:templater:dbt]
 project_dir = .
-
-# Line length
-[sqlfluff:rules:layout.long_lines]
-max_line_length = 200
 
 # Indentation
 [sqlfluff:rules:layout.indent]
@@ -24,7 +21,7 @@ capitalisation_policy = lower
 capitalisation_policy = lower
 
 [sqlfluff:rules:capitalisation.functions]
-capitalisation_policy = lower
+extended_capitalisation_policy = lower
 
 [sqlfluff:rules:capitalisation.literals]
 capitalisation_policy = lower
