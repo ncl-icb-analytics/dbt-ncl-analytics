@@ -1,14 +1,15 @@
 version: 2
 
 models:
-  - name: int_myria_conditions
+  - name: fct_person_myria_control_group
     description: >
-      For project Myria.
-      Aggregates patient-level activity flags for non-elective inpatient admissions
-      in past two years with site- and provider-specific indicators. (Time periods for NEL
+      Patient-level dataset identifying individuals with at least one high-risk condition
+      (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity
+      flags.
+      Includes counts of non-elective admissions. (Time periods for NEL
       counts and flags are based on discharge date).
-      Excludes patients who died before the start of this month. Flags patients that have received
-      diagnoses for certain conditions in any POD.
+      Restricted to NCL-registered patients alive at time of running, >=18 years of age 
+      and at least one NEL admission at any provider since 1-Jan-2025 (based on discharge date).
     config:
       meta:
         owner:
@@ -19,16 +20,13 @@ models:
         tests:
           - not_null
 
-      - name: hospital_number_most_recent_nel_bh
-        description: "Trust-provided patient identifier. (local patient identifier).
-          Taken from most recent BH NEL admission."
-      
-      - name: hospital_number_most_recent_nel_any_provider
+      - name: hospital_number
         description: "Trust-provided patient identifier. (local patient identifier).
           Taken from most recent NEL admission from any provider."
 
       - name: local_authority
-        description: "Most recent registered local authority based on GP practice."
+        description: "Most recent registered local authority based on GP practice
+          neighbourhood."
 
       - name: gp_code
         description: "Registered GP practice code at most recent acute activity."
@@ -49,75 +47,65 @@ models:
         description: "Age at most recent non-elective admission."
 
       - name: most_recent_nel_admission_date
-        description: "Date of most recent non-elective admission."
-      
+        description: "Date of most recent non-elective admission at any provider."
+
       - name: most_recent_nel_discharge_date
-        description: "Date of most recent non-elective discharge."
-
-      - name: most_recent_nel_admission_date_bh
-        description: "Date of most recent non-elective admission at Barnet Hospital."
-      
-      - name: most_recent_nel_discharge_date_bh
-        description: "Date of most recent non-elective discharge at Barnet Hospital."
-
-      - name: barnet_hospital_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at Barnet
-          Hospital between 01-Jan-2025 and start of current month (based on discharge date)."
+        description: "Date of most recent non-elective discharge at any provider."
 
       - name: barnet_hospital_count
         description: "Count of distinct non-elective admissions at Barnet Hospital
-          between 01-Jan-2025 and start of current month (based on discharge date)."
+          since 1-Jan-2025 (based on discharge date)."
 
-      - name: RFL_ex_BH_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal
-          Free London sites excluding Barnet Hospital between 01-Jan-2025 and start of current month (based on discharge date)."
+      - name: barnet_hospital_flag
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at Barnet
+          Hospital since 1-Jan-2025 (based on discharge date)."
 
       - name: RFL_ex_BH_count
         description: "Count of distinct non-elective admissions at Royal Free London
-          sites excluding Barnet Hospital between 01-Jan-2025 and start of current month (based on discharge date)."
+          sites excluding Barnet Hospital since 1-Jan-2025 (based on discharge date)."
 
-      - name: RFL_flag
+      - name: RFL_ex_BH_flag
         description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal
-          Free London (RAL, RAP) between 01-Jan-2025 and start of current month (based on discharge date)."
+          Free London sites excluding Barnet Hospital since 1-Jan-2025 (based on discharge date)."
 
       - name: RFL_count
         description: "Count of distinct non-elective admissions at Royal Free London
-          (RAL, RAP) between 01-Jan-2025 and start of current month (based on discharge date)."
+          (RAL, RAP) since 1-Jan-2025 (based on discharge date)."
 
-      - name: NCLProvider_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at NCL providers
-          (RAL, RAP, RKE, RRV) between 01-Jan-2025 and start of current month (based on discharge date)."
+      - name: RFL_flag
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at Royal
+          Free London (RAL, RAP) since 1-Jan-2025 (based on discharge date)."
 
       - name: NCLProvider_count
         description: "Count of distinct non-elective admissions at NCL providers (RAL,
-          RAP, RKE, RRV) between 01-Jan-2025 and start of current month (based on discharge date)."
+          RAP, RKE, RRV) since 1-Jan-2025 (based on discharge date)."
 
-      - name: Non_NCLProvider_flag
-        description: "Flag (1/0) if patient had ≥1 non-elective admission at non-NCL
-          providers between 01-Jan-2025 and start of current month (based on discharge date)."
+      - name: NCLProvider_flag
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at NCL providers
+          (RAL, RAP, RKE, RRV) since 1-Jan-2025 (based on discharge date)."
 
       - name: Non_NCLProvider_count
         description: "Count of distinct non-elective admissions at non-NCL providers
-          between 01-Jan-2025 and start of current month (based on discharge date)."
+          since 1-Jan-2025 (based on discharge date)."
+
+      - name: Non_NCLProvider_flag
+        description: "Flag (1/0) if patient had ≥1 non-elective admission at non-NCL
+          providers since 1-Jan-2025 (based on discharge date)."
 
       - name: nel_ip_admissions_last_24_months
-        description: "Count of distinct non-elective inpatient admissions in last
-          2 years (based on discharge date)."
+        description: "Count of distinct non-elective inpatient admissions in past
+          24 months (based on discharge date)."
 
       - name: nel_ip_admissions_last_12_months
-        description: "Count of distinct non-elective inpatient admissions in last
+        description: "Count of distinct non-elective inpatient admissions in past
           12 months (based on discharge date)."
 
       - name: nel_ip_admissions_last_6_months
-        description: "Count of distinct non-elective inpatient admissions in last
+        description: "Count of distinct non-elective inpatient admissions in past
           6 months (based on discharge date)."
 
       - name: heart_failure
-        description: >
-          Flag (1/0) if patient had diagnosis code starting with ICD-10 I50 (Heart
-          Failure).
-          Requires proxy for 'severe' heart failure  e.g. based on ≥2 admissions in
-          12 months or related acute events.
+        description: "Flag (1/0) if patient has ICD-10 I50* diagnosis (Heart Failure)."
 
       - name: copd
         description: "Flag (1/0) if patient has COPD or emphysema (ICD-10 J44*, J43*)."
@@ -183,6 +171,16 @@ models:
       - name: frailty_falls
         description: "Flag (1/0) if patient has frailty or history of falls (ICD-10
           R54, Z91.81)."
+
       - name: is_on_pds
         description: "Binary flag for whether patient is registered at an NCL GP on
           PDS at time of running (1 if yes, 0 if no)."
+      
+      - name: total_high_risk_conditions
+        description: "Sum of all high-risk conditions flags."
+      
+      - name: data_source_refresh_date
+        description: "Refresh datetime of the int_myria_conditions table. This is when the death status and PDS are checked."
+      
+      - name: table_refresh_date
+        description: "Refresh datetime of this table. Will usually be the same as data_source_refresh_date in normal dbt scheduling."
