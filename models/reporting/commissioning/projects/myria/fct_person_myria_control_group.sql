@@ -2,7 +2,7 @@
 
 select 
     patient_id,
-    hospital_number_most_recent_nel_bh as hospital_number,
+    hospital_number_most_recent_nel_any_provider as hospital_number,
     local_authority,
     gp_code,
     gp_name,
@@ -12,8 +12,6 @@ select
     age_at_most_recent_nel_admission,
     most_recent_nel_admission_date,
     most_recent_nel_discharge_date,
-    most_recent_nel_admission_date_bh,
-    most_recent_nel_discharge_date_bh,
     barnet_hospital_count,
     barnet_hospital_flag,
     RFL_ex_BH_count,
@@ -72,9 +70,10 @@ select
 from 
     {{ ref("int_myria_conditions") }} 
 where
-    barnet_hospital_count >= 1
-    AND local_authority IN ('Barnet','Enfield')
-    AND age_at_most_recent_nel_admission >= 18
+    (NCLProvider_count >= 1 OR Non_NCLProvider_count >= 1) -- 1 NEL attendance at any provider
+    AND local_authority IN ('Barnet','Enfield','Camden','Islington','Haringey') -- all NCL patients
+    AND patient_id NOT IN (select distinct patient_id from {{ ref("fct_person_myria_high_risk_patients") }} ) -- need exclusive cohorts
+    AND age_at_most_recent_nel_admission >= 18 -- otherwise criteria the same
     AND
     (heart_failure = 1 
     or copd = 1 
