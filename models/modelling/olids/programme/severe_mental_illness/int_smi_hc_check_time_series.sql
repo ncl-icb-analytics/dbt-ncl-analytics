@@ -34,7 +34,8 @@ b.person_id
 --,DATEADD('month', -12, p.analysis_month) AS MONTH_12LESS
 ,DATE(b.clinical_effective_date) as HBA1C_date
 ,b.HBA1C_CATEGORY
-,b.HBA1C_RESULT_DISPLAY
+--HBA1C values are undergoing maintenance to correct unit display issues so currently not included but will be added back once resolved.
+--,b.HBA1C_DISPLAY
 ,CASE
 WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As HBA1C_LAST_12M
 ,ROW_NUMBER() OVER (PARTITION BY b.person_id, p.analysis_month ORDER BY CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 1 ELSE 0 END DESC, clinical_effective_date desc) as row_num
