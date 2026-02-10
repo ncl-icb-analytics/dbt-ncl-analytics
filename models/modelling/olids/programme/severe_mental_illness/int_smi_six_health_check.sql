@@ -58,7 +58,9 @@ select
 b.person_id
 ,DATE(b.clinical_effective_date) as HBA1C_date
 ,b.HBA1C_CATEGORY
-,b.HBA1C_RESULT_DISPLAY
+--HBA1C values are undergoing maintenance to correct unit display issues so currently not included but will be added back once resolved.
+--,b.HBA1C_DISPLAY
+,NULL AS HBA1C_DISPLAY
 FROM {{ ref('int_hba1c_latest') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
@@ -69,7 +71,7 @@ select
 b.person_id
 ,DATE(b.clinical_effective_date) as HBA1C_DATE
 ,'Glucose Declined' as HBA1C_CATEGORY
-,NULL AS HBA1C_RESULT_DISPLAY
+,NULL AS HBA1C_DISPLAY
 FROM {{ ref('int_smi_glucose_declined') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where b.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
@@ -242,7 +244,7 @@ LEFT JOIN BMI b USING (person_id)
 UNION ALL
 
 SELECT person_id, 'HBA1C' AS Check_Type, HBA1C_CHECK_12M AS Check_Status,
-       h.HBA1C_DATE AS Check_Date, h.HBA1C_CATEGORY AS Result_Category, h.HBA1C_RESULT_DISPLAY AS Value
+       h.HBA1C_DATE AS Check_Date, h.HBA1C_CATEGORY AS Result_Category, h.HBA1C_DISPLAY AS Value
 FROM HC_CHECKS hc
 LEFT JOIN Glucose h USING (person_id)
 
