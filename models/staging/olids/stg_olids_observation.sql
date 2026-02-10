@@ -46,3 +46,4 @@ select
     lds_record_id
 
 from {{ ref('raw_olids_observation') }}
+where person_id is not null
