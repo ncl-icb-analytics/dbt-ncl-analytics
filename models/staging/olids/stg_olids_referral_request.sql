@@ -36,3 +36,4 @@ select
 
 from {{ ref('raw_olids_referral_request') }}
 where coalesce(lds_is_deleted, false) = false
+    and person_id is not null

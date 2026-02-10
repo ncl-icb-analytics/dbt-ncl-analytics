@@ -24,6 +24,7 @@ select
     lds_record_id_person
 
 from {{ ref('raw_olids_patient_person') }}
+where person_id is not null
 qualify row_number() over (
     partition by id
     order by lds_start_date_time desc
