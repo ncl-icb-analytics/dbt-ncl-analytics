@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: compare_emis_qof_vs_pit_registers
+    description: |
+      Practice-level comparison of EMIS QOF v50 register counts against OLIDS pit_ register models.
+
+      Outputs aggregate comparison (1% threshold) and practice-level comparison (2% or 5 patients threshold).
+      Rows ordered by comparison type, register name, and failures first.
+
+    config:
+      meta:
+        owner:
+          name: Kate Welsby
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+          severity: warn
+
+  - name: compare_emis_qof_vs_pit_registers_summary
+    description: |
+      Aggregate summary of EMIS QOF v50 vs OLIDS pit_ register validation.
+
+      Shows per-register totals, percentage differences, aggregate pass/fail (1% threshold),
+      and practice-level pass/fail counts (2% or 5 patients threshold).
+
+    config:
+      meta:
+        owner:
+          name: Kate Welsby
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+          severity: warn

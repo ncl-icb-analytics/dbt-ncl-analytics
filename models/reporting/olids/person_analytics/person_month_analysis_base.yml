@@ -52,9 +52,6 @@ models:
       - name: person_id
         description: Unique person identifier
 
-      - name: practice_id
-        description: Practice identifier where person was registered
-
       - name: practice_name
         description: Practice name where person was registered
 

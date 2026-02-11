@@ -190,6 +190,14 @@ sources:
     raw_prefix: raw_reference
     domain: shared
 
+    # PTL
+  - source_name: ptl
+    database: DATA_LAKE__NCL
+    schema: PTL
+    description: ptl data
+    raw_prefix: raw_ptl
+    domain: commissioning
+
   # ANALYST_MANAGED schema in DATA_LAKE__NCL
   - source_name: reference_analyst_managed
     database: DATA_LAKE__NCL

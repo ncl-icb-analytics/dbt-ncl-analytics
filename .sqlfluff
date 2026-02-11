@@ -1,10 +1,30 @@
 [sqlfluff]
 dialect = snowflake
 templater = dbt
-exclude_rules = None
-
-[sqlfluff:rules]
-max_line_length = 120
+max_line_length = 200
+# Formatting and capitalisation only - skip opinionated rules
+rules = layout, capitalisation
 
 [sqlfluff:templater:dbt]
 project_dir = .
+
+# Indentation
+[sqlfluff:rules:layout.indent]
+indent_unit = space
+tab_space_size = 4
+
+# All lowercase - keywords, identifiers, functions
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.identifiers]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.literals]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.types]
+capitalisation_policy = lower
