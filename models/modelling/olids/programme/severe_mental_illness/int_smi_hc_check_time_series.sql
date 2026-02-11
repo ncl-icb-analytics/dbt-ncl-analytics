@@ -228,7 +228,7 @@ SELECT
         ,CASE WHEN g.person_id IS NULL THEN 'Not Met' ELSE g.HBA1C_LAST_12M END AS HBA1C_CHECK_12M
         ,CASE WHEN c.person_id IS NULL THEN 'Not Met' ELSE c.CHOL_LAST_12M END AS CHOL_CHECK_12M
         ,CASE WHEN bp.person_id IS NULL THEN 'Not Met' ELSE bp.BP_LAST_12M END AS BP_CHECK_12M
-        ,CASE WHEN s.person_id IS NULL THEN 'Not Met' ELSE s.SMOK_LAST_12M END AS SMOK_LAST_12M
+        ,CASE WHEN s.person_id IS NULL THEN 'Not Met' ELSE s.SMOK_LAST_12M END AS SMOK_CHECK_12M
         ,CASE WHEN a.person_id IS NULL THEN 'Not Met' ELSE a.ALC_LAST_12M END AS ALC_CHECK_12M
         ,p.gender
         ,p.age_band_nhs
@@ -256,7 +256,7 @@ SELECT DISTINCT
         (HBA1C_CHECK_12M    = 'Met')::int +
         (CHOL_CHECK_12M     = 'Met')::int +
         (BP_CHECK_12M       = 'Met')::int +
-        (SMOK_LAST_12M      = 'Met')::int +
+        (SMOK_CHECK_12M      = 'Met')::int +
         (ALC_CHECK_12M      = 'Met')::int
     ) AS MET_COUNT
 FROM HC_CHECKS

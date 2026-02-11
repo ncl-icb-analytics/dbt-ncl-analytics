@@ -58,9 +58,7 @@ select
 b.person_id
 ,DATE(b.clinical_effective_date) as HBA1C_date
 ,b.HBA1C_CATEGORY
---HBA1C values are undergoing maintenance to correct unit display issues so currently not included but will be added back once resolved.
---,b.HBA1C_DISPLAY
-,NULL AS HBA1C_DISPLAY
+,b.HBA1C_DISPLAY
 FROM {{ ref('int_hba1c_latest') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
