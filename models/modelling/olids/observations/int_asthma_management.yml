@@ -26,7 +26,10 @@ models:
       - name: diagnosis_no_act
         description: >
           True if the person has an asthma diagnosis but no asthma control test
-          
+      
+      - name: salbutamol_repeats
+        description: >
+          True if the person has been prescribed 3+ salbutamol inhalers in the last 12 months
 
       - name: salbutamol_only
         description: >
