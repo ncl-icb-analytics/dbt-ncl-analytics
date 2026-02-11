@@ -1,0 +1,63 @@
+version: 1
+models:
+  - name: stg_asc_cld_adult_social_care_cld
+    description: National submission from local authorities for adult social care (client level dataset))
+    config:
+      meta:
+        owner:
+          name: EmmaKeston
+
+    columns:
+      - name: pseudo_nhs_number
+        description: Primary identifier for an individual patient (pseudonymised)
+        tests:
+          - not_null
+
+      - name: la_code
+        description: Local authority code where the record originates
+        tests:
+          - not_null        
+
+      - name: la_person_unique_identifier
+        description: Local authority person-specific ID
+
+      - name: gp_practice_code
+        description: Patient's GP practice code
+
+      - name: gender
+        description: Reported gender of the patient
+
+      - name: ethnicity
+        description: Patient ethnicity
+
+      - name: client_type
+        description: Classification of the client receiving adult social care
+
+
+      - name: primary_support_reason
+        description: Primary reason why support is being provided
+
+      - name: accommodation_status
+        description: Accommodation status 
+
+      - name: employment_status
+        description: Employment status 
+
+      - name: has_unpaid_carer
+        description: Whether the patient has an unpaid carer supporting them
+
+      - name: autism_spectrum_disorder_asd
+        description: ASD flag
+
+      - name: visual_impairment
+        description: Visual impairment flag
+
+      - name: hearing_impairment
+        description: Hearing impairment flag
+
+      - name: dementia
+        description: Dementia flag
+
+      - name: client_funding_status
+        description: Whether care is funded by the local authority, self-funded etc.
+
