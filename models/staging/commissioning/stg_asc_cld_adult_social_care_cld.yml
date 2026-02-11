@@ -16,7 +16,8 @@ models:
       - name: la_code
         description: Local authority code where the record originates
         tests:
-          - not_null        
+          - not_null   
+          - unique     
 
       - name: la_person_unique_identifier
         description: Local authority person-specific ID
