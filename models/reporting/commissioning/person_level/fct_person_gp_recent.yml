@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: fct_person_gp_recent
-    description: "Summary of recent clinical appointment encounters per person"
+    description: "Summary of recent (last 12 months and under) clinical appointment encounters per person"
     config:
       meta:
         owner:
@@ -10,27 +10,27 @@ models:
     columns:
       - name: sk_patient_id
         data_type: number
-        description: ""
+        description: "Unique identifier for the patient (pseudonymised NHS number)"	
         tests:
           - not_null
           - unique
 
       - name: gp_att_tot_12mo
         data_type: number
-        description: ""
+        description: "Number of GP appointments attended in the last 12 months"
 
       - name: gp_att_tot_3mo
         data_type: number
-        description: ""
+        description: "Number of GP appointments attended in the last 3 months"
 
       - name: gp_att_tot_1mo
         data_type: number
-        description: ""
+        description: "Number of GP appointments attended in the last 1 month"
 
       - name: gp_app_tot_12mo
         data_type: number
-        description: ""
+        description: "Number of GP appointments booked in the last 12 months"
 
       - name: gp_dna_tot_12mo
         data_type: number
-        description: ""
+        description: "Number of GP appointments missed in the last 12 months"
