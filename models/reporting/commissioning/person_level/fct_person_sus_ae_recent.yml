@@ -2,9 +2,7 @@ version: 2
 
 models:
   - name: fct_person_sus_ae_recent
-    description: Summary of recent A&E attendance counts per patient (12mo rolling). One 
-      row per patient with illness, injury, and Type 1 A&E counts. Note: likely needs window shift to account for
-      reporting delay.  Warning:needs expert analyst review."
+    description: "Summary of recent A&E attendance counts per patient (12mo rolling). One row per patient with illness, injury, and Type 1 A&E counts. Note: likely needs window shift to account for reporting delay.  Warning:needs expert analyst review."
     config:
       meta:
         owner:
