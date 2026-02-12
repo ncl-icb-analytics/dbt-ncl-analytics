@@ -1,5 +1,3 @@
--- 2025-10-13: dear future Tom, I removed an inner join that is necessary for tables which don't have unique_service_request_identifier
--- the inner join messed up the cyp201 deduplication process, so if you add it back in make sure it works ok
 {% macro deduplicate_mhsds(
         mhsds_table,
         partition_cols = []
@@ -9,7 +7,7 @@
         This macro deduplicates an mhsds table by keeping the most recent record
         (based on `effective_from`) within each unique combination of `partition_cols`.
 
-        dedup_table (dbt table ref):
+        mhsds_table (dbt table ref):
             a ref to the raw mhsds table to be deduplicated
          
         partition_cols (list[str]):
@@ -17,7 +15,7 @@
 
         Example usage:
           {{ 
-                deduplicate_mhsds(dedup_table = ref('raw_mhsds_mhs201carecontact'), 
+                deduplicate_mhsds(mhsds_table = ref('raw_mhsds_mhs201carecontact'), 
                               partition_cols = ['uniq_serv_req_id', 'uniq_care_cont_id']) 
            }}
     #}
