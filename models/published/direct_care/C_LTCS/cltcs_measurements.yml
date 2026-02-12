@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: cltcs_measurements
+    description: "Measurements for patients in the C-LTCS cohort"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data [sk_patient_id]"
+
+      - name: measurement_id
+        data_type: number
+        description: "Unique measurement identifier from OLIDS data [id]"
+
+      - name: pcn_code
+        data_type: varchar
+        description: "Current registered GP practice PCN code according to LDS"
+
+      - name: clinical_effective_date
+        data_type: timestamp_ntz
+        description: "Date of the measurement"
+
+      - name: value
+        data_type: number
+        description: "Value of the measurement"
+
+      - name: category
+        data_type: varchar
+        description: "Clinical category of the measurement"
+
+      - name: measurement_type
+        data_type: varchar
+        description: "Type of measurement"

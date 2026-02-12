@@ -38,6 +38,10 @@ models:
         description: "Site code for provider."
       - name: provider_site_name
         description: "Site name for provider."
+      - name: activity_start_date
+        description: "Start date of activity."
+      - name: activity_date
+        description: "Reportable activity date (start date for AE/OP, discharge date for IP)."
       - name: diag_n
         description: "Diagnosis position identifier."
       - name: diag_code

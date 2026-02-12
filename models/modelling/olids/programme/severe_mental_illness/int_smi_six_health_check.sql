@@ -5,7 +5,7 @@
         tags=['smi_registry']
         )
 }}
--- Intermediate table holding core health checks for people on the SMI register
+-- Intermediate table holding core health checks for people on the SMI register but not for people who are on lithium alone. MH1_REG only
 /* Intermediate Model to capture 6 measurements including exceptions and declined */
 WITH EXCEPTIONS AS (
 select 
@@ -58,7 +58,7 @@ select
 b.person_id
 ,DATE(b.clinical_effective_date) as HBA1C_date
 ,b.HBA1C_CATEGORY
-,b.HBA1C_RESULT_DISPLAY
+,b.HBA1C_DISPLAY
 FROM {{ ref('int_hba1c_latest') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
@@ -69,7 +69,7 @@ select
 b.person_id
 ,DATE(b.clinical_effective_date) as HBA1C_DATE
 ,'Glucose Declined' as HBA1C_CATEGORY
-,NULL AS HBA1C_RESULT_DISPLAY
+,NULL AS HBA1C_DISPLAY
 FROM {{ ref('int_smi_glucose_declined') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where b.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
@@ -96,7 +96,7 @@ c.person_id
 ,DATE(c.clinical_effective_date) as Cholesterol_date
 ,'Cholesterol Declined' as CHOLESTEROL_CATEGORY
 ,NULL as CHOLESTEROL_VALUE
-FROM {{ ref('int_smi_cholesterol_declined') }} c
+FROM {{ ref('int_cholesterol_declined') }} c
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where c.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY c.person_id ORDER BY c.clinical_effective_date DESC) = 1
@@ -119,6 +119,7 @@ ELSE Null END AS BP_CATEGORY,
 FROM {{ ref('fct_person_bp_control') }} bp
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where LATEST_BP_DATE  >= DATEADD('month', -12, CURRENT_DATE)
+And bp.LATEST_BP_DATE <= CURRENT_DATE()
 
 UNION
 
@@ -241,7 +242,7 @@ LEFT JOIN BMI b USING (person_id)
 UNION ALL
 
 SELECT person_id, 'HBA1C' AS Check_Type, HBA1C_CHECK_12M AS Check_Status,
-       h.HBA1C_DATE AS Check_Date, h.HBA1C_CATEGORY AS Result_Category, h.HBA1C_RESULT_DISPLAY AS Value
+       h.HBA1C_DATE AS Check_Date, h.HBA1C_CATEGORY AS Result_Category, h.HBA1C_DISPLAY AS Value
 FROM HC_CHECKS hc
 LEFT JOIN Glucose h USING (person_id)
 
@@ -313,6 +314,8 @@ FROM {{ ref('int_smi_population_base')  }} p
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 LEFT JOIN EXCEPTIONS e USING (PERSON_ID)
 LEFT JOIN COMBINED hc USING (PERSON_ID)
+--include only people with active SMI diagnosis as eligible for a health check- they might also be on lithium
+WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
 )
 ,MET_COUNT as (
 SELECT DISTINCT

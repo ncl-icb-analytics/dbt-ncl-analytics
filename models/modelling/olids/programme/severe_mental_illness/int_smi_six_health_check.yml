@@ -1,14 +1,15 @@
-models:
+﻿models:
   - name: int_smi_six_health_check
     description: Intermediate table holding core health checks for people on the
-      SMI register
+      SMI register MH1_REG only but not for people who are on lithium (MH2_REG)
 
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
+

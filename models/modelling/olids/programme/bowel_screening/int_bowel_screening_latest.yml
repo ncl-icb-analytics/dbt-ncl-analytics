@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 models:
   - name: int_bowel_screening_latest
     description: 'NHS bowel screening programme observations from clinical records.
@@ -8,7 +8,7 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: COLCANSCREV_COD, COLCANSCRDEC_COD, COLCANSCR_COD
@@ -32,3 +32,4 @@ models:
           COLCANSCR_COD)'
       - name: is_declined_screening
         description: 'Flag indicating if screening was declined (COLCANSCRDEC_COD)'
+

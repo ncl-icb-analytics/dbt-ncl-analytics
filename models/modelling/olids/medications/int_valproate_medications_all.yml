@@ -13,7 +13,10 @@ models:
           name: EddieDavison92
     columns:
       - name: medication_order_id
-        description: 'Unique identifier for the medication order'
+        description: 'Unique identifier for the medication order - primary key'
+        tests:
+          - unique
+          - not_null
 
       - name: medication_statement_id
         description: 'Unique identifier for the medication statement'

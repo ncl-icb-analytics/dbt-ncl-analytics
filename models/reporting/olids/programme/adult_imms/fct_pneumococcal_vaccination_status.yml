@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: fct_pneumococcal_vaccination_status
     description: 'Pneumococcal vaccination programme status for people aged 65+ as
@@ -6,10 +6,11 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
         tests:
           - not_null
           - unique
+

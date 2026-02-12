@@ -111,5 +111,6 @@ WHERE
 (dose_number = 1 AND row_num = 1)
 OR (dose_number = 2 AND row_num = 2)  
 OR (dose_number = 3 AND row_num = 3) 
+OR (dose_number = 4 AND row_num = 4) 
 -- Include single-entry cases for dose specific MenB and Rotavirus and HPV
 OR (VACCINE_ID in ('ROTA_2','MENB_2','MENB_2B','MENB_3', 'HPV_2') AND total_events = 1)

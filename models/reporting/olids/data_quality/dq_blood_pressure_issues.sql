@@ -2,74 +2,49 @@
     config(
         materialized='table',
         tags=['data_quality', 'blood_pressure'],
-        cluster_by=['person_id', 'clinical_effective_date'])
+        cluster_by=['person_id', 'effective_date'])
 }}
 
--- Blood Pressure Data Quality Issues
--- Identifies readings that are filtered out or do not pair properly in the main BP tables
--- Ensures alignment with our event-based BP consolidation approach
+/*
+Blood Pressure Data Quality Issues
+==================================
+Identifies readings with data quality issues from int_blood_pressure_observations_base.
+Aggregates to person/date level and flags specific issues.
+*/
 
-WITH base_observations_raw AS (
-    -- Get ALL BP-related observations, including those with issues
-    -- Keep NULL dates and out-of-range values for DQ analysis
-    SELECT
-        obs.ID,
-        obs.person_id,
-        obs.clinical_effective_date, -- Keep NULL dates
-        obs.result_value,
-        'mmHg' AS result_unit_display,
-        obs.mapped_concept_code AS concept_code,
-        obs.mapped_concept_display AS concept_display,
-        obs.cluster_id AS source_cluster_id
-    FROM ({{ get_observations("'BP_COD', 'SYSBP_COD', 'DIASBP_COD', 'HOMEAMBBP_COD', 'ABPM_COD', 'HOMEBP_COD'") }}) obs
-    WHERE obs.result_value IS NOT NULL -- Still need a value to assess
-    -- DO NOT filter dates or values here - we want to catch issues
-),
-
-row_flags_raw AS (
-    -- Determine BP type for each observation (including problematic ones)
-    SELECT
-        *,
-        -- Flag for Systolic readings
-        (source_cluster_id = 'SYSBP_COD' OR
-         (source_cluster_id = 'BP_COD' AND concept_display ILIKE '%systolic%')) AS is_systolic_row,
-
-        -- Flag for Diastolic readings
-        (source_cluster_id = 'DIASBP_COD' OR
-         (source_cluster_id = 'BP_COD' AND concept_display ILIKE '%diastolic%')) AS is_diastolic_row
-    FROM base_observations_raw
-),
-
-aggregated_raw_events AS (
-    -- Aggregate per person/date (including NULL dates) without range filtering
+WITH aggregated_events AS (
     SELECT
         person_id,
-        clinical_effective_date, -- Can be NULL
+        effective_date,
 
-        -- Original values before filtering
+        -- Original values before any filtering
         MAX(CASE WHEN is_systolic_row THEN result_value ELSE NULL END) AS systolic_value_original,
         MAX(CASE WHEN is_diastolic_row THEN result_value ELSE NULL END) AS diastolic_value_original,
 
         -- Metadata for traceability
         ANY_VALUE(result_unit_display) AS result_unit_display,
-        ARRAY_AGG(DISTINCT ID) WITHIN GROUP (ORDER BY ID) AS all_IDs,
+        ARRAY_AGG(DISTINCT id) WITHIN GROUP (ORDER BY id) AS all_ids,
         ARRAY_AGG(DISTINCT concept_code) WITHIN GROUP (ORDER BY concept_code) AS all_concept_codes,
         ARRAY_AGG(DISTINCT concept_display) WITHIN GROUP (ORDER BY concept_display) AS all_concept_displays,
         ARRAY_AGG(DISTINCT source_cluster_id) WITHIN GROUP (ORDER BY source_cluster_id) AS all_source_cluster_ids,
 
         -- Flags for specific code presence (for ambiguity checking)
         BOOLOR_AGG(source_cluster_id = 'SYSBP_COD') AS had_sysbp_cod,
-        BOOLOR_AGG(source_cluster_id = 'DIASBP_COD') AS had_diabp_cod
+        BOOLOR_AGG(source_cluster_id = 'DIASBP_COD') AS had_diabp_cod,
+        
+        -- DQ flags from base
+        BOOLOR_AGG(had_future_date) AS had_future_date,
+        BOOLOR_AGG(had_null_date) AS had_null_date
 
-    FROM row_flags_raw
-    GROUP BY person_id, clinical_effective_date
+    FROM {{ ref('int_blood_pressure_observations_base') }}
+    GROUP BY person_id, effective_date
     HAVING systolic_value_original IS NOT NULL OR diastolic_value_original IS NOT NULL
 )
 
 -- Final output: Only events with data quality issues
 SELECT
     person_id,
-    clinical_effective_date,
+    effective_date,
     systolic_value_original,
     diastolic_value_original,
     result_unit_display,
@@ -109,14 +84,13 @@ SELECT
         ELSE FALSE
     END AS is_orphaned_reading,
 
+    -- DQ Flag: Had future date (was corrected using date_recorded)
+    had_future_date AS is_future_date_corrected,
+    
     -- DQ Flag: Missing date
-    CASE
-        WHEN clinical_effective_date IS NULL
-        THEN TRUE
-        ELSE FALSE
-    END AS is_date_missing
+    had_null_date AS is_date_missing
 
-FROM aggregated_raw_events
+FROM aggregated_events
 
 -- Only include events with at least one DQ issue
 WHERE (systolic_value_original IS NOT NULL AND (systolic_value_original < 40 OR systolic_value_original > 350))
@@ -124,6 +98,7 @@ WHERE (systolic_value_original IS NOT NULL AND (systolic_value_original < 40 OR 
    OR (ARRAY_CONTAINS('BP_COD'::VARIANT, all_source_cluster_ids) AND NOT had_sysbp_cod AND NOT had_diabp_cod)
    OR (systolic_value_original IS NOT NULL AND diastolic_value_original IS NULL)
    OR (systolic_value_original IS NULL AND diastolic_value_original IS NOT NULL)
-   OR clinical_effective_date IS NULL
+   OR had_future_date = TRUE
+   OR had_null_date = TRUE
 
-ORDER BY person_id, clinical_effective_date DESC
+ORDER BY person_id, effective_date DESC

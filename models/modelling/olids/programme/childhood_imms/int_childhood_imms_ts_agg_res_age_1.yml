@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_childhood_imms_ts_agg_res_age_1
     description: Intermediate table holding aggregated completion metrics by 
       residential location for historical children aged 1 at each analysis 
@@ -6,4 +6,8 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+

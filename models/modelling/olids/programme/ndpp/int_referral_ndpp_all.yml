@@ -1,9 +1,23 @@
 version: 2
 models:
   - name: int_referral_ndpp_all
-    description: 'Determine NHS Diabetes Prevention Programme outcome using PCD REFSET
-      DPPOFF_COD. Includes invitations and declines.'
+    description: 'NHS Diabetes Prevention Programme outcomes using PCD REFSET DPPOFF_COD.
+      One row per person per date. Includes invitations and declines.'
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - person_id
+            - clinical_effective_date
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: 'Patient identifier'
+        tests:
+          - not_null
+      - name: clinical_effective_date
+        description: 'Date of NDPP event'
+        tests:
+          - not_null

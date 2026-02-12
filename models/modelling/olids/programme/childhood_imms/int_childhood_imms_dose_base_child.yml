@@ -1,0 +1,16 @@
+﻿models:
+  - name: int_childhood_imms_dose_base_child
+    description: Intermediate table holding historical imms population by practice under the age of 11 and any vaccinations associated with 
+      them.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Identifier for the person. There may be > 1 person if 
+          registered at multiple practices
+        tests:
+          - not_null
+

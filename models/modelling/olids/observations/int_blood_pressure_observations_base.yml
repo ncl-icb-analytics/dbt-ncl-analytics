@@ -1,0 +1,72 @@
+version: 2
+models:
+  - name: int_blood_pressure_observations_base
+    description: |
+      Base blood pressure observations with row classification flags.
+      Incremental model using lds_start_date_time to handle late-arriving data.
+      
+      Shared foundation for:
+      - int_blood_pressure_all (valid, paired BP events)
+      - dq_blood_pressure_issues (data quality issues)
+      
+      Features:
+      - Incremental: only processes new observations since last run
+      - Future date handling: uses date_recorded as fallback if clinical_effective_date > today
+      - Row classification: identifies systolic/diastolic and clinical context (Home BP, ABPM)
+      - Uses six BP cluster types: BP_COD, SYSBP_COD, DIASBP_COD, HOMEAMBBP_COD, ABPM_COD, HOMEBP_COD
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - id
+            - source_cluster_id
+    columns:
+      - name: id
+        description: Observation identifier (unique per cluster)
+        tests:
+          - not_null
+      - name: person_id
+        description: Person identifier
+        tests:
+          - not_null
+      - name: effective_date
+        description: |
+          Effective date for the BP reading. Uses clinical_effective_date unless it's
+          after date_recorded, in which case date_recorded is used as fallback.
+      - name: clinical_effective_date_raw
+        description: Original clinical_effective_date before future date correction
+      - name: date_recorded
+        description: Date the observation was recorded in the clinical system
+      - name: lds_start_date_time
+        description: |
+          London Data Service processing timestamp. Used as incremental key
+          to correctly handle late-arriving data.
+        tests:
+          - not_null
+      - name: result_value
+        description: Blood pressure reading value
+        tests:
+          - not_null
+      - name: result_unit_display
+        description: Unit of measurement (always mmHg)
+      - name: concept_code
+        description: Clinical concept code for the observation
+      - name: concept_display
+        description: Human-readable display name for the concept
+      - name: source_cluster_id
+        description: Source cluster identifier (BP_COD, SYSBP_COD, etc.)
+      - name: is_systolic_row
+        description: True if this observation is a systolic BP reading
+      - name: is_diastolic_row
+        description: True if this observation is a diastolic BP reading
+      - name: is_home_bp_row
+        description: True if observation is from home BP monitoring
+      - name: is_abpm_bp_row
+        description: True if observation is from ambulatory BP monitoring
+      - name: had_future_date
+        description: True if clinical_effective_date was after date_recorded (corrected)
+      - name: had_null_date
+        description: True if clinical_effective_date was null

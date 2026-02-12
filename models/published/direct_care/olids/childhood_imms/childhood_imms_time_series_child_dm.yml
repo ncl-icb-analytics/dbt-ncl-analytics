@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 
 models:
   - name: childhood_imms_time_series_child_dm
@@ -8,7 +8,8 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
+

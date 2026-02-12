@@ -105,5 +105,6 @@ FROM {{ ref('person_month_analysis_base') }} pmab
 WHERE HAS_SMI = TRUE
     -- Exclude deceased patients (age frozen at death)
     AND pmab.is_deceased = FALSE
+    AND IS_ACTIVE 
     -- Limit to last 48 months (4 years)
     AND pmab.analysis_month >= DATEADD('month', -48, CURRENT_DATE)

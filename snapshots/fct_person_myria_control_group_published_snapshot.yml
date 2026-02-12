@@ -1,0 +1,62 @@
+snapshots:
+  - name: fct_person_myria_control_group_published_snapshot
+    relation: ref("fct_person_myria_control_group_published")
+    description: >
+     Patient-level dataset identifying individuals with at least one high-risk condition
+      (e.g., heart failure, COPD, dementia, renal failure, etc.) or multimorbidity
+      flags.
+      Includes count of non-elective admissions. (Time periods for NEL
+      counts and flags are based on discharge date).
+      Restricted to NCL-registered patients alive at time of running, >=18 years of age at last admission and
+      at least one NEL admission at any provider since 1-Jan-2025.
+    config:
+      strategy: check
+      check_cols: ['patient_id',
+                    'hospital_number',
+                    'gp_code',
+                    'gp_name',
+                    'local_authority_pds',
+                    'gp_code_pds',
+                    'gp_name_pds',
+                    'age_at_most_recent_nel_admission',
+                    'most_recent_nel_admission_date',
+                    'most_recent_nel_discharge_date',
+                    'local_authority',
+                    'barnet_hospital_count',
+                    'barnet_hospital_flag',
+                    'RFL_ex_BH_count',
+                    'RFL_ex_BH_flag',
+                    'RFL_count',
+                    'RFL_flag',
+                    'NCLProvider_count',
+                    'NCLProvider_flag',
+                    'Non_NCLProvider_count',
+                    'Non_NCLProvider_flag',
+                    'nel_ip_admissions_last_24_months',
+                    'nel_ip_admissions_last_12_months',
+                    'nel_ip_admissions_last_6_months',
+                    'heart_failure',
+                    'copd',
+                    'dementia',
+                    'end_stage_renal_failure',
+                    'severe_interstitial_lung_disease',
+                    'parkinsons_disease',
+                    'chronic_kidney_disease',
+                    'liver_failure',
+                    'alcohol_dependence',
+                    'bronchiectasis',
+                    'atrial_fibrillation',
+                    'cerebrovascular_disease',
+                    'peripheral_vascular_disease',
+                    'pulmonary_heart_disease',
+                    'coronary_heart_disease',
+                    'osteoporosis',
+                    'rheumatoid_arthritis',
+                    'chronic_liver_disease',
+                    'hypertension',
+                    'frailty_falls',
+                    'total_high_risk_conditions',
+                    'is_on_pds']
+      unique_key: [patient_id]
+      updated_at: table_refresh_date
+      hard_deletes: new_record

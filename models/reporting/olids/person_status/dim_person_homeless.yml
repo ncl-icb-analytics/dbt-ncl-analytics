@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 models:
   - name: dim_person_homeless
     description: Dimension table providing the latest recorded homeless status 
@@ -8,7 +8,8 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - cluster_ids_exist:
           cluster_ids: RESIDE_COD, HOMELESS_COD
+

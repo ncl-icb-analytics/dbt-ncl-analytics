@@ -1,8 +1,12 @@
-models:
+﻿models:
   - name: int_childhood_imms_ts_agg_age_16
     description: Intermediate table holding aggregated completion metrics for 
       historical children aged 16 at each analysis month.
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+

@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_adult_imms_current_population
     description: Intermediate table holding demographics for base adult imms 
       population currently registered aged 65+
@@ -6,10 +6,11 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
           - unique
+

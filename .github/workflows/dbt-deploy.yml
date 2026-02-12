@@ -6,10 +6,10 @@
 # Prerequisites:
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
 #     SNOWFLAKE__PRIVATE_KEY, SNOWFLAKE__PASSPHRASE
-#   - DBT_DEPLOYMENT_TESTER role with: USAGE on warehouse, DBT_ADMIN role granted
+#   - DBT_ADMIN role with USAGE on warehouse
 #
 # Snowflake objects:
-#   - Role: DBT_DEPLOYMENT_TESTER
+#   - Role: DBT_ADMIN
 #   - Warehouse: WH_NCL_ENGINEERING_XS
 #   - Database/Schema: ACCOUNT_ADMIN.DBT_MANAGEMENT
 #   - Git repo: REPO__GITHUB__DBT_NCL_ANALYTICS
@@ -19,17 +19,20 @@ name: dbt Deploy to Production
 
 on:
   workflow_dispatch:
-  # TODO: Enable after permissions granted:
-  # push:
-  #   branches: [main]
-  #   paths:
-  #     - 'models/**'
-  #     - 'macros/**'
+  push:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'macros/**'
 
 jobs:
   deploy-models:
     name: Deploy Changed Models + Downstream
     runs-on: ubuntu-latest
+    # Queue deploys sequentially - don't cancel, wait for previous to finish
+    concurrency:
+      group: dbt-deploy-prod
+      cancel-in-progress: false
     permissions:
       contents: read
     steps:
@@ -41,14 +44,48 @@ jobs:
         with:
           version: "0.6.x"
 
-      - name: Install dependencies
-        run: uv pip install --system snowflake-connector-python
-
       - name: Get changed models
         id: changes
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.sql' | tr '\n' ' ')
+            # Get changed .sql files directly
+            SQL_FILES=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.sql')
+            
+            # Get changed .yml/.yaml files and find associated .sql models
+            YML_FILES=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} -- 'models/**/*.yml' 'models/**/*.yaml')
+            
+            # Get changed macro files
+            MACRO_FILES=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }} -- 'macros/**/*.sql')
+            
+            # For each yml file, find corresponding sql file with same base name
+            YML_DERIVED_SQL=""
+            for yml in $YML_FILES; do
+              dir=$(dirname "$yml")
+              base=$(basename "$yml" .yml)
+              base=$(basename "$base" .yaml)
+              if [ -f "$dir/$base.sql" ]; then
+                YML_DERIVED_SQL="$YML_DERIVED_SQL $dir/$base.sql"
+              fi
+            done
+            
+            # For each changed macro, find models that reference it
+            MACRO_DERIVED_SQL=""
+            for macro_file in $MACRO_FILES; do
+              # Extract macro name from filename (e.g., calculate_ckd_register.sql -> calculate_ckd_register)
+              macro_name=$(basename "$macro_file" .sql)
+              echo "Searching for models using macro: $macro_name"
+              # Find models that call this macro (search for {{ macro_name( pattern)
+              matching_models=$(grep -rl "{{ *$macro_name(" models/ --include="*.sql" 2>/dev/null || true)
+              if [ -n "$matching_models" ]; then
+                MACRO_DERIVED_SQL="$MACRO_DERIVED_SQL $matching_models"
+                echo "  Found: $matching_models"
+              fi
+            done
+            
+            # Combine and deduplicate
+            CHANGED=$(echo "$SQL_FILES $YML_DERIVED_SQL $MACRO_DERIVED_SQL" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+            [ -n "$YML_FILES" ] && echo "YML changes detected - included associated models" || true
+            [ -n "$MACRO_FILES" ] && echo "Macro changes detected - included models that use them" || true
           else
             CHANGED=""  # Manual trigger = full build
           fi
@@ -58,10 +95,14 @@ jobs:
           echo "Found $COUNT changed model files"
 
       - name: Setup Snowflake credentials
+        env:
+          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE__PRIVATE_KEY }}
         run: |
           mkdir -p ~/.snowflake
-          echo "${{ secrets.SNOWFLAKE__PRIVATE_KEY }}" > ~/.snowflake/rsa_key.p8
+          printf '%s\n' "$SNOWFLAKE_PRIVATE_KEY" > ~/.snowflake/rsa_key.p8
           chmod 600 ~/.snowflake/rsa_key.p8
+          echo "Key file created: $(wc -c < ~/.snowflake/rsa_key.p8) bytes"
+          head -1 ~/.snowflake/rsa_key.p8
 
       - name: Deploy to Snowflake PROD
         env:
@@ -71,7 +112,7 @@ jobs:
           CHANGED_FILES: ${{ steps.changes.outputs.changed_files }}
           FILE_COUNT: ${{ steps.changes.outputs.file_count }}
         run: |
-          python << 'EOF'
+          uv run --with snowflake-connector-python --with cryptography python << 'EOF'
           import os
           import re
           import sys
@@ -88,13 +129,42 @@ jobs:
               name = filepath.split('/')[-1].replace('.sql', '')
               return validate_identifier(name, r'^[a-zA-Z0-9_]+$')
 
+          from cryptography.hazmat.backends import default_backend
+          from cryptography.hazmat.primitives import serialization
+
+          # Load and validate private key
+          key_path = os.path.expanduser('~/.snowflake/rsa_key.p8')
+          print(f"Key file exists: {os.path.exists(key_path)}")
+          if os.path.exists(key_path):
+              print(f"Key file size: {os.path.getsize(key_path)} bytes")
+              with open(key_path, 'rb') as f:
+                  key_data = f.read()
+              print(f"Key looks valid: {key_data.startswith(b'-----BEGIN')}")
+          else:
+              print("ERROR: Key file not found!")
+              sys.exit(1)
+
+          passphrase = os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', '')
+          print(f"Passphrase length: {len(passphrase)}")
+
+          # Load private key with cryptography library
+          p_key = serialization.load_pem_private_key(
+              key_data,
+              password=passphrase.encode() if passphrase else None,
+              backend=default_backend()
+          )
+          pkb = p_key.private_bytes(
+              encoding=serialization.Encoding.DER,
+              format=serialization.PrivateFormat.PKCS8,
+              encryption_algorithm=serialization.NoEncryption()
+          )
+
           try:
               conn = snowflake.connector.connect(
                   account=os.environ['SNOWFLAKE_ACCOUNT'],
                   user=os.environ['SNOWFLAKE_USER'],
-                  private_key_path=os.path.expanduser('~/.snowflake/rsa_key.p8'),
-                  private_key_passphrase=os.environ.get('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', ''),
-                  role='DBT_DEPLOYMENT_TESTER',
+                  private_key=pkb,
+                  role='DBT_ADMIN',
                   database='ACCOUNT_ADMIN',
                   schema='DBT_MANAGEMENT',
                   warehouse='WH_NCL_ENGINEERING_XS'
@@ -105,12 +175,11 @@ jobs:
 
               print("Fetching git repository...")
               cur.execute("ALTER GIT REPOSITORY REPO__GITHUB__DBT_NCL_ANALYTICS FETCH")
+              print("Git fetch complete")
 
               print("Updating project to main branch...")
-              cur.execute("""
-                  ALTER DBT PROJECT DBT_NCL_ANALYTICS__MAIN
-                  ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/main'
-              """)
+              cur.execute("ALTER DBT PROJECT DBT_NCL_ANALYTICS__MAIN ADD VERSION FROM '@REPO__GITHUB__DBT_NCL_ANALYTICS/branches/main'")
+              print("Project branch set")
 
               file_count = int(os.environ.get('FILE_COUNT', 0))
               changed_files = os.environ.get('CHANGED_FILES', '').strip()
@@ -128,8 +197,17 @@ jobs:
               print(f"Executing: dbt {args}")
               cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__MAIN ARGS = '{args}'")
 
-              for row in cur.fetchall():
-                  print(row)
+              results = cur.fetchall()
+              print("\n--- dbt execution results ---")
+              for row in results:
+                  print(row[0] if len(row) == 1 else row)
+              print("--- end results ---\n")
+
+              # Check for failures in results (avoid false positives from "ERROR=0")
+              result_text = str(results)
+              if 'job failed' in result_text.lower() or '"command_success": false' in result_text.lower():
+                  print("dbt build reported failures", file=sys.stderr)
+                  sys.exit(1)
 
               print("Deployment complete!")
 

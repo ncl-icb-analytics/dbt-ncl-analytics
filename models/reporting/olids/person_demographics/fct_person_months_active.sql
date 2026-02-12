@@ -24,12 +24,12 @@ SELECT
     -- Include current practice for convenience (most recent if multiple)
     FIRST_VALUE(hr.practice_id) OVER (
         PARTITION BY ms.analysis_month, hr.person_id
-        ORDER BY hr.registration_start_date DESC, hr.is_current_registration DESC
+        ORDER BY hr.is_current_registration DESC, hr.registration_start_date DESC
         ROWS UNBOUNDED PRECEDING
     ) as current_practice_id,
     FIRST_VALUE(hr.practice_name) OVER (
         PARTITION BY ms.analysis_month, hr.person_id
-        ORDER BY hr.registration_start_date DESC, hr.is_current_registration DESC
+        ORDER BY hr.is_current_registration DESC, hr.registration_start_date DESC
         ROWS UNBOUNDED PRECEDING
     ) as current_practice_name
 
@@ -41,7 +41,7 @@ INNER JOIN {{ ref('dim_person_historical_practice') }} hr
 -- Ensure exactly one row per person-month
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY ms.analysis_month, hr.person_id
-    ORDER BY hr.registration_start_date DESC, hr.is_current_registration DESC
+    ORDER BY hr.is_current_registration DESC, hr.registration_start_date DESC
 ) = 1
 
 ORDER BY analysis_month, person_id

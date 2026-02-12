@@ -27,7 +27,9 @@ models:
           name: EddieDavison92
     columns:
       - name: practice_code
-        description: 'Unique identifier for the GP practice'
+        description: 'GP practice identifier. Not unique - practices may appear multiple times if they have multiple PCN relationships.'
+        tests:
+          - not_null
       - name: borough_registered
         description: 'Borough assignment for the practice based on historic CCG relationships'
       - name: practice_historic_ccg

@@ -1,4 +1,4 @@
-version: 2
+﻿version: 2
 models:
   - name: int_smi_longlives_alcohol_intervention
     description: 'Determine alcohol education or referrals for Longer Lives campaign
@@ -7,7 +7,7 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
@@ -16,3 +16,4 @@ models:
       - name: person_id
         tests:
           - not_null
+
