@@ -224,7 +224,7 @@ Never work directly on main. Always create a new branch:
 
 ```bash
 # Create and switch to a new feature branch
-git switch -c feature/your-feature-name
+git switch -c feat/your-feature-name
 
 # Or for bug fixes
 git switch -c fix/your-bug-fix
