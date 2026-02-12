@@ -42,14 +42,14 @@ p.PERSON_ID
 ,p.HX_FLAKE
 ,p.PRACTICE_NAME
 ,p.PRACTICE_CODE
-,hc.INCOMP12M_CT
-,hc.INCOMP12M_LIST
-,hc.SMOK_MISS
-,hc.ALC_MISS
-,hc.BP_MISS
-,hc.CHOL_MISS
-,hc.BMI_MISS
-,hc.HBA1C_MISS
+,COALESCE(hc.INCOMP12M_CT,0) AS INCOMP12M_CT
+,COALESCE(hc.INCOMP12M_LIST, 'All checks met') AS INCOMP12M_LIST
+,COALESCE(hc.SMOK_MISS,'No') AS SMOK_MISS
+,COALESCE(hc.ALC_MISS,'No') AS ALC_MISS
+,COALESCE(hc.BP_MISS,'No') AS BP_MISS
+,COALESCE(hc.CHOL_MISS,'No') AS CHOL_MISS
+,COALESCE(hc.BMI_MISS,'No') AS BMI_MISS
+,COALESCE(hc.HBA1C_MISS,'No') AS HBA1C_MISS
 ,CASE WHEN dc.PERSON_ID IS NOT NULL THEN 'Yes' ELSE 'No' END AS HAS_DECLINED
 ,AGE
 ,AGE_BAND_5Y
@@ -90,5 +90,6 @@ LEFT JOIN declined dc using (person_id)
 LEFT JOIN {{ ref('int_smi_lifestyle')  }} l using (person_id)
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_LTC_PROFILE ltc using (person_id)
 LEFT JOIN {{ ref('int_smi_ltc_profile')  }} ltc using (person_id)
-WHERE hc.PERSON_ID IS NOT NULL 
-AND p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
+WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
+--AND hc.PERSON_ID IS NOT NULL include all people whether they have had a health check or not, as long as they have an active SMI diagnosis. Those with no health checks will have 0 incomplete checks and 'All checks met' in the list field. AND p.ON_LITHIUM_ALONE = FALSE ORDER BY PERSON_ID
+
