@@ -167,17 +167,24 @@ ssh-keygen -t ed25519 -C "your.email@nhs.net"
 - Press Enter to accept the default file location (`~/.ssh/id_ed25519`)
 - Enter a passphrase when prompted (recommended for security)
 
-**2. Configure Git to use SSH signing:**
+**2. Create an allowed signers file (for local signature verification):**
+
+```bash
+echo "your.email@nhs.net $(cat ~/.ssh/id_ed25519.pub)" > ~/.ssh/allowed_signers
+```
+
+**3. Configure Git to use SSH signing:**
 
 ```bash
 git config --global gpg.format ssh
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true
+git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 git config --global user.email "your.email@nhs.net"
 git config --global user.name "Your Name"
 ```
 
-**3. Add the SSH key to GitHub as a signing key:**
+**4. Add the SSH key to GitHub as a signing key:**
 
 Copy your public key:
 ```bash

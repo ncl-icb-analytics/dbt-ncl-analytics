@@ -19,6 +19,28 @@ INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 WHERE IS_QOF = TRUE AND CONDITION_CODE is not null AND condition_code not in ('OB','SMI','NDH','PC')
 GROUP BY l.PERSON_ID
 )
+--prescribed antipyschotic drugs or depot injections within last 6 months
+,antipyschotics as (
+    SELECT
+        p.person_id,
+        MAX(ap.order_date) AS latest_antipsychotic_order_date,
+        MIN(
+            CASE WHEN ap.order_date >= CURRENT_DATE - INTERVAL '6 months' THEN ap.order_date END
+        ) AS earliest_recent_antipsychotic_date,
+        COUNT(
+            CASE WHEN ap.order_date >= CURRENT_DATE - INTERVAL '6 months' THEN 1 END
+        ) AS recent_antipsychotic_orders_count,
+        ARRAY_AGG(DISTINCT ap.mapped_concept_code)
+            AS all_antipsychotic_concept_codes,
+        ARRAY_AGG(DISTINCT ap.mapped_concept_display)
+            AS all_antipsychotic_concept_displays
+    FROM {{ ref('int_antipsychotic_medications_all') }} AS ap
+    --FROM DEV__MODELLING.OLIDS_MEDICATIONS.INT_ANTIPSYCHOTIC_MEDICATIONS_ALL ap 
+    INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+    --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
+       WHERE ap.order_date >= CURRENT_DATE - INTERVAL '6 months'  -- Only recent antipsychotic orders
+    GROUP BY p.person_id
+    )
 --CARE PLAN
 ,latest_Care as (
 select 
@@ -148,6 +170,7 @@ p.PERSON_ID
 ,p.GENDER
 ,p.HAS_ACTIVE_SMI_DIAGNOSIS
 ,p.IS_ON_LITHIUM
+,CASE WHEN ap.PERSON_ID IS NOT NULL THEN TRUE END AS IS_ON_ANTIPSYCHOTICS 
 ,m.MH_CARE_PLAN_DATE
 ,m.MH_CARE_PLAN_CURRENT_12M
 ,mr.MED_REVIEW_DATE
@@ -175,6 +198,7 @@ p.PERSON_ID
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 FROM {{ ref('int_smi_population_base')  }} p
 LEFT JOIN LTC_SUM ltc using (person_id)
+LEFT JOIN antipyschotics ap using (person_id) 
 LEFT JOIN latest_Care m using (person_id)
 LEFT JOIN qrisk q using (person_id)
 LEFT JOIN TCHOL_HH tc using (person_id)

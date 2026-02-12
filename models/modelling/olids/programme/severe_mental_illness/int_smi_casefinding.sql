@@ -6,7 +6,7 @@
         )
 }}
 --Create a person level dataset for where the key filters are number of checks missed in last 12 months and vulnerabilities such as smoking, substance misuse, homelessness, deprivation and LTC count
---number of incomplete or declined health checks in last 12 months
+--number of incomplete or declined health checks in last 12 months for those with and active SMI diagnosis. Exclude people who are on lithium alone. 
 with healthcheck_sum as (
 SELECT DISTINCT
   PERSON_ID
@@ -91,3 +91,4 @@ LEFT JOIN {{ ref('int_smi_lifestyle')  }} l using (person_id)
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_LTC_PROFILE ltc using (person_id)
 LEFT JOIN {{ ref('int_smi_ltc_profile')  }} ltc using (person_id)
 WHERE hc.PERSON_ID IS NOT NULL 
+AND p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
