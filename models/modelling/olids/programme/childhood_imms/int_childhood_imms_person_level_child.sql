@@ -113,6 +113,9 @@ CURRENT_DATE AS RUN_DATE
 ,v.person_id
 ,p.GENDER
 ,p.AGE
+,p.BORN_JAN_2025_FLAG
+,p.BORN_JUL_2024_FLAG
+,p.BORN_SEP_2022_FLAG
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.ethnicity_subcategory
