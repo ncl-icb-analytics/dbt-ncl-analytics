@@ -262,7 +262,7 @@ git commit -m "docs: update setup instructions in CONTRIBUTING"
 
 1. **Push your branch:**
    ```bash
-   git push -u origin feature/your-feature-name
+   git push -u origin feat/your-feature-name
    ```
 
    The `-u origin branch-name` creates the branch on GitHub and links it to your local branch. After this first push, you can use just `git push` for subsequent updates.
@@ -287,7 +287,7 @@ git switch main
 git pull
 
 # Switch back to your feature branch
-git switch feature/your-feature-name
+git switch feat/your-feature-name
 
 # Merge main into your branch
 git merge main
@@ -313,7 +313,7 @@ git switch main
 git pull
 
 # Go back to your feature branch
-git switch feature/your-feature-name
+git switch feat/your-feature-name
 
 # Restore your saved changes
 git stash pop
