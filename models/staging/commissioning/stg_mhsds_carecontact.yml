@@ -14,9 +14,13 @@ models:
     columns:
       - name: uniq_care_cont_id
         description: MHSDS care contact identifier
+        tests:
+          - not_null
 
       - name: uniq_serv_req_id
         description: unique service request identifer
+        tests:
+          - not_null
 
       - name: person_id
         description: MHSDS person identifier
