@@ -19,7 +19,7 @@ This project uses **dbt Core** (Python, v1.9.4) for all builds, tests, and deplo
 | **When it runs** | Terminal commands (`dbt build`, `dbt test`) | Automatically in the background when VS Code is open |
 | **Writes to Snowflake?** | Yes | No (except CTE previews, which you trigger manually) |
 
-You don't need to install Fusion separately — it's bundled inside the VS Code extension.
+When you first install the extension, it will prompt you to install the Fusion engine separately. Follow the prompts to complete the setup.
 
 ## Installation
 
