@@ -29,7 +29,7 @@ TABLES(
 
 FACTS(
     trends.total_active_conditions AS total_active_conditions COMMENT = 'Total conditions this month',
-    trends.total_new_episodes_this_month AS total_new_episodes COMMENT = 'New condition episodes this month',
+    trends.total_new_episodes_this_month AS new_episodes_this_month COMMENT = 'New condition episodes this month',
     trends.age AS age COMMENT = 'Age at this analysis month'
 )
 
@@ -192,7 +192,7 @@ METRICS(
     trends.complex_multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 4 THEN trends.person_id END) COMMENT = 'Patients with 4+ conditions',
     
     -- Total Incidence (single table - use prefix)
-    trends.total_new_episodes AS SUM(trends.total_new_episodes_this_month) COMMENT = 'Total new episodes',
+    trends.sum_new_episodes AS SUM(trends.total_new_episodes_this_month) COMMENT = 'Total new episodes',
     trends.patients_with_new_episode AS COUNT(DISTINCT CASE WHEN trends.has_any_new_episode THEN trends.person_id END) COMMENT = 'Patients with any new episode',
     
     -- Demographics (single table - use prefix)
