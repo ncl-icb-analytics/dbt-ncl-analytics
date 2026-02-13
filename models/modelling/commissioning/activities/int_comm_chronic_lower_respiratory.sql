@@ -1,113 +1,144 @@
--- IN UEC
+-- SET VARIABLES
 {% 
-    set respiratory_code_list = dbt_utils.get_column_values(
+    set snomed_diagnosis_list = dbt_utils.get_column_values(
         ref('stg_reference_combined_codesets'),
         'code',
         where="cluster_id = 'RESPIRATORY_CONDITIONS'"
     ) 
 %}
 
-with ae_chief_complaint as (
+{% set icd10_prefix_list = ['J96', 'J4', 'J2', 'J18'] %}
+
+{% set hrg_prefix_list = ['DZ', 'PD'] %}
+
+{% set OPCS4_prefix_list = ['E49', 'E63.4', 'E65', 'E25', 'E36'] %}
+
+{% set specialty_list = ['340'] %}
+
+
+with ae_attendance_summary as (
     select visit_occurrence_id
     from {{ ref('int_sus_ae_encounters') }}
-    where chief_complaint_ecds_group1 = 'Airway / breathing' 
+    where (
+        -- respiratory chief complaint
+        chief_complaint_ecds_group1 = 'Airway / breathing' 
         and chief_complaint_code not in ('13094009', -- aponea in newborns
                                         '70407001', -- stridor
                                         '262599003')
+                                        )
+        or
+        -- respiratory primary diagnosis
+        (
+            {% for prefix in icd10_prefix_list %}
+                startswith(primary_diagnosis_code_icd10, '{{ prefix }}')
+                {% if not loop.last %} or {% endif %}
+            {% endfor %}
+        ) 
+        -- respiratory primary diagnosis snomed
+        or 
+        ( primary_diagnosis_code_snomed in {{ to_sql_list(snomed_diagnosis_list) }})
+        -- respiratory procedure / investigation snomed?
 ),
 
 
-ae_diagnosis as (
+ae_diagnosis as ( -- likely to be too permissive as all diagnosis codes are recorded regardless of relevance
     select visit_occurrence_id
     from {{ ref('int_sus_ae_diagnosis') }} -- consider changing to all J?
-    where mapped_icd10_code like 'J96.0%' -- acute respiratory failure
-        or mapped_icd10_code like 'J96.1%' -- chronic respiratory failure
-        or mapped_icd10_code like 'J4%' -- chronic lower respiratory disease
-        {% if respiratory_code_list %}
-        or source_concept_code in {{ to_sql_list(respiratory_code_list) }}
-        {% endif %}
+    where (
+            {% for prefix in icd10_prefix_list %}
+                startswith(mapped_icd10_code, '{{ prefix }}')
+                {% if not loop.last %} or {% endif %}
+            {% endfor %}
+        ) 
+        or 
+        (source_concept_code in {{ to_sql_list(snomed_diagnosis_list) }})
 ),
+
+-- consider adding procedures
+
 
 -- Admitted
--- Notable exclusion: respiratory infections (J1*, J2*, B97.4)
-admitted_diagnosis as (
+admitted_spells_summary as (
     select visit_occurrence_id
-    from {{ ref('int_sus_ip_diagnosis') }}
-    where concept_code like 'J96.0%' -- acute respiratory failure
-        or concept_code like 'J96.1%' -- chronic respiratory failure
-        or concept_code like 'J4%' -- chronic lower respiratory disease
+    from {{ ref('int_sus_ip_encounters') }}
+    where (
+            {% for prefix in icd10_prefix_list %}
+                startswith(primary_diagnosis_code, '{{ prefix }}')
+                {% if not loop.last %} or {% endif %}
+            {% endfor %}
+        ) 
+      or LEFT(hrg_code, 2) IN {{ to_sql_list(hrg_prefix_list) }} -- consider switching to core_hrg_chapter = D if want more broad
 ),
 
--- DZ = Adult Respiratory System Procedures and Disorder
--- PD = paediatric respiratory system procedures and disorder
--- Notable exclusion: respiratory infections, check if need to exclude TB 
--- (DZ51Z Complex Tuberculosis with length of stay 29 days or more), 
--- DZ14 Pulmonary, Pleural or Other Tuberculosis
-admitted_hrg as (
-    select visit_occurrence_id
-    from {{ ref('int_sus_apc_procedure_hrg') }}
-    where LEFT(source_concept_code, 2) IN ('DZ', 'PD')
-),
-
--- encounter main speciality code = 340? hrg core = D? otherwise too permissive?
 admitted_procedure as (
     select visit_occurrence_id
     from {{ ref('int_sus_ip_procedure') }}
-    where source_concept_code like 'E49%' -- diagnostic fiberoptic bronchoscopy
-        or source_concept_code = 'E63.4' -- Endobronchial ultrasound- more of biopsy?
-        or source_concept_code like 'E65%' -- nasendoscopy
-        or source_concept_code like 'E25%' -- Diagnostic endoscopic examination of pharynx
-        or source_concept_code like 'E36%' -- Diagnostic endoscopic examination of larynx
-        -- Invasive ventilation with tracheostomy (E85.1) not included 
+    where (
+            {% for prefix in OPCS4_prefix_list %}
+                startswith(source_concept_code, '{{ prefix }}')
+                {% if not loop.last %} or {% endif %}
+            {% endfor %}
+        ) ),
+
+admitted_procedure_hrg as (
+    select visit_occurrence_id
+    from {{ ref('int_sus_apc_procedure_hrg') }}
+    where LEFT(source_concept_code, 2) IN {{ to_sql_list(hrg_prefix_list) }}
 ),
+
 
 -- Outpatient
 -- Notable exclusion: respiratory infections (J1*, J2*, B97.4)
-outpatient_diagnosis as (
+outpatient_appts_summary as (
+    select visit_occurrence_id
+    from {{ ref('int_sus_op_appointments') }}
+    where main_specialty_code IN {{ to_sql_list(specialty_list) }}
+      or treatment_function_code IN {{ to_sql_list(specialty_list) }}
+      or (
+            {% for prefix in icd10_prefix_list %}
+                startswith(primary_diagnosis_code, '{{ prefix }}')
+                {% if not loop.last %} or {% endif %}
+            {% endfor %}
+        ) 
+    or LEFT(core_hrg_code, 2) IN {{ to_sql_list(hrg_prefix_list) }}
+),
+
+outpatient_diagnosis as ( -- keeping as seems less catch all than APC
     select visit_occurrence_id
     from {{ ref('int_sus_op_diagnosis') }}
-    where concept_code like 'J96.0%' -- acute respiratory failure
-        or concept_code like 'J96.1%' -- chronic respiratory failure
-        or concept_code like 'J4%' -- chronic lower respiratory disease
+    where (
+            {% for prefix in icd10_prefix_list %}
+                startswith(source_concept_code, '{{ prefix }}')
+                {% if not loop.last %} or {% endif %}
+            {% endfor %}
+        ) 
 ),
 
 -- DZ = Adult Respiratory System Procedures and Disorder
 -- PD = paediatric respiratory system procedures and disorder
-outpatient_procedure_hrg as (
-    select visit_occurrence_id
-    from {{ ref('int_sus_op_procedure_hrg') }}
-    where LEFT(source_concept_code, 2) IN ('DZ', 'PD')
-),
 
 outpatient_procedure as (
     select visit_occurrence_id
     from {{ ref('int_sus_op_procedure') }}
-    where source_concept_code like 'E49%' -- diagnostic fiberoptic bronchoscopy
-        or source_concept_code = 'E63.4' -- Endobronchial ultrasound- more of biopsy?
-        or source_concept_code like 'E65%' -- nasendoscopy
-        or source_concept_code like 'E25%' -- Diagnostic endoscopic examination of pharynx
-        or source_concept_code like 'E36%' -- Diagnostic endoscopic examination of larynx
-        -- Invasive ventilation with tracheostomy (E85.1) not included 
+    where {% for prefix in OPCS4_prefix_list %}
+                startswith(source_concept_code, '{{ prefix }}')
+                {% if not loop.last %} or {% endif %}
+            {% endfor %}
 ),
 
 specialty_filters as (
     select visit_occurrence_id
-    from ae_chief_complaint
+    from ae_attendance_summary
     
     union all
-    
+
     select visit_occurrence_id
     from ae_diagnosis
     
     union all
     
     select visit_occurrence_id
-    from admitted_diagnosis
-    
-    union all
-    
-    select visit_occurrence_id
-    from admitted_hrg
+    from admitted_spells_summary
     
     union all
     
@@ -117,12 +148,18 @@ specialty_filters as (
     union all
     
     select visit_occurrence_id
-    from outpatient_diagnosis
+    from admitted_procedure_hrg
+
+    union all
+    
+    select visit_occurrence_id
+    from outpatient_appts_summary
     
     union all
     
     select visit_occurrence_id
-    from outpatient_procedure_hrg
+    from outpatient_diagnosis
+    
     
     union all
     
