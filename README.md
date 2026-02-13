@@ -80,6 +80,9 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 | Resource | Description |
 |----------|-------------|
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, commit signing, workflow |
+| [Modelling Guide](docs/modelling-guide.md) | Layer principles, naming conventions, building models |
+| [Materialisation Guide](docs/materialisation-guide.md) | Choosing between views, tables, incremental, ephemeral |
+| [Snapshots Guide](docs/snapshots-guide.md) | Tracking historical changes with SCDs |
 | [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
 | [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
 | [Working with Sources](docs/working-with-sources.md) | Source generation workflow |
@@ -87,9 +90,9 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 
 ## Learning dbt
 
-New to dbt? Start with [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals-vs-code) or browse the [dbt Learn catalog](https://learn.getdbt.com/catalog).
+New to dbt? Start with the [Modelling Guide](docs/modelling-guide.md) to understand how this project is structured, then read the [Materialisation Guide](docs/materialisation-guide.md) for advanced patterns.
 
-See also: [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)
+For general dbt learning: [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals-vs-code) | [dbt Learn catalog](https://learn.getdbt.com/catalog) | [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)
 
 ## Architecture
 
