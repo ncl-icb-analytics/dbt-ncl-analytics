@@ -8,6 +8,9 @@ A practical guide to using the dbt VS Code extension in this project. The extens
 
 **Fusion is currently in public preview.** Behaviour may change before the general availability release.
 
+See it in action here:
+https://www.youtube.com/watch?v=-UvwnojTTqk&t=796s
+
 ### Fusion vs dbt Core
 
 This project uses **dbt Core** (Python, v1.9.4) for all builds, tests, and deployments. That hasn't changed. Fusion runs alongside dbt Core purely as an IDE tool — it parses your project independently to power editor features but never executes models or writes to Snowflake.
