@@ -106,8 +106,9 @@ FACTS(
 )
 
 DIMENSIONS(
-    -- Core Demographics (for segmentation - age in FACTS for aggregation)
+    -- Core Demographics (for segmentation)
     demographics.gender COMMENT = 'Patient gender',
+    demographics.age COMMENT = 'Current age in years',
     demographics.age_band_5y COMMENT = '5-year age bands',
     demographics.age_band_10y COMMENT = '10-year age bands',
     demographics.ethnicity_category COMMENT = 'Ethnicity category',
