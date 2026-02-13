@@ -106,7 +106,7 @@ Snapshots are **not** included in `dbt build` or `dbt run` — you must run them
 
 ### Scheduling
 
-Snapshots run **daily** in production, before the main dbt build. See [Project Schedule](#project-schedule) below for the full schedule.
+Snapshots run **daily** in production, after the main dbt build. See [Project Schedule](#project-schedule) below for the full schedule.
 
 ## Snapshot Columns
 
