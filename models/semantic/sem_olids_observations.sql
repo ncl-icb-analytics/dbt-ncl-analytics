@@ -197,7 +197,7 @@ METRICS(
     cholesterol.cholesterol_desirable_count AS COUNT(DISTINCT CASE WHEN cholesterol.cholesterol_category = 'Desirable' THEN cholesterol.person_id END) COMMENT = 'Patients with desirable cholesterol',
     cholesterol.cholesterol_high_count AS COUNT(DISTINCT CASE WHEN cholesterol.cholesterol_category = 'High' THEN cholesterol.person_id END) COMMENT = 'Patients with high cholesterol',
     ldl.patients_with_ldl AS COUNT(DISTINCT ldl.person_id) COMMENT = 'Patients with LDL',
-    ldl.ldl_at_target_count AS COUNT(DISTINCT CASE WHEN ldl.LDL_CVD_Target_Met THEN ldl.person_id END) COMMENT = 'Patients with LDL at target',
+    ldl.ldl_at_target_count AS COUNT(DISTINCT CASE WHEN ldl.LDL_CVD_Target_Met = 'Met' THEN ldl.person_id END) COMMENT = 'Patients with LDL at target',
     
     -- BMI
     bmi.patients_with_bmi AS COUNT(DISTINCT bmi.person_id) COMMENT = 'Patients with BMI',
