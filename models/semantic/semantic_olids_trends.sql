@@ -149,7 +149,9 @@ METRICS(
     COUNT(DISTINCT CASE WHEN trends.has_chd THEN trends.person_id END) AS chd_prevalence COMMENT = 'Patients with CHD',
     COUNT(DISTINCT CASE WHEN trends.has_af THEN trends.person_id END) AS af_prevalence COMMENT = 'Patients with AF',
     COUNT(DISTINCT CASE WHEN trends.has_hf THEN trends.person_id END) AS heart_failure_prevalence COMMENT = 'Patients with heart failure',
+    COUNT(DISTINCT CASE WHEN trends.has_pad THEN trends.person_id END) AS pad_prevalence COMMENT = 'Patients with PAD',
     COUNT(DISTINCT CASE WHEN trends.has_ckd THEN trends.person_id END) AS ckd_prevalence COMMENT = 'Patients with CKD',
+    COUNT(DISTINCT CASE WHEN trends.has_ndh THEN trends.person_id END) AS ndh_prevalence COMMENT = 'Patients with NDH',
     COUNT(DISTINCT CASE WHEN trends.has_dep THEN trends.person_id END) AS depression_prevalence COMMENT = 'Patients with depression',
     COUNT(DISTINCT CASE WHEN trends.has_smi THEN trends.person_id END) AS smi_prevalence COMMENT = 'Patients with SMI',
     COUNT(DISTINCT CASE WHEN trends.has_dem THEN trends.person_id END) AS dementia_prevalence COMMENT = 'Patients with dementia',
@@ -159,6 +161,10 @@ METRICS(
     COUNT(DISTINCT CASE WHEN trends.has_ep THEN trends.person_id END) AS epilepsy_prevalence COMMENT = 'Patients with epilepsy',
     COUNT(DISTINCT CASE WHEN trends.has_stia THEN trends.person_id END) AS stroke_tia_prevalence COMMENT = 'Patients with stroke/TIA',
     COUNT(DISTINCT CASE WHEN trends.has_pc THEN trends.person_id END) AS palliative_care_prevalence COMMENT = 'Patients on palliative care',
+    COUNT(DISTINCT CASE WHEN trends.has_ra THEN trends.person_id END) AS ra_prevalence COMMENT = 'Patients with RA',
+    COUNT(DISTINCT CASE WHEN trends.has_ost THEN trends.person_id END) AS osteoporosis_prevalence COMMENT = 'Patients with osteoporosis',
+    COUNT(DISTINCT CASE WHEN trends.has_nafld THEN trends.person_id END) AS nafld_prevalence COMMENT = 'Patients with NAFLD',
+    COUNT(DISTINCT CASE WHEN trends.has_fh THEN trends.person_id END) AS fh_prevalence COMMENT = 'Patients with FH',
     
     -- Incidence
     COUNT(DISTINCT CASE WHEN trends.new_dm THEN trends.person_id END) AS diabetes_incidence COMMENT = 'New diabetes diagnoses',
@@ -178,6 +184,7 @@ METRICS(
     COUNT(DISTINCT CASE WHEN trends.new_stia THEN trends.person_id END) AS stroke_tia_incidence COMMENT = 'New stroke/TIA',
     COUNT(DISTINCT CASE WHEN trends.new_ld THEN trends.person_id END) AS learning_disability_incidence COMMENT = 'New LD diagnoses',
     COUNT(DISTINCT CASE WHEN trends.new_frail THEN trends.person_id END) AS frailty_incidence COMMENT = 'New frailty diagnoses',
+    COUNT(DISTINCT CASE WHEN trends.new_pc THEN trends.person_id END) AS palliative_care_incidence COMMENT = 'New palliative care',
     
     -- Multimorbidity
     AVG(trends.total_active_conditions) AS avg_conditions_per_patient COMMENT = 'Average conditions per patient',

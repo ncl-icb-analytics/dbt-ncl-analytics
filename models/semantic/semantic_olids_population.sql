@@ -168,6 +168,7 @@ METRICS(
     COUNT(DISTINCT CASE WHEN conditions.has_heart_failure THEN demographics.person_id END) AS heart_failure_count COMMENT = 'Patients with heart failure',
     COUNT(DISTINCT CASE WHEN conditions.has_atrial_fibrillation THEN demographics.person_id END) AS af_count COMMENT = 'Patients with AF',
     COUNT(DISTINCT CASE WHEN conditions.has_stroke_tia THEN demographics.person_id END) AS stroke_tia_count COMMENT = 'Patients with stroke/TIA',
+    COUNT(DISTINCT CASE WHEN conditions.has_peripheral_arterial_disease THEN demographics.person_id END) AS pad_count COMMENT = 'Patients with PAD',
     
     -- Metabolic Prevalence
     COUNT(DISTINCT CASE WHEN conditions.has_diabetes THEN demographics.person_id END) AS diabetes_count COMMENT = 'Patients with diabetes',
@@ -181,6 +182,7 @@ METRICS(
     COUNT(DISTINCT CASE WHEN conditions.has_depression THEN demographics.person_id END) AS depression_count COMMENT = 'Patients with depression',
     COUNT(DISTINCT CASE WHEN conditions.has_severe_mental_illness THEN demographics.person_id END) AS smi_count COMMENT = 'Patients with SMI',
     COUNT(DISTINCT CASE WHEN conditions.has_dementia THEN demographics.person_id END) AS dementia_count COMMENT = 'Patients with dementia',
+    COUNT(DISTINCT CASE WHEN conditions.has_anxiety THEN demographics.person_id END) AS anxiety_count COMMENT = 'Patients with anxiety',
     
     -- Other Conditions
     COUNT(DISTINCT CASE WHEN conditions.has_cancer THEN demographics.person_id END) AS cancer_count COMMENT = 'Patients with cancer',

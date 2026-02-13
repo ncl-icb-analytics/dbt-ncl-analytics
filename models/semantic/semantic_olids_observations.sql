@@ -176,7 +176,7 @@ METRICS(
     COUNT(DISTINCT bp.person_id) AS patients_with_bp COMMENT = 'Patients with BP measurement',
     COUNT(DISTINCT bp_control.person_id) AS patients_with_bp_assessment COMMENT = 'Patients with BP control assessment',
     COUNT(DISTINCT CASE WHEN bp_control.is_overall_bp_controlled THEN demographics.person_id END) AS bp_controlled_count COMMENT = 'Patients with BP controlled',
-    COUNT(DISTINCT CASE WHEN NOT bp_control.is_overall_bp_controlled THEN bp_control.person_id END) AS bp_uncontrolled_count COMMENT = 'Patients with BP uncontrolled',
+    COUNT(DISTINCT CASE WHEN NOT bp_control.is_overall_bp_controlled THEN demographics.person_id END) AS bp_uncontrolled_count COMMENT = 'Patients with BP uncontrolled',
     COUNT(DISTINCT CASE WHEN bp_control.hypertension_stage_number >= 1 THEN demographics.person_id END) AS bp_stage_1_plus_count COMMENT = 'Patients with Stage 1+ HTN',
     COUNT(DISTINCT CASE WHEN bp_control.hypertension_stage_number >= 2 THEN demographics.person_id END) AS bp_stage_2_plus_count COMMENT = 'Patients with Stage 2+ HTN',
     COUNT(DISTINCT CASE WHEN bp_control.hypertension_stage_number = 3 THEN demographics.person_id END) AS bp_stage_3_count COMMENT = 'Patients with Stage 3 (severe) HTN',
