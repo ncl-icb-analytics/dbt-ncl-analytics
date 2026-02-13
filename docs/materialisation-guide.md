@@ -28,7 +28,7 @@ from {{ ref('raw_source_table') }}
 
 ### When to use views
 
-- **Staging models** — our project convention; staging models are always views
+- **Staging models** — the default for staging; most staging models are views
 - **Simple transformations** — column renames, type casts, basic filters
 - **Small result sets** — where the query runs fast enough that caching isn't needed
 
@@ -71,14 +71,14 @@ group by patient_id
 
 ### When to use tables
 
-- **Modelling models** — our project convention for anything below staging
-- **Reporting models** — aggregated datasets queried by dashboards
+- **Modelling and reporting models** — the default for anything below staging
+- **Staging models with expensive processing** — deduplication, complex joins, or heavy transformations that would be too costly to recompute as a view
 - **Complex transformations** — joins, window functions, heavy aggregations
 - **Models with many downstream dependents** — compute once, read many times
 
 ### When to avoid tables
 
-- Staging models (use views instead)
+- Simple staging models (use views instead — tables are fine for staging models that do deduplication or heavy processing)
 - Very large datasets where only new records change (consider incremental)
 - Throwaway intermediate logic only used by one downstream model (consider ephemeral)
 
@@ -307,7 +307,8 @@ In practice, ephemeral models are rarely used in this project. Most intermediate
 
 ```
 Is it a staging model?
-  └─ Yes → view
+  ├─ Yes, simple transforms → view
+  └─ Yes, but needs deduplication or heavy processing → table
 
 Is the result set small (< 1 million rows)?
   └─ Yes → table
@@ -326,7 +327,7 @@ Everything else → table
 | Layer | Default | Override when... |
 |-------|---------|------------------|
 | Raw | View | Never — these are auto-generated |
-| Staging | View | Never — staging should always be views |
+| Staging | View | Use table for deduplication or expensive processing |
 | Modelling | Table | Use incremental for very large observation/event tables |
 | Reporting | Table | Use incremental for large time-series fact tables |
 | Published | Table | Never — published data should always be fully rebuilt |
