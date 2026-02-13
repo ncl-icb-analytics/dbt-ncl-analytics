@@ -9,7 +9,7 @@ For an introduction to the model layers and when each is used, see the [Modellin
 | Materialisation | Creates | Rebuild cost | When to use |
 |-----------------|---------|-------------|-------------|
 | `view` | SQL view | None (query-time) | Staging models, lightweight transforms |
-| `materialized_view` | Snowflake materialised view | Auto-maintained by Snowflake | Staging models queried often or with many dependents |
+| `materialized_view` | Snowflake materialised view | Auto-maintained by Snowflake | Staging models with expensive single-source transforms |
 | `table` | Physical table | Full rebuild each run | Most modelling and reporting models |
 | `incremental` | Physical table | Partial rebuild | Large datasets with clear "new data" logic |
 | `ephemeral` | Nothing (CTE) | None | One-off intermediate logic, not needed in database |
@@ -71,9 +71,8 @@ from {{ ref('raw_source_table') }}
 
 ### When to use materialised views
 
-- **Staging models with many downstream dependents** — avoids recomputing the same view many times, while staying fresh without a full rebuild
-- **Staging models queried frequently** — gives table-like read performance without managing rebuilds
-- **Simple single-source transforms** — column renames, type casts, basic filters (the same kind of work staging models already do)
+- **Staging models with expensive single-source transforms** — e.g. filtering a very large source table or applying costly expressions; the materialised view caches the result and Snowflake keeps it in sync automatically
+- **Staging models where the transform cost matters** — if the view logic is cheap (renames, casts), a regular view is fine; a materialised view only helps when there's real compute to avoid repeating
 
 ### When to avoid materialised views
 
@@ -362,7 +361,7 @@ In practice, ephemeral models are rarely used in this project. Most intermediate
 
 ```
 Is it a staging model?
-  ├─ Yes, simple transforms → view (or materialised view if queried heavily)
+  ├─ Yes, simple transforms → view (or materialised view if the transform is expensive)
   └─ Yes, but needs deduplication or heavy processing → table
 
 Is the result set small (< 1 million rows)?
@@ -382,7 +381,7 @@ Everything else → table
 | Layer | Default | Override when... |
 |-------|---------|------------------|
 | Raw | View | Never — these are auto-generated |
-| Staging | View | Use table for deduplication or expensive processing; consider materialised view for simple models queried heavily |
+| Staging | View | Use table for deduplication or expensive processing; consider materialised view for expensive single-source transforms |
 | Modelling | Table | Use incremental for very large observation/event tables |
 | Reporting | Table | Use incremental for large time-series fact tables |
 | Published | Table | Never — published data should always be fully rebuilt |
