@@ -106,10 +106,7 @@ Snapshots are **not** included in `dbt build` or `dbt run` — you must run them
 
 ### Scheduling
 
-Snapshots should run on a regular schedule, ideally before your main dbt build. The frequency depends on how often the source data changes:
-
-- **Daily** — for data that changes frequently (patient registrations, practice details)
-- **Weekly** — for slowly changing reference data
+Snapshots run **daily** in production, before the main dbt build. See [Project Schedule](#project-schedule) below for the full schedule.
 
 ## Snapshot Columns
 
@@ -205,6 +202,19 @@ snapshots:
         tests:
           - not_null
 ```
+
+## Project Schedule
+
+Snapshots run as part of the production build schedule:
+
+| When | What runs |
+|------|-----------|
+| **Daily** | `dbt snapshot` — all snapshots capture changes |
+| **Daily** | `dbt build -s tag:daily` — daily-tagged models build |
+| **Monday** | Full project build — all models rebuild |
+| **1st of month** | Full project build with `--full-refresh` — all tables rebuilt from scratch |
+
+Snapshots always run before the main model build so that downstream models can reference the latest snapshot data.
 
 ## Further Reading
 

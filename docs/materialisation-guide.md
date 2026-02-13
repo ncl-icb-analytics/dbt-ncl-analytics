@@ -214,13 +214,13 @@ Pick a column that reliably identifies new or changed records:
 
 ### Full Refresh
 
-Periodically run a full refresh to catch any data that slipped through the incremental filter (e.g. late-arriving records, retroactive corrections):
+A full refresh rebuilds the entire table from scratch, ignoring the `is_incremental()` filter. This catches any data that slipped through the incremental filter (e.g. late-arriving records, retroactive corrections).
 
 ```bash
 dbt run -s model_name --full-refresh
 ```
 
-Always test your model with `--full-refresh` after changing its logic to ensure the full and incremental paths produce the same results.
+In production, the entire project runs with `--full-refresh` on the 1st of every month (see [Project Schedule](#project-schedule)). Always test your model with `--full-refresh` after changing its logic to ensure the full and incremental paths produce the same results.
 
 ### Example from This Project
 
@@ -330,6 +330,34 @@ Everything else → table
 | Modelling | Table | Use incremental for very large observation/event tables |
 | Reporting | Table | Use incremental for large time-series fact tables |
 | Published | Table | Never — published data should always be fully rebuilt |
+
+## Project Schedule
+
+The production build schedule affects how materialisations behave:
+
+| When | What runs | Effect on materialisations |
+|------|-----------|---------------------------|
+| **Daily** | `dbt snapshot` | All snapshots capture changes |
+| **Daily** | `dbt build -s tag:daily` | Daily-tagged models build; incremental models process only new data |
+| **Monday** | Full project build | All models rebuild; incremental models process only new data |
+| **1st of month** | Full project build with `--full-refresh` | All tables rebuilt from scratch, including incremental models |
+
+### What This Means for You
+
+- **Tables** behave the same regardless of schedule — they're rebuilt from scratch every time they run
+- **Incremental models** process only new data on daily/weekly runs, but get a clean rebuild monthly
+- **Views** are never "stale" — they always reflect the latest source data when queried
+- **Snapshots** run daily to capture any changes before the main build
+
+### Tagging Models for the Daily Build
+
+If your model needs to run daily, add the `daily` tag:
+
+```sql
+{{ config(materialized='table', tags=['daily']) }}
+```
+
+Or in `dbt_project.yml` at the folder level (already configured for most layers). Models without the `daily` tag will only run on the Monday full build.
 
 ## Further Reading
 
