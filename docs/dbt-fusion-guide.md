@@ -35,7 +35,10 @@ The extension is already listed as a recommended extension in the project worksp
 
 When a model uses `SELECT *`, you can hover over the `*` to see the full list of columns and their data types that the star expands to. This is useful for understanding what a model actually outputs without having to trace back through its upstream dependencies.
 
+<img width="1455" height="561" alt="image" src="https://github.com/user-attachments/assets/516fd136-3623-4f65-9e76-279118e13d48" />
+
 Hovering over any column name or alias also shows its resolved data type.
+<img width="690" height="251" alt="image" src="https://github.com/user-attachments/assets/cf9bbb1f-f035-4f55-bdab-facf93d0bcb9" />
 
 This project discourages `SELECT *` in staging models (see [Modelling Guide](modelling-guide.md)), but it appears in raw models and occasionally in modelling or reporting layers. The hover feature helps you work with these models without guessing what columns are present.
 
@@ -58,6 +61,9 @@ In the lineage panel, you can use the `column:` prefix to filter to a specific c
 
 This is particularly useful for impact analysis — before changing a column, you can see every model that uses it.
 
+<img width="2066" height="833" alt="image" src="https://github.com/user-attachments/assets/44cfe6a4-38be-4d7c-95e6-a8e0a237764d" />
+
+
 ### Instant Refactoring: Rename Columns
 
 One of the most useful features for this project. If you need to rename a column and it's referenced in downstream models, the extension can update all references automatically.
@@ -69,6 +75,9 @@ One of the most useful features for this project. If you need to rename a column
 3. Type the new name
 4. The extension shows a preview of every file that will be changed
 5. Review the changes and confirm
+
+<img width="650" height="599" alt="image" src="https://github.com/user-attachments/assets/b2e498fe-2189-45bc-83c1-35a9ce4f8d2d" />
+
 
 All downstream `ref()` models that reference that column will be updated. This removes the risk of renaming a column in one model and breaking everything downstream.
 
@@ -85,8 +94,9 @@ Jump directly to where something is defined, instead of searching the project ma
 
 **How to use it:**
 
-- **`Ctrl+Click`** (or `Cmd+Click` on macOS) on any reference
-- Or right-click and select **Go to Definition**
+- right-click on any reference and select **Go to Definition**
+
+<img width="950" height="249" alt="image" src="https://github.com/user-attachments/assets/aede73f2-f33a-42f8-be91-bcc6ed3732b8" />
 
 **Works with:**
 
@@ -112,6 +122,8 @@ The extension validates your SQL as you type without querying Snowflake. It catc
 - **Invalid function arguments** — wrong number or type of arguments to SQL functions
 
 Errors appear as red underlines in the editor and in the Problems panel (`Ctrl+Shift+M`).
+
+<img width="1043" height="593" alt="image" src="https://github.com/user-attachments/assets/ec21e640-f4f1-416b-a76a-8e472f843f8c" />
 
 **Note on false positives:** The extension may flag some YAML files with false positive errors. The project workspace is already configured to suppress error decorations in the Explorer to avoid visual noise from this. If you see YAML errors in the Problems panel that look incorrect, they can generally be ignored.
 
