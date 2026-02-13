@@ -79,6 +79,8 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 
 | Resource | Description |
 |----------|-------------|
+| [What is dbt?](docs/what-is-dbt.md) | Introduction to dbt, why we use it, and where it adds value |
+| [dbt Fusion Guide](docs/dbt-fusion-guide.md) | Using the VS Code extension: lineage, refactoring, autocomplete |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, commit signing, workflow |
 | [Modelling Guide](docs/modelling-guide.md) | Layer principles, naming conventions, building models |
 | [Materialisation Guide](docs/materialisation-guide.md) | Choosing between views, tables, incremental, ephemeral |
@@ -90,7 +92,7 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 
 ## Learning dbt
 
-New to dbt? Start with the [Modelling Guide](docs/modelling-guide.md) to understand how this project is structured, then read the [Materialisation Guide](docs/materialisation-guide.md) for advanced patterns.
+New to dbt? Start with [What is dbt?](docs/what-is-dbt.md) to understand what dbt does and why we use it. Then read the [Modelling Guide](docs/modelling-guide.md) to understand how this project is structured, and the [dbt Fusion Guide](docs/dbt-fusion-guide.md) to get the most out of the VS Code extension.
 
 For general dbt learning: [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals-vs-code) | [dbt Learn catalog](https://learn.getdbt.com/catalog) | [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)
 
