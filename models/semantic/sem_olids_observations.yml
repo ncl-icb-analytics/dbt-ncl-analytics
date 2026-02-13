@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: semantic_olids_observations
+  - name: sem_olids_observations
     description: |
       OLIDS Clinical Observations Semantic View
       ==========================================
@@ -46,7 +46,7 @@ models:
       -- BP control by PCN (patient-specific thresholds)
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        REPORTING.SEMANTIC.sem_olids_observations
         METRICS bp_controlled_count, patients_with_bp_control_assessment
         DIMENSIONS pcn_name
         WHERE is_active = TRUE
@@ -55,7 +55,7 @@ models:
       -- HbA1c risk stratification by practice
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        REPORTING.SEMANTIC.sem_olids_observations
         METRICS hba1c_at_qof_target_count, hba1c_poor_control_count, patients_with_hba1c
         DIMENSIONS practice_name
       )
@@ -63,7 +63,7 @@ models:
       -- Case finding: elevated BP not on register
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        REPORTING.SEMANTIC.sem_olids_observations
         METRICS bp_case_finding_count
         DIMENSIONS borough_registered, age_band_10y
       )

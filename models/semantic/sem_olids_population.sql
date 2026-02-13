@@ -215,4 +215,4 @@ METRICS(
 
 COMMENT = 'OLIDS Population Health Semantic View - NCL registered population with demographics, conditions, vulnerability factors, and risk behaviours. Grain: one row per person (current state).'
 AI_SQL_GENERATION 'Always filter to is_active = TRUE unless the user explicitly asks about deceased or inactive patients. Use borough_registered for practice-based geography and borough_resident for residence-based geography. IMD 2025 (imd_decile_25, imd_quintile_25) is preferred over IMD 2019.'
-AI_QUESTION_CATEGORIZATION 'Use this view for questions about: condition prevalence, demographics, multimorbidity, vulnerability, smoking, polypharmacy, and population counts. For clinical biomarkers (BP, HbA1c, BMI, cholesterol) use semantic_olids_observations. For trends over time use semantic_olids_trends.'
+AI_QUESTION_CATEGORIZATION 'Use this view for questions about: condition prevalence, demographics, multimorbidity, vulnerability, smoking, polypharmacy, and population counts. For clinical biomarkers (BP, HbA1c, BMI, cholesterol) use sem_olids_observations. For trends over time use sem_olids_trends.'

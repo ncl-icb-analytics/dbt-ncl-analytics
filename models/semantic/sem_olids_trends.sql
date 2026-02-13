@@ -201,4 +201,4 @@ METRICS(
 
 COMMENT = 'OLIDS Population Trends Semantic View - 60-month time series for condition prevalence, incidence, and multimorbidity trends. Grain: one row per person per month.'
 AI_SQL_GENERATION 'Use financial_year and financial_quarter for UK reporting periods. For trend queries, group by analysis_month or financial_year. Prevalence metrics count patients WITH a condition; incidence metrics count NEW diagnoses. Always filter to is_active = TRUE unless analysing deceased patients.'
-AI_QUESTION_CATEGORIZATION 'Use this view for questions about: trends over time, prevalence changes, incidence rates, year-on-year comparisons, financial year reporting, and monthly/quarterly analysis. For current state snapshots use semantic_olids_population. For clinical biomarkers use semantic_olids_observations.'
+AI_QUESTION_CATEGORIZATION 'Use this view for questions about: trends over time, prevalence changes, incidence rates, year-on-year comparisons, financial year reporting, and monthly/quarterly analysis. For current state snapshots use sem_olids_population. For clinical biomarkers use sem_olids_observations.'
