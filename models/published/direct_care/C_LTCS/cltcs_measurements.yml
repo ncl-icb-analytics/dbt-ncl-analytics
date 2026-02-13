@@ -18,6 +18,8 @@ models:
       - name: measurement_id
         data_type: number
         description: "Unique measurement identifier from OLIDS data [id]"
+        tests:
+          - unique
 
       - name: pcn_code
         data_type: varchar
