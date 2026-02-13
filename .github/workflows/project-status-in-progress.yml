@@ -1,4 +1,6 @@
 name: Project Status - In Progress
+permissions:
+  contents: read
 
 on:
   push:
