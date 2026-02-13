@@ -9,6 +9,7 @@ For an introduction to the model layers and when each is used, see the [Modellin
 | Materialisation | Creates | Rebuild cost | When to use |
 |-----------------|---------|-------------|-------------|
 | `view` | SQL view | None (query-time) | Staging models, lightweight transforms |
+| `materialized_view` | Snowflake materialised view | Auto-maintained by Snowflake | Staging models with expensive single-source transforms |
 | `table` | Physical table | Full rebuild each run | Most modelling and reporting models |
 | `incremental` | Physical table | Partial rebuild | Large datasets with clear "new data" logic |
 | `ephemeral` | Nothing (CTE) | None | One-off intermediate logic, not needed in database |
@@ -28,7 +29,7 @@ from {{ ref('raw_source_table') }}
 
 ### When to use views
 
-- **Staging models** — our project convention; staging models are always views
+- **Staging models** — the default for staging; most staging models are views
 - **Simple transformations** — column renames, type casts, basic filters
 - **Small result sets** — where the query runs fast enough that caching isn't needed
 
@@ -55,6 +56,59 @@ staging:
 
 You don't need to add `{{ config(materialized='view') }}` to staging models unless you want to be explicit.
 
+## Materialised View
+
+A materialised view stores query results like a table but Snowflake keeps it in sync with the source data automatically — no rebuild needed on each dbt run.
+
+```sql
+{{ config(materialized='materialized_view') }}
+
+select
+    key_column,
+    cast(date_column as date) as date_column
+from {{ ref('raw_source_table') }}
+```
+
+### When to use materialised views
+
+- **Staging models with expensive single-source transforms** — e.g. filtering a very large source table or applying costly expressions; the materialised view caches the result and Snowflake keeps it in sync automatically
+- **Staging models where the transform cost matters** — if the view logic is cheap (renames, casts), a regular view is fine; a materialised view only helps when there's real compute to avoid repeating
+
+### When to avoid materialised views
+
+- Any model with joins, window functions, subqueries, or UDFs — Snowflake materialised views don't support these
+- Models that select from another view — the source must be a physical table (this means the upstream raw model would need to be a table, not a view)
+- Models where you need full control over when data refreshes
+
+### Snowflake limitations
+
+Snowflake materialised views are deliberately restrictive. They must:
+
+- Select from a **single physical table** (not a view, not a join)
+- Use only simple expressions — no window functions, no subqueries, no UDFs, no UNION
+- Not use `GROUP BY` (aggregations are not supported)
+
+These constraints happen to align well with what staging models typically do: select from one source, rename columns, cast types, and apply basic filters.
+
+### Cost considerations
+
+- Snowflake charges for the background maintenance process that keeps materialised views in sync
+- For infrequently changing source data, this cost is low
+- For very high-volume source tables that change constantly, the maintenance cost may outweigh the benefit — a regular table with a scheduled rebuild may be cheaper
+
+### Materialised views vs tables for staging
+
+| Consideration | Materialised view | Table |
+|---------------|-------------------|-------|
+| Stays fresh automatically | Yes | No — requires dbt run |
+| Supports joins/window functions | No | Yes |
+| Source must be a physical table | Yes | No |
+| Rebuild on each run | No | Yes |
+| Good for deduplication | No | Yes |
+| Storage cost | Yes (auto-managed) | Yes |
+
+Use a **materialised view** when the staging model is simple (single source, no joins) and freshness matters. Use a **table** when the staging model needs deduplication, joins, or other complex processing.
+
 ## Table
 
 A table stores the query results as a physical table in Snowflake. Each `dbt run` drops and recreates the table.
@@ -71,14 +125,14 @@ group by patient_id
 
 ### When to use tables
 
-- **Modelling models** — our project convention for anything below staging
-- **Reporting models** — aggregated datasets queried by dashboards
+- **Modelling and reporting models** — the default for anything below staging
+- **Staging models with expensive processing** — deduplication, complex joins, or heavy transformations that would be too costly to recompute as a view
 - **Complex transformations** — joins, window functions, heavy aggregations
 - **Models with many downstream dependents** — compute once, read many times
 
 ### When to avoid tables
 
-- Staging models (use views instead)
+- Simple staging models (use views instead — tables are fine for staging models that do deduplication or heavy processing)
 - Very large datasets where only new records change (consider incremental)
 - Throwaway intermediate logic only used by one downstream model (consider ephemeral)
 
@@ -307,7 +361,8 @@ In practice, ephemeral models are rarely used in this project. Most intermediate
 
 ```
 Is it a staging model?
-  └─ Yes → view
+  ├─ Yes, simple transforms → view (or materialised view if the transform is expensive)
+  └─ Yes, but needs deduplication or heavy processing → table
 
 Is the result set small (< 1 million rows)?
   └─ Yes → table
@@ -326,7 +381,7 @@ Everything else → table
 | Layer | Default | Override when... |
 |-------|---------|------------------|
 | Raw | View | Never — these are auto-generated |
-| Staging | View | Never — staging should always be views |
+| Staging | View | Use table for deduplication or expensive processing; consider materialised view for expensive single-source transforms |
 | Modelling | Table | Use incremental for very large observation/event tables |
 | Reporting | Table | Use incremental for large time-series fact tables |
 | Published | Table | Never — published data should always be fully rebuilt |
