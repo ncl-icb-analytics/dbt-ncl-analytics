@@ -18,14 +18,14 @@ DATA_LAKE (external sources)
 └────┬─────┘  No joins. No business logic.
      │
      ▼
-┌───────────┐ Business logic lives here: joins, CTEs,
-│ Modelling │ window functions, macros. Domain-organised.
-└────┬──────┘
+┌───────────┐ Modular building blocks: joins, CTEs,
+│ Modelling │ reusable components. Each model does
+└────┬──────┘ one specific thing well.
      │
      ▼
-┌───────────┐ Analytics-ready datasets: aggregations,
-│ Reporting │ metrics, dimensions and facts.
-└────┬──────┘
+┌───────────┐ Combines modelling components into
+│ Reporting │ analytics-ready datasets. Business logic,
+└────┬──────┘ aggregations, dimensions and facts.
      │
      ▼
 ┌───────────┐ Production datasets for end users.
@@ -168,13 +168,15 @@ This outputs a YAML template to your terminal. Copy it into a `.yml` file alongs
 **Materialisation:** Table
 **Database:** `MODELLING`
 
-This is where business logic lives. Models in this layer join multiple sources, apply business rules, calculate derived fields, and build the intermediate datasets that reporting models consume.
+The modelling layer is for building **modular, reusable components**. Each model should do one specific thing well — filter a cohort, join two datasets, calculate a set of flags — so it can be composed into reporting models downstream.
+
+Think of modelling models as building blocks. A dialysis encounters model identifies dialysis visits. A borough mapping model resolves geographic hierarchies. A blood pressure observations model extracts and classifies BP readings. Each is focused and testable on its own.
 
 ### Principles
 
-1. **Use CTEs for clarity** — break complex logic into named steps
-2. **Join freely** — combine data from multiple staging models
-3. **Apply business rules** — CASE WHEN logic, clinical criteria, date calculations
+1. **Keep each model focused** — one model, one job. If a model is doing too many things, split it up
+2. **Use CTEs for clarity** — break complex logic within a model into named steps
+3. **Join freely** — combine data from multiple staging models
 4. **Use macros** — leverage project macros for common patterns (age calculations, code cleaning, etc.)
 5. **Document with YAML** — descriptions, owner, and tests
 
@@ -242,7 +244,7 @@ inner join dialysis_encounters m
     on e.visit_occurrence_id = m.visit_occurrence_id
 ```
 
-Notice: clear CTE naming, filtering logic in dedicated CTEs, joins between models, business rules (specific HRG codes).
+Notice: the model does one thing — identifies dialysis encounters. It doesn't also aggregate them or join in patient demographics. Those are separate models downstream.
 
 ## Reporting Layer
 
@@ -250,7 +252,9 @@ Notice: clear CTE naming, filtering logic in dedicated CTEs, joins between model
 **Materialisation:** Table
 **Database:** `REPORTING`
 
-Reporting models produce analytics-ready datasets. These are the tables that dashboards and analysts query directly. They typically contain aggregations, metrics, and well-structured dimensions.
+Reporting models combine the modular components from the modelling layer into analytics-ready datasets. These are the tables that dashboards and analysts query directly.
+
+Reporting models can and do contain business logic — QOF disease register calculations, clinical programme definitions, and complex eligibility criteria all live here. The difference from modelling is purpose: modelling builds focused, reusable components; reporting assembles them into the final output.
 
 ### Common Patterns
 
@@ -272,6 +276,8 @@ group by sk_patient_id
 ```
 
 **Dimension tables** — descriptive attributes joined from multiple sources (practice details, patient demographics, geographic hierarchies).
+
+**Register and programme tables** — combine modelling components to determine patient eligibility, calculate QOF registers, or aggregate programme metrics.
 
 ### Naming Convention
 
