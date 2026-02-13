@@ -161,24 +161,52 @@ jobs:
 
                 const itemId = addProjectV2ItemById.item.id;
 
-                // Set status to "In Progress"
-                await github.graphql(`
-                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
-                    updateProjectV2ItemFieldValue(input: {
-                      projectId: $projectId
-                      itemId: $itemId
-                      fieldId: $fieldId
-                      value: { singleSelectOptionId: $optionId }
-                    }) {
-                      projectV2Item { id }
+                // Check current status and start date before updating
+                const { node: itemNode } = await github.graphql(`
+                  query($itemId: ID!) {
+                    node(id: $itemId) {
+                      ... on ProjectV2Item {
+                        status: fieldValueByName(name: "Status") {
+                          ... on ProjectV2ItemFieldSingleSelectValue {
+                            name
+                          }
+                        }
+                        startDate: fieldValueByName(name: "Start Date") {
+                          ... on ProjectV2ItemFieldDateValue {
+                            date
+                          }
+                        }
+                      }
                     }
                   }
-                `, { projectId, itemId, fieldId: statusField.id, optionId: statusOption.id });
+                `, { itemId });
 
-                core.info(`Issue #${issueNumber} status set to "${targetStatus}"`);
+                const currentStatus = itemNode?.status?.name;
+                const currentStartDate = itemNode?.startDate?.date;
+                const eligibleStatuses = [undefined, null, '', 'Todo', 'Backlog'];
 
-                // Set start date if field exists
-                if (startDateField?.id) {
+                // Only update status if current status is eligible for transition
+                if (eligibleStatuses.includes(currentStatus)) {
+                  await github.graphql(`
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: $projectId
+                        itemId: $itemId
+                        fieldId: $fieldId
+                        value: { singleSelectOptionId: $optionId }
+                      }) {
+                        projectV2Item { id }
+                      }
+                    }
+                  `, { projectId, itemId, fieldId: statusField.id, optionId: statusOption.id });
+
+                  core.info(`Issue #${issueNumber} status set to "${targetStatus}"`);
+                } else {
+                  core.info(`Issue #${issueNumber} status is "${currentStatus}" - skipping status update`);
+                }
+
+                // Set start date if field exists and not already set
+                if (startDateField?.id && !currentStartDate) {
                   await github.graphql(`
                     mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
                       updateProjectV2ItemFieldValue(input: {
@@ -193,6 +221,8 @@ jobs:
                   `, { projectId, itemId, fieldId: startDateField.id, date: today });
 
                   core.info(`Issue #${issueNumber} start date set to ${today}`);
+                } else if (currentStartDate) {
+                  core.info(`Issue #${issueNumber} already has start date ${currentStartDate} - skipping`);
                 }
 
               } catch (err) {
