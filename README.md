@@ -81,6 +81,7 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 |----------|-------------|
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, commit signing, workflow |
 | [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
+| [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
 | [Working with Sources](docs/working-with-sources.md) | Source generation workflow |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 
