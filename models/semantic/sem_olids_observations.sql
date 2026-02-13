@@ -169,12 +169,12 @@ DIMENSIONS(
 )
 
 METRICS(
-    -- Population
-    patient_count AS COUNT(DISTINCT demographics.person_id) COMMENT = 'Total patients',
+    -- Population (single table)
+    demographics.patient_count AS COUNT(DISTINCT demographics.person_id) COMMENT = 'Total patients',
     
-    -- Blood Pressure
-    patients_with_bp AS COUNT(DISTINCT bp.person_id) COMMENT = 'Patients with BP measurement',
-    patients_with_bp_assessment AS COUNT(DISTINCT bp_control.person_id) COMMENT = 'Patients with BP control assessment',
+    -- Blood Pressure (single table for counts, derived for cross-table)
+    bp.patients_with_bp AS COUNT(DISTINCT bp.person_id) COMMENT = 'Patients with BP measurement',
+    bp_control.patients_with_bp_assessment AS COUNT(DISTINCT bp_control.person_id) COMMENT = 'Patients with BP control assessment',
     bp_controlled_count AS COUNT(DISTINCT CASE WHEN bp_control.is_overall_bp_controlled THEN demographics.person_id END) COMMENT = 'Patients with BP controlled',
     bp_uncontrolled_count AS COUNT(DISTINCT CASE WHEN NOT bp_control.is_overall_bp_controlled THEN demographics.person_id END) COMMENT = 'Patients with BP uncontrolled',
     bp_stage_1_plus_count AS COUNT(DISTINCT CASE WHEN bp_control.hypertension_stage_number >= 1 THEN demographics.person_id END) COMMENT = 'Patients with Stage 1+ HTN',
@@ -183,8 +183,8 @@ METRICS(
     bp_case_finding_count AS COUNT(DISTINCT CASE WHEN bp_control.is_case_finding_candidate THEN demographics.person_id END) COMMENT = 'BP case finding candidates',
     bp_timely_count AS COUNT(DISTINCT CASE WHEN bp_control.is_latest_bp_within_recommended_interval THEN demographics.person_id END) COMMENT = 'Patients with timely BP',
     
-    -- HbA1c
-    patients_with_hba1c AS COUNT(DISTINCT hba1c.person_id) COMMENT = 'Patients with HbA1c',
+    -- HbA1c (single table for counts, derived for cross-table)
+    hba1c.patients_with_hba1c AS COUNT(DISTINCT hba1c.person_id) COMMENT = 'Patients with HbA1c',
     hba1c_at_target_count AS COUNT(DISTINCT CASE WHEN hba1c.meets_qof_target THEN demographics.person_id END) COMMENT = 'Patients with HbA1c at QOF target',
     hba1c_above_target_count AS COUNT(DISTINCT CASE WHEN NOT hba1c.meets_qof_target AND hba1c.person_id IS NOT NULL THEN demographics.person_id END) COMMENT = 'Patients with HbA1c above QOF target',
     hba1c_high_risk_count AS COUNT(DISTINCT CASE WHEN hba1c.hba1c_category = 'Diabetes - High Risk' THEN demographics.person_id END) COMMENT = 'Patients with HbA1c 75-85 (high risk)',
@@ -192,48 +192,48 @@ METRICS(
     hba1c_poor_control_count AS COUNT(DISTINCT CASE WHEN hba1c.hba1c_category IN ('Diabetes - High Risk', 'Diabetes - Very High Risk') THEN demographics.person_id END) COMMENT = 'Patients with HbA1c >=75 (poor control)',
     hba1c_prediabetes_count AS COUNT(DISTINCT CASE WHEN hba1c.hba1c_category = 'Prediabetes' THEN demographics.person_id END) COMMENT = 'Patients with prediabetes HbA1c',
     
-    -- Cholesterol
-    patients_with_cholesterol AS COUNT(DISTINCT cholesterol.person_id) COMMENT = 'Patients with cholesterol',
+    -- Cholesterol (single table for counts, derived for cross-table)
+    cholesterol.patients_with_cholesterol AS COUNT(DISTINCT cholesterol.person_id) COMMENT = 'Patients with cholesterol',
     cholesterol_desirable_count AS COUNT(DISTINCT CASE WHEN cholesterol.cholesterol_category = 'Desirable' THEN demographics.person_id END) COMMENT = 'Patients with desirable cholesterol',
     cholesterol_high_count AS COUNT(DISTINCT CASE WHEN cholesterol.cholesterol_category = 'High' THEN demographics.person_id END) COMMENT = 'Patients with high cholesterol',
-    patients_with_ldl AS COUNT(DISTINCT ldl.person_id) COMMENT = 'Patients with LDL',
+    ldl.patients_with_ldl AS COUNT(DISTINCT ldl.person_id) COMMENT = 'Patients with LDL',
     ldl_at_target_count AS COUNT(DISTINCT CASE WHEN ldl.LDL_CVD_Target_Met THEN demographics.person_id END) COMMENT = 'Patients with LDL at target',
     
-    -- BMI
-    patients_with_bmi AS COUNT(DISTINCT bmi.person_id) COMMENT = 'Patients with BMI',
+    -- BMI (single table for counts, derived for cross-table)
+    bmi.patients_with_bmi AS COUNT(DISTINCT bmi.person_id) COMMENT = 'Patients with BMI',
     bmi_normal_count AS COUNT(DISTINCT CASE WHEN bmi.bmi_category = 'Normal' THEN demographics.person_id END) COMMENT = 'Patients with normal BMI',
     bmi_overweight_count AS COUNT(DISTINCT CASE WHEN bmi.bmi_category = 'Overweight' THEN demographics.person_id END) COMMENT = 'Patients overweight',
     bmi_obese_count AS COUNT(DISTINCT CASE WHEN bmi.bmi_category IN ('Obese Class I', 'Obese Class II', 'Obese Class III') THEN demographics.person_id END) COMMENT = 'Patients with obesity',
     bmi_obese_class_3_count AS COUNT(DISTINCT CASE WHEN bmi.bmi_category = 'Obese Class III' THEN demographics.person_id END) COMMENT = 'Patients with severe obesity',
     bmi_underweight_count AS COUNT(DISTINCT CASE WHEN bmi.bmi_category = 'Underweight' THEN demographics.person_id END) COMMENT = 'Patients underweight',
     
-    -- eGFR / CKD
-    patients_with_egfr AS COUNT(DISTINCT egfr.person_id) COMMENT = 'Patients with eGFR',
+    -- eGFR / CKD (single table for counts, derived for cross-table)
+    egfr.patients_with_egfr AS COUNT(DISTINCT egfr.person_id) COMMENT = 'Patients with eGFR',
     ckd_indicator_count AS COUNT(DISTINCT CASE WHEN egfr.is_ckd_indicator THEN demographics.person_id END) COMMENT = 'Patients with CKD indicator',
     ckd_stage_3_plus_count AS COUNT(DISTINCT CASE WHEN egfr.ckd_stage IN ('3a', '3b', '4', '5') THEN demographics.person_id END) COMMENT = 'Patients with CKD Stage 3+',
     ckd_stage_4_plus_count AS COUNT(DISTINCT CASE WHEN egfr.ckd_stage IN ('4', '5') THEN demographics.person_id END) COMMENT = 'Patients with CKD Stage 4-5',
     
-    -- QRISK
-    patients_with_qrisk AS COUNT(DISTINCT qrisk.person_id) COMMENT = 'Patients with QRISK',
+    -- QRISK (single table for counts, derived for cross-table)
+    qrisk.patients_with_qrisk AS COUNT(DISTINCT qrisk.person_id) COMMENT = 'Patients with QRISK',
     qrisk_high_risk_count AS COUNT(DISTINCT CASE WHEN qrisk.is_high_cvd_risk THEN demographics.person_id END) COMMENT = 'Patients with QRISK >=10%',
     qrisk_very_high_risk_count AS COUNT(DISTINCT CASE WHEN qrisk.is_very_high_cvd_risk THEN demographics.person_id END) COMMENT = 'Patients with QRISK >=20%',
     qrisk_statin_count AS COUNT(DISTINCT CASE WHEN qrisk.warrants_statin_consideration THEN demographics.person_id END) COMMENT = 'Patients where statin warranted',
     
-    -- Urine ACR
-    patients_with_acr AS COUNT(DISTINCT acr.person_id) COMMENT = 'Patients with ACR',
+    -- Urine ACR (single table for counts, derived for cross-table)
+    acr.patients_with_acr AS COUNT(DISTINCT acr.person_id) COMMENT = 'Patients with ACR',
     acr_elevated_count AS COUNT(DISTINCT CASE WHEN acr.is_acr_elevated THEN demographics.person_id END) COMMENT = 'Patients with elevated ACR',
     microalbuminuria_count AS COUNT(DISTINCT CASE WHEN acr.is_microalbuminuria THEN demographics.person_id END) COMMENT = 'Patients with microalbuminuria',
     macroalbuminuria_count AS COUNT(DISTINCT CASE WHEN acr.is_macroalbuminuria THEN demographics.person_id END) COMMENT = 'Patients with macroalbuminuria',
     
-    -- Averages (supplementary)
-    avg_systolic_bp AS AVG(bp.systolic_value) COMMENT = 'Average systolic BP',
-    avg_diastolic_bp AS AVG(bp.diastolic_value) COMMENT = 'Average diastolic BP',
-    avg_hba1c AS AVG(hba1c.hba1c_ifcc) COMMENT = 'Average HbA1c',
-    avg_cholesterol AS AVG(cholesterol.cholesterol_value) COMMENT = 'Average cholesterol',
-    avg_ldl AS AVG(ldl.cholesterol_value) COMMENT = 'Average LDL',
-    avg_bmi AS AVG(bmi.bmi_value) COMMENT = 'Average BMI',
-    avg_egfr AS AVG(egfr.egfr_value) COMMENT = 'Average eGFR',
-    avg_qrisk AS AVG(qrisk.qrisk_score) COMMENT = 'Average QRISK'
+    -- Averages (single table - use prefix)
+    bp.avg_systolic_bp AS AVG(bp.systolic_value) COMMENT = 'Average systolic BP',
+    bp.avg_diastolic_bp AS AVG(bp.diastolic_value) COMMENT = 'Average diastolic BP',
+    hba1c.avg_hba1c AS AVG(hba1c.hba1c_ifcc) COMMENT = 'Average HbA1c',
+    cholesterol.avg_cholesterol AS AVG(cholesterol.cholesterol_value) COMMENT = 'Average cholesterol',
+    ldl.avg_ldl AS AVG(ldl.cholesterol_value) COMMENT = 'Average LDL',
+    bmi.avg_bmi AS AVG(bmi.bmi_value) COMMENT = 'Average BMI',
+    egfr.avg_egfr AS AVG(egfr.egfr_value) COMMENT = 'Average eGFR',
+    qrisk.avg_qrisk AS AVG(qrisk.qrisk_score) COMMENT = 'Average QRISK'
 )
 
 COMMENT = 'OLIDS Clinical Observations Semantic View - Clinical biomarkers with category-based metrics for population health. Includes patient-specific BP thresholds. Grain: one row per person (latest values).'
