@@ -41,9 +41,6 @@ RELATIONSHIPS(
 )
 
 FACTS(
-    -- Age for aggregation
-    demographics.age COMMENT = 'Age in years',
-    
     -- Condition counts
     conditions.total_conditions COMMENT = 'Total number of active conditions',
     conditions.total_qof_conditions COMMENT = 'Number of QOF-registered conditions',
@@ -63,8 +60,9 @@ FACTS(
 )
 
 DIMENSIONS(
-    -- Core Demographics (age removed - in FACTS for aggregation; use age_band_* for filtering)
+    -- Core Demographics
     demographics.gender COMMENT = 'Patient gender (Male, Female, Unknown)',
+    demographics.age COMMENT = 'Current age in years',
     demographics.age_band_5y COMMENT = '5-year age bands (0-4, 5-9, ..., 85+)',
     demographics.age_band_10y COMMENT = '10-year age bands (0-9, 10-19, ..., 80+)',
     demographics.age_band_nhs COMMENT = 'NHS Digital standard age bands',
