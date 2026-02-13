@@ -124,7 +124,7 @@ models:
       +schema: "SEMANTIC"
       +tags: ["semantic"]
       +meta:
-        custom_message: "Snowflake Semantic View - query via SEMANTIC_VIEW() function"
+        custom_message: "Snowflake Semantic View - Includes OLIDS data - don't publish/share outputs without DAC approval. Query via SEMANTIC_VIEW() function."
 
     # Published layer - production-ready datasets for end users
     published:

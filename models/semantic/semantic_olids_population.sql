@@ -22,28 +22,49 @@
 #}
 
 TABLES(
-    {{ ref('dim_person_demographics') }} AS demographics
+    demographics AS {{ ref('dim_person_demographics') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Core patient demographics including registration, geography, and ethnicity. One row per person.',
     
-    {{ ref('dim_person_conditions') }} AS conditions
+    conditions AS {{ ref('dim_person_conditions') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Boolean flags for all long-term conditions (QOF and non-QOF). One row per person with FALSE for no conditions.',
     
-    {{ ref('dim_person_status_summary') }} AS status
+    status AS {{ ref('dim_person_status_summary') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Vulnerability factors, risk behaviours, polypharmacy, and data sharing status. One row per person.'
 )
 
 RELATIONSHIPS(
-    demographics.person_id = conditions.person_id,
-    demographics.person_id = status.person_id
+    conditions (person_id) REFERENCES demographics,
+    status (person_id) REFERENCES demographics
+)
+
+FACTS(
+    -- Age for aggregation
+    demographics.age COMMENT = 'Age in years',
+    
+    -- Condition counts
+    conditions.total_conditions COMMENT = 'Total number of active conditions',
+    conditions.total_qof_conditions COMMENT = 'Number of QOF-registered conditions',
+    conditions.total_non_qof_conditions COMMENT = 'Number of non-QOF conditions',
+    
+    -- Clinical domain counts
+    conditions.cardiovascular_conditions COMMENT = 'Count of cardiovascular conditions',
+    conditions.respiratory_conditions COMMENT = 'Count of respiratory conditions',
+    conditions.mental_health_conditions COMMENT = 'Count of mental health conditions',
+    conditions.metabolic_conditions COMMENT = 'Count of metabolic conditions',
+    conditions.musculoskeletal_conditions COMMENT = 'Count of musculoskeletal conditions',
+    conditions.neurology_conditions COMMENT = 'Count of neurological conditions',
+    
+    -- Polypharmacy
+    status.medication_count COMMENT = 'Number of current medications',
+    status.behavioural_risk_count COMMENT = 'Count of behavioural risk factors'
 )
 
 DIMENSIONS(
-    -- Core Demographics
+    -- Core Demographics (age removed - in FACTS for aggregation; use age_band_* for filtering)
     demographics.gender COMMENT = 'Patient gender (Male, Female, Unknown)',
-    demographics.age COMMENT = 'Current age in years',
     demographics.age_band_5y COMMENT = '5-year age bands (0-4, 5-9, ..., 85+)',
     demographics.age_band_10y COMMENT = '10-year age bands (0-9, 10-19, ..., 80+)',
     demographics.age_band_nhs COMMENT = 'NHS Digital standard age bands',
@@ -172,28 +193,6 @@ DIMENSIONS(
     -- Data Sharing
     status.is_type1_opted_out COMMENT = 'Has Type 1 opt-out',
     status.is_allowed_secondary_use COMMENT = 'Allowed for secondary use'
-)
-
-FACTS(
-    -- Age for aggregation
-    demographics.age COMMENT = 'Age in years',
-    
-    -- Condition counts
-    conditions.total_conditions COMMENT = 'Total number of active conditions',
-    conditions.total_qof_conditions COMMENT = 'Number of QOF-registered conditions',
-    conditions.total_non_qof_conditions COMMENT = 'Number of non-QOF conditions',
-    
-    -- Clinical domain counts
-    conditions.cardiovascular_conditions COMMENT = 'Count of cardiovascular conditions',
-    conditions.respiratory_conditions COMMENT = 'Count of respiratory conditions',
-    conditions.mental_health_conditions COMMENT = 'Count of mental health conditions',
-    conditions.metabolic_conditions COMMENT = 'Count of metabolic conditions',
-    conditions.musculoskeletal_conditions COMMENT = 'Count of musculoskeletal conditions',
-    conditions.neurology_conditions COMMENT = 'Count of neurological conditions',
-    
-    -- Polypharmacy
-    status.medication_count COMMENT = 'Number of current medications',
-    status.behavioural_risk_count COMMENT = 'Count of behavioural risk factors'
 )
 
 METRICS(

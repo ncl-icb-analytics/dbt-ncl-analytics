@@ -32,58 +32,82 @@
 #}
 
 TABLES(
-    {{ ref('dim_person_demographics') }} AS demographics
+    demographics AS {{ ref('dim_person_demographics') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Base population - all persons with registration history',
     
-    {{ ref('int_blood_pressure_latest') }} AS bp
+    bp AS {{ ref('int_blood_pressure_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest blood pressure measurement (systolic/diastolic)',
     
-    {{ ref('int_hba1c_latest') }} AS hba1c
+    hba1c AS {{ ref('int_hba1c_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest HbA1c measurement for glycaemic control',
     
-    {{ ref('int_cholesterol_latest') }} AS cholesterol
+    cholesterol AS {{ ref('int_cholesterol_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest total cholesterol measurement',
     
-    {{ ref('int_cholesterol_ldl_latest') }} AS ldl
+    ldl AS {{ ref('int_cholesterol_ldl_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest LDL cholesterol measurement',
     
-    {{ ref('int_bmi_latest') }} AS bmi
+    bmi AS {{ ref('int_bmi_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest BMI with ethnicity-adjusted categorisation',
     
-    {{ ref('int_egfr_latest') }} AS egfr
+    egfr AS {{ ref('int_egfr_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest eGFR with CKD staging',
     
-    {{ ref('int_qrisk_latest') }} AS qrisk
+    qrisk AS {{ ref('int_qrisk_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest QRISK cardiovascular risk score',
     
-    {{ ref('int_urine_acr_latest') }} AS acr
+    acr AS {{ ref('int_urine_acr_latest') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Latest urine albumin:creatinine ratio'
 )
 
 RELATIONSHIPS(
-    demographics.person_id = bp.person_id,
-    demographics.person_id = hba1c.person_id,
-    demographics.person_id = cholesterol.person_id,
-    demographics.person_id = ldl.person_id,
-    demographics.person_id = bmi.person_id,
-    demographics.person_id = egfr.person_id,
-    demographics.person_id = qrisk.person_id,
-    demographics.person_id = acr.person_id
+    bp (person_id) REFERENCES demographics,
+    hba1c (person_id) REFERENCES demographics,
+    cholesterol (person_id) REFERENCES demographics,
+    ldl (person_id) REFERENCES demographics,
+    bmi (person_id) REFERENCES demographics,
+    egfr (person_id) REFERENCES demographics,
+    qrisk (person_id) REFERENCES demographics,
+    acr (person_id) REFERENCES demographics
+)
+
+FACTS(
+    -- Blood Pressure Values
+    bp.systolic_value COMMENT = 'Systolic BP (mmHg)',
+    bp.diastolic_value COMMENT = 'Diastolic BP (mmHg)',
+    
+    -- HbA1c Values
+    hba1c.hba1c_ifcc COMMENT = 'HbA1c value (mmol/mol IFCC)',
+    
+    -- Cholesterol Values
+    cholesterol.cholesterol_value COMMENT = 'Total cholesterol (mmol/L)',
+    ldl.cholesterol_value COMMENT = 'LDL cholesterol (mmol/L)',
+    
+    -- BMI Values
+    bmi.bmi_value COMMENT = 'BMI value (kg/m²)',
+    
+    -- eGFR Values
+    egfr.egfr_value COMMENT = 'eGFR value (mL/min/1.73m²)',
+    
+    -- QRISK Values
+    qrisk.qrisk_score COMMENT = 'QRISK score (%)',
+    
+    -- Urine ACR Values
+    acr.acr_value COMMENT = 'Urine ACR (mg/mmol)'
 )
 
 DIMENSIONS(
-    -- Core Demographics (for segmentation)
+    -- Core Demographics (for segmentation - age in FACTS for aggregation)
     demographics.gender COMMENT = 'Patient gender',
-    demographics.age COMMENT = 'Current age in years',
     demographics.age_band_5y COMMENT = '5-year age bands',
     demographics.age_band_10y COMMENT = '10-year age bands',
     demographics.ethnicity_category COMMENT = 'Ethnicity category',
@@ -138,31 +162,6 @@ DIMENSIONS(
     acr.is_acr_elevated COMMENT = 'ACR ≥3 mg/mmol',
     acr.is_microalbuminuria COMMENT = 'Microalbuminuria present',
     acr.is_macroalbuminuria COMMENT = 'Macroalbuminuria present'
-)
-
-FACTS(
-    -- Blood Pressure Values
-    bp.systolic_value COMMENT = 'Systolic BP (mmHg)',
-    bp.diastolic_value COMMENT = 'Diastolic BP (mmHg)',
-    
-    -- HbA1c Values
-    hba1c.hba1c_ifcc COMMENT = 'HbA1c value (mmol/mol IFCC)',
-    
-    -- Cholesterol Values
-    cholesterol.cholesterol_value COMMENT = 'Total cholesterol (mmol/L)',
-    ldl.cholesterol_value COMMENT = 'LDL cholesterol (mmol/L)',
-    
-    -- BMI Values
-    bmi.bmi_value COMMENT = 'BMI value (kg/m²)',
-    
-    -- eGFR Values
-    egfr.egfr_value COMMENT = 'eGFR value (mL/min/1.73m²)',
-    
-    -- QRISK Values
-    qrisk.qrisk_score COMMENT = 'QRISK score (%)',
-    
-    -- Urine ACR Values
-    acr.acr_value COMMENT = 'Urine ACR (mg/mmol)'
 )
 
 METRICS(
