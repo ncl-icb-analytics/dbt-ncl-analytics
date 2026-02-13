@@ -29,7 +29,7 @@ TABLES(
 
 FACTS(
     trends.total_active_conditions AS total_active_conditions COMMENT = 'Total conditions this month',
-    trends.total_new_episodes_this_month AS new_episodes_this_month COMMENT = 'New condition episodes this month',
+    trends.total_new_episodes_this_month AS total_new_episodes_this_month COMMENT = 'New condition episodes this month',
     trends.age AS age COMMENT = 'Age at this analysis month'
 )
 

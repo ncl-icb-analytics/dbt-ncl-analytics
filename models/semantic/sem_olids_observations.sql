@@ -79,12 +79,12 @@ FACTS(
     bp.diastolic_value AS diastolic_value COMMENT = 'Diastolic BP (mmHg)',
     hba1c.hba1c_ifcc AS hba1c_ifcc COMMENT = 'HbA1c value (mmol/mol IFCC)',
     cholesterol.cholesterol_value AS cholesterol_value COMMENT = 'Total cholesterol (mmol/L)',
-    ldl.cholesterol_value AS ldl_value COMMENT = 'LDL cholesterol (mmol/L)',
+    ldl.cholesterol_value AS cholesterol_value COMMENT = 'LDL cholesterol (mmol/L)',
     bmi.bmi_value AS bmi_value COMMENT = 'BMI value (kg/m2)',
     egfr.egfr_value AS egfr_value COMMENT = 'eGFR value (mL/min/1.73m2)',
     qrisk.qrisk_score AS qrisk_score WITH SYNONYMS = ('CVD risk', 'cardiovascular risk') COMMENT = 'QRISK score (%)',
     acr.acr_value AS acr_value COMMENT = 'Urine ACR (mg/mmol)',
-    bp_control.latest_bp_reading_age_months AS bp_reading_age_months COMMENT = 'Months since last BP reading'
+    bp_control.latest_bp_reading_age_months AS latest_bp_reading_age_months COMMENT = 'Months since last BP reading'
 )
 
 DIMENSIONS(
@@ -119,19 +119,19 @@ DIMENSIONS(
     demographics.imd_quintile_25 AS imd_quintile_25 COMMENT = 'IMD 2025 quintile',
     
     -- Blood Pressure (raw)
-    bp.is_home_bp_event AS is_home_bp WITH SYNONYMS = ('HBPM', 'home monitoring') COMMENT = 'Home BP measurement',
-    bp.is_abpm_bp_event AS is_abpm WITH SYNONYMS = ('ABPM', 'ambulatory', '24-hour') COMMENT = 'Ambulatory BP measurement',
+    bp.is_home_bp_event AS is_home_bp_event WITH SYNONYMS = ('HBPM', 'home monitoring', 'home BP') COMMENT = 'Home BP measurement',
+    bp.is_abpm_bp_event AS is_abpm_bp_event WITH SYNONYMS = ('ABPM', 'ambulatory', '24-hour') COMMENT = 'Ambulatory BP measurement',
     bp.is_hypertensive_range AS is_hypertensive_range COMMENT = 'BP in hypertensive range',
     
     -- Blood Pressure Control
-    bp_control.is_overall_bp_controlled AS is_bp_controlled WITH SYNONYMS = ('BP at target', 'controlled') COMMENT = 'BP controlled (patient-specific threshold)',
+    bp_control.is_overall_bp_controlled AS is_overall_bp_controlled WITH SYNONYMS = ('BP at target', 'BP controlled', 'controlled') COMMENT = 'BP controlled (patient-specific threshold)',
     bp_control.is_systolic_controlled AS is_systolic_controlled COMMENT = 'Systolic BP at target',
     bp_control.is_diastolic_controlled AS is_diastolic_controlled COMMENT = 'Diastolic BP at target',
     bp_control.hypertension_stage AS hypertension_stage COMMENT = 'Hypertension stage (Normal, Stage 1, 2, 3 Severe)',
     bp_control.hypertension_stage_number AS hypertension_stage_number COMMENT = 'Hypertension stage number (0-3)',
-    bp_control.applied_patient_group AS bp_threshold_group COMMENT = 'Which threshold applied (T2DM, CKD, AGE_GE_80, etc.)',
-    bp_control.is_case_finding_candidate AS is_bp_case_finding COMMENT = 'Elevated BP but not on HTN register',
-    bp_control.is_latest_bp_within_recommended_interval AS is_bp_timely COMMENT = 'BP within recommended interval',
+    bp_control.applied_patient_group AS applied_patient_group WITH SYNONYMS = ('BP threshold group') COMMENT = 'Which threshold applied (T2DM, CKD, AGE_GE_80, etc.)',
+    bp_control.is_case_finding_candidate AS is_case_finding_candidate WITH SYNONYMS = ('BP case finding') COMMENT = 'Elevated BP but not on HTN register',
+    bp_control.is_latest_bp_within_recommended_interval AS is_latest_bp_within_recommended_interval WITH SYNONYMS = ('BP timely', 'timely BP') COMMENT = 'BP within recommended interval',
     bp_control.has_t2dm AS has_t2dm COMMENT = 'Has Type 2 diabetes (affects BP threshold)',
     bp_control.has_ckd AS has_ckd COMMENT = 'Has CKD (affects BP threshold)',
     bp_control.is_diagnosed_htn AS is_diagnosed_htn WITH SYNONYMS = ('on HTN register', 'diagnosed hypertension') COMMENT = 'On hypertension register',
@@ -143,7 +143,7 @@ DIMENSIONS(
     
     -- Cholesterol Categories
     cholesterol.cholesterol_category AS cholesterol_category COMMENT = 'Cholesterol category (Desirable/Borderline/High)',
-    ldl.LDL_CVD_Target_Met AS ldl_at_target COMMENT = 'LDL at CVD target',
+    ldl.LDL_CVD_Target_Met AS LDL_CVD_Target_Met COMMENT = 'LDL at CVD target',
     
     -- BMI Categories
     bmi.bmi_category AS bmi_category COMMENT = 'BMI category (Underweight, Normal, Overweight, Obese Class I/II/III)',
@@ -159,7 +159,7 @@ DIMENSIONS(
     qrisk.cvd_risk_category AS cvd_risk_category COMMENT = 'CVD risk category',
     qrisk.is_high_cvd_risk AS is_high_cvd_risk WITH SYNONYMS = ('high risk', 'QRISK >= 10') COMMENT = 'QRISK >=10% (high CVD risk)',
     qrisk.is_very_high_cvd_risk AS is_very_high_cvd_risk COMMENT = 'QRISK >=20% (very high CVD risk)',
-    qrisk.warrants_statin_consideration AS warrants_statin COMMENT = 'QRISK warrants statin consideration',
+    qrisk.warrants_statin_consideration AS warrants_statin_consideration WITH SYNONYMS = ('statin warranted') COMMENT = 'QRISK warrants statin consideration',
     
     -- Urine ACR Categories
     acr.acr_category AS acr_category COMMENT = 'ACR category (Normal/Moderate/Severe)',
