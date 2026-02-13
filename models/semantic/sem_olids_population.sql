@@ -154,15 +154,13 @@ DIMENSIONS(
 )
 
 METRICS(
-    -- Population Counts
-    patient_count AS COUNT(DISTINCT demographics.person_id) COMMENT = 'Total number of patients',
-    active_patient_count AS COUNT(DISTINCT CASE WHEN demographics.is_active THEN demographics.person_id END) COMMENT = 'Currently registered patients',
-    deceased_patient_count AS COUNT(DISTINCT CASE WHEN demographics.is_deceased THEN demographics.person_id END) COMMENT = 'Deceased patients',
+    -- Population Counts (single table - use prefix)
+    demographics.patient_count AS COUNT(DISTINCT demographics.person_id) COMMENT = 'Total number of patients',
+    demographics.active_patient_count AS COUNT(DISTINCT CASE WHEN demographics.is_active THEN demographics.person_id END) COMMENT = 'Currently registered patients',
+    demographics.deceased_patient_count AS COUNT(DISTINCT CASE WHEN demographics.is_deceased THEN demographics.person_id END) COMMENT = 'Deceased patients',
+    demographics.average_age AS AVG(demographics.age) COMMENT = 'Average age of population',
     
-    -- Demographics
-    average_age AS AVG(demographics.age) COMMENT = 'Average age of population',
-    
-    -- Cardiovascular Prevalence
+    -- Cardiovascular Prevalence (derived - cross-table)
     hypertension_count AS COUNT(DISTINCT CASE WHEN conditions.has_hypertension THEN demographics.person_id END) COMMENT = 'Patients with hypertension',
     chd_count AS COUNT(DISTINCT CASE WHEN conditions.has_coronary_heart_disease THEN demographics.person_id END) COMMENT = 'Patients with CHD',
     heart_failure_count AS COUNT(DISTINCT CASE WHEN conditions.has_heart_failure THEN demographics.person_id END) COMMENT = 'Patients with heart failure',
@@ -170,45 +168,45 @@ METRICS(
     stroke_tia_count AS COUNT(DISTINCT CASE WHEN conditions.has_stroke_tia THEN demographics.person_id END) COMMENT = 'Patients with stroke/TIA',
     pad_count AS COUNT(DISTINCT CASE WHEN conditions.has_peripheral_arterial_disease THEN demographics.person_id END) COMMENT = 'Patients with PAD',
     
-    -- Metabolic Prevalence
+    -- Metabolic Prevalence (derived - cross-table)
     diabetes_count AS COUNT(DISTINCT CASE WHEN conditions.has_diabetes THEN demographics.person_id END) COMMENT = 'Patients with diabetes',
     ckd_count AS COUNT(DISTINCT CASE WHEN conditions.has_chronic_kidney_disease THEN demographics.person_id END) COMMENT = 'Patients with CKD',
     
-    -- Respiratory Prevalence
+    -- Respiratory Prevalence (derived - cross-table)
     copd_count AS COUNT(DISTINCT CASE WHEN conditions.has_copd THEN demographics.person_id END) COMMENT = 'Patients with COPD',
     asthma_count AS COUNT(DISTINCT CASE WHEN conditions.has_asthma THEN demographics.person_id END) COMMENT = 'Patients with asthma',
     
-    -- Mental Health Prevalence
+    -- Mental Health Prevalence (derived - cross-table)
     depression_count AS COUNT(DISTINCT CASE WHEN conditions.has_depression THEN demographics.person_id END) COMMENT = 'Patients with depression',
     smi_count AS COUNT(DISTINCT CASE WHEN conditions.has_severe_mental_illness THEN demographics.person_id END) COMMENT = 'Patients with SMI',
     dementia_count AS COUNT(DISTINCT CASE WHEN conditions.has_dementia THEN demographics.person_id END) COMMENT = 'Patients with dementia',
     anxiety_count AS COUNT(DISTINCT CASE WHEN conditions.has_anxiety THEN demographics.person_id END) COMMENT = 'Patients with anxiety',
     
-    -- Other Conditions
+    -- Other Conditions (derived - cross-table)
     cancer_count AS COUNT(DISTINCT CASE WHEN conditions.has_cancer THEN demographics.person_id END) COMMENT = 'Patients with cancer',
     frailty_count AS COUNT(DISTINCT CASE WHEN conditions.has_frailty THEN demographics.person_id END) COMMENT = 'Patients with frailty',
     learning_disability_count AS COUNT(DISTINCT CASE WHEN conditions.has_learning_disability THEN demographics.person_id END) COMMENT = 'Patients with LD',
     epilepsy_count AS COUNT(DISTINCT CASE WHEN conditions.has_epilepsy THEN demographics.person_id END) COMMENT = 'Patients with epilepsy',
     palliative_care_count AS COUNT(DISTINCT CASE WHEN conditions.has_palliative_care THEN demographics.person_id END) COMMENT = 'Patients on palliative care',
     
-    -- Multimorbidity
-    avg_conditions_per_patient AS AVG(conditions.total_conditions) COMMENT = 'Average conditions per patient',
+    -- Multimorbidity (derived - cross-table)
+    conditions.avg_conditions_per_patient AS AVG(conditions.total_conditions) COMMENT = 'Average conditions per patient',
     multimorbidity_count AS COUNT(DISTINCT CASE WHEN conditions.total_conditions >= 2 THEN demographics.person_id END) COMMENT = 'Patients with 2+ conditions',
     complex_multimorbidity_count AS COUNT(DISTINCT CASE WHEN conditions.total_conditions >= 4 THEN demographics.person_id END) COMMENT = 'Patients with 4+ conditions',
     
-    -- Smoking
+    -- Smoking (derived - cross-table)
     current_smoker_count AS COUNT(DISTINCT CASE WHEN status.smoking_status = 'Current Smoker' THEN demographics.person_id END) COMMENT = 'Current smokers',
     ex_smoker_count AS COUNT(DISTINCT CASE WHEN status.smoking_status = 'Ex-Smoker' THEN demographics.person_id END) COMMENT = 'Ex-smokers',
     
-    -- Vulnerability
+    -- Vulnerability (derived - cross-table)
     care_home_resident_count AS COUNT(DISTINCT CASE WHEN status.is_care_home_resident THEN demographics.person_id END) COMMENT = 'Care home residents',
     homeless_count AS COUNT(DISTINCT CASE WHEN status.is_homeless_or_chip THEN demographics.person_id END) COMMENT = 'Homeless patients',
     housebound_count AS COUNT(DISTINCT CASE WHEN status.is_housebound THEN demographics.person_id END) COMMENT = 'Housebound patients',
     carer_count AS COUNT(DISTINCT CASE WHEN status.is_carer THEN demographics.person_id END) COMMENT = 'Unpaid carers',
     vulnerable_count AS COUNT(DISTINCT CASE WHEN status.has_vulnerability_flag THEN demographics.person_id END) COMMENT = 'Patients with any vulnerability',
     
-    -- Polypharmacy
-    avg_medication_count AS AVG(status.medication_count) COMMENT = 'Average medications per patient',
+    -- Polypharmacy (derived - cross-table)
+    status.avg_medication_count AS AVG(status.medication_count) COMMENT = 'Average medications per patient',
     polypharmacy_5plus_count AS COUNT(DISTINCT CASE WHEN status.is_polypharmacy_5plus THEN demographics.person_id END) COMMENT = 'Patients with 5+ medications',
     polypharmacy_10plus_count AS COUNT(DISTINCT CASE WHEN status.is_polypharmacy_10plus THEN demographics.person_id END) COMMENT = 'Patients with 10+ medications'
 )

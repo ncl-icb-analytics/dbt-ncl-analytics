@@ -138,65 +138,65 @@ DIMENSIONS(
 )
 
 METRICS(
-    -- Population
-    patient_count AS COUNT(DISTINCT trends.person_id) COMMENT = 'Total patients in period',
+    -- Population (single table - use prefix)
+    trends.patient_count AS COUNT(DISTINCT trends.person_id) COMMENT = 'Total patients in period',
     
-    -- Prevalence
-    diabetes_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_dm THEN trends.person_id END) COMMENT = 'Patients with diabetes',
-    hypertension_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_htn THEN trends.person_id END) COMMENT = 'Patients with hypertension',
-    copd_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_copd THEN trends.person_id END) COMMENT = 'Patients with COPD',
-    asthma_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ast THEN trends.person_id END) COMMENT = 'Patients with asthma',
-    chd_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_chd THEN trends.person_id END) COMMENT = 'Patients with CHD',
-    af_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_af THEN trends.person_id END) COMMENT = 'Patients with AF',
-    heart_failure_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_hf THEN trends.person_id END) COMMENT = 'Patients with heart failure',
-    pad_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_pad THEN trends.person_id END) COMMENT = 'Patients with PAD',
-    ckd_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ckd THEN trends.person_id END) COMMENT = 'Patients with CKD',
-    ndh_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ndh THEN trends.person_id END) COMMENT = 'Patients with NDH',
-    depression_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_dep THEN trends.person_id END) COMMENT = 'Patients with depression',
-    smi_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_smi THEN trends.person_id END) COMMENT = 'Patients with SMI',
-    dementia_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_dem THEN trends.person_id END) COMMENT = 'Patients with dementia',
-    cancer_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_can THEN trends.person_id END) COMMENT = 'Patients with cancer',
-    frailty_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_frail THEN trends.person_id END) COMMENT = 'Patients with frailty',
-    learning_disability_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ld THEN trends.person_id END) COMMENT = 'Patients with LD',
-    epilepsy_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ep THEN trends.person_id END) COMMENT = 'Patients with epilepsy',
-    stroke_tia_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_stia THEN trends.person_id END) COMMENT = 'Patients with stroke/TIA',
-    palliative_care_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_pc THEN trends.person_id END) COMMENT = 'Patients on palliative care',
-    ra_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ra THEN trends.person_id END) COMMENT = 'Patients with RA',
-    osteoporosis_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ost THEN trends.person_id END) COMMENT = 'Patients with osteoporosis',
-    nafld_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_nafld THEN trends.person_id END) COMMENT = 'Patients with NAFLD',
-    fh_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_fh THEN trends.person_id END) COMMENT = 'Patients with FH',
+    -- Prevalence (single table - use prefix)
+    trends.diabetes_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_dm THEN trends.person_id END) COMMENT = 'Patients with diabetes',
+    trends.hypertension_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_htn THEN trends.person_id END) COMMENT = 'Patients with hypertension',
+    trends.copd_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_copd THEN trends.person_id END) COMMENT = 'Patients with COPD',
+    trends.asthma_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ast THEN trends.person_id END) COMMENT = 'Patients with asthma',
+    trends.chd_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_chd THEN trends.person_id END) COMMENT = 'Patients with CHD',
+    trends.af_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_af THEN trends.person_id END) COMMENT = 'Patients with AF',
+    trends.heart_failure_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_hf THEN trends.person_id END) COMMENT = 'Patients with heart failure',
+    trends.pad_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_pad THEN trends.person_id END) COMMENT = 'Patients with PAD',
+    trends.ckd_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ckd THEN trends.person_id END) COMMENT = 'Patients with CKD',
+    trends.ndh_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ndh THEN trends.person_id END) COMMENT = 'Patients with NDH',
+    trends.depression_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_dep THEN trends.person_id END) COMMENT = 'Patients with depression',
+    trends.smi_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_smi THEN trends.person_id END) COMMENT = 'Patients with SMI',
+    trends.dementia_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_dem THEN trends.person_id END) COMMENT = 'Patients with dementia',
+    trends.cancer_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_can THEN trends.person_id END) COMMENT = 'Patients with cancer',
+    trends.frailty_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_frail THEN trends.person_id END) COMMENT = 'Patients with frailty',
+    trends.learning_disability_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ld THEN trends.person_id END) COMMENT = 'Patients with LD',
+    trends.epilepsy_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ep THEN trends.person_id END) COMMENT = 'Patients with epilepsy',
+    trends.stroke_tia_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_stia THEN trends.person_id END) COMMENT = 'Patients with stroke/TIA',
+    trends.palliative_care_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_pc THEN trends.person_id END) COMMENT = 'Patients on palliative care',
+    trends.ra_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ra THEN trends.person_id END) COMMENT = 'Patients with RA',
+    trends.osteoporosis_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ost THEN trends.person_id END) COMMENT = 'Patients with osteoporosis',
+    trends.nafld_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_nafld THEN trends.person_id END) COMMENT = 'Patients with NAFLD',
+    trends.fh_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_fh THEN trends.person_id END) COMMENT = 'Patients with FH',
     
-    -- Incidence
-    diabetes_incidence AS COUNT(DISTINCT CASE WHEN trends.new_dm THEN trends.person_id END) COMMENT = 'New diabetes diagnoses',
-    hypertension_incidence AS COUNT(DISTINCT CASE WHEN trends.new_htn THEN trends.person_id END) COMMENT = 'New hypertension diagnoses',
-    copd_incidence AS COUNT(DISTINCT CASE WHEN trends.new_copd THEN trends.person_id END) COMMENT = 'New COPD diagnoses',
-    asthma_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ast THEN trends.person_id END) COMMENT = 'New asthma diagnoses',
-    chd_incidence AS COUNT(DISTINCT CASE WHEN trends.new_chd THEN trends.person_id END) COMMENT = 'New CHD diagnoses',
-    af_incidence AS COUNT(DISTINCT CASE WHEN trends.new_af THEN trends.person_id END) COMMENT = 'New AF diagnoses',
-    heart_failure_incidence AS COUNT(DISTINCT CASE WHEN trends.new_hf THEN trends.person_id END) COMMENT = 'New heart failure diagnoses',
-    pad_incidence AS COUNT(DISTINCT CASE WHEN trends.new_pad THEN trends.person_id END) COMMENT = 'New PAD diagnoses',
-    ckd_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ckd THEN trends.person_id END) COMMENT = 'New CKD diagnoses',
-    depression_incidence AS COUNT(DISTINCT CASE WHEN trends.new_dep THEN trends.person_id END) COMMENT = 'New depression diagnoses',
-    smi_incidence AS COUNT(DISTINCT CASE WHEN trends.new_smi THEN trends.person_id END) COMMENT = 'New SMI diagnoses',
-    dementia_incidence AS COUNT(DISTINCT CASE WHEN trends.new_dem THEN trends.person_id END) COMMENT = 'New dementia diagnoses',
-    epilepsy_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ep THEN trends.person_id END) COMMENT = 'New epilepsy diagnoses',
-    cancer_incidence AS COUNT(DISTINCT CASE WHEN trends.new_can THEN trends.person_id END) COMMENT = 'New cancer diagnoses',
-    stroke_tia_incidence AS COUNT(DISTINCT CASE WHEN trends.new_stia THEN trends.person_id END) COMMENT = 'New stroke/TIA',
-    learning_disability_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ld THEN trends.person_id END) COMMENT = 'New LD diagnoses',
-    frailty_incidence AS COUNT(DISTINCT CASE WHEN trends.new_frail THEN trends.person_id END) COMMENT = 'New frailty diagnoses',
-    palliative_care_incidence AS COUNT(DISTINCT CASE WHEN trends.new_pc THEN trends.person_id END) COMMENT = 'New palliative care',
+    -- Incidence (single table - use prefix)
+    trends.diabetes_incidence AS COUNT(DISTINCT CASE WHEN trends.new_dm THEN trends.person_id END) COMMENT = 'New diabetes diagnoses',
+    trends.hypertension_incidence AS COUNT(DISTINCT CASE WHEN trends.new_htn THEN trends.person_id END) COMMENT = 'New hypertension diagnoses',
+    trends.copd_incidence AS COUNT(DISTINCT CASE WHEN trends.new_copd THEN trends.person_id END) COMMENT = 'New COPD diagnoses',
+    trends.asthma_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ast THEN trends.person_id END) COMMENT = 'New asthma diagnoses',
+    trends.chd_incidence AS COUNT(DISTINCT CASE WHEN trends.new_chd THEN trends.person_id END) COMMENT = 'New CHD diagnoses',
+    trends.af_incidence AS COUNT(DISTINCT CASE WHEN trends.new_af THEN trends.person_id END) COMMENT = 'New AF diagnoses',
+    trends.heart_failure_incidence AS COUNT(DISTINCT CASE WHEN trends.new_hf THEN trends.person_id END) COMMENT = 'New heart failure diagnoses',
+    trends.pad_incidence AS COUNT(DISTINCT CASE WHEN trends.new_pad THEN trends.person_id END) COMMENT = 'New PAD diagnoses',
+    trends.ckd_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ckd THEN trends.person_id END) COMMENT = 'New CKD diagnoses',
+    trends.depression_incidence AS COUNT(DISTINCT CASE WHEN trends.new_dep THEN trends.person_id END) COMMENT = 'New depression diagnoses',
+    trends.smi_incidence AS COUNT(DISTINCT CASE WHEN trends.new_smi THEN trends.person_id END) COMMENT = 'New SMI diagnoses',
+    trends.dementia_incidence AS COUNT(DISTINCT CASE WHEN trends.new_dem THEN trends.person_id END) COMMENT = 'New dementia diagnoses',
+    trends.epilepsy_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ep THEN trends.person_id END) COMMENT = 'New epilepsy diagnoses',
+    trends.cancer_incidence AS COUNT(DISTINCT CASE WHEN trends.new_can THEN trends.person_id END) COMMENT = 'New cancer diagnoses',
+    trends.stroke_tia_incidence AS COUNT(DISTINCT CASE WHEN trends.new_stia THEN trends.person_id END) COMMENT = 'New stroke/TIA',
+    trends.learning_disability_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ld THEN trends.person_id END) COMMENT = 'New LD diagnoses',
+    trends.frailty_incidence AS COUNT(DISTINCT CASE WHEN trends.new_frail THEN trends.person_id END) COMMENT = 'New frailty diagnoses',
+    trends.palliative_care_incidence AS COUNT(DISTINCT CASE WHEN trends.new_pc THEN trends.person_id END) COMMENT = 'New palliative care',
     
-    -- Multimorbidity
-    avg_conditions_per_patient AS AVG(trends.total_active_conditions) COMMENT = 'Average conditions per patient',
-    multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 2 THEN trends.person_id END) COMMENT = 'Patients with 2+ conditions',
-    complex_multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 4 THEN trends.person_id END) COMMENT = 'Patients with 4+ conditions',
+    -- Multimorbidity (single table - use prefix)
+    trends.avg_conditions_per_patient AS AVG(trends.total_active_conditions) COMMENT = 'Average conditions per patient',
+    trends.multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 2 THEN trends.person_id END) COMMENT = 'Patients with 2+ conditions',
+    trends.complex_multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 4 THEN trends.person_id END) COMMENT = 'Patients with 4+ conditions',
     
-    -- Total Incidence
-    total_new_episodes AS SUM(trends.total_new_episodes_this_month) COMMENT = 'Total new episodes',
-    patients_with_new_episode AS COUNT(DISTINCT CASE WHEN trends.has_any_new_episode THEN trends.person_id END) COMMENT = 'Patients with any new episode',
+    -- Total Incidence (single table - use prefix)
+    trends.total_new_episodes AS SUM(trends.total_new_episodes_this_month) COMMENT = 'Total new episodes',
+    trends.patients_with_new_episode AS COUNT(DISTINCT CASE WHEN trends.has_any_new_episode THEN trends.person_id END) COMMENT = 'Patients with any new episode',
     
-    -- Demographics
-    average_age AS AVG(trends.age) COMMENT = 'Average age'
+    -- Demographics (single table - use prefix)
+    trends.average_age AS AVG(trends.age) COMMENT = 'Average age'
 )
 
 COMMENT = 'OLIDS Population Trends Semantic View - 60-month time series for condition prevalence, incidence, and multimorbidity trends. Grain: one row per person per month.'
