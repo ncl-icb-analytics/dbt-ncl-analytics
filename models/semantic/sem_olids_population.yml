@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: semantic_olids_population
+  - name: sem_olids_population
     description: |
       OLIDS Population Health Semantic View
       ======================================
@@ -29,7 +29,7 @@ models:
       -- Get diabetes prevalence by borough
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_POPULATION
+        REPORTING.SEMANTIC.sem_olids_population
         METRICS diabetes_count, patient_count
         DIMENSIONS borough_registered
       )
@@ -37,7 +37,7 @@ models:
       -- Average conditions by deprivation
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_POPULATION
+        REPORTING.SEMANTIC.sem_olids_population
         METRICS avg_conditions_per_patient, patient_count
         DIMENSIONS imd_quintile_25
       )
@@ -45,7 +45,7 @@ models:
       -- Vulnerability analysis by PCN
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_POPULATION
+        REPORTING.SEMANTIC.sem_olids_population
         METRICS care_home_resident_count, housebound_count, polypharmacy_5plus_count
         DIMENSIONS pcn_name
         WHERE is_active = TRUE

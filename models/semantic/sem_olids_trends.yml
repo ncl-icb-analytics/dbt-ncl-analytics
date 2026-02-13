@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: semantic_olids_trends
+  - name: sem_olids_trends
     description: |
       OLIDS Population Trends Semantic View
       ======================================
@@ -38,7 +38,7 @@ models:
       -- Diabetes prevalence trend by financial year
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_TRENDS
+        REPORTING.SEMANTIC.sem_olids_trends
         METRICS diabetes_prevalence, patient_count
         DIMENSIONS financial_year
       )
@@ -46,7 +46,7 @@ models:
       -- New hypertension diagnoses by PCN over last 12 months
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_TRENDS
+        REPORTING.SEMANTIC.sem_olids_trends
         METRICS hypertension_incidence
         DIMENSIONS pcn_name, analysis_month
         WHERE analysis_month >= DATEADD(month, -12, CURRENT_DATE())
@@ -55,14 +55,14 @@ models:
       -- Multimorbidity trend by deprivation
       SELECT *
       FROM SEMANTIC_VIEW(
-        REPORTING.SEMANTIC.SEMANTIC_OLIDS_TRENDS
+        REPORTING.SEMANTIC.sem_olids_trends
         METRICS multimorbidity_count, avg_conditions_per_patient
         DIMENSIONS imd_quintile_25, financial_quarter
       )
       ```
       
       **Note:** This view covers CONDITIONS and DEMOGRAPHICS trends only.
-      For clinical biomarker analysis (BP, HbA1c), use `semantic_olids_observations`.
+      For clinical biomarker analysis (BP, HbA1c), use `SEM_OLIDS_OBSERVATIONS`.
 
     config:
       materialized: semantic_view

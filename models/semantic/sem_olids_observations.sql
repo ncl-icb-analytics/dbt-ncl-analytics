@@ -238,4 +238,4 @@ METRICS(
 
 COMMENT = 'OLIDS Clinical Observations Semantic View - Clinical biomarkers with category-based metrics for population health. Includes patient-specific BP thresholds. Grain: one row per person (latest values).'
 AI_SQL_GENERATION 'Always filter to is_active = TRUE unless asked otherwise. For BP control queries, use bp_controlled_count and patients_with_bp_assessment to calculate control rate. Prefer category-based counts over averages for population health questions. BP control uses patient-specific thresholds based on T2DM, CKD, and age.'
-AI_QUESTION_CATEGORIZATION 'Use this view for questions about: BP control, HbA1c control, cholesterol, BMI, eGFR, CKD staging, QRISK, ACR, and clinical biomarkers. For condition prevalence and demographics use semantic_olids_population. For trends over time use semantic_olids_trends.'
+AI_QUESTION_CATEGORIZATION 'Use this view for questions about: BP control, HbA1c control, cholesterol, BMI, eGFR, CKD staging, QRISK, ACR, and clinical biomarkers. For condition prevalence and demographics use sem_olids_population. For trends over time use sem_olids_trends.'
