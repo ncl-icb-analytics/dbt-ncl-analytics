@@ -338,7 +338,7 @@ The production build schedule affects how materialisations behave:
 | When | What runs | Effect on materialisations |
 |------|-----------|---------------------------|
 | **Daily** | `dbt snapshot` | All snapshots capture changes |
-| **Daily** | `dbt build -s tag:daily` | Daily-tagged models build; incremental models process only new data |
+| **Daily** | `dbt build -s +tag:daily` | Daily-tagged models and their upstream dependencies build; incremental models process only new data |
 | **Monday** | Full project build | All models rebuild; incremental models process only new data |
 | **1st of month** | Full project build with `--full-refresh` | All tables rebuilt from scratch, including incremental models |
 

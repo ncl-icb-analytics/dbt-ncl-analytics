@@ -210,7 +210,7 @@ Snapshots run as part of the production build schedule:
 | When | What runs |
 |------|-----------|
 | **Daily** | `dbt snapshot` — all snapshots capture changes |
-| **Daily** | `dbt build -s tag:daily` — daily-tagged models build |
+| **Daily** | `dbt build -s +tag:daily` — daily-tagged models and their upstream dependencies build |
 | **Monday** | Full project build — all models rebuild |
 | **1st of month** | Full project build with `--full-refresh` — all tables rebuilt from scratch |
 
