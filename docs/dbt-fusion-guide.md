@@ -136,6 +136,8 @@ The extension provides autocomplete suggestions as you type:
 - **SQL functions** — suggests Snowflake-specific SQL functions
 - **Column names** — suggests columns from referenced models after typing a table alias
 
+<img width="1414" height="500" alt="image" src="https://github.com/user-attachments/assets/11b9778e-aaa3-4e2d-a7ed-95877da365f6" />
+
 This makes it easier to write correct SQL without having to look up model names or column names separately.
 
 ### Compiled Code View
@@ -171,6 +173,8 @@ The Lineage tab in the sidebar shows the DAG for the currently open file — its
 - Click on any node to open that model
 - Toggle between table-level and column-level lineage
 - Use the search bar to filter to specific models or columns
+
+<img width="2065" height="447" alt="image" src="https://github.com/user-attachments/assets/bc4515b6-e1e3-4e29-8be9-12049e683eb2" />
 
 This provides the same information as `dbt docs serve` but without leaving the editor.
 
