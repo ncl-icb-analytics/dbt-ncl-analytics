@@ -9,6 +9,8 @@ models:
       Semantic model for clinical observations and biomarkers, enabling
       natural language queries for clinical quality and population health.
       
+      **⚠️ Data Governance:** Includes OLIDS data - don't publish/share outputs without DAC approval.
+      
       **Purpose:**
       - Enable natural language queries via Snowflake Cortex Analyst
       - Provide governed metrics for clinical biomarker analysis
@@ -36,7 +38,7 @@ models:
       -- Average HbA1c by practice
       SELECT *
       FROM SEMANTIC_VIEW(
-        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        REPORTING.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
         METRICS avg_hba1c, patients_with_hba1c
         DIMENSIONS practice_name
         WHERE is_active = TRUE
@@ -45,7 +47,7 @@ models:
       -- BP control by deprivation
       SELECT *
       FROM SEMANTIC_VIEW(
-        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        REPORTING.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
         METRICS avg_systolic_bp, hypertensive_range_count
         DIMENSIONS imd_quintile_25
       )
@@ -53,7 +55,7 @@ models:
       -- CVD risk distribution
       SELECT *
       FROM SEMANTIC_VIEW(
-        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        REPORTING.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
         METRICS high_cvd_risk_count, very_high_cvd_risk_count
         DIMENSIONS age_band_10y, gender
       )

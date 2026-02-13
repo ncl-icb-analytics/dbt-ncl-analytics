@@ -7,7 +7,9 @@ models:
       ======================================
       
       Comprehensive semantic model for NCL population health analysis combining
-      demographics, conditions, and smoking status into a unified semantic layer.
+      demographics, conditions, and person status into a unified semantic layer.
+      
+      **⚠️ Data Governance:** Includes OLIDS data - don't publish/share outputs without DAC approval.
       
       **Purpose:**
       - Enable natural language queries via Snowflake Cortex Analyst
@@ -19,7 +21,7 @@ models:
       **Tables Included:**
       - `dim_person_demographics`: Core demographics, registration, geography
       - `dim_person_conditions`: Boolean flags for all conditions + summary counts
-      - `fct_person_smoking_status`: Smoking status (LEFT JOIN)
+      - `dim_person_status_summary`: Vulnerability factors, risk behaviours, polypharmacy, data sharing
       
       **Example Queries:**
       
@@ -27,7 +29,7 @@ models:
       -- Get diabetes prevalence by borough
       SELECT *
       FROM SEMANTIC_VIEW(
-        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_POPULATION
+        REPORTING.SEMANTIC.SEMANTIC_OLIDS_POPULATION
         METRICS diabetes_count, patient_count
         DIMENSIONS borough_registered
       )
@@ -35,25 +37,20 @@ models:
       -- Average conditions by deprivation
       SELECT *
       FROM SEMANTIC_VIEW(
-        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_POPULATION
+        REPORTING.SEMANTIC.SEMANTIC_OLIDS_POPULATION
         METRICS avg_conditions_per_patient, patient_count
         DIMENSIONS imd_quintile_25
       )
       
-      -- Smoking status by age band
+      -- Vulnerability analysis by PCN
       SELECT *
       FROM SEMANTIC_VIEW(
-        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_POPULATION
-        METRICS current_smoker_count, ex_smoker_count
-        DIMENSIONS age_band_10y
+        REPORTING.SEMANTIC.SEMANTIC_OLIDS_POPULATION
+        METRICS care_home_resident_count, housebound_count, polypharmacy_5plus_count
+        DIMENSIONS pcn_name
         WHERE is_active = TRUE
       )
       ```
-      
-      **Limitations:**
-      - Person status tables (care_home, homeless, carer) excluded as they only
-        contain rows for people WITH that status
-      - Consider separate semantic views for vulnerability-focused analysis
 
     config:
       materialized: semantic_view
