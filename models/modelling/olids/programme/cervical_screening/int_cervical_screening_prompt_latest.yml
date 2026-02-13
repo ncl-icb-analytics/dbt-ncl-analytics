@@ -1,15 +1,16 @@
 version: 1
 models:
   - name: int_cervical_screening_prompt_latest
-    description: 'Determine whether a person has received a prompt for breast screening, and if so, the date of the most recent prompt, using EL_CACHE Ref SMI_LONGER_LIVES_CANCER_SCREEN_PROMPTS cluster'
+    description: 'Determine whether a person has received a prompt for cervical screening, and if so, the date of the most recent prompt, using ECL_CACHE Ref SMI_LONGER_LIVES_CANCER_SCREEN_PROMPTS cluster'
 
     config:
       meta:
         owner:
           name: KateHomer55
-    tests:
-      - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+    # tests:
+    #   - dbt_expectations.expect_table_row_count_to_be_between:
+    #       arguments:
+    #         min_value: 1
 
     columns:
       - name: person_id

@@ -23,7 +23,8 @@ SELECT DISTINCT
   WHEN CHECK_TYPE = 'BMI' THEN 'BMI'
   WHEN CHECK_TYPE = 'Cholesterol' THEN 'Chol'
   WHEN CHECK_TYPE = 'HBA1C' THEN 'HbA1c'
-  ELSE CHECK_TYPE END ,',') AS INCOMP12M_LIST
+  --Coderabbit suggestion:If consistent output matters (e.g. for downstream comparisons or testing), consider adding WITHIN GROUP. It's good practice.
+  ELSE CHECK_TYPE END ,',') WITHIN GROUP (ORDER BY CHECK_TYPE) AS INCOMP12M_LIST
    ,COUNT(DISTINCT CHECK_TYPE) AS INCOMP12M_CT
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_SIX_HEALTH_CHECK 
 FROM {{ ref('int_smi_six_health_check')  }} 
@@ -82,6 +83,7 @@ WHEN l.ALCOHOL_RISK_CATEGORY = 'Alcohol Status Declined' THEN 'Status Declined' 
 ,NVL(ltc.LTC_COUNT,0) AS LTC_COUNT
 ,CASE WHEN ltc.LTC_COUNT >= 2 THEN 'Yes' ELSE 'No' END AS LTC_2PLUS
 ,ltc.LTC_SUMMARY
+,IS_ON_LITHIUM
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 FROM {{ ref('int_smi_population_base')  }} p
 LEFT JOIN healthcheck_sum hc using (person_id)
@@ -91,5 +93,5 @@ LEFT JOIN {{ ref('int_smi_lifestyle')  }} l using (person_id)
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_LTC_PROFILE ltc using (person_id)
 LEFT JOIN {{ ref('int_smi_ltc_profile')  }} ltc using (person_id)
 WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
---AND hc.PERSON_ID IS NOT NULL include all people whether they have had a health check or not, as long as they have an active SMI diagnosis. Those with no health checks will have 0 incomplete checks and 'All checks met' in the list field. AND p.ON_LITHIUM_ALONE = FALSE ORDER BY PERSON_ID
+-- include all people whether they have had a health check or not, as long as they have an active SMI diagnosis. Those with no health checks will have 0 incomplete checks and 'All checks met' in the list field. 
 
