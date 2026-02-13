@@ -1,0 +1,119 @@
+version: 2
+
+models:
+  - name: dim_person_status_summary
+    description: |
+      Person Status Summary Dimension
+      ================================
+      
+      Wide dimension table combining all person status flags into a single model
+      with one row per person. Provides a complete picture of each person's
+      vulnerability factors, risk behaviours, and data sharing preferences.
+      
+      **Grain:** One row per person (from dim_person_demographics)
+      
+      **Key Features:**
+      - All status flags default to FALSE/0/'Unknown' for persons without records
+      - Complete population coverage (everyone in dim_person_demographics)
+      - Pre-calculated summary flags for vulnerability and risk
+      
+      **Status Categories:**
+      - Care Home: residential status (care home, nursing home, temporary)
+      - Homeless: homeless codes or registered at CHIP practice
+      - Carer: unpaid carer status and type
+      - Housebound: housebound status
+      - Polypharmacy: medication counts and polypharmacy flags
+      - Alcohol: alcohol status and risk level
+      - Smoking: smoking status and risk level
+      - Pregnancy: currently pregnant
+      - Data Sharing: Type 1 opt-out and secondary use allowed
+      - Looked After Child: LAC status
+      
+      **Use Case:** Join to semantic views for population health analysis
+      with complete vulnerability and risk factor coverage.
+
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    
+    columns:
+      - name: person_id
+        description: Unique person identifier
+        tests:
+          - not_null
+          - unique
+      
+      # Care Home Status
+      - name: is_care_home_resident
+        description: Currently residing in a care home
+      - name: is_nursing_home_resident
+        description: Currently residing in a nursing home
+      - name: is_temporary_care_home
+        description: Temporary care home resident
+      - name: care_home_type
+        description: Type of care home residence (Care Home, Nursing Home, Temporary)
+      
+      # Homeless Status
+      - name: is_homeless_or_chip
+        description: Has homeless code OR registered at Camden CHIP practice
+      - name: has_homeless_code
+        description: Has recorded homeless SNOMED code
+      - name: is_registered_chip
+        description: Registered at Camden Health Improvement Practice (homeless GP)
+      
+      # Carer Status
+      - name: is_carer
+        description: Recorded as unpaid carer
+      - name: carer_type
+        description: Type of carer role
+      
+      # Housebound Status
+      - name: is_housebound
+        description: Recorded as housebound
+      - name: housebound_status
+        description: Housebound status detail
+      
+      # Polypharmacy Status
+      - name: medication_count
+        description: Number of current repeat medications (BNF chapters 1-4, 6-10)
+      - name: is_polypharmacy_5plus
+        description: Has 5+ current medications (standard polypharmacy)
+      - name: is_polypharmacy_10plus
+        description: Has 10+ current medications (severe/complex polypharmacy)
+      - name: medication_count_band
+        description: Medication count band (0, 1-4, 5-9, 10-14, 15+)
+      
+      # Alcohol Status
+      - name: alcohol_status
+        description: Current alcohol status (Non-Drinker, Lower Risk, Increasing Risk, etc.)
+      - name: alcohol_risk_sort_key
+        description: Alcohol risk level (0=Unknown, 1=Non-Drinker, 7=Active Disorder)
+      - name: alcohol_requires_intervention
+        description: Requires alcohol intervention (brief or specialist)
+      
+      # Smoking Status
+      - name: smoking_status
+        description: Current smoking status (Never Smoked, Ex-Smoker, Current Smoker, Unknown)
+      - name: smoking_risk_sort_key
+        description: Smoking risk level (0=Unknown, 1=Never, 2=Ex, 3=Current)
+      
+      # Pregnancy Status
+      - name: is_currently_pregnant
+        description: Currently pregnant (based on pregnancy codes without delivery)
+      
+      # Data Sharing Status
+      - name: is_type1_opted_out
+        description: Has Type 1 opt-out (no data sharing for direct care)
+      - name: is_allowed_secondary_use
+        description: Allowed for secondary use (no Type 1 opt-out)
+      
+      # Looked After Child
+      - name: is_looked_after_child
+        description: Recorded as looked after child (under 25)
+      
+      # Summary Flags
+      - name: has_vulnerability_flag
+        description: Has any vulnerability indicator (care home, homeless, housebound, LAC)
+      - name: behavioural_risk_count
+        description: Count of behavioural risk factors (current smoker, high alcohol risk, severe polypharmacy)
