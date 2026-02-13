@@ -10,20 +10,15 @@
     ==============================
     
     Comprehensive semantic model for NCL population health analysis.
-    Combines demographics and conditions into a unified semantic layer
-    for Cortex Analyst and governed metric definitions.
+    Combines demographics, conditions, and person status into a unified
+    semantic layer for Cortex Analyst and governed metric definitions.
     
     Grain: One row per person (current state)
     
     Core Tables (full population coverage):
     - dim_person_demographics: Core demographics, registration, geography
     - dim_person_conditions: Boolean flags for all conditions + summary counts
-    - fct_person_smoking_status: Smoking status (LEFT JOIN - not all have records)
-    
-    Note: Person status tables (care_home, homeless, carer) only contain
-    rows for people WITH that status - they're excluded from this base
-    semantic view to maintain clean joins. Consider separate semantic
-    views for vulnerability analysis.
+    - dim_person_status_summary: Vulnerability, risk factors, and data sharing status
 #}
 
 TABLES(
@@ -35,14 +30,14 @@ TABLES(
         PRIMARY KEY (person_id)
         COMMENT = 'Boolean flags for all long-term conditions (QOF and non-QOF). One row per person with FALSE for no conditions.',
     
-    {{ ref('fct_person_smoking_status') }} AS smoking
+    {{ ref('dim_person_status_summary') }} AS status
         PRIMARY KEY (person_id)
-        COMMENT = 'Current and historical smoking status. Only persons with smoking observations.'
+        COMMENT = 'Vulnerability factors, risk behaviours, polypharmacy, and data sharing status. One row per person.'
 )
 
 RELATIONSHIPS(
     demographics.person_id = conditions.person_id,
-    demographics.person_id = smoking.person_id
+    demographics.person_id = status.person_id
 )
 
 DIMENSIONS(
@@ -149,8 +144,34 @@ DIMENSIONS(
     conditions.has_palliative_care COMMENT = 'On palliative care register',
     conditions.has_nafld COMMENT = 'Non-alcoholic fatty liver disease',
     
-    -- Smoking
-    smoking.smoking_status COMMENT = 'Current smoking status (Never Smoked, Ex-Smoker, Current Smoker, Unknown)'
+    -- Vulnerability Status
+    status.is_care_home_resident COMMENT = 'Residing in care home',
+    status.is_nursing_home_resident COMMENT = 'Residing in nursing home',
+    status.care_home_type COMMENT = 'Type of care home residence',
+    status.is_homeless_or_chip COMMENT = 'Homeless or registered at CHIP practice',
+    status.has_homeless_code COMMENT = 'Has recorded homeless SNOMED code',
+    status.is_housebound COMMENT = 'Recorded as housebound',
+    status.is_carer COMMENT = 'Recorded as unpaid carer',
+    status.carer_type COMMENT = 'Type of carer role',
+    status.is_looked_after_child COMMENT = 'Looked after child (under 25)',
+    status.has_vulnerability_flag COMMENT = 'Has any vulnerability indicator',
+    
+    -- Smoking & Alcohol
+    status.smoking_status COMMENT = 'Current smoking status (Never Smoked, Ex-Smoker, Current Smoker, Unknown)',
+    status.alcohol_status COMMENT = 'Current alcohol status',
+    status.alcohol_requires_intervention COMMENT = 'Requires alcohol intervention',
+    
+    -- Polypharmacy
+    status.is_polypharmacy_5plus COMMENT = 'Has 5+ current medications',
+    status.is_polypharmacy_10plus COMMENT = 'Has 10+ current medications (severe polypharmacy)',
+    status.medication_count_band COMMENT = 'Medication count band (0, 1-4, 5-9, 10-14, 15+)',
+    
+    -- Pregnancy
+    status.is_currently_pregnant COMMENT = 'Currently pregnant',
+    
+    -- Data Sharing
+    status.is_type1_opted_out COMMENT = 'Has Type 1 opt-out',
+    status.is_allowed_secondary_use COMMENT = 'Allowed for secondary use'
 )
 
 FACTS(
@@ -168,7 +189,11 @@ FACTS(
     conditions.mental_health_conditions COMMENT = 'Count of mental health conditions',
     conditions.metabolic_conditions COMMENT = 'Count of metabolic conditions',
     conditions.musculoskeletal_conditions COMMENT = 'Count of musculoskeletal conditions',
-    conditions.neurology_conditions COMMENT = 'Count of neurological conditions'
+    conditions.neurology_conditions COMMENT = 'Count of neurological conditions',
+    
+    -- Polypharmacy
+    status.medication_count COMMENT = 'Number of current medications',
+    status.behavioural_risk_count COMMENT = 'Count of behavioural risk factors'
 )
 
 METRICS(
@@ -253,14 +278,58 @@ METRICS(
         COMMENT = 'Patients with 4+ conditions (complex multimorbidity)',
     
     -- Smoking Metrics
-    COUNT(DISTINCT CASE WHEN smoking.smoking_status = 'Current Smoker' THEN demographics.person_id END) AS current_smoker_count
+    COUNT(DISTINCT CASE WHEN status.smoking_status = 'Current Smoker' THEN demographics.person_id END) AS current_smoker_count
         COMMENT = 'Current smokers',
     
-    COUNT(DISTINCT CASE WHEN smoking.smoking_status = 'Ex-Smoker' THEN demographics.person_id END) AS ex_smoker_count
+    COUNT(DISTINCT CASE WHEN status.smoking_status = 'Ex-Smoker' THEN demographics.person_id END) AS ex_smoker_count
         COMMENT = 'Ex-smokers',
     
-    COUNT(DISTINCT CASE WHEN smoking.smoking_status = 'Never Smoked' THEN demographics.person_id END) AS never_smoked_count
-        COMMENT = 'Never smoked'
+    COUNT(DISTINCT CASE WHEN status.smoking_status = 'Never Smoked' THEN demographics.person_id END) AS never_smoked_count
+        COMMENT = 'Never smoked',
+    
+    -- Alcohol Metrics
+    COUNT(DISTINCT CASE WHEN status.alcohol_requires_intervention THEN demographics.person_id END) AS alcohol_intervention_count
+        COMMENT = 'Patients requiring alcohol intervention',
+    
+    -- Vulnerability Metrics
+    COUNT(DISTINCT CASE WHEN status.is_care_home_resident THEN demographics.person_id END) AS care_home_resident_count
+        COMMENT = 'Care home residents',
+    
+    COUNT(DISTINCT CASE WHEN status.is_homeless_or_chip THEN demographics.person_id END) AS homeless_count
+        COMMENT = 'Homeless or registered at CHIP',
+    
+    COUNT(DISTINCT CASE WHEN status.is_housebound THEN demographics.person_id END) AS housebound_count
+        COMMENT = 'Housebound patients',
+    
+    COUNT(DISTINCT CASE WHEN status.is_carer THEN demographics.person_id END) AS carer_count
+        COMMENT = 'Unpaid carers',
+    
+    COUNT(DISTINCT CASE WHEN status.is_looked_after_child THEN demographics.person_id END) AS looked_after_child_count
+        COMMENT = 'Looked after children',
+    
+    COUNT(DISTINCT CASE WHEN status.has_vulnerability_flag THEN demographics.person_id END) AS vulnerable_count
+        COMMENT = 'Patients with any vulnerability flag',
+    
+    -- Polypharmacy Metrics
+    AVG(status.medication_count) AS avg_medication_count
+        COMMENT = 'Average medications per patient',
+    
+    COUNT(DISTINCT CASE WHEN status.is_polypharmacy_5plus THEN demographics.person_id END) AS polypharmacy_5plus_count
+        COMMENT = 'Patients with 5+ medications',
+    
+    COUNT(DISTINCT CASE WHEN status.is_polypharmacy_10plus THEN demographics.person_id END) AS polypharmacy_10plus_count
+        COMMENT = 'Patients with 10+ medications (severe polypharmacy)',
+    
+    -- Pregnancy Metrics
+    COUNT(DISTINCT CASE WHEN status.is_currently_pregnant THEN demographics.person_id END) AS pregnant_count
+        COMMENT = 'Currently pregnant patients',
+    
+    -- Data Sharing Metrics
+    COUNT(DISTINCT CASE WHEN status.is_type1_opted_out THEN demographics.person_id END) AS type1_optout_count
+        COMMENT = 'Patients with Type 1 opt-out',
+    
+    COUNT(DISTINCT CASE WHEN status.is_allowed_secondary_use THEN demographics.person_id END) AS secondary_use_allowed_count
+        COMMENT = 'Patients allowed for secondary use'
 )
 
-COMMENT = 'OLIDS Population Health Semantic View - NCL registered population with demographics, conditions, and smoking status. Enables natural language queries via Cortex Analyst.'
+COMMENT = 'OLIDS Population Health Semantic View - NCL registered population with demographics, conditions, vulnerability factors, and risk behaviours. Enables natural language queries via Cortex Analyst.'
