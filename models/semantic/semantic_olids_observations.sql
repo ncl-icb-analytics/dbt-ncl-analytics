@@ -94,6 +94,18 @@ FACTS(
 )
 
 DIMENSIONS(
+    -- ===================
+    -- OBSERVATION DATES (for timeliness queries)
+    -- ===================
+    bp.clinical_effective_date AS bp_date COMMENT = 'Date of latest BP reading',
+    hba1c.clinical_effective_date AS hba1c_date COMMENT = 'Date of latest HbA1c',
+    cholesterol.clinical_effective_date AS cholesterol_date COMMENT = 'Date of latest cholesterol',
+    ldl.clinical_effective_date AS ldl_date COMMENT = 'Date of latest LDL',
+    bmi.clinical_effective_date AS bmi_date COMMENT = 'Date of latest BMI',
+    egfr.clinical_effective_date AS egfr_date COMMENT = 'Date of latest eGFR',
+    qrisk.clinical_effective_date AS qrisk_date COMMENT = 'Date of latest QRISK',
+    acr.clinical_effective_date AS acr_date COMMENT = 'Date of latest ACR',
+    
     -- Core Demographics (for segmentation)
     demographics.gender COMMENT = 'Patient gender',
     demographics.age COMMENT = 'Current age in years',
