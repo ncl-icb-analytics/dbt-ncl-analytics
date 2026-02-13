@@ -1,6 +1,25 @@
 # dbt Fusion Extension Guide
 
-A practical guide to using the dbt VS Code extension in this project. The extension is powered by the dbt Fusion engine and provides IDE features that make working with dbt models faster and less error-prone.
+A practical guide to using the dbt VS Code extension in this project. The extension provides IDE features that make working with dbt models faster and less error-prone.
+
+## What is dbt Fusion?
+
+**dbt Fusion** is a ground-up rewrite of dbt in Rust, built by dbt Labs. It includes a full SQL compiler and a Language Server Protocol (LSP) that powers the VS Code extension. Because it understands dbt SQL natively — `ref()`, `source()`, macros, Jinja — it can provide features like column-level lineage, go-to-definition, and live error detection that a generic SQL extension cannot.
+
+**Fusion is currently in public preview.** Behaviour may change before the general availability release.
+
+### Fusion vs dbt Core
+
+This project uses **dbt Core** (Python, v1.9.4) for all builds, tests, and deployments. That hasn't changed. Fusion runs alongside dbt Core purely as an IDE tool — it parses your project independently to power editor features but never executes models or writes to Snowflake.
+
+| | dbt Core | dbt Fusion |
+|---|---|---|
+| **What it is** | Python-based dbt runtime | Rust-based SQL compiler and LSP |
+| **What it does** | Builds models, runs tests, generates docs | Powers VS Code extension features |
+| **When it runs** | Terminal commands (`dbt build`, `dbt test`) | Automatically in the background when VS Code is open |
+| **Writes to Snowflake?** | Yes | No (except CTE previews, which you trigger manually) |
+
+You don't need to install Fusion separately — it's bundled inside the VS Code extension.
 
 ## Installation
 
@@ -9,8 +28,6 @@ The extension is already listed as a recommended extension in the project worksp
 1. Open the Extensions panel (`Ctrl+Shift+X`)
 2. Search for **dbt** by dbt Labs (`dbtLabsInc.dbt`)
 3. Install it
-
-The extension uses the dbt Fusion engine under the hood. It does not require dbt Core to be running — it parses your project independently.
 
 ## Key Features
 
