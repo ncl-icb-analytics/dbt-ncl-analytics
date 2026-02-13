@@ -24,4 +24,4 @@ select person_id
 ,concept_display
 from ALL_SCREENING_PROMPTS
 WHERE concept_code = '382161000000102' -- SNOMED code for Bowel Screening Prompt
-QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1
+QUALIFY ROW_NUMBER() OVER (PARTITION BY person_id, clinical_effective_date ORDER BY id) = 1

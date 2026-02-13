@@ -24,4 +24,4 @@ select person_id
 ,concept_display
 from ALL_SCREENING_PROMPTS
 WHERE concept_code = '710871000000104' -- SNOMED code for Breast Screening Prompt
-QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1
+QUALIFY ROW_NUMBER() OVER (PARTITION BY person_id, clinical_effective_date ORDER BY id) = 1
