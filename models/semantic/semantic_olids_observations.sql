@@ -320,7 +320,37 @@ METRICS(
         COMMENT = 'Patients with microalbuminuria',
     
     COUNT(DISTINCT CASE WHEN acr.is_macroalbuminuria THEN demographics.person_id END) AS acr_macroalbuminuria_count
-        COMMENT = 'Patients with macroalbuminuria'
+        COMMENT = 'Patients with macroalbuminuria',
+    
+    -- ===================
+    -- AVERAGE VALUES (supplementary - use categories for population health)
+    -- ===================
+    AVG(bp.systolic_value) AS avg_systolic_bp
+        COMMENT = 'Average systolic BP (mmHg) - use bp_controlled_count for population metrics',
+    
+    AVG(bp.diastolic_value) AS avg_diastolic_bp
+        COMMENT = 'Average diastolic BP (mmHg) - use bp_controlled_count for population metrics',
+    
+    AVG(hba1c.hba1c_ifcc) AS avg_hba1c
+        COMMENT = 'Average HbA1c (mmol/mol) - use hba1c_at_qof_target_count for population metrics',
+    
+    AVG(cholesterol.cholesterol_value) AS avg_cholesterol
+        COMMENT = 'Average total cholesterol (mmol/L)',
+    
+    AVG(ldl.cholesterol_value) AS avg_ldl
+        COMMENT = 'Average LDL cholesterol (mmol/L)',
+    
+    AVG(bmi.bmi_value) AS avg_bmi
+        COMMENT = 'Average BMI (kg/m²) - use bmi category counts for population metrics',
+    
+    AVG(egfr.egfr_value) AS avg_egfr
+        COMMENT = 'Average eGFR (mL/min/1.73m²)',
+    
+    AVG(qrisk.qrisk_score) AS avg_qrisk
+        COMMENT = 'Average QRISK score (%) - use qrisk_high_risk_count for population metrics',
+    
+    AVG(acr.acr_value) AS avg_acr
+        COMMENT = 'Average urine ACR (mg/mmol)'
 )
 
-COMMENT = 'OLIDS Clinical Observations Semantic View - Clinical biomarkers with category-based metrics for population health. Focus on proportions at target rather than raw averages. Includes patient-specific BP thresholds.'
+COMMENT = 'OLIDS Clinical Observations Semantic View - Clinical biomarkers with category-based metrics for population health. Raw values available in FACTS for custom queries. Includes patient-specific BP thresholds.'
