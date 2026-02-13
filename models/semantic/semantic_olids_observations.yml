@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: semantic_olids_observations
+    description: |
+      OLIDS Clinical Observations Semantic View
+      ==========================================
+      
+      Semantic model for clinical observations and biomarkers, enabling
+      natural language queries for clinical quality and population health.
+      
+      **Purpose:**
+      - Enable natural language queries via Snowflake Cortex Analyst
+      - Provide governed metrics for clinical biomarker analysis
+      - Support quality improvement and clinical outcome monitoring
+      
+      **Grain:** One row per person (latest observation values)
+      
+      **Tables Included:**
+      - `dim_person_demographics`: Base population
+      - `int_blood_pressure_latest`: Systolic/diastolic BP, hypertensive range
+      - `int_hba1c_latest`: HbA1c with QOF control categories
+      - `int_cholesterol_latest`: Total cholesterol
+      - `int_cholesterol_ldl_latest`: LDL cholesterol
+      - `int_bmi_latest`: BMI with ethnicity-adjusted categories
+      - `int_egfr_latest`: eGFR with CKD staging
+      - `int_qrisk_latest`: QRISK cardiovascular risk score
+      - `int_urine_acr_latest`: Urine ACR (kidney function)
+      
+      **Important:** Observation tables only contain rows for patients WITH that
+      measurement. Some dimensions/facts will be NULL for patients without records.
+      
+      **Example Queries:**
+      
+      ```sql
+      -- Average HbA1c by practice
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        METRICS avg_hba1c, patients_with_hba1c
+        DIMENSIONS practice_name
+        WHERE is_active = TRUE
+      )
+      
+      -- BP control by deprivation
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        METRICS avg_systolic_bp, hypertensive_range_count
+        DIMENSIONS imd_quintile_25
+      )
+      
+      -- CVD risk distribution
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        ANALYTICS_DEV.SEMANTIC.SEMANTIC_OLIDS_OBSERVATIONS
+        METRICS high_cvd_risk_count, very_high_cvd_risk_count
+        DIMENSIONS age_band_10y, gender
+      )
+      ```
+
+    config:
+      materialized: semantic_view
+      schema: SEMANTIC
+      meta:
+        owner:
+          name: EddieDavison92
