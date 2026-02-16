@@ -1,4 +1,5 @@
 -- SET VARIABLES
+-- Only asthma and copd related codes
 {% 
     set snomed_diagnosis_list = dbt_utils.get_column_values(
         ref('stg_reference_combined_codesets'),
@@ -7,12 +8,16 @@
     ) 
 %}
 
-{% set icd10_prefix_list = ['J96', 'J4', 'J2', 'J18'] %}
+-- specific icd10 codes (lower acute, lower chromic, other resp diseases - no flu, infection, pneumonia etc.)
+{% set icd10_prefix_list = ['J96', 'J4', 'J2'] %}
 
+-- all adult and respiratory hrg codes
 {% set hrg_prefix_list = ['DZ', 'PD'] %}
 
+-- specific procedures
 {% set OPCS4_prefix_list = ['E49', 'E63.4', 'E65', 'E25', 'E36'] %}
 
+-- all respiratory
 {% set specialty_list = ['340'] %}
 
 
