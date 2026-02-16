@@ -28,6 +28,7 @@ hba1c_measurements as(
     from {{ ref('int_hba1c_all')}} hb 
     inner join inclusion_list il on il.olids_id = hb.person_id
     where hb.clinical_effective_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
+    and hb.is_valid_hba1c = true
     qualify 
         case when hb.is_ifcc then 1 when hb.is_dcct then 2 else 3 end = 
         min(case when hb.is_ifcc then 1 when hb.is_dcct then 2 else 3 end) 
@@ -82,6 +83,7 @@ egfr_measurements as(
     from {{ ref('int_egfr_all')}} egfr 
     inner join inclusion_list il on il.olids_id = egfr.person_id
     where egfr.clinical_effective_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
+    and egfr.is_valid_egfr = true
     qualify 
         row_number() over (
             partition by il.patient_id, egfr.clinical_effective_date, egfr.egfr_value
@@ -99,6 +101,7 @@ urine_acr_measurements as(
     from {{ ref('int_urine_acr_all')}} acr 
     inner join inclusion_list il on il.olids_id = acr.person_id
     where acr.clinical_effective_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
+    and acr.is_valid_acr = true
     qualify 
         row_number() over (
             partition by il.patient_id, acr.clinical_effective_date, acr.acr_value
@@ -116,6 +119,7 @@ total_cholesterol_measurements as(
     from {{ ref('int_cholesterol_all')}} cholesterol 
     inner join inclusion_list il on il.olids_id = cholesterol.person_id
     where cholesterol.clinical_effective_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
+    and cholesterol.is_valid_cholesterol = true
     qualify 
         row_number() over (
             partition by il.patient_id, cholesterol.clinical_effective_date, cholesterol.cholesterol_value
