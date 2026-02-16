@@ -2,12 +2,16 @@ version: 2
 
 models:
   - name: cltcs_measurements
-    description: "Measurements for patients in the C-LTCS cohort"
+    description: "Biomarker measurements for patients in the C-LTCS cohort. Rolling 5 year window of measurements."
     config:
       meta:
         owner:
           name: Emily Baldwin
     tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - measurement_id
+            - measurement_type
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
     columns:
@@ -17,7 +21,7 @@ models:
 
       - name: measurement_id
         data_type: number
-        description: "Unique measurement identifier from OLIDS data [id]"
+        description: "Unique measurement identifier from OLIDS data within the context of the measurement type [id]"
 
       - name: pcn_code
         data_type: varchar
