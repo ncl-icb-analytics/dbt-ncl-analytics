@@ -142,19 +142,28 @@ ldl_cholesterol_measurements as(
             partition by il.patient_id, ldl.clinical_effective_date, ldl.cholesterol_value
             order by measurement_id
         ) = 1
-)
+),
 
-select * from hba1c_measurements
-union all
-select * from blood_pressure_measurements_systolic
-union all
-select * from blood_pressure_measurements_diastolic
-union all
-select * from egfr_measurements
-union all
-select * from urine_acr_measurements
-union all
-select * from total_cholesterol_measurements
-union all
-select * from ldl_cholesterol_measurements
--- union with other measurements
+complete_measurements as (
+    select * from hba1c_measurements
+    union all
+    select * from blood_pressure_measurements_systolic
+    union all
+    select * from blood_pressure_measurements_diastolic
+    union all
+    select * from egfr_measurements
+    union all
+    select * from urine_acr_measurements
+    union all
+    select * from total_cholesterol_measurements
+    union all
+    select * from ldl_cholesterol_measurements)
+
+select patient_id, 
+    pcn_code, 
+    clinical_effective_date,
+    measurement_type, 
+    measurement_id, 
+    value, 
+    category
+from complete_measurements
