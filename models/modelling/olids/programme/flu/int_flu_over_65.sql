@@ -12,9 +12,9 @@ No clinical codes, no complex logic, just age calculation.
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ flu_campaign_config(var('flu_current_campaign', 'flu_2024_25')) }})
+    SELECT * FROM ({{ flu_current_config() }})
     UNION ALL
-    SELECT * FROM ({{ flu_campaign_config(var('flu_previous_campaign', 'flu_2023_24')) }})
+    SELECT * FROM ({{ flu_previous_config() }})
 ),
 
 -- Step 1: Find people aged 65+ at reference date (for all campaigns)
