@@ -295,13 +295,23 @@ sources:
     columns:
     - name: REPORT_ID
       data_type: TEXT
+    - name: REPORT_XML_ID
+      data_type: TEXT
     - name: REPORT_NAME
       data_type: TEXT
     - name: SEARCH_NAME
       data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: PARENT_TYPE
+      data_type: TEXT
+    - name: PARENT_REPORT_ID
+      data_type: TEXT
     - name: FOLDER_PATH
       data_type: TEXT
     - name: XML_FILE_NAME
+      data_type: TEXT
+    - name: EQUIVALENCE_FILTER_SETTING
       data_type: TEXT
     - name: PARSED_AT
       data_type: TIMESTAMP_NTZ
@@ -319,6 +329,8 @@ sources:
     - name: VALUESET_FRIENDLY_NAME
       data_type: TEXT
     - name: CODE_SYSTEM
+      data_type: TEXT
+    - name: ECL_EXPRESSION
       data_type: TEXT
     - name: EXPANSION_ERROR
       data_type: TEXT
