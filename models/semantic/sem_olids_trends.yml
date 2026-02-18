@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  - name: sem_olids_trends
+    description: |
+      OLIDS Population Trends Semantic View
+      ======================================
+      
+      Time-series semantic model for population health trend analysis.
+      Built on person_month_analysis_base with 60-month rolling window.
+      
+      **⚠️ Data Governance:** Includes OLIDS data - don't publish/share outputs without DAC approval.
+      
+      **Purpose:**
+      - Track condition prevalence trends over time
+      - Monitor incidence (new diagnoses) by period
+      - Analyse multimorbidity trends
+      - Support financial year reporting
+      
+      **Grain:** One row per person per month (active registrations only)
+      
+      **Tables Included:**
+      - `person_month_analysis_base`: 60-month rolling window with demographics and condition flags
+      
+      **Key Metrics:**
+      - Prevalence: Count of patients WITH each condition per month
+      - Incidence: Count of NEW diagnoses per month
+      - Multimorbidity: 2+ and 4+ condition counts over time
+      
+      **Time Dimensions:**
+      - `analysis_month`: Monthly grain
+      - `financial_year`, `financial_quarter`: UK financial year reporting
+      - `year_number`, `month_number`, `quarter_number`: Calendar periods
+      
+      **Example Queries:**
+      
+      ```sql
+      -- Diabetes prevalence trend by financial year
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        REPORTING.SEMANTIC.sem_olids_trends
+        METRICS diabetes_prevalence, patient_count
+        DIMENSIONS financial_year
+      )
+      
+      -- New hypertension diagnoses by PCN over last 12 months
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        REPORTING.SEMANTIC.sem_olids_trends
+        METRICS hypertension_incidence
+        DIMENSIONS pcn_name, analysis_month
+        WHERE analysis_month >= DATEADD(month, -12, CURRENT_DATE())
+      )
+      
+      -- Multimorbidity trend by deprivation
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        REPORTING.SEMANTIC.sem_olids_trends
+        METRICS multimorbidity_count, avg_conditions_per_patient
+        DIMENSIONS imd_quintile_25, financial_quarter
+      )
+      ```
+      
+      **Note:** This view covers CONDITIONS and DEMOGRAPHICS trends only.
+      For clinical biomarker analysis (BP, HbA1c), use `SEM_OLIDS_OBSERVATIONS`.
+
+    config:
+      materialized: semantic_view
+      schema: SEMANTIC
+      meta:
+        owner:
+          name: EddieDavison92
