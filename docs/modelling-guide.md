@@ -23,14 +23,14 @@ DATA_LAKE (external sources)
 └────┬──────┘ one specific thing well.
      │
      ▼
-┌───────────┐ Combines modelling components into
-│ Reporting │ analytics-ready datasets. Business logic,
-└────┬──────┘ aggregations, dimensions and facts.
+┌───────────┐ Our marts layer. Combines modelling
+│ Reporting │ components into clean, analytics-ready
+└────┬──────┘ datasets for analysts to use directly.
      │
      ▼
-┌───────────┐ Production datasets for end users.
-│ Published │ Governance and access controls applied.
-└───────────┘
+┌───────────┐ Production datasets for dashboards
+│ Published │ and end-user tools. Governance and
+└───────────┘ access controls applied.
 ```
 
 Each layer references the one above it using `{{ ref() }}`. Raw models reference sources using `{{ source() }}`.
@@ -252,9 +252,11 @@ Notice: the model does one thing — identifies dialysis encounters. It doesn't 
 **Materialisation:** Table
 **Database:** `REPORTING`
 
-Reporting models combine the modular components from the modelling layer into analytics-ready datasets. These are the tables that dashboards and analysts query directly.
+The reporting layer is our **marts layer** — it produces clean, well-structured datasets that analysts can query directly for ad-hoc analysis, exploration, and development work. Think of reporting as the curated analytical layer: it assembles modelling components into meaningful, documented datasets with proper business logic applied.
 
-Reporting models can and do contain business logic — QOF disease register calculations, clinical programme definitions, and complex eligibility criteria all live here. The difference from modelling is purpose: modelling builds focused, reusable components; reporting assembles them into the final output.
+Reporting models can and do contain business logic — QOF disease register calculations, clinical programme definitions, and complex eligibility criteria all live here. The difference from modelling is purpose: modelling builds focused, reusable components; reporting assembles them into complete analytical datasets.
+
+**Important:** Dashboards and end-user tools do **not** query reporting models directly. For a dataset to be consumed by a dashboard, it must first be promoted to the [Published layer](#published-layer), where governance controls and access policies are applied. Reporting is for **analysts** — published is for **dashboards and production consumers**.
 
 ### Common Patterns
 
@@ -308,7 +310,9 @@ models/reporting/
 **Location:** `models/published/`
 **Materialisation:** Table
 
-Published models are the final output for end users. They are split into two databases based on data governance requirements:
+The published layer is the **production-facing layer** — this is what dashboards, Power BI reports, and other end-user tools query. No dashboard should reference a reporting model directly; it must go through published first.
+
+Published models take reporting datasets and apply the necessary governance controls, access policies, and privacy filters before exposing them to consumers. They are split into two databases based on data governance requirements:
 
 | Database | Purpose | Access |
 |----------|---------|--------|
@@ -394,13 +398,15 @@ Here's a practical walkthrough for adding a new staging model.
 
 ### 1. Identify the source
 
-Check whether a raw model already exists for your source table:
+Check whether a raw model already exists for your source table. The quickest way is to use the **VS Code search bar** (`Ctrl+Shift+F`) and search for your source name within `models/raw/` — this is much faster than running a dbt command which requires compilation.
+
+Alternatively, you can use the CLI:
 
 ```bash
 dbt ls -s raw --output name | grep your_source
 ```
 
-If not, follow [Working with Sources](working-with-sources.md) to generate it.
+If a raw model doesn't exist, follow [Working with Sources](working-with-sources.md) to generate it.
 
 ### 2. Create the staging SQL
 
