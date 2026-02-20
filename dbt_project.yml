@@ -197,7 +197,17 @@ seeds:
         VERSION_DATETIME:	varchar(200)
         UPLOADED_DATETIME: varchar(200)
 
-
+    observation_unit_rules:
+      +column_types:
+        DEFINITION_ID: varchar(50)
+        DEFINITION_NAME: varchar(50)
+        CONFIG_ID: varchar(50)
+        CONFIG_VERSION: varchar(20)
+        CONVERT_FROM_UNIT: varchar(50)
+        CONVERT_TO_UNIT: varchar(20)
+        MULTIPLY_BY: float
+        PRE_OFFSET: float
+        POST_OFFSET: float
 
 snapshots:
   ncl_analytics:
