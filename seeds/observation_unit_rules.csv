@@ -8,8 +8,8 @@ DEFINITION_ID,DEFINITION_NAME,CONFIG_ID,CONFIG_VERSION,CONVERT_FROM_UNIT,CONVERT
 ,eosinophil_count,,,{cells}/uL,10*9/L,0.001,0,0
 ,eosinophil_count,,,{cells}/mL,10*9/L,0.000001,0,0
 ,eosinophil_count,,,{cells}/L,10*9/L,0.000000001,0,0
-,eosinophil_count,,,%,,,,,
+,eosinophil_count,,,%,,,,
 ,eosinophil_percentage,,,%,%,1,0,0
 ,eosinophil_percentage,,,percent,%,1,0,0
 ,eosinophil_percentage,,,{WBCs},%,1,0,0
-,eosinophil_percentage,,,10*9/L,,,,,
+,eosinophil_percentage,,,10*9/L,,,,
