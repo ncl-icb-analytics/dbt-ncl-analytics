@@ -1,0 +1,73 @@
+version: 2
+models:
+  - name: int_eosinophil_percentage
+    description: >
+      Blood eosinophil percentage observations with unit validation and data quality flags.
+      One row per observation using the EOS_PERCENT cluster. Uses stricter logic than the
+      count model: only accepted units (%, percent, {WBCs}) are valid. All other units
+      receive NONE confidence. Standard unit: %.
+    columns:
+      - name: id
+        description: Unique observation identifier
+        tests:
+          - not_null
+      - name: person_id
+        description: Person identifier
+        tests:
+          - not_null
+      - name: clinical_effective_date
+        description: Date of observation
+        tests:
+          - not_null
+      - name: concept_code
+        description: SNOMED code for the observation
+      - name: code_description
+        description: SNOMED code description
+      - name: source_cluster_id
+        description: Cluster ID from get_observations
+      - name: original_result_value
+        description: Raw value from source data before any conversion
+      - name: original_result_unit_display
+        description: Raw unit display text from source data
+      - name: original_result_unit_code
+        description: Raw unit code from source data
+      - name: expected_measurement_type
+        description: Always PERCENTAGE for this model
+      - name: inferred_unit
+        description: Standardised unit after inference (% or NULL if NONE confidence)
+      - name: inferred_value
+        description: Standardised numeric value (unchanged from original for percentages)
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100
+              inclusive: true
+              where: "is_valid_eosinophil = TRUE"
+      - name: value_was_converted
+        description: Always FALSE for percentage model (no value conversions applied)
+      - name: unit_was_changed
+        description: TRUE if inferred_unit differs from original_result_unit_code
+      - name: conversion_reason
+        description: Human-readable explanation of validation action taken
+      - name: confidence
+        description: Confidence level in the inferred value
+        tests:
+          - accepted_values:
+              values: ['VERY_HIGH', 'HIGH', 'NONE']
+      - name: is_negative
+        description: TRUE if inferred value is negative
+      - name: is_extreme_outlier
+        description: TRUE if inferred value exceeds 80%
+      - name: is_implausible
+        description: TRUE if value is negative, extreme outlier, or NONE confidence
+      - name: is_valid_eosinophil
+        description: TRUE if inferred value is plausible and usable for analysis
+      - name: eosinophil_category
+        description: Clinical category based on inferred percentage value
+        tests:
+          - accepted_values:
+              values:
+                - 'Invalid'
+                - 'Normal'
+                - 'Elevated'
+                - 'Very Elevated'
