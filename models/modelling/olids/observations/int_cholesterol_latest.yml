@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_cholesterol_latest
     description: 'Most recent valid cholesterol measurement per person for cardiovascular

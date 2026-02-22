@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_schedule
     description: Practitioner schedules and availability for appointments. 

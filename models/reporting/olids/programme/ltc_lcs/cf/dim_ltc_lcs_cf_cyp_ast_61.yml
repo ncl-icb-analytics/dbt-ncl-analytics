@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_cyp_ast_61
     description: 'Case finding for children with possible asthma diagnosis.

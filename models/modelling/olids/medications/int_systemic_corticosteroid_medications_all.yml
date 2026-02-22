@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_systemic_corticosteroid_medications_all
     description: 'Systemic corticosteroid medication orders using BNF classification

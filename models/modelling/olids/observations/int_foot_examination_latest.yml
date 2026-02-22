@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_foot_examination_latest
     description: 'Most recent diabetic foot examination status per person for diabetes

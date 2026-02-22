@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_cvd_observations
     description: 'Cardiovascular disease-relevant observations for Long Term Conditions

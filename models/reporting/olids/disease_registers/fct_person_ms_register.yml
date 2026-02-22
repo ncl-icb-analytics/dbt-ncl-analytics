@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_person_ms_register
     description: 'Multiple sclerosis register for patients with MS diagnosis.

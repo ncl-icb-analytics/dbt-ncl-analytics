@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_referral_ndpp_all
     description: 'NHS Diabetes Prevention Programme outcomes using PCD REFSET DPPOFF_COD.

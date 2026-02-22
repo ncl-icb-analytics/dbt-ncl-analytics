@@ -1,4 +1,3 @@
-version: 2
 sources:
 - name: dictionary_snomed
   database: '"Dictionary"'

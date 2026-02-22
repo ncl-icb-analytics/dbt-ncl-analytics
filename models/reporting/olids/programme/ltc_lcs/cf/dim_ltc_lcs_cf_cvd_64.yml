@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_64
     description: 'CVD case finding priority (d): Patients with QRisk ≥10% not on statins.

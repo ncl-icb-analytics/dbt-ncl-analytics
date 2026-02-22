@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_ltc_lcs_valuesets
     description: Valuesets containing metadata and friendly names for code 

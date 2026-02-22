@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_bp_thresholds
     description: Blood pressure threshold rules for different programmes and 

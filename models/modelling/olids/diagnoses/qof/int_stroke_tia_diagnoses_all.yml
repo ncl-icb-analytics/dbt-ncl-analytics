@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_stroke_tia_diagnoses_all
     description: 'Stroke and TIA diagnosis observations for QOF register data collection

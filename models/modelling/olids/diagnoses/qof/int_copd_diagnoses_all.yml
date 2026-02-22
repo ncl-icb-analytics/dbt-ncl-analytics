@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_copd_diagnoses_all
     description: 'COPD diagnosis and resolution observations for QOF register management.

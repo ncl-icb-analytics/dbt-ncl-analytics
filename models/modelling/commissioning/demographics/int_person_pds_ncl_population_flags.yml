@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_person_pds_ncl_population_flags

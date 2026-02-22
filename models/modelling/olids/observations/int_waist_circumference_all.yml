@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_waist_circumference_all
     description: 'Waist circumference measurements for cardiovascular and metabolic

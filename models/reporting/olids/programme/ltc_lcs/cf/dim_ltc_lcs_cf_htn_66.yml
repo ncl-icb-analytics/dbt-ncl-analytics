@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_htn_66
     description: 'Case finding for stage 1 hypertension without cardiovascular risk

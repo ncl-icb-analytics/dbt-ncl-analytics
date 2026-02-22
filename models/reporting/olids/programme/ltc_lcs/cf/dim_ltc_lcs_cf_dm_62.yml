@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_62
     description: 'Mart: LTC LCS Case Finding DM_62 - Identifies patients with gestational

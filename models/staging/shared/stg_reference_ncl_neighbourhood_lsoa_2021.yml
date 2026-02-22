@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_ncl_neighbourhood_lsoa_2021
     description: LSOA 2021 to NCL neighbourhood mapping

@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: population_health_needs_base

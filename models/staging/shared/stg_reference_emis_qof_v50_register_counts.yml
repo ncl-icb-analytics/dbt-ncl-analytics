@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_emis_qof_v50_register_counts
     description: QOF v50 register counts from EMIS as of 2025-11-04. Filtered to

@@ -1,4 +1,3 @@
-version: 2
 models:
 - name: dim_snapshot_person_pds_demographics
   config:

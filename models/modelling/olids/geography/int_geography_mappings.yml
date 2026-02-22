@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_geography_mappings
     description: 'Geographic code to name mappings for ICBs, local authorities, LSOAs, and MSOAs.

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_valproate_neurology
     description: 'Neurology-related events aggregation for valproate monitoring.

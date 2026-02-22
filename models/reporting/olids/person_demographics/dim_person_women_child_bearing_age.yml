@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_women_child_bearing_age
     description: 'Individuals of child-bearing age for clinical safety and population
