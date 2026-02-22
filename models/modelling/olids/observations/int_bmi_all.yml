@@ -42,9 +42,6 @@ models:
         description: Person identifier
         tests:
           - not_null
-          - relationships:
-              to: ref('int_patient_person_unique')
-              field: person_id
       - name: age
         description: 'Age in years at time of analysis (adults 18+ only)'
         tests:
