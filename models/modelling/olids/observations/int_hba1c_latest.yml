@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_hba1c_latest
     description: 'Intermediate: Latest HbA1c Observations - Most recent valid HbA1c

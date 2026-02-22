@@ -1,4 +1,3 @@
-version: 2
 sources:
 - name: adult_social_care_cld
   database: '"DATA_LAKE"'

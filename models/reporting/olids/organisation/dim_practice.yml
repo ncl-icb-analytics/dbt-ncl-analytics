@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_practice
     description: 'Practice dimension with organisational hierarchy spanning multiple

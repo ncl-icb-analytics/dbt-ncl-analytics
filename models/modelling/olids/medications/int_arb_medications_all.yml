@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_arb_medications_all
     description: 'Angiotensin receptor blocker medication orders for cardiovascular

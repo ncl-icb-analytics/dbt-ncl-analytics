@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_ltc_lcs_population_summary
     description: 'Demographic cross-tabulation of LTC case finding indicators for

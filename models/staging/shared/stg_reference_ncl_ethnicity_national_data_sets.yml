@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_ncl_ethnicity_national_data_sets
     description: Patient ethnicity derived from national data sets

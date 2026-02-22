@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_nhs_health_check_all
     description: 'NHS Health Check completion events for programme analysis and QOF

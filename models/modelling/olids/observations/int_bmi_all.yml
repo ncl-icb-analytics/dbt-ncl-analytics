@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_bmi_all
     description: 'BMI measurements for adults aged 18+ with ethnicity-adjusted categorisation

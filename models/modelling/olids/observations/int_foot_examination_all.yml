@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_foot_examination_all
     description: 'Diabetic foot examination procedures with risk assessment for diabetes

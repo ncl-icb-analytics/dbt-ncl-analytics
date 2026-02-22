@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_ltc_lcs_expanded_concepts
     description: Expanded SNOMED codes from valuesets after terminology server 

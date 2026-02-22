@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_diuretic_medications_all
     description: 'Diuretic medication orders using BNF classification for cardiovascular

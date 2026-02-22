@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: compare_emis_qof_vs_pit_registers

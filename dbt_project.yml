@@ -183,4 +183,4 @@ seeds:
 snapshots:
   ncl_analytics:
     +database: "MODELLING"
-    +schema: "DBT_SNAPSHOTS"
+    +target_schema: "DBT_SNAPSHOTS"

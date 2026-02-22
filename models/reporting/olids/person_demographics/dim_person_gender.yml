@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_gender
     description: 'Gender demographics for all persons with standardised three-category classification.

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_smoking_status_latest
     description: 'Most recent smoking status per person for clinical decision support

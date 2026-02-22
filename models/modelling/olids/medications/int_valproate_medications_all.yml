@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_valproate_medications_all
     description: 'Valproate medication orders for seizure management and bipolar disorder

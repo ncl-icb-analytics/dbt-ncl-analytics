@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: practices_not_yet_in_olids_direct_care

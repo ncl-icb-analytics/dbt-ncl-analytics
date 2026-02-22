@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_olids_regular_registrations_at_point_in_time

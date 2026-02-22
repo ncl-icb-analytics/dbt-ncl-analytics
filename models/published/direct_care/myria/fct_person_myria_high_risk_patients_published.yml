@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: fct_person_myria_high_risk_patients_published

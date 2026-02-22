@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: raw_registries_births_births

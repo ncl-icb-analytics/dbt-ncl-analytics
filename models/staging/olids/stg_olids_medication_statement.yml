@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_medication_statement
     description: Medication statements representing current or historical 

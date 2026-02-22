@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: int_smi_longlives_weight_mgmt
     description: 'Determine weight management interventions for Longer Lives campaign

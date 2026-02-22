@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_ncl_lsoa_2021_ward_2025
     description: LSOA 2021 to ward 2025 and local authority 2025 mapping

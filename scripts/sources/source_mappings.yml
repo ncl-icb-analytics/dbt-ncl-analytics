@@ -10,7 +10,6 @@
 #     raw_prefix: Prefix for raw layer models (optional, defaults to raw_{source_name})
 #     domain: Which domain folder to create raw models in (commissioning, olids, shared)
 
-version: 1
 
 sources:
   # ========================================

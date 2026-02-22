@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_childhood_imms_codes
     description: Childhood immunisation SNOMED codes mapped to vaccine types and

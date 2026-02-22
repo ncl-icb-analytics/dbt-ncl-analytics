@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_64
     description: 'Case finding for patients with specific conditions requiring eGFR

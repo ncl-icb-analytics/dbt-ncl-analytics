@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_spirometry_all
     description: 'Spirometry test results (FEV1/FVC ratios) for COPD diagnosis and

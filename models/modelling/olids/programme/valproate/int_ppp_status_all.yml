@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ppp_status_all
     description: 'Pregnancy Prevention Programme status events for valproate patient

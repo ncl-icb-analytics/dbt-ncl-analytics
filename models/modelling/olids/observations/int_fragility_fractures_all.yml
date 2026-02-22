@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_fragility_fractures_all
     description: 'Fragility fracture observations for QOF osteoporosis register data

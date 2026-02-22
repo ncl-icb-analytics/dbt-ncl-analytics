@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_patient_registrations
     description: Intermediate table containing clean patient registration 

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_person_mnd_register
     description: 'Motor neurone disease register for patients with MND diagnosis.

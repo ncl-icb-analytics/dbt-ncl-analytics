@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_person_pmi_combined

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_allergy_medications_all
     description: 'Allergy medication orders using BNF classification for antihistamines

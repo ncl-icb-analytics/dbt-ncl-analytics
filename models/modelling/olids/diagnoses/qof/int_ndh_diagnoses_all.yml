@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ndh_diagnoses_all
     description: 'Non-diabetic hyperglycaemia diagnosis observations for QOF register

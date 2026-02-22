@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_rheumatoid_arthritis_diagnoses_all
     description: 'Rheumatoid arthritis diagnosis observations for QOF register data
