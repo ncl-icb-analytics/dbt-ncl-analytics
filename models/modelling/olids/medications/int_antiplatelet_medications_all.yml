@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_antiplatelet_medications_all
     description: 'Antiplatelet medication orders using BNF classification for cardiovascular

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_person_ltc_summary
     description: 'Long-term conditions summary combining all QOF and clinical disease

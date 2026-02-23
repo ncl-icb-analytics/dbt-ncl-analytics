@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_waist_circumference_latest
     description: 'Most recent valid waist circumference measurement per person for

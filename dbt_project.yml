@@ -24,13 +24,13 @@ model-paths: ["models"]
 vars:
   dbt_audit_schema: "test_audit"
   auto_schema_domains: ['olids']
-  qof_reference_date: "CURRENT_DATE"  # Used in yml descriptions + can override via --vars
+  qof_reference_date: "2025-11-04"  # EMIS QOF extract date, override via --vars
   
   # Elementary observability
-  disable_dbt_artifacts_autoupload: "{{ should_disable_dbt_artifacts_autoupload() }}"
-  disable_run_results: "{{ should_disable_run_results() }}"
-  disable_tests_results: "{{ should_disable_tests_results() }}"
-  disable_dbt_invocation_autoupload: "{{ should_disable_dbt_invocation_autoupload() }}"
+  disable_dbt_artifacts_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_run_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_tests_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
+  disable_dbt_invocation_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
 
 # Configure test failure storage (only for failures)
 tests:
@@ -183,4 +183,4 @@ seeds:
 snapshots:
   ncl_analytics:
     +database: "MODELLING"
-    +schema: "DBT_SNAPSHOTS"
+    +target_schema: "DBT_SNAPSHOTS"

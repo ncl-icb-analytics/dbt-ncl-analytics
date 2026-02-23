@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: int_valproate_base
     description: Valproate base population for dashboard one row per person

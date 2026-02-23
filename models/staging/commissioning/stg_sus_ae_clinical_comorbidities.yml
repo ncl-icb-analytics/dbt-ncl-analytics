@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_sus_ae_clinical_comorbidities
     description: SUS A&E clinical comorbidities (SNOMED CT)

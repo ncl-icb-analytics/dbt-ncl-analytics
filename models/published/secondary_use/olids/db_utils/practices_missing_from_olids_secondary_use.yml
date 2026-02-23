@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: practices_missing_from_olids_secondary_use

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_person_parkinsons_register
     description: 'Parkinsons disease register for patients with Parkinsons diagnosis.

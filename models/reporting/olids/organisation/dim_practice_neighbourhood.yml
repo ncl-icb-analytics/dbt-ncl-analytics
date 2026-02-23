@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_practice_neighbourhood
     description: 'Practice geographic context with local authority and neighbourhood

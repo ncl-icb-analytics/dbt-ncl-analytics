@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_antihypertensive_medications_all
     description: |

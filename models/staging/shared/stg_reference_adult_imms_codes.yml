@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: stg_reference_adult_imms_codes
     description: Adult immunisation SNOMED codes mapped to vaccine types and 

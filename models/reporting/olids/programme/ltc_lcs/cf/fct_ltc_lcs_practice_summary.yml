@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_ltc_lcs_practice_summary
     description: 'Practice-level LTC case finding indicators aggregation optimised

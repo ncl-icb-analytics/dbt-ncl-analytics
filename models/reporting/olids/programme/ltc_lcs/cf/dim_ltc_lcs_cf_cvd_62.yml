@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_62
     description: 'CVD case finding priority (b): Patients with moderate cardiovascular

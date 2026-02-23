@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_dictionary_ecds_diagnosis
     description: ECDS diagnosis reference data with ICD-10/11 mappings and 

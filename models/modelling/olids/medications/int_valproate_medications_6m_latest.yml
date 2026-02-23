@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_valproate_medications_6m_latest
     description: 'Most recent valproate medication order per person from the last

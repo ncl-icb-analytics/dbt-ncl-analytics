@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_health_social_care_worker
     description: 'Flu vaccination eligibility for health and social care workers with

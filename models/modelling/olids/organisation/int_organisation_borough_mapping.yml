@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_organisation_borough_mapping
     description: 'Organisation borough mapping for North Central London practices

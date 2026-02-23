@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ethnicity_all
     description: Intermediate table containing all dated Observation records 

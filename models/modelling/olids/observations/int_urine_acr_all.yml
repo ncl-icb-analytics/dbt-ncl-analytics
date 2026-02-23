@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_urine_acr_all
     description: 'Albumin-to-creatinine ratio measurements for kidney function assessment

@@ -9,9 +9,10 @@ Override at runtime:
 */
 
 {% macro qof_reference_date() %}
-    {%- if var('qof_reference_date', none) -%}
-        '{{ var('qof_reference_date') }}'::DATE
-    {%- else -%}
+    {%- set ref_date = var('qof_reference_date', '2025-11-04') -%}
+    {%- if ref_date | upper in ('CURRENT_DATE', 'CURRENT_DATE()') -%}
         CURRENT_DATE()
+    {%- else -%}
+        '{{ ref_date }}'::DATE
     {%- endif -%}
 {% endmacro %}

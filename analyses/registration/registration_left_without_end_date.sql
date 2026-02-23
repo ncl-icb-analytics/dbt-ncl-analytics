@@ -18,7 +18,7 @@ patient_to_person AS (
 
 left_no_end AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         eoc.patient_id,
         ptp.person_id,
         eoc.episode_of_care_start_date,
@@ -35,7 +35,7 @@ left_no_end AS (
 -- Also check null-status episodes without end dates
 null_status_no_end AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         eoc.patient_id,
         ptp.person_id,
         eoc.episode_of_care_start_date,

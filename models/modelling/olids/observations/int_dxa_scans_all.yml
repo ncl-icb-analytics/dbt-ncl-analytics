@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_dxa_scans_all
     description: 'DXA scan procedures and T-score measurements for osteoporosis diagnosis

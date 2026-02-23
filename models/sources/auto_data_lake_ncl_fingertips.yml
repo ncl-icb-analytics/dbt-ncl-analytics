@@ -1,4 +1,3 @@
-version: 2
 sources:
 - name: reference_fingertips
   database: '"DATA_LAKE__NCL"'

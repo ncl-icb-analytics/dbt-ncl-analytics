@@ -3729,7 +3729,7 @@ sources:
       data_type: TEXT
     - name: AGE_BAND_5YEAR
       data_type: TEXT
-    - name: AGE_BAND_5YEAR_POP_HEALTH
+    - name: AGE_BAND_5YR
       data_type: TEXT
     - name: YEAR
       data_type: TEXT

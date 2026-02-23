@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_patient_uprn
     description: Patient address matching to Unique Property Reference Numbers 

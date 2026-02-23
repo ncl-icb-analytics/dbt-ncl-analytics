@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_61
     description: 'Mart: LTC LCS Case Finding CKD_61 - Identifies patients with two

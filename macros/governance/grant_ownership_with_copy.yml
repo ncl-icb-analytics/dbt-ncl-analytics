@@ -1,4 +1,3 @@
-version: 2
 
 macros:
   - name: grant_ownership_with_copy

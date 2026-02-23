@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: int_smi_longlives_weight_mgmt_latest
     description: 'Determine latest weight management interventions for Longer Lives

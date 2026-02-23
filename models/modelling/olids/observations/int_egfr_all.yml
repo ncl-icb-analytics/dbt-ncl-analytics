@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_egfr_all
     description: 'Estimated glomerular filtration rate measurements for kidney function

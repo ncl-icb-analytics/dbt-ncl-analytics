@@ -25,7 +25,7 @@ deceased AS (
 -- Method 1: SNOMED code only (original)
 m1 AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed
@@ -41,7 +41,7 @@ m1 AS (
 -- Method 2: SNOMED code + display = 'Regular'
 m2 AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed
@@ -58,7 +58,7 @@ m2 AS (
 -- Method 3: source_code = 'Regular' (no status filter)
 m3 AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed
@@ -74,7 +74,7 @@ m3 AS (
 -- Method 4: source_code = 'Regular' + status = 'Registered'
 m4 AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed

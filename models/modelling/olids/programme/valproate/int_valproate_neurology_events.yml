@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_valproate_neurology_events
     description: 'Neurology-related events from observations using valproate programme

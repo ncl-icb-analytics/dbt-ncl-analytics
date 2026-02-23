@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_65
     description: 'CVD case finding priority (e): Patients with QRisk ≥10% not on high-intensity

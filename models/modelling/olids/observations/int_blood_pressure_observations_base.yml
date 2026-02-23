@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_blood_pressure_observations_base
     description: |

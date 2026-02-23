@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_clinical_safety_valproate_pregnancy
     description: 'Clinical safety alert identifying individuals of child-bearing age

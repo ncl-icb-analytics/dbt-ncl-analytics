@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: covid_flu_dashboard_base

@@ -15,7 +15,7 @@ regular_episodes AS (
         eoc.id,
         eoc.patient_id,
         ptp.person_id,
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         eoc.episode_of_care_start_date,
         eoc.episode_of_care_end_date,
         eoc.episode_type_source_code,
@@ -60,21 +60,29 @@ detail AS (
         pm.current_episode_count
     FROM current_episodes ce
     INNER JOIN persons_multiple pm ON ce.person_id = pm.person_id
-)
+),
 
--- Summary: how many multiple-registration persons by combination of reasons
-SELECT
-    current_episode_count,
-    LISTAGG(DISTINCT current_reason, ' + ') WITHIN GROUP (ORDER BY current_reason) AS reason_combination,
-    COUNT(DISTINCT person_id) AS distinct_persons,
-    COUNT(*) AS total_episodes
-FROM (
-    -- Get reason combinations per person
+-- Per-person reason combinations
+person_reasons AS (
     SELECT
         person_id,
         current_episode_count,
-        current_reason
+        LISTAGG(DISTINCT current_reason, ' + ') WITHIN GROUP (ORDER BY current_reason) AS reason_combination
     FROM detail
+    GROUP BY person_id, current_episode_count
+),
+
+-- Summary: how many multiple-registration persons by combination of reasons
+summary AS (
+    SELECT
+        current_episode_count,
+        reason_combination,
+        COUNT(DISTINCT person_id) AS distinct_persons,
+        SUM(current_episode_count) AS total_episodes
+    FROM person_reasons
+    GROUP BY current_episode_count, reason_combination
 )
-GROUP BY current_episode_count, reason_combination
+
+SELECT *
+FROM summary
 ORDER BY distinct_persons DESC

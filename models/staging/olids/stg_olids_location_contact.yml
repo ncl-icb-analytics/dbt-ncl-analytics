@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_location_contact
     description: Contact details for healthcare locations. Deduplicated by id 

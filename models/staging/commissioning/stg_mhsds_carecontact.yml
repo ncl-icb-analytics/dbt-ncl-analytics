@@ -1,4 +1,3 @@
-version: 3
 models:
   - name: stg_mhsds_carecontact
     description: 'Mental Health Services Data Set (MHSDS) care contacts'
@@ -11,6 +10,8 @@ models:
           combination_of_columns:
             - uniq_serv_req_id
             - uniq_care_cont_id
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
     columns:
       - name: uniq_care_cont_id
         description: MHSDS care contact identifier
@@ -37,6 +38,3 @@ models:
         description: The total duration of the direct clinical contact at a CARE CONTACT in minutes, excluding any administration time prior to or after the CARE CONTACT and the CARE PROFESSIONAL's travelling time to the CARE CONTACT. CLINICAL CONTACT DURATION OF CARE CONTACT includes the time spent on the different CARE ACTIVITIES that may be performed in a single CARE CONTACT. The duration of each CARE ACTIVITY is recorded in CLINICAL CONTACT DURATION OF CARE ACTIVITY. This should be recorded in minutes.
  
       - name: dm_icb_commissioner
-    tests:
-      - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1

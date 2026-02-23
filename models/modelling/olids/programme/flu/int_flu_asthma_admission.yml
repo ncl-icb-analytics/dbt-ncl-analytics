@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_asthma_admission
     description: 'Flu vaccination eligibility for people with emergency asthma admission

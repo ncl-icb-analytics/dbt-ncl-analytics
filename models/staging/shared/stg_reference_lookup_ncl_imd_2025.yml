@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_lookup_ncl_imd_2025
     description: IMD 2025 (Index of Multiple Deprivation) reference data mapped 

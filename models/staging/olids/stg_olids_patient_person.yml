@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_patient_person
     description: Junction table linking patient records to person records for 

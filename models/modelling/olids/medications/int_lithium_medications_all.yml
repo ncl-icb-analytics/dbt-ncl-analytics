@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_lithium_medications_all
     description: 'Lithium medication orders using BNF classification for bipolar disorder

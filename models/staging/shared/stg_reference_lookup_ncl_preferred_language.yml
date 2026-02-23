@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_lookup_ncl_preferred_language
     description: Preferred language reference data from lookup with ISO origin 

@@ -1,4 +1,3 @@
-version: 2
 # Manual sources - these override auto-generation
 # If a source is defined here, it will be used instead of auto-generating from metadata
 # Sources can be fully manual (not in source_mappings.yml) or override auto-generated sources (in source_mappings.yml)

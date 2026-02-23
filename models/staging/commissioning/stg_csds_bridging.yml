@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_csds_bridging
     description: Bridging table linking CSDS person identifiers to Pseudonymised

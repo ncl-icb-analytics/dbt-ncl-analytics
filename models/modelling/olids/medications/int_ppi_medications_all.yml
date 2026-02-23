@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ppi_medications_all
     description: 'PPI medication orders using BNF classification for gastric acid
