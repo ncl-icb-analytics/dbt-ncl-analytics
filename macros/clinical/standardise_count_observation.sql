@@ -64,6 +64,15 @@ unit_rules AS (
     WHERE DEFINITION_NAME = '{{ measurement }}'
 ),
 
+-- Look up the canonical target unit for this measurement (e.g. '10*9/L')
+-- Used as fallback for unknown units where seed_convert_to_unit is NULL
+canonical_unit AS (
+    SELECT CONVERT_TO_UNIT
+    FROM unit_rules
+    WHERE CONVERT_FROM_UNIT = CONVERT_TO_UNIT AND MULTIPLY_BY = 1
+    LIMIT 1
+),
+
 -- Join observations to seed and classify each record's unit status
 classified AS (
     SELECT
@@ -163,9 +172,9 @@ standardised AS (
         CASE
             WHEN unit_status = 'excluded'
                 THEN NULL
-            -- Pass 1: use the seed's target unit (or NULL for unknown units that still fall in range)
+            -- Pass 1: use the seed's target unit, falling back to canonical unit for unknown units
             WHEN numeric_value BETWEEN 0 AND {{ max_plausible_value }} AND unit_status != 'excluded'
-                THEN seed_convert_to_unit
+                THEN COALESCE(seed_convert_to_unit, (SELECT CONVERT_TO_UNIT FROM canonical_unit))
             -- Pass 2
             WHEN unit_status = 'known' AND seed_multiply_by != 1
              AND ((numeric_value + COALESCE(seed_pre_offset, 0)) * seed_multiply_by + COALESCE(seed_post_offset, 0)) BETWEEN 0 AND {{ max_plausible_value }}
