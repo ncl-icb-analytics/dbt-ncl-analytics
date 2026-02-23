@@ -24,7 +24,7 @@ model-paths: ["models"]
 vars:
   dbt_audit_schema: "test_audit"
   auto_schema_domains: ['olids']
-  qof_reference_date: "CURRENT_DATE"  # Used in yml descriptions + can override via --vars
+  qof_reference_date: "2025-11-04"  # EMIS QOF extract date, override via --vars
   
   # Elementary observability
   disable_dbt_artifacts_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"

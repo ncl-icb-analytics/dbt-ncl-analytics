@@ -1,6 +1,6 @@
 models:
   - name: stg_olids_episode_of_care
-    description: Episodes of care tracking patient care pathways over time. 
+    description: Episodes of care tracking patient care pathways over time.
       Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
@@ -12,9 +12,12 @@ models:
         tests:
           - unique
           - not_null
-      - name: organisation_id
-        description: Foreign key to organisation.id - organisation managing the 
-          episode
+      - name: organisation_id_publisher
+        description: Foreign key to organisation.id - data controller organisation
+          that published the record
+      - name: organisation_id_managing
+        description: Foreign key to organisation.id - organisation delivering the
+          episode of care
       - name: patient_id
         description: Foreign key to patient.id
       - name: person_id
@@ -28,7 +31,7 @@ models:
       - name: episode_type_source_code
         description: Source code for the episode type concept (from concept map)
       - name: episode_type_source_display
-        description: Source display name for the episode type concept (from 
+        description: Source display name for the episode type concept (from
           concept map)
       - name: episode_status_source_concept_id
         description: Foreign key to concept.id - status of the episode (planned,
@@ -38,34 +41,37 @@ models:
       - name: episode_status_display
         description: Display name for the episode status concept
       - name: episode_status_source_code
-        description: Source code for the episode status concept (from concept 
+        description: Source code for the episode status concept (from concept
           map)
       - name: episode_status_source_display
-        description: Source display name for the episode status concept (from 
+        description: Source display name for the episode status concept (from
           concept map)
       - name: episode_of_care_start_date
         description: Start date of the episode of care
       - name: episode_of_care_end_date
         description: End date of the episode of care
       - name: care_manager_practitioner_id
-        description: Foreign key to practitioner.id - care manager responsible 
+        description: Foreign key to practitioner.id - care manager responsible
           for the episode
       - name: lds_id
         description: LDS system identifier
-      - name: record_owner_organisation_code
-        description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
-        description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
+      - name: organisation_code_publisher
+        description: ODS code of the data controller organisation that published
+          the record
+      - name: organisation_code_managing
+        description: ODS code of the organisation delivering the episode of care
+      - name: lds_datetime_first_acquired
+        description: Datetime when source record was first acquired by LDS
+      - name: lds_datetime_update_acquired
+        description: Datetime when source record update was acquired by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
+        description: LDS datetime stamp from which the record version was
           correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
+        description: Deletion flag - records with TRUE are filtered out in this
           staging layer
-      - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
+      - name: lds_source_record_id
+        description: LDS assigned unique identifier for the source record
           version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:

@@ -25,7 +25,7 @@ deceased AS (
 -- All registration-type episodes active at reference date (old method: SNOMED code only)
 method_snomed_code AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed
@@ -41,7 +41,7 @@ method_snomed_code AS (
 -- Regular type only (old method: SNOMED code + display)
 method_regular_display AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed
@@ -58,7 +58,7 @@ method_regular_display AS (
 -- Regular source code only (no status filter)
 method_regular_source AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed
@@ -74,7 +74,7 @@ method_regular_source AS (
 -- Regular + Registered status (current method)
 method_regular_registered AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS patient_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed

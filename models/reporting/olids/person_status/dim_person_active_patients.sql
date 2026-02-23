@@ -20,7 +20,7 @@ current_registrations AS (
     SELECT
         ipr.person_id,
         ipr.patient_id,
-        ipr.organisation_id AS current_practice_id,
+        ipr.organisation_id_publisher AS current_practice_id,
         ipr.practice_name AS current_practice_name,
         ipr.practice_ods_code AS current_practice_code,
         ipr.registration_start_date AS current_registration_start,

@@ -15,7 +15,7 @@ regular_episodes AS (
         eoc.id,
         eoc.patient_id,
         ptp.person_id,
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         eoc.episode_of_care_start_date,
         eoc.episode_of_care_end_date,
         eoc.episode_type_source_code,
