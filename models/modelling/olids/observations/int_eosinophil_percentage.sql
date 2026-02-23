@@ -129,7 +129,6 @@ SELECT
     confidence,
     is_negative,
     is_extreme_outlier,
-    is_implausible,
     is_valid_eosinophil,
     CASE
         WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Invalid'

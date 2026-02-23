@@ -58,8 +58,6 @@ models:
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
         description: TRUE if inferred value exceeds 100 x10*9/L
-      - name: is_implausible
-        description: TRUE if value is negative, extreme outlier, or NONE confidence
       - name: is_valid_eosinophil
         description: TRUE if inferred value is plausible and usable for analysis
       - name: eosinophil_category

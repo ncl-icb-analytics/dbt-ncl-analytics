@@ -27,7 +27,6 @@ SELECT
     unit_was_changed,
     is_negative,
     is_extreme_outlier,
-    is_implausible,
     is_valid_eosinophil,
     eosinophil_category,
 
