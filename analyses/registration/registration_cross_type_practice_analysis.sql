@@ -28,7 +28,7 @@ active_episodes AS (
     SELECT
         eoc.id,
         ptp.person_id,
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         eoc.episode_type_source_code,
         eoc.episode_status_source_code,
         eoc.episode_type_code
