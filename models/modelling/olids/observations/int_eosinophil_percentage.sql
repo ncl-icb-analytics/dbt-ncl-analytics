@@ -104,7 +104,6 @@ flagged AS (
         *,
         inferred_value < 0 AS is_negative,
         inferred_value > 80 AS is_extreme_outlier,
-        (inferred_value < 0 OR inferred_value > 80 OR confidence = 'NONE') AS is_implausible,
         (NOT (inferred_value < 0 OR inferred_value > 80 OR confidence = 'NONE')
          AND inferred_value IS NOT NULL) AS is_valid_eosinophil
     FROM validated
