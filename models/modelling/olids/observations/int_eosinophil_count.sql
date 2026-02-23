@@ -45,7 +45,6 @@ validated AS (
         *,
         inferred_value < 0 AS is_negative,
         inferred_value > 100 AS is_extreme_outlier,
-        (inferred_value < 0 OR inferred_value > 100 OR confidence = 'NONE') AS is_implausible,
         (NOT (inferred_value < 0 OR inferred_value > 100 OR confidence = 'NONE')
          AND inferred_value IS NOT NULL) AS is_valid_eosinophil
     FROM standardised
@@ -70,7 +69,6 @@ SELECT
     confidence,
     is_negative,
     is_extreme_outlier,
-    is_implausible,
     is_valid_eosinophil,
     CASE
         WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Invalid'
