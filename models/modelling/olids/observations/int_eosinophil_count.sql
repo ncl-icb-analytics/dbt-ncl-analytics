@@ -65,7 +65,7 @@ SELECT
     inferred_unit,
     inferred_value,
     value_was_converted,
-    inferred_unit != original_result_unit_code AS unit_was_changed,
+    inferred_unit IS DISTINCT FROM original_result_unit_code AS unit_was_changed,
     conversion_reason,
     confidence,
     is_negative,
