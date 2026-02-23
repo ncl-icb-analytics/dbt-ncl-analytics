@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: reference_analyst_managed
   database: '"DATA_LAKE__NCL"'
@@ -49,6 +50,68 @@ sources:
     - name: WITHIN_STANDARD
       data_type: NUMBER
     - name: BREACHES
+      data_type: NUMBER
+  - name: CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS
+    identifier: '"CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS"'
+    columns:
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: MACHINE_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TEXT
+    - name: START_TIME
+      data_type: TIME
+    - name: END_TIME
+      data_type: TIME
+    - name: MONDAY
+      data_type: NUMBER
+    - name: TUESDAY
+      data_type: NUMBER
+    - name: WEDNESDAY
+      data_type: NUMBER
+    - name: THURSDAY
+      data_type: NUMBER
+    - name: FRIDAY
+      data_type: NUMBER
+    - name: SATURDAY
+      data_type: NUMBER
+    - name: SUNDAY
+      data_type: NUMBER
+  - name: CANCER__RADIOTHERAPY_MODELLING_EXCEPTIONS
+    identifier: '"CANCER__RADIOTHERAPY_MODELLING_EXCEPTIONS"'
+    columns:
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: MACHINE_NAME
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TEXT
+    - name: OVERRIDE_START
+      data_type: TIME
+    - name: OVERRIDE_END
+      data_type: TIME
+    - name: STATUS
+      data_type: TEXT
+    - name: NOTES
+      data_type: TEXT
+    - name: MONDAY
+      data_type: NUMBER
+    - name: TUESDAY
+      data_type: NUMBER
+    - name: WEDNESDAY
+      data_type: NUMBER
+    - name: THURSDAY
+      data_type: NUMBER
+    - name: FRIDAY
+      data_type: NUMBER
+    - name: SATURDAY
+      data_type: NUMBER
+    - name: SUNDAY
       data_type: NUMBER
   - name: CANCER__RCRD_NATIONAL
     identifier: '"CANCER__RCRD_NATIONAL"'
@@ -255,53 +318,6 @@ sources:
       data_type: FLOAT
     - name: TOTAL
       data_type: FLOAT
-    - name: AVERAGE_WEEKS_WAITING
-      data_type: NUMBER
-    - name: SERVICE_LINE_GROUP
-      data_type: TEXT
-    - name: SERVICE_LINE_GROUP_2
-      data_type: TEXT
-    - name: AGE_GROUP
-      data_type: TEXT
-    - name: BOROUGH
-      data_type: TEXT
-    - name: PROVIDER_SERVICE_LINE
-      data_type: TEXT
-    - name: IS_EXCLUDED
-      data_type: BOOLEAN
-    - name: EXCLUSION_GROUP
-      data_type: TEXT
-  - name: COMMUNITY_WAITING_TIMES_LOCAL_OLD
-    identifier: '"COMMUNITY_WAITING_TIMES_LOCAL_OLD"'
-    columns:
-    - name: SUBMITTED_MONTH
-      data_type: DATE
-    - name: REPORTED_MONTH
-      data_type: DATE
-    - name: PROVIDER
-      data_type: TEXT
-    - name: PROVIDER_SITE
-      data_type: TEXT
-    - name: SERVICE_LINE
-      data_type: TEXT
-    - name: 0 - 6 weeks
-      data_type: FLOAT
-    - name: 6 - 12 weeks
-      data_type: FLOAT
-    - name: 12 - 16 weeks
-      data_type: FLOAT
-    - name: 16 - 18 weeks
-      data_type: FLOAT
-    - name: 18 - 30 weeks
-      data_type: FLOAT
-    - name: 30 - 40 weeks
-      data_type: FLOAT
-    - name: 40 - 52 weeks
-      data_type: FLOAT
-    - name: 52+ weeks
-      data_type: FLOAT
-    - name: TOTAL
-      data_type: NUMBER
     - name: AVERAGE_WEEKS_WAITING
       data_type: NUMBER
     - name: SERVICE_LINE_GROUP
@@ -1381,6 +1397,11 @@ sources:
       data_type: NUMBER
     - name: STATUS
       data_type: TEXT
+  - name: ENT_LEFT_SHIT_HRG_CODES_20260127
+    identifier: '"ENT_LEFT_SHIT_HRG_CODES_20260127"'
+    columns:
+    - name: HRG_CODE
+      data_type: TEXT
   - name: FA_MONTHLY_IAP_2526_UCLH_211125
     identifier: '"FA_MONTHLY_IAP_2526_UCLH_211125"'
     columns:
@@ -2134,6 +2155,51 @@ sources:
       data_type: TEXT
     - name: NUMBER_OF_PATIENTS
       data_type: NUMBER
+  - name: HIGHRISKPATIENTS2022
+    identifier: '"HIGHRISKPATIENTS2022"'
+    columns:
+    - name: PATIENT_ID
+      data_type: NUMBER
+    - name: LOCAL_AUTHORITY
+      data_type: TEXT
+    - name: NEL_IP_ADMISSIONS_LAST_12_MONTHS
+      data_type: NUMBER
+    - name: HEART_FAILURE
+      data_type: NUMBER
+    - name: COPD
+      data_type: NUMBER
+    - name: DEMENTIA
+      data_type: NUMBER
+    - name: END_STAGE_RENAL_FAILURE
+      data_type: NUMBER
+    - name: SEVERE_INTERSTITIAL_LUNG_DISEASE
+      data_type: NUMBER
+    - name: PARKINSONS_DISEASE
+      data_type: NUMBER
+    - name: CHRONIC_KIDNEY_DISEASE
+      data_type: NUMBER
+    - name: LIVER_FAILURE
+      data_type: NUMBER
+    - name: ALCOHOL_DEPENDENCE
+      data_type: NUMBER
+    - name: BRONCHIECTASIS
+      data_type: NUMBER
+    - name: ATRIAL_FIBRILLATION
+      data_type: NUMBER
+    - name: CEREBROVASCULAR_DISEASE
+      data_type: NUMBER
+    - name: PERIPHERAL_VASCULAR_DISEASE
+      data_type: NUMBER
+    - name: PULMONARY_HEART_DISEASE
+      data_type: NUMBER
+    - name: CORONARY_HEART_DISEASE
+      data_type: NUMBER
+    - name: OSTEOPOROSIS
+      data_type: NUMBER
+    - name: RHEUMATOID_ARTHRITIS
+      data_type: NUMBER
+    - name: CHRONIC_LIVER_DISEASE
+      data_type: NUMBER
   - name: IA_CERTIFICATES_MONTHLY
     identifier: '"IA_CERTIFICATES_MONTHLY"'
     columns:
@@ -2637,6 +2703,11 @@ sources:
       data_type: TEXT
     - name: OBJECTID
       data_type: NUMBER
+  - name: LSOA21_BOUNDARIES
+    identifier: '"LSOA21_BOUNDARIES"'
+    columns:
+    - name: GEO
+      data_type: VARIANT
   - name: LSOA21_WARD25_LAD25
     identifier: '"LSOA21_WARD25_LAD25"'
     columns:
@@ -2927,35 +2998,87 @@ sources:
       data_type: TEXT
     - name: START_DATE
       data_type: DATE
-  - name: NHS_APP_USAGE
-    identifier: '"NHS_APP_USAGE"'
+  - name: NHS_APP
+    identifier: '"NHS_APP"'
     columns:
-    - name: Date
+    - name: DATE
+      data_type: DATE
+    - name: LOGINS
       data_type: NUMBER
-    - name: Logins
+    - name: APPOINTMENTS_BOOKED
       data_type: NUMBER
-    - name: Appointments Booked
+    - name: APPOINTMENTS_CANCELLED
       data_type: NUMBER
-    - name: Appointments Cancelled
+    - name: REPEAT_PRESCRIPTIONS
       data_type: NUMBER
-    - name: Repeat Prescriptions
+    - name: ORGAN_DONATION_REGISTRATIONS
       data_type: NUMBER
-    - name: Organ Donation Registrations
+    - name: ORGAN_DONATION_WITHDRAWALS
       data_type: NUMBER
-    - name: Organ Donation Withdrawals
+    - name: ORGAN_DONATION_UPDATES
       data_type: NUMBER
-    - name: Organ Donation Updates
+    - name: ORGAN_DONATION_LOOKUP
       data_type: NUMBER
-    - name: Organ Donation Lookup
+    - name: RECORD_VIEWS
       data_type: NUMBER
-    - name: Record Views
+    - name: SUMMARY_CARE_RECORD_VIEWS
       data_type: NUMBER
-    - name: Summary Care Record Views
+    - name: DETAIL_CODED_RECORD_VIEWS
       data_type: NUMBER
-    - name: Detail Coded Record Views
-      data_type: NUMBER
-    - name: Usage Practice Code
+    - name: USAGE_PRACTICE_CODE
       data_type: TEXT
+  - name: NHS_APP_USAGE2
+    identifier: '"NHS_APP_USAGE2"'
+    columns:
+    - name: DATE
+      data_type: DATE
+    - name: LOGINS
+      data_type: NUMBER
+    - name: APPOINTMENTS_BOOKED
+      data_type: NUMBER
+    - name: APPOINTMENTS_CANCELLED
+      data_type: NUMBER
+    - name: REPEAT_PRESCRIPTIONS
+      data_type: NUMBER
+    - name: ORGAN_DONATION_REGISTRATIONS
+      data_type: NUMBER
+    - name: ORGAN_DONATION_WITHDRAWALS
+      data_type: NUMBER
+    - name: ORGAN_DONATION_UPDATES
+      data_type: NUMBER
+    - name: ORGAN_DONATION_LOOKUP
+      data_type: NUMBER
+    - name: RECORD_VIEWS
+      data_type: NUMBER
+    - name: SUMMARY_CARE_RECORD_VIEWS
+      data_type: NUMBER
+    - name: DETAIL_CODED_RECORD_VIEWS
+      data_type: NUMBER
+    - name: USAGE_PRACTICE_CODE
+      data_type: TEXT
+  - name: ONLINE_CONSULTATION
+    identifier: '"ONLINE_CONSULTATION"'
+    columns:
+    - name: MONTH
+      data_type: DATE
+    - name: GP_CODE
+      data_type: TEXT
+    - name: GP_NAME
+      data_type: TEXT
+    - name: PCN_NAME
+      data_type: TEXT
+    - name: SUBMISSIONS
+      data_type: TEXT
+    - name: CLINICAL_SUBMISSIONS
+      data_type: NUMBER
+    - name: ADMINISTRATIVE_SUBMISSIONS
+      data_type: NUMBER
+    - name: Other/Unknown Type Submissions
+      data_type: NUMBER
+    - name: REGISTERED_PATIENT_COUNT
+      data_type: TEXT
+    - name: Rate per 1,000 Registered Patients
+      data_type: NUMBER
   - name: ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024
     identifier: '"ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024"'
     columns:
@@ -3108,6 +3231,15 @@ sources:
       data_type: DATE
     - name: PRACTICE_COUNT
       data_type: NUMBER
+  - name: SHP_UA24
+    identifier: '"SHP_UA24"'
+    columns:
+    - name: GEOMETRY
+      data_type: TEXT
+    - name: PROPERTIES
+      data_type: TEXT
+    - name: TYPE
+      data_type: TEXT
   - name: SR_SNOMED_ETHNICITY_2
     identifier: '"SR_SNOMED_ETHNICITY_2"'
     columns:
@@ -3595,10 +3727,37 @@ sources:
       data_type: TEXT
     - name: AGE_GROUP
       data_type: TEXT
+    - name: AGE_BAND_5YEAR
+      data_type: TEXT
+    - name: AGE_BAND_5YR
+      data_type: TEXT
     - name: YEAR
       data_type: TEXT
     - name: ONS_POPULATION
       data_type: NUMBER
+  - name: WNLNEIGHBOURHOODS
+    identifier: '"WNLNEIGHBOURHOODS"'
+    columns:
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: LACODE
+      data_type: TEXT
+    - name: LANAME
+      data_type: TEXT
+    - name: IMDRANK
+      data_type: NUMBER
+    - name: IMD25DECIL
+      data_type: NUMBER
+    - name: IMD19DECIL
+      data_type: NUMBER
+    - name: IMDDEPRIIN
+      data_type: NUMBER
+    - name: INT
+      data_type: TEXT
+    - name: INTBOROUGH
+      data_type: TEXT
   - name: model_hospital_theatre_imported
     identifier: '"model_hospital_theatre_imported"'
     columns:
