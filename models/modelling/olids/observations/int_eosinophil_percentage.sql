@@ -36,6 +36,21 @@ unit_rules AS (
     WHERE DEFINITION_NAME = 'eosinophil_percentage'
 ),
 
+canonical_unit AS (
+    SELECT UNIT AS CONVERT_TO_UNIT
+    FROM {{ ref('observation_standard_units') }}
+    WHERE DEFINITION_NAME = 'eosinophil_percentage'
+      AND PRIMARY_UNIT = TRUE
+    LIMIT 1
+),
+
+value_bounds AS (
+    SELECT LOWER_LIMIT, UPPER_LIMIT
+    FROM {{ ref('observation_value_bounds') }}
+    WHERE DEFINITION_NAME = 'eosinophil_percentage'
+    LIMIT 1
+),
+
 unit_checked AS (
     SELECT
         base.*,
@@ -43,8 +58,9 @@ unit_checked AS (
         base.result_unit_code AS original_result_unit_code,
         base.result_unit_display AS original_result_unit_display,
         base.result_value AS original_result_value,
-        ur.CONVERT_TO_UNIT AS seed_convert_to_unit,
-        ur.MULTIPLY_BY AS seed_multiply_by,
+        cu.CONVERT_TO_UNIT AS canonical_unit_code,
+        vb.LOWER_LIMIT,
+        vb.UPPER_LIMIT,
         CASE
             WHEN ur.CONVERT_FROM_UNIT IS NOT NULL AND ur.MULTIPLY_BY IS NULL THEN 'excluded'
             WHEN ur.CONVERT_FROM_UNIT IS NOT NULL AND ur.MULTIPLY_BY IS NOT NULL THEN 'known'
@@ -54,6 +70,8 @@ unit_checked AS (
     FROM base_observations base
     LEFT JOIN unit_rules ur
         ON base.result_unit_code = ur.CONVERT_FROM_UNIT
+    CROSS JOIN canonical_unit cu
+    CROSS JOIN value_bounds vb
 ),
 
 validated AS (
@@ -61,13 +79,13 @@ validated AS (
         *,
         CASE
             WHEN unit_status = 'excluded' OR unit_status = 'unknown' THEN NULL
-            WHEN numeric_value BETWEEN 0 AND 100 THEN numeric_value
+            WHEN numeric_value BETWEEN lower_limit AND upper_limit THEN numeric_value
             ELSE NULL
         END AS inferred_value,
 
         CASE
             WHEN unit_status = 'excluded' OR unit_status = 'unknown' THEN 'NONE'
-            WHEN numeric_value BETWEEN 0 AND 100 THEN
+            WHEN numeric_value BETWEEN lower_limit AND upper_limit THEN
                 CASE
                     WHEN is_canonical THEN 'VERY_HIGH'
                     ELSE 'HIGH'
@@ -77,19 +95,19 @@ validated AS (
 
         CASE
             WHEN unit_status = 'excluded' OR unit_status = 'unknown' THEN NULL
-            WHEN numeric_value BETWEEN 0 AND 100 THEN seed_convert_to_unit
+            WHEN numeric_value BETWEEN lower_limit AND upper_limit THEN canonical_unit_code
             ELSE NULL
         END AS inferred_unit,
 
         CASE
             WHEN unit_status = 'excluded' THEN 'Excluded unit on percentage measurement'
             WHEN unit_status = 'unknown' THEN 'Non-accepted unit on percentage measurement'
-            WHEN numeric_value BETWEEN 0 AND 100 THEN
+            WHEN numeric_value BETWEEN lower_limit AND upper_limit THEN
                 CASE
-                    WHEN is_canonical THEN 'Canonical unit, value in range'
-                    ELSE 'Accepted unit, value in range'
+                    WHEN is_canonical THEN 'No value or unit conversion necessary'
+                    ELSE 'No value conversion, unit was non-standard but numerically equivalent'
                 END
-            ELSE 'Value out of valid percentage range (0-100)'
+            ELSE 'Value out of valid percentage range'
         END AS conversion_reason,
 
         CASE
