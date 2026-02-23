@@ -209,6 +209,24 @@ seeds:
         PRE_OFFSET: float
         POST_OFFSET: float
 
+    observation_standard_units:
+      +column_types:
+        DEFINITION_ID: varchar(50)
+        DEFINITION_NAME: varchar(50)
+        CONFIG_ID: varchar(50)
+        CONFIG_VERSION: varchar(20)
+        UNIT: varchar(20)
+        PRIMARY_UNIT: boolean
+
+    observation_value_bounds:
+      +column_types:
+        DEFINITION_ID: varchar(50)
+        DEFINITION_NAME: varchar(50)
+        CONFIG_ID: varchar(50)
+        CONFIG_VERSION: varchar(20)
+        LOWER_LIMIT: float
+        UPPER_LIMIT: float
+
 snapshots:
   ncl_analytics:
     +database: "MODELLING"

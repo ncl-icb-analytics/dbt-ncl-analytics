@@ -1,4 +1,4 @@
-{% macro standardise_count_observation(base_cte, measurement, value_column='result_value', max_plausible_value=100, enable_magnitude_conversion=true) %}
+{% macro standardise_count_observation(base_cte, measurement, value_column='result_value', enable_magnitude_conversion=true) %}
 
 {#
     Standardises count-type observation values and units.
@@ -8,7 +8,7 @@
     and corresponding unit.
 
     Uses a 3-pass approach:
-      Pass 1 - Accept values already in plausible range (0 to max_plausible_value),
+      Pass 1 - Accept values already in plausible range (defined by observation_value_bounds seed),
                regardless of recorded unit. Most records are handled here.
 
       Pass 2 - For out-of-range values, look at the unit and apply known conversion factors 
@@ -37,14 +37,12 @@
           result_unit_display, and the value_column.
 
       measurement (str):
-          Identifier matching DEFINITION_NAME in the observation_unit_rules seed
+          Identifier matching DEFINITION_NAME in the observation_standard_units,
+          observation_value_bounds, and observation_unit_rules seeds
           (e.g. 'eosinophil_count').
 
       value_column (str):
           Column name containing the numeric result. Default: 'result_value'.
-
-      max_plausible_value (number):
-          Upper bound for plausible range in standard units. Default: 100.
 
       enable_magnitude_conversion (bool):
           Whether to attempt Pass 3 magnitude-based inference. Default: true.
@@ -75,11 +73,19 @@ unit_rules AS (
 ),
 
 -- Look up the canonical target unit for this measurement (e.g. '10*9/L')
--- Used as fallback for unknown units where seed_convert_to_unit is NULL
 canonical_unit AS (
-    SELECT CONVERT_TO_UNIT
-    FROM unit_rules
-    WHERE CONVERT_FROM_UNIT = CONVERT_TO_UNIT AND MULTIPLY_BY = 1
+    SELECT UNIT AS CONVERT_TO_UNIT
+    FROM {{ ref('observation_standard_units') }}
+    WHERE DEFINITION_NAME = '{{ measurement }}'
+      AND PRIMARY_UNIT = TRUE
+    LIMIT 1
+),
+
+-- Look up the plausible value range for this measurement
+value_bounds AS (
+    SELECT LOWER_LIMIT, UPPER_LIMIT
+    FROM {{ ref('observation_value_bounds') }}
+    WHERE DEFINITION_NAME = '{{ measurement }}'
     LIMIT 1
 ),
 
@@ -107,6 +113,7 @@ classified AS (
     LEFT JOIN unit_rules ur
         ON base.result_unit_code = ur.CONVERT_FROM_UNIT
     CROSS JOIN canonical_unit cu
+    CROSS JOIN value_bounds vb
 ),
 
 -- Determine which pass (if any) applies - evaluated ONCE per row
@@ -118,19 +125,19 @@ pass_assigned AS (
             + COALESCE(seed_post_offset, 0) AS converted_value,
         CASE
             WHEN unit_status = 'excluded' THEN 'excluded'
-            WHEN numeric_value BETWEEN 0 AND {{ max_plausible_value }}
+            WHEN numeric_value BETWEEN lower_limit AND upper_limit
                 THEN 'pass_1'
             WHEN unit_status = 'known'
              AND seed_multiply_by != 1
              AND ((numeric_value + COALESCE(seed_pre_offset, 0)) * seed_multiply_by
                   + COALESCE(seed_post_offset, 0))
-                  BETWEEN 0 AND {{ max_plausible_value }}
+                  BETWEEN lower_limit AND upper_limit
                 THEN 'pass_2'
             {% if enable_magnitude_conversion %}
             {% for tier in magnitude_tiers %}
-            WHEN numeric_value > {% if loop.first %}{{ max_plausible_value }}{% else %}{{ magnitude_tiers[loop.index0 - 1].upper_bound }}{% endif %}
+            WHEN numeric_value > {% if loop.first %}upper_limit{% else %}{{ magnitude_tiers[loop.index0 - 1].upper_bound }}{% endif %}
              AND numeric_value <= {{ tier.upper_bound }}
-             AND (numeric_value / {{ tier.divisor }}) BETWEEN 0 AND {{ max_plausible_value }}
+             AND (numeric_value / {{ tier.divisor }}) BETWEEN lower_limit AND upper_limit
                 THEN '{{ tier.name }}'
             {% endfor %}
             {% endif %}

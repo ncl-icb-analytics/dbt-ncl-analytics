@@ -34,7 +34,6 @@ WITH base_observations AS (
     base_cte='base_observations',
     measurement='eosinophil_count',
     value_column='result_value',
-    max_plausible_value=100,
     enable_magnitude_conversion=true
 ) }}
 
