@@ -98,6 +98,8 @@ classified AS (
         base.result_unit_display AS original_result_unit_display,
         base.{{ value_column }} AS original_result_value,
         cu.CONVERT_TO_UNIT AS canonical_unit_code,
+        vb.LOWER_LIMIT AS lower_limit,
+        vb.UPPER_LIMIT AS upper_limit,
         ur.MULTIPLY_BY AS seed_multiply_by,
         ur.PRE_OFFSET AS seed_pre_offset,
         ur.POST_OFFSET AS seed_post_offset,
