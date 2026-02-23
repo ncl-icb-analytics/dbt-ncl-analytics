@@ -23,8 +23,8 @@
 
     Confidence levels:
       VERY_HIGH - Canonical unit (e.g. 10*9/L -> 10*9/L), value in range
-      HIGH      - Known conversion applied, or known equivalent unit with value in range
-      MEDIUM    - Unknown/nonsense unit but value in plausible range
+      HIGH      - Known equivalent unit (MULTIPLY_BY=1) with value in range, or known conversion applied (Pass 2)
+      MEDIUM    - Unknown/nonsense unit, or known non-equivalent unit, but value in plausible range
       LOW       - Value inferred from magnitude (Pass 3)
       NONE      - Excluded unit, or value out of range after all passes
 
@@ -146,7 +146,10 @@ standardised AS (
             WHEN numeric_value BETWEEN 0 AND {{ max_plausible_value }} AND unit_status != 'excluded' THEN
                 CASE
                     WHEN is_canonical THEN 'VERY_HIGH'
-                    WHEN unit_status = 'known' THEN 'HIGH'
+                    -- Known equivalent unit (MULTIPLY_BY = 1) means the value is numerically correct as-is
+                    WHEN unit_status = 'known' AND seed_multiply_by = 1 THEN 'HIGH'
+                    -- Known non-equivalent unit (MULTIPLY_BY != 1) but value in range: we are ignoring
+                    -- the unit and trusting the value, same level of inference as unknown units
                     ELSE 'MEDIUM'
                 END
             -- Pass 2
@@ -226,7 +229,8 @@ standardised AS (
             WHEN numeric_value BETWEEN 0 AND {{ max_plausible_value }} AND unit_status != 'excluded' THEN
                 CASE
                     WHEN is_canonical THEN 'Canonical unit, value in range'
-                    WHEN unit_status = 'known' THEN 'Known equivalent unit, value in range'
+                    WHEN unit_status = 'known' AND seed_multiply_by = 1 THEN 'Known equivalent unit, value in range'
+                    WHEN unit_status = 'known' THEN 'Known non-equivalent unit, value in plausible range - accepted as standard unit'
                     ELSE 'Unknown unit, value in plausible range - accepted as standard unit'
                 END
             -- Pass 2 reason
