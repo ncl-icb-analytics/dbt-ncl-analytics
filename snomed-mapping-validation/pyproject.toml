@@ -1,0 +1,53 @@
+[project]
+name = "snomed-mapping-validation"
+version = "0.1.0"
+description = "Validate SNOMED CT concept mappings using embeddings, LLM reasoning, and human review"
+readme = "PLAN.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    # Embeddings & ML
+    "sentence-transformers>=3.0.0",
+    "torch>=2.2.0",
+    "faiss-gpu>=1.7.4",
+    "transformers>=4.40.0",
+
+    # Data
+    "pandas>=2.2.0",
+    "pyarrow>=15.0.0",
+    "polars>=0.20.0",
+
+    # Snowflake
+    "snowflake-connector-python[pandas]>=3.6.0",
+
+    # API clients
+    "httpx>=0.27.0",
+    "openai>=1.12.0",           # OpenRouter-compatible client
+
+    # FHIR
+    "fhir.resources>=7.1.0",
+
+    # Utilities
+    "tqdm>=4.66.0",
+    "pyyaml>=6.0.0",
+    "python-dotenv>=1.0.0",
+    "click>=8.1.0",
+    "structlog>=24.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",
+    "ipykernel>=6.29.0",
+]
+
+[project.scripts]
+smv = "src.cli:main"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]

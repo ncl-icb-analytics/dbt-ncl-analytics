@@ -1,0 +1,46 @@
+# FHIR Terminology Server configuration
+
+# Primary terminology server
+terminology_server:
+  # base_url: "https://ontology.nhs.uk/authoring/fhir"  # NHS Ontoserver
+  # base_url: "https://snowstorm.ihtsdotools.org/fhir"  # SNOMED International Snowstorm
+  base_url: "${FHIR_TERMINOLOGY_SERVER_URL}"
+  auth:
+    type: "bearer"  # or "basic", "none"
+    token: "${FHIR_AUTH_TOKEN}"
+  timeout_seconds: 30
+  max_retries: 3
+  rate_limit_rpm: 600
+
+# SNOMED CT edition settings
+snomed:
+  edition: "http://snomed.info/sct/999000021000000109"  # UK Clinical Edition
+  version: ""  # Leave empty for latest; or specify e.g., "20240101"
+  drug_extension: "http://snomed.info/sct/999000011000001104"  # UK Drug Extension
+
+# FHIR operations used in the pipeline
+operations:
+  lookup:
+    path: "/CodeSystem/$lookup"
+    properties:
+      - "parent"
+      - "child"
+      - "designations"
+      - "sufficientlyDefined"
+
+  expand:
+    path: "/ValueSet/$expand"
+    default_count: 20
+
+  translate:
+    path: "/ConceptMap/$translate"
+
+  subsumes:
+    path: "/CodeSystem/$subsumes"
+
+# Caching
+cache:
+  enabled: true
+  ttl_hours: 168  # 1 week - SNOMED doesn't change often
+  backend: "sqlite"  # or "redis"
+  path: ".cache/fhir_cache.db"

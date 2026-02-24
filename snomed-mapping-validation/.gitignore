@@ -1,0 +1,21 @@
+# Data files (large, generated)
+data/
+.cache/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Environment
+.env
+
+# Model downloads
+models/
+
+# Node (workflow + review-app)
+node_modules/
+.wrangler/
+.svelte-kit/
+build/

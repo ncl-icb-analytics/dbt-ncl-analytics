@@ -1,0 +1,79 @@
+# Embedding model configurations for SNOMED mapping validation
+
+models:
+  biolord_2023:
+    name: "BioLORD-2023"
+    model_id: "FremyCompany/BioLORD-2023"
+    type: local
+    dimensions: 768
+    max_sequence_length: 512
+    batch_size: 512
+    precision: fp16
+    description: >
+      Trained on biomedical ontology descriptions (SNOMED, MedDRA, ICD, etc).
+      Best suited for clinical terminology matching.
+    similarity_threshold: 0.70
+    top_k_threshold: 5
+
+  sapbert:
+    name: "SapBERT"
+    model_id: "cambridgeltl/SapBERT-from-PubMedBERT-fulltext"
+    type: local
+    dimensions: 768
+    max_sequence_length: 512
+    batch_size: 512
+    precision: fp16
+    description: >
+      Self-alignment pre-training on UMLS. Strong for biomedical entity
+      linking and synonym resolution.
+    similarity_threshold: 0.65
+    top_k_threshold: 5
+
+  medcpt:
+    name: "MedCPT Query Encoder"
+    model_id: "ncbi/MedCPT-Query-Encoder"
+    type: local
+    dimensions: 768
+    max_sequence_length: 512
+    batch_size: 256
+    precision: fp16
+    description: >
+      Contrastive pre-trained transformer for medical text retrieval.
+      Trained on PubMed queries and articles.
+    similarity_threshold: 0.65
+    top_k_threshold: 5
+
+  openai_large:
+    name: "OpenAI text-embedding-3-large"
+    model_id: "openai/text-embedding-3-large"
+    type: api
+    provider: openrouter
+    dimensions: 3072
+    reduced_dimensions: 1024  # Use Matryoshka reduction for indexing
+    max_sequence_length: 8191
+    batch_size: 100  # API batch size
+    requests_per_minute: 3000
+    description: >
+      OpenAI's largest embedding model. High quality general-purpose
+      embeddings with Matryoshka dimension reduction support.
+    similarity_threshold: 0.75
+    top_k_threshold: 5
+
+# Global settings
+embedding_settings:
+  normalize_vectors: true
+  index_type: "IVFFlat"  # FAISS index type (IVFFlat for large datasets)
+  nprobe: 32             # Number of clusters to search
+  nlist: 4096            # Number of clusters for IVF
+
+# Flagging: a mapping is flagged if ANY of these conditions are met
+flagging_rules:
+  min_models_agreeing: 2           # At least N models must flag it
+  conditions:
+    - type: low_similarity
+      description: "Source-target cosine similarity below model threshold"
+    - type: low_rank
+      description: "Current target not in top-K nearest neighbours"
+    - type: better_alternative
+      description: "A SNOMED concept scores significantly higher than current target"
+      margin: 0.10  # Must be this much better than current target
