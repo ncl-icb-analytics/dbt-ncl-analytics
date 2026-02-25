@@ -1,0 +1,232 @@
+version: 2
+
+models:
+  - name: stg_lpf_result
+    description: 
+    config:
+      meta:
+        owner:
+          name: Susie Rahman
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - primarykey_id
+            - episodes_id
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      #me: primarykey_id
+      #  data_type: number
+      #  description: "The unique primary key of the parent record in the [spell] table
+      #    used to link to records in the child tables. This is based on the [system.record.identifier]
+      #    which is the same value asthe [Generated Record ID] from the monthly SUS"
+   
+      - name: delete_ind
+        data_type: number
+        description: "1 indicates if entity deleted in source system"
+
+      - name: result_id
+        data_type: number
+        description: "The unique identifier assigned to the result in the source system. 
+          The ResultID may be an internal ID from that system and must remain consistent for all 
+          future updates related to the same result."
+
+      - name: version
+        data_type: number
+        description: "The version of the entity in the source system. This value must be
+          lexicographically comparable and is typically a string representing the last updated 
+          date and time. It is used to determine whether this version is newer than the version 
+          currently stored in the receiving system. If no version is provided, a default value of 
+          0 is used"
+
+      - name: person_id
+        data_type: varchar
+        description: "The unique ID used to identify the person in the context of the tenant in 
+          the source system. The PersonID can be the internal ID from the source system as long 
+          as it identifies the person within the tenant and does not contain protected health
+          information (PHI). It must match the PersonID used in the all flat files
+          (at Provider level)"
+
+      - name: encounter_id
+        data_type: varchar
+        description: "The unique ID used to identify the encounter in the source system.
+           It can be an internal ID from the source system and must match the ID used in all 
+           flat files to identify the encounter."
+
+      - name: result_code_id
+        data_type: varchar
+        description: "A code that identifies a test, measurement or observation."
+
+      - name: result_code_system_id
+        data_type: varchar
+        description: "Required if the code is from an industry-standard coding system 
+          (e.g. SNOMED CT). Values are the object identifiers (OIDs) representing the coding 
+          system. If the code is from a proprietary coding system, this field can be empty."
+
+      - name: result_display
+        data_type: varchar
+        description: "How the result is displayed. Required if ResultTypeCodeID is populated."
+
+      - name: result_date
+        data_type: date
+        description: "The clinically significant date, or date and time, of the result, represented
+          ISO 8601 format. For lab results, this is the date and time the specimen was collected.
+          For vitals and other measurements, this is when the result was obtained. If time is 
+          specified, then it must be in UTC (denoted by the Z suffix)."
+
+      - name: result_value_number
+        data_type: number
+        description: "The value of the result if the value is a numeric data type."
+
+      - name: result_value_number_modifier
+        data_type: varchar
+        description: The symbol or characters that modify the numeric data value, 
+          for example, >, <, or >=."
+
+      - name: unit_of_measure_code_id
+        data_type: varchar
+        description: "The unit of measure for the result."
+
+      - name: unit_of_measure_code_system_id
+        data_type: varchar
+        description: "Required if the code is from an industry-standard coding system 
+          (e.g. SNOMED CT). Values are the object identifiers (OIDs) representing the coding 
+          system. If the code is from a proprietary coding system, this field can be empty."
+
+      - name: unit_of_measure_display
+        data_type: varchar
+        description: "How the unit of measure is displayed. Required if UnitOfMeasureCodeID 
+          is populated."
+
+      - name: result_value_text
+        data_type: varchar
+        description: "The value of the result if the value is a textual type."
+
+      - name: result_value_code_id
+        data_type: varchar
+        description: "The code that identifies a codified result value."
+
+      - name: result_value_code_system_id
+        data_type: varchar
+        description: "Required if the code is from an industry-standard coding system 
+          (e.g. SNOMED CT). Values are the object identifiers (OIDs) representing the coding 
+          system. If the code is from a proprietary coding system, this field can be empty."
+
+      - name: result_value_code_display
+        data_type: varchar
+        description: "The display name associated with the code value. Required if 
+          ResultValueCodeID is populated."
+
+      - name: result_value_date
+        data_type: date
+        description: "The value of the result if the value is a date, represented in ISO 8601 format."
+
+      - name: reference_range
+        data_type: varchar
+        description: "The reference range for the result in textual format."
+
+      - name: interpretation_code_id
+        data_type: varchar
+        description: "The interpretation of the result."       
+
+      - name: interpretation_code_system_id
+        data_type: varchar
+        description: "Required if the code is from an industry-standard coding system 
+          (e.g. SNOMED CT). Values are the object identifiers (OIDs) representing the coding 
+          system. If the code is from a proprietary coding system, this field can be empty."
+
+      - name: interpretation_display
+        data_type: varchar
+        description: "How the interpretation is displayed. Required if InterpretationCodeID is 
+          populated."
+
+      - name: status_code_id
+        data_type: varchar
+        description: The status of the result. For example, In Error, Modified, or Preliminary."
+
+      - name: status_code_system_id
+        data_type: varchar
+        description: "Required if the code is from an industry-standard coding system 
+          (e.g. SNOMED CT). Values are the object identifiers (OIDs) representing the coding 
+          system. If the code is from a proprietary coding system, this field can be empty."
+
+      - name: status_display
+        data_type: varchar
+        description: "Treatment Function Code is based on Main Specialty but also
+          includes approved sub-specialties and treatment specialties that denote
+          further specialisation."
+
+      - name: specimen_type_code_id
+        data_type: varchar
+        description: "A unique identifier for a Consultants Local Sub-Specialty"
+
+      - name: specimen_type_code_system_id
+        data_type: varchar
+        description: "This is the procedure submitted on the episode with the highest
+          hierarchy rank as determined in the HRG process. Where procedures carry
+          an equal rank then the first of these recorded on the episode will be used."
+
+      - name: specimen_type_display
+        data_type: varchar
+        description: "The Programme Budgeting Category code is an output of the Healthcare
+          Resource Grouper (HRG) process. PBCs are derived for each APC record by
+          the Grouper after derivation of the episode core HRG. At spell level the
+          Spell HRG value is used."
+
+      - name: measurement_method_code_id
+        data_type: number
+        description: "Indicates whether episode is excluded/included in Payment by
+          Results"
+
+      - name: measurement_method_code_system_id
+        data_type: number
+        description: "Derived field CC Days for LOS"
+
+      - name: measurement_method_display
+        data_type: number
+        description: "Report field Length Of Stay Adjustment (Specialist Palliative
+          Care)"
+
+      - name: accession
+        data_type: number
+        description: "Based on two input fields from the last episode in a spell but
+          only if both are populated. The value 0 is used if either are missing and
+          a floor of 0 is imposed on the result of an undisclosed calculation"
+
+      - name: recorder_type
+        data_type: number
+        description: "Report field Length Of Stay Adjustment (Rehabilitation)"
+
+      - name: device_model
+        data_type: varchar
+        description: An episode level field returned from the HRG grouper. It is
+          based on grouping episodes in the spell that are not PbR excluded"
+
+      - name: device_serial_number
+        data_type: varchar
+        description: "This item is the specialty in which the consultant is contracted
+          or recognised and the code identifies a specialty as designated by Royal
+          Colleges."
+
+      - name: device_type_code_id
+        data_type: varchar
+        description: "Treatment Function Code is based on Main Specialty but also
+          includes approved sub-specialties and treatment specialties that denote
+          further specialisation."
+
+      - name: device_type_code_system_id
+        data_type: varchar
+        description: "A unique identifier for a Consultants Local Sub-Specialty"
+
+      - name: device_type_display
+        data_type: varchar
+        description: "This is the procedure submitted on the episode with the highest
+          hierarchy rank as determined in the HRG process. Where procedures carry
+          an equal rank then the first of these recorded on the episode will be used."
+
+      - name: device_manufacturer
+        data_type: varchar
+        description: "The Programme Budgeting Category code is an output of the Healthcare
+          Resource Grouper (HRG) process. PBCs are derived for each APC record by
+          the Grouper after derivation of the episode core HRG. At spell level the
+          Spell HRG value is used."
