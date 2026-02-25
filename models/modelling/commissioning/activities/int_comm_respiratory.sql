@@ -169,7 +169,7 @@ specialty_filters as (
     from outpatient_procedure
 )
 
-select distinct 
-    visit_occurrence_id, 
+select summ.*, 
     true as respiratory_encounter
-from specialty_filters
+from {{ref('int_comm_primary_summary')}} as summ
+inner join specialty_filters as filt on filt.visit_occurrence_id = summ.visit_occurrence_id
