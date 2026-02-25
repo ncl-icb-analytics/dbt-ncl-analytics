@@ -5,7 +5,7 @@
         ref('stg_reference_combined_codesets'),
         'code',
         where="cluster_id = 'LOWER_RESP_COND'"
-    ) | default([], true)
+    ) 
 %}
 
 {% 
@@ -13,7 +13,7 @@
         ref('stg_reference_combined_codesets'),
         'code',
         where="cluster_id = 'TOT_RESP_COND'"
-    ) | default([], true)
+    )
 %}
 
 {% set snomed_diagnosis_exclude = snomed_diagnosis_list_all | reject('in', snomed_diagnosis_list_resp) | list %}

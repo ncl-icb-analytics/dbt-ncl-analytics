@@ -4,7 +4,7 @@ models:
   - name: int_comm_chronic_lower_respiratory
     description: > 
       Warning: In development. Incomplete logic.
-      Activities considered as chronic lower respiratory disease-related for commissioning analysis. 
+      Activities considered as chronic lower respiratory disease-related for commissioning analysis. Based on an exclusion based approach from respiratory.
       Includes encounters from A&E, admitted patient care, and outpatient settings that match respiratory-related diagnoses, procedures, or HRG codes. 
       Notable exclusions: respiratory infections in some datasets but not all(J1*, J2*, B97.4).
     config:
@@ -16,13 +16,9 @@ models:
         data_type: number
         description: "Unique identifier for the visit occurrence."
         data_tests:
-          - unique:
-              config:
-                severity: error
-                error_if: ">100"
-                warn_if: ">10"
+          - unique
           - not_null
 
-      - name: respiratory_encounter
+      - name: lower_respiratory_encounter
         data_type: boolean
         description: "Flag indicating whether the encounter is related to chronic lower respiratory disease. Always true for records in this table."

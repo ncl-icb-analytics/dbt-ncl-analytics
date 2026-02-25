@@ -22,10 +22,10 @@ ae_encounter_summary as(
         , count(distinct case when is_injury_related = FALSE  -- Attended - not injury -- TO DO: stratify by department type
                 then be.visit_occurrence_id end) as ae_ill_12mo
         , count(distinct case when is_injury_related = FALSE -- Attended - not injury
-                and start_date between dateadd(month, -3, current_date()) and current_date() 
+                and be.start_date between dateadd(month, -3, current_date()) and current_date() 
                 then be.visit_occurrence_id end) as ae_ill_3mo
         , count(distinct case when is_injury_related = FALSE  -- Attended - not injury
-                and start_date between dateadd(month, -1, current_date()) and current_date() 
+                and be.start_date between dateadd(month, -1, current_date()) and current_date() 
                 then be.visit_occurrence_id end) as ae_ill_1mo
         , count(distinct be.visit_occurrence_id) as ae_tot_12mo -- all attendances
         , count(distinct case when is_injury_related = TRUE-- all injuries
@@ -49,8 +49,8 @@ SELECT
     , zeroifnull(a.ae_tot_12mo) as ae_tot_12mo
     , zeroifnull(a.ae_inj_12mo) as ae_inj_12mo
     , zeroifnull(a.ae_t1_12mo) as ae_t1_12mo
-    , zeroifnull(a.ae_respiratory_attendance_12mo) as ae_respiratory_attendance_12mo -- 500k million attendance >= admission
-    , zeroifnull(ea.ae_respiratory_admission_12mo) as ae_respiratory_admission_12mo --  15k admission > attendance
+    , zeroifnull(a.ae_respiratory_attendance_12mo) as ae_lower_respiratory_attendance_12mo -- 500k million attendance >= admission
+    , zeroifnull(ea.ae_respiratory_admission_12mo) as ae_lower_respiratory_admission_12mo --  15k admission > attendance
 from ae_encounter_summary as a
 left join emergency_admissions ea
     on a.sk_patient_id = ea.sk_patient_id

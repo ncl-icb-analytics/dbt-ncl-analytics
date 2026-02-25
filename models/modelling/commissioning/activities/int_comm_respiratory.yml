@@ -5,7 +5,7 @@ models:
     description: > 
       Warning: In development. Incomplete logic.
       Activities considered respiratory-related for commissioning analysis. 
-      Includes encounters from A&E, admitted patient care, and outpatient settings that match respiratory-related diagnoses, procedures, or HRG codes. 
+      Includes encounters from A&E, admitted patient care, and outpatient settings that match respiratory-related diagnoses, procedures, or HRG codes in an inclusion based approach. 
     config:
       meta:
         owner:
@@ -15,11 +15,7 @@ models:
         data_type: number
         description: "Unique identifier for the visit occurrence."
         data_tests:
-          - unique:
-              config:
-                severity: error
-                error_if: ">100"
-                warn_if: ">10"
+          - unique
           - not_null
 
       - name: respiratory_encounter
