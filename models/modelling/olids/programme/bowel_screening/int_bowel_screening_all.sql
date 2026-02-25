@@ -35,7 +35,9 @@ SELECT
     obs.cluster_id AS source_cluster_id,
 
     -- Screening type classification
+    -- 368481000000103 is an observable entity recorded without result data; reclassify as Screening Recorded (No Result)
     CASE
+        WHEN obs.cluster_id in ('COLCANSCREV_COD','COLCANSCR_COD') AND obs.mapped_concept_code = '368481000000103' THEN 'Screening Recorded (No Result)'
         WHEN obs.cluster_id in ('COLCANSCREV_COD','COLCANSCR_COD') THEN 'Bowel Screening Completed'
         WHEN obs.cluster_id = 'COLCANSCRDEC_COD' THEN 'Screening Declined'
         ELSE 'Unknown'
@@ -43,7 +45,11 @@ SELECT
     --no PCD refsets for either invitation non reposnse or unsuitable for bowel screening
 
     -- Simple screening type flags based on core cluster codes
-    CASE WHEN obs.cluster_id in ('COLCANSCREV_COD','COLCANSCR_COD') THEN TRUE ELSE FALSE END AS is_completed_screening,
+    -- Exclude 368481000000103 (observable entity "BCSP: FOB result") which is recorded
+    -- without actual result data and inflates the screening numerator vs Fingertips
+    CASE WHEN obs.cluster_id in ('COLCANSCREV_COD','COLCANSCR_COD')
+              AND obs.mapped_concept_code != '368481000000103'
+         THEN TRUE ELSE FALSE END AS is_completed_screening,
     CASE WHEN obs.cluster_id = 'COLCANSCRDEC_COD' THEN TRUE ELSE FALSE END AS is_declined_screening
     --no PCD refsets for either invitation non reposnse or unsuitable for bowel screening
 
