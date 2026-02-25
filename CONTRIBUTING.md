@@ -208,6 +208,12 @@ Create a test commit:
 git commit --allow-empty -m "test: verify signed commits"
 ```
 
+Fix line-endings using this command (thx Kate)
+
+```bash
+$file = "$env:USERPROFILE\.ssh\allowed_signers"; $content = [System.IO.File]::ReadAllText($file); [System.IO.File]::WriteAllText($file, $content.Replace("`r`n", "`n"), [System.Text.Encoding]::UTF8); Write-Host "Line endings converted from CRLF to LF"
+```
+
 Check the signature:
 
 ```bash
