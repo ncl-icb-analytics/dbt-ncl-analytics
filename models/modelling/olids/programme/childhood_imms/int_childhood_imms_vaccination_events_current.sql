@@ -4,8 +4,7 @@
         tags=['childhood_imms'])
 }}
 
-
-WITH IMMS_CODE_OBS as (
+--FIND all vaccination events for currently eligible children by joining the mapped concept codes in the observation table to the childhood imms code dose mapping table to identify vaccination events.
 SELECT DISTINCT 
         dem.PERSON_ID,
         clut.VACCINE_ORDER,
@@ -21,14 +20,17 @@ SELECT DISTINCT
         clut.declined_cluster_id,
         clut.contraindicated_cluster_id 
    FROM {{ ref('stg_olids_observation') }} o
+   --FROM MODELLING.DBT_STAGING.STG_OLIDS_OBSERVATION o
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
+    --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = o.patient_id
     LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
-     -- Join mapped_concept_code to the IMMS_CODE_DOSEMATCH making sure clut.code is VARCHAR (currently is number)
-    JOIN {{ ref('int_childhood_imms_code_dose') }} clut on o.mapped_concept_code  = CAST(clut.CODE AS VARCHAR) 
+    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
+    JOIN {{ ref('int_childhood_imms_code_dose') }} clut on o.mapped_concept_code  = clut.CODE
+    -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = = clut.CODE 
     WHERE o.clinical_effective_date <= CURRENT_DATE
     AND dem.age < 25
     and o.mapped_concept_code  = clut.CODE
-              )
+    )
 
 --Define Vaccination Events look for ADMIN CODES by matching IMMS_CODE_OBS to CURRENTLY ELIGIBLE 
 ,IMM_ADM as ( 
