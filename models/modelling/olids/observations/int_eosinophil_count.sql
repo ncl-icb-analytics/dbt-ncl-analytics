@@ -33,8 +33,7 @@ WITH base_observations AS (
 {{ standardise_count_observation(
     base_cte='base_observations',
     measurement='eosinophil_count',
-    value_column='result_value',
-    enable_magnitude_conversion=true
+    value_column='result_value'
 ) }}
 
 ,

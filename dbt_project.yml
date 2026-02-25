@@ -226,6 +226,8 @@ seeds:
         CONFIG_VERSION: varchar(20)
         LOWER_LIMIT: float
         UPPER_LIMIT: float
+        CANONICAL_EXPONENT: integer
+        EXPECTED_LOWER: float
 
 snapshots:
   ncl_analytics:

@@ -1,4 +1,4 @@
-{% macro standardise_count_observation(base_cte, measurement, value_column='result_value', enable_magnitude_conversion=true) %}
+{% macro standardise_count_observation(base_cte, measurement, value_column='result_value') %}
 
 {#
     Standardises count-type observation values and units.
@@ -9,15 +9,16 @@
 
     Uses a 3-pass approach:
       Pass 1 - Accept values already in plausible range (defined by observation_value_bounds seed),
-               regardless of recorded unit. Most records are handled here.
+               regardless of recorded unit.
 
-      Pass 2 - For out-of-range values, look at the unit and apply known conversion factors 
+      Pass 2 - For out-of-range values, look at the unit and apply known conversion factors
                from the seed table if possible (e.g. {cells}/uL -> 10*9/L via x0.001).
 
-      Pass 3 - if this conversion is not possible, we try and infer the unit 
-               from the magnitude of the value using SI prefix conversions (/1000, /1M, /1B), 
-               and apply the appropriate conversion factor to the value.
-               Only runs if enable_magnitude_conversion is true.
+      Pass 3 - For remaining out-of-range values, check if the value is unambiguously
+               a raw base-unit recording (e.g. cells/L instead of 10*9/L) by dividing
+               by 10^CANONICAL_EXPONENT and checking the result falls in
+               [EXPECTED_LOWER, UPPER_LIMIT]. Controlled by the observation_value_bounds
+               seed — CANONICAL_EXPONENT IS NULL disables Pass 3.
 
     Unit classification after LEFT JOIN to seed:
       known    - CONVERT_FROM_UNIT IS NOT NULL AND MULTIPLY_BY IS NOT NULL
@@ -44,9 +45,6 @@
       value_column (str):
           Column name containing the numeric result. Default: 'result_value'.
 
-      enable_magnitude_conversion (bool):
-          Whether to attempt Pass 3 magnitude-based inference. Default: true.
-
     Output columns (appended to all columns from base_cte):
       original_result_value       - Raw value preserved from source
       original_result_unit_code   - Raw unit code preserved from source
@@ -57,13 +55,6 @@
       value_was_converted         - TRUE if value was mathematically changed
       conversion_reason           - Human-readable explanation of action taken
 #}
-
-{# -- Magnitude tiers for Pass 3: SI prefix conversions from larger unit scales -- #}
-{% set magnitude_tiers = [
-    {'name': 'pass_3_k', 'divisor': 1000,       'upper_bound': 1000,       'reason': 'Value magnitude suggests cells/uL scale, divided by 1000'},
-    {'name': 'pass_3_m', 'divisor': 1000000,     'upper_bound': 1000000,    'reason': 'Value magnitude suggests cells/mL scale, divided by 1000000'},
-    {'name': 'pass_3_b', 'divisor': 1000000000,  'upper_bound': 1000000000, 'reason': 'Value magnitude suggests cells/L scale, divided by 1000000000'},
-] %}
 
 -- Filter seed to rules for this measurement only
 unit_rules AS (
@@ -81,9 +72,9 @@ canonical_unit AS (
     LIMIT 1
 ),
 
--- Look up the plausible value range for this measurement
+-- Look up the plausible value range and Pass 3 configuration for this measurement
 value_bounds AS (
-    SELECT LOWER_LIMIT, UPPER_LIMIT
+    SELECT LOWER_LIMIT, UPPER_LIMIT, CANONICAL_EXPONENT, EXPECTED_LOWER
     FROM {{ ref('observation_value_bounds') }}
     WHERE DEFINITION_NAME = '{{ measurement }}'
     LIMIT 1
@@ -100,6 +91,8 @@ classified AS (
         cu.CONVERT_TO_UNIT AS canonical_unit_code,
         vb.LOWER_LIMIT AS lower_limit,
         vb.UPPER_LIMIT AS upper_limit,
+        vb.CANONICAL_EXPONENT AS canonical_exponent,
+        vb.EXPECTED_LOWER AS expected_lower,
         ur.MULTIPLY_BY AS seed_multiply_by,
         ur.PRE_OFFSET AS seed_pre_offset,
         ur.POST_OFFSET AS seed_post_offset,
@@ -135,14 +128,12 @@ pass_assigned AS (
                   + COALESCE(seed_post_offset, 0))
                   BETWEEN lower_limit AND upper_limit
                 THEN 'pass_2'
-            {% if enable_magnitude_conversion %}
-            {% for tier in magnitude_tiers %}
-            WHEN numeric_value > {% if loop.first %}upper_limit{% else %}{{ magnitude_tiers[loop.index0 - 1].upper_bound }}{% endif %}
-             AND numeric_value <= {{ tier.upper_bound }}
-             AND (numeric_value / {{ tier.divisor }}) BETWEEN lower_limit AND upper_limit
-                THEN '{{ tier.name }}'
-            {% endfor %}
-            {% endif %}
+            -- Pass 3: value is unambiguously in raw base-unit scale
+            WHEN canonical_exponent IS NOT NULL
+             AND numeric_value > upper_limit
+             AND (numeric_value / POWER(10, canonical_exponent)) >= expected_lower
+             AND (numeric_value / POWER(10, canonical_exponent)) <= upper_limit
+                THEN 'pass_3'
             ELSE 'no_match'
         END AS matched_pass
     FROM classified
@@ -157,9 +148,7 @@ standardised AS (
         CASE matched_pass
             WHEN 'pass_1' THEN numeric_value
             WHEN 'pass_2' THEN converted_value
-            {% for tier in magnitude_tiers %}
-            WHEN '{{ tier.name }}' THEN numeric_value / {{ tier.divisor }}
-            {% endfor %}
+            WHEN 'pass_3' THEN numeric_value / POWER(10, canonical_exponent)
             ELSE NULL
         END AS inferred_value,
 
@@ -173,9 +162,7 @@ standardised AS (
                     ELSE 'MEDIUM'
                 END
             WHEN 'pass_2' THEN 'HIGH'
-            {% for tier in magnitude_tiers %}
-            WHEN '{{ tier.name }}' THEN 'LOW'
-            {% endfor %}
+            WHEN 'pass_3' THEN 'LOW'
             ELSE 'NONE'
         END AS confidence,
 
@@ -189,9 +176,7 @@ standardised AS (
         CASE matched_pass
             WHEN 'pass_1' THEN FALSE
             WHEN 'pass_2' THEN TRUE
-            {% for tier in magnitude_tiers %}
-            WHEN '{{ tier.name }}' THEN TRUE
-            {% endfor %}
+            WHEN 'pass_3' THEN TRUE
             ELSE FALSE
         END AS value_was_converted,
 
@@ -205,9 +190,7 @@ standardised AS (
                     ELSE 'No value conversion, unit was assumed to be incorrect'
                 END
             WHEN 'pass_2' THEN 'Value converted using known unit factor (x' || seed_multiply_by::VARCHAR || ')'
-            {% for tier in magnitude_tiers %}
-            WHEN '{{ tier.name }}' THEN '{{ tier.reason }}'
-            {% endfor %}
+            WHEN 'pass_3' THEN 'Value divided by 10^' || canonical_exponent::VARCHAR || ' (inferred raw base-unit recording)'
             ELSE 'Value out of range after all conversion attempts'
         END AS conversion_reason
 
