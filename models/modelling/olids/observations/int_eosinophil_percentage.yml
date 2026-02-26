@@ -6,18 +6,23 @@ models:
       One row per observation using the EOS_PERCENT cluster. Uses stricter logic than the
       count model: only accepted units (%, percent, {WBCs}) are valid. All other units
       receive NONE confidence. Standard unit: %.
+    config:
+      meta:
+        owner:
+          name: ThomasShallcross
     columns:
       - name: id
         description: Unique observation identifier
-        tests:
+        data_tests:
           - not_null
+          - unique
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
         description: Date of observation
-        tests:
+        data_tests:
           - not_null
       - name: concept_code
         description: SNOMED code for the observation
@@ -37,7 +42,7 @@ models:
         description: Standardised unit after inference (% or NULL if NONE confidence)
       - name: inferred_value
         description: Standardised numeric value (unchanged from original for percentages)
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               min_value: 0
               max_value: 100
@@ -46,12 +51,12 @@ models:
       - name: value_was_converted
         description: Always FALSE for percentage model (no value conversions applied)
       - name: unit_was_changed
-        description: TRUE if inferred_unit differs from original_result_unit_code
+        description: TRUE if inferred_unit differs from original_result_unit_code, NULL if inference failed
       - name: conversion_reason
         description: Human-readable explanation of validation action taken
       - name: confidence
         description: Confidence level in the inferred value
-        tests:
+        data_tests:
           - accepted_values:
               values: ['VERY_HIGH', 'HIGH', 'NONE']
       - name: is_negative
@@ -62,7 +67,7 @@ models:
         description: TRUE if inferred value is plausible and usable for analysis
       - name: eosinophil_category
         description: Clinical category based on inferred percentage value
-        tests:
+        data_tests:
           - accepted_values:
               values:
                 - 'Invalid'

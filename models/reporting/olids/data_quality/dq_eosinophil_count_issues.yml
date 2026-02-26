@@ -1,0 +1,51 @@
+models:
+  - name: dq_eosinophil_count_issues
+    description: >
+      Eosinophil count data quality issues. Captures records from int_eosinophil_count
+      that fail validation for investigation, including negative values, extreme outliers,
+      excluded units, and values that could not be standardised.
+    config:
+      meta:
+        owner:
+          name: ThomasShallcross
+    columns:
+      - name: person_id
+        description: Person identifier
+      - name: id
+        description: Observation record identifier
+        data_tests:
+          - not_null
+      - name: clinical_effective_date
+        description: Date of observation
+      - name: concept_code
+        description: SNOMED code for the observation
+      - name: code_description
+        description: SNOMED code description
+      - name: original_result_value
+        description: Raw value from source data
+      - name: original_result_unit_display
+        description: Raw unit display text from source data
+      - name: original_result_unit_code
+        description: Raw unit code from source data
+      - name: inferred_value
+        description: Standardised numeric value (NULL if inference failed)
+      - name: inferred_unit
+        description: Standardised unit (NULL if inference failed)
+      - name: confidence
+        description: Confidence level in the inferred value
+      - name: conversion_reason
+        description: Human-readable explanation of standardisation action taken
+      - name: value_was_converted
+        description: TRUE if the numeric value was mathematically converted
+      - name: unit_was_changed
+        description: TRUE if inferred_unit differs from original_result_unit_code
+      - name: is_negative
+        description: TRUE if inferred value is negative
+      - name: is_extreme_outlier
+        description: TRUE if inferred value exceeds 100 x10*9/L
+      - name: is_valid_eosinophil
+        description: Always FALSE in this model (pre-filtered to issues)
+      - name: eosinophil_category
+        description: Clinical severity category from base model
+      - name: eosinophil_category_with_issues
+        description: Category including issue classifications for invalid records

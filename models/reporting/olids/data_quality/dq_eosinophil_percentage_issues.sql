@@ -33,7 +33,7 @@ SELECT
     CASE
         WHEN is_negative THEN 'Negative Value'
         WHEN is_extreme_outlier THEN 'Extreme Outlier (> 80%)'
-        WHEN confidence = 'NONE' AND original_result_unit_code = '10*9/L' THEN 'Excluded Unit (10*9/L on percentage code)'
+        WHEN confidence = 'NONE' AND conversion_reason = 'Excluded unit on this measurement type' THEN 'Excluded Unit (' || original_result_unit_code || ')'
         WHEN confidence = 'NONE' THEN 'Non-Accepted Unit on Percentage Measurement'
         ELSE eosinophil_category
     END AS eosinophil_category_with_issues

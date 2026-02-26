@@ -41,14 +41,12 @@ canonical_unit AS (
     FROM {{ ref('observation_standard_units') }}
     WHERE DEFINITION_NAME = 'eosinophil_percentage'
       AND PRIMARY_UNIT = TRUE
-    LIMIT 1
 ),
 
 value_bounds AS (
     SELECT LOWER_LIMIT, UPPER_LIMIT
     FROM {{ ref('observation_value_bounds') }}
     WHERE DEFINITION_NAME = 'eosinophil_percentage'
-    LIMIT 1
 ),
 
 unit_checked AS (
@@ -100,7 +98,7 @@ validated AS (
         END AS inferred_unit,
 
         CASE
-            WHEN unit_status = 'excluded' THEN 'Excluded unit on percentage measurement'
+            WHEN unit_status = 'excluded' THEN 'Excluded unit on this measurement type'
             WHEN unit_status = 'unknown' THEN 'Non-accepted unit on percentage measurement'
             WHEN numeric_value BETWEEN lower_limit AND upper_limit THEN
                 CASE
@@ -141,7 +139,9 @@ SELECT
     inferred_unit,
     inferred_value,
     value_was_converted,
-    inferred_unit IS DISTINCT FROM original_result_unit_code AS unit_was_changed,
+    CASE WHEN inferred_unit IS NULL THEN NULL
+         ELSE inferred_unit IS DISTINCT FROM original_result_unit_code
+    END AS unit_was_changed,
     conversion_reason,
     confidence,
     is_negative,

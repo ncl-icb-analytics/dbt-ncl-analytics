@@ -69,7 +69,6 @@ canonical_unit AS (
     FROM {{ ref('observation_standard_units') }}
     WHERE DEFINITION_NAME = '{{ measurement }}'
       AND PRIMARY_UNIT = TRUE
-    LIMIT 1
 ),
 
 -- Look up the plausible value range and Pass 3 configuration for this measurement
@@ -77,7 +76,6 @@ value_bounds AS (
     SELECT LOWER_LIMIT, UPPER_LIMIT, CANONICAL_EXPONENT, EXPECTED_LOWER
     FROM {{ ref('observation_value_bounds') }}
     WHERE DEFINITION_NAME = '{{ measurement }}'
-    LIMIT 1
 ),
 
 -- Join observations to seed and classify each record's unit status

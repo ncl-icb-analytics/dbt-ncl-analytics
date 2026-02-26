@@ -62,7 +62,9 @@ SELECT
     inferred_unit,
     inferred_value,
     value_was_converted,
-    inferred_unit IS DISTINCT FROM original_result_unit_code AS unit_was_changed,
+    CASE WHEN inferred_unit IS NULL THEN NULL
+         ELSE inferred_unit IS DISTINCT FROM original_result_unit_code
+    END AS unit_was_changed,
     conversion_reason,
     confidence,
     is_negative,
@@ -70,6 +72,7 @@ SELECT
     is_valid_eosinophil,
     CASE
         WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Invalid'
+        WHEN inferred_value < 0 THEN 'Invalid'
         WHEN inferred_value < 0.04 THEN 'Eosinopenia'
         WHEN inferred_value <= 0.5 THEN 'Normal'
         WHEN inferred_value <= 1.5 THEN 'Mild Eosinophilia'

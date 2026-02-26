@@ -33,7 +33,7 @@ SELECT
     CASE
         WHEN is_negative THEN 'Negative Value'
         WHEN is_extreme_outlier THEN 'Extreme Outlier (> 100 x10*9/L)'
-        WHEN confidence = 'NONE' AND original_result_unit_code = '%' THEN 'Excluded Unit (% on count code)'
+        WHEN confidence = 'NONE' AND conversion_reason = 'Excluded unit on this measurement type' THEN 'Excluded Unit (' || original_result_unit_code || ')'
         WHEN confidence = 'NONE' AND inferred_value IS NULL THEN 'Value Out of Range After All Conversions'
         WHEN confidence = 'NONE' THEN 'Could Not Determine Valid Value'
         ELSE eosinophil_category

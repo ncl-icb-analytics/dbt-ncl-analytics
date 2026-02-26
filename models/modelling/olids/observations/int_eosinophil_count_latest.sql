@@ -32,5 +32,5 @@ FROM {{ ref('int_eosinophil_count') }}
 WHERE is_valid_eosinophil = TRUE
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id
-    ORDER BY clinical_effective_date DESC
+    ORDER BY clinical_effective_date DESC, id DESC
 ) = 1
