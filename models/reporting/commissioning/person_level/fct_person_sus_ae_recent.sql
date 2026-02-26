@@ -1,20 +1,25 @@
-with 
-base_encounters as (
+with base_encounters as (
     select *
     from {{ ref('int_sus_ae_encounters') }}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     and sk_patient_id is not null and sk_patient_id != '1'
 ),  
-emergency_admissions as (
-    select sk_patient_id 
-        , count(distinct visit_occurrence_id) as ae_respiratory_admission_12mo
-    from {{ ref('int_sus_ip_encounters') }}
+lower_respiratory_encounters as (
+    select *
+    from {{ref('int_comm_chronic_lower_respiratory') }}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     and sk_patient_id is not null and sk_patient_id != '1'
-    and left(spell_admission_method, 1) = '2' -- Non-elective - emergency
-    and visit_occurrence_id in (select visit_occurrence_id from {{ref('int_comm_chronic_lower_respiratory')}})
+),  
+emergency_admissions as (
+    select ip.sk_patient_id 
+        , count(distinct ip.visit_occurrence_id) as ae_respiratory_admission_12mo
+    from {{ ref('int_sus_ip_encounters') }} as ip
+    inner join lower_respiratory_encounters as lre on lre.visit_occurrence_id = ip.visit_occurrence_id
+    where ip.start_date between dateadd(month, -12, current_date()) and current_date()
+    and ip.sk_patient_id is not null and ip.sk_patient_id != '1'
+    and left(ip.spell_admission_method, 1) = '2' -- Non-elective - emergency
     group by 
-        sk_patient_id
+        ip.sk_patient_id
 ),
 ae_encounter_summary as(
     select
@@ -30,12 +35,12 @@ ae_encounter_summary as(
         , count(distinct be.visit_occurrence_id) as ae_tot_12mo -- all attendances
         , count(distinct case when is_injury_related = TRUE-- all injuries
                 then be.visit_occurrence_id end) as ae_inj_12mo
-        , count(distinct case when clr.respiratory_encounter = true -- respiratory
+        , count(distinct case when clr.lower_respiratory_encounter = true -- respiratory
                 then be.visit_occurrence_id end) as ae_respiratory_attendance_12mo
         , count(distinct case when pod = 'AE-T1' -- Type 1 A&E
                 then be.visit_occurrence_id end) as ae_t1_12mo
     from base_encounters be
-    left join {{ref('int_comm_chronic_lower_respiratory')}} clr 
+    left join lower_respiratory_encounters clr 
     on be.visit_occurrence_id = clr.visit_occurrence_id
     group by 
         be.sk_patient_id

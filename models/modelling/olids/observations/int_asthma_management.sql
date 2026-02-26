@@ -110,7 +110,7 @@ salbutamol_only_ids as (
 
 salbutamol_repeats_id as (
     -- Persons with 3+ salbutamol prescriptions in 12 months
-    select person_id
+    select distinct person_id
     from {{ ref('int_asthma_medications_12m') }}
     where mapped_concept_code in {{ to_sql_list(salbutamol_code_list) }}
     group by person_id
@@ -119,14 +119,14 @@ salbutamol_repeats_id as (
 
 recent_antibacterial_medications_ids as (
     -- Persons with recent antibacterial medications
-    select person_id
+    select distinct person_id
     from {{ ref('int_antibacterial_medications_all') }}
     where is_recent_12m = true
 ),
 
 recent_prednisolone_medications_ids as (
     -- Persons with recent prednisolone medications - needs to be improved to remove people that have other indications such as rash, allergy and IBD
-    select mo.person_id
+    select distinct mo.person_id
     from ({{ get_medication_orders(bnf_code='0603020T0') }}) mo
     WHERE mo.order_date >= CURRENT_DATE() - INTERVAL '12 months'
         AND mo.order_date <= CURRENT_DATE()
