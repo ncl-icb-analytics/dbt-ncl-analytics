@@ -35,8 +35,8 @@ select core.primarykey_id
     , core.spell_admission_patient_classification
 
     -- clinical information
-    , core.spell_clinical_coding_grouper_derived_primary_diagnosis
-    , core.spell_clinical_coding_grouper_derived_secondary_diagnosis
+    , {{clean_icd10_code("spell_clinical_coding_grouper_derived_primary_diagnosis")}} as spell_clinical_coding_grouper_derived_primary_diagnosis
+    , {{clean_icd10_code("core.spell_clinical_coding_grouper_derived_secondary_diagnosis")}} as spell_clinical_coding_grouper_derived_secondary_diagnosis
     , core.spell_clinical_coding_grouper_derived_dominant_procedure
     , core.spell_patient_identity_pds_date_of_death
     , core.spell_patient_identity_pds_death_status
