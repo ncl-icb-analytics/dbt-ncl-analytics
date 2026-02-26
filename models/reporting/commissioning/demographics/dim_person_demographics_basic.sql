@@ -36,7 +36,7 @@ select
         --Registered information
         pmi.flag_current_ncl_registered,
         pmi.record_registered_start_date,
-        pmi.practice_code,
+        dict_gp.organisation_code as practice_code,
         dict_gp.organisation_name as practice_name,
         dict_pcn.network_code as pcn_code,
         dict_pcn.network_name as pcn_name,
@@ -81,6 +81,7 @@ on pmi.lsoa21_code = imd.lsoa_code_2021
 
 left join {{ref('stg_dictionary_dbo_organisation')}} dict_gp
 on pmi.practice_code = dict_gp.organisation_code
+and dict_gp.end_date is null
 
 left join {{ref('stg_dictionary_dbo_organisationmatrixpracticeview')}} as dict_pcn
 on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
