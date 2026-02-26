@@ -131,22 +131,34 @@ lsoa_field as (
 practice_code_field as (
     select 
 
-        sk_patient_id,
-        dataset_source as practice_source,
-        practice_code,
-        registered_event_date
+        combined.sk_patient_id,
+        combined.dataset_source as practice_source,
+        combined.practice_code,
+        combined.registered_event_date
         
     from combined
+
+    --Join to get current NCL Practices and Current NCL Registered Population
+    left join {{ref('stg_reference_lookup_ncl_gp_practice')}} gp_lu
+    on combined.practice_code = gp_lu.gp_practice_code
+
+    left join {{ref('int_person_pds_ncl_population_flags')}} ncl_flags
+    on combined.sk_patient_id = ncl_flags.sk_patient_id
 
     where dataset_source in ('pds', 'sus')
 
     qualify row_number () over (
-        partition by sk_patient_id
+        partition by combined.sk_patient_id
         order by 
-            practice_code is not null desc,
-            registered_event_date desc,
-            dataset_source = 'pds' desc
+            combined.practice_code is not null desc,
+            combined.registered_event_date desc,
+            combined.dataset_source = 'pds' desc
     ) = 1
+    --Extra additional restriction to prevent additional NCL registered from a non-pds source
+    --Working on the assumption that pds contains all NCL registered
+    and (
+        ncl_flags.flag_current_ncl_registered = TRUE or gp_lu.gp_practice_code is null
+    )
 )
 
 select
