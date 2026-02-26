@@ -28,6 +28,7 @@
         o.date_recorded,
         o.result_value,
         o.result_value_units_concept_id,
+        o.result_unit_code,
         o.result_unit_display,
         o.result_text,
         o.is_problem,

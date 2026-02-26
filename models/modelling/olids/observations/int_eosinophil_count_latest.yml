@@ -1,0 +1,52 @@
+models:
+  - name: int_eosinophil_count_latest
+    description: >
+      Latest valid eosinophil count per person. Filters to valid observations only
+      (is_valid_eosinophil = TRUE) and returns the most recent per person.
+    config:
+      meta:
+        owner:
+          name: ThomasShallcross
+    columns:
+      - name: id
+        description: Unique observation identifier
+        data_tests:
+          - not_null
+          - unique
+      - name: person_id
+        description: Person identifier
+        data_tests:
+          - not_null
+          - unique
+      - name: clinical_effective_date
+        description: Date of the most recent valid eosinophil count observation
+      - name: concept_code
+        description: SNOMED code for the observation
+      - name: code_description
+        description: SNOMED code description
+      - name: source_cluster_id
+        description: Cluster ID from get_observations
+      - name: original_result_value
+        description: Raw value from source data before any conversion
+      - name: original_result_unit_display
+        description: Raw unit display text from source data
+      - name: original_result_unit_code
+        description: Raw unit code from source data
+      - name: expected_measurement_type
+        description: Always COUNT for this model
+      - name: inferred_unit
+        description: Standardised unit (10*9/L)
+      - name: inferred_value
+        description: Standardised numeric value after any conversion
+      - name: value_was_converted
+        description: TRUE if the numeric value was mathematically converted
+      - name: unit_was_changed
+        description: TRUE if inferred_unit differs from original_result_unit_code
+      - name: conversion_reason
+        description: Human-readable explanation of standardisation action taken
+      - name: confidence
+        description: Confidence level in the inferred value
+      - name: is_valid_eosinophil
+        description: Always TRUE in this model (pre-filtered)
+      - name: eosinophil_category
+        description: Clinical severity category based on inferred value
