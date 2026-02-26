@@ -2,6 +2,7 @@
 -- ECDS
 with ae_attendance_summary as (
     select visit_occurrence_id
+        , sk_patient_id
         , start_date
         , chief_complaint_code as primary_complaint
         , primary_diagnosis_code_icd10 as primary_diagnosis_icd10
@@ -18,6 +19,7 @@ with ae_attendance_summary as (
 -- Admitted
 admitted_spells_summary as (
     select visit_occurrence_id
+        , sk_patient_id
         , start_date
         , null as primary_complaint
         , {{clean_icd10_code("primary_diagnosis_code")}} as primary_diagnosis_icd10
@@ -34,6 +36,7 @@ admitted_spells_summary as (
 -- Outpatient
 outpatient_appts_summary as (
     select visit_occurrence_id
+        , sk_patient_id
         , start_date
         , null as primary_complaint
         , {{clean_icd10_code("primary_diagnosis_code")}} as primary_diagnosis_icd10
