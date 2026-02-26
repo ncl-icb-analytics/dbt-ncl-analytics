@@ -208,6 +208,12 @@ Create a test commit:
 git commit --allow-empty -m "test: verify signed commits"
 ```
 
+Fix line-endings using this command (thx Kate)
+
+```bash
+$file = "$env:USERPROFILE\.ssh\allowed_signers"; $content = [System.IO.File]::ReadAllText($file); [System.IO.File]::WriteAllText($file, $content.Replace("`r`n", "`n"), [System.Text.Encoding]::UTF8); Write-Host "Line endings converted from CRLF to LF"
+```
+
 Check the signature:
 
 ```bash
@@ -367,6 +373,7 @@ This repository commits `dbt_packages/` to ensure consistent package versions. W
 ## Next Steps
 
 Once you're set up:
-1. Read the [Development Guide](docs/development-guide.md) for daily workflows
-2. Review [Working with Sources](docs/working-with-sources.md) to understand the data pipeline
-3. Check the README for project architecture and structure
+1. Read the [Modelling Guide](docs/modelling-guide.md) to understand the layers, naming conventions, and how to build models
+2. Read the [Materialisation Guide](docs/materialisation-guide.md) to understand views, tables, incremental models, and ephemeral CTEs
+3. Review [Working with Sources](docs/working-with-sources.md) to understand the source generation pipeline
+4. Read the [Development Guide](docs/development-guide.md) for daily workflows and advanced patterns

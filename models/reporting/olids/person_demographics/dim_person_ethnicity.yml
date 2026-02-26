@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_ethnicity
     description: 'Latest recorded ethnicity for all persons with three-level classification

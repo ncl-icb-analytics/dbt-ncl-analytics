@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_anxiety_diagnoses_all
     description: 'Anxiety diagnosis and resolution observations for mental health

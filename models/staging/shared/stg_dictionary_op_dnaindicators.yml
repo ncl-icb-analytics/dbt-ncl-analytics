@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_dictionary_op_dnaindicators
     description: Did Not Attend (DNA) indicator codes reference

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_65
     description: 'Case finding for diabetes screening in patients with moderate-high

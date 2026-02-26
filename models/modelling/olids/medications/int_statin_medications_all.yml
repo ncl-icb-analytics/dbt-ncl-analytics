@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_statin_medications_all
     description: 'Statin medication orders using BNF classification for cholesterol

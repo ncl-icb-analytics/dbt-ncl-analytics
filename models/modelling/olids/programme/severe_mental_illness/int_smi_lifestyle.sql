@@ -166,6 +166,11 @@ select
 n.person_id
 ,DATE(n.clinical_effective_date) as NUTR_REV_DATE
 ,n.CONCEPT_DISPLAY as NUTR_REV_OUTCOME
+,CASE 
+WHEN n.concept_code in ( '310502008','301991000000101') THEN 'Yes' 
+WHEN n.CONCEPT_CODE IN ('226234005', '310503003','16208003','301961000000107','310500000') THEN 'No'
+WHEN n.CONCEPT_CODE IN ('391129005', '401070008','391132008') THEN 'Outcome Unknown'
+END AS POOR_DIET_FLAG
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_nutrition_review_latest n 
 FROM {{ ref('int_smi_longlives_nutrition_review_latest') }} n
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
@@ -177,12 +182,17 @@ select
 w.person_id
 ,DATE(w.clinical_effective_date) as WT_MGMT_DATE
 ,w.CONCEPT_DISPLAY as WT_MGMT_TYPE
+,CASE
+WHEN w.CONCEPT_CODE IN ('103699006', '306163007','443288003','11816003') THEN 'Yes'
+END AS REFERRAL_DIET_ADVICE
+,CASE
+WHEN w.CONCEPT_CODE IN ('390893007', '892281000000101','390893007','304507003','526151000000109','183073003','416974006') THEN 'Yes'
+END AS REFERRAL_EXERCISE_ADVICE
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_weight_mgmt_latest w
 FROM {{ ref('int_smi_longlives_weight_mgmt_latest') }} w
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
-
 --DENTAL INSPECTION LATEST EVER
 ,DENTAL_INSPECTION as (
 select 
@@ -191,6 +201,22 @@ d.person_id
 ,d.CONCEPT_DISPLAY as DENTAL_TYPE
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_dental_inspection_latest d
 FROM {{ ref('int_smi_longlives_dental_inspection_latest') }} d
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
+INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
+)
+--EXERCISE PATTERN LATEST EVER
+,EXERCISE as (
+select 
+e.person_id
+,DATE(e.clinical_effective_date) as EX_STAT_DATE
+,e.CONCEPT_DISPLAY as EXERCISE_STATUS
+,CASE 
+WHEN e.CONCEPT_CODE IN ('228445002','160631001') THEN 'Yes' 
+WHEN e.CONCEPT_CODE IN ('160632008','160633003') THEN 'No'
+WHEN e.CONCEPT_CODE IN ('160628002','266930008') THEN 'Outcome Unknown'
+ELSE e.CONCEPT_CODE END AS LOW_EXERCISE_FLAG
+--FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_exercise_assessment_latest e
+FROM {{ ref('int_smi_longlives_exercise_assessment_latest') }} e
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
@@ -223,10 +249,16 @@ p.PERSON_ID
 ,b.BMI_CATEGORY
 ,n.NUTR_REV_DATE
 ,n.NUTR_REV_OUTCOME
+,n.POOR_DIET_FLAG
+,w.REFERRAL_DIET_ADVICE
 ,w.WT_MGMT_DATE
 ,w.WT_MGMT_TYPE
 ,d.DENTAL_DATE
 ,d.DENTAL_TYPE
+,e.EX_STAT_DATE
+,e.EXERCISE_STATUS
+,e.LOW_EXERCISE_FLAG
+,w.REFERRAL_EXERCISE_ADVICE
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 FROM {{ ref('int_smi_population_base')  }} p
 LEFT JOIN ILLICIT i using (person_id)
@@ -239,3 +271,4 @@ LEFT JOIN BMI_EVER b using (person_id)
 LEFT JOIN NUT_REV n using (person_id)
 LEFT JOIN WT_MGMT w using (person_id)
 LEFT JOIN DENTAL_INSPECTION d using (person_id)
+LEFT JOIN EXERCISE e using (person_id)

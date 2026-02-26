@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_dictionary_ecds_chiefcomplaint
     description: ECDS chief complaint reference dictionary

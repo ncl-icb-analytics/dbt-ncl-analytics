@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_active_patients
     description: Dimension table providing active patient status at person 

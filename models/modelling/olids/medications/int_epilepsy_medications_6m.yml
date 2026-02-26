@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_epilepsy_medications_6m
     description: 'Anti-epileptic drug medication orders from the last 6 months for

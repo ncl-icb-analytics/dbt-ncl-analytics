@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: fct_breast_screening_status
     description: 'Breast screening programme status for eligible females aged 50-71

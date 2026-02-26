@@ -1,4 +1,3 @@
-version: 2
 sources:
 - name: olids
   database: '"DATA_LAKE"'
@@ -451,11 +450,13 @@ sources:
   - name: EPISODE_OF_CARE
     identifier: '"EPISODE_OF_CARE"'
     columns:
-    - name: LDS_RECORD_ID
+    - name: LDS_SOURCE_RECORD_ID
       data_type: TEXT
     - name: ID
       data_type: TEXT
-    - name: ORGANISATION_ID
+    - name: ORGANISATION_ID_PUBLISHER
+      data_type: TEXT
+    - name: ORGANISATION_ID_MANAGING
       data_type: TEXT
     - name: PATIENT_ID
       data_type: TEXT
@@ -491,17 +492,19 @@ sources:
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
       data_type: TEXT
-    - name: LDS_DATASET_ID
+    - name: LDS_SOURCE_DATASET_ID
       data_type: TEXT
     - name: LDS_CDM_EVENT_ID
       data_type: TEXT
     - name: LDS_VERSIONER_EVENT_ID
       data_type: TEXT
-    - name: RECORD_OWNER_ORGANISATION_CODE
+    - name: ORGANISATION_CODE_PUBLISHER
       data_type: TEXT
-    - name: LDS_DATETIME_DATA_ACQUIRED
+    - name: ORGANISATION_CODE_MANAGING
+      data_type: TEXT
+    - name: LDS_DATETIME_FIRST_ACQUIRED
       data_type: TIMESTAMP_NTZ
-    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+    - name: LDS_DATETIME_UPDATE_ACQUIRED
       data_type: TIMESTAMP_NTZ
     - name: LDS_IS_DELETED
       data_type: BOOLEAN

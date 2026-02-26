@@ -5,9 +5,12 @@
 -- and materialisation type -  technically redundant here if declared in dbt_project.yml so just including it for clarity whilst testing
 -- NOTE (18/12/25): Changed materialization now from view to table to as missing_summary test running too early on blank views, reulting in it being empty
 
-{{ config(
-    materialized='table'
-) }}
+{{
+    config(
+        materialized='table',
+        tags='daily'
+    )
+}}
 
 WITH base AS (
     SELECT

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_66
     description: 'CVD case finding priority (f): Patients aged 75-84 requiring cardiovascular

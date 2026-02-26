@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_pcn
     description: 'Primary Care Network dimension with comprehensive PCN details and

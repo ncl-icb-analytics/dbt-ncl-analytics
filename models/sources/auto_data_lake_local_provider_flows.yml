@@ -1,4 +1,3 @@
-version: 2
 sources:
 - name: local_provider_flows
   database: '"DATA_LAKE"'

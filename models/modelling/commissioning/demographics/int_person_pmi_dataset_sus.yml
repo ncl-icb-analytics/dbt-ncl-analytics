@@ -1,4 +1,3 @@
-version: 2
 models:
 - name: int_person_pmi_dataset_sus
   description: Intermediate table containing the demographic dimensions from the SUS dataset, one per patient

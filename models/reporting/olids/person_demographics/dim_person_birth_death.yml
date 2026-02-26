@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_birth_death
     description: 'Person vital statistics with birth and death information using statistical

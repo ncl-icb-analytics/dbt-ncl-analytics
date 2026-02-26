@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_inactive_patients
     description: Dimension table providing inactive patient status at person 

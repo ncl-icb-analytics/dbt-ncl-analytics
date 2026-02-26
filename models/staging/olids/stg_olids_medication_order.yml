@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_medication_order
     description: Medication orders and prescriptions issued in GP systems. 

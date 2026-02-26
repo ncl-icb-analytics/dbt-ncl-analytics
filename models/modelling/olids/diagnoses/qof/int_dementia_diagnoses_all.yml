@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_dementia_diagnoses_all
     description: 'Dementia diagnosis observations for QOF register management and

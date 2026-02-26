@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: ltc_lcs_cf_dashboard_base_secondary_use

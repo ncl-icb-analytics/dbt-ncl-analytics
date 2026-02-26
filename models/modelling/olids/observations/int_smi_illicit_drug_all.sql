@@ -30,22 +30,29 @@ AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 --final select with categorisations
 select o.*
 ,CASE 
-WHEN CONCEPT_DISPLAY is null THEN 'Unknown'
-WHEN CONCEPT_DISPLAY in ('Does not misuse drugs','Has never misused drugs') THEN 'Does not misuse drugs'
-WHEN CONCEPT_DISPLAY in ('Poly-drug misuser', 'Long-term drug misuser','Combined opioid with non-opioid substance dependence, continuous','Notified addict') THEN 'Dependence' 
-WHEN CONCEPT_DISPLAY ILIKE ANY ('%dependence','%Glue sniffing dependence%','%drug dependence%') THEN 'Dependence'
-WHEN CONCEPT_DISPLAY in ('Misused drugs in past', 'Date stopped drug misuse', 'Time since stopped drug misuse','Time spent recovering from drugs','Abstinent from drug misuse') THEN 'Abstinence/Remission'
-WHEN CONCEPT_DISPLAY ILIKE ANY ('Abstinen%','%remission') THEN 'Abstinence/Remission'
-WHEN CONCEPT_DISPLAY in ('Shares drug injecting equipment','Cleaning of drug injection equipment','Drug injecting equipment hygiene','Drug injection behaviour') THEN 'Injecting drug user'
-WHEN CONCEPT_DISPLAY ILIKE ANY ('Intravenous%','%needle%','Injects drugs%','%injector%') THEN 'Injecting drug user'
-WHEN CONCEPT_DISPLAY ILIKE ANY ('Overdose%','%overdose','%intoxication%','%poison%') THEN 'Overdose or Poisoning' 
-WHEN CONCEPT_DISPLAY ilike '%disorder%' THEN 'Drug-Induced Mental Disorders'
-WHEN CONCEPT_DISPLAY in ('Duplicative flashbacks') THEN 'Drug-Induced Mental Disorders'
-WHEN CONCEPT_DISPLAY in ('Not using heroin on top of substitution therapy') THEN 'Withdrawal/Treatment'
-WHEN CONCEPT_DISPLAY ilike '%withdrawal%' THEN 'Withdrawal/Treatment'
-WHEN CONCEPT_DISPLAY in ('Misuses drugs', 'Occasional drug user', 'Episodic use of drugs', 'Current drug user','Illicit drug use','Never injecting drug user','Recreational drug user','Details of drug misuse behaviour','Misuses drugs sublingually','Drug seeking behaviour') THEN 'Misuse/Harmful Use'
-WHEN CONCEPT_DISPLAY ILIKE ANY ('%drug abuse%','%drug misuse','Misuse%','%Harmful pattern%','%inject%','%drug-related activities%','Smokes%','%Inject%','%needle%') THEN 'Misuse/Harmful Use'
-ELSE 'Misuse/Harmful Use'
+WHEN concept_code in ('228367002','228368007') THEN 'Does not misuse drugs'
+WHEN concept_code in ('1364721000000101','191821007','191827006','191833002','191839003','191845006',
+'191920007','228411009','228424009','44870007','712542001','712543006','712545004','712546003') THEN 'Abstinence/Remission' 
+WHEN concept_code in ('1047881000000106','11048011000119103','1254812006','1255013006','1255018002','191816009','191819002','191820008','191829009',
+'191853003','191855005','191856006','191857002','191865004','191867007','191868002','191871005','191873008','191875001','191877009',
+'199252002','21647008','228371004','228374007','231468005','231469002','231470001','231472009','231473004','231474005',
+'231475006','231477003','231478008','231479000','231480002','231481003','231482005','2403008','267206008','268640002','268641003',
+'275471001','31956009','38247002','427327003','442406005','75544000','85005007','191825003','191826002','191831000','191832007',
+'191837001','191838006','191843004','191844005','191850000') THEN 'Dependence'
+WHEN concept_code in ('228372006','105546006','1104931000000109','191905001','191906000','191916008','191918009','191919001','191924003','191925002','191939002',
+'197541000000101','202961000000106','202991000000100','204641000000107','226034001','228373001','228375008','228376009','228377000','228378005',
+'228379002','228381000','228384008','228390007','228392004','228393009','228397005','228413007','228417008','228423003','228425005','228427002',
+'228428007','228430009','228438002','228440007','228441006','228443009','228444003','248021000000105','268647004','279461000000104','307052004',
+'361055000','363908000','383871000000108','383901000000108','413096007','416262000','416437003','416479009','416751004','417252002','417284009',
+'417298001','417531009','424626006','424848002','428406005','428493006','428819003','428823006','429782000','441668002','442229000','699449003',
+'703885002','707848009','723933008','724653003','78267003','785277001','824001000000103','84758004','91388009') THEN 'Misuse/Harmful Use'
+WHEN concept_code in ('11061003','11387009','1187219008','14784000','16238221000119109','39951001','417360004',
+'46975003','61104008','724729003','762325009','77355000','83168008','943121000000104','943151000000109') THEN 'Drug-Induced Mental Disorders'
+WHEN concept_code in ('228386005','228387001','228388006','228389003','228391006','228394003','228395002',
+'228400001','228401002','228405006','228406007','228410005','248601000000106') THEN 'Injecting drug user'
+WHEN concept_code in ('216463005','216551003','216583009','27956007','295174006','295175007','296301000','296302007',
+'296305009','296318001','296321004','296324007','45421006','708079007','737335004','838519006','296319009','296322006','296323001','296327000')THEN 'Overdose or Poisoning'
+WHEN concept_code in ('1254960008','230443000','279491000000105','428370001','718617006','724728006','74934004','763699005','87132004') THEN 'Withdrawal/Treatment'
 END AS ILLICIT_DRUG_PATTERN
 ,CASE 
 WHEN CONCEPT_DISPLAY in ('Methadone dependence', 'Opium dependence') THEN 'Opioids'

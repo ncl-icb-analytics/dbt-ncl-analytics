@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: practices_with_significant_registration_differences_direct_care

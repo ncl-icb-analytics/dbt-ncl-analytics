@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_61
     description: 'Diabetes case finding for patients aged 17+ with HbA1c in diabetic

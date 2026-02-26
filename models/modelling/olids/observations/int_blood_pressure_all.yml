@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_blood_pressure_all
     description: 'Event-based blood pressure consolidation with paired systolic/diastolic

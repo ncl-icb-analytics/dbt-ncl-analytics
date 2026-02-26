@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_palliative_care_diagnoses_all
     description: 'Palliative care pathway observations for QOF register management.

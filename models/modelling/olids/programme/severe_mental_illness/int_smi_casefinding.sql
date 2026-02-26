@@ -23,7 +23,8 @@ SELECT DISTINCT
   WHEN CHECK_TYPE = 'BMI' THEN 'BMI'
   WHEN CHECK_TYPE = 'Cholesterol' THEN 'Chol'
   WHEN CHECK_TYPE = 'HBA1C' THEN 'HbA1c'
-  ELSE CHECK_TYPE END ,',') AS INCOMP12M_LIST
+  --Coderabbit suggestion:If consistent output matters (e.g. for downstream comparisons or testing), consider adding WITHIN GROUP. It's good practice.
+  ELSE CHECK_TYPE END ,',') WITHIN GROUP (ORDER BY CHECK_TYPE) AS INCOMP12M_LIST
    ,COUNT(DISTINCT CHECK_TYPE) AS INCOMP12M_CT
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_SIX_HEALTH_CHECK 
 FROM {{ ref('int_smi_six_health_check')  }} 
@@ -42,14 +43,14 @@ p.PERSON_ID
 ,p.HX_FLAKE
 ,p.PRACTICE_NAME
 ,p.PRACTICE_CODE
-,hc.INCOMP12M_CT
-,hc.INCOMP12M_LIST
-,hc.SMOK_MISS
-,hc.ALC_MISS
-,hc.BP_MISS
-,hc.CHOL_MISS
-,hc.BMI_MISS
-,hc.HBA1C_MISS
+,COALESCE(hc.INCOMP12M_CT,0) AS INCOMP12M_CT
+,COALESCE(hc.INCOMP12M_LIST, 'All checks met') AS INCOMP12M_LIST
+,COALESCE(hc.SMOK_MISS,'No') AS SMOK_MISS
+,COALESCE(hc.ALC_MISS,'No') AS ALC_MISS
+,COALESCE(hc.BP_MISS,'No') AS BP_MISS
+,COALESCE(hc.CHOL_MISS,'No') AS CHOL_MISS
+,COALESCE(hc.BMI_MISS,'No') AS BMI_MISS
+,COALESCE(hc.HBA1C_MISS,'No') AS HBA1C_MISS
 ,CASE WHEN dc.PERSON_ID IS NOT NULL THEN 'Yes' ELSE 'No' END AS HAS_DECLINED
 ,AGE
 ,AGE_BAND_5Y
@@ -82,6 +83,7 @@ WHEN l.ALCOHOL_RISK_CATEGORY = 'Alcohol Status Declined' THEN 'Status Declined' 
 ,NVL(ltc.LTC_COUNT,0) AS LTC_COUNT
 ,CASE WHEN ltc.LTC_COUNT >= 2 THEN 'Yes' ELSE 'No' END AS LTC_2PLUS
 ,ltc.LTC_SUMMARY
+,IS_ON_LITHIUM
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 FROM {{ ref('int_smi_population_base')  }} p
 LEFT JOIN healthcheck_sum hc using (person_id)
@@ -90,5 +92,6 @@ LEFT JOIN declined dc using (person_id)
 LEFT JOIN {{ ref('int_smi_lifestyle')  }} l using (person_id)
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_LTC_PROFILE ltc using (person_id)
 LEFT JOIN {{ ref('int_smi_ltc_profile')  }} ltc using (person_id)
-WHERE hc.PERSON_ID IS NOT NULL 
-AND p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
+WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
+-- include all people whether they have had a health check or not, as long as they have an active SMI diagnosis. Those with no health checks will have 0 incomplete checks and 'All checks met' in the list field. 
+

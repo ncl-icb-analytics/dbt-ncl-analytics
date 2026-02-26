@@ -1,4 +1,3 @@
-version: 2
 models:
 - name: int_person_pmi_dataset_pds
   description: Intermediate table containing the demographic dimensions from the PDS dataset, one per patient based on most recent information

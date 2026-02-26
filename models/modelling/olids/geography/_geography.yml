@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_geography_lsoa_2011

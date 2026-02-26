@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ethnicity_cardiometabolic_risk
     description: 'Ethnicity classifications for populations requiring lower BMI thresholds

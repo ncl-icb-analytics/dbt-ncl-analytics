@@ -14,9 +14,9 @@ Age-agnostic naming allows for year-to-year age range changes.
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ flu_campaign_config(var('flu_current_campaign', 'flu_2024_25')) }})
+    SELECT * FROM ({{ flu_current_config() }})
     UNION ALL
-    SELECT * FROM ({{ flu_campaign_config(var('flu_previous_campaign', 'flu_2023_24')) }})
+    SELECT * FROM ({{ flu_previous_config() }})
 ),
 
 -- Step 1: Find children in the preschool age range based on birth dates (for all campaigns)

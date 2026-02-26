@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_valproate_action_status
     description: |

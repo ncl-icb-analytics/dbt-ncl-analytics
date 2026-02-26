@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_nhs_health_checks
     description: 'NHS health check completion observations for Long Term Conditions

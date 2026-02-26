@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: patient_opt_out_summary_secondary_use

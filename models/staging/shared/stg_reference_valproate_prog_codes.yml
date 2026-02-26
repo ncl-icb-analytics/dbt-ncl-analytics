@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_valproate_prog_codes
     description: Valproate medication codes for pregnancy prevention programme

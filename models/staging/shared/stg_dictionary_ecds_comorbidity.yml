@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_dictionary_ecds_comorbidity
     description: ECDS comorbidity reference data mapping SNOMED codes to ECDS 

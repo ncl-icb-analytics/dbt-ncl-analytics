@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_asplenia
     description: 'Flu vaccination eligibility for people with asplenia or dysfunction

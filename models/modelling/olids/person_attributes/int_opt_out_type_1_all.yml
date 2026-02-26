@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_opt_out_type_1_all

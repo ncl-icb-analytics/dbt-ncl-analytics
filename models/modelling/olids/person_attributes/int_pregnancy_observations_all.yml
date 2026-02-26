@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_pregnancy_observations_all
     description: 'Pregnancy-related observations for maternity care pathway coordination

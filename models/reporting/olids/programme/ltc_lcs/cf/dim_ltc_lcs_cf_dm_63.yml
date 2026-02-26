@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_63
     description: 'Case finding for patients with borderline HbA1c levels requiring

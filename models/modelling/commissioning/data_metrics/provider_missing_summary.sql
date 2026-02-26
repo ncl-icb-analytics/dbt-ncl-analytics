@@ -4,9 +4,12 @@
 --- Select the number of missing days per provider per dataset (APC, OP, ECDS)
 
 
-{{ config(
-    materialized='table'
-) }}
+{{
+    config(
+        materialized='table',
+        tags='daily'
+    )
+}}
 
 WITH 
 apc_raw AS (
