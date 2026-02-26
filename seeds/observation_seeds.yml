@@ -3,14 +3,13 @@ seeds:
     description: >
       Canonical unit definitions for clinical observations.
       Each measurement should have exactly one primary unit row.
-    data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DEFINITION_NAME
-            - PRIMARY_UNIT
     columns:
       - name: DEFINITION_NAME
         description: Measurement identifier (e.g. eosinophil_count)
+        data_tests:
+          - unique:
+              config:
+                where: "PRIMARY_UNIT = TRUE"
 
   - name: observation_value_bounds
     description: >

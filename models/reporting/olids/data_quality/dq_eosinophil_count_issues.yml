@@ -11,10 +11,13 @@ models:
     columns:
       - name: person_id
         description: Person identifier
+        data_tests:
+          - not_null
       - name: id
         description: Observation record identifier
         data_tests:
           - not_null
+          - unique
       - name: clinical_effective_date
         description: Date of observation
       - name: concept_code
