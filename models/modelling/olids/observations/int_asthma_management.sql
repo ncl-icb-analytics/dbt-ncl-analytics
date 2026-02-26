@@ -110,11 +110,26 @@ salbutamol_only_ids as (
 
 salbutamol_repeats_id as (
     -- Persons with 3+ salbutamol prescriptions in 12 months
-    select person_id
+    select distinct person_id
     from {{ ref('int_asthma_medications_12m') }}
     where mapped_concept_code in {{ to_sql_list(salbutamol_code_list) }}
     group by person_id
     having count(*) >= 3  
+),
+
+recent_antibacterial_medications_ids as (
+    -- Persons with recent antibacterial medications
+    select distinct person_id
+    from {{ ref('int_antibacterial_medications_all') }}
+    where is_recent_12m = true
+),
+
+recent_prednisolone_medications_ids as (
+    -- Persons with recent prednisolone medications - needs to be improved to remove people that have other indications such as rash, allergy and IBD
+    select distinct mo.person_id
+    from ({{ get_medication_orders(bnf_code='0603020T0') }}) mo
+    WHERE mo.order_date >= CURRENT_DATE() - INTERVAL '12 months'
+        AND mo.order_date <= CURRENT_DATE()
 )
 
 {# 
@@ -129,7 +144,9 @@ select
     tnd.person_id is not null as testing_no_diagnosis ,
     act.person_id is not null  as diagnosis_no_act,
     so.person_id is not null  as salbutamol_only,
-    sr.person_id is not null as salbutamol_repeats
+    sr.person_id is not null as salbutamol_repeats,
+    rabm.person_id is not null as recent_antibacterial_medications,
+    rpn.person_id is not null as recent_prednisolone_medications
 
 from persons p
 left join diagnosis_no_testing_ids dnt
@@ -142,3 +159,7 @@ left join salbutamol_only_ids so
     on p.id = so.person_id   
 left join salbutamol_repeats_id sr
     on p.id = sr.person_id 
+left join recent_antibacterial_medications_ids rabm
+    on p.id = rabm.person_id
+left join recent_prednisolone_medications_ids rpn
+    on p.id = rpn.person_id
