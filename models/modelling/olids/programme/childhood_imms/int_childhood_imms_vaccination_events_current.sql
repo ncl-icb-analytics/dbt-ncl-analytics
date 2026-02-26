@@ -4,13 +4,15 @@
         tags=['childhood_imms'])
 }}
 
---FIND all vaccination events for currently eligible children by joining the mapped concept codes in the observation table to the childhood imms code dose mapping table to identify vaccination events.
+--FIND  vaccination events using observation table.
+WITH IMMS_CODE_OBS as (
 SELECT DISTINCT 
         dem.PERSON_ID,
         clut.VACCINE_ORDER,
         clut.vaccine,
         clut.vaccine_id,
         clut.CODECLUSTERID,
+        clut.code,
         clut.dose_match,
         DATE(o.clinical_effective_date) as EVENT_DATE,
         --o."age_at_event" is from EMIS. It either rounds years up or down
@@ -28,10 +30,48 @@ SELECT DISTINCT
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on o.mapped_concept_code  = clut.CODE
     -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = = clut.CODE 
     WHERE o.clinical_effective_date <= CURRENT_DATE
-    AND dem.age < 25
+    AND dem.age < 19
     and o.mapped_concept_code  = clut.CODE
     )
-
+--same query using medication orders table rather than observations
+,IMMS_CODE_MED as (
+SELECT DISTINCT 
+        dem.PERSON_ID,
+        clut.VACCINE_ORDER,
+        clut.vaccine,
+        clut.vaccine_id,
+        clut.CODECLUSTERID,
+        clut.code,
+        clut.dose_match,
+        DATE(m.clinical_effective_date) as EVENT_DATE,
+        --m."age_at_event" is from EMIS. It either rounds years up or down
+        m.age_at_event AS AGE_AT_EVENT_OBS,
+        clut.administered_cluster_id, 
+        clut.drug_cluster_id,
+        clut.declined_cluster_id,
+        clut.contraindicated_cluster_id
+    FROM {{ ref('stg_olids_medication_order') }} m
+    --FROM MODELLING.DBT_STAGING.STG_OLIDS_MEDICATION_ORDER m
+    LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = m.patient_id
+    --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = m.patient_id
+    LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
+    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
+    JOIN {{ ref('int_childhood_imms_code_dose') }} clut on m.mapped_concept_code  = clut.CODE
+    -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on m.mapped_concept_code  = clut.CODE 
+    WHERE m.clinical_effective_date <= CURRENT_DATE
+    AND dem.age < 19
+    and m.mapped_concept_code  = clut.CODE
+)
+--UNION OBSERVATIONS AND MEDICATIONS and prioritise admin over drug events if on the same date 
+,VACCS_COMBINED AS (
+    SELECT o.*
+    FROM IMMS_CODE_OBS o
+    UNION ALL
+    SELECT m.*
+    FROM IMMS_CODE_MED m
+    WHERE (m.PERSON_ID, m.VACCINE_ID) NOT IN (
+                SELECT PERSON_ID, VACCINE_ID FROM IMMS_CODE_OBS)
+)
 --Define Vaccination Events look for ADMIN CODES by matching IMMS_CODE_OBS to CURRENTLY ELIGIBLE 
 ,IMM_ADM as ( 
      SELECT distinct
@@ -50,9 +90,9 @@ SELECT DISTINCT
         el.ELIGIBLE_TO_DATE,
         el.MAXIMUM_AGE_DAYS,
         clut.EVENT_DATE,
-        CASE 
+            CASE 
             WHEN clut.codeclusterid = clut.administered_cluster_id THEN 'Administration'
-            WHEN clut.codeclusterid = clut.drug_cluster_id THEN 'Administration'
+            WHEN clut.codeclusterid = clut.drug_cluster_id THEN 'Administration_drug'
             WHEN clut.codeclusterid = clut.Contraindicated_Cluster_ID THEN 'Contraindicated'
             WHEN clut.codeclusterid = clut.Declined_Cluster_ID THEN 'Declined'
             ELSE 'Other'
@@ -61,19 +101,24 @@ SELECT DISTINCT
         CASE 
             WHEN clut.codeclusterid = clut.administered_cluster_id 
             AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) > el.ELIGIBLE_AGE_TO_DAYS + 15 THEN 'Yes' 
+            WHEN clut.codeclusterid = clut.drug_cluster_id 
+            AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) > el.ELIGIBLE_AGE_TO_DAYS + 15 THEN 'Yes'
             WHEN clut.codeclusterid = clut.administered_cluster_id 
+            AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) < el.ELIGIBLE_AGE_FROM_DAYS - 15 THEN 'Yes' 
+            WHEN clut.codeclusterid = clut.drug_cluster_id 
             AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) < el.ELIGIBLE_AGE_FROM_DAYS - 15 THEN 'Yes' 
             ELSE 'No' 
         END AS OUT_OF_SCHEDULE    
-    FROM {{ ref('int_childhood_imms_currently_eligible') }} el 
-    INNER JOIN IMMS_CODE_OBS clut on clut.PERSON_ID = el.PERSON_ID
+    FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CURRENTLY_ELIGIBLE el 
+    INNER JOIN VACCS_COMBINED clut on clut.PERSON_ID = el.PERSON_ID
     AND el.DOSE_NUMBER = clut.DOSE_MATCH 
     and el.VACCINE_NAME = clut.VACCINE
     and el.VACCINE_ID = clut.VACCINE_ID
        --imms date must be greater than 1st day of the birth month BIRTH_DATE_APPROX
     and clut.EVENT_DATE > DATE_TRUNC('MONTH',el.BIRTH_DATE_APPROX)
-    AND el.age < 19
+       order by 3
    )
+ 
 ,IMM_ADM_CLUSTER as (
 --IDENTIFY DUPLICATE ROWS WHERE DECLINED OR CONTRAINDICATED AND ADMINSTRATION ON THE SAME DATE
 SELECT 
@@ -100,11 +145,25 @@ SELECT
             WHEN EVENT_TYPE = 'Declined' THEN 0
             WHEN EVENT_TYPE = 'Contraindicated' THEN 0
             WHEN EVENT_TYPE = 'Administration' THEN 1
+            WHEN EVENT_TYPE = 'Administration_drug' THEN 1
         END DESC
     ) AS r
 FROM IMM_ADM
 QUALIFY r = 1
     ) 
+--deduplicate drug clusters
+,IMM_ADM_CLUSTER_DEDUP as (
+SELECT *,
+ RANK() OVER (
+        PARTITION BY PERSON_ID, VACCINE_NAME, EVENT_DATE
+        ORDER BY CASE 
+            WHEN EVENT_TYPE = 'Administration' THEN 1
+            WHEN EVENT_TYPE = 'Administration_drug' THEN 0
+            END DESC
+    ) AS r2
+from IMM_ADM_CLUSTER
+QUALIFY r2 = 1
+)
 --IDENTIFY DUPLICATE ROWS WHERE SAME CODE CAN BE USED FOR DIFFERENT DOSES
 ,IMM_ADM_RANKED as (
 SELECT 
@@ -125,9 +184,9 @@ SELECT
     EVENT_TYPE,
 	EVENT_DATE,
 	OUT_OF_SCHEDULE,
-       ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID ORDER BY EVENT_DATE ASC) AS row_num,
+          ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID ORDER BY EVENT_DATE ASC) AS row_num,
        COUNT(*) OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE) AS TOTAL_EVENTS
-    FROM IMM_ADM_CLUSTER   
+    FROM IMM_ADM_CLUSTER_DEDUP
       ) 
 --SELECT FINAL VACCINATIONS DATASET 
 ,FINAL_VACCS as (
@@ -151,7 +210,7 @@ SELECT
 	OUT_OF_SCHEDULE
 	FROM IMM_ADM_RANKED
 WHERE 
---deduplicate where codes are non dose specific PCV, 6-in-1, MMR
+--deduplicate where codes are non dose specific PCV, 6-in-1, MMR, MMRV
 (dose_number = 1 AND row_num = 1)
 OR (dose_number = 2 AND row_num = 2)  
 OR (dose_number = 3 AND row_num = 3) 
@@ -172,8 +231,8 @@ WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMR_2','MMRV_2','MMRV
 WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMRV_1C','MMRV_2','MMRV_2B','6IN1_4')  AND BIRTH_DATE_APPROX < '2022-09-01'  THEN 'Not applicable'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE >= CURRENT_DATE() THEN 'Not due yet'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE < CURRENT_DATE() AND AGE_DAYS_APPROX < maximum_age_days THEN 'Overdue'
-WHEN EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
-WHEN EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'
+WHEN EVENT_TYPE in ('Administration','Administration_drug') AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
+WHEN EVENT_TYPE in ('Administration','Administration_drug') AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'
 WHEN EVENT_DATE IS NULL AND AGE_DAYS_APPROX > maximum_age_days THEN 'No longer eligible'
 WHEN EVENT_TYPE = 'Declined' THEN 'Declined'  
 WHEN EVENT_TYPE = 'Contraindicated' THEN 'Contraindicated' 
