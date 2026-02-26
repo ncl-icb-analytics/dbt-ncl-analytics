@@ -1,0 +1,44 @@
+
+models:
+  - name: cltcs_events
+    description: "Event-level data for C-LTCS cohort over 2 years. SUS (AE, APC, OP) and GP
+      appointments in a rolling window. One row per event."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - event_type
+            - event_id
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data [sk_patient_id]"
+
+      - name: pcn_code
+        data_type: varchar
+        description: "Current registered GP practice PCN code according to LDS"
+
+      - name: event_start_date
+        data_type: date
+        description: "Start date of the event"
+
+      - name: event_end_date
+        data_type: date
+        description: "End date of the event"
+
+      - name: event_type
+        data_type: varchar
+        description: "Type of event (e.g. SUS AE, APC, OP visit, GP Appointment)"
+
+      - name: event_detail
+        data_type: varchar
+        description: "Event-level detail (e.g. POD, admission method, slot category)"
+
+      - name: event_id
+        data_type: varchar
+        description: "Event identifier (visit_occurrence_id or encounter_id from source)"
