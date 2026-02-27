@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: cltcs_full_detailed_patient_list
+    description: >
+      Full detailed patient list for C-LTCS combining eligible patients from the
+      inclusion cohort and shortlisted patients from the status log. One row per
+      patient; where a patient appears in both sources with different pcn_code,
+      the pcn_code from the shortlist is prioritised (via qualify).
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: olids_id
+        data_type: varchar
+        description: "Unique patient identifier from OLIDS data [person_id]"
+
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data [sk_patient_id]"
+
+      - name: pcn_code
+        data_type: varchar
+        description: "PCN code; when a patient appears from both inclusion and shortlist with different pcn_code, the shortlist value is used"

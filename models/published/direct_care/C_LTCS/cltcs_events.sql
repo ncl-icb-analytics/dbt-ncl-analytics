@@ -13,20 +13,8 @@ Clinical Purpose:
 */
 {% set measurement_cutoff = -2 %}
 with inclusion_list as (
-    select olids_id, patient_id,pcn_code
-    from {{ ref('inclusion_cohort')}}
-    where eligible = 1
-),
-shortlisted_list as (
-    select pp.person_id as olids_id,sl.patient_id,sl.pcn_code
-    from {{ ref('cltcs_status_log_most_recent')}} sl
-    left join {{ref('dim_person_pseudo')}} pp on pp.sk_patient_id = sl.patient_id
-    where action in ('Added to shortlist', 'Accept for MDT')
-),
-complete_list as (
-    select * from inclusion_list
-    union all
-    select * from shortlisted_list
+    select *
+    from {{ ref('cltcs_full_detailed_patient_list')}}
 ),
 sus_ae_events as(
     select 
@@ -38,7 +26,7 @@ sus_ae_events as(
         sus_events.pod as event_detail,
         sus_events.visit_occurrence_id::varchar as event_id
     from {{ ref('int_sus_ae_encounters')}} sus_events 
-    inner join complete_list il on il.patient_id = sus_events.sk_patient_id
+    inner join inclusion_list il on il.patient_id = sus_events.sk_patient_id
     where sus_events.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
 ),
 sus_apc_events as(
@@ -51,7 +39,7 @@ sus_apc_events as(
         admission_method_name as event_detail,
         sus_events.visit_occurrence_id::varchar as event_id
     from {{ ref('int_sus_ip_encounters')}} sus_events 
-    inner join complete_list il on il.patient_id = sus_events.sk_patient_id
+    inner join inclusion_list il on il.patient_id = sus_events.sk_patient_id
     where sus_events.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
 ),
 sus_op_events as(
@@ -64,7 +52,7 @@ sus_op_events as(
         sus_events.pod as event_detail,
         sus_events.visit_occurrence_id::varchar as event_id
     from {{ ref('int_sus_op_encounters')}} sus_events 
-    inner join complete_list il on il.patient_id = sus_events.sk_patient_id
+    inner join inclusion_list il on il.patient_id = sus_events.sk_patient_id
     where sus_events.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
 ),
 gp_events as (
@@ -77,7 +65,7 @@ gp_events as (
         gpa.national_slot_category_name as event_detail,
         gpa.encounter_id::varchar as event_id
     from {{ ref('int_gp_encounters_appt') }} gpa
-    inner join complete_list il on il.olids_id = gpa.person_id
+    inner join inclusion_list il on il.olids_id = gpa.person_id
     where gpa.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
     and gpa.code not in ('3', '0')
 ), 
