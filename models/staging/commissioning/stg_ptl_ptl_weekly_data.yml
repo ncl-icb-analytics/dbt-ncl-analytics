@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: stg_ptl_ptl_weekly_data
+    description: ""
+    columns:
+      - name: census_date
+        data_type: date
+        description: ""
+        tests:
+          - not_null
+
+      - name: provider_code
+        data_type: varchar
+        description: ""
+
+      - name: provider_site
+        data_type: varchar
+        description: ""
+
+      - name: count
+        data_type: number
+        description: ""
+
+      - name: ccg_code
+        data_type: varchar
+        description: ""
+
+      - name: gp_practice_code
+        data_type: varchar
+        description: ""
+
+      - name: gender
+        data_type: varchar
+        description: ""
+
+      - name: ethnicity
+        data_type: varchar
+        description: ""
+
+      - name: age
+        data_type: number
+        description: ""
