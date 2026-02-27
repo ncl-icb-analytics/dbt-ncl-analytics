@@ -1,6 +1,6 @@
 
 models:
-  - name: cltcs_status_log_most_recent
+  - name: stg_c_ltcs_status_log
     description: "C-LTCS status log. One row per patient action."
     config:
       meta:
