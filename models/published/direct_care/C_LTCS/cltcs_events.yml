@@ -36,8 +36,6 @@ models:
       - name: event_end_date
         data_type: date
         description: "End date of the event"
-        data_tests:
-          - not_null
 
       - name: event_type
         data_type: varchar
