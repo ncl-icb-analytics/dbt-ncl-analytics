@@ -13,9 +13,8 @@ Clinical Purpose:
 */
 {% set measurement_cutoff = -5 %}
 with inclusion_list as (
-    select olids_id, patient_id,pcn_code
-    from {{ ref('inclusion_cohort')}}
-    where eligible = 1
+    select *
+    from {{ ref('cltcs_full_detailed_patient_list')}}
 ),
 hba1c_measurements as(
     select il.patient_id,
