@@ -91,7 +91,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , null::number as cost -- TO DO: replace with pricing from reference book according to app type?
         , sum(actual_duration) as duration
     from 
-        {{ ref('int_gp_encounters_appt') }} gpa
+        {{ ref('obt_gp_encounters_appt') }} gpa
     left join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
     group by 
         pp.sk_patient_id, date_trunc('month', start_date)
