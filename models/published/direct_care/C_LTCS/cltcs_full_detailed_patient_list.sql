@@ -17,6 +17,6 @@ complete_list as (
 select olids_id, patient_id, pcn_code
 from complete_list
 qualify row_number() over (
-    partition by olids_id, patient_id
+    partition by patient_id
     order by case when source = 'shortlist' then 0 else 1 end
 ) = 1

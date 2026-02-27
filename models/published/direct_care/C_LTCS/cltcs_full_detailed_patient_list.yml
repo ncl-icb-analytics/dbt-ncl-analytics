@@ -11,6 +11,9 @@ models:
       meta:
         owner:
           name: Emily Baldwin
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
     columns:
       - name: olids_id
         data_type: varchar
@@ -19,6 +22,9 @@ models:
       - name: patient_id
         data_type: number
         description: "Unique patient identifier from commissioning data [sk_patient_id]"
+        data_tests:
+          - unique
+          - not_null
 
       - name: pcn_code
         data_type: varchar

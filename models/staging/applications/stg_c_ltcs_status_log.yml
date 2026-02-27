@@ -1,0 +1,35 @@
+
+models:
+  - name: cltcs_status_log_most_recent
+    description: "C-LTCS status log. One row per patient action."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data [sk_patient_id]"
+
+      - name: pcn_code
+        data_type: varchar
+        description: "PCN code at time of status log"
+
+      - name: mdt_date
+        data_type: date
+        description: "MDT date for the status log entry"
+
+      - name: action
+        data_type: varchar
+        description: "Action recorded in the status log"
+
+      - name: action_date
+        data_type: date
+        description: "Date of the action"
+
+      - name: criteria
+        data_type: varchar
+        description: "Criteria associated with the status log entry"
