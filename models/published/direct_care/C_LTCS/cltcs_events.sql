@@ -62,7 +62,7 @@ gp_events as (
         il.pcn_code,
         gpa.start_date as event_start_date,
         gpa.start_date as event_end_date,
-        'GP Appointment' as event_type,
+        'GP_APPT' as event_type,
         gpa.national_slot_category_name as event_detail,
         gpa.encounter_id::varchar as event_id
     from {{ ref('int_gp_encounters_appt') }} gpa
