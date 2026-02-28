@@ -1,0 +1,77 @@
+version: 2
+
+models:
+  - name: sem_olids_observations
+    description: |
+      OLIDS Clinical Observations Semantic View
+      ==========================================
+      
+      Semantic model for clinical observations with category-based metrics
+      for population health analysis. Focuses on proportions at target
+      rather than raw averages.
+      
+      **⚠️ Data Governance:** Includes OLIDS data - don't publish/share outputs without DAC approval.
+      
+      **Design Principles:**
+      - Categories over averages (% at target vs mean value)
+      - Patient-specific thresholds where applicable (BP control)
+      - Pre-computed clinical classifications from int/fct models
+      
+      **Grain:** One row per person (latest observation values)
+      
+      **Tables Included:**
+      - `dim_person_demographics`: Base population
+      - `int_blood_pressure_latest`: Raw BP values
+      - `fct_person_bp_control`: BP control with patient-specific thresholds (T2DM, CKD, age)
+      - `int_hba1c_latest`: HbA1c with NICE categories
+      - `int_cholesterol_latest`: Total cholesterol
+      - `int_cholesterol_ldl_latest`: LDL cholesterol
+      - `int_bmi_latest`: BMI with ethnicity-adjusted categories
+      - `int_egfr_latest`: eGFR with CKD staging
+      - `int_qrisk_latest`: QRISK cardiovascular risk
+      - `int_urine_acr_latest`: Urine ACR
+      
+      **Key Metrics:**
+      - BP: controlled/uncontrolled, staging, case finding candidates
+      - HbA1c: at QOF target, high risk, prediabetes
+      - Cholesterol: desirable/high, LDL at target
+      - BMI: normal/overweight/obese by class
+      - CKD: stage 3+, stage 4+
+      - QRISK: high/very high CVD risk, statin consideration
+      - ACR: elevated, micro/macroalbuminuria
+      
+      **Example Queries:**
+      
+      ```sql
+      -- BP control by PCN (patient-specific thresholds)
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        REPORTING.SEMANTIC.sem_olids_observations
+        METRICS bp_controlled_count, patients_with_bp_control_assessment
+        DIMENSIONS pcn_name
+        WHERE is_active = TRUE
+      )
+      
+      -- HbA1c risk stratification by practice
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        REPORTING.SEMANTIC.sem_olids_observations
+        METRICS hba1c_at_qof_target_count, hba1c_poor_control_count, patients_with_hba1c
+        DIMENSIONS practice_name
+      )
+      
+      -- Case finding: elevated BP not on register
+      SELECT *
+      FROM SEMANTIC_VIEW(
+        REPORTING.SEMANTIC.sem_olids_observations
+        METRICS bp_case_finding_count
+        DIMENSIONS borough_registered, age_band_10y
+      )
+      ```
+
+    config:
+      materialized: semantic_view
+      schema: SEMANTIC
+      meta:
+        owner:
+          name: EddieDavison92
