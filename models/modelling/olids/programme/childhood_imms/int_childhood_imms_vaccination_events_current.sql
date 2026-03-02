@@ -28,7 +28,7 @@ SELECT DISTINCT
     -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE 
     WHERE o.clinical_effective_date <= CURRENT_DATE
     AND dem.age < 19
-    and o.mapped_concept_code  = clut.CODE
+    --and o.mapped_concept_code  = clut.CODE
     )
 --FIND all vaccination events by joining the mapped concept codes in the medication orders table.
 ,IMMS_CODE_MED as (
@@ -54,7 +54,7 @@ SELECT DISTINCT
     -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE
     WHERE m.clinical_effective_date <= CURRENT_DATE
     AND dem.age < 19
-    and m.mapped_concept_code  = clut.CODE
+    --and m.mapped_concept_code  = clut.CODE
 )
 --UNION OBSERVATIONS AND MEDICATIONS. Only add drug events if they do not already exist as an admin code
 ,VACCS_COMBINED AS (
@@ -212,8 +212,8 @@ WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMR_2','MMRV_2','MMRV
 WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMRV_1C','MMRV_2','MMRV_2B','6IN1_4')  AND BIRTH_DATE_APPROX < '2022-09-01'  THEN 'Not applicable'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE >= CURRENT_DATE() THEN 'Not due yet'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE < CURRENT_DATE() AND AGE_DAYS_APPROX < maximum_age_days THEN 'Overdue'
-WHEN EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
-WHEN EVENT_TYPE = 'Administration' AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'
+WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
+WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'
 WHEN EVENT_DATE IS NULL AND AGE_DAYS_APPROX > maximum_age_days THEN 'No longer eligible'
 WHEN EVENT_TYPE = 'Declined' THEN 'Declined'  
 WHEN EVENT_TYPE = 'Contraindicated' THEN 'Contraindicated' 

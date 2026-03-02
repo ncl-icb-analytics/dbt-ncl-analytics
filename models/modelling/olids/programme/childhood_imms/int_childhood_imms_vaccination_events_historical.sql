@@ -37,7 +37,7 @@ SELECT DISTINCT
    and DATE(o.clinical_effective_date) > DATE_TRUNC('MONTH',dem.BIRTH_DATE_APPROX)
     --look for events across the historical population by age at event in OBS table rather than age of historical means that the number of rows is 1.25 million
     AND o.age_at_event < 19
-    and o.mapped_concept_code  = clut.CODE 
+    --and o.mapped_concept_code  = clut.CODE 
          )
 --same query using medication orders table rather than observations
 ,IMMS_CODE_MED as (
@@ -67,7 +67,7 @@ SELECT DISTINCT
     and DATE(m.clinical_effective_date) > DATE_TRUNC('MONTH',dem.BIRTH_DATE_APPROX)
     --look for events across the historical population by age at event in OBS table rather than age of historical means that the number of rows is 1.25 million
     AND m.age_at_event < 19
-    and m.mapped_concept_code  = clut.CODE 
+    --and m.mapped_concept_code  = clut.CODE 
     )
 --UNION OBSERVATIONS AND MEDICATIONS. Only add drug events if they do not already exist as an admin code
 ,VACCS_COMBINED AS (
