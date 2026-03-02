@@ -18,7 +18,7 @@ PERSON_ID
 ,VACCINATION_STATUS
 ,VACCINATION_DATE
 --use the built in age at event from EMIS
-,AGE_AT_EVENT_OBS
+,AGE_AT_EVENT
 FROM {{ ref('int_childhood_imms_vaccination_status_current') }}
 WHERE AGE = 16
 --Replace AGE = 16 for more accurate Age Bucket which is created from actual DOB. base population selected by age only, not relevant vaccinations
@@ -30,13 +30,13 @@ WHERE AGE = 16
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS sixin1_first_date, 
         v1.VACCINATION_STATUS AS sixin1_first_status,
-	   v1.AGE_AT_EVENT_OBS as sixin1_first_event_age,
+	   v1.AGE_AT_EVENT as sixin1_first_event_age,
         v2.VACCINATION_DATE AS sixin1_second_date,
         v2.VACCINATION_STATUS AS sixin1_second_status,
-	   v2.AGE_AT_EVENT_OBS as sixin1_second_event_age,
+	   v2.AGE_AT_EVENT as sixin1_second_event_age,
         v3.VACCINATION_DATE AS sixin1_third_date,
         v3.VACCINATION_STATUS AS sixin1_third_status,
-	   v3.AGE_AT_EVENT_OBS as sixin1_third_event_age,
+	   v3.AGE_AT_EVENT as sixin1_third_event_age,
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC16YRBASE v1
@@ -50,7 +50,7 @@ WHERE AGE = 16
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS fourin1_first_date,
         v1.VACCINATION_STATUS as fourin1_first_status,
-        v1.AGE_AT_EVENT_OBS as fourin1_first_event_age,
+        v1.AGE_AT_EVENT as fourin1_first_event_age,
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
    ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
            FROM VACC16YRBASE v1
@@ -62,7 +62,7 @@ WHERE AGE = 16
         v1.PERSON_ID
         ,v1.VACCINATION_DATE AS threein1_first_date
 		,v1.VACCINATION_STATUS as threein1_first_status
-        ,v1.AGE_AT_EVENT_OBS as threein1_first_event_age
+        ,v1.AGE_AT_EVENT as threein1_first_event_age
 --HELPER column number of months between vaccination date and approx 13th bday. If it's a negative number than the vaccination is early and not valid
         ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.THIRTEENTH_BDAY)) AS threein1_thirteenth_bday_mths   
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
@@ -76,14 +76,14 @@ WHERE AGE = 16
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS mmr_first_date,
          v1.VACCINATION_STATUS as mmr_first_status,
-         v1.AGE_AT_EVENT_OBS as mmr_first_event_age,
+         v1.AGE_AT_EVENT as mmr_first_event_age,
 --HELPER column number of months between first vaccination date and approx first bday. If it's a negative number than the vaccination is early and not valid
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.FIRST_BDAY)) AS mmr_first_bday_mths,   
  --HELPER COLUMN to check number of months between DOB and second vaccination date is not > 192 months (16 years)
     ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS mmr_second_event_age_mths,
          v2.VACCINATION_DATE AS mmr_second_date,
         v2.VACCINATION_STATUS AS mmr_second_status,
-         v2.AGE_AT_EVENT_OBS as mmr_second_event_age,
+         v2.AGE_AT_EVENT as mmr_second_event_age,
           FROM VACC16YRBASE v1
           LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' 
           AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
@@ -97,14 +97,14 @@ WHERE AGE = 16
         v1.PERSON_ID 
         ,v1.VACCINATION_DATE AS hpv_first_date
 		,v1.VACCINATION_STATUS as hpv_first_status
-        ,v1.AGE_AT_EVENT_OBS as hpv_first_event_age
+        ,v1.AGE_AT_EVENT as hpv_first_event_age
 --HELPER column number of months between first vaccination date and approx twelfth bday. If it's a negative number than the vaccination is early and not valid
        ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.TWELFTH_BDAY)) AS hpv_first_twelfth_bday_mths  
 --HELPER COLUMN to check number of months between DOB and first vaccination date is not > 192 months (16 years)
         ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hpv_first_event_age_mths
         ,v2.VACCINATION_DATE AS hpv_second_date
         ,v2.VACCINATION_STATUS AS hpv_second_status
-        ,v2.AGE_AT_EVENT_OBS as hpv_second_event_age
+        ,v2.AGE_AT_EVENT as hpv_second_event_age
 --HELPER column number of months between second vaccination date and approx twelfth bday. If it's a negative number than the vaccination is early and not valid
        ,ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.TWELFTH_BDAY)) AS hpv_second_twelfth_bday_mths
 --HELPER COLUMN to check number of months between DOB and second vaccination date is not > 192 months (16 years) 
@@ -122,7 +122,7 @@ WHERE AGE = 16
     v1.PERSON_ID
     ,v1.VACCINATION_DATE AS menacwy_first_date
 	,v1.VACCINATION_STATUS as menacwy_first_status
-    ,v1.AGE_AT_EVENT_OBS as menacwy_first_event_age
+    ,v1.AGE_AT_EVENT as menacwy_first_event_age
 --HELPER column number of months between vaccination date and approx 13th bday. If it's a negative number than the vaccination is early and not valid
         ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.THIRTEENTH_BDAY)) AS menacwy_thirteenth_bday_mths   
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months 
