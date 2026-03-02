@@ -10,5 +10,7 @@ select
     "WARD_2025_NAME" as ward_2025_name,
     "LOCAL_AUTHORITY_2025_CODE" as local_authority_2025_code,
     "LOCAL_AUTHORITY_2025_NAME" as local_authority_2025_name,
+    "ICB_CODE" as icb_code,
+    "ICB_NAME" as icb_name,
     "RESIDENT_FLAG" as resident_flag
 from {{ source('reference_lookup_ncl', 'LSOA_2021_WARD_2025_LOCAL_AUTHORITY_2025') }}

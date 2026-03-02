@@ -5,5 +5,7 @@ select
     ward_2025_name,
     local_authority_2025_code,
     local_authority_2025_name,
+    icb_code,
+    icb_name,
     resident_flag
 from {{ ref('raw_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025') }}
