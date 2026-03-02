@@ -8,7 +8,7 @@
 WITH POP AS (
 select distinct PERSON_ID, BIRTH_DATE_APPROX
 FROM {{ ref('int_childhood_imms_historical_population') }}
---FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_POPULATION
+-- MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_POPULATION
 )
 ,IMMS_CODE_OBS as (
 SELECT DISTINCT 
@@ -23,7 +23,7 @@ SELECT DISTINCT
         DATE(o.clinical_effective_date) as EVENT_DATE,
         --o."age_at_event" is from EMIS. It either rounds years up or down
         o.age_at_event AS AGE_AT_EVENT,
-        CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
+        --CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
     FROM {{ ref('stg_olids_observation') }} o
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_OBSERVATION o
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
@@ -53,7 +53,7 @@ SELECT DISTINCT
         DATE(m.clinical_effective_date) as EVENT_DATE,
         --m."age_at_event" is from EMIS. It either rounds years up or down
         m.age_at_event AS AGE_AT_EVENT,
-        CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
+        --CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
     FROM {{ ref('stg_olids_medication_order') }} m
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_MEDICATION_ORDER m
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = m.patient_id
@@ -76,7 +76,15 @@ from IMMS_CODE_OBS o
 UNION ALL
 select m.*
 from IMMS_CODE_MED m
-where m.vacc_key NOT IN (SELECT vacc_key FROM IMMS_CODE_OBS)
+--where m.vacc_key NOT IN (SELECT vacc_key FROM IMMS_CODE_OBS) - this is no longer sufficient as some codes can be used for different doses. De-duplication by vaccine_id, event_date and dose_match is required instead
+where not exists (
+    select 1
+   from IMMS_CODE_OBS o
+    where o.person_id = m.person_id
+     and o.vaccine_id = m.vaccine_id
+    and o.event_date = m.event_date
+    and o.dose_match = m.dose_match
+)
 )        
 --Define Vaccination Events by codecluster - do not bother with out of schedule
 ,IMM_ADM as ( 
