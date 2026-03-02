@@ -16,7 +16,7 @@ PERSON_ID
 ,VACCINE_ID
 ,VACCINATION_STATUS
 ,VACCINATION_DATE
-,AGE_AT_EVENT_OBS
+,AGE_AT_EVENT
 FROM {{ ref('int_childhood_imms_vaccination_status_current') }}
 --Children that are currently aged 1 (based on approx dob) for base population selected by age only, not relevant vaccinations
 WHERE AGE = 1
@@ -30,13 +30,13 @@ WHERE AGE = 1
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS sixin1_first_date, 
         v1.VACCINATION_STATUS AS sixin1_first_status,
-	    v1.AGE_AT_EVENT_OBS as sixin1_first_event_age,
+	    v1.AGE_AT_EVENT as sixin1_first_event_age,
         v2.VACCINATION_DATE AS sixin1_second_date,
         v2.VACCINATION_STATUS AS sixin1_second_status,
-	    v2.AGE_AT_EVENT_OBS as sixin1_second_event_age,
+	    v2.AGE_AT_EVENT as sixin1_second_event_age,
         v3.VACCINATION_DATE AS sixin1_third_date,
         v3.VACCINATION_STATUS AS sixin1_third_status,
-	    v3.AGE_AT_EVENT_OBS as sixin1_third_event_age,
+	    v3.AGE_AT_EVENT as sixin1_third_event_age,
     --HELPER COLUMN to check number of months between DOB and 3rd vaccination date to check not 12 months
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC1YRBASE v1
@@ -50,10 +50,10 @@ WHERE AGE = 1
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS rota_first_date, 
         v1.VACCINATION_STATUS AS rota_first_status,
-        v1.AGE_AT_EVENT_OBS as  rota_first_event_age,
+        v1.AGE_AT_EVENT as  rota_first_event_age,
         v2.VACCINATION_DATE AS rota_second_date,
         v2.VACCINATION_STATUS AS rota_second_status,
-        v2.AGE_AT_EVENT_OBS as  rota_second_event_age,
+        v2.AGE_AT_EVENT as  rota_second_event_age,
         --HELPER COLUMN to check number of months between DOB and 2nd vaccination date to check not 12 months
     ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS rota_second_event_age_mths
     FROM VACC1YRBASE v1
@@ -67,10 +67,10 @@ WHERE AGE = 1
          v1.PERSON_ID, 
          v1.VACCINATION_STATUS AS menb_first_status,
          v1.VACCINATION_DATE AS menb_first_date, 
-          v1.AGE_AT_EVENT_OBS as menb_first_event_age,
+          v1.AGE_AT_EVENT as menb_first_event_age,
          v2.VACCINATION_STATUS AS menb_second_status,
          v2.VACCINATION_DATE AS menb_second_date,
-         v2.AGE_AT_EVENT_OBS as menb_second_event_age,
+         v2.AGE_AT_EVENT as menb_second_event_age,
     --HELPER COLUMN to check number of months between DOB and 2nd vaccination date to check not 12 months
     ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS menb_second_event_age_mths
     FROM VACC1YRBASE v1
@@ -85,10 +85,10 @@ WHERE AGE = 1
          v1.PERSON_ID, 
          v1.VACCINATION_STATUS AS menb_first_status,
          v1.VACCINATION_DATE AS menb_first_date, 
-          v1.AGE_AT_EVENT_OBS as menb_first_event_age,
+          v1.AGE_AT_EVENT as menb_first_event_age,
          v2.VACCINATION_STATUS AS menb_second_status,
          v2.VACCINATION_DATE AS menb_second_date,
-         v2.AGE_AT_EVENT_OBS as menb_second_event_age,
+         v2.AGE_AT_EVENT as menb_second_event_age,
     --HELPER COLUMN to check number of months between DOB and 2nd vaccination date to check not 12 months
     ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS menb_second_event_age_mths
     FROM VACC1YRBASE v1
@@ -103,7 +103,7 @@ WHERE AGE = 1
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS pcv_first_date,
         v1.VACCINATION_STATUS as pcv_first_status,
-        v1.AGE_AT_EVENT_OBS as pcv_first_event_age,
+        v1.AGE_AT_EVENT as pcv_first_event_age,
     --HELPER COLUMN to check number of months between DOB and 1st vaccination date to check not 12 months
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS pcv_first_event_age_mths
          FROM VACC1YRBASE v1
@@ -117,7 +117,7 @@ WHERE AGE = 1
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS pcv_first_date,
         v1.VACCINATION_STATUS as pcv_first_status,
-        v1.AGE_AT_EVENT_OBS as pcv_first_event_age,
+        v1.AGE_AT_EVENT as pcv_first_event_age,
     --HELPER COLUMN to check number of months between DOB and 1st vaccination date to check not 12 months
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS pcv_first_event_age_mths
          FROM VACC1YRBASE v1

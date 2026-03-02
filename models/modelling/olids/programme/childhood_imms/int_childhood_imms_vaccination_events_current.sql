@@ -16,11 +16,8 @@ SELECT DISTINCT
         clut.dose_match,
         DATE(o.clinical_effective_date) as EVENT_DATE,
         --o."age_at_event" is from EMIS. It either rounds years up or down
-        o.age_at_event AS AGE_AT_EVENT_OBS,
-        clut.administered_cluster_id, 
-        clut.drug_cluster_id,
-        clut.declined_cluster_id,
-        clut.contraindicated_cluster_id 
+        o.age_at_event AS AGE_AT_EVENT,
+        CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
    FROM {{ ref('stg_olids_observation') }} o
    --FROM MODELLING.DBT_STAGING.STG_OLIDS_OBSERVATION o
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
@@ -28,7 +25,7 @@ SELECT DISTINCT
     LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
     --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on o.mapped_concept_code  = clut.CODE
-    -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = = clut.CODE 
+    -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE 
     WHERE o.clinical_effective_date <= CURRENT_DATE
     AND dem.age < 19
     and o.mapped_concept_code  = clut.CODE
@@ -45,11 +42,8 @@ SELECT DISTINCT
         clut.dose_match,
         DATE(m.clinical_effective_date) as EVENT_DATE,
         --m."age_at_event" is from EMIS. It either rounds years up or down
-        m.age_at_event AS AGE_AT_EVENT_OBS,
-        clut.administered_cluster_id, 
-        clut.drug_cluster_id,
-        clut.declined_cluster_id,
-        clut.contraindicated_cluster_id
+         m.age_at_event AS AGE_AT_EVENT,
+        CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
     FROM {{ ref('stg_olids_medication_order') }} m
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_MEDICATION_ORDER m
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = m.patient_id
@@ -57,6 +51,7 @@ SELECT DISTINCT
     LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
     --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on m.mapped_concept_code  = clut.CODE
+    -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE
     WHERE m.clinical_effective_date <= CURRENT_DATE
     AND dem.age < 19
     and m.mapped_concept_code  = clut.CODE
@@ -68,8 +63,7 @@ from IMMS_CODE_OBS o
 UNION ALL
 select m.*
 from IMMS_CODE_MED m
-WHERE (m.PERSON_ID, m.VACCINE_ID) NOT IN (
-            SELECT PERSON_ID, VACCINE_ID FROM IMMS_CODE_OBS)
+where m.vacc_key NOT IN (SELECT vacc_key FROM IMMS_CODE_OBS)
 )
 --MATCH RECORDED IMMS EVENTS TO ELIGIBLE POPULATION AND DEFINE 'OUT OF SCHEDULE'
 ,IMM_ADM_ELIG as (  
@@ -80,7 +74,7 @@ WHERE (m.PERSON_ID, m.VACCINE_ID) NOT IN (
         el.BORN_JUL_2024_FLAG,
         el.BORN_JAN_2025_FLAG,
         el.AGE_DAYS_APPROX,
-        clut.AGE_AT_EVENT_OBS,
+        clut.AGE_AT_EVENT,
 	    clut.VACCINE_ORDER,
         el.VACCINE_ID,
         el.VACCINE_NAME,
@@ -90,10 +84,10 @@ WHERE (m.PERSON_ID, m.VACCINE_ID) NOT IN (
         el.MAXIMUM_AGE_DAYS,
        clut.EVENT_DATE,
             CASE 
-            WHEN clut.codeclusterid = clut.administered_cluster_id THEN 'Administration'
-            WHEN clut.codeclusterid = clut.drug_cluster_id THEN 'Administration_drug'
-            WHEN clut.codeclusterid = clut.Contraindicated_Cluster_ID THEN 'Contraindicated'
-            WHEN clut.codeclusterid = clut.Declined_Cluster_ID THEN 'Declined'
+            WHEN clut.codeclusterid LIKE '%_ADM' THEN 'Administration'
+            WHEN clut.codeclusterid LIKE '%_DRUG' THEN 'Administration_drug'
+            WHEN clut.codeclusterid LIKE '%_CONTRA' THEN 'Contraindicated'
+            WHEN clut.codeclusterid LIKE '%_DEC' THEN 'Declined'
             ELSE NULL
         END AS EVENT_TYPE,
          -- Determine if the event was out of schedule for any of the events not just (clut.administered_cluster_id,clut.drug_cluster_id )
@@ -120,7 +114,7 @@ SELECT
     BORN_JUL_2024_FLAG,
     BORN_JAN_2025_FLAG,
     AGE_DAYS_APPROX,
-    AGE_AT_EVENT_OBS,
+    AGE_AT_EVENT,
     VACCINE_ORDER,
     VACCINE_ID,
     VACCINE_NAME,
@@ -152,7 +146,7 @@ SELECT
     BORN_JUL_2024_FLAG,
     BORN_JAN_2025_FLAG,
     AGE_DAYS_APPROX,
-	AGE_AT_EVENT_OBS,
+	AGE_AT_EVENT,
     VACCINE_ORDER,
 	VACCINE_ID,
 	VACCINE_NAME,
@@ -176,7 +170,7 @@ SELECT
     BORN_JUL_2024_FLAG,
     BORN_JAN_2025_FLAG,
     age_days_approx,
-	AGE_AT_EVENT_OBS,
+	AGE_AT_EVENT,
     VACCINE_ORDER,
 	VACCINE_ID,
 	VACCINE_NAME,

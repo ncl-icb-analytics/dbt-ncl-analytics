@@ -17,7 +17,7 @@ p.PERSON_ID
 ,v.VACCINE_ORDER
 ,v.EVENT_DATE
 ,v.EVENT_TYPE
-,v.AGE_AT_EVENT_OBS as AGE_AT_EVENT
+,v.AGE_AT_EVENT
 FROM {{ ref('int_childhood_imms_historical_population') }} p
 LEFT JOIN {{ ref('int_childhood_imms_vaccination_events_historical') }} v using (PERSON_ID)
 --restrict by AGE not by VACCINE as for currently aged 1 - otherwise base population is not correct
@@ -27,7 +27,7 @@ where p.age = 1
 -- Creating CTE for 6in1 (dose 1,2,3) where 1 row is per patient AS NUMERATOR
 ,SIXIN1 AS (
        SELECT 
-         v1.PERSON_ID, 
+        v1.PERSON_ID, 
         v1.EVENT_DATE AS sixin1_first_date, 
         v1.AGE_AT_EVENT as sixin1_first_event_age,
         v2.EVENT_DATE AS sixin1_second_date,

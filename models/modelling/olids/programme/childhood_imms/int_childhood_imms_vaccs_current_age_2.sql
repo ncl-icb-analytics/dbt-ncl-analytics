@@ -18,7 +18,7 @@ PERSON_ID
 ,VACCINATION_STATUS
 ,VACCINATION_DATE
 --use the built in age at event from EMIS
-,AGE_AT_EVENT_OBS
+,AGE_AT_EVENT
 FROM {{ ref('int_childhood_imms_vaccination_status_current') }}
 --Children that are currently aged 2 (based on approx dob) base population selected by age only, not relevant vaccinations
 WHERE AGE = 2
@@ -31,13 +31,13 @@ WHERE AGE = 2
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS sixin1_first_date, 
         v1.VACCINATION_STATUS AS sixin1_first_status,
-	v1.AGE_AT_EVENT_OBS as sixin1_first_event_age,
+	v1.AGE_AT_EVENT as sixin1_first_event_age,
         v2.VACCINATION_DATE AS sixin1_second_date,
         v2.VACCINATION_STATUS AS sixin1_second_status,
-	v2.AGE_AT_EVENT_OBS as sixin1_second_event_age,
+	v2.AGE_AT_EVENT as sixin1_second_event_age,
         v3.VACCINATION_DATE AS sixin1_third_date,
         v3.VACCINATION_STATUS AS sixin1_third_status,
-	v3.AGE_AT_EVENT_OBS as sixin1_third_event_age,
+	v3.AGE_AT_EVENT as sixin1_third_event_age,
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC2YRBASE v1
@@ -51,7 +51,7 @@ WHERE AGE = 2
          v1.PERSON_ID, 
          v1.VACCINATION_DATE AS hibmc_first_date,
          v1.VACCINATION_STATUS as hibmc_first_status,
-	   v1.AGE_AT_EVENT_OBS as hibmc_first_event_age,
+	   v1.AGE_AT_EVENT as hibmc_first_event_age,
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
     ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths,
          FROM VACC2YRBASE v1
@@ -63,7 +63,7 @@ WHERE AGE = 2
         v1.PERSON_ID, 
         v1.VACCINATION_DATE AS mmr_first_date,
         v1.VACCINATION_STATUS as mmr_first_status,
-        v1.AGE_AT_EVENT_OBS as mmr_first_event_age,
+        v1.AGE_AT_EVENT as mmr_first_event_age,
 --calculate HELPER column number of months between first vaccination date and approx first bday. If it's a negative number than the vaccination is early and not valid
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.FIRST_BDAY)) AS mmr_first_bday_mths,
  --HELPER COLUMN to check number of months between DOB and vaccination date to check not > 24 months
@@ -77,13 +77,13 @@ WHERE AGE = 2
     v1.PERSON_ID, 
     v1.VACCINATION_DATE AS menb_first_date, 
     v1.VACCINATION_STATUS AS menb_first_status,
-	v1.AGE_AT_EVENT_OBS as menb_first_event_age,
+	v1.AGE_AT_EVENT as menb_first_event_age,
     v2.VACCINATION_DATE AS menb_second_date,
     v2.VACCINATION_STATUS AS menb_second_status,
-v2.AGE_AT_EVENT_OBS as menb_second_event_age,
+v2.AGE_AT_EVENT as menb_second_event_age,
     v3.VACCINATION_DATE AS menb_third_date,
     v3.VACCINATION_STATUS AS menb_third_status,
-v3.AGE_AT_EVENT_OBS as menb_third_event_age,
+v3.AGE_AT_EVENT as menb_third_event_age,
 --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS menb_third_event_age_mths
     FROM VACC2YRBASE v1
@@ -98,10 +98,10 @@ v3.AGE_AT_EVENT_OBS as menb_third_event_age,
         v1.PERSON_ID,  
         v1.VACCINATION_DATE AS pcv_first_date,
         v1.VACCINATION_STATUS AS pcv_first_status,
-        v1.AGE_AT_EVENT_OBS as pcv_first_event_age,
+        v1.AGE_AT_EVENT as pcv_first_event_age,
         v2.VACCINATION_DATE AS pcv_second_date,
         v2.VACCINATION_STATUS AS pcv_second_status,
-        v2.AGE_AT_EVENT_OBS as pcv_second_event_age,
+        v2.AGE_AT_EVENT as pcv_second_event_age,
 --calculate HELPER column number of months between second vaccination date and approx first bday. If it's a negative number than the vaccination is early and not valid
         ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.FIRST_BDAY)) AS pcv_second_first_bday_mths,
          FROM VACC2YRBASE v1

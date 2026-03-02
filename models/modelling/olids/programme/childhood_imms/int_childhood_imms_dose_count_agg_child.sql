@@ -11,19 +11,20 @@ p.fiscal_year
 WHEN p.vaccination_dose = '6-in-1 (dose 1)' THEN 1
 WHEN p.vaccination_dose = '6-in-1 (dose 2)' THEN 2
 WHEN p.vaccination_dose = '6-in-1 (dose 3)' THEN 3
-WHEN p.vaccination_dose ='Rotavirus (dose 1)' THEN 4
-WHEN p.vaccination_dose ='Rotavirus (dose 2)' THEN 5
-WHEN p.vaccination_dose ='MenB (dose 1)' THEN 6
-WHEN p.vaccination_dose ='MenB (dose 2)' THEN 7
-WHEN p.vaccination_dose ='MenB (dose 3)' THEN 8
-WHEN p.vaccination_dose ='PCV (dose 1)' THEN 9
-WHEN p.vaccination_dose ='PCV (dose 2)' THEN 10
-WHEN p.vaccination_dose ='HibMenC (dose 1)' THEN 11
-WHEN p.vaccination_dose ='MMR (dose 1)' THEN 12
-WHEN p.vaccination_dose ='MMR (dose 2)' THEN 13
-WHEN p.vaccination_dose ='4-in-1 (dose 1)' THEN 14
-WHEN p.vaccination_dose ='MMRV (dose 1)' THEN 15
-WHEN p.vaccination_dose ='MMRV (dose 2)' THEN 16
+WHEN p.vaccination_dose = '6-in-1 (dose 4)' THEN 4
+WHEN p.vaccination_dose ='Rotavirus (dose 1)' THEN 5
+WHEN p.vaccination_dose ='Rotavirus (dose 2)' THEN 6
+WHEN p.vaccination_dose ='MenB (dose 1)' THEN 7
+WHEN p.vaccination_dose ='MenB (dose 2)' THEN 8
+WHEN p.vaccination_dose ='MenB (dose 3)' THEN 9
+WHEN p.vaccination_dose ='PCV (dose 1)' THEN 10
+WHEN p.vaccination_dose ='PCV (dose 2)' THEN 11
+WHEN p.vaccination_dose ='HibMenC (dose 1)' THEN 12
+WHEN p.vaccination_dose ='MMR (dose 1)' THEN 13
+WHEN p.vaccination_dose ='MMR (dose 2)' THEN 14
+WHEN p.vaccination_dose ='4-in-1 (dose 1)' THEN 15
+WHEN p.vaccination_dose ='MMRV (dose 1)' THEN 16
+WHEN p.vaccination_dose ='MMRV (dose 2)' THEN 17
 END As VACC_ORDER 
 ,p.practice_code
 ,p.month_year
@@ -57,6 +58,16 @@ select
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where sixin1_dose3_sort is not null
+group by all
+
+UNION
+
+--sixin1 Dose 4
+select 
+ '6-in-1 (dose 4)' as vaccination_dose, SIXIN1_DOSE4_FISCAL as fiscal_year,  practice_code, sixin1_dose4_sort as month_year, SIXIN1_DOSE4_LABEL as month_label, count(person_id) as vaccination_count
+FROM {{ ref('int_childhood_imms_dose_count_child') }}
+--FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
+where sixin1_dose4_sort is not null
 group by all
 
 UNION
