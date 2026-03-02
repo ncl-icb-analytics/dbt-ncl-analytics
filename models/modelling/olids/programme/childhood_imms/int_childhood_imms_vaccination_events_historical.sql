@@ -7,7 +7,8 @@
 --Historical View of Vaccination events. Not linked to Currently eligible population.
 WITH POP AS (
 select distinct PERSON_ID, BIRTH_DATE_APPROX
-from MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_POPULATION
+FROM {{ ref('int_childhood_imms_historical_population') }}
+--FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_POPULATION
 )
 ,IMMS_CODE_OBS as (
 SELECT DISTINCT 
