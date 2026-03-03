@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: olids
   database: '"DATA_LAKE"'
@@ -331,7 +332,7 @@ sources:
     - name: RESULT_VALUE_UNITS_CONCEPT_ID
       data_type: TEXT
     - name: RESULT_DATE
-      data_type: DATE
+      data_type: TIMESTAMP_NTZ
     - name: RESULT_TEXT
       data_type: TEXT
     - name: IS_PROBLEM
@@ -593,9 +594,9 @@ sources:
     - name: MANAGING_ORGANISATION_ID
       data_type: TEXT
     - name: OPEN_DATE
-      data_type: DATE
+      data_type: TIMESTAMP_NTZ
     - name: CLOSE_DATE
-      data_type: DATE
+      data_type: TIMESTAMP_NTZ
     - name: IS_OBSOLETE
       data_type: BOOLEAN
     - name: LDS_ID
@@ -1006,9 +1007,9 @@ sources:
     - name: PARENT_ORGANISATION_ID
       data_type: TEXT
     - name: OPEN_DATE
-      data_type: DATE
+      data_type: TIMESTAMP_NTZ
     - name: CLOSE_DATE
-      data_type: DATE
+      data_type: TIMESTAMP_NTZ
     - name: IS_OBSOLETE
       data_type: BOOLEAN
     - name: LDS_ID
