@@ -37,9 +37,9 @@ WHERE AGE = 11
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 132 months (unlikely)
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC11YRBASE v1
-     LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
-    LEFT JOIN VACC11YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
-    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )   
+     LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    LEFT JOIN VACC11YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')   
 )
  -- Creating CTE for 4-in-1 (dose 1) where 1 row is per patient at 11 yr AS NUMERATOR
 ,FOURIN1 AS (
@@ -51,7 +51,7 @@ WHERE AGE = 11
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 132 months (unlikely)
    ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
            FROM VACC11YRBASE v1
-        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 ) 
  -- Creating CTE for HibMenC (dose 1) where 1 row is per patient at 11 yr AS NUMERATOR
 ,HIBMENC AS (
@@ -65,7 +65,7 @@ WHERE AGE = 11
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 132 months (unlikely)
        ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths
            FROM VACC11YRBASE v1
-        WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 )  
 -- Creating CTE for MMR (dose 1) where 1 row is per patient at 11 yr AS NUMERATOR
 ,MMR AS ( 
@@ -84,8 +84,8 @@ WHERE AGE = 11
         v2.VACCINATION_STATUS AS mmr_second_status,
          v2.AGE_AT_EVENT as mmr_second_event_age,
           FROM VACC11YRBASE v1
-          LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+          LEFT JOIN VACC11YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
          
 ) 
 ,COMBINED AS (
@@ -94,22 +94,19 @@ SELECT distinct
     ,CURRENT_DATE as run_date
     ,'11 Years' as reporting_age
     --6-IN-1 ALIGN to HEI current logic - 3 doses anytime before or on eleventh bday
-    ,CASE WHEN  (s.sixin1_first_status in ('Completed','OutofSchedule') AND s.sixin1_first_event_age <= 11) AND
-     (s.sixin1_second_status in ('Completed','OutofSchedule') AND s.sixin1_second_event_age <= 11) AND
- 	(s.sixin1_third_status in ('Completed','OutofSchedule') AND s.sixin1_third_event_age <= 11 AND s.sixin1_third_event_age_mths <= 132) THEN 1
+    ,CASE WHEN  s.sixin1_first_event_age <= 11 AND s.sixin1_second_event_age <= 11 AND s.sixin1_third_event_age <= 11 AND s.sixin1_third_event_age_mths <= 132 THEN 1
 	ELSE 0 END AS sixin1_comp_by_11
 --------------------------------
 --4-IN-1 ALIGN to HEI current logic - 1 doses anytime before or on eleventh bday - do not restrict by 3years and 4 mths
-    ,CASE WHEN (f.fourin1_first_status in ('Completed','OutofSchedule') AND f.fourin1_first_event_age <= 11 AND f.fourin1_event_age_mths <= 132) 
-  	THEN 1 ELSE 0 END AS fourin1_comp_by_11  
+    ,CASE WHEN f.fourin1_first_event_age <= 11 AND f.fourin1_event_age_mths <= 132 THEN 1 ELSE 0 END AS fourin1_comp_by_11  
 -------------------------------
  --HIBMENC ALIGN to HEI current logic - 1 dose anytime before or on eleventh_bday and after the age of one year.
-    ,CASE WHEN h.hibmc_first_status in ('Completed','OutofSchedule') AND h.hibmc_first_bday_mths >= 0 AND h.hibmc_first_event_age <= 11 AND h.hibmc_event_age_mths <= 132
+    ,CASE WHEN h.hibmc_first_bday_mths >= 0 AND h.hibmc_first_event_age <= 11 AND h.hibmc_event_age_mths <= 132
     THEN 1 ELSE 0 END AS hibmc_comp_by_11
 --------------------------------
 --MMR Doses 1 and 2 ALIGN to HEI current logic Evaluate whether or not MMR (dose 2) has been completed by the eleventh birthday and after first dose and first dose is on or after first b-day
 --and one dose must be at least 15 mths if the first dose is at at 1 year then second dose can be at least 3 mths after Dose 1
-   	,CASE WHEN mr.mmr_first_status in ('Completed','OutofSchedule') AND mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0  
+   	,CASE WHEN mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0  
     AND mmr_first_second_mths >= 3 AND mr.mmr_second_event_age <=11 AND mr.mmr_second_event_age_mths <=132  THEN 1 ELSE 0 END AS mmr_comp_by_11
 FROM VACC11YRBASE v  
 left join SIXIN1 s using (PERSON_ID) 

@@ -13,17 +13,20 @@ WHEN p.Vaccination_metric ='Rotavirus (dose 1 & 2) 1 Year' THEN 4
 WHEN p.Vaccination_metric ='PCV (dose 1) 1 Year' THEN 5
 WHEN p.Vaccination_metric ='All vaccinations 2 Years' THEN 6
 WHEN p.Vaccination_metric ='6-in-1 (dose 1, 2, 3) 2 Years' THEN 7
-WHEN p.Vaccination_metric ='Hib/MenC 2 Years' THEN 8
-WHEN p.Vaccination_metric ='Men B (dose 3) 2 Years' THEN 9
-WHEN p.Vaccination_metric ='MMR (dose 1) 2 Years' THEN 10
-WHEN p.Vaccination_metric ='PCV (dose 2) 2 Years' THEN 11
-WHEN p.Vaccination_metric ='All vaccinations 5 Years' THEN 12
-WHEN p.Vaccination_metric ='6-in-1 (dose 1, 2, 3) 5 Years' THEN 13
-WHEN p.Vaccination_metric ='4-in-1 Booster 5 Years' THEN 14
-WHEN p.Vaccination_metric ='Hib/MenC 5 Years' THEN 15
-WHEN p.Vaccination_metric ='MMR (dose 1) 5 Years' THEN 16
-WHEN p.Vaccination_metric ='MMR (dose 2) 5 Years' THEN 17 
-END As VACC_ORDER 
+WHEN p.Vaccination_metric ='6-in-1 (dose 4) 2 Years' THEN 8
+WHEN p.Vaccination_metric ='Hib/MenC 2 Years' THEN 9
+WHEN p.Vaccination_metric ='Men B (dose 3) 2 Years' THEN 10
+WHEN p.Vaccination_metric ='MMR (dose 1) 2 Years' THEN 11
+WHEN p.Vaccination_metric ='MMRV (dose 1) 2 Years' THEN 12
+WHEN p.Vaccination_metric ='MMRV (dose 2) 2 Years' THEN 13
+WHEN p.Vaccination_metric ='PCV (dose 2) 2 Years' THEN 14
+WHEN p.Vaccination_metric ='All vaccinations 5 Years' THEN 15
+WHEN p.Vaccination_metric ='6-in-1 (dose 1, 2, 3) 5 Years' THEN 16
+WHEN p.Vaccination_metric ='4-in-1 Booster 5 Years' THEN 17
+WHEN p.Vaccination_metric ='Hib/MenC 5 Years' THEN 18
+WHEN p.Vaccination_metric ='MMR (dose 1) 5 Years' THEN 19
+WHEN p.Vaccination_metric ='MMR (dose 2) 5 Years' THEN 20 
+END As VACC_ORDER  
 ,p.*
 FROM (
 --UNION ALL LINE LEVEL VACC REPORTS AGGREGATING BY FILTERS around 220K rows
@@ -83,6 +86,15 @@ FROM {{ ref('int_childhood_imms_vaccs_current_age_2') }}
 group by all
 
 UNION
+--sixin1_4_2y 
+select 
+run_date, reporting_age, '6-in-1 (dose 4) 2 Years' as vaccination_metric, gender, imd_quintile, imdquintile_order, imd_decile, practice_borough,practice_neighbourhood, primary_care_network, 
+gp_name, practice_code,residential_loc, residential_borough, residential_neighbourhood, ward_name, ward_code,  ETHNICITY_GRANULAR, MAIN_LANGUAGE, ethnicity_category, ethcat_order, ethnicity_subcategory, ethsubcat_order,  lac_flag,
+sum(sixin1_4_comp_by_2) as numerator, count(*) as denominator 
+FROM {{ ref('int_childhood_imms_vaccs_current_age_2') }}
+group by all
+
+UNION
 --hibmenc_2y 
 select 
 run_date, reporting_age, 'Hib/MenC 2 Years' as vaccination_metric, gender, imd_quintile, imdquintile_order, imd_decile, practice_borough,practice_neighbourhood, primary_care_network, 
@@ -106,6 +118,24 @@ select
 run_date, reporting_age, 'MMR (dose 1) 2 Years' as vaccination_metric, gender, imd_quintile, imdquintile_order, imd_decile, practice_borough,practice_neighbourhood, primary_care_network, 
 gp_name, practice_code,residential_loc, residential_borough, residential_neighbourhood, ward_name, ward_code,  ETHNICITY_GRANULAR, MAIN_LANGUAGE, ethnicity_category, ethcat_order, ethnicity_subcategory, ethsubcat_order,  lac_flag,
 sum(mmr1_comp_by_2) as numerator, count(*) as denominator 
+FROM {{ ref('int_childhood_imms_vaccs_current_age_2') }}
+group by all
+
+UNION
+--mmrv1_2y 
+select 
+run_date, reporting_age, 'MMRV (dose 1) 2 Years' as vaccination_metric, gender, imd_quintile, imdquintile_order, imd_decile, practice_borough,practice_neighbourhood, primary_care_network, 
+gp_name, practice_code,residential_loc, residential_borough, residential_neighbourhood, ward_name, ward_code,  ETHNICITY_GRANULAR, MAIN_LANGUAGE, ethnicity_category, ethcat_order, ethnicity_subcategory, ethsubcat_order,  lac_flag,
+sum(mmrv1_comp_by_2) as numerator, count(*) as denominator 
+FROM {{ ref('int_childhood_imms_vaccs_current_age_2') }}
+group by all
+
+UNION
+--mmrv2_2y 
+select 
+run_date, reporting_age, 'MMRV (dose 2) 2 Years' as vaccination_metric, gender, imd_quintile, imdquintile_order, imd_decile, practice_borough,practice_neighbourhood, primary_care_network, 
+gp_name, practice_code,residential_loc, residential_borough, residential_neighbourhood, ward_name, ward_code,  ETHNICITY_GRANULAR, MAIN_LANGUAGE, ethnicity_category, ethcat_order, ethnicity_subcategory, ethsubcat_order,  lac_flag,
+sum(mmrv2_comp_by_2) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_current_age_2') }}
 group by all
 
