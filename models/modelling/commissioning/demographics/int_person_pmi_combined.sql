@@ -1,4 +1,8 @@
 --When expanding this change int tables to use the same names and then union by name
+{%
+    set self_icb_code = 'QMJ'
+%}
+
 with combined as (
     select * from {{ref('int_person_pmi_dataset_pds')}}
     union by name
