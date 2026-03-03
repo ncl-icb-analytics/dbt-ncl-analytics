@@ -23,8 +23,8 @@ select
     lds_id,
     organisation_code_publisher,
     organisation_code_managing,
-    lds_datetime_first_acquired,
-    lds_datetime_update_acquired,
+    lds_datetime_source_record_acquired,
+    lds_datetime_source_record_updated,
 
     -- Metadata
     lds_start_date_time,

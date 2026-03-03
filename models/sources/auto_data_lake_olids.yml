@@ -502,9 +502,9 @@ sources:
       data_type: TEXT
     - name: ORGANISATION_CODE_MANAGING
       data_type: TEXT
-    - name: LDS_DATETIME_FIRST_ACQUIRED
+    - name: LDS_DATETIME_SOURCE_RECORD_ACQUIRED
       data_type: TIMESTAMP_NTZ
-    - name: LDS_DATETIME_UPDATE_ACQUIRED
+    - name: LDS_DATETIME_SOURCE_RECORD_UPDATED
       data_type: TIMESTAMP_NTZ
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
