@@ -25,7 +25,7 @@ sus_ae_events as(
         sus_events.visit_occurrence_type as event_type,
         sus_events.pod as event_detail,
         sus_events.visit_occurrence_id::varchar as event_id
-    from {{ ref('int_sus_ae_encounters')}} sus_events 
+    from {{ ref('obt_encounter_uec')}} sus_events 
     inner join inclusion_list il on il.patient_id = sus_events.sk_patient_id
     where sus_events.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
 ),
@@ -38,7 +38,7 @@ sus_apc_events as(
         sus_events.visit_occurrence_type as event_type,
         admission_method_name as event_detail,
         sus_events.visit_occurrence_id::varchar as event_id
-    from {{ ref('int_sus_ip_encounters')}} sus_events 
+    from {{ ref('obt_encounter_apc')}} sus_events 
     inner join inclusion_list il on il.patient_id = sus_events.sk_patient_id
     where sus_events.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
 ),
@@ -51,7 +51,7 @@ sus_op_events as(
         sus_events.visit_occurrence_type as event_type,
         sus_events.pod as event_detail,
         sus_events.visit_occurrence_id::varchar as event_id
-    from {{ ref('int_sus_op_encounters')}} sus_events 
+    from {{ ref('obt_encounter_outpatient')}} sus_events 
     inner join inclusion_list il on il.patient_id = sus_events.sk_patient_id
     where sus_events.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
 ),

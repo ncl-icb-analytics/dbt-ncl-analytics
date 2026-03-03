@@ -28,7 +28,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , sum(cost) as cost
         , sum(duration) as duration
     from 
-        {{ ref('int_sus_ae_encounters') }}
+        {{ ref('obt_encounter_uec') }}
     where 
         sk_patient_id is not null and sk_patient_id != '1'
     group by 
@@ -55,7 +55,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
             )
         ) as duration
     from 
-        {{ ref('int_sus_ip_encounters') }} as e
+        {{ ref('obt_encounter_apc') }} as e
     left join -- join all months during the spell
         date_range as d
         on d.month_start_date <= coalesce(e.end_date, current_date)
@@ -75,7 +75,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , sum(cost) as cost
         , sum(expected_duration) as duration
     from 
-        {{ ref('int_sus_op_encounters') }}
+        {{ ref('obt_encounter_outpatient') }}
     where 
         sk_patient_id is not null and sk_patient_id != '1'
     group by 
