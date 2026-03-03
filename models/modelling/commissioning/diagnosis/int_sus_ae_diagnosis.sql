@@ -48,7 +48,7 @@ select f.diagnosis_id,
 from diag_codes as f
 
 /* Diagnosis code for infering reason */
-left join {{ref('int_sus_ae_encounters')}} as sa on sa.visit_occurrence_id = f.primarykey_id
+left join {{ref('obt_encounter_uec')}} as sa on sa.visit_occurrence_id = f.primarykey_id
 
 left join final_icd_codes as d on d.code = f.code
 

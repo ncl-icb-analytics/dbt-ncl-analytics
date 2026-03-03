@@ -1,6 +1,6 @@
 
 models:
-  - name: int_sus_ip_encounters
+  - name: obt_encounter_apc
     description: "Event history for admitted patient care encounters from SUS data"
     columns:
       - name: visit_occurrence_id

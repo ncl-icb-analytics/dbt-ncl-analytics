@@ -8,7 +8,7 @@ with specialty_filters as (
     union all
     
     -- select distinct visit_occurrence_id
-    -- from {{ ref('int_sus_ip_encounters')}}
+    -- from {{ ref('obt_encounter_apc')}}
     -- where main_specialty_code = '501' 
     --    or treatment_function_code in ('501', '560')
     
