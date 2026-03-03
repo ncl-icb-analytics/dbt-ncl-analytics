@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: epd_primary_care
   database: '"DATA_LAKE"'

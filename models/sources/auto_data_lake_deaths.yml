@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: registries_deaths
   database: '"DATA_LAKE"'
