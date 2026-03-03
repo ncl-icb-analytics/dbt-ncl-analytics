@@ -64,7 +64,7 @@ gp_events as (
         'GP_APPT' as event_type,
         gpa.national_slot_category_name as event_detail,
         gpa.encounter_id::varchar as event_id
-    from {{ ref('obt_gp_encounters_appt') }} gpa
+    from {{ ref('obt_appointment_gp') }} gpa
     inner join inclusion_list il on il.olids_id = gpa.person_id
     where gpa.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
     and gpa.code not in ('3', '0')
