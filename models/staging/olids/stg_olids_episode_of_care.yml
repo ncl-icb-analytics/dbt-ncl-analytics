@@ -60,9 +60,9 @@ models:
           the record
       - name: organisation_code_managing
         description: ODS code of the organisation delivering the episode of care
-      - name: lds_datetime_first_acquired
+      - name: lds_datetime_source_record_acquired
         description: Datetime when source record was first acquired by LDS
-      - name: lds_datetime_update_acquired
+      - name: lds_datetime_source_record_updated
         description: Datetime when source record update was acquired by LDS
       - name: lds_start_date_time
         description: LDS datetime stamp from which the record version was

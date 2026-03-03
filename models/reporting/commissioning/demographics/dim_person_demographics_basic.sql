@@ -31,7 +31,7 @@ select
         geo.local_authority_2025_name as residence_borough,
         geo.icb_code as residence_icb_code,
         geo.icb_name as residence_icb_name,
-        geo.resident_flag as residence_icb_flag,
+        geo.resident_flag as residence_icb_group,
         nb_res.neighbourhood_code as residence_neighbourhood_code,
         nb_res.neighbourhood_name as residence_neighbourhood_name,
         imd.imd25_decile as residence_imd_decile,
