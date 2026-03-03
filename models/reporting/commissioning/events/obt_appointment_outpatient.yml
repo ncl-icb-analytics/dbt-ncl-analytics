@@ -1,6 +1,6 @@
 
 models:
-  - name: int_sus_op_appointments
+  - name: obt_appointment_outpatient
     description: "Event history for outpatient encounters from SUS data"
     config:
       meta:

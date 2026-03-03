@@ -93,7 +93,7 @@ admitted_procedure_hrg as (
 -- Notable exclusion: respiratory infections (J1*, J2*, B97.4)
 outpatient_appts_summary as (
     select visit_occurrence_id
-    from {{ ref('int_sus_op_appointments') }}
+    from {{ ref('obt_appointment_outpatient') }}
     where main_specialty_code IN {{ to_sql_list(specialty_list) }}
       or treatment_function_code IN {{ to_sql_list(specialty_list) }}
       or (
