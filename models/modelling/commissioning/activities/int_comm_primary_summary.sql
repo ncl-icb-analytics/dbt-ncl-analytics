@@ -48,7 +48,7 @@ outpatient_appts_summary as (
         , main_specialty_code as main_specialty
         , treatment_function_code as treatment_function
         , source
-    from {{ ref('int_sus_op_appointments') }}),
+    from {{ ref('obt_appointment_outpatient') }}),
 
 primary_encounters_summary as (
     select *
