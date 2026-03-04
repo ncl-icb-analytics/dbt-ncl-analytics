@@ -24,7 +24,8 @@ WITH base_observations AS (
                 obs.person_id,
                 obs.clinical_effective_date,
                 obs.result_value,
-                obs.result_unit_code
+                obs.result_unit_code,
+                obs.mapped_concept_code
             ORDER BY obs.date_recorded DESC
         ) AS sequence,
         obs.id,
