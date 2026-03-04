@@ -31,6 +31,7 @@ WITH base_observations AS (
     FROM ({{ get_observations("'LSMOK_COD', 'EXSMOK_COD', 'NSMOK_COD'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
     AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
+    AND obs.age_at_event >= 11 -- Filter out parent smoking codes recorded on children's records (#595)
 )
 
 SELECT
