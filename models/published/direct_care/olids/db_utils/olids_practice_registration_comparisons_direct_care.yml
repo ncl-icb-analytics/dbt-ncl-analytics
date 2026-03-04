@@ -1,4 +1,3 @@
-
 models:
   - name: pds_olids_reg_pass_direct_care
     description: |
@@ -16,9 +15,10 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-          severity: warn
-
+          config:
+            severity: warn
+          arguments:
+            min_value: 1
   - name: pds_olids_reg_fail_direct_care
     description: |
       Practices failing PDS registration count validation.
@@ -35,8 +35,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
   - name: pds_olids_reg_comparison_all_direct_care
     description: |
       Complete PDS registration comparison for all practices with categorisation.
@@ -51,8 +51,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
   - name: emis_olids_reg_pass_direct_care
     description: |
       Practices passing EMIS Regular registration count validation.
@@ -69,8 +69,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
   - name: emis_olids_reg_fail_direct_care
     description: |
       Practices failing EMIS Regular registration count validation.
@@ -89,8 +89,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
   - name: emis_olids_reg_comparison_all_direct_care
     description: |
       Complete EMIS Regular registration comparison for all practices using acceptance criteria.
@@ -110,8 +110,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
   - name: emis_olids_reg_aggregate_validation_direct_care
     description: |
       Aggregate-level validation of OLIDS Regular registrations against EMIS list size.
@@ -127,4 +127,5 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

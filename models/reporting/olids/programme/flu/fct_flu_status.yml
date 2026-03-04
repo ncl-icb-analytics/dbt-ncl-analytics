@@ -1,14 +1,10 @@
-
 models:
   - name: fct_flu_status
     description: 'Flu vaccination status combining eligibility with vaccination records.
 
-      Grain: One row per person per campaign per status event (vaccination given,
-      LAIV given, declined, or eligible with no record)
+      Grain: One row per person per campaign per status event (vaccination given, LAIV given, declined, or eligible with no record)
 
-      Contains: • Eligibility determination and risk group classification • Vaccination
-      status (given, LAIV given, declined, no record) • Status dates and reasoning
-      • Eligibility flags and timing
+      Contains: • Eligibility determination and risk group classification • Vaccination status (given, LAIV given, declined, no record) • Status dates and reasoning • Eligibility flags and timing
 
       Note: Includes both TIV and LAIV vaccination tracking'
     config:
@@ -19,8 +15,7 @@ models:
           category: "FLU"
           clinical_domain: "Programme Management"
           name_short: "Flu Status Tracking"
-          description_short: "Flu vaccination status combining eligibility and vaccination
-            records"
+          description_short: "Flu vaccination status combining eligibility and vaccination records"
           description_long: >
             Flu vaccination status tracking combining eligibility determination
             with vaccination records to create status categories: eligible and vaccinated,
@@ -57,13 +52,14 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
-            - status_type
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
+              - status_type
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         description: Unique person identifier

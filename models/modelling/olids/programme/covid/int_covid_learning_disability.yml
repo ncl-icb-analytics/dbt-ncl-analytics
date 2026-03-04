@@ -14,12 +14,11 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to learning disability
-      requiring immunisation.'
+      Purpose: Identify people eligible for COVID vaccination due to learning disability requiring immunisation.'
     tests:
       - cluster_ids_exist:
-          cluster_ids: LEARNDIS_COD
-
+          arguments:
+            cluster_ids: LEARNDIS_COD
     config:
       meta:
         indicator:

@@ -1,8 +1,6 @@
 models:
   - name: stg_wl_wl_openpathways_data
-    description: 'All active waiting lists, corrected to Sunday census dates. Used
-      for care coordination across providers. Not limited to most recent census date
-      - can be used for time series.'
+    description: 'All active waiting lists, corrected to Sunday census dates. Used for care coordination across providers. Not limited to most recent census date - can be used for time series.'
     config:
       materialized: view
       meta:
@@ -10,8 +8,7 @@ models:
           name: EddieDavison92
     columns:
       - name: week_ending_date
-        description: Week ending (census) date aligned to Sunday (e.g. if occurs
-          on Monday, is moved to previous Sunday)
+        description: Week ending (census) date aligned to Sunday (e.g. if occurs on Monday, is moved to previous Sunday)
       - name: sk_patient_id
         description: Pseudonymized NHS patient identifier
       - name: local_patient_identifier
@@ -141,16 +138,19 @@ models:
         description: Flag indicating open pathway (always 1)
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - sk_patient_id
-            - referral_identifier
-            - patient_pathway_identifier
-            - treatment_function_code
-            - provider_code
-            - provider_site_code
-            - week_ending_date
-            - referral_to_treatment_period_start_date
-            - date_and_time_data_set_created
-          severity: warn
+          config:
+            severity: warn
+          arguments:
+            combination_of_columns:
+              - sk_patient_id
+              - referral_identifier
+              - patient_pathway_identifier
+              - treatment_function_code
+              - provider_code
+              - provider_site_code
+              - week_ending_date
+              - referral_to_treatment_period_start_date
+              - date_and_time_data_set_created

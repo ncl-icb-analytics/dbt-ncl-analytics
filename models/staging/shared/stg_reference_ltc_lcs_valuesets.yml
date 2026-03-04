@@ -1,14 +1,14 @@
 models:
   - name: stg_reference_ltc_lcs_valuesets
-    description: Valuesets containing metadata and friendly names for code 
-      groupings
+    description: Valuesets containing metadata and friendly names for code groupings
     config:
       meta:
         owner:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: valueset_id
         description: Unique identifier for the valueset
@@ -24,8 +24,7 @@ models:
       - name: valueset_hash
         description: Hash of valueset contents for change detection
       - name: valueset_friendly_name
-        description: Human-readable name for the valueset (used in macro 
-          lookups)
+        description: Human-readable name for the valueset (used in macro lookups)
       - name: code_system
         description: Primary code system used in this valueset
       - name: expansion_error

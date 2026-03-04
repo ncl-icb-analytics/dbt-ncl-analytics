@@ -1,4 +1,3 @@
-
 models:
   - name: cltcs_measurements
     description: "Biomarker measurements for patients in the C-LTCS cohort. Rolling 5 year window of measurements."
@@ -8,11 +7,13 @@ models:
           name: Emily Baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - measurement_id
-            - measurement_type
+          arguments:
+            combination_of_columns:
+              - measurement_id
+              - measurement_type
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: patient_id
         data_type: number

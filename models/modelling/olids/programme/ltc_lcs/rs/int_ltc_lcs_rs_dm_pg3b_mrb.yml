@@ -23,19 +23,20 @@ models:
       - dbt_utils.at_least_one:
           column_name: person_id
       - valuesets_have_codes:
-          valuesets:
-            - on_dm_reg_priority_group_3b_mrb_vs1
-            - on_dm_reg_priority_group_3b_mrb_vs2
-            - on_dm_reg_priority_group_3b_mrb_vs3
-            - on_dm_reg_priority_group_3b_mrb_vs4
-            - on_dm_reg_priority_group_3b_mrb_vs5
-            - on_dm_reg_priority_group_3b_mrb_vs6
-            - on_dm_reg_priority_group_3b_mrb_vs7
+          arguments:
+            valuesets:
+              - on_dm_reg_priority_group_3b_mrb_vs1
+              - on_dm_reg_priority_group_3b_mrb_vs2
+              - on_dm_reg_priority_group_3b_mrb_vs3
+              - on_dm_reg_priority_group_3b_mrb_vs4
+              - on_dm_reg_priority_group_3b_mrb_vs5
+              - on_dm_reg_priority_group_3b_mrb_vs6
+              - on_dm_reg_priority_group_3b_mrb_vs7
             # vs8 excluded - Insulins drug group has no SNOMED mapping, using BNF 060101 fallback
-            - on_dm_reg_priority_group_3b_mrb_vs9
-            - on_dm_reg_priority_group_3b_mrb_vs10
-            - on_dm_reg_priority_group_3b_mrb_vs11
-            - on_dm_reg_priority_group_3b_mrb_vs12
+              - on_dm_reg_priority_group_3b_mrb_vs9
+              - on_dm_reg_priority_group_3b_mrb_vs10
+              - on_dm_reg_priority_group_3b_mrb_vs11
+              - on_dm_reg_priority_group_3b_mrb_vs12
     columns:
       - name: person_id
         tests:

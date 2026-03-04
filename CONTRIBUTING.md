@@ -91,7 +91,7 @@ pip install -r requirements.txt
 
 </details>
 
-**Important**: This project uses dbt-core 1.9.4 for Snowflake compatibility. Do not upgrade dbt packages.
+**Important**: This project targets dbt-core 1.10.15 for Snowflake compatibility. Use `arguments:` for generic test arguments and run dbt autofix for deprecation cleanups when needed.
 
 ### Step 3: Configure Snowflake Connection
 

@@ -18,9 +18,10 @@ models:
       - dbt_utils.at_least_one:
           column_name: person_id
       - valuesets_have_codes:
-          valuesets:
-            - on_ckd_reg_pg2_hr_vs1
-            - on_ckd_reg_pg2_hr_vs2
+          arguments:
+            valuesets:
+              - on_ckd_reg_pg2_hr_vs1
+              - on_ckd_reg_pg2_hr_vs2
     columns:
       - name: person_id
         tests:

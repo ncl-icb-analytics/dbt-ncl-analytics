@@ -12,12 +12,13 @@ models:
           name: ThomasShallcross
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - person_id
-            - clinical_effective_date
-            - original_result_value
-            - original_result_unit_code
-            - concept_code
+          arguments:
+            combination_of_columns:
+              - person_id
+              - clinical_effective_date
+              - original_result_value
+              - original_result_unit_code
+              - concept_code
     columns:
       - name: id
         description: Unique observation identifier
@@ -52,10 +53,12 @@ models:
         description: Standardised numeric value after any conversion
         data_tests:
           - dbt_utils.accepted_range:
-              min_value: 0
-              max_value: 100
-              inclusive: true
-              where: "is_valid_eosinophil = TRUE"
+              config:
+                where: "is_valid_eosinophil = TRUE"
+              arguments:
+                min_value: 0
+                max_value: 100
+                inclusive: true
       - name: value_was_converted
         description: TRUE if the numeric value was mathematically converted
       - name: unit_was_changed
@@ -66,7 +69,8 @@ models:
         description: Confidence level in the inferred value
         data_tests:
           - accepted_values:
-              values: ['VERY_HIGH', 'HIGH', 'MEDIUM', 'LOW', 'NONE']
+              arguments:
+                values: ['VERY_HIGH', 'HIGH', 'MEDIUM', 'LOW', 'NONE']
       - name: is_negative
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
@@ -77,10 +81,11 @@ models:
         description: Clinical severity category based on inferred value
         data_tests:
           - accepted_values:
-              values:
-                - 'Invalid'
-                - 'Eosinopenia'
-                - 'Normal'
-                - 'Mild Eosinophilia'
-                - 'Moderate Eosinophilia'
-                - 'Severe Eosinophilia'
+              arguments:
+                values:
+                  - 'Invalid'
+                  - 'Eosinopenia'
+                  - 'Normal'
+                  - 'Mild Eosinophilia'
+                  - 'Moderate Eosinophilia'
+                  - 'Severe Eosinophilia'

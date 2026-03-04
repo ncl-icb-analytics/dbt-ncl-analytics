@@ -1,12 +1,11 @@
 models:
   - name: int_smi_smoking_declined
-    description: 'Mental Health smoking status REFUSED for 6 Health Checks Latest
-      value per Mental Health /SMI observation using SMOKSTATDEC_COD'
+    description: 'Mental Health smoking status REFUSED for 6 Health Checks Latest value per Mental Health /SMI observation using SMOKSTATDEC_COD'
     config:
       meta:
         owner:
           name: KateHomer55
     tests:
       - cluster_ids_exist:
-          cluster_ids: SMOKSTATDEC_COD
-
+          arguments:
+            cluster_ids: SMOKSTATDEC_COD

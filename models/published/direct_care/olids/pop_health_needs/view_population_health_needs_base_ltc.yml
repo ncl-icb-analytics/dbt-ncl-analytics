@@ -1,4 +1,3 @@
-
 models:
   - name: view_population_health_needs_base_ltc
     description: |
@@ -11,12 +10,11 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: keyid
-        description: 'Composite key from gender, age band, ethnicity, language, and
-          practice code'
+        description: 'Composite key from gender, age band, ethnicity, language, and practice code'
 
       - name: gender
         description: 'Patient gender'

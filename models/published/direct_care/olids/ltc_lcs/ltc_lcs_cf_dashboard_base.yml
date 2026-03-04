@@ -1,8 +1,6 @@
-
 models:
   - name: ltc_lcs_cf_dashboard_base
-    description: 'Dashboard-ready LTC/LCS case finding data in long format with demographics
-      and indicator metadata.
+    description: 'Dashboard-ready LTC/LCS case finding data in long format with demographics and indicator metadata.
 
       Grain: One row per person-indicator combination (only triggered indicators)
 
@@ -16,8 +14,7 @@ models:
 
       • Enriched with def_indicator metadata for human-readable descriptions
 
-      Purpose: Long format table optimised for dashboard tools like PowerBI/Tableau
-      with dynamic filtering and visualisation capabilities.'
+      Purpose: Long format table optimised for dashboard tools like PowerBI/Tableau with dynamic filtering and visualisation capabilities.'
     config:
       meta:
         indicator:
@@ -26,8 +23,7 @@ models:
           category: "CASE_FINDING"
           clinical_domain: "Population Health Management"
           name_short: "LTC/LCS Case Finding Dashboard Base"
-          description_short: "Dashboard-ready case finding data with demographics
-            and indicator metadata"
+          description_short: "Dashboard-ready case finding data with demographics and indicator metadata"
           description_long: >
             Dashboard-ready LTC/LCS case finding data combining all 24 case finding
             indicators with complete demographics, practice registration, and indicator
@@ -129,13 +125,11 @@ models:
         description: Whether person triggers any case finding indicator
 
       - name: case_finding_count
-        description: Total number of case finding indicators triggered for this 
-          person
+        description: Total number of case finding indicators triggered for this person
 
       # Indicator details (long format)
       - name: indicator_id
-        description: Short indicator ID for dashboard display (e.g. AF_61, 
-          CVD_65)
+        description: Short indicator ID for dashboard display (e.g. AF_61, CVD_65)
         tests:
           - not_null
 
@@ -152,35 +146,28 @@ models:
         description: Short clinical description of the indicator
 
       - name: indicator_description_long
-        description: Detailed clinical description including criteria and 
-          thresholds
+        description: Detailed clinical description including criteria and thresholds
 
       - name: sort_order
         description: Sorting order for indicators within categories
 
       - name: indicator_flag
-        description: Always TRUE (only triggered indicators included in long 
-          format)
+        description: Always TRUE (only triggered indicators included in long format)
         tests:
           - not_null
           - accepted_values:
-              values: [true]
+              arguments:
+                values: [true]
       - name: has_learning_disability
-        description: QOF Learning Disability register flag (age ≥14 years with 
-          LD diagnosis). For population health inclusion group filtering.
+        description: QOF Learning Disability register flag (age ≥14 years with LD diagnosis). For population health inclusion group filtering.
 
       - name: has_severe_mental_illness
-        description: QOF Severe Mental Illness register flag (active SMI 
-          diagnosis or recent lithium therapy). For population health inclusion 
-          group filtering.
+        description: QOF Severe Mental Illness register flag (active SMI diagnosis or recent lithium therapy). For population health inclusion group filtering.
 
       - name: is_currently_pregnant
-        description: Currently pregnant flag (non-male, pregnancy code within 
-          last 9 months, no delivery code after). For population health 
-          inclusion group filtering.
+        description: Currently pregnant flag (non-male, pregnancy code within last 9 months, no delivery code after). For population health inclusion group filtering.
 
       - name: created_at
         description: Timestamp when the row was created
         tests:
           - not_null
-

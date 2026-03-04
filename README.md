@@ -128,9 +128,9 @@ The naming logic is in `macros/overrides/generate_database_name.sql` and `genera
 
 ### Technology Stack
 
-- **dbt-core 1.9.4** - Do not upgrade to 1.10+
+- **dbt-core 1.10.15** - Snowflake-supported runtime target
 - **Snowflake** - Cloud data warehouse
-- **Python 3.8+** - Scripting and automation
+- **Python 3.11** - Scripting and automation
 
 ## License
 

@@ -1,7 +1,6 @@
 models:
   - name: dim_pcn
-    description: 'Primary Care Network dimension with comprehensive PCN details and
-      member practice information.
+    description: 'Primary Care Network dimension with comprehensive PCN details and member practice information.
 
       Key Features:
 
@@ -15,8 +14,7 @@ models:
 
       • Address and operational details from Dictionary sources
 
-      Purpose: Supports PCN-level reporting, network membership tracking, and organisational
-      hierarchy analysis.'
+      Purpose: Supports PCN-level reporting, network membership tracking, and organisational hierarchy analysis.'
 
     config:
       meta:
@@ -35,8 +33,7 @@ models:
           - not_null
 
       - name: pcn_name_with_borough
-        description: 'PCN name prefixed with borough (e.g., "Camden: Example PCN")
-          for geographic identification'
+        description: 'PCN name prefixed with borough (e.g., "Camden: Example PCN") for geographic identification'
         tests:
           - not_null
 
@@ -97,7 +94,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['QMJ']
+              arguments:
+                values: ['QMJ']
 
       - name: stp_name
         description: 'STP name (NHS North Central London Integrated Care Board)'

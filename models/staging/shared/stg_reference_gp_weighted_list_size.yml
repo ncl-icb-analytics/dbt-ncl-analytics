@@ -7,11 +7,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - practice_code
-            - financial_quarter_date
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - financial_quarter_date
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: practice_code
         description: GP practice code

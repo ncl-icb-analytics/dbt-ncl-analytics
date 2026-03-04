@@ -1,4 +1,3 @@
-
 models:
   - name: int_polypharmacy_history
     description: |
@@ -40,57 +39,55 @@ models:
         data_tests:
           - not_null
           - relationships:
-              to: ref('int_patient_person_unique')
-              field: person_id
-
+              arguments:
+                to: ref('int_patient_person_unique')
+                field: person_id
       - name: medication_count
-        description: Count of distinct polypharmacy-scope medications during 
-          this period
+        description: Count of distinct polypharmacy-scope medications during this period
         data_tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "> 0"
-
+              arguments:
+                expression: "> 0"
       - name: valid_from
         description: Start date of this medication count period (inclusive)
         data_tests:
           - not_null
 
       - name: valid_to
-        description: End date of this medication count period (inclusive, NULL 
-          if current)
+        description: End date of this medication count period (inclusive, NULL if current)
 
       - name: is_polypharmacy_5plus
-        description: Flag for standard polypharmacy (5+ medications) during this
-          period
+        description: Flag for standard polypharmacy (5+ medications) during this period
         data_tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
 
       - name: is_polypharmacy_10plus
-        description: Flag for severe/complex polypharmacy (10+ medications) 
-          during this period
+        description: Flag for severe/complex polypharmacy (10+ medications) during this period
         data_tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
 
       - name: is_current
-        description: Whether this period overlaps with today (valid_from <= 
-          today AND valid_to >= today)
+        description: Whether this period overlaps with today (valid_from <= today AND valid_to >= today)
         data_tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
 
       - name: period_duration_days
-        description: Duration of this period in days (up to current date if 
-          ongoing)
+        description: Duration of this period in days (up to current date if ongoing)
         data_tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: ">= 0"
+              arguments:
+                expression: ">= 0"
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id

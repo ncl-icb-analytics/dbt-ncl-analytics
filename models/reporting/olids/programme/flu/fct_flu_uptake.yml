@@ -1,16 +1,12 @@
-
 models:
   - name: fct_flu_uptake
     description: 'Flu vaccination uptake fact table focused on core uptake metrics.
 
       Grain: One row per person per campaign per risk group they qualify for
 
-      Contains: • Eligibility status and reasons • Vaccination status (vaccinated,
-      declined, no record) • Uptake category and timing metrics • Campaign reference
-      dates • LAIV administration tracking
+      Contains: • Eligibility status and reasons • Vaccination status (vaccinated, declined, no record) • Uptake category and timing metrics • Campaign reference dates • LAIV administration tracking
 
-      Purpose: Core uptake facts for flu programme monitoring. Join with dim_person_demographics
-      for demographic analysis.'
+      Purpose: Core uptake facts for flu programme monitoring. Join with dim_person_demographics for demographic analysis.'
     config:
       meta:
         indicator:
@@ -61,13 +57,14 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
-            - risk_group
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
+              - risk_group
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: Flu campaign identifier

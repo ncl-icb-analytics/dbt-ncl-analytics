@@ -1,15 +1,13 @@
 models:
   - name: int_cholesterol_latest
-    description: 'Most recent valid cholesterol measurement per person for cardiovascular
-      risk assessment and statin therapy decision-making.
+    description: 'Most recent valid cholesterol measurement per person for cardiovascular risk assessment and statin therapy decision-making.
 
-      One row per person with their latest cholesterol including clinical cholesterol
-      categorisation and data quality validation.'
+      One row per person with their latest cholesterol including clinical cholesterol categorisation and data quality validation.'
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:
@@ -24,8 +22,7 @@ models:
           category: "LABORATORY_RESULT"
           clinical_domain: "Cardiometabolic"
           name_short: "Latest Cholesterol"
-          description_short: "Most recent total cholesterol measurement for cardiovascular
-            risk assessment"
+          description_short: "Most recent total cholesterol measurement for cardiovascular risk assessment"
           description_long: >
             Latest valid total cholesterol measurement per person supporting cardiovascular
             risk assessment
@@ -59,8 +56,7 @@ models:
               threshold_value: "4"
               threshold_operator: "BELOW"
               threshold_unit: "mmol/L"
-              description: "Secondary prevention cholesterol target for established
-                CVD"
+              description: "Secondary prevention cholesterol target for established CVD"
               sort_order: 2
             - population_group: "DIABETES"
               threshold_type: "DIABETES_TARGET"

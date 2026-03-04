@@ -1,7 +1,6 @@
 models:
   - name: dim_person_current_practice
-    description: 'Current practice registration snapshot for each person with registration
-      history and practice context.
+    description: 'Current practice registration snapshot for each person with registration history and practice context.
 
       Key Features:
 
@@ -15,8 +14,7 @@ models:
 
       • Age at registration start for demographic analysis
 
-      Purpose: Supports current state analysis, practice population profiling, and
-      patient registration tracking.'
+      Purpose: Supports current state analysis, practice population profiling, and patient registration tracking.'
 
     config:
       meta:
@@ -69,8 +67,8 @@ models:
         description: 'Flag indicating if practice record is obsolete'
         tests:
           - not_null:
-              severity: warn
-
+              config:
+                severity: warn
       - name: registration_start_date
         description: 'Start date of current registration'
         tests:
@@ -83,23 +81,21 @@ models:
         description: 'Duration of current registration in days'
 
       - name: registration_sequence
-        description: 'Sequential number of this registration for the person (1st,
-          2nd, 3rd, etc.)'
+        description: 'Sequential number of this registration for the person (1st, 2nd, 3rd, etc.)'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 1
-
+              arguments:
+                min_value: 1
       - name: total_registrations_count
         description: 'Total number of registrations this person has had'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 1
-
+              arguments:
+                min_value: 1
       - name: has_changed_practice
-        description: 'Flag indicating if person has ever changed practice (based on
-          total registrations)'
+        description: 'Flag indicating if person has ever changed practice (based on total registrations)'
         tests:
           - not_null
 
@@ -108,5 +104,4 @@ models:
 
       - name: practitioner_id
         description: 'Practitioner ID associated with this registration'
-
 

@@ -1,20 +1,19 @@
 models:
   - name: stg_dictionary_ecds_diagnosis
-    description: ECDS diagnosis reference data with ICD-10/11 mappings and 
-      clinical flags
+    description: ECDS diagnosis reference data with ICD-10/11 mappings and clinical flags
     config:
       meta:
         owner:
           name: Emily Baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ecds_unique_id
-            - valid_from
+          arguments:
+            combination_of_columns:
+              - ecds_unique_id
+              - valid_from
     columns:
       - name: ecds_unique_id
-        description: ECDS unique identifier (part of composite key with 
-          valid_from)
+        description: ECDS unique identifier (part of composite key with valid_from)
         tests:
           - not_null
       - name: snomed_code

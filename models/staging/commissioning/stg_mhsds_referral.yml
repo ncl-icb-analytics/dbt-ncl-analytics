@@ -20,7 +20,7 @@ models:
 
       - name: prim_reason_referral_mh
         description: The primary presenting condition or symptom for which the patient was referred to a Mental Health Service
-      
+
       - name: decision_to_treat_date
         description: The date that it was first identified that the patient needs mental health treatment, but the formal service request has not yet been created. However, the patient may be formally under the care of the Home Treatment Service. This applies to home treatments.
 
@@ -35,10 +35,11 @@ models:
 
       - name: refer_reject_reason
         description: The reason that a Referral Request has been rejected by the SERVICE.
-      
+
       - name: refer_clos_reason
         description: The reason that a Referral Request has been closed. A Referral Request can be closed as a result of a Patient being discharged from the SERVICE. Cancelled referrals such as those entered onto a system in error should not be submitted within the data set.
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

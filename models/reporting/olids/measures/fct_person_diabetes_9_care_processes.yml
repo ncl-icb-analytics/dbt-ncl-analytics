@@ -2,13 +2,12 @@ models:
   - name: fct_person_diabetes_9_care_processes
     description: 'Diabetes 9 care processes achievement for QOF reporting.
 
-      One row per person on diabetes register with completion status for all 9 care
-      processes (8 standard plus retinal screening) within 12 months.'
+      One row per person on diabetes register with completion status for all 9 care processes (8 standard plus retinal screening) within 12 months.'
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:
@@ -23,8 +22,7 @@ models:
           category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes 9 Care Processes"
-          description_short: "QOF diabetes care processes including retinal screening
-            within 12 months"
+          description_short: "QOF diabetes care processes including retinal screening within 12 months"
           description_long: >
             Tracks completion of 9 diabetes care processes required for QOF reporting:
             the 8 standard care processes (HbA1c, blood pressure, cholesterol, creatinine,

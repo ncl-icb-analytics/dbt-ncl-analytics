@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_bp_thresholds
-    description: Blood pressure threshold rules for different programmes and 
-      patient groups
+    description: Blood pressure threshold rules for different programmes and patient groups
     config:
       meta:
         owner:
@@ -13,13 +12,11 @@ models:
           - unique
           - not_null
       - name: programme_or_guideline
-        description: Programme or clinical guideline (QOF, NHS Health Check, 
-          etc.)
+        description: Programme or clinical guideline (QOF, NHS Health Check, etc.)
         tests:
           - not_null
       - name: patient_group
-        description: Patient group this threshold applies to (e.g., diabetes, 
-          CKD)
+        description: Patient group this threshold applies to (e.g., diabetes, CKD)
       - name: threshold_type
         description: Type of threshold (control, treatment target, etc.)
       - name: systolic_threshold
@@ -30,4 +27,5 @@ models:
         description: Comparison operator (<=, <, >=, >, =)
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

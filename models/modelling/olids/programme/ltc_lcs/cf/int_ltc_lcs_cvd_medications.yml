@@ -1,7 +1,6 @@
 models:
   - name: int_ltc_lcs_cvd_medications
-    description: 'Cardiovascular disease-relevant medications for Long Term Conditions
-      case finding measures CVD_63, CVD_64, CVD_65, and CVD_66.
+    description: 'Cardiovascular disease-relevant medications for Long Term Conditions case finding measures CVD_63, CVD_64, CVD_65, and CVD_66.
 
       One row per medication order for statin medications using cluster ID: LCS_STAT_COD_CVD.'
     config:
@@ -12,7 +11,8 @@ models:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
-          cluster_ids: LCS_STAT_COD_CVD
+          arguments:
+            cluster_ids: LCS_STAT_COD_CVD
     columns:
       - name: person_id
         tests:

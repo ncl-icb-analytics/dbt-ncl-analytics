@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_imms_schedule_child_latest
-    description: Immunisation schedule with age eligibility and code cluster 
-      mappings for children and adolescents
+    description: Immunisation schedule with age eligibility and code cluster mappings for children and adolescents
     config:
       meta:
         owner:
@@ -30,5 +29,5 @@ models:
         description: FK to combined_codesets cluster for drug codes
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1

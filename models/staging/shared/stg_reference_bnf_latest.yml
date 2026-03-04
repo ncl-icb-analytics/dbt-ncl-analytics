@@ -1,8 +1,6 @@
 models:
   - name: stg_reference_bnf_latest
-    description: British National Formulary (BNF) reference data mapping 
-      medication codes to SNOMED and dm+d. Contains both Presentation (AMP) and 
-      Pack (AMPP) level records for each medication.
+    description: British National Formulary (BNF) reference data mapping medication codes to SNOMED and dm+d. Contains both Presentation (AMP) and Pack (AMPP) level records for each medication.
     config:
       meta:
         owner:
@@ -34,4 +32,5 @@ models:
         description: Virtual Therapeutic Moiety name
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

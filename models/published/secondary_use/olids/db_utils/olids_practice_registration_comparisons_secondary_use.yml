@@ -1,4 +1,3 @@
-
 models:
   - name: pds_olids_reg_pass_secondary_use
     description: |
@@ -17,9 +16,10 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-          severity: warn
-
+          config:
+            severity: warn
+          arguments:
+            min_value: 1
   - name: pds_olids_reg_fail_secondary_use
     description: |
       Practices failing PDS registration count validation (Secondary Use).
@@ -37,8 +37,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
   - name: pds_olids_reg_comparison_all_secondary_use
     description: |
       Complete PDS registration comparison for all practices with categorisation (Secondary Use).
@@ -57,4 +57,5 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

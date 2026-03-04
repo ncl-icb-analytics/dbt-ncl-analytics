@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025
-    description: Mapping between LSOA 2021, Ward 2025, and Local Authority 2025 
-      codes from reference lookup
+    description: Mapping between LSOA 2021, Ward 2025, and Local Authority 2025 codes from reference lookup
     config:
       meta:
         owner:
@@ -30,4 +29,5 @@ models:
         description: Resident flag indicator
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

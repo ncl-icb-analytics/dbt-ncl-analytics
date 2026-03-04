@@ -1,7 +1,6 @@
 models:
   - name: stg_olids_location
-    description: Physical locations where healthcare services are provided. 
-      Deduplicated by id and filtered to exclude deleted records.
+    description: Physical locations where healthcare services are provided. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
@@ -39,8 +38,7 @@ models:
       - name: postcode
         description: Postcode of the location
       - name: managing_organisation_id
-        description: Foreign key to organisation.id - organisation managing this
-          location
+        description: Foreign key to organisation.id - organisation managing this location
       - name: open_date
         description: Date the location opened
       - name: close_date
@@ -56,14 +54,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

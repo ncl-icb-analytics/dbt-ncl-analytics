@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021
-    description: Mapping between LSOA 2021 codes and NCL neighbourhood codes 
-      from reference lookup
+    description: Mapping between LSOA 2021 codes and NCL neighbourhood codes from reference lookup
     config:
       meta:
         owner:
@@ -22,4 +21,5 @@ models:
         description: Date the neighbourhood definition became effective from
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

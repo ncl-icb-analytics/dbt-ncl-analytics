@@ -4,15 +4,13 @@ models:
 
       Grain: One row per person per campaign who meets active asthma criteria
 
-      Identifies people: • Diagnosed with asthma and recent inhaled medication (12
-      months) • 2+ oral steroid prescriptions within any 2-year window • OR recent
-      asthma hospital admission (2 years) • Minimum age 5 years
+      Identifies people: • Diagnosed with asthma and recent inhaled medication (12 months) • 2+ oral steroid prescriptions within any 2-year window • OR recent asthma hospital admission (2 years) • Minimum age 5 years
 
       Used by: Mart models for eligibility determination'
     tests:
       - cluster_ids_exist:
-          cluster_ids: AST_COD,ASTRXM1_COD,ASTRXM2_COD,ASTADM_COD
-
+          arguments:
+            cluster_ids: AST_COD,ASTRXM1_COD,ASTRXM2_COD,ASTADM_COD
     config:
       meta:
         indicator:
@@ -94,13 +92,11 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying asthma event (admission, steroid prescription,
-          or diagnosis)'
+        description: 'Date of qualifying asthma event (admission, steroid prescription, or diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description
-        description: 'Description of eligibility criteria including reason (emergency
-          admission or active management)'
+        description: 'Description of eligibility criteria including reason (emergency admission or active management)'
       - name: birth_date_approx
         description: 'Approximate birth date used for age calculation'
       - name: age_months_at_ref_date

@@ -2,8 +2,7 @@ models:
   - name: int_cancer_diagnoses_all
     description: 'Cancer diagnosis observations for QOF register management.
 
-      One row per diagnosis observation using CAN_COD cluster. Tracks earliest/latest
-      dates and concept codes per person.'
+      One row per diagnosis observation using CAN_COD cluster. Tracks earliest/latest dates and concept codes per person.'
     config:
       meta:
         owner:
@@ -40,4 +39,5 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: CAN_COD
+          arguments:
+            cluster_ids: CAN_COD

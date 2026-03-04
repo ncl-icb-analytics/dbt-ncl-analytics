@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_lookup_ncl_imd_2025
-    description: IMD 2025 (Index of Multiple Deprivation) reference data mapped 
-      to LSOA 2021 and Local Authority District 2024
+    description: IMD 2025 (Index of Multiple Deprivation) reference data mapped to LSOA 2021 and Local Authority District 2024
     config:
       meta:
         owner:
@@ -52,4 +51,5 @@ models:
         description: Outdoors subdomain decile
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

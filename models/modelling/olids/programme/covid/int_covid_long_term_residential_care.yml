@@ -1,7 +1,6 @@
 models:
   - name: int_covid_long_term_residential_care
-    description: 'COVID vaccination eligibility for people in long-term residential
-      care.
+    description: 'COVID vaccination eligibility for people in long-term residential care.
 
       Key Features:
 
@@ -15,12 +14,11 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to residential care
-      status requiring immunisation.'
+      Purpose: Identify people eligible for COVID vaccination due to residential care status requiring immunisation.'
     tests:
       - cluster_ids_exist:
-          cluster_ids: LONGRES_COD,RESIDE_COD
-
+          arguments:
+            cluster_ids: LONGRES_COD,RESIDE_COD
     config:
       meta:
         indicator:
@@ -29,8 +27,7 @@ models:
           category: "COVID"
           clinical_domain: "Social Care"
           name_short: "COVID Eligible Residential Care"
-          description_short: "People in long-term residential care eligible for COVID
-            vaccination"
+          description_short: "People in long-term residential care eligible for COVID vaccination"
           description_long: >
             COVID vaccination eligibility for people in long-term residential care
             using LTRC_COV_COD

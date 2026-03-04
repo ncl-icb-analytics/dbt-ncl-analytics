@@ -15,18 +15,17 @@ models:
       • Deduplication ensures single row per person
 
       Purpose: Supports demographic analysis, clinical safety screening, and population health assessment.'
-    
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
         tests:
           - not_null
           - unique
-      
+
       - name: gender
         description: 'Persons gender derived from gender concept mappings'
         tests:
           - not_null
           - accepted_values:
-              values: ['Male', 'Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']
-
+              arguments:
+                values: ['Male', 'Female', 'Unknown', 'Indeterminate sex', 'Finding related to biological sex']

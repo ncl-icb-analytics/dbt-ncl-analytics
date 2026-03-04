@@ -7,7 +7,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: original_code_id
         description: Unique identifier for this original code entry

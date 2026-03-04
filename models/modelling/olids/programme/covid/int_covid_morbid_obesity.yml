@@ -14,12 +14,11 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to morbid obesity
-      requiring immunisation.'
+      Purpose: Identify people eligible for COVID vaccination due to morbid obesity requiring immunisation.'
     tests:
       - cluster_ids_exist:
-          cluster_ids: BMI_COD,BMI_STAGE_COD,SEV_OBESITY_COD
-
+          arguments:
+            cluster_ids: BMI_COD,BMI_STAGE_COD,SEV_OBESITY_COD
     config:
       meta:
         indicator:

@@ -2,15 +2,15 @@ models:
   - name: int_bowel_screening_all
     description: 'NHS bowel screening programme observations from clinical records.
 
-      One row per bowel screening observation using COLCANSCREV_COD, COLCANSCRDEC_COD,
-      COLCANSCR_COD PCD Refset clusters for core programme tracking.'
+      One row per bowel screening observation using COLCANSCREV_COD, COLCANSCRDEC_COD, COLCANSCR_COD PCD Refset clusters for core programme tracking.'
     config:
       meta:
         owner:
           name: KateHomer55
     tests:
       - cluster_ids_exist:
-          cluster_ids: COLCANSCREV_COD, COLCANSCRDEC_COD, COLCANSCR_COD
+          arguments:
+            cluster_ids: COLCANSCREV_COD, COLCANSCRDEC_COD, COLCANSCR_COD
     columns:
       - name: id
         description: 'Unique identifier for the observation'
@@ -27,8 +27,6 @@ models:
       - name: screening_observation_type
         description: 'Type of screening observation based on cluster'
       - name: is_completed_screening
-        description: 'Flag indicating if this is a completed screening (COLCANSCREV_COD,
-          COLCANSCR_COD)'
+        description: 'Flag indicating if this is a completed screening (COLCANSCREV_COD, COLCANSCR_COD)'
       - name: is_declined_screening
         description: 'Flag indicating if screening was declined (COLCANSCRDEC_COD)'
-

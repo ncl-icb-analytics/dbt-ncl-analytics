@@ -1,10 +1,8 @@
 models:
   - name: int_pad_diagnoses_all
-    description: 'Peripheral arterial disease diagnosis observations for QOF register
-      data collection and cardiovascular risk stratification.
+    description: 'Peripheral arterial disease diagnosis observations for QOF register data collection and cardiovascular risk stratification.
 
-      One row per peripheral arterial disease diagnosis observation using PAD_COD
-      cluster with lifelong condition tracking and no resolution codes.'
+      One row per peripheral arterial disease diagnosis observation using PAD_COD cluster with lifelong condition tracking and no resolution codes.'
     config:
       meta:
         owner:
@@ -41,4 +39,5 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: PAD_COD
+          arguments:
+            cluster_ids: PAD_COD

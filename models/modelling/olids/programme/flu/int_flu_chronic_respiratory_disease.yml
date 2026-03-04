@@ -1,15 +1,12 @@
 models:
   - name: int_flu_chronic_respiratory_disease
-    description: 'Flu vaccination eligibility for people with chronic respiratory
-      conditions combining asthma and other lung diseases.
+    description: 'Flu vaccination eligibility for people with chronic respiratory conditions combining asthma and other lung diseases.
 
       Key Features:
 
-      • Three eligibility pathways: active asthma management, asthma admission, or
-      chronic respiratory diagnosis (RESP_COD)
+      • Three eligibility pathways: active asthma management, asthma admission, or chronic respiratory diagnosis (RESP_COD)
 
-      • Combines existing asthma eligibility rules with additional respiratory disease
-      codes
+      • Combines existing asthma eligibility rules with additional respiratory disease codes
 
       • Age restriction: minimum 6 months for flu vaccination
 
@@ -17,8 +14,7 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to chronic respiratory
-      conditions including asthma and COPD.'
+      Purpose: Identify people eligible for flu vaccination due to chronic respiratory conditions including asthma and COPD.'
     config:
       meta:
         indicator:
@@ -27,8 +23,7 @@ models:
           category: "FLU"
           clinical_domain: "Respiratory"
           name_short: "Flu Eligible Chronic Respiratory"
-          description_short: "People with chronic respiratory disease eligible for
-            flu vaccination"
+          description_short: "People with chronic respiratory disease eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for people with chronic respiratory conditions
             including
@@ -68,12 +63,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
@@ -88,8 +84,7 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying respiratory event (latest asthma management,
-          admission, or earliest respiratory diagnosis)'
+        description: 'Date of qualifying respiratory event (latest asthma management, admission, or earliest respiratory diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

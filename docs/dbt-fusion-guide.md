@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=-UvwnojTTqk&t=796s
 
 ### Fusion vs dbt Core
 
-This project uses **dbt Core** (Python, v1.9.4) for all builds, tests, and deployments. That hasn't changed. Fusion runs alongside dbt Core purely as an IDE tool — it parses your project independently to power editor features but never executes models or writes to Snowflake.
+This project uses **dbt Core** (Python, v1.10.15) for all builds, tests, and deployments. Fusion runs alongside dbt Core purely as an IDE tool — it parses your project independently to power editor features but never executes models or writes to Snowflake.
 
 | | dbt Core | dbt Fusion |
 |---|---|---|

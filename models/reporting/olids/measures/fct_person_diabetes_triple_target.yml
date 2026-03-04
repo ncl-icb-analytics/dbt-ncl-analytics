@@ -1,7 +1,6 @@
 models:
   - name: fct_person_diabetes_triple_target
-    description: 'Diabetes triple target achievement tracking for clinical quality
-      monitoring.
+    description: 'Diabetes triple target achievement tracking for clinical quality monitoring.
 
       One row per person on diabetes register.
 
@@ -13,13 +12,12 @@ models:
 
       • Total cholesterol <5 mmol/L (cardiovascular risk management)
 
-      Purpose: Supports diabetes care quality assessment and identification of patients
-      requiring intensified management to achieve clinical targets.'
+      Purpose: Supports diabetes care quality assessment and identification of patients requiring intensified management to achieve clinical targets.'
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     config:
       meta:
         indicator:
@@ -28,8 +26,7 @@ models:
           category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes Triple Target Achievement"
-          description_short: "Diabetes care quality assessment using HbA1c ≤58 mmol/mol,
-            BP <130/80 mmHg, cholesterol <5 mmol/L"
+          description_short: "Diabetes care quality assessment using HbA1c ≤58 mmol/mol, BP <130/80 mmHg, cholesterol <5 mmol/L"
           description_long: >
             Diabetes care quality indicator tracking achievement of three clinical
             targets:

@@ -1,7 +1,6 @@
 models:
   - name: int_flu_over_65
-    description: 'Flu vaccination eligibility for people aged 65 and over based on
-      age criteria.
+    description: 'Flu vaccination eligibility for people aged 65 and over based on age criteria.
 
       Key Features:
 
@@ -13,8 +12,7 @@ models:
 
       • Uses birth_date_approx for age calculation
 
-      Purpose: Identify people eligible for flu vaccination based on age threshold
-      alone.'
+      Purpose: Identify people eligible for flu vaccination based on age threshold alone.'
     config:
       meta:
         indicator:
@@ -51,12 +49,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'

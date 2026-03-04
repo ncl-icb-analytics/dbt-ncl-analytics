@@ -63,4 +63,5 @@ models:
 
     tests:
       - cluster_ids_exist:
-          cluster_ids: BMIVAL_COD
+          arguments:
+            cluster_ids: BMIVAL_COD

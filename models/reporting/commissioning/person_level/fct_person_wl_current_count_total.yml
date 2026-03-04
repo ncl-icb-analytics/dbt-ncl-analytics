@@ -1,4 +1,3 @@
-
 models:
   - name: fct_person_wl_current_count_total
     description: >
@@ -21,12 +20,10 @@ models:
         description: Total number of open waiting lists for the patient.
 
       - name: wl_current_distinct_providers_count
-        description: Number of distinct providers that the patient has open 
-          waiting lists on.
+        description: Number of distinct providers that the patient has open waiting lists on.
 
       - name: wl_current_distinct_tfc_count
-        description: Number of distinct Treatment Function Codes (TFCs) that the
-          patient has open waiting lists on.
+        description: Number of distinct Treatment Function Codes (TFCs) that the patient has open waiting lists on.
 
       - name: same_tfc_multiple_providers_flag
         description: >
@@ -34,9 +31,9 @@ models:
           assigned to multiple providers.
 
       - name: current_waiting_list_arrays
-        description: Array of waiting list objects for the patient, sorted by 
-          days on waiting list.
+        description: Array of waiting list objects for the patient, sorted by days on waiting list.
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
