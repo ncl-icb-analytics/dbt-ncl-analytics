@@ -36,6 +36,13 @@ current_dbt_models AS (
         UPPER(alias) AS table_name
     FROM DATA_LAKE__NCL.DBT_OBSERVABILITY.DBT_MODELS
     WHERE package_name = 'ncl_analytics'
+    UNION ALL
+    SELECT
+        'DEV__' || UPPER(database_name) AS database_name,
+        UPPER(schema_name) AS schema_name,
+        UPPER(alias) AS table_name
+    FROM DATA_LAKE__NCL.DBT_OBSERVABILITY.DBT_MODELS
+    WHERE package_name = 'ncl_analytics'
 )
 SELECT
     s.table_catalog,
