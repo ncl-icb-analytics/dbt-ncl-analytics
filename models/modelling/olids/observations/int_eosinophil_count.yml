@@ -17,6 +17,7 @@ models:
             - clinical_effective_date
             - original_result_value
             - original_result_unit_code
+            - concept_code
     columns:
       - name: id
         description: Unique observation identifier
