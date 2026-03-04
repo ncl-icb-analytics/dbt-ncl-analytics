@@ -107,12 +107,12 @@ eligible_patients AS (
     LEFT JOIN qrisk2_recent AS qr ON bp.person_id = qr.person_id
     LEFT JOIN high_risk_review_declined AS hrrd ON bp.person_id = hrrd.person_id
     WHERE
-        NOT COALESCE(sm.person_id IS NOT NULL, FALSE)  -- Not on statins
-        AND NOT COALESCE(se.latest_statin_allergy_date IS NOT NULL, FALSE)  -- No statin allergies
-        AND NOT COALESCE(se.latest_statin_decision_date IS NOT NULL, FALSE)  -- No statin decisions
-        AND NOT COALESCE(hc.person_id IS NOT NULL, FALSE)  -- No health checks in last 24 months
-        AND NOT COALESCE(qr.person_id IS NOT NULL, FALSE)  -- No QRISK2 in last 60 months
-        AND NOT COALESCE(hrrd.person_id IS NOT NULL, FALSE)  -- No high CVD risk review decline in last 3 years
+        sm.person_id IS NULL  -- Not on statins
+        AND se.latest_statin_allergy_date IS NULL  -- No statin allergies
+        AND se.latest_statin_decision_date IS NULL  -- No statin decisions
+        AND hc.person_id IS NULL  -- No health checks in last 24 months
+        AND qr.person_id IS NULL  -- No QRISK2 in last 60 months
+        AND hrrd.person_id IS NULL  -- No high CVD risk review decline in last 3 years
 ),
 
 latest_qrisk2 AS (

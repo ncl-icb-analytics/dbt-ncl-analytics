@@ -45,3 +45,8 @@ models:
               sort_order: 1
         owner:
           name: EddieDavison92
+    data_tests:
+      - not_null:
+          column_name: person_id
+      - unique:
+          column_name: person_id

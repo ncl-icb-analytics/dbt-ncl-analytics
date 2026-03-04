@@ -27,6 +27,12 @@ models:
             - "LTC_LCS_DASHBOARD"
             - "CASE_FINDING_PROGRAMME"
           code_clusters:
+            - cluster_id: "HYPERTENSION_BP_ABPM"
+              category: "INCLUSION"
+            - cluster_id: "HYPERTENSION_BP_HOME"
+              category: "INCLUSION"
+            - cluster_id: "HYPERTENSION_BP_CLINIC"
+              category: "INCLUSION"
             - cluster_id: "HYPERTENSION_MYOCARDIAL"
               category: "INCLUSION"
             - cluster_id: "HYPERTENSION_CEREBRAL"
@@ -72,3 +78,9 @@ models:
               sort_order: 4
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        data_tests:
+          - unique
+          - not_null

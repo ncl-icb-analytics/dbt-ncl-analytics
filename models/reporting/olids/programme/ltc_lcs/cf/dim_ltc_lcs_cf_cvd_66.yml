@@ -62,3 +62,9 @@ models:
       - valuesets_have_codes:
           valuesets:
             - aged_75_84_years_who_are_not_on_a_statin_and_no_qrisk_in_l5y_vs1
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

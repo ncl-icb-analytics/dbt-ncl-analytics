@@ -71,3 +71,9 @@ models:
       - valuesets_have_codes:
           valuesets:
             - people_at_high_risk_cvd_eligible_population_with_qrisk_15_20_vs1
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

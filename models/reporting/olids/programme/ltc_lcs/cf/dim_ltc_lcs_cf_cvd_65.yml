@@ -1,6 +1,6 @@
 models:
   - name: dim_ltc_lcs_cf_cvd_65
-    description: 'Age 40 to under 84 with QRISK2 ≥10% and eligible statin medication
+    description: 'Age 40 to under 84 years with QRISK2 ≥10% and eligible statin medication
       courses for CVD_65. Excludes statin allergies/adverse reactions, not indicated,
       statin declines (60m), and high CVD risk review declines (36m).
 
@@ -15,7 +15,7 @@ models:
           name_short: "CVD_65: QRISK2 ≥10%, medication-course cohort"
           description_short: "QRISK2 ≥10%, medication-course cohort"
           description_long: >
-            Age 40 to under 84, QRISK2 ≥10%, on medication courses defined by
+            Age 40 to under 84 years, QRISK2 ≥10%, on medication courses defined by
             valueset with_qrisk210_amd_not_on_a_high_intensity_statin_vs3.
             Excludes statin allergies/adverse reactions, not indicated,
             statin declines (60m), and high CVD risk review declines (36m)
