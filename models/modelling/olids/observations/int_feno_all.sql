@@ -8,7 +8,7 @@
 All Fractional Exhaled Nitric Oxide measurements with unit standardisation and data quality flags
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 Uses the standardise_count_observation macro for value-first unit inference.
-Standard unit: parts per billon (ppb).
+Standard unit: parts per billion (ppb).
 */
 
 WITH raw_observations AS (
