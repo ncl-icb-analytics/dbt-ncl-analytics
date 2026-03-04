@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_children_school_age
     description: 'Flu vaccination eligibility for children of school age based on

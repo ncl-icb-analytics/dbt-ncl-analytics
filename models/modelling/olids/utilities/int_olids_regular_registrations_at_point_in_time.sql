@@ -48,8 +48,8 @@ regular_episodes as (
     select
         eoc.id,
         eoc.patient_id,
-        eoc.organisation_id,
-        eoc.record_owner_organisation_code as practice_ods_code,
+        eoc.organisation_id_publisher,
+        eoc.organisation_code_publisher as practice_ods_code,
         eoc.episode_of_care_start_date,
         eoc.episode_of_care_end_date
     from {{ ref('stg_olids_episode_of_care') }} as eoc

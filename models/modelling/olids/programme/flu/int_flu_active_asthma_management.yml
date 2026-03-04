@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_active_asthma_management
     description: 'Flu vaccination eligibility for people with active asthma management

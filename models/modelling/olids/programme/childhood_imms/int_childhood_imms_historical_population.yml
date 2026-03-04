@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_childhood_imms_historical_population
     description: 'Childhood immunisation population at key ages for time series analysis.
 
@@ -28,10 +28,11 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: identifier for the person ()
 
       - name: is_fiscal_year_end
         description: Flag to identify the 31st March of each year as FISCAL year
+

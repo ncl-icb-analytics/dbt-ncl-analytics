@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_htn_61
     description: 'Patients with severe hypertension: clinic BP ≥180/120 or home/ABPM

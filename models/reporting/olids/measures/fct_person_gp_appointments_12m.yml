@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_person_gp_appointments_12m
     description: 'GP appointment activity tracking over 12-month period for capacity

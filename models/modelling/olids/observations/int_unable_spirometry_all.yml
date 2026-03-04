@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_unable_spirometry_all
     description: 'Records where spirometry testing was unsuitable or contraindicated

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_homeless
     description: 'Flu vaccination eligibility for people in precarious accommodation

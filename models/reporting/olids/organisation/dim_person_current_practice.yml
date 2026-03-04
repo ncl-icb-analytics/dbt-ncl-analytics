@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_current_practice
     description: 'Current practice registration snapshot for each person with registration

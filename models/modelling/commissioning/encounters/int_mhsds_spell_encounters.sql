@@ -28,9 +28,6 @@ select
     , 'MHSDS' as source
 from 
     {{ ref('stg_mhsds_spell')}} as c 
-inner join 
-    {{ ref('stg_mhsds_activesubmission')}} as a
-    on c.uniq_submission_id = a.uniq_submission_id
 left join 
     {{ ref('stg_mhsds_bridging')}} as b
     on c.person_id = b.person_id 

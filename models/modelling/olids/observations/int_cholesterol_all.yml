@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_cholesterol_all
     description: 'Total cholesterol measurements for cardiovascular risk assessment

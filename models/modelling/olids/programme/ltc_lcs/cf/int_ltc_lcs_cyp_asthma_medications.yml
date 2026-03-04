@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_cyp_asthma_medications
     description: 'Children and young people asthma-relevant medications for Long Term

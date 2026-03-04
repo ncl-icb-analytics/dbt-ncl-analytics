@@ -2,6 +2,14 @@
     config(materialized = 'table')
 }}
 
+WITH deduplicated AS (
+{{
+    deduplicate_mhsds(
+        mhsds_table =ref('raw_mhsds_mhs501hospprovspell'),
+        partition_cols = ['uniq_hosp_prov_spell_num']
+    )
+}} )
+
 select 
     uniq_hosp_prov_spell_num
     , uniq_submission_id
@@ -11,11 +19,7 @@ select
     , meth_adm_mh_hosp_prov_spell
     , disch_date_hosp_prov_spell
     , estimated_disch_date_hosp_prov_spell
-from {{ ref('raw_mhsds_mhs501hospprovspell') }}
-qualify row_number() over (
-    partition by uniq_hosp_prov_spell_num
-    order by effective_from desc
-) = 1
+from deduplicated
 
 -- NB: De-deuplicated layer MHSDS.docx shared by Shak recommends to deduplicate using
 -- PARTITION BY [UniqServReqID],[UniqHospProvSpellNum]

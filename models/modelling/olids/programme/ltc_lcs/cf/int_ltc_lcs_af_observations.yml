@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_af_observations
     description: 'Atrial fibrillation-relevant observations for Long Term Conditions

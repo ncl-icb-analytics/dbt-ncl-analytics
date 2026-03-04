@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_egfr_latest
     description: 'Most recent valid eGFR measurement per person with CKD staging for

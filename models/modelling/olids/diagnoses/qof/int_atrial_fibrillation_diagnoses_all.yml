@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_atrial_fibrillation_diagnoses_all
     description: 'Atrial fibrillation diagnosis and resolution observations for QOF

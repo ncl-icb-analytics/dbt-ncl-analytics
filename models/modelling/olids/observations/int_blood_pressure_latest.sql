@@ -9,7 +9,8 @@
 
 SELECT
     person_id,
-    clinical_effective_date,
+    effective_date,
+    effective_date AS clinical_effective_date,  -- Backward compatibility alias
     systolic_value,
     diastolic_value,
     is_home_bp_event,
@@ -25,5 +26,5 @@ SELECT
 FROM {{ ref('int_blood_pressure_all') }}
 QUALIFY
     ROW_NUMBER()
-        OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC)
+        OVER (PARTITION BY person_id ORDER BY effective_date DESC)
     = 1

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_valproate_psychiatry
     description: 'Psychiatry-related events aggregation for valproate monitoring.

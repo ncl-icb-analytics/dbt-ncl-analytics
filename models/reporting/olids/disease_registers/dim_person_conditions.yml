@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_conditions
     description: 'Population dimension with boolean flags for each condition.

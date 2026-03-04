@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_arb_medications_all
     description: 'Angiotensin receptor blocker medication orders for cardiovascular
@@ -16,7 +15,10 @@ models:
         description: 'Patient identifier'
 
       - name: medication_order_id
-        description: 'Unique identifier for the medication order'
+        description: 'Unique identifier for the medication order - primary key'
+        tests:
+          - unique
+          - not_null
 
       - name: medication_statement_id
         description: 'Unique identifier for the medication statement'

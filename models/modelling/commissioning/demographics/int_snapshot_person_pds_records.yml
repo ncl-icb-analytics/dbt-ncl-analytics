@@ -1,4 +1,3 @@
-version: 2
 models:
 - name: int_snapshot_person_pds_records
   description: Personal Demographics Service snapshot records for each patient in a combined table.

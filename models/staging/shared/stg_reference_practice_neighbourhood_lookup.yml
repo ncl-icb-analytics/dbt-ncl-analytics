@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_practice_neighbourhood_lookup
     description: GP practice to neighbourhood, PCN, and local authority mapping

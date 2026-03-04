@@ -23,7 +23,7 @@ SELECT
 
     -- Enhanced HbA1c data presentation
     hba.clinical_effective_date AS latest_hba1c_date,
-    hba.hba1c_value AS latest_hba1c_value,
+    hba.hba1c_original_value AS latest_hba1c_value,
     hba.result_unit_display AS hba1c_unit,
     hba.hba1c_category AS hba1c_clinical_category,
     bp.clinical_effective_date AS latest_bp_date,

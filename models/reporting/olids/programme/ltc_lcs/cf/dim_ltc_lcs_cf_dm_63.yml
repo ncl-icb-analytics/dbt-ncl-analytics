@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_63
     description: 'Patients aged 17+ with latest HbA1c ≥46 and <48 mmol/mol, where

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_bmi_latest
     description: 'Most recent valid BMI measurement per person with ethnicity-adjusted

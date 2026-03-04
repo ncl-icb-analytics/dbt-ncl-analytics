@@ -21,7 +21,7 @@ care_process_data AS (
 
         -- HbA1c
         hba.clinical_effective_date AS latest_hba1c_date,
-        hba.hba1c_value AS latest_hba1c_value,
+        hba.hba1c_original_value AS latest_hba1c_value,
         bp.clinical_effective_date AS latest_bp_date,
 
         -- Blood Pressure

@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: fct_provider_wl_current_count_total

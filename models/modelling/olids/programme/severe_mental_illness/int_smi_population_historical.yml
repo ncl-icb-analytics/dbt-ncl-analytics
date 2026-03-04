@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_smi_population_historical
     description: Intermediate table holding historical population by month for 
       people on the SMI register. Multiple lines per person, one for each month 
@@ -7,9 +7,10 @@ models:
     config:
       meta:
         owner:
-          name: Kate Homer
+          name: KateHomer55
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
+

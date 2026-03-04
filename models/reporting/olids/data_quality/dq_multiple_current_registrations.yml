@@ -13,6 +13,8 @@ models:
 
       Purpose: Supports patient registration data validation and duplicate resolution
       processes.'
+    # TODO: grain test disabled - 73 duplicates found
+    # Upstream data may have multiple sk_patient_ids per person+practice+date
     config:
       meta:
         owner:

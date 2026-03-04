@@ -1,0 +1,22 @@
+models:
+  - name: int_person_partner_attribution
+    description: |
+      Shows which patients in OLIDS are permitted to be viewed by different partner organiations, e.g. which patients a local authority analyst can use in their analysis.
+      Since a patient can be viewed by more than one partner, this table will have more rows than unique people.
+
+    config:
+      meta:
+        owner:
+          name: FelixPeckitt
+    columns:
+      - name: SK_PATIENT_ID
+        description: Unique patient ID
+        data_tests: 
+          - not_null
+
+      - name: PARTNER_ATTRIBUTION
+        description: |
+          The name of the partner ogranisation's Snowflake role that a partner can view.
+          e.g. PARTNER__CAMDEN shows indicates the patient can be included in Camden's dataset.
+        data_tests:
+          - not_null

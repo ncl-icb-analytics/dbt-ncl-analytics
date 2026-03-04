@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_observation
     description: Clinical observations including test results, vital signs, and 

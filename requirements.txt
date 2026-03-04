@@ -1,11 +1,17 @@
-# Pin dbt-core to 1.9.4 for Snowflake compatibility
-# dbt-snowflake 1.9.1 works with dbt-core 1.9.4
+# Pin dbt-core to 1.9.x for Snowflake compatibility
+# dbt-snowflake 1.9.4 is the latest patch release for 1.9.x line
 dbt-core==1.9.4
-dbt-snowflake==1.9.1
-pandas==2.3.1
+dbt-snowflake==1.9.4
+pandas==2.3.3
 pyyaml==6.0.2
 snowflake-snowpark-python==1.35.0
 snowflake-snowpark-python[pandas]
 dotenv==0.9.9
-keyring==25.5.0
-ruamel-yaml>=0.19.1
+keyring==25.6.0
+ruamel-yaml>=0.18.0
+
+# Note on Dependabot alerts (2026-02-04):
+# - deepdiff (CRITICAL): Blocked by dbt-common<8.0 pin, requires dbt 1.10+ to fix
+# - protobuf (HIGH): Blocked by snowflake-snowpark-python<6 pin
+# - wheel (HIGH): Transitive dep, pip install --upgrade wheel separately if needed
+# These are low practical risk for dbt analytics use cases (no untrusted input processing)

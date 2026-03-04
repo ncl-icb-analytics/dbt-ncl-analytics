@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_cf_base_population
     description: 'Base population for Long Term Conditions case finding indicators

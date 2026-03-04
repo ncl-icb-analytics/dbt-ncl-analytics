@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_care_home
     description: Dimension table providing the latest recorded care home/nursing

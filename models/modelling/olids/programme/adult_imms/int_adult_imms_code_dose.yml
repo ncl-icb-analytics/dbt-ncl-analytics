@@ -1,8 +1,9 @@
-models:
+﻿models:
   - name: int_adult_imms_code_dose
     description: Intermediate table to match vaccines from the schedule with 
       code clusters and doses
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+

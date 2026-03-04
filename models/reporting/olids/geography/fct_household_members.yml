@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_household_members
     description: 'Bridge table linking patients to households with demographic and

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_gp_weighted_list_size
     description: GP practice weighted list size by financial quarter

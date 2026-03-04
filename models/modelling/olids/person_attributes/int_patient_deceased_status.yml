@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_patient_deceased_status
     description: Patient-level deceased status with approximate death date.

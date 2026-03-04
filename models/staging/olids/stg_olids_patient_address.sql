@@ -19,3 +19,4 @@ select
     lds_record_id
 
 from {{ ref('raw_olids_patient_address') }}
+where person_id is not null

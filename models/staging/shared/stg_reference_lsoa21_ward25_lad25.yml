@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_lsoa21_ward25_lad25
     description: LSOA 2021 to Ward 2025 and Local Authority District 2025 

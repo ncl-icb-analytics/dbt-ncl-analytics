@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_blood_pressure_latest
     description: 'Latest blood pressure event per person with paired systolic/diastolic
@@ -14,7 +13,7 @@ models:
         tests:
           - not_null
           - unique
-      - name: clinical_effective_date
+      - name: effective_date
         description: Date of most recent blood pressure measurement
         tests:
           - not_null

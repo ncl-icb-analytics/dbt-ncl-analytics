@@ -25,7 +25,7 @@ deceased AS (
 -- SNOMED code only (all registration types)
 snomed_counts AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS snomed_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed
@@ -41,7 +41,7 @@ snomed_counts AS (
 -- Regular source code only
 regular_counts AS (
     SELECT
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        eoc.organisation_code_publisher AS practice_ods_code,
         COUNT(DISTINCT ptp.person_id) AS regular_count
     FROM {{ ref('stg_olids_episode_of_care') }} eoc
     CROSS JOIN emis_extract_date ed

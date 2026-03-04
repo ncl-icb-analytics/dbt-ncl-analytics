@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_anticoagulant_medications_all
     description: 'Oral anticoagulant medication orders using BNF classification for

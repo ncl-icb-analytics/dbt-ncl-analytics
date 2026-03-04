@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_covid_pregnancy
     description: 'COVID vaccination eligibility for people who are pregnant.

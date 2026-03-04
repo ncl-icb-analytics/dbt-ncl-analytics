@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_valproate_araf_events
     description: 'ARAF events from observations using valproate programme codes.

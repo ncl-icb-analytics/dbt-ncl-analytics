@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_creatinine_latest
     description: 'Most recent valid serum creatinine measurement per person for kidney

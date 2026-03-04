@@ -48,10 +48,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install yq
+      - name: Install Python deps
         run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pyyaml
       - name: Get changed files
         id: changed
         run: |
@@ -59,7 +59,7 @@ jobs:
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
-          bash scripts/ci/check_model_descriptions.sh ${{ steps.changed.outputs.files }} | tee result.txt
+          python3 scripts/ci/check_model_descriptions.py ${{ steps.changed.outputs.files }} | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
 

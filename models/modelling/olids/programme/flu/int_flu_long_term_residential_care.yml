@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_long_term_residential_care
     description: 'Flu vaccination eligibility for people in long-term residential

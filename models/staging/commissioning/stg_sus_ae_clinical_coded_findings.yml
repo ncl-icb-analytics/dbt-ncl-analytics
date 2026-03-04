@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_sus_ae_clinical_coded_findings
     description: SUS A&E clinical coded findings (SNOMED CT)

@@ -29,6 +29,9 @@ select
         geo.ward_2025_code as residence_ward_2025_code,
         geo.ward_2025_name as residence_ward_2025_name,
         geo.local_authority_2025_name as residence_borough,
+        geo.icb_code as residence_icb_code,
+        geo.icb_name as residence_icb_name,
+        geo.resident_flag as residence_icb_group,
         nb_res.neighbourhood_code as residence_neighbourhood_code,
         nb_res.neighbourhood_name as residence_neighbourhood_name,
         imd.imd25_decile as residence_imd_decile,
@@ -36,7 +39,7 @@ select
         --Registered information
         pmi.flag_current_ncl_registered,
         pmi.record_registered_start_date,
-        pmi.practice_code,
+        dict_gp.organisation_code as practice_code,
         dict_gp.organisation_name as practice_name,
         dict_pcn.network_code as pcn_code,
         dict_pcn.network_name as pcn_name,
@@ -81,6 +84,7 @@ on pmi.lsoa21_code = imd.lsoa_code_2021
 
 left join {{ref('stg_dictionary_dbo_organisation')}} dict_gp
 on pmi.practice_code = dict_gp.organisation_code
+and dict_gp.end_date is null
 
 left join {{ref('stg_dictionary_dbo_organisationmatrixpracticeview')}} as dict_pcn
 on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_under_65_at_risk
     description: 'Flu vaccination eligibility parent category for people under 65

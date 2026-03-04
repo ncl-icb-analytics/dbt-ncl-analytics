@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_households
     description: 'Geographic reference for household dwellings with location context

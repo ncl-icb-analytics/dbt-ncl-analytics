@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_frailty_diagnoses_all
     description: 'Frailty diagnosis observations with severity classification for

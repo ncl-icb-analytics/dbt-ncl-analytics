@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_valproate_medications_6m_latest
     description: 'Most recent valproate medication order per person from the last
@@ -13,7 +12,10 @@ models:
           name: EddieDavison92
     columns:
       - name: person_id
-        description: 'Patient identifier'
+        description: 'Patient identifier - primary key (one row per person)'
+        tests:
+          - unique
+          - not_null
 
       - name: most_recent_order_date
         description: 'Date of the most recent valproate order in the last 6 months'

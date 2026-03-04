@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_combined_codesets
     description: Combined code sets mapping cluster IDs to individual codes 

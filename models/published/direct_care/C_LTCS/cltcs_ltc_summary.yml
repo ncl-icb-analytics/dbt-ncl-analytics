@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: cltcs_ltc_summary

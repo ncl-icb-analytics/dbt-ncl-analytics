@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: pds_olids_reg_pass_direct_care

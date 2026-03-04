@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_appointment
     description: Patient appointment records from GP and other healthcare 

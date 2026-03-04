@@ -1,0 +1,153 @@
+version: 2
+sources:
+- name: adult_social_care_cld
+  database: '"DATA_LAKE"'
+  schema: '"SOCIAL_CARE"'
+  description: National submission from local authorities for adult social care (client
+    level dataset)
+  tables:
+  - name: Adult_Social_Care_CLD
+    identifier: '"Adult_Social_Care_CLD"'
+    columns:
+    - name: LA Code
+      data_type: TEXT
+    - name: Reporting Period Start Date
+      data_type: TIMESTAMP_NTZ
+    - name: Reporting Period End Date
+      data_type: TIMESTAMP_NTZ
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: LA Person Unique Identifier
+      data_type: TEXT
+    - name: GP Practice Name
+      data_type: TEXT
+    - name: GP Practice Code
+      data_type: TEXT
+    - name: Gender
+      data_type: TEXT
+    - name: Ethnicity
+      data_type: TEXT
+    - name: Client Type
+      data_type: TEXT
+    - name: Primary Support Reason
+      data_type: TEXT
+    - name: Accommodation Status
+      data_type: TEXT
+    - name: Employment Status
+      data_type: TEXT
+    - name: Has Unpaid Carer
+      data_type: TEXT
+    - name: Autism Spectrum Disorder (ASD)
+      data_type: TEXT
+    - name: Visual Impairment
+      data_type: TEXT
+    - name: Hearing Impairment
+      data_type: TEXT
+    - name: Dementia
+      data_type: TEXT
+    - name: Client Funding Status
+      data_type: TEXT
+    - name: Event Type
+      data_type: TEXT
+    - name: Event Reference
+      data_type: TEXT
+    - name: Event Start Date
+      data_type: TIMESTAMP_NTZ
+    - name: Event End Date
+      data_type: TIMESTAMP_NTZ
+    - name: Event Description
+      data_type: TEXT
+    - name: Event Outcome
+      data_type: TEXT
+    - name: 'Request: Route of Access'
+      data_type: TEXT
+    - name: Assessment Type
+      data_type: TEXT
+    - name: Eligible Needs Identified
+      data_type: TEXT
+    - name: Informal Carer involved in Assessment
+      data_type: TEXT
+    - name: Method of Assessment
+      data_type: TEXT
+    - name: Total Hrs Caring per week
+      data_type: TEXT
+    - name: No. of adults being cared for
+      data_type: NUMBER
+    - name: Adult 1 Linked Person_ID
+      data_type: TEXT
+    - name: Adult 2 Linked Person_ID
+      data_type: TEXT
+    - name: Adult 3 Linked Person_ID
+      data_type: TEXT
+    - name: Service Type
+      data_type: TEXT
+    - name: Service Component
+      data_type: TEXT
+    - name: Delivery Mechanism
+      data_type: TEXT
+    - name: Provider CQC Location Name
+      data_type: TEXT
+    - name: Provider CQC Location ID
+      data_type: TEXT
+    - name: Review Reason
+      data_type: TEXT
+    - name: Review Outcomes Achieved
+      data_type: TEXT
+    - name: Method of Review
+      data_type: TEXT
+    - name: Unit Cost
+      data_type: NUMBER
+    - name: Cost Frequency (Unit Type)
+      data_type: TEXT
+    - name: Planned units per week
+      data_type: NUMBER
+    - name: Full cost client
+      data_type: TEXT
+    - name: dmAgeAtReportingPeriodStartDate
+      data_type: NUMBER
+    - name: dmCcgOfPracticeFromNHSNumber
+      data_type: TEXT
+    - name: dmCcgOfResidenceFromNHSNumber
+      data_type: TEXT
+    - name: dmPracticeCodeFromNHSNumber
+      data_type: TEXT
+    - name: dmPostCodeSectorFromSubmittedPostCode
+      data_type: TEXT
+    - name: dmLsoaFromSubmittedPostcode
+      data_type: TEXT
+    - name: dmLoadDate
+      data_type: TIMESTAMP_NTZ
+    - name: dmYearAndMonthOfBirth
+      data_type: TEXT
+    - name: dmYearAndMonthofDeath
+      data_type: TEXT
+    - name: dmCCGOfPracticeFromSubmittedPractice
+      data_type: TEXT
+    - name: dmCCGOfResidenceFromSubmittedPostcode
+      data_type: TEXT
+    - name: dmIcbCommissioner
+      data_type: TEXT
+    - name: dmSubIcbCommissioner
+      data_type: TEXT
+    - name: dmIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmSubIcbRegistrationSubmitted
+      data_type: TEXT
+    - name: dmSubIcbResidenceSubmitted
+      data_type: TEXT
+    - name: dmCommissionerDerivationReason
+      data_type: TEXT
+    - name: dmImportLogId
+      data_type: TEXT
+    - name: dmRowId
+      data_type: TEXT
+    - name: dmFlowId
+      data_type: NUMBER
+    - name: dmSubmittedFileName
+      data_type: TEXT
+    - name: dmSpecification
+      data_type: TEXT
+    - name: dmReceivedDate
+      data_type: TIMESTAMP_NTZ

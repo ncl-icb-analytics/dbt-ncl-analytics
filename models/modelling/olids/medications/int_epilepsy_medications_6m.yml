@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_epilepsy_medications_6m
     description: 'Anti-epileptic drug medication orders from the last 6 months for
@@ -22,7 +21,10 @@ models:
         description: 'Surrogate key for patient identification'
 
       - name: medication_order_id
-        description: 'Unique identifier for the medication order'
+        description: 'Unique identifier for the medication order - primary key'
+        tests:
+          - unique
+          - not_null
 
       - name: medication_statement_id
         description: 'Unique identifier for the medication statement'

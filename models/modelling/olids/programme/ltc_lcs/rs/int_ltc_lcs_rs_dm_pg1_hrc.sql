@@ -47,16 +47,16 @@ rule_5_hba1c_prerequisite as (
 -- Rule 6: Cardiac conditions (inclusion)
 rule_6_cardiac as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg1_hrc_vs6") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg1_hrc_vs5") }})
 ),
 
 -- Rule 6: Diabetes medications in last 6 months (inclusion)
--- GLP-1 agonists (vs8) or Insulins
--- Note: vs7 is empty (EMIS DRUG Group didn't resolve to SNOMED codes)
+-- GLP-1 agonists (vs7) or Insulins
+-- Note: vs6 is empty (EMIS DRUG Group didn't resolve to SNOMED codes)
 -- Using BNF code 060101 (Insulins) instead
 rule_6_medications as (
     select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_dm_reg_pg1_hrc_vs8") }})
+    from ({{ get_ltc_lcs_medication_orders_latest("on_dm_reg_pg1_hrc_vs7") }})
     where order_date >= dateadd(month, -6, current_date())
     union
     select person_id

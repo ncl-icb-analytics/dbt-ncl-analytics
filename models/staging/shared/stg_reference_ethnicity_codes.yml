@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_ethnicity_codes
     description: Ethnicity code reference with categorisation and prioritisation

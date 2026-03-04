@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_smi_population_base
     description: Intermediate table holding demographics and core metrics for 
       people on the SMI register
@@ -6,10 +6,11 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
           - unique
+

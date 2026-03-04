@@ -19,9 +19,16 @@
         o.id,
         o.patient_id,
         o.person_id,
-        COALESCE(o.clinical_effective_date, '1900-01-01') AS clinical_effective_date,
+        -- Use date_recorded as fallback if clinical_effective_date is after it (data quality fix)
+        CASE 
+            WHEN o.clinical_effective_date > o.date_recorded THEN o.date_recorded
+            ELSE COALESCE(o.clinical_effective_date, '1900-01-01')
+        END AS clinical_effective_date,
+        o.clinical_effective_date AS clinical_effective_date_raw,  -- Original value for audit
+        o.date_recorded,
         o.result_value,
         o.result_value_units_concept_id,
+        o.result_unit_code,
         o.result_unit_display,
         o.result_text,
         o.is_problem,
@@ -30,6 +37,8 @@
         o.mapped_concept_id,
         o.mapped_concept_code,
         o.mapped_concept_display,
+        o.age_at_event,
+        o.lds_start_date_time,
         cc.cluster_id,
         cc.cluster_description,
         cc.code_description

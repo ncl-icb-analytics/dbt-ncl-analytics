@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_emis_olids_practice_registration_comparison
@@ -26,7 +25,10 @@ models:
           name: Eddie Davison
     columns:
       - name: practice_code
-        description: GP practice ODS code
+        description: 'GP practice ODS code - primary key'
+        tests:
+          - unique
+          - not_null
 
       - name: practice_name
         description: GP practice name

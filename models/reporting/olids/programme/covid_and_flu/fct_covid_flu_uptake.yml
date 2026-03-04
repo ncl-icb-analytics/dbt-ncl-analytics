@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: fct_covid_flu_uptake

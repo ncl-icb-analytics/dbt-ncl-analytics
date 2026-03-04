@@ -1,8 +1,13 @@
-models:
+﻿models:
   - name: int_childhood_imms_vaccination_events_historical
-    description: Intermediate table holding vaccination events for historical 
-      childhood imms population for time series. Multiple lines per person
+    description: Intermediate table holding vaccination events for historical childhood imms population for time series. Multiple lines per person
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+

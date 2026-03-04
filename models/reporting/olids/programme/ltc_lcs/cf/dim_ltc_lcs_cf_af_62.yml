@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_af_62
     description: 'AF case finding for patients 65+ without recent pulse check.

@@ -1,4 +1,3 @@
-version: 2
 models:
 - name: int_person_pds_demographics
   description: Demographic lookup table for the current population based on the PDS dataset. Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021
     description: Mapping between LSOA 2021 codes and NCL neighbourhood codes 

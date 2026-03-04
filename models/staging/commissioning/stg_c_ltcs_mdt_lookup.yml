@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_c_ltcs_mdt_lookup
     description: C-LTCS MDT PCN lookup. One row per PCN per MDT date.

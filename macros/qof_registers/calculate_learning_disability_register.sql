@@ -2,10 +2,10 @@
     {#
     Calculates Learning Disability register status at a given reference date.
 
-    Business Logic:
-    - Presence of learning disability diagnosis
-    - Age ≥14 at reference date
-    - Lifelong condition, no resolution
+    Business Logic (QOF v50):
+    - Has learning disability diagnosis (LD_COD)
+    - NOT excluded: no exclusion code (LDREM_COD) after latest diagnosis
+    - No age restriction in QOF spec (includes all ages)
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -17,27 +17,20 @@
         SELECT
             person_id,
             clinical_effective_date,
-            is_diagnosis_code
+            is_diagnosis_code,
+            is_exclusion_code
         FROM {{ ref('int_learning_disability_diagnoses_all') }}
         WHERE clinical_effective_date <= {{ reference_date_expr }}
-          AND is_diagnosis_code = TRUE
     ),
 
     learning_disability_person_aggregates AS (
         SELECT
             person_id,
-            MIN(clinical_effective_date) AS earliest_diagnosis_date
+            MIN(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) AS earliest_diagnosis_date,
+            MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) AS latest_diagnosis_date,
+            MAX(CASE WHEN is_exclusion_code THEN clinical_effective_date END) AS latest_exclusion_date
         FROM learning_disability_diagnoses_filtered
         GROUP BY person_id
-    ),
-
-    age_at_reference AS (
-        SELECT
-            person_id,
-            birth_date_approx,
-            DATEDIFF('year', birth_date_approx, {{ reference_date_expr }}) AS age
-        FROM {{ ref('dim_person_birth_death') }}
-        WHERE birth_date_approx IS NOT NULL
     ),
 
     learning_disability_register_logic AS (
@@ -45,12 +38,16 @@
             diag.person_id,
             'Learning Disability' AS register_name,
             COALESCE(
-                diag.earliest_diagnosis_date IS NOT NULL
-                AND age.age >= 14,
+                -- Must have an LD diagnosis
+                diag.latest_diagnosis_date IS NOT NULL
+                -- Must not have been excluded after latest diagnosis
+                AND (
+                    diag.latest_exclusion_date IS NULL
+                    OR diag.latest_diagnosis_date > diag.latest_exclusion_date
+                ),
                 FALSE
             ) AS is_on_register
         FROM learning_disability_person_aggregates diag
-        LEFT JOIN age_at_reference age ON diag.person_id = age.person_id
     )
 
     SELECT

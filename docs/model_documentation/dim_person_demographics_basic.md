@@ -14,7 +14,7 @@ Currently the following datasets are used in the Demographics Basic table:
 Note that the logic for the PDS Snapshot table largely follows the same logic as the Demographics Basic table but is limited to data available in PDS only (with ethnicity data supplemented using Ethnicity National Data Sets) ([DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/REPORTING/schemas/COMMISSIONING_REPORTING/table/DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS)).
 
 ## Version History
-### V1.0 - 22/01/2026
+### V1.0.0 - 22/01/2026
 * Initial version of dim_person_demographics_basic created.
 * Initial data sources included:
     - PDS
@@ -33,7 +33,7 @@ Note that the logic for the PDS Snapshot table largely follows the same logic as
     - NCL Registered Flag (At time of refresh)
     - NCL Resident Flag (At time of refresh)
 
-### V1.1 - 26/01/2026
+### V1.1.0 - 26/01/2026
 * The logic to determine which dataset to pull from is more advanced:
   * Previous logic: Use PDS where it exists otherwise SUS (expect for ethnicity data where ETHNICITY_NATIONAL_DATA_SETS | Table is used when possible)
   * New logic: Custom per field but typically:
@@ -42,3 +42,8 @@ Note that the logic for the PDS Snapshot table largely follows the same logic as
 * Cleaned up some of the ethnicity codes in the ethnicity data set and truncated to 1 digit (as 95% of codes only used 1 digit simplified ethnicity codes so why mix and match)
 * Renamed resident fields to all include residence_ as a prefix for consistency
 * Added some logic for registered borough and neighbourhood to replace NULLs with more informative values like 'Non-NCL' or 'Unknown due to practice closure'
+
+### V1.1.1 - 02/03/2026
+* Modified the registered GP practice logic to only consider non-PDS sources for the population outside of NCL (in order to reduce known false positives)
+* Adjusted logic so that patients registered to a closed GP practice are now listed with no registered practice in the final output
+* Added Residence ICB fields in the final output

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_organisation_active_patients
     description: 'Organisation active patient counts for capacity planning and service

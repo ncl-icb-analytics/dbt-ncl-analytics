@@ -19,7 +19,7 @@ select
     flag_female,
     flag_sdec,
     flag_ads,
-    icd10_mapping,
+    {{clean_icd10_code("icd10_mapping")}} as icd10_mapping,
     icd10_description,
     icd11_mapping,
     icd11_description,

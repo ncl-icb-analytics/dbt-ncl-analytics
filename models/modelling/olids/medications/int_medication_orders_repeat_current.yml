@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_medication_orders_repeat_current

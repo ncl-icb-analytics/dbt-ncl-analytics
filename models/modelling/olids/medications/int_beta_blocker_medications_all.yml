@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_beta_blocker_medications_all
     description: 'Beta blocker medication orders using BNF classification for cardiovascular

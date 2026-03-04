@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_bmi_qof
     description: 'BMI measurements with QOF-specific obesity register logic and ethnicity-adjusted

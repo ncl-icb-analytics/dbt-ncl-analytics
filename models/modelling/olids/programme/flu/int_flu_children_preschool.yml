@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_children_preschool
     description: 'Flu vaccination eligibility for children of preschool age based

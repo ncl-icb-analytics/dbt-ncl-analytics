@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_pregnancy
     description: 'Flu vaccination eligibility for pregnant women using campaign timing

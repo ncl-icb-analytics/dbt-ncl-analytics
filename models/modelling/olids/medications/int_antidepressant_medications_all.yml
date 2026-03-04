@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_antidepressant_medications_all
     description: 'Antidepressant medication orders using BNF classification for mental

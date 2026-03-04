@@ -9,8 +9,17 @@
         This macro deduplicates a CSDS table by keeping the most recent record
         (based on `effective_from`) within each unique combination of `partition_cols`.
 
+        dedup_table (dbt table ref):
+            a ref to the raw csds table to be deduplicated
+         
+        partition_cols (list[str]):
+            a list of column(s) present in the dedup_table which the deduplication occurs over
+
         Example usage:
-          {{ deduplicate_csds('my_schema.my_table', ['unique_service_request_identifier', 'unique_care_contact_identifier']) }}
+          {{ 
+                deduplicate_csds(dedup_table = ref('raw_csds_cyp201carecontact'), 
+                              partition_cols = ['unique_service_request_identifier', 'unique_care_contact_identifier']) 
+           }}
     #}
 
     {% if partition_cols | length == 0 %}

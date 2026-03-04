@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_mhsds_activesubmission
     description: Table containing active submissions in MHSDS data

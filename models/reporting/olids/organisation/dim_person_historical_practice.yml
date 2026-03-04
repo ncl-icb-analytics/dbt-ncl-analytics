@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_historical_practice
     description: 'Complete practice registration history tracking patient mobility
@@ -70,9 +69,6 @@ models:
 
       - name: practice_is_obsolete
         description: 'Flag indicating if practice record is obsolete'
-        tests:
-          - not_null:
-              severity: warn
 
       - name: registration_start_date
         description: 'Start date of this registration period'

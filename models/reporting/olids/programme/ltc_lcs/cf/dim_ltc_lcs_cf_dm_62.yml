@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_62
     description: 'Patients aged 17+ with gestational diabetes history and no HbA1c

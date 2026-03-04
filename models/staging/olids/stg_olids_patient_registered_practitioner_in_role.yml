@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_olids_patient_registered_practitioner_in_role
     description: Registration history linking patients to their registered GPs 

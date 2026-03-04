@@ -1,0 +1,19 @@
+models:
+  - name: int_person_borough_registered_or_resident
+    description: Shows which patients in OLIDS are registered to a GP in a borough OR (inclusive) resident in a borough. Intended use is to help with attributing patients to a borough.
+      Since a patient can be resident in one borough and have their GP registration in another, this table will have more rows than unique people. 
+
+    config:
+      meta:
+        owner:
+          name: FelixPeckitt
+    columns:
+      - name: SK_PATIENT_ID
+        description: Unique patient ID
+        data_tests:
+          - not_null
+
+      - name: BOROUGH_REGISTERED_OR_RESIDENT
+        description: The borough where a patient is a resident of a borough OR (inclusive) resident
+        data_tests:
+          - not_null

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_66
     description: 'Age 75-84, no QRISK2 (60m), not on statins (12m), no health

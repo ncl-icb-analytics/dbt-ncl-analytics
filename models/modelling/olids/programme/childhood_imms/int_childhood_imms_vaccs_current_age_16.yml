@@ -1,4 +1,4 @@
-models:
+﻿models:
   - name: int_childhood_imms_vaccs_current_age_16
     description: Intermediate table for eligble population aged 16 years old by 
       current time_stamp and who have complete or outofschedule vaccinations 
@@ -7,10 +7,11 @@ models:
     config:
       meta:
         owner:
-          name: KatsplatH
+          name: KateHomer55
     columns:
       - name: person_id
         description: Unique identifier for the person
         tests:
           - not_null
           - unique
+

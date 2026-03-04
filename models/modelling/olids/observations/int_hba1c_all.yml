@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_hba1c_all
     description: 'HbA1c measurements for diabetes diagnosis, monitoring and management

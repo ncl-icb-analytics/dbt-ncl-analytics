@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_covid_chronic_heart_disease
     description: 'COVID vaccination eligibility for people with chronic heart disease.

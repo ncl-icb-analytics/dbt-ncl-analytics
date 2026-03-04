@@ -16,4 +16,4 @@
         FROM {{ ref('int_childhood_imms_dose_base_child') }} v
         --FROM DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_BASE_CHILD v
         --restrict to administered doses only
-       WHERE v.VACCINE_ID = '6IN1_3'  AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '6IN1_3'  AND v.EVENT_TYPE LIKE 'Admin%'

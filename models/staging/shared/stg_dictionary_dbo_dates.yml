@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_dictionary_dbo_dates
     description: Date dimension / dictionary reference data from Dictionary.dbo

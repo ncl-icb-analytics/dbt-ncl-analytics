@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_person_smoking_status
     description: 'Current and historical smoking status based on most recent clinical

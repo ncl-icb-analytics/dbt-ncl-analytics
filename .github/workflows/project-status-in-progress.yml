@@ -1,0 +1,231 @@
+name: Project Status - In Progress
+permissions:
+  contents: read
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  update-project-status:
+    name: Set Project Status to In Progress
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update referenced issues
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          script: |
+            const projectNumber = 3;
+            const org = 'ncl-icb-analytics';
+            const targetStatus = 'In Progress';
+
+            // Get all commit messages from the push
+            const commits = context.payload.commits || [];
+            const commitMessages = commits.map(c => `${c.message}`).join('\n');
+
+            // Also check branch name for issue refs (e.g., feature/123-some-feature)
+            const branchName = context.ref.replace('refs/heads/', '');
+
+            const textToScan = `${commitMessages}\n${branchName}`;
+
+            // Find all issue references (#123, fixes #123, closes #123, etc.)
+            const issueRefs = new Set();
+            const patterns = [
+              /#(\d+)/gi,                          // #123
+              /(?:fix|fixes|fixed|close|closes|closed|resolve|resolves|resolved)\s*#(\d+)/gi
+            ];
+
+            for (const pattern of patterns) {
+              let match;
+              while ((match = pattern.exec(textToScan)) !== null) {
+                issueRefs.add(match[1]);
+              }
+            }
+
+            if (issueRefs.size === 0) {
+              core.info('No issue references found in commits or branch name');
+              return;
+            }
+
+            core.info(`Found issue references: ${[...issueRefs].join(', ')}`);
+
+            // Get project ID
+            const { organization } = await github.graphql(`
+              query($org: String!, $number: Int!) {
+                organization(login: $org) {
+                  projectV2(number: $number) {
+                    id
+                  }
+                }
+              }
+            `, { org, number: projectNumber });
+
+            const projectId = organization.projectV2.id;
+
+            // Get Status field, Start Date field, and "In Progress" option
+            const { node: project } = await github.graphql(`
+              query($projectId: ID!) {
+                node(id: $projectId) {
+                  ... on ProjectV2 {
+                    fields(first: 20) {
+                      nodes {
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                          options { id name }
+                        }
+                        ... on ProjectV2Field {
+                          id
+                          name
+                          dataType
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `, { projectId });
+
+            const statusField = project.fields.nodes.find(f => f.name === 'Status' && f.options);
+            const startDateField = project.fields.nodes.find(f => f.name === 'Start Date' || f.name === 'Start');
+
+            if (!statusField?.id) {
+              core.setFailed('Status field not found in project');
+              return;
+            }
+
+            const statusOption = statusField.options.find(o => o.name === targetStatus);
+            if (!statusOption) {
+              const available = statusField.options.map(o => o.name).join(', ');
+              core.setFailed(`"${targetStatus}" option not found. Available: ${available}`);
+              return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+
+            // Process each referenced issue
+            for (const issueNumber of issueRefs) {
+              try {
+                // Get issue node ID
+                const { repository } = await github.graphql(`
+                  query($owner: String!, $repo: String!, $number: Int!) {
+                    repository(owner: $owner, name: $repo) {
+                      issue(number: $number) {
+                        id
+                        assignees(first: 10) {
+                          nodes { login }
+                        }
+                      }
+                    }
+                  }
+                `, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  number: parseInt(issueNumber)
+                });
+
+                if (!repository?.issue) {
+                  core.warning(`Issue #${issueNumber} not found`);
+                  continue;
+                }
+
+                const issueNodeId = repository.issue.id;
+                const currentAssignees = repository.issue.assignees.nodes.map(a => a.login);
+
+                // Add pusher as assignee if not already assigned
+                const pusher = context.payload.pusher?.name || context.actor;
+                if (!currentAssignees.includes(pusher)) {
+                  try {
+                    await github.rest.issues.addAssignees({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: parseInt(issueNumber),
+                      assignees: [pusher]
+                    });
+                    core.info(`Assigned ${pusher} to issue #${issueNumber}`);
+                  } catch (assignErr) {
+                    core.warning(`Could not assign ${pusher} to #${issueNumber}: ${assignErr.message}`);
+                  }
+                }
+
+                // Add issue to project (idempotent)
+                const { addProjectV2ItemById } = await github.graphql(`
+                  mutation($projectId: ID!, $contentId: ID!) {
+                    addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+                      item { id }
+                    }
+                  }
+                `, { projectId, contentId: issueNodeId });
+
+                const itemId = addProjectV2ItemById.item.id;
+
+                // Check current status and start date before updating
+                const { node: itemNode } = await github.graphql(`
+                  query($itemId: ID!) {
+                    node(id: $itemId) {
+                      ... on ProjectV2Item {
+                        status: fieldValueByName(name: "Status") {
+                          ... on ProjectV2ItemFieldSingleSelectValue {
+                            name
+                          }
+                        }
+                        startDate: fieldValueByName(name: "Start Date") {
+                          ... on ProjectV2ItemFieldDateValue {
+                            date
+                          }
+                        }
+                      }
+                    }
+                  }
+                `, { itemId });
+
+                const currentStatus = itemNode?.status?.name;
+                const currentStartDate = itemNode?.startDate?.date;
+                const eligibleStatuses = [undefined, null, '', 'Todo', 'Backlog'];
+
+                // Only update status if current status is eligible for transition
+                if (eligibleStatuses.includes(currentStatus)) {
+                  await github.graphql(`
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: $projectId
+                        itemId: $itemId
+                        fieldId: $fieldId
+                        value: { singleSelectOptionId: $optionId }
+                      }) {
+                        projectV2Item { id }
+                      }
+                    }
+                  `, { projectId, itemId, fieldId: statusField.id, optionId: statusOption.id });
+
+                  core.info(`Issue #${issueNumber} status set to "${targetStatus}"`);
+                } else {
+                  core.info(`Issue #${issueNumber} status is "${currentStatus}" - skipping status update`);
+                }
+
+                // Set start date if field exists and not already set
+                if (startDateField?.id && !currentStartDate) {
+                  await github.graphql(`
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: $projectId
+                        itemId: $itemId
+                        fieldId: $fieldId
+                        value: { date: $date }
+                      }) {
+                        projectV2Item { id }
+                      }
+                    }
+                  `, { projectId, itemId, fieldId: startDateField.id, date: today });
+
+                  core.info(`Issue #${issueNumber} start date set to ${today}`);
+                } else if (currentStartDate) {
+                  core.info(`Issue #${issueNumber} already has start date ${currentStartDate} - skipping`);
+                }
+
+              } catch (err) {
+                core.warning(`Failed to process issue #${issueNumber}: ${err.message}`);
+              }
+            }

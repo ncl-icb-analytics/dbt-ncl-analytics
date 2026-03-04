@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_sus_ae_clinical_treatments_snomed
     description: SUS A&E clinical treatments (SNOMED CT)

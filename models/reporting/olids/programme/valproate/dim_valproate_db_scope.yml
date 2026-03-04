@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_valproate_db_scope
     description: 'Valproate monitoring dashboard scope for child-bearing age cohort

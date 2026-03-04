@@ -23,10 +23,7 @@ WITH active_person_months AS (
     -- date ranges to determine temporal activity, not the point-in-time registration_status
     SELECT DISTINCT
         ds.month_end_date as analysis_month,
-        hr.person_id,
-        hr.practice_id,
-        hr.practice_code,
-        hr.practice_name
+        hr.person_id
     FROM {{ ref('dim_person_historical_practice') }} hr
     INNER JOIN {{ ref('int_date_spine') }} ds
         ON hr.registration_start_date <= ds.month_end_date
@@ -43,8 +40,7 @@ SELECT
     -- Core identifiers
     apm.analysis_month,
     apm.person_id,
-    apm.practice_id,
-    apm.practice_name,
+    d.practice_name,
     
     -- Date components for filtering
     ds.year_number,
@@ -92,7 +88,7 @@ SELECT
     ) }},
     
     -- Practice and geography
-    apm.practice_code,
+    d.practice_code,
     d.borough_registered,
     d.practice_postcode,
     d.practice_lsoa,

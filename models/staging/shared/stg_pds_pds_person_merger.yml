@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_pds_pds_person_merger
     description: NHS number merger tracking from PDS. Maps old NHS numbers to 

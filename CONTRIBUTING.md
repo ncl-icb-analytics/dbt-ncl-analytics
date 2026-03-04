@@ -167,17 +167,24 @@ ssh-keygen -t ed25519 -C "your.email@nhs.net"
 - Press Enter to accept the default file location (`~/.ssh/id_ed25519`)
 - Enter a passphrase when prompted (recommended for security)
 
-**2. Configure Git to use SSH signing:**
+**2. Create an allowed signers file (for local signature verification):**
+
+```bash
+echo "your.email@nhs.net $(cat ~/.ssh/id_ed25519.pub)" > ~/.ssh/allowed_signers
+```
+
+**3. Configure Git to use SSH signing:**
 
 ```bash
 git config --global gpg.format ssh
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true
+git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 git config --global user.email "your.email@nhs.net"
 git config --global user.name "Your Name"
 ```
 
-**3. Add the SSH key to GitHub as a signing key:**
+**4. Add the SSH key to GitHub as a signing key:**
 
 Copy your public key:
 ```bash
@@ -199,6 +206,12 @@ Create a test commit:
 
 ```bash
 git commit --allow-empty -m "test: verify signed commits"
+```
+
+Fix line-endings using this command (thx Kate)
+
+```bash
+$file = "$env:USERPROFILE\.ssh\allowed_signers"; $content = [System.IO.File]::ReadAllText($file); [System.IO.File]::WriteAllText($file, $content.Replace("`r`n", "`n"), [System.Text.Encoding]::UTF8); Write-Host "Line endings converted from CRLF to LF"
 ```
 
 Check the signature:
@@ -224,7 +237,7 @@ Never work directly on main. Always create a new branch:
 
 ```bash
 # Create and switch to a new feature branch
-git switch -c feature/your-feature-name
+git switch -c feat/your-feature-name
 
 # Or for bug fixes
 git switch -c fix/your-bug-fix
@@ -262,7 +275,7 @@ git commit -m "docs: update setup instructions in CONTRIBUTING"
 
 1. **Push your branch:**
    ```bash
-   git push -u origin feature/your-feature-name
+   git push -u origin feat/your-feature-name
    ```
 
    The `-u origin branch-name` creates the branch on GitHub and links it to your local branch. After this first push, you can use just `git push` for subsequent updates.
@@ -287,7 +300,7 @@ git switch main
 git pull
 
 # Switch back to your feature branch
-git switch feature/your-feature-name
+git switch feat/your-feature-name
 
 # Merge main into your branch
 git merge main
@@ -313,7 +326,7 @@ git switch main
 git pull
 
 # Go back to your feature branch
-git switch feature/your-feature-name
+git switch feat/your-feature-name
 
 # Restore your saved changes
 git stash pop
@@ -360,6 +373,7 @@ This repository commits `dbt_packages/` to ensure consistent package versions. W
 ## Next Steps
 
 Once you're set up:
-1. Read the [Development Guide](docs/development-guide.md) for daily workflows
-2. Review [Working with Sources](docs/working-with-sources.md) to understand the data pipeline
-3. Check the README for project architecture and structure
+1. Read the [Modelling Guide](docs/modelling-guide.md) to understand the layers, naming conventions, and how to build models
+2. Read the [Materialisation Guide](docs/materialisation-guide.md) to understand views, tables, incremental models, and ephemeral CTEs
+3. Review [Working with Sources](docs/working-with-sources.md) to understand the source generation pipeline
+4. Read the [Development Guide](docs/development-guide.md) for daily workflows and advanced patterns

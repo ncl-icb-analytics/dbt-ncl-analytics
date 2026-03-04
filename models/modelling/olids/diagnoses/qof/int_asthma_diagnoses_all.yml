@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_asthma_diagnoses_all
     description: 'Asthma diagnosis and resolution observations for QOF register management.

@@ -88,6 +88,12 @@ select il.patient_id
     -- current status to consider 
     , ps.is_currently_pregnant 
     -- dim_person_is_carer?
+    -- bespoke management flags : asthma management flags
+    , am.testing_no_diagnosis as asthma_testing_no_diagnosis
+    , am.diagnosis_no_testing as asthma_diagnosis_no_testing
+    , am.diagnosis_no_act as asthma_diagnosis_no_act
+    , am.salbutamol_only as asthma_salbutamol_only
+    , am.salbutamol_repeats as asthma_salbutamol_repeats
     -- measurement flags (fully summaries elsewhere or held as array?)
     , case when bp.latest_bp_date between dateadd(month, -6, current_date()) and current_date() then bp.is_overall_bp_controlled else null end as is_overall_bp_controlled -- assuming bp control only relevant if recent, replace with more nuanced logic that ascerts likely control given redings history and time
     ,bp.is_overall_bp_controlled as is_most_recent_overall_bp_controlled
@@ -153,6 +159,8 @@ left join {{ref('fct_person_diabetes_8_care_processes')}} dcp
     on il.olids_id = dcp.person_id
 --left join {{ref('fct_person_diabetes_register')}} dpr
 --    on il.olids_id  = dpr.person_id
+left join {{ref('int_asthma_management')}} am
+    on il.olids_id = am.person_id
 left join {{ref('fct_person_wl_current_count_total')}} wl
     on il.patient_id = wl.sk_patient_id
 left join {{ref('fct_person_sus_op_recent')}} opa

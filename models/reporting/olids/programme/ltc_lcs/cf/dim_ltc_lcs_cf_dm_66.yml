@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_dm_66
     description: 'Patients with latest HbA1c 42-45 mmol/mol and no HbA1c in last 12

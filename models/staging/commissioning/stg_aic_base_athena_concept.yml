@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_aic_base_athena_concept
     description: OHDSI Athena concept vocabulary

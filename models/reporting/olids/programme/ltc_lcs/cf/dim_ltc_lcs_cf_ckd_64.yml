@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_ckd_64
     description: 'Patients aged 17+ with high-risk conditions and no eGFR in 12 months.

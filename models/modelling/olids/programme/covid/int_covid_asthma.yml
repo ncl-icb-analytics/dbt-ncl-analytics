@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_covid_asthma
     description: 'COVID asthma eligibility determination.

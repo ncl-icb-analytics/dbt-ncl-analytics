@@ -18,6 +18,9 @@ v.PERSON_ID
 ,sixin1_dose3_label
 ,sixin1_dose3_fiscal
 ,sixin1_dose3_sort
+,sixin1_dose4_label
+,sixin1_dose4_fiscal
+,sixin1_dose4_sort
 ,rota_dose1_label
 ,rota_dose1_fiscal
 ,rota_dose1_sort
@@ -65,6 +68,8 @@ LEFT JOIN {{ ref('int_childhood_imms_historical_sixin1_dose1') }} s1 using (PERS
 LEFT JOIN {{ ref('int_childhood_imms_historical_sixin1_dose2') }} s2 using (PERSON_ID)
 --left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_SIXIN1_DOSE2 s2 using (PERSON_ID)
 LEFT JOIN {{ ref('int_childhood_imms_historical_sixin1_dose3') }} s3 using (PERSON_ID)
+--left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_SIXIN1_DOSE3 s3 using (PERSON_ID)
+LEFT JOIN {{ ref('int_childhood_imms_historical_sixin1_dose4') }} s4 using (PERSON_ID)
 --left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_SIXIN1_DOSE3 s3 using (PERSON_ID)
 LEFT JOIN {{ ref('int_childhood_imms_historical_rota_dose1') }} r1 using (PERSON_ID)
 --left join DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_ROTA_DOSE1 r1 using (PERSON_ID)

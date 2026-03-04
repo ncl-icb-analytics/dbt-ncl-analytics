@@ -1,0 +1,813 @@
+version: 2
+sources:
+- name: local_provider_flows
+  database: '"DATA_LAKE"'
+  schema: '"LOCAL_PROVIDER_FLOWS"'
+  description: Providers submissions from PID environment via MESH
+  tables:
+  - name: ALLERGIES
+    identifier: '"ALLERGIES"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: AllergyID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: AllergenCodeID
+      data_type: TEXT
+    - name: AllergenCodeSystemID
+      data_type: TEXT
+    - name: AllergenDisplay
+      data_type: TEXT
+    - name: OnsetDate
+      data_type: TEXT
+    - name: ResolvedDate
+      data_type: TEXT
+    - name: ReactionCodeID
+      data_type: TEXT
+    - name: ReactionCodeSystemID
+      data_type: TEXT
+    - name: ReactionDisplay
+      data_type: TEXT
+    - name: SeverityCodeID
+      data_type: TEXT
+    - name: SeverityCodeSystemID
+      data_type: TEXT
+    - name: SeverityDisplay
+      data_type: TEXT
+    - name: StatusCodeID
+      data_type: TEXT
+    - name: StatusCodeSystemID
+      data_type: TEXT
+    - name: StatusDisplay
+      data_type: TEXT
+    - name: CategoryCodeID
+      data_type: TEXT
+    - name: CategoryCodeSystemID
+      data_type: TEXT
+    - name: CategoryDisplay
+      data_type: TEXT
+    - name: TypeCodeID
+      data_type: TEXT
+    - name: TypeCodeSystemID
+      data_type: TEXT
+    - name: TypeDisplay
+      data_type: TEXT
+    - name: CriticalityCodeID
+      data_type: TEXT
+    - name: CriticalityCodeSystemID
+      data_type: TEXT
+    - name: CriticalityDisplay
+      data_type: TEXT
+    - name: AssertedDate
+      data_type: TEXT
+  - name: APPOINTMENTS
+    identifier: '"APPOINTMENTS"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: AppointmentID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: StartDate
+      data_type: TEXT
+    - name: EndDate
+      data_type: TEXT
+    - name: StatusCodeID
+      data_type: TEXT
+    - name: StatusCodeSystemID
+      data_type: TEXT
+    - name: StatusDisplay
+      data_type: TEXT
+    - name: TypeCodeSystemID
+      data_type: TEXT
+    - name: TypeDisplay
+      data_type: TEXT
+    - name: ReasonCodeID
+      data_type: TEXT
+    - name: ReasonCodeSystemID
+      data_type: TEXT
+    - name: ReasonDisplay
+      data_type: TEXT
+    - name: LocationID
+      data_type: TEXT
+    - name: LocationDisplay
+      data_type: TEXT
+    - name: TypeCodeID
+      data_type: TEXT
+  - name: DEMOGRAPHICS
+    identifier: '"DEMOGRAPHICS"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: NHSNumber
+      data_type: TEXT
+    - name: MRN
+      data_type: TEXT
+    - name: MRNAssigningAuthority
+      data_type: TEXT
+    - name: Surname
+      data_type: TEXT
+    - name: FirstName
+      data_type: TEXT
+    - name: MiddleName
+      data_type: TEXT
+    - name: BirthDate
+      data_type: TEXT
+    - name: GenderCodeID
+      data_type: TEXT
+    - name: GenderCodeSystemID
+      data_type: TEXT
+    - name: GenderDisplay
+      data_type: TEXT
+    - name: EthnicityCodeID
+      data_type: TEXT
+    - name: EthnicityCodeSystemID
+      data_type: TEXT
+    - name: EthnicityDisplay
+      data_type: TEXT
+    - name: MaritalStatusCodeID
+      data_type: TEXT
+    - name: MaritalStatusCodeSystemID
+      data_type: TEXT
+    - name: MaritalStatusDisplay
+      data_type: TEXT
+    - name: ReligionCodeID
+      data_type: TEXT
+    - name: ReligionCodeSystemID
+      data_type: TEXT
+    - name: ReligionDisplay
+      data_type: TEXT
+    - name: DeceasedInd
+      data_type: TEXT
+    - name: DeathDate
+      data_type: TEXT
+    - name: CauseOfDeathCodeID
+      data_type: TEXT
+    - name: CauseOfDeathCodeSystemID
+      data_type: TEXT
+    - name: CauseOfDeathDisplay
+      data_type: TEXT
+    - name: PrimaryLanguageCodeID
+      data_type: TEXT
+    - name: PrimaryLanguageCodeSystemID
+      data_type: TEXT
+    - name: PrimaryLanguageDisplay
+      data_type: TEXT
+    - name: StreetAddress1
+      data_type: TEXT
+    - name: StreetAddress2
+      data_type: TEXT
+    - name: City
+      data_type: TEXT
+    - name: PostalCode
+      data_type: TEXT
+    - name: CountryCodeID
+      data_type: TEXT
+    - name: CountryCodeSystemID
+      data_type: TEXT
+    - name: CountryDisplay
+      data_type: TEXT
+    - name: PrimaryPhoneNumber
+      data_type: TEXT
+    - name: PrimaryPhoneNumberUseCodeID
+      data_type: TEXT
+    - name: PrimaryPhoneNumberUseCodeSystemID
+      data_type: TEXT
+    - name: PrimaryPhoneNumberUseDisplay
+      data_type: TEXT
+    - name: SecondaryPhoneNumber
+      data_type: TEXT
+    - name: SecondaryPhoneNumberUseCodeID
+      data_type: TEXT
+    - name: SecondaryPhoneNumberUseCodeSystemID
+      data_type: TEXT
+    - name: SecondaryPhoneNumberUseDisplay
+      data_type: TEXT
+    - name: PrimaryEmailAddress
+      data_type: TEXT
+    - name: PrimaryEmailAddressUseCodeID
+      data_type: TEXT
+    - name: PrimaryEmailAddressUseCodeSystemID
+      data_type: TEXT
+    - name: PrimaryEmailAddressUseDisplay
+      data_type: TEXT
+    - name: SecondaryEmailAddress
+      data_type: TEXT
+    - name: SecondaryEmailAddressUseCodeID
+      data_type: TEXT
+    - name: SecondaryEmailAddressUseCodeSystemID
+      data_type: TEXT
+    - name: SecondaryEmailAddressUseDisplay
+      data_type: TEXT
+    - name: RegisteredGPIdentifier
+      data_type: TEXT
+    - name: RegisteredGPIdentifierType
+      data_type: TEXT
+    - name: RegisteredGPDisplay
+      data_type: TEXT
+    - name: RegisteredGPStartDate
+      data_type: TEXT
+    - name: RegisteredGPEndDate
+      data_type: TEXT
+  - name: DIAGNOSIS
+    identifier: '"DIAGNOSIS"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: DiagnosisID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: DiagnosisCodeID
+      data_type: TEXT
+    - name: DiagnosisCodeSystemID
+      data_type: TEXT
+    - name: DiagnosisDisplay
+      data_type: TEXT
+    - name: DiagnosisDate
+      data_type: TEXT
+    - name: ClassificationCodeID
+      data_type: TEXT
+    - name: ClassificationCodeSystemID
+      data_type: TEXT
+    - name: ClassificationDisplay
+      data_type: TEXT
+    - name: ConfirmationCodeID
+      data_type: TEXT
+    - name: ConfirmationCodeSystemID
+      data_type: TEXT
+    - name: ConfirmationDisplay
+      data_type: TEXT
+    - name: ProviderID
+      data_type: TEXT
+    - name: ProviderSurname
+      data_type: TEXT
+    - name: ProviderGivenName
+      data_type: TEXT
+    - name: ProviderMiddleName
+      data_type: TEXT
+    - name: ProviderFullName
+      data_type: TEXT
+    - name: BillingRank
+      data_type: TEXT
+    - name: PresentOnAdmissionCodeID
+      data_type: TEXT
+    - name: PresentOnAdmissionCodeSystemID
+      data_type: TEXT
+    - name: PresentOnAdmissionDisplay
+      data_type: TEXT
+    - name: StatusCodeID
+      data_type: TEXT
+    - name: StatusCodeSystemID
+      data_type: TEXT
+    - name: StatusDisplay
+      data_type: TEXT
+    - name: AssertedDate
+      data_type: TEXT
+  - name: ENCOUNTER
+    identifier: '"ENCOUNTER"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: ActualServiceDate
+      data_type: TEXT
+    - name: HospitalisationStartDate
+      data_type: TEXT
+    - name: DischargeDate
+      data_type: TEXT
+    - name: VisitTypeCodeID
+      data_type: TEXT
+    - name: VisitTypeCodeSystemID
+      data_type: TEXT
+    - name: VisitTypeDisplay
+      data_type: TEXT
+    - name: AdmissionTypeCodeID
+      data_type: TEXT
+    - name: AdmissionTypeCodeSystemID
+      data_type: TEXT
+    - name: AdmissionTypeDisplay
+      data_type: TEXT
+    - name: DischargeDispositionCodeID
+      data_type: TEXT
+    - name: DischargeDispositionCodeSystemID
+      data_type: TEXT
+    - name: DischargeDispositionDisplay
+      data_type: TEXT
+    - name: DischargeToDisplay
+      data_type: TEXT
+    - name: FacilityID
+      data_type: TEXT
+    - name: FacilityDisplay
+      data_type: TEXT
+    - name: BuildingID
+      data_type: TEXT
+    - name: BuildingDisplay
+      data_type: TEXT
+    - name: NurseUnitID
+      data_type: TEXT
+    - name: NurseUnitDisplay
+      data_type: TEXT
+    - name: RoomID
+      data_type: TEXT
+    - name: RoomDisplay
+      data_type: TEXT
+    - name: BedID
+      data_type: TEXT
+    - name: BedDisplay
+      data_type: TEXT
+    - name: ServiceCodeID
+      data_type: TEXT
+    - name: ServiceCodeSystemID
+      data_type: TEXT
+    - name: ServiceDisplay
+      data_type: TEXT
+    - name: AdmissionSourceCodeID
+      data_type: TEXT
+    - name: AdmissionSourceCodeSystemID
+      data_type: TEXT
+    - name: AdmissionSourceDisplay
+      data_type: TEXT
+    - name: StatusCodeID
+      data_type: TEXT
+    - name: StatusCodeSystemID
+      data_type: TEXT
+    - name: StatusDisplay
+      data_type: TEXT
+    - name: ReasonForVisitCodeID
+      data_type: TEXT
+    - name: ReasonForVisitCodeSystemID
+      data_type: TEXT
+    - name: ReasonForVisitDisplay
+      data_type: TEXT
+    - name: ServiceProviderOrgName
+      data_type: TEXT
+    - name: ServiceProviderOrgID
+      data_type: TEXT
+    - name: PartOfEncounterID
+      data_type: TEXT
+    - name: ParticipantID
+      data_type: TEXT
+    - name: ParticipantTypeCodeID
+      data_type: TEXT
+    - name: ParticipantTypeCodeSystemID
+      data_type: TEXT
+    - name: ParticipantTypeDisplay
+      data_type: TEXT
+    - name: ParticipantSurname
+      data_type: TEXT
+    - name: ParticipantGivenName
+      data_type: TEXT
+    - name: ParticipantMiddleName
+      data_type: TEXT
+    - name: ParticipantFullName
+      data_type: TEXT
+  - name: IMMUNISATION
+    identifier: '"IMMUNISATION"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: ImmunisationID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: ImmunisationCodeID
+      data_type: TEXT
+    - name: ImmunisationCodeSystemID
+      data_type: TEXT
+    - name: ImmunisationDisplay
+      data_type: TEXT
+    - name: ImmunisationDate
+      data_type: TEXT
+    - name: DrugCodeID
+      data_type: TEXT
+    - name: DrugCodeSystemID
+      data_type: TEXT
+    - name: DrugDisplay
+      data_type: TEXT
+    - name: DoseAmount
+      data_type: TEXT
+    - name: DoseUnitCodeID
+      data_type: TEXT
+    - name: DoseUnitCodeSystemID
+      data_type: TEXT
+    - name: DoseUnitDisplay
+      data_type: TEXT
+    - name: RouteCodeID
+      data_type: TEXT
+    - name: RouteCodeSystemID
+      data_type: TEXT
+    - name: RouteDisplay
+      data_type: TEXT
+    - name: RefusalInd
+      data_type: TEXT
+    - name: RefusalReasonCodeID
+      data_type: TEXT
+    - name: RefusalReasonCodeSystemID
+      data_type: TEXT
+    - name: RefusalReasonDisplay
+      data_type: TEXT
+    - name: StatusCodeID
+      data_type: TEXT
+    - name: StatusCodeSystemID
+      data_type: TEXT
+    - name: StatusDisplay
+      data_type: TEXT
+    - name: AdministeringProviderID
+      data_type: TEXT
+    - name: AdministeringProviderSurname
+      data_type: TEXT
+    - name: AdministeringProviderGivenName
+      data_type: TEXT
+    - name: AdministeringProviderMiddleName
+      data_type: TEXT
+    - name: AdministeringProviderFullName
+      data_type: TEXT
+  - name: MEDICATION
+    identifier: '"MEDICATION"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: MedicationID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: DrugCodeID
+      data_type: TEXT
+    - name: DrugCodeSystemID
+      data_type: TEXT
+    - name: DrugDisplay
+      data_type: TEXT
+    - name: StartDate
+      data_type: TEXT
+    - name: StopDate
+      data_type: TEXT
+    - name: RouteCodeID
+      data_type: TEXT
+    - name: RouteCodeSystemID
+      data_type: TEXT
+    - name: RouteDisplay
+      data_type: TEXT
+    - name: FrequencyCodeID
+      data_type: TEXT
+    - name: FrequencyCodeSystemID
+      data_type: TEXT
+    - name: FrequencyDisplay
+      data_type: TEXT
+    - name: DoseStrengthAmount
+      data_type: TEXT
+    - name: DoseStrengthUnitCodeID
+      data_type: TEXT
+    - name: DoseStrengthUnitCodeSystemID
+      data_type: TEXT
+    - name: DoseStrengthUnitDisplay
+      data_type: TEXT
+    - name: DoseVolumeAmount
+      data_type: TEXT
+    - name: DoseVolumeUnitCodeID
+      data_type: TEXT
+    - name: DoseVolumeUnitCodeSystemID
+      data_type: TEXT
+    - name: DoseVolumeUnitDisplay
+      data_type: TEXT
+    - name: DoseQuantity
+      data_type: TEXT
+    - name: DoseQuantityUnitCodeID
+      data_type: TEXT
+    - name: DoseQuantityUnitCodeSystemID
+      data_type: TEXT
+    - name: DoseQuantityUnitDisplay
+      data_type: TEXT
+    - name: PatientInstructions
+      data_type: TEXT
+    - name: OrderStatusCodeID
+      data_type: TEXT
+    - name: OrderStatusCodeSystemID
+      data_type: TEXT
+    - name: OrderStatusDisplay
+      data_type: TEXT
+    - name: OrderDetailLine
+      data_type: TEXT
+    - name: PrescribingProviderID
+      data_type: TEXT
+    - name: PrescribingProviderSurname
+      data_type: TEXT
+    - name: PrescribingProviderGivenName
+      data_type: TEXT
+    - name: PrescribingProviderMiddleName
+      data_type: TEXT
+    - name: PrescribingProviderFullName
+      data_type: TEXT
+  - name: PROCEDURE
+    identifier: '"PROCEDURE"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: ProcedureID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: ProcedureCodeID
+      data_type: TEXT
+    - name: ProcedureCodeSystemID
+      data_type: TEXT
+    - name: ProcedureDisplay
+      data_type: TEXT
+    - name: StartDate
+      data_type: TEXT
+    - name: EndDate
+      data_type: TEXT
+    - name: BillingRank
+      data_type: TEXT
+    - name: StatusCodeID
+      data_type: TEXT
+    - name: StatusCodeSystemID
+      data_type: TEXT
+    - name: StatusDisplay
+      data_type: TEXT
+    - name: ProviderID
+      data_type: TEXT
+    - name: ProviderSurname
+      data_type: TEXT
+    - name: ProviderSurame
+      data_type: TEXT
+    - name: ProviderGivenName
+      data_type: TEXT
+    - name: ProviderMiddleName
+      data_type: TEXT
+    - name: ProviderFullName
+      data_type: TEXT
+    - name: ProviderRoleCodeID
+      data_type: TEXT
+    - name: ProviderRoleCodeSystemID
+      data_type: TEXT
+    - name: ProviderRoleDisplay
+      data_type: TEXT
+  - name: REFERRAL_REQUEST
+    identifier: '"REFERRAL_REQUEST"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: ReferralRequestID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: ReferralReasonCodeID
+      data_type: TEXT
+    - name: ReferralReasonCodeSystemID
+      data_type: TEXT
+    - name: ReferralReasonDisplay
+      data_type: TEXT
+    - name: SentDate
+      data_type: TEXT
+    - name: PrincipalDiagnosisCodeID
+      data_type: TEXT
+    - name: PrincipalDiagnosisCodeSystemID
+      data_type: TEXT
+    - name: PrincipalDiagnosisDisplay
+      data_type: TEXT
+    - name: PrincipalDiagnosisDate
+      data_type: TEXT
+    - name: EstimatedDateOfBirth
+      data_type: TEXT
+    - name: RequestingProviderID
+      data_type: TEXT
+    - name: RequestingProviderSurname
+      data_type: TEXT
+    - name: RequestingProviderGivenName
+      data_type: TEXT
+    - name: RequestingProviderMiddleName
+      data_type: TEXT
+    - name: RequestingProviderFullName
+      data_type: TEXT
+    - name: ReferralToProviderID
+      data_type: TEXT
+    - name: ReferralToProviderSurname
+      data_type: TEXT
+    - name: ReferralToProviderGivenName
+      data_type: TEXT
+    - name: ReferralToProviderMiddleName
+      data_type: TEXT
+    - name: ReferralToProviderFullName
+      data_type: TEXT
+  - name: RESULT
+    identifier: '"RESULT"'
+    columns:
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+    - name: DeleteInd
+      data_type: TEXT
+    - name: ResultID
+      data_type: TEXT
+    - name: Version
+      data_type: TEXT
+    - name: PersonID
+      data_type: TEXT
+    - name: EncounterID
+      data_type: TEXT
+    - name: ResultCodeID
+      data_type: TEXT
+    - name: ResultCodeSystemID
+      data_type: TEXT
+    - name: ResultDisplay
+      data_type: TEXT
+    - name: ResultDate
+      data_type: TEXT
+    - name: ResultValueNumber
+      data_type: TEXT
+    - name: ResultValueNumberModifier
+      data_type: TEXT
+    - name: UnitOfMeasureCodeID
+      data_type: TEXT
+    - name: UnitOfMeasureCodeSystemID
+      data_type: TEXT
+    - name: UnitOfMeasureDisplay
+      data_type: TEXT
+    - name: ResultValueText
+      data_type: TEXT
+    - name: ResultValueCodeID
+      data_type: TEXT
+    - name: ResultValueCodeSystemID
+      data_type: TEXT
+    - name: ResultValueCodeDisplay
+      data_type: TEXT
+    - name: ResultValueDate
+      data_type: TEXT
+    - name: ReferenceRange
+      data_type: TEXT
+    - name: InterpretationCodeID
+      data_type: TEXT
+    - name: InterpretationCodeSystemID
+      data_type: TEXT
+    - name: InterpretationDisplay
+      data_type: TEXT
+    - name: StatusCodeID
+      data_type: TEXT
+    - name: StatusCodeSystemID
+      data_type: TEXT
+    - name: StatusDisplay
+      data_type: TEXT
+    - name: SpecimenTypeCodeID
+      data_type: TEXT
+    - name: SpecimenTypeCodeSystemID
+      data_type: TEXT
+    - name: SpecimenTypeDisplay
+      data_type: TEXT
+    - name: MeasurementMethodCodeID
+      data_type: TEXT
+    - name: MeasurementMethodCodeSystemID
+      data_type: TEXT
+    - name: MeasurementMethodDisplay
+      data_type: TEXT
+    - name: Accession
+      data_type: TEXT
+    - name: RecorderType
+      data_type: TEXT
+    - name: DeviceModel
+      data_type: TEXT
+    - name: DeviceSerialNumber
+      data_type: TEXT
+    - name: DeviceTypeCodeID
+      data_type: TEXT
+    - name: DeviceTypeCodeSystemID
+      data_type: TEXT
+    - name: DeviceTypeDisplay
+      data_type: TEXT
+    - name: DeviceManufacturer
+      data_type: TEXT

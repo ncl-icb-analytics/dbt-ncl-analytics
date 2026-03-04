@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_qrisk_all
     description: 'QRISK cardiovascular risk scores for cardiovascular disease risk

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_rs_dm_pg3a_mra
     description: |

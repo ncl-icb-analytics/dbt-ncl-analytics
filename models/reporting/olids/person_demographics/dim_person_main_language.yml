@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_main_language
     description: 'Latest recorded preferred language and interpreter needs with communication

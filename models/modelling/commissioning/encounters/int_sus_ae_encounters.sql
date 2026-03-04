@@ -45,6 +45,7 @@ select
     /* Time & date */
     , core.attendance_arrival_date as start_date
     , core.attendance_departure_time_since_arrival as duration
+    , core.attendance_departure_date as end_date 
     -- bed days cc and excess bed days to be added later
     -- other time related fields to be added later
 
@@ -59,7 +60,7 @@ select
     -- diagnosis information
     , diagnosis.code as primary_diagnosis_code_snomed
     , diag_dict.snomed_uk_preferred_term as primary_diagnosis_desc_snomed
-    , diag_dict.icd10_mapping as primary_diagnosis_code_icd10
+    , {{clean_icd10_code("diag_dict.icd10_mapping")}} as primary_diagnosis_code_icd10
     , diag_dict.icd10_description as primary_diagnosis_desc_icd10
     , diag_dict.ecds_group1 as primary_diagnosis_desc_ecds_group1
     

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_chd_diagnoses_all
     description: 'Coronary heart disease diagnosis observations for QOF register management.

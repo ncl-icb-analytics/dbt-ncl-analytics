@@ -1,7 +1,7 @@
 # dbt PR Validation Workflow
 #
 # Validates changed dbt models in Snowflake DEV environment before merge.
-# Runs dbt build with --fail-fast to catch errors early.
+# Runs full build to report all errors (no fail-fast).
 #
 # Prerequisites:
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
@@ -44,14 +44,24 @@ jobs:
         contains(github.event.pull_request.labels.*.name, '❄️snowflake-ci')
       ))
     concurrency:
-      group: snowflake-dbt-project
-      cancel-in-progress: false
+      # Per-PR concurrency: new commits to same PR cancel old runs
+      group: pr-validation-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     permissions:
       contents: read
+      actions: read  # Required for turnstyle to check workflow runs
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
+
+      # Queue across different PRs - Snowflake dbt project can only run one branch at a time
+      - name: Wait for other PR validations
+        uses: softprops/turnstyle@v2
+        with:
+          same-branch-only: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
         with:
@@ -60,12 +70,48 @@ jobs:
       - name: Get changed models
         id: changes
         run: |
-          # --diff-filter=d excludes deleted files (only include added/modified/renamed)
-          CHANGED=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'models/**/*.sql' | tr '\n' ' ')
+          # Get changed .sql files directly
+          SQL_FILES=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'models/**/*.sql')
+          
+          # Get changed .yml/.yaml files and find associated .sql models
+          YML_FILES=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'models/**/*.yml' 'models/**/*.yaml')
+          
+          # Get changed macro files
+          MACRO_FILES=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD -- 'macros/**/*.sql')
+          
+          # For each yml file, find corresponding sql file with same base name
+          YML_DERIVED_SQL=""
+          for yml in $YML_FILES; do
+            dir=$(dirname "$yml")
+            base=$(basename "$yml" .yml)
+            base=$(basename "$base" .yaml)
+            if [ -f "$dir/$base.sql" ]; then
+              YML_DERIVED_SQL="$YML_DERIVED_SQL $dir/$base.sql"
+            fi
+          done
+          
+          # For each changed macro, find models that reference it
+          MACRO_DERIVED_SQL=""
+          for macro_file in $MACRO_FILES; do
+            # Extract macro name from filename (e.g., calculate_ckd_register.sql -> calculate_ckd_register)
+            macro_name=$(basename "$macro_file" .sql)
+            echo "Searching for models using macro: $macro_name"
+            # Find models that call this macro (search for {{ macro_name( pattern)
+            matching_models=$(grep -rl "{{ *$macro_name(" models/ --include="*.sql" 2>/dev/null || true)
+            if [ -n "$matching_models" ]; then
+              MACRO_DERIVED_SQL="$MACRO_DERIVED_SQL $matching_models"
+              echo "  Found: $matching_models"
+            fi
+          done
+          
+          # Combine and deduplicate
+          CHANGED=$(echo "$SQL_FILES $YML_DERIVED_SQL $MACRO_DERIVED_SQL" | tr ' ' '\n' | sort -u | tr '\n' ' ')
           COUNT=$(echo "$CHANGED" | wc -w)
           echo "changed_files=$CHANGED" >> $GITHUB_OUTPUT
           echo "file_count=$COUNT" >> $GITHUB_OUTPUT
           echo "Found $COUNT changed model files"
+          [ -n "$YML_FILES" ] && echo "YML changes detected - included associated models" || true
+          [ -n "$MACRO_FILES" ] && echo "Macro changes detected - included models that use them" || true
 
       - name: Setup Snowflake credentials
         if: steps.changes.outputs.file_count != '0'
@@ -162,14 +208,14 @@ jobs:
               file_count = int(os.environ.get('FILE_COUNT', 0))
               changed_files = os.environ.get('CHANGED_FILES', '').strip()
 
-              if file_count > 50:
+              if file_count > 100:
                   print(f"Large changeset ({file_count} files) - running full build")
-                  args = "build --target snowflake-dev --fail-fast"
+                  args = "build --target snowflake-dev"
               else:
                   models = [get_model_name(f) for f in changed_files.split() if f]
                   select = ' '.join(models)
                   print(f"Validating {file_count} changed models: {select}")
-                  args = f"build --target snowflake-dev --fail-fast --select {select}"
+                  args = f"build --target snowflake-dev --select {select}"
 
               print(f"Executing: dbt {args}")
               cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__CI ARGS = '{args}'")

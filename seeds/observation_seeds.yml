@@ -1,0 +1,23 @@
+seeds:
+  - name: observation_standard_units
+    description: >
+      Canonical unit definitions for clinical observations.
+      Each measurement should have exactly one primary unit row.
+    columns:
+      - name: DEFINITION_NAME
+        description: Measurement identifier (e.g. eosinophil_count)
+        data_tests:
+          - unique:
+              config:
+                where: "PRIMARY_UNIT = TRUE"
+
+  - name: observation_value_bounds
+    description: >
+      Plausible value ranges and Pass 3 configuration for clinical observations.
+      Each measurement should have exactly one row.
+    columns:
+      - name: DEFINITION_NAME
+        description: Measurement identifier (e.g. eosinophil_count)
+        data_tests:
+          - unique
+          - not_null

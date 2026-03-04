@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_sus_op_appointment_clinical_coding_diagnosis_icd
     description: SUS outpatient appointment clinical diagnoses (ICD-10)

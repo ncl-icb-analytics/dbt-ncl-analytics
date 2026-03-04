@@ -34,7 +34,8 @@ b.person_id
 --,DATEADD('month', -12, p.analysis_month) AS MONTH_12LESS
 ,DATE(b.clinical_effective_date) as HBA1C_date
 ,b.HBA1C_CATEGORY
-,b.HBA1C_RESULT_DISPLAY
+--HBA1C values are undergoing maintenance to correct unit display issues so currently not included but will be added back once resolved.
+--,b.HBA1C_DISPLAY
 ,CASE
 WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As HBA1C_LAST_12M
 ,ROW_NUMBER() OVER (PARTITION BY b.person_id, p.analysis_month ORDER BY CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 1 ELSE 0 END DESC, clinical_effective_date desc) as row_num
@@ -227,7 +228,7 @@ SELECT
         ,CASE WHEN g.person_id IS NULL THEN 'Not Met' ELSE g.HBA1C_LAST_12M END AS HBA1C_CHECK_12M
         ,CASE WHEN c.person_id IS NULL THEN 'Not Met' ELSE c.CHOL_LAST_12M END AS CHOL_CHECK_12M
         ,CASE WHEN bp.person_id IS NULL THEN 'Not Met' ELSE bp.BP_LAST_12M END AS BP_CHECK_12M
-        ,CASE WHEN s.person_id IS NULL THEN 'Not Met' ELSE s.SMOK_LAST_12M END AS SMOK_LAST_12M
+        ,CASE WHEN s.person_id IS NULL THEN 'Not Met' ELSE s.SMOK_LAST_12M END AS SMOK_CHECK_12M
         ,CASE WHEN a.person_id IS NULL THEN 'Not Met' ELSE a.ALC_LAST_12M END AS ALC_CHECK_12M
         ,p.gender
         ,p.age_band_nhs
@@ -255,7 +256,7 @@ SELECT DISTINCT
         (HBA1C_CHECK_12M    = 'Met')::int +
         (CHOL_CHECK_12M     = 'Met')::int +
         (BP_CHECK_12M       = 'Met')::int +
-        (SMOK_LAST_12M      = 'Met')::int +
+        (SMOK_CHECK_12M      = 'Met')::int +
         (ALC_CHECK_12M      = 'Met')::int
     ) AS MET_COUNT
 FROM HC_CHECKS

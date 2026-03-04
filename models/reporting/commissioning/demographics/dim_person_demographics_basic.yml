@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: dim_person_demographics_basic
@@ -65,6 +64,15 @@ models:
 
       - name: residence_borough
         description: Local authority name where patient resides
+
+      - name: residence_icb_code
+        description: Integrated Care Board code for residence location
+
+      - name: residence_icb_name
+        description: Integrated Care Board name for residence location
+
+      - name: residence_icb_flag
+        description: Flag indicating if residence location is within NCL ICB or London
 
       - name: residence_neighbourhood_code
         description: NCL neighbourhood code for residence location

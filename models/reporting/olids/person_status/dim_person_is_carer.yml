@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_person_is_carer
     description: Dimension table providing the latest recorded carer status for 

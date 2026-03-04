@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_retinal_screening_all
     description: 'Completed diabetes retinal screening procedures for eye care monitoring

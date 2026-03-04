@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_flu_over_65
     description: 'Flu vaccination eligibility for people aged 65 and over based on

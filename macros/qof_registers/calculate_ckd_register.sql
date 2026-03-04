@@ -2,9 +2,11 @@
     {#
     Calculates CKD register status at a given reference date.
 
-    Business Logic:
+    Business Logic (QOF v50):
     - Age ≥18 at reference date
-    - Active CKD diagnosis (latest diagnosis > latest resolution)
+    - Has CKD Stage 3-5 diagnosis (CKD_COD)
+    - NOT downstaged: no CKD Stage 1-2 code (CKD1AND2_COD) after latest Stage 3-5
+    - NOT resolved: no resolved code (CKDRES_COD) after latest Stage 3-5
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -16,7 +18,8 @@
         SELECT
             person_id,
             clinical_effective_date,
-            is_diagnosis_code,
+            is_stage_3_5_code,
+            is_stage_1_2_code,
             is_resolved_code
         FROM {{ ref('int_ckd_diagnoses_all') }}
         WHERE clinical_effective_date <= {{ reference_date_expr }}
@@ -25,8 +28,9 @@
     ckd_person_aggregates AS (
         SELECT
             person_id,
-            MIN(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) AS earliest_diagnosis_date,
-            MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) AS latest_diagnosis_date,
+            MIN(CASE WHEN is_stage_3_5_code THEN clinical_effective_date END) AS earliest_diagnosis_date,
+            MAX(CASE WHEN is_stage_3_5_code THEN clinical_effective_date END) AS latest_diagnosis_date,
+            MAX(CASE WHEN is_stage_1_2_code THEN clinical_effective_date END) AS latest_stage_1_2_date,
             MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) AS latest_resolved_date
         FROM ckd_diagnoses_filtered
         GROUP BY person_id
@@ -46,8 +50,16 @@
             diag.person_id,
             'CKD' AS register_name,
             COALESCE(
+                -- Age requirement
                 age.age >= 18
-                AND diag.earliest_diagnosis_date IS NOT NULL
+                -- Must have a Stage 3-5 diagnosis
+                AND diag.latest_diagnosis_date IS NOT NULL
+                -- Must not have been downstaged to Stage 1-2 after latest Stage 3-5
+                AND (
+                    diag.latest_stage_1_2_date IS NULL
+                    OR diag.latest_diagnosis_date > diag.latest_stage_1_2_date
+                )
+                -- Must not have been resolved after latest Stage 3-5
                 AND (
                     diag.latest_resolved_date IS NULL
                     OR diag.latest_diagnosis_date > diag.latest_resolved_date

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_cyp_asthma_observations
     description: 'Children and young people asthma-relevant observations for Long

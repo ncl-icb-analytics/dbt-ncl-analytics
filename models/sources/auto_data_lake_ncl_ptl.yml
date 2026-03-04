@@ -1,0 +1,256 @@
+version: 2
+sources:
+- name: ptl
+  database: '"DATA_LAKE__NCL"'
+  schema: '"PTL"'
+  description: ptl data
+  tables:
+  - name: PTL_LOAD_SUBMISSION_IDS
+    identifier: '"PTL_LOAD_SUBMISSION_IDS"'
+    columns:
+    - name: CENSUS_DATE
+      data_type: DATE
+    - name: CENSUS_DATE_NUMERIC
+      data_type: NUMBER
+    - name: LOAD_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SUBMISSION_ID
+      data_type: TEXT
+  - name: PTL_MONTHLY_MAPPING
+    identifier: '"PTL_MONTHLY_MAPPING"'
+    columns:
+    - name: CENSUS_DATE
+      data_type: DATE
+    - name: FINYEAR
+      data_type: TEXT
+    - name: FINMONTH
+      data_type: TEXT
+    - name: END_OF_MONTH
+      data_type: DATE
+  - name: PTL_SUBSPECIALTY_MAPPING
+    identifier: '"PTL_SUBSPECIALTY_MAPPING"'
+    columns:
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: LOCAL_SUBSPECIALITY_CODE
+      data_type: TEXT
+    - name: LOCAL_SUBSPECIALTY_DESCRIPTION
+      data_type: TEXT
+  - name: PTL_SUB_SPECIALTY_LATEST
+    identifier: '"PTL_SUB_SPECIALTY_LATEST"'
+    columns:
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALITY_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: MAPPING_ID
+      data_type: TEXT
+  - name: PTL_WEEKLY_ANON_COMBINED
+    identifier: '"PTL_WEEKLY_ANON_COMBINED"'
+    columns:
+    - name: CENSUS_DATE
+      data_type: DATE
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: PROVIDER_SITE
+      data_type: TEXT
+    - name: COUNT
+      data_type: NUMBER
+    - name: CCG_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GENDER
+      data_type: TEXT
+    - name: ETHNICITY
+      data_type: TEXT
+    - name: AGE
+      data_type: NUMBER
+    - name: REFERRAL_RECEIVED_DATE
+      data_type: DATE
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: REFERRING_ORG_CODE
+      data_type: TEXT
+    - name: IS_EREFERRAL
+      data_type: TEXT
+    - name: ASI_FLAG
+      data_type: TEXT
+    - name: RTT_WAIT_DAYS
+      data_type: NUMBER
+    - name: ADMITTED_NONADMITTED_LIST
+      data_type: TEXT
+    - name: HAS_HAD_FIRST_OP
+      data_type: TEXT
+    - name: PATIENT_REFUSAL_DEFERRAL_DATE
+      data_type: DATE
+    - name: TCI_STATUS
+      data_type: TEXT
+    - name: TCI_DECISION_DATE
+      data_type: DATE
+    - name: TCI_DATE
+      data_type: DATE
+    - name: CLINICAL_PRIORITY
+      data_type: TEXT
+    - name: CLINICAL_PRIORITISATION_DATE
+      data_type: TEXT
+    - name: PRIORITY_TYPE
+      data_type: TEXT
+    - name: LATEST_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: INTENDED_OPCS_CODE
+      data_type: TEXT
+    - name: INTENDED_ICD10_CODE
+      data_type: TEXT
+    - name: NETWORK
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: FUTURE_BOOKED_OP_DATE
+      data_type: DATE
+    - name: LOCAL_SUB_SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: MAPPING_ID
+      data_type: TEXT
+    - name: LOAD_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: SUBMISSION_ID
+      data_type: TEXT
+    - name: ROW_ID
+      data_type: TEXT
+  - name: PTL_WEEKLY_DATA
+    identifier: '"PTL_WEEKLY_DATA"'
+    columns:
+    - name: CENSUS_DATE
+      data_type: DATE
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: PROVIDER_SITE
+      data_type: TEXT
+    - name: COUNT
+      data_type: NUMBER
+    - name: CCG_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GENDER
+      data_type: TEXT
+    - name: ETHNICITY
+      data_type: TEXT
+    - name: AGE
+      data_type: NUMBER
+    - name: REFERRAL_RECEIVED_DATE
+      data_type: DATE
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: REFERRING_ORG_CODE
+      data_type: TEXT
+    - name: IS_EREFERRAL
+      data_type: TEXT
+    - name: ASI_FLAG
+      data_type: TEXT
+    - name: RTT_WAIT_DAYS
+      data_type: NUMBER
+    - name: ADMITTED_NONADMITTED
+      data_type: TEXT
+    - name: HAS_HAD_FIRST_OP
+      data_type: TEXT
+    - name: PATIENT_REFUSAL_DEFERRAL_DATE
+      data_type: DATE
+    - name: TCI_STATUS
+      data_type: TEXT
+    - name: TCI_DECISION_DATE
+      data_type: DATE
+    - name: TCI_DATE
+      data_type: DATE
+    - name: CLINICAL_PRIORITY
+      data_type: TEXT
+    - name: CLINICAL_PRIORITISATION_DATE
+      data_type: TEXT
+    - name: PRIORITY_TYPE
+      data_type: TEXT
+    - name: LATEST_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: INTENDED_OPCS_CODE
+      data_type: TEXT
+    - name: INTENDED_ICD10_CODE
+      data_type: TEXT
+    - name: NETWORK
+      data_type: TEXT
+    - name: LOCAL_SUBSPECIALTY
+      data_type: TEXT
+    - name: FUTURE_BOOKED_OP_DATE
+      data_type: DATE
+  - name: PTL_WEEKLY_UPLOAD_WITH_ROW_IDS
+    identifier: '"PTL_WEEKLY_UPLOAD_WITH_ROW_IDS"'
+    columns:
+    - name: CENSUS_DATE
+      data_type: DATE
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: PROVIDER_SITE
+      data_type: TEXT
+    - name: COUNT
+      data_type: NUMBER
+    - name: CCG_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GENDER
+      data_type: TEXT
+    - name: ETHNICITY
+      data_type: TEXT
+    - name: AGE
+      data_type: NUMBER
+    - name: REFERRAL_RECEIVED_DATE
+      data_type: DATE
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: REFERRING_ORG_CODE
+      data_type: TEXT
+    - name: IS_EREFERRAL
+      data_type: TEXT
+    - name: ASI_FLAG
+      data_type: TEXT
+    - name: RTT_WAIT_DAYS
+      data_type: NUMBER
+    - name: ADMITTED_NONADMITTED_LIST
+      data_type: TEXT
+    - name: HAS_HAD_FIRST_OP
+      data_type: TEXT
+    - name: PATIENT_REFUSAL_DEFERRAL_DATE
+      data_type: DATE
+    - name: TCI_STATUS
+      data_type: TEXT
+    - name: TCI_DECISION_DATE
+      data_type: DATE
+    - name: TCI_DATE
+      data_type: DATE
+    - name: CLINICAL_PRIORITY
+      data_type: TEXT
+    - name: CLINICAL_PRIORITISATION_DATE
+      data_type: DATE
+    - name: PRIORITY_TYPE
+      data_type: TEXT
+    - name: LATEST_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: INTENDED_OPCS_CODE
+      data_type: TEXT
+    - name: INTENDED_ICD10_CODE
+      data_type: TEXT
+    - name: NETWORK
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: FUTURE_BOOKED_OP_DATE
+      data_type: DATE
+    - name: ROW_ID
+      data_type: TEXT

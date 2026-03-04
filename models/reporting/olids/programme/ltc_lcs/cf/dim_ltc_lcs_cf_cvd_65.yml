@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_65
     description: 'Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12m).

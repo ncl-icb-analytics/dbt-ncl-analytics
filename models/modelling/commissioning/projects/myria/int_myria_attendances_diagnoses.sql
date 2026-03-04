@@ -1,4 +1,4 @@
--- Gets list of attendances and diagnoses in last 12 months (monthly grain)
+-- Gets list of attendances and diagnoses before the start of current month
  {{ config(materialized="table") }}
 
 SELECT
@@ -14,7 +14,8 @@ SELECT
         ip.ORGANISATION_NAME AS provider_name,
         ip.SITE_ID AS provider_site_code,
         ip.SITE_NAME AS provider_site_name,
-        ip.END_DATE AS ACTIVITY_DATE,            
+        ip.START_DATE AS activity_start_date,
+        ip.END_DATE AS activity_date,            
         dx.ICD_ID AS diag_n,
         dx.SOURCE_CONCEPT_CODE AS diag_code,
         ip.gender_at_event,
@@ -22,7 +23,6 @@ SELECT
         ip.age_at_event,
         ip.reg_practice_at_event,
         DATEDIFF(MM,ip.END_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago -- use this in int_myria_conditions to flag 6 mth/1 year/2 year periods
-        -- add col for how many months ago
     FROM
        {{ ref("int_sus_ip_encounters") }} ip
     LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx
@@ -44,8 +44,9 @@ SELECT
         op.ORGANISATION_ID AS provider_code,
         op.ORGANISATION_NAME AS provider_name,
         op.SITE_ID AS provider_site_code,
-        op.SITE_NAME AS provider_site_name,    
-        op.START_DATE AS ACTIVITY_DATE,         
+        op.SITE_NAME AS provider_site_name,
+        op.START_DATE AS activity_start_date,    
+        op.START_DATE AS activity_date,         
         dx.ICD_ID AS diag_n,
         dx.SOURCE_CONCEPT_CODE AS diag_code,
         op.gender_at_event,
@@ -75,8 +76,9 @@ SELECT
         ae.ORGANISATION_ID AS provider_code,
         ae.ORGANISATION_NAME AS provider_name,
         ae.SITE_ID AS provider_site_code,
-        ae.SITE_NAME AS provider_site_name, 
-        ae.START_DATE AS ACTIVITY_DATE,           
+        ae.SITE_NAME AS provider_site_name,
+        ae.START_DATE AS activity_start_date,   
+        ae.START_DATE AS activity_date,           
         dx.SNOMED_ID AS diag_n,
         dx.MAPPED_ICD10_CODE AS diag_code,
         ae.gender_at_event,

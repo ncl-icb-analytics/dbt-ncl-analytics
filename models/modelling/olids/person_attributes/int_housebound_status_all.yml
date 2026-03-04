@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_housebound_status_all
     description: 'Housebound status observations from ECL source.

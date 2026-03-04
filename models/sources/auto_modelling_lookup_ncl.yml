@@ -427,6 +427,10 @@ sources:
       data_type: TEXT
     - name: LOCAL_AUTHORITY_2025_NAME
       data_type: TEXT
+    - name: ICB_CODE
+      data_type: TEXT
+    - name: ICB_NAME
+      data_type: TEXT
     - name: RESIDENT_FLAG
       data_type: TEXT
   - name: NCL_GP_PRACTICE_NEIGHBOURHOOD

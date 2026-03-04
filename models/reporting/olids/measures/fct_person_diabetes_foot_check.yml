@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_person_diabetes_foot_check
     description: 'Diabetes foot examination status for QOF reporting with Townson

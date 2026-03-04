@@ -5,7 +5,7 @@ models:
     config:
       meta:
         owner:
-          name: Kate Homer
+          name: KateHomer55
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1

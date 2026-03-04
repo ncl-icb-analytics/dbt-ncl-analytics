@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_dm_observations
     description: 'Diabetes-relevant observations for Long Term Conditions case finding

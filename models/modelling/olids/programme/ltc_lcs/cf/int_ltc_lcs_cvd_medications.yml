@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_cvd_medications
     description: 'Cardiovascular disease-relevant medications for Long Term Conditions
