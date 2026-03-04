@@ -50,7 +50,7 @@ models:
               sort_order: 1
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
@@ -62,6 +62,6 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null

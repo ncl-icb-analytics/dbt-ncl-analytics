@@ -26,7 +26,6 @@ WITH qrisk2_patients AS (
             WHERE
                 obs2.person_id = obs.person_id
                 AND obs2.cluster_id = 'QRISK2_10YEAR'
-                AND obs2.result_value >= 10
         )
 ),
 
@@ -69,7 +68,7 @@ statin_exclusions AS (
 
 eligible_medication_courses AS (
     -- Include only people on the CVD_65 medication courses valueset
-    SELECT DISTINCT
+    SELECT
         person_id,
         MAX(order_date) AS latest_eligible_statin_date
     FROM ({{ get_ltc_lcs_medication_orders("with_qrisk210_amd_not_on_a_high_intensity_statin_vs3") }})
