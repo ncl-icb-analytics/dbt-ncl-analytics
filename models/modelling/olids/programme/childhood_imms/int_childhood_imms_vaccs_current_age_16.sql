@@ -40,9 +40,9 @@ WHERE AGE = 16
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC16YRBASE v1
-    LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
-    LEFT JOIN VACC16YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
-    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )  
+    LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    LEFT JOIN VACC16YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')  
 )
  -- Creating CTE for 4-in-1 (dose 1) where 1 row is per patient at 16 yr AS NUMERATOR
 ,FOURIN1 AS (
@@ -54,7 +54,7 @@ WHERE AGE = 16
     --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
    ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
            FROM VACC16YRBASE v1
-        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 ) 
  -- Creating CTE for 3-in-1 (dose 1) where 1 row is per patient AS NUMERATOR
 ,THREEIN1 AS (
@@ -68,7 +68,7 @@ WHERE AGE = 16
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months (16 years)
         ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS threein1_event_age_mths
         FROM VACC16YRBASE v1
-        WHERE v1.VACCINE_ID = '3IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = '3IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 )
 -- Creating CTE for MMR (dose 1) where 1 row is per patient at 5 yr AS NUMERATOR
 ,MMR AS ( 
@@ -86,8 +86,8 @@ WHERE AGE = 16
          v2.AGE_AT_EVENT as mmr_second_event_age,
           FROM VACC16YRBASE v1
           LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' 
-          AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )      
+          AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')      
 ) 
 
 -- Creating CTE for HPV (dose 1) where 1 row is per patient AS NUMERATOR. 
@@ -111,9 +111,9 @@ WHERE AGE = 16
         ,ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hpv_second_event_age_mths
         FROM VACC16YRBASE v1
         LEFT JOIN VACC16YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'HPV_2'
-        AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
         WHERE v1.VACCINE_ID = 'HPV_1'  
-        --AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' ) allow for missing first dose
+        --AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule') allow for missing first dose
 )
 
 -- Creating CTE for MenACWY  (dose 1) where 1 row is per patient AS NUMERATOR 
@@ -128,7 +128,7 @@ WHERE AGE = 16
 --HELPER COLUMN to check number of months between DOB and vaccination date is not > 192 months 
          ,ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS menacwy_event_age_mths
     FROM VACC16YRBASE v1
-    WHERE v1.VACCINE_ID = 'MENACWY_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+    WHERE v1.VACCINE_ID = 'MENACWY_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 )
 
 
@@ -138,38 +138,31 @@ SELECT distinct
     ,CURRENT_DATE as run_date
     ,'16 Years' as reporting_age
 --6-IN-1 ALIGN to HEI current logic - 3 doses anytime before or on 16th bday ie age at event <= 16
-    ,CASE WHEN  (s.sixin1_first_status in ('Completed','OutofSchedule') AND s.sixin1_first_event_age <= 16) AND
-     (s.sixin1_second_status in ('Completed','OutofSchedule') AND s.sixin1_second_event_age <= 16) AND
- 	(s.sixin1_third_status in ('Completed','OutofSchedule') AND s.sixin1_third_event_age <= 16 AND s.sixin1_third_event_age_mths <= 192) THEN 1
+    ,CASE WHEN s.sixin1_first_event_age <= 16 AND s.sixin1_second_event_age <= 16 AND s.sixin1_third_event_age <= 16 AND s.sixin1_third_event_age_mths <= 192 THEN 1
 	ELSE 0 END AS sixin1_comp_by_16
 --------------------------------
 --4-IN-1 ALIGN to HEI current logic - 1 doses anytime before or on sixteenth bday - do not restrict by 3years and 4 mths ie age at event <= 16
-    ,CASE WHEN (f.fourin1_first_status in ('Completed','OutofSchedule') AND f.fourin1_first_event_age <= 16 AND f.fourin1_event_age_mths <= 192)
-  	THEN 1 ELSE 0 END AS fourin1_comp_by_16 
+    ,CASE WHEN f.fourin1_first_event_age <= 16 AND f.fourin1_event_age_mths <= 192 THEN 1 ELSE 0 END AS fourin1_comp_by_16 
 -------------------------------
 --HPV as a SINGLE DOSE 1 >= 12th bday (months between vacc date and 12th bday is >= 0) & age at event <= 16 and double check that hpv_first_event_age_mths <= 192
 --OR Dose 1 is null & Dose 2 >=twelfth_bday & <= 16th bday
        ,CASE 
-        WHEN hp.hpv_first_status in ('Completed','OutofSchedule') AND hp.hpv_first_twelfth_bday_mths >=0  AND hp.hpv_first_event_age <= 16 
-        AND hp.hpv_first_event_age_mths <=192 THEN 1
-        WHEN hp.hpv_first_date IS NULL AND hp.hpv_second_status in ('Completed','OutofSchedule') AND hp.hpv_second_twelfth_bday_mths >=0  
-        AND hp.hpv_second_event_age <= 16 AND hp.hpv_second_event_age_mths <=192 THEN 1
+        WHEN hp.hpv_first_twelfth_bday_mths >=0  AND hp.hpv_first_event_age <= 16 AND hp.hpv_first_event_age_mths <=192 THEN 1
+        WHEN hp.hpv_first_date IS NULL AND hp.hpv_second_twelfth_bday_mths >=0 AND hp.hpv_second_event_age <= 16 AND hp.hpv_second_event_age_mths <=192 THEN 1
         ELSE 0 END AS hpv_comp_by_16
 --------------------------------
 --3-IN-1 Green Book teenage TETANUS booster from the age of 13 and 14 (school year 9 or 10)
      ,CASE 
-	WHEN t.threein1_first_status in ('Completed','OutofSchedule') AND t.threein1_thirteenth_bday_mths >= 0
-    AND t.threein1_first_event_age <= 16 AND t.threein1_event_age_mths <= 192 THEN 1 
+	WHEN t.threein1_thirteenth_bday_mths >= 0 AND t.threein1_first_event_age <= 16 AND t.threein1_event_age_mths <= 192 THEN 1 
     ELSE 0 END AS threein1_comp_by_16 
     -------------------------
     --MMR Doses 1 and 2 Evaluate whether or not MMR (dose 2) has been completed by the sixteenth birthday and after first dose 	and first dose is on or after first b-day
-	,CASE WHEN mr.mmr_first_status in ('Completed','OutofSchedule') AND mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0  
+	,CASE WHEN mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0  
     AND mr.mmr_second_date > mr.mmr_first_date AND mr.mmr_second_event_age <=16 AND mr.mmr_second_event_age_mths <=192 THEN 1 ELSE 0 END AS mmr_comp_by_16
 ---------------------------
  --MENACWY from the age of 13 and 14 (school year 9 or 10)
     ,CASE 
-    WHEN ma.menacwy_first_status in ('Completed','OutofSchedule') AND ma.menacwy_thirteenth_bday_mths >= 0
-    AND ma.menacwy_first_event_age <= 16 AND ma.menacwy_event_age_mths <= 192 THEN 1 ELSE 0 END AS menacwy_comp_by_16 
+    WHEN ma.menacwy_thirteenth_bday_mths >= 0 AND ma.menacwy_first_event_age <= 16 AND ma.menacwy_event_age_mths <= 192 THEN 1 ELSE 0 END AS menacwy_comp_by_16 
 
 FROM VACC16YRBASE v  
 left join SIXIN1 s using (PERSON_ID) 
