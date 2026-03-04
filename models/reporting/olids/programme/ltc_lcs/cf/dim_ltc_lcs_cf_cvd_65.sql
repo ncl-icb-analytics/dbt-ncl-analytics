@@ -104,8 +104,8 @@ eligible_patients AS (
     LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_64') }} AS cvd_64 ON qp.person_id = cvd_64.person_id
     LEFT JOIN high_risk_review_declined AS hrrd ON qp.person_id = hrrd.person_id
     WHERE
-        AND NOT COALESCE(se.latest_statin_allergy_date IS NOT NULL, FALSE)  -- No statin allergies
-        AND NOT COALESCE(se.latest_statin_decision_date IS NOT NULL, FALSE)  -- No statin decisions
+        se.latest_statin_allergy_date IS NULL  -- No statin allergies
+        AND se.latest_statin_decision_date IS NULL  -- No statin decisions
         AND cvd_61.person_id IS NULL
         AND cvd_62.person_id IS NULL
         AND cvd_63.person_id IS NULL

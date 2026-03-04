@@ -40,8 +40,6 @@ models:
             - cluster_id: "STATINDEC_COD"
               category: "EXCLUSION"
               time_window: "60_MONTHS"
-            - cluster_id: "CVD_REGISTER_CODES"
-              category: "EXCLUSION"
           thresholds:
             - population_group: "ELDERLY_75_84"
               threshold_type: "AGE_RANGE"
@@ -57,8 +55,7 @@ models:
           column_name: person_id
       - cluster_ids_exist:
           cluster_ids: QRISK2_10YEAR, STAT_COD, 
-            STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD, 
-            CVD_REGISTER_CODES
+            STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD
       - valuesets_have_codes:
           valuesets:
             - aged_75_84_years_who_are_not_on_a_statin_and_no_qrisk_in_l5y_vs1
