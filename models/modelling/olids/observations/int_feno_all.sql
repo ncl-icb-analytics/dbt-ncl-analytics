@@ -53,8 +53,8 @@ validated AS (
     SELECT
         *,
         inferred_value < 0 AS is_negative,
-        inferred_value > 1000 AS is_extreme_outlier,
-        (NOT (inferred_value < 0 OR inferred_value > 1000 OR confidence = 'NONE')
+        inferred_value >= 1000 AS is_extreme_outlier,
+        (NOT (inferred_value < 0 OR inferred_value >= 1000 OR confidence = 'NONE')
          AND inferred_value IS NOT NULL) AS is_valid
     FROM standardised
 )
