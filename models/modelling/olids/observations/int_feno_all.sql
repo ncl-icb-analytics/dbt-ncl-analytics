@@ -1,0 +1,94 @@
+{{
+    config(
+        materialized='table',
+        cluster_by=['person_id', 'clinical_effective_date'])
+}}
+
+/*
+All Fractional Exhaled Nitric Oxide measurements with unit standardisation and data quality flags
+Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
+Uses the standardise_count_observation macro for value-first unit inference.
+Standard unit: parts per billion (ppb).
+*/
+
+WITH raw_observations AS (
+    SELECT *
+    FROM ({{ get_observations("'FENO'") }})
+),
+
+deduplicated AS (
+    {{ deduplicate_table(
+        table='raw_observations',
+        partition_cols=['person_id', 'clinical_effective_date', 'result_value', 'result_unit_code', 'mapped_concept_code'],
+        order_col='date_recorded'
+    ) }}
+),
+
+base_observations AS (
+    SELECT
+        id,
+        person_id,
+        clinical_effective_date,
+        result_value,
+        result_unit_code,
+        result_unit_display,
+        mapped_concept_code AS concept_code,
+        mapped_concept_display AS code_description,
+        cluster_id AS source_cluster_id
+    FROM deduplicated
+    WHERE clinical_effective_date IS NOT NULL
+      AND clinical_effective_date <= CURRENT_DATE()
+      AND result_value IS NOT NULL
+),
+
+{{ standardise_count_observation(
+    base_cte='base_observations',
+    measurement='feno',
+    value_column='result_value'
+) }}
+
+,
+
+validated AS (
+    SELECT
+        *,
+        inferred_value < 0 AS is_negative,
+        inferred_value >= 1000 AS is_extreme_outlier,
+        (NOT (inferred_value < 0 OR inferred_value >= 1000 OR confidence = 'NONE')
+         AND inferred_value IS NOT NULL) AS is_valid
+    FROM standardised
+)
+
+SELECT
+    id,
+    person_id,
+    clinical_effective_date,
+    concept_code,
+    code_description,
+    source_cluster_id,
+    original_result_value,
+    original_result_unit_display,
+    original_result_unit_code,
+    'COUNT' AS expected_measurement_type,
+    inferred_unit,
+    inferred_value,
+    value_was_converted,
+    CASE WHEN inferred_unit IS NULL THEN NULL
+         ELSE inferred_unit IS DISTINCT FROM original_result_unit_code
+    END AS unit_was_changed,
+    conversion_reason,
+    confidence,
+    is_negative,
+    is_extreme_outlier,
+    is_valid,
+    CASE
+        WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Invalid'
+        WHEN inferred_value < 0 THEN 'Invalid'
+        WHEN inferred_value < 25 THEN 'Low'
+        WHEN inferred_value < 50 THEN 'Intermediate'
+        WHEN inferred_value < 1000 THEN 'HIGH'
+        ELSE 'Invalid'
+
+
+    END AS feno_category
+FROM validated
