@@ -72,7 +72,7 @@ WHERE AGE = 2
     FROM VACC2YRBASE v1
     LEFT JOIN VACC2YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule' )
     LEFT JOIN VACC2YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS in ('Completed', 'OutofSchedule' )
-    LEFT JOIN VACC2YRBASE v4 ON v1.PERSON_ID = v4.PERSON_ID AND v4.VACCINE_ID = '6IN1_4' AND v3.VACCINATION_STATUS in ('Completed', 'OutofSchedule' )
+    LEFT JOIN VACC2YRBASE v4 ON v1.PERSON_ID = v4.PERSON_ID AND v4.VACCINE_ID = '6IN1_4' AND v4.VACCINATION_STATUS in ('Completed', 'OutofSchedule' )
     WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule' )
     AND v1.BORN_JUL_2024_FLAG = 'Yes'
 )
@@ -84,7 +84,7 @@ WHERE AGE = 2
          v1.VACCINATION_STATUS as hibmc_first_status,
 	   v1.AGE_AT_EVENT as hibmc_first_event_age,
     --HELPER COLUMN to check number of months between DOB and vaccination date to check not 24 months
-    ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths,
+    ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths
          FROM VACC2YRBASE v1
         WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 )  
@@ -113,7 +113,7 @@ WHERE AGE = 2
 --calculate HELPER column number of months between first vaccination date and approx first bday. If it's a negative number than the vaccination is early and not valid
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.FIRST_BDAY)) AS mmrv_first_bday_mths,
          --HELPER COLUMN to check number of months between DOB and vaccination date is not >24 months
-        ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS mmrv_first_event_age_mths,
+        ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS mmrv_first_event_age_mths
           FROM VACC2YRBASE v1
           WHERE v1.VACCINE_ID = 'MMRV_1B' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule' )
           AND v1.BORN_JUL_2024_FLAG = 'Yes'
@@ -171,7 +171,7 @@ v3.AGE_AT_EVENT as menb_third_event_age,
         v2.VACCINATION_STATUS AS pcv_second_status,
         v2.AGE_AT_EVENT as pcv_second_event_age,
 --calculate HELPER column number of months between second vaccination date and approx first bday. If it's a negative number than the vaccination is early and not valid
-        ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.FIRST_BDAY)) AS pcv_second_first_bday_mths,
+        ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.FIRST_BDAY)) AS pcv_second_first_bday_mths
          FROM VACC2YRBASE v1
          LEFT JOIN VACC2YRBASE v2 
          ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'PCV_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
