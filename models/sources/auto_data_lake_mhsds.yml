@@ -18,7 +18,7 @@ sources:
     identifier: '"MHS000Header"'
     columns:
     - name: DatSetVer
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: OrgIDProvider
       data_type: TEXT
     - name: OrgIDSubmit
@@ -32,161 +32,161 @@ sources:
     - name: DateTimeDatSetCreate
       data_type: TIMESTAMP_NTZ
     - name: MHS000UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FileType
       data_type: TEXT
     - name: TotRec
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqSubmissionID
       data_type: TEXT
     - name: TotMHS000
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS001
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS002
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS003
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS004
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS005
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS006
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS007
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS008
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS009
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS010
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS011
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS012
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS013
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS014
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS101
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS102
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS103
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS104
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS105
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS106
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS107
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS201
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS202
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS203
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS204
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS205
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS206
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS301
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS302
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS401
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS402
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS403
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS404
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS405
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS501
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS502
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS503
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS504
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS505
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS506
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS507
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS509
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS510
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS511
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS512
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS513
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS514
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS515
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS516
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS517
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS518
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS601
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS603
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS604
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS605
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS606
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS607
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS608
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS609
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS701
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS702
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS801
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS802
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS803
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS804
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS901
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS902
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotMHS903
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -231,9 +231,9 @@ sources:
     - name: PersDeathDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS001UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: OrgIDCCGRes
@@ -243,11 +243,11 @@ sources:
     - name: UniqSubmissionID
       data_type: TEXT
     - name: AgeRepPeriodStart
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeRepPeriodEnd
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeDeath
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PostcodeDistrict
       data_type: TEXT
     - name: DefaultPostcode Pseudo
@@ -323,9 +323,9 @@ sources:
     - name: NHSEValidatedPostcode Pseudo
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicOrgIDCCGGPPractice
       data_type: TEXT
     - name: dmicEthnicCategoryGroup
@@ -333,7 +333,7 @@ sources:
     - name: dmicAgeGroupRPEndDate
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -376,9 +376,9 @@ sources:
     - name: OrgIDGPPrac
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS002UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -406,11 +406,11 @@ sources:
     - name: OrgIDCCGGPPractice
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -455,9 +455,9 @@ sources:
     - name: AccommodationTypeEndDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS003UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -465,19 +465,19 @@ sources:
     - name: UniqSubmissionID
       data_type: TEXT
     - name: AgeAccomStatusDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeAccomTypeDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -512,9 +512,9 @@ sources:
     - name: WeekHoursWorked
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS004UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -526,11 +526,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -595,9 +595,9 @@ sources:
     - name: AutismStatus
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS005UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -609,11 +609,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -644,9 +644,9 @@ sources:
     - name: CareProfServOrTeamTypeAssoc
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS006UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -666,11 +666,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -697,9 +697,9 @@ sources:
     - name: DisabImpacPercep
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS007UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -711,11 +711,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -752,9 +752,9 @@ sources:
     - name: CarePlanImplementDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS008UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -772,11 +772,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -815,9 +815,9 @@ sources:
     - name: CarePlanAgreedTime
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS009UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -835,11 +835,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -866,9 +866,9 @@ sources:
     - name: AssistiveTechnologyPrescDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS010UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -884,11 +884,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -917,9 +917,9 @@ sources:
     - name: SocPerCircumstanceRecDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS011UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -935,11 +935,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -968,9 +968,9 @@ sources:
     - name: OvsVisChCatEndDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS012UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -982,11 +982,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1015,9 +1015,9 @@ sources:
     - name: EndDateMHResourceGroup
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS013UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1029,9 +1029,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1112,9 +1112,9 @@ sources:
     - name: ReferClosReason
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS101UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1124,9 +1124,9 @@ sources:
     - name: UniqServReqID
       data_type: TEXT
     - name: AgeServReferRecDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeServReferDischDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: RecordStartDate
@@ -1152,15 +1152,15 @@ sources:
     - name: FirstContactEverDate
       data_type: TIMESTAMP_NTZ
     - name: CountOfAttendedCareContacts
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FirstContactEverWhereAgeAtContactUnder18Date
       data_type: TIMESTAMP_NTZ
     - name: SecondContactEverWhereAgeAtContactUnder18Date
       data_type: TIMESTAMP_NTZ
     - name: CountOfAttendedCareContactsInFinancialYear
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CountAttendedCareContactsInFinancialYearPersonWas017AtTimeOfContact
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FirstAttendedContactInRPDate
       data_type: TIMESTAMP_NTZ
     - name: FirstAttendedContactInFinancialYearDate
@@ -1178,15 +1178,15 @@ sources:
     - name: ServTeamIntAgeGroup
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicServiceAreaCYPRefStartIndicator
       data_type: BOOLEAN
     - name: dmicAreaEndRP
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1208,7 +1208,7 @@ sources:
     - name: dmicDataset
       data_type: TEXT
     - name: dmicUniqCareProfTeamIdPercentUnder18
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicIsCYPServiceTypeIndicator
       data_type: BOOLEAN
     - name: dmicIsLDAServiceTypeIndicator
@@ -1239,9 +1239,9 @@ sources:
     - name: ReferClosReason
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS102UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1251,9 +1251,9 @@ sources:
     - name: UniqServReqID
       data_type: TEXT
     - name: AgeServReferClosure
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeServReferRejection
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: RecordStartDate
@@ -1277,9 +1277,9 @@ sources:
     - name: ServTeamIntAgeGroup
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicIsCYPServiceTypeIndicator
       data_type: BOOLEAN
     - name: dmicIsLDAServiceTypeIndicator
@@ -1287,11 +1287,11 @@ sources:
     - name: dmicIsAMHServiceTypeIndicator
       data_type: BOOLEAN
     - name: dmicUniqCareProfTeamIdPercentUnder18
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CAMHSTier
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1314,9 +1314,9 @@ sources:
     - name: OtherReasonReferMH
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS103UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1330,11 +1330,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1367,9 +1367,9 @@ sources:
     - name: ReferToTreatPeriodStatus
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS104UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1379,21 +1379,21 @@ sources:
     - name: UniqServReqID
       data_type: TEXT
     - name: AgeReferTreatStartDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeReferTreatEndDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TimeReferStartAndEndDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1432,9 +1432,9 @@ sources:
     - name: CodeRefProcAndProcStatus
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS105UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1448,11 +1448,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1485,9 +1485,9 @@ sources:
     - name: DischPlanAgreedTime
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS106UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1505,11 +1505,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1536,9 +1536,9 @@ sources:
     - name: PrescriptionTime
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS107UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1552,9 +1552,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1591,7 +1591,7 @@ sources:
     - name: SpecialisedMHServiceCode
       data_type: TEXT
     - name: ClinContDurOfCareCont
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ConsType
       data_type: TEXT
     - name: CareContSubj
@@ -1641,9 +1641,9 @@ sources:
     - name: ReasonPatientNoIMHA
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS201UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1655,11 +1655,11 @@ sources:
     - name: UniqCareContID
       data_type: TEXT
     - name: AgeCareContDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ContLocDistanceHome
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TimeReferAndCareContact
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: EFFECTIVE_FROM
@@ -1669,15 +1669,15 @@ sources:
     - name: UniqCareProfTeamID
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicMinContactDate
       data_type: TIMESTAMP_NTZ
     - name: dmicMaxContactDate
       data_type: TIMESTAMP_NTZ
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1708,7 +1708,7 @@ sources:
     - name: CareProfLocalId
       data_type: TEXT
     - name: ClinContactDurOfCareAct
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Procedure
       data_type: TEXT
     - name: CodeProcAndProcStatus
@@ -1730,9 +1730,9 @@ sources:
     - name: UnitMeasure
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS202UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1756,9 +1756,9 @@ sources:
     - name: MasterSnomedCTObsCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicActivityDate
       data_type: TIMESTAMP_NTZ
     - name: ServiceRequestId
@@ -1766,7 +1766,7 @@ sources:
     - name: ObsSchemeInUse
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1793,9 +1793,9 @@ sources:
     - name: ReasonPatientNoIMHA
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS203UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1811,11 +1811,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1864,9 +1864,9 @@ sources:
     - name: CodeFind
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS204UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1884,15 +1884,15 @@ sources:
     - name: MasterSnomedCTFindingCode
       data_type: TEXT
     - name: AgeAtIndirectActivity
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqOtherCareProfTeamLocalID
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1929,9 +1929,9 @@ sources:
     - name: PSDDIProcedure
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS205UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -1945,9 +1945,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -1961,7 +1961,7 @@ sources:
     - name: dmicDataset
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: MHS206StaffActivity
     identifier: '"MHS206StaffActivity"'
     columns:
@@ -1970,9 +1970,9 @@ sources:
     - name: CareProfLocalID
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS206UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: UniqSubmissionID
@@ -1984,9 +1984,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2010,7 +2010,7 @@ sources:
     - name: UniqServReqId
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: MHS301GroupSession
     identifier: '"MHS301GroupSession"'
     columns:
@@ -2023,11 +2023,11 @@ sources:
     - name: OrgIDComm
       data_type: TEXT
     - name: ClinContDurOfGroupSess
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GroupSessType
       data_type: TEXT
     - name: NumberOfGroupSessParticip
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ActLocTypeCode
       data_type: TEXT
     - name: SiteIDOfTreat
@@ -2041,7 +2041,7 @@ sources:
     - name: NHSServAgreeLineNum
       data_type: TEXT
     - name: MHS301UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: UniqSubmissionID
@@ -2053,13 +2053,13 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqGroupSessId
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2118,7 +2118,7 @@ sources:
     - name: OrgIDReceiving
       data_type: TEXT
     - name: MHS302UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: UniqSubmissionID
@@ -2126,9 +2126,9 @@ sources:
     - name: UniqCareProfLocalID
       data_type: TEXT
     - name: AgeRepPeriodStart
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeRepPeriodEnd
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: NHSDEthnicity
@@ -2138,11 +2138,11 @@ sources:
     - name: UniqMHDropInContactId
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2193,9 +2193,9 @@ sources:
     - name: MentalCat
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS401UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2217,11 +2217,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2250,9 +2250,9 @@ sources:
     - name: EndDateRespClinAssign
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS402UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2272,11 +2272,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2305,9 +2305,9 @@ sources:
     - name: AbsDischResp
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS403UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2325,11 +2325,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2358,9 +2358,9 @@ sources:
     - name: CommTreatOrdEndReason
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS404UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2378,11 +2378,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2411,9 +2411,9 @@ sources:
     - name: EndTimeCommTreatOrdRecall
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS405UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2431,11 +2431,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2504,9 +2504,9 @@ sources:
     - name: TransformingCareCategory
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS501UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2532,29 +2532,29 @@ sources:
     - name: InactTimeHPS
       data_type: TIMESTAMP_NTZ
     - name: LOSDischHosSpell
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LOSHosSpellEoRP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TimeEstDischDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TimePlanDischDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: AgeHospStartDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeHospDischDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NHSEValidatedPostcodeMainVisitor Pseudo
       data_type: TEXT
     - name: NHSEValidatedPostcodeDischDestHospProvSpell Pseudo
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2615,9 +2615,9 @@ sources:
     - name: SpecialisedMHServiceCode
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS502UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2633,7 +2633,7 @@ sources:
     - name: UniqWardStayID
       data_type: TEXT
     - name: WardLocDistanceHome
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: RecordStartDate
@@ -2647,7 +2647,7 @@ sources:
     - name: BedTypeAdultDischarge
       data_type: TEXT
     - name: BedDaysWSEndRP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: WardStayServiceAreasOpenEndRPAMH
@@ -2671,9 +2671,9 @@ sources:
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicWardStayArea
       data_type: TEXT
     - name: dmicWardStayAreaEndRP
@@ -2689,7 +2689,7 @@ sources:
     - name: LDAServiceWSDischarge
       data_type: BOOLEAN
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2720,9 +2720,9 @@ sources:
     - name: TreatFuncCodeMH
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS503UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2746,11 +2746,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2783,9 +2783,9 @@ sources:
     - name: OrgIDRespLADelayDisch
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS504UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2805,13 +2805,13 @@ sources:
     - name: RecordEndDate
       data_type: TIMESTAMP_NTZ
     - name: BedDaysDDRP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2850,9 +2850,9 @@ sources:
     - name: RestrictiveIntPIReviewHeldCarePers
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS505UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2874,11 +2874,11 @@ sources:
     - name: UniqRestrictiveIntIncID
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2921,9 +2921,9 @@ sources:
     - name: RestrictiveIntPIReviewHeldCarePers
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS505UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2941,9 +2941,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -2966,9 +2966,9 @@ sources:
     - name: DateAssault
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS506UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -2990,11 +2990,11 @@ sources:
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3017,9 +3017,9 @@ sources:
     - name: DateSelfHarm
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS507UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3041,11 +3041,11 @@ sources:
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3074,9 +3074,9 @@ sources:
     - name: EndTimeHomeLeave
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS509UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3098,17 +3098,17 @@ sources:
     - name: RecordEndDate
       data_type: TIMESTAMP_NTZ
     - name: HomeLeaveDaysEndRP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3141,9 +3141,9 @@ sources:
     - name: EscortedLeaveIndicator
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS510UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3165,17 +3165,17 @@ sources:
     - name: RecordEndDate
       data_type: TIMESTAMP_NTZ
     - name: LOADaysRP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3206,9 +3206,9 @@ sources:
     - name: MHAbsWOLeaveEndReason
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS511UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3230,17 +3230,17 @@ sources:
     - name: RecordEndDate
       data_type: TIMESTAMP_NTZ
     - name: AWOLDaysEndRP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3269,9 +3269,9 @@ sources:
     - name: EndDateOrgCodeComm
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS512UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3293,11 +3293,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3326,9 +3326,9 @@ sources:
     - name: SubstanceMisuse
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS513UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3350,11 +3350,11 @@ sources:
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3383,9 +3383,9 @@ sources:
     - name: EndTimeMHTrialLeave
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS514UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3411,11 +3411,11 @@ sources:
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3454,9 +3454,9 @@ sources:
     - name: RestraintInjuryOtherPers
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS515UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3484,11 +3484,11 @@ sources:
     - name: UniqRestrictiveIntTypeID
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3519,9 +3519,9 @@ sources:
     - name: PoliceRestraintForceUsedInd
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS516UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3541,11 +3541,11 @@ sources:
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3566,7 +3566,7 @@ sources:
     - name: HospProvSpellID
       data_type: TEXT
     - name: SMHEPCCharge
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: OrgIDComm
       data_type: TEXT
     - name: StartDateSMHEPC
@@ -3574,9 +3574,9 @@ sources:
     - name: EndDateSMHEPC
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS517UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3596,11 +3596,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3637,9 +3637,9 @@ sources:
     - name: OrgIDRespLAClinReadyforDisch
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS518UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3659,11 +3659,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3692,9 +3692,9 @@ sources:
     - name: DiagDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS601UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3706,13 +3706,13 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MasterSnomedCTPrevDiagCode
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3743,9 +3743,9 @@ sources:
     - name: ProvDiagDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS603UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3765,11 +3765,11 @@ sources:
     - name: MasterSnomedCTProvDiagCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3798,9 +3798,9 @@ sources:
     - name: DiagDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS604UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3820,11 +3820,11 @@ sources:
     - name: MasterSnomedCTPrimDiagCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3853,9 +3853,9 @@ sources:
     - name: DiagDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS605UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3875,11 +3875,11 @@ sources:
     - name: MasterSnomedCTSecDiagCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3910,9 +3910,9 @@ sources:
     - name: CareProfLocalId
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS606UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3922,7 +3922,7 @@ sources:
     - name: UniqServReqID
       data_type: TEXT
     - name: AgeAssessToolReferCompDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqCareProfLocalID
       data_type: TEXT
     - name: UniqMonthID
@@ -3930,11 +3930,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -3959,9 +3959,9 @@ sources:
     - name: PersScore
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS607UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -3975,17 +3975,17 @@ sources:
     - name: UniqCareActID
       data_type: TEXT
     - name: AgeAssessToolCont
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4014,7 +4014,7 @@ sources:
     - name: OrgIDComm
       data_type: TEXT
     - name: MHS608UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: UniqSubmissionID
@@ -4024,11 +4024,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4057,9 +4057,9 @@ sources:
     - name: PresCompDate
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS609UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -4077,9 +4077,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4093,7 +4093,7 @@ sources:
     - name: dmicDataset
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: MHS701CPACareEpisode
     identifier: '"MHS701CPACareEpisode"'
     columns:
@@ -4108,9 +4108,9 @@ sources:
     - name: EndDateCPA
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS701UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -4128,11 +4128,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4161,9 +4161,9 @@ sources:
     - name: CareProfLocalId
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS702UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -4179,11 +4179,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4222,9 +4222,9 @@ sources:
     - name: FLDCareClustInit
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS801UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -4238,9 +4238,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4267,9 +4267,9 @@ sources:
     - name: PersScore
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS802UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -4287,9 +4287,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4328,9 +4328,9 @@ sources:
     - name: EndTimeCareClust
       data_type: TIMESTAMP_NTZ
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS803UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -4346,7 +4346,7 @@ sources:
     - name: ClusterOpenEndRPFlag
       data_type: BOOLEAN
     - name: ClusterDaysRP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqMonthID
       data_type: TEXT
     - name: RecordStartDate
@@ -4358,9 +4358,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4387,9 +4387,9 @@ sources:
     - name: FFPCode
       data_type: TEXT
     - name: RecordNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MHS804UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: Person_ID
@@ -4401,9 +4401,9 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4438,7 +4438,7 @@ sources:
     - name: CareProfJobRoleCode
       data_type: TEXT
     - name: MHS901UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: UniqSubmissionID
@@ -4450,11 +4450,11 @@ sources:
     - name: EFFECTIVE_FROM
       data_type: TIMESTAMP_NTZ
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4479,7 +4479,7 @@ sources:
     - name: ServTeamIntAgeGroup
       data_type: TEXT
     - name: MHS902UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: UniqSubmissionID
@@ -4493,11 +4493,11 @@ sources:
     - name: UniqCareProfTeamLocalID
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded
@@ -4534,7 +4534,7 @@ sources:
     - name: ClosedBedDays
       data_type: TEXT
     - name: MHS903UniqID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrgIDProv
       data_type: TEXT
     - name: UniqSubmissionID
@@ -4546,11 +4546,11 @@ sources:
     - name: UniqWardCode
       data_type: TEXT
     - name: RowNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDateAdded

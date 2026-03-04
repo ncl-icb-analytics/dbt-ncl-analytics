@@ -9,7 +9,7 @@ sources:
     identifier: '"CustomerRFA"'
     columns:
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCustomerCode
       data_type: TEXT
     - name: dmicPrimeRecipient
@@ -35,31 +35,31 @@ sources:
     - name: dmicDerivedGPPractice
       data_type: BOOLEAN
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: InsertDeleteLog
     identifier: '"InsertDeleteLog"'
     columns:
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicIsDeleted
       data_type: BOOLEAN
     - name: dmicDeletedImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment
     identifier: '"appointment"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: type
       data_type: TEXT
     - name: action
       data_type: TEXT
     - name: schema_version
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: system.report.as_at
       data_type: TIMESTAMP_NTZ
     - name: system.report.date_range
@@ -101,7 +101,7 @@ sources:
     - name: system.transaction.cds_protocol_identifier
       data_type: TEXT
     - name: system.transaction.cds_update_type
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: system.transaction.cds_applicable_date
       data_type: TIMESTAMP_NTZ
     - name: system.transaction.cds_applicable_time
@@ -115,7 +115,7 @@ sources:
     - name: system.record.cds_group_indicator
       data_type: TEXT
     - name: system.record.finished_indicator
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.identifier
       data_type: TEXT
     - name: appointment.date
@@ -143,23 +143,23 @@ sources:
     - name: appointment.patient.identity.birth_date
       data_type: TIMESTAMP_NTZ
     - name: appointment.patient.identity.birth_month
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.birth_year
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.age_range
       data_type: TEXT
     - name: appointment.patient.identity.age_at_cds_activity_date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.age_at_record_start
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.fractional_age_at_record_start
       data_type: TEXT
     - name: appointment.patient.identity.hes_age_at_record_start
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.age_at_record_end
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.hes_age_at_record_end
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.gender
       data_type: TEXT
     - name: appointment.patient.identity.ethnic_category
@@ -227,7 +227,7 @@ sources:
     - name: appointment.referral.source_op
       data_type: TEXT
     - name: appointment.referral.priority_type
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.referral_to_treatment.ubrn.issuer
       data_type: TEXT
     - name: appointment.referral_to_treatment.patient_pathway_identifier.value Pseudo
@@ -299,9 +299,9 @@ sources:
     - name: appointment.commissioning.grouping.code_cleaning_applied
       data_type: BOOLEAN
     - name: appointment.commissioning.pss_grouping.tariff_uplift_rate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.commissioning.tariff_calculation.excluded_from_pbr
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.commissioning.tariff_calculation.patient_type
       data_type: TEXT
     - name: appointment.commissioning.tariff_calculation.outpatient_type
@@ -311,17 +311,17 @@ sources:
     - name: appointment.commissioning.tariff_calculation.tariff_applied
       data_type: TEXT
     - name: appointment.commissioning.tariff_calculation.specialised_services_tariff_uplift
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: appointment.commissioning.tariff_calculation.market_forces_factor
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: appointment.commissioning.commissioner_assignment.commissioner
       data_type: TEXT
     - name: appointment.commissioning.commissioner_assignment.flowchart_reference
       data_type: TEXT
     - name: appointment.commissioning.tariff_calculation.initial_tariff
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: appointment.commissioning.tariff_calculation.final_price
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: appointment.expected_duration
       data_type: TEXT
     - name: appointment.consultation_medium
@@ -335,29 +335,29 @@ sources:
     - name: appointment.patient.overseas_visitor.classification
       data_type: TEXT
     - name: appointment.referral.service_type_requested
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.referral_to_treatment.period_start_date
       data_type: TIMESTAMP_NTZ
     - name: appointment.referral_to_treatment.period_end_date
       data_type: TIMESTAMP_NTZ
     - name: appointment.referral_to_treatment.period_length
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.referral_to_treatment.ubrn.value Pseudo
       data_type: TEXT
     - name: appointment.referral_to_treatment.ubrn.is_valid
       data_type: BOOLEAN
     - name: appointment.referral_to_treatment.ubrn.occurrences
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.clinical_coding.grouper_derived.dominant_procedure
       data_type: TEXT
     - name: appointment.commissioning.tariff_calculation.aggregate_unbundled_tariff
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.referral.direct_access_indicator
       data_type: TEXT
     - name: appointment.care_location.type
       data_type: TEXT
     - name: appointment.care_professional.multiple_professional_or_discipline_indicator
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.patient.identity.withheld_identity_reason
       data_type: TEXT
     - name: appointment.commissioning.grouping.sus_hrg
@@ -371,9 +371,9 @@ sources:
     - name: appointment.commissioning.pss_grouping.prescribed_service_line_code
       data_type: TEXT
     - name: appointment.care_professional.rehabilitation_assessment_team_type
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: system.record.confidentiality_category
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: appointment.referral.earliest_reasonable_offer_date
       data_type: TIMESTAMP_NTZ
     - name: system.transaction.cds_extract_date
@@ -389,7 +389,7 @@ sources:
     - name: appointment.referral.earliest_clinically_appropriate_date
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: system.report.activity_date_from
       data_type: TIMESTAMP_NTZ
     - name: system.report.activity_date_to
@@ -425,16 +425,16 @@ sources:
     - name: appointment.commissioning.tariff_calculation.bpt_indicator_action
       data_type: TEXT
     - name: appointment.commissioning.tariff_calculation.aggregate_unbundled_guide_tariff
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.care_professionals
     identifier: '"appointment.care_professionals"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CARE_PROFESSIONALS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: professional_registration_issuer
       data_type: TEXT
     - name: professional_registration_identifier
@@ -448,16 +448,16 @@ sources:
     - name: clinical_responsibility_indicator
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.coded_scored_assessments
     identifier: '"appointment.clinical_coding.coded_scored_assessments"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CODED_SCORED_ASSESSMENTS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: tool_type
       data_type: TEXT
     - name: person_score
@@ -469,16 +469,16 @@ sources:
     - name: data_absent_reason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.comorbidities
     identifier: '"appointment.clinical_coding.comorbidities"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: COMORBIDITIES_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: is_data_absent
@@ -486,48 +486,48 @@ sources:
     - name: data_absent_reason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.diagnosis.icd
     identifier: '"appointment.clinical_coding.diagnosis.icd"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ICD_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: present_on_admission
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.diagnosis.read
     identifier: '"appointment.clinical_coding.diagnosis.read"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: READ_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.diagnosis.snomed
     identifier: '"appointment.clinical_coding.diagnosis.snomed"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: sequence_number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: timestamp
       data_type: TIMESTAMP_NTZ
     - name: is_data_absent
@@ -535,16 +535,16 @@ sources:
     - name: data_absent_reason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.findings
     identifier: '"appointment.clinical_coding.findings"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINDINGS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: timestamp
@@ -554,16 +554,16 @@ sources:
     - name: data_absent_reason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.fit_notes
     identifier: '"appointment.clinical_coding.fit_notes"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FIT_NOTES_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: condition
       data_type: TEXT
     - name: assessment_date
@@ -583,16 +583,16 @@ sources:
     - name: issuer
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.observations
     identifier: '"appointment.clinical_coding.observations"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OBSERVATIONS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: value
@@ -606,16 +606,16 @@ sources:
     - name: data_absent_reason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.procedure.opcs
     identifier: '"appointment.clinical_coding.procedure.opcs"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OPCS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: date
@@ -629,20 +629,20 @@ sources:
     - name: responsible_anaesthetist.registration_issuer
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.clinical_coding.procedure.snomed
     identifier: '"appointment.clinical_coding.procedure.snomed"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: sequence_number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: timestamp
       data_type: TIMESTAMP_NTZ
     - name: main_operating_professional.identifier
@@ -658,35 +658,35 @@ sources:
     - name: data_absent_reason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.commissioning.grouping.unbundled_hrg
     identifier: '"appointment.commissioning.grouping.unbundled_hrg"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNBUNDLED_HRG_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: multiple_applies
       data_type: BOOLEAN
     - name: tariff
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: tariff_applied
       data_type: TEXT
   - name: appointment.commissioning.service_agreements
     identifier: '"appointment.commissioning.service_agreements"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SERVICE_AGREEMENTS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: commissioner
       data_type: TEXT
     - name: is_commissioner_recognised
@@ -708,29 +708,29 @@ sources:
     - name: service_code
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.commissioning.tariff_calculation.exclusion_reasons
     identifier: '"appointment.commissioning.tariff_calculation.exclusion_reasons"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EXCLUSION_REASONS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: exclusion_reasons
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: appointment.patient.social_and_personal_circumstances
     identifier: '"appointment.patient.social_and_personal_circumstances"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SOCIAL_AND_PERSONAL_CIRCUMSTANCES_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: recorded_timestamp
@@ -740,12 +740,12 @@ sources:
     - name: data_absent_reason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: derived
     identifier: '"derived"'
     columns:
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CqcCareHomeCode
       data_type: TEXT
     - name: dmicICBCommissioner
@@ -763,7 +763,7 @@ sources:
     - name: dmicCommissionerDerivationReason
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicLSOA2021
       data_type: TEXT
     - name: dmicElectoralWardCode
@@ -772,12 +772,12 @@ sources:
     identifier: '"system.transaction.cds_copy_recipients"'
     columns:
     - name: ROWNUMBER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CDS_COPY_RECIPIENTS_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: cds_copy_recipients
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)

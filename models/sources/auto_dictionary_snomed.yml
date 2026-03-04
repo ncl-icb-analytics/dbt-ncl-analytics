@@ -9,38 +9,38 @@ sources:
     identifier: '"Code"'
     columns:
     - name: SK_SnomedID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SnomedItemID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SnomedNamespaceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SnomedPartitionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SnomedCheckDigit
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: InNationalDataset
       data_type: BOOLEAN
     - name: SnomedCodeType
       data_type: TEXT
     - name: SK_SnomedConceptID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedDescriptionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsSensitive
       data_type: BOOLEAN
   - name: Concept
     identifier: '"Concept"'
     columns:
     - name: SK_SnomedConceptID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedModuleID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedDescriptionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PreferredTerm
       data_type: TEXT
     - name: SK_SnomedDefinitionStatusID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DefinitionStatus
       data_type: TEXT
     - name: IsActive
@@ -53,28 +53,28 @@ sources:
     identifier: '"Description"'
     columns:
     - name: SK_SnomedDescriptionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedModuleID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedConceptID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Term
       data_type: TEXT
     - name: LanguageCode
       data_type: TEXT
     - name: SK_SnomedTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedCaseSignificanceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedRefSetID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SnomedAcceptabilityID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Namespace
     identifier: '"Namespace"'
     columns:
     - name: SK_NamespaceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateIssued
       data_type: TIMESTAMP_NTZ
     - name: Organisation
@@ -89,11 +89,11 @@ sources:
     - name: Cluster_Description
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_Code_Description
       data_type: TEXT
     - name: PCD_Refset_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Service_And_Ruleset
       data_type: TEXT
     - name: IsActive
@@ -114,15 +114,15 @@ sources:
     - name: Active
       data_type: BOOLEAN
     - name: Module_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Ref_Set_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Referenced_Component_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Map_Group
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Map_Priority
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Map_Rule
       data_type: TEXT
     - name: Map_Advice
@@ -130,6 +130,6 @@ sources:
     - name: Map_Target
       data_type: TEXT
     - name: Correlation_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Map_Block
-      data_type: NUMBER
+      data_type: NUMBER(38,0)

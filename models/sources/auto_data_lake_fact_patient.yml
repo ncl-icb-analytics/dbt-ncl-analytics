@@ -9,24 +9,24 @@ sources:
     identifier: '"DimConditionType"'
     columns:
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ConditionType
       data_type: TEXT
     - name: ConditionLifespan
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Description
       data_type: TEXT
     - name: HasValue
       data_type: BOOLEAN
     - name: SK_UnitID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DimDataSource
     identifier: '"DimDataSource"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_DataSourceParentID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DataSource
       data_type: TEXT
     - name: Description
@@ -35,23 +35,23 @@ sources:
     identifier: '"DimLifetimeConditionGroup"'
     columns:
     - name: SK_LifetimeConditionGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LifetimeConditionGroup
       data_type: TEXT
   - name: DimLifetimeConditionGroupTypeLookup
     identifier: '"DimLifetimeConditionGroupTypeLookup"'
     columns:
     - name: SK_LifetimeConditionGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_LifetimeConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Weighting
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DimLifetimeConditionType
     identifier: '"DimLifetimeConditionType"'
     columns:
     - name: SK_LifetimeConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LifetimeConditionType
       data_type: TEXT
     - name: Description
@@ -60,58 +60,58 @@ sources:
     identifier: '"DimRiskScore"'
     columns:
     - name: SK_RiskScoreID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RiskScore
       data_type: TEXT
     - name: RiskScoreLifespan
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Description
       data_type: TEXT
   - name: DimRiskScoreBand
     identifier: '"DimRiskScoreBand"'
     columns:
     - name: SK_RiskScoreBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_RiskScoreID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RiskScoreBand
       data_type: TEXT
     - name: LowerBound
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: UpperBound
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
   - name: FactActivity
     identifier: '"FactActivity"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Period
       data_type: TIMESTAMP_NTZ
     - name: ActivityCount
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotalCost
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BedDays
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NoTreatment
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AEAdmission
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: FactCareHome
     identifier: '"FactCareHome"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PeriodStart
       data_type: TIMESTAMP_NTZ
     - name: PeriodEnd
       data_type: TIMESTAMP_NTZ
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Score
       data_type: FLOAT
     - name: DateDetectedJoin
@@ -122,11 +122,11 @@ sources:
     identifier: '"FactCareHomeRaw"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Score
       data_type: FLOAT
     - name: RegistrationStartDate
@@ -137,39 +137,39 @@ sources:
     identifier: '"FactCondition"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PeriodStart
       data_type: TIMESTAMP_NTZ
     - name: PeriodEnd
       data_type: TIMESTAMP_NTZ
     - name: Value
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: DateDetected
       data_type: TIMESTAMP_NTZ
   - name: FactLifetimeCondition
     identifier: '"FactLifetimeCondition"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_LifetimeConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateFirstDetected
       data_type: TIMESTAMP_NTZ
   - name: FactPractice
     identifier: '"FactPractice"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PeriodStart
       data_type: TIMESTAMP_NTZ
     - name: PeriodEnd
@@ -182,11 +182,11 @@ sources:
     identifier: '"FactPracticeRaw"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RegistrationStartDate
       data_type: TIMESTAMP_NTZ
     - name: RegistrationEndDate
@@ -195,9 +195,9 @@ sources:
     identifier: '"FactProfile"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PeriodStart
       data_type: TIMESTAMP_NTZ
     - name: PeriodEnd
@@ -205,66 +205,66 @@ sources:
     - name: DateOfBirth
       data_type: TIMESTAMP_NTZ
     - name: SK_GenderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_EthnicityID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateOfDeath
       data_type: TIMESTAMP_NTZ
   - name: FactRiskScore
     identifier: '"FactRiskScore"'
     columns:
     - name: SK_RiskScoreID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PeriodStart
       data_type: TIMESTAMP_NTZ
     - name: PeriodEnd
       data_type: TIMESTAMP_NTZ
     - name: SK_RiskScoreBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Value
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: DateDetected
       data_type: TIMESTAMP_NTZ
   - name: FactVital
     identifier: '"FactVital"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PeriodStart
       data_type: TIMESTAMP_NTZ
     - name: PeriodEnd
       data_type: TIMESTAMP_NTZ
     - name: BodyTemp
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: RespiratoryRate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: HeartRate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BloodPressureSystolic
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BloodPressureDiastolic
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Height
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: Weight
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: BMI
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
   - name: Factresidence
     identifier: '"Factresidence"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OutputAreaID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PeriodStart
       data_type: TIMESTAMP_NTZ
     - name: PeriodEnd
@@ -277,13 +277,13 @@ sources:
     identifier: '"FactresidenceRaw"'
     columns:
     - name: SK_DataSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PatientID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OutputAreaID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ResidenceStartDate
       data_type: TIMESTAMP_NTZ
     - name: ResidenceEndDate
@@ -292,7 +292,7 @@ sources:
     identifier: '"MetaConditionCodeMaskAEDiag"'
     columns:
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
     - name: IsExclude
@@ -301,7 +301,7 @@ sources:
     identifier: '"MetaConditionCodeMaskICD10"'
     columns:
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
     - name: IsExclude
@@ -310,7 +310,7 @@ sources:
     identifier: '"MetaConditionCodeMaskRead"'
     columns:
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
     - name: IsExclude
@@ -319,7 +319,7 @@ sources:
     identifier: '"MetaConditionCodeMaskReadMedication"'
     columns:
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
     - name: IsExclude
@@ -328,77 +328,77 @@ sources:
     identifier: '"MetaConditionCodeMaskSnomed"'
     columns:
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Snomed
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsExclude
       data_type: BOOLEAN
   - name: MetaConditionCodeMaskSnomedMedication
     identifier: '"MetaConditionCodeMaskSnomedMedication"'
     columns:
     - name: SK_ConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Snomed
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsExclude
       data_type: BOOLEAN
   - name: MetaLifetimeConditionCodeMaskAEDiag
     identifier: '"MetaLifetimeConditionCodeMaskAEDiag"'
     columns:
     - name: SK_LifetimeConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
   - name: MetaLifetimeConditionCodeMaskICD10
     identifier: '"MetaLifetimeConditionCodeMaskICD10"'
     columns:
     - name: SK_LifetimeConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
   - name: MetaLifetimeConditionCodeMaskRead
     identifier: '"MetaLifetimeConditionCodeMaskRead"'
     columns:
     - name: SK_LifetimeConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
   - name: MetaLifetimeConditionCodeMaskSnomed
     identifier: '"MetaLifetimeConditionCodeMaskSnomed"'
     columns:
     - name: SK_LifetimeConditionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Snomed
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: MetaRiskScoreHospitalFrailtyICD10
     identifier: '"MetaRiskScoreHospitalFrailtyICD10"'
     columns:
     - name: SK_HospitalFrailtyID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Code
       data_type: TEXT
     - name: Score
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: MetaVital
     identifier: '"MetaVital"'
     columns:
     - name: SK_VitalID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_UnitID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Vital
       data_type: TEXT
   - name: MetaVitalRead
     identifier: '"MetaVitalRead"'
     columns:
     - name: SK_VitalID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CodeMask
       data_type: TEXT
   - name: MetaVitalSnomed
     identifier: '"MetaVitalSnomed"'
     columns:
     - name: SK_VitalID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Snomed
-      data_type: NUMBER
+      data_type: NUMBER(38,0)

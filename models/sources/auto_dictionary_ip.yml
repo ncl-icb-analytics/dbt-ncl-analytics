@@ -9,7 +9,7 @@ sources:
     identifier: '"AdmissionMethods"'
     columns:
     - name: SK_AdmissionMethodID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_AdmissionMethodCode
       data_type: TEXT
     - name: AdmissionMethodName
@@ -26,7 +26,7 @@ sources:
     identifier: '"AdmissionType"'
     columns:
     - name: SK_AdmissionTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: admission_type
       data_type: TEXT
     - name: admission_type_group
@@ -37,7 +37,7 @@ sources:
     identifier: '"DischargeDestination"'
     columns:
     - name: SK_DischargeDestinationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_DischargeDestinationCode
       data_type: TEXT
     - name: DischargeDestinationName
@@ -46,7 +46,7 @@ sources:
     identifier: '"DischargeMethod"'
     columns:
     - name: SK_DischargeMethodID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_DischargeMethodCode
       data_type: TEXT
     - name: DischargeMethodName
@@ -55,7 +55,7 @@ sources:
     identifier: '"FirstRegularDayOrNightAdmission"'
     columns:
     - name: SK_FirstRegularDayOrNightAdmissionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_FirstRegularDayOrNightAdmission
       data_type: TEXT
     - name: FirstRegularDayOrNightAdmission
@@ -64,7 +64,7 @@ sources:
     identifier: '"IntendedManagement"'
     columns:
     - name: SK_IntendedManagementID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_IntendedManagementCode
       data_type: TEXT
     - name: IntendedManagementDescription
@@ -73,7 +73,7 @@ sources:
     identifier: '"LastEpisodeInSpellIndicator"'
     columns:
     - name: SK_LastEpisodeInSpellIndicatorID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_LastEpisodeInSpellIndicator
       data_type: TEXT
     - name: LastEpisodeInSpellIndicator
@@ -82,7 +82,7 @@ sources:
     identifier: '"NeoNatalCareLevel"'
     columns:
     - name: SK_NeoNatalCareLevelID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NeoNatalCareCode
       data_type: TEXT
     - name: ShortCareDescription
@@ -93,7 +93,7 @@ sources:
     identifier: '"SourceOfAdmissions"'
     columns:
     - name: SK_SourceOfAdmissionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_SourceOfAdmissionCode
       data_type: TEXT
     - name: SourceOfAdmissionName

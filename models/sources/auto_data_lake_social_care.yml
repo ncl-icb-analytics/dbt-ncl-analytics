@@ -72,7 +72,7 @@ sources:
     - name: Total Hrs Caring per week
       data_type: TEXT
     - name: No. of adults being cared for
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Adult 1 Linked Person_ID
       data_type: TEXT
     - name: Adult 2 Linked Person_ID
@@ -96,15 +96,15 @@ sources:
     - name: Method of Review
       data_type: TEXT
     - name: Unit Cost
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: Cost Frequency (Unit Type)
       data_type: TEXT
     - name: Planned units per week
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: Full cost client
       data_type: TEXT
     - name: dmAgeAtReportingPeriodStartDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmCcgOfPracticeFromNHSNumber
       data_type: TEXT
     - name: dmCcgOfResidenceFromNHSNumber
@@ -144,7 +144,7 @@ sources:
     - name: dmRowId
       data_type: TEXT
     - name: dmFlowId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmSubmittedFileName
       data_type: TEXT
     - name: dmSpecification

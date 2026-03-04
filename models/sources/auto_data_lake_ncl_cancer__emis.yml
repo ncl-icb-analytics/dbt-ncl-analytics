@@ -13,23 +13,23 @@ sources:
     - name: CDB
       data_type: TEXT
     - name: Population Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: '%'
       data_type: TEXT
     - name: Males
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Females
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Excluded
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Status
       data_type: TEXT
     - name: _Year
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _Month
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: CCR_CAN005
@@ -40,23 +40,23 @@ sources:
     - name: CDB
       data_type: TEXT
     - name: Population Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: '%'
       data_type: TEXT
     - name: Males
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Females
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Excluded
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Status
       data_type: TEXT
     - name: _Year
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _Month
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: ESAFETY
@@ -67,23 +67,23 @@ sources:
     - name: CDB
       data_type: TEXT
     - name: Population Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: '%'
       data_type: TEXT
     - name: Males
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Females
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Excluded
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Status
       data_type: TEXT
     - name: _Year
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _Month
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: FIT_MONTHLY
@@ -94,23 +94,23 @@ sources:
     - name: CDB
       data_type: TEXT
     - name: Population Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: '%'
       data_type: TEXT
     - name: Males
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Females
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Excluded
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Status
       data_type: TEXT
     - name: _Year
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _Month
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: FIT_QUARTERLY
@@ -121,23 +121,23 @@ sources:
     - name: CDB
       data_type: TEXT
     - name: Population Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: '%'
       data_type: TEXT
     - name: Males
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Females
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Excluded
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Status
       data_type: TEXT
     - name: _Year
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _Month
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: SOCIAL_PRESCRIBER_REFERRALS
@@ -148,22 +148,22 @@ sources:
     - name: CDB
       data_type: TEXT
     - name: Population Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: '%'
       data_type: TEXT
     - name: Males
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Females
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Excluded
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Status
       data_type: TEXT
     - name: _Year
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _Month
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ

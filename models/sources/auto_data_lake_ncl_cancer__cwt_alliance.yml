@@ -11,7 +11,7 @@ sources:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -41,14 +41,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__24_DAY_CLASSIC
     identifier: '"CADEAS__CCG__24_DAY_CLASSIC"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -78,14 +78,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__24_DAY_SCREENING
     identifier: '"CADEAS__CCG__24_DAY_SCREENING"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -115,14 +115,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__24_DAY_UPGRADE
     identifier: '"CADEAS__CCG__24_DAY_UPGRADE"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -152,14 +152,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__28_DAY_FDS
     identifier: '"CADEAS__CCG__28_DAY_FDS"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -217,14 +217,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__2WW
     identifier: '"CADEAS__CCG__2WW"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -254,14 +254,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__31_DAY
     identifier: '"CADEAS__CCG__31_DAY"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -305,14 +305,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__38_DAY_BREASTSYMP
     identifier: '"CADEAS__CCG__38_DAY_BREASTSYMP"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -340,14 +340,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__38_DAY_CLASSIC
     identifier: '"CADEAS__CCG__38_DAY_CLASSIC"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -375,14 +375,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__38_DAY_SCREENING
     identifier: '"CADEAS__CCG__38_DAY_SCREENING"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -410,14 +410,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__38_DAY_UPGRADE
     identifier: '"CADEAS__CCG__38_DAY_UPGRADE"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -445,14 +445,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__62_DAY_BREASTSYMP
     identifier: '"CADEAS__CCG__62_DAY_BREASTSYMP"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -492,7 +492,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -520,14 +520,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__62_DAY_CLASSIC
     identifier: '"CADEAS__CCG__62_DAY_CLASSIC"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -567,7 +567,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -595,14 +595,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__62_DAY_SCREENING
     identifier: '"CADEAS__CCG__62_DAY_SCREENING"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -642,7 +642,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -670,14 +670,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__62_DAY_UPGRADE
     identifier: '"CADEAS__CCG__62_DAY_UPGRADE"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -717,7 +717,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -745,14 +745,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__BREACH__28_DAY_FDS
     identifier: '"CADEAS__CCG__BREACH__28_DAY_FDS"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -788,14 +788,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__BREACH__2WW
     identifier: '"CADEAS__CCG__BREACH__2WW"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -817,14 +817,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__BREACH__31_DAY
     identifier: '"CADEAS__CCG__BREACH__31_DAY"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -852,14 +852,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__BREACH__62_DAY_BREASTSYMP
     identifier: '"CADEAS__CCG__BREACH__62_DAY_BREASTSYMP"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -899,7 +899,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -917,14 +917,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__BREACH__62_DAY_CLASSIC
     identifier: '"CADEAS__CCG__BREACH__62_DAY_CLASSIC"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -964,7 +964,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -984,14 +984,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__BREACH__62_DAY_SCREENING
     identifier: '"CADEAS__CCG__BREACH__62_DAY_SCREENING"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1031,7 +1031,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -1049,14 +1049,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__CCG__BREACH__62_DAY_UPGRADE
     identifier: '"CADEAS__CCG__BREACH__62_DAY_UPGRADE"'
     columns:
     - name: CCG
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1096,7 +1096,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -1114,14 +1114,14 @@ sources:
     - name: CALNCV18NM
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__24_DAY_BREASTSYMP
     identifier: '"CADEAS__TRUST__24_DAY_BREASTSYMP"'
     columns:
     - name: AccountableProvider.24.day.wait.treatment.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1151,14 +1151,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__24_DAY_CLASSIC
     identifier: '"CADEAS__TRUST__24_DAY_CLASSIC"'
     columns:
     - name: AccountableProvider.24.day.wait.treatment.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1188,14 +1188,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__24_DAY_SCREENING
     identifier: '"CADEAS__TRUST__24_DAY_SCREENING"'
     columns:
     - name: AccountableProvider.24.day.wait.treatment.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1225,14 +1225,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__24_DAY_UPGRADE
     identifier: '"CADEAS__TRUST__24_DAY_UPGRADE"'
     columns:
     - name: AccountableProvider.24.day.wait.treatment.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1262,14 +1262,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__28_DAY_FDS
     identifier: '"CADEAS__TRUST__28_DAY_FDS"'
     columns:
     - name: Provider.Code.FDS
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1327,14 +1327,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__2WW
     identifier: '"CADEAS__TRUST__2WW"'
     columns:
     - name: ProviderCode
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1364,14 +1364,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__31_DAY
     identifier: '"CADEAS__TRUST__31_DAY"'
     columns:
     - name: ProviderCode
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1415,14 +1415,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__38_DAY_BREASTSYMP
     identifier: '"CADEAS__TRUST__38_DAY_BREASTSYMP"'
     columns:
     - name: AccountableProvider.38.day.wait.investigative.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1450,14 +1450,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__38_DAY_CLASSIC
     identifier: '"CADEAS__TRUST__38_DAY_CLASSIC"'
     columns:
     - name: AccountableProvider.38.day.wait.investigative.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1485,14 +1485,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__38_DAY_SCREENING
     identifier: '"CADEAS__TRUST__38_DAY_SCREENING"'
     columns:
     - name: AccountableProvider.38.day.wait.investigative.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1520,14 +1520,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__38_DAY_UPGRADE
     identifier: '"CADEAS__TRUST__38_DAY_UPGRADE"'
     columns:
     - name: AccountableProvider.38.day.wait.investigative.phase
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1555,14 +1555,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__62_DAY_BREASTSYMP
     identifier: '"CADEAS__TRUST__62_DAY_BREASTSYMP"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1602,7 +1602,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -1630,14 +1630,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__62_DAY_CLASSIC
     identifier: '"CADEAS__TRUST__62_DAY_CLASSIC"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1677,7 +1677,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -1705,14 +1705,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__62_DAY_SCREENING
     identifier: '"CADEAS__TRUST__62_DAY_SCREENING"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1752,7 +1752,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -1780,14 +1780,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__62_DAY_UPGRADE
     identifier: '"CADEAS__TRUST__62_DAY_UPGRADE"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1827,7 +1827,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -1855,14 +1855,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__BREACH__28_DAY_FDS
     identifier: '"CADEAS__TRUST__BREACH__28_DAY_FDS"'
     columns:
     - name: Provider.Code.FDS
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1898,14 +1898,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__BREACH__2WW
     identifier: '"CADEAS__TRUST__BREACH__2WW"'
     columns:
     - name: ProviderCode
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1927,14 +1927,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__BREACH__31_DAY
     identifier: '"CADEAS__TRUST__BREACH__31_DAY"'
     columns:
     - name: ProviderCode
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -1962,14 +1962,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__BREACH__62_DAY_BREASTSYMP
     identifier: '"CADEAS__TRUST__BREACH__62_DAY_BREASTSYMP"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -2009,7 +2009,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -2027,14 +2027,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__BREACH__62_DAY_CLASSIC
     identifier: '"CADEAS__TRUST__BREACH__62_DAY_CLASSIC"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -2074,7 +2074,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -2094,14 +2094,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__BREACH__62_DAY_SCREENING
     identifier: '"CADEAS__TRUST__BREACH__62_DAY_SCREENING"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -2141,7 +2141,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -2159,14 +2159,14 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CADEAS__TRUST__BREACH__62_DAY_UPGRADE
     identifier: '"CADEAS__TRUST__BREACH__62_DAY_UPGRADE"'
     columns:
     - name: AccountableProvider.62.day.wait
       data_type: TEXT
     - name: Month.Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Month
       data_type: TEXT
     - name: Year
@@ -2206,7 +2206,7 @@ sources:
     - name: TreatmentProvider
       data_type: TEXT
     - name: Number.of.Transfers
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Allocation.Rules
       data_type: TEXT
     - name: AdmittedCare
@@ -2224,4 +2224,4 @@ sources:
     - name: Cancer_Alliance
       data_type: TEXT
     - name: _TIMESTAMP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)

@@ -9,7 +9,7 @@ sources:
     identifier: '"Action"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -18,7 +18,7 @@ sources:
     identifier: '"AdditionalRequirementStatus"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -27,7 +27,7 @@ sources:
     identifier: '"AdditionalRequirementType"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -36,7 +36,7 @@ sources:
     identifier: '"AdviceCloseReason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -45,7 +45,7 @@ sources:
     identifier: '"AdviceResponseOutcome"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -54,7 +54,7 @@ sources:
     identifier: '"AppointmentType"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -63,7 +63,7 @@ sources:
     identifier: '"AssessmentOutcome"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -72,7 +72,7 @@ sources:
     identifier: '"CancelReason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -81,7 +81,7 @@ sources:
     identifier: '"ClinicType"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -90,7 +90,7 @@ sources:
     identifier: '"CommunicationTemplateType"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -99,7 +99,7 @@ sources:
     identifier: '"ContactReason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -108,7 +108,7 @@ sources:
     identifier: '"DeferToProviderReason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -117,7 +117,7 @@ sources:
     identifier: '"DnaReason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -126,7 +126,7 @@ sources:
     identifier: '"E-Referral_Reason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -137,7 +137,7 @@ sources:
     identifier: '"Gender"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -156,25 +156,25 @@ sources:
     - name: Postcode
       data_type: TEXT
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationOrganisationRole
     identifier: '"OrganisationOrganisationRole"'
     columns:
     - name: OrganisationID
       data_type: TEXT
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Role
       data_type: TEXT
   - name: OrganisationRole
     identifier: '"OrganisationRole"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -183,7 +183,7 @@ sources:
     identifier: '"Position"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -192,7 +192,7 @@ sources:
     identifier: '"Priority"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -201,7 +201,7 @@ sources:
     identifier: '"RejectionReason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -210,7 +210,7 @@ sources:
     identifier: '"RestrictReason"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -243,35 +243,35 @@ sources:
     - name: Urgent
       data_type: BOOLEAN
     - name: Two_Week_Wait
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Referrer_Alert_Present
       data_type: BOOLEAN
     - name: Gender_Treated
       data_type: TEXT
     - name: Min_Age_Treated
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Min_Age_Treated_Units
       data_type: TEXT
     - name: Max_Age_Treated
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Max_Age_Treated_Units
       data_type: TEXT
     - name: Concept_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Accepts_Advice_Requests
       data_type: BOOLEAN
     - name: On_Secondary_Care_Menu
       data_type: BOOLEAN
     - name: Slot_Reservation_Period
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Service_Transition_Date
       data_type: TIMESTAMP_NTZ
     - name: Service_End_Date_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Last_Modified_Date_Of_Service_End_Date
       data_type: TIMESTAMP_NTZ
     - name: Service_Transition_Date_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Last_Modified_Date_Of_Service_Transition_Date
       data_type: TIMESTAMP_NTZ
     - name: IWT_Routine
@@ -293,27 +293,27 @@ sources:
     - name: Restriction_Comments
       data_type: TEXT
     - name: Restricted_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Auth_Referrer_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Auth_Service_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Auth_Org_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Unpublished_Dt_Tm
       data_type: TIMESTAMP_NTZ
     - name: Unpublished_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Commissioning_Rule_Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: endpoint_id
       data_type: TEXT
     - name: Polling_Range
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Polling_Freq_Type
       data_type: TEXT
     - name: Polling_Interval
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Capacity_Alert_Type
       data_type: TEXT
     - name: Capacity_Alert_Beg_Dt
@@ -374,7 +374,7 @@ sources:
     identifier: '"Specialty"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -383,7 +383,7 @@ sources:
     identifier: '"TriageOutcomeType"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
@@ -392,7 +392,7 @@ sources:
     identifier: '"WorklistRemovalType"'
     columns:
     - name: Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Meaning
       data_type: TEXT
     - name: Display
