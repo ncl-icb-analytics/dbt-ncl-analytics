@@ -1,4 +1,8 @@
 --When expanding this change int tables to use the same names and then union by name
+{%
+    set self_icb_code = 'QMJ'
+%}
+
 with combined as (
     select * from {{ref('int_person_pmi_dataset_pds')}}
     union by name
@@ -111,22 +115,35 @@ interpreter_required_field as (
 lsoa_field as (
     select 
 
-        sk_patient_id,
-        dataset_source as lsoa_source,
-        lsoa21_code,
-        lsoa_event_date
+        combined.sk_patient_id,
+        combined.dataset_source as lsoa_source,
+        combined.lsoa21_code,
+        combined.lsoa_event_date
         
     from combined
+
+    --Join to get current NCL LSOAs and Current NCL Residence Population
+    left join {{ref('stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025')}} geo
+    on combined.lsoa21_code = geo.lsoa_2021_code
+    and geo.icb_code = '{{self_icb_code}}'
+
+    left join {{ref('int_person_pds_ncl_population_flags')}} ncl_flags
+    on combined.sk_patient_id = ncl_flags.sk_patient_id
 
     where dataset_source in ('pds', 'sus')
 
     qualify row_number () over (
-        partition by sk_patient_id
+        partition by combined.sk_patient_id
         order by 
-            lsoa21_code is not null desc,
-            lsoa_event_date desc,
-            dataset_source = 'pds' desc
+            combined.lsoa21_code is not null desc,
+            combined.lsoa_event_date desc,
+            combined.dataset_source = 'pds' desc
     ) = 1
+    --Extra additional restriction to prevent additional NCL residents from a non-pds source
+    --Working on the assumption that pds contains all NCL residents
+    and (
+        ncl_flags.flag_current_ncl_residence = TRUE or geo.lsoa_2021_code is null
+    )
 ),
 practice_code_field as (
     select 

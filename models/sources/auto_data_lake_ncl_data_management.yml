@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: reference_data_management
   database: '"DATA_LAKE__NCL"'

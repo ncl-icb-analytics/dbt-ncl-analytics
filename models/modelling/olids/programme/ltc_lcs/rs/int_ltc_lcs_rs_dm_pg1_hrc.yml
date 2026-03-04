@@ -22,8 +22,8 @@ models:
             - on_dm_reg_pg1_hrc_vs2
             - on_dm_reg_pg1_hrc_vs3
             - on_dm_reg_pg1_hrc_vs4
-            - on_dm_reg_pg1_hrc_vs6
-            - on_dm_reg_pg1_hrc_vs8
+            - on_dm_reg_pg1_hrc_vs5
+            - on_dm_reg_pg1_hrc_vs7
     columns:
       - name: person_id
         tests:

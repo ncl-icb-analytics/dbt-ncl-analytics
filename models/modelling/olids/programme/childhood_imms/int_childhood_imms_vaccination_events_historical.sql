@@ -5,12 +5,7 @@
 }}
 
 --Historical View of Vaccination events. Not linked to Currently eligible population.
-WITH POP AS (
-select distinct PERSON_ID, BIRTH_DATE_APPROX
-FROM {{ ref('int_childhood_imms_historical_population') }}
--- MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_HISTORICAL_POPULATION
-)
-,IMMS_CODE_OBS as (
+WITH IMMS_CODE_OBS as (
 SELECT DISTINCT 
         dem.PERSON_ID,
         clut.VACCINE_ORDER,
@@ -22,13 +17,14 @@ SELECT DISTINCT
         clut.schedule_dose as dose_number,
         DATE(o.clinical_effective_date) as EVENT_DATE,
         --o."age_at_event" is from EMIS. It either rounds years up or down
-        o.age_at_event AS AGE_AT_EVENT,
-        --CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
+        o.age_at_event AS AGE_AT_EVENT
+        
     FROM {{ ref('stg_olids_observation') }} o
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_OBSERVATION o
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
     --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = o.patient_id
-    LEFT JOIN POP dem ON pp.PERSON_ID = dem.PERSON_ID
+    LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
+    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on o.mapped_concept_code  = clut.CODE 
     --JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE 
     --no future dates
@@ -37,7 +33,7 @@ SELECT DISTINCT
    and DATE(o.clinical_effective_date) > DATE_TRUNC('MONTH',dem.BIRTH_DATE_APPROX)
     --look for events across the historical population by age at event in OBS table rather than age of historical means that the number of rows is 1.25 million
     AND o.age_at_event < 19
-    --and o.mapped_concept_code  = clut.CODE 
+    
          )
 --same query using medication orders table rather than observations
 ,IMMS_CODE_MED as (
@@ -52,13 +48,13 @@ SELECT DISTINCT
         clut.schedule_dose as dose_number,
         DATE(m.clinical_effective_date) as EVENT_DATE,
         --m."age_at_event" is from EMIS. It either rounds years up or down
-        m.age_at_event AS AGE_AT_EVENT,
-        --CONCAT(DEM.PERSON_ID, '+', clut.vaccine_id) AS vacc_key
-    FROM {{ ref('stg_olids_medication_order') }} m
+        m.age_at_event AS AGE_AT_EVENT
+        FROM {{ ref('stg_olids_medication_order') }} m
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_MEDICATION_ORDER m
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = m.patient_id
     --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = m.patient_id
-    LEFT JOIN POP dem ON pp.PERSON_ID = dem.PERSON_ID
+    LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
+    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on m.mapped_concept_code  = clut.CODE 
     --JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on m.mapped_concept_code  = clut.CODE 
      --no future dates
@@ -67,7 +63,7 @@ SELECT DISTINCT
     and DATE(m.clinical_effective_date) > DATE_TRUNC('MONTH',dem.BIRTH_DATE_APPROX)
     --look for events across the historical population by age at event in OBS table rather than age of historical means that the number of rows is 1.25 million
     AND m.age_at_event < 19
-    --and m.mapped_concept_code  = clut.CODE 
+     
     )
 --UNION OBSERVATIONS AND MEDICATIONS. Only add drug events if they do not already exist as an admin code
 ,VACCS_COMBINED AS (

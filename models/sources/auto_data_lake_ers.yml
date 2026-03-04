@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: eRS_primary_care
   database: '"DATA_LAKE"'

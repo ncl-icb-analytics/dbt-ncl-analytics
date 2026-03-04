@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: sus_ae
   database: '"DATA_LAKE"'

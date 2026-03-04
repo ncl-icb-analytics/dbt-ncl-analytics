@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: sus_apc
   database: '"DATA_LAKE"'
