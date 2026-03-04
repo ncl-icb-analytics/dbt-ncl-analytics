@@ -23,16 +23,14 @@
     {% endif %}
 
     SELECT
-        ROW_NUMBER() OVER (
-            PARTITION BY
-            {%- for col in partition_cols %}
-                {{ "tbl." ~ col }}{% if not loop.last %}, {% endif %}
-            {%- endfor %}
-            ORDER BY tbl.{{ order_col }} DESC
-        ) AS sequence,
         tbl.*
     FROM {{ table }} AS tbl
-
-    QUALIFY sequence = 1
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+        {%- for col in partition_cols %}
+            {{ "tbl." ~ col }}{% if not loop.last %}, {% endif %}
+        {%- endfor %}
+        ORDER BY tbl.{{ order_col }} DESC
+    ) = 1
 
 {% endmacro %}
