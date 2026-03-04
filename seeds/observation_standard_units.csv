@@ -1,3 +1,4 @@
 DEFINITION_ID,DEFINITION_NAME,CONFIG_ID,CONFIG_VERSION,UNIT,PRIMARY_UNIT
 ,eosinophil_count,,,10*9/L,TRUE
 ,eosinophil_percentage,,,%,TRUE
+,feno,,,ppb,TRUE
