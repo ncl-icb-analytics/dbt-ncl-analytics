@@ -39,9 +39,9 @@ WHERE AGE = 5
     --HELPER COLUMN to check number of months between DOB and vaccination date is not >60 months
     ROUND(MONTHS_BETWEEN(v3.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS sixin1_third_event_age_mths
     FROM VACC5YRBASE v1
-    LEFT JOIN VACC5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue')
-    LEFT JOIN VACC5YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS not in ('Declined', 'Contraindicated' ,'Overdue')
-    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )  
+    LEFT JOIN VACC5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = '6IN1_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    LEFT JOIN VACC5YRBASE v3 ON v1.PERSON_ID = v3.PERSON_ID AND v3.VACCINE_ID = '6IN1_3' AND v3.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    WHERE v1.VACCINE_ID = '6IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')  
 )
  -- Creating CTE for 4-in-1 (dose 1) where 1 row is per patient at 5 yr AS NUMERATOR
 ,FOURIN1 AS (
@@ -53,7 +53,7 @@ WHERE AGE = 5
          --HELPER COLUMN to check number of months between DOB and vaccination date is not >60 months
     ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS fourin1_event_age_mths
            FROM VACC5YRBASE v1
-        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = '4IN1_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 ) 
  -- Creating CTE for HibMenC (dose 1) where 1 row is per patient at 5 yr AS NUMERATOR
 ,HIBMENC AS (
@@ -65,7 +65,7 @@ WHERE AGE = 5
     --HELPER COLUMN to check number of months between DOB and vaccination date is not >60 months
     ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS hibmc_event_age_mths
            FROM VACC5YRBASE v1
-        WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+        WHERE v1.VACCINE_ID = 'HIBMENC_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 )  
 -- Creating CTE for MMR (dose 1) where 1 row is per patient at 5 yr AS NUMERATOR
 ,MMR AS ( 
@@ -84,8 +84,8 @@ WHERE AGE = 5
         --HELPER COLUMN to check number of months between DOB and second vaccination date is not >60 months
     ROUND(MONTHS_BETWEEN(v2.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS mmr_second_event_age_mths
           FROM VACC5YRBASE v1
-          LEFT JOIN VACC5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' AND v2.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
-          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS not in ('Declined', 'Contraindicated','Overdue' )
+          LEFT JOIN VACC5YRBASE v2 ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MMR_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+          WHERE v1.VACCINE_ID = 'MMR_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
 ) 
 ,COMBINED AS (
 SELECT distinct
@@ -93,23 +93,18 @@ SELECT distinct
     ,CURRENT_DATE as run_date
     ,'5 Years' as reporting_age
        --6-IN-1 ALIGN to HEI current logic - 3 doses anytime before or on fifth bday ie THIRD sixin1 AGE AT EVENT must be less than or equal to 5 and check that event age in mths is <= 60 mths
-     ,CASE WHEN  (s.sixin1_first_status in ('Completed','OutofSchedule') AND s.sixin1_first_event_age <= 5) AND
-     (s.sixin1_second_status in ('Completed','OutofSchedule') AND s.sixin1_second_event_age <= 5) AND
- 	(s.sixin1_third_status in ('Completed','OutofSchedule') AND s.sixin1_third_event_age <= 5 AND s.sixin1_third_event_age_mths <= 60) THEN 1
+     ,CASE WHEN s.sixin1_first_event_age <= 5 AND s.sixin1_second_event_age <= 5 AND s.sixin1_third_event_age <= 5 AND s.sixin1_third_event_age_mths <= 60 THEN 1
 	ELSE 0 END AS sixin1_comp_by_5
 --4-IN-1 ALIGN to HEI current logic - 1 doses anytime before or on fifth bday ie AGE AT EVENT must be less than or equal to 5 and check that event age in mths is <= 60 mths
-      ,CASE WHEN (f.fourin1_first_status in ('Completed','OutofSchedule') AND f.fourin1_first_event_age <= 5 AND f.fourin1_event_age_mths <= 60) 
-    THEN 1 ELSE 0 END AS fourin1_comp_by_5
+      ,CASE WHEN f.fourin1_first_event_age <= 5 AND f.fourin1_event_age_mths <= 60 THEN 1 ELSE 0 END AS fourin1_comp_by_5
 --HIBMENC ALIGN to HEI current logic - 1 doses anytime before or on fifth bday ie AGE AT EVENT must be less than or equal to 5 and check that event age in mths is <= 60 mths 
-    ,CASE WHEN (h.hibmc_first_status in ('Completed','OutofSchedule') AND h.hibmc_first_event_age <= 5 AND h.hibmc_event_age_mths <= 60) THEN 1 ELSE 0  
-     END AS hibmc_comp_by_5
+    ,CASE WHEN h.hibmc_first_event_age <= 5 AND h.hibmc_event_age_mths <= 60 THEN 1 ELSE 0 END AS hibmc_comp_by_5
 --MMR Dose 1 ALIGN to HEI current logic one dose of MMR on or after their first birthday MMR dose AGE AT EVENT years must be at least 1 but <3 and first dose must not be before FIRST_BDAY (ie mmr1_first_bday_mths is negative)
-     ,CASE WHEN mr.mmr_first_status in ('Completed','OutofSchedule') AND mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0 
+     ,CASE WHEN mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0 
      AND mr.mmr_first_event_age_mths <=60 THEN 1 ELSE 0 END AS mmr1_comp_by_5
 --MMR Doses 1 and 2 ALIGN to HEI current logic Evaluate whether or not MMR (dose 2) has been completed by the fifth birthday and after first dose and first dose is on or after first b-day
      ,CASE 
-   WHEN mr.mmr_first_status in ('Completed','OutofSchedule') AND mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0 
-  AND mr.mmr_second_status in ('Completed','OutofSchedule') AND mr.mmr_second_date >= mr.mmr_first_date 
+   WHEN mr.mmr_first_event_age BETWEEN 1 AND 2 AND mr.mmr_first_bday_mths >= 0 AND mr.mmr_second_date >= mr.mmr_first_date 
   AND mr.mmr_second_event_age <=5 AND mr.mmr_second_event_age_mths <=60 THEN 1 ELSE 0 END AS mmr2_comp_by_5
 FROM VACC5YRBASE v  
 left join SIXIN1 s using (PERSON_ID) 
