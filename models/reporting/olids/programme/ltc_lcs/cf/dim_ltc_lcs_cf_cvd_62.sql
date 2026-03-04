@@ -37,6 +37,17 @@ statin_exclusions AS (
     GROUP BY person_id
 ),
 
+high_risk_review_declined AS (
+    -- Exclusion from ICB_CF_CVD_62:
+    -- "Cardiovascular disease high risk review declined" in the last 3 years
+    SELECT DISTINCT
+        person_id
+    FROM (
+        {{ get_ltc_lcs_observations("people_at_high_risk_cvd_eligible_population_with_qrisk_15_20_vs1") }}
+    )
+    WHERE clinical_effective_date >= DATEADD('year', -3, CURRENT_DATE())
+),
+
 qrisk2_readings AS (
     -- Get all QRISK2 readings with valid values
     SELECT
@@ -102,9 +113,13 @@ LEFT JOIN latest_qrisk2 AS qr ON bp.person_id = qr.person_id
 LEFT JOIN qrisk2_codes AS codes ON bp.person_id = codes.person_id
 LEFT JOIN statin_medications AS sm ON bp.person_id = sm.person_id
 LEFT JOIN statin_exclusions AS se ON bp.person_id = se.person_id
+LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_61') }} AS cvd_61 ON bp.person_id = cvd_61.person_id
+LEFT JOIN high_risk_review_declined AS hrrd ON bp.person_id = hrrd.person_id
 WHERE
     age.age >= 40 AND age.age < 84  -- CVD base population age range
     AND CAST(qr.result_value AS NUMBER) BETWEEN 15 AND 19.99  -- QRISK2 15-19.99%
+    AND cvd_61.person_id IS NULL  -- Exclude CVD_61 cohort
     AND sm.person_id IS NULL  -- Not on statins in last 12 months
     AND se.latest_statin_allergy_date IS NULL  -- No statin allergies
     AND se.latest_statin_decision_date IS NULL  -- No statin decisions in last 60 months
+    AND hrrd.person_id IS NULL  -- No high CVD risk review decline in last 3 years

@@ -42,6 +42,17 @@ qrisk2_codes AS (
         ) AS all_qrisk2_displays
     FROM qrisk2_readings
     GROUP BY person_id
+),
+
+high_risk_review_declined AS (
+    -- Exclusion from ICB_CF_CVD_64:
+    -- "Cardiovascular disease high risk review declined" in the last 3 years
+    SELECT DISTINCT
+        person_id
+    FROM (
+        {{ get_ltc_lcs_observations("with_a_qrisk2_10_and_not_on_a_statin_vs1") }}
+    )
+    WHERE clinical_effective_date >= DATEADD('year', -3, CURRENT_DATE())
 )
 
 -- Final selection: QRisk ≥10 EXCLUDING those on statins or with statin decisions
@@ -57,4 +68,14 @@ SELECT
 FROM {{ ref('int_ltc_lcs_cf_cvd_base_population') }} AS bp
 INNER JOIN latest_qrisk2 AS qr ON bp.person_id = qr.person_id
 LEFT JOIN qrisk2_codes AS qc ON bp.person_id = qc.person_id
-WHERE CAST(qr.result_value AS NUMBER) >= 10
+LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_61') }} AS cvd_61 ON bp.person_id = cvd_61.person_id
+LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_62') }} AS cvd_62 ON bp.person_id = cvd_62.person_id
+LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_63') }} AS cvd_63 ON bp.person_id = cvd_63.person_id
+LEFT JOIN high_risk_review_declined AS hrrd ON bp.person_id = hrrd.person_id
+WHERE
+    CAST(qr.result_value AS NUMBER) >= 10
+    AND CAST(qr.result_value AS NUMBER) < 15  -- Excludes CVD_61 and CVD_62 QRISK ranges
+    AND cvd_61.person_id IS NULL
+    AND cvd_62.person_id IS NULL
+    AND cvd_63.person_id IS NULL
+    AND hrrd.person_id IS NULL

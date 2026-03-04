@@ -1,7 +1,8 @@
 models:
   - name: dim_ltc_lcs_cf_cvd_64
-    description: 'Age 40 to under 84 with QRISK2 ≥10%, not on statins (12m). Excludes
-      statin allergies/adverse reactions, not indicated, and declines (60m).
+    description: 'Age 40 to under 84 with QRISK2 10-<15%, not on statins (12m). Excludes
+      statin allergies/adverse reactions, not indicated, statin declines (60m),
+      and high CVD risk review declines (36m).
 
       One row per person.'
     config:
@@ -11,11 +12,13 @@ models:
           type: "CASE_FINDING"
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
-          name_short: "CVD_64: QRISK2 ≥10%, no statins"
-          description_short: "QRISK2 ≥10%, no statins"
+          name_short: "CVD_64: QRISK2 10-<15%, no statins"
+          description_short: "QRISK2 10-<15%, no statins"
           description_long: >
-            Age 40 to under 84, QRISK2 ≥10%, not on statins (12m). Excludes statin
-            allergies/adverse reactions, not indicated, and declines (60m).
+            Age 40 to under 84, QRISK2 10-<15%, not on statins (12m). Excludes statin
+            allergies/adverse reactions, not indicated, statin declines (60m), and
+            high CVD risk review declines (36m) using valueset
+            with_a_qrisk2_10_and_not_on_a_statin_vs1.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_64"
@@ -50,6 +53,13 @@ models:
               threshold_unit: "percentage"
               description: "QRISK2 ≥10%"
               sort_order: 2
+            - population_group: "ADULTS_40_UNDER_84"
+              threshold_type: "QRISK2_SCORE"
+              threshold_value: "15"
+              threshold_operator: "LESS_THAN"
+              threshold_unit: "percentage"
+              description: "QRISK2 <15%"
+              sort_order: 3
         owner:
           name: EddieDavison92
     tests:
@@ -58,6 +68,9 @@ models:
       - cluster_ids_exist:
           cluster_ids: QRISK2_10YEAR, STAT_COD, 
             STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD
+      - valuesets_have_codes:
+          valuesets:
+            - with_a_qrisk2_10_and_not_on_a_statin_vs1
     columns:
       - name: person_id
         description: Unique identifier for the person

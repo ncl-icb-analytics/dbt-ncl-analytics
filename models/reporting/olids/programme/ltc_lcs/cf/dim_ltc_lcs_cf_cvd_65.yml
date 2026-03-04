@@ -1,7 +1,8 @@
 models:
   - name: dim_ltc_lcs_cf_cvd_65
-    description: 'Age 40-84 with QRISK2 ≥10%, not on high-intensity statins (12m).
-      Excludes statin allergies/adverse reactions, not indicated, and declines (60m).
+    description: 'Age 40 to under 84 with QRISK2 ≥10% and eligible statin medication
+      courses for CVD_65. Excludes statin allergies/adverse reactions, not indicated,
+      statin declines (60m), and high CVD risk review declines (36m).
 
       One row per person.'
     config:
@@ -11,12 +12,15 @@ models:
           type: "CASE_FINDING"
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
-          name_short: "CVD_65: QRISK2 ≥10%, no high-intensity statin"
-          description_short: "QRISK2 ≥10%, no high-intensity statin"
+          name_short: "CVD_65: QRISK2 ≥10%, medication-course cohort"
+          description_short: "QRISK2 ≥10%, medication-course cohort"
           description_long: >
-            Age 40-84, QRISK2 ≥10%, not on high-intensity statins (12m).
+            Age 40 to under 84, QRISK2 ≥10%, on medication courses defined by
+            valueset with_qrisk210_amd_not_on_a_high_intensity_statin_vs3.
             Excludes statin allergies/adverse reactions, not indicated,
-            and declines (60m).
+            statin declines (60m), and high CVD risk review declines (36m)
+            using valueset
+            with_qrisk210_amd_not_on_a_high_intensity_statin_vs1.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_65"
@@ -26,9 +30,6 @@ models:
           code_clusters:
             - cluster_id: "QRISK2_10YEAR"
               category: "INCLUSION"
-            - cluster_id: "STATIN_CVD_65_MEDICATIONS"
-              category: "EXCLUSION"
-              time_window: "12_MONTHS"
             - cluster_id: "STATIN_ALLERGY_ADVERSE_REACTION"
               category: "EXCLUSION"
             - cluster_id: "STATIN_NOT_INDICATED"
@@ -37,14 +38,14 @@ models:
               category: "EXCLUSION"
               time_window: "60_MONTHS"
           thresholds:
-            - population_group: "ADULTS_40_84"
+            - population_group: "ADULTS_40_UNDER_84"
               threshold_type: "AGE_RANGE"
-              threshold_value: "40-84"
+              threshold_value: "40-<84"
               threshold_operator: "WITHIN"
               threshold_unit: "years"
-              description: "Age 40-84 years"
+              description: "Age 40 to under 84 years"
               sort_order: 1
-            - population_group: "ADULTS_40_84"
+            - population_group: "ADULTS_40_UNDER_84"
               threshold_type: "QRISK2_SCORE"
               threshold_value: "10"
               threshold_operator: "GREATER_THAN_OR_EQUAL"
@@ -53,3 +54,13 @@ models:
               sort_order: 2
         owner:
           name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - cluster_ids_exist:
+          cluster_ids: QRISK2_10YEAR, STATIN_ALLERGY_ADVERSE_REACTION,
+            STATIN_NOT_INDICATED, STATINDEC_COD
+      - valuesets_have_codes:
+          valuesets:
+            - with_qrisk210_amd_not_on_a_high_intensity_statin_vs1
+            - with_qrisk210_amd_not_on_a_high_intensity_statin_vs3

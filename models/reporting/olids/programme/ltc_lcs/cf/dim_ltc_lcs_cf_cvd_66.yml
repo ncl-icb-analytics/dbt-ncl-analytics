@@ -1,10 +1,10 @@
 models:
   - name: dim_ltc_lcs_cf_cvd_66
-    description: 'Age 75-84, no QRISK2 (60m), not on statins (12m), no health
+    description: 'Age 75 to under 84, no QRISK2 (60m), not on statins (12m), no health
       check (24m). Excludes statin allergies/adverse reactions, not indicated,
-      and declines (60m).
+      statin declines (60m), and high CVD risk review declines (36m).
 
-      One row per person aged 75-84 without recent CVD risk assessment.'
+      One row per person aged 75 to under 84 without recent CVD risk assessment.'
     config:
       meta:
         indicator:
@@ -12,12 +12,14 @@ models:
           type: "CASE_FINDING"
           category: "CVD"
           clinical_domain: "Cardiovascular Disease Case Finding"
-          name_short: "CVD_66: 75-84, no recent QRISK2"
-          description_short: "75-84, no recent QRISK2"
+          name_short: "CVD_66: 75-<84, no recent QRISK2"
+          description_short: "75-<84, no recent QRISK2"
           description_long: >
-            Age 75-84, no QRISK2 (60m), not on statins (12m), no health
+            Age 75 to under 84, no QRISK2 (60m), not on statins (12m), no health
             check (24m). Excludes statin allergies/adverse reactions, not
-            indicated, and declines (60m).
+            indicated, statin declines (60m), and high CVD risk review declines
+            (36m) using valueset
+            aged_75_84_years_who_are_not_on_a_statin_and_no_qrisk_in_l5y_vs1.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_CVD_66"
@@ -43,10 +45,10 @@ models:
           thresholds:
             - population_group: "ELDERLY_75_84"
               threshold_type: "AGE_RANGE"
-              threshold_value: "75-84"
+              threshold_value: "75-<84"
               threshold_operator: "WITHIN"
               threshold_unit: "years"
-              description: "Age 75-84 years"
+              description: "Age 75 to under 84 years"
               sort_order: 1
         owner:
           name: EddieDavison92
@@ -57,3 +59,6 @@ models:
           cluster_ids: QRISK2_10YEAR, STAT_COD, 
             STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD, 
             CVD_REGISTER_CODES
+      - valuesets_have_codes:
+          valuesets:
+            - aged_75_84_years_who_are_not_on_a_statin_and_no_qrisk_in_l5y_vs1
