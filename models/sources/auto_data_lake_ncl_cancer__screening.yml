@@ -1,3 +1,4 @@
+version: 2
 sources:
 - name: reference_cancer_screening
   database: '"DATA_LAKE__NCL"'

@@ -5,13 +5,13 @@
 -- - Rule 1: Exclude PG1, PG2, or PG3A
 -- - Rule 2: HbA1c 58-75 (include directly)
 -- - Rule 3: HbA1c 48-58 (cascade - go to next rule if passed, exclude if failed)
--- - Rule 4: Erectile dysfunction (vs3) OR diabetic retinopathy (vs4) OR BMI >35 (vs5)
---           OR diabetic neuropathy (vs6) OR diabetic foot moderate/high risk (vs7)
---           OR heart failure first episode (vs8) OR GLP-1/insulin in last 6 months (vs10, BNF 060101)
---           OR claudication/atherosclerosis (vs11) (include)
---   Note: vs9 (Insulins) has no SNOMED mapping, using BNF 060101 fallback
--- - Rule 5: eGFR 45-49 (vs12) (include)
--- - Rule 6: ACR 3-30 (vs13) (include)
+-- - Rule 4: Erectile dysfunction (vs2) OR diabetic retinopathy (vs3) OR BMI >35 (vs4)
+--           OR diabetic neuropathy (vs5) OR diabetic foot moderate/high risk (vs6)
+--           OR heart failure first episode (vs7) OR GLP-1/insulin in last 6 months (vs9, BNF 060101)
+--           OR claudication/atherosclerosis (vs10) (include)
+--   Note: vs8 (Insulins) has no SNOMED mapping, using BNF 060101 fallback
+-- - Rule 5: eGFR 45-49 (vs11) (include)
+-- - Rule 6: ACR 3-30 (vs12) (include)
 -- - Rule 7: ABPM BP ≥140/90 (include, if failed → exclude)
 
 with
@@ -46,60 +46,60 @@ rule_2_hba1c_58_75 as (
 ),
 
 -- Rule 3: HbA1c 48-58 (cascade prerequisite for rules 4-7)
--- vs2 = HbA1c codes
+-- vs1 = HbA1c codes (same valueset as Rule 2, different threshold)
 rule_3_hba1c_48_58 as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs2") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs1") }})
     where result_value > 48 and result_value <= 58
 ),
 
 -- Rule 4 components (any one qualifies if Rule 3 passed):
 
--- vs3 = Erectile dysfunction
+-- vs2 = Erectile dysfunction
 rule_4_erectile_dysfunction as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs2") }})
+),
+
+-- vs3 = Diabetic retinopathy
+rule_4_diabetic_retinopathy as (
     select distinct person_id
     from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs3") }})
 ),
 
--- vs4 = Diabetic retinopathy
-rule_4_diabetic_retinopathy as (
-    select distinct person_id
-    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs4") }})
-),
-
--- vs5 = BMI > 35
+-- vs4 = BMI > 35
 rule_4_bmi_high as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs5") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs4") }})
     where result_value > 35
 ),
 
--- vs6 = Diabetic neuropathy
+-- vs5 = Diabetic neuropathy
 rule_4_diabetic_neuropathy as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs5") }})
+),
+
+-- vs6 = Diabetic foot at moderate/high risk
+rule_4_diabetic_foot_risk as (
     select distinct person_id
     from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs6") }})
 ),
 
--- vs7 = Diabetic foot at moderate/high risk
-rule_4_diabetic_foot_risk as (
-    select distinct person_id
-    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs7") }})
-),
-
--- vs8 = Heart failure (first episode, excluding review/end)
+-- vs7 = Heart failure (first episode, excluding review/end)
 rule_4_heart_failure as (
     select distinct person_id
-    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs8") }})
+    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs7") }})
     where is_problem = true
       and coalesce(is_review, false) = false
 ),
 
--- GLP-1 medications (vs10) and Insulins in last 6 months
--- Note: vs9 (Insulins drug group) has no SNOMED mapping from terminology server,
+-- GLP-1 medications (vs9) and Insulins in last 6 months
+-- Note: vs8 (Insulins drug group) has no SNOMED mapping from terminology server,
 -- using BNF 060101 as fallback instead
 rule_4_glp1_medications as (
     select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_dm_reg_priority_group_3b_mrb_vs10") }})
+    from ({{ get_ltc_lcs_medication_orders_latest("on_dm_reg_priority_group_3b_mrb_vs9") }})
     where order_date >= dateadd(month, -6, current_date())
     union
     select person_id
@@ -108,10 +108,10 @@ rule_4_glp1_medications as (
     qualify row_number() over (partition by person_id order by order_date desc) = 1
 ),
 
--- vs11 = Claudication/atherosclerosis
+-- vs10 = Claudication/atherosclerosis
 rule_4_claudication as (
     select distinct person_id
-    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs11") }})
+    from ({{ get_ltc_lcs_observations("on_dm_reg_priority_group_3b_mrb_vs10") }})
 ),
 
 -- Combine all Rule 4 components
@@ -134,18 +134,18 @@ rule_4_combined as (
 ),
 
 -- Rule 5: eGFR 45-49 (latest value)
--- vs12 = eGFR codes
+-- vs11 = eGFR codes
 rule_5_egfr_range as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs12") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs11") }})
     where result_value >= 45 and result_value < 49
 ),
 
 -- Rule 6: ACR 3-30 (latest value)
--- vs13 = ACR codes
+-- vs12 = ACR codes
 rule_6_acr_range as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs13") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_priority_group_3b_mrb_vs12") }})
     where result_value >= 3 and result_value <= 30
 ),
 

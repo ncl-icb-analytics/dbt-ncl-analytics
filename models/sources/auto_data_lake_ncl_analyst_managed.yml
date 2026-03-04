@@ -206,39 +206,6 @@ sources:
       data_type: TEXT
     - name: PROVIDER
       data_type: TEXT
-  - name: COMMUNITY_REFACT_LOCAL
-    identifier: '"COMMUNITY_REFACT_LOCAL"'
-    columns:
-    - name: PROVIDER
-      data_type: TEXT
-    - name: WEEK_END
-      data_type: TEXT
-    - name: SERVICE_LINE
-      data_type: TEXT
-    - name: TEAM
-      data_type: TEXT
-    - name: No. of Referrals
-      data_type: TEXT
-    - name: ACCEPTED_REFERRALS
-      data_type: TEXT
-    - name: REFERRAL_SOURCE
-      data_type: TEXT
-    - name: ACTIVITY
-      data_type: TEXT
-    - name: ACTIVITY_TYPE
-      data_type: TEXT
-    - name: POINT_OF_DELIVERY
-      data_type: TEXT
-    - name: SERVICE_LINE_GROUP
-      data_type: TEXT
-    - name: WEEK_ENDING
-      data_type: TEXT
-    - name: YEAR
-      data_type: TEXT
-    - name: WEEK_NUMBER
-      data_type: NUMBER
-    - name: CCG
-      data_type: TEXT
   - name: COMMUNITY_REFERRALS_ACTIVITY_LOCAL
     identifier: '"COMMUNITY_REFERRALS_ACTIVITY_LOCAL"'
     columns:
@@ -2708,6 +2675,31 @@ sources:
     columns:
     - name: GEO
       data_type: VARIANT
+  - name: LSOA21_ICB
+    identifier: '"LSOA21_ICB"'
+    columns:
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: SICBL23CD
+      data_type: TEXT
+    - name: SICBL23CDH
+      data_type: TEXT
+    - name: SICBL23NM
+      data_type: TEXT
+    - name: ICB23CD
+      data_type: TEXT
+    - name: ICB23CDH
+      data_type: TEXT
+    - name: ICB23NM
+      data_type: TEXT
+    - name: LAD23CD
+      data_type: TEXT
+    - name: LAD23NM
+      data_type: TEXT
+    - name: OBJECTID
+      data_type: NUMBER
   - name: LSOA21_WARD25_LAD25
     identifier: '"LSOA21_WARD25_LAD25"'
     columns:
@@ -3253,6 +3245,11 @@ sources:
       data_type: NUMBER
     - name: SK_ETHNICITY_ID
       data_type: NUMBER
+  - name: TEST
+    identifier: '"TEST"'
+    columns:
+    - name: REPORTED_MONTH
+      data_type: DATE
   - name: TURNAROUND_TIMES_RAW
     identifier: '"TURNAROUND_TIMES_RAW"'
     columns:
