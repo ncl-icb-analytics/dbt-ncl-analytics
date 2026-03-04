@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: dim_ltc_lcs_cf_cvd_62
-    description: 'Age 40-84 with QRISK2 15-19.99%, not on statins (12m). Excludes
+    description: 'Age 40 to under 84 with QRISK2 15-19.99%, not on statins (12m). Excludes
       statin allergies/adverse reactions, not indicated, and declines (60m).
 
       One row per person.'
@@ -15,7 +15,7 @@ models:
           name_short: "CVD_62: QRISK2 15-20%, no statins"
           description_short: "QRISK2 15-19.99%, no statins"
           description_long: >
-            Age 40-84, QRISK2 15-19.99%, not on statins (12m). Excludes statin
+            Age 40 to under 84, QRISK2 15-19.99%, not on statins (12m). Excludes statin
             allergies/adverse reactions, not indicated, and declines (60m).
           is_qof: false
           source_column: "person_id"
@@ -26,7 +26,7 @@ models:
           code_clusters:
             - cluster_id: "QRISK2_10YEAR"
               category: "INCLUSION"
-            - cluster_id: "LCS_STAT_COD_CVD"
+            - cluster_id: "STAT_COD"
               category: "EXCLUSION"
               time_window: "12_MONTHS"
             - cluster_id: "STATIN_ALLERGY_ADVERSE_REACTION"
@@ -37,21 +37,21 @@ models:
               category: "EXCLUSION"
               time_window: "60_MONTHS"
           thresholds:
-            - population_group: "ADULTS_40_84"
+            - population_group: "ADULTS_40_UNDER_84"
               threshold_type: "AGE_RANGE"
-              threshold_value: "40-84"
+              threshold_value: "40-<84"
               threshold_operator: "WITHIN"
               threshold_unit: "years"
-              description: "Age 40-84 years"
+              description: "Age 40 to under 84 years"
               sort_order: 1
-            - population_group: "ADULTS_40_84"
+            - population_group: "ADULTS_40_UNDER_84"
               threshold_type: "QRISK2_SCORE"
               threshold_value: "15"
               threshold_operator: "GREATER_THAN_OR_EQUAL"
               threshold_unit: "percentage"
               description: "QRISK2 15-19.99%"
               sort_order: 2
-            - population_group: "ADULTS_40_84"
+            - population_group: "ADULTS_40_UNDER_84"
               threshold_type: "QRISK2_SCORE"
               threshold_value: "20"
               threshold_operator: "LESS_THAN"
@@ -60,3 +60,9 @@ models:
               sort_order: 3
         owner:
           name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - cluster_ids_exist:
+          cluster_ids: QRISK2_10YEAR, STAT_COD, 
+            STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD

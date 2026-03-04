@@ -10,7 +10,7 @@ WITH statin_medications AS (
         MAX(order_date) AS latest_statin_date
     FROM {{ ref('int_ltc_lcs_cvd_medications') }}
     WHERE
-        cluster_id = 'LCS_STAT_COD_CVD'
+        cluster_id = 'STAT_COD'
         AND order_date >= DATEADD('month', -12, CURRENT_DATE())
     GROUP BY person_id
 ),
@@ -103,7 +103,7 @@ LEFT JOIN qrisk2_codes AS codes ON bp.person_id = codes.person_id
 LEFT JOIN statin_medications AS sm ON bp.person_id = sm.person_id
 LEFT JOIN statin_exclusions AS se ON bp.person_id = se.person_id
 WHERE
-    age.age BETWEEN 40 AND 84  -- CVD base population age range
+    age.age >= 40 AND age.age < 84  -- CVD base population age range
     AND CAST(qr.result_value AS NUMBER) BETWEEN 15 AND 19.99  -- QRISK2 15-19.99%
     AND sm.person_id IS NULL  -- Not on statins in last 12 months
     AND se.latest_statin_allergy_date IS NULL  -- No statin allergies

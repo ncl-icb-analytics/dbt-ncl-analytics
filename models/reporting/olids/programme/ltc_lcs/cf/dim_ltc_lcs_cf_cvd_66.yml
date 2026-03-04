@@ -32,6 +32,10 @@ models:
             - cluster_id: "STAT_COD"
               category: "EXCLUSION"
               time_window: "12_MONTHS"
+            - cluster_id: "STATIN_ALLERGY_ADVERSE_REACTION"
+              category: "EXCLUSION"
+            - cluster_id: "STATIN_NOT_INDICATED"
+              category: "EXCLUSION"
             - cluster_id: "STATINDEC_COD"
               category: "EXCLUSION"
               time_window: "60_MONTHS"
@@ -47,3 +51,10 @@ models:
               sort_order: 1
         owner:
           name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - cluster_ids_exist:
+          cluster_ids: QRISK2_10YEAR, STAT_COD, 
+            STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD, 
+            CVD_REGISTER_CODES

@@ -2,25 +2,30 @@
     materialized='table') }}
 
 -- General CVD base population for case finding indicators
--- Includes patients aged 40-84 who are not on statins, have no statin allergies/contraindications, and no recent statin decisions
+-- Includes patients aged 40 to under 84 who are not on statins, have no statin
+-- allergies/contraindications, and no recent statin decisions
 
 WITH base_population AS (
-    -- Get base population aged 40-84
+    -- Get base population aged 40 to under 84
     SELECT
         bp.person_id,
         bp.age
     FROM {{ ref('int_ltc_lcs_cf_base_population') }} AS bp
-    WHERE bp.age BETWEEN 40 AND 84
+    WHERE bp.age >= 40 AND bp.age < 84
 ),
 
 statin_medications AS (
     -- Get patients on any statins in last 12 months
+    -- NOTE: Search spec also lists a Clinical Codes(EVENTS) STAT_COD branch.
+    -- In OLIDS, STAT_COD is implemented as a drugs cluster and resolved via
+    -- medication orders; there are no separate non-drug STAT_COD event records.
+    -- Treating this through medications preserves the same exclusion intent.
     SELECT DISTINCT
         person_id,
         MAX(order_date) AS latest_statin_date
     FROM {{ ref('int_ltc_lcs_cvd_medications') }}
     WHERE
-        cluster_id = 'LCS_STAT_COD_CVD'
+        cluster_id = 'STAT_COD'
         AND order_date >= DATEADD('month', -12, CURRENT_DATE())
     GROUP BY person_id
 ),
