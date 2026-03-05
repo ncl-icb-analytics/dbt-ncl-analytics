@@ -4,14 +4,18 @@ models:
       Person-level LTC register status for all configured condition codes.
       Adds age-rule denominator eligibility (is_eligible_denominator) alongside numerator status (is_on_register)
       without changing existing numerator-only register models.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
 
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
 
       - name: condition_code
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -19,11 +23,15 @@ models:
                 field: condition_code
 
       - name: is_eligible_denominator
-        tests:
+        data_tests:
           - not_null
 
       - name: is_on_register
-        tests:
+        data_tests:
+          - not_null
+
+      - name: reference_date
+        data_tests:
           - not_null
 
     tests:

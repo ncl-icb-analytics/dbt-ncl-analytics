@@ -3,6 +3,10 @@ seeds:
     description: >
       Condition-level metadata and age-based denominator eligibility rules for LTC registers.
       min_age and max_age are inclusive; max_age NULL means no upper age bound.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: condition_code
         description: Condition code aligned to fct_person_ltc_summary.condition_code.

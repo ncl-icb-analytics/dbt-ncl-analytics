@@ -40,12 +40,10 @@ missing_in_model AS (
 
 SELECT mismatch_type, condition_code
 FROM missing_in_seed
-WHERE (SELECT model_code_count FROM model_rowcount) > 0
 
 UNION ALL
 
 SELECT mismatch_type, condition_code
 FROM missing_in_model
-WHERE (SELECT model_code_count FROM model_rowcount) > 0
 
 {% endtest %}
