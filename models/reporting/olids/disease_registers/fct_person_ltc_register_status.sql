@@ -54,8 +54,7 @@ person_condition_status AS (
             p.age >= r.min_age
             AND (r.max_age IS NULL OR p.age <= r.max_age),
             FALSE
-        ) AS is_eligible_denominator,
-        CURRENT_DATE() AS reference_date
+        ) AS is_eligible_denominator
     FROM person_population AS p
     CROSS JOIN register_rules AS r
     LEFT JOIN ltc_numerator AS n
@@ -75,6 +74,5 @@ SELECT
     min_age,
     max_age,
     is_eligible_denominator,
-    is_on_register,
-    reference_date
+    is_on_register
 FROM person_condition_status

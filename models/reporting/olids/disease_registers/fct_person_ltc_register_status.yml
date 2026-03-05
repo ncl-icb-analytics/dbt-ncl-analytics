@@ -30,14 +30,9 @@ models:
         data_tests:
           - not_null
 
-      - name: reference_date
-        data_tests:
-          - not_null
-
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
               - person_id
               - condition_code
-              - reference_date
