@@ -13,12 +13,11 @@ models:
           type: "CASE_FINDING"
           category: "AF"
           clinical_domain: "Cardiovascular Case Finding"
-          name_short: "Cardiac meds no AF"
-          description_short: "Patients on cardiac medications without AF/HF diagnosis"
+          name_short: "AF_61: Cardiac meds, no AF/HF"
+          description_short: "Cardiac medications without AF/HF diagnosis"
           description_long: >
-            Patients on digoxin, flecainide, propafenone, or anticoagulant not on
-            AF or heart failure registers,
-            no DVT/PE in last year.
+            On digoxin, flecainide, propafenone, or anticoagulant, not on
+            AF or heart failure registers, no DVT/PE in last year.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_AF_61"
@@ -57,3 +56,9 @@ models:
               sort_order: 1
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

@@ -13,3 +13,7 @@ models:
         tests:
           - unique
           - not_null
+      - name: is_allowed_secondary_use
+        description: Flag indicating person is allowed for secondary use
+        tests:
+          - not_null
