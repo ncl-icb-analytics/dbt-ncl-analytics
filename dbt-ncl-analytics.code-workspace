@@ -5,8 +5,10 @@
         }
     ],
     "settings": {
-        // dbt fusion flags yml files as false positive errors; hide error decorations in explorer
-        "problems.decorations.enabled": false,
+        // Show file problem badges/decorations in explorer now that dbt 1.10 arguments syntax is supported
+        "problems.decorations.enabled": true,
+        "explorer.decorations.badges": true,
+        "explorer.decorations.colors": true,
         "problems.defaultSeverityFilter": "warning",
 
         // Windows: auto-run start_dbt.ps1 when opening a terminal
