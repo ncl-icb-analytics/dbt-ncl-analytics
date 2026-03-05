@@ -18,26 +18,15 @@ WITH qrisk2_patients AS (
     WHERE
         obs.cluster_id = 'QRISK2_10YEAR'
         AND obs.result_value >= 10
+        AND bp.age >= 40
+        AND bp.age < 84
         AND obs.clinical_effective_date = (
             SELECT MAX(clinical_effective_date)
             FROM {{ ref('int_ltc_lcs_cvd_observations') }} AS obs2
             WHERE
                 obs2.person_id = obs.person_id
                 AND obs2.cluster_id = 'QRISK2_10YEAR'
-                AND obs2.result_value >= 10
         )
-),
-
-high_intensity_statins AS (
--- Get patients on high-intensity statins in last 12 months (using CVD_65 specific cluster)
-    SELECT DISTINCT
-        person_id,
-        MAX(order_date) AS latest_high_intensity_statin_date
-    FROM {{ ref('int_ltc_lcs_cvd_medications') }}
-    WHERE
-        cluster_id = 'STATIN_CVD_65_MEDICATIONS'
-        AND order_date >= DATEADD('month', -12, CURRENT_DATE())
-    GROUP BY person_id
 ),
 
 statin_exclusions AS (
@@ -77,20 +66,50 @@ statin_exclusions AS (
     GROUP BY person_id
 ),
 
+eligible_medication_courses AS (
+    -- Include only people on the CVD_65 medication courses valueset
+    SELECT
+        person_id,
+        MAX(order_date) AS latest_eligible_statin_date
+    FROM ({{ get_ltc_lcs_medication_orders("with_qrisk210_amd_not_on_a_high_intensity_statin_vs3") }})
+    GROUP BY person_id
+),
+
+high_risk_review_declined AS (
+    -- Exclusion from ICB_CF_CVD_65:
+    -- "Cardiovascular disease high risk review declined" in the last 3 years
+    SELECT DISTINCT
+        person_id
+    FROM (
+        {{ get_ltc_lcs_observations("with_qrisk210_amd_not_on_a_high_intensity_statin_vs1") }}
+    )
+    WHERE clinical_effective_date >= DATEADD('year', -3, CURRENT_DATE())
+),
+
 eligible_patients AS (
--- QRISK2 ≥ 10 patients not on high-intensity statins, no allergies, no recent decisions
+-- QRISK2 ≥ 10 patients on CVD_65 medication courses, no allergies, no recent
+-- decisions, excluding prior CVD cohorts
     SELECT
         qp.person_id,
         qp.age,
         qp.latest_qrisk2_date,
         qp.latest_qrisk2_value
     FROM qrisk2_patients AS qp
-    LEFT JOIN high_intensity_statins AS his ON qp.person_id = his.person_id
+    INNER JOIN eligible_medication_courses AS meds ON qp.person_id = meds.person_id
     LEFT JOIN statin_exclusions AS se ON qp.person_id = se.person_id
+    LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_61') }} AS cvd_61 ON qp.person_id = cvd_61.person_id
+    LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_62') }} AS cvd_62 ON qp.person_id = cvd_62.person_id
+    LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_63') }} AS cvd_63 ON qp.person_id = cvd_63.person_id
+    LEFT JOIN {{ ref('dim_ltc_lcs_cf_cvd_64') }} AS cvd_64 ON qp.person_id = cvd_64.person_id
+    LEFT JOIN high_risk_review_declined AS hrrd ON qp.person_id = hrrd.person_id
     WHERE
-        NOT COALESCE(his.person_id IS NOT NULL, FALSE)  -- Not on high-intensity statins
-        AND NOT COALESCE(se.latest_statin_allergy_date IS NOT NULL, FALSE)  -- No statin allergies
-        AND NOT COALESCE(se.latest_statin_decision_date IS NOT NULL, FALSE)  -- No statin decisions
+        se.latest_statin_allergy_date IS NULL  -- No statin allergies
+        AND se.latest_statin_decision_date IS NULL  -- No statin decisions
+        AND cvd_61.person_id IS NULL
+        AND cvd_62.person_id IS NULL
+        AND cvd_63.person_id IS NULL
+        AND cvd_64.person_id IS NULL
+        AND hrrd.person_id IS NULL
 ),
 
 all_qrisk2_readings AS (

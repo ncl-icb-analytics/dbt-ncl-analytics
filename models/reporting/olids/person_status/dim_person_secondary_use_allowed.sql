@@ -1,7 +1,7 @@
 {{
     config(
         materialized='table',
-        tags=['dimension', 'person', 'opt_out', 'gdpr'],
+        tags=['dimension', 'person', 'opt_out'],
         cluster_by=['person_id'])
 }}
 
