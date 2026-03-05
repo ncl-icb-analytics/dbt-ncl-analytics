@@ -37,7 +37,7 @@ expanded_codes AS (
         cd.indicator_id,
         'SNOMED' AS code_system,
         cs.code,
-        cs.code_description,
+        COALESCE(NULLIF(TRIM(cs.code_description), ''), CONCAT('No description available for code ', cs.code)) AS code_description,
         cd.code_category,
         cd.cluster_id
     FROM cluster_definitions cd
