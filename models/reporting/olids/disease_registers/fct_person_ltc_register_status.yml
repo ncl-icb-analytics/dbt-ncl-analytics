@@ -1,0 +1,35 @@
+models:
+  - name: fct_person_ltc_register_status
+    description: >
+      Person-level LTC register status for all configured condition codes.
+      Adds age-rule denominator eligibility (is_eligible_denominator) alongside numerator status (is_on_register)
+      without changing existing numerator-only register models.
+
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+
+      - name: condition_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('ltc_register_denominator_rules')
+                field: condition_code
+
+      - name: is_eligible_denominator
+        tests:
+          - not_null
+
+      - name: is_on_register
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - person_id
+              - condition_code
+              - reference_date

@@ -1,0 +1,36 @@
+seeds:
+  - name: ltc_register_denominator_rules
+    description: >
+      Condition-level metadata and age-based denominator eligibility rules for LTC registers.
+      min_age and max_age are inclusive; max_age NULL means no upper age bound.
+    columns:
+      - name: condition_code
+        description: Condition code aligned to fct_person_ltc_summary.condition_code.
+        data_tests:
+          - not_null
+          - unique
+      - name: condition_name
+        description: Human-readable condition label used in LTC reporting.
+        data_tests:
+          - not_null
+      - name: clinical_domain
+        description: Clinical domain label aligned to LTC summary outputs.
+        data_tests:
+          - not_null
+      - name: is_qof
+        description: True when the condition is a QOF register condition.
+        data_tests:
+          - not_null
+      - name: min_age
+        description: Inclusive minimum age for denominator eligibility.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+      - name: max_age
+        description: Inclusive maximum age for denominator eligibility. NULL means no upper bound.
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "IS NULL OR max_age >= min_age"
