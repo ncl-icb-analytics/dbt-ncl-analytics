@@ -2,8 +2,7 @@ models:
   - name: dim_valproate_araf_referral
     description: 'ARAF referral events aggregation for valproate monitoring.
 
-      One row per person with ARAF referral events including earliest and latest dates
-      and observation traceability.'
+      One row per person with ARAF referral events including earliest and latest dates and observation traceability.'
 
     config:
       meta:
@@ -11,8 +10,8 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:

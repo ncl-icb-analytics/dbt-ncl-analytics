@@ -1,19 +1,20 @@
 models:
   - name: stg_reference_combined_codesets
-    description: Combined code sets mapping cluster IDs to individual codes 
-      across multiple coding systems (SNOMED, Read, etc.)
+    description: Combined code sets mapping cluster IDs to individual codes across multiple coding systems (SNOMED, Read, etc.)
     config:
       meta:
         owner:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - cluster_id
-            - code
-            - source
+          arguments:
+            combination_of_columns:
+              - cluster_id
+              - code
+              - source
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: cluster_id
         description: Cluster identifier grouping related codes

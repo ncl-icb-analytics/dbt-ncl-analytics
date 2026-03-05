@@ -1,4 +1,3 @@
-
 models:
   - name: int_wl_current
     description: >
@@ -11,8 +10,7 @@ models:
           name: Emily Baldwin
     columns:
       - name: week_ending_date
-        description: Week ending (census) date aligned to Sunday (e.g. if occurs
-          on Monday, is moved to previous Sunday)
+        description: Week ending (census) date aligned to Sunday (e.g. if occurs on Monday, is moved to previous Sunday)
       - name: sk_patient_id
         description: Surrogate key for patient identifier
       - name: local_patient_identifier
@@ -123,15 +121,18 @@ models:
         description: Flag indicating open pathway (always 1)
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - sk_patient_id
-            - referral_identifier
-            - patient_pathway_identifier
-            - treatment_function_code
-            - provider_code
-            - provider_site_code
-            - week_ending_date
-            - referral_to_treatment_period_start_date
-          severity: warn
+          config:
+            severity: warn
+          arguments:
+            combination_of_columns:
+              - sk_patient_id
+              - referral_identifier
+              - patient_pathway_identifier
+              - treatment_function_code
+              - provider_code
+              - provider_site_code
+              - week_ending_date
+              - referral_to_treatment_period_start_date

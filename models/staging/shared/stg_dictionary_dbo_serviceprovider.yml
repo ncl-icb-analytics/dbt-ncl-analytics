@@ -27,4 +27,5 @@ models:
         description: Whether service provider is currently active
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

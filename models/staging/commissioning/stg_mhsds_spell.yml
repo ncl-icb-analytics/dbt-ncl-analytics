@@ -7,11 +7,11 @@ models:
           name: Jessica Roberts
     columns:
       - name: uniq_hosp_prov_spell_num
-        description: A unique identifier for each Hospital Provider Spell for a 
-          Health Care Provider
+        description: A unique identifier for each Hospital Provider Spell for a Health Care Provider
         tests:
           - not_null
           - unique
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

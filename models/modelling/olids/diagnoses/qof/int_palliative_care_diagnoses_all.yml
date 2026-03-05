@@ -2,8 +2,7 @@ models:
   - name: int_palliative_care_diagnoses_all
     description: 'Palliative care pathway observations for QOF register management.
 
-      One row per observation using PALCARE_COD (pathway) and PALCARENI_COD (no longer
-      indicated) clusters. Register inclusion on/after 1 April 2008.'
+      One row per observation using PALCARE_COD (pathway) and PALCARENI_COD (no longer indicated) clusters. Register inclusion on/after 1 April 2008.'
     config:
       meta:
         owner:
@@ -33,8 +32,7 @@ models:
         description: 'Flag indicating palliative care pathway code (PALCARE_COD cluster)'
 
       - name: is_palliative_care_not_indicated_code
-        description: 'Flag indicating palliative care no longer indicated code (PALCARENI_COD
-          cluster)'
+        description: 'Flag indicating palliative care no longer indicated code (PALCARENI_COD cluster)'
 
       - name: is_diagnosis_code
         description: 'Flag indicating palliative care diagnosis code'
@@ -46,4 +44,5 @@ models:
       - dbt_utils.at_least_one:
           column_name: observation_id
       - cluster_ids_exist:
-          cluster_ids: PALCARENI_COD, PALCARE_COD
+          arguments:
+            cluster_ids: PALCARENI_COD, PALCARE_COD

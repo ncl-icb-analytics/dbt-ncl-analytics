@@ -1,25 +1,24 @@
 models:
   - name: int_hba1c_all
-    description: 'HbA1c measurements for diabetes diagnosis, monitoring and management
-      with dual unit support.
+    description: 'HbA1c measurements for diabetes diagnosis, monitoring and management with dual unit support.
 
-      One row per HbA1c observation handling both IFCC (mmol/mol) and DCCT (%) measurement
-      types with clinical categorisation and QOF target achievement flags.'
+      One row per HbA1c observation handling both IFCC (mmol/mol) and DCCT (%) measurement types with clinical categorisation and QOF target achievement flags.'
     config:
       meta:
         owner:
           name: EddieDavison92
     tests:
       - cluster_ids_exist:
-          cluster_ids: DCCTHBA1C_COD, IFCCHBAM_COD
+          arguments:
+            cluster_ids: DCCTHBA1C_COD, IFCCHBAM_COD
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - id
-            - source_cluster_id
+          arguments:
+            combination_of_columns:
+              - id
+              - source_cluster_id
     columns:
       - name: id
-        description: Identifier for each HbA1c observation (may not be unique if
-          observation maps to multiple clusters)
+        description: Identifier for each HbA1c observation (may not be unique if observation maps to multiple clusters)
         tests:
           - not_null
       - name: person_id
@@ -31,11 +30,12 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['IFCC', 'DCCT', 'UNKNOWN']
+              arguments:
+                values: ['IFCC', 'DCCT', 'UNKNOWN']
       - name: is_valid_hba1c
-        description: Flag indicating if HbA1c value is within valid range for 
-          its measurement type
+        description: Flag indicating if HbA1c value is within valid range for its measurement type
         tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]

@@ -1,7 +1,6 @@
 models:
   - name: int_flu_asplenia
-    description: 'Flu vaccination eligibility for people with asplenia or dysfunction
-      of the spleen.
+    description: 'Flu vaccination eligibility for people with asplenia or dysfunction of the spleen.
 
       Key Features:
 
@@ -15,8 +14,7 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to asplenia or spleen
-      dysfunction requiring immunisation.'
+      Purpose: Identify people eligible for flu vaccination due to asplenia or spleen dysfunction requiring immunisation.'
     config:
       meta:
         indicator:
@@ -25,8 +23,7 @@ models:
           category: "FLU"
           clinical_domain: "Immunology"
           name_short: "Flu Eligible Asplenia"
-          description_short: "People with asplenia or spleen dysfunction eligible
-            for flu vaccination"
+          description_short: "People with asplenia or spleen dysfunction eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for people with asplenia (absent spleen) or
             dysfunction
@@ -56,12 +53,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
@@ -76,8 +74,7 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest asplenia/spleen dysfunction
-          diagnosis)'
+        description: 'Date of qualifying diagnosis (earliest asplenia/spleen dysfunction diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

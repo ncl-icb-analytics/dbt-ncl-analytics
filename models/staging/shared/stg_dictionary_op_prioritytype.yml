@@ -1,7 +1,6 @@
 models:
   - name: stg_dictionary_op_prioritytype
-    description: Outpatient priority type codes reference (routine, urgent, 
-      etc.)
+    description: Outpatient priority type codes reference (routine, urgent, etc.)
     config:
       meta:
         owner:
@@ -18,4 +17,5 @@ models:
           - not_null
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

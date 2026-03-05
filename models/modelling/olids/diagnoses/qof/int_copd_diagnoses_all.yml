@@ -2,8 +2,7 @@ models:
   - name: int_copd_diagnoses_all
     description: 'COPD diagnosis and resolution observations for QOF register management.
 
-      One row per observation using COPD_COD (diagnosis) and COPDRES_COD (resolved)
-      clusters. Post-April 2023 requires spirometry confirmation (FEV1/FVC <0.7).'
+      One row per observation using COPD_COD (diagnosis) and COPDRES_COD (resolved) clusters. Post-April 2023 requires spirometry confirmation (FEV1/FVC <0.7).'
     config:
       meta:
         owner:
@@ -43,4 +42,5 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: COPDRES_COD, COPD_COD
+          arguments:
+            cluster_ids: COPDRES_COD, COPD_COD

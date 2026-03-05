@@ -1,18 +1,19 @@
 models:
   - name: stg_reference_emis_qof_v50_register_counts
-    description: QOF v50 register counts from EMIS as of 2025-11-04. Filtered to
-      disease registers only and mapped to OLIDS register names for comparison.
+    description: QOF v50 register counts from EMIS as of 2025-11-04. Filtered to disease registers only and mapped to OLIDS register names for comparison.
     config:
       meta:
         owner:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - register_name
-            - practice_code
+          arguments:
+            combination_of_columns:
+              - register_name
+              - practice_code
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: reference_date
         description: Reference date for the QOF extract (2025-11-04)
@@ -31,8 +32,7 @@ models:
       - name: practice_name
         description: GP practice name
       - name: register_name
-        description: Standardized register name mapped to match OLIDS pit_ 
-          register definitions
+        description: Standardized register name mapped to match OLIDS pit_ register definitions
         tests:
           - not_null
       - name: population_count

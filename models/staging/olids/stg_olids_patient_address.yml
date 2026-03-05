@@ -1,27 +1,22 @@
 models:
   - name: stg_olids_patient_address
-    description: Patient address history linking patients to postcodes. 
-      Deduplicated by id - note that deleted records are not filtered as 
-      lds_is_deleted is not used in this table.
+    description: Patient address history linking patients to postcodes. Deduplicated by id - note that deleted records are not filtered as lds_is_deleted is not used in this table.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
       - name: id
-        description: Primary key - unique identifier for this patient address 
-          record
+        description: Primary key - unique identifier for this patient address record
         tests:
           - unique
           - not_null
       - name: patient_id
         description: Foreign key to patient.id
       - name: address_type_concept_id
-        description: Foreign key to concept.id - type of address (home, 
-          temporary, work, etc.)
+        description: Foreign key to concept.id - type of address (home, temporary, work, etc.)
       - name: postcode_hash
-        description: Foreign key to postcode_hash.postcode_hash - hashed 
-          postcode
+        description: Foreign key to postcode_hash.postcode_hash - hashed postcode
       - name: start_date
         description: Start date of the patient living at this address
       - name: end_date
@@ -37,11 +32,10 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

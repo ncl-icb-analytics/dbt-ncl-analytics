@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_lookup_ncl_ncl_gp_practice_neighbourhood
-    description: Mapping between GP practice codes and NCL neighbourhood codes 
-      from reference lookup
+    description: Mapping between GP practice codes and NCL neighbourhood codes from reference lookup
     config:
       meta:
         owner:
@@ -20,4 +19,5 @@ models:
         description: NCL neighbourhood name
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

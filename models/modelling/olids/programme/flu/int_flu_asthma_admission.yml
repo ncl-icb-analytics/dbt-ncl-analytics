@@ -1,7 +1,6 @@
 models:
   - name: int_flu_asthma_admission
-    description: 'Flu vaccination eligibility for people with emergency asthma admission
-      history.
+    description: 'Flu vaccination eligibility for people with emergency asthma admission history.
 
       Key Features:
 
@@ -15,8 +14,7 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to severe asthma history
-      requiring emergency care.'
+      Purpose: Identify people eligible for flu vaccination due to severe asthma history requiring emergency care.'
     config:
       meta:
         indicator:
@@ -25,8 +23,7 @@ models:
           category: "FLU"
           clinical_domain: "Respiratory"
           name_short: "Flu Eligible Asthma Admission"
-          description_short: "People with asthma admission history eligible for flu
-            vaccination"
+          description_short: "People with asthma admission history eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for people with emergency asthma admission
             history.
@@ -57,12 +54,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'

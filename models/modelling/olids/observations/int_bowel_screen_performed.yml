@@ -1,16 +1,11 @@
 models:
   - name: int_bowel_screen_performed
-    description: 'SMI Longer Lives Enhanced Health Check Bowel Cancer Screen PERFORMED
-      Latest value per Mental Health /SMI observation using COLCANSCREV_COD - SUPERSEDED
-      BY int_bowel_screening_all'
+    description: 'SMI Longer Lives Enhanced Health Check Bowel Cancer Screen PERFORMED Latest value per Mental Health /SMI observation using COLCANSCREV_COD - SUPERSEDED BY int_bowel_screening_all'
     config:
       meta:
         owner:
           name: KateHomer55
     tests:
       - cluster_ids_exist:
-          cluster_ids: COLCANSCREV_COD
-
-
-
-
+          arguments:
+            cluster_ids: COLCANSCREV_COD

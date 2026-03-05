@@ -1,14 +1,14 @@
 models:
   - name: int_asthma_medications_12m
-    description: 'Asthma medication orders from last 12 months using ASTTRT_COD cluster
-      for QOF monitoring.'
+    description: 'Asthma medication orders from last 12 months using ASTTRT_COD cluster for QOF monitoring.'
     config:
       meta:
         owner:
           name: EddieDavison92
     tests:
       - cluster_ids_exist:
-          cluster_ids: ASTTRT_COD
+          arguments:
+            cluster_ids: ASTTRT_COD
     columns:
       - name: person_id
         description: 'Person identifier'

@@ -17,7 +17,7 @@ sources:
     - name: DEC_MARITAL_STATUS
       data_type: TEXT
     - name: DEC_AGEC
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REG_DATE_OF_DEATH
       data_type: TIMESTAMP_NTZ
     - name: REG_DATE
@@ -179,9 +179,9 @@ sources:
     - name: DMIC_RECORD_VALID_IS_LATEST
       data_type: BOOLEAN
     - name: DMIC_IMPORT_LOG_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DMIC_ROW_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmIcbCommissioner
       data_type: TEXT
     - name: dmSubIcbCommissioner

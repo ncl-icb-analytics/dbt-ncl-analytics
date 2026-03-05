@@ -1,7 +1,6 @@
 models:
   - name: int_flu_severe_obesity
-    description: 'Flu vaccination eligibility for people with severe obesity using
-      BMI logic and age restrictions.
+    description: 'Flu vaccination eligibility for people with severe obesity using BMI logic and age restrictions.
 
       Key Features:
 
@@ -15,8 +14,7 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people with severe obesity eligible for flu vaccination due
-      to increased infection risk.'
+      Purpose: Identify people with severe obesity eligible for flu vaccination due to increased infection risk.'
     config:
       meta:
         indicator:
@@ -65,12 +63,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'

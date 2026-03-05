@@ -1,8 +1,6 @@
-
 models:
   - name: int_opt_out_type_1_all
-    description: Type 1 opt-out observations for dissent from secondary use of 
-      primary care data. One row per opt-out event per person.
+    description: Type 1 opt-out observations for dissent from secondary use of primary care data. One row per opt-out event per person.
 
     config:
       meta:
@@ -10,8 +8,8 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:

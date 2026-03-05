@@ -9,24 +9,24 @@ sources:
     identifier: '"DimListSizeAge"'
     columns:
     - name: SK_ListSizeAgeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ListSizeAge
       data_type: TEXT
     - name: AgeStarts
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeEnds
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DimListSizeAgeBand
     identifier: '"DimListSizeAgeBand"'
     columns:
     - name: SK_ListSizeAgeBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ListSizeAgeBand
       data_type: TEXT
     - name: AgeBandStarts
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeBandEnds
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsStandardAgeBand
       data_type: BOOLEAN
     - name: IsExtendedAgeBand
@@ -35,7 +35,7 @@ sources:
     identifier: '"DimListSizeSource"'
     columns:
     - name: SK_ListSizeSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ListSizeSource
       data_type: TEXT
     - name: Description
@@ -44,59 +44,59 @@ sources:
     identifier: '"FactListSize"'
     columns:
     - name: SK_ListSizeSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Period
       data_type: TIMESTAMP_NTZ
     - name: Value
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
   - name: FactListSizeAge
     identifier: '"FactListSizeAge"'
     columns:
     - name: SK_ListSizeSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ListSizeAgeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_GenderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Period
       data_type: TIMESTAMP_NTZ
     - name: Value
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: FactListSizeAgeBand
     identifier: '"FactListSizeAgeBand"'
     columns:
     - name: SK_ListSizeSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ListSizeAgeBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_GenderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Period
       data_type: TIMESTAMP_NTZ
     - name: Value
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: FactListSizeLocation
     identifier: '"FactListSizeLocation"'
     columns:
     - name: SK_ListSizeSourceID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ListSizeAgeBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_GenderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Easting
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Northing
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Period
       data_type: TIMESTAMP_NTZ
     - name: Value
-      data_type: NUMBER
+      data_type: NUMBER(38,0)

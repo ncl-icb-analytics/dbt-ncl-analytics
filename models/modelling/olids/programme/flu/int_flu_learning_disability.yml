@@ -1,12 +1,10 @@
 models:
   - name: int_flu_learning_disability
-    description: 'Flu vaccination eligibility for people with learning disabilities
-      using severity classification.
+    description: 'Flu vaccination eligibility for people with learning disabilities using severity classification.
 
       Key Features:
 
-      • Two pathway logic: severe learning disability (SEV_LRNDIS_COD) or general
-      learning disability (LEARNDIS_COD)
+      • Two pathway logic: severe learning disability (SEV_LRNDIS_COD) or general learning disability (LEARNDIS_COD)
 
       • Earliest occurrence in medical history qualifies
 
@@ -16,8 +14,7 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to learning disability
-      conditions.'
+      Purpose: Identify people eligible for flu vaccination due to learning disability conditions.'
     config:
       meta:
         indicator:
@@ -60,12 +57,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'

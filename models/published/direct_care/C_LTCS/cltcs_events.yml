@@ -1,19 +1,19 @@
-
 models:
   - name: cltcs_events
-    description: "Event-level data for C-LTCS cohort over 2 years. SUS (AE, APC, OP) and GP
-      appointments in a rolling window. One row per event."
+    description: "Event-level data for C-LTCS cohort over 2 years. SUS (AE, APC, OP) and GP appointments in a rolling window. One row per event."
     config:
       meta:
         owner:
           name: Emily Baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - event_type
-            - event_id
+          arguments:
+            combination_of_columns:
+              - event_type
+              - event_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: patient_id
         data_type: number

@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_lookup_ncl_gp_practice
-    description: GP practice reference data from lookup with geography and list 
-      size source information
+    description: GP practice reference data from lookup with geography and list size source information
     config:
       meta:
         owner:
@@ -33,4 +32,5 @@ models:
         description: NCL neighbourhood name
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

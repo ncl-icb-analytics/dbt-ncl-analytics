@@ -1,4 +1,3 @@
-
 models:
   - name: metadata_refresh_dates
     description: |
@@ -16,8 +15,8 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: metric_type
         description: Type of metric (global_data_refresh or table_refresh)
@@ -32,9 +31,7 @@ models:
         description: Table name (NULL for global metrics)
 
       - name: refresh_date
-        description: Date when data was last refreshed (date portion of 
-          last_altered_timestamp for tables)
+        description: Date when data was last refreshed (date portion of last_altered_timestamp for tables)
 
       - name: last_altered_timestamp
-        description: Timestamp when table was last modified (from Snowflake 
-          metadata, NULL for global metrics)
+        description: Timestamp when table was last modified (from Snowflake metadata, NULL for global metrics)

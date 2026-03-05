@@ -1,7 +1,6 @@
 models:
   - name: int_smi_longlives_alcohol_intervention
-    description: 'Determine alcohol education or referrals for Longer Lives campaign
-      using EL_CACHE Ref SMI_LONGER_LIVES_ALCOHOL_EDUCATION cluster and PCD Refeset'
+    description: 'Determine alcohol education or referrals for Longer Lives campaign using EL_CACHE Ref SMI_LONGER_LIVES_ALCOHOL_EDUCATION cluster and PCD Refeset'
 
     config:
       meta:
@@ -9,10 +8,9 @@ models:
           name: KateHomer55
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:
           - not_null
-

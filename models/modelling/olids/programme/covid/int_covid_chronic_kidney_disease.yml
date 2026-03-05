@@ -14,12 +14,11 @@ models:
 
       • Generates data for current and previous COVID campaigns automatically
 
-      Purpose: Identify people eligible for COVID vaccination due to chronic kidney
-      disease requiring immunisation.'
+      Purpose: Identify people eligible for COVID vaccination due to chronic kidney disease requiring immunisation.'
     tests:
       - cluster_ids_exist:
-          cluster_ids: CKD_COV_COD,CKD15_COD,CKD35_COD
-
+          arguments:
+            cluster_ids: CKD_COV_COD,CKD15_COD,CKD35_COD
     config:
       meta:
         indicator:
@@ -28,8 +27,7 @@ models:
           category: "COVID"
           clinical_domain: "Renal"
           name_short: "COVID Eligible Kidney Disease"
-          description_short: "People with chronic kidney disease eligible for COVID
-            vaccination"
+          description_short: "People with chronic kidney disease eligible for COVID vaccination"
           description_long: >
             COVID vaccination eligibility for people with chronic kidney disease using
             CKD_COV_COD
@@ -75,8 +73,7 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest chronic kidney disease
-          diagnosis)'
+        description: 'Date of qualifying diagnosis (earliest chronic kidney disease diagnosis)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

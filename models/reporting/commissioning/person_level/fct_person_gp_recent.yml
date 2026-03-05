@@ -9,7 +9,7 @@ models:
     columns:
       - name: sk_patient_id
         data_type: number
-        description: "Unique identifier for the patient (pseudonymised NHS number)"	
+        description: "Unique identifier for the patient (pseudonymised NHS number)"  
         tests:
           - not_null
           - unique

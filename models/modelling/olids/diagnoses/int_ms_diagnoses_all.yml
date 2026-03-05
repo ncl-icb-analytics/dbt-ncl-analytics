@@ -1,7 +1,6 @@
 models:
   - name: int_ms_diagnoses_all
-    description: 'Multiple sclerosis diagnosis observations for neurological condition
-      register management.
+    description: 'Multiple sclerosis diagnosis observations for neurological condition register management.
 
       Key Features:
 
@@ -13,8 +12,7 @@ models:
 
       • No resolution codes as MS is a chronic condition
 
-      Purpose: Provide observation-level data for multiple sclerosis tracking and
-      disease-modifying therapy monitoring.'
+      Purpose: Provide observation-level data for multiple sclerosis tracking and disease-modifying therapy monitoring.'
     config:
       meta:
         owner:
@@ -23,7 +21,8 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: MS_COD
+          arguments:
+            cluster_ids: MS_COD
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -44,4 +43,3 @@ models:
         description: 'Boolean flag indicating diagnosis code (always TRUE for MS observations)'
       - name: ms_observation_type
         description: 'Type of MS observation (always "Multiple Sclerosis Diagnosis")'
-

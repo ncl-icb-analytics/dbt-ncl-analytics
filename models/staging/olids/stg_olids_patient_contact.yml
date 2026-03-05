@@ -1,7 +1,6 @@
 models:
   - name: stg_olids_patient_contact
-    description: Patient contact information including next of kin and emergency
-      contacts. Deduplicated by id and filtered to exclude deleted records.
+    description: Patient contact information including next of kin and emergency contacts. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
@@ -19,8 +18,7 @@ models:
       - name: description
         description: Description of the contact relationship
       - name: contact_type_concept_id
-        description: Foreign key to concept.id - type of contact (next of kin, 
-          emergency contact, etc.)
+        description: Foreign key to concept.id - type of contact (next of kin, emergency contact, etc.)
       - name: start_date
         description: Start date of this contact relationship
       - name: end_date
@@ -34,14 +32,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

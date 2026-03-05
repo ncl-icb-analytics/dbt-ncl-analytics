@@ -63,6 +63,71 @@ def load_source_mappings():
 
     return db_schema_to_source
 
+def normalize_identifier(value):
+    """Normalize quoted/unquoted identifiers for metadata matching."""
+    if value is None:
+        return ""
+    value = str(value).strip()
+    if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
+        return value[1:-1]
+    return value
+
+def sync_manual_source_types(df):
+    """Sync data_type values in manual sources.yml from extracted metadata."""
+    manual_sources_file = os.path.join(OUTPUT_DIR, 'sources.yml')
+    if not os.path.exists(manual_sources_file):
+        return 0, 0
+
+    with open(manual_sources_file, 'r') as f:
+        sources_data = yaml.safe_load(f) or {}
+
+    sources = sources_data.get('sources', [])
+    if not sources:
+        return 0, 0
+
+    # Build metadata lookup keyed by exact DB/SCHEMA/TABLE/COLUMN identifiers.
+    metadata_lookup = {
+        (
+            str(row.DATABASE_NAME),
+            str(row.SCHEMA_NAME),
+            str(row.TABLE_NAME),
+            str(row.COLUMN_NAME),
+        ): str(row.DATA_TYPE)
+        for row in df.itertuples(index=False)
+    }
+
+    updates = 0
+    checked = 0
+
+    for source in sources:
+        source_db = normalize_identifier(source.get('database', ''))
+        source_schema = normalize_identifier(source.get('schema', ''))
+        if not source_db or not source_schema:
+            continue
+
+        for table in source.get('tables', []):
+            table_name = normalize_identifier(table.get('identifier') or table.get('name'))
+            if not table_name:
+                continue
+
+            for column in table.get('columns', []):
+                column_name = str(column.get('name', '')).strip()
+                if not column_name:
+                    continue
+
+                checked += 1
+                key = (source_db, source_schema, table_name, column_name)
+                metadata_type = metadata_lookup.get(key)
+                if metadata_type and column.get('data_type') != metadata_type:
+                    column['data_type'] = metadata_type
+                    updates += 1
+
+    if updates > 0:
+        with open(manual_sources_file, 'w') as f:
+            yaml.dump(sources_data, f, sort_keys=False, default_flow_style=False)
+
+    return updates, checked
+
 def find_source_mapping(database, schema, mappings):
     """Find the appropriate source mapping for a database/schema combination"""
     database = database.upper()
@@ -117,6 +182,12 @@ def main():
         df = pd.read_csv(INPUT_FILE, sep='\t')
         df.columns = df.columns.str.strip()
         print("Columns found in file (tab):", df.columns.tolist())
+
+    # Keep manually curated sources in sync with real metadata types.
+    # This avoids stale type drift warnings while preserving manual source ownership.
+    updated_columns, checked_columns = sync_manual_source_types(df)
+    if updated_columns > 0:
+        print(f"Updated {updated_columns} manual source column type(s) in sources.yml (checked {checked_columns}).")
 
     # Group by database and schema to create sources
     sources_by_file = {}  # Track sources by output filename

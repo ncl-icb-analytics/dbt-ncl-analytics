@@ -1,20 +1,21 @@
 models:
   - name: stg_reference_adult_imms_codes
-    description: Adult immunisation SNOMED codes mapped to vaccine types and 
-      doses
+    description: Adult immunisation SNOMED codes mapped to vaccine types and doses
     config:
       meta:
         owner:
           name: KateHomer55
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - vaccine
-            - dose
-            - snomedconceptid
-            - sourceclusterid
+          arguments:
+            combination_of_columns:
+              - vaccine
+              - dose
+              - snomedconceptid
+              - sourceclusterid
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: vaccine
         description: Vaccine type (Pneumoccocal, RSV, Shingles)
@@ -32,4 +33,3 @@ models:
         description: Description of the SNOMED code
       - name: source
         description: Source of the code mapping
-

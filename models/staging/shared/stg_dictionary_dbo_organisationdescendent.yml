@@ -1,19 +1,20 @@
 models:
   - name: stg_dictionary_dbo_organisationdescendent
-    description: Organisation hierarchy showing parent-child relationships 
-      between organisations
+    description: Organisation hierarchy showing parent-child relationships between organisations
     config:
       meta:
         owner:
           name: Emily Baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - sk_organisation_id_root
-            - sk_organisation_id_child
-            - path
+          arguments:
+            combination_of_columns:
+              - sk_organisation_id_root
+              - sk_organisation_id_child
+              - path
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: sk_organisation_id_root
         description: Root organisation in hierarchy

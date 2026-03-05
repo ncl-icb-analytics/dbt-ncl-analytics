@@ -1,8 +1,6 @@
 models:
   - name: dim_ltc_lcs_cf_cvd_63
-    description: 'Age 40 to under 84 with QRISK2 ≥10%, on statins (12m), non-HDL >2.5 mmol/L.
-      Excludes statin allergies/adverse reactions, not indicated, and high CVD
-      risk review declines (36m).
+    description: 'Age 40 to under 84 with QRISK2 ≥10%, on statins (12m), non-HDL >2.5 mmol/L. Excludes statin allergies/adverse reactions, not indicated, and high CVD risk review declines (36m).
 
       One row per person on statins with elevated non-HDL cholesterol.'
     config:
@@ -65,8 +63,9 @@ models:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
-          cluster_ids: QRISK2_10YEAR, NON_HDL_CHOLESTEROL, STAT_COD,
-            STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED
+          arguments:
+            cluster_ids: QRISK2_10YEAR, NON_HDL_CHOLESTEROL, STAT_COD, STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED
       - valuesets_have_codes:
-          valuesets:
-            - qrisk2_10_on_a_statin_and_a_non_hdl_25_vs1
+          arguments:
+            valuesets:
+              - qrisk2_10_on_a_statin_and_a_non_hdl_25_vs1

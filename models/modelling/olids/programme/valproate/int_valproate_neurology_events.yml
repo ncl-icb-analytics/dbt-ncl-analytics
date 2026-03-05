@@ -1,10 +1,8 @@
 models:
   - name: int_valproate_neurology_events
-    description: 'Neurology-related events from observations using valproate programme
-      codes.
+    description: 'Neurology-related events from observations using valproate programme codes.
 
-      One row per neurology observation with person, date, concept details filtered
-      to NEUROLOGY code category only.'
+      One row per neurology observation with person, date, concept details filtered to NEUROLOGY code category only.'
 
     config:
       meta:
@@ -12,12 +10,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - person_id
-            - neurology_ID
+          arguments:
+            combination_of_columns:
+              - person_id
+              - neurology_ID
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:

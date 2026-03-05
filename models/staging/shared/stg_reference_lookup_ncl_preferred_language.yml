@@ -1,7 +1,6 @@
 models:
   - name: stg_reference_lookup_ncl_preferred_language
-    description: Preferred language reference data from lookup with ISO origin 
-      codes
+    description: Preferred language reference data from lookup with ISO origin codes
     config:
       meta:
         owner:
@@ -18,4 +17,5 @@ models:
         description: ISO origin code
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

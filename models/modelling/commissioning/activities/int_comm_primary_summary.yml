@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: int_comm_primary_summary
-    description: > 
+    description: >
       Standardized summary of primary clinical information from commissioning encounters.
       Combines primary diagnoses, procedures, treatments, and investigations from A&E attendances (ECDS),
       admitted patient care spells, and outpatient appointments into a unified structure.
@@ -65,4 +65,5 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              values: ['SUS_ECDS', 'SUS_APC', 'SUS_OP']
+              arguments:
+                values: ['SUS_ECDS', 'SUS_APC', 'SUS_OP']

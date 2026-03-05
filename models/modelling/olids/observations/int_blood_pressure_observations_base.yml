@@ -3,11 +3,11 @@ models:
     description: |
       Base blood pressure observations with row classification flags.
       Incremental model using lds_start_date_time to handle late-arriving data.
-      
+
       Shared foundation for:
       - int_blood_pressure_all (valid, paired BP events)
       - dq_blood_pressure_issues (data quality issues)
-      
+
       Features:
       - Incremental: only processes new observations since last run
       - Future date handling: uses date_recorded as fallback if clinical_effective_date > today
@@ -19,9 +19,10 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - id
-            - source_cluster_id
+          arguments:
+            combination_of_columns:
+              - id
+              - source_cluster_id
     columns:
       - name: id
         description: Observation identifier (unique per cluster)

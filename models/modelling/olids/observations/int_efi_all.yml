@@ -21,7 +21,8 @@ models:
           name: EddieDavison92
     tests:
       - cluster_ids_exist:
-          cluster_ids: EFI_SCORE, EFI2_SCORE
+          arguments:
+            cluster_ids: EFI_SCORE, EFI2_SCORE
     columns:
       - name: person_id
         description: Person identifier

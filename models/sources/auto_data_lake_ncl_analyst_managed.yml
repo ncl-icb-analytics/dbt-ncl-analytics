@@ -19,9 +19,9 @@ sources:
     - name: THRESHOLD_TYPE
       data_type: TEXT
     - name: SYSTOLIC_THRESHOLD
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DIASTOLIC_THRESHOLD
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OPERATOR
       data_type: TEXT
     - name: NOTES
@@ -46,11 +46,11 @@ sources:
     - name: CANCER_TYPE
       data_type: TEXT
     - name: TOTAL_TREATED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WITHIN_STANDARD
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS
     identifier: '"CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS"'
     columns:
@@ -67,19 +67,19 @@ sources:
     - name: END_TIME
       data_type: TIME
     - name: MONDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TUESDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WEDNESDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: THURSDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FRIDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SATURDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SUNDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CANCER__RADIOTHERAPY_MODELLING_EXCEPTIONS
     identifier: '"CANCER__RADIOTHERAPY_MODELLING_EXCEPTIONS"'
     columns:
@@ -100,19 +100,19 @@ sources:
     - name: NOTES
       data_type: TEXT
     - name: MONDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TUESDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WEDNESDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: THURSDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FRIDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SATURDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SUNDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CANCER__RCRD_NATIONAL
     identifier: '"CANCER__RCRD_NATIONAL"'
     columns:
@@ -121,7 +121,7 @@ sources:
     - name: GEOGRAPHY
       data_type: TEXT
     - name: YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MONTH
       data_type: TEXT
     - name: DATE
@@ -141,22 +141,22 @@ sources:
     - name: Completeness treatment follow-up
       data_type: TEXT
     - name: NUMERATOR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DENOMINATOR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STATISTIC
-      data_type: NUMBER
+      data_type: NUMBER(38,1)
     - name: Numerator (12m)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Denominator (12m)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Statistic (12m)
-      data_type: NUMBER
+      data_type: NUMBER(38,1)
   - name: CANCER__TRAJECTORY_SUBMISSIONS
     identifier: '"CANCER__TRAJECTORY_SUBMISSIONS"'
     columns:
     - name: COLLECTIONID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SELECTEDICB
       data_type: TEXT
     - name: ASSOCIATEDORG
@@ -164,7 +164,7 @@ sources:
     - name: SECONDARYASSOCORG
       data_type: TEXT
     - name: MEASUREID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MEASURETYPE
       data_type: TEXT
     - name: MEASURESOURCE
@@ -172,13 +172,13 @@ sources:
     - name: MEASURENAME
       data_type: TEXT
     - name: DIMENSIONID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DIMENSIONTYPE
       data_type: TEXT
     - name: DIMENSIONNAME
       data_type: TEXT
     - name: DATA
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: COMMENTS
       data_type: TEXT
   - name: COMMUNITY_P2_OCCUPANCY
@@ -191,15 +191,15 @@ sources:
     - name: ADMISSIONS_IN_MONTH
       data_type: TEXT
     - name: DISCHARGES_IN_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AVERAGE_LOS_OF_PATIENTS_DISCHARGED
       data_type: TEXT
     - name: BED_DAYS_FOR_DISCHARGED_PATIENTS
       data_type: TEXT
     - name: BED_DAYS_AVAILABLE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BED_DAYS_OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OCCUPANCY_RATE
       data_type: TEXT
     - name: MONTH
@@ -218,13 +218,13 @@ sources:
     - name: TEAM
       data_type: TEXT
     - name: NO_OF_REFERRALS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ACCEPTED_REFERRALS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REFERRAL_SOURCE
       data_type: TEXT
     - name: ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ACTIVITY_TYPE
       data_type: TEXT
     - name: POINT_OF_DELIVERY
@@ -236,7 +236,7 @@ sources:
     - name: YEAR
       data_type: TEXT
     - name: WEEK_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CCG
       data_type: TEXT
   - name: COMMUNITY_SERVICE_MAPPING
@@ -286,7 +286,7 @@ sources:
     - name: TOTAL
       data_type: FLOAT
     - name: AVERAGE_WEEKS_WAITING
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: SERVICE_LINE_GROUP
       data_type: TEXT
     - name: SERVICE_LINE_GROUP_2
@@ -327,11 +327,11 @@ sources:
     - name: SERVICE_TYPE
       data_type: TEXT
     - name: ROTA_POSITION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WAIT_TIME_SEC
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TALK_TIME_SEC
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OUTCOME
       data_type: TEXT
   - name: CONSULTANT_CONNECT_CALLS_MESSAGES
@@ -354,7 +354,7 @@ sources:
     - name: SPECIALISM
       data_type: TEXT
     - name: NO_OF_PHOTOS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONSULTANT
       data_type: TEXT
     - name: TRUST
@@ -362,15 +362,15 @@ sources:
     - name: SERVICE_TYPE
       data_type: TEXT
     - name: ROTA_POSITION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WAIT_TIME_SEC
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TALK_TIME_SEC
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RESPONSE_TIME
       data_type: TEXT
     - name: RESPONSE_TIME_SEC
-      data_type: NUMBER
+      data_type: NUMBER(38,6)
     - name: OUTCOME
       data_type: TEXT
     - name: DATE_CLOSED
@@ -397,7 +397,7 @@ sources:
     - name: ICS
       data_type: TEXT
     - name: NO_OF_PHOTOS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SHARED_WITH
       data_type: TEXT
     - name: CONSULTANT
@@ -407,7 +407,7 @@ sources:
     - name: RESPONSE_TIME
       data_type: TEXT
     - name: RESPONSE_TIME_SEC
-      data_type: NUMBER
+      data_type: NUMBER(38,6)
     - name: OUTCOME
       data_type: TEXT
     - name: DATE_CLOSED
@@ -458,7 +458,7 @@ sources:
     - name: LATEST_RATING
       data_type: TEXT
     - name: VALUE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PUBLICATION_DATE
       data_type: TEXT
     - name: REPORT_TYPE
@@ -492,133 +492,133 @@ sources:
     - name: Metric
       data_type: TEXT
     - name: September 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2025
       data_type: FLOAT
     - name: March 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2022
       data_type: FLOAT
     - name: November 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2022
       data_type: FLOAT
     - name: July 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2022
       data_type: FLOAT
     - name: March 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2020
       data_type: FLOAT
     - name: November 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2020
       data_type: FLOAT
     - name: June 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2020
       data_type: FLOAT
     - name: April 2020
@@ -626,21 +626,21 @@ sources:
     - name: March 2020
       data_type: FLOAT
     - name: February 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2019
       data_type: FLOAT
     - name: November 2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2019
       data_type: FLOAT
     - name: August 2019
       data_type: FLOAT
     - name: July 2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2019
       data_type: FLOAT
     - name: May 2019
@@ -822,21 +822,21 @@ sources:
     - name: Metric
       data_type: TEXT
     - name: August 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2024
       data_type: FLOAT
     - name: May 2024
@@ -848,17 +848,17 @@ sources:
     - name: August 2024
       data_type: FLOAT
     - name: September 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2024
       data_type: FLOAT
     - name: December 2024
       data_type: FLOAT
     - name: January 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2025
       data_type: FLOAT
     - name: April 2025
@@ -870,9 +870,9 @@ sources:
     - name: July 2025
       data_type: FLOAT
     - name: August 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CYPMH_Provider
     identifier: '"CYPMH_Provider"'
     columns:
@@ -883,155 +883,155 @@ sources:
     - name: Metric
       data_type: TEXT
     - name: September 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2025
       data_type: FLOAT
     - name: March 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2025
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2023
       data_type: FLOAT
     - name: November 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2022
       data_type: FLOAT
     - name: November 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2021
       data_type: FLOAT
     - name: July 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: March 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2021
       data_type: FLOAT
     - name: December 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: November 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: July 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: May 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: April 2020
       data_type: FLOAT
     - name: March 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: February 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: January 2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: December 2019
       data_type: FLOAT
     - name: November 2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: October 2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: September 2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: August 2019
       data_type: FLOAT
     - name: July 2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: June 2019
       data_type: FLOAT
     - name: May 2019
@@ -1064,47 +1064,47 @@ sources:
     - name: Diagnostic Tests
       data_type: TEXT
     - name: 00 < 01 Week
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 01 < 02 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 02 < 03 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 03 < 04 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 04 < 05 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 05 < 06 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 06 < 07 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 07 < 08 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 08 < 09 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 09 < 10 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 10 < 11 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 11 < 12 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 12 < 13 Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 13+ Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Total WL
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Waiting List Activity
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Planned Activity
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Unscheduled Activity
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Total Activity
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: <6Weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 6+WW
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DIAGNOSTICS_WEEKLY_DM01
     identifier: '"DIAGNOSTICS_WEEKLY_DM01"'
     columns:
@@ -1119,45 +1119,45 @@ sources:
     - name: DIAGNOSTIC_MODALITY
       data_type: TEXT
     - name: Waiting list_Activity
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNSCHEDULED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DNA
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PATIENT_CANCELLED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Patient_Declined/Refused
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 0 <01 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 01 <02 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 02 <03 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 03 <04 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 04 <05 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 05 <06 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 06 <07 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 07 <08 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 08 <09 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 09 <10 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 10 <11 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 11 <12 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 12 <13 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 13+ weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DIAGNOSTICS_WEEKLY_DM01_HISTORIC
     identifier: '"DIAGNOSTICS_WEEKLY_DM01_HISTORIC"'
     columns:
@@ -1170,43 +1170,43 @@ sources:
     - name: WEEKNUMBER
       data_type: TEXT
     - name: Diagnostic waiting list-With a TCI
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Diagnostic waiting list-Without a TCI
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Diagnostic waiting list-Total
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Waiting list
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PLANNED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNSCHEDULED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DM01-Total
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DNA
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Patient Cancelled
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Patient Declined/Refused
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Total DNA
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Cancer 62day pathway - Total on waiting list
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Cancer 62 day pathway - Activity in the week
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Wait List-0<01 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Wait List-01<02 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Wait List-02<03 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Wait List-03<04 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Wait List-04<05 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Wait List-05<06 weeks
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DIAGNOSTIC_MSK_FLAG
     identifier: '"DIAGNOSTIC_MSK_FLAG"'
     columns:
@@ -1317,7 +1317,7 @@ sources:
     - name: SOURCE_INSTRUCTION
       data_type: TEXT
     - name: RULE_PRIORITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: EFI2_SNOMED
     identifier: '"EFI2_SNOMED"'
     columns:
@@ -1351,17 +1351,17 @@ sources:
     - name: CDB
       data_type: TEXT
     - name: POPULATION_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PARENT_POPULATION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PERCENTAGE
       data_type: TEXT
     - name: MALES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FEMALES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EXCLUDED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STATUS
       data_type: TEXT
   - name: ENT_LEFT_SHIT_HRG_CODES_20260127
@@ -1373,7 +1373,7 @@ sources:
     identifier: '"FA_MONTHLY_IAP_2526_UCLH_211125"'
     columns:
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
       data_type: TEXT
     - name: DATE_AND_TIME_DATA_SET_CREATED
@@ -1391,13 +1391,13 @@ sources:
     - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
       data_type: TEXT
     - name: ACTIVITY_TREATMENT_FUNCTION_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LOCAL_SUB-SPECIALTY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WARD_CODE
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SERVICE_CODE
       data_type: TEXT
     - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
@@ -1429,9 +1429,9 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: BOOLEAN
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,17)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,17)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
       data_type: TEXT
   - name: FA__MONTHLY_FA_ACM_VERSIONS_V3
@@ -1452,7 +1452,7 @@ sources:
     - name: TARIFF CODE
       data_type: TEXT
     - name: CONTRACT MONITORING ACTUAL MARKET FORCES FACTOR
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: ACTIVITY TREATMENT FUNCTION CODE
       data_type: TEXT
     - name: MAIN SPECIALTY CODE
@@ -1462,9 +1462,9 @@ sources:
     - name: FinMonth
       data_type: TEXT
     - name: DV_FINANCIALMONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DV_FINANCIALYEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIALYEAR
       data_type: TEXT
     - name: ORGANISATION IDENTIFIER (CODE OF COMMISSIONER)
@@ -1484,9 +1484,9 @@ sources:
     - name: SERVICE CODE
       data_type: TEXT
     - name: ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
   - name: FA__MONTHLY_FA_SLAM_1920_V3
     identifier: '"FA__MONTHLY_FA_SLAM_1920_V3"'
     columns:
@@ -1515,9 +1515,9 @@ sources:
     - name: FinMonth
       data_type: TEXT
     - name: DV_FINANCIALMONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DV_FINANCIALYEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FinancialYear
       data_type: TEXT
     - name: CommissionerID
@@ -1537,16 +1537,16 @@ sources:
     - name: SERVICE CODE
       data_type: TEXT
     - name: ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
   - name: FA__MONTHLY_IAP_2526_GOSH_NEW_NCL_ONLY
     identifier: '"FA__MONTHLY_IAP_2526_GOSH_NEW_NCL_ONLY"'
     columns:
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DATE_AND_TIME_DATA_SET_CREATED
       data_type: TIMESTAMP_NTZ
     - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
@@ -1568,7 +1568,7 @@ sources:
     - name: WARD_CODE
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SERVICE_CODE
       data_type: TEXT
     - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
@@ -1600,11 +1600,11 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: BOOLEAN
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,16)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,16)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
-      data_type: NUMBER
+      data_type: NUMBER(38,16)
     - name: NAME_OF_SUBMITTER
       data_type: TEXT
     - name: PHASING_CODE
@@ -1623,9 +1623,9 @@ sources:
     - name: METRIC
       data_type: TEXT
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
       data_type: TEXT
     - name: PROVIDER_NAME
@@ -1637,11 +1637,11 @@ sources:
     - name: GENERAL_MEDICAL_PRACTICE_CODE_(PATIENT_REGISTRATION)
       data_type: TEXT
     - name: ACTIVITY_TREATMENT_FUNCTION_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SPECIALTY_NAME
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POINT_OF_DELIVERY_CODE
       data_type: TEXT
     - name: LOCAL_POD_CODE
@@ -1653,17 +1653,17 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: TEXT
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: CONTRACT_MONITORING_ACTUAL_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONTRACT_MONITORING_ACTUAL_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONTRACT_MONITORING_ACTUAL_MARKET_FORCES_FACTOR
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
       data_type: TEXT
     - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
@@ -1692,11 +1692,11 @@ sources:
     identifier: '"FA__MONTHLY_IAP_2526_MEH"'
     columns:
     - name: COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DATE_AND_TIME_DATA_SET_CREATED
       data_type: DATE
     - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
@@ -1712,9 +1712,9 @@ sources:
     - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
       data_type: TEXT
     - name: ACTIVITY_TREATMENT_FUNCTION_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LOCAL_SUB-SPECIALTY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WARD_CODE
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
@@ -1750,9 +1750,9 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: BOOLEAN
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,15)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,15)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
       data_type: TEXT
     - name: NAME_OF_SUBMITTER
@@ -1761,9 +1761,9 @@ sources:
     identifier: '"FA__MONTHLY_IAP_2526_RFL_NTPS"'
     columns:
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DATE_AND_TIME_DATA_SET_CREATED
       data_type: TEXT
     - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
@@ -1785,7 +1785,7 @@ sources:
     - name: WARD_CODE
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SERVICE_CODE
       data_type: TEXT
     - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
@@ -1817,22 +1817,22 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: BOOLEAN
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: NAME_OF_SUBMITTER
       data_type: TEXT
   - name: FA__MONTHLY_IAP_2526_RNOH_NEW_NCL_ONLY_220725
     identifier: '"FA__MONTHLY_IAP_2526_RNOH_NEW_NCL_ONLY_220725"'
     columns:
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DATE_AND_TIME_DATA_SET_CREATED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
       data_type: TEXT
     - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
@@ -1846,13 +1846,13 @@ sources:
     - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
       data_type: TEXT
     - name: ACTIVITY_TREATMENT_FUNCTION_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LOCAL_SUB-SPECIALTY_CODE
       data_type: TEXT
     - name: WARD_CODE
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SERVICE_CODE
       data_type: TEXT
     - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
@@ -1884,18 +1884,18 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: BOOLEAN
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,23)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,23)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
-      data_type: NUMBER
+      data_type: NUMBER(38,6)
     - name: NAME_OF_SUBMITTER
       data_type: TEXT
   - name: FA__MONTHLY_IAP_2526_UCLH_160725
     identifier: '"FA__MONTHLY_IAP_2526_UCLH_160725"'
     columns:
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
       data_type: TEXT
     - name: DATE_AND_TIME_DATA_SET_CREATED
@@ -1913,13 +1913,13 @@ sources:
     - name: GENERAL_MEDICAL_PRACTICE_CODE_(PATIENT_REGISTRATION)
       data_type: TEXT
     - name: ACTIVITY_TREATMENT_FUNCTION_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LOCAL_SUB-SPECIALTY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WARD_CODE
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SERVICE_CODE
       data_type: TEXT
     - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
@@ -1951,9 +1951,9 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: TEXT
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,13)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,13)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
       data_type: TEXT
     - name: NAME_OF_SUBMITTER
@@ -1962,9 +1962,9 @@ sources:
     identifier: '"FA__MONTHLY_IAP_2526_WH"'
     columns:
     - name: FINANCIAL_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FINANCIAL_YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DATE_AND_TIME_DATA_SET_CREATED
       data_type: TIMESTAMP_NTZ
     - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
@@ -1986,7 +1986,7 @@ sources:
     - name: WARD_CODE
       data_type: TEXT
     - name: COMMISSIONED_SERVICE_CATEGORY_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SERVICE_CODE
       data_type: TEXT
     - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
@@ -2018,11 +2018,11 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: BOOLEAN
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
     - name: NAME_OF_SUBMITTER
       data_type: TEXT
   - name: FA__MONTHLY_NHSE_SERVICE_CODES_2526
@@ -2049,7 +2049,7 @@ sources:
     - name: EFFECTIVE_TO
       data_type: TEXT
     - name: IS_CURRENT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 2024/25_ICB_Delegation_Status
       data_type: TEXT
     - name: 2025/26_ICB_Delegation_Status
@@ -2064,7 +2064,7 @@ sources:
     identifier: '"FA__MONTHLY_REF_TRUST_VW"'
     columns:
     - name: SK_ORGANISATIONID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TRUST_CODE
       data_type: TEXT
     - name: TRUST_NAME
@@ -2102,7 +2102,7 @@ sources:
     - name: SEX
       data_type: TEXT
     - name: NUMBER_OF_PATIENTS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: GP_REG_PAT_PRAC_SING_AGE_REGIONS_APR25
     identifier: '"GP_REG_PAT_PRAC_SING_AGE_REGIONS_APR25"'
     columns:
@@ -2121,52 +2121,52 @@ sources:
     - name: AGE
       data_type: TEXT
     - name: NUMBER_OF_PATIENTS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: HIGHRISKPATIENTS2022
     identifier: '"HIGHRISKPATIENTS2022"'
     columns:
     - name: PATIENT_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,5)
     - name: LOCAL_AUTHORITY
       data_type: TEXT
     - name: NEL_IP_ADMISSIONS_LAST_12_MONTHS
-      data_type: NUMBER
+      data_type: NUMBER(18,0)
     - name: HEART_FAILURE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: COPD
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: DEMENTIA
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: END_STAGE_RENAL_FAILURE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: SEVERE_INTERSTITIAL_LUNG_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: PARKINSONS_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CHRONIC_KIDNEY_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: LIVER_FAILURE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: ALCOHOL_DEPENDENCE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: BRONCHIECTASIS
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: ATRIAL_FIBRILLATION
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CEREBROVASCULAR_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: PERIPHERAL_VASCULAR_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: PULMONARY_HEART_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CORONARY_HEART_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: OSTEOPOROSIS
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: RHEUMATOID_ARTHRITIS
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CHRONIC_LIVER_DISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
   - name: IA_CERTIFICATES_MONTHLY
     identifier: '"IA_CERTIFICATES_MONTHLY"'
     columns:
@@ -2273,14 +2273,14 @@ sources:
     - name: Month/Year
       data_type: TEXT
     - name: Data
-      data_type: NUMBER
+      data_type: NUMBER(38,1)
   - name: IMD2019
     identifier: '"IMD2019"'
     columns:
     - name: LSOACODE
       data_type: TEXT
     - name: IMDDECILE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: IMD2025_ICB
     identifier: '"IMD2025_ICB"'
     columns:
@@ -2289,25 +2289,25 @@ sources:
     - name: INTEGRATED_CARE_BOARD_NAME_2024
       data_type: TEXT
     - name: IMD__AVERAGE_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: IMD__RANK_OF_AVERAGE_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD__AVERAGE_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: IMD__RANK_OF_AVERAGE_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD__PROPORTION_OF_LSOAS_IN_MOST_DEPRIVED_10_PERCENT_NATIONALLY
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: IMD__RANK_OF_PROPORTION_OF_LSOAS_IN_MOST_DEPRIVED_10_PERCENT_NATIONALLY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD_2025__EXTENT
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: IMD_2025__RANK_OF_EXTENT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD_2025__LOCAL_CONCENTRATION
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: IMD_2025__RANK_OF_LOCAL_CONCENTRATION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: IMD_2019
     identifier: '"IMD_2019"'
     columns:
@@ -2320,111 +2320,111 @@ sources:
     - name: LOCAL_AUTHORITY_DISTRICT_NAME_2019
       data_type: TEXT
     - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INCOME_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EMPLOYMENT_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: EMPLOYMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EMPLOYMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EDUCATION_SKILLS_AND_TRAINING_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: EDUCATION_SKILLS_AND_TRAINING_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EDUCATION_SKILLS_AND_TRAINING_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: HEALTH_DEPRIVATION_AND_DISABILITY_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: HEALTH_DEPRIVATION_AND_DISABILITY_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: HEALTH_DEPRIVATION_AND_DISABILITY_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CRIME_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: CRIME_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CRIME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BARRIERS_TO_HOUSING_AND_SERVICES_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: BARRIERS_TO_HOUSING_AND_SERVICES_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BARRIERS_TO_HOUSING_AND_SERVICES_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LIVING_ENVIRONMENT_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: LIVING_ENVIRONMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LIVING_ENVIRONMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CHILDREN_AND_YOUNG_PEOPLE_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: CHILDREN_AND_YOUNG_PEOPLE_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CHILDREN_AND_YOUNG_PEOPLE_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADULT_SKILLS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: ADULT_SKILLS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADULT_SKILLS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GEOGRAPHICAL_BARRIERS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: GEOGRAPHICAL_BARRIERS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GEOGRAPHICAL_BARRIERS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WIDER_BARRIERS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: WIDER_BARRIERS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WIDER_BARRIERS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INDOORS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INDOORS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INDOORS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OUTDOORS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: OUTDOORS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OUTDOORS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL_POPULATION_MID_2015_EXCLUDING_PRISONERS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DEPENDENT_CHILDREN_AGED_0_TO_15_MID_2015_EXCLUDING_PRISONERS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_AGED_16_TO_59_MID_2015_EXCLUDING_PRISONERS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OLDER_POPULATION_AGED_60_AND_OVER_MID_2015_EXCLUDING_PRISONERS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WORKING_AGE_POPULATION_18_TO_59_64_FOR_USE_WITH_EMPLOYMENT_DEPRIVATION_DOMAIN_EXCLUDING_PRISONERS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: IMD_2025
     identifier: '"IMD_2025"'
     columns:
@@ -2437,114 +2437,114 @@ sources:
     - name: LOCAL_AUTHORITY_DISTRICT_NAME_2024
       data_type: TEXT
     - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INDEX_OF_MULTIPLE_DEPRIVATION_IMD_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INCOME_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EMPLOYMENT_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: EMPLOYMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EMPLOYMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EDUCATION_SKILLS_AND_TRAINING_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: EDUCATION_SKILLS_AND_TRAINING_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EDUCATION_SKILLS_AND_TRAINING_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: HEALTH_DEPRIVATION_AND_DISABILITY_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: HEALTH_DEPRIVATION_AND_DISABILITY_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: HEALTH_DEPRIVATION_AND_DISABILITY_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CRIME_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: CRIME_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CRIME_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BARRIERS_TO_HOUSING_AND_SERVICES_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: BARRIERS_TO_HOUSING_AND_SERVICES_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BARRIERS_TO_HOUSING_AND_SERVICES_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LIVING_ENVIRONMENT_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: LIVING_ENVIRONMENT_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LIVING_ENVIRONMENT_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_CHILDREN_INDEX_IDACI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_SCORE_RATE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INCOME_DEPRIVATION_AFFECTING_OLDER_PEOPLE_IDAOPI_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CHILDREN_AND_YOUNG_PEOPLE_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: CHILDREN_AND_YOUNG_PEOPLE_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CHILDREN_AND_YOUNG_PEOPLE_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADULT_SKILLS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: ADULT_SKILLS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADULT_SKILLS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GEOGRAPHICAL_BARRIERS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: GEOGRAPHICAL_BARRIERS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GEOGRAPHICAL_BARRIERS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WIDER_BARRIERS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: WIDER_BARRIERS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WIDER_BARRIERS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INDOORS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: INDOORS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INDOORS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OUTDOORS_SUBDOMAIN_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,3)
     - name: OUTDOORS_SUBDOMAIN_RANK_WHERE_1_IS_MOST_DEPRIVED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OUTDOORS_SUBDOMAIN_DECILE_WHERE_1_IS_MOST_DEPRIVED_10_PERCENT__OF_LSOAS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL_POPULATION_MID_2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DEPENDENT_CHILDREN_AGED_0_TO_15_MID_2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OLDER_POPULATION_AGED_60_AND_OVER_MID_2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WORKING_AGE_POPULATION_18_TO_66_FOR_USE_WITH_EMPLOYMENT_DEPRIVATION_DOMAIN_MID_2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: IMMS_SCHEDULE_ADULT_LATEST
     identifier: '"IMMS_SCHEDULE_ADULT_LATEST"'
     columns:
     - name: VACCINE_ORDER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: VACCINE_ID
       data_type: TEXT
     - name: VACCINE_NAME
@@ -2562,17 +2562,17 @@ sources:
     - name: SCHEDULE_AGE
       data_type: TEXT
     - name: MINIMUM_AGE_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MAXIMUM_AGE_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MINIMUM_INTERVAL_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NEXT_DOSE_VACCINE_ID
       data_type: TEXT
     - name: ELIGIBLE_AGE_FROM_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ELIGIBLE_AGE_TO_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADMINISTERED_CLUSTER_ID
       data_type: TEXT
     - name: DRUG_CLUSTER_ID
@@ -2585,7 +2585,7 @@ sources:
     identifier: '"IMMS_SCHEDULE_CHILD_LATEST"'
     columns:
     - name: VACCINE_ORDER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: VACCINE_ID
       data_type: TEXT
     - name: VACCINE_NAME
@@ -2601,11 +2601,11 @@ sources:
     - name: SCHEDULE_AGE
       data_type: TEXT
     - name: ELIGIBLE_AGE_FROM_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ELIGIBLE_AGE_TO_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MAXIMUM_AGE_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADMINISTERED_CLUSTER_ID
       data_type: TEXT
     - name: DRUG_CLUSTER_ID
@@ -2622,7 +2622,7 @@ sources:
     - name: P4_GROUP_NAME
       data_type: TEXT
     - name: LTC_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(9,0)
   - name: LAST_SUNDAY_OF_THE_MONTH
     identifier: '"LAST_SUNDAY_OF_THE_MONTH"'
     columns:
@@ -2631,7 +2631,7 @@ sources:
     - name: MonthName
       data_type: TEXT
     - name: CalendarYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FiscalCalendarYearName
       data_type: TEXT
     - name: FiscalCalendarMonthNameYM
@@ -2646,9 +2646,9 @@ sources:
     - name: PROVIDER_CODE
       data_type: TEXT
     - name: FINANCIAL_YEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FILEID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: LSOA2011_LSOA2021
     identifier: '"LSOA2011_LSOA2021"'
     columns:
@@ -2669,7 +2669,7 @@ sources:
     - name: LAD22NMW
       data_type: TEXT
     - name: OBJECTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: LSOA21_BOUNDARIES
     identifier: '"LSOA21_BOUNDARIES"'
     columns:
@@ -2699,7 +2699,7 @@ sources:
     - name: LAD23NM
       data_type: TEXT
     - name: OBJECTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: LSOA21_WARD25_LAD25
     identifier: '"LSOA21_WARD25_LAD25"'
     columns:
@@ -2743,14 +2743,14 @@ sources:
     - name: MEASURE_NAME
       data_type: TEXT
     - name: MEASURE_VALUE
-      data_type: NUMBER
+      data_type: NUMBER(38,9)
   - name: MHSDS_DQ
     identifier: '"MHSDS_DQ"'
     columns:
     - name: REPORTING_PERIOD
       data_type: TEXT
     - name: IS_LATEST
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CDP_MEASURE_ID
       data_type: TEXT
     - name: CDP_MEASURE_NAME
@@ -2821,7 +2821,7 @@ sources:
     - name: MEASURE_NAME
       data_type: TEXT
     - name: MEASURE_VALUE_SUPPRESSED
-      data_type: NUMBER
+      data_type: NUMBER(38,1)
   - name: MODEL_HOSPITAL_METRIC_MAPPING
     identifier: '"MODEL_HOSPITAL_METRIC_MAPPING"'
     columns:
@@ -2996,27 +2996,27 @@ sources:
     - name: DATE
       data_type: DATE
     - name: LOGINS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: APPOINTMENTS_BOOKED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: APPOINTMENTS_CANCELLED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REPEAT_PRESCRIPTIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_REGISTRATIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_WITHDRAWALS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_UPDATES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_LOOKUP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD_VIEWS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SUMMARY_CARE_RECORD_VIEWS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DETAIL_CODED_RECORD_VIEWS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: USAGE_PRACTICE_CODE
       data_type: TEXT
   - name: NHS_APP_USAGE2
@@ -3025,28 +3025,59 @@ sources:
     - name: DATE
       data_type: DATE
     - name: LOGINS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: APPOINTMENTS_BOOKED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: APPOINTMENTS_CANCELLED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REPEAT_PRESCRIPTIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_REGISTRATIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_WITHDRAWALS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_UPDATES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGAN_DONATION_LOOKUP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD_VIEWS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SUMMARY_CARE_RECORD_VIEWS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DETAIL_CODED_RECORD_VIEWS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: USAGE_PRACTICE_CODE
+      data_type: TEXT
+  - name: NMUH_200_PATIENT_SAMPLE
+    identifier: '"NMUH_200_PATIENT_SAMPLE"'
+    columns:
+    - name: PATIENT_SER
+      data_type: TEXT
+    - name: PATIENT_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_DATE
+      data_type: TEXT
+    - name: TUMOUR_GROUP
+      data_type: TEXT
+    - name: TREATMENT_SITE
+      data_type: TEXT
+    - name: DAILY_TREATMENT_ACTIVITY
+      data_type: TEXT
+    - name: TREATMENT_TECHNIQUE
+      data_type: TEXT
+    - name: TREATMENT_MACHINE
+      data_type: TEXT
+    - name: APPOINTMENT_TIME_START_TIME
+      data_type: TEXT
+    - name: APPOINTMENT_TIME_END_TIME
+      data_type: TEXT
+    - name: FRACTION_TIME_MINS
+      data_type: TIME
+    - name: DIAGNOSIS_SEQ_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: INTENDEND_NUMBER_OF_FRACTIONS
+      data_type: NUMBER(38,0)
+    - name: COURSE_ID
       data_type: TEXT
   - name: ONLINE_CONSULTATION
     identifier: '"ONLINE_CONSULTATION"'
@@ -3062,15 +3093,15 @@ sources:
     - name: SUBMISSIONS
       data_type: TEXT
     - name: CLINICAL_SUBMISSIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADMINISTRATIVE_SUBMISSIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Other/Unknown Type Submissions
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REGISTERED_PATIENT_COUNT
       data_type: TEXT
     - name: Rate per 1,000 Registered Patients
-      data_type: NUMBER
+      data_type: NUMBER(38,1)
   - name: ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024
     identifier: '"ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024"'
     columns:
@@ -3083,35 +3114,35 @@ sources:
     - name: SEX
       data_type: TEXT
     - name: AGE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2011
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2012
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2013
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2014
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2015
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2016
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2017
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2018
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2019
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2020
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2021
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2022
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2023
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: POPULATION_2024
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: PRACTICE_NEIGHBOURHOOD_LOOKUP
     identifier: '"PRACTICE_NEIGHBOURHOOD_LOOKUP"'
     columns:
@@ -3222,7 +3253,7 @@ sources:
     - name: REFRESHED_DATE
       data_type: DATE
     - name: PRACTICE_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(18,0)
   - name: SHP_UA24
     identifier: '"SHP_UA24"'
     columns:
@@ -3236,15 +3267,15 @@ sources:
     identifier: '"SR_SNOMED_ETHNICITY_2"'
     columns:
     - name: SNOMED_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ETHNICITY
       data_type: TEXT
     - name: GROUPING_16
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GROUPING_6
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ETHNICITY_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: TEST
     identifier: '"TEST"'
     columns:
@@ -3268,7 +3299,7 @@ sources:
     - name: general_medical_practice
       data_type: TEXT
     - name: patient_source_type
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: referrer_code
       data_type: TEXT
     - name: referring_org
@@ -3288,7 +3319,7 @@ sources:
     - name: provider_site_code
       data_type: TEXT
     - name: priority_type_code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: cancer_pathway_flag
       data_type: BOOLEAN
     - name: file_name
@@ -3325,9 +3356,9 @@ sources:
     - name: FILEID
       data_type: TEXT
     - name: DV_FINANCIALYEAR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DV_FINANCIALMONTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DV_PROVIDERCODE
       data_type: TEXT
     - name: DV_PROVIDERDESCRIPTION
@@ -3355,9 +3386,9 @@ sources:
     - name: DV_TREATMENTFUNCTIONDESCRIPTION
       data_type: TEXT
     - name: ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: COST
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: BOROUGH
       data_type: TEXT
   - name: UCLH_FERTIITY_NCL_2526
@@ -3372,7 +3403,7 @@ sources:
     - name: CUSTOMER
       data_type: TEXT
     - name: VALUE
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: Month of treatment text
       data_type: TEXT
     - name: Month of treatment
@@ -3387,9 +3418,9 @@ sources:
     - name: FIN_MONTH
       data_type: TEXT
     - name: FIN_MONTH_NO
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UCR_REFERRALS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: UEC__DAILY__LAS_HANDOVER
     identifier: '"UEC__DAILY__LAS_HANDOVER"'
     columns:
@@ -3400,23 +3431,23 @@ sources:
     - name: SITE_CODE
       data_type: TEXT
     - name: CONVEYANCES_NONBLUE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONVEYANCES_TOTAL_ED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL_HANDOVER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ARRIVAL_TO_PATIENT_HANDOVER_AVERAGE
       data_type: TEXT
     - name: UNDER_15_MIN_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_15_MIN_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_15_MIN_PERCENT
       data_type: FLOAT
     - name: OVER_15_MIN_RATIO
       data_type: FLOAT
     - name: OVER_15_MIN_PERCENT_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_15_MIN_OVERRUN_AVERAGE
       data_type: FLOAT
     - name: TOTAL_TIME_LOST_OVER_15_MIN_HOURS
@@ -3424,29 +3455,29 @@ sources:
     - name: TOTAL_TIME_LOST_OVER_15_MIN_MINUTES
       data_type: FLOAT
     - name: OVER_30_MIN_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_30_MIN_PERCENT
       data_type: FLOAT
     - name: TOTAL_TIME_LOST_OVER_30_MIN_HOURS
       data_type: FLOAT
     - name: OVER_45_MIN_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_45_MIN_PERCENT
       data_type: FLOAT
     - name: TOTAL_TIME_LOST_OVER_45_MIN_HOURS
       data_type: FLOAT
     - name: OVER_60_MIN_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_60_MIN_PERCENT
       data_type: FLOAT
     - name: TOTAL_TIME_LOST_OVER_60_MIN_HOURS
       data_type: FLOAT
     - name: OVER_120_MIN_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_120_MIN_PERCENT
       data_type: FLOAT
     - name: OVER_180_MIN_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_180_MIN_PERCENT
       data_type: FLOAT
     - name: _TIMESTAMP
@@ -3455,7 +3486,7 @@ sources:
     identifier: '"UEC__DAILY__REPORT_TARGETS"'
     columns:
     - name: ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DATASET
       data_type: TEXT
     - name: METRIC_NAME
@@ -3463,11 +3494,11 @@ sources:
     - name: TARGET_DESC
       data_type: TEXT
     - name: TARGET_VALUE
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: TARGET_DIRECTION
       data_type: TEXT
     - name: TARGET_LENIENCE_AMOUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,2)
     - name: TARGET_LENIENCE_TYPE
       data_type: TEXT
     - name: ACTIVE_FROM
@@ -3509,7 +3540,7 @@ sources:
     - name: METRIC_NAME
       data_type: TEXT
     - name: METRIC_VALUE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: UEC__DAILY__TRACKER_P2_CAPACITY
@@ -3522,9 +3553,9 @@ sources:
     - name: UNIT
       data_type: TEXT
     - name: BEDS_AVAILABLE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BEDS_OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: UEC__DAILY__TRACKER_VIRTUAL_WARD
@@ -3533,9 +3564,9 @@ sources:
     - name: DATE_DATA
       data_type: DATE
     - name: CAPACITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SYSTEM_VALUE
       data_type: FLOAT
     - name: IS_INCLUDES_PAEDIATRIC
@@ -3560,159 +3591,159 @@ sources:
     - name: REGION_NAME
       data_type: TEXT
     - name: ACC_BEDS_OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ACC_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AE_ATTENDANCES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AE_BREACHES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AE_PERFORMANCE_BOOKED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AE_PATIENTS_STREAMED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AE_PATIENTS_STREAMED_BREACHES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AMB_HANDOVER_30_TO_60
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AMB_HANDOVER_OVER_60
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AMBULANCE_HANDOVER_4_TO_12_HOURS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AMBULANCE_HANDOVEROVER_12_HOURS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ARRIVING_BY_AMBULANCE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ATTENDANCES_MAJOR_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ATTENDANCES_MINOR_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ATTENDANCES_PAEDS_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ATTENDANCES_RESUS_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ATTENDANCES_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ATTENDANCES_TYPE_2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ATTENDANCES_TYPE_3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BEDS_OCCUPIED_BY_LONG_STAY_PATIENTS_14_PLUS_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BOOKED_BREACHES_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BOOKED_BREACHES_TYPE_2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BOOKED_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BOOKED_TYPE_2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES_MAJOR_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES_MINOR_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES_PAEDS_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES_RESUS_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES_TYPE_2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BREACHES_TYPE_3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EMERGENCY_ADMISSIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EMERGENCY_ADMISSIONS_AE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EXTENDED_PATIENTS_OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GA_CORE_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GA_ESCALATION_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GA_TOTAL_BEDS_OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GA_TOTAL_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NUMBER_OF_ADMISSIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NUMBER_OF_ADVANCE_BOOKINGS_UTC
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NUMBER_OF_DISCHARGES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NUMBER_OF_PATIENTS_SEEN_WITHIN_4_HOURS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_12_HOUR_FROM_ARRIVAL_DUMMY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OVER_12_HOURS_FROM_ARRIVAL
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SEEN_WITHIN_60_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNAVAILABLE_BED_STRANDED_PATIENTS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CRS_ATTENDANCES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CRS_TYPE_1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NO_CTR
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DISCHARGED_BY_5
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DISCHARGED_AFTER_5
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NO_CTR_MINUS_DISCHARGES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OCCUPANCY_AT_MIDDAY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OCCUPANCY_AT_MIDNIGHT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 4HR_PERFORMANCE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 4HR_NATIONAL_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 4HR_REGIONAL_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL_HOURS_LOST_DUE_TO_HANDOVER_DELAYS
       data_type: TEXT
     - name: PATIENTS_AWAITING_ADMISSION_AT_8AM
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 4HR_TYPE_1_NATIONAL_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 4HR_TYPE_3_NATIONAL_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: 4HR_TYPE_3_REGIONAL_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PAED_4_HOUR_BREACHES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PAED_12_HOUR_BREACHES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PAED_ATTENDANCES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: COVID_ADMISSIONS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: COVID_OCCUPANCY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL_HANDOVER_MINUTES
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL_DATE_DIFFERENCE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DISCHARGE_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PAED_CORE_GA_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PAED_ESCALATION_GA_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PAED_TOTAL_GA_BEDS_OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PAED_TOTAL_GA_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PICU_BEDS_OCCUPIED
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PICU_BEDS_OPEN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TTIA_AVERAGE_TIME
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PERCENTAGE_TTIA_15_MINS,
       data_type: TEXT
   - name: VW_ONS_MID_YEAR_POPULATION_ESTIMATES_BY_GENDER_SINGLE_YEAR_OF_AGE
@@ -3731,7 +3762,7 @@ sources:
     - name: YEAR
       data_type: TEXT
     - name: ONS_POPULATION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: WNLNEIGHBOURHOODS
     identifier: '"WNLNEIGHBOURHOODS"'
     columns:
@@ -3744,13 +3775,13 @@ sources:
     - name: LANAME
       data_type: TEXT
     - name: IMDRANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD25DECIL
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD19DECIL
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMDDEPRIIN
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INT
       data_type: TEXT
     - name: INTBOROUGH

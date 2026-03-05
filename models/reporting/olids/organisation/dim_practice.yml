@@ -1,7 +1,6 @@
 models:
   - name: dim_practice
-    description: 'Practice dimension with organisational hierarchy spanning multiple
-      London ICBs.
+    description: 'Practice dimension with organisational hierarchy spanning multiple London ICBs.
 
       Key Features:
 
@@ -15,11 +14,9 @@ models:
 
       • Complete organisational hierarchy (Practice > PCN > Commissioner > STP)
 
-      • Filtered to London ICBs: North Central, North East, North West, South East,
-      South West
+      • Filtered to London ICBs: North Central, North East, North West, South East, South West
 
-      Purpose: Supports practice-level reporting, geographic analysis, and organisational
-      hierarchy navigation.'
+      Purpose: Supports practice-level reporting, geographic analysis, and organisational hierarchy navigation.'
 
     config:
       meta:
@@ -55,8 +52,7 @@ models:
         description: 'Borough where practice is located'
 
       - name: pcn_borough
-        description: 'Borough where practices PCN is located (may differ from practice
-          borough)'
+        description: 'Borough where practices PCN is located (may differ from practice borough)'
 
       - name: practice_historic_ccg
         description: 'Historic CCG association for temporal analysis'
@@ -140,7 +136,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
+              arguments:
+                values: ['QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
 
       - name: stp_name
         description: 'STP/ICB name (London Integrated Care Boards)'

@@ -8,12 +8,12 @@ flags:
   partial_parse: true
 
 # Display connection info when dbt runs start
+  require_generic_test_arguments_property: true
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
-target-path: "target"
 clean-targets:
   - "target"
   - "dbt_modules"
@@ -25,7 +25,6 @@ vars:
   dbt_audit_schema: "test_audit"
   auto_schema_domains: ['olids']
   qof_reference_date: "2025-11-04"  # EMIS QOF extract date, override via --vars
-  
   # Elementary observability
   disable_dbt_artifacts_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
   disable_run_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
@@ -163,7 +162,7 @@ seeds:
         GP_PRACTICE: varchar(200)
         LIST_SIZE: integer
         EXTRACT_DATE: varchar(10)
-    
+
     asthma_testing_codelist:
       +column_types:
         CODE: varchar(50)
@@ -175,7 +174,7 @@ seeds:
         DEFINITION_NAME: varchar(200)
         DEFINITION_VERSION: varchar(200)
         DEFINITION_SOURCE: varchar(200)
-        VERSION_DATETIME:	varchar(200)
+        VERSION_DATETIME: varchar(200)
         UPLOADED_DATETIME: varchar(200)
 
     observation_unit_rules:

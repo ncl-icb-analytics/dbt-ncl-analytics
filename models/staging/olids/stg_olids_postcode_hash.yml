@@ -1,7 +1,6 @@
 models:
   - name: stg_olids_postcode_hash
-    description: Hashed postcodes linked to geographical and administrative 
-      areas. Deduplicated by postcode_hash using lds_start_date_time.
+    description: Hashed postcodes linked to geographical and administrative areas. Deduplicated by postcode_hash using lds_start_date_time.
     config:
       meta:
         owner:
@@ -29,13 +28,12 @@ models:
       - name: effective_to
         description: Date this geographical mapping ceased to be effective
       - name: is_latest
-        description: Boolean indicating if this is the latest mapping for the 
-          postcode
+        description: Boolean indicating if this is the latest mapping for the postcode
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lakehouse_date_processed
         description: Date when record was processed by lakehouse
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

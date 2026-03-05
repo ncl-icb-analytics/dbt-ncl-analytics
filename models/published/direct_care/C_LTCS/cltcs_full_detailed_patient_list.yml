@@ -13,7 +13,8 @@ models:
           name: Emily Baldwin
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: olids_id
         data_type: varchar

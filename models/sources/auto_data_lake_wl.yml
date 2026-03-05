@@ -21,9 +21,9 @@ sources:
     - name: ACTIVITY_TREATMENT_FUNCTION_CODE
       data_type: TEXT
     - name: derSubmissionId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derRowId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Pseudo NHS_NUMBER
       data_type: TEXT
     - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
@@ -60,9 +60,9 @@ sources:
     - name: ACTIVITY_TREATMENT_FUNCTION_CODE
       data_type: TEXT
     - name: derSubmissionId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derRowId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmIcbCommissioner
       data_type: TEXT
     - name: dmSubIcbCommissioner
@@ -82,9 +82,9 @@ sources:
     - name: REFERRAL_TO_TREATMENT_PERIOD_STATUS
       data_type: TEXT
     - name: der_Age_WeekEndingDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: der_Age_at_Referral_To_Treatment_Period_Start_Date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: der_AgeBand_WeekEndingDate
       data_type: TEXT
     - name: der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
@@ -193,13 +193,13 @@ sources:
     - name: Completed_Type
       data_type: TEXT
     - name: derSubmissionId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derRowId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_Age_WeekEndingDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_Age_at_Referral_To_Treatment_Period_Start_Date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_AgeBand_WeekEndingDate
       data_type: TEXT
     - name: Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
@@ -282,13 +282,13 @@ sources:
     - name: Inclusion_On_Cancer_PTL
       data_type: TEXT
     - name: derSubmissionId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derRowId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_Age_WeekEndingDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_Age_at_Referral_To_Treatment_Period_Start_Date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_AgeBand_WeekEndingDate
       data_type: TEXT
     - name: Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
@@ -405,13 +405,13 @@ sources:
     - name: Inclusion_On_Cancer_PTL
       data_type: TEXT
     - name: derSubmissionId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derRowId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_Age_WeekEndingDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_Age_at_Referral_To_Treatment_Period_Start_Date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Der_AgeBand_WeekEndingDate
       data_type: TEXT
     - name: Der_AgeBand_at_Referral_To_Treatment_Period_Start_Date
@@ -490,13 +490,13 @@ sources:
     - name: Expiry_Date
       data_type: TIMESTAMP_NTZ
     - name: der_Age_WeekEndingDate
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: der_AgeBand_WeekEndingDate
       data_type: TEXT
     - name: derSubmissionId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derRowId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derCCGofPractice
       data_type: TEXT
     - name: derCCGofResidence
@@ -511,7 +511,7 @@ sources:
     identifier: '"WL_SubmissionLog_Data"'
     columns:
     - name: derSubmissionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derDLPSpecificationName
       data_type: TEXT
     - name: derFileName

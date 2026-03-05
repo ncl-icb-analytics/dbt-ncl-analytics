@@ -1,11 +1,11 @@
 -- Gets list of attendances and diagnoses before the start of current month
- {{ config(materialized="table") }}
+ {{ config(materialized="table", static_analysis="off") }}
 
 SELECT
         ip.VISIT_OCCURRENCE_ID AS primary_id,
         'IP' AS pod_group,
         ip.POD AS pod,
-        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(ip.END_DATE) AS FIN_YEAR,
+        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(TO_DATE(ip.END_DATE)) AS FIN_YEAR,
         MOD(MONTH(ip.END_DATE) + 8, 12) + 1 AS fin_month,
         ip.SK_PATIENT_ID AS patient_id,
         ip.local_patient_identifier,
@@ -36,7 +36,7 @@ SELECT
         op.VISIT_OCCURRENCE_ID AS primary_id,
         'OP' AS pod_group,
         op.POD AS pod,
-        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(op.START_DATE) AS FIN_YEAR,
+        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(TO_DATE(op.START_DATE)) AS FIN_YEAR,
         MOD(MONTH(op.START_DATE) + 8, 12) + 1 AS fin_month,
         op.SK_PATIENT_ID AS patient_id,
         op.local_patient_identifier,

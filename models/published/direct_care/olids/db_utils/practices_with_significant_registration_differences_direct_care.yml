@@ -1,4 +1,3 @@
-
 models:
   - name: practices_with_significant_registration_differences_direct_care
     description: |
@@ -11,4 +10,5 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

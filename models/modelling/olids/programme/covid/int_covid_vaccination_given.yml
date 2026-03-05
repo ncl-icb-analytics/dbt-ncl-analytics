@@ -4,14 +4,13 @@ models:
 
       Grain: One row per person per campaign who received vaccination
 
-      Identifies people: • Vaccination administration codes (COVADM_COD) • OR medication
-      orders (COVRX_COD) • Within campaign tracking period • All ages eligible
+      Identifies people: • Vaccination administration codes (COVADM_COD) • OR medication orders (COVRX_COD) • Within campaign tracking period • All ages eligible
 
       Used by: Mart models for uptake and status determination'
     tests:
       - cluster_ids_exist:
-          cluster_ids: COVADM_COD,COVRX_COD
-
+          arguments:
+            cluster_ids: COVADM_COD,COVRX_COD
     config:
       meta:
         indicator:
