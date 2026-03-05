@@ -1,8 +1,6 @@
 models:
   - name: dim_ltc_lcs_cf_cvd_65
-    description: 'Age 40 to under 84 years with QRISK2 ≥10% and eligible statin medication
-      courses for CVD_65. Excludes statin allergies/adverse reactions, not indicated,
-      statin declines (60m), and high CVD risk review declines (36m).
+    description: 'Age 40 to under 84 years with QRISK2 ≥10% and eligible statin medication courses for CVD_65. Excludes statin allergies/adverse reactions, not indicated, statin declines (60m), and high CVD risk review declines (36m).
 
       One row per person.'
     config:
@@ -58,9 +56,10 @@ models:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
-          cluster_ids: QRISK2_10YEAR, STATIN_ALLERGY_ADVERSE_REACTION,
-            STATIN_NOT_INDICATED, STATINDEC_COD
+          arguments:
+            cluster_ids: QRISK2_10YEAR, STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD
       - valuesets_have_codes:
-          valuesets:
-            - with_qrisk210_amd_not_on_a_high_intensity_statin_vs1
-            - with_qrisk210_amd_not_on_a_high_intensity_statin_vs3
+          arguments:
+            valuesets:
+              - with_qrisk210_amd_not_on_a_high_intensity_statin_vs1
+              - with_qrisk210_amd_not_on_a_high_intensity_statin_vs3
