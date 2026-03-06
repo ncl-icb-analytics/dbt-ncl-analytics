@@ -12,6 +12,9 @@ SELECT
     coalesce(af_61.person_id IS NOT NULL, FALSE) AS in_af_61,
     coalesce(af_62.person_id IS NOT NULL, FALSE) AS in_af_62,
 
+    -- HF indicator
+    coalesce(hf_61.person_id IS NOT NULL, FALSE) AS in_hf_61,
+
     -- CKD indicators
     coalesce(ckd_61.person_id IS NOT NULL, FALSE)
         AS in_ckd_61,
@@ -63,6 +66,7 @@ SELECT
     -- Summary flags
     coalesce((
         af_61.person_id IS NOT NULL OR af_62.person_id IS NOT NULL
+        OR hf_61.person_id IS NOT NULL
         OR ckd_61.person_id IS NOT NULL
         OR ckd_62.person_id IS NOT NULL
         OR ckd_63.person_id IS NOT NULL
@@ -91,6 +95,7 @@ SELECT
     (
         CASE WHEN af_61.person_id IS NOT NULL THEN 1 ELSE 0 END
         + CASE WHEN af_62.person_id IS NOT NULL THEN 1 ELSE 0 END
+        + CASE WHEN hf_61.person_id IS NOT NULL THEN 1 ELSE 0 END
         + CASE WHEN ckd_61.person_id IS NOT NULL THEN 1 ELSE 0 END
         + CASE WHEN ckd_62.person_id IS NOT NULL THEN 1 ELSE 0 END
         + CASE WHEN ckd_63.person_id IS NOT NULL THEN 1 ELSE 0 END
@@ -124,6 +129,9 @@ LEFT JOIN
 LEFT JOIN
     {{ ref('dim_ltc_lcs_cf_af_62') }} AS af_62
     ON base.person_id = af_62.person_id
+LEFT JOIN
+    {{ ref('dim_ltc_lcs_cf_hf_61') }} AS hf_61
+    ON base.person_id = hf_61.person_id
 
 -- CKD joins
 LEFT JOIN

@@ -1,0 +1,27 @@
+models:
+  - name: int_ltc_lcs_hf_observations
+    description: 'Heart failure case-finding observation evidence for Long Term Conditions case finding measures.
+
+      One row per person-valueset latest observation for HF evidence, NT-proBNP, cardiology referral, heart failure exclusion, cardiomyopathy, breathlessness, female coding, and hirsutism-related coding.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          arguments:
+            valuesets:
+              - eligible_for_hf_casefinding_vs1
+              - hf_case_finding_eligible_patients_vs1
+              - hf_case_finding_eligible_patients_vs5
+              - hf_case_finding_eligible_patients_vs6
+              - hf_case_finding_eligible_patients_vs7
+              - hf_case_finding_eligible_patients_vs8
+              - hf_case_finding_eligible_patients_vs9
+              - hf_case_finding_eligible_patients_vs13
+    columns:
+      - name: person_id
+        tests:
+          - not_null

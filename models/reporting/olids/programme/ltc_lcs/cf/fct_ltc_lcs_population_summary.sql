@@ -52,6 +52,9 @@ case_finding_demographics AS (
         -- AF indicators
         COUNT(CASE WHEN cf.in_af_61 THEN 1 END) AS cf_af_61_count,
         COUNT(CASE WHEN cf.in_af_62 THEN 1 END) AS cf_af_62_count,
+
+        -- HF indicator
+        COUNT(CASE WHEN cf.in_hf_61 THEN 1 END) AS cf_hf_61_count,
         
         -- CKD indicators
         COUNT(CASE WHEN cf.in_ckd_61 THEN 1 END) AS cf_ckd_61_count,
@@ -133,6 +136,7 @@ SELECT
     -- Case finding counts by indicator
     COALESCE(cf.cf_af_61_count, 0) AS cf_af_61_count,
     COALESCE(cf.cf_af_62_count, 0) AS cf_af_62_count,
+    COALESCE(cf.cf_hf_61_count, 0) AS cf_hf_61_count,
     COALESCE(cf.cf_ckd_61_count, 0) AS cf_ckd_61_count,
     COALESCE(cf.cf_ckd_62_count, 0) AS cf_ckd_62_count,
     COALESCE(cf.cf_ckd_63_count, 0) AS cf_ckd_63_count,
