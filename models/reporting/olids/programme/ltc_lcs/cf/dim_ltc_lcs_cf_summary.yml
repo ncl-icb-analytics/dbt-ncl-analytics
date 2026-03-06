@@ -5,7 +5,15 @@ models:
 
       One row per person meeting criteria for atrial fibrillation, heart failure, CKD, cardiovascular,
       diabetes, or hypertension case finding.'
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
     config:
       meta:
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

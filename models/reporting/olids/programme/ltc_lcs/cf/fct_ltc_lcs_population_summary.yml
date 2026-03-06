@@ -9,3 +9,18 @@ models:
       meta:
         owner:
           name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: age_band_10y
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - age_band_10y
+              - ethnicity_category
+              - imd_quintile
+              - borough_registered
+              - neighbourhood_registered
+    columns:
+      - name: age_band_10y
+        tests:
+          - not_null
