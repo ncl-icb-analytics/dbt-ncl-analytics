@@ -36,11 +36,12 @@ hf_register AS (
 ),
 
 hf_evidence AS (
-    SELECT DISTINCT
+    SELECT
         person_id,
-        clinical_effective_date AS latest_hf_evidence_date
+        MAX(clinical_effective_date) AS latest_hf_evidence_date
     FROM {{ ref('int_ltc_lcs_hf_observations') }}
     WHERE valueset_friendly_name = 'eligible_for_hf_casefinding_vs1'
+    GROUP BY person_id
 ),
 
 base_population AS (

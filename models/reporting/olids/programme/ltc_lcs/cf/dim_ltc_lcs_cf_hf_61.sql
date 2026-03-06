@@ -1,5 +1,6 @@
 {{ config(
-    materialized='table') }}
+    materialized='table',
+    cluster_by=['person_id']) }}
 
 -- HF_61 case finding dimension: patients with possible undiagnosed heart failure
 -- Uses the HF-specific base population plus inline branch logic to match existing LTC LCS CF model layout

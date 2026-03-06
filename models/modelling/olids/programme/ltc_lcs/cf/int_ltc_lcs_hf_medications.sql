@@ -59,5 +59,6 @@ SELECT
             THEN 'branch_6_digoxin'
         WHEN valueset_friendly_name = 'hf_case_finding_eligible_patients_vs11'
             THEN 'branch_7_spironolactone'
+        ELSE 'unmapped'
     END AS medication_branch
 FROM hf_medications

@@ -41,5 +41,6 @@ SELECT
             THEN 'branch_5_breathlessness'
         WHEN valueset_friendly_name = 'hf_case_finding_eligible_patients_vs13'
             THEN 'branch_7_hirsutism'
+        ELSE 'unmapped'
     END AS observation_branch
 FROM hf_observations
