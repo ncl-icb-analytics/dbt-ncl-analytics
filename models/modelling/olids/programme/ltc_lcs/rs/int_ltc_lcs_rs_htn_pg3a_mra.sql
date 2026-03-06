@@ -52,7 +52,12 @@ rule_3_chd as (
 -- Stroke/TIA (first episode, excluding review/end)
 rule_3_stroke_tia as (
     select distinct person_id
-    from ({{ get_ltc_lcs_observations("on_htn_reg_priority_group_3a_mra_v3_vs4,on_htn_reg_priority_group_3a_mra_v3_vs5") }})
+    from ({{ get_ltc_lcs_observations("on_htn_reg_priority_group_3a_mra_v3_vs4") }})
+    where is_problem = true
+      and coalesce(is_review, false) = false
+    union
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_htn_reg_priority_group_3a_mra_v3_vs5") }})
     where is_problem = true
       and coalesce(is_review, false) = false
 ),

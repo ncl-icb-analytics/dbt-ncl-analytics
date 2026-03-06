@@ -83,7 +83,12 @@ pg2b_chd as (
 -- Stroke/TIA (first episode, excluding review/end)
 pg2b_stroke_tia as (
     select distinct person_id
-    from ({{ get_ltc_lcs_observations("priority_group_2b_icb_v3_vs5,priority_group_2b_icb_v3_vs6") }})
+    from ({{ get_ltc_lcs_observations("priority_group_2b_icb_v3_vs5") }})
+    where is_problem = true
+      and coalesce(is_review, false) = false
+    union
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("priority_group_2b_icb_v3_vs6") }})
     where is_problem = true
       and coalesce(is_review, false) = false
 ),
