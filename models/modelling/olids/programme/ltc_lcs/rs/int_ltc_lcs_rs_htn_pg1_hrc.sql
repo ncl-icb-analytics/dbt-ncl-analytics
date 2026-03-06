@@ -26,11 +26,11 @@ rule_1_severe_bp as (
     where clinical_effective_date >= dateadd(month, -12, current_date())
       and (
           -- Clinic BP: severe if SBP > 180 or DBP > 120
-          (not is_home_bp_event and not is_abpm_bp_event
+          (not coalesce(is_home_bp_event or is_abpm_bp_event, false)
            and (systolic_value > 180 or diastolic_value > 120))
           or
           -- Home/ABPM BP: severe if SBP > 170 or DBP > 115
-          ((is_home_bp_event or is_abpm_bp_event)
+          (coalesce(is_home_bp_event or is_abpm_bp_event, false)
            and (systolic_value > 170 or diastolic_value > 115))
       )
 ),

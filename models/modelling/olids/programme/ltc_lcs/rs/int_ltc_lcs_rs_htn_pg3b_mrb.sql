@@ -58,7 +58,7 @@ uncontrolled_bp as (
         ))
         or
         -- Age > 80: relaxed systolic thresholds
-        (hr.age > 80 and (
+        (coalesce(hr.age, 0) > 80 and (
             (not lbp.is_home_or_abpm and (lbp.systolic_value > 150 or lbp.diastolic_value > 90))
             or
             (lbp.is_home_or_abpm and (lbp.systolic_value > 145 or lbp.diastolic_value > 85))
