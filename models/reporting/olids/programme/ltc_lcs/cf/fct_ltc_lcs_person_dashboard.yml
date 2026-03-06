@@ -10,9 +10,15 @@ models:
       meta:
         owner:
           name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
     columns:
       - name: person_id
         description: Unique person identifier
+        tests:
+          - not_null
+          - unique
 
       - name: has_learning_disability
         description: QOF Learning Disability register flag (age ≥14 years with 

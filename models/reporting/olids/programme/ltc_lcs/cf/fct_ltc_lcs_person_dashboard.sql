@@ -64,6 +64,9 @@ SELECT
     -- AF indicators
     cf.in_af_61,
     cf.in_af_62,
+
+    -- HF indicator
+    cf.in_hf_61,
     
     -- CKD indicators
     cf.in_ckd_61,
@@ -99,6 +102,7 @@ SELECT
     
     -- Condition groupings for easier filtering
     CASE WHEN (cf.in_af_61 OR cf.in_af_62) THEN TRUE ELSE FALSE END AS has_af_indicators,
+    CASE WHEN cf.in_hf_61 THEN TRUE ELSE FALSE END AS has_hf_indicators,
     CASE WHEN (cf.in_ckd_61 OR cf.in_ckd_62 OR cf.in_ckd_63 OR cf.in_ckd_64) THEN TRUE ELSE FALSE END AS has_ckd_indicators,
     CASE WHEN (cf.in_cvd_61 OR cf.in_cvd_62 OR cf.in_cvd_63 OR cf.in_cvd_64 OR cf.in_cvd_65 OR cf.in_cvd_66) THEN TRUE ELSE FALSE END AS has_cvd_indicators,
     CASE WHEN (cf.in_dm_61 OR cf.in_dm_62 OR cf.in_dm_63 OR cf.in_dm_64 OR cf.in_dm_65 OR cf.in_dm_66) THEN TRUE ELSE FALSE END AS has_dm_indicators,
