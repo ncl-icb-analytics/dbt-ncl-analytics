@@ -1,0 +1,18 @@
+models:
+  - name: int_ltc_lcs_rs_htn_pg4_lr
+    description: |
+      Hypertension Register Priority Group 4 - Low Risk identification.
+      All patients on the hypertension register not assigned to PG1 (HRC),
+      PG2 (HR), PG3A (MRa), or PG3B (MRb).
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
