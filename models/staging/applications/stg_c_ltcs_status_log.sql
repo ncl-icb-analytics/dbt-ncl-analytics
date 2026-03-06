@@ -1,7 +1,8 @@
 select patient_id
-    , pcn_code
-    , mdt_date
+    , area_code
+    , intervention_date
     , action
     , action_date
-    , criteria
+    , detail
+    , intervention_name
 from {{ ref('raw_c_ltcs_status_log') }}

@@ -19,7 +19,7 @@ with inclusion_list as (
 sus_ae_events as(
     select 
         il.patient_id,
-        il.pcn_code,
+        il.area_code,
         sus_events.start_date as event_start_date,
         sus_events.end_date as event_end_date,
         sus_events.visit_occurrence_type as event_type,
@@ -32,7 +32,7 @@ sus_ae_events as(
 sus_apc_events as(
     select 
         il.patient_id,
-        il.pcn_code,
+        il.area_code,
         sus_events.start_date as event_start_date,
         sus_events.end_date as event_end_date,
         sus_events.visit_occurrence_type as event_type,
@@ -45,7 +45,7 @@ sus_apc_events as(
 sus_op_events as(
     select 
         il.patient_id,
-        il.pcn_code,
+        il.area_code,
         sus_events.start_date as event_start_date,
         sus_events.start_date as event_end_date,
         sus_events.visit_occurrence_type as event_type,
@@ -58,7 +58,7 @@ sus_op_events as(
 gp_events as (
     select 
         il.patient_id,
-        il.pcn_code,
+        il.area_code,
         gpa.start_date as event_start_date,
         gpa.start_date as event_end_date,
         'GP_APPT' as event_type,
@@ -81,7 +81,7 @@ complete_events as (
   )
 
 select patient_id, 
-    pcn_code, 
+    area_code, 
     event_start_date,
     event_end_date,
     event_type,

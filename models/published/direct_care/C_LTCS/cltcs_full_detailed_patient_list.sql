@@ -1,10 +1,10 @@
 with inclusion_list as (
-    select olids_id, patient_id, pcn_code, 'inclusion' as source
+    select olids_id, patient_id, area_code, 'inclusion' as source
     from {{ ref('inclusion_cohort') }}
     where eligible = 1
 ),
 shortlisted_list as (
-    select pp.person_id as olids_id, sl.patient_id, sl.pcn_code, 'shortlist' as source
+    select pp.person_id as olids_id, sl.patient_id, sl.area_code, 'shortlist' as source
     from {{ ref('cltcs_status_log_most_recent') }} sl
     left join {{ ref('dim_person_pseudo') }} pp on pp.sk_patient_id = sl.patient_id
     where action in ('Added to shortlist', 'Accept for MDT')
@@ -14,7 +14,7 @@ complete_list as (
     union all
     select * from shortlisted_list
 )
-select olids_id, patient_id, pcn_code
+select olids_id, patient_id, area_code
 from complete_list
 qualify row_number() over (
     partition by patient_id
