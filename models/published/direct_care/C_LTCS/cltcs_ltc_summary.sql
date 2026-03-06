@@ -13,13 +13,13 @@ Clinical Purpose:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, pcn_code, pcn_name, practice_code, practice_name, age, main_language
+    select patient_id, olids_id, area_code, pcn_name, practice_code, practice_name, age, main_language
     from {{ ref('inclusion_cohort')}}
     where eligible = 1
 )
 
 select il.patient_id
-    , il.pcn_code
+    , il.area_code
     , ltcs.condition_code
     , ltcs.condition_name
     , ltcs.clinical_domain

@@ -78,8 +78,9 @@ select pp.sk_patient_id as patient_id
     ,pp.person_id as olids_id
     ,pd.practice_code
     ,pd.practice_name
-    ,pd.pcn_code
-    ,pd.pcn_name
+    ,'PCN' as area_type 
+    ,pd.pcn_code as area_code
+    ,pd.pcn_name as area_name
     ,pd.main_language
     ,pd.age
     ,pd.gender
@@ -95,7 +96,7 @@ left join op_inclusion op
 left join {{ref('dim_person_demographics')}} pd
     on pd.person_id = pp.person_id
 where pd.is_deceased = FALSE 
-    and pcn_code in (select distinct pcn_code from {{ ref('stg_c_ltcs_mdt_lookup') }})
+    and area_code in (select distinct pcn_code from {{ ref('stg_c_ltcs_mdt_lookup') }}) -- replace this with a lookup table of areas
     and pd.age >= 18
   --  and fragmented_sk_patient_id_flag = 0 -- keep warning for awareness of person/patient mapping issues
 -- and fragmented_person_id_flag = 0
