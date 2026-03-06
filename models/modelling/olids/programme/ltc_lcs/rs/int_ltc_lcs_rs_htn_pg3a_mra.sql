@@ -12,7 +12,7 @@
 -- - vs7: CKD (CKD_COD)
 -- - vs8: eGFR < 60
 -- - vs9: Diabetes (DM_COD)
--- - vs10: Black ethnicity
+-- - vs10: Ethnicity (EMIS-defined valueset)
 
 with
 -- Parent population: Patients currently on hypertension register
@@ -89,7 +89,7 @@ rule_3_diabetes as (
     from ({{ get_ltc_lcs_observations("on_htn_reg_priority_group_3a_mra_v3_vs9") }})
 ),
 
--- Black ethnicity
+-- Ethnicity (EMIS valueset vs10)
 rule_3_ethnicity as (
     select distinct person_id
     from ({{ get_ltc_lcs_observations("on_htn_reg_priority_group_3a_mra_v3_vs10") }})

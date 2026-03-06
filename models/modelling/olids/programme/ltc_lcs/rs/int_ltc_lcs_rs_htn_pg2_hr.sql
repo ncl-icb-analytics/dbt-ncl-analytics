@@ -7,10 +7,10 @@
 -- - Clinic: SBP > 160 or DBP > 100
 -- - Home/ABPM: SBP > 150 or DBP > 95
 --
--- PG2b: Stage 1 BP + Black ethnicity + comorbidity
--- - Clinic: SBP >= 140 or DBP >= 90
--- - Home/ABPM: SBP >= 135 or DBP >= 85
--- - Ethnicity: vs3 Black African/Caribbean/British
+-- PG2b: Stage 1 BP + ethnicity (EMIS vs3) + comorbidity
+-- - Clinic: SBP > 140 or DBP > 90
+-- - Home/ABPM: SBP > 135 or DBP > 85
+-- - Ethnicity: vs3 (EMIS-defined ethnicity valueset)
 -- - Comorbidity (any): vs4 CHD, vs5+vs6 Stroke/TIA, vs7 PAD, vs8 CKD,
 --   vs9 eGFR < 60, vs10 Diabetes, vs11 BMI > 35
 
@@ -52,20 +52,20 @@ pg2a_stage2_bp as (
     )
 ),
 
--- PG2b: Stage 1 BP thresholds
--- Clinic: SBP >= 140 or DBP >= 90
--- Home/ABPM: SBP >= 135 or DBP >= 85
+-- PG2b: Stage 1 BP thresholds (EMIS excludes if <= threshold, so inclusion is strictly >)
+-- Clinic: SBP > 140 or DBP > 90
+-- Home/ABPM: SBP > 135 or DBP > 85
 pg2b_stage1_bp as (
     select person_id
     from latest_bp
     where (
-        (not is_home_or_abpm and (systolic_value >= 140 or diastolic_value >= 90))
+        (not is_home_or_abpm and (systolic_value > 140 or diastolic_value > 90))
         or
-        (is_home_or_abpm and (systolic_value >= 135 or diastolic_value >= 85))
+        (is_home_or_abpm and (systolic_value > 135 or diastolic_value > 85))
     )
 ),
 
--- PG2b: Black ethnicity (EMIS valueset)
+-- PG2b: Ethnicity (EMIS valueset vs3)
 pg2b_ethnicity as (
     select distinct person_id
     from ({{ get_ltc_lcs_observations("priority_group_2b_icb_v3_vs3") }})
@@ -143,7 +143,7 @@ pg2b_comorbidities as (
     select person_id from pg2b_bmi
 ),
 
--- PG2b combined: Stage 1 BP + Black ethnicity + comorbidity
+-- PG2b combined: Stage 1 BP + ethnicity + comorbidity
 pg2b_combined as (
     select bp.person_id
     from pg2b_stage1_bp bp

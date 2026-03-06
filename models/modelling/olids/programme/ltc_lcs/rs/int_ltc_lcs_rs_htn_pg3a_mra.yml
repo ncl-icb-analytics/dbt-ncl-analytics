@@ -13,7 +13,7 @@ models:
       - vs7: CKD
       - vs8: eGFR < 60
       - vs9: Diabetes
-      - vs10: Black ethnicity
+      - vs10: Ethnicity (EMIS-defined valueset)
 
       BP thresholds (latest in 12 months):
       - Clinic: SBP > 140 or DBP > 90

@@ -10,10 +10,10 @@ models:
       - Clinic: SBP > 160 or DBP > 100
       - Home/ABPM: SBP > 150 or DBP > 95
 
-      PG2b - Stage 1 BP + Black ethnicity + comorbidity:
-      - Clinic: SBP >= 140 or DBP >= 90
-      - Home/ABPM: SBP >= 135 or DBP >= 85
-      - Ethnicity: vs3 Black African/Caribbean/British
+      PG2b - Stage 1 BP + ethnicity (EMIS vs3) + comorbidity:
+      - Clinic: SBP > 140 or DBP > 90
+      - Home/ABPM: SBP > 135 or DBP > 85
+      - Ethnicity: vs3 (EMIS-defined ethnicity valueset)
       - Comorbidity (any): vs4 CHD, vs5+vs6 Stroke/TIA, vs7 PAD, vs8 CKD,
         vs9 eGFR < 60, vs10 Diabetes, vs11 BMI > 35
     config:
