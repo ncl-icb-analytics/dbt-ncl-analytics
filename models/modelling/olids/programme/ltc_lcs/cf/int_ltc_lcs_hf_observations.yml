@@ -1,8 +1,12 @@
 models:
   - name: int_ltc_lcs_hf_observations
-    description: 'Heart failure case-finding observation evidence for Long Term Conditions case finding measures.
+    description: >
+      Heart failure case-finding observation evidence for LTC LCS case finding.
 
-      One row per person-valueset latest observation for HF evidence, NT-proBNP, cardiology referral, heart failure exclusion, cardiomyopathy, breathlessness, female coding, and hirsutism-related coding.'
+      One row per person-valueset latest observation for: HF evidence (base exclusion),
+      NT-proBNP levels, cardiology referral, heart failure exclusion codes, cardiomyopathy
+      evidence, breathlessness, and hirsutism-related coding. Observation branches map to
+      EMIS ICB_CF_HF_61_woEX rule structure.
     config:
       meta:
         owner:
@@ -14,7 +18,6 @@ models:
           arguments:
             valuesets:
               - eligible_for_hf_casefinding_vs1
-              - hf_case_finding_eligible_patients_vs1
               - hf_case_finding_eligible_patients_vs5
               - hf_case_finding_eligible_patients_vs6
               - hf_case_finding_eligible_patients_vs7

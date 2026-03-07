@@ -56,15 +56,14 @@ cardiology_referral_latest AS (
 ),
 
 hf_excluded_latest AS (
+    -- EMIS ICB_CF_HF_61 excludes "Heart failure excluded" (vs7) within 3 years
+    -- vs1 is Sacubitril/Valsartan medications, NOT HF excluded
     SELECT
         observation_id,
         person_id,
         clinical_effective_date AS hf_excluded_date
     FROM {{ ref('int_ltc_lcs_hf_observations') }}
-    WHERE valueset_friendly_name IN (
-        'hf_case_finding_eligible_patients_vs7',
-        'hf_case_finding_eligible_patients_vs1'
-    )
+    WHERE valueset_friendly_name = 'hf_case_finding_eligible_patients_vs7'
         AND clinical_effective_date >= DATEADD(YEAR, -3, CURRENT_DATE())
 ),
 

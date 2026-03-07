@@ -18,8 +18,8 @@ WITH hf_observations AS (
     SELECT * FROM ({{ get_ltc_lcs_observations_latest('hf_case_finding_eligible_patients_vs9') }})
     UNION ALL
     SELECT * FROM ({{ get_ltc_lcs_observations_latest('hf_case_finding_eligible_patients_vs13') }})
-    UNION ALL
-    SELECT * FROM ({{ get_ltc_lcs_observations_latest('hf_case_finding_eligible_patients_vs1') }})
+    -- Removed duplicate fetch of hf_case_finding_eligible_patients_vs1 (Sacubitril/Valsartan medications)
+    -- vs7 (Heart failure excluded) is already fetched above
 )
 
 SELECT
@@ -31,10 +31,8 @@ SELECT
             THEN 'branch_3_4_ntprobnp'
         WHEN valueset_friendly_name = 'hf_case_finding_eligible_patients_vs6'
             THEN 'branch_3_cardiology_referral'
-        WHEN valueset_friendly_name IN (
-            'hf_case_finding_eligible_patients_vs7',
-            'hf_case_finding_eligible_patients_vs1'
-        ) THEN 'hf_excluded'
+        WHEN valueset_friendly_name = 'hf_case_finding_eligible_patients_vs7'
+            THEN 'hf_excluded'
         WHEN valueset_friendly_name = 'hf_case_finding_eligible_patients_vs8'
             THEN 'branch_5_cardiomyopathy'
         WHEN valueset_friendly_name = 'hf_case_finding_eligible_patients_vs9'

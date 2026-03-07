@@ -48,3 +48,8 @@ models:
               sort_order: 2
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        data_tests:
+          - unique
+          - not_null
