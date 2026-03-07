@@ -31,12 +31,13 @@ WITH ltc_summary_conditions AS (
 
 diabetes_all AS (
     -- EMIS ICS_METABOLIC_LTC excludes ALL diabetes types (Type 1, Type 2, gestational, etc.)
-    -- not just Type 2
+    -- not just Type 2. Scoped to current register members to match other conditions.
     SELECT DISTINCT
         person_id,
         MIN(earliest_diagnosis_date) AS earliest_diagnosis_date,
         MAX(latest_diagnosis_date) AS latest_diagnosis_date
     FROM {{ ref('fct_person_diabetes_register') }}
+    WHERE is_on_register = TRUE
     GROUP BY person_id
 ),
 
