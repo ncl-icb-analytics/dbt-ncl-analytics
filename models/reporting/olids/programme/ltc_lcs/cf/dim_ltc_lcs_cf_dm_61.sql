@@ -46,7 +46,7 @@ latest_hba1c AS (
     GROUP BY person_id, clinical_effective_date, result_value
     QUALIFY
         ROW_NUMBER()
-            OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC)
+            OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC, result_value DESC)
         = 1
 ),
 
