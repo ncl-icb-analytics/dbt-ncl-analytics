@@ -1,11 +1,13 @@
 models:
   - name: int_ltc_lcs_cf_base_population
-    description: 'Base population for Long Term Conditions case finding indicators
-      with appropriate exclusions.
+    description: >
+      Base population for metabolic/cardiovascular LTC case finding indicators.
 
-      One row per eligible person excluding patients already in LTC programmes and
-      those with NHS health checks in last 24 months to prevent duplicate programme
-      targeting.'
+      One row per eligible person excluding patients already in metabolic/CV LTC programmes
+      (ICS_METABOLIC_LTC equivalent: AF, CKD, CHD, HTN, HF, Stroke/TIA, PAD, NAFLD,
+      Diabetes (all types), Hyperlipidaemia) and those with NHS health checks in last
+      24 months. Does NOT exclude respiratory conditions (COPD, Asthma) — those use
+      ICS_RESP_LTC separately for the CYP Asthma pathway.
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id
@@ -21,13 +23,14 @@ models:
           category: "CASE_FINDING"
           clinical_domain: "Population Health Management"
           name_short: "LTC/LCS base population"
-          description_short: "Eligible population for LTC/LCS case finding with exclusions
-            applied"
+          description_short: "Eligible population for metabolic/CV case finding with exclusions applied"
           description_long: >
-            Active patients with practice registration, excluding existing LTC programme  participants
-            (CKD, AF, COPD, HTN, CHD, STIA, PAD, HF, DM2, FHYP, NAF, AST, CYP_AST)  and
-            recent NHS health check recipients (24m) to prevent duplicate targeting.  Forms
-            foundation for all case finding indicators.
+            Active patients with practice registration, excluding metabolic/CV LTC programme
+            participants (ICS_METABOLIC_LTC: CKD, AF, HTN, CHD, STIA, PAD, HF, Diabetes
+            (all types), Hyperlipidaemia, NAFLD) and recent NHS health check recipients (24m).
+            Does NOT exclude respiratory conditions (COPD, Asthma) which are handled separately
+            via ICS_RESP_LTC for the CYP Asthma pathway. Forms foundation for metabolic case
+            finding indicators.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_BASE_001"
@@ -41,8 +44,6 @@ models:
               category: "EXCLUSION"
             - cluster_id: "AFIB_COD"
               category: "EXCLUSION"
-            - cluster_id: "COPD_COD"
-              category: "EXCLUSION"
             - cluster_id: "HTN_COD"
               category: "EXCLUSION"
             - cluster_id: "CHD_COD"
@@ -53,15 +54,11 @@ models:
               category: "EXCLUSION"
             - cluster_id: "HF_COD"
               category: "EXCLUSION"
-            - cluster_id: "DMTYPE2_COD"
-              category: "EXCLUSION"
             - cluster_id: "DM_COD"
               category: "EXCLUSION"
             - cluster_id: "FHYP_COD"
               category: "EXCLUSION"
             - cluster_id: "NAF_COD"
-              category: "EXCLUSION"
-            - cluster_id: "AST_COD"
               category: "EXCLUSION"
           thresholds:
             - population_group: "ALL_ADULTS"
