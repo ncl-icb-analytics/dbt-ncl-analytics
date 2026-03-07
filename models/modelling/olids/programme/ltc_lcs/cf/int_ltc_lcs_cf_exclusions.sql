@@ -1,6 +1,8 @@
 -- Intermediate model for LTC LCS Case Finding Exclusions
--- Identifies patients with any of the specified conditions that exclude them from the LTC LCS Case Finding programme.
--- Includes CKD, AF, COPD, Hypertension, CHD, Stroke/TIA, PAD, Heart Failure, Type 2 Diabetes, Hyperlipidaemia, NAFLD, and Asthma (adult and CYP).
+-- Identifies patients with conditions that exclude them from LTC LCS Case Finding.
+-- Mirrors EMIS ICS_METABOLIC_LTC: AF, CKD, CHD, HTN, HF, Stroke/TIA, PAD, NAFLD, Diabetes (all types), Hyperlipidaemia.
+-- Respiratory conditions (COPD, Asthma, CYP Asthma) are tracked separately as ICS_RESP_LTC equivalents
+-- and NOT included in the shared has_metabolic_excluding_condition flag.
 
 WITH ltc_summary_conditions AS (
     SELECT
@@ -27,14 +29,15 @@ WITH ltc_summary_conditions AS (
     AND is_on_register = TRUE
 ),
 
-type2_diabetes AS (
-    SELECT
+diabetes_all AS (
+    -- EMIS ICS_METABOLIC_LTC excludes ALL diabetes types (Type 1, Type 2, gestational, etc.)
+    -- not just Type 2
+    SELECT DISTINCT
         person_id,
-        earliest_type2_date AS earliest_diagnosis_date,
-        latest_type2_date AS latest_diagnosis_date
+        MIN(earliest_diagnosis_date) AS earliest_diagnosis_date,
+        MAX(latest_diagnosis_date) AS latest_diagnosis_date
     FROM {{ ref('fct_person_diabetes_register') }}
-    WHERE diabetes_type = 'Type 2'
-
+    GROUP BY person_id
 ),
 
 all_conditions AS (
@@ -42,10 +45,10 @@ all_conditions AS (
     UNION ALL
     SELECT
         person_id,
-        'DM2' AS condition_code,
+        'DM' AS condition_code,
         earliest_diagnosis_date,
         latest_diagnosis_date
-    FROM type2_diabetes
+    FROM diabetes_all
 ),
 
 person_level_aggregation AS (
@@ -60,7 +63,7 @@ person_level_aggregation AS (
         BOOLOR_AGG(condition_code = 'STIA') AS has_stia,
         BOOLOR_AGG(condition_code = 'PAD') AS has_pad,
         BOOLOR_AGG(condition_code = 'HF') AS has_hf,
-        BOOLOR_AGG(condition_code = 'DM2') AS has_type2_diabetes,
+        BOOLOR_AGG(condition_code = 'DM') AS has_diabetes,
         BOOLOR_AGG(condition_code = 'FHYP') AS has_hyperlipidaemia,
         BOOLOR_AGG(condition_code = 'NAF') AS has_nafld,
         BOOLOR_AGG(condition_code = 'AST') AS has_asthma,
@@ -79,15 +82,29 @@ SELECT
     has_stia,
     has_pad,
     has_hf,
-    has_type2_diabetes,
+    has_diabetes,
     has_hyperlipidaemia,
     has_nafld,
     has_asthma,
     has_cyp_asthma,
     earliest_excluding_condition_date,
+
+    -- ICS_METABOLIC_LTC equivalent: metabolic/cardiovascular conditions only
+    -- Used by DM, CKD, CVD, HTN, AF, HF case finding base populations
+    (
+        has_ckd OR has_af OR has_hypertension OR has_chd
+        OR has_stia OR has_pad OR has_hf OR has_diabetes
+        OR has_hyperlipidaemia OR has_nafld
+    ) AS has_metabolic_excluding_condition,
+
+    -- ICS_RESP_LTC equivalent: respiratory conditions only
+    -- Used by CYP Asthma case finding base population
+    (has_copd OR has_asthma OR has_cyp_asthma) AS has_respiratory_excluding_condition,
+
+    -- Legacy combined flag (kept for backward compatibility — prefer specific flags above)
     (
         has_ckd OR has_af OR has_copd OR has_hypertension OR has_chd
-        OR has_stia OR has_pad OR has_hf OR has_type2_diabetes
+        OR has_stia OR has_pad OR has_hf OR has_diabetes
         OR has_hyperlipidaemia OR has_nafld OR has_asthma OR has_cyp_asthma
     ) AS has_excluding_condition
 FROM person_level_aggregation

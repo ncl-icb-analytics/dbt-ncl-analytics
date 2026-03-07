@@ -18,7 +18,7 @@ metabolic_ltc AS (
     SELECT
         person_id
     FROM {{ ref('int_ltc_lcs_cf_exclusions') }}
-    WHERE has_type2_diabetes = TRUE
+    WHERE has_diabetes = TRUE
         OR has_hyperlipidaemia = TRUE
         OR has_nafld = TRUE
 ),
