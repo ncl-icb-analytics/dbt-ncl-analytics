@@ -11,39 +11,34 @@ Uses stricter logic than the count model: only accepted units (%, percent, {WBCs
 Standard unit: % (percentage of total WBC count).
 */
 
-WITH base_observations AS (
+WITH raw_observations AS (
+    SELECT *
+    FROM ({{ get_observations("'EOS_PERCENT'") }})
+),
 
+deduplicated AS (
+    {{ deduplicate_table(
+        table='raw_observations',
+        partition_cols=['person_id', 'clinical_effective_date', 'result_value', 'result_unit_code', 'mapped_concept_code'],
+        order_cols=['date_recorded', 'id']
+    ) }}
+),
+
+base_observations AS (
     SELECT
-    /*
-    There seems to be duplications in olids observations in terms of clinical information, 
-    so we deduplicate by person_id, clinical_effective_date, result_value, and result_unit_code, 
-    ordering by date_recorded as this often seems to differ   
-    */
-        ROW_NUMBER() OVER (
-            PARTITION BY 
-                obs.person_id,
-                obs.clinical_effective_date,
-                obs.result_value,
-                obs.result_unit_code,
-                obs.mapped_concept_code
-            ORDER BY obs.date_recorded DESC
-        ) AS sequence,
-        obs.id,
-        obs.person_id,
-        obs.clinical_effective_date,
-        obs.result_value,
-        obs.result_unit_code,
-        obs.result_unit_display,
-        obs.mapped_concept_code AS concept_code,
-        obs.mapped_concept_display AS code_description,
-        obs.cluster_id AS source_cluster_id
-    FROM ({{ get_observations("'EOS_PERCENT'") }}) obs
-    WHERE obs.clinical_effective_date IS NOT NULL
-      AND obs.clinical_effective_date <= CURRENT_DATE()
-      AND obs.result_value IS NOT NULL
-
-    QUALIFY sequence = 1
-
+        id,
+        person_id,
+        clinical_effective_date,
+        result_value,
+        result_unit_code,
+        result_unit_display,
+        mapped_concept_code AS concept_code,
+        mapped_concept_display AS code_description,
+        cluster_id AS source_cluster_id
+    FROM deduplicated
+    WHERE clinical_effective_date IS NOT NULL
+      AND clinical_effective_date <= CURRENT_DATE()
+      AND result_value IS NOT NULL
 ),
 
 unit_rules AS (
