@@ -1,0 +1,32 @@
+models:
+  - name: cltcs_scores
+    description: "Combined C-LTCS scores per patient. One row per patient with activation, coordination and treatment sub-scores (final composite score to be added)."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data"
+        data_tests:
+          - unique
+          - not_null
+
+      - name: area_code
+        data_type: varchar
+        description: "Area code (PCN in this context)"
+        data_tests:
+          - not_null
+
+      - name: score_activation
+        data_type: number
+        description: "Activation sub-score from cltcs_score_activation"
+
+      - name: score_coordination
+        data_type: number
+        description: "Coordination sub-score from cltcs_score_coordination"
+
+      - name: score_treatment
+        data_type: number
+        description: "Treatment sub-score from cltcs_score_treatment"
