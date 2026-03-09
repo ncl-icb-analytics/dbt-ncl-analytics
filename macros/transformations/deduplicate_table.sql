@@ -30,7 +30,10 @@
         {%- for col in partition_cols %}
             {{ "tbl." ~ col }}{% if not loop.last %}, {% endif %}
         {%- endfor %}
-        ORDER BY tbl.{{ order_col }} DESC
+        ORDER BY
+        {%- for col in order_col %}
+            tbl.{{ col }} DESC{% if not loop.last %},{% endif %}
+        {%- endfor %}
     ) = 1
 
 {% endmacro %}
