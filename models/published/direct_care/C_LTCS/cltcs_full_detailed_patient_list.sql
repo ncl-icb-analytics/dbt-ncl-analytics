@@ -1,7 +1,8 @@
 with inclusion_list as (
     select olids_id, patient_id, area_code, 'inclusion' as source
     from {{ ref('inclusion_cohort') }}
-    where eligible = 1
+    where eligible = 1 and fragmented_sk_patient_id_flag = 0 and fragmented_person_id_flag = 0 -- exclude fragmented patients for now
+
 ),
 shortlisted_list as (
     select pp.person_id as olids_id, sl.patient_id, sl.area_code, 'shortlist' as source

@@ -33,7 +33,7 @@ activity as(
     , op_encounters
     , gp_encounters
     from {{ref('fct_person_activity_by_month')}}
-    where activity_month between dateadd(month, -13, current_date()) and current_date()
+    where activity_month between dateadd(month, -18, current_date()) and current_date()
 )
 
 select il.patient_id

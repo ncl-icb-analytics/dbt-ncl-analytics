@@ -13,9 +13,8 @@ Clinical Purpose:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, area_code, area_name, practice_code, practice_name, age, main_language
-    from {{ ref('inclusion_cohort')}}
-    where eligible = 1
+    select *
+    from {{ ref('cltcs_full_detailed_patient_list')}}
 )
 
 select il.patient_id

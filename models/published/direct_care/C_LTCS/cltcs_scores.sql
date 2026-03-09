@@ -1,7 +1,7 @@
-with cohort_data as (
+with inclusion_list as (
     select patient_id,
         area_code
-    from {{ ref('cohort_data') }}
+    from {{ ref('cltcs_full_detailed_patient_list') }}
 ),
 activation_score as (
     select patient_id,
@@ -22,15 +22,15 @@ treatment_score as (
     from {{ ref('cltcs_score_treatment') }}
 ),
 final_score as (
-    select cohort_data.patient_id,
-        cohort_data.area_code,
+    select il.patient_id,
+        il.area_code,
         score_activation,
         score_coordination,
         score_treatment
         -- TO DO: normalise scores and add final score calculation
-    from cohort_data
-    left join activation_score  on cohort_data.patient_id = activation_score.patient_id
-    left join coordination_score on cohort_data.patient_id = coordination_score.patient_id
-    left join treatment_score on cohort_data.patient_id = treatment_score.patient_id
+    from inclusion_list il
+    left join activation_score  on il.patient_id = activation_score.patient_id
+    left join coordination_score on il.patient_id = coordination_score.patient_id
+    left join treatment_score on il.patient_id = treatment_score.patient_id
 )
 select * from final_score
