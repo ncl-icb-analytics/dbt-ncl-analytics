@@ -37,6 +37,6 @@ from final_icd_codes f
 left join  {{ ref('stg_aic_base_athena_concept') }} c
     on c.concept_code = f.concept_code
     and c.vocabulary_id = 'ICD10'
-left join {{ ref("int_sus_ip_encounters") }} se on se.visit_occurrence_id = f.primarykey_id
+left join {{ ref("obt_encounter_apc") }} se on se.visit_occurrence_id = f.primarykey_id
 
 where se.sk_patient_id is not null and se.sk_patient_id != '1'

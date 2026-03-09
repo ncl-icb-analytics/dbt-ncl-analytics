@@ -1,12 +1,16 @@
 
 models:
-  - name: int_gp_encounters_appt
-    description: "GP encounters from OLIDS appointments filtered to include only relevant
+  - name: obt_appointment_gp
+    description: "GP appointments from OLIDS appointments filtered to include only relevant
       'Care Related Encounter' appointment context types"
     config:
       meta:
         owner:
           name: Emily Baldwin
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         data_type: varchar

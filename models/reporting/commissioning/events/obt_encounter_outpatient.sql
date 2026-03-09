@@ -18,5 +18,5 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 */
 
 select *
-from {{ ref('int_sus_op_appointments') }}
+from {{ ref('obt_appointment_outpatient') }}
 where appointment_attended_or_dna in ('5', '6') 
