@@ -20,7 +20,7 @@ Key features:
 
 Usage:
 - Primary table for LTC/LCS Case Finding Dashboard
-- Filter by indicator categories (AF, CKD, CVD, DM, HTN, CYP_AST)
+- Filter by indicator categories (AF, HF, CKD, CVD, DM, HTN, CYP_AST)
 - Demographic breakdowns for equity analysis
 - Practice-level performance monitoring
 */
@@ -53,6 +53,7 @@ base_data AS (
         cf.case_finding_count,
         -- All individual indicator flags
         cf.in_af_61, cf.in_af_62,
+        cf.in_hf_61,
         cf.in_ckd_61, cf.in_ckd_62, cf.in_ckd_63, cf.in_ckd_64,
         cf.in_cvd_61, cf.in_cvd_62, cf.in_cvd_63, cf.in_cvd_64, cf.in_cvd_65, cf.in_cvd_66,
         cf.in_dm_61, cf.in_dm_62, cf.in_dm_63, cf.in_dm_64, cf.in_dm_65, cf.in_dm_66,
@@ -157,6 +158,7 @@ final_dashboard AS (
     FROM (
         SELECT *, 'AF_61' as indicator_id FROM base_data WHERE in_af_61
         UNION ALL SELECT *, 'AF_62' FROM base_data WHERE in_af_62
+        UNION ALL SELECT *, 'HF_61' FROM base_data WHERE in_hf_61
         UNION ALL SELECT *, 'CKD_61' FROM base_data WHERE in_ckd_61
         UNION ALL SELECT *, 'CKD_62' FROM base_data WHERE in_ckd_62
         UNION ALL SELECT *, 'CKD_63' FROM base_data WHERE in_ckd_63

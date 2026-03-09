@@ -21,10 +21,11 @@ health_checks AS (
 ),
 
 ltc_exclusions AS (
-    -- Get patients already in LTC programmes (with excluding conditions)
+    -- Get patients already in metabolic/cardiovascular LTC programmes (ICS_METABOLIC_LTC equivalent)
+    -- Does NOT exclude respiratory conditions (COPD, Asthma) — those use ICS_RESP_LTC separately
     SELECT DISTINCT person_id
     FROM {{ ref('int_ltc_lcs_cf_exclusions') }}
-    WHERE has_excluding_condition = TRUE
+    WHERE has_metabolic_excluding_condition = TRUE
 )
 
 SELECT DISTINCT

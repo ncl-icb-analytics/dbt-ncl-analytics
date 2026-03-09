@@ -24,7 +24,9 @@ hba1c_readings AS (
         mapped_concept_display
     FROM {{ ref('int_ltc_lcs_dm_observations') }}
     WHERE
-        cluster_id = 'HBA1C_LEVEL'
+        -- EMIS uses a single value set (vs3, 3 codes) for HbA1c.
+        -- Combine both HBA1C_LEVEL and HBA1C clusters to ensure "latest" considers all codes.
+        cluster_id IN ('HBA1C_LEVEL', 'HBA1C')
         AND result_value > 0
 ),
 
@@ -44,7 +46,7 @@ latest_hba1c AS (
     GROUP BY person_id, clinical_effective_date, result_value
     QUALIFY
         ROW_NUMBER()
-            OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC)
+            OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC, result_value DESC)
         = 1
 ),
 

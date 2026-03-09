@@ -4,7 +4,7 @@ models:
       diagnosis.
 
       One row per person on digoxin, flecainide, propafenone, or anticoagulant without
-      AF/HF diagnosis or DVT/PE in last year.'
+      AF/HF diagnosis or DVT/PE ever recorded.'
 
     config:
       meta:
@@ -17,7 +17,7 @@ models:
           description_short: "Cardiac medications without AF/HF diagnosis"
           description_long: >
             On digoxin, flecainide, propafenone, or anticoagulant, not on
-            AF or heart failure registers, no DVT/PE in last year.
+            AF or heart failure registers, no DVT/PE ever recorded.
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_AF_61"

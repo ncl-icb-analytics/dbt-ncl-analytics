@@ -1,0 +1,21 @@
+models:
+  - name: int_ltc_lcs_rs_htn_pg1_hrc
+    description: |
+      Hypertension Register Priority Group 1 - High Risk & Complex identification.
+
+      Patients on the hypertension register are included if their latest BP (within 12 months)
+      exceeds severe thresholds:
+      - Clinic BP: systolic > 180 or diastolic > 120
+      - Home/ABPM BP: systolic > 170 or diastolic > 115
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
