@@ -171,11 +171,14 @@ final_uptake AS (
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
         FROM ({{ covid_autumn_config() }})
         UNION ALL
-        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date  
+        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
         FROM ({{ covid_spring_config() }})
         UNION ALL
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
         FROM ({{ covid_previous_autumn_config() }})
+        UNION ALL
+        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
+        FROM ({{ covid_previous_spring_config() }})
     ) cc
         ON cd.campaign_id = cc.campaign_id
 )

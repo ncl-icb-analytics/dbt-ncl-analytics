@@ -16,7 +16,11 @@ WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
     SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
+    SELECT * FROM ({{ covid_spring_config() }})
+    UNION ALL
     SELECT * FROM ({{ covid_previous_autumn_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_spring_config() }})
 ),
 
 -- Step 1: Find people with learning disability diagnosis (for all campaigns)
