@@ -4,10 +4,10 @@ COVID Severe Mental Illness Eligibility Rule
 Business Rule: Person is eligible if they have:
 1. Severe mental illness diagnosis (SMI_COD) - any time in history
 2. AND aged 5+ years (minimum age for COVID vaccination)
-3. Eligible in all campaigns (universal eligibility)
+3. Campaign must have eligible_severe_mental_illness = TRUE
 
 Simple diagnosis rule - any severe mental illness diagnosis qualifies.
-This condition is eligible in both 2024/25 AND 2025/26 campaigns.
+Eligible in 2024/25 campaigns; not eligible in 2025/26.
 */
 
 {{ config(materialized='table') }}
@@ -31,7 +31,8 @@ people_with_smi_diagnosis AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
-    GROUP BY 
+        AND cc.eligible_severe_mental_illness = TRUE
+    GROUP BY
         cc.campaign_id, obs.person_id, cc.audit_end_date, cc.campaign_reference_date
 ),
 

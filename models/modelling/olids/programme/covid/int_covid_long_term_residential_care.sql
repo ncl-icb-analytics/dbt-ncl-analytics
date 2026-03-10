@@ -31,6 +31,7 @@ people_with_residence_codes AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_care_home = TRUE
 ),
 
 -- Step 2: Find people with long-term care residence codes (for all campaigns)

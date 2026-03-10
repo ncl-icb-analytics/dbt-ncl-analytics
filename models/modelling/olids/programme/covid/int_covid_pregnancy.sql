@@ -6,7 +6,7 @@ Business Rule: Person is eligible if they have:
 2. Pregnancy code in 8 months before campaign with no subsequent delivery
 
 Simplified rule aligned with flu pregnancy logic.
-Eligible in all COVID campaigns (both 2024/25 and 2025/26).
+Eligible in 2024/25 campaigns; not eligible in 2025/26.
 */
 
 {{ config(materialized='table') }}
@@ -31,7 +31,8 @@ pregnancy_during_campaign_periods AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.pregnancy_current_start
         AND obs.clinical_effective_date <= cc.pregnancy_current_end
-    GROUP BY 
+        AND cc.eligible_pregnancy = TRUE
+    GROUP BY
         cc.campaign_id, obs.person_id, cc.campaign_reference_date
 ),
 

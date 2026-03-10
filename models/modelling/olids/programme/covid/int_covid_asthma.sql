@@ -32,6 +32,7 @@ people_with_asthma_diagnosis AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
