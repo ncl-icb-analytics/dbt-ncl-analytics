@@ -4,10 +4,10 @@ COVID Learning Disability Eligibility Rule
 Business Rule: Person is eligible if they have:
 1. Learning disability diagnosis (LD_COD) - any time in history
 2. AND aged 5+ years (minimum age for COVID vaccination)  
-3. Eligible in all campaigns (universal eligibility)
+3. Campaign must have eligible_learning_disability = TRUE
 
 Simple diagnosis rule - any learning disability diagnosis qualifies.
-This condition is eligible in both 2024/25 AND 2025/26 campaigns.
+Eligible in 2024/25 campaigns; not eligible in 2025/26.
 */
 
 {{ config(materialized='table') }}
@@ -16,7 +16,11 @@ WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
     SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
+    SELECT * FROM ({{ covid_spring_config() }})
+    UNION ALL
     SELECT * FROM ({{ covid_previous_autumn_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_spring_config() }})
 ),
 
 -- Step 1: Find people with learning disability diagnosis (for all campaigns)
