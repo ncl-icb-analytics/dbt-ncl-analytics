@@ -54,6 +54,7 @@ pregnancy_before_campaign AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.pregnancy_lookback_start
         AND obs.clinical_effective_date < cc.pregnancy_current_start
+        AND cc.eligible_pregnancy = TRUE
     GROUP BY 
         cc.campaign_id, obs.person_id, cc.pregnancy_lookback_start,
         cc.pregnancy_current_start, cc.campaign_reference_date

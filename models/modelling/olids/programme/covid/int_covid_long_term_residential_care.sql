@@ -50,6 +50,7 @@ people_with_longterm_care_codes AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_care_home = TRUE
 ),
 
 -- Step 3: Get latest residence code for each person/campaign
