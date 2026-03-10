@@ -282,10 +282,10 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             FALSE AS eligible_pregnancy,                 -- Not eligible in 2025/26
             FALSE AS eligible_gestational_diabetes,      -- Not eligible in 2025/26
             FALSE AS eligible_homeless,                  -- Not eligible in 2025/26
-            
+
             -- Current audit date
-            '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
-            
+            '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
+
     {%- else -%}
         -- Default to current campaign if unknown campaign_id
         {{ covid_campaign_config('COVID Autumn 2025') }}
