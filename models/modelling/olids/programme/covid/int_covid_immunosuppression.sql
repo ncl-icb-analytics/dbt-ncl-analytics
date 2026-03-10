@@ -7,7 +7,7 @@ Business Rule: Person is eligible if they have:
    - Immunosuppression medication (IMMRX_COD) since lookback date (6 months)
    - Immunosuppression administration (IMM_ADM_COD) since lookback date (3 years)  
    - Chemotherapy/radiotherapy (DXT_CHEMO_COD) since lookback date (6 months)
-2. AND aged 6 months to 74 years (for 2025/26 campaigns) or any age (for 2024/25)
+2. AND aged 6 months to <75 years (for 2025/26 via immuno_max_age_years) or any age (for 2024/25)
 
 Combination rule - multiple evidence sources with OR logic.
 KEY ELIGIBILITY GROUP for restricted 2025/26 campaigns.
@@ -110,23 +110,26 @@ all_immuno_evidence AS (
 
 -- Step 6: Get people with any immunosuppression evidence
 people_with_immunosuppression AS (
-    SELECT 
+    SELECT
         aie.campaign_id,
         aie.person_id,
         MAX(aie.evidence_date) AS latest_evidence_date,
         LISTAGG(DISTINCT aie.evidence_type, '; ') AS evidence_types,
         cc.campaign_reference_date,
+        cc.immuno_max_age_years,
         cc.audit_end_date
     FROM all_immuno_evidence aie
     LEFT JOIN all_campaigns cc ON aie.campaign_id = cc.campaign_id
-    GROUP BY 
-        aie.campaign_id, aie.person_id, cc.campaign_reference_date, 
-        cc.audit_end_date
+    GROUP BY
+        aie.campaign_id, aie.person_id, cc.campaign_reference_date,
+        cc.immuno_max_age_years, cc.audit_end_date
 ),
 
 -- Step 7: Add age information and apply campaign-specific age restrictions
+-- Minimum age: 6 months (all campaigns)
+-- Maximum age: immuno_max_age_years from config (NULL = no cap, 75 = <75 for 2025/26)
 people_immunosuppressed_with_age AS (
-    SELECT 
+    SELECT
         pwi.campaign_id,
         pwi.person_id,
         demo.birth_date_approx,
@@ -136,11 +139,15 @@ people_immunosuppressed_with_age AS (
         pwi.evidence_types,
         pwi.campaign_reference_date
     FROM people_with_immunosuppression pwi
-    LEFT JOIN {{ ref('dim_person_demographics') }} demo 
+    LEFT JOIN {{ ref('dim_person_demographics') }} demo
         ON pwi.person_id = demo.person_id
     WHERE demo.is_active = TRUE
         AND demo.birth_date_approx IS NOT NULL
         AND DATEDIFF('month', demo.birth_date_approx, pwi.campaign_reference_date) >= 6  -- Minimum age 6 months
+        AND (
+            pwi.immuno_max_age_years IS NULL
+            OR DATEDIFF('year', demo.birth_date_approx, pwi.campaign_reference_date) < pwi.immuno_max_age_years
+        )
 ),
 
 -- Step 8: Format for eligibility table

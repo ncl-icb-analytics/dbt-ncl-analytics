@@ -71,9 +71,12 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             '2024-01-14'::DATE AS gestational_diabetes_start,          -- Gestational diabetes tracking
             
             
+            -- Immunosuppression age cap (NULL = no upper age limit)
+            NULL AS immuno_max_age_years,                               -- No age cap in 2024/25
+
             -- Individual condition eligibility flags (2024/25 campaigns)
             TRUE AS eligible_age_75_plus,
-            TRUE AS eligible_immunosuppression,  
+            TRUE AS eligible_immunosuppression,
             TRUE AS eligible_care_home,
             TRUE AS eligible_asthma,
             TRUE AS eligible_chronic_heart_disease,
@@ -89,28 +92,28 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             TRUE AS eligible_pregnancy,
             TRUE AS eligible_gestational_diabetes,
             TRUE AS eligible_homeless,
-            
+
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
-            
+
     {%- elif campaign_id == 'COVID Spring 2025' -%}
-        SELECT 
+        SELECT
             '{{ campaign_id }}' AS campaign_id,
             'Spring 2025 COVID Vaccination Campaign' AS campaign_name,
             'covid_2024_25' AS campaign_year,
             'spring' AS campaign_period,
-            
+
             -- Core campaign dates
             '2025-04-01'::DATE AS campaign_start_date,
             '2025-06-30'::DATE AS campaign_end_date,
             '2025-06-30'::DATE AS campaign_reference_date,
-            
+
             -- Medication lookback dates (from START_DAT)
             '2024-10-01'::DATE AS immuno_medication_lookback_date,      -- 6 months before start
             '2024-04-01'::DATE AS asthma_medication_lookback_date,      -- 1 year before start
-            '2023-04-01'::DATE AS asthma_admission_lookback_date,       -- 2 years before start  
+            '2023-04-01'::DATE AS asthma_admission_lookback_date,       -- 2 years before start
             '2022-04-01'::DATE AS immuno_admin_lookback_date,           -- 3 years before start
-            
+
             -- Asthma oral steroid windows (3 overlapping 2-year periods)
             '2023-04-01'::DATE AS asthma_steroid_window_1_start,        -- 2 years before spring start
             '2025-03-31'::DATE AS asthma_steroid_window_1_end,          -- Up to spring 2025
@@ -118,23 +121,25 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             '2025-09-30'::DATE AS asthma_steroid_window_2_end,          -- Up to autumn 2025
             '2024-01-01'::DATE AS asthma_steroid_window_3_start,        -- Additional window
             '2025-12-31'::DATE AS asthma_steroid_window_3_end,          -- Extended window
-            
+
             -- Vaccination tracking dates
             '2025-04-01'::DATE AS vaccination_tracking_start,
             '2025-06-30'::DATE AS vaccination_tracking_end,
             '2025-03-01'::DATE AS decline_tracking_start,               -- 1 month before campaign
             '2025-06-30'::DATE AS decline_tracking_end,                 -- Through spring period
-            
+
             -- Pregnancy tracking (campaign-specific)
-            '2024-08-01'::DATE AS pregnancy_lookback_start,             -- 8 months before campaign  
+            '2024-08-01'::DATE AS pregnancy_lookback_start,             -- 8 months before campaign
             '2025-04-01'::DATE AS pregnancy_current_start,              -- Campaign period start
             '2025-06-30'::DATE AS pregnancy_current_end,                -- Campaign period end
             '2025-01-14'::DATE AS gestational_diabetes_start,          -- Gestational diabetes tracking
-            
-            
+
+            -- Immunosuppression age cap (NULL = no upper age limit)
+            NULL AS immuno_max_age_years,                               -- No age cap in 2024/25
+
             -- Individual condition eligibility flags (2024/25 campaigns)
             TRUE AS eligible_age_75_plus,
-            TRUE AS eligible_immunosuppression,  
+            TRUE AS eligible_immunosuppression,
             TRUE AS eligible_care_home,
             TRUE AS eligible_asthma,
             TRUE AS eligible_chronic_heart_disease,
@@ -150,7 +155,7 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             TRUE AS eligible_pregnancy,
             TRUE AS eligible_gestational_diabetes,
             TRUE AS eligible_homeless,
-            
+
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
             
@@ -192,6 +197,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             '2026-06-30'::DATE AS pregnancy_current_end,                -- Campaign period end
             '2026-01-14'::DATE AS gestational_diabetes_start,           -- Gestational diabetes tracking
 
+
+            -- Immunosuppression age cap (NULL = no upper age limit)
+            75 AS immuno_max_age_years,                                 -- <75 in 2025/26, 75+ covered by age group
 
             -- Individual condition eligibility flags (Spring 2026 restricted)
             TRUE AS eligible_age_75_plus,
@@ -253,6 +261,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             '2026-06-30'::DATE AS pregnancy_current_end,                -- Through spring period
             '2025-01-14'::DATE AS gestational_diabetes_start,          -- Gestational diabetes tracking
             
+            -- Immunosuppression age cap (NULL = no upper age limit)
+            75 AS immuno_max_age_years,                                 -- <75 in 2025/26, 75+ covered by age group
+
             -- Individual condition eligibility flags (2025/26 restricted campaigns)
             TRUE AS eligible_age_75_plus,
             TRUE AS eligible_immunosuppression,
