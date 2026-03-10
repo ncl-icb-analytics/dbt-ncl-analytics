@@ -9,8 +9,9 @@ All COVID models work with any campaign by changing the covid_current_campaign v
 
 Available campaigns:
 - 'COVID Autumn 2024' - Autumn 2024 COVID Vaccination Campaign
-- 'COVID Spring 2025' - Spring 2025 COVID Vaccination Campaign  
+- 'COVID Spring 2025' - Spring 2025 COVID Vaccination Campaign
 - 'COVID Autumn 2025' - Autumn 2025 COVID Vaccination Campaign
+- 'COVID Spring 2026' - Spring 2026 COVID Vaccination Campaign
 
 Usage Examples:
 - Default campaign: {{ covid_campaign_config() }}
@@ -153,6 +154,67 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
             
+    {%- elif campaign_id == 'COVID Spring 2026' -%}
+        SELECT
+            '{{ campaign_id }}' AS campaign_id,
+            'Spring 2026 COVID Vaccination Campaign' AS campaign_name,
+            'covid_2025_26' AS campaign_year,
+            'spring' AS campaign_period,
+
+            -- Core campaign dates
+            '2026-04-01'::DATE AS campaign_start_date,
+            '2026-06-30'::DATE AS campaign_end_date,
+            '2026-06-30'::DATE AS campaign_reference_date,
+
+            -- Medication lookback dates (from START_DAT)
+            '2025-10-01'::DATE AS immuno_medication_lookback_date,      -- 6 months before start
+            '2025-04-01'::DATE AS asthma_medication_lookback_date,      -- 1 year before start
+            '2024-04-01'::DATE AS asthma_admission_lookback_date,       -- 2 years before start
+            '2023-04-01'::DATE AS immuno_admin_lookback_date,           -- 3 years before start
+
+            -- Asthma oral steroid windows (3 overlapping 2-year periods)
+            '2024-04-01'::DATE AS asthma_steroid_window_1_start,        -- 2 years before spring start
+            '2026-03-31'::DATE AS asthma_steroid_window_1_end,          -- Up to spring 2026
+            '2024-10-01'::DATE AS asthma_steroid_window_2_start,        -- 2 years from autumn 2024
+            '2026-09-30'::DATE AS asthma_steroid_window_2_end,          -- Up to autumn 2026
+            '2025-01-01'::DATE AS asthma_steroid_window_3_start,        -- Additional window
+            '2026-12-31'::DATE AS asthma_steroid_window_3_end,          -- Extended window
+
+            -- Vaccination tracking dates
+            '2026-04-01'::DATE AS vaccination_tracking_start,
+            '2026-06-30'::DATE AS vaccination_tracking_end,
+            '2026-03-01'::DATE AS decline_tracking_start,               -- 1 month before campaign
+            '2026-06-30'::DATE AS decline_tracking_end,                 -- Through spring period
+
+            -- Pregnancy tracking (campaign-specific)
+            '2025-08-01'::DATE AS pregnancy_lookback_start,             -- 8 months before campaign
+            '2026-04-01'::DATE AS pregnancy_current_start,              -- Campaign period start
+            '2026-06-30'::DATE AS pregnancy_current_end,                -- Campaign period end
+            '2026-01-14'::DATE AS gestational_diabetes_start,           -- Gestational diabetes tracking
+
+
+            -- Individual condition eligibility flags (Spring 2026 restricted)
+            TRUE AS eligible_age_75_plus,
+            TRUE AS eligible_immunosuppression,
+            TRUE AS eligible_care_home,
+            FALSE AS eligible_asthma,                    -- Not eligible in Spring 2026
+            FALSE AS eligible_chronic_heart_disease,     -- Not eligible in Spring 2026
+            FALSE AS eligible_chronic_kidney_disease,    -- Not eligible in Spring 2026
+            FALSE AS eligible_diabetes,                  -- Not eligible in Spring 2026
+            FALSE AS eligible_chronic_liver_disease,     -- Not eligible in Spring 2026
+            FALSE AS eligible_chronic_neurological_disease, -- Not eligible in Spring 2026
+            FALSE AS eligible_chronic_respiratory_disease, -- Not eligible in Spring 2026
+            FALSE AS eligible_morbid_obesity,            -- Not eligible in Spring 2026
+            FALSE AS eligible_asplenia,                  -- Not eligible in Spring 2026
+            FALSE AS eligible_learning_disability,       -- Not eligible in Spring 2026
+            FALSE AS eligible_severe_mental_illness,     -- Not eligible in Spring 2026
+            FALSE AS eligible_pregnancy,                 -- Not eligible in Spring 2026
+            FALSE AS eligible_gestational_diabetes,      -- Not eligible in Spring 2026
+            FALSE AS eligible_homeless,                  -- Not eligible in Spring 2026
+
+            -- Current audit date
+            '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
+
     {%- elif campaign_id == 'COVID Autumn 2025' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
@@ -193,22 +255,22 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             
             -- Individual condition eligibility flags (2025/26 restricted campaigns)
             TRUE AS eligible_age_75_plus,
-            TRUE AS eligible_immunosuppression,  
+            TRUE AS eligible_immunosuppression,
             TRUE AS eligible_care_home,
-            TRUE AS eligible_asthma,
-            FALSE AS eligible_chronic_heart_disease,       -- Removed in 2025/26
-            FALSE AS eligible_chronic_kidney_disease,      -- Removed in 2025/26
-            FALSE AS eligible_diabetes,                    -- Removed in 2025/26
-            FALSE AS eligible_chronic_liver_disease,       -- Removed in 2025/26
-            FALSE AS eligible_chronic_neurological_disease, -- Removed in 2025/26
-            FALSE AS eligible_chronic_respiratory_disease, -- Removed in 2025/26
-            FALSE AS eligible_morbid_obesity,              -- Removed in 2025/26
-            FALSE AS eligible_asplenia,                    -- Removed in 2025/26
-            TRUE AS eligible_learning_disability,
-            TRUE AS eligible_severe_mental_illness,
-            TRUE AS eligible_pregnancy,
-            FALSE AS eligible_gestational_diabetes,        -- Removed in 2025/26
-            FALSE AS eligible_homeless,                    -- Removed in 2025/26
+            FALSE AS eligible_asthma,                    -- Not eligible in 2025/26
+            FALSE AS eligible_chronic_heart_disease,     -- Not eligible in 2025/26
+            FALSE AS eligible_chronic_kidney_disease,    -- Not eligible in 2025/26
+            FALSE AS eligible_diabetes,                  -- Not eligible in 2025/26
+            FALSE AS eligible_chronic_liver_disease,     -- Not eligible in 2025/26
+            FALSE AS eligible_chronic_neurological_disease, -- Not eligible in 2025/26
+            FALSE AS eligible_chronic_respiratory_disease, -- Not eligible in 2025/26
+            FALSE AS eligible_morbid_obesity,            -- Not eligible in 2025/26
+            FALSE AS eligible_asplenia,                  -- Not eligible in 2025/26
+            FALSE AS eligible_learning_disability,       -- Not eligible in 2025/26
+            FALSE AS eligible_severe_mental_illness,     -- Not eligible in 2025/26
+            FALSE AS eligible_pregnancy,                 -- Not eligible in 2025/26
+            FALSE AS eligible_gestational_diabetes,      -- Not eligible in 2025/26
+            FALSE AS eligible_homeless,                  -- Not eligible in 2025/26
             
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
