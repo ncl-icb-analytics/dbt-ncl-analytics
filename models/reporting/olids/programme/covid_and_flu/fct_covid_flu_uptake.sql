@@ -13,7 +13,7 @@ Key features:
 
 Multi-Programme Support:
 COVID Campaigns:
-- COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025
+- COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025, COVID Spring 2026
 
 Flu Campaigns: 
 - Flu 2023-24, Flu 2024-25, Flu 2025-26
@@ -123,9 +123,9 @@ final_combined AS (
         -- Extract campaign year for easier analysis
         CASE 
             WHEN programme_type = 'COVID' THEN
-                CASE 
-                    WHEN campaign_id IN ('COVID Autumn 2024') THEN '2024/25'
-                    WHEN campaign_id IN ('COVID Spring 2025', 'COVID Autumn 2025') THEN '2025/26'
+                CASE
+                    WHEN campaign_id IN ('COVID Autumn 2024', 'COVID Spring 2025') THEN '2024/25'
+                    WHEN campaign_id IN ('COVID Autumn 2025', 'COVID Spring 2026') THEN '2025/26'
                     ELSE 'Unknown'
                 END
             WHEN programme_type = 'FLU' THEN
