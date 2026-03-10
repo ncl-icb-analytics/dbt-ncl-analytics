@@ -125,7 +125,7 @@ people_with_morbid_obesity AS (
         ON COALESCE(pbv.campaign_id, pbs.campaign_id) = pso.campaign_id 
         AND COALESCE(pbv.person_id, pbs.person_id) = pso.person_id
         AND pso.severe_obesity_rank = 1
-    WHERE pbv.bmi_rank = 1 OR pbv.person_id IS NULL  -- Latest BMI only
+    WHERE (pbv.bmi_rank = 1 OR pbv.person_id IS NULL)  -- Latest BMI only
         AND (pbv.person_id IS NOT NULL OR pbs.person_id IS NOT NULL OR pso.person_id IS NOT NULL)
 ),
 

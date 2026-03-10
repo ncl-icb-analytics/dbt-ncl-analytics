@@ -69,12 +69,13 @@ people_with_recent_immuno_admin AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.immuno_admin_lookback_date
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, obs.person_id
 ),
 
 -- Step 4: Find people with recent chemotherapy/radiotherapy (for all campaigns)
 people_with_recent_chemo AS (
-    SELECT 
+    SELECT
         cc.campaign_id,
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_chemo_date,
@@ -84,6 +85,7 @@ people_with_recent_chemo AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.immuno_medication_lookback_date  -- Same 6-month lookback
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, obs.person_id
 ),
 
