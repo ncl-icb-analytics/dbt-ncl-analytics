@@ -1,11 +1,11 @@
 
 models:
-  - name: int_sus_op_encounters
+  - name: obt_encounter_outpatient
     description: "Event history for attended outpatient appointments from SUS data"
     config:
       meta:
         owner:
-          name: Jessica Roberts
+          name: Emily Baldwin
     columns:
       - name: visit_occurrence_id
         data_type: number

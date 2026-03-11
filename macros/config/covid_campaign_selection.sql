@@ -11,9 +11,9 @@ To change campaign year, update covid_current_autumn() etc below.
 {# ===== Campaign ID selectors (edit these to change campaign year) ===== #}
 
 {% macro covid_current_autumn() %}COVID Autumn 2025{% endmacro %}
-{% macro covid_current_spring() %}COVID Spring 2025{% endmacro %}
+{% macro covid_current_spring() %}COVID Spring 2026{% endmacro %}
 {% macro covid_previous_autumn() %}COVID Autumn 2024{% endmacro %}
-{% macro covid_previous_spring() %}COVID Spring 2024{% endmacro %}
+{% macro covid_previous_spring() %}COVID Spring 2025{% endmacro %}
 
 {# ===== Campaign data lookup ===== #}
 
@@ -51,6 +51,17 @@ To change campaign year, update covid_current_autumn() etc below.
         {%- elif field == 'decline_tracking_end' -%}'2025-06-30'::DATE
         {%- else -%}{{ exceptions.raise_compiler_error("Unknown field '" ~ field ~ "' for campaign '" ~ campaign_id ~ "'") }}
         {%- endif -%}
+    {%- elif campaign_id == 'COVID Spring 2026' -%}
+        {%- if field == 'campaign_name' -%}Spring 2026 COVID Vaccination Campaign
+        {%- elif field == 'campaign_start_date' -%}'2026-04-01'::DATE
+        {%- elif field == 'campaign_end_date' -%}'2026-06-30'::DATE
+        {%- elif field == 'campaign_reference_date' -%}'2026-06-30'::DATE
+        {%- elif field == 'vaccination_tracking_start' -%}'2026-04-01'::DATE
+        {%- elif field == 'vaccination_tracking_end' -%}'2026-06-30'::DATE
+        {%- elif field == 'decline_tracking_start' -%}'2026-03-01'::DATE
+        {%- elif field == 'decline_tracking_end' -%}'2026-06-30'::DATE
+        {%- else -%}{{ exceptions.raise_compiler_error("Unknown field '" ~ field ~ "' for campaign '" ~ campaign_id ~ "'") }}
+        {%- endif -%}
     {%- elif campaign_id == 'COVID Spring 2024' -%}
         {%- if field == 'campaign_name' -%}Spring 2024 COVID Vaccination Campaign
         {%- elif field == 'campaign_start_date' -%}'2024-04-01'::DATE
@@ -63,7 +74,7 @@ To change campaign year, update covid_current_autumn() etc below.
         {%- else -%}{{ exceptions.raise_compiler_error("Unknown field '" ~ field ~ "' for campaign '" ~ campaign_id ~ "'") }}
         {%- endif -%}
     {%- else -%}
-        {{ exceptions.raise_compiler_error("Unknown COVID campaign_id: '" ~ campaign_id ~ "'. Valid campaigns: COVID Autumn 2025, COVID Autumn 2024, COVID Spring 2025, COVID Spring 2024") }}
+        {{ exceptions.raise_compiler_error("Unknown COVID campaign_id: '" ~ campaign_id ~ "'. Valid campaigns: COVID Autumn 2025, COVID Autumn 2024, COVID Spring 2026, COVID Spring 2025, COVID Spring 2024") }}
     {%- endif -%}
 {% endmacro %}
 

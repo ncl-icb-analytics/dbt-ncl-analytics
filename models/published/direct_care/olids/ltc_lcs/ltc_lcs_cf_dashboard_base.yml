@@ -103,6 +103,12 @@ models:
       - name: lsoa_code
         description: Lower Super Output Area code
 
+      - name: ward_code
+        description: Electoral ward code (residence-based)
+
+      - name: ward_name
+        description: Electoral ward name (residence-based)
+
       - name: practice_code
         description: GP practice code
 

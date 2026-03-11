@@ -1,6 +1,6 @@
 with base_encounters as (
     select *
-    from {{ ref('int_sus_ae_encounters') }}
+    from {{ ref('obt_encounter_uec') }}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     and sk_patient_id is not null and sk_patient_id != '1'
 ),  
@@ -13,7 +13,7 @@ lower_respiratory_encounters as (
 emergency_admissions as (
     select ip.sk_patient_id 
         , count(distinct ip.visit_occurrence_id) as ae_respiratory_admission_12mo
-    from {{ ref('int_sus_ip_encounters') }} as ip
+    from {{ ref('obt_encounter_apc') }} as ip
     inner join lower_respiratory_encounters as lre on lre.visit_occurrence_id = ip.visit_occurrence_id
     where ip.start_date between dateadd(month, -12, current_date()) and current_date()
     and ip.sk_patient_id is not null and ip.sk_patient_id != '1'

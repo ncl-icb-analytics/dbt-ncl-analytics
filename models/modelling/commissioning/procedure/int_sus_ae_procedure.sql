@@ -110,7 +110,7 @@ select
 from all_obs as f
 
 /* Diagnosis code for infering reason */
-left join {{ref('int_sus_ae_encounters')}}  as sa on sa.visit_occurrence_id = f.primarykey_id
+left join {{ref('obt_encounter_uec')}}  as sa on sa.visit_occurrence_id = f.primarykey_id
 
 where sa.sk_patient_id is not null
 and f.code is not null

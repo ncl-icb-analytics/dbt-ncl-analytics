@@ -18,7 +18,11 @@ WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
     SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
+    SELECT * FROM ({{ covid_spring_config() }})
+    UNION ALL
     SELECT * FROM ({{ covid_previous_autumn_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_spring_config() }})
 ),
 
 -- Step 1: Find people with asthma diagnosis (for all campaigns)
@@ -32,6 +36,7 @@ people_with_asthma_diagnosis AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
@@ -47,12 +52,13 @@ people_with_asthma_admissions AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.asthma_admission_lookback_date  -- 2 years before campaign
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
 -- Step 3: Find people with recent asthma inhaled medications
 people_with_recent_asthma_inhalers AS (
-    SELECT 
+    SELECT
         cc.campaign_id,
         med.person_id,
         MAX(med.order_date) AS latest_inhaler_date,
@@ -62,13 +68,14 @@ people_with_recent_asthma_inhalers AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_medication_lookback_date  -- 12 months before campaign
         AND med.order_date <= cc.audit_end_date
+        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id, cc.audit_end_date
 ),
 
 -- Step 4: Find oral steroid prescriptions in each 2-year window
 -- Window 1: 2 years before autumn start
 oral_steroids_window_1 AS (
-    SELECT 
+    SELECT
         cc.campaign_id,
         med.person_id,
         MIN(med.order_date) AS earliest_steroid_w1,
@@ -79,12 +86,13 @@ oral_steroids_window_1 AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_1_start
         AND med.order_date <= cc.asthma_steroid_window_1_end
+        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id
 ),
 
 -- Window 2: 2 years from spring campaigns
 oral_steroids_window_2 AS (
-    SELECT 
+    SELECT
         cc.campaign_id,
         med.person_id,
         MIN(med.order_date) AS earliest_steroid_w2,
@@ -95,12 +103,13 @@ oral_steroids_window_2 AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_2_start
         AND med.order_date <= cc.asthma_steroid_window_2_end
+        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id
 ),
 
 -- Window 3: Additional overlapping window
 oral_steroids_window_3 AS (
-    SELECT 
+    SELECT
         cc.campaign_id,
         med.person_id,
         MIN(med.order_date) AS earliest_steroid_w3,
@@ -111,6 +120,7 @@ oral_steroids_window_3 AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_3_start
         AND med.order_date <= cc.asthma_steroid_window_3_end
+        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id
 ),
 

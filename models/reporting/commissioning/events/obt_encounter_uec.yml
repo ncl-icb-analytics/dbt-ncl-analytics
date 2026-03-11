@@ -1,6 +1,6 @@
 
 models:
-  - name: int_sus_ae_encounters
+  - name: obt_encounter_uec
     description: "Event history for emergency encounters from SUS data. More information: https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/emergency-care-data-set-ecds/ecds-guidance"
     columns:
       - name: visit_occurrence_id

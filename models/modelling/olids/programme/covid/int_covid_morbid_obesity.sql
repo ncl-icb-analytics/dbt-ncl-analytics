@@ -17,7 +17,11 @@ WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
     SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
+    SELECT * FROM ({{ covid_spring_config() }})
+    UNION ALL
     SELECT * FROM ({{ covid_previous_autumn_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_spring_config() }})
 ),
 
 -- Step 1: Find people with BMI values (for all campaigns)
@@ -121,7 +125,7 @@ people_with_morbid_obesity AS (
         ON COALESCE(pbv.campaign_id, pbs.campaign_id) = pso.campaign_id 
         AND COALESCE(pbv.person_id, pbs.person_id) = pso.person_id
         AND pso.severe_obesity_rank = 1
-    WHERE pbv.bmi_rank = 1 OR pbv.person_id IS NULL  -- Latest BMI only
+    WHERE (pbv.bmi_rank = 1 OR pbv.person_id IS NULL)  -- Latest BMI only
         AND (pbv.person_id IS NOT NULL OR pbs.person_id IS NOT NULL OR pso.person_id IS NOT NULL)
 ),
 
