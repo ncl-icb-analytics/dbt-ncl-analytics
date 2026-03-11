@@ -27,7 +27,7 @@ SELECT
     unit_was_changed,
     is_negative,
     is_extreme_outlier,
-    is_valid_eosinophil,
+    is_valid,
     eosinophil_category,
 
     CASE
@@ -40,7 +40,7 @@ SELECT
 
 FROM {{ ref('int_eosinophil_percentage') }}
 
-WHERE is_valid_eosinophil = FALSE
+WHERE is_valid = FALSE
    OR confidence = 'NONE'
    OR is_extreme_outlier = TRUE
    OR is_negative = TRUE

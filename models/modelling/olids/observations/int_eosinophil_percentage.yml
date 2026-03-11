@@ -53,7 +53,7 @@ models:
         data_tests:
           - dbt_utils.accepted_range:
               config:
-                where: "is_valid_eosinophil = TRUE"
+                where: "is_valid = TRUE"
               arguments:
                 min_value: 0
                 max_value: 100
@@ -74,7 +74,7 @@ models:
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
         description: TRUE if inferred value exceeds 80%
-      - name: is_valid_eosinophil
+      - name: is_valid
         description: TRUE if inferred value is plausible and usable for analysis
       - name: eosinophil_category
         description: Clinical category based on inferred percentage value
