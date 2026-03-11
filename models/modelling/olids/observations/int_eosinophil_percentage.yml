@@ -2,10 +2,9 @@ version: 2
 models:
   - name: int_eosinophil_percentage
     description: >
-      Blood eosinophil percentage observations with unit validation and data quality flags.
-      One row per observation using the EOS_PERCENT cluster. Uses stricter logic than the
-      count model: only accepted units (%, percent, {WBCs}) are valid. All other units
-      receive NONE confidence. Standard unit: %.
+      Blood eosinophil percentage observations with unit standardisation and data quality flags.
+      One row per observation using the EOS_PERCENT cluster. Uses the standardise_count_observation
+      macro for value-first unit inference. Standard unit: %.
     config:
       meta:
         owner:
@@ -60,7 +59,7 @@ models:
                 max_value: 100
                 inclusive: true
       - name: value_was_converted
-        description: Always FALSE for percentage model (no value conversions applied)
+        description: TRUE if the numeric value was mathematically changed during standardisation
       - name: unit_was_changed
         description: TRUE if inferred_unit differs from original_result_unit_code, NULL if inference failed
       - name: conversion_reason
@@ -70,7 +69,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['VERY_HIGH', 'HIGH', 'NONE']
+                values: ['VERY_HIGH', 'HIGH', 'MEDIUM', 'LOW', 'NONE']
       - name: is_negative
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
