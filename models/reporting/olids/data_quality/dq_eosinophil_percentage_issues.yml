@@ -46,7 +46,7 @@ models:
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
         description: TRUE if inferred value exceeds 80%
-      - name: is_valid_eosinophil
+      - name: is_valid
         description: Always FALSE in this model (pre-filtered to issues)
       - name: eosinophil_category
         description: Clinical category from base model

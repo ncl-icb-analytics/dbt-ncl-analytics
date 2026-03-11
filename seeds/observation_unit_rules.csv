@@ -13,3 +13,4 @@ DEFINITION_ID,DEFINITION_NAME,CONFIG_ID,CONFIG_VERSION,CONVERT_FROM_UNIT,CONVERT
 ,eosinophil_percentage,,,percent,%,1,0,0
 ,eosinophil_percentage,,,{WBCs},%,1,0,0
 ,eosinophil_percentage,,,10*9/L,,,,
+,eosinophil_percentage,,,/L,,,,
