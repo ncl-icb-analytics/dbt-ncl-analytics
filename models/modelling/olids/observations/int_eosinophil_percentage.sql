@@ -54,7 +54,7 @@ validated AS (
         *,
         inferred_value < 0 AS is_negative,
         inferred_value > 80 AS is_extreme_outlier,
-        (NOT (inferred_value < 0 OR inferred_value > 80 OR confidence = 'NONE')
+        (NOT (inferred_value < 0 OR inferred_value > 100 OR confidence = 'NONE')
          AND inferred_value IS NOT NULL) AS is_valid
     FROM standardised
 )
@@ -85,7 +85,7 @@ SELECT
         WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Invalid'
         WHEN inferred_value <= 5 THEN 'Normal'
         WHEN inferred_value <= 20 THEN 'Elevated'
-        WHEN inferred_value <= 80 THEN 'Very Elevated'
+        WHEN inferred_value <= 100 THEN 'Very Elevated'
         ELSE 'Invalid'
     END AS eosinophil_category
 FROM validated
