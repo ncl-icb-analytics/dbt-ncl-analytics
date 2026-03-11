@@ -1,14 +1,14 @@
 with specialty_filters as (
     -- Combine filter conditions to avoid repetition
     select distinct visit_occurrence_id
-    from {{ ref('int_sus_op_appointments')}}
+    from {{ ref('obt_appointment_outpatient')}}
     where main_specialty_code = '501' 
        or treatment_function_code in ('501', '560')
     
     union all
     
     -- select distinct visit_occurrence_id
-    -- from {{ ref('int_sus_ip_encounters')}}
+    -- from {{ ref('obt_encounter_apc')}}
     -- where main_specialty_code = '501' 
     --    or treatment_function_code in ('501', '560')
     
@@ -37,6 +37,6 @@ select
     , e.core_hrg_code
     , e.core_hrg_desc
     , e.core_hrg_chapter_desc
-from {{ ref('int_sus_op_appointments')}} e
+from {{ ref('obt_appointment_outpatient')}} e
 inner join mat_encounters m 
     on e.visit_occurrence_id = m.visit_occurrence_id

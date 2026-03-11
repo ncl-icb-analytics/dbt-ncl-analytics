@@ -46,6 +46,6 @@ select {{ dbt_utils.generate_surrogate_key(["hgl.primarykey_id", "hgl.episodes_i
     hg.hrg_subchapter
 from hrg_list hgl
 left join {{ ref("stg_sus_apc_spell_episodes") }} see on hgl.primarykey_id = see.primarykey_id and hgl.episodes_id = see.episodes_id 
-left join {{ ref("int_sus_ip_encounters") }} se on hgl.primarykey_id = se.visit_occurrence_id
+left join {{ ref("obt_encounter_apc") }} se on hgl.primarykey_id = se.visit_occurrence_id
 left join {{ ref("stg_dictionary_dbo_hrg") }} hg on hgl.code = hg.hrg_code
 where se.sk_patient_id is not null and se.sk_patient_id != 1 

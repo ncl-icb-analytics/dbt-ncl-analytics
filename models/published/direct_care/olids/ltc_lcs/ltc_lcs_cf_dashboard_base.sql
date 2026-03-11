@@ -80,6 +80,8 @@ base_data AS (
         d.imd_decile_19,
         d.lsoa_code_21,
         d.lsoa_name_21,
+        d.ward_code,
+        d.ward_name,
         d.borough_resident,
         d.neighbourhood_resident,
         d.icb_code_resident,
@@ -140,6 +142,8 @@ final_dashboard AS (
         imd_quintile_19 as imd_quintile_label,
         imd_decile_19,
         lsoa_code_21 as lsoa_code,
+        ward_code,
+        ward_name,
         
         -- Practice information
         practice_code,
