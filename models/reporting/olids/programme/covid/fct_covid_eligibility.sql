@@ -14,9 +14,10 @@ Key improvements:
 - Separate from vaccination status tracking (see fct_covid_status)
 
 Multi-Campaign Support:
-- covid_2024_autumn: September 2024 - March 2025 (broader eligibility)
-- covid_2025_spring: April 2025 - June 2025 (broader eligibility)  
-- covid_2025_autumn: September 2025 - March 2026 (restricted eligibility)
+- COVID Autumn 2024: September 2024 - March 2025 (broader eligibility)
+- COVID Spring 2025: April 2025 - June 2025 (broader eligibility)
+- COVID Autumn 2025: September 2025 - March 2026 (restricted eligibility)
+- COVID Spring 2026: April 2026 - June 2026 (restricted eligibility)
 
 Usage: 
 - Default: Uses all defined COVID campaigns automatically

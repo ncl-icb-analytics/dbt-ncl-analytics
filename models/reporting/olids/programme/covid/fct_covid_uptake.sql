@@ -10,10 +10,14 @@ Key features:
 - Supports analysis of coverage gaps and vaccination patterns
 - Works automatically with multiple COVID campaigns
 
+IMPORTANT: Eligible people may have multiple rows (one per risk group).
+Use COUNT(DISTINCT person_id) for headcounts, not SUM(vaccinated).
+
 Multi-Campaign Support:
-- covid_2024_autumn: September 2024 - March 2025 (broader eligibility)
-- covid_2025_spring: April 2025 - June 2025 (broader eligibility)  
-- covid_2025_autumn: September 2025 - March 2026 (restricted eligibility)
+- COVID Autumn 2024: September 2024 - March 2025 (broader eligibility)
+- COVID Spring 2025: April 2025 - June 2025 (broader eligibility)
+- COVID Autumn 2025: September 2025 - March 2026 (restricted eligibility)
+- COVID Spring 2026: April 2026 - June 2026 (restricted eligibility)
 
 Usage:
 - Filter by campaign_id to analyze specific campaigns
@@ -109,7 +113,7 @@ combined_data AS (
         ON e.campaign_id = v.campaign_id 
         AND e.person_id = v.person_id
     WHERE e.person_id IS NOT NULL  -- Keep all eligible people
-        OR v.vaccination_status = 'VACCINATION_ADMINISTERED'  -- Keep only vaccinated non-eligible people
+        OR v.person_id IS NOT NULL  -- Keep all people with any vaccination activity
 ),
 
 -- Add campaign information and calculate uptake metrics
@@ -171,11 +175,14 @@ final_uptake AS (
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
         FROM ({{ covid_autumn_config() }})
         UNION ALL
-        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date  
+        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
         FROM ({{ covid_spring_config() }})
         UNION ALL
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
         FROM ({{ covid_previous_autumn_config() }})
+        UNION ALL
+        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
+        FROM ({{ covid_previous_spring_config() }})
     ) cc
         ON cd.campaign_id = cc.campaign_id
 )

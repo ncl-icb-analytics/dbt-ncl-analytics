@@ -14,9 +14,10 @@ Key features:
 - Works automatically with multiple COVID campaigns
 
 Multi-Campaign Support:
-- covid_2024_autumn: September 2024 - March 2025 (broader eligibility)
-- covid_2025_spring: April 2025 - June 2025 (broader eligibility)  
-- covid_2025_autumn: September 2025 - March 2026 (restricted eligibility)
+- COVID Autumn 2024: September 2024 - March 2025 (broader eligibility)
+- COVID Spring 2025: April 2025 - June 2025 (broader eligibility)
+- COVID Autumn 2025: September 2025 - March 2026 (restricted eligibility)
+- COVID Spring 2026: April 2026 - June 2026 (restricted eligibility)
 
 This gives a complete picture of vaccination patterns across the population.
 */
@@ -27,7 +28,8 @@ This gives a complete picture of vaccination patterns across the population.
 ) }}
 
 WITH
--- All eligible people (from eligibility table)
+-- One row per person per campaign (created_at excluded to prevent fan-out
+-- from intermediate models materializing at different times)
 all_eligible_people AS (
     SELECT DISTINCT
         campaign_id,
@@ -35,8 +37,7 @@ all_eligible_people AS (
         birth_date_approx,
         age_months,
         age_years,
-        reference_date,
-        created_at
+        reference_date
     FROM {{ ref('fct_covid_eligibility') }}
 ),
 
@@ -81,7 +82,7 @@ eligible_no_vaccination AS (
         ep.age_years AS age_years_at_ref_date,
         'NO_VACCINATION_RECORD' AS status_type,
         3 AS status_priority,
-        ep.created_at
+        CURRENT_TIMESTAMP() AS created_at
     FROM all_eligible_people ep
     WHERE NOT EXISTS (
         SELECT 1 

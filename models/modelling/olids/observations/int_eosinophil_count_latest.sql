@@ -26,10 +26,10 @@ SELECT
     unit_was_changed,
     conversion_reason,
     confidence,
-    is_valid_eosinophil,
+    is_valid,
     eosinophil_category
 FROM {{ ref('int_eosinophil_count') }}
-WHERE is_valid_eosinophil = TRUE
+WHERE is_valid = TRUE
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id
     ORDER BY clinical_effective_date DESC, id DESC
