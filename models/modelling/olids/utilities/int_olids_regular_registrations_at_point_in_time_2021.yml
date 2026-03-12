@@ -17,14 +17,14 @@ models:
     columns:
       - name: practice_ods_code
         description: GP practice ODS code.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: regular_registered_patients
         description: Count of distinct persons with an active Regular registration episode.
-        tests:
+        data_tests:
           - not_null
       - name: snapshot_date
         description: Reference date used for the point-in-time calculation.
-        tests:
+        data_tests:
           - not_null

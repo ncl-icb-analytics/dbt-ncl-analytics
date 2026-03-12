@@ -21,7 +21,7 @@ models:
     columns:
       - name: practice_code
         description: GP practice ODS code. Primary key.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: practice_name

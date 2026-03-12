@@ -15,6 +15,7 @@ historical EMIS extract date from the 2021 seed.
 with emis_extract_date as (
     select extract_date as reference_date
     from {{ ref('stg_emis_list_size_2021') }}
+    order by extract_date desc
     limit 1
 ),
 
@@ -57,14 +58,11 @@ regular_episodes as (
 active_registrations as (
     select
         r.practice_ods_code,
-        ptp.person_id,
-        p.sk_patient_id
+        ptp.person_id
     from regular_episodes as r
     cross join emis_extract_date as ed
     inner join patient_to_person as ptp
         on r.patient_id = ptp.patient_id
-    left join {{ ref('stg_olids_patient') }} as p
-        on r.patient_id = p.id
     left join patient_deceased_status as pds
         on r.patient_id = pds.patient_id
     where r.practice_ods_code is not null
