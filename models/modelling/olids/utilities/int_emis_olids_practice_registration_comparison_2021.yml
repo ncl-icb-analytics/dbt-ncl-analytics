@@ -1,0 +1,50 @@
+models:
+  - name: int_emis_olids_practice_registration_comparison_2021
+    description: |
+      Compares OLIDS Regular registration counts against EMIS list size per practice
+      for the 01/04/2021 historical extract.
+
+      Acceptance Criteria:
+      - Aggregate: <1% variance across all practices
+      - Per-practice: <2% variance OR fewer than 5 persons difference
+
+      Categorisation:
+      - Meets Criteria: <2% variance OR <5 persons difference
+      - 2-5% Variance: Between 2-5% variance
+      - 5-20% Variance: Between 5-20% variance
+      - 20%+ Variance: 20% or greater variance
+      - Missing Data: No EMIS or OLIDS data available
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: practice_code
+        description: GP practice ODS code. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: practice_name
+        description: GP practice name.
+      - name: borough
+        description: Borough name.
+      - name: emis_list_size
+        description: Number of registered patients from the EMIS extract.
+      - name: olids_regular_count
+        description: Number of patients with Regular registration episodes in OLIDS.
+      - name: difference
+        description: Signed difference between OLIDS and EMIS.
+      - name: absolute_difference
+        description: Absolute difference between OLIDS and EMIS.
+      - name: percent_difference
+        description: Signed percentage difference between OLIDS and EMIS.
+      - name: absolute_percent_difference
+        description: Absolute percentage difference between OLIDS and EMIS.
+      - name: extract_date
+        description: Date of the EMIS extract.
+      - name: meets_acceptance_criteria
+        description: Whether the practice meets the validation threshold.
+      - name: variance_category
+        description: Variance band used for validation reporting.
+      - name: validation_methodology
+        description: Text description of the validation approach applied.

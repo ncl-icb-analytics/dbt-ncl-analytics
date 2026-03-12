@@ -1,0 +1,30 @@
+models:
+  - name: int_olids_regular_registrations_at_point_in_time_2021
+    description: |
+      Counts OLIDS patients with Regular registration episodes active on the
+      01/04/2021 historical EMIS extract date.
+
+      Filters to Regular episode type only and deduplicates at person level.
+      Excludes patients deceased on or before the reference date.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: practice_ods_code
+        description: GP practice ODS code.
+        tests:
+          - not_null
+          - unique
+      - name: regular_registered_patients
+        description: Count of distinct persons with an active Regular registration episode.
+        tests:
+          - not_null
+      - name: snapshot_date
+        description: Reference date used for the point-in-time calculation.
+        tests:
+          - not_null

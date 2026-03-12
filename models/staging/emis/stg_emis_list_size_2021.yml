@@ -1,0 +1,25 @@
+models:
+  - name: stg_emis_list_size_2021
+    description: |
+      Stages EMIS list size reference data for the 01/04/2021 historical extract.
+
+      Converts EXTRACT_DATE to a DATE, standardises column naming, and enriches
+      the file with practice borough metadata for historical OLIDS validation.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: borough
+        description: Borough name for the practice.
+      - name: practice_code
+        description: GP practice ODS code.
+        tests:
+          - unique
+          - not_null
+      - name: practice_name
+        description: GP practice name.
+      - name: list_size
+        description: Number of registered patients according to the EMIS extract.
+      - name: extract_date
+        description: Date the EMIS data was extracted.
