@@ -9,6 +9,44 @@ models:
           name: Emily Baldwin
     columns:
       - name: practice_code
+        data_type: varchar
+        description: "Current registered GP practice ODS code"
         data_tests:
           - unique
           - not_null
+
+      - name: practice_name
+        data_type: varchar
+        description: "Current registered GP practice name"
+
+      - name: borough_registered
+        data_type: varchar
+        description: "Registered borough for the GP practice"
+
+      - name: active_patient_count
+        data_type: number
+        description: "Count of active registered patients for the GP practice"
+
+      - name: pcn_code
+        data_type: varchar
+        description: "Primary Care Network (PCN) code"
+
+      - name: pcn_name
+        data_type: varchar
+        description: "Primary Care Network (PCN) name"
+
+      - name: pcn_borough
+        data_type: varchar
+        description: "Borough associated with the PCN"
+
+      - name: practice_msoa
+        data_type: varchar
+        description: "MSOA for the GP practice location"
+
+      - name: practice_latitude
+        data_type: number
+        description: "Latitude of the GP practice"
+
+      - name: practice_longitude
+        data_type: number
+        description: "Longitude of the GP practice"

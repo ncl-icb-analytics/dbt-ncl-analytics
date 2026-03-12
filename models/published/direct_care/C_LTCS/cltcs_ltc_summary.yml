@@ -10,3 +10,39 @@ models:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
+    columns:
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data [sk_patient_id]"
+
+      - name: area_code
+        data_type: varchar
+        description: "Area code (PCN of registered GP practice in this context)"
+
+      - name: condition_code
+        data_type: varchar
+        description: "Code for the long-term condition"
+
+      - name: condition_name
+        data_type: varchar
+        description: "Name of the long-term condition"
+
+      - name: clinical_domain
+        data_type: varchar
+        description: "Clinical domain grouping for the condition"
+
+      - name: is_on_register
+        data_type: boolean
+        description: "Flag indicating whether the patient is on the disease register for this condition"
+
+      - name: is_qof
+        data_type: boolean
+        description: "Flag indicating whether the condition is part of QOF"
+
+      - name: earliest_diagnosis_date
+        data_type: date
+        description: "Earliest valid diagnosis date for the condition"
+
+      - name: latest_diagnosis_date
+        data_type: date
+        description: "Most recent valid diagnosis date for the condition"

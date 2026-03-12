@@ -17,13 +17,13 @@ models:
           - unique
           - not_null
 
-      - name: pcn_code
+      - name: area_code
         data_type: varchar
-        description: "PCN code at time of status log"
+        description: "Area code (PCN of registered GP practice in this context) at time of status log"
 
-      - name: mdt_date
+      - name: intervention_date
         data_type: date
-        description: "MDT date for the status log entry"
+        description: "Date of the intervention referred onto by triage e.g., MDT date if accepted onto MDT"
 
       - name: action
         data_type: varchar
@@ -33,6 +33,10 @@ models:
         data_type: date
         description: "Date of the action"
 
-      - name: criteria
+      - name: detail
         data_type: varchar
-        description: "Criteria associated with the status log entry"
+        description: "Additional detail associated with the status log entry"
+
+      - name: intervention_name
+        data_type: varchar
+        description: "Name of the intervention referred onto by triage e.g., MDT"
