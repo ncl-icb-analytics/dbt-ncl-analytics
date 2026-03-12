@@ -1,0 +1,25 @@
+seeds:
+  - name: emis_list_size_2021
+    description: >
+      Historical EMIS list size extract used to validate OLIDS Regular registration
+      counts at practice level for 01/04/2021.
+    config:
+      column_types:
+        CODE: varchar
+        GP_PRACTICE: varchar
+        LIST_SIZE: number
+        EXTRACT_DATE: varchar
+    columns:
+      - name: CODE
+        description: GP practice ODS code.
+        data_tests:
+          - not_null
+          - unique
+      - name: GP_PRACTICE
+        description: GP practice name.
+      - name: LIST_SIZE
+        description: Registered patient count from the EMIS extract.
+      - name: EXTRACT_DATE
+        description: Extract date supplied in the source file.
+        data_tests:
+          - not_null
