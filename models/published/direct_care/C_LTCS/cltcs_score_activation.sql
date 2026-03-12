@@ -13,8 +13,8 @@ encoding_features as(
         , zeroifnull(gpa.gp_att_tot_12mo) + 10 as gp_att_tot_12mo_plus_10
         , case when pd.main_language in ('English', 'Not Recorded') then 0 else 1 end as main_language_flag -- TO DO: switch to interpreter flag
         , pd.main_language 
-        , rat.oe_ratio as op_oe_ratio
-        , case when rat.oe_ratio < 0.8 then 1 else 0 end as op_oe_ratio_flag
+        , nvl(rat.oe_ratio, 1) as op_oe_ratio
+        , case when nvl(rat.oe_ratio, 1) < 0.8 then 1 else 0 end as op_oe_ratio_flag
         , pc.has_severe_mental_illness
         , case when zeroifnull(aea.ae_tot_12mo) > zeroifnull(gpa.gp_att_tot_12mo) then 1 else 0 end as ae_greater_gp_12mo_flag
         , case when pc.has_severe_mental_illness = TRUE then 1 else 0 end as has_severe_mental_illness_flag

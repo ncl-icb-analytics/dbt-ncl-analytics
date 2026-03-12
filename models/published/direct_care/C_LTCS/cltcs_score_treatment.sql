@@ -12,9 +12,10 @@ encoding_features as(
         , zeroifnull(gpa.gp_att_tot_12mo) as gp_att_tot_12mo
         , zeroifnull(rm.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
         , pd.age
-        , br.smoking_risk_sort_key
-        , br.bmi_risk_sort_key
-        , br.alcohol_risk_sort_key
+        , zeroifnull(br.smoking_risk_sort_key) as smoking_risk_sort_key
+        , zeroifnull(br.bmi_risk_sort_key) as bmi_risk_sort_key
+        , zeroifnull(br.alcohol_risk_sort_key) as alcohol_risk_sort_key
+        , zeroifnull(br.alcohol_risk_sort_key) as alcohol_risk_sort_key
         , case when am.testing_no_diagnosis = TRUE then 1 else 0 end as asthma_testing_no_diagnosis_flag
         , case when am.diagnosis_no_testing = TRUE then 1 else 0 end as asthma_diagnosis_no_testing_flag
         , case when am.diagnosis_no_act = TRUE then 1 else 0 end as asthma_diagnosis_no_act_flag
