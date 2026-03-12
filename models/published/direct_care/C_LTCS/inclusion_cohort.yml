@@ -18,10 +18,9 @@ models:
                 warn_if: ">10"
           - not_null
 
-      - name: reid_key
+      - name: re_id_key
         data_type: varchar
-        description: "Unique patient identified for LDS re-identification service
-          [hx_flake]"
+        description: "Unique patient identifier for LDS re-identification service [hx_flake]"
 
       - name: olids_id
         data_type: varchar
@@ -35,13 +34,17 @@ models:
         data_type: varchar
         description: "Current registered GP practice name"
 
-      - name: pcn_code
+      - name: area_type
         data_type: varchar
-        description: "Current registered GP practice PCN code"
+        description: "Area type (PCN of registered GP practice in this context)"
 
-      - name: pcn_name
+      - name: area_code
         data_type: varchar
-        description: "Current registered GP practice PCN name"
+        description: "Area code (PCN in this context)"
+
+      - name: area_name
+        data_type: varchar
+        description: "Area name (PCN name in this context)"
 
       - name: main_language
         data_type: varchar
@@ -63,3 +66,11 @@ models:
         data_type: number
         description: "Flag for eligibility for inclusion in the C-LTCS cohort (1=eligible,
           0=not eligible)"
+
+      - name: fragmented_sk_patient_id_flag
+        data_type: number
+        description: "Flag indicating multiple OLIDS person_ids mapped to a single commissioning patient_id (1=fragmented mapping, 0=not fragmented)"
+
+      - name: fragmented_person_id_flag
+        data_type: number
+        description: "Flag indicating multiple commissioning patient_ids mapped to a single OLIDS person_id (1=fragmented mapping, 0=not fragmented)"

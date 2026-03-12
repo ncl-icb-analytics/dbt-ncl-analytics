@@ -304,7 +304,7 @@ sources:
 
   # C-LTCS tables
   - source_name: c_ltcs
-    database: DEV__PUBLISHED_REPORTING__DIRECT_CARE
+    database: PUBLISHED_REPORTING__DIRECT_CARE
     schema: C_LTCS
     description: C-LTCS tables
     raw_prefix: raw_c_ltcs

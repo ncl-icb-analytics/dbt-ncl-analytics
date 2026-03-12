@@ -17,23 +17,21 @@ Testing:
 */
 
 with inclusion_list as (
-    select patient_id, olids_id, fragmented_sk_patient_id_flag, fragmented_person_id_flag, pcn_code, pcn_name, practice_code, practice_name, age, main_language, gender, ethnicity_category -- reduce to one GP per patient
-    from {{ ref('inclusion_cohort')}}
-    where eligible = 1 and fragmented_sk_patient_id_flag = 0 and fragmented_person_id_flag = 0 -- exclude fragmented patients for now
-)
+    select *
+    from {{ ref('cltcs_full_detailed_patient_list')}}
+    )
 
 select il.patient_id
  --   , il.fragmented_sk_patient_id_flag -- include as DQ check later, excluded for now
 --  , il.fragmented_person_id_flag
-    , il.pcn_code
-    , il.pcn_name
-    , il.practice_code
-    , il.practice_name
-    , il.age
-    , il.main_language as main_language
-    , il.gender
-    , il.ethnicity_category
-    , case when il.main_language in ('English', 'Not Recorded') then 0 else 1 end as main_language_flag -- TO DO: switch to interpreter flag
+    , il.area_code
+    , pd.practice_code
+    , pd.practice_name
+    , pd.age
+    , pd.main_language as main_language
+    , pd.gender
+    , pd.ethnicity_category
+    , case when pd.main_language in ('English', 'Not Recorded') then 0 else 1 end as main_language_flag -- TO DO: switch to interpreter flag
     -- trajectories for sparkline visualisation [add other domains - GP, Community, MH, total?]
     , tr.ae_encounters_sl
     , tr.ip_encounters_sl
@@ -139,10 +137,15 @@ select il.patient_id
     -- Current referrals
 
     -- Current risk scores?
-
+    -- scores from cltcs_scores model
+    ,cs.score_activation
+    ,cs.score_coordination
+    ,cs.score_treatment
     -- Other relevant annual activity (LTC LCS, C-LTCS review)
 
 from inclusion_list il
+left join {{ref('dim_person_demographics')}} pd
+    on il.olids_id = pd.person_id
 left join {{ ref('trajectories') }} tr
     on il.patient_id = tr.patient_id
 left join {{ ref('dim_person_conditions')}} pc
@@ -175,3 +178,5 @@ left join {{ref('fct_person_medications_recent')}} rm
     on il.olids_id = rm.person_id
 left join  {{ ref('stg_c_ltcs_op_oe_ratio') }} rat
     on il.patient_id  = rat.patient_id 
+left join {{ref('cltcs_scores')}} cs
+    on il.patient_id = cs.patient_id

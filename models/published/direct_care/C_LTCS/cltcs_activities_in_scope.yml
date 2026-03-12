@@ -15,6 +15,10 @@ models:
           - unique
           - not_null
 
+      - name: PRIMARY_CARE_PROVIDER
+        data_type: varchar
+        description: "Current registered GP practice ODS code from PDS"
+
       - name: cancer
         data_type: number
         description: "Flag for potential cancer OP activity in the last 12 months"

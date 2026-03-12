@@ -5,8 +5,8 @@ models:
     description: >
       Full detailed patient list for C-LTCS combining eligible patients from the
       inclusion cohort and shortlisted patients from the status log. One row per
-      patient; where a patient appears in both sources with different pcn_code,
-      the pcn_code from the shortlist is prioritised (via qualify).
+      patient; where a patient appears in both sources with different area_code,
+      the area_code from the shortlist is prioritised (via qualify).
     config:
       meta:
         owner:
@@ -26,7 +26,6 @@ models:
         data_tests:
           - unique
           - not_null
-
-      - name: pcn_code
+      - name: area_code
         data_type: varchar
-        description: "PCN code; when a patient appears from both inclusion and shortlist with different pcn_code, the shortlist value is used"
+        description: "Area code (PCN in this context); when a patient appears from both inclusion and shortlist with different area_code, the shortlist value is used"

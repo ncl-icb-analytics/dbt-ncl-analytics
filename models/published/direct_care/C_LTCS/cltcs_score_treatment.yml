@@ -1,0 +1,24 @@
+models:
+  - name: cltcs_score_treatment
+    description: "Treatment sub-score for C-LTCS cohort. One row per patient. Derived from QOF conditions, A&E/GP usage, polypharmacy, age and asthma/BP treatment flags."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data"
+        data_tests:
+          - unique
+          - not_null
+
+      - name: area_code
+        data_type: varchar
+        description: "Area code (PCN in this context)"
+        data_tests:
+          - not_null
+
+      - name: score_treatment
+        data_type: number
+        description: "Treatment sub-score (higher indicates higher treatment-related risk)"
