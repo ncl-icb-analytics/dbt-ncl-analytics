@@ -24,6 +24,17 @@ cp env.example .env    # Edit with your Snowflake credentials
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signing.
 
+## Codespaces
+
+This repository supports GitHub Codespaces for cloud-based dbt development.
+
+- Store Snowflake credentials as Codespaces secrets, not in committed files.
+- `SNOWFLAKE_PAT` is the recommended auth method for Codespaces.
+- If `SNOWFLAKE_PAT` is set, dbt uses it as the password and skips browser auth.
+- If no PAT or password is set, the project falls back to `externalbrowser`.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md#github-codespaces) for setup.
+
 ## What This Project Does
 
 Transforms healthcare data into analytical datasets across two domains:
