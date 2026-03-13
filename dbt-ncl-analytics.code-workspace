@@ -29,14 +29,9 @@
         },
         "terminal.integrated.defaultProfile.osx": "dbt",
 
-        // Linux: auto-run start_dbt.sh when opening a terminal
-        "terminal.integrated.profiles.linux": {
-            "dbt": {
-                "path": "bash",
-                "args": ["-c", "source ${workspaceFolder}/start_dbt.sh && exec bash"]
-            }
-        },
-        "terminal.integrated.defaultProfile.linux": "dbt",
+        // Linux: use a normal shell. Codespaces injects environment variables
+        // directly, so start_dbt.sh is not required for remote terminals.
+        "terminal.integrated.defaultProfile.linux": "bash",
 
         // Python - let the extension auto-detect the .venv (works cross-platform)
         "python.venvPath": "${workspaceFolder}",
