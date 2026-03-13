@@ -17,7 +17,8 @@ ncl_analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
-      authenticator: externalbrowser
+      password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
+      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'snowflake' if env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) else 'externalbrowser') }}"
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_DEV
@@ -30,7 +31,8 @@ ncl_analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
-      authenticator: externalbrowser
+      password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
+      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'snowflake' if env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) else 'externalbrowser') }}"
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_PROD

@@ -69,6 +69,12 @@ echo ""
 # Disable AWS metadata service checks (prevents connection pool warnings on Azure)
 export AWS_EC2_METADATA_DISABLED=true
 
+# Detect whether Snowflake credentials are already present in the environment
+has_snowflake_env=false
+if [ -n "$SNOWFLAKE_ACCOUNT" ] && [ -n "$SNOWFLAKE_USER" ] && { [ -n "$SNOWFLAKE_PAT" ] || [ -n "$SNOWFLAKE_PASSWORD" ] || [ "$SNOWFLAKE_AUTHENTICATOR" = "externalbrowser" ]; }; then
+    has_snowflake_env=true
+fi
+
 # Load project-specific environment variables
 echo "Loading environment variables from .env..."
 if [ -f ".env" ]; then
@@ -96,15 +102,36 @@ if [ -f ".env" ]; then
         [ -n "$SNOWFLAKE_USER" ] && echo "  SNOWFLAKE_USER: $SNOWFLAKE_USER"
         [ -n "$SNOWFLAKE_ROLE" ] && echo "  SNOWFLAKE_ROLE: $SNOWFLAKE_ROLE"
         [ -n "$SNOWFLAKE_WAREHOUSE" ] && echo "  SNOWFLAKE_WAREHOUSE: $SNOWFLAKE_WAREHOUSE"
+        [ -n "$SNOWFLAKE_PAT" ] && echo "  SNOWFLAKE_PAT: ${SNOWFLAKE_PAT:0:8}..."
+        [ -n "$SNOWFLAKE_PASSWORD" ] && echo "  SNOWFLAKE_PASSWORD: [set]"
+        [ -n "$SNOWFLAKE_AUTHENTICATOR" ] && echo "  SNOWFLAKE_AUTHENTICATOR: $SNOWFLAKE_AUTHENTICATOR"
     fi
 else
-    if [ -f "env.example" ]; then
+    if [ "$has_snowflake_env" = true ]; then
+        echo "[OK] No .env file found - using existing environment variables"
+        [ -n "$SNOWFLAKE_ACCOUNT" ] && echo "  SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT:0:10}..."
+        [ -n "$SNOWFLAKE_USER" ] && echo "  SNOWFLAKE_USER: $SNOWFLAKE_USER"
+        [ -n "$SNOWFLAKE_ROLE" ] && echo "  SNOWFLAKE_ROLE: $SNOWFLAKE_ROLE"
+        [ -n "$SNOWFLAKE_WAREHOUSE" ] && echo "  SNOWFLAKE_WAREHOUSE: $SNOWFLAKE_WAREHOUSE"
+        [ -n "$SNOWFLAKE_PAT" ] && echo "  SNOWFLAKE_PAT: ${SNOWFLAKE_PAT:0:8}..."
+        [ -n "$SNOWFLAKE_PASSWORD" ] && echo "  SNOWFLAKE_PASSWORD: [set]"
+        [ -n "$SNOWFLAKE_AUTHENTICATOR" ] && echo "  SNOWFLAKE_AUTHENTICATOR: $SNOWFLAKE_AUTHENTICATOR"
+        if [ -n "$SNOWFLAKE_PAT" ]; then
+            echo "  Auth method: SNOWFLAKE_PAT"
+        elif [ -n "$SNOWFLAKE_PASSWORD" ]; then
+            echo "  Auth method: SNOWFLAKE_PASSWORD"
+        else
+            echo "  Auth method: externalbrowser"
+        fi
+    elif [ -f "env.example" ]; then
         cp env.example .env
         echo "[WARNING] No .env file found — created from template"
     else
         echo "[WARNING] No .env file found and no env.example template"
     fi
-    actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
+    if [ "$has_snowflake_env" != true ]; then
+        actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
+    fi
 fi
 echo ""
 
