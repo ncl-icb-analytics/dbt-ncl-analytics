@@ -513,10 +513,67 @@ WITH all_condition_events AS (
     -- Learning Disability All Ages uses same diagnosis codes as regular LD - age filtering happens in QOF layer
 ),
 
+obesity_daily_status AS (
+    -- Collapse multiple BMI measurements on the same day to a single obesity status
+    SELECT
+        person_id,
+        clinical_effective_date AS event_date,
+        MAX(
+            CASE
+                WHEN is_valid_bmi = TRUE
+                    AND bmi_category IN ('Obese Class I', 'Obese Class II', 'Obese Class III')
+                    THEN 1
+                ELSE 0
+            END
+        ) AS is_obese
+    FROM {{ ref('int_bmi_all') }}
+    GROUP BY person_id, clinical_effective_date
+),
+
+obesity_events AS (
+    -- Derive obesity episode transitions from day-level BMI obesity status
+    SELECT
+        person_id,
+        event_date,
+        'Obesity' AS condition_name,
+        'OB' AS condition_code,
+        'Metabolic' AS clinical_domain,
+        CASE
+            WHEN is_obese = 1 AND COALESCE(prev_is_obese, 0) = 0 THEN 'onset'
+            WHEN is_obese = 1 THEN 'diagnosis'
+            WHEN is_obese = 0 AND prev_is_obese = 1 THEN 'resolved'
+        END AS event_type,
+        'BMI_OBESITY_THRESHOLD' AS concept_code,
+        'BMI-based obesity status' AS concept_display
+    FROM (
+        SELECT
+            person_id,
+            event_date,
+            is_obese,
+            LAG(is_obese) OVER (
+                PARTITION BY person_id
+                ORDER BY event_date
+            ) AS prev_is_obese
+        FROM obesity_daily_status
+    ) obesity_status_with_history
+    WHERE is_obese = 1
+        OR (is_obese = 0 AND prev_is_obese = 1)
+),
+
 -- Filter out invalid dates (NULL or future dates) for data quality
 valid_condition_events AS (
     SELECT *
     FROM all_condition_events
+
+    UNION ALL
+
+    SELECT *
+    FROM obesity_events
+),
+
+filtered_condition_events AS (
+    SELECT *
+    FROM valid_condition_events
     WHERE event_date IS NOT NULL
         AND event_date <= CURRENT_DATE
 ),
@@ -533,7 +590,7 @@ events_with_row_numbers AS (
             PARTITION BY person_id, condition_name 
             ORDER BY event_date, event_type
         ) as prev_event_type
-    FROM valid_condition_events
+    FROM filtered_condition_events
 ),
 
 episode_starts AS (

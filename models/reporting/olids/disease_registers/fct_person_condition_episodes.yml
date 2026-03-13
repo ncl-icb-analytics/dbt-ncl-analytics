@@ -202,6 +202,29 @@ models:
             code_clusters:
               - cluster_id: "NDH_COD"
                 category: "INCLUSION"
+          - id: "CONDITION_EPISODES_OB"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Metabolic"
+            name_short: "Obesity Episodes"
+            description_short: "BMI-derived obesity episodes with start and resolution tracking"
+            description_long: >
+              Episode tracking for obesity using dated BMI measurements rather than
+              diagnosis register codes.
+              Episode starts are triggered when BMI first enters an obesity category
+              and end when a later BMI falls below the obesity threshold.
+              Supports repeated on/off cycles for longitudinal weight-status analysis.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_OB"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "BMIVAL_COD"
+                category: "INCLUSION"
+              - cluster_id: "CALCULATED"
+                category: "INCLUSION"
 
           # Renal Conditions
           - id: "CONDITION_EPISODES_CKD"
@@ -750,6 +773,7 @@ models:
                   - 'LD'
                   - 'NAFLD'
                   - 'NDH'
+                  - 'OB'
                   - 'OST'
                   - 'PAD'
                   - 'PC'
