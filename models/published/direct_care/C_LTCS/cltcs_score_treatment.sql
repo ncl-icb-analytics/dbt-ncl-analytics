@@ -15,7 +15,6 @@ encoding_features as(
         , zeroifnull(br.smoking_risk_sort_key) as smoking_risk_sort_key
         , zeroifnull(br.bmi_risk_sort_key) as bmi_risk_sort_key
         , zeroifnull(br.alcohol_risk_sort_key) as alcohol_risk_sort_key
-        , zeroifnull(br.alcohol_risk_sort_key) as alcohol_risk_sort_key
         , case when am.testing_no_diagnosis = TRUE then 1 else 0 end as asthma_testing_no_diagnosis_flag
         , case when am.diagnosis_no_testing = TRUE then 1 else 0 end as asthma_diagnosis_no_testing_flag
         , case when am.diagnosis_no_act = TRUE then 1 else 0 end as asthma_diagnosis_no_act_flag
