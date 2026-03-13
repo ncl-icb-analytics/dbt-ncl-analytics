@@ -233,7 +233,8 @@ METRICS(
     ldl.avg_ldl AS AVG(ldl.cholesterol_value) COMMENT = 'Average LDL',
     bmi.avg_bmi AS AVG(bmi.bmi_value) COMMENT = 'Average BMI',
     egfr.avg_egfr AS AVG(egfr.egfr_value) COMMENT = 'Average eGFR',
-    qrisk.avg_qrisk AS AVG(qrisk.qrisk_score) COMMENT = 'Average QRISK'
+    qrisk.avg_qrisk AS AVG(qrisk.qrisk_score) COMMENT = 'Average QRISK',
+    acr.avg_acr AS AVG(acr.acr_value) COMMENT = 'Average ACR'
 )
 
 COMMENT = 'OLIDS Clinical Observations Semantic View - Clinical biomarkers with category-based metrics for population health. Includes patient-specific BP thresholds. Grain: one row per person (latest values).'

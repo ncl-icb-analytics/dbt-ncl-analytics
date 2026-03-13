@@ -185,7 +185,13 @@ METRICS(
     trends.learning_disability_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ld THEN trends.person_id END) COMMENT = 'New LD diagnoses',
     trends.frailty_incidence AS COUNT(DISTINCT CASE WHEN trends.new_frail THEN trends.person_id END) COMMENT = 'New frailty diagnoses',
     trends.palliative_care_incidence AS COUNT(DISTINCT CASE WHEN trends.new_pc THEN trends.person_id END) COMMENT = 'New palliative care',
-    
+    trends.ndh_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ndh THEN trends.person_id END) COMMENT = 'New NDH diagnoses',
+    trends.gestational_diabetes_incidence AS COUNT(DISTINCT CASE WHEN trends.new_gestdiab THEN trends.person_id END) COMMENT = 'New gestational diabetes diagnoses',
+    trends.ra_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ra THEN trends.person_id END) COMMENT = 'New RA diagnoses',
+    trends.osteoporosis_incidence AS COUNT(DISTINCT CASE WHEN trends.new_ost THEN trends.person_id END) COMMENT = 'New osteoporosis diagnoses',
+    trends.nafld_incidence AS COUNT(DISTINCT CASE WHEN trends.new_nafld THEN trends.person_id END) COMMENT = 'New NAFLD diagnoses',
+    trends.fh_incidence AS COUNT(DISTINCT CASE WHEN trends.new_fh THEN trends.person_id END) COMMENT = 'New FH diagnoses',
+
     -- Multimorbidity (single table - use prefix)
     trends.avg_conditions_per_patient AS AVG(trends.total_active_conditions) COMMENT = 'Average conditions per patient',
     trends.multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 2 THEN trends.person_id END) COMMENT = 'Patients with 2+ conditions',

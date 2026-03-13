@@ -170,7 +170,9 @@ METRICS(
     
     -- Metabolic Prevalence
     conditions.diabetes_count AS COUNT(DISTINCT CASE WHEN conditions.has_diabetes THEN conditions.person_id END) COMMENT = 'Patients with diabetes',
+    conditions.ndh_count AS COUNT(DISTINCT CASE WHEN conditions.has_non_diabetic_hyperglycaemia THEN conditions.person_id END) COMMENT = 'Patients with non-diabetic hyperglycaemia',
     conditions.ckd_count AS COUNT(DISTINCT CASE WHEN conditions.has_chronic_kidney_disease THEN conditions.person_id END) COMMENT = 'Patients with CKD',
+    conditions.obesity_count AS COUNT(DISTINCT CASE WHEN conditions.has_obesity THEN conditions.person_id END) COMMENT = 'Patients with recorded obesity',
     
     -- Respiratory Prevalence
     conditions.copd_count AS COUNT(DISTINCT CASE WHEN conditions.has_copd THEN conditions.person_id END) COMMENT = 'Patients with COPD',
