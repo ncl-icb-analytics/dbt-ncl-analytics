@@ -12,10 +12,12 @@
         "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python"
       },
       "extensions": [
-        "innoverio.vscode-dbt-power-user",
+        "dbtLabsInc.dbt",
         "charliermarsh.ruff",
+        "usernamehw.errorlens",
         "ms-python.python",
-        "ms-python.vscode-pylance"
+        "ms-python.vscode-pylance",
+        "snowflake.snowflake-vsc"
       ]
     },
     "codespaces": {
