@@ -20,4 +20,10 @@ select
     , attend_status
     , clin_cont_dur_of_care_cont
     , dm_icb_commissioner
+    --adding additional fields to help categorise care contacts.
+    , care_prof_team_local_id
+    , site_id_of_treat
+    , cons_type 
+    , cons_mechanism_mh
+    , act_loc_type_code
 from deduplicated
