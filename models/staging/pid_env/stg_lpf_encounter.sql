@@ -9,11 +9,11 @@ with raw_data as (
 ),
 cleaned as (
     select * from raw_data
-    where delete_ind != 'Y' and "EncounterID" is not null
+    where delete_ind != 'Y' and encounter_id is not null
 ),
 deduplicated as (
     select *,
-        row_number() over (partition by "EncounterID" order by "Version" desc) as rn
+        row_number() over (partition by encounter_id order by version desc) as rn
     from cleaned
 )
 select * exclude (rn) from deduplicated where rn = 1

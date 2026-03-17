@@ -9,11 +9,11 @@ with raw_data as (
 ),
 cleaned as (
     select * from raw_data
-    where delete_ind != 'Y' and "ReferralRequestID" is not null
+    where delete_ind != 'Y' and referral_request_id is not null
 ),
 deduplicated as (
     select *,
-        row_number() over (partition by "ReferralRequestID" order by "Version" desc) as rn
+        row_number() over (partition by referral_request_id order by version desc) as rn
     from cleaned
 )
 select * exclude (rn) from deduplicated where rn = 1
