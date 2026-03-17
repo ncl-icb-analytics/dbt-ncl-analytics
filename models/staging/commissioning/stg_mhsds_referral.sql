@@ -27,6 +27,7 @@ select
     , care_prof_team_local_id
     , source_of_referral_mh
     , service_type_name
+    , clin_resp_priority_type
     , dm_icb_commissioner
     , uniq_submission_id
 from deduplicated 
