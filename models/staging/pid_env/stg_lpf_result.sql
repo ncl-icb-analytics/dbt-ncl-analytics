@@ -12,7 +12,8 @@ cleaned as (
     where delete_ind != 'Y' and "ResultID" is not null
 ),
 deduplicated as (
-    select *, row_number() over (partition by "ResultID" order by "Version" desc) as rn
+    select *,
+        row_number() over (partition by "ResultID" order by "Version" desc) as rn
     from cleaned
 )
-select * except rn from deduplicated where rn = 1
+select * exclude (rn) from deduplicated where rn = 1

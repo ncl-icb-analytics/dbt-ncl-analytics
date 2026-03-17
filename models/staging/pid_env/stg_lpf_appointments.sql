@@ -32,6 +32,4 @@ deduplicated as (
     from cleaned
 )
 
-select * except rn
-from deduplicated
-where rn = 1
+select * exclude (rn) from deduplicated where rn = 1
