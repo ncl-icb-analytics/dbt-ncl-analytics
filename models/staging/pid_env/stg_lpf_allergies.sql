@@ -64,7 +64,10 @@ deduplicated as (
     -- Take the latest version of each allergy
     select
         *,
-        row_number() over (partition by allergy_id order by version desc) as rn
+        row_number() over (
+            partition by allergy_id
+            order by version desc, metadata_record_ingestion_timestamp desc, metadata_file_row_number desc
+        ) as rn
     from cleaned
 )
 

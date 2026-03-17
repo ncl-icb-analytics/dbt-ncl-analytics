@@ -28,7 +28,10 @@ cleaned as (
 deduplicated as (
     select
         *,
-        row_number() over (partition by appointment_id order by version desc) as rn
+        row_number() over (
+            partition by appointment_id
+            order by version desc, metadata_record_ingestion_timestamp desc, metadata_file_row_number desc
+        ) as rn
     from cleaned
 )
 
