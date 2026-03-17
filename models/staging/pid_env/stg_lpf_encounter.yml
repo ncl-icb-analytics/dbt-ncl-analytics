@@ -22,7 +22,7 @@ tests:
   - name: referential_integrity_encounter
     description: "All encounters must reference valid persons"
     sql: |
-      select * from {{ ref('stg_lpf_encounter') }} where "PersonID" is null
+      select * from {{ ref('stg_lpf_encounter') }} where person_id is null
     config:
       severity: error
       store_failures: true
@@ -31,7 +31,7 @@ tests:
     description: "All encounters must have an encounter type code"
     sql: |
       select * from {{ ref('stg_lpf_encounter') }}
-      where "EncounterTypeCodeID" is null
+      where encounter_type_code_id is null
     config:
       severity: warn
       store_failures: true

@@ -31,7 +31,7 @@ tests:
   - name: referential_integrity_medication
     description: "All medication records must reference valid persons"
     sql: |
-      select * from {{ ref('stg_lpf_medication') }} where "PersonID" is null
+      select * from {{ ref('stg_lpf_medication') }} where person_id is null
     config:
       severity: error
       store_failures: true
