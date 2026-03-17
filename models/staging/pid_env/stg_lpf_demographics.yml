@@ -22,7 +22,7 @@ tests:
   - name: referential_integrity_demographics
     description: "All demographic records must have valid person IDs"
     sql: |
-      select * from {{ ref('stg_lpf_demographics') }} where "PersonID" is null
+      select * from {{ ref('stg_lpf_demographics') }} where person_id is null
     config:
       severity: error
       store_failures: true

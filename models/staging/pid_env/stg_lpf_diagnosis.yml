@@ -23,7 +23,7 @@ tests:
     description: "Diagnosis codes must have code system and display"
     sql: |
       select * from {{ ref('stg_lpf_diagnosis') }}
-      where "DiagnosisCodeID" is not null and ("DiagnosisCodeSystemID" is null or "DiagnosisDisplay" is null)
+      where diagnosis_code_id is not null and (diagnosis_code_system_id is null or diagnosis_display is null)
     config:
       severity: warn
       store_failures: true

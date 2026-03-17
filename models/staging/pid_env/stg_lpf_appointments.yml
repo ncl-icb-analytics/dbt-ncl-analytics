@@ -23,7 +23,7 @@ tests:
     description: "All appointment records must reference valid persons"
     sql: |
       select * from {{ ref('stg_lpf_appointments') }}
-      where "PersonID" is null
+      where person_id is null
     config:
       severity: error
       store_failures: true
