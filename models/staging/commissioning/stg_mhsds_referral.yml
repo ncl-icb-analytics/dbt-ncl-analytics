@@ -39,6 +39,25 @@ models:
       - name: refer_clos_reason
         description: The reason that a Referral Request has been closed. A Referral Request can be closed as a result of a Patient being discharged from the SERVICE. Cancelled referrals such as those entered onto a system in error should not be submitted within the data set.
 
+      - name: care_prof_team_local_id
+        description: A unique local CARE PROFESSIONAL TEAM IDENTIFIER code within a Health Care Provider.
+
+      - name: source_of_referral_mh
+        description: Describes the source of referral - GP, Internal, Police, Local Authority etc.
+
+      - name: service_type_name
+        description: Describes the type of SERVICE or team that the CARE PROFESSIONAL is associated with, within a Mental Health Service.
+
+      - name: clin_resp_priority_type
+        description: Describes clinical response priority of a SERVICE REQUEST (eg emergency, urgent, routine).
+
+      - name: dm_icb_commissioner
+        description: The ICB (Integrated Care Board) that commissioned the referral.
+
+      - name: uniq_submission_id
+        description: The unique identifier for the submission of the data, which is used to link records across the MHSDS datasets.
+
+
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

@@ -19,6 +19,9 @@ select
     , meth_adm_mh_hosp_prov_spell
     , disch_date_hosp_prov_spell
     , estimated_disch_date_hosp_prov_spell
+     --adding additional fields
+    , org_id_prov
+    , dmic_ccg_code
 from deduplicated
 
 -- NB: De-deuplicated layer MHSDS.docx shared by Shak recommends to deduplicate using
