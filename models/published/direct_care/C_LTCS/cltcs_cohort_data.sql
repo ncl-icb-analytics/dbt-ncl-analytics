@@ -60,6 +60,7 @@ select il.patient_id
     , pc.has_non_diabetic_hyperglycaemia
     , pc.has_obesity
     , pc.has_osteoporosis
+    , pc.has_osteoarthritis
     , pc.has_peripheral_arterial_disease
     , pc.has_palliative_care
     , pc.has_rheumatoid_arthritis

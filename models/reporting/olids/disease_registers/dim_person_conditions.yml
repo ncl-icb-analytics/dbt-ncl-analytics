@@ -14,3 +14,7 @@ models:
         tests:
           - not_null
           - unique
+      - name: has_osteoarthritis
+        description: Boolean flag indicating whether person is on osteoarthritis register
+        tests:
+          - not_null

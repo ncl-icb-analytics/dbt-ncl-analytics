@@ -250,6 +250,18 @@ WITH condition_union AS (
 
     UNION ALL
 
+    -- Osteoarthritis
+    SELECT
+        person_id,
+        'OA' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_osteoarthritis_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
     -- Peripheral Arterial Disease
     SELECT
         person_id,

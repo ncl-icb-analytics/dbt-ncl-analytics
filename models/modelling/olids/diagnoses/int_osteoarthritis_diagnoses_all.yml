@@ -1,0 +1,43 @@
+models:
+  - name: int_osteoarthritis_diagnoses_all
+    description: 'Osteoarthritis diagnosis observations for musculoskeletal condition register management.
+
+      Key Features:
+
+      • Uses OA_COD cluster for diagnosis identification
+
+      • Supports osteoarthritis register data collection
+
+      • No resolution codes as osteoarthritis is a degenerative condition
+
+      Purpose: Provide observation-level data for osteoarthritis tracking and care planning.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: OA_COD
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation'
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: 'Unique identifier for the person'
+      - name: clinical_effective_date
+        description: 'Date when the osteoarthritis observation was recorded'
+      - name: concept_code
+        description: 'Clinical code for the osteoarthritis diagnosis'
+      - name: concept_display
+        description: 'Human-readable description of the osteoarthritis diagnosis'
+      - name: source_cluster_id
+        description: 'Source cluster identifier (OA_COD for osteoarthritis diagnoses)'
+      - name: is_diagnosis_code
+        description: 'Boolean flag indicating diagnosis code (always TRUE for osteoarthritis observations)'
+      - name: osteoarthritis_observation_type
+        description: 'Type of osteoarthritis observation (always "Osteoarthritis Diagnosis")'

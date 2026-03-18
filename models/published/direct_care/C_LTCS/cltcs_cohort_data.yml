@@ -153,6 +153,10 @@ models:
         data_type: boolean
         description: "Flag for osteoporosis"
 
+      - name: has_osteoarthritis
+        data_type: boolean
+        description: "Flag for osteoarthritis"
+
       - name: has_peripheral_arterial_disease
         data_type: boolean
         description: "Flag for peripheral arterial disease"

@@ -148,6 +148,8 @@ models:
         description: Presence of learning disability
       - name: has_osteoporosis
         description: Presence of osteoporosis
+      - name: has_osteoarthritis
+        description: Presence of osteoarthritis
       - name: has_palliative_care
         description: Receiving palliative care
       - name: has_rheumatoid_arthritis
