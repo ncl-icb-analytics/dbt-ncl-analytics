@@ -1,18 +1,8 @@
 models:
   - name: int_hypothyroidism_diagnoses_all
-    description: 'Hypothyroidism diagnosis observations for endocrine condition register management.
+    description: 'Hypothyroidism diagnosis observations using HYPOTHY_COD (ECL << 40930008) and legacy THY_COD clusters.
 
-      Key Features:
-
-      • Uses THY_COD cluster for diagnosis identification
-
-      • Supports hypothyroidism register data collection
-
-      • Enables endocrine condition monitoring and care pathway tracking
-
-      • No resolution codes as hypothyroidism is a chronic condition
-
-      Purpose: Provide observation-level data for hypothyroidism tracking and medication management.'
+      No resolution codes — hypothyroidism is a chronic condition. One row per observation.'
     config:
       meta:
         owner:
@@ -22,7 +12,7 @@ models:
           column_name: id
       - cluster_ids_exist:
           arguments:
-            cluster_ids: THY_COD
+            cluster_ids: HYPOTHY_COD, THY_COD
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -38,7 +28,7 @@ models:
       - name: concept_display
         description: 'Human-readable description of the hypothyroidism diagnosis'
       - name: source_cluster_id
-        description: 'Source cluster identifier (THY_COD for hypothyroidism diagnoses)'
+        description: 'Source cluster identifier (HYPOTHY_COD or THY_COD)'
       - name: is_diagnosis_code
         description: 'Boolean flag indicating diagnosis code (always TRUE for hypothyroidism observations)'
       - name: hypothyroidism_observation_type
