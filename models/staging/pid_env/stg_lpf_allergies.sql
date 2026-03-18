@@ -56,7 +56,7 @@ cleaned as (
         criticality_display,
         asserted_date
     from raw_allergies
-    where delete_ind != 'Y'
+    where coalesce(delete_ind, 'N') != 'Y'
         and allergy_id is not null
 ),
 
