@@ -8,6 +8,7 @@
 --Capture the sixin1 dose 1 vaccination events for this population
   SELECT 
         v.PERSON_ID
+        ,v.age
         ,v.practice_code
         ,v.EVENT_DATE AS sixin1_dose1_date
         ,TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose1_sort
