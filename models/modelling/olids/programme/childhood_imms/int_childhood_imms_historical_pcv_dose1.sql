@@ -8,6 +8,7 @@
 --Capture the pcv dose 1 vaccination events for this population
   SELECT DISTINCT
         v.PERSON_ID
+        ,v.age
         ,v.practice_code
         ,v.EVENT_DATE AS pcv_dose1_date 
         ,TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS pcv_dose1_sort

@@ -56,9 +56,9 @@ select *
 FROM (
 select 
 b.person_id
-,DATE(b.clinical_effective_date) as HBA1C_date
-,b.HBA1C_CATEGORY
-,b.HBA1C_DISPLAY
+,DATE(b.clinical_effective_date) as hba1c_date
+,b.hba1c_category
+,b.hba1c_display
 FROM {{ ref('int_hba1c_latest') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
@@ -67,15 +67,15 @@ UNION
 
 select 
 b.person_id
-,DATE(b.clinical_effective_date) as HBA1C_DATE
-,'Glucose Declined' as HBA1C_CATEGORY
-,NULL AS HBA1C_DISPLAY
+,DATE(b.clinical_effective_date) as hba1c_date
+,'Glucose Declined' as hba1c_category
+,NULL AS hba1c_display
 FROM {{ ref('int_smi_glucose_declined') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where b.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY b.person_id ORDER BY b.clinical_effective_date DESC) = 1
 ) a
-QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.HBA1C_date DESC, CASE WHEN a.HBA1C_CATEGORY <> 'Glucose Declined' THEN 1 ELSE 0 END DESC) = 1
+QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.hba1c_date DESC, CASE WHEN a.hba1c_category <> 'Glucose Declined' THEN 1 ELSE 0 END DESC) = 1
 )
 -- # TEST 3 CHOLESTEROL
 ,CHOL as (
@@ -211,7 +211,7 @@ WHEN ALCOHOL_RISK_CATEGORY = 'Alcohol Declined' THEN 1 ELSE 0 END DESC) = 1
              WHEN b.person_id IS NOT NULL AND b.BMI_CATEGORY = 'BMI Declined' THEN 'Declined'
              ELSE 'Met' END AS BMI_CHECK_12M,
         CASE WHEN h.person_id IS NULL THEN 'Not Met'
-             WHEN h.person_id IS NOT NULL AND h.HBA1C_CATEGORY = 'Glucose Declined' THEN 'Declined'
+             WHEN h.person_id IS NOT NULL AND h.hba1c_category = 'Glucose Declined' THEN 'Declined'
              ELSE 'Met' END AS HBA1C_CHECK_12M,
         CASE WHEN c.person_id IS NULL THEN 'Not Met'
              WHEN c.person_id IS NOT NULL AND c.CHOLESTEROL_CATEGORY = 'Cholesterol Declined' THEN 'Declined'
@@ -242,7 +242,7 @@ LEFT JOIN BMI b USING (person_id)
 UNION ALL
 
 SELECT person_id, 'HBA1C' AS Check_Type, HBA1C_CHECK_12M AS Check_Status,
-       h.HBA1C_DATE AS Check_Date, h.HBA1C_CATEGORY AS Result_Category, h.HBA1C_DISPLAY AS Value
+       h.hba1c_date AS Check_Date, h.hba1c_category AS Result_Category, h.hba1c_display AS Value
 FROM HC_CHECKS hc
 LEFT JOIN Glucose h USING (person_id)
 
