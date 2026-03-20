@@ -8,6 +8,7 @@
 
 SELECT DISTINCT
 v.PERSON_ID 
+,v.age
 ,v.practice_code
 ,sixin1_dose1_label
 ,sixin1_dose1_fiscal

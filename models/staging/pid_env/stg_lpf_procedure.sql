@@ -9,7 +9,7 @@ with raw_data as (
 ),
 cleaned as (
     select * from raw_data
-    where delete_ind != 'Y' and procedure_id is not null
+    where coalesce(delete_ind, 'N') != 'Y' and procedure_id is not null
 ),
 deduplicated as (
     select *,

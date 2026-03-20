@@ -6,19 +6,12 @@
 
 /*
 All hypothyroidism diagnosis observations from clinical records.
-Uses hypothyroidism cluster ID:
-- THY_COD: Hypothyroidism diagnoses
+Uses hypothyroidism cluster IDs:
+- HYPOTHY_COD: ECL-based hypothyroidism diagnoses (<< 40930008 |Hypothyroidism|, 113 concepts)
+- THY_COD: Legacy hypothyroidism diagnoses (retained for backward compatibility)
 
-Clinical Purpose:
-- Hypothyroidism register data collection
-- Endocrine condition monitoring
-- Care pathway tracking
-- Medication management support
-
-Clinical Context:
-Hypothyroidism register includes persons with hypothyroidism diagnosis codes.
 Hypothyroidism is a chronic endocrine condition with no resolution codes.
-No age restrictions applied - condition can occur at any age though more common in older adults, particularly women.
+No age restrictions applied.
 
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 This is OBSERVATION-LEVEL data - one row per hypothyroidism observation.
@@ -39,8 +32,13 @@ SELECT
     -- Hypothyroidism observation type
     'Hypothyroidism Diagnosis' AS hypothyroidism_observation_type
 
-FROM ({{ get_observations("'THY_COD'") }}) obs
+FROM ({{ get_observations("'HYPOTHY_COD', 'THY_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL
+-- Deduplicate overlapping clusters: same observation may match both HYPOTHY_COD and THY_COD
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY obs.id
+    ORDER BY CASE WHEN obs.cluster_id = 'HYPOTHY_COD' THEN 0 ELSE 1 END
+) = 1
 
 ORDER BY person_id, clinical_effective_date, id
 

@@ -8,6 +8,7 @@
 --Capture the HibMenC dose 1 vaccination events for this population
   SELECT 
         v.PERSON_ID
+        ,v.AGE
         ,v.practice_code
          ,v.EVENT_DATE AS hibmc_dose1_date 
         ,TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS hibmc_dose1_sort

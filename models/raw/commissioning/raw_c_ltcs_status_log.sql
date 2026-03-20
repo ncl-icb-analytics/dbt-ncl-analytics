@@ -5,10 +5,9 @@
 }}
 select
     "PATIENT_ID" as patient_id,
-    "AREA_CODE" as area_code,
-    "INTERVENTION_DATE" as intervention_date,
+    "PCN_CODE" as pcn_code,
+    "MDT_DATE" as mdt_date,
     "ACTION" as action,
     "ACTION_DATE" as action_date,
-    "DETAIL" as detail,
-    "INTERVENTION_NAME" as intervention_name
+    "CRITERIA" as criteria
 from {{ source('c_ltcs', 'STATUS_LOG') }}

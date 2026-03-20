@@ -8,7 +8,8 @@
 --Creating a base table for vaccinations for this population to be joined against in further analysis n~2.5 million rows 
 SELECT DISTINCT
 p.PERSON_ID
---,p.practice_name as GP_NAME
+--adding age to cross checks against FDP figures.
+,p.AGE
 ,p.practice_code
 ,v.VACCINE_ID
 ,v.VACCINE_NAME
