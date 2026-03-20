@@ -60,6 +60,7 @@ SELECT
   has_learning_disability,
   has_learning_disability_under_14,
   has_osteoporosis,
+  has_osteoarthritis,
   has_palliative_care,
   has_rheumatoid_arthritis,
   COUNT(*) AS patient_count

@@ -41,6 +41,7 @@ person_conditions AS (
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'NDH' THEN TRUE END), FALSE) AS has_non_diabetic_hyperglycaemia,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'OB' THEN TRUE END), FALSE) AS has_obesity,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'OST' THEN TRUE END), FALSE) AS has_osteoporosis,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'OA' THEN TRUE END), FALSE) AS has_osteoarthritis,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'PAD' THEN TRUE END), FALSE) AS has_peripheral_arterial_disease,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'PC' THEN TRUE END), FALSE) AS has_palliative_care,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'RA' THEN TRUE END), FALSE) AS has_rheumatoid_arthritis,

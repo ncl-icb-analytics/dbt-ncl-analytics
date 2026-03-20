@@ -320,9 +320,24 @@ WITH all_condition_events AS (
     WHERE is_diagnosis_code
     
     UNION ALL
-    
+
+    -- Osteoarthritis events (diagnosis only)
+    SELECT
+        person_id,
+        clinical_effective_date as event_date,
+        'Osteoarthritis' as condition_name,
+        'OA' as condition_code,
+        'Musculoskeletal' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_osteoarthritis_diagnoses_all') }}
+    WHERE is_diagnosis_code
+
+    UNION ALL
+
     -- PAD events (diagnosis only)
-    SELECT 
+    SELECT
         person_id,
         clinical_effective_date as event_date,
         'Peripheral Arterial Disease' as condition_name,

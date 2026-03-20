@@ -1,0 +1,40 @@
+models:
+  - name: fct_person_osteoarthritis_register
+    description: 'Osteoarthritis register for patients with osteoarthritis diagnosis.
+      One row per person with OA_COD present (non-QOF).'
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    config:
+      meta:
+        indicator:
+          id: "OSTEOARTHRITIS"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Musculoskeletal"
+          name_short: "Osteoarthritis"
+          description_short: "Osteoarthritis register (non-QOF)"
+          description_long: >
+            Osteoarthritis register for persons with osteoarthritis diagnosis.
+            Includes active patients with osteoarthritis diagnosis using OA_COD
+            cluster codes. No age restrictions or resolution codes applied.
+            Degenerative joint condition with no resolution.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_MSK_OSTEOARTHRITIS"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "OA_COD"
+              category: "INCLUSION"
+
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null
