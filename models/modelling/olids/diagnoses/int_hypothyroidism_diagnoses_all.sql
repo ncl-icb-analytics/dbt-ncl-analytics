@@ -34,6 +34,11 @@ SELECT
 
 FROM ({{ get_observations("'HYPOTHY_COD', 'THY_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL
+-- Deduplicate overlapping clusters: same observation may match both HYPOTHY_COD and THY_COD
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY obs.id
+    ORDER BY CASE WHEN obs.cluster_id = 'HYPOTHY_COD' THEN 0 ELSE 1 END
+) = 1
 
 ORDER BY person_id, clinical_effective_date, id
 
