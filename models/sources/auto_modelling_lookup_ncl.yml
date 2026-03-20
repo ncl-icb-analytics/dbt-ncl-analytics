@@ -108,6 +108,27 @@ sources:
       data_type: TEXT
     - name: NEIGHBOURHOOD_NAME
       data_type: TEXT
+  - name: GP_PRACTICE_WNL
+    identifier: '"GP_PRACTICE_WNL"'
+    columns:
+    - name: SK_ORGANISATION_ID
+      data_type: NUMBER(38,0)
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: PRACTICE_NAME_SHORT
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: PCN_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
   - name: GP_RAW_LIST_SIZE_AGE_SEX_HIST
     identifier: '"GP_RAW_LIST_SIZE_AGE_SEX_HIST"'
     columns:
@@ -381,6 +402,15 @@ sources:
       data_type: NUMBER(38,0)
   - name: IMD_PRACTICE
     identifier: '"IMD_PRACTICE"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: DATE_INDICATOR
+      data_type: TEXT
+    - name: IMD_DECILE
+      data_type: NUMBER(28,0)
+  - name: IMD_PRACTICE_25
+    identifier: '"IMD_PRACTICE_25"'
     columns:
     - name: PRACTICE_CODE
       data_type: TEXT
