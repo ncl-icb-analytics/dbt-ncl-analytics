@@ -235,6 +235,8 @@ LEFT JOIN (
         MAX(CASE WHEN condition_code = 'OA' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_oa,
         MAX(CASE WHEN condition_code = 'NAFLD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_nafld,
         MAX(CASE WHEN condition_code = 'FH' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_fh,
+        MAX(CASE WHEN condition_code = 'ADHD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_adhd,
+        MAX(CASE WHEN condition_code = 'CLD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_cld,
 
         -- New episode flags (new_*)
         MAX(CASE WHEN condition_code = 'AST' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_ast,
@@ -262,6 +264,8 @@ LEFT JOIN (
         MAX(CASE WHEN condition_code = 'OA' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_oa,
         MAX(CASE WHEN condition_code = 'NAFLD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_nafld,
         MAX(CASE WHEN condition_code = 'FH' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_fh,
+        MAX(CASE WHEN condition_code = 'ADHD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_adhd,
+        MAX(CASE WHEN condition_code = 'CLD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_cld,
 
         -- Summary metrics
         COUNT(DISTINCT CASE WHEN has_active_episode THEN condition_code END) as total_active_conditions,
