@@ -82,6 +82,7 @@ def sanitise_column_name(col_name, apply_transformations=True, used_names=None):
                 # Remove symbols that don't have clear semantic meaning in column names
                 safe_name = safe_name.replace('?', '')
                 safe_name = safe_name.replace('!', '')
+                safe_name = safe_name.replace('#', '')
                 safe_name = safe_name.replace('@', '_at_')
                 safe_name = safe_name.replace('$', '')
                 safe_name = safe_name.replace('|', '_or_')
