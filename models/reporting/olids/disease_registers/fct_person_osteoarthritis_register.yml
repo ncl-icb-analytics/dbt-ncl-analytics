@@ -17,9 +17,8 @@ models:
           name_short: "Osteoarthritis"
           description_short: "Osteoarthritis register (non-QOF)"
           description_long: >
-            Osteoarthritis register for persons with osteoarthritis diagnosis.
-            Includes active patients with osteoarthritis diagnosis using OA_COD
-            cluster codes. No age restrictions or resolution codes applied.
+            Osteoarthritis register for persons with osteoarthritis diagnosis
+            using OA_COD cluster codes. No age restrictions or resolution codes.
             Degenerative joint condition with no resolution.
           is_qof: false
           source_column: "is_on_register"
