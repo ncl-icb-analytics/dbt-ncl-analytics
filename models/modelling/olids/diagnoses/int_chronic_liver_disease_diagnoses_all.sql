@@ -38,5 +38,11 @@ SELECT
 
 FROM ({{ get_observations("'CLDATRISK1_COD', 'CIRRHOSIS_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL
+-- Deduplicate overlapping clusters: same observation may match both clusters.
+-- Prefer CIRRHOSIS_COD so the is_cirrhosis_code flag is preserved.
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY obs.id
+    ORDER BY CASE WHEN obs.cluster_id = 'CIRRHOSIS_COD' THEN 0 ELSE 1 END
+) = 1
 
 ORDER BY person_id, clinical_effective_date, id
