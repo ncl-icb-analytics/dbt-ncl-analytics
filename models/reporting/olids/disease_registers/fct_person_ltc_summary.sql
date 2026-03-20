@@ -427,6 +427,30 @@ WITH condition_union AS (
         latest_diagnosis_date
     FROM {{ ref('fct_person_autism_register') }}
     WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- ADHD
+    SELECT
+        person_id,
+        'ADHD' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_adhd_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Chronic Liver Disease
+    SELECT
+        person_id,
+        'CLD' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_chronic_liver_disease_register') }}
+    WHERE is_on_register = TRUE
 ),
 
 condition_metadata AS (

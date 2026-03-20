@@ -1,0 +1,44 @@
+models:
+  - name: fct_person_chronic_liver_disease_register
+    description: 'Chronic liver disease register for patients with CLD or cirrhosis diagnosis.
+
+      One row per person with CLDATRISK1_COD or CIRRHOSIS_COD present (non-QOF).
+      Includes has_cirrhosis flag for end-stage progression.'
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    config:
+      meta:
+        indicator:
+          id: "CLD"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Hepatology"
+          name_short: "Chronic Liver Disease"
+          description_short: "Chronic liver disease register (non-QOF)"
+          description_long: >
+            Chronic liver disease register using CLDATRISK1_COD for CLD diagnosis
+            and CIRRHOSIS_COD for cirrhosis. Cirrhosis is flagged as end-stage
+            progression via has_cirrhosis rather than a separate register.
+            No resolution codes or age restrictions.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_HEP_CLD"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "CLDATRISK1_COD"
+              category: "INCLUSION"
+            - cluster_id: "CIRRHOSIS_COD"
+              category: "INCLUSION"
+
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

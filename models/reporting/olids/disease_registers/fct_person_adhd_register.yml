@@ -1,0 +1,42 @@
+models:
+  - name: fct_person_adhd_register
+    description: 'ADHD register for patients with active ADHD diagnosis.
+
+      One row per person with latest ADHD_COD > latest ADHDREM_COD (non-QOF).'
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    config:
+      meta:
+        indicator:
+          id: "ADHD"
+          type: "CONDITION"
+          category: "LTC"
+          clinical_domain: "Neurodevelopmental"
+          name_short: "ADHD"
+          description_short: "ADHD register (non-QOF)"
+          description_long: >
+            ADHD register for persons with active ADHD diagnosis where latest
+            diagnosis code is more recent than any remission code. Uses ADHD_COD
+            for diagnosis and ADHDREM_COD for remission. No age restrictions.
+          is_qof: false
+          source_column: "is_on_register"
+          sort_order: "COND_ND_ADHD"
+          usage_contexts:
+            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+          code_clusters:
+            - cluster_id: "ADHD_COD"
+              category: "INCLUSION"
+            - cluster_id: "ADHDREM_COD"
+              category: "RESOLUTION"
+
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - unique
+          - not_null

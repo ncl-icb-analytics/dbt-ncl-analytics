@@ -146,6 +146,7 @@ SELECT
     
     -- Conditions: Neurodevelopmental
     c.has_autism,
+    c.has_adhd,
     
     -- Conditions: Other
     c.has_cancer,
@@ -156,6 +157,7 @@ SELECT
     c.has_learning_disability_under_14,
     c.has_osteoporosis,
     c.has_osteoarthritis,
+    c.has_chronic_liver_disease,
     c.has_palliative_care,
     c.has_rheumatoid_arthritis,
     
