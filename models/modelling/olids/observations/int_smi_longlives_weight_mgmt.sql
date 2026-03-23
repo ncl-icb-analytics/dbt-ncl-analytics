@@ -13,8 +13,8 @@ SELECT
     obs.person_id,
     obs.clinical_effective_date,
     obs.mapped_concept_code AS concept_code,
-    obs.mapped_concept_display AS concept_display,
-FROM ({{ get_observations("'SMI_LONGER_LIVES_WEIGHT_MANAGEMENT'", source='ECL_CACHE') }}) obs
+    obs.mapped_concept_display AS concept_display
+FROM ({{ get_observations("'SMI_LONGER_LIVES_WEIGHT_MANAGEMENT','EXERCISEINT_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 )
@@ -23,5 +23,12 @@ select person_id
 ,clinical_effective_date
 ,concept_code
 ,concept_display
+,CASE
+WHEN concept_code IN ('103699006', '306163007','443288003','11816003') THEN 'Yes'
+END AS referral_diet_advice
+,CASE
+WHEN concept_code IN ('390893007', '892281000000101','390893007','304507003','526151000000109','183073003','416974006','767621000000102') THEN 'Yes'
+WHEN concept_code in ('199351000000104','511991000000101') THEN 'Declined'
+END AS referral_exercise_advice
 from WEIGHT_MGMT
 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1

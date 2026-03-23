@@ -1,0 +1,14 @@
+models:
+  - name: int_smi_lifestyle_es
+    description: Person Level Intermediate table holding Enhanced Service Lifestyle data for 
+      people on the SMI register. 
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null

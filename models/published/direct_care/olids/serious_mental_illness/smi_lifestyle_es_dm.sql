@@ -6,4 +6,4 @@
 }}
 
 select * 
-FROM {{ ref('int_smi_lifestyle') }}
+FROM {{ ref('int_smi_lifestyle_es') }}

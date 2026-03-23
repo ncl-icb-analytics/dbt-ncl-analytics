@@ -19,5 +19,9 @@ person_id
 ,result_value
 ,result_unit_display
 ,alcohol_risk_category
+,CASE
+WHEN a.alcohol_risk_category in ('Increasing Risk','Higher Risk') THEN 'Yes'
+WHEN a.alcohol_risk_category in ('Ex-Drinker','Low Risk','Non-Drinker') THEN 'No'
+ELSE 'Unknown'END AS high_alcohol_use_flag
 FROM {{ ref('int_smi_alcohol_all') }} a
 QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY clinical_effective_date DESC, CASE WHEN result_value IS NOT NULL THEN 1 ELSE 0 END DESC) = 1
