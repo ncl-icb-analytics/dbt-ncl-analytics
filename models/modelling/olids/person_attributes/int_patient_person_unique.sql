@@ -13,6 +13,7 @@ EXCLUDES orphaned person records that don't link to valid patient records.
 SELECT DISTINCT
     pp.patient_id,
     pp.person_id,
+    pp.person_uuid,
     pat.sk_patient_id
 FROM {{ ref('stg_olids_patient_person') }} pp
 INNER JOIN {{ ref('stg_olids_person') }} p

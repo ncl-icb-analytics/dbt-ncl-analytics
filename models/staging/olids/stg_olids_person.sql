@@ -1,6 +1,7 @@
 select
     -- Primary key
     id,
+    max(person_uuid) as person_uuid,
 
     -- Business columns
     array_agg(distinct nhs_number_hash) as nhs_number_hashes,

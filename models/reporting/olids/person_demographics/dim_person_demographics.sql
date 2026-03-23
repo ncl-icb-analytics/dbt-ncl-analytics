@@ -36,6 +36,7 @@ For monthly snapshots, use person_month_analysis_base.
 SELECT
     -- Core Identifiers
     hist.person_id,
+    hist.person_uuid,
     hist.sk_patient_id,
 
     -- Status Flags

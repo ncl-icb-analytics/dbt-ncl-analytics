@@ -268,6 +268,7 @@ periods_with_attributes AS (
 SELECT
     -- Core identifiers
     pwa.person_id,
+    ppu.person_uuid,
     bd.sk_patient_id,
 
     -- SCD-2 fields
@@ -378,6 +379,12 @@ SELECT
     pwa.neighbourhood_resident
 
 FROM periods_with_attributes pwa
+
+-- Join person_uuid for backwards compatibility
+LEFT JOIN (
+    SELECT DISTINCT person_id, person_uuid
+    FROM {{ ref('int_patient_person_unique') }}
+) ppu ON pwa.person_id = ppu.person_id
 
 -- Join birth/death
 INNER JOIN {{ ref('dim_person_birth_death') }} bd

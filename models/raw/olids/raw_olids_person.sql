@@ -5,6 +5,7 @@
 }}
 select
     "ID" as id,
+    "PERSON_UUID" as person_uuid,
     "NHS_NUMBER_HASH" as nhs_number_hash,
     "TITLE" as title,
     "GENDER_CONCEPT_ID" as gender_concept_id,
