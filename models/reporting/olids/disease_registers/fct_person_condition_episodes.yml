@@ -773,6 +773,7 @@ models:
                   - 'LD'
                   - 'NAFLD'
                   - 'NDH'
+                  - 'OA'
                   - 'OB'
                   - 'OST'
                   - 'PAD'
@@ -787,6 +788,8 @@ models:
                   - 'ANX'
                   - 'THY'
                   - 'AUTISM'
+                  - 'ADHD'
+                  - 'CLD'
 
       - name: clinical_domain
         description: 'Clinical specialty domain for the condition'

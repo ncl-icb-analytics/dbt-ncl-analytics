@@ -14,7 +14,7 @@ SELECT
     obs.clinical_effective_date,
     obs.mapped_concept_code AS concept_code,
     obs.mapped_concept_display AS concept_display,
-  FROM ({{ get_observations("'SMI_LONGER_LIVES_NUTRITION_ACTIVITY'", source='ECL_CACHE') }}) obs
+  FROM ({{ get_observations("'SMI_LONGER_LIVES_NUTRITION_ACTIVITY','NUTRIASSDEC_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 )
@@ -23,5 +23,10 @@ select person_id
 ,clinical_effective_date
 ,concept_code
 ,concept_display
+,CASE WHEN concept_code in ( '310502008','301991000000101') THEN 'Yes' 
+WHEN concept_code IN ('226234005', '310503003','16208003','301961000000107','310500000') THEN 'No'
+WHEN concept_code in ('1875261000000107' ) THEN 'Declined'
+WHEN concept_code IN ('391129005', '401070008','391132008') THEN 'Unclear'
+END AS poor_diet_flag
 from NUTR
 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1

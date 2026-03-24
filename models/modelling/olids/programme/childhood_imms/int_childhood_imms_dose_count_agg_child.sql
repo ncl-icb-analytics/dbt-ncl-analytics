@@ -29,12 +29,13 @@ END As VACC_ORDER
 ,p.practice_code
 ,p.month_year
 ,p.month_label
+,p.age
 ,p.vaccination_count 
 FROM (
 ------- ALL VACCINATION METRICS FROM VACCINATION COUNT CHILD UNDER 10
 --sixin1 Dose 1
 select 
- '6-in-1 (dose 1)' as vaccination_dose, SIXIN1_DOSE1_FISCAL as fiscal_year,  practice_code, sixin1_dose1_sort as month_year, SIXIN1_DOSE1_LABEL as month_label, count(person_id) as vaccination_count
+ '6-in-1 (dose 1)' as vaccination_dose, SIXIN1_DOSE1_FISCAL as fiscal_year,  practice_code, sixin1_dose1_sort as month_year, SIXIN1_DOSE1_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where sixin1_dose1_sort is not null
@@ -44,7 +45,7 @@ UNION
 
 --sixin1 Dose 2
 select 
- '6-in-1 (dose 2)' as vaccination_dose, SIXIN1_DOSE2_FISCAL as fiscal_year,  practice_code, sixin1_dose2_sort as month_year, SIXIN1_DOSE2_LABEL as month_label, count(person_id) as vaccination_count
+ '6-in-1 (dose 2)' as vaccination_dose, SIXIN1_DOSE2_FISCAL as fiscal_year,  practice_code, sixin1_dose2_sort as month_year, SIXIN1_DOSE2_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where sixin1_dose2_sort is not null
@@ -54,7 +55,7 @@ UNION
 
 --sixin1 Dose 3
 select 
- '6-in-1 (dose 3)' as vaccination_dose, SIXIN1_DOSE3_FISCAL as fiscal_year,  practice_code, sixin1_dose3_sort as month_year, SIXIN1_DOSE3_LABEL as month_label, count(person_id) as vaccination_count
+ '6-in-1 (dose 3)' as vaccination_dose, SIXIN1_DOSE3_FISCAL as fiscal_year,  practice_code, sixin1_dose3_sort as month_year, SIXIN1_DOSE3_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where sixin1_dose3_sort is not null
@@ -64,7 +65,7 @@ UNION
 
 --sixin1 Dose 4
 select 
- '6-in-1 (dose 4)' as vaccination_dose, SIXIN1_DOSE4_FISCAL as fiscal_year,  practice_code, sixin1_dose4_sort as month_year, SIXIN1_DOSE4_LABEL as month_label, count(person_id) as vaccination_count
+ '6-in-1 (dose 4)' as vaccination_dose, SIXIN1_DOSE4_FISCAL as fiscal_year,  practice_code, sixin1_dose4_sort as month_year, SIXIN1_DOSE4_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where sixin1_dose4_sort is not null
@@ -74,7 +75,7 @@ UNION
 
 --rota Dose 1
 select 
- 'Rotavirus (dose 1)' as vaccination_dose, ROTA_DOSE1_FISCAL as fiscal_year,  practice_code, rota_dose1_sort as month_year, ROTA_DOSE1_LABEL as month_label, count(person_id) as vaccination_count
+ 'Rotavirus (dose 1)' as vaccination_dose, ROTA_DOSE1_FISCAL as fiscal_year,  practice_code, rota_dose1_sort as month_year, ROTA_DOSE1_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where rota_dose1_sort is not null
@@ -84,7 +85,7 @@ UNION
 
 --rota Dose 2
 select 
- 'Rotavirus (dose 2)' as vaccination_dose, ROTA_DOSE2_FISCAL as fiscal_year,  practice_code, rota_dose2_sort as month_year, ROTA_DOSE2_LABEL as month_label, count(person_id) as vaccination_count
+ 'Rotavirus (dose 2)' as vaccination_dose, ROTA_DOSE2_FISCAL as fiscal_year,  practice_code, rota_dose2_sort as month_year, ROTA_DOSE2_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where rota_dose2_sort is not null
@@ -94,7 +95,7 @@ UNION
 
 --menb Dose 1
 select 
- 'MenB (dose 1)' as vaccination_dose, MENB_DOSE1_FISCAL as fiscal_year,  practice_code, menb_dose1_sort as month_year, MENB_DOSE1_LABEL as month_label, count(person_id) as vaccination_count
+ 'MenB (dose 1)' as vaccination_dose, MENB_DOSE1_FISCAL as fiscal_year,  practice_code, menb_dose1_sort as month_year, MENB_DOSE1_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where menb_dose1_sort is not null
@@ -104,7 +105,7 @@ UNION
 
 --menb Dose 2
 select 
- 'MenB (dose 2)' as vaccination_dose, MENB_DOSE2_FISCAL as fiscal_year,  practice_code, menb_dose2_sort as month_year, MENB_DOSE2_LABEL as month_label,  count(person_id) as vaccination_count
+ 'MenB (dose 2)' as vaccination_dose, MENB_DOSE2_FISCAL as fiscal_year,  practice_code, menb_dose2_sort as month_year, MENB_DOSE2_LABEL as month_label, age,  count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where menb_dose2_sort is not null
@@ -114,7 +115,7 @@ UNION
 
 --menb Dose 3
 select 
- 'MenB (dose 3)' as vaccination_dose, MENB_DOSE3_FISCAL as fiscal_year,  practice_code, menb_dose3_sort as month_year, MENB_DOSE3_LABEL as month_label,  count(person_id) as vaccination_count
+ 'MenB (dose 3)' as vaccination_dose, MENB_DOSE3_FISCAL as fiscal_year,  practice_code, menb_dose3_sort as month_year, MENB_DOSE3_LABEL as month_label, age,  count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 where menb_dose3_sort is not null
@@ -124,7 +125,7 @@ UNION
 
 --pcv Dose 1
 select 
- 'PCV (dose 1)' as vaccination_dose, PCV_DOSE1_FISCAL as fiscal_year,  practice_code, pcv_dose1_sort as month_year, PCV_DOSE1_LABEL as month_label,  count(person_id) as vaccination_count
+ 'PCV (dose 1)' as vaccination_dose, PCV_DOSE1_FISCAL as fiscal_year,  practice_code, pcv_dose1_sort as month_year, PCV_DOSE1_LABEL as month_label, age,  count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE pcv_dose1_sort is not null
@@ -134,7 +135,7 @@ UNION
 
 --pcv Dose 2
 select 
- 'PCV (dose 2)' as vaccination_dose, PCV_DOSE2_FISCAL as fiscal_year,  practice_code, pcv_dose2_sort as month_year, PCV_DOSE2_LABEL as month_label,  count(person_id) as vaccination_count
+ 'PCV (dose 2)' as vaccination_dose, PCV_DOSE2_FISCAL as fiscal_year,  practice_code, pcv_dose2_sort as month_year, PCV_DOSE2_LABEL as month_label, age,  count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE pcv_dose2_sort is not null
@@ -144,7 +145,7 @@ UNION
 
 --HibMenC Dose 1
 select 
- 'HibMenC (dose 1)' as vaccination_dose, HIBMC_DOSE1_FISCAL as fiscal_year,  practice_code, hibmc_dose1_sort as month_year, HIBMC_DOSE1_LABEL as month_label, count(person_id) as vaccination_count
+ 'HibMenC (dose 1)' as vaccination_dose, HIBMC_DOSE1_FISCAL as fiscal_year,  practice_code, hibmc_dose1_sort as month_year, HIBMC_DOSE1_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE hibmc_dose1_sort is not null
@@ -154,7 +155,7 @@ UNION
 
 --mmr Dose 1
 select 
- 'MMR (dose 1)' as vaccination_dose, MMR_DOSE1_FISCAL as fiscal_year,  practice_code, mmr_dose1_sort as month_year, MMR_DOSE1_LABEL as month_label, count(person_id) as vaccination_count
+ 'MMR (dose 1)' as vaccination_dose, MMR_DOSE1_FISCAL as fiscal_year,  practice_code, mmr_dose1_sort as month_year, MMR_DOSE1_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE mmr_dose1_sort is not null
@@ -164,7 +165,7 @@ UNION
 
 --mmr Dose 2
 select 
- 'MMR (dose 2)' as vaccination_dose, MMR_DOSE2_FISCAL as fiscal_year,  practice_code, mmr_dose2_sort as month_year, MMR_DOSE2_LABEL as month_label, count(person_id) as vaccination_count
+ 'MMR (dose 2)' as vaccination_dose, MMR_DOSE2_FISCAL as fiscal_year,  practice_code, mmr_dose2_sort as month_year, MMR_DOSE2_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE mmr_dose2_sort is not null
@@ -174,7 +175,7 @@ UNION
 
 --fourin1 Dose 1
 select 
- '4-in-1 (dose 1)' as vaccination_dose, FOURIN1_DOSE1_FISCAL as fiscal_year,  practice_code, fourin1_dose1_sort as month_year, fourin1_DOSE1_LABEL as month_label, count(person_id) as vaccination_count
+ '4-in-1 (dose 1)' as vaccination_dose, FOURIN1_DOSE1_FISCAL as fiscal_year,  practice_code, fourin1_dose1_sort as month_year, fourin1_DOSE1_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE fourin1_dose1_sort is not null
@@ -184,7 +185,7 @@ UNION
 
 --mmrv Dose 1
 select 
- 'MMRV (dose 1)' as vaccination_dose, MMRV_DOSE1_FISCAL as fiscal_year,  practice_code, mmrv_dose1_sort as month_year, MMRV_DOSE1_LABEL as month_label, count(person_id) as vaccination_count
+ 'MMRV (dose 1)' as vaccination_dose, MMRV_DOSE1_FISCAL as fiscal_year,  practice_code, mmrv_dose1_sort as month_year, MMRV_DOSE1_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE mmrv_dose1_sort is not null
@@ -194,7 +195,7 @@ UNION
 
 --mmrv Dose 2
 select 
- 'MMRV (dose 2)' as vaccination_dose, MMRV_DOSE2_FISCAL as fiscal_year,  practice_code, mmrv_dose2_sort as month_year, MMRV_DOSE2_LABEL as month_label, count(person_id) as vaccination_count
+ 'MMRV (dose 2)' as vaccination_dose, MMRV_DOSE2_FISCAL as fiscal_year,  practice_code, mmrv_dose2_sort as month_year, MMRV_DOSE2_LABEL as month_label, age, count(person_id) as vaccination_count
 FROM {{ ref('int_childhood_imms_dose_count_child') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_COUNT_CHILD
 WHERE mmrv_dose2_sort is not null

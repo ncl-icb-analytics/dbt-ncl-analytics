@@ -69,7 +69,7 @@ sources:
     - name: IS_CONFIDENTIAL
       data_type: BOOLEAN
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: LDS_ID
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
@@ -106,7 +106,7 @@ sources:
     - name: PATIENT_ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PRACTITIONER_IN_ROLE_ID
       data_type: TEXT
     - name: SCHEDULE_ID
@@ -356,7 +356,7 @@ sources:
     - name: DATE_RECORDED
       data_type: TIMESTAMP_NTZ
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: LDS_ID
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
@@ -389,7 +389,7 @@ sources:
     - name: ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: PRACTITIONER_ID
@@ -462,7 +462,7 @@ sources:
     - name: PATIENT_ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: EPISODE_TYPE_SOURCE_CONCEPT_ID
       data_type: TEXT
     - name: EPISODE_TYPE_SOURCE_CODE
@@ -523,7 +523,7 @@ sources:
     - name: ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: EFFECTIVE_DATE
@@ -672,7 +672,7 @@ sources:
     - name: ORGANISATION_ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: MEDICATION_STATEMENT_ID
@@ -783,7 +783,7 @@ sources:
     - name: ORGANISATION_ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: ENCOUNTER_ID
@@ -900,7 +900,7 @@ sources:
     - name: PATIENT_ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: ENCOUNTER_ID
       data_type: TEXT
     - name: PRACTITIONER_ID
@@ -1117,7 +1117,7 @@ sources:
     - name: END_DATE
       data_type: TIMESTAMP_NTZ
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: LDS_ID
       data_type: TEXT
     - name: LDS_BUSINESS_KEY
@@ -1148,7 +1148,7 @@ sources:
     - name: ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: DESCRIPTION
@@ -1195,6 +1195,8 @@ sources:
     - name: PATIENT_ID
       data_type: TEXT
     - name: PERSON_ID
+      data_type: NUMBER(38,0)
+    - name: PERSON_UUID
       data_type: TEXT
     - name: LDS_ID
       data_type: TEXT
@@ -1222,7 +1224,7 @@ sources:
     - name: ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: ORGANISATION_ID
@@ -1316,6 +1318,8 @@ sources:
     identifier: '"PERSON"'
     columns:
     - name: ID
+      data_type: NUMBER(38,0)
+    - name: PERSON_UUID
       data_type: TEXT
     - name: NHS_NUMBER_HASH
       data_type: BINARY
@@ -1460,7 +1464,7 @@ sources:
     - name: ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: ENCOUNTER_ID
@@ -1523,7 +1527,7 @@ sources:
     - name: ORGANISATION_ID
       data_type: TEXT
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: PATIENT_ID
       data_type: TEXT
     - name: ENCOUNTER_ID

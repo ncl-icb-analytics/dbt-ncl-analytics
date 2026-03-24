@@ -14,6 +14,7 @@ select
     lds_dataset_id,
     patient_id,
     person_id,
+    person_uuid,
 
     -- Metadata
     lds_start_date_time,

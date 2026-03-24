@@ -14,3 +14,15 @@ models:
         tests:
           - not_null
           - unique
+      - name: has_osteoarthritis
+        description: Boolean flag indicating whether person is on osteoarthritis register
+        tests:
+          - not_null
+      - name: has_adhd
+        description: Boolean flag indicating whether person is on ADHD register
+        tests:
+          - not_null
+      - name: has_chronic_liver_disease
+        description: Boolean flag indicating whether person is on chronic liver disease register
+        tests:
+          - not_null

@@ -41,6 +41,7 @@ person_conditions AS (
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'NDH' THEN TRUE END), FALSE) AS has_non_diabetic_hyperglycaemia,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'OB' THEN TRUE END), FALSE) AS has_obesity,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'OST' THEN TRUE END), FALSE) AS has_osteoporosis,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'OA' THEN TRUE END), FALSE) AS has_osteoarthritis,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'PAD' THEN TRUE END), FALSE) AS has_peripheral_arterial_disease,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'PC' THEN TRUE END), FALSE) AS has_palliative_care,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'RA' THEN TRUE END), FALSE) AS has_rheumatoid_arthritis,
@@ -53,7 +54,9 @@ person_conditions AS (
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'ANX' THEN TRUE END), FALSE) AS has_anxiety,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'THY' THEN TRUE END), FALSE) AS has_hypothyroidism,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'AUTISM' THEN TRUE END), FALSE) AS has_autism,
-        
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'ADHD' THEN TRUE END), FALSE) AS has_adhd,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'CLD' THEN TRUE END), FALSE) AS has_chronic_liver_disease,
+
         -- Summary counts (0 for persons with no conditions)
         COALESCE(COUNT(DISTINCT ltc.condition_code), 0) AS total_conditions,
         COALESCE(COUNT(DISTINCT CASE WHEN ltc.is_qof = TRUE THEN ltc.condition_code END), 0) AS total_qof_conditions,

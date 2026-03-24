@@ -8,6 +8,7 @@
 --Capture the MMRV dose 1 vaccination events for this population - LIMIT to 1st JAN 2026 official introduction date
   SELECT DISTINCT
         v.PERSON_ID
+        ,v.age
         ,v.practice_code
           ,v.EVENT_DATE AS mmrv_dose1_date 
         ,TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS  mmrv_dose1_sort

@@ -5,6 +5,93 @@ sources:
   schema: '"ANALYST_MANAGED"'
   description: Analyst-managed reference datasets and business rules
   tables:
+  - name: ALL_TRUSTS_LSACM_2526_M08_FREEZE
+    identifier: '"ALL_TRUSTS_LSACM_2526_M08_FREEZE"'
+    columns:
+    - name: Source
+      data_type: TEXT
+    - name: FINANCIAL_MONTH
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(26,11)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(26,11)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(26,11)
+    - name: CONTRACT_MONITORING_ACTUAL_ACTIVITY
+      data_type: NUMBER(26,11)
+    - name: CONTRACT_MONITORING_ACTUAL_PRICE
+      data_type: NUMBER(26,11)
+    - name: CONTRACT_MONITORING_ACTUAL_MARKET_FORCES_FACTOR
+      data_type: NUMBER(26,11)
+    - name: cam_assignment
+      data_type: TEXT
+    - name: flow_chart_path
+      data_type: TEXT
+    - name: output
+      data_type: TEXT
+    - name: cam_servicecategory_code
+      data_type: TEXT
+    - name: dv_RecipientCode
+      data_type: TEXT
+    - name: Rowid##
+      data_type: NUMBER(38,0)
+    - name: Fileid##
+      data_type: NUMBER(38,0)
   - name: BP_THRESHOLDS
     identifier: '"BP_THRESHOLDS"'
     columns:
@@ -51,17 +138,124 @@ sources:
       data_type: NUMBER(38,0)
     - name: BREACHES
       data_type: NUMBER(38,0)
+  - name: CANCER__QOF_ACHIEVEMENT_1920
+    identifier: '"CANCER__QOF_ACHIEVEMENT_1920"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+  - name: CANCER__QOF_ACHIEVEMENT_2021
+    identifier: '"CANCER__QOF_ACHIEVEMENT_2021"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+  - name: CANCER__QOF_ACHIEVEMENT_2122
+    identifier: '"CANCER__QOF_ACHIEVEMENT_2122"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+  - name: CANCER__QOF_ACHIEVEMENT_LONDON_2223
+    identifier: '"CANCER__QOF_ACHIEVEMENT_LONDON_2223"'
+    columns:
+    - name: REGION_ODS_CODE
+      data_type: TEXT
+    - name: REGION_ONS_CODE
+      data_type: TEXT
+    - name: REGION_NAME
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+  - name: CANCER__QOF_ACHIEVEMENT_LONDON_2324
+    identifier: '"CANCER__QOF_ACHIEVEMENT_LONDON_2324"'
+    columns:
+    - name: REGION_ODS_CODE
+      data_type: TEXT
+    - name: REGION_ONS_CODE
+      data_type: TEXT
+    - name: REGION_NAME
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+  - name: CANCER__QOF_ACHIEVEMENT_LONDON_2425
+    identifier: '"CANCER__QOF_ACHIEVEMENT_LONDON_2425"'
+    columns:
+    - name: REGION_ODS_CODE
+      data_type: TEXT
+    - name: REGION_ONS_CODE
+      data_type: TEXT
+    - name: REGION_NAME
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: VALUE
+      data_type: TEXT
+  - name: CANCER__QOF_MAPPING_INDICATORS_2425
+    identifier: '"CANCER__QOF_MAPPING_INDICATORS_2425"'
+    columns:
+    - name: INDICATOR_CODE
+      data_type: TEXT
+    - name: INDICATOR_DESCRIPTION
+      data_type: TEXT
+    - name: INDICATOR_POINT_VALUE
+      data_type: TEXT
+    - name: GROUP_CODE
+      data_type: TEXT
+    - name: GROUP_DESCRIPTION
+      data_type: TEXT
+    - name: SUB_DOMAIN_CODE
+      data_type: TEXT
+    - name: SUB_DOMAIN_DESCRIPTION
+      data_type: TEXT
+    - name: DOMAIN_CODE
+      data_type: TEXT
+    - name: DOMAIN_DESCRIPTION
+      data_type: TEXT
+    - name: PATIENT_LIST_TYPE
+      data_type: TEXT
   - name: CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS
     identifier: '"CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS"'
     columns:
     - name: PROVIDER_NAME
       data_type: TEXT
-    - name: MACHINE_NAME
+    - name: MACHINE_ID
       data_type: TEXT
     - name: START_DATE
-      data_type: TEXT
+      data_type: DATE
     - name: END_DATE
-      data_type: TEXT
+      data_type: DATE
     - name: START_TIME
       data_type: TIME
     - name: END_TIME
@@ -85,34 +279,43 @@ sources:
     columns:
     - name: PROVIDER_NAME
       data_type: TEXT
-    - name: MACHINE_NAME
+    - name: MACHINE_ID
       data_type: TEXT
     - name: START_DATE
-      data_type: TEXT
+      data_type: DATE
     - name: END_DATE
-      data_type: TEXT
+      data_type: DATE
     - name: OVERRIDE_START
-      data_type: TIME
+      data_type: TEXT
     - name: OVERRIDE_END
-      data_type: TIME
+      data_type: TEXT
     - name: STATUS
       data_type: TEXT
     - name: NOTES
       data_type: TEXT
     - name: MONDAY
-      data_type: NUMBER(38,0)
+      data_type: TEXT
     - name: TUESDAY
-      data_type: NUMBER(38,0)
+      data_type: TEXT
     - name: WEDNESDAY
-      data_type: NUMBER(38,0)
+      data_type: TEXT
     - name: THURSDAY
-      data_type: NUMBER(38,0)
+      data_type: TEXT
     - name: FRIDAY
-      data_type: NUMBER(38,0)
+      data_type: TEXT
     - name: SATURDAY
-      data_type: NUMBER(38,0)
+      data_type: TEXT
     - name: SUNDAY
-      data_type: NUMBER(38,0)
+      data_type: TEXT
+  - name: CANCER__RADIOTHERAPY_MODELLING_MACHINES
+    identifier: '"CANCER__RADIOTHERAPY_MODELLING_MACHINES"'
+    columns:
+    - name: MACHINE_ID
+      data_type: TEXT
+    - name: MACHINE_NAME
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
   - name: CANCER__RCRD_NATIONAL
     identifier: '"CANCER__RCRD_NATIONAL"'
     columns:
@@ -482,562 +685,102 @@ sources:
       data_type: TEXT
     - name: DESCRIPTION
       data_type: TEXT
-  - name: CYPMH_Borough
-    identifier: '"CYPMH_Borough"'
+  - name: CYPMH_BOROUGH
+    identifier: '"CYPMH_BOROUGH"'
     columns:
-    - name: Organisation Code
+    - name: ORGANISATION_CODE
       data_type: TEXT
-    - name: Organisation Name
+    - name: ORGANISATION___NAME
       data_type: TEXT
-    - name: Metric
+    - name: METRIC
       data_type: TEXT
-    - name: September 2025
+    - name: MONTH
+      data_type: TEXT
+    - name: YEAR
       data_type: NUMBER(38,0)
-    - name: August 2025
+    - name: VALUE
       data_type: NUMBER(38,0)
-    - name: July 2025
-      data_type: NUMBER(38,0)
-    - name: June 2025
-      data_type: NUMBER(38,0)
-    - name: May 2025
-      data_type: NUMBER(38,0)
-    - name: April 2025
-      data_type: FLOAT
-    - name: March 2025
-      data_type: NUMBER(38,0)
-    - name: February 2025
-      data_type: NUMBER(38,0)
-    - name: January 2025
-      data_type: NUMBER(38,0)
-    - name: December 2024
-      data_type: NUMBER(38,0)
-    - name: November 2024
-      data_type: NUMBER(38,0)
-    - name: October 2024
-      data_type: NUMBER(38,0)
-    - name: September 2024
-      data_type: NUMBER(38,0)
-    - name: August 2024
-      data_type: NUMBER(38,0)
-    - name: July 2024
-      data_type: NUMBER(38,0)
-    - name: June 2024
-      data_type: NUMBER(38,0)
-    - name: May 2024
-      data_type: NUMBER(38,0)
-    - name: April 2024
-      data_type: NUMBER(38,0)
-    - name: March 2024
-      data_type: NUMBER(38,0)
-    - name: February 2024
-      data_type: NUMBER(38,0)
-    - name: January 2024
-      data_type: NUMBER(38,0)
-    - name: December 2023
-      data_type: NUMBER(38,0)
-    - name: November 2023
-      data_type: NUMBER(38,0)
-    - name: October 2023
-      data_type: NUMBER(38,0)
-    - name: September 2023
-      data_type: NUMBER(38,0)
-    - name: August 2023
-      data_type: NUMBER(38,0)
-    - name: July 2023
-      data_type: NUMBER(38,0)
-    - name: June 2023
-      data_type: NUMBER(38,0)
-    - name: May 2023
-      data_type: NUMBER(38,0)
-    - name: April 2023
-      data_type: NUMBER(38,0)
-    - name: March 2023
-      data_type: NUMBER(38,0)
-    - name: February 2023
-      data_type: NUMBER(38,0)
-    - name: January 2023
-      data_type: NUMBER(38,0)
-    - name: December 2022
-      data_type: FLOAT
-    - name: November 2022
-      data_type: NUMBER(38,0)
-    - name: October 2022
-      data_type: NUMBER(38,0)
-    - name: September 2022
-      data_type: NUMBER(38,0)
-    - name: August 2022
-      data_type: FLOAT
-    - name: July 2022
-      data_type: NUMBER(38,0)
-    - name: June 2022
-      data_type: NUMBER(38,0)
-    - name: May 2022
-      data_type: NUMBER(38,0)
-    - name: April 2022
-      data_type: FLOAT
-    - name: March 2022
-      data_type: NUMBER(38,0)
-    - name: February 2022
-      data_type: NUMBER(38,0)
-    - name: January 2022
-      data_type: NUMBER(38,0)
-    - name: December 2021
-      data_type: NUMBER(38,0)
-    - name: November 2021
-      data_type: NUMBER(38,0)
-    - name: October 2021
-      data_type: NUMBER(38,0)
-    - name: September 2021
-      data_type: NUMBER(38,0)
-    - name: August 2021
-      data_type: NUMBER(38,0)
-    - name: July 2021
-      data_type: NUMBER(38,0)
-    - name: June 2021
-      data_type: NUMBER(38,0)
-    - name: May 2021
-      data_type: NUMBER(38,0)
-    - name: April 2021
-      data_type: NUMBER(38,0)
-    - name: March 2021
-      data_type: NUMBER(38,0)
-    - name: February 2021
-      data_type: NUMBER(38,0)
-    - name: January 2021
-      data_type: NUMBER(38,0)
-    - name: December 2020
-      data_type: FLOAT
-    - name: November 2020
-      data_type: NUMBER(38,0)
-    - name: October 2020
-      data_type: NUMBER(38,0)
-    - name: September 2020
-      data_type: NUMBER(38,0)
-    - name: August 2020
-      data_type: NUMBER(38,0)
-    - name: July 2020
-      data_type: FLOAT
-    - name: June 2020
-      data_type: NUMBER(38,0)
-    - name: May 2020
-      data_type: FLOAT
-    - name: April 2020
-      data_type: FLOAT
-    - name: March 2020
-      data_type: FLOAT
-    - name: February 2020
-      data_type: NUMBER(38,0)
-    - name: January 2020
-      data_type: NUMBER(38,0)
-    - name: December 2019
-      data_type: FLOAT
-    - name: November 2019
-      data_type: NUMBER(38,0)
-    - name: October 2019
-      data_type: NUMBER(38,0)
-    - name: September 2019
-      data_type: FLOAT
-    - name: August 2019
-      data_type: FLOAT
-    - name: July 2019
-      data_type: NUMBER(38,0)
-    - name: June 2019
-      data_type: FLOAT
-    - name: May 2019
-      data_type: FLOAT
-    - name: April 2019
-      data_type: FLOAT
-  - name: CYPMH_LondonICB
-    identifier: '"CYPMH_LondonICB"'
+  - name: CYPMH_LONDONICB
+    identifier: '"CYPMH_LONDONICB"'
     columns:
-    - name: Organisation Code
+    - name: ORGANISATION_CODE
       data_type: TEXT
-    - name: Organisation Name
+    - name: ORGANISATION___NAME
       data_type: TEXT
-    - name: Metric
+    - name: METRIC
       data_type: TEXT
-    - name: September 2025
-      data_type: FLOAT
-    - name: August 2025
-      data_type: FLOAT
-    - name: July 2025
-      data_type: FLOAT
-    - name: June 2025
-      data_type: FLOAT
-    - name: May 2025
-      data_type: FLOAT
-    - name: April 2025
-      data_type: FLOAT
-    - name: March 2025
-      data_type: FLOAT
-    - name: February 2025
-      data_type: FLOAT
-    - name: January 2025
-      data_type: FLOAT
-    - name: December 2024
-      data_type: FLOAT
-    - name: November 2024
-      data_type: FLOAT
-    - name: October 2024
-      data_type: FLOAT
-    - name: September 2024
-      data_type: FLOAT
-    - name: August 2024
-      data_type: FLOAT
-    - name: July 2024
-      data_type: FLOAT
-    - name: June 2024
-      data_type: FLOAT
-    - name: May 2024
-      data_type: FLOAT
-    - name: April 2024
-      data_type: FLOAT
-    - name: March 2024
-      data_type: FLOAT
-    - name: February 2024
-      data_type: FLOAT
-    - name: January 2024
-      data_type: FLOAT
-    - name: December 2023
-      data_type: FLOAT
-    - name: November 2023
-      data_type: FLOAT
-    - name: October 2023
-      data_type: FLOAT
-    - name: September 2023
-      data_type: FLOAT
-    - name: August 2023
-      data_type: FLOAT
-    - name: July 2023
-      data_type: FLOAT
-    - name: June 2023
-      data_type: FLOAT
-    - name: May 2023
-      data_type: FLOAT
-    - name: April 2023
-      data_type: FLOAT
-    - name: March 2023
-      data_type: FLOAT
-    - name: February 2023
-      data_type: FLOAT
-    - name: January 2023
-      data_type: FLOAT
-    - name: December 2022
-      data_type: FLOAT
-    - name: November 2022
-      data_type: FLOAT
-    - name: October 2022
-      data_type: FLOAT
-    - name: September 2022
-      data_type: FLOAT
-    - name: August 2022
-      data_type: FLOAT
-    - name: July 2022
-      data_type: FLOAT
-    - name: June 2022
-      data_type: FLOAT
-    - name: May 2022
-      data_type: FLOAT
-    - name: April 2022
-      data_type: FLOAT
-    - name: March 2022
-      data_type: FLOAT
-    - name: February 2022
-      data_type: FLOAT
-    - name: January 2022
-      data_type: FLOAT
-    - name: December 2021
-      data_type: FLOAT
-    - name: November 2021
-      data_type: FLOAT
-    - name: October 2021
-      data_type: FLOAT
-    - name: September 2021
-      data_type: FLOAT
-    - name: August 2021
-      data_type: FLOAT
-    - name: July 2021
-      data_type: FLOAT
-    - name: June 2021
-      data_type: FLOAT
-    - name: May 2021
-      data_type: FLOAT
-    - name: April 2021
-      data_type: FLOAT
-    - name: March 2021
-      data_type: FLOAT
-    - name: February 2021
-      data_type: FLOAT
-    - name: January 2021
-      data_type: FLOAT
-    - name: December 2020
-      data_type: FLOAT
-    - name: November 2020
-      data_type: FLOAT
-    - name: October 2020
-      data_type: FLOAT
-    - name: September 2020
-      data_type: FLOAT
-    - name: August 2020
-      data_type: FLOAT
-    - name: July 2020
-      data_type: FLOAT
-    - name: June 2020
-      data_type: FLOAT
-    - name: May 2020
-      data_type: FLOAT
-    - name: April 2020
-      data_type: FLOAT
-    - name: March 2020
-      data_type: FLOAT
-    - name: February 2020
-      data_type: FLOAT
-    - name: January 2020
-      data_type: FLOAT
-    - name: December 2019
-      data_type: FLOAT
-    - name: November 2019
-      data_type: FLOAT
-    - name: October 2019
-      data_type: FLOAT
-    - name: September 2019
-      data_type: FLOAT
-    - name: August 2019
-      data_type: FLOAT
-    - name: July 2019
-      data_type: FLOAT
-    - name: June 2019
-      data_type: FLOAT
-    - name: May 2019
-      data_type: FLOAT
-    - name: April 2019
-      data_type: FLOAT
-  - name: CYPMH_Median & 90th Per WT
-    identifier: '"CYPMH_Median & 90th Per WT"'
+    - name: MONTH
+      data_type: TEXT
+    - name: YEAR
+      data_type: NUMBER(38,0)
+    - name: VALUE
+      data_type: NUMBER(38,0)
+  - name: CYPMH_MEASURING_CHANGE_ACROSS_PAIRED
+    identifier: '"CYPMH_MEASURING_CHANGE_ACROSS_PAIRED"'
     columns:
-    - name: Organisation Code
+    - name: ORGANISATION_CODE
       data_type: TEXT
-    - name: Organisation Name
+    - name: ORGANISATION___NAME
       data_type: TEXT
-    - name: Metric
+    - name: RATER
       data_type: TEXT
-    - name: August 2023
+    - name: MEASURE_NAME
+      data_type: TEXT
+    - name: METRIC
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: YEAR
       data_type: NUMBER(38,0)
-    - name: September 2023
-      data_type: NUMBER(38,0)
-    - name: October 2023
-      data_type: NUMBER(38,0)
-    - name: November 2023
-      data_type: NUMBER(38,0)
-    - name: December 2023
-      data_type: NUMBER(38,0)
-    - name: January 2024
-      data_type: NUMBER(38,0)
-    - name: February 2024
-      data_type: NUMBER(38,0)
-    - name: March 2024
-      data_type: NUMBER(38,0)
-    - name: April 2024
-      data_type: FLOAT
-    - name: May 2024
-      data_type: FLOAT
-    - name: June 2024
-      data_type: FLOAT
-    - name: July 2024
-      data_type: FLOAT
-    - name: August 2024
-      data_type: FLOAT
-    - name: September 2024
-      data_type: NUMBER(38,0)
-    - name: October 2024
-      data_type: NUMBER(38,0)
-    - name: November 2024
-      data_type: FLOAT
-    - name: December 2024
-      data_type: FLOAT
-    - name: January 2025
-      data_type: NUMBER(38,0)
-    - name: February 2025
-      data_type: NUMBER(38,0)
-    - name: March 2025
-      data_type: FLOAT
-    - name: April 2025
-      data_type: FLOAT
-    - name: May 2025
-      data_type: FLOAT
-    - name: June 2025
-      data_type: FLOAT
-    - name: July 2025
-      data_type: FLOAT
-    - name: August 2025
-      data_type: NUMBER(38,0)
-    - name: September 2025
-      data_type: NUMBER(38,0)
-  - name: CYPMH_Provider
-    identifier: '"CYPMH_Provider"'
+    - name: VALUE
+      data_type: NUMBER(38,9)
+  - name: CYPMH_MEDIAN_90TH_PER_WT
+    identifier: '"CYPMH_MEDIAN_90TH_PER_WT"'
     columns:
-    - name: Organisation Code
+    - name: ORGANISATION_CODE
       data_type: TEXT
-    - name: Organisation Name
+    - name: ORGANISATION___NAME
       data_type: TEXT
-    - name: Metric
+    - name: METRIC
       data_type: TEXT
-    - name: September 2025
+    - name: MONTH
+      data_type: TEXT
+    - name: YEAR
+      data_type: NUMBER(38,0)
+    - name: VALUE
+      data_type: NUMBER(38,1)
+  - name: CYPMH_PAIRED_SCORES
+    identifier: '"CYPMH_PAIRED_SCORES"'
+    columns:
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION___NAME
+      data_type: TEXT
+    - name: MEASURE_NAME
+      data_type: TEXT
+    - name: METRIC
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: YEAR
+      data_type: NUMBER(38,0)
+    - name: VALUE
+      data_type: NUMBER(38,9)
+  - name: CYPMH_PROVIDER
+    identifier: '"CYPMH_PROVIDER"'
+    columns:
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION___NAME
+      data_type: TEXT
+    - name: METRIC
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: YEAR
+      data_type: NUMBER(38,0)
+    - name: VALUE
       data_type: NUMBER(38,0)
-    - name: August 2025
-      data_type: NUMBER(38,0)
-    - name: July 2025
-      data_type: NUMBER(38,0)
-    - name: June 2025
-      data_type: NUMBER(38,0)
-    - name: May 2025
-      data_type: NUMBER(38,0)
-    - name: April 2025
-      data_type: FLOAT
-    - name: March 2025
-      data_type: NUMBER(38,0)
-    - name: February 2025
-      data_type: NUMBER(38,0)
-    - name: January 2025
-      data_type: NUMBER(38,0)
-    - name: December 2024
-      data_type: NUMBER(38,0)
-    - name: November 2024
-      data_type: NUMBER(38,0)
-    - name: October 2024
-      data_type: NUMBER(38,0)
-    - name: September 2024
-      data_type: NUMBER(38,0)
-    - name: August 2024
-      data_type: NUMBER(38,0)
-    - name: July 2024
-      data_type: NUMBER(38,0)
-    - name: June 2024
-      data_type: NUMBER(38,0)
-    - name: May 2024
-      data_type: NUMBER(38,0)
-    - name: April 2024
-      data_type: NUMBER(38,0)
-    - name: March 2024
-      data_type: NUMBER(38,0)
-    - name: February 2024
-      data_type: NUMBER(38,0)
-    - name: January 2024
-      data_type: NUMBER(38,0)
-    - name: December 2023
-      data_type: FLOAT
-    - name: November 2023
-      data_type: NUMBER(38,0)
-    - name: October 2023
-      data_type: NUMBER(38,0)
-    - name: September 2023
-      data_type: NUMBER(38,0)
-    - name: August 2023
-      data_type: NUMBER(38,0)
-    - name: July 2023
-      data_type: NUMBER(38,0)
-    - name: June 2023
-      data_type: NUMBER(38,0)
-    - name: May 2023
-      data_type: NUMBER(38,0)
-    - name: April 2023
-      data_type: NUMBER(38,0)
-    - name: March 2023
-      data_type: NUMBER(38,0)
-    - name: February 2023
-      data_type: NUMBER(38,0)
-    - name: January 2023
-      data_type: NUMBER(38,0)
-    - name: December 2022
-      data_type: FLOAT
-    - name: November 2022
-      data_type: NUMBER(38,0)
-    - name: October 2022
-      data_type: NUMBER(38,0)
-    - name: September 2022
-      data_type: NUMBER(38,0)
-    - name: August 2022
-      data_type: NUMBER(38,0)
-    - name: July 2022
-      data_type: NUMBER(38,0)
-    - name: June 2022
-      data_type: NUMBER(38,0)
-    - name: May 2022
-      data_type: NUMBER(38,0)
-    - name: April 2022
-      data_type: NUMBER(38,0)
-    - name: March 2022
-      data_type: NUMBER(38,0)
-    - name: February 2022
-      data_type: NUMBER(38,0)
-    - name: January 2022
-      data_type: NUMBER(38,0)
-    - name: December 2021
-      data_type: NUMBER(38,0)
-    - name: November 2021
-      data_type: NUMBER(38,0)
-    - name: October 2021
-      data_type: NUMBER(38,0)
-    - name: September 2021
-      data_type: NUMBER(38,0)
-    - name: August 2021
-      data_type: FLOAT
-    - name: July 2021
-      data_type: NUMBER(38,0)
-    - name: June 2021
-      data_type: NUMBER(38,0)
-    - name: May 2021
-      data_type: NUMBER(38,0)
-    - name: April 2021
-      data_type: NUMBER(38,0)
-    - name: March 2021
-      data_type: NUMBER(38,0)
-    - name: February 2021
-      data_type: NUMBER(38,0)
-    - name: January 2021
-      data_type: FLOAT
-    - name: December 2020
-      data_type: NUMBER(38,0)
-    - name: November 2020
-      data_type: NUMBER(38,0)
-    - name: October 2020
-      data_type: NUMBER(38,0)
-    - name: September 2020
-      data_type: NUMBER(38,0)
-    - name: August 2020
-      data_type: NUMBER(38,0)
-    - name: July 2020
-      data_type: NUMBER(38,0)
-    - name: June 2020
-      data_type: NUMBER(38,0)
-    - name: May 2020
-      data_type: NUMBER(38,0)
-    - name: April 2020
-      data_type: FLOAT
-    - name: March 2020
-      data_type: NUMBER(38,0)
-    - name: February 2020
-      data_type: NUMBER(38,0)
-    - name: January 2020
-      data_type: NUMBER(38,0)
-    - name: December 2019
-      data_type: FLOAT
-    - name: November 2019
-      data_type: NUMBER(38,0)
-    - name: October 2019
-      data_type: NUMBER(38,0)
-    - name: September 2019
-      data_type: NUMBER(38,0)
-    - name: August 2019
-      data_type: FLOAT
-    - name: July 2019
-      data_type: NUMBER(38,0)
-    - name: June 2019
-      data_type: FLOAT
-    - name: May 2019
-      data_type: FLOAT
-    - name: April 2019
-      data_type: FLOAT
   - name: DIAGNOSTICS_MONTHLY_DM01_PRE_RELEASE
     identifier: '"DIAGNOSTICS_MONTHLY_DM01_PRE_RELEASE"'
     columns:
@@ -2086,6 +1829,23 @@ sources:
       data_type: TEXT
     - name: PODGROUPOVERVIEW
       data_type: TEXT
+  - name: GP_PRACTICE_WORKFORCE_MAPPING
+    identifier: '"GP_PRACTICE_WORKFORCE_MAPPING"'
+    columns:
+    - name: STAFF_GROUP
+      data_type: TEXT
+    - name: DETAILED_STAFF_ROLE
+      data_type: TEXT
+    - name: MEASURE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: OUTPUT_NAME
+      data_type: TEXT
+    - name: VALUE_TYPE
+      data_type: TEXT
+    - name: COMMENTS
+      data_type: TEXT
   - name: GP_REG_PAT_PRAC_LSOA_ALL
     identifier: '"GP_REG_PAT_PRAC_LSOA_ALL"'
     columns:
@@ -2167,6 +1927,387 @@ sources:
       data_type: NUMBER(1,0)
     - name: CHRONIC_LIVER_DISEASE
       data_type: NUMBER(1,0)
+  - name: IAP_2627_GOSH_API_260306
+    identifier: '"IAP_2627_GOSH_API_260306"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER(38,0)
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER(38,0)
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER(38,0)
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(38,9)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(38,8)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,8)
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+    - name: PHASING_CODE
+      data_type: TEXT
+    - name: PHASING_DESCRIPTION
+      data_type: TEXT
+    - name: REGION
+      data_type: TEXT
+    - name: REGION_DESCRIPTION
+      data_type: TEXT
+    - name: ICB_NAME
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+  - name: IAP_2627_GOSH_API_260306_LS_FIX
+    identifier: '"IAP_2627_GOSH_API_260306_LS_FIX"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER(38,0)
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER(38,0)
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER(38,0)
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(38,16)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(38,16)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,16)
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+    - name: PHASING_CODE
+      data_type: TEXT
+    - name: PHASING_DESCRIPTION
+      data_type: TEXT
+    - name: REGION
+      data_type: TEXT
+    - name: REGION_DESCRITION
+      data_type: TEXT
+    - name: ICB_NAME
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+  - name: IAP_2627_GOSH_NHSE_260306
+    identifier: '"IAP_2627_GOSH_NHSE_260306"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER(38,0)
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER(38,0)
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER(38,0)
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(38,22)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(38,22)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,22)
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+    - name: PHASING_CODE
+      data_type: TEXT
+    - name: PHASING_DESCRIPTION
+      data_type: TEXT
+    - name: REGION
+      data_type: TEXT
+    - name: REGION_DESCRIPTION
+      data_type: TEXT
+    - name: ICB_NAME
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+  - name: IAP_2627_MEH_260317
+    identifier: '"IAP_2627_MEH_260317"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER(38,0)
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER(38,0)
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: DATE
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: NUMBER(38,0)
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER(38,0)
+    - name: SERVICE_CODE
+      data_type: NUMBER(38,0)
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(38,0)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(38,0)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,0)
+    - name: CONTRACT_MONITORING_ACTUAL_ACTIVITY
+      data_type: NUMBER(38,0)
+    - name: CONTRACT_MONITORING_ACTUAL_PRICE
+      data_type: NUMBER(38,0)
+    - name: CONTRACT_MONITORING_ACTUAL_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,0)
+  - name: IAP_2627_RFL_260310
+    identifier: '"IAP_2627_RFL_260310"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER(38,0)
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: NUMBER(38,0)
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(38,20)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(38,22)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,0)
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+    - name: COMMISSIONER_GROUPING
+      data_type: TEXT
+    - name: ICB_CODE
+      data_type: TEXT
+    - name: ICB_DESCRIPTION
+      data_type: TEXT
   - name: IA_CERTIFICATES_MONTHLY
     identifier: '"IA_CERTIFICATES_MONTHLY"'
     columns:
@@ -2822,6 +2963,34 @@ sources:
       data_type: TEXT
     - name: MEASURE_VALUE_SUPPRESSED
       data_type: NUMBER(38,1)
+  - name: MH_ADMITTED_PATIENT_CLASS
+    identifier: '"MH_ADMITTED_PATIENT_CLASS"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+  - name: MH_CARE_ACTIVITY_LOCATION
+    identifier: '"MH_CARE_ACTIVITY_LOCATION"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+  - name: MH_CARE_CONTACT_MODE
+    identifier: '"MH_CARE_CONTACT_MODE"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+  - name: MH_REFERRAL_REASON
+    identifier: '"MH_REFERRAL_REASON"'
+    columns:
+    - name: CODE
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
   - name: MODEL_HOSPITAL_METRIC_MAPPING
     identifier: '"MODEL_HOSPITAL_METRIC_MAPPING"'
     columns:
@@ -2836,103 +3005,6 @@ sources:
       data_type: TEXT
     - name: SubCompartment_Mapping
       data_type: TEXT
-  - name: Measuring Change Across Paired
-    identifier: '"Measuring Change Across Paired"'
-    columns:
-    - name: Organisation Code
-      data_type: TEXT
-    - name: Organisation Name
-      data_type: TEXT
-    - name: Rater
-      data_type: TEXT
-    - name: Measure Name
-      data_type: TEXT
-    - name: Metric
-      data_type: TEXT
-    - name: April 2022
-      data_type: FLOAT
-    - name: May 2022
-      data_type: FLOAT
-    - name: June 2022
-      data_type: FLOAT
-    - name: July 2022
-      data_type: FLOAT
-    - name: August 2022
-      data_type: FLOAT
-    - name: September 2022
-      data_type: FLOAT
-    - name: October 2022
-      data_type: FLOAT
-    - name: November 2022
-      data_type: FLOAT
-    - name: December 2022
-      data_type: FLOAT
-    - name: January 2023
-      data_type: FLOAT
-    - name: February 2023
-      data_type: FLOAT
-    - name: March 2023
-      data_type: FLOAT
-    - name: April 2023
-      data_type: FLOAT
-    - name: May 2023
-      data_type: FLOAT
-    - name: June 2023
-      data_type: FLOAT
-    - name: July 2023
-      data_type: FLOAT
-    - name: August 2023
-      data_type: FLOAT
-    - name: September 2023
-      data_type: FLOAT
-    - name: October 2023
-      data_type: FLOAT
-    - name: November 2023
-      data_type: FLOAT
-    - name: December 2023
-      data_type: FLOAT
-    - name: January 2024
-      data_type: FLOAT
-    - name: February 2024
-      data_type: FLOAT
-    - name: March 2024
-      data_type: FLOAT
-    - name: April 2024
-      data_type: FLOAT
-    - name: May 2024
-      data_type: FLOAT
-    - name: June 2024
-      data_type: FLOAT
-    - name: July 2024
-      data_type: FLOAT
-    - name: August 2024
-      data_type: FLOAT
-    - name: September 2024
-      data_type: FLOAT
-    - name: October 2024
-      data_type: FLOAT
-    - name: November 2024
-      data_type: FLOAT
-    - name: December 2024
-      data_type: FLOAT
-    - name: January 2025
-      data_type: FLOAT
-    - name: February 2025
-      data_type: FLOAT
-    - name: March 2025
-      data_type: FLOAT
-    - name: April 2025
-      data_type: FLOAT
-    - name: May 2025
-      data_type: FLOAT
-    - name: June 2025
-      data_type: FLOAT
-    - name: July 2025
-      data_type: FLOAT
-    - name: August 2025
-      data_type: FLOAT
-    - name: September 2025
-      data_type: FLOAT
   - name: NCL_GP_PRACTICE_NEIGHBOURHOOD
     identifier: '"NCL_GP_PRACTICE_NEIGHBOURHOOD"'
     columns:
@@ -3102,6 +3174,19 @@ sources:
       data_type: TEXT
     - name: Rate per 1,000 Registered Patients
       data_type: NUMBER(38,1)
+  - name: ONS_POPULATION_AGE_GENDER_LSOA_2024
+    identifier: '"ONS_POPULATION_AGE_GENDER_LSOA_2024"'
+    columns:
+    - name: LAD_2023_CODE
+      data_type: TEXT
+    - name: LSOA_2021_CODE
+      data_type: TEXT
+    - name: AGE
+      data_type: NUMBER(38,0)
+    - name: PERSONS
+      data_type: NUMBER(38,0)
+    - name: GENDER
+      data_type: TEXT
   - name: ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024
     identifier: '"ONS_SINGLE_YEAR_OF_AGE_AND_GENDER_2011_2024"'
     columns:
@@ -3176,77 +3261,6 @@ sources:
       data_type: TEXT
     - name: PRACTICE_NAME_SHORT
       data_type: TEXT
-  - name: Paired Scores
-    identifier: '"Paired Scores"'
-    columns:
-    - name: Organisation Code
-      data_type: TEXT
-    - name: Organisation Name
-      data_type: TEXT
-    - name: Measure Name
-      data_type: TEXT
-    - name: Metric
-      data_type: TEXT
-    - name: April 2023
-      data_type: FLOAT
-    - name: May 2023
-      data_type: FLOAT
-    - name: June 2023
-      data_type: FLOAT
-    - name: July 2023
-      data_type: FLOAT
-    - name: August 2023
-      data_type: FLOAT
-    - name: September 2023
-      data_type: FLOAT
-    - name: October 2023
-      data_type: FLOAT
-    - name: November 2023
-      data_type: FLOAT
-    - name: December 2023
-      data_type: FLOAT
-    - name: January 2024
-      data_type: FLOAT
-    - name: February 2024
-      data_type: FLOAT
-    - name: March 2024
-      data_type: FLOAT
-    - name: April 2024
-      data_type: FLOAT
-    - name: May 2024
-      data_type: FLOAT
-    - name: June 2024
-      data_type: FLOAT
-    - name: July 2024
-      data_type: FLOAT
-    - name: August 2024
-      data_type: FLOAT
-    - name: September 2024
-      data_type: FLOAT
-    - name: October 2024
-      data_type: FLOAT
-    - name: November 2024
-      data_type: FLOAT
-    - name: December 2024
-      data_type: FLOAT
-    - name: January 2025
-      data_type: FLOAT
-    - name: February 2025
-      data_type: FLOAT
-    - name: March 2025
-      data_type: FLOAT
-    - name: April 2025
-      data_type: FLOAT
-    - name: May 2025
-      data_type: FLOAT
-    - name: June 2025
-      data_type: FLOAT
-    - name: July 2025
-      data_type: FLOAT
-    - name: August 2025
-      data_type: FLOAT
-    - name: September 2025
-      data_type: FLOAT
   - name: REFRESHED_DATE
     identifier: '"REFRESHED_DATE"'
     columns:
@@ -3746,6 +3760,25 @@ sources:
       data_type: NUMBER(38,0)
     - name: PERCENTAGE_TTIA_15_MINS,
       data_type: TEXT
+  - name: VW_GP_WEIGHTED_LIST_SIZE
+    identifier: '"VW_GP_WEIGHTED_LIST_SIZE"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: PCN_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: WEIGHTED_LIST_SIZE
+      data_type: NUMBER(38,18)
   - name: VW_ONS_MID_YEAR_POPULATION_ESTIMATES_BY_GENDER_SINGLE_YEAR_OF_AGE
     identifier: '"VW_ONS_MID_YEAR_POPULATION_ESTIMATES_BY_GENDER_SINGLE_YEAR_OF_AGE"'
     columns:
@@ -3763,6 +3796,45 @@ sources:
       data_type: TEXT
     - name: ONS_POPULATION
       data_type: NUMBER(38,0)
+  - name: VW_WORKFORCE_PRACTICE_LEVEL_DETAILED
+    identifier: '"VW_WORKFORCE_PRACTICE_LEVEL_DETAILED"'
+    columns:
+    - name: Period
+      data_type: DATE
+    - name: Year
+      data_type: TEXT
+    - name: Month
+      data_type: TEXT
+    - name: Month_No
+      data_type: NUMBER(4,0)
+    - name: Borough
+      data_type: TEXT
+    - name: PCN
+      data_type: TEXT
+    - name: Neighbourhood
+      data_type: TEXT
+    - name: Practice code
+      data_type: TEXT
+    - name: GP Practice
+      data_type: TEXT
+    - name: Staff Group
+      data_type: TEXT
+    - name: Staff Role
+      data_type: TEXT
+    - name: FTE/Headcount
+      data_type: TEXT
+    - name: Staff in Post
+      data_type: FLOAT
+    - name: Measure
+      data_type: TEXT
+    - name: Weighted List Size
+      data_type: NUMBER(38,2)
+    - name: Per1000 weighted population
+      data_type: FLOAT
+    - name: Latest Period Flag
+      data_type: TEXT
+    - name: Same Month In Previous Years Flag
+      data_type: TEXT
   - name: WNLNEIGHBOURHOODS
     identifier: '"WNLNEIGHBOURHOODS"'
     columns:
@@ -3785,6 +3857,17 @@ sources:
     - name: INT
       data_type: TEXT
     - name: INTBOROUGH
+      data_type: TEXT
+  - name: WNL_GP_PRACTICE_NEIGHBOURHOOD
+    identifier: '"WNL_GP_PRACTICE_NEIGHBOURHOOD"'
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
       data_type: TEXT
   - name: model_hospital_theatre_imported
     identifier: '"model_hospital_theatre_imported"'

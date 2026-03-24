@@ -8,6 +8,7 @@
 --Capture the sixin1 dose4 vaccination events for this population. - LIMIT to 1st JAN 2026 official introduction date
 SELECT 
         v.PERSON_ID
+        ,v.age
         ,v.practice_code
         ,v.EVENT_DATE AS sixin1_dose4_date
         ,TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS sixin1_dose4_sort

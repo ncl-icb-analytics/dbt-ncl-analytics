@@ -11,6 +11,11 @@ models:
         tests:
           - not_null
           - unique
+
+      - name: dm_icb_commissioner
+        description: The ICB (Integrated Care Board) that commissioned the spell.
+
+
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

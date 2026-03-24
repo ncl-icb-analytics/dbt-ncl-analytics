@@ -320,9 +320,24 @@ WITH all_condition_events AS (
     WHERE is_diagnosis_code
     
     UNION ALL
-    
+
+    -- Osteoarthritis events (diagnosis only)
+    SELECT
+        person_id,
+        clinical_effective_date as event_date,
+        'Osteoarthritis' as condition_name,
+        'OA' as condition_code,
+        'Musculoskeletal' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_osteoarthritis_diagnoses_all') }}
+    WHERE is_diagnosis_code
+
+    UNION ALL
+
     -- PAD events (diagnosis only)
-    SELECT 
+    SELECT
         person_id,
         clinical_effective_date as event_date,
         'Peripheral Arterial Disease' as condition_name,
@@ -507,7 +522,40 @@ WITH all_condition_events AS (
         concept_display
     FROM {{ ref('int_autism_diagnoses_all') }}
     WHERE is_diagnosis_code
-    
+
+    UNION ALL
+
+    -- ADHD events (diagnosis and remission)
+    SELECT
+        person_id,
+        clinical_effective_date as event_date,
+        'ADHD' as condition_name,
+        'ADHD' as condition_code,
+        'Neurodevelopmental' as clinical_domain,
+        CASE
+            WHEN is_diagnosis_code THEN 'onset'
+            WHEN is_resolved_code THEN 'resolved'
+        END as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_adhd_diagnoses_all') }}
+    WHERE is_diagnosis_code OR is_resolved_code
+
+    UNION ALL
+
+    -- Chronic Liver Disease events (diagnosis only)
+    SELECT
+        person_id,
+        clinical_effective_date as event_date,
+        'Chronic Liver Disease' as condition_name,
+        'CLD' as condition_code,
+        'Hepatology' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_chronic_liver_disease_diagnoses_all') }}
+    WHERE is_diagnosis_code
+
     -- Note: Obesity register is BMI-based, not diagnosis code based
     -- CYP Asthma uses same diagnosis codes as regular asthma - age filtering happens in QOF layer
     -- Learning Disability All Ages uses same diagnosis codes as regular LD - age filtering happens in QOF layer

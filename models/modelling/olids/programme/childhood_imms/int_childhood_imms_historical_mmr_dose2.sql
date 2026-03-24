@@ -8,6 +8,7 @@
 --Capture the MMR dose 2 vaccination events for this population
   SELECT 
         v.PERSON_ID
+        ,v.age
         ,v.practice_code
         ,v.EVENT_DATE AS mmr_dose2_date
         ,TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS mmr_dose2_sort
