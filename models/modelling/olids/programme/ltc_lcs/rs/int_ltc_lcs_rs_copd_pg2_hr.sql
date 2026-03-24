@@ -39,7 +39,7 @@ rule_4_mrcbs_grade_4 as (
     from ({{ get_ltc_lcs_observations("on_copd_reg_pg2_hr_vs3") }})
     qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1
 ),
--- Rule 5: 2+ COPD exacerbations in past year
+-- Rule 5: 1+ COPD exacerbations in past year
 rule_5_copd_exacerbations as (
     select person_id
     from ({{ get_ltc_lcs_observations("on_copd_reg_pg2_hr_vs4") }})
