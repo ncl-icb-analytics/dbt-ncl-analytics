@@ -2006,6 +2006,85 @@ sources:
       data_type: TEXT
     - name: CONTRACT_TYPE
       data_type: TEXT
+  - name: IAP_2627_GOSH_API_260306_LS_FIX
+    identifier: '"IAP_2627_GOSH_API_260306_LS_FIX"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER(38,0)
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER(38,0)
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER(38,0)
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(38,16)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(38,16)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,16)
+    - name: NAME_OF_SUBMITTER
+      data_type: TEXT
+    - name: PHASING_CODE
+      data_type: TEXT
+    - name: PHASING_DESCRIPTION
+      data_type: TEXT
+    - name: REGION
+      data_type: TEXT
+    - name: REGION_DESCRITION
+      data_type: TEXT
+    - name: ICB_NAME
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
   - name: IAP_2627_GOSH_NHSE_260306
     identifier: '"IAP_2627_GOSH_NHSE_260306"'
     columns:
@@ -3749,16 +3828,13 @@ sources:
     - name: Measure
       data_type: TEXT
     - name: Weighted List Size
-      data_type: NUMBER(38,18)
+      data_type: NUMBER(38,2)
     - name: Per1000 weighted population
       data_type: FLOAT
-  - name: VW_WORKFORCE_PRACTICE_LEVEL_DETAILED_PERIOD
-    identifier: '"VW_WORKFORCE_PRACTICE_LEVEL_DETAILED_PERIOD"'
-    columns:
-    - name: SOURCE_FILE
+    - name: Latest Period Flag
       data_type: TEXT
-    - name: PERIOD
-      data_type: DATE
+    - name: Same Month In Previous Years Flag
+      data_type: TEXT
   - name: WNLNEIGHBOURHOODS
     identifier: '"WNLNEIGHBOURHOODS"'
     columns:
