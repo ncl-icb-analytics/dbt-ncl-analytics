@@ -14,7 +14,7 @@ SELECT
     obs.mapped_concept_code AS concept_code,
     obs.mapped_concept_display AS concept_display,
     obs.cluster_id
-FROM ({{ get_observations("'SMI_LONGER_LIVES_ALCOHOL_EDUCATION','ALCOHOLINT_COD','ALCSPADVDEC_COD'") }}) obs
+FROM ({{ get_observations("'SMI_LONGER_LIVES_ALCOHOL_EDUCATION','ALCOHOLINT_COD','ALCSPADVDEC_COD','ALCBRINTDEC_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 )
@@ -25,7 +25,7 @@ select person_id
 ,concept_display
 ,CASE 
 WHEN cluster_id = 'ALCOHOLINT_COD' THEN 'Yes'
-WHEN cluster_id = 'ALCSPADVDEC_COD' THEN 'Declined' 
+WHEN cluster_id in ('ALCSPADVDEC_COD','ALCBRINTDEC_COD') THEN 'Declined' 
 WHEN cluster_id = 'SMI_LONGER_LIVES_ALCOHOL_EDUCATION' AND concept_code <> '21121000175100' THEN 'Yes' 
 WHEN cluster_id = 'SMI_LONGER_LIVES_ALCOHOL_EDUCATION' AND concept_code = '21121000175100' THEN 'Declined'
 END AS alcohol_advice_services
