@@ -66,97 +66,30 @@ weight_measurements AS (
       AND TRY_CAST(obs.result_value AS FLOAT) BETWEEN 10 AND 500  -- Valid weight range in kg
 ),
 
-weight_with_prior_height AS (
-    -- For each weight, find the most recent height at or before that weight's date
+calculated_bmi AS (
+    -- Calculate BMI from weight + most recent prior height using ASOF JOIN
+    -- This avoids the explosive inequality join that produced billions of intermediate rows
     SELECT
+        w.id AS ID,
         w.person_id,
         w.clinical_effective_date,
-        w.weight_kg,
-        w.id AS weight_obs_id,
-        h.height_cm,
-        h.id AS height_obs_id,
-        h.clinical_effective_date AS height_date,
-        -- Calculate BMI: weight (kg) / (height (cm) / 100)²
-        CASE 
-            WHEN h.height_cm > 0 THEN ROUND(w.weight_kg / ((h.height_cm / 100.0) * (h.height_cm / 100.0)), 2)
-            ELSE NULL
-        END AS calculated_bmi,
-        'weight_primary' AS calculation_source
-    FROM weight_measurements w
-    INNER JOIN height_measurements h
-        ON w.person_id = h.person_id
-        AND h.clinical_effective_date <= w.clinical_effective_date
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY w.person_id, w.clinical_effective_date, w.id 
-        ORDER BY h.clinical_effective_date DESC
-    ) = 1
-),
-
-height_with_prior_weight AS (
-    -- For each height, find the most recent weight at or before that height's date
-    -- Exclude combinations already captured in weight_with_prior_height
-    SELECT
-        h.person_id,
-        h.clinical_effective_date,
-        w.weight_kg,
-        w.id AS weight_obs_id,
-        h.height_cm,
-        h.id AS height_obs_id,
-        w.clinical_effective_date AS weight_date,
-        -- Calculate BMI: weight (kg) / (height (cm) / 100)²
-        CASE 
-            WHEN h.height_cm > 0 THEN ROUND(w.weight_kg / ((h.height_cm / 100.0) * (h.height_cm / 100.0)), 2)
-            ELSE NULL
-        END AS calculated_bmi,
-        'height_primary' AS calculation_source
-    FROM height_measurements h
-    INNER JOIN weight_measurements w
-        ON h.person_id = w.person_id
-        AND w.clinical_effective_date <= h.clinical_effective_date
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY h.person_id, h.clinical_effective_date, h.id 
-        ORDER BY w.clinical_effective_date DESC
-    ) = 1
-),
-
-all_calculated_pairs AS (
-    SELECT * FROM weight_with_prior_height
-    UNION ALL
-    SELECT * FROM height_with_prior_weight
-),
-
-calculated_bmi AS (
-    -- Create calculated BMI records using the primary ID (height or weight)
-    -- Only calculate BMI for dates without existing recorded BMI for the same person
-    SELECT
-        CASE 
-            WHEN acp.calculation_source = 'weight_primary' THEN acp.weight_obs_id
-            ELSE acp.height_obs_id
-        END AS ID,
-        acp.person_id,
-        acp.clinical_effective_date,
-        acp.calculated_bmi AS bmi_value,
+        ROUND(w.weight_kg / ((h.height_cm / 100.0) * (h.height_cm / 100.0)), 2) AS bmi_value,
         'kg/m²' AS result_unit_display,
         'CALCULATED_BMI' AS concept_code,
         'Calculated BMI from Height/Weight' AS concept_display,
         'CALCULATED' AS source_cluster_id,
-        CAST(acp.calculated_bmi AS VARCHAR(20)) AS result_value,
+        CAST(ROUND(w.weight_kg / ((h.height_cm / 100.0) * (h.height_cm / 100.0)), 2) AS VARCHAR(20)) AS result_value,
         'calculated' AS bmi_source
-    FROM all_calculated_pairs acp
-    WHERE acp.calculated_bmi IS NOT NULL
-      -- Avoid duplicates where same observation could be primary in both CTEs
-      AND NOT EXISTS (
-          SELECT 1 FROM recorded_bmi rb 
-          WHERE rb.id = CASE 
-              WHEN acp.calculation_source = 'weight_primary' THEN acp.weight_obs_id
-              ELSE acp.height_obs_id
-          END
-      )
+    FROM weight_measurements w
+    ASOF JOIN height_measurements h
+        MATCH_CONDITION (w.clinical_effective_date >= h.clinical_effective_date)
+        ON w.person_id = h.person_id
+    WHERE h.height_cm > 0
       -- Only calculate BMI for dates without existing recorded BMI for same person
       AND NOT EXISTS (
-          SELECT 1 FROM recorded_bmi rb 
-          WHERE rb.person_id = acp.person_id
-            AND rb.clinical_effective_date = acp.clinical_effective_date
+          SELECT 1 FROM recorded_bmi rb
+          WHERE rb.person_id = w.person_id
+            AND rb.clinical_effective_date = w.clinical_effective_date
       )
 ),
 
@@ -253,6 +186,3 @@ SELECT
     END AS bmi_risk_sort_key
 
 FROM bmi_with_ethnicity
-
--- Sort for consistent output
-ORDER BY person_id, clinical_effective_date DESC
