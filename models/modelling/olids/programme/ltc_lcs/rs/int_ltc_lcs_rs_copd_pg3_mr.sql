@@ -63,82 +63,82 @@ rule_4a_copd_exacerbations as (
 -- Rule 4b: Medication issues (antibiotics) - 2 or more within last 12 months
 rule_4b_medication_issues as ( 
     select person_id, count(*) as issue_count
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs4") }})
-    where clinical_effective_date >= dateadd(month, -12, current_date())
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs4") }})
+    where order_date >= dateadd(month, -12, current_date())
     group by all
     having count(*) >= 2
 ),
 -- Rule 4c: Medication issues (steroids) within last 12 months
 rule_4c_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs5") }})
-    where clinical_effective_date >= dateadd(month, -12, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs5") }})
+    where order_date >= dateadd(month, -12, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 -- Rule 4d: Medication issues (Azithromycin) within last 12 months
 rule_4d_medication_issues as ( 
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs6") }})
-    where clinical_effective_date >= dateadd(month, -12, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs6") }})
+    where order_date >= dateadd(month, -12, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 -- Rule 5: Medication issues (Trimbow/Trelegy Ellipta inhalers) within last 6 months
 rule_5_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs7") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs7") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 -- Rule 6a: Medication issues (steroids) within last 6 months
 rule_6a_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs8") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs8") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 -- Rule 6b: Medication issues (antimuscarinics) within last 6 months
 rule_6bi_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs10") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs10") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 rule_6bii_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs9") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs9") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 rule_6biii_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs11") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs11") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 -- Rule 6c: Medication issues (LABA and steroids) within last 6 months
 rule_6ci_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs12") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs12") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 rule_6cii_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs13") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs13") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 rule_6ciii_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs14") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs14") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 rule_6civ_medication_issues as (
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs15") }})
-    where clinical_effective_date >= dateadd(month, -6, current_date())
-    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1    
+    from ({{ get_ltc_lcs_medication_orders("on_copd_reg_pg3_mr_vs15") }})
+    where order_date >= dateadd(month, -6, current_date())
+    qualify row_number() over (partition by person_id order by order_date desc) = 1    
 ),
 -- Combine rule results for all COPD register patients
 patient_rules as (
