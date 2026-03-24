@@ -51,10 +51,12 @@ rule_3_mrcbs_grade_2_3 as (
     from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs2") }})
     qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1
 ),
--- Rule 4a: 1 COPD exacerbation within last 12 months
+-- Rule 4a: 1+ COPD exacerbation within last 12 months.
+-- Re-using the COPD ruleset for COPD exacerbation from pg2 - the code in ruleset on_copd_reg_pg3_mr_vs3 is only in
+-- EMIS's local nameset and doesn't match, returning 0 results.
 rule_4a_copd_exacerbations as ( 
     select person_id
-    from ({{ get_ltc_lcs_observations("on_copd_reg_pg3_mr_vs3") }})
+    from ({{ get_ltc_lcs_observations("on_copd_reg_pg2_hr_vs4") }})
     where clinical_effective_date >= dateadd(month, -12, current_date())
     qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1
 ),
