@@ -13,14 +13,14 @@ WITH person_patients AS (
     -- Get all patient relationships for each person
     SELECT
         pp.person_id,
-        pp.person_uuid,
+        ANY_VALUE(pp.person_uuid) AS person_uuid,
         ARRAY_AGG(DISTINCT p.sk_patient_id) AS sk_patient_ids,
         ARRAY_AGG(DISTINCT p.id) AS patient_ids,
         COUNT(DISTINCT p.id) AS total_patients
     FROM {{ ref('int_patient_person_unique') }} AS pp
     INNER JOIN {{ ref('stg_olids_patient') }} AS p
         ON pp.patient_id = p.id
-    GROUP BY pp.person_id, pp.person_uuid
+    GROUP BY pp.person_id
 ),
 
 person_practices AS (

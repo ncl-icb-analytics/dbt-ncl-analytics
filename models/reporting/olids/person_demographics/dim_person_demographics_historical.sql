@@ -380,10 +380,11 @@ SELECT
 
 FROM periods_with_attributes pwa
 
--- Join person_uuid for backwards compatibility
+-- Join person_uuid for backwards compatibility (one row per person)
 LEFT JOIN (
-    SELECT DISTINCT person_id, person_uuid
+    SELECT person_id, ANY_VALUE(person_uuid) AS person_uuid
     FROM {{ ref('int_patient_person_unique') }}
+    GROUP BY person_id
 ) ppu ON pwa.person_id = ppu.person_id
 
 -- Join birth/death
