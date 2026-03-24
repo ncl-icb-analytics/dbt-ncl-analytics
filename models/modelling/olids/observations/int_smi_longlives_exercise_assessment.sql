@@ -28,6 +28,6 @@ WHEN concept_code IN ('228445002','160631001') THEN 'Yes'
 WHEN concept_code IN ('160632008','160633003') THEN 'No'
 WHEN concept_code IN ('160628002','266930008') THEN 'Unclear'
 WHEN concept_code = '160629005' THEN 'Exercise physically impossible'
-ELSE concept_code END AS low_exercise_flag
+END AS low_exercise_flag
 from NUTR
 QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1

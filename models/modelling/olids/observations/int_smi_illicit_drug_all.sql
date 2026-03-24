@@ -23,7 +23,7 @@ SELECT
         ELSE FALSE
     END AS illicit_drug_assessed_last_12m
 
-FROM ({{ get_observations("'ILLSUB_COD'") }}) obs
+FROM ({{ get_observations("'ILLSUB_COD','ILLSUBASSDEC_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 )
