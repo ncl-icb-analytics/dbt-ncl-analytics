@@ -1,0 +1,27 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_copd_pg1_hrc
+    description: |
+      COPD Register Priority Group 1 - High Risk & Complex identification.
+
+      Patients on the COPD register are included if ANY of the following apply:
+      - Rule 1: Percent predicted FEV1 < 30 (latest value)
+        OR Medical Research Council (MRC) Breathlessness Scale grade 5
+        OR Home oxygen supply/Oxygen therapy
+    config:
+      meta:
+        owner:
+          name: Peter Shakeshaft
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_copd_reg_pg1_hrc_vs1
+            - on_copd_reg_pg1_hrc_vs2
+            - on_copd_reg_pg1_hrc_vs3
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
