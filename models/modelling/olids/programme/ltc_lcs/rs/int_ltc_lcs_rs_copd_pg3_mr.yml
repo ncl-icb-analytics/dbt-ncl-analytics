@@ -39,7 +39,7 @@ models:
             valuesets:
               - on_copd_reg_pg3_mr_vs1
               - on_copd_reg_pg3_mr_vs2
-              - on_copd_reg_pg3_mr_vs3
+              - on_copd_reg_pg2_hr_vs4
               - on_copd_reg_pg3_mr_vs4
               - on_copd_reg_pg3_mr_vs5
               - on_copd_reg_pg3_mr_vs6
