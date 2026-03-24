@@ -1,0 +1,30 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_copd_pg2_hr
+    description: |
+      COPD Register Priority Group 2 - High Risk.
+
+      Patients on COPD register (excluding PG1 HRC) meeting any inclusion rule:
+      - Rule 1: Not in PG1 HRC cohort
+      - Rule 2: latest FEV1 < 50 (inclusion)
+      - Rule 3: Chronic cor pulmonale within last 5 years (inclusion)
+      - Rule 4: MRC Breathlessness Scale: grade 4 (inclusion)
+      - Rule 5: 2+ COPD exacerbations in past year, Acute exacerbation of COPD (inclusion)
+    config:
+      meta:
+        owner:
+          name: Peter Shakeshaft
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          valuesets:
+            - on_copd_reg_pg2_hr_vs1
+            - on_copd_reg_pg2_hr_vs2
+            - on_copd_reg_pg2_hr_vs3
+            - on_copd_reg_pg2_hr_vs4
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
