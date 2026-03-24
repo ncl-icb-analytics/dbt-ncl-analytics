@@ -35,7 +35,8 @@ WITH recorded_bmi AS (
 ),
 
 height_measurements AS (
-    -- Get height measurements in cm
+    -- Get height measurements in cm, deduplicated to one per person per date
+    -- for deterministic ASOF JOIN behaviour
     SELECT
         obs.person_id,
         obs.clinical_effective_date,
@@ -44,10 +45,14 @@ height_measurements AS (
         obs.result_unit_display AS height_unit
     FROM ({{ get_observations("'HEIGHT'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
-    AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
+    AND obs.clinical_effective_date <= CURRENT_DATE()
       AND obs.result_value IS NOT NULL
       AND TRY_CAST(obs.result_value AS FLOAT) IS NOT NULL
-      AND TRY_CAST(obs.result_value AS FLOAT) BETWEEN 50 AND 250  -- Valid height range in cm
+      AND TRY_CAST(obs.result_value AS FLOAT) BETWEEN 50 AND 250
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY obs.person_id, obs.clinical_effective_date
+        ORDER BY obs.id DESC
+    ) = 1
 ),
 
 weight_measurements AS (
