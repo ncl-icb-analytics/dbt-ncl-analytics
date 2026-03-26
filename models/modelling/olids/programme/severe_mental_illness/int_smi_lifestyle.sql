@@ -117,7 +117,7 @@ select
 s.person_id
 ,DATE(s.clinical_effective_date) as alcohol_assessment_date
 ,'Alcohol Status Declined' AS alcohol_risk_category
-,'Unknown' as high_alcohol_use_flag
+,NULL as high_alcohol_use_flag
 ,NULL as alcohol_units
 ,NULL as unit_display
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_SMI_ALCOHOL_DECLINED s

@@ -17,6 +17,7 @@ p.PERSON_ID
 -- ,p.WARD_CODE
 -- ,p.WARD_NAME
 ,p.AGE
+,p.BIRTH_DATE_APPROX
 ,p.AGE_BAND_5Y
 ,p.GENDER
 ,p.ETHNICITY_CATEGORY
@@ -59,3 +60,4 @@ FROM {{ ref('int_smi_population_base')  }} p
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 LEFT JOIN {{ ref('int_smi_lifestyle')  }} l using (person_id)
 --LEFT JOIN DEV__MODELLING.OLIDS_PROGRAMME.INT_SMI_LIFESTYLE l using (person_id)
+WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
