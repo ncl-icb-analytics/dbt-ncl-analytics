@@ -6,24 +6,10 @@
 
 /*
 All serious mental illness (SMI) diagnosis observations from clinical records.
-Uses QOF SMI cluster IDs:
-- MH_COD: Mental health diagnoses (schizophrenia, bipolar disorder, other psychoses)
-- MHREM_COD: Mental health remission codes
+Uses MH_COD cluster for mental health diagnoses (schizophrenia, bipolar disorder, other psychoses).
 
-Clinical Purpose:
-- QOF SMI register data collection
-- Mental health care pathway monitoring
-- SMI treatment tracking
-- Resolution status tracking
-
-QOF Context:
-SMI register includes persons with mental health diagnosis codes who have not
-been resolved (no recent remission codes). Resolution logic applied in downstream fact models.
-Age restrictions typically ≥18 years applied in fact layer.
-
-Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
-This is OBSERVATION-LEVEL data - one row per SMI observation.
-Use this model as input for fct_person_smi_register.sql which applies QOF business rules.
+Per QOF MH001 spec, MH1_REG is "ever diagnosed" with no remission exclusion.
+MHREM_COD is not used — the register includes all patients with MH_DAT != Null.
 */
 
 SELECT
@@ -33,18 +19,10 @@ SELECT
     obs.mapped_concept_code AS concept_code,
     obs.mapped_concept_display AS concept_display,
     obs.cluster_id AS source_cluster_id,
+    TRUE AS is_diagnosis_code,
+    FALSE AS is_resolved_code,
+    'SMI Diagnosis' AS smi_observation_type
 
-    -- SMI-specific flags (observation-level only)
-    CASE WHEN obs.cluster_id = 'MH_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
-    CASE WHEN obs.cluster_id = 'MHREM_COD' THEN TRUE ELSE FALSE END AS is_resolved_code,
-
-    -- SMI observation type determination
-    CASE
-        WHEN obs.cluster_id = 'MH_COD' THEN 'SMI Diagnosis'
-        WHEN obs.cluster_id = 'MHREM_COD' THEN 'SMI Resolved'
-        ELSE 'Unknown'
-    END AS smi_observation_type
-
-FROM ({{ get_observations("'MH_COD', 'MHREM_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'MH_COD'", source='PCD') }}) obs
 
 ORDER BY person_id, clinical_effective_date, id
