@@ -6,9 +6,34 @@
 
 /*
 All lithium medication orders for bipolar disorder and severe depression.
-Uses BNF classification (4.2.3) for lithium.
-Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
+Uses BNF 040203 and LIT_COD cluster (QOF lithium prescription codes).
 */
+
+WITH bnf_orders AS (
+    SELECT
+        person_id, medication_order_id, medication_statement_id,
+        order_date, order_medication_name, order_dose,
+        order_quantity_value, order_quantity_unit, order_duration_days,
+        statement_medication_name, mapped_concept_code, mapped_concept_display,
+        bnf_code, bnf_name
+    FROM ({{ get_medication_orders(bnf_code='040203') }}) bo
+),
+
+cluster_orders AS (
+    SELECT
+        person_id, medication_order_id, medication_statement_id,
+        order_date, order_medication_name, order_dose,
+        order_quantity_value, order_quantity_unit, order_duration_days,
+        statement_medication_name, mapped_concept_code, mapped_concept_display,
+        bnf_code, bnf_name
+    FROM ({{ get_medication_orders(cluster_id='LIT_COD') }}) co
+),
+
+combined AS (
+    SELECT * FROM bnf_orders
+    UNION
+    SELECT * FROM cluster_orders
+)
 
 SELECT
     person_id,
@@ -25,26 +50,8 @@ SELECT
     mapped_concept_display,
     bnf_code,
     bnf_name,
-
-
-
-    -- Order recency flags (lithium requires regular monitoring and compliance tracking)
-    CASE
-        WHEN DATEDIFF(day, order_date, CURRENT_DATE()) <= 90 THEN TRUE
-        ELSE FALSE
-    END AS is_recent_3m,
-
-    CASE
-        WHEN DATEDIFF(day, order_date, CURRENT_DATE()) <= 180 THEN TRUE
-        ELSE FALSE
-    END AS is_recent_6m,
-
-    CASE
-        WHEN DATEDIFF(day, order_date, CURRENT_DATE()) <= 365 THEN TRUE
-        ELSE FALSE
-    END AS is_recent_12m
-
-FROM (
-    {{ get_medication_orders(bnf_code='040203') }}
-) base_orders
+    order_date >= CURRENT_DATE() - INTERVAL '3 months' AS is_recent_3m,
+    order_date >= CURRENT_DATE() - INTERVAL '6 months' AS is_recent_6m,
+    order_date >= CURRENT_DATE() - INTERVAL '12 months' AS is_recent_12m
+FROM combined
 ORDER BY person_id, order_date DESC
