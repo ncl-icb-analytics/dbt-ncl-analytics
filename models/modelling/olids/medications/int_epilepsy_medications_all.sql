@@ -6,9 +6,9 @@
 }}
 
 /*
-Epilepsy medication orders from the last 6 months for seizure management monitoring.
-Uses cluster ID EPILDRUG_COD for anti-epileptic drugs.
-Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
+All epilepsy medication orders for anti-epileptic drugs.
+Uses cluster ID EPILDRUG_COD.
+Date filtering should be applied by consumers (fct/pit models).
 */
 
 SELECT
@@ -28,9 +28,11 @@ SELECT
     mapped_concept_display,
     bnf_code,
     bnf_name,
-    cluster_id
+    cluster_id,
+    order_date >= CURRENT_DATE() - INTERVAL '3 months' AS is_recent_3m,
+    order_date >= CURRENT_DATE() - INTERVAL '6 months' AS is_recent_6m,
+    order_date >= CURRENT_DATE() - INTERVAL '12 months' AS is_recent_12m
 FROM (
     {{ get_medication_orders(cluster_id='EPILDRUG_COD') }}
 ) base_orders
-WHERE order_date >= CURRENT_DATE() - INTERVAL '6 months'
 ORDER BY person_id, order_date DESC

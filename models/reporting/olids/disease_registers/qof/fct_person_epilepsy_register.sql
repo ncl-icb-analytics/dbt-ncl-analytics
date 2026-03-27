@@ -5,7 +5,7 @@
 }}
 
 -- Epilepsy Register (QOF Pattern 3: Complex QOF Register with External Validation)
--- Business Logic: Age ≥18 + Active epilepsy diagnosis (latest EPIL_COD > latest EPILDRUG_COD) + Recent epilepsy medication (last 6 months)
+-- Business Logic: Age ≥18 + Active epilepsy diagnosis (latest EPIL_COD > latest EPILRES_COD) + Recent epilepsy medication (last 6 months)
 -- External Validation: Requires medication confirmation to ensure active epilepsy management
 
 WITH epilepsy_diagnoses AS (
@@ -77,7 +77,8 @@ epilepsy_medications AS (
         MAX(mapped_concept_display)
             AS latest_epilepsy_medication_concept_display,
         COUNT(*) AS recent_epilepsy_medication_count
-    FROM {{ ref('int_epilepsy_medications_6m') }}
+    FROM {{ ref('int_epilepsy_medications_all') }}
+    WHERE order_date >= CURRENT_DATE() - INTERVAL '6 months'
     GROUP BY person_id
 ),
 
