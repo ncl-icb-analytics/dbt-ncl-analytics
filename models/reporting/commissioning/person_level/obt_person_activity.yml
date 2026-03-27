@@ -1,0 +1,139 @@
+models:
+  - name: obt_person_activity
+    description: "Combined person-level activity summary across recent GP, A&E, outpatient, and inpatient utilisation windows."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: sk_patient_id
+        data_type: varchar
+        description: "Unique identifier for the patient (pseudonymised NHS number)"
+        tests:
+          - not_null
+          - unique
+        
+      - name: person_id
+        data_type: number
+        description: "Unique person identifier from OLIDs, arbitrary choice"
+
+      - name: AE_ILL_12MO
+        data_type: number
+        description: "Number of A&E attendances attended for illness in the last 12 months"
+        tests:
+          - not_null
+      - name: AE_ILL_3MO
+        data_type: number
+        description: "Number of A&E attendances attended for illness in the last 3 months"
+        tests:
+          - not_null
+      - name: AE_ILL_1MO
+        data_type: number
+        description: "Number of A&E attendances attended for illness in the last 1 month"
+        tests:
+          - not_null
+      - name: AE_TOT_12MO
+        data_type: number
+        description: "Number of A&E attendances attended in the last 12 months"
+        tests:
+          - not_null
+      - name: AE_INJ_12MO
+        data_type: number
+        description: "Number of A&E attendances attended for injury in the last 12 months"
+        tests:
+          - not_null
+      - name: AE_T1_12MO
+        data_type: number
+        description: "Number of A&E attendances attended via Type 1 A&E in the last 12 months"
+        tests:
+          - not_null
+      - name: APC_3MO
+        data_type: number
+        description: "Number of inpatient spells attended in the last 3 months"
+        tests:
+          - not_null
+      - name: APC_1MO
+        data_type: number
+        description: "Number of inpatient spells attended in the last 1 month"
+        tests:
+          - not_null
+      - name: APC_12MO
+        data_type: number
+        description: "Number of inpatient spells attended in the last 12 months"
+        tests:
+          - not_null
+      - name: APC_LOS_12MO
+        data_type: number
+        description: "Total length of stay for inpatient spells in the last 12 months"
+        tests:
+          - not_null
+      - name: APC_NEL_12MO
+        data_type: number
+        description: "Number of inpatient spells attended as non-elective (emergency) in the last 12 months"
+        tests:
+          - not_null
+      - name: OP_ATT_TOT_12MO
+        data_type: number
+        description: "Number of outpatient appointments attended in the last 12 months"
+        tests:
+          - not_null
+      - name: OP_ATT_TOT_3MO
+        data_type: number
+        description: "Number of outpatient appointments attended in the last 3 months"
+        tests:
+          - not_null
+      - name: OP_ATT_TOT_1MO
+        data_type: number
+        description: "Number of outpatient appointments attended in the last 1 month"
+        tests:
+          - not_null
+      - name: OP_ATT_FIRST_12MO
+        data_type: number
+        description: "Number of outpatient appointments attended for the first time in the last 12 months"
+        tests:
+          - not_null
+      - name: OP_APP_TOT_12MO
+        data_type: number
+        description: "Number of outpatient appointments booked in the last 12 months"
+        tests:
+          - not_null
+      - name: OP_SPEC_12MO
+        data_type: number
+        description: "Number of outpatient specialties where appointments were attended in the last 12 months"
+        tests:
+          - not_null
+      - name: OP_PROV_12MO
+        data_type: number
+        description: "Number of outpatient providers where appointments were attended in the last 12 months"
+        tests:
+          - not_null
+      - name: OP_NUM_SPEC_2_PROV_12MO
+        data_type: number
+        description: "Number of outpatient specialties where more than one provider was attended in the last 12 months"
+        tests:
+          - not_null
+      - name: GP_ATT_TOT_12MO
+        data_type: number
+        description: "Number of GP appointments attended in the last 12 months"
+        tests:
+          - not_null
+      - name: GP_ATT_TOT_3MO
+        data_type: number
+        description: "Number of GP appointments attended in the last 3 months"
+        tests:
+          - not_null
+      - name: GP_ATT_TOT_1MO
+        data_type: number
+        description: "Number of GP appointments attended in the last 1 month"
+        tests:
+          - not_null
+      - name: GP_APP_TOT_12MO
+        data_type: number
+        description: "Number of GP appointments booked in the last 12 months"
+        tests:
+          - not_null
+      - name: GP_DNA_TOT_12MO
+        data_type: number
+        description: "Number of GP appointments missed in the last 12 months"
+        tests:
+          - not_null
