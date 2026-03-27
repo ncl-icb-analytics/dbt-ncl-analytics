@@ -43,12 +43,12 @@
 
     asthma_medications_filtered AS (
         SELECT
-            mo.person_id,
-            MAX(mo.order_date) AS latest_medication_date
-        FROM ({{ get_medication_orders(cluster_id='ASTTRT_COD') }}) mo
-        WHERE mo.order_date >= {{ reference_date_expr }} - INTERVAL '12 months'
-          AND mo.order_date <= {{ reference_date_expr }}
-        GROUP BY mo.person_id
+            person_id,
+            MAX(order_date) AS latest_medication_date
+        FROM {{ ref('int_asthma_medications_all') }}
+        WHERE order_date >= {{ reference_date_expr }} - INTERVAL '12 months'
+          AND order_date <= {{ reference_date_expr }}
+        GROUP BY person_id
     ),
 
     age_at_reference AS (
