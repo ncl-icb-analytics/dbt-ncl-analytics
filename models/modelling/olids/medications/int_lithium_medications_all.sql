@@ -31,8 +31,9 @@ cluster_orders AS (
 
 combined AS (
     SELECT * FROM bnf_orders
-    UNION
+    UNION ALL
     SELECT * FROM cluster_orders
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY medication_order_id ORDER BY bnf_code NULLS LAST) = 1
 )
 
 SELECT
