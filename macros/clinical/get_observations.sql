@@ -20,14 +20,14 @@
     -- Picks up retired SNOMED codes that map to current cluster codes
     historical_codes AS (
         SELECT DISTINCT
-            h."OldConceptId"::VARCHAR AS mapped_concept_code,
+            h.old_concept_id::VARCHAR AS mapped_concept_code,
             cc.cluster_id,
             cc.cluster_description,
             cc.code_description
-        FROM {{ source('nhsd_snomed', 'SCT_History') }} h
+        FROM {{ ref('stg_nhsd_snomed_sct_history') }} h
         INNER JOIN cluster_codes cc
-            ON h."NewConceptId"::VARCHAR = cc.mapped_concept_code
-        WHERE h."OldConceptId"::VARCHAR NOT IN (
+            ON h.new_concept_id::VARCHAR = cc.mapped_concept_code
+        WHERE h.old_concept_id::VARCHAR NOT IN (
             SELECT mapped_concept_code FROM cluster_codes
         )
     ),

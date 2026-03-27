@@ -177,6 +177,14 @@ sources:
     raw_prefix: raw_dictionary_snomed
     domain: shared
 
+  # NHSD SNOMED Reporting Model
+  - source_name: nhsd_snomed
+    database: Dictionary
+    schema: NHSD_SnomedReportingModel
+    description: NHS Digital SNOMED CT reporting model with concept status and history
+    raw_prefix: raw_nhsd_snomed
+    domain: shared
+
   # ========================================
   # DATA_LAKE__NCL [NCL locally managed data sources]
   # ========================================
