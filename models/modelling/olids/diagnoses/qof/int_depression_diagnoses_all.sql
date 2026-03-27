@@ -45,6 +45,6 @@ SELECT
         ELSE 'Unknown'
     END AS depression_observation_type
 
-FROM ({{ get_observations("'DEPR_COD', 'DEPRES_COD'", source='PCD', include_history=true) }}) obs
+FROM ({{ get_observations("'DEPR_COD', 'DEPRES_COD'", source='PCD') }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

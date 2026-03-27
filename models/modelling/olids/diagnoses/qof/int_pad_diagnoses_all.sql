@@ -40,6 +40,6 @@ SELECT
         ELSE 'Unknown'
     END AS pad_observation_type
 
-FROM ({{ get_observations("'PAD_COD'", source='PCD', include_history=true) }}) obs
+FROM ({{ get_observations("'PAD_COD'", source='PCD') }}) obs
 
 ORDER BY person_id, clinical_effective_date, id
