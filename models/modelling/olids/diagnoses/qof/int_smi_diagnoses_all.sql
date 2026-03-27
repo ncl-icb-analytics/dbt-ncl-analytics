@@ -45,6 +45,6 @@ SELECT
         ELSE 'Unknown'
     END AS smi_observation_type
 
-FROM ({{ get_observations("'MH_COD', 'MHREM_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'MH_COD', 'MHREM_COD'", source='PCD', include_history=true) }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

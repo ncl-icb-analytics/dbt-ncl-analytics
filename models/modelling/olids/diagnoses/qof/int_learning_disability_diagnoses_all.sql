@@ -43,6 +43,6 @@ SELECT
         ELSE 'Unknown'
     END AS learning_disability_observation_type
 
-FROM ({{ get_observations("'LD_COD', 'LDREM_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'LD_COD', 'LDREM_COD'", source='PCD', include_history=true) }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

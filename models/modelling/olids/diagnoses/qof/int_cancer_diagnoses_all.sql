@@ -42,6 +42,6 @@ SELECT
         ELSE 'Unknown'
     END AS cancer_observation_type
 
-FROM ({{ get_observations("'CAN_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'CAN_COD'", source='PCD', include_history=true) }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

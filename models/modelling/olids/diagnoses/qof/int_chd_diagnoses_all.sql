@@ -34,6 +34,6 @@ SELECT
     -- CHD-specific flags (observation-level only)
     CASE WHEN obs.cluster_id = 'CHD_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code
 
-FROM ({{ get_observations("'CHD_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'CHD_COD'", source='PCD', include_history=true) }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

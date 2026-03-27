@@ -54,6 +54,6 @@ SELECT
         ELSE FALSE
     END AS is_diagnosis_code
 
-FROM ({{ get_observations("'NDH_COD', 'IGT_COD', 'PRD_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'NDH_COD', 'IGT_COD', 'PRD_COD'", source='PCD', include_history=true) }}) obs
 
 ORDER BY person_id, clinical_effective_date, id
