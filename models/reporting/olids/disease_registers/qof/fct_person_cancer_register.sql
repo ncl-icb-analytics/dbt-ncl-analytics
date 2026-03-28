@@ -25,20 +25,20 @@ WITH cancer_diagnoses AS (
     SELECT
         person_id,
 
-        -- Person-level aggregation from observation-level data
+        -- Person-level aggregation — CAN_DAT is "latest first or new episode"
         MIN(
-            CASE WHEN is_diagnosis_code THEN clinical_effective_date END
+            CASE WHEN is_diagnosis_code AND is_first_or_new_episode THEN clinical_effective_date END
         ) AS earliest_diagnosis_date,
         MAX(
-            CASE WHEN is_diagnosis_code THEN clinical_effective_date END
+            CASE WHEN is_diagnosis_code AND is_first_or_new_episode THEN clinical_effective_date END
         ) AS latest_diagnosis_date,
 
-        -- QOF register logic: cancer is permanent, any diagnosis since April 2003 qualifies
+        -- QOF register logic: first/new cancer episode since April 2003
         COALESCE(MAX(
-            CASE WHEN is_diagnosis_code THEN clinical_effective_date END
+            CASE WHEN is_diagnosis_code AND is_first_or_new_episode THEN clinical_effective_date END
         ) IS NOT NULL
         AND MAX(
-            CASE WHEN is_diagnosis_code THEN clinical_effective_date END
+            CASE WHEN is_diagnosis_code AND is_first_or_new_episode THEN clinical_effective_date END
         )
         >= '2003-04-01', FALSE) AS has_active_cancer_diagnosis,
 
