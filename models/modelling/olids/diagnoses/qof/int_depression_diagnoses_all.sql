@@ -41,10 +41,10 @@ SELECT
     CASE WHEN obs.cluster_id = 'DEPR_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
     CASE WHEN obs.cluster_id = 'DEPRES_COD' THEN TRUE ELSE FALSE END AS is_resolved_code,
 
-    -- QOF: "first or new episode" flag for DEPR_DAT calculation
+    -- QOF: "first or new episode" for DEPR_DAT — exclude reviews and ended
     CASE
-        WHEN ecm.target_code IN ('255217005', '288527008') THEN TRUE  -- First episode / New episode
-        ELSE FALSE
+        WHEN ecm.source_display IN ('Review', 'Ended', 'Changed', 'Evolved') THEN FALSE
+        ELSE TRUE  -- First, New, Flare Up, unspecified all count
     END AS is_first_or_new_episode,
 
     -- Depression observation type determination
