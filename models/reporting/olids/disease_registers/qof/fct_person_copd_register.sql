@@ -19,17 +19,12 @@ RULE 3: If EUNRESCOPD_DAT >= 01/04/2023 AND newly registered (last 12 months) AN
 - FEV1/FVC <0.7 within 93 days before and 186 days after REG_DAT
 - For patients who registered recently and already have spirometry from before registration
 
-RULE 4: If EUNRESCOPD_DAT >= 01/04/2023 AND unable to undertake spirometry → SELECT
-- Per register description: only patients unable to undertake spirometry qualify
-- Requires a code from int_unable_spirometry_all
-
 EUNRESCOPD_DAT Calculation (per QOF Field 22):
 - If COPDRES_DAT = NULL AND COPDRES1_DAT = NULL → RETURN COPD_DAT
 - Otherwise → RETURN COPD1_DAT
 
-Note: Rule 4 requires an "unable to spirometry" code per the register description,
-which states post-2023 patients must have spirometry confirmation OR be unable to
-undertake spirometry.
+Note: Rule 4 in the spec rejects all remaining patients. Post-2023 patients
+without spirometry confirmation (Rules 2/3) are not on the register.
 */
 
 WITH base_copd_diagnoses AS (
@@ -254,25 +249,8 @@ qof_rule_3_newly_registered AS (
         )
 ),
 
--- RULE 4: Post-April 2023 patients unable to undertake spirometry
--- Per register description: only patients with an "unable to spirometry" code qualify
-qof_rule_4_unable_spirometry AS (
-    SELECT DISTINCT
-        pfr.person_id,
-        pfr.eunrescopd_dat AS diagnosis_date,
-        'Rule 4: Post-April 2023 (Unable Spirometry)' AS qof_rule_applied,
-        TRUE AS qualifies_for_register,
-        'EUNRESCOPD_DAT >= 01/04/2023 with unable-to-spirometry code'
-            AS qualification_reason,
-        NULL AS relevant_spirometry_date,
-        NULL AS relevant_spirometry_ratio
-    FROM patients_for_rule_2_3_4 AS pfr
-    INNER JOIN {{ ref('int_unable_spirometry_all') }} AS us
-        ON pfr.person_id = us.person_id
-    WHERE
-        pfr.person_id NOT IN (SELECT person_id FROM qof_rule_2_spirometry_timeframe)
-        AND pfr.person_id NOT IN (SELECT person_id FROM qof_rule_3_newly_registered)
-),
+-- No Rule 4: Post-2023 patients without spirometry confirmation are rejected per spec.
+-- Rule 4 in the spec says Select/Reject — patients not qualifying via Rules 1-3 are out.
 
 -- Combine all qualifying patients (deduplicated to one row per person)
 all_qualifying_patients_raw AS (
@@ -281,8 +259,6 @@ all_qualifying_patients_raw AS (
     SELECT * FROM qof_rule_2_spirometry_timeframe
     UNION ALL
     SELECT * FROM qof_rule_3_newly_registered
-    UNION ALL
-    SELECT * FROM qof_rule_4_unable_spirometry
 ),
 
 all_qualifying_patients AS (
@@ -296,8 +272,7 @@ all_qualifying_patients AS (
                 WHEN 'Rule 1: Pre-April 2023' THEN 1
                 WHEN 'Rule 2: Post-April 2023 + Spirometry' THEN 2
                 WHEN 'Rule 3: Newly Registered + Spirometry' THEN 3
-                WHEN 'Rule 4: Post-April 2023 (Unable Spirometry)' THEN 4
-                ELSE 5
+                ELSE 4
             END,
             -- Then by earliest spirometry date for tie-breaking
             relevant_spirometry_date NULLS LAST
@@ -387,9 +362,7 @@ SELECT
     COALESCE(aqp.qof_rule_applied = 'Rule 1: Pre-April 2023', FALSE) AS qualified_rule_1,
     COALESCE(aqp.qof_rule_applied = 'Rule 2: Post-April 2023 + Spirometry', FALSE) AS qualified_rule_2,
     COALESCE(aqp.qof_rule_applied = 'Rule 3: Newly Registered + Spirometry', FALSE) AS qualified_rule_3,
-    COALESCE(aqp.qof_rule_applied = 'Rule 4: Post-April 2023 (Unable Spirometry)', FALSE) AS qualified_rule_4,
-
-    -- Flag for patients who have "unable to spirometry" codes (for analytics, not register requirement)
+    -- Flag for patients who have "unable to spirometry" codes (for analytics)
     COALESCE(uss.total_unable_spirometry_records > 0, FALSE) AS has_unable_spirometry_code
 
 FROM qof_field_calculations_extended AS qfce
