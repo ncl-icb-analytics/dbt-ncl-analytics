@@ -43,8 +43,8 @@ SELECT
 
     -- QOF: "first or new episode" for DEPR_DAT — exclude reviews and ended
     CASE
-        WHEN ecm.source_display IN ('Review', 'Ended', 'Changed', 'Evolved') THEN FALSE
-        ELSE TRUE  -- First, New, Flare Up, unspecified all count
+        WHEN ecm.source_display IN ('Review', 'Ended', 'Changed', 'Evolved', 'Flare Up') THEN FALSE
+        ELSE TRUE  -- First, New, unspecified count
     END AS is_first_or_new_episode,
 
     -- Depression observation type determination
