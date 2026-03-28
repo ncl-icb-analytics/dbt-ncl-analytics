@@ -1,10 +1,9 @@
 models:
-  - name: int_epilepsy_medications_6m
-    description: 'Anti-epileptic drug medication orders from the last 6 months for
-      seizure management.
+  - name: int_epilepsy_medications_all
+    description: 'All anti-epileptic drug medication orders using EPILDRUG_COD cluster.
 
-      One row per medication order using EPILDRUG_COD cluster with AED generation
-      classification, therapeutic drug monitoring flags, and teratogenicity risk assessment.'
+      Date filtering should be applied by consumers. Includes is_recent_3m/6m/12m
+      boolean flags for convenience.'
 
     config:
       meta:
@@ -30,7 +29,7 @@ models:
         description: 'Unique identifier for the medication statement'
 
       - name: order_date
-        description: 'Date when epilepsy medication was ordered (last 6 months)'
+        description: 'Date when epilepsy medication was ordered'
 
       - name: order_medication_name
         description: 'Name of the anti-epileptic drug as ordered'
@@ -64,3 +63,12 @@ models:
 
       - name: cluster_id
         description: 'Drug cluster identifier (EPILDRUG_COD) for epilepsy medications'
+
+      - name: is_recent_3m
+        description: 'True if order_date is within the last 3 months'
+
+      - name: is_recent_6m
+        description: 'True if order_date is within the last 6 months'
+
+      - name: is_recent_12m
+        description: 'True if order_date is within the last 12 months'

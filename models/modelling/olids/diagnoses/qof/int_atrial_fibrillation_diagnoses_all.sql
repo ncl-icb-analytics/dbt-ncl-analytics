@@ -45,6 +45,6 @@ SELECT
         ELSE 'Unknown'
     END AS af_observation_type
 
-FROM ({{ get_observations("'AFIB_COD', 'AFIBRES_COD'", source='PCD') }}) obs
+FROM ({{ get_observations("'AFIB_COD', 'AFIBRES_COD'", source='PCD', include_history=true) }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

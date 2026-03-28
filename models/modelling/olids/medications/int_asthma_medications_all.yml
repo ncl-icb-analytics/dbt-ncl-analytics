@@ -1,6 +1,6 @@
 models:
-  - name: int_asthma_medications_12m
-    description: 'Asthma medication orders from last 12 months using ASTTRT_COD cluster for QOF monitoring.'
+  - name: int_asthma_medications_all
+    description: 'All asthma medication orders using ASTTRT_COD cluster. Date filtering applied by consumers.'
     config:
       meta:
         owner:

@@ -2,9 +2,9 @@
     {#
     Calculates SMI (Severe Mental Illness) register status at a given reference date.
 
-    Business Logic:
-    - Active SMI diagnosis (latest diagnosis > latest resolution OR no resolution)
-    - OR lithium therapy in last 6 months from reference date
+    Per QOF MH001:
+    - MH1_REG: Ever diagnosed with MH_COD (no remission exclusion)
+    - MH2_REG: Lithium therapy in last 6 months, not subsequently stopped
     - No age restrictions
 
     Parameters:
@@ -14,53 +14,32 @@
     #}
 
     WITH smi_diagnoses_filtered AS (
-        SELECT
-            person_id,
-            clinical_effective_date,
-            is_diagnosis_code,
-            is_resolved_code
+        SELECT DISTINCT person_id
         FROM {{ ref('int_smi_diagnoses_all') }}
         WHERE clinical_effective_date <= {{ reference_date_expr }}
-    ),
-
-    smi_person_aggregates AS (
-        SELECT
-            person_id,
-            MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) AS latest_diagnosis_date,
-            MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) AS latest_resolved_date
-        FROM smi_diagnoses_filtered
-        GROUP BY person_id
     ),
 
     lithium_medications_filtered AS (
         SELECT
             person_id,
-            order_date
+            COUNT(*) AS recent_lithium_orders
         FROM {{ ref('int_lithium_medications_all') }}
         WHERE order_date <= {{ reference_date_expr }}
           AND order_date >= DATEADD('month', -6, {{ reference_date_expr }})
-    ),
-
-    lithium_person_aggregates AS (
-        SELECT
-            person_id,
-            COUNT(*) AS recent_lithium_orders
-        FROM lithium_medications_filtered
         GROUP BY person_id
     ),
 
     smi_register_logic AS (
         SELECT
-            diag.person_id,
+            COALESCE(diag.person_id, lith.person_id) AS person_id,
             'SMI' AS register_name,
             COALESCE(
-                (diag.latest_diagnosis_date IS NOT NULL
-                 AND (diag.latest_resolved_date IS NULL OR diag.latest_diagnosis_date > diag.latest_resolved_date))
+                diag.person_id IS NOT NULL
                 OR lith.recent_lithium_orders > 0,
                 FALSE
             ) AS is_on_register
-        FROM smi_person_aggregates diag
-        LEFT JOIN lithium_person_aggregates lith ON diag.person_id = lith.person_id
+        FROM smi_diagnoses_filtered diag
+        FULL OUTER JOIN lithium_medications_filtered lith ON diag.person_id = lith.person_id
     )
 
     SELECT

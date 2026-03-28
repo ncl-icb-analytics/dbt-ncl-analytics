@@ -1,6 +1,6 @@
-{% macro get_medication_orders(bnf_code=none, cluster_id=none, source=none) %}
-    -- Simpler: emit a single SELECT, no CTEs, cluster_id IN (...), always includes cluster_id in output
+{% macro get_medication_orders(bnf_code=none, cluster_id=none, source=none, include_history=false) %}
     -- Optional source parameter to filter to specific refset (e.g., 'LTC_LCS')
+    -- include_history=true expands cluster codes with retired SNOMED predecessors via SCT_History
     {% if bnf_code is none and cluster_id is none %}
     {{ exceptions.raise_compiler_error("Must provide either bnf_code or cluster_id parameter to get_medication_orders macro") }}
 {% endif %}
@@ -21,7 +21,7 @@
     {%- if cluster_id is not none -%}
     -- Join pre-mapped medication orders with cluster definitions
     WITH cluster_codes AS (
-        SELECT DISTINCT 
+        SELECT DISTINCT
             code as mapped_concept_code,
             cluster_id,
             cluster_description
@@ -30,7 +30,27 @@
         {% if source is not none %}
         AND source = '{{ source }}'
         {% endif %}
-    )
+    ){% if include_history %},
+
+    historical_codes AS (
+        SELECT DISTINCT
+            h.old_concept_id::VARCHAR AS mapped_concept_code,
+            cc.cluster_id,
+            cc.cluster_description
+        FROM {{ ref('stg_nhsd_snomed_sct_history') }} h
+        INNER JOIN cluster_codes cc
+            ON h.new_concept_id::VARCHAR = cc.mapped_concept_code
+        WHERE h.old_concept_id::VARCHAR NOT IN (
+            SELECT mapped_concept_code FROM cluster_codes
+        )
+    ),
+
+    expanded_codes AS (
+        SELECT * FROM cluster_codes
+        UNION ALL
+        SELECT * FROM historical_codes
+    ){% endif %}
+
     SELECT
         mo.id AS medication_order_id,
         mo.medication_statement_id,
@@ -53,7 +73,7 @@
     FROM {{ ref('stg_olids_medication_order') }} mo
     JOIN {{ ref('int_patient_person_unique') }} pp
         ON mo.patient_id = pp.patient_id
-    INNER JOIN cluster_codes cc
+    INNER JOIN {% if include_history %}expanded_codes{% else %}cluster_codes{% endif %} cc
         ON mo.mapped_concept_code = cc.mapped_concept_code
     LEFT JOIN {{ ref('stg_reference_bnf_latest') }} bnf
         ON mo.mapped_concept_code = bnf.snomed_code

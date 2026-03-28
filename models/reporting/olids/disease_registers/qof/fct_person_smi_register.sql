@@ -23,43 +23,16 @@ Used for serious mental illness quality measures including:
 */
 
 WITH smi_diagnoses AS (
+    -- Per QOF MH001: MH1_REG is "ever diagnosed" — no remission exclusion
     SELECT
         person_id,
-
-        -- Person-level aggregation from observation-level data
-        MIN(CASE WHEN is_diagnosis_code THEN clinical_effective_date END)
-            AS earliest_diagnosis_date,
-        MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END)
-            AS latest_diagnosis_date,
-        MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END)
-            AS latest_resolved_date,
-
-        -- QOF register logic: active diagnosis required
-        COALESCE(MAX(
-            CASE WHEN is_diagnosis_code THEN clinical_effective_date END
-        ) IS NOT NULL
-        AND (
-            MAX(
-                CASE WHEN is_resolved_code THEN clinical_effective_date END
-            ) IS NULL
-            OR MAX(
-                CASE WHEN is_diagnosis_code THEN clinical_effective_date END
-            )
-            > MAX(
-                CASE WHEN is_resolved_code THEN clinical_effective_date END
-            )
-        ), FALSE) AS has_active_smi_diagnosis,
-
-        -- Traceability arrays
-        ARRAY_AGG(
-            DISTINCT CASE WHEN is_diagnosis_code THEN concept_code END
-        ) AS all_smi_concept_codes,
-        ARRAY_AGG(
-            DISTINCT CASE WHEN is_diagnosis_code THEN concept_display END
-        ) AS all_smi_concept_displays,
-        ARRAY_AGG(
-            DISTINCT CASE WHEN is_resolved_code THEN concept_code END
-        ) AS all_resolved_concept_codes
+        MIN(clinical_effective_date) AS earliest_diagnosis_date,
+        MAX(clinical_effective_date) AS latest_diagnosis_date,
+        NULL::TIMESTAMP_NTZ AS latest_resolved_date,
+        TRUE AS has_active_smi_diagnosis,
+        ARRAY_AGG(DISTINCT concept_code) AS all_smi_concept_codes,
+        ARRAY_AGG(DISTINCT concept_display) AS all_smi_concept_displays,
+        ARRAY_CONSTRUCT() AS all_resolved_concept_codes
 
     FROM {{ ref('int_smi_diagnoses_all') }}
     GROUP BY person_id

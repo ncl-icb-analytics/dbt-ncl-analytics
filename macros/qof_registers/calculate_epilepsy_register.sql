@@ -46,7 +46,7 @@
         SELECT
             person_id,
             order_date
-        FROM {{ ref('int_epilepsy_medications_6m') }}
+        FROM {{ ref('int_epilepsy_medications_all') }}
         WHERE order_date <= {{ reference_date_expr }}
           AND order_date >= DATEADD('month', -6, {{ reference_date_expr }})
     ),
