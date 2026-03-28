@@ -19,17 +19,17 @@ RULE 3: If EUNRESCOPD_DAT >= 01/04/2023 AND newly registered (last 12 months) AN
 - FEV1/FVC <0.7 within 93 days before and 186 days after REG_DAT
 - For patients who registered recently and already have spirometry from before registration
 
-RULE 4: If EUNRESCOPD_DAT >= 01/04/2023 → SELECT (all remaining)
-- Per QOF v50 spec: All remaining patients with post-April 2023 diagnosis are included
-- The spec's Rule 4 does NOT require an "unable to spirometry" code
-- Register description mentions "unable to undertake spirometry" but rules don't enforce it
+RULE 4: If EUNRESCOPD_DAT >= 01/04/2023 AND unable to undertake spirometry → SELECT
+- Per register description: only patients unable to undertake spirometry qualify
+- Requires a code from int_unable_spirometry_all
 
 EUNRESCOPD_DAT Calculation (per QOF Field 22):
 - If COPDRES_DAT = NULL AND COPDRES1_DAT = NULL → RETURN COPD_DAT
 - Otherwise → RETURN COPD1_DAT
 
-Note: Previous implementation incorrectly required SPIRPU_COD for Rule 4. This has been
-corrected to match the actual QOF v50 business rules specification.
+Note: Rule 4 requires an "unable to spirometry" code per the register description,
+which states post-2023 patients must have spirometry confirmation OR be unable to
+undertake spirometry.
 */
 
 WITH base_copd_diagnoses AS (
@@ -254,20 +254,21 @@ qof_rule_3_newly_registered AS (
         )
 ),
 
--- RULE 4: All remaining post-April 2023 patients (per QOF v50 spec)
--- The spec's Rule 4 says: "If EUNRESCOPD_DAT >= 01/04/2023 → Select"
--- This includes ALL remaining patients - no "unable to spirometry" code required
-qof_rule_4_post_april_2023_remaining AS (
+-- RULE 4: Post-April 2023 patients unable to undertake spirometry
+-- Per register description: only patients with an "unable to spirometry" code qualify
+qof_rule_4_unable_spirometry AS (
     SELECT DISTINCT
         pfr.person_id,
         pfr.eunrescopd_dat AS diagnosis_date,
-        'Rule 4: Post-April 2023 (No Spirometry)' AS qof_rule_applied,
+        'Rule 4: Post-April 2023 (Unable Spirometry)' AS qof_rule_applied,
         TRUE AS qualifies_for_register,
-        'EUNRESCOPD_DAT >= 01/04/2023 - included per QOF v50 Rule 4 (no spirometry confirmation)'
+        'EUNRESCOPD_DAT >= 01/04/2023 with unable-to-spirometry code'
             AS qualification_reason,
         NULL AS relevant_spirometry_date,
         NULL AS relevant_spirometry_ratio
     FROM patients_for_rule_2_3_4 AS pfr
+    INNER JOIN {{ ref('int_unable_spirometry_all') }} AS us
+        ON pfr.person_id = us.person_id
     WHERE
         pfr.person_id NOT IN (SELECT person_id FROM qof_rule_2_spirometry_timeframe)
         AND pfr.person_id NOT IN (SELECT person_id FROM qof_rule_3_newly_registered)
@@ -281,7 +282,7 @@ all_qualifying_patients_raw AS (
     UNION ALL
     SELECT * FROM qof_rule_3_newly_registered
     UNION ALL
-    SELECT * FROM qof_rule_4_post_april_2023_remaining
+    SELECT * FROM qof_rule_4_unable_spirometry
 ),
 
 all_qualifying_patients AS (
@@ -295,7 +296,7 @@ all_qualifying_patients AS (
                 WHEN 'Rule 1: Pre-April 2023' THEN 1
                 WHEN 'Rule 2: Post-April 2023 + Spirometry' THEN 2
                 WHEN 'Rule 3: Newly Registered + Spirometry' THEN 3
-                WHEN 'Rule 4: Post-April 2023 (No Spirometry)' THEN 4
+                WHEN 'Rule 4: Post-April 2023 (Unable Spirometry)' THEN 4
                 ELSE 5
             END,
             -- Then by earliest spirometry date for tie-breaking
@@ -386,7 +387,7 @@ SELECT
     COALESCE(aqp.qof_rule_applied = 'Rule 1: Pre-April 2023', FALSE) AS qualified_rule_1,
     COALESCE(aqp.qof_rule_applied = 'Rule 2: Post-April 2023 + Spirometry', FALSE) AS qualified_rule_2,
     COALESCE(aqp.qof_rule_applied = 'Rule 3: Newly Registered + Spirometry', FALSE) AS qualified_rule_3,
-    COALESCE(aqp.qof_rule_applied = 'Rule 4: Post-April 2023 (No Spirometry)', FALSE) AS qualified_rule_4,
+    COALESCE(aqp.qof_rule_applied = 'Rule 4: Post-April 2023 (Unable Spirometry)', FALSE) AS qualified_rule_4,
 
     -- Flag for patients who have "unable to spirometry" codes (for analytics, not register requirement)
     COALESCE(uss.total_unable_spirometry_records > 0, FALSE) AS has_unable_spirometry_code
