@@ -448,6 +448,49 @@ sources:
       data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
+  - name: ENRICHED_CONCEPT_MAP
+    identifier: '"ENRICHED_CONCEPT_MAP"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_RESOURCE_ID
+      data_type: TEXT
+    - name: CONCEPT_MAP_URL
+      data_type: TEXT
+    - name: CONCEPT_MAP_VERSION
+      data_type: TEXT
+    - name: SOURCE_CODE_ID
+      data_type: TEXT
+    - name: SOURCE_SYSTEM
+      data_type: TEXT
+    - name: SOURCE_CODE
+      data_type: TEXT
+    - name: SOURCE_DISPLAY
+      data_type: TEXT
+    - name: TARGET_CODE_ID
+      data_type: TEXT
+    - name: TARGET_SYSTEM
+      data_type: TEXT
+    - name: TARGET_CODE
+      data_type: TEXT
+    - name: TARGET_DISPLAY
+      data_type: TEXT
+    - name: IS_PRIMARY
+      data_type: BOOLEAN
+    - name: IS_ACTIVE
+      data_type: BOOLEAN
+    - name: EQUIVALENCE
+      data_type: TEXT
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
   - name: EPISODE_OF_CARE
     identifier: '"EPISODE_OF_CARE"'
     columns:

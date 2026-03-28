@@ -1,0 +1,22 @@
+select
+    id,
+    lds_id,
+    lds_business_key,
+    lds_dataset_id,
+    concept_map_id,
+    concept_map_resource_id,
+    concept_map_url,
+    concept_map_version,
+    source_code_id,
+    source_system,
+    source_code,
+    source_display,
+    target_code_id,
+    target_system,
+    target_code,
+    target_display,
+    is_primary,
+    is_active,
+    equivalence,
+    lds_start_date_time
+from {{ ref('raw_olids_enriched_concept_map') }}

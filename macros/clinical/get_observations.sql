@@ -60,6 +60,7 @@
         o.mapped_concept_id,
         o.mapped_concept_code,
         o.mapped_concept_display,
+        o.episodicity_concept_id,
         o.age_at_event,
         o.lds_start_date_time,
         cc.cluster_id,
