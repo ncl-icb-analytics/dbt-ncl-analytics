@@ -3,14 +3,14 @@ models:
     description: 'QOF COPD register per v50 business rules specification.
 
       One row per person on the COPD register. Inclusion rules:
-
+      
       Rule 1: Pre-April 2023 diagnosis - automatic inclusion
-
+      
       Rule 2: Post-April 2023 + spirometry <0.7 within -93 to +186 days of diagnosis
-
+      
       Rule 3: Post-April 2023 + newly registered + spirometry <0.7 within -93 to +186 days of registration
-
-      Post-2023 patients without spirometry confirmation are rejected.'
+      
+      Rule 4: Post-April 2023 remaining - all included per QOF v50 spec (no spirometry required)'
 
     tests:
       - dbt_utils.at_least_one:
@@ -36,8 +36,8 @@ models:
             COPD register per QOF v50 business rules. Rule 1: Automatic inclusion for
             diagnoses before 01/04/2023. Rule 2: Post-April 2023 with spirometry FEV1/FVC
             <0.7 within -93 to +186 days of diagnosis. Rule 3: Newly registered (last 12
-            months) with spirometry within -93 to +186 days of registration. Post-2023
-            patients without spirometry confirmation are rejected.
+            months) with spirometry within -93 to +186 days of registration. Rule 4: All
+            remaining post-April 2023 diagnoses included per spec (no spirometry required).
             Uses COPD_COD for diagnosis and COPDRES_COD for resolution codes.
           is_qof: true
           qof_indicator: "COPD007"
