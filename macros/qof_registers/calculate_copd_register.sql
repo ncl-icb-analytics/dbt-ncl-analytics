@@ -6,14 +6,11 @@
     - Rule 1: EUNRESCOPD_DAT < 01/04/2023 → automatic inclusion
     - Rule 2: EUNRESCOPD_DAT >= 01/04/2023 + spirometry <0.7 within -93 to +186 days of diagnosis
     - Rule 3: EUNRESCOPD_DAT >= 01/04/2023 + newly registered (last 12 months) + spirometry <0.7 within -93 to +186 days of registration
-    - Rule 4: EUNRESCOPD_DAT >= 01/04/2023 → all remaining patients included (no spirometry code required per QOF v50)
+    - Rule 4: Reject remaining (post-2023 without spirometry are not on register)
 
     EUNRESCOPD_DAT (Field 22):
     - If no resolved codes → COPD_DAT (earliest diagnosis)
     - Else → COPD1_DAT (earliest diagnosis after latest resolved)
-
-    Note: Previous implementation incorrectly required SPIRPU_COD for Rule 4. QOF v50 spec
-    Rule 4 simply states: "If EUNRESCOPD_DAT >= 01/04/2023 → Select" for all remaining patients.
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -159,18 +156,7 @@
         WHERE pap.person_id NOT IN (SELECT person_id FROM rule_2_qualifiers)
     ),
 
-    -- Rule 4: All remaining post-April 2023 patients (per QOF v50 spec)
-    -- The spec's Rule 4 says: "If EUNRESCOPD_DAT >= 01/04/2023 → Select"
-    -- This includes ALL remaining patients - no "unable to spirometry" code required
-    rule_4_qualifiers AS (
-        SELECT DISTINCT
-            pap.person_id,
-            pap.eunrescopd_dat,
-            4 AS rule_number
-        FROM post_april_patients pap
-        WHERE pap.person_id NOT IN (SELECT person_id FROM rule_2_qualifiers)
-          AND pap.person_id NOT IN (SELECT person_id FROM rule_3_qualifiers)
-    ),
+    -- Rule 4: Reject remaining — post-2023 without spirometry are not on register
 
     all_qualifiers AS (
         SELECT person_id, eunrescopd_dat, rule_number FROM rule_1_qualifiers
@@ -178,8 +164,6 @@
         SELECT person_id, eunrescopd_dat, rule_number FROM rule_2_qualifiers
         UNION ALL
         SELECT person_id, eunrescopd_dat, rule_number FROM rule_3_qualifiers
-        UNION ALL
-        SELECT person_id, eunrescopd_dat, rule_number FROM rule_4_qualifiers
     ),
 
     copd_register_logic AS (
