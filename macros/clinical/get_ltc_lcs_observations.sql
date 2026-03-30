@@ -24,6 +24,7 @@ select
     o.mapped_concept_id as concept_id,
     o.mapped_concept_code as concept_code,
     o.mapped_concept_display as concept_display,
+    o.episodicity_concept_id,
     ec.valueset_id,
     vs.valueset_friendly_name
 from {{ ref('stg_olids_observation') }} as o
