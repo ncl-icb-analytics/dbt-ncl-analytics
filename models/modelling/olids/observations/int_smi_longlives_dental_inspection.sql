@@ -5,7 +5,7 @@
         tags=['smi_registry']
         )
 }}
---using mixed codes defined by SMI Longer Lives Campaign covers Dental/Mouth inspection.
+--using mixed codes defined by SMI Longer Lives Campaign covers Dental/Mouth inspection. Additional codes from NHS England GPES specification.
 
 with DENTAL AS (
 SELECT
@@ -19,7 +19,7 @@ SELECT
         WHEN DATEDIFF(day, obs.clinical_effective_date, CURRENT_DATE()) <= 365 THEN TRUE
         ELSE FALSE
     END AS dental_last_12m
-FROM ({{ get_observations("'SMI_LONGER_LIVES_DENTAL'", source='ECL_CACHE') }}) obs
+FROM ({{ get_observations("'SMI_LONGER_LIVES_DENTAL','ORALHEALTHREV_COD','ORALHEALTHINT_COD'") }}) obs
 WHERE obs.clinical_effective_date IS NOT NULL 
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 )

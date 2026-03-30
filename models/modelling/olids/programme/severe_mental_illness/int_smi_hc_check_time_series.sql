@@ -222,6 +222,7 @@ QUALIFY rowno = 1
 SELECT 
         p.person_id
         ,p.analysis_month
+        ,p.fiscal_year_label
         ,p.PRACTICE_NAME
         ,p.PRACTICE_CODE
         ,CASE WHEN b.person_id IS NULL THEN 'Not Met' ELSE b.BMI_LAST_12M END AS BMI_CHECK_12M
