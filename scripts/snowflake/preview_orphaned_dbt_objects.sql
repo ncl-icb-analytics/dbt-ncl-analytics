@@ -16,7 +16,8 @@ WITH snowflake_objects AS (
         DATEDIFF(day, last_altered, CURRENT_DATE) AS days_since_altered
     FROM SNOWFLAKE.ACCOUNT_USAGE.TABLES
     WHERE comment LIKE '%🤖%'
-      AND comment LIKE '%github.com/ncl-icb-analytics/dbt-ncl-analytics%'
+      AND (comment LIKE '%github.com/ncl-icb-analytics/dbt-ncl-analytics%'
+        OR comment LIKE '%github.com/wnl-icb-analytics/dbt-analytics%')
       AND table_catalog IN (
         'MODELLING',
         'REPORTING',

@@ -17,7 +17,7 @@
     {%- set run_timestamp = day|string + day_suffix + london_time.strftime(' %B %Y at %H:%M:%S ') + tz_abbr -%}
     {%- set target_name = target.name | default('unknown') -%}
 
-    {%- set github_base_url = "https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/" -%}
+    {%- set github_base_url = "https://github.com/wnl-icb-analytics/dbt-analytics/blob/main/" -%}
     {%- set model_file_path = model.original_file_path | replace("\\", "/") -%}
     {%- set github_file_url = github_base_url + model_file_path -%}
 
@@ -42,13 +42,13 @@
       {%- set footer = owner_line + "
 🤖 Last ran on " + run_timestamp + " by " + current_user + " (target: " + target_name + ")
 📄 Model source: " + github_file_url + "
-📖 Documentation: https://github.com/ncl-icb-analytics/dbt-ncl-analytics" -%}
+📖 Documentation: https://github.com/wnl-icb-analytics/dbt-analytics" -%}
       {{- clean_description + footer | replace("'", "''") -}}
     {%- else -%}
 {{- owner_line -}}
 🤖 Last ran on {{ run_timestamp }} by {{ current_user }} (target: {{ target_name }})
 📄 Model source: {{ github_file_url }}
-📖 Documentation: https://github.com/ncl-icb-analytics/dbt-ncl-analytics
+📖 Documentation: https://github.com/wnl-icb-analytics/dbt-analytics
     {%- endif -%}
   {%- endif -%}
 {% endmacro %}

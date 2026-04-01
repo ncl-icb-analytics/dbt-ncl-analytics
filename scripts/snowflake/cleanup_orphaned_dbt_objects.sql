@@ -6,7 +6,7 @@
     comments containing both the robot emoji and the GitHub repository URL.
 
     Objects are dropped if:
-    - Comment contains '🤖' AND 'github.com/ncl-icb-analytics/dbt-ncl-analytics'
+    - Comment contains '🤖' AND either the old or new GitHub repo URL
     - Not in current dbt models (DATA_LAKE__NCL.DBT_OBSERVABILITY.DBT_MODELS)
     - Last altered > 21 days ago
 
@@ -41,7 +41,8 @@ DECLARE
                 DATEDIFF(day, last_altered, CURRENT_DATE) AS days_since_altered
             FROM SNOWFLAKE.ACCOUNT_USAGE.TABLES
             WHERE comment LIKE '%🤖%'
-              AND comment LIKE '%github.com/ncl-icb-analytics/dbt-ncl-analytics%'
+              AND (comment LIKE '%github.com/ncl-icb-analytics/dbt-ncl-analytics%'
+                OR comment LIKE '%github.com/wnl-icb-analytics/dbt-analytics%')
               AND table_catalog IN (
                 'MODELLING',
                 'REPORTING',
