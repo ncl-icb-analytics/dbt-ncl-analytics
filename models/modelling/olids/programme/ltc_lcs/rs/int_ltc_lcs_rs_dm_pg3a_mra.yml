@@ -3,16 +3,10 @@ models:
     description: |
       Diabetes Register Priority Group 3A - Moderate Risk A identification.
 
-      Patients on the diabetes register (excluding PG1, PG2) with HbA1c 58-75 AND any of:
-      - Rule 3: MI, cerebral thrombosis, or TIA in last 12 months
-      - Rule 4: eGFR 30-44
-      - Rule 5: ACR > 30
-      - Rule 6: ABPM BP ≥140/90
-
-      Note: BP logic simplified from EMIS implementation. EMIS anchors to the date of the
-      latest 1000 BP readings then checks for ABPM codes on that date. This implementation
-      directly checks the latest ABPM reading against the 140/90 threshold, which is
-      logically equivalent but more readable.
+      EMIS final include path:
+      - Exclude PG1 and PG2
+      - Require HbA1c > 58 and <= 75
+      - Require latest ABPM BP >= 140 systolic or >= 90 diastolic
     config:
       meta:
         owner:
@@ -24,11 +18,6 @@ models:
           arguments:
             valuesets:
               - on_dm_reg_priority_group_3a_mra_vs1
-              - on_dm_reg_priority_group_3a_mra_vs2
-              - on_dm_reg_priority_group_3a_mra_vs3
-              - on_dm_reg_priority_group_3a_mra_vs4
-              - on_dm_reg_priority_group_3a_mra_vs5
-              - on_dm_reg_priority_group_3a_mra_vs6
     columns:
       - name: person_id
         tests:
