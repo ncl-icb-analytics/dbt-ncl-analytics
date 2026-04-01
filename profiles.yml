@@ -1,4 +1,4 @@
-# dbt profiles for NCL Analytics project
+# dbt profiles for WNL ICB Analytics project
 #
 # This file is tracked in git (uses env_var() with defaults - no secrets stored).
 # Set required environment variables in your .env file (see env.example).
@@ -9,7 +9,7 @@
 #   snowflake-dev  - Snowflake native execution (empty credentials)
 #   snowflake-prod - Snowflake native execution (empty credentials)
 
-ncl_analytics:
+wnl_analytics:
   target: dev  # Default target for local dev
   outputs:
     # Local development targets (require env vars)
@@ -25,7 +25,7 @@ ncl_analytics:
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'NCL_ANALYTICS_M') }}"
       threads: 16
       client_session_keep_alive: true
-      query_tag: dbt_ncl_analytics_dev
+      query_tag: dbt_analytics_dev
 
     prod:
       type: snowflake
@@ -39,7 +39,7 @@ ncl_analytics:
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'NCL_ANALYTICS_M') }}"
       threads: 16
       client_session_keep_alive: true
-      query_tag: dbt_ncl_analytics_prod
+      query_tag: dbt_analytics_prod
 
     # Snowflake native execution targets (empty credentials - runs in Snowflake context)
     snowflake-dev:
@@ -52,7 +52,7 @@ ncl_analytics:
       warehouse: NCL_ANALYTICS_M
       threads: 16
       client_session_keep_alive: false
-      query_tag: dbt_ncl_analytics_dev
+      query_tag: dbt_analytics_dev
 
     snowflake-prod:
       type: snowflake
@@ -64,4 +64,4 @@ ncl_analytics:
       warehouse: NCL_ANALYTICS_M
       threads: 16
       client_session_keep_alive: false
-      query_tag: dbt_ncl_analytics_prod
+      query_tag: dbt_analytics_prod

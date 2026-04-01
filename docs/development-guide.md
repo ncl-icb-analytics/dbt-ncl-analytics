@@ -1,6 +1,6 @@
 # Development Guide
 
-This guide covers advanced development patterns and technical details for working with the NCL Analytics dbt project.
+This guide covers advanced development patterns and technical details for working with the WNL ICB Analytics dbt project.
 
 ## Daily Development Workflow
 
@@ -434,7 +434,7 @@ cat .env
 
 ### Getting Help
 
-- Check [GitHub Issues](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/issues)
+- Check [GitHub Issues](https://github.com/wnl-icb-analytics/dbt-analytics/issues)
 - Review dbt error messages carefully
 - Use `dbt compile` to see generated SQL
 - Check `target/compiled/` and `target/run/` for debugging

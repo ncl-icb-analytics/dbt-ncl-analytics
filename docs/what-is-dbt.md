@@ -179,7 +179,7 @@ This makes daily refreshes practical even for tables with millions of rows.
 
 ## How This Relates to This Project
 
-This dbt project transforms healthcare data from the NCL data lake into the analytical datasets that power dashboards and reports across the ICB. The data flows through five layers:
+This dbt project transforms healthcare data from the data lake into the analytical datasets that power dashboards and reports across the ICB. The data flows through five layers:
 
 ```
 DATA_LAKE → Raw → Staging → Modelling → Reporting → Published

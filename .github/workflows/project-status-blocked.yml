@@ -16,7 +16,7 @@ jobs:
           github-token: ${{ secrets.PROJECT_TOKEN }}
           script: |
             const projectNumber = 3;
-            const org = 'ncl-icb-analytics';
+            const org = 'wnl-icb-analytics';
             const targetStatus = 'Blocked';
             const issueNodeId = context.payload.issue.node_id;
 

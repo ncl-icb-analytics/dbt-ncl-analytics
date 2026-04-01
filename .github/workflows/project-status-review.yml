@@ -28,7 +28,7 @@ jobs:
           github-token: ${{ secrets.PROJECT_TOKEN }}
           script: |
             const projectNumber = 3;
-            const org = 'ncl-icb-analytics';
+            const org = 'wnl-icb-analytics';
             const targetStatus = 'Code Review';
             const prNodeId = context.payload.pull_request.node_id;
 

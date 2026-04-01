@@ -1,4 +1,4 @@
-# Contributing to NCL Analytics dbt Project
+# Contributing to WNL ICB Analytics dbt Project
 
 Welcome! This guide will help you get set up to contribute to this project.
 
@@ -58,8 +58,8 @@ You'll need the following information from Snowflake (ask your team lead if you 
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics
-cd dbt-ncl-analytics
+git clone https://github.com/wnl-icb-analytics/dbt-analytics
+cd dbt-analytics
 ```
 
 ### Step 2: Set Up Python Environment
@@ -410,7 +410,7 @@ This repository commits `dbt_packages/` to ensure consistent package versions. W
 
 ## Getting Help
 
-- Check existing [GitHub Issues](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/issues)
+- Check existing [GitHub Issues](https://github.com/wnl-icb-analytics/dbt-analytics/issues)
 - Review the [Development Guide](docs/development-guide.md) for advanced workflows
 - Create a new issue with details about your problem
 
