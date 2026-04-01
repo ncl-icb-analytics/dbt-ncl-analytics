@@ -1,4 +1,4 @@
-# Source Database and Schema Mappings for NCL Analytics
+# Source Database and Schema Mappings for WNL ICB Analytics
 # This file defines how source databases/schemas map to dbt sources
 # Supports both OLIDS and Commissioning data sources
 #

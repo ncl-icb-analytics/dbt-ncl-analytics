@@ -18,7 +18,7 @@ jobs:
           github-token: ${{ secrets.PROJECT_TOKEN }}
           script: |
             const projectNumber = 3;
-            const org = 'ncl-icb-analytics';
+            const org = 'wnl-icb-analytics';
             const targetStatus = 'In Progress';
 
             // Get all commit messages from the push

@@ -60,7 +60,7 @@ The lineage view opens in a panel showing how that column flows upstream and dow
 
 **Using column selectors in lineage:**
 
-In the lineage panel, you can use the `column:` prefix to filter to a specific column. For example: `+column:model.ncl_analytics.dim_practice.practice_code+` shows everything upstream and downstream of that specific column.
+In the lineage panel, you can use the `column:` prefix to filter to a specific column. For example: `+column:model.wnl_analytics.dim_practice.practice_code+` shows everything upstream and downstream of that specific column.
 
 This is particularly useful for impact analysis — before changing a column, you can see every model that uses it.
 
