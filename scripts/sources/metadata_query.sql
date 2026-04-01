@@ -293,6 +293,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- nhsd_snomed: NHS Digital SNOMED CT reporting model with concept status and history
+  SELECT 
+    'Dictionary' as database_name,
+    'NHSD_SnomedReportingModel' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'NHSD_SnomedReportingModel'
+  
+  UNION ALL
+  
     -- reference_terminology: Reference terminology data including SNOMED, BNF, and other code sets
   SELECT 
     'DATA_LAKE__NCL' as database_name,

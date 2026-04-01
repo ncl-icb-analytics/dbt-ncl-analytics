@@ -73,7 +73,10 @@ rule_5_acr_range as (
     where result_value >= 70 and result_value < 250
 ),
 
--- Rule 6: 3+ repeat antihypertensive prescriptions in last 3 months
+-- Rule 6: 3+ repeat antihypertensive prescriptions in last 3 months (gate for BP rules)
+-- EMIS: must-match on Antihypertensive Drug Group with repeat prescription type in 3 months.
+-- EMIS Drug Group is narrower than our antihypertensive codeset, so >= 3 count acts as
+-- a proxy filter to approximate the EMIS match rate.
 repeat_prescription_codes as (
     select distinct code
     from {{ ref('stg_reference_combined_codesets') }}
@@ -108,6 +111,9 @@ rule_8_bp_systolic as (
 ),
 
 -- Combine rule results for all CKD register patients (excluding PG1)
+-- Rules 2-5: independent inclusion criteria (eGFR/ACR thresholds)
+-- Rule 6: antihypertensive is a gate (must-match) for Rules 7-8 (BP)
+-- Rules 7-8: BP inclusion only applies if Rule 6 (antihypertensive gate) passes
 patient_rules as (
     select
         cr.person_id,
@@ -123,9 +129,8 @@ patient_rules as (
             when r3.person_id is not null then 'Included'
             when r4.person_id is not null then 'Included'
             when r5.person_id is not null then 'Included'
-            when r6.person_id is not null then 'Included'
-            when r7.person_id is not null then 'Included'
-            when r8.person_id is not null then 'Included'
+            -- Rule 6 is a gate: must have 3+ antihypertensives to reach BP rules
+            when r6.person_id is not null and (r7.person_id is not null or r8.person_id is not null) then 'Included'
             else 'Excluded'
         end as final_status
     from ckd_register cr

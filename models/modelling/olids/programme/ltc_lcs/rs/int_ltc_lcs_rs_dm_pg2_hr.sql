@@ -49,11 +49,19 @@ rule_4_mi as (
       and clinical_effective_date >= dateadd(year, -1, current_date())
 ),
 
--- Rule 5: Cerebral artery thrombosis (first episode) in last 1 year
--- vs4 = cerebral thrombosis codes, first episode (not review/end), earliest date
-rule_5_cerebral_thrombosis as (
+-- Rule 5: Cerebral artery thrombosis or TIA (first episode) in last 1 year
+-- vs4 = cerebral thrombosis codes (STRK_COD), vs5 = TIA codes (TIA_COD)
+-- First episode (not review/end), earliest date
+rule_5_cerebral_thrombosis_tia as (
     select person_id
     from ({{ get_ltc_lcs_observations("on_dm_reg_pg2_hr_vs4") }})
+    where is_problem = true
+      and coalesce(is_review, false) = false
+    qualify row_number() over (partition by person_id order by clinical_effective_date asc) = 1
+      and clinical_effective_date >= dateadd(year, -1, current_date())
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations("on_dm_reg_pg2_hr_vs5") }})
     where is_problem = true
       and coalesce(is_review, false) = false
     qualify row_number() over (partition by person_id order by clinical_effective_date asc) = 1
@@ -61,25 +69,25 @@ rule_5_cerebral_thrombosis as (
 ),
 
 -- Rule 6: eGFR 15-29 (latest value)
--- vs5 = eGFR codes
+-- vs6 = eGFR codes
 rule_6_egfr_range as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg2_hr_vs5") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg2_hr_vs6") }})
     where result_value >= 15 and result_value < 29
 ),
 
 -- Rule 7: ACR > 70 (latest value)
--- vs6 = ACR codes
+-- vs7 = ACR codes
 rule_7_acr_high as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg2_hr_vs6") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg2_hr_vs7") }})
     where result_value > 70
 ),
 
 -- Patients who have ACR data but don't meet threshold (Rule 7 failed = exclude)
 rule_7_acr_tested as (
     select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg2_hr_vs6") }})
+    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg2_hr_vs7") }})
 ),
 
 -- Combine rule results for all diabetes register patients (excluding PG1)
@@ -89,7 +97,7 @@ patient_rules as (
         (r2.person_id is not null) as rule_2_hba1c_range,
         (r3.person_id is not null) as rule_3_foot_ulcer,
         (r4.person_id is not null) as rule_4_mi,
-        (r5.person_id is not null) as rule_5_cerebral_thrombosis,
+        (r5.person_id is not null) as rule_5_cerebral_thrombosis_tia,
         (r6.person_id is not null) as rule_6_egfr_range,
         (r7.person_id is not null) as rule_7_acr_high,
         (r7_tested.person_id is not null) as has_acr_test,
@@ -116,7 +124,7 @@ patient_rules as (
     left join rule_2_hba1c_range r2 on dr.person_id = r2.person_id
     left join rule_3_foot_ulcer r3 on dr.person_id = r3.person_id
     left join rule_4_mi r4 on dr.person_id = r4.person_id
-    left join rule_5_cerebral_thrombosis r5 on dr.person_id = r5.person_id
+    left join rule_5_cerebral_thrombosis_tia r5 on dr.person_id = r5.person_id
     left join rule_6_egfr_range r6 on dr.person_id = r6.person_id
     left join rule_7_acr_high r7 on dr.person_id = r7.person_id
     left join rule_7_acr_tested r7_tested on dr.person_id = r7_tested.person_id

@@ -355,6 +355,8 @@ sources:
       data_type: TEXT
     - name: TERM
       data_type: TEXT
+    - name: CLUSTER_ID
+      data_type: TEXT
   - name: OPENCODELISTS_INGEST_LOG
     identifier: '"OPENCODELISTS_INGEST_LOG"'
     columns:

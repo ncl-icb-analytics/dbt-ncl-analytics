@@ -144,7 +144,7 @@ sources:
       data_type: TEXT
     - name: Version
       data_type: TEXT
-    - name: NHSNumber
+    - name: SK_PATIENT_ID
       data_type: TEXT
     - name: MRN
       data_type: TEXT
