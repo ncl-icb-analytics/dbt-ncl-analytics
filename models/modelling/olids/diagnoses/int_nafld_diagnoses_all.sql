@@ -32,6 +32,6 @@ SELECT
     'MASLD / NAFLD Diagnosis' AS nafld_observation_type,
     (obs.result_value)::NUMBER(10, 2) AS numeric_value
 
-FROM ({{ get_observations("'MASLD_DX_CODES'", source='PCD', include_history=true) }}) obs
+FROM ({{ get_observations("'MASLD_DX_CODES'", source='ECL_CACHE', include_history=true) }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

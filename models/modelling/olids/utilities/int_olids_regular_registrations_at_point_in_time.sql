@@ -12,7 +12,7 @@ Counts OLIDS patients with Regular registration episodes active at a fixed point
 Filters to Regular episode type only (excludes Temporary, Emergency, Private, etc.)
 Used for EMIS list size comparison validation.
 
-Snapshot Date: 04/11/2025 (from EMIS extract)
+Snapshot Date: Derived from EMIS seed extract_date
 Episode Type: Regular only
 Patient Counting: Deduplicated by person_id (handles patient ID mergers)
 Deceased Handling: Excludes patients deceased on or before snapshot date

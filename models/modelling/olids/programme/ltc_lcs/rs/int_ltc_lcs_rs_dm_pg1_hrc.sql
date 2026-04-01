@@ -44,10 +44,12 @@ rule_5_hba1c_prerequisite as (
     where result_value > 75
 ),
 
--- Rule 6: Cardiac conditions (inclusion)
+-- Rule 6: Cardiac conditions (inclusion) - first/new episodes only
 rule_6_cardiac as (
-    select person_id
-    from ({{ get_ltc_lcs_observations_latest("on_dm_reg_pg1_hrc_vs5") }})
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_dm_reg_pg1_hrc_vs5") }})
+    where is_problem = true
+      and coalesce(is_review, false) = false
 ),
 
 -- Rule 6: Diabetes medications in last 6 months (inclusion)

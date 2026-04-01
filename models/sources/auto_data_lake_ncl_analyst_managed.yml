@@ -245,6 +245,23 @@ sources:
       data_type: TEXT
     - name: PATIENT_LIST_TYPE
       data_type: TEXT
+  - name: CANCER__RADIOTHEARPY_MODELLING_CAPACITY_LOSS
+    identifier: '"CANCER__RADIOTHEARPY_MODELLING_CAPACITY_LOSS"'
+    columns:
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: MACHINE_ID
+      data_type: TEXT
+    - name: CAPACITY_LOSS_CAUSE
+      data_type: TEXT
+    - name: CAPACITY_LOSS_TIME_MINS
+      data_type: NUMBER(38,0)
+    - name: CAPACITY_LOSS_FREQUENCY_PER_MONTH
+      data_type: NUMBER(38,3)
+    - name: START_DATE
+      data_type: DATE
+    - name: END_DATE
+      data_type: DATE
   - name: CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS
     identifier: '"CANCER__RADIOTHERAPY_MODELLING_CORE_HOURS"'
     columns:
@@ -366,8 +383,6 @@ sources:
       data_type: TEXT
     - name: SECONDARYASSOCORG
       data_type: TEXT
-    - name: MEASUREID
-      data_type: NUMBER(38,0)
     - name: MEASURETYPE
       data_type: TEXT
     - name: MEASURESOURCE
@@ -383,6 +398,8 @@ sources:
     - name: DATA
       data_type: NUMBER(38,9)
     - name: COMMENTS
+      data_type: TEXT
+    - name: MEASUREID
       data_type: TEXT
   - name: COMMUNITY_P2_OCCUPANCY
     identifier: '"COMMUNITY_P2_OCCUPANCY"'
@@ -2224,11 +2241,11 @@ sources:
     - name: NATIONAL_TARIFF_INDICATOR
       data_type: BOOLEAN
     - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
-      data_type: NUMBER(38,0)
+      data_type: NUMBER(38,18)
     - name: CONTRACT_MONITORING_PLANNED_PRICE
-      data_type: NUMBER(38,0)
+      data_type: NUMBER(38,18)
     - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
-      data_type: NUMBER(38,0)
+      data_type: NUMBER(38,20)
     - name: CONTRACT_MONITORING_ACTUAL_ACTIVITY
       data_type: NUMBER(38,0)
     - name: CONTRACT_MONITORING_ACTUAL_PRICE
@@ -2307,6 +2324,73 @@ sources:
     - name: ICB_CODE
       data_type: TEXT
     - name: ICB_DESCRIPTION
+      data_type: TEXT
+  - name: IAP_2627_RNOH_260401
+    identifier: '"IAP_2627_RNOH_260401"'
+    columns:
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER(38,0)
+    - name: FINANCIAL_YEAR
+      data_type: NUMBER(38,0)
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_PROVIDER)
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_(OF_TREATMENT)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(GP_PRACTICE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(RESIDENCE_RESPONSIBILITY)
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_(CODE_OF_COMMISSIONER)
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_(PATIENT_REGISTRATION)
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: NUMBER(38,0)
+    - name: LOCAL_SUB-SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: NUMBER(38,0)
+    - name: SERVICE_CODE
+      data_type: NUMBER(38,0)
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: BOOLEAN
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(38,22)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(38,22)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(38,24)
+    - name: NAME_OF_SUBMITTER
       data_type: TEXT
   - name: IA_CERTIFICATES_MONTHLY
     identifier: '"IA_CERTIFICATES_MONTHLY"'

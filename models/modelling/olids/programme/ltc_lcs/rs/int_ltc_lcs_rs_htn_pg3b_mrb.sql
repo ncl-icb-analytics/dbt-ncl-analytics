@@ -30,55 +30,71 @@ higher_pg_exclusions as (
     select person_id from {{ ref('int_ltc_lcs_rs_htn_pg3a_mra') }}
 ),
 
--- Latest BP within 12 months
-latest_bp as (
-    select
-        person_id,
-        systolic_value,
-        diastolic_value,
-        coalesce(is_home_bp_event or is_abpm_bp_event, false) as is_home_or_abpm
-    from {{ ref('int_blood_pressure_latest') }}
+-- Must have any BP in last 12 months (gate)
+has_recent_bp as (
+    select distinct person_id
+    from {{ ref('int_blood_pressure_all') }}
     where clinical_effective_date >= dateadd(month, -12, current_date())
 ),
 
--- Age-appropriate BP thresholds
--- Rules 3-4 (all ages): Clinic <=140/<=90, Home/ABPM <=135/<=85 → controlled
--- Rules 5-7 (age >80): Clinic <=150/<=90, Home/ABPM <=145/<=85 → controlled
-uncontrolled_bp as (
-    select
-        lbp.person_id
-    from latest_bp lbp
-    inner join hypertension_register hr on lbp.person_id = hr.person_id
-    where (
-        -- Age <= 80: standard thresholds
-        (coalesce(hr.age, 0) <= 80 and (
-            (not lbp.is_home_or_abpm and (lbp.systolic_value > 140 or lbp.diastolic_value > 90))
+-- Latest CLINIC BP in last 12 months
+latest_clinic_bp as (
+    select person_id, systolic_value, diastolic_value
+    from {{ ref('int_blood_pressure_all') }}
+    where clinical_effective_date >= dateadd(month, -12, current_date())
+      and not coalesce(is_home_bp_event or is_abpm_bp_event, false)
+    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1
+),
+
+-- Latest HOME/ABPM BP in last 12 months
+latest_home_abpm_bp as (
+    select person_id, systolic_value, diastolic_value
+    from {{ ref('int_blood_pressure_all') }}
+    where clinical_effective_date >= dateadd(month, -12, current_date())
+      and (is_home_bp_event or is_abpm_bp_event)
+    qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1
+),
+
+-- EMIS evaluates clinic and home/ABPM BP independently.
+-- Patient is controlled (excluded) if EITHER latest clinic OR latest home/ABPM is in range.
+-- Uncontrolled = NOT controlled by clinic AND NOT controlled by home/ABPM.
+--
+-- Age <= 80: Clinic <=140/<=90, Home/ABPM <=135/<=85 → controlled
+-- Age > 80:  Clinic <=150/<=90, Home/ABPM <=145/<=85 → controlled
+controlled_bp as (
+    select hr.person_id
+    from hypertension_register hr
+    left join latest_clinic_bp cbp on hr.person_id = cbp.person_id
+    left join latest_home_abpm_bp hbp on hr.person_id = hbp.person_id
+    where
+        -- Controlled via clinic BP
+        (cbp.person_id is not null and (
+            (coalesce(hr.age, 0) <= 80 and cbp.systolic_value <= 140 and cbp.diastolic_value <= 90)
             or
-            (lbp.is_home_or_abpm and (lbp.systolic_value > 135 or lbp.diastolic_value > 85))
+            (coalesce(hr.age, 0) > 80 and cbp.systolic_value <= 150 and cbp.diastolic_value <= 90)
         ))
         or
-        -- Age > 80: relaxed systolic thresholds
-        (coalesce(hr.age, 0) > 80 and (
-            (not lbp.is_home_or_abpm and (lbp.systolic_value > 150 or lbp.diastolic_value > 90))
+        -- Controlled via home/ABPM BP
+        (hbp.person_id is not null and (
+            (coalesce(hr.age, 0) <= 80 and hbp.systolic_value <= 135 and hbp.diastolic_value <= 85)
             or
-            (lbp.is_home_or_abpm and (lbp.systolic_value > 145 or lbp.diastolic_value > 85))
+            (coalesce(hr.age, 0) > 80 and hbp.systolic_value <= 145 and hbp.diastolic_value <= 85)
         ))
-    )
 ),
 
 -- Combine all rules
 patient_rules as (
     select
         hr.person_id,
-        (ubp.person_id is not null) as has_uncontrolled_bp,
+        (ctrl.person_id is null) as has_uncontrolled_bp,
         case
-            when ubp.person_id is not null then 'Included'
+            when ctrl.person_id is null then 'Included'
             else 'Excluded'
         end as final_status
     from hypertension_register hr
-    inner join latest_bp lbp on hr.person_id = lbp.person_id  -- Must have BP in last 12 months
+    inner join has_recent_bp rbp on hr.person_id = rbp.person_id  -- Must have BP in last 12 months
     left join higher_pg_exclusions excl on hr.person_id = excl.person_id
-    left join uncontrolled_bp ubp on hr.person_id = ubp.person_id
+    left join controlled_bp ctrl on hr.person_id = ctrl.person_id
     where excl.person_id is null  -- Exclude higher priority groups
 )
 

@@ -23,8 +23,8 @@ Categorization:
 - Missing Data: No EMIS or OLIDS data available
 
 Data Sources:
-- EMIS: Static extract from 04/11/2025
-- OLIDS: Regular episode types only, active as of 04/11/2025
+- EMIS: Static extract (date from seed file)
+- OLIDS: Regular episode types only, active as of EMIS extract date
 */
 
 with emis_registrations as (
