@@ -1,0 +1,24 @@
+models:
+  - name: stg_dictionary_ip_dischargedestination
+    description: Inpatient discharge destination reference dictionary
+    config:
+      meta:
+        owner:
+          name: Thomas Shallcross
+    columns:
+      - name: sk_discharge_destination_id
+        description: Primary key - surrogate key for discharge destination
+        tests:
+          - unique
+          - not_null
+      - name: bk_discharge_destination_code
+        description: Business key - discharge destination code
+        tests:
+          - unique
+          - not_null
+      - name: discharge_destination_name
+        description: Discharge destination description
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1

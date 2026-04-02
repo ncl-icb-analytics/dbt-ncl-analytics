@@ -1,0 +1,35 @@
+models:
+  - name: stg_dictionary_dbo_commissioner
+    description: Commissioner organisation reference data
+    config:
+      meta:
+        owner:
+          name: Thomas Shallcross
+    columns:
+      - name: sk_commissioner_id
+        description: Primary key - surrogate key for commissioner
+        tests:
+          - unique
+          - not_null
+      - name: commissioner_code
+        description: Commissioner organisation code
+        tests:
+          - not_null
+      - name: commissioner_name
+        description: Commissioner organisation name
+      - name: commissioner_type
+        description: Type of commissioner
+      - name: start_date
+        description: Commissioner start date
+      - name: end_date
+        description: Commissioner end date (null if active)
+      - name: sk_service_provider_group_id
+        description: Foreign key to service provider group
+      - name: is_customer
+        description: Whether commissioner is a customer
+      - name: is_test_organisation
+        description: Whether commissioner is a test organisation
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
