@@ -60,7 +60,8 @@ models:
           - accepted_values:
               arguments:
                 values: [true, false]
-
+      - name: death_source_flag
+        description: 'Flag indicating the source of death information'
       - name: is_dummy_patient
         description: 'Flag indicating if record comes from dummy patient data'
         tests:

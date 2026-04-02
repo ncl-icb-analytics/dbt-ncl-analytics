@@ -40,6 +40,7 @@ patient_candidates AS (
         pds.death_year,
         pds.death_month,
         pds.is_deceased,
+        pds.death_source_flag,
         pds.death_date_approx,
         p.is_dummy_patient,
         CASE WHEN p.birth_year IS NOT NULL AND p.birth_month IS NOT NULL THEN 1 ELSE 0 END AS has_dob
@@ -88,6 +89,7 @@ SELECT
     END AS birth_date_approx,
     bp.death_date_approx,
     bp.is_deceased,
+    bp.death_source_flag,
     COALESCE(bp.is_dummy_patient, FALSE) AS is_dummy_patient
 FROM persons_with_patients AS ap
 INNER JOIN best_patient AS bp
