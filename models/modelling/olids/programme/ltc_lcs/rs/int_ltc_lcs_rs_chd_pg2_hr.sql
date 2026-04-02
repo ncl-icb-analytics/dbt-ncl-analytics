@@ -1,5 +1,5 @@
 -- LTC LCS: CHD Register - Priority Group 2 (High Risk)
--- Implements inclusion/exclusion rules for high-risk & complex patient identification
+-- Implements inclusion/exclusion rules for high-risk identification
 -- Parent population: CHD register
 --
 -- Inclusion rules:
