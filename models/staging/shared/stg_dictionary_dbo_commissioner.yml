@@ -8,12 +8,12 @@ models:
     columns:
       - name: sk_commissioner_id
         description: Primary key - surrogate key for commissioner
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: commissioner_code
         description: Commissioner organisation code
-        tests:
+        data_tests:
           - not_null
       - name: commissioner_name
         description: Commissioner organisation name

@@ -8,12 +8,12 @@ models:
     columns:
       - name: sk_discharge_destination_id
         description: Primary key - surrogate key for discharge destination
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: bk_discharge_destination_code
         description: Business key - discharge destination code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: discharge_destination_name
