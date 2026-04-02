@@ -1,0 +1,25 @@
+models:
+  - name: int_ltc_lcs_rs_chd_pg1_hrc
+    description: |
+      CHD Register Priority Group 1 - High Risk & Complex identification.
+
+      Patients on the CHD register are included if ANY of the following apply:
+      - Rule 1a: First/new or flare-up of CHD within last month or
+      - Rule 1b: Significant CHD within last month. This is a data gap. Problem significance is not in OLIDS. 
+                 It is also not used consistently by all practices and not used in a consistent way.
+    config:
+      meta:
+        owner:
+          name: Peter Shakeshaft
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          arguments:
+            valuesets:
+              - on_chd_reg_pg1_hrc_vs1
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
