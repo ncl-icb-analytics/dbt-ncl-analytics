@@ -1,0 +1,25 @@
+models:
+  - name: int_ltc_lcs_rs_chd_pg2_hr
+    description: |
+      CHD Register Priority Group 2 - High Risk identification.
+
+      Patients on the CHD register are included if ALL of the following apply:
+      - Rule 1: Not in PG1 HRC
+      - Rule 2: CHD not recorded more than 1 year ago
+      - Rule 3: CHD recorded within the last 1 year to before 1 month ago
+    config:
+      meta:
+        owner:
+          name: Peter Shakeshaft
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          arguments:
+            valuesets:
+              - on_chd_reg_pg2_hr_vs1
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
