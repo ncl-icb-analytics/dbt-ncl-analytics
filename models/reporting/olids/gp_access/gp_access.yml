@@ -4,9 +4,14 @@ models:
     description: |
       GP Contract KPI: % of clinically urgent appointments seen same-day.
 
-      Grain: practice x month. Numerator is urgent attended appointments
-      booked and seen on the same day. Denominator is all urgent attended
-      appointments with a booking date recorded.
+      Grain: one row per practice per month.
+
+      Numerator: urgent attended appointments booked and seen on the same
+      calendar day (NHSE 2026/27 GP contract definition).
+      Denominator: all urgent attended appointments with a booking date.
+
+      Urgency is determined by national slot category = General Consultation
+      Acute, Triage, Unplanned, Walk-in.
     config:
       meta:
         owner:
@@ -23,9 +28,10 @@ models:
     description: |
       GP Contract KPI: % of routine appointments seen within 7 days of booking.
 
-      Grain: practice x month. Numerator is routine attended appointments
-      with days_to_appointment <= 7. Denominator is all routine attended
-      appointments with a booking date recorded.
+      Grain: one row per practice per month.
+
+      Numerator: routine attended appointments with days_to_appointment <= 7.
+      Denominator: all routine attended appointments with a booking date.
     config:
       meta:
         owner:
@@ -42,7 +48,10 @@ models:
     description: |
       GP Contract KPI: % of routine appointments seen within 14 days of booking.
 
-      Grain: practice x month. Same methodology as 7-day but with 14-day threshold.
+      Grain: one row per practice per month.
+
+      Numerator: routine attended appointments with days_to_appointment <= 14.
+      Denominator: all routine attended appointments with a booking date.
     config:
       meta:
         owner:
@@ -57,7 +66,12 @@ models:
 
   - name: fct_gp_dna_rate
     description: |
-      GP appointment DNA (Did Not Attend) rate by practice and month.
+      GP appointment DNA (Did Not Attend) rate.
+
+      Grain: one row per practice per month.
+
+      Numerator: appointments with is_dna = TRUE.
+      Denominator: all appointments (attended + DNA, excluding future slots).
 
       DNA rates vary significantly by deprivation and demographics.
       Join to practice-level demographics for equity analysis.
@@ -77,11 +91,11 @@ models:
     description: |
       GP appointment volumes by contact mode and practitioner role group.
 
+      Grain: one row per practice per month per contact_mode per practitioner_role_group.
+
       Tracks digital transformation (F2F vs telephone vs online trends)
       and workforce mix. Includes average duration and wait times for
       costing and patient experience analysis.
-
-      Grain: practice x month x contact_mode x practitioner_role_group.
     config:
       meta:
         owner:

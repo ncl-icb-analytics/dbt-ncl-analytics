@@ -4,9 +4,17 @@ models:
     description: |
       Cleaned OLIDS GP appointments for analysis and costing.
 
-      Filters to Care Related Encounters (patient-facing appointments only),
-      resolves practitioner roles into groups, cleans durations, and classifies
-      contact modes and national slot categories.
+      Grain: one row per appointment.
+
+      Includes:
+      - Care Related Encounters only (patient-facing clinical appointments)
+      - Clinical practitioner roles only (GP, Nurse, Pharmacist, HCA, etc.)
+      - Attended and DNA appointments (excludes future/available slots)
+
+      Excludes:
+      - Non-clinical context types (admin, care related activity, none, other)
+      - Future/available slots (appointment status code 0)
+      - Admin practitioner roles (receptionists, clerks, etc. — workflow logging, not clinical)
 
       Duration methodology (PSSRU-aligned):
       - Uses actual_duration if shorter than planned (reliable early finish)
@@ -14,10 +22,12 @@ models:
       - Caps at 60 minutes (session-length data quality fix)
       - Defaults NULLs/zeros to 10 minutes (PSSRU standard)
 
-      Excludes: future/available slots (status code 0), all non-Care-Related-Encounter
-      context types (admin, care related activity, none, other).
+      Urgency classification (NHSE GPAD methodology):
+      - Urgent = General Consultation Acute, Unplanned, Walk-in, Triage slots
+      - Routine = General Consultation Routine/Planned, Planned Clinics, Procedures, Medication Review
+      - Same-day = booked and seen on same calendar day (GP contract 2026/27 definition)
 
-      Source: stg_olids_appointment, stg_olids_practitioner_in_role
+      Sources: stg_olids_appointment, stg_olids_practitioner_in_role
       Reference: PSSRU Unit Costs of Health and Social Care 2024 Manual
     config:
       meta:
@@ -33,7 +43,7 @@ models:
           - not_null
           - unique
       - name: person_id
-        description: Person identifier
+        description: Person identifier (deduplicated across patient IDs)
         tests:
           - not_null
       - name: patient_id
@@ -41,13 +51,13 @@ models:
       - name: organisation_id
         description: Practice organisation identifier
       - name: start_date
-        description: Appointment start date
+        description: Appointment start date and time
       - name: date_time_booked
         description: When the appointment was booked
       - name: planned_duration
         description: Original planned/booked slot duration in minutes
       - name: actual_duration
-        description: Raw actual duration in minutes (unreliable when > planned)
+        description: Raw actual duration in minutes (unreliable when > planned due to late button-press)
       - name: duration_minutes
         description: >
           Cleaned duration for costing. Uses actual if < planned (early finish),
@@ -60,15 +70,27 @@ models:
         description: >
           Simplified contact mode: Face-to-face, Telephone, Online,
           Home Visit, Video, Not an Appointment, Unknown
+      - name: contact_mode_source_code
+        description: Raw contact mode from source system
       - name: slot_category
         description: >
           Simplified national slot category: Routine, Acute, Triage,
           Planned Clinic, Clinical Procedure, Unplanned, Home/Care Home Visit,
           Medication Review, Walk-in, Social Prescribing, etc.
+      - name: national_slot_category_name
+        description: Raw national slot category name from GPAD
       - name: practitioner_role_group
         description: >
-          Practitioner role grouped for costing: GP, Nurse, Pharmacist,
-          HCA, Physician Associate, Admin, Other Clinical, Other
+          Practitioner role grouped into: GP, Nurse, Pharmacist, HCA,
+          Physician Associate, Other Doctor, Paramedic, Physiotherapist,
+          Counsellor, Care Navigator, Other Clinical, Other.
+          Admin roles are excluded from this model.
+      - name: is_arrs_role
+        description: >
+          TRUE if the practitioner is in an ARRS-funded role (pharmacist,
+          physiotherapist, paramedic, physician associate, care navigator,
+          counsellor). Useful for tracking Additional Roles Reimbursement
+          Scheme workforce impact.
       - name: role_code
         description: Raw practitioner role code from practitioner_in_role
       - name: role_name
@@ -80,13 +102,15 @@ models:
           Routine = Routine, Planned, Procedure, Medication Review slots.
           Other = everything else.
       - name: is_same_day
-        description: TRUE if appointment was booked and attended on the same day (NHSE definition)
+        description: >
+          TRUE if booked and seen on the same calendar day.
+          NHSE GP contract 2026/27 standard definition.
       - name: days_to_appointment
-        description: Days between booking date and appointment date. 0 = same day.
+        description: Calendar days between booking date and appointment date. 0 = same day.
       - name: patient_wait
         description: >
           Minutes the patient waited beyond their scheduled appointment time.
-          Populated for ~48% of appointments. Median ~13 minutes.
+          Populated for ~48% of appointments.
       - name: patient_delay
         description: >
           Minutes the patient arrived late for their appointment.
@@ -94,6 +118,8 @@ models:
       - name: local_slot_type
         description: >
           Practice's own free-text slot type name (e.g. "Telephone Consultation",
-          "URGENT", "Default"). Messy and unstandardised across practices but
-          useful for data quality investigation. The national_slot_category_name
-          is the standardised equivalent.
+          "URGENT", "Default"). Unstandardised across practices but useful for
+          data quality investigation. The national_slot_category_name is the
+          standardised equivalent.
+      - name: record_owner_organisation_code
+        description: Practice ODS code
