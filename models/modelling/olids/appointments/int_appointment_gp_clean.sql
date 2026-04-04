@@ -175,24 +175,61 @@ practitioner_roles as (
         pir.role_code,
         pir.role as role_name,
         CASE
-            WHEN pir.role_code IN ('R0260', 'R0270', 'R6300', 'R0262', 'R6200')
+            -- GPs
+            WHEN pir.role_code IN ('R0260', 'R0270', 'R6300', 'R0262', 'R6200',
+                                    'R0261')
                 THEN 'GP'
+            -- Other doctors (consultants, associate specialists — not confirmed GPs)
+            WHEN pir.role_code IN ('R0050', 'R0070')
+                THEN 'Other Doctor'
+            -- Nurses
             WHEN pir.role_code IN ('R0690', 'R0700', 'R0620', 'R0600', 'R0570',
-                                    'R0580', 'R1543', 'R0630')
+                                    'R0580', 'R1543', 'R0630', 'R0610', 'R0410',
+                                    'E1001')
                 THEN 'Nurse'
-            WHEN pir.role_code IN ('R1290', 'R9804')
+            -- Pharmacists
+            WHEN pir.role_code IN ('R1290', 'R9804', 'R9803')
                 THEN 'Pharmacist'
-            WHEN pir.role_code IN ('R1480', 'R1450')
+            -- HCAs and clinical support
+            WHEN pir.role_code IN ('R1480', 'R1450', 'R1590', 'R0100', 'R1540',
+                                    'E1008')
                 THEN 'HCA'
+            -- Physician associates
             WHEN pir.role_code IN ('R1547', 'E1003', 'R9813')
                 THEN 'Physician Associate'
-            WHEN pir.role_code IN ('R1370')
+            -- Paramedics (ARRS role)
+            WHEN pir.role_code IN ('R1070', 'R1100')
+                THEN 'Paramedic'
+            -- Physiotherapists (ARRS first contact practitioners)
+            WHEN pir.role_code IN ('R1110', 'R1140', 'R9806')
+                THEN 'Physiotherapist'
+            -- Mental health and wellbeing
+            WHEN pir.role_code IN ('R1550')
+                THEN 'Counsellor'
+            -- Care navigators and coordinators (ARRS role)
+            WHEN pir.role_code IN ('R9801')
+                THEN 'Care Navigator'
+            -- Other clinical
+            WHEN pir.role_code IN ('R1370', 'R0240', 'R6400')
                 THEN 'Other Clinical'
+            -- Admin and non-clinical
             WHEN pir.role_code IN ('R1730', 'R1720', 'R1982', 'R1973', 'R1760',
-                                    'R1780', 'R1790', 'R1800')
+                                    'R1780', 'R1790', 'R1800', 'R5007', 'R6050')
                 THEN 'Admin'
             ELSE 'Other'
-        END as practitioner_role_group
+        END as practitioner_role_group,
+        -- ARRS (Additional Roles Reimbursement Scheme) funded roles
+        CASE
+            WHEN pir.role_code IN (
+                'R1290', 'R9804', 'R9803',          -- Pharmacists
+                'R1110', 'R1140', 'R9806',           -- Physiotherapists
+                'R1070', 'R1100',                    -- Paramedics
+                'R1547', 'E1003', 'R9813',           -- Physician Associates
+                'R9801',                             -- Care Navigators
+                'R1550'                              -- Counsellors / MH practitioners
+            ) THEN TRUE
+            ELSE FALSE
+        END as is_arrs_role
     from {{ ref('stg_olids_practitioner_in_role') }} as pir
 )
 
@@ -228,6 +265,7 @@ select
     pr.role_code,
     pr.role_name,
     pr.practitioner_role_group,
+    pr.is_arrs_role,
 
     -- Urgency
     a.urgency,
