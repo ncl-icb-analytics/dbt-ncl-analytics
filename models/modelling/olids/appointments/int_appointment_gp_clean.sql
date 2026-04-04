@@ -8,8 +8,12 @@
 /*
 Cleaned GP appointments from OLIDS
 
-Filters to legitimate patient-facing appointments (Care Related Encounters),
-resolves practitioner roles, cleans durations, and classifies contact modes
+Filters to legitimate patient-facing clinical appointments:
+- Care Related Encounters only (excludes admin, care related activity, none)
+- Excludes future/available slots (status code 0)
+- Excludes admin practitioner roles (receptionists, clerks etc. — workflow logging, not clinical)
+
+Resolves practitioner roles, cleans durations, and classifies contact modes
 and slot categories for downstream analysis and costing.
 
 Duration methodology:
@@ -286,3 +290,4 @@ select
 from appointments as a
 left join practitioner_roles as pr
     on a.practitioner_in_role_id = pr.practitioner_in_role_id
+where COALESCE(pr.practitioner_role_group, 'Unknown') != 'Admin'
