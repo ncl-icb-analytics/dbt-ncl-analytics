@@ -99,6 +99,7 @@ DIMENSIONS(
     demographics.practice_name AS practice_name COMMENT = 'GP practice name',
     demographics.pcn_name AS pcn_name COMMENT = 'Primary Care Network name',
     demographics.borough_registered AS borough_registered COMMENT = 'Borough of GP practice',
+    demographics.neighbourhood_registered AS neighbourhood_registered COMMENT = 'Neighbourhood of registration',
 
     -- Geography (residence)
     demographics.borough_resident AS borough_resident COMMENT = 'Borough of residence',
