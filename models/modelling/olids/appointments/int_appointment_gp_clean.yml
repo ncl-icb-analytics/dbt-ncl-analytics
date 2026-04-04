@@ -1,0 +1,99 @@
+version: 2
+models:
+  - name: int_appointment_gp_clean
+    description: |
+      Cleaned OLIDS GP appointments for analysis and costing.
+
+      Filters to Care Related Encounters (patient-facing appointments only),
+      resolves practitioner roles into groups, cleans durations, and classifies
+      contact modes and national slot categories.
+
+      Duration methodology (PSSRU-aligned):
+      - Uses actual_duration if shorter than planned (reliable early finish)
+      - Falls back to planned_duration (booked slot)
+      - Caps at 60 minutes (session-length data quality fix)
+      - Defaults NULLs/zeros to 10 minutes (PSSRU standard)
+
+      Excludes: future/available slots (status code 0), all non-Care-Related-Encounter
+      context types (admin, care related activity, none, other).
+
+      Source: stg_olids_appointment, stg_olids_practitioner_in_role
+      Reference: PSSRU Unit Costs of Health and Social Care 2024 Manual
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: appointment_id
+    columns:
+      - name: appointment_id
+        description: Unique appointment identifier from OLIDS
+        tests:
+          - not_null
+          - unique
+      - name: person_id
+        description: Person identifier
+        tests:
+          - not_null
+      - name: patient_id
+        description: Patient identifier
+      - name: organisation_id
+        description: Practice organisation identifier
+      - name: start_date
+        description: Appointment start date
+      - name: date_time_booked
+        description: When the appointment was booked
+      - name: planned_duration
+        description: Original planned/booked slot duration in minutes
+      - name: actual_duration
+        description: Raw actual duration in minutes (unreliable when > planned)
+      - name: duration_minutes
+        description: >
+          Cleaned duration for costing. Uses actual if < planned (early finish),
+          otherwise planned. Capped at 60 minutes, defaults to 10 if NULL/zero.
+      - name: is_attended
+        description: TRUE if appointment status code = 5 (attended)
+      - name: is_dna
+        description: TRUE if appointment status code = 3 (did not attend)
+      - name: contact_mode
+        description: >
+          Simplified contact mode: Face-to-face, Telephone, Online,
+          Home Visit, Video, Not an Appointment, Unknown
+      - name: slot_category
+        description: >
+          Simplified national slot category: Routine, Acute, Triage,
+          Planned Clinic, Clinical Procedure, Unplanned, Home/Care Home Visit,
+          Medication Review, Walk-in, Social Prescribing, etc.
+      - name: practitioner_role_group
+        description: >
+          Practitioner role grouped for costing: GP, Nurse, Pharmacist,
+          HCA, Physician Associate, Admin, Other Clinical, Other
+      - name: role_code
+        description: Raw practitioner role code from practitioner_in_role
+      - name: role_name
+        description: Raw practitioner role name from practitioner_in_role
+      - name: urgency
+        description: >
+          Urgency classification derived from national slot category.
+          Urgent = Acute, Unplanned, Walk-in, Triage slots.
+          Routine = Routine, Planned, Procedure, Medication Review slots.
+          Other = everything else.
+      - name: is_same_day
+        description: TRUE if appointment was booked and attended on the same day (NHSE definition)
+      - name: days_to_appointment
+        description: Days between booking date and appointment date. 0 = same day.
+      - name: patient_wait
+        description: >
+          Minutes the patient waited beyond their scheduled appointment time.
+          Populated for ~48% of appointments. Median ~13 minutes.
+      - name: patient_delay
+        description: >
+          Minutes the patient arrived late for their appointment.
+          Populated for ~41% of appointments.
+      - name: local_slot_type
+        description: >
+          Practice's own free-text slot type name (e.g. "Telephone Consultation",
+          "URGENT", "Default"). Messy and unstandardised across practices but
+          useful for data quality investigation. The national_slot_category_name
+          is the standardised equivalent.

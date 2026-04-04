@@ -1,0 +1,15 @@
+version: 2
+seeds:
+  - name: pssru_unit_costs_2024
+    description: |
+      Unit costs per practitioner role group from the PSSRU Unit Costs of
+      Health and Social Care 2024 Manual (Jones et al., 2025).
+
+      Costs are 2023/2024 prices. Join to int_appointment_gp_clean on
+      practitioner_role_group to derive estimated appointment costs.
+
+      Source: https://kar.kent.ac.uk/109563/
+    config:
+      column_types:
+        cost_per_hour_gbp: float
+        cost_per_minute_gbp: float

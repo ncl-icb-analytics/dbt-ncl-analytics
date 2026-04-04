@@ -1,0 +1,9 @@
+practitioner_role_group,cost_per_hour_gbp,cost_per_minute_gbp,afc_band,pssru_table_ref,notes
+GP,222.00,3.70,,Table 9.4.2,Excl. direct care staff costs and qualification costs. Per hour of patient contact.
+Nurse,47.00,0.78,Band 5,Table 9.3.1,GP practice nurse. Cost per working hour excl. qualifications.
+Pharmacist,57.00,0.95,Band 6,Table 8.2.1,Community-based scientific and professional staff. Cost per working hour.
+HCA,39.00,0.65,Band 4,Table 8.2.1,Community-based scientific and professional staff. Cost per working hour.
+Physician Associate,68.00,1.13,Band 7,Table 8.2.1,Community-based scientific and professional staff. Cost per working hour.
+Other Clinical,44.00,0.73,Band 5,Table 8.2.1,Default to Band 5 rate. Cost per working hour.
+Admin,39.00,0.65,Band 4,Table 8.2.1,Default to Band 4 rate. Cost per working hour.
+Other,44.00,0.73,Band 5,Table 8.2.1,Default to Band 5 rate. Cost per working hour.
