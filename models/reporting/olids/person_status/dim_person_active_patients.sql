@@ -45,8 +45,8 @@ latest_patient_record_per_person AS (
         p.is_spine_sensitive,
         p.birth_year,
         p.birth_month,
-        p.death_year,
-        p.death_month,
+        bd.death_year,
+        bd.death_month,
         cr.current_practice_id,
         cr.current_practice_code,
         -- Registration details from proper episode_of_care data
@@ -59,12 +59,12 @@ latest_patient_record_per_person AS (
         p.record_owner_organisation_code AS record_owner_org_code,
         p.lds_datetime_data_acquired AS latest_record_date,
         CASE
-            WHEN p.death_year IS NOT NULL THEN FALSE -- Deceased
+            WHEN bd.is_deceased THEN FALSE -- Deceased (from all sources: OLIDS, PDS, Registries)
             WHEN p.is_dummy_patient THEN FALSE -- Dummy patient
             WHEN cr.person_id IS NULL THEN FALSE -- No current registration
             ELSE TRUE
         END AS is_active,
-        p.death_year IS NOT NULL AS is_deceased,
+        bd.is_deceased,
         -- Rank to get the latest record
         ROW_NUMBER() OVER (
             PARTITION BY ap.person_id
@@ -79,6 +79,8 @@ latest_patient_record_per_person AS (
         ON ap.person_id = cr.person_id
     LEFT JOIN {{ ref('stg_olids_patient') }} AS p
         ON cr.patient_id = p.id
+    LEFT JOIN {{ ref('dim_person_birth_death') }} AS bd
+        ON ap.person_id = bd.person_id
 )
 
 -- Select only the latest record per person and only active patients
