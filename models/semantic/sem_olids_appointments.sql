@@ -79,6 +79,8 @@ DIMENSIONS(
     appt.practitioner_role_group AS practitioner_role_group WITH SYNONYMS = ('HCP type', 'staff type', 'role') COMMENT = 'GP, Nurse, Pharmacist, HCA, Physician Associate, Admin, Other',
     appt.role_name AS role_name COMMENT = 'Detailed practitioner role name',
     appt.is_arrs_role AS is_arrs_role WITH SYNONYMS = ('ARRS', 'additional roles') COMMENT = 'TRUE if ARRS-funded role (pharmacist, physio, paramedic, PA, care navigator, counsellor)',
+    appt.schedule_type AS schedule_type COMMENT = 'Raw schedule type from OLIDS',
+    appt.is_untimed_session AS is_untimed_session COMMENT = 'TRUE if parent schedule is an open/untimed session (duty doctor, eConsult list)',
 
     -- Organisation
     appt.record_owner_organisation_code AS record_owner_organisation_code WITH SYNONYMS = ('practice code', 'GP practice') COMMENT = 'Practice ODS code',

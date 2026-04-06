@@ -17,8 +17,11 @@ Resolves practitioner roles, cleans durations, and classifies contact modes
 and slot categories for downstream analysis and costing.
 
 Duration methodology:
-- Use actual_duration if recorded and shorter than planned (GP finished early)
-- Otherwise use planned_duration (the booked slot length)
+- For untimed schedules (open-book triage/duty doctor sessions), planned_duration
+  is inherited from the whole session and meaningless — default to 10 minutes
+- For timed schedules:
+  - Use actual_duration if recorded and shorter than planned (GP finished early)
+  - Otherwise use planned_duration (the booked slot length)
 - Cap at 60 minutes (anything above is a session/day-length data quality issue)
 - Default NULLs and 0s to 10 minutes (PSSRU standard GP consultation length)
 
@@ -37,24 +40,9 @@ with appointments as (
         a.start_date,
         a.date_time_booked,
 
-        -- Raw durations
+        -- Raw durations (cleaned below after joining schedule)
         a.planned_duration,
         a.actual_duration,
-
-        -- Duration methodology: actual if reliable, else planned, then cap and default
-        LEAST(
-            COALESCE(
-                CASE
-                    WHEN a.actual_duration > 0 AND a.actual_duration < a.planned_duration
-                        THEN a.actual_duration
-                    WHEN a.planned_duration > 0
-                        THEN a.planned_duration
-                    ELSE 10
-                END,
-                10
-            ),
-            60
-        ) as duration_minutes,
 
         -- Status
         a.appointment_status_source_code,
@@ -235,6 +223,20 @@ practitioner_roles as (
             ELSE FALSE
         END as is_arrs_role
     from {{ ref('stg_olids_practitioner_in_role') }} as pir
+),
+
+schedules as (
+    -- Schedule is the container for appointments; type indicates whether
+    -- the schedule is timed (normal bookable slots) or untimed (open books
+    -- like duty doctor / triage sessions where planned_duration is meaningless)
+    select
+        s.id as schedule_id,
+        s.type as schedule_type,
+        CASE
+            WHEN s.type IN ('Untimed Appointments', 'List') THEN TRUE
+            ELSE FALSE
+        END as is_untimed_session
+    from {{ ref('stg_olids_schedule') }} as s
 )
 
 select
@@ -242,13 +244,37 @@ select
     a.person_id,
     a.patient_id,
     a.organisation_id,
+    a.schedule_id,
     a.start_date,
     a.date_time_booked,
 
-    -- Duration
+    -- Raw durations
     a.planned_duration,
     a.actual_duration,
-    a.duration_minutes,
+
+    -- Cleaned duration
+    -- Untimed session schedules inherit session-length planned_duration, so
+    -- we default to 10 minutes for those rather than trusting the inherited value.
+    -- For timed schedules, use actual if it's reliably shorter than planned, else planned.
+    -- Everything is capped at 60 minutes and defaults to 10 when null.
+    LEAST(
+        COALESCE(
+            CASE
+                WHEN COALESCE(s.is_untimed_session, FALSE) THEN 10
+                WHEN a.actual_duration > 0 AND a.actual_duration < a.planned_duration
+                    THEN a.actual_duration
+                WHEN a.planned_duration > 0
+                    THEN a.planned_duration
+                ELSE 10
+            END,
+            10
+        ),
+        60
+    ) as duration_minutes,
+
+    -- Schedule context
+    s.schedule_type,
+    s.is_untimed_session,
 
     -- Status
     a.appointment_status_source_code,
@@ -290,4 +316,6 @@ select
 from appointments as a
 left join practitioner_roles as pr
     on a.practitioner_in_role_id = pr.practitioner_in_role_id
+left join schedules as s
+    on a.schedule_id = s.schedule_id
 where COALESCE(pr.practitioner_role_group, 'Unknown') != 'Admin'
