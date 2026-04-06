@@ -111,13 +111,13 @@ with appointments as (
             ELSE 'Other'
         END as slot_category,
 
-        -- Urgency classification (NHSE GPAD methodology)
+        -- Urgency classification (NHSE GP contract 2026/27 definition)
+        -- Only 'General Consultation Acute' maps to urgent — this is the
+        -- national category practices are instructed to use for clinically
+        -- urgent patients. Triage/Unplanned/Walk-in are not inherently urgent.
         CASE
-            WHEN a.national_slot_category_name IN (
-                'General Consultation Acute', 'Unplanned Clinical Activity',
-                'Unscheduled/Unplanned Clinical Activity', 'Walk-in',
-                'Clinical Triage', 'Triage'
-            ) THEN 'Urgent'
+            WHEN a.national_slot_category_name = 'General Consultation Acute'
+                THEN 'Urgent'
             WHEN a.national_slot_category_name IN (
                 'General Consultation Routine', 'General Consultation Planned',
                 'Planned Clinics', 'Planned Clinical Procedure',

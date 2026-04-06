@@ -22,10 +22,14 @@ models:
       - Caps at 60 minutes (session-length data quality fix)
       - Defaults NULLs/zeros to 10 minutes (PSSRU standard)
 
-      Urgency classification (NHSE GPAD methodology):
-      - Urgent = General Consultation Acute, Unplanned, Walk-in, Triage slots
+      Urgency classification (NHSE 2026/27 GP contract definition):
+      - Urgent = General Consultation Acute only (the category practices must use
+        for clinically urgent patients per the 2026/27 GP contract)
       - Routine = General Consultation Routine/Planned, Planned Clinics, Procedures, Medication Review
-      - Same-day = booked and seen on same calendar day (GP contract 2026/27 definition)
+      - Other = Triage, Unplanned, Walk-in, Home Visit etc. (not inherently urgent or routine)
+
+      Booking timing:
+      - is_same_day = booked and seen on same calendar day (booking timing, not urgency)
 
       Sources: stg_olids_appointment, stg_olids_practitioner_in_role
       Reference: PSSRU Unit Costs of Health and Social Care 2024 Manual
@@ -109,10 +113,13 @@ models:
         description: Raw practitioner role name from practitioner_in_role
       - name: urgency
         description: >
-          Urgency classification derived from national slot category.
-          Urgent = Acute, Unplanned, Walk-in, Triage slots.
-          Routine = Routine, Planned, Procedure, Medication Review slots.
-          Other = everything else.
+          Urgency classification using the NHSE 2026/27 GP contract definition.
+          Urgent = national slot category "General Consultation Acute" (the
+          category practices are instructed to use for clinically urgent patients).
+          Routine = General Consultation Routine/Planned, Planned Clinics,
+          Procedures, Medication Review.
+          Other = everything else (Triage, Walk-in, Home Visit, etc. — not
+          inherently urgent or routine).
       - name: is_same_day
         description: >
           TRUE if booked and seen on the same calendar day.
