@@ -17,13 +17,13 @@ Resolves practitioner roles, cleans durations, and classifies contact modes
 and slot categories for downstream analysis and costing.
 
 Duration methodology:
-- For untimed schedules (open-book triage/duty doctor sessions), planned_duration
-  is inherited from the whole session and meaningless — default to 10 minutes
+- For untimed/list schedules (open-book triage, duty doctor, eConsult lists),
+  planned_duration is inherited from the whole session — duration_minutes is NULL
 - For timed schedules:
   - Use actual_duration if recorded and shorter than planned (GP finished early)
   - Otherwise use planned_duration (the booked slot length)
-- Cap at 60 minutes (anything above is a session/day-length data quality issue)
-- Default NULLs and 0s to 10 minutes (PSSRU standard GP consultation length)
+  - Cap at 60 minutes (anything above is a session/day-length data quality issue)
+  - Default NULLs and 0s to 10 minutes (PSSRU standard GP consultation length)
 
 Source: PSSRU Unit Costs of Health and Social Care 2024 Manual
         https://kar.kent.ac.uk/109563/
@@ -252,25 +252,28 @@ select
     a.planned_duration,
     a.actual_duration,
 
-    -- Cleaned duration
-    -- Untimed session schedules inherit session-length planned_duration, so
-    -- we default to 10 minutes for those rather than trusting the inherited value.
-    -- For timed schedules, use actual if it's reliably shorter than planned, else planned.
-    -- Everything is capped at 60 minutes and defaults to 10 when null.
-    LEAST(
-        COALESCE(
-            CASE
-                WHEN COALESCE(s.is_untimed_session, FALSE) THEN 10
-                WHEN a.actual_duration > 0 AND a.actual_duration < a.planned_duration
-                    THEN a.actual_duration
-                WHEN a.planned_duration > 0
-                    THEN a.planned_duration
-                ELSE 10
-            END,
-            10
-        ),
-        60
-    ) as duration_minutes,
+    -- Cleaned duration (timed schedules only)
+    -- For untimed/list schedules, planned_duration is meaningless (inherited from
+    -- the whole session), so duration_minutes is NULL. Downstream aggregations
+    -- will correctly skip these rather than using a fabricated default.
+    -- For timed schedules: use actual if reliably shorter than planned, else
+    -- planned. Capped at 60 minutes, defaults to 10 if null/zero.
+    CASE
+        WHEN COALESCE(s.is_untimed_session, FALSE) THEN NULL
+        ELSE LEAST(
+            COALESCE(
+                CASE
+                    WHEN a.actual_duration > 0 AND a.actual_duration < a.planned_duration
+                        THEN a.actual_duration
+                    WHEN a.planned_duration > 0
+                        THEN a.planned_duration
+                    ELSE 10
+                END,
+                10
+            ),
+            60
+        )
+    END as duration_minutes,
 
     -- Schedule context
     s.schedule_type,

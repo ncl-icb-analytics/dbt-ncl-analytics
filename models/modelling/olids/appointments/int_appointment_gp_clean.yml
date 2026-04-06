@@ -60,11 +60,10 @@ models:
         description: Raw actual duration in minutes (unreliable when > planned due to late button-press)
       - name: duration_minutes
         description: >
-          Cleaned duration for costing. For untimed/list schedules (where
-          planned_duration is inherited from a whole session and meaningless),
-          defaults to 10 minutes. For timed schedules, uses actual if < planned
-          (early finish), otherwise planned. Capped at 60 minutes, defaults to
-          10 if NULL/zero.
+          Cleaned duration for costing. NULL for untimed/list schedules (where
+          planned_duration is inherited from a whole session and meaningless).
+          For timed schedules: uses actual if < planned (early finish),
+          otherwise planned. Capped at 60 minutes, defaults to 10 if NULL/zero.
       - name: schedule_type
         description: >
           Raw schedule type from OLIDS. "Timed appointments" = normal bookable
