@@ -10,8 +10,9 @@ models:
       calendar day (NHSE 2026/27 GP contract definition).
       Denominator: all urgent attended appointments with a booking date.
 
-      Urgency is determined by national slot category = General Consultation
-      Acute, Triage, Unplanned, Walk-in.
+      Urgency is strictly the "General Consultation Acute" national slot
+      category — the single category practices are instructed to use for
+      clinically urgent patients under the 2026/27 GP contract.
     config:
       meta:
         owner:
