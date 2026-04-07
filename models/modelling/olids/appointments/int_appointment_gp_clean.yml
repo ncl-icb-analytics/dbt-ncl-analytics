@@ -1,0 +1,165 @@
+version: 2
+models:
+  - name: int_appointment_gp_clean
+    description: |
+      Cleaned OLIDS GP appointments for access KPI reporting, utilisation
+      analysis, workforce mix and costing.
+
+      Grain: one row per appointment.
+
+      Scope (Care Related Encounters with a clinical practitioner):
+      * Includes attended and DNA appointments
+      * Excludes future/available slots, admin practitioner roles
+        (receptionists, clerks — workflow logging not clinical contact),
+        non-Care-Related-Encounter contexts
+
+      Key cleaning:
+      * practitioner_role_group groups ~120 raw role codes into clinical
+        categories (GP, Nurse, Pharmacist, HCA, ARRS roles, etc.)
+      * duration_minutes is derived from planned/actual duration but set to
+        NULL for untimed/list schedules (open-book duty doctor / eConsult
+        lists) where the source duration is session-inherited and meaningless
+      * urgency follows the NHSE 2026/27 GP contract: only
+        "General Consultation Acute" counts as Urgent
+
+      Key facts exposed:
+      * urgency, is_same_day, days_to_appointment — for access KPIs
+      * is_attended, is_dna — for DNA analysis
+      * contact_mode, practitioner_role_group, is_arrs_role — for workforce mix
+      * duration_minutes — for costing (join to pssru_unit_costs_2024)
+      * patient_wait — patient experience
+
+      Sources: stg_olids_appointment, stg_olids_practitioner_in_role,
+      stg_olids_schedule
+      Reference: PSSRU Unit Costs of Health and Social Care 2024 Manual,
+      NHSE GPAD national category mapping guide
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.at_least_one:
+          arguments:
+            column_name: appointment_id
+    columns:
+      - name: appointment_id
+        description: Unique appointment identifier from OLIDS
+        data_tests:
+          - not_null
+          - unique
+      - name: person_id
+        description: Person identifier (deduplicated across patient IDs)
+        data_tests:
+          - not_null
+      - name: patient_id
+        description: Patient identifier
+      - name: organisation_id
+        description: Practice organisation identifier
+      - name: schedule_id
+        description: Parent schedule identifier (appointment book session)
+      - name: start_date
+        description: Appointment start date and time
+      - name: date_time_booked
+        description: When the appointment was booked
+      - name: planned_duration
+        description: Raw planned slot duration in minutes (unreliable for untimed schedules)
+      - name: actual_duration
+        description: >
+          Raw actual duration in minutes. Unreliable when longer than planned
+          because GPs often press the "send in" / "left" buttons well after
+          the real event.
+      - name: duration_minutes
+        description: >
+          Cleaned duration in minutes for costing and averaging.
+          NULL for untimed/list schedules (where the source duration is
+          inherited from a whole session and meaningless).
+          For timed schedules: actual_duration if reliably shorter than
+          planned, otherwise planned. Capped at 60 minutes, defaults to
+          10 minutes when the source is NULL or zero.
+      - name: schedule_type
+        description: >
+          Raw OLIDS schedule type. "Timed appointments" = normal bookable
+          slots. "Untimed Appointments" / "List" = open-book sessions
+          (duty doctor, eConsult triage lists) where appointments inherit
+          session-length durations.
+      - name: is_untimed_session
+        description: >
+          TRUE if the parent schedule is an untimed or list session.
+          When TRUE, duration_minutes is NULL because the source duration
+          cannot be trusted.
+      - name: is_attended
+        description: TRUE if the appointment was attended (status code 5)
+      - name: is_dna
+        description: TRUE if the patient did not attend (status code 3)
+      - name: contact_mode
+        description: >
+          Simplified contact mode: Face-to-face, Telephone, Online,
+          Home Visit, Video, Not an Appointment, Unknown
+      - name: contact_mode_source_code
+        description: Raw contact mode from source system
+      - name: slot_category
+        description: >
+          Simplified national slot category: Routine, Acute, Triage,
+          Planned Clinic, Clinical Procedure, Unplanned, Home/Care Home
+          Visit, Medication Review, Walk-in, Social Prescribing, etc.
+      - name: national_slot_category_name
+        description: Raw GPAD national slot category name
+      - name: practitioner_id
+        description: Practitioner identifier (individual clinician)
+      - name: role_code
+        description: Raw practitioner role code from practitioner_in_role
+      - name: role_name
+        description: Raw practitioner role name from practitioner_in_role
+      - name: practitioner_role_group
+        description: >
+          Grouped practitioner role for reporting and costing:
+          GP, Nurse, Pharmacist, HCA, Physician Associate, Other Doctor
+          (consultant / associate specialist), Paramedic, Physiotherapist,
+          Counsellor, Care Navigator, Other Clinical, Other.
+          Admin roles are excluded from this model entirely.
+      - name: is_arrs_role
+        description: >
+          TRUE if the practitioner is in an ARRS (Additional Roles
+          Reimbursement Scheme) funded role — pharmacist, physiotherapist,
+          paramedic, physician associate, care navigator, or counsellor.
+          Useful for tracking ARRS workforce impact.
+      - name: urgency
+        description: >
+          Clinical urgency per the NHSE 2026/27 GP contract definition.
+          Urgent = national slot category "General Consultation Acute"
+          (the single category practices must use for clinically urgent
+          patients).
+          Routine = General Consultation Routine/Planned, Planned Clinics,
+          Procedures, Medication Review.
+          Other = Triage, Unplanned, Walk-in, Home Visit etc.
+          (not inherently urgent or routine).
+      - name: is_same_day
+        description: >
+          TRUE if the appointment was booked and seen on the same calendar
+          day. This is a booking-timing fact and does not itself imply
+          urgency. Used as the numerator for the NHSE urgent same-day
+          access KPI.
+      - name: days_to_appointment
+        description: Calendar days between booking and appointment (0 = same day)
+      - name: patient_wait
+        description: >
+          Minutes the patient waited beyond their scheduled time.
+          Populated for ~48% of appointments.
+      - name: patient_delay
+        description: >
+          Minutes the patient arrived late for their appointment.
+          Populated for ~41% of appointments.
+      - name: booking_method
+        description: How the appointment was booked (Practice, EMIS Access, External Organisation)
+      - name: local_slot_type
+        description: >
+          Practice's own free-text slot type name (e.g. "Duty Doctor",
+          "Telephone Consultation"). Unstandardised across practices but
+          useful for data quality investigation. The national_slot_category_name
+          is the standardised equivalent.
+      - name: service_setting
+        description: Service setting where the appointment took place
+      - name: age_at_event
+        description: Patient age at the time of the appointment
+      - name: record_owner_organisation_code
+        description: Practice ODS code (e.g. E85012)

@@ -1,0 +1,143 @@
+version: 2
+models:
+  - name: fct_gp_urgent_same_day_access
+    description: |
+      GP Contract KPI: % of clinically urgent appointments seen same-day.
+
+      Grain: one row per practice per month.
+
+      Numerator: urgent attended appointments booked and seen on the same
+      calendar day (NHSE 2026/27 GP contract definition).
+      Denominator: all urgent attended appointments with a booking date.
+
+      Urgency is strictly the "General Consultation Acute" national slot
+      category — the single category practices are instructed to use for
+      clinically urgent patients under the 2026/27 GP contract.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
+    columns:
+      - name: practice_code
+        data_tests:
+          - not_null
+      - name: report_month
+        data_tests:
+          - not_null
+
+  - name: fct_gp_routine_7day_access
+    description: |
+      GP Contract KPI: % of routine appointments seen within 7 days of booking.
+
+      Grain: one row per practice per month.
+
+      Numerator: routine attended appointments with days_to_appointment <= 7.
+      Denominator: all routine attended appointments with a booking date.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
+    columns:
+      - name: practice_code
+        data_tests:
+          - not_null
+      - name: report_month
+        data_tests:
+          - not_null
+
+  - name: fct_gp_routine_14day_access
+    description: |
+      GP Contract KPI: % of routine appointments seen within 14 days of booking.
+
+      Grain: one row per practice per month.
+
+      Numerator: routine attended appointments with days_to_appointment <= 14.
+      Denominator: all routine attended appointments with a booking date.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
+    columns:
+      - name: practice_code
+        data_tests:
+          - not_null
+      - name: report_month
+        data_tests:
+          - not_null
+
+  - name: fct_gp_dna_rate
+    description: |
+      GP appointment DNA (Did Not Attend) rate.
+
+      Grain: one row per practice per month.
+
+      Numerator: appointments with is_dna = TRUE.
+      Denominator: in-scope appointments (is_attended OR is_dna only —
+      excludes cancelled, rescheduled and other non-attendance statuses).
+
+      DNA rates vary significantly by deprivation and demographics.
+      Join to practice-level demographics for equity analysis.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
+    columns:
+      - name: practice_code
+        data_tests:
+          - not_null
+      - name: report_month
+        data_tests:
+          - not_null
+
+  - name: fct_gp_appointments_by_mode
+    description: |
+      GP appointment volumes by contact mode and practitioner role group.
+
+      Grain: one row per practice per month per contact_mode per practitioner_role_group.
+
+      Tracks digital transformation (F2F vs telephone vs online trends)
+      and workforce mix. Includes average duration and wait times for
+      costing and patient experience analysis.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
+              - contact_mode
+              - practitioner_role_group
+    columns:
+      - name: practice_code
+        data_tests:
+          - not_null
+      - name: report_month
+        data_tests:
+          - not_null
