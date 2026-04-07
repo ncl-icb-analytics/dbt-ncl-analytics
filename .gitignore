@@ -8,6 +8,7 @@ dbt_packages/
 # Environment variables
 .env
 .env.*
+.envrc
 
 # Python
 venv/
