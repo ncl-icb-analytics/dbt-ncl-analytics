@@ -37,7 +37,7 @@ models:
 
       Grain: one row per practice per month.
 
-      Numerator: routine attended appointments with days_to_appointment <= 7.
+      Numerator: routine attended appointments with booking_to_slot_days <= 7.
       Denominator: all routine attended appointments with a booking date.
     config:
       meta:
@@ -63,7 +63,7 @@ models:
 
       Grain: one row per practice per month.
 
-      Numerator: routine attended appointments with days_to_appointment <= 14.
+      Numerator: routine attended appointments with booking_to_slot_days <= 14.
       Denominator: all routine attended appointments with a booking date.
     config:
       meta:

@@ -24,7 +24,7 @@ select
     SUM(CASE WHEN is_attended THEN 1 ELSE 0 END) as attended_count,
     SUM(CASE WHEN is_dna THEN 1 ELSE 0 END) as dna_count,
     ROUND(AVG(duration_minutes), 1) as avg_duration_minutes,
-    ROUND(AVG(days_to_appointment), 1) as avg_days_to_appointment,
+    ROUND(AVG(booking_to_slot_days), 1) as avg_booking_to_slot_days,
     ROUND(AVG(patient_wait), 1) as avg_patient_wait_minutes
 from {{ ref('int_appointment_gp_clean') }}
 group by practice_code, report_month, contact_mode, practitioner_role_group

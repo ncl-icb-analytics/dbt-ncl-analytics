@@ -1,0 +1,460 @@
+role_code,role_description,sds_role_group,practitioner_role_group,is_arrs_role
+R0110,Specialist Registrar,GP,GP,false
+R0120,Senior Registrar (Closed),GP,GP,false
+R0130,Registrar (Closed),GP,GP,false
+R0190,Trust Grade Doctor - Specialist Registrar level,GP,GP,false
+R0215,Asst. Clinical Medical Officer,GP,GP,false
+R0220,Clinical Medical Officer,GP,GP,false
+R0230,Senior Clinical Medical Officer,GP,GP,false
+R0260,General Medical Practitioner,GP,GP,false
+R0261,Assistant GP,GP,GP,false
+R0262,Locum GP,GP,GP,false
+R0263,Deputising Doctor,GP,GP,false
+R0270,Salaried General Practitioner,GP,GP,false
+R1547,Associate Practitioner - General Practitioner,GP,GP,false
+R6200,GP Registrar,GP,GP,false
+R6300,Sessional GP,GP,GP,false
+R8000,Clinical Practitioner Access Role,GP,GP,false
+R9001,OBSOLETE EBS GP (Referrer),GP,GP,false
+E1002,Health Visitor,Nurses,Nurse,false
+R0006,Student Community Practitioner,Nurses,Nurse,false
+R0330,Student Nurse - Adult Branch,Nurses,Nurse,false
+R0340,Student Nurse - Child Branch,Nurses,Nurse,false
+R0350,Student Nurse - Mental Health Branch,Nurses,Nurse,false
+R0360,Student Nurse - Learning Disabilities Branch,Nurses,Nurse,false
+R0390,Student District Nurse,Nurses,Nurse,false
+R0400,Student School Nurse,Nurses,Nurse,false
+R0410,Student Practice Nurse,Nurses,Nurse,false
+R0420,Student Occupational Health Nurse,Nurses,Nurse,false
+R0430,Student Community Paediatric Nurse,Nurses,Nurse,false
+R0440,Student Community Mental Health Nurse,Nurses,Nurse,false
+R0450,Student Community Learning Disabilities Nurse,Nurses,Nurse,false
+R0560,Director of Nursing,Nurses,Nurse,false
+R0570,Nurse Consultant,Nurses,Nurse,false
+R0580,Nurse Manager,Nurses,Nurse,false
+R0590,Modern Matron,Nurses,Nurse,false
+R0600,Specialist Nurse Practitioner,Nurses,Nurse,false
+R0610,Sister/Charge Nurse,Nurses,Nurse,false
+R0620,Staff Nurse,Nurses,Nurse,false
+R0630,Enrolled Nurse,Nurses,Nurse,false
+R0690,Community Practitioner,Nurses,Nurse,false
+R0700,Community Nurse,Nurses,Nurse,false
+R1490,Nursery Nurse,Nurses,Nurse,false
+R1543,Associate Practitioner - Nurse,Nurses,Nurse,false
+R1640,Nursing Cadet,Nurses,Nurse,false
+R1974,Community Learning Disabilities Nurse,Nurses,Nurse,false
+R1975,Community Mental Health Nurse,Nurses,Nurse,false
+R1976,Community Team Manager,Nurses,Nurse,false
+R8001,Nurse Access Role,Nurses,Nurse,false
+R8002,Nurse Manager Access Role,Nurses,Nurse,false
+R9809,Nursing Associates,Nurses,Nursing Associate,true
+R9816,Trainee Nursing Associates,Nurses,Nursing Associate,true
+E1001,Advanced Practitioner,Other Direct Patient Care,Other Clinical,false
+E1003,Physician Assistant,Other Direct Patient Care,Physician Associate,false
+E1006,Healthcare Science Practitioner,Other Direct Patient Care,Other Clinical,false
+E1007,Healthcare Science Associate,Other Direct Patient Care,Other Clinical,false
+E1008,Healthcare Science Assistant,Other Direct Patient Care,HCA,false
+R0002,Porter,Other Direct Patient Care,Admin,false
+R0003,Clinical Application Administrator,Other Direct Patient Care,Admin,false
+R0010,Medical Director,Other Direct Patient Care,Other Doctor,false
+R0011,Dispenser,Other Direct Patient Care,Other Clinical,false
+R0012,Radiographer,Other Direct Patient Care,Other Clinical,false
+R0013,Student Radiographer,Other Direct Patient Care,Other Clinical,false
+R0014,Radiologist,Other Direct Patient Care,Other Doctor,false
+R0015,PACS Administrator,Other Direct Patient Care,Admin,false
+R0016,Reporting Radiographer,Other Direct Patient Care,Other Clinical,false
+R0017,Assistant Practitioner,Other Direct Patient Care,HCA,false
+R0018,Audiologist,Other Direct Patient Care,Other Clinical,false
+R0019,Medical Technical Officer,Other Direct Patient Care,Other Clinical,false
+R0020,Clinical Director - Medical,Other Direct Patient Care,Other Doctor,false
+R0030,Professor,Other Direct Patient Care,Other Clinical,false
+R0040,Senior Lecturer,Other Direct Patient Care,Other Clinical,false
+R0050,Consultant,Other Direct Patient Care,Other Doctor,false
+R0055,Dental surgeon acting as Hospital Consultant,Other Direct Patient Care,Other Clinical,false
+R0060,Special salary scale in Public Health Medicine,Other Direct Patient Care,Other Doctor,false
+R0070,Associate Specialist,Other Direct Patient Care,Other Doctor,false
+R0080,Staff Grade,Other Direct Patient Care,Other Doctor,false
+R0090,Hospital Practitioner,Other Direct Patient Care,Other Doctor,false
+R0100,Clinical Assistant,Other Direct Patient Care,Other Doctor,false
+R0140,Senior House Officer,Other Direct Patient Care,Other Doctor,false
+R0150,House Officer - Pre Registration,Other Direct Patient Care,Other Doctor,false
+R0160,House Officer - Post Registration,Other Direct Patient Care,Other Doctor,false
+R0170,Trust Grade Doctor - House Officer level,Other Direct Patient Care,Other Doctor,false
+R0180,Trust Grade Doctor - SHO level,Other Direct Patient Care,Other Doctor,false
+R0200,Trust Grade Doctor - Career Grade level,Other Direct Patient Care,Other Doctor,false
+R0210,Director of Public Health,Other Direct Patient Care,Other Doctor,false
+R0240,Other Community Health Service,Other Direct Patient Care,Other Clinical,false
+R0243,Other Community Health Service - Social Care Worker,Other Direct Patient Care,Other,false
+R0247,Other Community Health Service - Admin Clerk,Other Direct Patient Care,Admin,false
+R0250,General Dental Practitioner,Other Direct Patient Care,Other Clinical,false
+R0280,Regional Dental Officer,Other Direct Patient Care,Other Clinical,false
+R0290,Dental Clinical Director - Dental,Other Direct Patient Care,Other Clinical,false
+R0295,Dental Assistant Clinical Director,Other Direct Patient Care,Other Clinical,false
+R0300,Dental Officer,Other Direct Patient Care,Other Clinical,false
+R0310,Senior Dental Officer,Other Direct Patient Care,Other Clinical,false
+R0320,Salaried Dental Practitioner,Other Direct Patient Care,Other Clinical,false
+R0370,Student Midwife,Other Direct Patient Care,Other Clinical,false
+R0380,Student Health Visitor,Other Direct Patient Care,Other Clinical,false
+R0460,Student Chiropodist,Other Direct Patient Care,Other Clinical,false
+R0470,Student Dietitian,Other Direct Patient Care,Other Clinical,false
+R0480,Student Occupational Therapist,Other Direct Patient Care,Other Clinical,false
+R0490,Student Orthoptist,Other Direct Patient Care,Other Clinical,false
+R0500,Student Physiotherapist,Other Direct Patient Care,Physiotherapist,false
+R0510,Student Radiographer - Diagnostic,Other Direct Patient Care,Other Clinical,false
+R0520,Student Radiographer - Therapeutic,Other Direct Patient Care,Other Clinical,false
+R0530,Student Speech & Language Therapist,Other Direct Patient Care,Other Clinical,false
+R0540,"Art, Music & Drama Student",Other Direct Patient Care,Other Clinical,false
+R0550,Student Psychotherapist,Other Direct Patient Care,Counsellor,false
+R0640,Midwife - Consultant,Other Direct Patient Care,Other Clinical,false
+R0650,Midwife - Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0660,Midwife - Manager,Other Direct Patient Care,Other Clinical,false
+R0670,Midwife - Sister/Charge Nurse,Other Direct Patient Care,Other Clinical,false
+R0680,Midwife,Other Direct Patient Care,Other Clinical,false
+R0710,Art Therapist,Other Direct Patient Care,Other Clinical,false
+R0720,Art Therapist Consultant,Other Direct Patient Care,Other Clinical,false
+R0730,Art Therapist Manager,Other Direct Patient Care,Other Clinical,false
+R0740,Art Therapist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0750,Chiropodist/Podiatrist,Other Direct Patient Care,Other Clinical,false
+R0760,Chiropodist/Podiatrist Consultant,Other Direct Patient Care,Other Clinical,false
+R0770,Chiropodist/Podiatrist Manager,Other Direct Patient Care,Other Clinical,false
+R0780,Chiropodist/Podiatrist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0790,Dietitian,Other Direct Patient Care,Other Clinical,false
+R0800,Dietitian Consultant,Other Direct Patient Care,Other Clinical,false
+R0810,Dietitian Manager,Other Direct Patient Care,Other Clinical,false
+R0820,Dietitian Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0830,Drama Therapist,Other Direct Patient Care,Other Clinical,false
+R0840,Drama Therapist Consultant,Other Direct Patient Care,Other Clinical,false
+R0850,Drama Therapist Manager,Other Direct Patient Care,Other Clinical,false
+R0860,Drama Therapist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0870,Multi Therapist,Other Direct Patient Care,Other Clinical,false
+R0880,Multi Therapist Consultant,Other Direct Patient Care,Other Clinical,false
+R0890,Multi Therapist Manager,Other Direct Patient Care,Other Clinical,false
+R0900,Multi Therapist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0910,Music Therapist,Other Direct Patient Care,Other Clinical,false
+R0920,Music Therapist Consultant,Other Direct Patient Care,Other Clinical,false
+R0930,Music Therapist Manager,Other Direct Patient Care,Other Clinical,false
+R0940,Music Therapist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0950,Occupational Therapist,Other Direct Patient Care,Other Clinical,false
+R0955,Speech & Language Therapist,Other Direct Patient Care,Other Clinical,false
+R0960,Occupational Therapist Consultant,Other Direct Patient Care,Other Clinical,false
+R0965,Speech & Language Therapist Consultant,Other Direct Patient Care,Other Clinical,false
+R0970,Occupational Therapist Manager,Other Direct Patient Care,Other Clinical,false
+R0975,Speech & Language Therapist Manager,Other Direct Patient Care,Other Clinical,false
+R0980,Occupational Therapy Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0985,Speech & Language Therapist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R0990,Orthoptist,Other Direct Patient Care,Other Clinical,false
+R1000,Orthoptist Consultant,Other Direct Patient Care,Other Clinical,false
+R1010,Orthoptist Manager,Other Direct Patient Care,Other Clinical,false
+R1020,Orthoptist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R1030,Orthotist,Other Direct Patient Care,Other Clinical,false
+R1040,Orthotist Consultant,Other Direct Patient Care,Other Clinical,false
+R1050,Orthotist Manager,Other Direct Patient Care,Other Clinical,false
+R1060,Orthotist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R1070,Paramedic,Other Direct Patient Care,Paramedic,false
+R1080,Paramedic Consultant,Other Direct Patient Care,Paramedic,false
+R1090,Paramedic Manager,Other Direct Patient Care,Paramedic,false
+R1100,Paramedic Specialist Practitioner,Other Direct Patient Care,Paramedic,false
+R1110,Physiotherapist,Other Direct Patient Care,Physiotherapist,false
+R1120,Physiotherapist Consultant,Other Direct Patient Care,Physiotherapist,false
+R1130,Physiotherapist Manager,Other Direct Patient Care,Physiotherapist,false
+R1140,Physiotherapist Specialist Practitioner,Other Direct Patient Care,Physiotherapist,false
+R1150,Prosthetist,Other Direct Patient Care,Other Clinical,false
+R1160,Prosthetist Consultant,Other Direct Patient Care,Other Clinical,false
+R1170,Prosthetist Manager,Other Direct Patient Care,Other Clinical,false
+R1180,Prosthetist Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R1190,Radiographer - Diagnostic,Other Direct Patient Care,Other Clinical,false
+R1200,"Radiographer - Diagnostic, Consultant",Other Direct Patient Care,Other Clinical,false
+R1210,"Radiographer - Diagnostic, Manager",Other Direct Patient Care,Other Clinical,false
+R1220,"Radiographer - Diagnostic, Specialist Practitioner",Other Direct Patient Care,Other Clinical,false
+R1230,Radiographer - Therapeutic,Other Direct Patient Care,Other Clinical,false
+R1240,"Radiographer - Therapeutic, Consultant",Other Direct Patient Care,Other Clinical,false
+R1250,"Radiographer - Therapeutic, Manager",Other Direct Patient Care,Other Clinical,false
+R1260,"Radiographer - Therapeutic, Specialist Practitioner",Other Direct Patient Care,Other Clinical,false
+R1280,Optometrist,Other Direct Patient Care,Other Clinical,false
+R1290,Pharmacist,Other Direct Patient Care,Pharmacist,false
+R1300,Psychotherapist,Other Direct Patient Care,Counsellor,false
+R1310,Clinical Psychologist,Other Direct Patient Care,Counsellor,false
+R1320,Chaplain,Other Direct Patient Care,Other,false
+R1330,Social Worker,Other Direct Patient Care,Other,false
+R1340,Approved Social Worker,Other Direct Patient Care,Other,false
+R1350,Youth Worker,Other Direct Patient Care,Other,false
+R1360,Specialist Practitioner,Other Direct Patient Care,Other Clinical,false
+R1370,Practitioner,Other Direct Patient Care,Other Clinical,false
+R1380,Technician - PS&T,Other Direct Patient Care,Other Clinical,false
+R1390,Osteopath,Other Direct Patient Care,Other Clinical,false
+R1400,Healthcare Scientist,Other Direct Patient Care,Other Clinical,false
+R1410,Consultant Healthcare Scientist,Other Direct Patient Care,Other Clinical,false
+R1420,Biomedical Scientist,Other Direct Patient Care,Other Clinical,false
+R1430,Technician - Healthcare Scientists,Other Direct Patient Care,Other Clinical,false
+R1440,Therapist,Other Direct Patient Care,Other Clinical,false
+R1450,Health Care Support Worker,Other Direct Patient Care,HCA,false
+R1460,Social Care Support Worker,Other Direct Patient Care,HCA,false
+R1470,Home Help,Other Direct Patient Care,HCA,false
+R1480,Healthcare Assistant,Other Direct Patient Care,HCA,false
+R1500,Play Therapist,Other Direct Patient Care,Other Clinical,false
+R1510,Play Specialist,Other Direct Patient Care,Other Clinical,false
+R1520,Technician - Add'l Clinical Services,Other Direct Patient Care,Other Clinical,false
+R1530,Technical Instructor,Other Direct Patient Care,Other Clinical,false
+R1540,Associate Practitioner,Other Direct Patient Care,HCA,false
+R1550,Counsellor,Other Direct Patient Care,Counsellor,false
+R1560,Helper/Assistant,Other Direct Patient Care,HCA,false
+R1570,Dental Surgery Assistant,Other Direct Patient Care,Other Clinical,false
+R1580,Medical Laboratory Assistant,Other Direct Patient Care,Other Clinical,false
+R1590,Phlebotomist,Other Direct Patient Care,HCA,false
+R1600,Cytoscreener,Other Direct Patient Care,Other Clinical,false
+R1610,Student Technician,Other Direct Patient Care,Other Clinical,false
+R1620,Trainee Scientist,Other Direct Patient Care,Other Clinical,false
+R1630,Trainee Practitioner,Other Direct Patient Care,Other Clinical,false
+R1650,Healthcare Cadet,Other Direct Patient Care,HCA,false
+R1660,Pre-reg Pharmacist,Other Direct Patient Care,Pharmacist,false
+R1670,Assistant Psychologist,Other Direct Patient Care,Counsellor,false
+R1680,Assistant Psychotherapist,Other Direct Patient Care,Counsellor,false
+R1979,Medical Technical Officer - Pharmacy,Other Direct Patient Care,Pharmacy Technician,false
+R1980,Patient Welfare Officer,Other Direct Patient Care,Other,false
+R1981,Psychiatrist,Other Direct Patient Care,Other Doctor,false
+R2500,Support Worker,Other Direct Patient Care,HCA,false
+R2570,Technician,Other Direct Patient Care,Other Clinical,false
+R2600,Assistant,Other Direct Patient Care,HCA,false
+R2740,Apprentice,Other Direct Patient Care,HCA,false
+R5220,Pharmacy Technician,Other Direct Patient Care,Pharmacy Technician,false
+R5230,Community Pharmacy Assistant,Other Direct Patient Care,Pharmacy Technician,false
+R5240,OBSOLETE Community Pharmacist,Other Direct Patient Care,Pharmacist,false
+R5260,Clinical Pharmacy Specialist,Other Direct Patient Care,Pharmacist,false
+R6400,Medical Student,Other Direct Patient Care,Other Doctor,false
+R7140,ODP,Other Direct Patient Care,Other Clinical,false
+R7150,SODP,Other Direct Patient Care,Other Clinical,false
+R8003,Health Professional Access Role,Other Direct Patient Care,Other Clinical,false
+R8004,Healthcare Student Access Role,Other Direct Patient Care,Other Clinical,false
+R8005,Biomedical Scientist Access Role,Other Direct Patient Care,Other Clinical,false
+R8006,Medical Secretary Access Role,Other Direct Patient Care,Admin,false
+R8007,Clinical Coder Access Role,Other Direct Patient Care,Admin,false
+R8014,Social Worker Access Role,Other Direct Patient Care,Other,false
+R8016,Midwife Access Role,Other Direct Patient Care,Other Clinical,false
+R8017,Midwife Manager Access Role,Other Direct Patient Care,Other Clinical,false
+R8024,Bank Access Role,Other Direct Patient Care,Other,false
+R9005,OBSOLETE EBS Clinician (Trust),Other Direct Patient Care,Other Clinical,false
+R9006,OBSOLETE EBS Clinician (BMS),Other Direct Patient Care,Other Clinical,false
+R9100,A & E Staff Nurse (Temporary) London Cluster Only,Other Direct Patient Care,Nurse,false
+R9101,A & E Manager (Temporary) London Cluster Only,Other Direct Patient Care,Admin,false
+R9102,A & E Doctor (Temporary) London Cluster only,Other Direct Patient Care,Other Doctor,false
+R9103,A & E Student (Temporary) London Cluster Only,Other Direct Patient Care,Other Clinical,false
+R9104,A & E Clerk (Temporary) London Cluster Only,Other Direct Patient Care,Admin,false
+R9500,Social services senior management,Other Direct Patient Care,Other,false
+R9505,Social services policy and planning,Other Direct Patient Care,Other,false
+R9510,Social Services information manager,Other Direct Patient Care,Other,false
+R9515,Social work team manager (children),Other Direct Patient Care,Other,false
+R9520,Senior social worker (children),Other Direct Patient Care,Other,false
+R9525,Social services care manager (children),Other Direct Patient Care,Other,false
+R9530,Social work assistant (children),Other Direct Patient Care,Other,false
+R9535,Child Protection worker,Other Direct Patient Care,Other,false
+R9540,Family Placement worker,Other Direct Patient Care,Other,false
+R9545,Community Worker (children),Other Direct Patient Care,Other,false
+R9550,Occupational therapist,Other Direct Patient Care,Other Clinical,false
+R9555,OT assistant,Other Direct Patient Care,Other Clinical,false
+R9560,Occupational Therapy Team Manager,Other Direct Patient Care,Other Clinical,false
+R9565,Social work team manager (adults),Other Direct Patient Care,Other,false
+R9570,Senior social worker (adults),Other Direct Patient Care,Other,false
+R9575,Social services care manager (adults),Other Direct Patient Care,Other,false
+R9580,Social work assistant (adults),Other Direct Patient Care,Other,false
+R9585,Social work team manager (mental health),Other Direct Patient Care,Other,false
+R9590,Senior social worker (mental health),Other Direct Patient Care,Other,false
+R9595,Social services care manager (mental health),Other Direct Patient Care,Other,false
+R9600,Social work assistant (mental health),Other Direct Patient Care,Other,false
+R9605,Emergency Duty social worker,Other Direct Patient Care,Other,false
+R9615,Social services driver,Other Direct Patient Care,Other,false
+R9620,Home Care organiser,Other Direct Patient Care,Other,false
+R9625,Home Care administrator,Other Direct Patient Care,Other,false
+R9630,Home help,Other Direct Patient Care,Other,false
+R9635,Warden,Other Direct Patient Care,Other,false
+R9640,Meals on wheels organiser,Other Direct Patient Care,Other,false
+R9645,Meals delivery,Other Direct Patient Care,Other,false
+R9650,Day centre manager,Other Direct Patient Care,Other,false
+R9655,Day centre deputy,Other Direct Patient Care,Other,false
+R9660,Day Centre officer,Other Direct Patient Care,Other,false
+R9665,Day centre care staff,Other Direct Patient Care,Other,false
+R9670,Family centre manager,Other Direct Patient Care,Other,false
+R9675,Family centre deputy,Other Direct Patient Care,Other,false
+R9680,Family centre worker,Other Direct Patient Care,Other,false
+R9685,Nursery manager,Other Direct Patient Care,Other,false
+R9690,Nursery deputy,Other Direct Patient Care,Other,false
+R9695,Nursery worker,Other Direct Patient Care,Other,false
+R9700,Playgroup leader,Other Direct Patient Care,Other,false
+R9705,Playgroup assistant,Other Direct Patient Care,Other,false
+R9710,Residential manager,Other Direct Patient Care,Other,false
+R9715,Residential deputy,Other Direct Patient Care,Other,false
+R9720,Residential worker,Other Direct Patient Care,Other,false
+R9725,Residential care staff,Other Direct Patient Care,Other,false
+R9730,Intermediate Care Manager,Other Direct Patient Care,Other Clinical,false
+R9735,Intermediate Care deputy,Other Direct Patient Care,Other Clinical,false
+R9740,Intermediate Care worker,Other Direct Patient Care,Other Clinical,false
+R9745,Intermediate Care staff,Other Direct Patient Care,Other Clinical,false
+R9750,Social Care SAP User,Other Direct Patient Care,Admin,false
+R9755,Social Care SAP Manager,Other Direct Patient Care,Admin,false
+R9802,Chiropodist/Podiatrist Advanced Practitioner,Other Direct Patient Care,Other Clinical,false
+R9803,Clinical Pharmacist Advanced Practitioner,Other Direct Patient Care,Pharmacist,true
+R9804,Clinical Pharmacists,Other Direct Patient Care,Pharmacist,true
+R9805,Dietitian Advanced Practitioner,Other Direct Patient Care,Other Clinical,false
+R9806,First Contact Physiotherapists,Other Direct Patient Care,Physiotherapist,true
+R9807,Health and Wellbeing Coaches,Other Direct Patient Care,Health & Wellbeing Coach,true
+R9808,Mental Health Practitioners,Other Direct Patient Care,Mental Health Practitioner,true
+R9810,Occupational Therapist Advanced Practitioner,Other Direct Patient Care,Other Clinical,false
+R9811,Paramedic Advanced Practitioner,Other Direct Patient Care,Paramedic,true
+R9812,Pharmacy Technicians,Other Direct Patient Care,Pharmacy Technician,true
+R9813,Physician Associates,Other Direct Patient Care,Physician Associate,true
+R9814,Physiotherapist Advanced Practitioner,Other Direct Patient Care,Physiotherapist,false
+R9815,Social Prescribing Link Workers,Other Direct Patient Care,Social Prescriber,true
+R0001,Privacy Officer,Data Quality,Admin,false
+R0007,ERS SDS Organisation Reporting Analyst,Data Quality,Admin,false
+R0008,Demographic Supervisor,Data Quality,Admin,false
+R0021,DSA NHS Number Manager (TEMPORARY),Data Quality,Admin,false
+R0022,DSA National Clinical Supervisor (TEMPORARY),Data Quality,Admin,false
+R0023,DSA National Clinical Administrator (TEMPORARY),Data Quality,Admin,false
+R1270,Clinical Director,Data Quality,Admin,false
+R1690,Call Operator,Data Quality,Admin,false
+R1700,Gateway Worker,Data Quality,Admin,false
+R1710,"Support, Time, Recovery Worker",Data Quality,Admin,false
+R1720,Clerical Worker,Data Quality,Admin,false
+R1730,Receptionist,Data Quality,Admin,false
+R1740,Secretary,Data Quality,Admin,false
+R1750,Personal Assistant,Data Quality,Admin,false
+R1751,Demographic Administrator (Sensitive Records) Temporary,Data Quality,Admin,false
+R1760,Medical Secretary,Data Quality,Admin,false
+R1770,Officer,Data Quality,Admin,false
+R1780,Manager,Data Quality,Admin,false
+R1790,Senior Manager,Data Quality,Admin,false
+R1800,Technician - Admin & Clerical,Data Quality,Admin,false
+R1810,Accountant,Data Quality,Admin,false
+R1820,Librarian,Data Quality,Admin,false
+R1830,Interpreter,Data Quality,Admin,false
+R1840,Analyst,Data Quality,Admin,false
+R1850,Adviser,Data Quality,Admin,false
+R1860,Researcher,Data Quality,Admin,false
+R1870,Control Assistant,Data Quality,Admin,false
+R1880,Architect,Data Quality,Admin,false
+R1890,Lawyer,Data Quality,Admin,false
+R1900,Surveyor,Data Quality,Admin,false
+R1910,Chair,Data Quality,Admin,false
+R1920,Chief Executive,Data Quality,Admin,false
+R1930,Finance Director,Data Quality,Admin,false
+R1940,Other Executive Director,Data Quality,Admin,false
+R1950,Board Level Director,Data Quality,Admin,false
+R1960,Non Executive Director,Data Quality,Admin,false
+R1970,Childcare Co-ordinator,Data Quality,Admin,false
+R1971,Map of Medicine Administrator,Data Quality,Admin,false
+R1972,Clinical Team Manager,Data Quality,Admin,false
+R1973,Community Administrator,Data Quality,Admin,false
+R1977,ECC/CPA Administrator,Data Quality,Admin,false
+R1978,Information Officer,Data Quality,Admin,false
+R1982,Senior Administrator,Data Quality,Admin,false
+R1983,Ward Manager,Data Quality,Admin,false
+R1984,Health Records Administrator,Data Quality,Admin,false
+R1985,Health Records Clerk,Data Quality,Admin,false
+R1986,Workgroup Administrator,Data Quality,Admin,false
+R1987,National RBAC Attribute Administrator,Data Quality,Admin,false
+R1988,National RBAC Baseline Policy Administrator,Data Quality,Admin,false
+R1989,Complaints Coordinator,Data Quality,Admin,false
+R1990,Complaints Investigator,Data Quality,Admin,false
+R1995,End Point Approver,Data Quality,Admin,false
+R1996,End Point DNS Administrator,Data Quality,Admin,false
+R1997,End Point Spine Administrator,Data Quality,Admin,false
+R1998,End Point Super User,Data Quality,Admin,false
+R1999,End Point Service Administrator,Data Quality,Admin,false
+R2510,Housekeeper,Data Quality,Admin,false
+R2520,Cook,Data Quality,Admin,false
+R2540,Driver,Data Quality,Admin,false
+R2550,Telephonist,Data Quality,Admin,false
+R2560,Gardener/Groundsperson,Data Quality,Admin,false
+R2640,Bricklayer,Data Quality,Admin,false
+R2670,Chargehand,Data Quality,Admin,false
+R2680,Supervisor,Data Quality,Admin,false
+R2690,Engineer,Data Quality,Admin,false
+R2700,Building Officer,Data Quality,Admin,false
+R5000,Network Administrator,Data Quality,Admin,false
+R5003,Cluster System Administrator,Data Quality,Admin,false
+R5007,System Administrator,Data Quality,Admin,false
+R5010,Network Technician,Data Quality,Admin,false
+R5020,Helpdesk Administrator,Data Quality,Admin,false
+R5030,Helpdesk Technician,Data Quality,Admin,false
+R5040,Desktop Support Administrator,Data Quality,Admin,false
+R5050,Desktop Support Technician,Data Quality,Admin,false
+R5060,Security Policy Controller,Data Quality,Admin,false
+R5070,Senior Security Manager,Data Quality,Admin,false
+R5072,Root Registration Authority Manager,Data Quality,Admin,false
+R5077,OBSOLETE SHA Registration Authority,Data Quality,Admin,false
+R5080,Registration Authority Manager,Data Quality,Admin,false
+R5090,Registration Authority Agent,Data Quality,Admin,false
+R5100,Audit Manager,Data Quality,Admin,false
+R5105,Caldicott Guardian,Data Quality,Admin,false
+R5110,Demographic Administrator,Data Quality,Admin,false
+R5120,ISP Administrator,Data Quality,Admin,false
+R5130,Technical Codes Administrator,Data Quality,Admin,false
+R5140,OSS Administrator,Data Quality,Admin,false
+R5150,System Worker,Data Quality,Admin,false
+R5170,End Point Administrator,Data Quality,Admin,false
+R5175,End Point Viewer,Data Quality,Admin,false
+R5180,NASP Service Manager,Data Quality,Admin,false
+R5181,RTS Dashboard User,Data Quality,Admin,false
+R5182,ERS ETP System Administrator,Data Quality,Admin,false
+R5183,RTS BT Dashboard User,Data Quality,Admin,false
+R5184,ERS Spine SLA Manager,Data Quality,Admin,false
+R5185,ERS BT Customer SLA Manager,Data Quality,Admin,false
+R5186,ERS BT Customer SLA User,Data Quality,Admin,false
+R5187,ERS BT Supplier SLA Manager,Data Quality,Admin,false
+R5188,ERS BT Supplier SLA User,Data Quality,Admin,false
+R5189,ERS LogicaCMG SLA User,Data Quality,Admin,false
+R5190,Content Creator,Data Quality,Admin,false
+R5191,ERS Support Administrator,Data Quality,Admin,false
+R5192,ECS Administrator,Data Quality,Admin,false
+R5195,Content Publisher,Data Quality,Admin,false
+R5200,OBSOLETE Service Registration Authority Agent,Data Quality,Admin,false
+R5210,User Details Administrator,Data Quality,Admin,false
+R5250,EBS Administrator,Data Quality,Admin,false
+R5300,Portal Administrator,Data Quality,Admin,false
+R5310,LiquidLogic Administrator,Data Quality,Admin,false
+R5320,i.EPR Administrator,Data Quality,Admin,false
+R5330,Synergy Administrator,Data Quality,Admin,false
+R5340,SystmOne Administrator,Data Quality,Admin,false
+R5400,Availability Monitor,Data Quality,Admin,false
+R6010,Appointments Clerk,Data Quality,Admin,false
+R6020,Outpatient Manager,Data Quality,Admin,false
+R6030,Ward Clerk,Data Quality,Admin,false
+R6040,Bed Manager,Data Quality,Admin,false
+R6050,Clinical Coder,Data Quality,Admin,false
+R6060,Medical Records Clerk,Data Quality,Admin,false
+R6070,Medical Records Manager,Data Quality,Admin,false
+R6080,Waiting List Clerk,Data Quality,Admin,false
+R6090,Waiting List Manager,Data Quality,Admin,false
+R6100,Mental Health Act Administrator,Data Quality,Admin,false
+R6130,Ad-hoc Reporting Server Administrator,Data Quality,Admin,false
+R6160,Ad-hoc Report Manager,Data Quality,Admin,false
+R7000,Outpatient Clerk,Data Quality,Admin,false
+R7010,Outpatient Manager (R7010),Data Quality,Admin,false
+R7020,Ward Clerk (R7020),Data Quality,Admin,false
+R7050,Medical Records Clerk (R7050),Data Quality,Admin,false
+R7070,Waiting List Clerk (R7070),Data Quality,Admin,false
+R7080,Waiting List Manager (R7080),Data Quality,Admin,false
+R7090,Mental Health Act Administrator (R7090),Data Quality,Admin,false
+R7100,Trainer,Data Quality,Admin,false
+R7110,Training Manager,Data Quality,Admin,false
+R7120,Directory of Services Coordinator,Data Quality,Admin,false
+R7130,PAS Manager,Data Quality,Admin,false
+R8008,Admin/Clinical Support Access Role,Data Quality,Admin,false
+R8009,Receptionist Access Role,Data Quality,Admin,false
+R8010,Clerical Access Role,Data Quality,Admin,false
+R8011,Clerical Manager Access Role,Data Quality,Admin,false
+R8012,Information Officer Access Role,Data Quality,Admin,false
+R8013,Health Records Manager Access Role,Data Quality,Admin,false
+R8015,Systems Support Access Role,Data Quality,Admin,false
+R9002,OBSOLETE EBS ClinicalAdmin (Referrer),Data Quality,Admin,false
+R9003,OBSOLETE EBS Admin (Referrer),Data Quality,Admin,false
+R9004,OBSOLETE EBS Admin (Trust),Data Quality,Admin,false
+R9007,OBSOLETE EBS Admin (BMS),Data Quality,Admin,false
+R9008,OBSOLETE EBS Admin (Helpdesk),Data Quality,Admin,false
+R9009,OBSOLETE EBS Commissioner,Data Quality,Admin,false
+R9010,OBSOLETE EBS GuidanceDefiner,Data Quality,Admin,false
+R9011,OBSOLETE EBS ServiceDefiner,Data Quality,Admin,false
+R9012,OBSOLETE EBS Information Analyst,Data Quality,Admin,false
+R9756,ETP System Administrator,Data Quality,Admin,false
+R9801,Care Co-ordinators,Data Quality,Care Navigator,true
+E1005,Unknown,Unknown,Unknown,false
+Not Recorded,Unknown,Unknown,Unknown,false

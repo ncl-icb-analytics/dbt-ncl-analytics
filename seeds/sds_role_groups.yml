@@ -1,0 +1,95 @@
+version: 2
+seeds:
+  - name: sds_role_groups
+    description: |
+      NHS Spine Directory Service (SDS) role code lookup — maps SDS role
+      codes to both the official NHS Digital SDS role group AND our own
+      analytical practitioner_role_group used for primary care reporting.
+
+      Grain: one row per SDS role_code.
+
+      Source: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice/sds-role-groups
+      The canonical NHS Digital page is updated in-place when SDS publishes
+      new codes. To refresh this seed, re-run analysis/sds_role_groups/build_seed.py
+      after updating the RAW list from the latest HTML table.
+
+      Columns:
+      * sds_role_group follows the NHS Digital 4-group (+ Unknown) taxonomy
+        (GP / Nurses / Other Direct Patient Care / Data Quality / Unknown)
+        used in Appointments in General Practice publications.
+      * practitioner_role_group is our richer analytical grouping that
+        preserves ARRS and workforce-mix signal the NHS 4-group flattens
+        away: GP, Other Doctor, Nurse, Nursing Associate, Pharmacist,
+        Pharmacy Technician, HCA, Physician Associate, Paramedic,
+        Physiotherapist, Counsellor, Care Navigator, Mental Health
+        Practitioner, Health & Wellbeing Coach, Social Prescriber,
+        Other Clinical, Admin, Other, Unknown.
+      * is_arrs_role is TRUE only where the SDS description unambiguously
+        identifies the code as an ARRS-scheme role (R9801, R9803-R9804,
+        R9806-R9809, R9811-R9813, R9815-R9816). Generic profession codes
+        (R1290 Pharmacist, R1110 Physiotherapist, R1070 Paramedic) are
+        FALSE because non-ARRS staff also hold them. Use this seed joined
+        to practice-level ARRS funding data if precise ARRS headcount
+        is needed.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+      column_types:
+        role_code: varchar
+        role_description: varchar
+        sds_role_group: varchar
+        practitioner_role_group: varchar
+        is_arrs_role: boolean
+    columns:
+      - name: role_code
+        description: SDS role code (e.g. R0260). Primary key.
+        data_tests:
+          - not_null
+          - unique
+      - name: role_description
+        description: SDS role description as published by NHS Digital.
+        data_tests:
+          - not_null
+      - name: sds_role_group
+        description: Official NHS Digital SDS role group.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - GP
+                  - Nurses
+                  - Other Direct Patient Care
+                  - Data Quality
+                  - Unknown
+      - name: practitioner_role_group
+        description: Analytical grouping used by int_appointment_gp_clean and downstream GP access reporting.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - GP
+                  - Other Doctor
+                  - Nurse
+                  - Nursing Associate
+                  - Pharmacist
+                  - Pharmacy Technician
+                  - HCA
+                  - Physician Associate
+                  - Paramedic
+                  - Physiotherapist
+                  - Counsellor
+                  - Care Navigator
+                  - Mental Health Practitioner
+                  - Health & Wellbeing Coach
+                  - Social Prescriber
+                  - Other Clinical
+                  - Admin
+                  - Other
+                  - Unknown
+      - name: is_arrs_role
+        description: TRUE where the SDS description unambiguously identifies an ARRS-scheme role.
+        data_tests:
+          - not_null
