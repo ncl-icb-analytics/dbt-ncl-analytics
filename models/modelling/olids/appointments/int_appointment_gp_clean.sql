@@ -6,15 +6,16 @@
 }}
 
 /*
-Cleaned GP appointments from OLIDS
+Cleaned GP appointments from OLIDS.
 
 Filters to legitimate patient-facing clinical appointments:
 - Care Related Encounters only (excludes admin, care related activity, none)
 - Excludes future/available slots (status code 0)
-- Excludes admin practitioner roles (receptionists, clerks etc. — workflow logging, not clinical)
+- Excludes admin practitioner roles (receptionists, clerks etc. — workflow
+  logging, not clinical)
 
-Resolves practitioner roles, cleans durations, and classifies contact modes
-and slot categories for downstream analysis and costing.
+Resolves practitioner roles via the sds_role_groups seed, cleans durations,
+and classifies contact modes and slot categories for downstream analysis.
 
 Duration methodology:
 - For untimed/list schedules (open-book triage, duty doctor, eConsult lists),
@@ -23,10 +24,7 @@ Duration methodology:
   - Use actual_duration if recorded and shorter than planned (GP finished early)
   - Otherwise use planned_duration (the booked slot length)
   - Cap at 60 minutes (anything above is a session/day-length data quality issue)
-  - Default NULLs and 0s to 10 minutes (PSSRU standard GP consultation length)
-
-Source: PSSRU Unit Costs of Health and Social Care 2024 Manual
-        https://kar.kent.ac.uk/109563/
+  - Default NULLs and 0s to 10 minutes (PSSRU-convention GP consultation length)
 */
 
 with appointments as (
@@ -134,11 +132,19 @@ with appointments as (
                 THEN TRUE
             ELSE FALSE
         END as is_same_day,
-        -- Days between booking and appointment
+        -- Calendar days from booking to the appointment slot time
+        -- (0 = same day; NULL when booking time is not recorded)
         CASE
             WHEN a.date_time_booked IS NOT NULL
                 THEN DATEDIFF('day', DATE(a.date_time_booked), DATE(a.start_date))
-        END as days_to_appointment,
+        END as booking_to_slot_days,
+
+        -- UK fiscal year start (Apr-Mar) — used for costing and any
+        -- year-on-year rollups that should align to NHS financial years
+        CASE
+            WHEN MONTH(a.start_date) >= 4 THEN YEAR(a.start_date)
+            ELSE YEAR(a.start_date) - 1
+        END as fiscal_year_start,
 
         -- Patient experience
         a.patient_wait,
@@ -160,69 +166,27 @@ with appointments as (
 ),
 
 practitioner_roles as (
+    -- Join practitioner_in_role to:
+    --   - stg_olids_practitioner for the clinician's name
+    --   - sds_role_groups seed for official SDS group + our analytical
+    --     grouping + ARRS flag (replaces the old hard-coded CASE block)
+    -- Codes not present in the seed fall through to 'Other' / FALSE via
+    -- COALESCE below, so new SDS codes never cause rows to be dropped.
     select
         pir.id as practitioner_in_role_id,
         pir.practitioner_id,
         pir.organisation_id as practitioner_org_id,
         pir.role_code,
         pir.role as role_name,
-        CASE
-            -- GPs
-            WHEN pir.role_code IN ('R0260', 'R0270', 'R6300', 'R0262', 'R6200',
-                                    'R0261')
-                THEN 'GP'
-            -- Other doctors (consultants, associate specialists — not confirmed GPs)
-            WHEN pir.role_code IN ('R0050', 'R0070')
-                THEN 'Other Doctor'
-            -- Nurses
-            WHEN pir.role_code IN ('R0690', 'R0700', 'R0620', 'R0600', 'R0570',
-                                    'R0580', 'R1543', 'R0630', 'R0610', 'R0410',
-                                    'E1001')
-                THEN 'Nurse'
-            -- Pharmacists
-            WHEN pir.role_code IN ('R1290', 'R9804', 'R9803')
-                THEN 'Pharmacist'
-            -- HCAs and clinical support
-            WHEN pir.role_code IN ('R1480', 'R1450', 'R1590', 'R0100', 'R1540',
-                                    'E1008')
-                THEN 'HCA'
-            -- Physician associates
-            WHEN pir.role_code IN ('R1547', 'E1003', 'R9813')
-                THEN 'Physician Associate'
-            -- Paramedics (ARRS role)
-            WHEN pir.role_code IN ('R1070', 'R1100')
-                THEN 'Paramedic'
-            -- Physiotherapists (ARRS first contact practitioners)
-            WHEN pir.role_code IN ('R1110', 'R1140', 'R9806')
-                THEN 'Physiotherapist'
-            -- Mental health and wellbeing
-            WHEN pir.role_code IN ('R1550')
-                THEN 'Counsellor'
-            -- Care navigators and coordinators (ARRS role)
-            WHEN pir.role_code IN ('R9801')
-                THEN 'Care Navigator'
-            -- Other clinical
-            WHEN pir.role_code IN ('R1370', 'R0240', 'R6400')
-                THEN 'Other Clinical'
-            -- Admin and non-clinical
-            WHEN pir.role_code IN ('R1730', 'R1720', 'R1982', 'R1973', 'R1760',
-                                    'R1780', 'R1790', 'R1800', 'R5007', 'R6050')
-                THEN 'Admin'
-            ELSE 'Other'
-        END as practitioner_role_group,
-        -- ARRS (Additional Roles Reimbursement Scheme) funded roles
-        CASE
-            WHEN pir.role_code IN (
-                'R1290', 'R9804', 'R9803',          -- Pharmacists
-                'R1110', 'R1140', 'R9806',           -- Physiotherapists
-                'R1070', 'R1100',                    -- Paramedics
-                'R1547', 'E1003', 'R9813',           -- Physician Associates
-                'R9801',                             -- Care Navigators
-                'R1550'                              -- Counsellors / MH practitioners
-            ) THEN TRUE
-            ELSE FALSE
-        END as is_arrs_role
+        p.name as practitioner_name,
+        COALESCE(sds.sds_role_group, 'Unknown') as sds_role_group,
+        COALESCE(sds.practitioner_role_group, 'Other') as practitioner_role_group,
+        COALESCE(sds.is_arrs_role, FALSE) as is_arrs_role
     from {{ ref('stg_olids_practitioner_in_role') }} as pir
+    left join {{ ref('stg_olids_practitioner') }} as p
+        on pir.practitioner_id = p.id
+    left join {{ ref('sds_role_groups') }} as sds
+        on pir.role_code = sds.role_code
 ),
 
 schedules as (
@@ -237,9 +201,23 @@ schedules as (
             ELSE FALSE
         END as is_untimed_session
     from {{ ref('stg_olids_schedule') }} as s
-)
+),
 
-select
+pssru_base_deflator as (
+    -- GDP deflator for the PSSRU base fiscal year. The 2024 manual reports
+    -- 2023-24 prices, so fiscal_year_start = 2023. Bump this (and the
+    -- pssru_unit_costs_2024 seed) when PSSRU publishes a newer manual.
+    select gdp_deflator as pssru_base_gdp_deflator
+    from {{ ref('uk_cost_indices') }}
+    where fiscal_year_start = 2023
+),
+
+cleaned as (
+    -- Core cleaned appointment row with duration_minutes computed. Wrapped
+    -- in its own CTE so the downstream cost calculation can reference
+    -- duration_minutes (Snowflake can't use a SELECT-level alias in the
+    -- same SELECT).
+    select
     a.appointment_id,
     a.person_id,
     a.patient_id,
@@ -302,19 +280,24 @@ select
 
     -- Practitioner
     pr.practitioner_id,
+    pr.practitioner_name,
     pr.role_code,
     pr.role_name,
+    pr.sds_role_group,
     pr.practitioner_role_group,
     pr.is_arrs_role,
 
     -- Urgency
     a.urgency,
     a.is_same_day,
-    a.days_to_appointment,
+    a.booking_to_slot_days,
 
     -- Patient experience
     a.patient_wait,
     a.patient_delay,
+
+    -- Fiscal year (for costing and financial-year rollups)
+    a.fiscal_year_start,
 
     -- Booking and context
     a.booking_method,
@@ -323,9 +306,51 @@ select
     a.age_at_event,
     a.record_owner_organisation_code
 
-from appointments as a
-left join practitioner_roles as pr
-    on a.practitioner_in_role_id = pr.practitioner_in_role_id
-left join schedules as s
-    on a.schedule_id = s.schedule_id
-where COALESCE(pr.practitioner_role_group, 'Unknown') != 'Admin'
+    from appointments as a
+    left join practitioner_roles as pr
+        on a.practitioner_in_role_id = pr.practitioner_in_role_id
+    left join schedules as s
+        on a.schedule_id = s.schedule_id
+    where COALESCE(pr.practitioner_role_group, 'Unknown') != 'Admin'
+)
+
+select
+    c.*,
+
+    -- PSSRU unit cost at PSSRU base year prices (2023-24 for the 2024 manual).
+    -- Sourced from the pssru_unit_costs_2024 seed. Rows flagged cost_is_proxy
+    -- use a band-matched rate from another role (see pssru_unit_costs_2024.yml
+    -- for methodology and the seed's notes column for per-row rationale).
+    -- NULL for non-clinical role groups (Other / Unknown).
+    costs.cost_per_minute_gbp as pssru_cost_per_minute_gbp,
+    COALESCE(costs.is_proxy, FALSE) as cost_is_proxy,
+    costs.proxy_source as cost_proxy_source,
+
+    -- Cost in PSSRU base year prices (constant real terms across FYs)
+    CASE
+        WHEN c.duration_minutes IS NULL THEN NULL
+        WHEN costs.cost_per_minute_gbp IS NULL THEN NULL
+        ELSE ROUND(c.duration_minutes * costs.cost_per_minute_gbp, 2)
+    END as appointment_cost_gbp_base_prices,
+
+    -- Cost in the appointment's own fiscal year prices (nominal / contemporaneous)
+    -- = base cost * (appointment-year deflator / PSSRU base-year deflator)
+    CASE
+        WHEN c.duration_minutes IS NULL THEN NULL
+        WHEN costs.cost_per_minute_gbp IS NULL THEN NULL
+        WHEN idx.gdp_deflator IS NULL THEN NULL
+        WHEN pssru.pssru_base_gdp_deflator IS NULL THEN NULL
+        ELSE ROUND(
+            c.duration_minutes
+            * costs.cost_per_minute_gbp
+            * (idx.gdp_deflator / pssru.pssru_base_gdp_deflator),
+            2
+        )
+    END as appointment_cost_gbp_nominal
+
+from cleaned as c
+cross join pssru_base_deflator as pssru
+left join {{ ref('pssru_unit_costs_2024') }} as costs
+    on c.practitioner_role_group = costs.practitioner_role_group
+left join {{ ref('uk_cost_indices') }} as idx
+    on c.fiscal_year_start = idx.fiscal_year_start

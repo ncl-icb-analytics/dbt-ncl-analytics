@@ -47,13 +47,16 @@ RELATIONSHIPS(
 FACTS(
     appt.duration_minutes AS duration_minutes COMMENT = 'Cleaned appointment duration in minutes',
     appt.planned_duration AS planned_duration COMMENT = 'Original planned slot duration in minutes',
-    appt.days_to_appointment AS days_to_appointment COMMENT = 'Days between booking and appointment',
+    appt.booking_to_slot_days AS booking_to_slot_days COMMENT = 'Calendar days from booking to the appointment slot time (0 = same day)',
     appt.patient_wait AS patient_wait COMMENT = 'Minutes patient waited beyond scheduled time',
     appt.patient_delay AS patient_delay COMMENT = 'Minutes patient arrived late',
     appt.age_at_event AS age_at_event COMMENT = 'Patient age at appointment (event-time, stable for historical analysis)',
     demographics.current_age AS age COMMENT = 'Patient current age (drifts over time — do not use to cohort historical appointments)',
     conditions.total_conditions AS total_conditions COMMENT = 'Total active long-term conditions',
-    costs.cost_per_minute_gbp AS cost_per_minute_gbp COMMENT = 'PSSRU cost per minute for this role group'
+    appt.pssru_cost_per_minute_gbp AS pssru_cost_per_minute_gbp COMMENT = 'PSSRU 2024 cost per minute for the appointment practitioner role group (2023/24 prices)',
+    appt.appointment_cost_gbp_base_prices AS appointment_cost_gbp_base_prices COMMENT = 'Appointment cost in PSSRU base year prices (2023/24) — real-terms cost',
+    appt.appointment_cost_gbp_nominal AS appointment_cost_gbp_nominal COMMENT = 'Appointment cost in contemporaneous fiscal year prices (GDP deflator adjusted from PSSRU 2023/24 base)',
+    costs.cost_per_minute_gbp AS cost_per_minute_gbp COMMENT = 'Legacy: PSSRU cost per minute for this role group (same as pssru_cost_per_minute_gbp on appt — retained for back-compatibility)'
 )
 
 DIMENSIONS(
@@ -77,9 +80,11 @@ DIMENSIONS(
     appt.national_slot_category_name AS national_slot_category_name COMMENT = 'Raw national slot category',
 
     -- Practitioner
-    appt.practitioner_role_group AS practitioner_role_group WITH SYNONYMS = ('HCP type', 'staff type', 'role') COMMENT = 'GP, Nurse, Pharmacist, HCA, Physician Associate, Admin, Other',
-    appt.role_name AS role_name COMMENT = 'Detailed practitioner role name',
-    appt.is_arrs_role AS is_arrs_role WITH SYNONYMS = ('ARRS', 'additional roles') COMMENT = 'TRUE if ARRS-funded role (pharmacist, physio, paramedic, PA, care navigator, counsellor)',
+    appt.practitioner_role_group AS practitioner_role_group WITH SYNONYMS = ('HCP type', 'staff type', 'role') COMMENT = 'Analytical grouping from sds_role_groups seed (GP, Nurse, Pharmacist, HCA, Physician Associate, Paramedic, Physiotherapist, Care Navigator, etc.)',
+    appt.sds_role_group AS sds_role_group WITH SYNONYMS = ('SDS group', 'NHS role group') COMMENT = 'Official NHS Digital SDS role group (GP, Nurses, Other Direct Patient Care, Data Quality, Unknown) for alignment with national publications',
+    appt.role_name AS role_name COMMENT = 'Raw practitioner role name as recorded by the practice',
+    appt.practitioner_name AS practitioner_name COMMENT = 'Clinician full name — personal data, restrict access accordingly',
+    appt.is_arrs_role AS is_arrs_role WITH SYNONYMS = ('ARRS', 'additional roles') COMMENT = 'TRUE where the SDS code unambiguously identifies an ARRS-scheme role',
     appt.schedule_type AS schedule_type COMMENT = 'Raw schedule type from OLIDS',
     appt.is_untimed_session AS is_untimed_session COMMENT = 'TRUE if parent schedule is an open/untimed session (duty doctor, eConsult list)',
 
@@ -149,14 +154,14 @@ METRICS(
     -- Access KPIs
     appt.urgent_same_day_count AS COUNT(CASE WHEN appt.urgency = 'Urgent' AND appt.is_attended AND appt.is_same_day THEN appt.appointment_id END) COMMENT = 'Urgent seen same day',
     appt.urgent_attended_count AS COUNT(CASE WHEN appt.urgency = 'Urgent' AND appt.is_attended THEN appt.appointment_id END) COMMENT = 'All urgent attended',
-    appt.routine_within_7d_count AS COUNT(CASE WHEN appt.urgency = 'Routine' AND appt.is_attended AND appt.days_to_appointment <= 7 THEN appt.appointment_id END) COMMENT = 'Routine within 7 days',
-    appt.routine_within_14d_count AS COUNT(CASE WHEN appt.urgency = 'Routine' AND appt.is_attended AND appt.days_to_appointment <= 14 THEN appt.appointment_id END) COMMENT = 'Routine within 14 days',
+    appt.routine_within_7d_count AS COUNT(CASE WHEN appt.urgency = 'Routine' AND appt.is_attended AND appt.booking_to_slot_days <= 7 THEN appt.appointment_id END) COMMENT = 'Routine within 7 days',
+    appt.routine_within_14d_count AS COUNT(CASE WHEN appt.urgency = 'Routine' AND appt.is_attended AND appt.booking_to_slot_days <= 14 THEN appt.appointment_id END) COMMENT = 'Routine within 14 days',
     appt.routine_attended_count AS COUNT(CASE WHEN appt.urgency = 'Routine' AND appt.is_attended THEN appt.appointment_id END) COMMENT = 'All routine attended',
 
     -- Duration and wait
     appt.avg_duration AS AVG(appt.duration_minutes) COMMENT = 'Average duration (minutes)',
     appt.total_duration AS SUM(appt.duration_minutes) COMMENT = 'Total appointment minutes',
-    appt.avg_days_to_appointment AS AVG(appt.days_to_appointment) COMMENT = 'Average days from booking to appointment',
+    appt.avg_booking_to_slot_days AS AVG(appt.booking_to_slot_days) COMMENT = 'Average days from booking to the appointment slot',
     appt.avg_patient_wait AS AVG(appt.patient_wait) COMMENT = 'Average wait beyond scheduled time (minutes)'
 )
 

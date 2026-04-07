@@ -1,0 +1,77 @@
+version: 2
+seeds:
+  - name: uk_cost_indices
+    description: |
+      UK inflation indices for cost adjustment, one row per financial year.
+
+      Grain: one row per UK financial year (1 April to 31 March).
+
+      Columns:
+      * gdp_deflator  — HMT / ONS GDP deflator at market prices, fiscal year,
+        base 2024-25 = 100. Outturn 2000-01 to 2024-25 from ONS series L8GG;
+        forecasts 2025-26 to 2030-31 chain-computed from OBR Spring Statement
+        March 2026 percent-change projections. Source release:
+        "GDP deflators at market prices, and money GDP (March 2026 QNA)".
+        HMT collection: https://www.gov.uk/government/collections/gdp-deflators-at-market-prices-and-money-gdp
+      * cpi_index     — ONS CPI all items, base 2015 = 100. Fiscal year value
+        is the unweighted mean of the 12 monthly values Apr YYYY to Mar YYYY+1.
+        Source: ONS series D7BT (MM23), release 2026-03. NULL for years where
+        any of the 12 months is not yet published.
+        https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7bt/mm23
+      * cpih_index    — ONS CPIH all items, base 2015 = 100. Same fiscal-year
+        averaging as CPI. Source: ONS series L522 (MM23), release 2026-03.
+        https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l522/mm23
+      * is_forecast   — TRUE where the row is an OBR projection rather than
+        an ONS outturn. Currently TRUE for 2025-26 onwards for GDP deflator;
+        CPI and CPIH forecasts are not included (indices are NULL after the
+        last complete outturn fiscal year).
+
+      Recommended usage for unit cost adjustment:
+
+      ```
+      -- inflate a 2023-24 PSSRU cost to a different fiscal year
+      adjusted_cost = pssru_cost
+          * (target_year.gdp_deflator / source_year.gdp_deflator)
+      ```
+
+      Use gdp_deflator as the default index — it is the HMT Green Book
+      standard, NHSE's own choice for the NHS Payment Scheme, and has OBR
+      forecasts forward to 2030-31. CPI / CPIH are exposed alongside for
+      sensitivity analysis or contracts that explicitly specify them.
+
+      Re-run analysis/inflation_indices/build_seed.py after downloading the
+      latest HMT GDP deflator XLSX and fresh ONS CPI / CPIH JSON to refresh.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+      column_types:
+        fiscal_year_start: integer
+        fiscal_year: varchar
+        gdp_deflator: float
+        cpi_index: float
+        cpih_index: float
+        is_forecast: boolean
+    columns:
+      - name: fiscal_year_start
+        description: Calendar year the UK fiscal year begins (e.g. 2023 for 2023-24). Primary key.
+        data_tests:
+          - not_null
+          - unique
+      - name: fiscal_year
+        description: Fiscal year label in the form "YYYY-YY" (e.g. "2023-24").
+        data_tests:
+          - not_null
+          - unique
+      - name: gdp_deflator
+        description: HMT GDP deflator index, base 2024-25 = 100. Populated for every row.
+        data_tests:
+          - not_null
+      - name: cpi_index
+        description: ONS CPI all-items index, base 2015 = 100. NULL for forecast years.
+      - name: cpih_index
+        description: ONS CPIH all-items index, base 2015 = 100. NULL for forecast years.
+      - name: is_forecast
+        description: TRUE where the gdp_deflator value is an OBR projection rather than an ONS outturn.
+        data_tests:
+          - not_null
