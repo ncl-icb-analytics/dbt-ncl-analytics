@@ -17,12 +17,18 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
     columns:
       - name: practice_code
-        tests:
+        data_tests:
           - not_null
       - name: report_month
-        tests:
+        data_tests:
           - not_null
 
   - name: fct_gp_routine_7day_access
@@ -37,12 +43,18 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
     columns:
       - name: practice_code
-        tests:
+        data_tests:
           - not_null
       - name: report_month
-        tests:
+        data_tests:
           - not_null
 
   - name: fct_gp_routine_14day_access
@@ -57,12 +69,18 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
     columns:
       - name: practice_code
-        tests:
+        data_tests:
           - not_null
       - name: report_month
-        tests:
+        data_tests:
           - not_null
 
   - name: fct_gp_dna_rate
@@ -72,7 +90,8 @@ models:
       Grain: one row per practice per month.
 
       Numerator: appointments with is_dna = TRUE.
-      Denominator: all appointments (attended + DNA, excluding future slots).
+      Denominator: in-scope appointments (is_attended OR is_dna only —
+      excludes cancelled, rescheduled and other non-attendance statuses).
 
       DNA rates vary significantly by deprivation and demographics.
       Join to practice-level demographics for equity analysis.
@@ -80,12 +99,18 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
     columns:
       - name: practice_code
-        tests:
+        data_tests:
           - not_null
       - name: report_month
-        tests:
+        data_tests:
           - not_null
 
   - name: fct_gp_appointments_by_mode
@@ -101,10 +126,18 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - practice_code
+              - report_month
+              - contact_mode
+              - practitioner_role_group
     columns:
       - name: practice_code
-        tests:
+        data_tests:
           - not_null
       - name: report_month
-        tests:
+        data_tests:
           - not_null

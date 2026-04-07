@@ -1,0 +1,23 @@
+version: 2
+models:
+  - name: sem_olids_appointments
+    description: |
+      OLIDS GP Appointments semantic view. Combines cleaned appointment data
+      with patient demographics, long-term condition flags and PSSRU unit
+      costs for GP access KPI reporting, DNA equity analysis, workforce mix
+      and appointment costing.
+
+      Grain: one row per appointment (appointment_id).
+
+      Practice attribution: appointment-owner side via
+      record_owner_organisation_code. Practice / PCN / borough / age fields
+      sourced from dim_person_demographics are the patient's CURRENT
+      registration / age and are prefixed `current_` so historical
+      appointments are not mis-attributed when patients re-register or age
+      into a new band. Use age_at_event for event-time age cohorting.
+    config:
+      materialized: semantic_view
+      schema: SEMANTIC
+      meta:
+        owner:
+          name: Eddie Davison

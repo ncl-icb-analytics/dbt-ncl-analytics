@@ -263,10 +263,17 @@ select
         ELSE LEAST(
             COALESCE(
                 CASE
-                    WHEN a.actual_duration > 0 AND a.actual_duration < a.planned_duration
+                    -- Actual is reliable when shorter than planned (GP finished early)
+                    WHEN a.actual_duration > 0
+                         AND a.planned_duration > 0
+                         AND a.actual_duration < a.planned_duration
                         THEN a.actual_duration
+                    -- Otherwise prefer planned slot length
                     WHEN a.planned_duration > 0
                         THEN a.planned_duration
+                    -- If only actual is recorded (planned NULL/0), use it
+                    WHEN a.actual_duration > 0
+                        THEN a.actual_duration
                     ELSE 10
                 END,
                 10

@@ -37,18 +37,19 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
-          column_name: appointment_id
+          arguments:
+            column_name: appointment_id
     columns:
       - name: appointment_id
         description: Unique appointment identifier from OLIDS
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: person_id
         description: Person identifier (deduplicated across patient IDs)
-        tests:
+        data_tests:
           - not_null
       - name: patient_id
         description: Patient identifier

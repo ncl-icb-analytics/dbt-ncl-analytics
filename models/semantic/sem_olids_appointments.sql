@@ -34,13 +34,14 @@ TABLES(
         PRIMARY KEY (person_id)
         COMMENT = 'Long-term condition flags',
     costs AS {{ ref('pssru_unit_costs_2024') }}
+        PRIMARY KEY (practitioner_role_group)
         COMMENT = 'PSSRU unit costs per practitioner role group (2023/2024 prices)'
 )
 
 RELATIONSHIPS(
     appt (person_id) REFERENCES demographics,
     appt (person_id) REFERENCES conditions,
-    costs (practitioner_role_group) REFERENCES appt
+    appt (practitioner_role_group) REFERENCES costs
 )
 
 FACTS(
@@ -49,8 +50,8 @@ FACTS(
     appt.days_to_appointment AS days_to_appointment COMMENT = 'Days between booking and appointment',
     appt.patient_wait AS patient_wait COMMENT = 'Minutes patient waited beyond scheduled time',
     appt.patient_delay AS patient_delay COMMENT = 'Minutes patient arrived late',
-    appt.age_at_event AS age_at_event COMMENT = 'Patient age at appointment',
-    demographics.age AS age COMMENT = 'Current patient age',
+    appt.age_at_event AS age_at_event COMMENT = 'Patient age at appointment (event-time, stable for historical analysis)',
+    demographics.age AS current_age COMMENT = 'Patient current age (drifts over time — do not use to cohort historical appointments)',
     conditions.total_conditions AS total_conditions COMMENT = 'Total active long-term conditions',
     costs.cost_per_minute_gbp AS cost_per_minute_gbp COMMENT = 'PSSRU cost per minute for this role group'
 )
@@ -88,21 +89,25 @@ DIMENSIONS(
     -- Booking
     appt.booking_method AS booking_method COMMENT = 'Booking method',
 
-    -- Patient demographics
+    -- Patient demographics (current snapshot — slowly changing attributes
+    -- like ethnicity/language are reasonable for historical analysis;
+    -- age-derived bands are CURRENT and drift over time, so are prefixed
+    -- current_ to make event-time vs current intent explicit)
     demographics.gender AS gender COMMENT = 'Patient gender',
-    demographics.age_band_5y AS age_band_5y COMMENT = '5-year age bands',
-    demographics.age_band_10y AS age_band_10y COMMENT = '10-year age bands',
-    demographics.age_life_stage AS age_life_stage COMMENT = 'Life stage classification',
+    demographics.age_band_5y AS current_age_band_5y COMMENT = 'Current 5-year age band (drifts — use age_at_event for cohorting historical appointments)',
+    demographics.age_band_10y AS current_age_band_10y COMMENT = 'Current 10-year age band (drifts — use age_at_event for cohorting historical appointments)',
+    demographics.age_life_stage AS current_age_life_stage COMMENT = 'Current life stage (drifts — use age_at_event for cohorting historical appointments)',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category',
     demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory',
     demographics.main_language AS main_language COMMENT = 'Main spoken language',
 
-    -- Registration
+    -- Current registration (NOT appointment-owner — for appointment-owner
+    -- practice attribution use record_owner_organisation_code on appt)
     demographics.is_active AS is_active COMMENT = 'Currently registered',
-    demographics.practice_name AS practice_name COMMENT = 'GP practice name',
-    demographics.pcn_name AS pcn_name COMMENT = 'Primary Care Network name',
-    demographics.borough_registered AS borough_registered COMMENT = 'Borough of GP practice',
-    demographics.neighbourhood_registered AS neighbourhood_registered COMMENT = 'Neighbourhood of registration',
+    demographics.practice_name AS current_practice_name COMMENT = 'Current registered practice name (NOT appointment owner — use record_owner_organisation_code for appointment-owner attribution)',
+    demographics.pcn_name AS current_pcn_name COMMENT = 'Current registered PCN name (NOT appointment owner)',
+    demographics.borough_registered AS current_borough_registered COMMENT = 'Borough of current registered practice (NOT appointment owner)',
+    demographics.neighbourhood_registered AS current_neighbourhood_registered COMMENT = 'Neighbourhood of current registration (NOT appointment owner)',
 
     -- Geography (residence)
     demographics.borough_resident AS borough_resident COMMENT = 'Borough of residence',
