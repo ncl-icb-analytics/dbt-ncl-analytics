@@ -54,8 +54,8 @@ FACTS(
     demographics.current_age AS age COMMENT = 'Patient current age (drifts over time — do not use to cohort historical appointments)',
     conditions.total_conditions AS total_conditions COMMENT = 'Total active long-term conditions',
     appt.pssru_cost_per_minute_gbp AS pssru_cost_per_minute_gbp COMMENT = 'PSSRU 2024 cost per minute for the appointment practitioner role group (2023/24 prices)',
-    appt.appointment_cost_gbp_base_prices AS appointment_cost_gbp_base_prices COMMENT = 'Appointment cost in PSSRU base year prices (2023/24) — real-terms cost',
-    appt.appointment_cost_gbp_nominal AS appointment_cost_gbp_nominal COMMENT = 'Appointment cost in contemporaneous fiscal year prices (GDP deflator adjusted from PSSRU 2023/24 base)',
+    appt.appointment_cost_gbp_base_prices AS appointment_cost_gbp_base_prices COMMENT = 'Appointment cost in PSSRU base year prices (2023/24) — real-terms. Populated for any fiscal year; use for cross-year comparisons.',
+    appt.appointment_cost_gbp_nominal AS appointment_cost_gbp_nominal COMMENT = 'Appointment cost in contemporaneous fiscal year prices (GDP deflator adjusted from PSSRU 2023/24 base). NULL for fiscal years outside uk_cost_indices seed coverage (pre 2000-01).',
     costs.cost_per_minute_gbp AS cost_per_minute_gbp COMMENT = 'Legacy: PSSRU cost per minute for this role group (same as pssru_cost_per_minute_gbp on appt — retained for back-compatibility)'
 )
 

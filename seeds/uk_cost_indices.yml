@@ -6,6 +6,21 @@ seeds:
 
       Grain: one row per UK financial year (1 April to 31 March).
 
+      Coverage: 2000-01 to 2030-31 (31 rows). Outturn for GDP deflator
+      runs to 2024-25; OBR forecasts cover 2025-26 to 2030-31.
+      CPI / CPIH fiscal-year means are populated where all 12 monthly
+      ONS values are published (currently to 2024-25).
+
+      Deliberately does NOT extend before 2000-01. Joins from downstream
+      models against pre-2000 fiscal years will correctly return NULL
+      deflator values, which surfaces pre-2000 OLIDS records (almost
+      entirely data quality artefacts) as NULL contemporaneous costs
+      in int_appointment_gp_clean.appointment_cost_gbp_nominal.
+
+      If genuine pre-2000 coverage is needed: the HMT GDP deflator
+      series goes back to 1955-56; bump the `>= 2000` filter in
+      analysis/inflation_indices/build_seed.py and regenerate.
+
       Columns:
       * gdp_deflator  — HMT / ONS GDP deflator at market prices, fiscal year,
         base 2024-25 = 100. Outturn 2000-01 to 2024-25 from ONS series L8GG;

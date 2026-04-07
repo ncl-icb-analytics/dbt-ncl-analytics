@@ -199,8 +199,13 @@ models:
           Estimated appointment cost in PSSRU base year prices
           (2023/24), calculated as duration_minutes *
           pssru_cost_per_minute_gbp. Use this for real-terms comparisons
-          across fiscal years. NULL when duration_minutes or the role's
-          unit cost is NULL.
+          across fiscal years — the value is in 2023/24 money regardless
+          of when the appointment happened.
+
+          NULL only when duration_minutes or the role's unit cost is
+          NULL (e.g. untimed/list schedules, Other / Unknown roles).
+          Populated for appointments in any fiscal year — this column
+          does NOT depend on uk_cost_indices coverage.
       - name: appointment_cost_gbp_nominal
         description: >
           Estimated appointment cost in the appointment's own fiscal
@@ -208,8 +213,17 @@ models:
           the GDP deflator ratio between the appointment year and the
           PSSRU base year (2023/24) from uk_cost_indices. Use for
           reporting costs "as they would have been at the time".
-          NULL when duration or unit cost or the appointment-year
-          deflator is NULL.
+
+          NULL when:
+          * duration_minutes or unit cost is NULL, OR
+          * the appointment's fiscal_year_start falls outside the
+            uk_cost_indices seed coverage (currently 2000-01 onwards).
+            Pre-2000 OLIDS appointments (which are predominantly data
+            quality artefacts) will therefore have a NULL nominal cost
+            even though base_prices cost is populated — the NULL is
+            an intentional data quality signal, not a bug. Extend the
+            seed lower bound in analysis/inflation_indices/build_seed.py
+            if genuine pre-2000 coverage is needed.
       - name: patient_wait
         description: >
           Minutes the patient waited beyond their scheduled time.
