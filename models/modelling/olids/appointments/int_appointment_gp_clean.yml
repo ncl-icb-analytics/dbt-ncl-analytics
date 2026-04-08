@@ -99,9 +99,20 @@ models:
       - name: contact_mode
         description: >
           Simplified contact mode: Face-to-face, Telephone, Online,
-          Home Visit, Video, Not an Appointment, Unknown
+          Home Visit, Video, Unknown. The raw 'Not an Appointment' value
+          from OLIDS is collapsed into 'Unknown' because profiling showed
+          those rows are real booked clinical activity (including Urgent
+          and Routine consultations that feed the access KPIs) with a
+          practice data-entry quirk in the contact mode field rather than
+          genuine non-appointments. Use contact_mode_source_code for the
+          raw value.
       - name: contact_mode_source_code
-        description: Raw contact mode from source system
+        description: >
+          Raw contact mode from source system. Includes values like
+          'Face to Face (Surgery)', 'Telephone/Audio', 'Not an Appointment'
+          etc. Kept unmodified so analysts can inspect the original
+          value if the simplified contact_mode doesn't give them what
+          they need.
       - name: slot_category
         description: >
           Simplified national slot category: Routine, Acute, Triage,
