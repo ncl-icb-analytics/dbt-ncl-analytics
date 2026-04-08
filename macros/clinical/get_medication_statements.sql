@@ -5,17 +5,25 @@
     {{ exceptions.raise_compiler_error("Must provide either bnf_code or cluster_id parameter to get_medication_statements macro") }}
 {% endif %}
 
-{# Accept cluster_id as string or list, convert to a comma-separated quoted list #}
+{# Accept cluster_id as string or list, normalise to a clean upper-cased token list #}
 {% set cluster_ids_str = '' %}
 {% if cluster_id is not none %}
     {% if cluster_id is string and ',' in cluster_id %}
-            {% set cluster_ids = cluster_id.replace("'", "").split(",") %}
-        {% elif cluster_id is string %}
-            {% set cluster_ids = [cluster_id] %}
-        {% else %}
+        {% set cluster_ids = cluster_id.replace("'", "").split(",") %}
+    {% elif cluster_id is string %}
+        {% set cluster_ids = [cluster_id] %}
+    {% else %}
         {% set cluster_ids = cluster_id %}
     {% endif %}
-    {% set cluster_ids_str = cluster_ids | map('trim') | map('upper') | map('string') | map('replace', "'", "") | map('replace', '"', '') | map('string') | join("','") %}
+    {% set cleaned_cluster_ids = [] %}
+    {% for c in cluster_ids %}
+        {% set token = c | string | replace("'", "") | replace('"', '') | trim | upper %}
+        {% if token %}{% do cleaned_cluster_ids.append(token) %}{% endif %}
+    {% endfor %}
+    {% if cleaned_cluster_ids | length == 0 %}
+        {{ exceptions.raise_compiler_error("get_medication_statements requires non-empty cluster_id values") }}
+    {% endif %}
+    {% set cluster_ids_str = cleaned_cluster_ids | join("','") %}
 {% endif %}
 
     {%- if cluster_id is not none -%}
