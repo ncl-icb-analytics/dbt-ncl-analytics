@@ -4,10 +4,17 @@
     {{ exceptions.raise_compiler_error("get_ltc_lcs_observations_latest requires valuesets parameter") }}
 {%- endif -%}
 
-{# Convert comma-separated values to quoted list if needed #}
-{%- if "'" not in valuesets -%}
-    {%- set valuesets = "'" ~ valuesets.replace(',', "','") ~ "'" -%}
+{# Normalise valuesets into a clean token list, then render quoted forms #}
+{%- set valueset_tokens = [] -%}
+{%- for raw in valuesets.replace("'", "").split(",") -%}
+    {%- set token = raw | trim -%}
+    {%- if token -%}{%- do valueset_tokens.append(token) -%}{%- endif -%}
+{%- endfor -%}
+{%- if valueset_tokens | length == 0 -%}
+    {{ exceptions.raise_compiler_error("get_ltc_lcs_observations_latest requires non-empty valuesets parameter") }}
 {%- endif -%}
+{%- set valuesets_quoted = "'" ~ valueset_tokens | join("','") ~ "'" -%}
+{%- set valuesets_upper_quoted = "'" ~ (valueset_tokens | map('upper') | join("','")) ~ "'" -%}
 
 select
     o.id as observation_id,
@@ -33,8 +40,8 @@ inner join {{ ref('stg_reference_ltc_lcs_expanded_concepts') }} as ec
 left join {{ ref('stg_reference_ltc_lcs_valuesets') }} as vs
     on ec.valueset_id = vs.valueset_id
 where (
-    ec.valueset_id in ({{ valuesets }})
-    or upper(vs.valueset_friendly_name) in (upper({{ valuesets }}))
+    ec.valueset_id in ({{ valuesets_quoted }})
+    or upper(vs.valueset_friendly_name) in ({{ valuesets_upper_quoted }})
 )
 qualify row_number() over (partition by o.person_id, ec.valueset_id order by o.clinical_effective_date desc, o.id desc) = 1
 

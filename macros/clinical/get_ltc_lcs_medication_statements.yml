@@ -1,0 +1,15 @@
+
+macros:
+  - name: get_ltc_lcs_medication_statements
+    description: >
+      Retrieves medication statements (courses) filtered by LTC/LCS valueset IDs or friendly names.
+      Joins to expanded concepts, valuesets, patient mapping, and BNF reference data.
+      Use when rules need course-level criteria (e.g. Date Drug Added) rather than issue-level.
+
+
+    arguments:
+      - name: valuesets
+        type: string
+        description: >
+          Comma-separated valueset IDs or friendly names to filter by.
+          Can be passed as 'VS001,VS002' or "'VS001','VS002'"

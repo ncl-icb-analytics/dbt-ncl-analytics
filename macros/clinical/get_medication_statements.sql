@@ -1,8 +1,8 @@
-{% macro get_medication_orders(bnf_code=none, cluster_id=none, source=none, include_history=false) %}
+{% macro get_medication_statements(bnf_code=none, cluster_id=none, source=none, include_history=false) %}
     -- Optional source parameter to filter to specific refset (e.g., 'LTC_LCS')
     -- include_history=true expands cluster codes with retired SNOMED predecessors via SCT_History
     {% if bnf_code is none and cluster_id is none %}
-    {{ exceptions.raise_compiler_error("Must provide either bnf_code or cluster_id parameter to get_medication_orders macro") }}
+    {{ exceptions.raise_compiler_error("Must provide either bnf_code or cluster_id parameter to get_medication_statements macro") }}
 {% endif %}
 
 {# Accept cluster_id as string or list, normalise to a clean upper-cased token list #}
@@ -21,13 +21,13 @@
         {% if token %}{% do cleaned_cluster_ids.append(token) %}{% endif %}
     {% endfor %}
     {% if cleaned_cluster_ids | length == 0 %}
-        {{ exceptions.raise_compiler_error("get_medication_orders requires non-empty cluster_id values") }}
+        {{ exceptions.raise_compiler_error("get_medication_statements requires non-empty cluster_id values") }}
     {% endif %}
     {% set cluster_ids_str = cleaned_cluster_ids | join("','") %}
 {% endif %}
 
     {%- if cluster_id is not none -%}
-    -- Join pre-mapped medication orders with cluster definitions
+    -- Join pre-mapped medication statements with cluster definitions
     WITH cluster_codes AS (
         SELECT DISTINCT
             code as mapped_concept_code,
@@ -60,62 +60,70 @@
     ){% endif %}
 
     SELECT
-        mo.id AS medication_order_id,
-        mo.medication_statement_id,
-        mo.patient_id,
+        ms.id AS medication_statement_id,
+        ms.patient_id,
         pp.person_id,
         pp.sk_patient_id,
-        mo.clinical_effective_date AS order_date,
-        mo.medication_name AS order_medication_name,
-        mo.dose AS order_dose,
-        mo.quantity_value AS order_quantity_value,
-        mo.quantity_unit AS order_quantity_unit,
-        mo.duration_days AS order_duration_days,
-        mo.estimated_cost,
-        mo.statement_medication_name,
-        mo.mapped_concept_code,
-        mo.mapped_concept_display,
+        ms.clinical_effective_date AS statement_date,
+        ms.date_recorded,
+        ms.medication_name AS statement_medication_name,
+        ms.dose AS statement_dose,
+        ms.quantity_value AS statement_quantity_value,
+        ms.quantity_unit AS statement_quantity_unit,
+        ms.authorisation_type_code,
+        ms.authorisation_type_display,
+        ms.issue_method,
+        ms.is_active,
+        ms.cancellation_date,
+        ms.expiry_date,
+        ms.age_at_event,
+        ms.mapped_concept_code,
+        ms.mapped_concept_display,
         cc.cluster_id,
         bnf.bnf_code,
         bnf.bnf_name
-    FROM {{ ref('stg_olids_medication_order') }} mo
+    FROM {{ ref('stg_olids_medication_statement') }} ms
     JOIN {{ ref('int_patient_person_unique') }} pp
-        ON mo.patient_id = pp.patient_id
+        ON ms.patient_id = pp.patient_id
     INNER JOIN {% if include_history %}expanded_codes{% else %}cluster_codes{% endif %} cc
-        ON mo.mapped_concept_code = cc.mapped_concept_code
+        ON ms.mapped_concept_code = cc.mapped_concept_code
     LEFT JOIN {{ ref('stg_reference_bnf_latest') }} bnf
-        ON mo.mapped_concept_code = bnf.snomed_code
-    WHERE mo.clinical_effective_date IS NOT NULL
+        ON ms.mapped_concept_code = bnf.snomed_code
+    WHERE ms.clinical_effective_date IS NOT NULL
     {% if bnf_code is not none %}
         AND bnf.bnf_code LIKE '{{ bnf_code }}%'
     {% endif %}
     {%- else -%}
     -- BNF code path without cluster filtering
     SELECT
-        mo.id AS medication_order_id,
-        mo.medication_statement_id,
-        mo.patient_id,
+        ms.id AS medication_statement_id,
+        ms.patient_id,
         pp.person_id,
         pp.sk_patient_id,
-        mo.clinical_effective_date AS order_date,
-        mo.medication_name AS order_medication_name,
-        mo.dose AS order_dose,
-        mo.quantity_value AS order_quantity_value,
-        mo.quantity_unit AS order_quantity_unit,
-        mo.duration_days AS order_duration_days,
-        mo.estimated_cost,
-        mo.statement_medication_name,
-        mo.mapped_concept_code,
-        mo.mapped_concept_display,
+        ms.clinical_effective_date AS statement_date,
+        ms.date_recorded,
+        ms.medication_name AS statement_medication_name,
+        ms.dose AS statement_dose,
+        ms.quantity_value AS statement_quantity_value,
+        ms.quantity_unit AS statement_quantity_unit,
+        ms.authorisation_type_code,
+        ms.authorisation_type_display,
+        ms.issue_method,
+        ms.is_active,
+        ms.cancellation_date,
+        ms.expiry_date,
+        ms.age_at_event,
+        ms.mapped_concept_code,
+        ms.mapped_concept_display,
         NULL AS cluster_id,
         bnf.bnf_code,
         bnf.bnf_name
-    FROM {{ ref('stg_olids_medication_order') }} mo
+    FROM {{ ref('stg_olids_medication_statement') }} ms
     JOIN {{ ref('int_patient_person_unique') }} pp
-        ON mo.patient_id = pp.patient_id
+        ON ms.patient_id = pp.patient_id
     LEFT JOIN {{ ref('stg_reference_bnf_latest') }} bnf
-        ON mo.mapped_concept_code = bnf.snomed_code
-    WHERE mo.clinical_effective_date IS NOT NULL
+        ON ms.mapped_concept_code = bnf.snomed_code
+    WHERE ms.clinical_effective_date IS NOT NULL
     {% if bnf_code is not none %}
         AND bnf.bnf_code LIKE '{{ bnf_code }}%'
     {% endif %}
