@@ -10,11 +10,12 @@ Classification notes:
 - sds_role_group is the official NHS Digital 4-group (+ Unknown) classification.
 - practitioner_role_group is our analytical grouping, richer than SDS to preserve
   ARRS / workforce-mix signal that matters for primary care reporting.
-- is_arrs_role is TRUE only for codes whose SDS description is explicitly an
-  ARRS-scheme role (R9801, R9803, R9804, R9806-R9808, R9811-R9813, R9815).
-  Generic role codes (R1290 Pharmacist, R1070 Paramedic) are FALSE because
-  non-ARRS staff can hold them; use the seed + practice funding data together
-  if you need a precise ARRS headcount.
+- is_arrs_role is TRUE only for codes whose SDS description unambiguously
+  identifies an ARRS-scheme role. The current set is defined in the
+  ARRS_CODES constant below — see that for the authoritative list and
+  per-code rationale. Generic role codes (R1290 Pharmacist, R1070 Paramedic)
+  are FALSE because non-ARRS staff can hold them; use the seed + practice
+  funding data together if you need a precise ARRS headcount.
 """
 
 from pathlib import Path

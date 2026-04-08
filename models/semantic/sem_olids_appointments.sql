@@ -24,9 +24,9 @@
 #}
 
 TABLES(
-    appt AS {{ ref('int_appointment_gp_clean') }}
+    appt AS {{ ref('int_appointment_gp_clean_recent') }}
         PRIMARY KEY (appointment_id)
-        COMMENT = 'Cleaned GP appointments - Care Related Encounters only',
+        COMMENT = 'Cleaned GP appointments — Care Related Encounters only, restricted to last 60 months matching OLIDS retention',
     demographics AS {{ ref('dim_person_demographics') }}
         PRIMARY KEY (person_id)
         COMMENT = 'Patient demographics, geography, ethnicity, deprivation',
@@ -166,5 +166,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS GP Appointments with patient demographics and conditions. Grain: one row per appointment. Supports GP contract access KPIs, DNA equity analysis, workforce mix, and utilisation by condition/deprivation.'
-AI_SQL_GENERATION 'For GP contract KPIs: urgent_same_day_count / urgent_attended_count = same-day rate; routine_within_7d_count / routine_attended_count = 7-day rate. For equity analysis, group by imd_quintile_25 or ethnicity_category. For condition-specific utilisation, filter on has_diabetes etc. Group by DATE_TRUNC(month, start_date) for trends. Cost estimation: AGG(total_duration) * cost_per_minute_gbp grouped by practitioner_role_group.'
+AI_SQL_GENERATION 'For GP contract KPIs: urgent_same_day_count / urgent_attended_count = same-day rate; routine_within_7d_count / routine_attended_count = 7-day rate. For equity analysis, group by imd_quintile_25 or ethnicity_category. For condition-specific utilisation, filter on has_diabetes etc. Group by DATE_TRUNC(month, start_date) for trends. Cost estimation: aggregate the per-appointment cost facts directly — SUM(appointment_cost_gbp_base_prices) for real-terms cost in PSSRU 2023/24 prices (use this for cross-year comparisons), or SUM(appointment_cost_gbp_nominal) for contemporaneous (GDP-deflator-adjusted) cost. Do NOT derive cost from total_duration * cost_per_minute_gbp — that ignores the per-row deflator adjustment and produces incorrect totals for any analysis spanning multiple fiscal years or mixing role groups. The pre-computed appointment cost facts already handle role mix, untimed-session NULLs and the deflator adjustment.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: GP appointment access, same-day urgent access, wait times, DNA rates by deprivation/ethnicity, contact mode trends, workforce mix, utilisation by condition, and GP contract KPIs. For current population snapshots without appointment data use sem_olids_population. For clinical biomarkers use sem_olids_observations. For time-series condition trends use sem_olids_trends.'

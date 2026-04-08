@@ -37,12 +37,24 @@ seeds:
         cost_per_hour_gbp: float
         cost_per_minute_gbp: float
         is_proxy: boolean
+    data_tests:
+      # Proxy-provenance contract: every row flagged as a proxy must
+      # name its source role and document the rationale in notes, so
+      # imputed costs are never untraceable.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "proxy_source is not null and notes is not null"
+          config:
+            where: "is_proxy = true"
     columns:
       - name: practitioner_role_group
         description: Join key matching int_appointment_gp_clean.practitioner_role_group (and sds_role_groups.practitioner_role_group).
         data_tests:
           - not_null
           - unique
+          # Coverage contract is enforced on the sds_role_groups side:
+          # see seeds/sds_role_groups.yml for the relationships test that
+          # asserts every analytical role group from SDS has a row here.
       - name: cost_per_hour_gbp
         description: PSSRU 2024 unit cost per working hour in 2023/24 prices. NULL for non-clinical / Unknown / Admin rows.
       - name: cost_per_minute_gbp

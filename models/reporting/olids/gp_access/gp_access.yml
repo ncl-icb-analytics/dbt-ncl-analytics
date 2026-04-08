@@ -6,6 +6,9 @@ models:
 
       Grain: one row per practice per month.
 
+      Scope: rolling last 60 months (built from int_appointment_gp_clean_recent
+      to match OLIDS retention — see that view for the rationale).
+
       Numerator: urgent attended appointments booked and seen on the same
       calendar day (NHSE 2026/27 GP contract definition).
       Denominator: all urgent attended appointments with a booking date.
@@ -37,6 +40,9 @@ models:
 
       Grain: one row per practice per month.
 
+      Scope: rolling last 60 months (built from int_appointment_gp_clean_recent
+      to match OLIDS retention).
+
       Numerator: routine attended appointments with booking_to_slot_days <= 7.
       Denominator: all routine attended appointments with a booking date.
     config:
@@ -62,6 +68,9 @@ models:
       GP Contract KPI: % of routine appointments seen within 14 days of booking.
 
       Grain: one row per practice per month.
+
+      Scope: rolling last 60 months (built from int_appointment_gp_clean_recent
+      to match OLIDS retention).
 
       Numerator: routine attended appointments with booking_to_slot_days <= 14.
       Denominator: all routine attended appointments with a booking date.
@@ -89,12 +98,16 @@ models:
 
       Grain: one row per practice per month.
 
+      Scope: rolling last 60 months (built from int_appointment_gp_clean_recent
+      to match OLIDS retention).
+
       Numerator: appointments with is_dna = TRUE.
       Denominator: in-scope appointments (is_attended OR is_dna only —
       excludes cancelled, rescheduled and other non-attendance statuses).
 
       DNA rates vary significantly by deprivation and demographics.
-      Join to practice-level demographics for equity analysis.
+      Join to practice-level demographics for equity analysis. For DNA
+      cost reporting see fct_gp_dna_costs.
     config:
       meta:
         owner:
@@ -118,6 +131,9 @@ models:
       GP appointment volumes by contact mode and practitioner role group.
 
       Grain: one row per practice per month per contact_mode per practitioner_role_group.
+
+      Scope: rolling last 60 months (built from int_appointment_gp_clean_recent
+      to match OLIDS retention).
 
       Tracks digital transformation (F2F vs telephone vs online trends)
       and workforce mix. Includes average duration and wait times for

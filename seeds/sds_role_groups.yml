@@ -67,6 +67,14 @@ seeds:
         description: Analytical grouping used by int_appointment_gp_clean and downstream GP access reporting.
         data_tests:
           - not_null
+          # Coverage contract: every analytical role group used here
+          # must have a cost row in pssru_unit_costs_2024 so the
+          # int_appointment_gp_clean LEFT JOIN never silently leaves a
+          # known role group with NULL unit cost.
+          - relationships:
+              arguments:
+                to: ref('pssru_unit_costs_2024')
+                field: practitioner_role_group
           - accepted_values:
               arguments:
                 values:
