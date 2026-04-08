@@ -4,10 +4,17 @@
     {{ exceptions.raise_compiler_error("get_ltc_lcs_medication_statements_latest requires valuesets parameter") }}
 {%- endif -%}
 
-{# Convert comma-separated values to quoted list if needed #}
-{%- if "'" not in valuesets -%}
-    {%- set valuesets = "'" ~ valuesets.replace(',', "','") ~ "'" -%}
+{# Normalise valuesets into a clean token list, then render quoted forms #}
+{%- set valueset_tokens = [] -%}
+{%- for raw in valuesets.replace("'", "").split(",") -%}
+    {%- set token = raw | trim -%}
+    {%- if token -%}{%- do valueset_tokens.append(token) -%}{%- endif -%}
+{%- endfor -%}
+{%- if valueset_tokens | length == 0 -%}
+    {{ exceptions.raise_compiler_error("get_ltc_lcs_medication_statements_latest requires non-empty valuesets parameter") }}
 {%- endif -%}
+{%- set valuesets_quoted = "'" ~ valueset_tokens | join("','") ~ "'" -%}
+{%- set valuesets_upper_quoted = "'" ~ (valueset_tokens | map('upper') | join("','")) ~ "'" -%}
 
 select
     ms.id as medication_statement_id,
@@ -44,8 +51,8 @@ left join {{ ref('stg_reference_bnf_latest') }} as bnf
     on ms.mapped_concept_code = bnf.snomed_code
 where ms.clinical_effective_date is not null
     and (
-        ec.valueset_id in ({{ valuesets }})
-        or upper(vs.valueset_friendly_name) in (upper({{ valuesets }}))
+        ec.valueset_id in ({{ valuesets_quoted }})
+        or upper(vs.valueset_friendly_name) in ({{ valuesets_upper_quoted }})
     )
 qualify row_number() over (partition by pp.person_id, ec.valueset_id order by ms.clinical_effective_date desc, ms.id desc) = 1
 

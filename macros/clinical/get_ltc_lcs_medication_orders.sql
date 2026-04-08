@@ -4,10 +4,17 @@
     {{ exceptions.raise_compiler_error("get_ltc_lcs_medication_orders requires valuesets parameter") }}
 {%- endif -%}
 
-{# Convert comma-separated values to quoted list if needed #}
-{%- if "'" not in valuesets -%}
-    {%- set valuesets = "'" ~ valuesets.replace(',', "','") ~ "'" -%}
+{# Normalise valuesets into a clean token list, then render quoted forms #}
+{%- set valueset_tokens = [] -%}
+{%- for raw in valuesets.replace("'", "").split(",") -%}
+    {%- set token = raw | trim -%}
+    {%- if token -%}{%- do valueset_tokens.append(token) -%}{%- endif -%}
+{%- endfor -%}
+{%- if valueset_tokens | length == 0 -%}
+    {{ exceptions.raise_compiler_error("get_ltc_lcs_medication_orders requires non-empty valuesets parameter") }}
 {%- endif -%}
+{%- set valuesets_quoted = "'" ~ valueset_tokens | join("','") ~ "'" -%}
+{%- set valuesets_upper_quoted = "'" ~ (valueset_tokens | map('upper') | join("','")) ~ "'" -%}
 
 select
     mo.id as medication_order_id,
@@ -40,8 +47,8 @@ left join {{ ref('stg_reference_bnf_latest') }} as bnf
     on mo.mapped_concept_code = bnf.snomed_code
 where mo.clinical_effective_date is not null
     and (
-        ec.valueset_id in ({{ valuesets }})
-        or upper(vs.valueset_friendly_name) in (upper({{ valuesets }}))
+        ec.valueset_id in ({{ valuesets_quoted }})
+        or upper(vs.valueset_friendly_name) in ({{ valuesets_upper_quoted }})
     )
 qualify row_number() over (partition by mo.id, ec.valueset_id order by ec.snomed_code) = 1
 
