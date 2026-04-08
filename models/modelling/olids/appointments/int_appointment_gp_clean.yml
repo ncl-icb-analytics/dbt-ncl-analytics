@@ -2,41 +2,42 @@ version: 2
 models:
   - name: int_appointment_gp_clean
     description: |
-      Cleaned OLIDS GP appointments for access KPI reporting, utilisation
-      analysis, workforce mix and costing.
+      Cleaned OLIDS GP appointments. Grain: one row per appointment.
 
-      Grain: one row per appointment.
+      Scope: Care Related Encounters with a clinical practitioner.
+      Excludes future/available slots, admin practitioner roles, and
+      non-Care-Related-Encounter contexts.
 
-      Scope (Care Related Encounters with a clinical practitioner):
-      * Includes attended and DNA appointments
-      * Excludes future/available slots, admin practitioner roles
-        (receptionists, clerks — workflow logging not clinical contact),
-        non-Care-Related-Encounter contexts
+      Two role groupings (sourced from the sds_role_groups seed):
+      * practitioner_role_group — analytical grouping preserving ARRS
+        workforce signal (GP, Nurse, Pharmacist, HCA, PA, Paramedic,
+        Physio, Care Navigator, etc.)
+      * sds_role_group — official NHS Digital 4-group taxonomy for
+        alignment with NHS Digital Appointments in General Practice
 
-      Key cleaning:
-      * practitioner_role_group and sds_role_group are sourced from the
-        sds_role_groups seed (NHS Digital SDS role code lookup). The seed
-        provides both the official NHS 4-group taxonomy and our richer
-        analytical grouping preserving ARRS workforce signal.
-      * duration_minutes is derived from planned/actual duration but set to
-        NULL for untimed/list schedules (open-book duty doctor / eConsult
-        lists) where the source duration is session-inherited and meaningless.
-        The 10-minute fallback when both are NULL/zero follows the PSSRU
-        convention for a standard GP consultation.
-      * urgency follows the NHSE 2026/27 GP contract: only
-        "General Consultation Acute" counts as Urgent.
+      Two cost columns (sourced from pssru_unit_costs_2024 seed,
+      adjusted via uk_cost_indices seed):
+      * appointment_cost_gbp_base_prices — always in PSSRU 2023/24
+        real-terms prices, use for cross-year comparisons
+      * appointment_cost_gbp_nominal — in the appointment's own fiscal
+        year prices (GDP deflator adjusted), use for contemporaneous
+        reporting. NULL for pre-2000 fiscal years (outside seed
+        coverage — intentional data quality signal).
 
-      Key facts exposed:
-      * urgency, is_same_day, booking_to_slot_days — for access KPIs
-      * is_attended, is_dna — for DNA analysis
-      * contact_mode, practitioner_role_group, is_arrs_role — for workforce mix
-      * duration_minutes — for costing downstream (sem_olids_appointments
-        joins pssru_unit_costs_2024)
-      * patient_wait — patient experience
+      cost_is_proxy flags rows where the unit cost is borrowed from
+      another role's PSSRU rate (ARRS roles without a direct PSSRU
+      figure). Filter WHERE cost_is_proxy = FALSE to restrict to direct
+      PSSRU figures only.
 
-      Sources: stg_olids_appointment, stg_olids_practitioner_in_role,
-      stg_olids_practitioner, stg_olids_schedule, sds_role_groups seed.
-      Reference: NHSE GPAD national category mapping guide.
+      For full cost methodology and per-role rationale see the
+      pssru_unit_costs_2024 and uk_cost_indices seed descriptions.
+
+      All reporting models (fct_gp_* and sem_olids_appointments) build
+      from int_appointment_gp_clean_recent rather than this model
+      directly. The recent view restricts to the last 60 months of
+      data to match OLIDS retention. Use this unfiltered model only
+      for ad-hoc analyses that need pre-5-year history (with the
+      OLIDS retention caveat in mind — leavers are silently truncated).
     config:
       meta:
         owner:
@@ -112,8 +113,20 @@ models:
         description: Practitioner identifier (individual clinician)
       - name: practitioner_name
         description: >
-          Clinician full name (from stg_olids_practitioner). Personal data —
-          restrict access downstream accordingly.
+          Clinician full name (from stg_olids_practitioner). Personal data
+          under UK GDPR. Combined with pseudonymised patient-level
+          appointment records this column is a quasi-identifier that
+          materially increases re-identification risk for patients (not
+          just clinician privacy) — clinician name + practice + date +
+          condition can collapse k-anonymity quickly. Restrict downstream
+          access accordingly and prefer aggregating at role / practice
+          level rather than named clinician unless there is an explicit
+          clinical-supervisory purpose.
+        config:
+          tags:
+            - personal_data
+          meta:
+            contains_personal_data: true
       - name: role_code
         description: Raw SDS role code from practitioner_in_role (e.g. R0260).
       - name: role_name
@@ -246,3 +259,29 @@ models:
         description: Patient age at the time of the appointment
       - name: record_owner_organisation_code
         description: Practice ODS code (e.g. E85012)
+
+  - name: int_appointment_gp_clean_recent
+    description: |
+      Recent-window view over int_appointment_gp_clean. Same grain
+      (one row per appointment), same columns, restricted to the
+      rolling last 60 months of data anchored to MAX(start_date).
+
+      Why this view exists: OLIDS only retains records for patients
+      who left or died within the last ~5 years. Anything older is
+      silently truncated to currently-registered patients only,
+      systematically biasing historical reporting (per-capita cost
+      drifts down, DNA rate biased toward stayers, workforce mix
+      tilts). Restricting reporting to a 5-year window matching OLIDS
+      retention keeps the population denominator honest.
+
+      All reporting models in models/reporting/olids/gp_access/ and
+      models/reporting/olids/gp_costs/ build from this view rather
+      than the unfiltered int_appointment_gp_clean. The semantic view
+      sem_olids_appointments also references this view.
+
+      Materialised as a view (zero storage cost) — Snowflake pushes
+      the date filter down to the underlying clustered table.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison

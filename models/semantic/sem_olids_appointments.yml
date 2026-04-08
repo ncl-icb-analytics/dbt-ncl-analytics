@@ -9,6 +9,13 @@ models:
 
       Grain: one row per appointment (appointment_id).
 
+      Scope: built from int_appointment_gp_clean_recent which restricts
+      to the rolling last 60 months of appointment data. This matches
+      OLIDS retention — anything older has been silently truncated to
+      currently-registered patients only and would bias historical
+      analysis. Apply the same 5-year caveat to any historical
+      comparisons drawn from this view.
+
       Practice attribution: appointment-owner side via
       record_owner_organisation_code. Practice / PCN / borough / age fields
       sourced from dim_person_demographics are the patient's CURRENT

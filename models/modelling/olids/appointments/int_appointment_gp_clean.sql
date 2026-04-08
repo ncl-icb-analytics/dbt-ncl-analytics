@@ -1,6 +1,7 @@
 {{
     config(
         materialized='table',
+        cluster_by=['start_date'],
         tags=['intermediate', 'appointment', 'gp']
     )
 }}
@@ -279,13 +280,17 @@ cleaned as (
     a.slot_category,
 
     -- Practitioner
+    -- Wrap the seed-derived columns in COALESCE so appointments with no
+    -- matching practitioner_in_role record (NULL practitioner_in_role_id
+    -- or missing pir row) still get an explicit 'Unknown' value rather
+    -- than NULL — protects downstream not_null tests and analyst queries.
     pr.practitioner_id,
     pr.practitioner_name,
     pr.role_code,
     pr.role_name,
-    pr.sds_role_group,
-    pr.practitioner_role_group,
-    pr.is_arrs_role,
+    COALESCE(pr.sds_role_group, 'Unknown') as sds_role_group,
+    COALESCE(pr.practitioner_role_group, 'Unknown') as practitioner_role_group,
+    COALESCE(pr.is_arrs_role, FALSE) as is_arrs_role,
 
     -- Urgency
     a.urgency,

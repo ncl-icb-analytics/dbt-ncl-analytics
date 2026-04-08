@@ -85,8 +85,21 @@ def parse_gdp_deflator() -> dict[int, dict]:
             }
             last_outturn_index = float(idx_val)
         elif is_forecast and isinstance(pct_change, (int, float)):
-            # Chain-compute from the previous year's index using the pct change
-            prev = out[year_start - 1]["deflator"]
+            # Chain-compute from the previous year's index using the pct change.
+            # Guard against the previous year being missing — fall back to the
+            # most recent available year, or skip the row if no prior year
+            # exists at all (avoids a confusing KeyError on partial data).
+            if (year_start - 1) in out:
+                prev = out[year_start - 1]["deflator"]
+            else:
+                earlier_years = [k for k in out.keys() if k < year_start]
+                if not earlier_years:
+                    print(
+                        f"WARNING: skipping forecast year {year_start} — "
+                        f"no prior year in series to chain from"
+                    )
+                    continue
+                prev = out[max(earlier_years)]["deflator"]
             deflator = prev * (1 + pct_change / 100)
             out[year_start] = {
                 "deflator": round(deflator, 4),
@@ -163,10 +176,13 @@ def main() -> None:
     SEED_PATH.write_text("\n".join(rows) + "\n", encoding="utf-8")
     print(f"Wrote {len(rows) - 1} rows to {SEED_PATH}")
 
-    # Quick sanity print -- show years around the outturn/forecast boundary
+    # Quick sanity print -- show years around the outturn/forecast boundary.
+    # Iterate over the years we actually have so the print never KeyErrors
+    # on a partial HMT release.
     print("\nBoundary years (outturn -> forecast):")
     print("  fy      | deflator | cpi      | cpih     | forecast?")
-    for y in range(2020, 2031):
+    boundary_years = sorted(y for y in gdp if 2020 <= y <= 2030)
+    for y in boundary_years:
         g = gdp[y]
         cpi_val = fiscal_year_mean(cpi, y)
         cpih_val = fiscal_year_mean(cpih, y)
