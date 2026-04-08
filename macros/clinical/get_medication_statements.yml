@@ -1,0 +1,23 @@
+
+macros:
+  - name: get_medication_statements
+    description: >
+      Retrieves standardised medication statement (course) data filtered by either BNF code or cluster ID.
+      Joins to concept mapping and BNF reference tables. Statement-grain counterpart to get_medication_orders,
+      use when rules need course-level criteria rather than issue-level.
+    arguments:
+      - name: bnf_code
+        type: string
+        description: BNF code prefix to filter medications by (e.g. '0205' for beta blockers)
+
+      - name: cluster_id
+        type: string
+        description: Cluster ID to filter medications by (e.g. 'AF_MEDICATIONS' for atrial fibrillation drugs)
+
+      - name: source
+        type: string
+        description: Optional source/refset filter applied to combined codesets (e.g. 'LTC_LCS')
+
+      - name: include_history
+        type: boolean
+        description: Expand cluster codes with retired SNOMED predecessors via SCT_History (default false)
