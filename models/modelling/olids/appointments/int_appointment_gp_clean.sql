@@ -58,13 +58,21 @@ with appointments as (
 
         -- Contact mode (simplified)
         a.contact_mode_source_code,
+        -- 'Not an Appointment' is a practice data-entry label rather than a
+        -- genuine non-appointment — profiling (2026-04) showed all 44k such
+        -- rows have a populated date_time_booked, sit on real schedules,
+        -- and span the full range of slot categories including 13.5k
+        -- Urgent and 10.4k Routine consultations that feed the access
+        -- KPIs. They're real clinical activity where the contact mode
+        -- just wasn't properly recorded, so we collapse them into
+        -- 'Unknown' alongside the ELSE fallback. The raw value is still
+        -- available via contact_mode_source_code for anyone who needs it.
         CASE
             WHEN a.contact_mode_source_code = 'Face to Face (Surgery)' THEN 'Face-to-face'
             WHEN a.contact_mode_source_code = 'Telephone/Audio' THEN 'Telephone'
             WHEN a.contact_mode_source_code = 'Written (Including Online)' THEN 'Online'
             WHEN a.contact_mode_source_code = 'Face to Face (Home Visit)' THEN 'Home Visit'
             WHEN a.contact_mode_source_code = 'Video with Audio' THEN 'Video'
-            WHEN a.contact_mode_source_code = 'Not an Appointment' THEN 'Not an Appointment'
             ELSE 'Unknown'
         END as contact_mode,
 
