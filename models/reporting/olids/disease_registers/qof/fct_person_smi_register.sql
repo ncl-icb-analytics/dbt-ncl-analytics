@@ -12,6 +12,7 @@ Business Logic:
 - OR lithium therapy in last 6 months and not stopped
 - No age restrictions for SMI register
 - Based on legacy fct_person_dx_smi.sql
+- Amended 8.4.26 KH Include 'Has_resolved_code' flag for use in SMI health checks
 
 QOF Context:
 Used for serious mental illness quality measures including:
@@ -26,14 +27,48 @@ WITH smi_diagnoses AS (
     -- Per QOF MH001: MH1_REG is "ever diagnosed" — no remission exclusion
     SELECT
         person_id,
-        MIN(clinical_effective_date) AS earliest_diagnosis_date,
-        MAX(clinical_effective_date) AS latest_diagnosis_date,
-        NULL::TIMESTAMP_NTZ AS latest_resolved_date,
+        MIN(
+            CASE WHEN is_diagnosis_code THEN clinical_effective_date END
+        ) AS earliest_diagnosis_date,
+        -- MAX(clinical_effective_date) AS latest_diagnosis_date,
+        MAX(
+            CASE WHEN is_diagnosis_code THEN clinical_effective_date END
+        ) AS latest_diagnosis_date,
+        -- MAX(clinical_effective_date) AS latest_diagnosis_date,
+        --NULL::TIMESTAMP_NTZ AS latest_resolved_date,
+        MAX(
+            CASE WHEN is_resolved_code THEN clinical_effective_date END
+        ) AS latest_resolved_date,
+        --for QOF keep in ever had any diagnosis 
         TRUE AS has_active_smi_diagnosis,
-        ARRAY_AGG(DISTINCT concept_code) AS all_smi_concept_codes,
-        ARRAY_AGG(DISTINCT concept_display) AS all_smi_concept_displays,
-        ARRAY_CONSTRUCT() AS all_resolved_concept_codes
-
+         -- For SMI health checks flag whether the resolved code is reported on or after the latest diagnosis date
+        COALESCE(
+    (
+        /* Case 1: both diagnosis and resolved exist, resolved is same or later */
+        MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
+        AND
+        MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) IS NOT NULL
+        AND
+        MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END)
+            >=
+        MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END)
+    )
+    OR
+    (
+        /* Case 2: resolved exists and NO diagnosis exists */
+        MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
+        AND
+        MAX(CASE WHEN is_diagnosis_code THEN 1 ELSE 0 END) = 0
+    ),
+    FALSE
+) AS has_recent_resolved_code,
+        --ARRAY_AGG(DISTINCT concept_code) AS all_smi_concept_codes,
+        ARRAY_AGG(DISTINCT CASE WHEN is_diagnosis_code THEN concept_code END) AS all_smi_concept_codes,
+        --ARRAY_AGG(DISTINCT concept_display) AS all_smi_concept_displays,
+        ARRAY_AGG(DISTINCT CASE WHEN is_diagnosis_code THEN concept_display END) AS all_smi_concept_displays,
+      --ARRAY_CONSTRUCT() AS all_resolved_concept_codes,
+        ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_code END) AS all_resolved_concept_codes,
+        ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_display END) AS all_resolved_concept_displays
     FROM {{ ref('int_smi_diagnoses_all') }}
     GROUP BY person_id
 ),
@@ -77,28 +112,29 @@ combined_smi_eligibility AS (
         smi.latest_diagnosis_date,
         smi.latest_resolved_date,
         smi.has_active_smi_diagnosis,
+        smi.has_recent_resolved_code,
         lith.latest_lithium_order_date,
 
         -- Lithium therapy details
         lith.recent_lithium_orders_count,
-        smi.all_smi_concept_codes,
-
-        -- SMI Register Logic: Active SMI diagnosis OR recent lithium therapy
-        smi.all_smi_concept_displays,
-
-        -- Supporting flags
-        smi.all_resolved_concept_codes,
         lith.all_lithium_concept_codes,
-
-        -- Concept arrays
         lith.all_lithium_concept_displays,
+        
+       -- SMI diagnosis details
+        smi.all_smi_concept_codes,
+        smi.all_smi_concept_displays,
+        smi.all_resolved_concept_codes,
+        smi.all_resolved_concept_displays,
+        
+        -- SMI Register Logic: Active SMI diagnosis OR recent lithium therapy
+       
         COALESCE(smi.person_id, lith.person_id) AS person_id,
         (
             smi.has_active_smi_diagnosis = TRUE
             OR
             (lith.recent_lithium_orders_count > 0)
         ) AS is_on_register,
-        smi.latest_diagnosis_date IS NOT NULL AS has_mh_diagnosis,
+        smi.latest_diagnosis_date IS NOT NULL OR smi.latest_resolved_date IS NOT NULL AS has_mh_diagnosis,
         lith.recent_lithium_orders_count > 0 AS is_on_lithium
 
     FROM smi_diagnoses AS smi
@@ -117,6 +153,7 @@ SELECT
     cse.is_on_register,
     cse.is_on_lithium,
     cse.has_mh_diagnosis,
+    cse.has_recent_resolved_code,
     cse.has_active_smi_diagnosis,
     cse.earliest_diagnosis_date,
     cse.latest_diagnosis_date,
@@ -125,6 +162,7 @@ SELECT
     cse.all_smi_concept_codes AS all_mh_concept_codes,
     cse.all_smi_concept_displays AS all_mh_concept_displays,
     cse.all_resolved_concept_codes,
+    cse.all_resolved_concept_displays,
     cse.all_lithium_concept_codes,
     cse.all_lithium_concept_displays
 
