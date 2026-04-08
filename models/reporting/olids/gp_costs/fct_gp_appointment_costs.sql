@@ -41,11 +41,21 @@ R1290 generic Pharmacist).
 select
     record_owner_organisation_code as practice_code,
     DATE_TRUNC('month', start_date) as report_month,
-    fiscal_year_start,
     practitioner_role_group,
+    -- Part of the grain: a handful of analytical role groups span two
+    -- SDS groups (e.g. Nurse includes both 'Nurses' and 'Other Direct
+    -- Patient Care' via A&E Staff Nurse; Admin similarly spans
+    -- 'Data Quality' and 'Other Direct Patient Care'), so including
+    -- sds_role_group in the grain keeps the result deterministic.
+    sds_role_group,
 
-    -- Seed-determined passthroughs (invariant within practitioner_role_group)
-    ANY_VALUE(sds_role_group) as sds_role_group,
+    -- fiscal_year_start is functionally determined by report_month so
+    -- MAX() returns the same value for every row in the group.
+    MAX(fiscal_year_start) as fiscal_year_start,
+
+    -- Seed-determined passthroughs (invariant within practitioner_role_group
+    -- because they come from the pssru_unit_costs_2024 seed keyed on
+    -- practitioner_role_group; ANY_VALUE is safe here)
     ANY_VALUE(cost_is_proxy) as cost_is_proxy,
     ANY_VALUE(cost_proxy_source) as cost_proxy_source,
 
@@ -77,5 +87,5 @@ from {{ ref('int_appointment_gp_clean_recent') }}
 group by
     record_owner_organisation_code,
     DATE_TRUNC('month', start_date),
-    fiscal_year_start,
-    practitioner_role_group
+    practitioner_role_group,
+    sds_role_group

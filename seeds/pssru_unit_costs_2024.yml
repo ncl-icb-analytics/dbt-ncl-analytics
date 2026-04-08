@@ -44,8 +44,8 @@ seeds:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "proxy_source is not null and notes is not null"
-            config:
-              where: "is_proxy = true"
+          config:
+            where: "is_proxy = true"
     columns:
       - name: practitioner_role_group
         description: Join key matching int_appointment_gp_clean.practitioner_role_group (and sds_role_groups.practitioner_role_group).

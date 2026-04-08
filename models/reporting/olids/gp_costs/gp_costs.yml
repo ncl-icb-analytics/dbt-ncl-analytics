@@ -38,6 +38,7 @@ models:
               - practice_code
               - report_month
               - practitioner_role_group
+              - sds_role_group
     columns:
       - name: practice_code
         description: GP practice ODS code (record_owner_organisation_code from the appointment).
