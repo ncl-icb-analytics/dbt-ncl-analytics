@@ -15,9 +15,6 @@ models:
       - Rule 7: beta blockers within 6/12 months (or adverse reaction) (include on fail)
       - Rule 8: ACE inhibitors within 6/12 months (or adverse reaction) (include on fail)
 
-      Valuesets vs11 and vs13 (adverse reactions for rules 5 and 6) currently return no codes. 
-      They are local EMIS codes without a translation. They do not have terms on termbrowser.nhs.uk.
-
     config:
       meta:
         owner:
