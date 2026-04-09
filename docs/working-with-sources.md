@@ -1,191 +1,155 @@
-# How dbt Sources Work in This Project
+# Working with Sources
 
-## Overview
+A quick reference for adding, updating, and regenerating sources in this project. See [How it works](#how-it-works) further down for background.
 
-This project uses a dynamic, configuration-driven approach to generate dbt sources and staging models. Everything is controlled by a single configuration file that drives the entire process.
+## Quick reference
 
-## Source File Structure
+| I want to... | Do this |
+|---|---|
+| Regenerate all sources and raw models | `python scripts/sources/run_all_source_generation.py` |
+| Regenerate just the YAMLs and raw models (no Snowflake refresh) | `python scripts/sources/2_generate_sources.py && python scripts/sources/3_generate_raw_models.py` |
+| Add a new database/schema with all its tables | Add to `source_mappings.yml`, run the pipeline |
+| Add a single ad-hoc table from an existing schema | Add it to a manual YAML (see below) |
+| Pin a volatile schema to a curated table list | Use `manual: true` + a `manual_<name>.yml` file |
 
-Sources are organised into two types:
+## Adding a new source
 
-1. **Auto-generated sources** (`auto_*.yml` files):
-   - Generated automatically from database metadata
-   - Located in `models/sources/auto_*.yml`
-   - Include all tables found in the configured database/schema
-   - Re-generated each time the source generation script runs
+### Option A: all tables from a stable schema
 
-2. **Manual sources** (`sources.yml`):
-   - Manually defined and maintained
-   - Located in `models/sources/sources.yml`
-   - Used for sources not in `source_mappings.yml` or with custom table definitions
-   - Take precedence over auto-generated sources (prevents duplicates)
-
-## Step-by-Step Workflow
-
-### 1. Configure Your Data Sources
-
-Edit `scripts/sources/source_mappings.yml` to define which databases and schemas you want to include:
+Most common. Add an entry to `scripts/sources/source_mappings.yml`:
 
 ```yaml
-# Example configuration
-- source_name: wl
+- source_name: my_source
   database: DATA_LAKE
-  schema: WL
-  description: Waiting lists and patient pathway data
-  staging_prefix: stg_wl
-  domain: commissioning
+  schema: MY_SCHEMA
+  description: What the data contains
+  raw_prefix: raw_my_source
+  domain: commissioning   # commissioning | olids | shared | pid_env
 ```
 
-### 2. Generate Dynamic SQL Query
+Run `python scripts/sources/run_all_source_generation.py`. Commit the new `auto_*.yml` and `models/raw/**/*.sql` files.
 
-Run the Python script to create a custom SQL query based on your configuration:
+### Option B: curated table list from a volatile schema
 
-```bash
-python scripts/sources/1_generate_metadata_query.py
-```
+Use this when a schema gets lots of ad-hoc uploads but the project only depends on a few tables (e.g. `ANALYST_MANAGED`).
 
-This creates `scripts/sources/metadata_query.sql` with SQL that queries only the databases/schemas you've configured.
+1. Create `models/sources/manual_<name>.yml` listing only the tables you care about:
 
-### 3. Extract Metadata from Snowflake
-
-1. Open `scripts/sources/metadata_query.sql`
-2. Copy the entire SQL query
-3. Paste into Snowflake UI and execute
-4. Export results as CSV 
-5. Save as `table_metadata.csv` in the project root directory
-
-### 4. Generate dbt Sources Files
-
-Run the Python script to convert the CSV metadata into dbt sources:
-
-```bash
-python scripts/sources/2_generate_sources.py
-```
-
-This creates auto-generated source files (`models/sources/auto_*.yml`) for all sources defined in `source_mappings.yml`. 
-
-**Important:** The script automatically:
-- Skips auto-generating sources that are manually defined in `sources.yml`
-- Cleans up existing auto-generated files if sources become manual
-- Prevents duplicate source definitions
-
-### 5. Generate Staging Models
-
-Run the Python script to create individual staging SQL files:
-
-```bash
-python scripts/sources/3_generate_staging_models.py
-```
-
-This creates SQL files in `models/commissioning/staging/`, `models/olids/staging/`, etc.
-
-### 6. Build Your dbt Models
-
-```bash
-dbt run         # Build all models
-dbt test        # Run data quality tests
-```
-
-## Manual Sources (sources.yml)
-
-**Location:** `models/sources/sources.yml`
-
-This file contains manually defined sources that:
-- Are NOT in `source_mappings.yml` (fully manual sources like `aic`)
-- Override auto-generated sources with custom table definitions (like `c_ltcs`)
-
-### When to Use Manual Sources
-
-Use manual sources in `sources.yml` when:
-
-1. **Source is not in source_mappings.yml**: The source won't be auto-generated, so define it manually
-2. **You need custom table definitions**: Only specific tables are needed, not all tables in the schema
-3. **You need custom column definitions**: Override auto-generated column metadata
-
-### Examples
-
-**Fully manual source** (not in source_mappings.yml):
-```yaml
-- name: aic
-  database: '"DATA_LAKE__NCL"'
-  schema: '"AIC_DEV"'
-  description: AIC pipelines
-  tables:
-    - name: BASE_ATHENA__CONCEPT
-      # ... column definitions
-```
-
-**Partial override** (source exists in source_mappings.yml but only some tables needed):
-```yaml
-- name: c_ltcs
-  database: '"DEV__PUBLISHED_REPORTING__DIRECT_CARE"'
-  schema: '"C_LTCS"'
-  description: C-LTCS tables
-  tables:
-    - name: MDT_LOOKUP  # Only this table, not all tables in schema
-      # ... column definitions
-```
-
-## Auto-Generated Sources
-
-**Location:** `models/sources/auto_*.yml`
-
-These files are automatically generated and include ALL tables found in the configured database/schema. Do not edit these files manually - they will be overwritten on the next generation run.
-
-## How Sources Map to Models
-
-The `source_mappings.yml` configuration determines:
-1. Which sources get included in `sources.yml`
-2. Which folder the staging models go into
-
-```yaml
-# Example from source_mappings.yml
-- source_name: wl
-  database: DATA_LAKE
-  schema: WL
-  staging_prefix: stg_wl
-  domain: commissioning  # Explicitly define the target domain
-```
-
-## Staging Model Distribution
-
-When you run `3_generate_staging_models.py`, it reads `sources.yml` and creates staging models in the appropriate folders:
-
-- `models/commissioning/staging/` - stg_wl_*, stg_sus_op_*, stg_sus_apc_*, stg_epd_pc_*
-- `models/olids/staging/` - (future integration when OLIDS moves out of UAT)
-- `models/shared/staging/` - stg_dictionary_* (reference/lookup data used across domains)
-
-## Key Points
-
-1. **Manual sources override auto-generated** - If a source exists in `sources.yml`, it won't be auto-generated
-2. **No duplicates** - The generation script prevents duplicate source definitions
-3. **Multiple staging folders** - Models distributed by domain
-4. **source() function** - Works the same regardless of folder:
-   ```sql
-   -- In any staging model:
-   SELECT * FROM {{ source('wl', 'WL_OpenPathways_Data') }}
+   ```yaml
+   version: 2
+   sources:
+     - name: my_source
+       database: '"DATA_LAKE__NCL"'
+       schema: '"MY_SCHEMA"'
+       description: Curated subset of MY_SCHEMA
+       tables:
+         - name: TABLE_A
+           identifier: '"TABLE_A"'
+           columns:
+             - name: COL_1
+               data_type: TEXT
    ```
 
-5. **Domain selection** - Models are organised by domain for clear separation of concerns
+2. Add a matching entry in `source_mappings.yml` with `manual: true`:
 
-## Best Practices
+   ```yaml
+   - source_name: my_source
+     database: DATA_LAKE__NCL
+     schema: MY_SCHEMA
+     description: Curated subset of MY_SCHEMA
+     raw_prefix: raw_my_source
+     domain: shared
+     manual: true
+   ```
 
-### Adding a New Source
+3. Run the pipeline. Step 2 skips auto-generating a YAML; step 3 uses the manual YAML to write raw models with the `raw_prefix` from the mapping.
 
-1. **If all tables are needed**: Add to `source_mappings.yml` and let it auto-generate
-2. **If only specific tables needed**: Add to `sources.yml` with manual table definitions
-3. **If source not in mappings**: Define fully in `sources.yml`
+Tables that appear in `MY_SCHEMA` but not in the manual YAML are ignored. Downstream refs for a removed table break explicitly.
 
-### Updating an Existing Source
+## Drift warnings
 
-1. **Auto-generated source**: Update `source_mappings.yml` and regenerate
-2. **Manual source**: Edit `sources.yml` directly
-3. **Convert auto to manual**: Add to `sources.yml` and the script will skip auto-generation automatically
+Step 2 of the pipeline compares manual YAML files against the live Snowflake schema and prints warnings when they disagree:
 
-### Avoiding Duplicates
+```
+Manual source drift check - 2 warning(s) across 14 table(s):
+  [drift] manual_analyst_managed.yml: reference_analyst_managed.BP_THRESHOLDS declares columns not in source: ['THRESHOLD_RULE_ID']
+  [drift] manual_analyst_managed.yml: reference_analyst_managed.IMD_2025 source has undeclared columns: ['NEW_SCORE_COLUMN']
+```
 
-- Never define the same source in both `sources.yml` and auto-generated files
-- The script prevents this automatically, but if you see duplicate errors:
-  - Check if source exists in `sources.yml`
-  - Check if source is being auto-generated
-  - Remove it from one location
+| Warning | Likely cause | What to do |
+|---|---|---|
+| `declares columns not in source` | Column renamed or dropped upstream | Update the manual YAML and any downstream models that reference the old name |
+| `source has undeclared columns` | New column added upstream | Add it to the manual YAML if you want to use it; otherwise ignore |
+| `not found in live metadata` | Table renamed or dropped upstream | Remove the entry from the manual YAML and fix downstream refs, or point at the new name |
+
+`data_type` changes (e.g. `NUMBER(38,0)` → `NUMBER(38,2)`) are synced silently into the manual YAML on every run — you don't need to edit them by hand.
+
+## Common pitfalls
+
+- **Never edit `models/raw/**/*.sql` or `auto_*.yml` by hand** — both are regenerated from the source YAMLs on every run. Fix the source YAML instead.
+- **`DEV__` vs prod database** — `sources.yml` entries often use `DEV__<database>` so dev builds work. When prod and dev schemas drift, raw models can compile against a table shape that only exists in one environment. If a raw model throws `invalid identifier`, check that `source_mappings.yml` and the manual YAML both point at the same database as the raw model is being built against.
+- **Duplicate source names** — step 3 fails fast if the same source name appears in more than one manual YAML file. Don't copy-paste source blocks between files.
+- **Missing mapping** — if step 3 warns `No mapping found for source '<name>'`, add the source to `source_mappings.yml` (with `manual: true` if it's a manual YAML) so raw models pick up the right `raw_prefix` and `domain`.
+
+---
+
+## How it works
+
+This section is for context — day-to-day work doesn't need it.
+
+### Pipeline scripts
+
+```
+scripts/sources/
+  source_mappings.yml            # Source registry (every source in the project)
+  1a_generate_metadata_query.py  # Writes metadata_query.sql from the mappings
+  1b_extract_metadata.py         # Runs the query via Snowflake SSO -> table_metadata.csv
+  2_generate_sources.py          # Writes auto_*.yml + drift check on manual YAMLs
+  3_generate_raw_models.py       # Writes models/raw/**/*.sql from all source YAMLs
+  run_all_source_generation.py   # Runs 1a -> 1b -> 2 -> 3
+```
+
+Step `1b` opens a browser for Snowflake SSO. Steps `2` and `3` are offline.
+
+### Source file types
+
+| File pattern | Editable? | Where the tables come from |
+|---|---|---|
+| `models/sources/auto_*.yml` | No | Snowflake `INFORMATION_SCHEMA` at step 2 |
+| `models/sources/sources.yml` | Yes | Hand-written (shared file for several sources) |
+| `models/sources/manual_<name>.yml` | Yes | Hand-written (dedicated file per source) |
+
+Manual sources override auto-generated sources with the same name. Step 2 removes the source from `auto_*.yml` automatically if it gets added to a manual file.
+
+### The `manual: true` flag
+
+In `source_mappings.yml`, entries tagged `manual: true` still appear in the metadata query (so drift detection can compare against the live schema), but step 2 skips writing an `auto_*.yml`. The mapping is kept only for its `raw_prefix` and `domain`, which step 3 uses when generating raw models from the manual YAML.
+
+### Drift checks in step 2
+
+Two things happen to every manual source whose `(database, schema)` matches a mapping in `source_mappings.yml`:
+
+1. **Silent type sync** — `data_type` values in the manual YAML are rewritten to match live metadata. No warning is printed for type changes because they are idempotent and don't break downstream SQL.
+2. **Warning-only drift check** — added, removed, or renamed columns and missing tables are reported but not auto-corrected. These need human review.
+
+### Raw model naming
+
+Raw models are written to `models/raw/<domain>/{raw_prefix}_{sanitised_table_name}.sql`. Downstream models reference them via `ref()`:
+
+```sql
+select * from {{ ref('raw_reference_bp_thresholds') }}
+```
+
+And reference the dbt source via `source()`:
+
+```sql
+select * from {{ source('reference_analyst_managed', 'BP_THRESHOLDS') }}
+```
+
+### Pipeline failures
+
+| Failure | Cause | Fix |
+|---|---|---|
+| `SQL file not found` in `1b` | Step `1a` wasn't run | Run `1a` first |
+| `Error during metadata extraction` in `1b` | Snowflake auth or query error | The stale `table_metadata.csv` is removed automatically so step `2` can't silently consume it. Re-run `1b` once the underlying error is fixed |
+| `source '<name>' is declared in both '<file>' and '<file>'` in `3` | Two manual YAMLs declare the same source name | Remove the duplicate |
