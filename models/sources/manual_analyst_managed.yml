@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: reference_analyst_managed
+    database: "DATA_LAKE__NCL"
+    schema: "ANALYST_MANAGED"
+    description: Analyst-managed reference datasets with downstream dependencies. Manually maintained — do not auto-generate.
+    tables:
+      - name: BP_THRESHOLDS
+      - name: EMIS_QOF_V50_REGISTER_COUNTS
+      - name: IMD2019
+      - name: IMD_2025
+      - name: IMMS_SCHEDULE_ADULT_LATEST
+      - name: IMMS_SCHEDULE_CHILD_LATEST
+      - name: LSOA2011_LSOA2021
+      - name: LSOA21_WARD25_LAD25
+      - name: NCL_NEIGHBOURHOOD_LSOA_2021
+      - name: PRACTICE_NEIGHBOURHOOD_LOOKUP
