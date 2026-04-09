@@ -1,0 +1,58 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_hf_pg2_hr
+    description: |
+      Heart Failure Register Priority Group 2 - High Risk.
+      NB: There is no PG1 for HF.
+
+      Patients on Heart Failure register meeting:
+      - Rule 1: New York Heart Association Classification I - IV (include on pass)
+      - Rule 2: Oedema (event) or metolazone (medication isue) (include on pass)
+      - Rule 3: Latest hba1c > 48 and <= 75 (exclude on fail)
+      - Rule 4: left ventricular ejection fraction < 50 (exclude on fail)
+      - Rule 5: SGLT2 inhibitors within 6/12 months (or adverse reaction) (include on fail)
+      - Rule 6: MRAs within 6/12 months (or adverse reaction) (include on fail)
+      - Rule 7: beta blockers within 6/12 months (or adverse reaction) (include on fail)
+      - Rule 8: ACE inhibitors within 6/12 months (or adverse reaction) (include on fail)
+
+      Valuesets vs11 and vs13 (adverse reactions for rules 5 and 6) currently return no codes. 
+      They are local EMIS codes without a translation. They do not have terms on termbrowser.nhs.uk.
+
+    config:
+      meta:
+        owner:
+          name: Peter Shakeshaft
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          arguments:
+            valuesets:
+              - on_hf_reg_pg2_hr_vs1
+              - on_hf_reg_pg2_hr_vs2
+              - on_hf_reg_pg2_hr_vs3
+              - on_hf_reg_pg2_hr_vs4
+              - on_hf_reg_pg2_hr_vs5
+              - on_hf_reg_pg2_hr_vs6
+              - on_hf_reg_pg2_hr_vs7
+              - on_hf_reg_pg2_hr_vs8
+              - on_hf_reg_pg2_hr_vs9
+              - on_hf_reg_pg2_hr_vs10
+              - on_hf_reg_pg2_hr_vs11
+              - on_hf_reg_pg2_hr_vs12
+              - on_hf_reg_pg2_hr_vs13
+              - on_hf_reg_pg2_hr_vs14
+              - on_hf_reg_pg2_hr_vs15
+              - on_hf_reg_pg2_hr_vs16
+              - on_hf_reg_pg2_hr_vs17
+              - on_hf_reg_pg2_hr_vs18
+              - on_hf_reg_pg2_hr_vs19
+              - on_hf_reg_pg2_hr_vs20
+              - on_hf_reg_pg2_hr_vs21
+              - on_hf_reg_pg2_hr_vs22
+              - on_hf_reg_pg2_hr_vs23
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique
