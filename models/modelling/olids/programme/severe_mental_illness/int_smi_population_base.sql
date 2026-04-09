@@ -121,6 +121,7 @@ ELSE la.RESIDENT_FLAG END as RESIDENTIAL_LOC
 ,ltc.HAS_PERIPHERAL_ARTERIAL_DISEASE as HAS_PAD
 ,smi.IS_ON_LITHIUM
 ,smi.HAS_ACTIVE_SMI_DIAGNOSIS
+,smi.HAS_RECENT_RESOLVED_CODE
 FROM {{ ref('dim_person_demographics') }} dem 
 INNER JOIN {{ ref('fct_person_smi_register') }} smi using (PERSON_ID)
 LEFT JOIN {{ ref('dim_person_conditions') }} ltc using (PERSON_ID)

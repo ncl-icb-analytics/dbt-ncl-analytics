@@ -14,6 +14,12 @@ models:
     tests:
       - dbt_utils.at_least_one:
           column_name: person_id
+          config:
+            severity: warn
+          # Severity warn: Rule 1a requires First/New/Flare-Up CHD observations within
+          # the last month. Dev OLIDS data sometimes has a recent gap, leaving the
+          # model legitimately empty. Promote back to error once data freshness is
+          # consistent or Rule 1b becomes implementable.
       - valuesets_have_codes:
           arguments:
             valuesets:
