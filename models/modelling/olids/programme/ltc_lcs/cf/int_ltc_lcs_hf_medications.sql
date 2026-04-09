@@ -26,7 +26,8 @@ WITH hf_medications AS (
         'ENTRESTO_PRODUCTS' AS valueset_id,
         'hf_case_finding_eligible_patients_vs2' AS valueset_friendly_name,
         bnf_code,
-        bnf_name
+        bnf_name,
+        'mapped' AS match_path
     FROM ({{ get_medication_orders(
         cluster_id="'ENTRESTO_PRODUCTS'",
         source="LTC_LCS"
