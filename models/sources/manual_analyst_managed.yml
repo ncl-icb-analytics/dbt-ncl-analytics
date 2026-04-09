@@ -2,8 +2,8 @@ version: 2
 
 sources:
   - name: reference_analyst_managed
-    database: "DATA_LAKE__NCL"
-    schema: "ANALYST_MANAGED"
+    database: '"DATA_LAKE__NCL"'
+    schema: '"ANALYST_MANAGED"'
     description: Analyst-managed reference datasets with downstream dependencies. Manually maintained — do not auto-generate.
     tables:
       - name: BP_THRESHOLDS
