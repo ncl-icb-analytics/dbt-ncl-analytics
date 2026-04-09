@@ -168,42 +168,43 @@ def main():
         print("Please run 2_generate_sources.py first to generate source files", file=sys.stderr)
         sys.exit(1)
 
-    # Read all .yml files from sources directory
-    # Sources in source_mappings.yml: Use auto-generated file (which already has manual table definitions preferred)
-    # Sources NOT in source_mappings.yml: Use manual sources.yml definition
+    # Read all .yml files from sources directory.
+    # Manual sources live in sources.yml or manual_*.yml and take precedence
+    # over auto-generated (auto_*.yml) definitions for the same source name.
     all_sources = []
     source_files = {}  # Track which file each source came from
-    manual_sources = {}  # Track manual sources by name (NOT in source_mappings.yml)
+    manual_sources = {}  # Track manual sources by name
     auto_sources = {}  # Track auto-generated sources by name
-    
-    # Get list of source names from mappings (these are auto-generated)
-    auto_generated_source_names = set(mappings.keys())
-    
-    # First, load manual sources.yml (these override auto-generated sources)
-    manual_sources_file = os.path.join(SOURCES_DIR, 'sources.yml')
-    if os.path.exists(manual_sources_file):
-        with open(manual_sources_file) as f:
-            sources_data = yaml.safe_load(f)
-            if sources_data and 'sources' in sources_data:
-                for source in sources_data['sources']:
-                    source_name = source['name']
-                    # Sources in sources.yml override auto-generated ones
-                    manual_sources[source_name] = source
-                    source_files[source_name] = 'sources.yml'
-    
-    # Then load auto-generated files (excluding sources.yml), but skip if already in sources.yml
+
+    def _is_manual_file(name):
+        return name == 'sources.yml' or (name.startswith('manual_') and name.endswith('.yml'))
+
+    # First, load manual YAML files - these override auto-generated sources
     for filename in sorted(os.listdir(SOURCES_DIR)):
-        if filename.endswith('.yml') and filename != 'sources.yml':
-            filepath = os.path.join(SOURCES_DIR, filename)
-            with open(filepath) as f:
-                sources_data = yaml.safe_load(f)
-                if sources_data and 'sources' in sources_data:
-                    for source in sources_data['sources']:
-                        source_name = source['name']
-                        # Only add if not already defined in sources.yml (manual sources take precedence)
-                        if source_name not in manual_sources:
-                            auto_sources[source_name] = source
-                            source_files[source_name] = filename
+        if not filename.endswith('.yml') or not _is_manual_file(filename):
+            continue
+        filepath = os.path.join(SOURCES_DIR, filename)
+        with open(filepath) as f:
+            sources_data = yaml.safe_load(f)
+        if sources_data and 'sources' in sources_data:
+            for source in sources_data['sources']:
+                source_name = source['name']
+                manual_sources[source_name] = source
+                source_files[source_name] = filename
+
+    # Then load auto-generated files, but skip if already in a manual file
+    for filename in sorted(os.listdir(SOURCES_DIR)):
+        if not filename.endswith('.yml') or _is_manual_file(filename):
+            continue
+        filepath = os.path.join(SOURCES_DIR, filename)
+        with open(filepath) as f:
+            sources_data = yaml.safe_load(f)
+        if sources_data and 'sources' in sources_data:
+            for source in sources_data['sources']:
+                source_name = source['name']
+                if source_name not in manual_sources:
+                    auto_sources[source_name] = source
+                    source_files[source_name] = filename
     
     # Combine all sources: manual sources (from sources.yml) take precedence, then auto-generated
     for source_name, source in manual_sources.items():
