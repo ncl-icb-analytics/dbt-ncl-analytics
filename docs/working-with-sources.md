@@ -2,6 +2,42 @@
 
 A quick reference for adding, updating, and regenerating sources in this project. See [How it works](#how-it-works) further down for background.
 
+## The raw layer
+
+Every source table gets a generated **raw model** in `models/raw/<domain>/`. Raw models are a 1:1 passthrough — one `SELECT` that reads the source and renames its columns to snake_case. They exist so the rest of the project can `ref()` a stable name instead of calling `source()` with a quoted identifier and reaching directly into Snowflake.
+
+A generated raw model looks like this:
+
+```sql
+-- models/raw/shared/raw_reference_bp_thresholds.sql (generated)
+{{ config(description="Raw layer (Analyst-managed reference datasets...)...") }}
+select
+    "THRESHOLD_RULE_ID" as threshold_rule_id,
+    "PROGRAMME_OR_GUIDELINE" as programme_or_guideline,
+    "SYSTOLIC_THRESHOLD"    as systolic_threshold,
+    -- ...
+from {{ source('reference_analyst_managed', 'BP_THRESHOLDS') }}
+```
+
+Rules:
+
+- **File name**: `{raw_prefix}_{table_name_sanitised}.sql`. `raw_prefix` comes from `source_mappings.yml`.
+- **Folder**: `models/raw/<domain>/`, where `domain` also comes from `source_mappings.yml` (`commissioning`, `olids`, `shared`, `pid_env`).
+- **Column aliases**: originals are double-quoted (preserves case), aliases are snake_case. Special characters get cleaned (`%` → `percent`, `#` → `number`, `&` → `and`, spaces/dashes/dots → `_`). CamelCase becomes snake_case with acronym handling (`GPPracticeCode` → `gp_practice_code`). Reserved words like `group`, `order`, `where` get `_value` appended. Columns starting with a digit get a `col_` prefix or are reordered.
+- **Never edit by hand** — raw models are regenerated on every pipeline run.
+
+Staging models (`stg_*`) should always reference raw models via `ref()`, never the source directly:
+
+```sql
+-- Correct (in a staging model)
+select * from {{ ref('raw_reference_bp_thresholds') }}
+
+-- Avoid - bypasses the raw layer and its cleaned column names
+select * from {{ source('reference_analyst_managed', 'BP_THRESHOLDS') }}
+```
+
+This gives the project one place where source column names are mapped, quoted identifiers are handled, and the interface between dbt and Snowflake is defined.
+
 ## Quick reference
 
 | I want to... | Do this |
@@ -131,20 +167,6 @@ Two things happen to every manual source whose `(database, schema)` matches a ma
 
 1. **Silent type sync** — `data_type` values in the manual YAML are rewritten to match live metadata. No warning is printed for type changes because they are idempotent and don't break downstream SQL.
 2. **Warning-only drift check** — added, removed, or renamed columns and missing tables are reported but not auto-corrected. These need human review.
-
-### Raw model naming
-
-Raw models are written to `models/raw/<domain>/{raw_prefix}_{sanitised_table_name}.sql`. Downstream models reference them via `ref()`:
-
-```sql
-select * from {{ ref('raw_reference_bp_thresholds') }}
-```
-
-And reference the dbt source via `source()`:
-
-```sql
-select * from {{ source('reference_analyst_managed', 'BP_THRESHOLDS') }}
-```
 
 ### Pipeline failures
 
