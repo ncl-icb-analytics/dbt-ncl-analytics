@@ -69,9 +69,9 @@ rule_4_lvef as (
         *
         from ({{ get_ltc_lcs_observations("on_hf_reg_pg2_hr_vs8") }})) o
     left join {{ ref('stg_olids_enriched_concept_map') }} ecm
-        on o.episodicity_concept_id = ecm.source_code_id -- join episodiity for first/new/flare-up
+        on o.episodicity_concept_id = ecm.source_code_id -- join episodicity for first/new/flare-up
     where
-    ecm.source_display not in ('Review','End')
+    (ecm.source_display not in ('Review','End') or ecm.source_display is null)
     and clinical_effective_date <= current_date()
     qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1
 
@@ -85,7 +85,7 @@ rule_4_lvef as (
     left join {{ ref('stg_olids_enriched_concept_map') }} ecm
         on o.episodicity_concept_id = ecm.source_code_id -- join episodiity for first/new/flare-up
     where
-    ecm.source_display not in ('Review','End')
+    (ecm.source_display not in ('Review','End') or ecm.source_display is null)
     and clinical_effective_date <= current_date()
     qualify row_number() over (partition by person_id order by clinical_effective_date desc) = 1
 ),
