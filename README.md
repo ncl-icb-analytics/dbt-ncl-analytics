@@ -98,7 +98,7 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 | [Snapshots Guide](docs/snapshots-guide.md) | Tracking historical changes with SCDs |
 | [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
 | [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
-| [Working with Sources](docs/working-with-sources.md) | Source generation workflow |
+| [Working with Sources](docs/working-with-sources.md) | Adding sources, regenerating raw models, and handling drift |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 
 ## Learning dbt
