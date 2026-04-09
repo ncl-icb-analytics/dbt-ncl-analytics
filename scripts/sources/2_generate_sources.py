@@ -11,30 +11,115 @@ INPUT_FILE = os.path.join(CURRENT_DIR, 'table_metadata.csv')
 OUTPUT_DIR = os.path.join(PROJECT_DIR, 'models', 'sources')
 MAPPINGS_FILE = os.path.join(CURRENT_DIR, 'source_mappings.yml')
 
+def _iter_manual_source_files():
+    """Yield paths of manual source YAML files.
+
+    Manual sources are defined either in sources.yml or any manual_*.yml file.
+    """
+    if not os.path.exists(OUTPUT_DIR):
+        return
+    for filename in sorted(os.listdir(OUTPUT_DIR)):
+        if filename == 'sources.yml' or (filename.startswith('manual_') and filename.endswith('.yml')):
+            yield os.path.join(OUTPUT_DIR, filename)
+
+
 def load_manual_sources():
-    """Load manually defined sources and tables from sources.yml
-    
+    """Load manually defined sources and tables from sources.yml and manual_*.yml.
+
     Returns:
         tuple: (set of source names, dict mapping source_name -> set of table names)
     """
-    manual_sources_file = os.path.join(OUTPUT_DIR, 'sources.yml')
     manual_source_names = set()
     manual_source_tables = {}  # source_name -> set of table names
-    
-    if os.path.exists(manual_sources_file):
-        with open(manual_sources_file, 'r') as f:
+
+    for file_path in _iter_manual_source_files():
+        with open(file_path, 'r') as f:
             sources_data = yaml.safe_load(f)
-            if sources_data and 'sources' in sources_data and sources_data['sources']:
-                for source in sources_data['sources']:
-                    source_name = source['name']
-                    manual_source_names.add(source_name)
-                    
-                    # Track manually defined tables for this source
-                    if 'tables' in source:
-                        table_names = {table['name'] for table in source['tables']}
-                        manual_source_tables[source_name] = table_names
-    
+        if not sources_data or 'sources' not in sources_data or not sources_data['sources']:
+            continue
+        for source in sources_data['sources']:
+            source_name = source['name']
+            manual_source_names.add(source_name)
+            if 'tables' in source:
+                table_names = {table['name'] for table in source['tables']}
+                manual_source_tables[source_name] = table_names
+
     return manual_source_names, manual_source_tables
+
+
+def check_manual_source_drift(df, mappings):
+    """Warn if manually declared sources drift from extracted metadata.
+
+    Only checks manual sources whose (database, schema) is present in
+    source_mappings.yml - otherwise the metadata query would not have
+    pulled them and any "missing" finding is a false positive.
+
+    Flags:
+      - declared tables missing from live metadata (renamed / dropped)
+      - declared columns missing from the live table
+      - live columns not declared in the manual YAML (new columns)
+    """
+    # Build set of (db, schema) pairs that were actually queried.
+    queried_db_schema = set()
+    for source in mappings.values():
+        db = source.get('database', '').upper()
+        schema = source.get('schema', '').upper()
+        if db and schema:
+            queried_db_schema.add((db, schema))
+
+    # Build lookup: (db, schema, table) -> set of column names from metadata.
+    metadata_columns = {}
+    for row in df.itertuples(index=False):
+        key = (str(row.DATABASE_NAME), str(row.SCHEMA_NAME), str(row.TABLE_NAME))
+        metadata_columns.setdefault(key, set()).add(str(row.COLUMN_NAME))
+
+    warnings = []
+    checked_tables = 0
+    for file_path in _iter_manual_source_files():
+        with open(file_path, 'r') as f:
+            sources_data = yaml.safe_load(f) or {}
+        for source in sources_data.get('sources', []) or []:
+            source_db = normalize_identifier(source.get('database', ''))
+            source_schema = normalize_identifier(source.get('schema', ''))
+            if not source_db or not source_schema:
+                continue
+            # Skip if this db/schema was not queried - no metadata to compare against.
+            if (source_db.upper(), source_schema.upper()) not in queried_db_schema:
+                continue
+            for table in source.get('tables', []) or []:
+                table_name = normalize_identifier(table.get('identifier') or table.get('name'))
+                if not table_name:
+                    continue
+                checked_tables += 1
+                key = (source_db, source_schema, table_name)
+                live_cols = metadata_columns.get(key)
+                if live_cols is None:
+                    warnings.append(
+                        f"[drift] {os.path.basename(file_path)}: {source['name']}.{table_name} "
+                        f"not found in live metadata ({source_db}.{source_schema}.{table_name})"
+                    )
+                    continue
+                declared = {str(c.get('name', '')).strip() for c in (table.get('columns') or []) if c.get('name')}
+                missing_in_source = declared - live_cols
+                new_in_source = live_cols - declared
+                if missing_in_source:
+                    warnings.append(
+                        f"[drift] {os.path.basename(file_path)}: {source['name']}.{table_name} "
+                        f"declares columns not in source: {sorted(missing_in_source)}"
+                    )
+                if new_in_source:
+                    warnings.append(
+                        f"[drift] {os.path.basename(file_path)}: {source['name']}.{table_name} "
+                        f"source has undeclared columns: {sorted(new_in_source)}"
+                    )
+
+    if warnings:
+        print(f"\nManual source drift check - {len(warnings)} warning(s) across {checked_tables} table(s):")
+        for w in warnings:
+            print(f"  {w}")
+        print("Consider updating the manual YAML to match Snowflake, or confirm the drift is intentional.\n")
+    else:
+        print(f"Manual source drift check: clean ({checked_tables} table(s) checked).")
 
 def load_source_mappings():
     """Load source mappings from YAML file"""
@@ -73,18 +158,11 @@ def normalize_identifier(value):
     return value
 
 def sync_manual_source_types(df):
-    """Sync data_type values in manual sources.yml from extracted metadata."""
-    manual_sources_file = os.path.join(OUTPUT_DIR, 'sources.yml')
-    if not os.path.exists(manual_sources_file):
-        return 0, 0
+    """Sync data_type values in all manual source YAMLs from extracted metadata.
 
-    with open(manual_sources_file, 'r') as f:
-        sources_data = yaml.safe_load(f) or {}
-
-    sources = sources_data.get('sources', [])
-    if not sources:
-        return 0, 0
-
+    Iterates every file returned by _iter_manual_source_files() so sources.yml
+    and any manual_*.yml file are kept in sync with the live Snowflake schema.
+    """
     # Build metadata lookup keyed by exact DB/SCHEMA/TABLE/COLUMN identifiers.
     metadata_lookup = {
         (
@@ -96,37 +174,47 @@ def sync_manual_source_types(df):
         for row in df.itertuples(index=False)
     }
 
-    updates = 0
-    checked = 0
+    total_updates = 0
+    total_checked = 0
 
-    for source in sources:
-        source_db = normalize_identifier(source.get('database', ''))
-        source_schema = normalize_identifier(source.get('schema', ''))
-        if not source_db or not source_schema:
+    for file_path in _iter_manual_source_files():
+        with open(file_path, 'r') as f:
+            sources_data = yaml.safe_load(f) or {}
+
+        sources = sources_data.get('sources', [])
+        if not sources:
             continue
 
-        for table in source.get('tables', []):
-            table_name = normalize_identifier(table.get('identifier') or table.get('name'))
-            if not table_name:
+        file_updates = 0
+        for source in sources:
+            source_db = normalize_identifier(source.get('database', ''))
+            source_schema = normalize_identifier(source.get('schema', ''))
+            if not source_db or not source_schema:
                 continue
 
-            for column in table.get('columns', []):
-                column_name = str(column.get('name', '')).strip()
-                if not column_name:
+            for table in source.get('tables', []):
+                table_name = normalize_identifier(table.get('identifier') or table.get('name'))
+                if not table_name:
                     continue
 
-                checked += 1
-                key = (source_db, source_schema, table_name, column_name)
-                metadata_type = metadata_lookup.get(key)
-                if metadata_type and column.get('data_type') != metadata_type:
-                    column['data_type'] = metadata_type
-                    updates += 1
+                for column in table.get('columns', []):
+                    column_name = str(column.get('name', '')).strip()
+                    if not column_name:
+                        continue
 
-    if updates > 0:
-        with open(manual_sources_file, 'w') as f:
-            yaml.dump(sources_data, f, sort_keys=False, default_flow_style=False)
+                    total_checked += 1
+                    key = (source_db, source_schema, table_name, column_name)
+                    metadata_type = metadata_lookup.get(key)
+                    if metadata_type and column.get('data_type') != metadata_type:
+                        column['data_type'] = metadata_type
+                        file_updates += 1
 
-    return updates, checked
+        if file_updates > 0:
+            with open(file_path, 'w') as f:
+                yaml.dump(sources_data, f, sort_keys=False, default_flow_style=False)
+            total_updates += file_updates
+
+    return total_updates, total_checked
 
 def find_source_mapping(database, schema, mappings):
     """Find the appropriate source mapping for a database/schema combination"""
@@ -189,6 +277,9 @@ def main():
     if updated_columns > 0:
         print(f"Updated {updated_columns} manual source column type(s) in sources.yml (checked {checked_columns}).")
 
+    # Warn if any manual YAML has drifted from the live Snowflake schema.
+    check_manual_source_drift(df, mappings)
+
     # Group by database and schema to create sources
     sources_by_file = {}  # Track sources by output filename
     total_tables = 0
@@ -207,10 +298,16 @@ def main():
             continue
 
         source_name = mapping['source_name']
-        
-        # Skip sources that are manually defined in sources.yml (they override auto-generation)
+
+        # Skip sources explicitly flagged as manual in source_mappings.yml -
+        # their columns come from a manual YAML (sources.yml or manual_*.yml).
+        if mapping.get('manual', False):
+            continue
+
+        # Skip sources that are manually defined in a manual YAML file
+        # (sources.yml or manual_*.yml) - they override auto-generation.
         if source_name in manual_source_names:
-            print(f"Info: Source '{source_name}' is manually defined in sources.yml, skipping auto-generation...")
+            print(f"Info: Source '{source_name}' is manually defined, skipping auto-generation...")
             continue
         
         # Note: Source names stay as-is (no 'auto_' prefix in source name)

@@ -338,21 +338,6 @@ WITH schema_metadata AS (
   
   UNION ALL
   
-    -- reference_analyst_managed: Analyst-managed reference datasets and business rules
-  SELECT 
-    'DATA_LAKE__NCL' as database_name,
-    'ANALYST_MANAGED' as schema_name,
-    table_name,
-    column_name,
-    data_type,
-    numeric_precision,
-    numeric_scale,
-    ordinal_position
-  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'ANALYST_MANAGED'
-  
-  UNION ALL
-  
     -- reference_data_management: Data management reference datasets
   SELECT 
     'DATA_LAKE__NCL' as database_name,
@@ -488,6 +473,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- reference_analyst_managed: Analyst-managed reference datasets and business rules
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'ANALYST_MANAGED' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'ANALYST_MANAGED'
+  
+  UNION ALL
+  
     -- reference_lookup_ncl: Analyst-managed reference datasets and business rules in the MODELLING environment
   SELECT 
     'MODELLING' as database_name,
@@ -505,7 +505,7 @@ WITH schema_metadata AS (
   
     -- c_ltcs: C-LTCS tables
   SELECT 
-    'PUBLISHED_REPORTING__DIRECT_CARE' as database_name,
+    'DEV__PUBLISHED_REPORTING__DIRECT_CARE' as database_name,
     'C_LTCS' as schema_name,
     table_name,
     column_name,
@@ -513,7 +513,7 @@ WITH schema_metadata AS (
     numeric_precision,
     numeric_scale,
     ordinal_position
-  FROM "PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
+  FROM "DEV__PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'C_LTCS'
   
   UNION ALL

@@ -209,3 +209,26 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: Reason for Removal Business Effective To Date
       data_type: TIMESTAMP_NTZ
+  - name: WNL.PDS_Patient_Care_Practice
+    identifier: '"WNL.PDS_Patient_Care_Practice"'
+    columns:
+    - name: RowID
+      data_type: NUMBER(38,0)
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: Primary Care Provider
+      data_type: TEXT
+    - name: Primary Care Provider Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Primary Care Provider Business Effective To Date
+      data_type: TIMESTAMP_NTZ
+    - name: Reason for Removal
+      data_type: TEXT
+    - name: derCcgOfRegistration
+      data_type: TEXT
+    - name: derCurrentCcgOfRegistration
+      data_type: TEXT
+    - name: derIcbOfRegistration
+      data_type: TEXT
+    - name: derCurrentIcbOfRegistration
+      data_type: TEXT

@@ -95,15 +95,17 @@ sources:
     columns:
     - name: PATIENT_ID
       data_type: NUMBER(38,0)
-    - name: PCN_CODE
+    - name: AREA_CODE
       data_type: TEXT
-    - name: MDT_DATE
+    - name: INTERVENTION_DATE
       data_type: DATE
     - name: ACTION
       data_type: TEXT
     - name: ACTION_DATE
       data_type: TIMESTAMP_NTZ
-    - name: CRITERIA
+    - name: DETAIL
+      data_type: TEXT
+    - name: INTERVENTION_NAME
       data_type: TEXT
   - name: OP_OE_RATIO
     identifier: OP_OE_RATIO

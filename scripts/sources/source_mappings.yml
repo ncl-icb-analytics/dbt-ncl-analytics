@@ -205,14 +205,6 @@ sources:
     raw_prefix: raw_ptl
     domain: commissioning
 
-  # ANALYST_MANAGED schema in DATA_LAKE__NCL
-  - source_name: reference_analyst_managed
-    database: DATA_LAKE__NCL
-    schema: ANALYST_MANAGED
-    description: Analyst-managed reference datasets and business rules
-    raw_prefix: raw_reference
-    domain: shared
-
   # DATA_MANAGEMENT schema in DATA_LAKE__NCL
   - source_name: reference_data_management
     database: DATA_LAKE__NCL
@@ -299,8 +291,20 @@ sources:
   # ========================================
   # MANUAL SOURCES (not auto-generated)
   # ========================================
-  # These sources are manually defined in models/sources/sources.yml
-  # They are included here for raw model generation configuration only
+  # Manual sources are defined either in models/sources/sources.yml or a
+  # models/sources/manual_*.yml file. They are listed here so scripts know
+  # the raw_prefix and domain to use when generating raw models. Entries
+  # tagged `manual: true` are skipped by the metadata query and source YAML
+  # generation steps; their column lists come from the manual YAML instead.
+
+  # ANALYST_MANAGED - volatile schema; only explicitly listed tables are used
+  - source_name: reference_analyst_managed
+    database: DATA_LAKE__NCL
+    schema: ANALYST_MANAGED
+    description: Analyst-managed reference datasets and business rules
+    raw_prefix: raw_reference
+    domain: shared
+    manual: true
 
   # Reference Lookup NCL - Analyst-managed reference datasets
   - source_name: reference_lookup_ncl
@@ -312,7 +316,7 @@ sources:
 
   # C-LTCS tables
   - source_name: c_ltcs
-    database: PUBLISHED_REPORTING__DIRECT_CARE
+    database: DEV__PUBLISHED_REPORTING__DIRECT_CARE
     schema: C_LTCS
     description: C-LTCS tables
     raw_prefix: raw_c_ltcs
