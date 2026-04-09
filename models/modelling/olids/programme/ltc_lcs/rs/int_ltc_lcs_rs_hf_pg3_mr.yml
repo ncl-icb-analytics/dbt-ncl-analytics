@@ -22,7 +22,8 @@ models:
           name: Peter Shakeshaft
     tests:
       - dbt_utils.at_least_one:
-          column_name: person_id
+          arguments:
+            column_name: person_id
       - valuesets_have_codes:
           arguments:
             valuesets:
@@ -48,6 +49,6 @@ models:
               - on_hf_reg_pg3_mr_vs20
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
           - unique
