@@ -158,18 +158,11 @@ def normalize_identifier(value):
     return value
 
 def sync_manual_source_types(df):
-    """Sync data_type values in manual sources.yml from extracted metadata."""
-    manual_sources_file = os.path.join(OUTPUT_DIR, 'sources.yml')
-    if not os.path.exists(manual_sources_file):
-        return 0, 0
+    """Sync data_type values in all manual source YAMLs from extracted metadata.
 
-    with open(manual_sources_file, 'r') as f:
-        sources_data = yaml.safe_load(f) or {}
-
-    sources = sources_data.get('sources', [])
-    if not sources:
-        return 0, 0
-
+    Iterates every file returned by _iter_manual_source_files() so sources.yml
+    and any manual_*.yml file are kept in sync with the live Snowflake schema.
+    """
     # Build metadata lookup keyed by exact DB/SCHEMA/TABLE/COLUMN identifiers.
     metadata_lookup = {
         (
@@ -181,37 +174,47 @@ def sync_manual_source_types(df):
         for row in df.itertuples(index=False)
     }
 
-    updates = 0
-    checked = 0
+    total_updates = 0
+    total_checked = 0
 
-    for source in sources:
-        source_db = normalize_identifier(source.get('database', ''))
-        source_schema = normalize_identifier(source.get('schema', ''))
-        if not source_db or not source_schema:
+    for file_path in _iter_manual_source_files():
+        with open(file_path, 'r') as f:
+            sources_data = yaml.safe_load(f) or {}
+
+        sources = sources_data.get('sources', [])
+        if not sources:
             continue
 
-        for table in source.get('tables', []):
-            table_name = normalize_identifier(table.get('identifier') or table.get('name'))
-            if not table_name:
+        file_updates = 0
+        for source in sources:
+            source_db = normalize_identifier(source.get('database', ''))
+            source_schema = normalize_identifier(source.get('schema', ''))
+            if not source_db or not source_schema:
                 continue
 
-            for column in table.get('columns', []):
-                column_name = str(column.get('name', '')).strip()
-                if not column_name:
+            for table in source.get('tables', []):
+                table_name = normalize_identifier(table.get('identifier') or table.get('name'))
+                if not table_name:
                     continue
 
-                checked += 1
-                key = (source_db, source_schema, table_name, column_name)
-                metadata_type = metadata_lookup.get(key)
-                if metadata_type and column.get('data_type') != metadata_type:
-                    column['data_type'] = metadata_type
-                    updates += 1
+                for column in table.get('columns', []):
+                    column_name = str(column.get('name', '')).strip()
+                    if not column_name:
+                        continue
 
-    if updates > 0:
-        with open(manual_sources_file, 'w') as f:
-            yaml.dump(sources_data, f, sort_keys=False, default_flow_style=False)
+                    total_checked += 1
+                    key = (source_db, source_schema, table_name, column_name)
+                    metadata_type = metadata_lookup.get(key)
+                    if metadata_type and column.get('data_type') != metadata_type:
+                        column['data_type'] = metadata_type
+                        file_updates += 1
 
-    return updates, checked
+        if file_updates > 0:
+            with open(file_path, 'w') as f:
+                yaml.dump(sources_data, f, sort_keys=False, default_flow_style=False)
+            total_updates += file_updates
+
+    return total_updates, total_checked
 
 def find_source_mapping(database, schema, mappings):
     """Find the appropriate source mapping for a database/schema combination"""

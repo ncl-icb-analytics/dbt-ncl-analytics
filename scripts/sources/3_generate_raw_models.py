@@ -179,7 +179,8 @@ def main():
     def _is_manual_file(name):
         return name == 'sources.yml' or (name.startswith('manual_') and name.endswith('.yml'))
 
-    # First, load manual YAML files - these override auto-generated sources
+    # First, load manual YAML files - these override auto-generated sources.
+    # Fail fast if the same source_name is declared in multiple manual files.
     for filename in sorted(os.listdir(SOURCES_DIR)):
         if not filename.endswith('.yml') or not _is_manual_file(filename):
             continue
@@ -189,6 +190,15 @@ def main():
         if sources_data and 'sources' in sources_data:
             for source in sources_data['sources']:
                 source_name = source['name']
+                if source_name in manual_sources:
+                    existing_file = source_files[source_name]
+                    print(
+                        f"Error: source '{source_name}' is declared in both "
+                        f"'{existing_file}' and '{filename}'. Manual source "
+                        f"names must be unique across models/sources/*.yml.",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
                 manual_sources[source_name] = source
                 source_files[source_name] = filename
 

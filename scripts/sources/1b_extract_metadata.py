@@ -12,7 +12,6 @@ load_dotenv()
 
 if __name__ == "__main__":
     print(f"SNOWFLAKE_ROLE: {os.getenv('SNOWFLAKE_ROLE')}")
-    print(f"SNOWFLAKE_USER: {os.getenv('SNOWFLAKE_USER')}")
 
     sql_file_path = pathlib.Path(__file__).parent / "metadata_query.sql"
     output_file = pathlib.Path(__file__).parent / "table_metadata.csv"
@@ -27,17 +26,22 @@ if __name__ == "__main__":
         print("  python scripts/sources/1a_generate_metadata_query.py", file=sys.stderr)
         sys.exit(1)
 
-    conn = snowflake.connector.connect(
-        account=os.getenv('SNOWFLAKE_ACCOUNT'),
-        user=os.getenv('SNOWFLAKE_USER'),
-        authenticator="externalbrowser",
-        warehouse=os.getenv('SNOWFLAKE_WAREHOUSE'),
-        role=os.getenv('SNOWFLAKE_ROLE'),
-        database="MODELLING",
-        schema="DBT_DEV",
-    )
+    def _remove_stale_output():
+        if output_file.exists():
+            output_file.unlink()
+            print(f"Removed stale {output_file}", file=sys.stderr)
 
+    conn = None
     try:
+        conn = snowflake.connector.connect(
+            account=os.getenv('SNOWFLAKE_ACCOUNT'),
+            user=os.getenv('SNOWFLAKE_USER'),
+            authenticator="externalbrowser",
+            warehouse=os.getenv('SNOWFLAKE_WAREHOUSE'),
+            role=os.getenv('SNOWFLAKE_ROLE'),
+            database="MODELLING",
+            schema="DBT_DEV",
+        )
         cur = conn.cursor()
         cur.execute(sql_query)
         df = cur.fetch_pandas_all()
@@ -48,11 +52,9 @@ if __name__ == "__main__":
         print(f"\nNext step: Generate sources.yml file:")
         print(f"  python scripts/sources/2_generate_sources.py")
     except Exception as e:
-        print(f"Error executing query: {str(e)}", file=sys.stderr)
-        # Remove any stale output so step 2 cannot silently consume it.
-        if output_file.exists():
-            output_file.unlink()
-            print(f"Removed stale {output_file}", file=sys.stderr)
+        print(f"Error during metadata extraction: {str(e)}", file=sys.stderr)
+        _remove_stale_output()
         sys.exit(1)
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
