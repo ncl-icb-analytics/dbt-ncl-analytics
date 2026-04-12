@@ -124,7 +124,7 @@ FACTS(
     bp.systolic_value AS systolic_value COMMENT = 'Systolic BP (mmHg)',
     bp.diastolic_value AS diastolic_value COMMENT = 'Diastolic BP (mmHg)',
     cholesterol.cholesterol_value AS cholesterol_value COMMENT = 'Total cholesterol (mmol/L)',
-    ldl.cholesterol_value AS cholesterol_value COMMENT = 'LDL cholesterol (mmol/L)',
+    ldl.ldl_cholesterol_value AS cholesterol_value COMMENT = 'LDL cholesterol (mmol/L)',
     qrisk.qrisk_score AS qrisk_score WITH SYNONYMS = ('CVD risk', 'cardiovascular risk') COMMENT = 'QRISK score (%)',
     bp_control.latest_bp_reading_age_months AS latest_bp_reading_age_months COMMENT = 'Months since last BP reading',
 
@@ -151,21 +151,21 @@ FACTS(
 )
 
 DIMENSIONS(
-    -- Observation Dates
-    bp.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest BP reading',
-    hba1c.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest HbA1c',
-    cholesterol.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest cholesterol',
-    ldl.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest LDL',
-    bmi.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest BMI',
-    waist.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest waist circumference',
-    egfr.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest eGFR',
-    creatinine.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest creatinine',
-    qrisk.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest QRISK',
-    acr.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest ACR',
-    efi.clinical_effective_date AS latest_efi_date COMMENT = 'Date of latest eFI assessment',
-    rockwood.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest Rockwood assessment',
-    foot_exam.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest foot examination',
-    retinal.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest retinal screening',
+    -- Observation Dates (each table's latest measurement date)
+    bp.latest_bp_date AS clinical_effective_date COMMENT = 'Date of latest BP reading',
+    hba1c.latest_hba1c_date AS clinical_effective_date COMMENT = 'Date of latest HbA1c',
+    cholesterol.latest_cholesterol_date AS clinical_effective_date COMMENT = 'Date of latest cholesterol',
+    ldl.latest_ldl_date AS clinical_effective_date COMMENT = 'Date of latest LDL',
+    bmi.latest_bmi_date AS clinical_effective_date COMMENT = 'Date of latest BMI',
+    waist.latest_waist_date AS clinical_effective_date COMMENT = 'Date of latest waist circumference',
+    egfr.latest_egfr_date AS clinical_effective_date COMMENT = 'Date of latest eGFR',
+    creatinine.latest_creatinine_date AS clinical_effective_date COMMENT = 'Date of latest creatinine',
+    qrisk.latest_qrisk_date AS clinical_effective_date COMMENT = 'Date of latest QRISK',
+    acr.latest_acr_date AS clinical_effective_date COMMENT = 'Date of latest ACR',
+    efi.latest_efi_date AS latest_efi_date COMMENT = 'Date of latest eFI assessment',
+    rockwood.latest_rockwood_date AS clinical_effective_date COMMENT = 'Date of latest Rockwood assessment',
+    foot_exam.latest_foot_exam_date AS clinical_effective_date COMMENT = 'Date of latest foot examination',
+    retinal.latest_retinal_date AS clinical_effective_date COMMENT = 'Date of latest retinal screening',
 
     -- Core Demographics
     demographics.gender AS gender COMMENT = 'Patient gender (Male, Female, Unknown)',

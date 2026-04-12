@@ -9,7 +9,7 @@ models:
       Joins SNOMED → BNF mapping (96% coverage) and medication statement for
       prescription type (Acute/Repeat/Repeat Dispensing/Automatic) and active status.
 
-      BNF hierarchy: practice_code (2-digit chapter) → bnf_section (4-digit) →
+      BNF hierarchy: bnf_chapter (2-digit) → bnf_section (4-digit) →
       bnf_paragraph (6-digit) → bnf_code (full 15-character product code).
 
       Materialised as a view — can be changed to table if performance requires.
@@ -18,3 +18,9 @@ models:
       meta:
         owner:
           name: Eddie Davison
+
+    data_tests:
+      - not_null:
+          column_name: medication_order_id
+      - unique:
+          column_name: medication_order_id

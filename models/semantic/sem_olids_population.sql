@@ -21,10 +21,11 @@
     Condition Registers:
     Built to QOF Business Rules v50. QOF registers are marked below.
     Conditions are grouped by clinical domain:
-    - Cardiovascular (QOF): AF, CHD, HF, HTN, PAD, Stroke/TIA
+    - Cardiovascular (QOF): AF, CHD, HF, HTN, PAD
     - Respiratory (QOF): Asthma, COPD; (non-QOF): CYP Asthma
     - Mental Health (QOF): Depression, SMI, Dementia; (non-QOF): Anxiety
-    - Metabolic (QOF): Diabetes, NDH, CKD, Obesity; (non-QOF): Gestational Diabetes
+    - Metabolic (QOF): Diabetes, NDH, CKD, Obesity
+    - Renal (QOF): CKD
     - Musculoskeletal (QOF): RA, Osteoporosis; (non-QOF): Osteoarthritis
     - Neurology (QOF): Epilepsy, Stroke/TIA; (non-QOF): Parkinson's, Cerebral Palsy, MND, MS
     - Neurodevelopmental (QOF): Learning Disability; (non-QOF): LD Under 14, Autism, ADHD
