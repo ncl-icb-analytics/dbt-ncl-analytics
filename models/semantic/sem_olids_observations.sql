@@ -99,9 +99,6 @@ TABLES(
         PRIMARY KEY (person_id)
         COMMENT = 'Diabetes 8 care processes completion status (12-month lookback). Only populated for persons on the diabetes register.',
 
-    esp AS {{ ref('esp_2013') }}
-        PRIMARY KEY (age_band_esp)
-        COMMENT = 'European Standard Population 2013 weights for age-standardised rate calculation (Eurostat revision, used by ONS/OHID)'
 )
 
 RELATIONSHIPS(
@@ -120,8 +117,7 @@ RELATIONSHIPS(
     rockwood (person_id) REFERENCES demographics,
     foot_exam (person_id) REFERENCES demographics,
     retinal (person_id) REFERENCES demographics,
-    dm8cp (person_id) REFERENCES demographics,
-    demographics (age_band_esp) REFERENCES esp
+    dm8cp (person_id) REFERENCES demographics
 )
 
 FACTS(
@@ -151,8 +147,8 @@ FACTS(
     dm8cp.care_processes_completed AS care_processes_completed COMMENT = 'Count of diabetes 8 care processes completed in last 12 months (0-8). Only for persons on diabetes register.',
 
     -- ESP
-    esp.esp_weight AS esp_weight COMMENT = 'ESP 2013 population weight for this age band (out of 100,000 total). Use with age_band_esp for age-standardised rate calculation.',
-    esp.esp_proportion AS esp_proportion COMMENT = 'ESP 2013 weight as proportion (esp_weight / 100,000). Multiply stratum-specific rate by this and SUM across bands to get the ASR.'
+    demographics.esp_weight AS esp_weight COMMENT = 'ESP 2013 population weight for this persons age band (out of 100,000 total). Use with age_band_esp for age-standardised rate calculation.',
+    demographics.esp_proportion AS esp_proportion COMMENT = 'ESP 2013 weight as proportion (esp_weight / 100,000). Multiply stratum-specific rate by this and SUM across bands to get the ASR.'
 )
 
 DIMENSIONS(

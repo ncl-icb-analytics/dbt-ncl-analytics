@@ -26,7 +26,7 @@ Rules:
 - **Column aliases**: originals are double-quoted (preserves case), aliases are snake_case. Special characters get cleaned (`%` → `percent`, `#` → `number`, `&` → `and`, spaces/dashes/dots → `_`). CamelCase becomes snake_case with acronym handling (`GPPracticeCode` → `gp_practice_code`). Reserved words like `group`, `order`, `where` get `_value` appended. Columns starting with a digit get a `col_` prefix or are reordered.
 - **Never edit by hand** — raw models are regenerated on every pipeline run.
 
-Staging models (`stg_*`) should always reference raw models via `ref()`, never the source directly:
+Staging models (`stg_`*) should always reference raw models via `ref()`, never the source directly:
 
 ```sql
 -- Correct (in a staging model)
@@ -40,13 +40,15 @@ This gives the project one place where source column names are mapped, quoted id
 
 ## Quick reference
 
-| I want to... | Do this |
-|---|---|
-| Regenerate all sources and raw models | `python scripts/sources/run_all_source_generation.py` |
+
+| I want to...                                                    | Do this                                                                                           |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Regenerate all sources and raw models                           | `python scripts/sources/run_all_source_generation.py`                                             |
 | Regenerate just the YAMLs and raw models (no Snowflake refresh) | `python scripts/sources/2_generate_sources.py && python scripts/sources/3_generate_raw_models.py` |
-| Add a new database/schema with all its tables | Add to `source_mappings.yml`, run the pipeline |
-| Add a single ad-hoc table from an existing schema | Add it to a manual YAML (see below) |
-| Pin a volatile schema to a curated table list | Use `manual: true` + a `manual_<name>.yml` file |
+| Add a new database/schema with all its tables                   | Add to `source_mappings.yml`, run the pipeline                                                    |
+| Add a single ad-hoc table from an existing schema               | Add it to a manual YAML (see below)                                                               |
+| Pin a volatile schema to a curated table list                   | Use `manual: true` + a `manual_<name>.yml` file                                                   |
+
 
 ## Adding a new source
 
@@ -70,8 +72,7 @@ Run `python scripts/sources/run_all_source_generation.py`. Commit the new `auto_
 Use this when a schema gets lots of ad-hoc uploads but the project only depends on a few tables (e.g. `ANALYST_MANAGED`).
 
 1. Create `models/sources/manual_<name>.yml` listing only the tables you care about:
-
-   ```yaml
+  ```yaml
    version: 2
    sources:
      - name: my_source
@@ -84,11 +85,9 @@ Use this when a schema gets lots of ad-hoc uploads but the project only depends 
            columns:
              - name: COL_1
                data_type: TEXT
-   ```
-
+  ```
 2. Add a matching entry in `source_mappings.yml` with `manual: true`:
-
-   ```yaml
+  ```yaml
    - source_name: my_source
      database: DATA_LAKE__NCL
      schema: MY_SCHEMA
@@ -96,8 +95,7 @@ Use this when a schema gets lots of ad-hoc uploads but the project only depends 
      raw_prefix: raw_my_source
      domain: shared
      manual: true
-   ```
-
+  ```
 3. Run the pipeline. Step 2 skips auto-generating a YAML; step 3 uses the manual YAML to write raw models with the `raw_prefix` from the mapping.
 
 Tables that appear in `MY_SCHEMA` but not in the manual YAML are ignored. Downstream refs for a removed table break explicitly.
@@ -112,18 +110,20 @@ Manual source drift check - 2 warning(s) across 14 table(s):
   [drift] manual_analyst_managed.yml: reference_analyst_managed.IMD_2025 source has undeclared columns: ['NEW_SCORE_COLUMN']
 ```
 
-| Warning | Likely cause | What to do |
-|---|---|---|
-| `declares columns not in source` | Column renamed or dropped upstream | Update the manual YAML and any downstream models that reference the old name |
-| `source has undeclared columns` | New column added upstream | Add it to the manual YAML if you want to use it; otherwise ignore |
-| `not found in live metadata` | Table renamed or dropped upstream | Remove the entry from the manual YAML and fix downstream refs, or point at the new name |
+
+| Warning                          | Likely cause                       | What to do                                                                              |
+| -------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `declares columns not in source` | Column renamed or dropped upstream | Update the manual YAML and any downstream models that reference the old name            |
+| `source has undeclared columns`  | New column added upstream          | Add it to the manual YAML if you want to use it; otherwise ignore                       |
+| `not found in live metadata`     | Table renamed or dropped upstream  | Remove the entry from the manual YAML and fix downstream refs, or point at the new name |
+
 
 `data_type` changes (e.g. `NUMBER(38,0)` → `NUMBER(38,2)`) are synced silently into the manual YAML on every run — you don't need to edit them by hand.
 
 ## Common pitfalls
 
 - **Never edit `models/raw/**/*.sql` or `auto_*.yml` by hand** — both are regenerated from the source YAMLs on every run. Fix the source YAML instead.
-- **`DEV__` vs prod database** — `sources.yml` entries often use `DEV__<database>` so dev builds work. When prod and dev schemas drift, raw models can compile against a table shape that only exists in one environment. If a raw model throws `invalid identifier`, check that `source_mappings.yml` and the manual YAML both point at the same database as the raw model is being built against.
+- `**DEV__` vs prod database** — `sources.yml` entries often use `DEV__<database>` so dev builds work. When prod and dev schemas drift, raw models can compile against a table shape that only exists in one environment. If a raw model throws `invalid identifier`, check that `source_mappings.yml` and the manual YAML both point at the same database as the raw model is being built against.
 - **Duplicate source names** — step 3 fails fast if the same source name appears in more than one manual YAML file. Don't copy-paste source blocks between files.
 - **Missing mapping** — if step 3 warns `No mapping found for source '<name>'`, add the source to `source_mappings.yml` (with `manual: true` if it's a manual YAML) so raw models pick up the right `raw_prefix` and `domain`.
 
@@ -149,11 +149,13 @@ Step `1b` opens a browser for Snowflake SSO. Steps `2` and `3` are offline.
 
 ### Source file types
 
-| File pattern | Editable? | Where the tables come from |
-|---|---|---|
-| `models/sources/auto_*.yml` | No | Snowflake `INFORMATION_SCHEMA` at step 2 |
-| `models/sources/sources.yml` | Yes | Hand-written (shared file for several sources) |
-| `models/sources/manual_<name>.yml` | Yes | Hand-written (dedicated file per source) |
+
+| File pattern                       | Editable? | Where the tables come from                     |
+| ---------------------------------- | --------- | ---------------------------------------------- |
+| `models/sources/auto_*.yml`        | No        | Snowflake `INFORMATION_SCHEMA` at step 2       |
+| `models/sources/sources.yml`       | Yes       | Hand-written (shared file for several sources) |
+| `models/sources/manual_<name>.yml` | Yes       | Hand-written (dedicated file per source)       |
+
 
 Manual sources override auto-generated sources with the same name. Step 2 removes the source from `auto_*.yml` automatically if it gets added to a manual file.
 
@@ -170,8 +172,11 @@ Two things happen to every manual source whose `(database, schema)` matches a ma
 
 ### Pipeline failures
 
-| Failure | Cause | Fix |
-|---|---|---|
-| `SQL file not found` in `1b` | Step `1a` wasn't run | Run `1a` first |
-| `Error during metadata extraction` in `1b` | Snowflake auth or query error | The stale `table_metadata.csv` is removed automatically so step `2` can't silently consume it. Re-run `1b` once the underlying error is fixed |
-| `source '<name>' is declared in both '<file>' and '<file>'` in `3` | Two manual YAMLs declare the same source name | Remove the duplicate |
+
+| Failure                                                            | Cause                                         | Fix                                                                                                                                           |
+| ------------------------------------------------------------------ | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SQL file not found` in `1b`                                       | Step `1a` wasn't run                          | Run `1a` first                                                                                                                                |
+| `Error during metadata extraction` in `1b`                         | Snowflake auth or query error                 | The stale `table_metadata.csv` is removed automatically so step `2` can't silently consume it. Re-run `1b` once the underlying error is fixed |
+| `source '<name>' is declared in both '<file>' and '<file>'` in `3` | Two manual YAMLs declare the same source name | Remove the duplicate                                                                                                                          |
+
+

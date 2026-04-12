@@ -33,21 +33,12 @@ TABLES(
         PRIMARY KEY (person_id, analysis_month)
         COMMENT = 'Person-month analysis base with 60-month rolling window and condition flags',
 
-    esp AS {{ ref('esp_2013') }}
-        PRIMARY KEY (age_band_esp)
-        COMMENT = 'European Standard Population 2013 weights for age-standardised rate calculation (Eurostat revision, used by ONS/OHID)'
-)
-
-RELATIONSHIPS(
-    trends (age_band_esp) REFERENCES esp
 )
 
 FACTS(
     trends.total_active_conditions AS total_active_conditions COMMENT = 'Total conditions this month',
     trends.total_new_episodes_this_month AS total_new_episodes_this_month COMMENT = 'New condition episodes this month',
-    trends.age AS age COMMENT = 'Age at this analysis month',
-    esp.esp_weight AS esp_weight COMMENT = 'ESP 2013 population weight for this age band (out of 100,000 total)',
-    esp.esp_proportion AS esp_proportion COMMENT = 'ESP 2013 weight as proportion (esp_weight / 100,000). Multiply stratum-specific rate by this and SUM across bands to get the ASR.'
+    trends.age AS age COMMENT = 'Age at this analysis month'
 )
 
 DIMENSIONS(

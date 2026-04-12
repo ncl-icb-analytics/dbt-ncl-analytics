@@ -50,15 +50,11 @@ TABLES(
         PRIMARY KEY (person_id)
         COMMENT = 'Vulnerability factors, polypharmacy, smoking, alcohol, and data sharing status',
 
-    esp AS {{ ref('esp_2013') }}
-        PRIMARY KEY (age_band_esp)
-        COMMENT = 'European Standard Population 2013 weights for age-standardised rate calculation (Eurostat revision, used by ONS/OHID)'
 )
 
 RELATIONSHIPS(
     conditions (person_id) REFERENCES demographics,
-    status (person_id) REFERENCES demographics,
-    demographics (age_band_esp) REFERENCES esp
+    status (person_id) REFERENCES demographics
 )
 
 FACTS(
@@ -72,8 +68,8 @@ FACTS(
     conditions.metabolic_conditions AS metabolic_conditions COMMENT = 'Count of metabolic conditions (Diabetes, NDH, CKD, Obesity)',
     status.medication_count AS medication_count COMMENT = 'Number of current medications',
     status.behavioural_risk_count AS behavioural_risk_count COMMENT = 'Count of behavioural risk factors',
-    esp.esp_weight AS esp_weight COMMENT = 'ESP 2013 population weight for this age band (out of 100,000 total). Use with age_band_esp for age-standardised rate calculation.',
-    esp.esp_proportion AS esp_proportion COMMENT = 'ESP 2013 weight as proportion (esp_weight / 100,000). Multiply stratum-specific rate by this and SUM across bands to get the ASR.'
+    demographics.esp_weight AS esp_weight COMMENT = 'ESP 2013 population weight for this persons age band (out of 100,000 total). Use with age_band_esp for age-standardised rate calculation.',
+    demographics.esp_proportion AS esp_proportion COMMENT = 'ESP 2013 weight as proportion (esp_weight / 100,000). Multiply stratum-specific rate by this and SUM across bands to get the ASR.'
 )
 
 DIMENSIONS(
