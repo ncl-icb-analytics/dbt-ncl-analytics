@@ -142,6 +142,18 @@
         ELSE '85+'
     END AS age_band_ons,
 
+    -- ESP 2013 age bands (matches European Standard Population 2013 structure)
+    CASE
+        WHEN {{ birth_date_field }} IS NULL THEN 'Unknown'
+        WHEN ({{ age_calc }}) < 0 THEN 'Unknown'
+        WHEN ({{ age_calc }}) < 1 THEN '<1'
+        WHEN ({{ age_calc }}) < 5 THEN '1-4'
+        WHEN ({{ age_calc }}) >= 95 THEN '95+'
+        WHEN ({{ age_calc }}) >= 90 THEN '90-94'
+        WHEN ({{ age_calc }}) >= 85 THEN '85-89'
+        ELSE TO_VARCHAR(FLOOR(({{ age_calc }}) / 5) * 5) || '-' || TO_VARCHAR(FLOOR(({{ age_calc }}) / 5) * 5 + 4)
+    END AS age_band_esp,
+
     -- Life stage
     CASE
         WHEN {{ birth_date_field }} IS NULL THEN 'Unknown'

@@ -324,7 +324,7 @@ SELECT
     pwa.ethnicity_display_sort_key,
 
     -- Language
-    lang.language AS main_language,
+    COALESCE(lang.language, 'Not Recorded') AS main_language,
     lang.language_type,
     lang.interpreter_type,
     COALESCE(lang.interpreter_needed, FALSE) AS interpreter_needed,
@@ -371,10 +371,10 @@ SELECT
     pwa.ward_code,
     pwa.ward_name,
     pwa.imd_decile_19,
-    pwa.imd_quintile_19,
+    COALESCE(pwa.imd_quintile_19, 'Unknown') AS imd_quintile_19,
     pwa.imd_quintile_numeric_19,
     pwa.imd_decile_25,
-    pwa.imd_quintile_25,
+    COALESCE(pwa.imd_quintile_25, 'Unknown') AS imd_quintile_25,
     pwa.imd_quintile_numeric_25,
     pwa.neighbourhood_resident
 

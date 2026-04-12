@@ -14,10 +14,18 @@ WITH all_persons AS (
     FROM {{ ref('dim_person_demographics') }}
 ),
 
+diabetes_register AS (
+    SELECT person_id, diabetes_type
+    FROM {{ ref('fct_person_diabetes_register') }}
+),
+
 person_conditions AS (
     SELECT
         p.person_id,
-        
+
+        -- Diabetes type from register (Type 1, Type 2, Unknown, or Not Diabetic)
+        COALESCE(dm_reg.diabetes_type, 'Not Diabetic') AS diabetes_type,
+
         -- Boolean condition flags (pivoted from condition_code) - explicit TRUE/FALSE for all
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'AF' THEN TRUE END), FALSE) AS has_atrial_fibrillation,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'AST' THEN TRUE END), FALSE) AS has_asthma,
@@ -78,7 +86,9 @@ person_conditions AS (
     FROM all_persons p
     LEFT JOIN {{ ref('fct_person_ltc_summary') }} ltc
         ON p.person_id = ltc.person_id
-    GROUP BY p.person_id
+    LEFT JOIN diabetes_register dm_reg
+        ON p.person_id = dm_reg.person_id
+    GROUP BY p.person_id, dm_reg.diabetes_type
 )
 
 SELECT * FROM person_conditions

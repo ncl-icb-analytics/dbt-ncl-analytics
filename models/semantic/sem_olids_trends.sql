@@ -8,17 +8,24 @@
 {#
     OLIDS Population Trends Semantic View
     =====================================
-    
+
     Time-series semantic model for population health trend analysis.
+    OLIDS is the One London Integrated Data Set — primary care data from
+    system suppliers (currently EMIS Web, with TPP to follow), unified by
+    the One London team.
+
     Built on person_month_analysis_base with 60-month rolling window.
-    
+
     Grain: One row per person per month
-    
+
     Use Cases:
     - Prevalence trends over time
     - Incidence trends (new diagnoses per month)
     - Multimorbidity trends
     - Financial year reporting
+    - Age-standardised prevalence trends (via ESP 2013 weights)
+
+    Condition registers built to QOF Business Rules v50.
 #}
 
 TABLES(
@@ -44,18 +51,19 @@ DIMENSIONS(
     trends.financial_year_start AS financial_year_start COMMENT = 'Starting year of financial year',
     trends.financial_quarter AS financial_quarter WITH SYNONYMS = ('FQ', 'fiscal quarter') COMMENT = 'UK financial quarter (Q1=Apr-Jun)',
     trends.financial_quarter_number AS financial_quarter_number COMMENT = 'Financial quarter number (1-4)',
-    
+
     -- Demographics
-    trends.gender AS gender COMMENT = 'Patient gender',
-    trends.age_band_5y AS age_band_5y COMMENT = '5-year age bands',
-    trends.age_band_10y AS age_band_10y COMMENT = '10-year age bands',
-    trends.age_band_nhs AS age_band_nhs COMMENT = 'NHS standard age bands',
-    trends.age_life_stage AS age_life_stage COMMENT = 'Life stage classification',
-    
+    trends.gender AS gender COMMENT = 'Patient gender (Male, Female, Unknown)',
+    trends.age_band_5y AS age_band_5y COMMENT = '5-year age bands (0-4, 5-9, ..., 80-84, 85+, Unknown)',
+    trends.age_band_10y AS age_band_10y COMMENT = '10-year age bands (0-9, 10-19, ..., 70-79, 80+, Unknown)',
+    trends.age_band_nhs AS age_band_nhs COMMENT = 'NHS standard age bands (0-4, 5-14, 15-24, ..., 75-84, 85+)',
+    trends.age_band_esp AS age_band_esp COMMENT = 'ESP 2013 age bands (<1, 1-4, 5-9, ..., 80-84, 85-89, 90-94, 95+). Join to esp_weight for standardised rates.',
+    trends.age_life_stage AS age_life_stage COMMENT = 'Life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown)',
+
     -- Ethnicity
-    trends.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category',
-    trends.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory',
-    
+    trends.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
+    trends.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
+
     -- Organisation
     trends.practice_code AS practice_code COMMENT = 'GP practice code',
     trends.practice_name AS practice_name COMMENT = 'GP practice name',
@@ -64,49 +72,49 @@ DIMENSIONS(
     trends.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN with borough prefix',
     trends.borough_registered AS borough_registered COMMENT = 'Borough of registration',
     trends.neighbourhood_registered AS neighbourhood_registered COMMENT = 'NCL neighbourhood',
-    
+
     -- Geography
     trends.lsoa_code_21 AS lsoa_code_21 COMMENT = 'LSOA 2021 code',
     trends.ward_code AS ward_code COMMENT = 'Electoral ward code',
     trends.ward_name AS ward_name COMMENT = 'Electoral ward name',
     trends.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Residence neighbourhood',
-    
+
     -- Deprivation
-    trends.imd_decile_19 AS imd_decile_19 COMMENT = 'IMD 2019 decile',
-    trends.imd_quintile_19 AS imd_quintile_19 COMMENT = 'IMD 2019 quintile',
-    trends.imd_decile_25 AS imd_decile_25 COMMENT = 'IMD 2025 decile',
-    trends.imd_quintile_25 AS imd_quintile_25 COMMENT = 'IMD 2025 quintile',
-    
+    trends.imd_decile_19 AS imd_decile_19 COMMENT = 'IMD 2019 decile (1=most deprived, 10=least)',
+    trends.imd_quintile_19 AS imd_quintile_19 COMMENT = 'IMD 2019 quintile (1 - Most Deprived to 5 - Least Deprived, Unknown)',
+    trends.imd_decile_25 AS imd_decile_25 COMMENT = 'IMD 2025 decile (1=most deprived, 10=least). Preferred over 2019.',
+    trends.imd_quintile_25 AS imd_quintile_25 COMMENT = 'IMD 2025 quintile (1 - Most Deprived to 5 - Least Deprived, Unknown)',
+
     -- Registration Status
     trends.is_active AS is_active COMMENT = 'Active registration this month',
     trends.is_deceased AS is_deceased COMMENT = 'Deceased by this month',
-    
-    -- Condition Prevalence Flags (use source column names, synonyms provide friendly names)
-    trends.has_ast AS has_ast WITH SYNONYMS = ('asthma') COMMENT = 'Has asthma this month',
-    trends.has_copd AS has_copd WITH SYNONYMS = ('COPD') COMMENT = 'Has COPD this month',
-    trends.has_htn AS has_htn WITH SYNONYMS = ('HTN', 'hypertension', 'high blood pressure') COMMENT = 'Has hypertension this month',
-    trends.has_chd AS has_chd WITH SYNONYMS = ('CHD', 'coronary heart disease') COMMENT = 'Has CHD this month',
-    trends.has_af AS has_af WITH SYNONYMS = ('AF', 'atrial fibrillation') COMMENT = 'Has AF this month',
-    trends.has_hf AS has_hf WITH SYNONYMS = ('heart failure', 'HF') COMMENT = 'Has heart failure this month',
-    trends.has_pad AS has_pad WITH SYNONYMS = ('PAD', 'peripheral arterial disease') COMMENT = 'Has PAD this month',
-    trends.has_dm AS has_dm WITH SYNONYMS = ('DM', 'diabetes', 'diabetic') COMMENT = 'Has diabetes this month',
-    trends.has_ndh AS has_ndh WITH SYNONYMS = ('NDH', 'prediabetes') COMMENT = 'Has NDH this month',
-    trends.has_dep AS has_dep WITH SYNONYMS = ('depression') COMMENT = 'Has depression this month',
-    trends.has_smi AS has_smi WITH SYNONYMS = ('SMI', 'severe mental illness') COMMENT = 'Has SMI this month',
-    trends.has_ckd AS has_ckd WITH SYNONYMS = ('CKD', 'chronic kidney disease') COMMENT = 'Has CKD this month',
-    trends.has_dem AS has_dem WITH SYNONYMS = ('dementia') COMMENT = 'Has dementia this month',
-    trends.has_ep AS has_ep WITH SYNONYMS = ('epilepsy') COMMENT = 'Has epilepsy this month',
-    trends.has_stia AS has_stia WITH SYNONYMS = ('stroke', 'TIA') COMMENT = 'Has stroke/TIA this month',
-    trends.has_can AS has_can WITH SYNONYMS = ('cancer') COMMENT = 'Has cancer this month',
-    trends.has_pc AS has_pc WITH SYNONYMS = ('palliative care') COMMENT = 'On palliative care this month',
-    trends.has_ld AS has_ld WITH SYNONYMS = ('LD', 'learning disability') COMMENT = 'Has LD this month',
-    trends.has_frail AS has_frail WITH SYNONYMS = ('frailty') COMMENT = 'Has frailty this month',
-    trends.has_ra AS has_ra WITH SYNONYMS = ('RA', 'rheumatoid arthritis') COMMENT = 'Has RA this month',
-    trends.has_ost AS has_ost WITH SYNONYMS = ('osteoporosis') COMMENT = 'Has osteoporosis this month',
-    trends.has_nafld AS has_nafld WITH SYNONYMS = ('NAFLD', 'fatty liver') COMMENT = 'Has NAFLD this month',
-    trends.has_fh AS has_fh WITH SYNONYMS = ('FH', 'familial hypercholesterolaemia') COMMENT = 'Has FH this month',
-    
-    -- Incidence Flags (use source column names, synonyms provide friendly names)
+
+    -- Condition Prevalence Flags (QOF Business Rules v50)
+    trends.has_ast AS has_ast WITH SYNONYMS = ('asthma') COMMENT = 'Has asthma this month (QOF)',
+    trends.has_copd AS has_copd WITH SYNONYMS = ('COPD') COMMENT = 'Has COPD this month (QOF)',
+    trends.has_htn AS has_htn WITH SYNONYMS = ('HTN', 'hypertension', 'high blood pressure') COMMENT = 'Has hypertension this month (QOF)',
+    trends.has_chd AS has_chd WITH SYNONYMS = ('CHD', 'coronary heart disease') COMMENT = 'Has CHD this month (QOF)',
+    trends.has_af AS has_af WITH SYNONYMS = ('AF', 'atrial fibrillation') COMMENT = 'Has AF this month (QOF)',
+    trends.has_hf AS has_hf WITH SYNONYMS = ('heart failure', 'HF') COMMENT = 'Has heart failure this month (QOF)',
+    trends.has_pad AS has_pad WITH SYNONYMS = ('PAD', 'peripheral arterial disease') COMMENT = 'Has PAD this month (QOF)',
+    trends.has_dm AS has_dm WITH SYNONYMS = ('DM', 'diabetes', 'diabetic') COMMENT = 'Has diabetes this month (QOF)',
+    trends.has_ndh AS has_ndh WITH SYNONYMS = ('NDH', 'prediabetes') COMMENT = 'Has NDH this month (QOF)',
+    trends.has_dep AS has_dep WITH SYNONYMS = ('depression') COMMENT = 'Has depression this month (QOF)',
+    trends.has_smi AS has_smi WITH SYNONYMS = ('SMI', 'severe mental illness') COMMENT = 'Has SMI this month (QOF)',
+    trends.has_ckd AS has_ckd WITH SYNONYMS = ('CKD', 'chronic kidney disease') COMMENT = 'Has CKD this month (QOF)',
+    trends.has_dem AS has_dem WITH SYNONYMS = ('dementia') COMMENT = 'Has dementia this month (QOF)',
+    trends.has_ep AS has_ep WITH SYNONYMS = ('epilepsy') COMMENT = 'Has epilepsy this month (QOF)',
+    trends.has_stia AS has_stia WITH SYNONYMS = ('stroke', 'TIA') COMMENT = 'Has stroke/TIA this month (QOF)',
+    trends.has_can AS has_can WITH SYNONYMS = ('cancer') COMMENT = 'Has cancer this month (QOF)',
+    trends.has_pc AS has_pc WITH SYNONYMS = ('palliative care') COMMENT = 'On palliative care this month (QOF)',
+    trends.has_ld AS has_ld WITH SYNONYMS = ('LD', 'learning disability') COMMENT = 'Has LD this month (QOF)',
+    trends.has_frail AS has_frail WITH SYNONYMS = ('frailty') COMMENT = 'Has frailty this month (non-QOF)',
+    trends.has_ra AS has_ra WITH SYNONYMS = ('RA', 'rheumatoid arthritis') COMMENT = 'Has RA this month (QOF)',
+    trends.has_ost AS has_ost WITH SYNONYMS = ('osteoporosis') COMMENT = 'Has osteoporosis this month (QOF)',
+    trends.has_nafld AS has_nafld WITH SYNONYMS = ('NAFLD', 'fatty liver') COMMENT = 'Has NAFLD this month (non-QOF)',
+    trends.has_fh AS has_fh WITH SYNONYMS = ('FH', 'familial hypercholesterolaemia') COMMENT = 'Has FH this month (non-QOF)',
+
+    -- Incidence Flags (new diagnoses this month)
     trends.new_ast AS new_ast WITH SYNONYMS = ('new asthma') COMMENT = 'New asthma this month',
     trends.new_copd AS new_copd WITH SYNONYMS = ('new COPD') COMMENT = 'New COPD this month',
     trends.new_htn AS new_htn WITH SYNONYMS = ('new hypertension') COMMENT = 'New hypertension this month',
@@ -131,17 +139,17 @@ DIMENSIONS(
     trends.new_ost AS new_ost WITH SYNONYMS = ('new osteoporosis') COMMENT = 'New osteoporosis this month',
     trends.new_nafld AS new_nafld WITH SYNONYMS = ('new NAFLD') COMMENT = 'New NAFLD this month',
     trends.new_fh AS new_fh WITH SYNONYMS = ('new FH') COMMENT = 'New FH this month',
-    
+
     -- Summary Flags
     trends.has_any_condition AS has_any_condition COMMENT = 'Has any condition this month',
     trends.has_any_new_episode AS has_any_new_episode COMMENT = 'Has any new episode this month'
 )
 
 METRICS(
-    -- Population (single table - use prefix)
+    -- Population
     trends.patient_count AS COUNT(DISTINCT trends.person_id) COMMENT = 'Total patients in period',
-    
-    -- Prevalence (single table - use prefix)
+
+    -- Prevalence
     trends.diabetes_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_dm THEN trends.person_id END) COMMENT = 'Patients with diabetes',
     trends.hypertension_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_htn THEN trends.person_id END) COMMENT = 'Patients with hypertension',
     trends.copd_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_copd THEN trends.person_id END) COMMENT = 'Patients with COPD',
@@ -165,8 +173,8 @@ METRICS(
     trends.osteoporosis_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_ost THEN trends.person_id END) COMMENT = 'Patients with osteoporosis',
     trends.nafld_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_nafld THEN trends.person_id END) COMMENT = 'Patients with NAFLD',
     trends.fh_prevalence AS COUNT(DISTINCT CASE WHEN trends.has_fh THEN trends.person_id END) COMMENT = 'Patients with FH',
-    
-    -- Incidence (single table - use prefix)
+
+    -- Incidence
     trends.diabetes_incidence AS COUNT(DISTINCT CASE WHEN trends.new_dm THEN trends.person_id END) COMMENT = 'New diabetes diagnoses',
     trends.hypertension_incidence AS COUNT(DISTINCT CASE WHEN trends.new_htn THEN trends.person_id END) COMMENT = 'New hypertension diagnoses',
     trends.copd_incidence AS COUNT(DISTINCT CASE WHEN trends.new_copd THEN trends.person_id END) COMMENT = 'New COPD diagnoses',
@@ -192,19 +200,19 @@ METRICS(
     trends.nafld_incidence AS COUNT(DISTINCT CASE WHEN trends.new_nafld THEN trends.person_id END) COMMENT = 'New NAFLD diagnoses',
     trends.fh_incidence AS COUNT(DISTINCT CASE WHEN trends.new_fh THEN trends.person_id END) COMMENT = 'New FH diagnoses',
 
-    -- Multimorbidity (single table - use prefix)
+    -- Multimorbidity
     trends.avg_conditions_per_patient AS AVG(trends.total_active_conditions) COMMENT = 'Average conditions per patient',
     trends.multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 2 THEN trends.person_id END) COMMENT = 'Patients with 2+ conditions',
     trends.complex_multimorbidity_count AS COUNT(DISTINCT CASE WHEN trends.total_active_conditions >= 4 THEN trends.person_id END) COMMENT = 'Patients with 4+ conditions',
-    
-    -- Total Incidence (single table - use prefix)
+
+    -- Total Incidence
     trends.sum_new_episodes AS SUM(trends.total_new_episodes_this_month) COMMENT = 'Total new episodes',
     trends.patients_with_new_episode AS COUNT(DISTINCT CASE WHEN trends.has_any_new_episode THEN trends.person_id END) COMMENT = 'Patients with any new episode',
-    
-    -- Demographics (single table - use prefix)
+
+    -- Demographics
     trends.average_age AS AVG(trends.age) COMMENT = 'Average age'
 )
 
-COMMENT = 'OLIDS Population Trends Semantic View - 60-month time series for condition prevalence, incidence, and multimorbidity trends. Grain: one row per person per month.'
-AI_SQL_GENERATION 'Use financial_year and financial_quarter for UK reporting periods. For trend queries, group by analysis_month or financial_year. Prevalence metrics count patients WITH a condition; incidence metrics count NEW diagnoses. Always filter to is_active = TRUE unless analysing deceased patients.'
+COMMENT = 'OLIDS Population Trends Semantic View - 60-month time series for condition prevalence, incidence, and multimorbidity trends. Source: OLIDS (One London Integrated Data Set). Condition registers built to QOF Business Rules v50. Grain: one row per person per month. age_band_esp available for grouping but ESP weights are not in this view — use sem_olids_population for age-standardised rates.'
+AI_SQL_GENERATION 'Use financial_year and financial_quarter for UK reporting periods. For trend queries, group by analysis_month or financial_year. Prevalence metrics count patients WITH a condition; incidence metrics count NEW diagnoses. Always filter to is_active = TRUE unless analysing deceased patients. Condition registers are built to QOF Business Rules v50. Note: ESP weights (esp_proportion) are not available in this view. For age-standardised rates, use sem_olids_population which has esp_weight and esp_proportion denormalised at person level.'
 AI_QUESTION_CATEGORIZATION 'Use this view for questions about: trends over time, prevalence changes, incidence rates, year-on-year comparisons, financial year reporting, and monthly/quarterly analysis. For current state snapshots use sem_olids_population. For clinical biomarkers use sem_olids_observations.'

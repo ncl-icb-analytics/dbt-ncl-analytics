@@ -1,0 +1,29 @@
+version: 2
+
+seeds:
+  - name: esp_2013
+    description: |
+      European Standard Population 2013 (Eurostat revision) weights by age band.
+      Total weight: 100,000. 21 bands matching the age_band_esp column from
+      calculate_age_attributes macro and dim_person_age.
+
+      Used for calculating age-standardised rates (ASR) comparable across
+      populations with different age structures. This is the standard used
+      by ONS and OHID for UK health statistics (Fingertips etc).
+
+      Methodology: group by age_band_esp (and gender if sex-standardising),
+      calculate stratum-specific rate, multiply by esp_weight, sum across
+      all bands, divide by 100,000.
+
+    config:
+      column_types:
+        age_band_esp: varchar(10)
+        esp_weight: integer
+        esp_proportion: float
+    columns:
+      - name: age_band_esp
+        description: ESP age band matching age_band_esp from calculate_age_attributes / dim_person_age
+      - name: esp_weight
+        description: ESP 2013 population weight (out of 100,000 total)
+      - name: esp_proportion
+        description: ESP weight as a proportion (esp_weight / 100,000). Multiply stratum rate by this and sum for ASR.
