@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: sem_olids_prescribing
+    description: |
+      OLIDS Prescribing semantic view. OLIDS is the One London Integrated
+      Data Set — primary care data from system suppliers, unified by the
+      One London team.
+
+      All medication orders (issues) enriched with BNF classification,
+      prescription type (acute/repeat from medication statements),
+      prescribing practice details, patient demographics and conditions.
+
+      Pre-defined medication category tables are linked for key drug
+      classes: statins, antihypertensives, ACE inhibitors, ARBs,
+      beta-blockers, anticoagulants, antiplatelets, antipsychotics,
+      antidepressants, lithium, epilepsy drugs, valproate, diabetes
+      medications, inhaled corticosteroids, antibacterials, NSAIDs,
+      and PPIs.
+
+      BNF codes are mapped from SNOMED via stg_reference_bnf_latest (~96%
+      coverage). The chatbot has a BNF lookup tool to resolve drug class
+      names to BNF codes for filtering.
+
+      Grain: one row per medication order (issue).
+
+      Core table: int_medication_order_bnf (view, not materialised).
+
+    config:
+      materialized: semantic_view
+      schema: SEMANTIC
+      meta:
+        owner:
+          name: Eddie Davison

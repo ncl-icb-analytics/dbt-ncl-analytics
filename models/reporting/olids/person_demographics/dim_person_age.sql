@@ -141,6 +141,33 @@ SELECT
         ELSE '85+'
     END AS age_band_ons,
 
+    -- ESP 2013 age bands (matches European Standard Population 2013 structure)
+    -- Splits <1 and 1-4 at the young end, and 85-89, 90-94, 95+ at the old end
+    CASE
+        WHEN ac.age < 0 THEN 'Unknown'
+        WHEN ac.age < 1 THEN '<1'
+        WHEN ac.age < 5 THEN '1-4'
+        WHEN ac.age < 10 THEN '5-9'
+        WHEN ac.age < 15 THEN '10-14'
+        WHEN ac.age < 20 THEN '15-19'
+        WHEN ac.age < 25 THEN '20-24'
+        WHEN ac.age < 30 THEN '25-29'
+        WHEN ac.age < 35 THEN '30-34'
+        WHEN ac.age < 40 THEN '35-39'
+        WHEN ac.age < 45 THEN '40-44'
+        WHEN ac.age < 50 THEN '45-49'
+        WHEN ac.age < 55 THEN '50-54'
+        WHEN ac.age < 60 THEN '55-59'
+        WHEN ac.age < 65 THEN '60-64'
+        WHEN ac.age < 70 THEN '65-69'
+        WHEN ac.age < 75 THEN '70-74'
+        WHEN ac.age < 80 THEN '75-79'
+        WHEN ac.age < 85 THEN '80-84'
+        WHEN ac.age < 90 THEN '85-89'
+        WHEN ac.age < 95 THEN '90-94'
+        ELSE '95+'
+    END AS age_band_esp,
+
     -- Life stage categories
     CASE
         WHEN ac.age < 0 THEN 'Unknown'
