@@ -109,7 +109,7 @@ DIMENSIONS(
     practice.pcn_code AS pcn_code COMMENT = 'PCN code of the appointment-owning practice',
     practice.pcn_name AS pcn_name COMMENT = 'PCN name of the appointment-owning practice',
     practice.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN with borough prefix for the appointment-owning practice',
-    practice.practice_borough AS borough_registered COMMENT = 'Borough of the appointment-owning practice',
+    practice.borough_registered AS borough_registered COMMENT = 'Borough of the appointment-owning practice',
 
     -- Booking
     appt.booking_method AS booking_method COMMENT = 'Booking method source code',
