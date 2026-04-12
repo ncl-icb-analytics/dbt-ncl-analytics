@@ -31,8 +31,7 @@
 TABLES(
     trends AS {{ ref('person_month_analysis_base') }}
         PRIMARY KEY (person_id, analysis_month)
-        COMMENT = 'Person-month analysis base with 60-month rolling window and condition flags',
-
+        COMMENT = 'Person-month analysis base with 60-month rolling window and condition flags'
 )
 
 FACTS(

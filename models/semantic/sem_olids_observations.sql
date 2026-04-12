@@ -97,8 +97,7 @@ TABLES(
 
     dm8cp AS {{ ref('fct_person_diabetes_8_care_processes') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Diabetes 8 care processes completion status (12-month lookback). Only populated for persons on the diabetes register.',
-
+        COMMENT = 'Diabetes 8 care processes completion status (12-month lookback). Only populated for persons on the diabetes register.'
 )
 
 RELATIONSHIPS(

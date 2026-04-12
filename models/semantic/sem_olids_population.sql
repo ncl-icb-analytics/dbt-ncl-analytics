@@ -48,8 +48,7 @@ TABLES(
 
     status AS {{ ref('dim_person_status_summary') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Vulnerability factors, polypharmacy, smoking, alcohol, and data sharing status',
-
+        COMMENT = 'Vulnerability factors, polypharmacy, smoking, alcohol, and data sharing status'
 )
 
 RELATIONSHIPS(
