@@ -93,6 +93,5 @@ LEFT JOIN {{ ref('int_smi_lifestyle')  }} l using (person_id)
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_LTC_PROFILE ltc using (person_id)
 LEFT JOIN {{ ref('int_smi_ltc_profile')  }} ltc using (person_id)
 WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
-AND p.HAS_RECENT_RESOLVED_CODE = FALSE
 -- include all people whether they have had a health check or not, as long as they have an active SMI diagnosis. Those with no health checks will have 0 incomplete checks and 'All checks met' in the list field. 
 
