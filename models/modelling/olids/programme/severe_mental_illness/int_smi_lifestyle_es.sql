@@ -61,4 +61,3 @@ FROM {{ ref('int_smi_population_base')  }} p
 LEFT JOIN {{ ref('int_smi_lifestyle')  }} l using (person_id)
 --LEFT JOIN DEV__MODELLING.OLIDS_PROGRAMME.INT_SMI_LIFESTYLE l using (person_id)
 WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
-AND p.HAS_RECENT_RESOLVED_CODE = FALSE

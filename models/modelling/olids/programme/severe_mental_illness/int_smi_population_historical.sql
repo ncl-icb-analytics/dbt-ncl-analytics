@@ -6,19 +6,26 @@
         )
 }}
 
---SMI REGISTER BASE POPULATION HISTORICAL (using HAS_SMI flag)
-
+--SMI REGISTER BASE POPULATION HISTORICAL (using HAS_SMI flag) 
+with eligible as (
+select 
+person_id, 
+analysis_month, 
+has_smi, 
+CASE when has_smi THEN TRUE ELSE FALSE END as eligible_for_check
+FROM {{ ref('person_month_analysis_base') }} pmab
+WHERE is_deceased = FALSE
+--AND IS_ACTIVE = TRUE
+-- Limit to last 48 months (4 years)
+AND analysis_month >= DATEADD('month', -48, CURRENT_DATE)
+order by person_id, analysis_month
+)
 SELECT
     pmab.analysis_month    -- -- Fiscal year end flag
-    -- CASE
-    --     WHEN EXTRACT(MONTH FROM pmab.analysis_month) = 3
-    --          AND EXTRACT(DAY FROM pmab.analysis_month) = 31
-    --     THEN 1
-    --     ELSE 0
-    -- END AS is_fiscal_year_end
-    -- Fiscal year label (use existing field from person_month_analysis_base)
-    ,pmab.financial_year as fiscal_year_label
+   ,pmab.financial_year as fiscal_year_label
     ,pmab.person_id
+    ,e.has_smi
+    ,e.eligible_for_check
     ,pmab.age
     ,pmab.gender
     ,pmab.AGE_BAND_NHS
@@ -102,9 +109,7 @@ SELECT
     ELSE pmab.ward_name END as WARD_NAME
 FROM {{ ref('person_month_analysis_base') }} pmab
 --FROM REPORTING.OLIDS_PERSON_ANALYTICS.PERSON_MONTH_ANALYSIS_BASE  pmab
-WHERE HAS_SMI = TRUE
-    -- Exclude deceased patients (age frozen at death)
-    AND pmab.is_deceased = FALSE
-    AND IS_ACTIVE 
-    -- Limit to last 48 months (4 years)
-    AND pmab.analysis_month >= DATEADD('month', -48, CURRENT_DATE)
+INNER JOIN eligible e
+    ON pmab.person_id = e.person_id
+    AND pmab.analysis_month = e.analysis_month
+
