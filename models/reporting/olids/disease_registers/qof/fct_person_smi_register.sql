@@ -61,32 +61,23 @@ WITH smi_diagnoses AS (
     ),
     FALSE
 ) AS has_recent_resolved_code,
---HAS_ACTIVE_SMI_DIAGNOSIS is derived 
-   CASE WHEN
-                  COALESCE(
-                    (
-                     /* Case 1: both diagnosis and resolved exist, resolved is same or later */
-                        MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
-                        AND MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) IS NOT NULL
-                        AND MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END)
-                                >= MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END)
-                    )
-                    OR
-                     /* Case 2: resolved exists and NO diagnosis exists */
-                    (
-                        MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
-                        AND MAX(CASE WHEN is_diagnosis_code THEN 1 ELSE 0 END) = 0
-                    ),
-                    FALSE
-                ) = TRUE
-            THEN FALSE
-            ELSE TRUE
-        END AS has_active_smi_diagnosis,
-        --ARRAY_AGG(DISTINCT concept_code) AS all_smi_concept_codes,
+-- has_active_smi_diagnosis is simply the inverse of has_recent_resolved_code
+      NOT COALESCE(
+         (
+              MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
+              AND MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) IS NOT NULL
+              AND MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END)
+                  >= MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END)
+          )
+          OR
+          (
+              MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
+              AND MAX(CASE WHEN is_diagnosis_code THEN 1 ELSE 0 END) = 0
+          ),
+          FALSE
+      ) AS has_active_smi_diagnosis,
         ARRAY_AGG(DISTINCT CASE WHEN is_diagnosis_code THEN concept_code END) AS all_smi_concept_codes,
-        --ARRAY_AGG(DISTINCT concept_display) AS all_smi_concept_displays,
         ARRAY_AGG(DISTINCT CASE WHEN is_diagnosis_code THEN concept_display END) AS all_smi_concept_displays,
-      --ARRAY_CONSTRUCT() AS all_resolved_concept_codes,
         ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_code END) AS all_resolved_concept_codes,
         ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_display END) AS all_resolved_concept_displays
     FROM {{ ref('int_smi_diagnoses_all') }}

@@ -11,21 +11,19 @@ with eligible as (
 select 
 person_id, 
 analysis_month, 
-has_smi, 
-CASE when has_smi THEN TRUE ELSE FALSE END as eligible_for_check
+has_smi
 FROM {{ ref('person_month_analysis_base') }} pmab
 WHERE is_deceased = FALSE
 --AND IS_ACTIVE = TRUE
 -- Limit to last 48 months (4 years)
 AND analysis_month >= DATEADD('month', -48, CURRENT_DATE)
-order by person_id, analysis_month
+AND HAS_SMI
 )
 SELECT
-    pmab.analysis_month    -- -- Fiscal year end flag
-   ,pmab.financial_year as fiscal_year_label
-    ,pmab.person_id
+    pmab.person_id
     ,e.has_smi
-    ,e.eligible_for_check
+    ,pmab.analysis_month    -- -- Fiscal year end flag
+   ,pmab.financial_year as fiscal_year_label   
     ,pmab.age
     ,pmab.gender
     ,pmab.AGE_BAND_NHS
@@ -112,4 +110,5 @@ FROM {{ ref('person_month_analysis_base') }} pmab
 INNER JOIN eligible e
     ON pmab.person_id = e.person_id
     AND pmab.analysis_month = e.analysis_month
+    
 
