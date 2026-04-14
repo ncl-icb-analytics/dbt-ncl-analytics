@@ -10,6 +10,8 @@ models:
 
       • Date validation: Missing or future dates
 
+      • Adult-only scope: inherits int_bmi_all filtering — heights and weights with age_at_event < 18 are excluded upstream, so paediatric measurements do not appear here
+
       Purpose: Supports BMI data validation and clinical review of extreme values.'
     config:
       meta:

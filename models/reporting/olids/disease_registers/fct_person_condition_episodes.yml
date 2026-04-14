@@ -214,6 +214,7 @@ models:
               Episode starts are triggered when BMI first enters an obesity category
               and end when a later BMI falls below the obesity threshold.
               Supports repeated on/off cycles for longitudinal weight-status analysis.
+              BMI sourced from int_bmi_all — heights and weights recorded under age 18 are excluded upstream so paediatric measurements do not feed obesity episodes.
             is_qof: false
             source_column: "current_condition_status"
             sort_order: "CONDITION_EPISODES_OB"
