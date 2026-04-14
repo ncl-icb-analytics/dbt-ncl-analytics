@@ -780,6 +780,7 @@ models:
                   - 'PC'
                   - 'RA'
                   - 'SMI'
+                  - 'SMI_RES'
                   - 'STIA'
                   - 'PD'
                   - 'CEREBRALP'

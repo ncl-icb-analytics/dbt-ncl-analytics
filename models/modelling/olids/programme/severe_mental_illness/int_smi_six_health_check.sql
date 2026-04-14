@@ -316,7 +316,6 @@ LEFT JOIN EXCEPTIONS e USING (PERSON_ID)
 LEFT JOIN COMBINED hc USING (PERSON_ID)
 --include only people with active SMI diagnosis as eligible for a health check- they might also be on lithium
 WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS = TRUE
-AND p.HAS_RECENT_RESOLVED_CODE = FALSE
 
 )
 ,MET_COUNT as (
