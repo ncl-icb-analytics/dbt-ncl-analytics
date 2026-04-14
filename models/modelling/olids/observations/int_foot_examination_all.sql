@@ -51,8 +51,19 @@ WITH foot_observations AS (
             ELSE NULL
         END AS risk_level
 
-    FROM ({{ get_observations("'FEPU_COD', 'FEDEC_COD', 'FRC_COD', 'CONABL_COD', 'CONABR_COD', 'AMPL_COD', 'AMPR_COD'") }}) obs
+    FROM ({{ get_observations("'FEPU_COD', 'FEDEC_COD', 'FOOTEXAM_COD', 'CONABL_COD', 'CONABR_COD', 'AMPL_COD', 'AMPR_COD'") }}) obs
     WHERE obs.clinical_effective_date IS NOT NULL
+),
+
+-- Tag foot exam rows with no laterality keyword and no Townson as generic bilateral checks
+foot_observations_tagged AS (
+    SELECT
+        *,
+        (source_cluster_id = 'FOOTEXAM_COD'
+         AND NOT has_left
+         AND NOT has_right
+         AND NOT is_townson) AS is_bilateral_generic
+    FROM foot_observations
 ),
 
 -- First aggregate foot status (amputations/absences) across all time
@@ -63,7 +74,7 @@ foot_status AS (
         MAX(CASE WHEN source_cluster_id = 'CONABR_COD' THEN TRUE ELSE FALSE END) AS right_foot_absent,
         MAX(CASE WHEN source_cluster_id = 'AMPL_COD' THEN TRUE ELSE FALSE END) AS left_foot_amputated,
         MAX(CASE WHEN source_cluster_id = 'AMPR_COD' THEN TRUE ELSE FALSE END) AS right_foot_amputated
-    FROM foot_observations
+    FROM foot_observations_tagged
     GROUP BY person_id
 ),
 
@@ -77,32 +88,32 @@ check_details AS (
         MAX(CASE WHEN source_cluster_id = 'FEPU_COD' THEN TRUE ELSE FALSE END) AS is_unsuitable,
         MAX(CASE WHEN source_cluster_id = 'FEDEC_COD' THEN TRUE ELSE FALSE END) AS is_declined,
 
-        -- Foot checks - left foot is checked if either explicit left foot check OR Townson scale
+        -- Left foot checked: explicit left code, Townson, or generic bilateral exam code
         MAX(CASE
-            WHEN source_cluster_id = 'FRC_COD' AND (has_left OR is_townson) THEN TRUE
+            WHEN source_cluster_id = 'FOOTEXAM_COD' AND (has_left OR is_townson OR is_bilateral_generic) THEN TRUE
             ELSE FALSE
         END) AS left_foot_checked,
 
-        -- Right foot is checked if either explicit right foot check OR Townson scale
+        -- Right foot checked: explicit right code, Townson, or generic bilateral exam code
         MAX(CASE
-            WHEN source_cluster_id = 'FRC_COD' AND (has_right OR is_townson) THEN TRUE
+            WHEN source_cluster_id = 'FOOTEXAM_COD' AND (has_right OR is_townson OR is_bilateral_generic) THEN TRUE
             ELSE FALSE
         END) AS right_foot_checked,
 
-        -- Both feet checked if Townson scale used
+        -- Both feet checked: Townson scale or generic bilateral exam code
         MAX(CASE
-            WHEN source_cluster_id = 'FRC_COD' AND is_townson THEN TRUE
+            WHEN source_cluster_id = 'FOOTEXAM_COD' AND (is_townson OR is_bilateral_generic) THEN TRUE
             ELSE FALSE
         END) AS both_feet_checked,
 
-        -- Get risk levels for each foot
+        -- Risk level by foot (only populated where the code carries an explicit risk descriptor)
         MAX(CASE
-            WHEN source_cluster_id = 'FRC_COD' AND (has_left OR is_townson) THEN risk_level
+            WHEN source_cluster_id = 'FOOTEXAM_COD' AND (has_left OR is_townson) THEN risk_level
             ELSE NULL
         END) AS left_foot_risk_level,
 
         MAX(CASE
-            WHEN source_cluster_id = 'FRC_COD' AND (has_right OR is_townson) THEN risk_level
+            WHEN source_cluster_id = 'FOOTEXAM_COD' AND (has_right OR is_townson) THEN risk_level
             ELSE NULL
         END) AS right_foot_risk_level,
 
@@ -117,7 +128,7 @@ check_details AS (
         ARRAY_AGG(DISTINCT concept_display) WITHIN GROUP (ORDER BY concept_display) AS all_concept_displays,
         ARRAY_AGG(DISTINCT source_cluster_id) WITHIN GROUP (ORDER BY source_cluster_id) AS all_source_cluster_ids
 
-    FROM foot_observations
+    FROM foot_observations_tagged
     GROUP BY person_id, clinical_effective_date
 )
 

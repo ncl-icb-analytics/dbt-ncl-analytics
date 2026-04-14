@@ -30,6 +30,7 @@ SELECT
         <= 12
         AND (
             fc.both_feet_checked
+            OR (fc.left_foot_checked AND fc.right_foot_checked)
             OR (
                 fc.left_foot_checked
                 AND (fc.right_foot_absent OR fc.right_foot_amputated)
