@@ -30,7 +30,6 @@ SELECT
         <= 12
         AND (
             fc.both_feet_checked
-            OR (fc.left_foot_checked AND fc.right_foot_checked)
             OR (
                 fc.left_foot_checked
                 AND (fc.right_foot_absent OR fc.right_foot_amputated)
@@ -55,10 +54,7 @@ SELECT
         WHEN fc.clinical_effective_date IS NULL THEN 'Not Done'
         WHEN fc.is_declined THEN 'Declined'
         WHEN fc.is_unsuitable THEN 'Unsuitable'
-        WHEN
-            fc.both_feet_checked
-            OR (fc.left_foot_checked AND fc.right_foot_checked)
-            THEN 'Complete - Both Feet'
+        WHEN fc.both_feet_checked THEN 'Complete - Both Feet'
         WHEN
             fc.left_foot_checked
             AND (fc.right_foot_absent OR fc.right_foot_amputated)
@@ -81,9 +77,6 @@ SELECT
         WHEN fc.is_unsuitable THEN 'Not Appropriate - Unsuitable'
         WHEN fc.is_declined THEN 'Not Appropriate - Declined'
         WHEN fc.both_feet_checked THEN 'Complete - Both Feet'
-        WHEN
-            fc.left_foot_checked AND fc.right_foot_checked
-            THEN 'Complete - Both Feet'
         WHEN
             fc.left_foot_checked
             AND (fc.right_foot_absent OR fc.right_foot_amputated)

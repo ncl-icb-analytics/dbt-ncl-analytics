@@ -79,7 +79,7 @@ foot_status AS (
 ),
 
 -- Then get the check details for each date
-check_details AS (
+check_details_raw AS (
     SELECT
         person_id,
         clinical_effective_date,
@@ -100,11 +100,12 @@ check_details AS (
             ELSE FALSE
         END) AS right_foot_checked,
 
-        -- Both feet checked: Townson scale or generic bilateral exam code
+        -- Bilateral signal at the row level (Townson or generic bilateral exam code).
+        -- Paired left+right rows on the same date are folded in by check_details below.
         MAX(CASE
             WHEN source_cluster_id = 'FOOTEXAM_COD' AND (is_townson OR is_bilateral_generic) THEN TRUE
             ELSE FALSE
-        END) AS both_feet_checked,
+        END) AS both_feet_checked_row_level,
 
         -- Risk level by foot (only populated where the code carries an explicit risk descriptor)
         MAX(CASE
@@ -130,6 +131,25 @@ check_details AS (
 
     FROM foot_observations_tagged
     GROUP BY person_id, clinical_effective_date
+),
+
+-- Canonical both_feet_checked: bilateral row OR paired left+right on same date
+check_details AS (
+    SELECT
+        person_id,
+        clinical_effective_date,
+        is_unsuitable,
+        is_declined,
+        left_foot_checked,
+        right_foot_checked,
+        (both_feet_checked_row_level OR (left_foot_checked AND right_foot_checked)) AS both_feet_checked,
+        left_foot_risk_level,
+        right_foot_risk_level,
+        townson_scale_level,
+        all_concept_codes,
+        all_concept_displays,
+        all_source_cluster_ids
+    FROM check_details_raw
 )
 
 -- Final selection combining check details with foot status
@@ -158,7 +178,6 @@ SELECT
         WHEN cd.is_unsuitable THEN 'Unsuitable'
         WHEN cd.is_declined THEN 'Declined'
         WHEN cd.both_feet_checked THEN 'Complete - Both Feet'
-        WHEN cd.left_foot_checked AND cd.right_foot_checked THEN 'Complete - Both Feet'
         WHEN cd.left_foot_checked AND (fs.right_foot_absent OR fs.right_foot_amputated) THEN 'Complete - Left Only (Right Missing)'
         WHEN cd.right_foot_checked AND (fs.left_foot_absent OR fs.left_foot_amputated) THEN 'Complete - Right Only (Left Missing)'
         WHEN cd.left_foot_checked THEN 'Partial - Left Only'
