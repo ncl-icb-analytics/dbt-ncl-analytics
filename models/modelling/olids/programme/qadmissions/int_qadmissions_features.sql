@@ -1,9 +1,8 @@
 {{
     config(
         materialized='table',
-        schema='QADMISSIONS',
         cluster_by=['sk_patient_id'],
-        tags=['qadmissions', 'risk_scores', 'published_reporting'],
+        tags=['qadmissions', 'risk_scores'],
         meta={
             'custom_message': 'QAdmissions feature set for Snowflake model registry. Derived from the QAdmissions 2013 v4.1 reference implementation (AGPL-3.0, ClinRisk Ltd). Displaying any score produced from these features requires the ClinRisk disclaimer.'
         }
