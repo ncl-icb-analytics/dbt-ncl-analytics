@@ -4,17 +4,17 @@ models:
 
       One row per person that has a blood pressure recording.
 
-      Treatment Targets:
+      Treatment Targets (clinic values; applied target is shifted -5 mmHg for HBPM/ABPM readings per NG136 rec 1.4.22):
 
-      • Standard (under 80): <140/90 mmHg
+      • Standard (under 80): <140/90 clinic, <135/85 HBPM/ABPM
 
-      • Age 80+: <150/90 mmHg
+      • Age 80+: <150/90 clinic, <145/85 HBPM/ABPM
 
-      • Type 2 Diabetes: <140/90 mmHg
+      • Type 2 Diabetes (under 80): <140/90 clinic, <135/85 HBPM/ABPM
 
-      • CKD (under 80): <140/90 mmHg
+      • CKD (under 80): <140/90 clinic, <135/85 HBPM/ABPM
 
-      • CKD with ACR ≥70: <130/80 mmHg
+      • CKD with ACR ≥70 (under 80): <130/80 clinic, <125/75 HBPM/ABPM
 
       Monitoring Intervals:
 
@@ -40,6 +40,8 @@ models:
     
     config:
       meta:
+        owner:
+          name: EddieDavison92
         indicator:
           id: "NG136_BP"
           type: "MEASURE"
@@ -173,23 +175,31 @@ models:
       - name: applied_patient_group
         description: "Patient group used for threshold selection (AGE_LT_80, AGE_GE_80, T2DM, CKD, CKD_ACR_GE_70)"
 
+      - name: applied_measurement_context
+        description: "'CLINIC' or 'HBPM_ABPM' — which variant of the bp_thresholds rule was applied, matching the latest reading's source."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CLINIC', 'HBPM_ABPM']
+
       - name: applied_systolic_threshold
-        description: "Patient-specific systolic BP target - 140 (standard/diabetes/CKD), 150 (age 80+), 130 (CKD with high ACR)"
-        
+        description: "Patient-specific systolic target actually used for control. CLINIC value (140/150/130) for clinic readings, or the -5 mmHg HBPM/ABPM variant (135/145/125) per NG136 rec 1.4.22."
+
       - name: applied_diastolic_threshold
-        description: "Patient-specific diastolic BP target - 90 (standard/age 80+), 80 (CKD with high ACR)"
+        description: "Patient-specific diastolic target actually used for control. CLINIC value (90/80) for clinic readings, or the -5 mmHg HBPM/ABPM variant (85/75) per NG136 rec 1.4.22."
         
       - name: has_t2dm
         description: Whether person has Type 2 diabetes
         
       - name: is_systolic_controlled
-        description: "Whether systolic BP below target (varies: 140/150/130 per NICE NG136)"
-        
+        description: "Whether latest systolic BP is below applied_systolic_threshold (clinic target, or clinic target -5 mmHg when latest BP is HBPM/ABPM)."
+
       - name: is_diastolic_controlled
-        description: "Whether diastolic BP below target (90 standard, 80 for CKD high ACR)"
-        
+        description: "Whether latest diastolic BP is below applied_diastolic_threshold (clinic target, or clinic target -5 mmHg when latest BP is HBPM/ABPM)."
+
       - name: is_overall_bp_controlled
-        description: "Overall BP control per NICE NG136 - both systolic and diastolic below patient-specific targets"
+        description: "Both systolic and diastolic below their applied (measurement-aware) targets per NICE NG136."
 
       - name: hypertension_stage_number
         description: "Numeric hypertension stage (0=Normal, 1=Stage 1, 2=Stage 2, 3=Stage 3 Severe). Uses highest of systolic/diastolic stage."
