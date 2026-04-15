@@ -13,3 +13,4 @@ models:
         description: Unique identifier for the person
         tests:
           - not_null
+          - unique
