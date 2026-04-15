@@ -7,6 +7,8 @@ seeds:
       Includes both full official codes and the shorter H-coded representations used
       in the source dataset.
       Source: https://geoportal.statistics.gov.uk/search?sort=Date%20Created%7Ccreated%7Cdesc&tags=LUP_EXACT_LSOA21_SICBL_ICB_CAL
+
+      Contact: jake.kealey@nhs.net
     config:
       column_types:
         CCG21CD: varchar(64)
