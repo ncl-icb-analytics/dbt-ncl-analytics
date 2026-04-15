@@ -6,26 +6,27 @@
         )
 }}
 /*Person Level Intermediate table holding Case Finding data for people on the SMI register who have had an inpatient spell at NLFT in the last 6 months or who have a current inpatient spell. 
-This includes number of checks missed and vulnerabilities. */
+This includes number of checks missed and vulnerabilities. The MHSDS active submission is 6 weeks behind current date.
+*/
 
 --find local patient ids for active submission. One sk_patient_id and one person_id can have multiple local patient ids. MPI_PERSON_ID is the unique identifier in the MHSD record set.
 with LOCAL_ID as (
 select distinct 
-nhs_number_pseudo as sk_patient_id, 
-mpi.PERSON_ID as mpi_person_id, 
-local_patient_id,  
-org_id_prov,
-'NLFT' as provider
-FROM {{ ref('raw_mhsds_mhs001mpi') }} mpi
---FROM MODELLING.DBT_RAW.RAW_MHSDS_MHS001MPI mpi
+mpi.sk_patient_id 
+,mpi.PERSON_ID as mpi_person_id 
+,local_patient_id  
+,org_id_prov
+,'NLFT' as provider
+FROM {{ ref('stg_mhsds_mpi') }} mpi
+--FROM MODELLING.DBT_STAGING.STG_MHSDS_MPI mpi
 INNER JOIN {{ ref('stg_mhsds_activesubmission') }} a ON mpi.uniq_submission_id = a.uniq_submission_id
 --inner join MODELLING.DBT_STAGING.STG_MHSDS_ACTIVESUBMISSION a  on mpi.uniq_submission_id = a.uniq_submission_id
-INNER JOIN {{ ref('int_smi_population_base') }} smi on TO_VARCHAR(smi.sk_patient_id) = mpi.nhs_number_pseudo
---INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE smi on TO_VARCHAR(smi.sk_patient_id) = mpi.nhs_number_pseudo
+INNER JOIN {{ ref('int_smi_population_base') }} smi on TO_VARCHAR(smi.sk_patient_id) = mpi.sk_patient_id
+--INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE smi on TO_VARCHAR(smi.sk_patient_id) = mpi.sk_patient_id
 where ORG_ID_PROV in ('G6V2S') --,'TAF') use NLFT code only C&I legacy patients are not found in the NLFT EPR system
 and DMIC_CCG_CODE = '93C'
 and HAS_ACTIVE_SMI_DIAGNOSIS
---and mpi.person_id = 'MYCG3Y42UHE991Q' - this person has two C&I ids
+
 order by 1
 )
 --DEFINE SMI POP
@@ -85,57 +86,63 @@ WHERE HAS_ACTIVE_SMI_DIAGNOSIS
     ,p.mpi_person_id
     ,'NLFT' as provider
     ,sp.uniq_hosp_prov_spell_num
-    ,sp.uniq_submission_id
-    ,DATE(sp.start_date_hosp_prov_spell) as SPELL_START_DATE
-    ,CASE WHEN sp.start_date_hosp_prov_spell  >= DATEADD('month', -6, CURRENT_DATE) THEN 'Yes' ELSE 'No' END AS LAST_6MTHS_FLAG
-    ,coalesce(sp.disch_date_hosp_prov_spell, sp.estimated_disch_date_hosp_prov_spell) as spell_end_date
+    ,ws.uniq_ward_stay_id
+    ,DATE(sp.start_date_hosp_prov_spell) as spell_start_date
+    ,DATE(sp.disch_date_hosp_prov_spell) as spell_discharge_date
+    ,sp.disch_date_hosp_prov_spell is null as is_current_spell  
+    ,DATE(ws.start_date_ward_stay) as start_date_ward_stay
+    ,DATE(end_date_ward_stay) as end_date_ward_stay
+    ,CASE WHEN sp.start_date_hosp_prov_spell  >= DATEADD('month', -6, CURRENT_DATE) THEN 'Yes' ELSE 'No' END AS last_6mths_flag
     ,CASE
     WHEN sp.meth_adm_mh_hosp_prov_spell in ('11','12','13') THEN 'Elective'
     WHEN sp.meth_adm_mh_hosp_prov_spell in ('81') THEN 'Other transfer'
     ELSE 'Emergency' END AS admission_type
-    ,DATE(ws.effective_from) as ward_date_from
     ,CASE 
-    WHEN ws.ward_type = '01' THEN 'Child and Adolescent Mental Health'
-    WHEN ws.ward_type = '02' THEN 'Paediatric'
-    WHEN ws.ward_type = '03' THEN 'Adult Mental Health'
-    WHEN ws.ward_type = '04' THEN 'Non Mental Health'
-    WHEN ws.ward_type = '05' THEN 'Learning Disabilities'
-    WHEN ws.ward_type = '06' THEN 'Older People Mental Health'
-    END AS ward_type
+    WHEN ws.hospital_bed_type_name = 'Adult Psychiatric Intensive Care Unit (Acute Mental Health Care)' THEN 'Adult Psychiatric Intensive Care Unit'
+    WHEN ws.hospital_bed_type_name = 'Acute Older Adult Mental Health Care (Organic and Functional)' THEN 'Acute Older Adult Mental Health Care'
+    WHEN ws.hospital_bed_type_name = 'Adult Mental Health Rehabilitation (Mainstream Service)' THEN 'Adult Mental Health Rehabilitation'
+    WHEN ws.hospital_bed_type_name = 'General Child and Young Person - Young Person (13 years up to and including 17 years)' THEN 'General Child and Young Person'
+    ELSE ws.hospital_bed_type_name END AS ward_type
 FROM {{ ref('stg_mhsds_spell') }} sp
 --FROM MODELLING.DBT_STAGING.STG_MHSDS_spell sp
 INNER JOIN SMIPOPULATION p ON p.mpi_person_id = sp.person_id
-LEFT JOIN {{ ref('raw_mhsds_mhs502wardstay') }} ws on sp.uniq_hosp_prov_spell_num = ws.uniq_hosp_prov_spell_num
---LEFT JOIN MODELLING.DBT_RAW.RAW_MHSDS_MHS502WARDSTAY ws on sp.uniq_hosp_prov_spell_num = ws.uniq_hosp_prov_spell_num
+LEFT JOIN {{ ref('stg_mhsds_mhs502wardstay') }} ws on sp.uniq_hosp_prov_spell_num = ws.uniq_hosp_prov_spell_num
+--LEFT JOIN MODELLING.DBT_STAGING.STG_MHSDS_MHS502WARDSTAY ws on sp.uniq_hosp_prov_spell_num = ws.uniq_hosp_prov_spell_num
 WHERE sp.DM_ICB_COMMISSIONER = '93C'
 AND sp.ORG_ID_PROV in ('G6V2S')--,'TAF','RNK','RRP') use NLFT code only C&I legacy patients are not found in the NLFT EPR system
 )
 --select people who are inpatients currently or who have been admitted in the last 6 months
-,SPELL_DEDUP AS (
+,SPELL_6M AS (
 select 
 sk_patient_id
 ,mpi_person_id
 ,provider
+,uniq_ward_stay_id
 ,admission_type
 ,ward_type
-,SPELL_START_DATE
-,LAST_6MTHS_FLAG
-,DATE(spell_end_date) as SPELL_END_DATE
+,spell_start_date
+,spell_discharge_date
+,is_current_spell
+,last_6mths_flag
 FROM SPELL
-where LAST_6MTHS_FLAG = 'Yes' OR spell_end_date  is NULL
---deduplicate ward stays by selecting the latest
-QUALIFY ROW_NUMBER() OVER (PARTITION BY SK_PATIENT_ID, uniq_hosp_prov_spell_num ORDER BY ward_date_from DESC) = 1
-order by 1,4
+where last_6mths_flag = 'Yes' OR is_current_spell
 )
---final add back in population characteristics and local patient id for NFLT.
+--select latest spell
+,latest_spell as (
+select *
+from spell_6m sp
+QUALIFY ROW_NUMBER() OVER (PARTITION BY sp.mpi_person_id ORDER BY SPELL_START_DATE DESC) = 1
+)
+--final add back in population characteristics and local patient id for NFLT and select latest spell.
 select 
 p.person_id
 ,p.hx_flake
 ,loc.local_patient_id 
-,max(sp.admission_type) as admission_type
-,max(sp.ward_type) as ward_type
-,max(sp.spell_start_date) as latest_spell_start
-,max(sp.spell_end_date) as latest_spell_end
+,sp.spell_start_date
+,sp.spell_discharge_date
+,sp.is_current_spell
+,sp.admission_type
+,sp.ward_type
 ,p.age
 ,p.age_band_5y
 ,p.gender
@@ -170,8 +177,7 @@ p.person_id
 ,p.chol_miss
 ,p.bmi_miss
 ,p.hba1c_miss
-from spell_dedup sp
+from  latest_spell sp
 left join smipopulation p on p.mpi_person_id = sp.mpi_person_id
-left join (select distinct mpi_person_id, local_patient_id from LOCAL_ID) loc on loc.mpi_person_id = p.mpi_person_id --and loc.provider = p.provider
---where s.provider in (  'NLFT') --'C&I' C&I legacy patients are not found in NLFT systems
-group by all
+--some people have multiple MPI_PERSON_IDs to each sk_patient_id/local_patient_id.
+left join (select distinct mpi_person_id, local_patient_id from LOCAL_ID) loc on loc.mpi_person_id = sp.mpi_person_id 
