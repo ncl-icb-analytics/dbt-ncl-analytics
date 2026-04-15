@@ -1,5 +1,8 @@
 {{
-    config(materialized = 'table')
+     config(
+        materialized = 'table',
+        tags=['mhsds']
+        )
 }}
 
 WITH deduplicated AS (
