@@ -27,7 +27,7 @@ models:
       - name: hospital_bed_type_name
         description: The ward where the activity took place during a hospital provider spell.
 
-      - name: uniq_hosp_prov_spell_number
+      - name: uniq_hosp_prov_spell_num
         description: unique identifier for each Hospital Provider Spell for a Health Care Provider
         
       - name: dmic_ccg_code

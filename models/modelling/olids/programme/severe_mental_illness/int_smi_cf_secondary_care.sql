@@ -121,6 +121,7 @@ sk_patient_id
 ,admission_type
 ,ward_type
 ,spell_start_date
+,start_date_ward_stay
 ,spell_discharge_date
 ,is_current_spell
 ,last_6mths_flag
@@ -131,7 +132,7 @@ where last_6mths_flag = 'Yes' OR is_current_spell
 ,latest_spell as (
 select *
 from spell_6m sp
-QUALIFY ROW_NUMBER() OVER (PARTITION BY sp.mpi_person_id ORDER BY SPELL_START_DATE DESC) = 1
+QUALIFY ROW_NUMBER() OVER (PARTITION BY sp.mpi_person_id ORDER BY spell_start_date DESC, start_date_ward_stay DESC) = 1
 )
 --final add back in population characteristics and local patient id for NFLT and select latest spell.
 select 
