@@ -1,0 +1,61 @@
+version: 2
+
+seeds:
+  - name: ccg_icb_to_cancer_alliance
+    description: |
+      Lookup of 2021 CCG and STP codes mapped to 2021 Cancer Alliance codes.
+      Includes both full official codes and the shorter H-coded representations used
+      in the source dataset.
+      Source: https://geoportal.statistics.gov.uk/search?sort=Date%20Created%7Ccreated%7Cdesc&tags=LUP_EXACT_LSOA21_SICBL_ICB_CAL
+
+      Contact: jake.kealey@nhs.net
+    config:
+      column_types:
+        CCG21CD: varchar(64)
+        CCG21CDH: varchar(64)
+        CCG21NM: varchar(255)
+        STP21CD: varchar(64)
+        STP21CDH: varchar(64)
+        STP21NM: varchar(255)
+        CAL21CD: varchar(64)
+        CAL21NM: varchar(255)
+        FID: integer
+    columns:
+      - name: CCG21CD
+        description: Official CCG 2021 code.
+        data_tests:
+          - not_null
+          - unique
+      - name: CCG21CDH
+        description: Alternate short/historical CCG 2021 code used in the source.
+        data_tests:
+          - not_null
+      - name: CCG21NM
+        description: CCG 2021 name.
+        data_tests:
+          - not_null
+      - name: STP21CD
+        description: Official STP 2021 code.
+        data_tests:
+          - not_null
+      - name: STP21CDH
+        description: Alternate short/historical STP 2021 code used in the source.
+        data_tests:
+          - not_null
+      - name: STP21NM
+        description: STP 2021 name.
+        data_tests:
+          - not_null
+      - name: CAL21CD
+        description: Cancer Alliance 2021 code.
+        data_tests:
+          - not_null
+      - name: CAL21NM
+        description: Cancer Alliance 2021 name.
+        data_tests:
+          - not_null
+      - name: FID
+        description: Internal row identifier from the source file.
+        data_tests:
+          - not_null
+          - unique

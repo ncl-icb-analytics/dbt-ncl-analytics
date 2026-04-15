@@ -1,0 +1,80 @@
+version: 2
+
+seeds:
+  - name: lsoa_to_cancer_alliance
+    description: |
+      Lookup of 2021 LSOA codes mapped to 2025 ICB, Cancer Alliance and local authority codes.
+      Includes both the full official codes and shorter source-specific code variants.
+      Source: https://geoportal.statistics.gov.uk/search?sort=Date%20Created%7Ccreated%7Cdesc&tags=LUP_EXACT_CCG_STP_CALNCV
+
+      Contact: jake.kealey@nhs.net
+    config:
+      column_types:
+        LSOA21CD: varchar(64)
+        LSOA21NM: varchar(255)
+        SICBL25CD: varchar(64)
+        SICBL25CDH: varchar(64)
+        SICBL25NM: varchar(255)
+        ICB25CD: varchar(64)
+        ICB25CDH: varchar(64)
+        ICB25NM: varchar(255)
+        CAL25CD: varchar(64)
+        CAL25NM: varchar(255)
+        LAD25CD: varchar(64)
+        LAD25NM: varchar(255)
+        FID: integer
+    columns:
+      - name: LSOA21CD
+        description: Official Lower Layer Super Output Area 2021 code.
+        data_tests:
+          - not_null
+          - unique
+      - name: LSOA21NM
+        description: LSOA 2021 name.
+        data_tests:
+          - not_null
+      - name: SICBL25CD
+        description: Source-specific 2025 code used for the SICBL mapping.
+        data_tests:
+          - not_null
+      - name: SICBL25CDH
+        description: Short/historical SICBL 2025 code.
+        data_tests:
+          - not_null
+      - name: SICBL25NM
+        description: SICBL 2025 name.
+        data_tests:
+          - not_null
+      - name: ICB25CD
+        description: Integrated Care Board 2025 code.
+        data_tests:
+          - not_null
+      - name: ICB25CDH
+        description: Short/historical ICB 2025 code.
+        data_tests:
+          - not_null
+      - name: ICB25NM
+        description: Integrated Care Board 2025 name.
+        data_tests:
+          - not_null
+      - name: CAL25CD
+        description: Cancer Alliance 2025 code.
+        data_tests:
+          - not_null
+      - name: CAL25NM
+        description: Cancer Alliance 2025 name.
+        data_tests:
+          - not_null
+      - name: LAD25CD
+        description: Local Authority District 2025 code.
+        data_tests:
+          - not_null
+      - name: LAD25NM
+        description: Local Authority District 2025 name.
+        data_tests:
+          - not_null
+      - name: FID
+        description: Internal row identifier from the source file.
+        data_tests:
+          - not_null
+          - unique
