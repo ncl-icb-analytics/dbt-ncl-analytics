@@ -40,6 +40,8 @@ models:
     
     config:
       meta:
+        owner:
+          name: EddieDavison92
         indicator:
           id: "NG136_BP"
           type: "MEASURE"
@@ -175,6 +177,11 @@ models:
 
       - name: applied_measurement_context
         description: "'CLINIC' or 'HBPM_ABPM' — which variant of the bp_thresholds rule was applied, matching the latest reading's source."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CLINIC', 'HBPM_ABPM']
 
       - name: applied_systolic_threshold
         description: "Patient-specific systolic target actually used for control. CLINIC value (140/150/130) for clinic readings, or the -5 mmHg HBPM/ABPM variant (135/145/125) per NG136 rec 1.4.22."

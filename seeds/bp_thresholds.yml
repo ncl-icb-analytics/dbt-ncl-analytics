@@ -30,46 +30,50 @@ seeds:
         diastolic_threshold: integer
         operator: varchar(16)
         notes: varchar(255)
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: threshold_rule_id
         description: Unique rule identifier. HBPM/ABPM variants carry the "_HBPM_ABPM" suffix.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: programme_or_guideline
         description: Source guideline (currently NICE NG136).
-        tests:
+        data_tests:
           - not_null
       - name: description
         description: Human-readable description.
       - name: patient_group
         description: AGE_LT_80 | AGE_GE_80 | T2DM | CKD | CKD_ACR_GE_70 | DIAGNOSIS | SEVERE.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['AGE_LT_80', 'AGE_GE_80', 'T2DM', 'CKD', 'CKD_ACR_GE_70', 'DIAGNOSIS', 'SEVERE']
       - name: threshold_type
         description: TARGET_UPPER for treatment targets, DIAGNOSIS_S1_* / DIAGNOSIS_S2_* for staging, SEVERE_CLINIC for the Stage 3 cut-off.
-        tests:
+        data_tests:
           - not_null
       - name: measurement_context
-        description: CLINIC or HBPM_ABPM. For TARGET_UPPER rows, identifies which reading source the threshold applies to. For DIAGNOSIS and SEVERE rows, repeats the context already encoded in threshold_type.
-        tests:
+        description: CLINIC or HBPM_ABPM. For TARGET_UPPER rows, identifies which reading source the threshold applies to. For DIAGNOSIS and SEVERE rows, repeats the context already encoded in threshold_type. Required for all rows so consumer joins on measurement_context cannot silently drop data.
+        data_tests:
+          - not_null
           - accepted_values:
               arguments:
                 values: ['CLINIC', 'HBPM_ABPM']
       - name: systolic_threshold
         description: Systolic BP in mmHg.
-        tests:
+        data_tests:
           - not_null
       - name: diastolic_threshold
         description: Diastolic BP in mmHg.
-        tests:
+        data_tests:
           - not_null
       - name: operator
         description: BELOW for TARGET_UPPER (controlled if value < threshold); AT_OR_ABOVE for DIAGNOSIS / SEVERE.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

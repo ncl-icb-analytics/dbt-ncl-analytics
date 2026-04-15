@@ -206,12 +206,13 @@ DIMENSIONS(
     bp.is_hypertensive_range AS is_hypertensive_range COMMENT = 'BP in hypertensive range',
 
     -- Blood Pressure Control
-    bp_control.is_overall_bp_controlled AS is_overall_bp_controlled WITH SYNONYMS = ('BP at target', 'BP controlled', 'controlled') COMMENT = 'BP controlled (patient-specific threshold)',
-    bp_control.is_systolic_controlled AS is_systolic_controlled COMMENT = 'Systolic BP at target',
-    bp_control.is_diastolic_controlled AS is_diastolic_controlled COMMENT = 'Diastolic BP at target',
+    bp_control.is_overall_bp_controlled AS is_overall_bp_controlled WITH SYNONYMS = ('BP at target', 'BP controlled', 'controlled') COMMENT = 'BP controlled per NICE NG136 — measurement-aware (HBPM/ABPM targets are clinic -5 mmHg)',
+    bp_control.is_systolic_controlled AS is_systolic_controlled COMMENT = 'Systolic BP below NG136 target (HBPM/ABPM target is clinic -5 mmHg)',
+    bp_control.is_diastolic_controlled AS is_diastolic_controlled COMMENT = 'Diastolic BP below NG136 target (HBPM/ABPM target is clinic -5 mmHg)',
     bp_control.hypertension_stage AS hypertension_stage COMMENT = 'Hypertension stage (Normal, Stage 1, Stage 2, Stage 3 Severe)',
     bp_control.hypertension_stage_number AS hypertension_stage_number COMMENT = 'Hypertension stage number (0-3)',
-    bp_control.applied_patient_group AS applied_patient_group WITH SYNONYMS = ('BP threshold group') COMMENT = 'Which threshold applied (T2DM, CKD, AGE_GE_80, STANDARD)',
+    bp_control.applied_patient_group AS applied_patient_group WITH SYNONYMS = ('BP threshold group') COMMENT = 'Which threshold applied (AGE_LT_80, AGE_GE_80, T2DM, CKD, CKD_ACR_GE_70)',
+    bp_control.applied_measurement_context AS applied_measurement_context WITH SYNONYMS = ('BP threshold context', 'clinic vs home') COMMENT = 'CLINIC or HBPM_ABPM — which NG136 variant was used to score control, matching the latest reading source',
     bp_control.is_case_finding_candidate AS is_case_finding_candidate WITH SYNONYMS = ('BP case finding') COMMENT = 'Elevated BP but not on HTN register',
     bp_control.is_latest_bp_within_recommended_interval AS is_latest_bp_within_recommended_interval WITH SYNONYMS = ('BP timely', 'timely BP') COMMENT = 'BP within recommended interval',
     bp_control.has_t2dm AS has_t2dm COMMENT = 'Has Type 2 diabetes (affects BP threshold)',

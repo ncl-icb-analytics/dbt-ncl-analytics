@@ -118,25 +118,30 @@ ranked_thresholds AS (
     WHERE
         thr.threshold_type = 'TARGET_UPPER'
         AND thr.operator = 'BELOW'
+    -- threshold_rule_id is unique per seed row, giving a deterministic order when
+    -- priority_rank ties (it shouldn't tie today — patient_groups map 1:1 to rank —
+    -- but the belt-and-braces tie-break guards against future threshold additions)
     QUALIFY
-        ROW_NUMBER() OVER (PARTITION BY pc.person_id ORDER BY priority_rank ASC)
-        = 1
+        ROW_NUMBER() OVER (
+            PARTITION BY pc.person_id
+            ORDER BY priority_rank ASC, thr.threshold_rule_id ASC
+        ) = 1
 ),
 
 with_staging AS (
     -- Add NG136 hypertension staging. The ranked_thresholds join has already picked the
     -- measurement-appropriate TARGET_UPPER row (CLINIC or HBPM_ABPM -5 mmHg variant), so
     -- rt.systolic_threshold / rt.diastolic_threshold are the values to compare against.
-    -- Staging thresholds below are kept inline since the seed stores them as separate
-    -- DIAGNOSIS_* rows and we don't need the reference-table lookup for staging.
+    -- Staging uses the same canonical ambulatory flag (applied_measurement_context) as
+    -- the control comparison so both paths share one source of truth for reading source.
     SELECT
         rt.*,
         rt.applied_measurement_context = 'HBPM_ABPM' AS is_ambulatory_reading,
 
-        -- Systolic stage (using appropriate thresholds)
+        -- Systolic stage (using measurement-appropriate thresholds)
         CASE
             WHEN rt.latest_systolic_value >= 180 THEN 3  -- Stage 3: ≥180 (same for both)
-            WHEN COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) THEN
+            WHEN rt.applied_measurement_context = 'HBPM_ABPM' THEN
                 CASE
                     WHEN rt.latest_systolic_value >= 150 THEN 2  -- Stage 2 ABPM/HBPM: ≥150
                     WHEN rt.latest_systolic_value >= 135 THEN 1  -- Stage 1 ABPM/HBPM: ≥135
@@ -150,10 +155,10 @@ with_staging AS (
                 END
         END AS systolic_stage,
 
-        -- Diastolic stage (using appropriate thresholds)
+        -- Diastolic stage (using measurement-appropriate thresholds)
         CASE
             WHEN rt.latest_diastolic_value >= 120 THEN 3  -- Stage 3: ≥120 (same for both)
-            WHEN COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) THEN
+            WHEN rt.applied_measurement_context = 'HBPM_ABPM' THEN
                 CASE
                     WHEN rt.latest_diastolic_value >= 95 THEN 2  -- Stage 2 ABPM/HBPM: ≥95
                     WHEN rt.latest_diastolic_value >= 85 THEN 1  -- Stage 1 ABPM/HBPM: ≥85
