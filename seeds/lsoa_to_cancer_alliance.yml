@@ -6,6 +6,8 @@ seeds:
       Lookup of 2021 LSOA codes mapped to 2025 ICB, Cancer Alliance and local authority codes.
       Includes both the full official codes and shorter source-specific code variants.
       Source: https://geoportal.statistics.gov.uk/search?sort=Date%20Created%7Ccreated%7Cdesc&tags=LUP_EXACT_CCG_STP_CALNCV
+
+      Contact: jake.kealey@nhs.net
     config:
       column_types:
         LSOA21CD: varchar(64)
