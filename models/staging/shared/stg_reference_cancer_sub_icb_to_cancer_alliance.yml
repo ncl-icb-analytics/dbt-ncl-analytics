@@ -6,25 +6,32 @@ models:
     columns:
       - name: ons_sub_icb_code
         data_type: varchar
-        description: "ONS Sub-ICB (CCG) 2021 code."
+        description: "ONS Sub-ICB code."
       - name: sub_icb_code
         data_type: varchar
-        description: "Short/historical Sub-ICB code used in source data."
+        description: "Sub-ICB code"
+        tests:
+          - unique
+          - not_null
       - name: sub_icb_name
         data_type: varchar
-        description: "Sub-ICB (CCG) 2021 name."
+        description: "Sub-ICB name"
       - name: ons_icb_code
         data_type: varchar
-        description: "ONS ICB (STP) 2021 code."
+        description: "ONS ICB code"
       - name: icb_code
         data_type: varchar
-        description: "Short/historical ICB code used in source data."
+        description: "ICB code"
+        tests:
+          - not_null
       - name: icb_name
         data_type: varchar
-        description: "ICB (STP) 2021 name."
+        description: "ICB name"
       - name: cancer_alliance_code
         data_type: varchar
-        description: "Cancer Alliance 2021 code."
+        description: "Cancer Alliance code"
+        tests:
+          - not_null
       - name: cancer_alliance_name
         data_type: varchar
-        description: "Cancer Alliance 2021 name."
+        description: "Cancer Alliance name"
