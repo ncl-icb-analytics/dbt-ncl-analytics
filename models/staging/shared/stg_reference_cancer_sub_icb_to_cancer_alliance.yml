@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_reference_cancer_sub_icb_to_cancer_alliance
+    description: "Staging model for CCG/ICB to Cancer Alliance mappings. Provides cleaned column names and data types for the reference lookup.\nContact: jake.kealey@nhs.net"
+    columns:
+      - name: ons_sub_icb_code
+        data_type: varchar
+        description: "ONS Sub-ICB (CCG) 2021 code."
+      - name: sub_icb_code
+        data_type: varchar
+        description: "Short/historical Sub-ICB code used in source data."
+      - name: sub_icb_name
+        data_type: varchar
+        description: "Sub-ICB (CCG) 2021 name."
+      - name: ons_icb_code
+        data_type: varchar
+        description: "ONS ICB (STP) 2021 code."
+      - name: icb_code
+        data_type: varchar
+        description: "Short/historical ICB code used in source data."
+      - name: icb_name
+        data_type: varchar
+        description: "ICB (STP) 2021 name."
+      - name: cancer_alliance_code
+        data_type: varchar
+        description: "Cancer Alliance 2021 code."
+      - name: cancer_alliance_name
+        data_type: varchar
+        description: "Cancer Alliance 2021 name."
