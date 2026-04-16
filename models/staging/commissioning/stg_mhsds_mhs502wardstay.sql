@@ -4,12 +4,15 @@
         tags=['mhsds']
         )
 }}
-
+/*
+This table is deduplicated using both 'uniq_serv_req_id' and 'uniq_ward_stay_id' (i.e. partition_cols = ['uniq_serv_req_id',
+'uniq_ward_stay_id']) so each distinct ward stay is preserved, matching the pattern used in stg_mhsds_carecontact.
+ */
 WITH deduplicated AS (
 {{
     deduplicate_mhsds(
         mhsds_table = ref('raw_mhsds_mhs502wardstay'),
-        partition_cols = ['uniq_serv_req_id']
+        partition_cols = ['uniq_serv_req_id','uniq_ward_stay_id']
     )
 }} )
 select 
@@ -20,6 +23,7 @@ select
     ,site_id_of_treat
     ,hospital_bed_type_name
     ,ward_type
+    ,ward_code
     ,uniq_ward_stay_id
     ,effective_from
     ,start_date_ward_stay

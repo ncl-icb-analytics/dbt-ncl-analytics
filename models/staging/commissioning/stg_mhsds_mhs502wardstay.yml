@@ -7,10 +7,9 @@ models:
           name: Kate Homer
     columns:
       - name: uniq_serv_req_id
-        description: Primary key - unique service request identifier
+        description: Primary key - unique service request identifier. One request may have more than one ward stay.
         tests:
-          - unique
-          - not_null
+         - not_null
 
       - name: person_id
         description: MHSDS person identifier
