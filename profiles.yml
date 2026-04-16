@@ -22,7 +22,7 @@ wnl_analytics:
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_DEV
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'NCL_ANALYTICS_M') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'WH_WNL_ENGINEERING_M') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_analytics_dev
@@ -36,7 +36,7 @@ wnl_analytics:
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_PROD
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'NCL_ANALYTICS_M') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'WH_WNL_ENGINEERING_M') }}"
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_analytics_prod
@@ -49,7 +49,7 @@ wnl_analytics:
       role: DBT_ADMIN
       database: MODELLING
       schema: DBT_DEV
-      warehouse: NCL_ANALYTICS_M
+      warehouse: WH_WNL_ENGINEERING_M
       threads: 16
       client_session_keep_alive: false
       query_tag: dbt_analytics_dev
@@ -61,7 +61,7 @@ wnl_analytics:
       role: DBT_ADMIN
       database: MODELLING
       schema: DBT_PROD
-      warehouse: NCL_ANALYTICS_M
+      warehouse: WH_WNL_ENGINEERING_M
       threads: 16
       client_session_keep_alive: false
       query_tag: dbt_analytics_prod
