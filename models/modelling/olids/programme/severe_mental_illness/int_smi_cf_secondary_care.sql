@@ -79,13 +79,13 @@ LEFT JOIN {{ ref('int_smi_casefinding') }} cf on smi.person_id = cf.person_id
 INNER JOIN (SELECT DISTINCT mpi_person_id, sk_patient_id FROM LOCAL_ID) b ON TO_VARCHAR(smi.sk_patient_id) = b.sk_patient_id
 WHERE HAS_ACTIVE_SMI_DIAGNOSIS
 )
---Inpatient stays
+--Inpatient stays that started in the last 6 months or are currently active for people on the SMI register. Some people have multiple spells and ward stays, so we select the latest ward stay only.
 ,SPELL as (
     select distinct 
     p.sk_patient_id
     ,p.mpi_person_id
     ,'NLFT' as provider
-    ,sp.uniq_hosp_prov_spell_num
+    ,sp.uniq_hosp_prov_spell_num as spell_number
     ,ws.uniq_ward_stay_id
     ,DATE(sp.start_date_hosp_prov_spell) as spell_start_date
     ,DATE(sp.disch_date_hosp_prov_spell) as spell_discharge_date
@@ -103,6 +103,7 @@ WHERE HAS_ACTIVE_SMI_DIAGNOSIS
     WHEN ws.hospital_bed_type_name = 'Adult Mental Health Rehabilitation (Mainstream Service)' THEN 'Adult Mental Health Rehabilitation'
     WHEN ws.hospital_bed_type_name = 'General Child and Young Person - Young Person (13 years up to and including 17 years)' THEN 'General Child and Young Person'
     ELSE ws.hospital_bed_type_name END AS ward_type
+    ,ws.ward_code
 FROM {{ ref('stg_mhsds_spell') }} sp
 --FROM MODELLING.DBT_STAGING.STG_MHSDS_spell sp
 INNER JOIN SMIPOPULATION p ON p.mpi_person_id = sp.person_id
@@ -110,6 +111,8 @@ LEFT JOIN {{ ref('stg_mhsds_mhs502wardstay') }} ws on sp.uniq_hosp_prov_spell_nu
 --LEFT JOIN MODELLING.DBT_STAGING.STG_MHSDS_MHS502WARDSTAY ws on sp.uniq_hosp_prov_spell_num = ws.uniq_hosp_prov_spell_num
 WHERE sp.DM_ICB_COMMISSIONER = '93C'
 AND sp.ORG_ID_PROV in ('G6V2S')--,'TAF','RNK','RRP') use NLFT code only C&I legacy patients are not found in the NLFT EPR system
+--deduplicate selecting latest ward_start_date only
+QUALIFY ROW_NUMBER() OVER (PARTITION BY sp.person_id, sp.uniq_hosp_prov_spell_num ORDER BY start_date_ward_stay DESC) = 1
 )
 --select people who are inpatients currently or who have been admitted in the last 6 months
 ,SPELL_6M AS (
@@ -120,6 +123,8 @@ sk_patient_id
 ,uniq_ward_stay_id
 ,admission_type
 ,ward_type
+,ward_code
+,spell_number
 ,spell_start_date
 ,start_date_ward_stay
 ,spell_discharge_date
@@ -128,22 +133,24 @@ sk_patient_id
 FROM SPELL
 where last_6mths_flag = 'Yes' OR is_current_spell
 )
---select latest spell
+--select latest spell if multiple reported.
 ,latest_spell as (
 select *
 from spell_6m sp
 QUALIFY ROW_NUMBER() OVER (PARTITION BY sp.mpi_person_id ORDER BY spell_start_date DESC, start_date_ward_stay DESC) = 1
 )
---final add back in population characteristics and local patient id for NFLT and select latest spell.
+--final add back in population characteristics and health check flags and local patient id for NFLT.
 select 
 p.person_id
 ,p.hx_flake
 ,loc.local_patient_id 
+,sp.spell_number
 ,sp.spell_start_date
 ,sp.spell_discharge_date
 ,sp.is_current_spell
 ,sp.admission_type
 ,sp.ward_type
+,sp.ward_code
 ,p.age
 ,p.age_band_5y
 ,p.gender
