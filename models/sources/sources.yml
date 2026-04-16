@@ -4,6 +4,17 @@ sources:
   schema: '"AIC_DEV"'
   description: AIC pipelines
   tables:
+  - name: INT_CMCMS_CURRENT
+    identifier: '"INT_CMCMS_CURRENT"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: CAMBRIDGE_COMORBIDITY_SCORE
+      data_type: NUMBER
+    - name: CCMS_CURRENT_ID
+      data_type: TEXT
+    - name: LAST_UPDATED
+      data_type: TIMESTAMP_TZ
   - name: BASE_ATHENA__CONCEPT
     identifier: '"BASE_ATHENA__CONCEPT"'
     columns:
@@ -79,14 +90,20 @@ sources:
     - name: VPID
       data_type: NUMBER
 - name: c_ltcs
-  database: '"DEV__PUBLISHED_REPORTING__DIRECT_CARE"'
+  database: '"PUBLISHED_REPORTING__DIRECT_CARE"'
   schema: '"C_LTCS"'
   description: C-LTCS tables
   tables:
   - name: MDT_LOOKUP
     identifier: MDT_LOOKUP
     columns:
-    - name: PCN_CODE
+    - name: AREA_CODE
+      data_type: TEXT
+    - name: AREA_NAME
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
       data_type: TEXT
     - name: MDT_DATE
       data_type: DATE
