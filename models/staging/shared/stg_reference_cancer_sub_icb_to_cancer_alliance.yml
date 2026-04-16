@@ -3,6 +3,10 @@ version: 2
 models:
   - name: stg_reference_cancer_sub_icb_to_cancer_alliance
     description: "Staging model for CCG/ICB to Cancer Alliance mappings. Provides cleaned column names and data types for the reference lookup.\nContact: jake.kealey@nhs.net"
+    config:
+      meta:
+        owner:
+          name: JakeKea
     columns:
       - name: ons_sub_icb_code
         data_type: varchar
