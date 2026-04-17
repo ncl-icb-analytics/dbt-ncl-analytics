@@ -139,6 +139,12 @@ models:
               arguments:
                 values: ['Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
 
+      - name: legacy_sub_icb_code
+        description: 'Legacy sub-ICB ODS code (QMJ NCL, QRV NWL) for practices in the merged WNL ICB. NULL outside WNL boroughs. Useful for split reporting against the pre-merger structure.'
+
+      - name: legacy_sub_icb_name
+        description: 'Legacy sub-ICB display name (NHS North Central London / NHS North West London). NULL outside WNL boroughs.'
+
       - name: stp_name
         description: 'STP/ICB name (London Integrated Care Boards)'
         tests:

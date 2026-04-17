@@ -98,12 +98,18 @@ models:
                 values: ['Z9B2Z']
 
       - name: stp_name
-        description: 'STP name (NHS North Central London Integrated Care Board)'
+        description: 'STP name (NHS West and North London Integrated Care Board)'
         tests:
           - not_null
 
       - name: sk_stp_id
         description: 'Surrogate key for STP organisation'
+
+      - name: legacy_sub_icb_code
+        description: 'Legacy sub-ICB ODS code (QMJ NCL, QRV NWL) derived from the PCN predominant borough. Useful for split reporting against the pre-merger structure.'
+
+      - name: legacy_sub_icb_name
+        description: 'Legacy sub-ICB display name (NHS North Central London / NHS North West London).'
 
       - name: sk_pcn_dict_id
         description: 'Dictionary organisation surrogate key for PCN'

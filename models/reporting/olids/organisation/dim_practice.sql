@@ -35,6 +35,8 @@ WITH practice_org_joined AS (
     borough_map.borough_registered,
     borough_map.pcn_borough,
     borough_map.practice_historic_ccg,
+    borough_map.legacy_sub_icb_code,
+    borough_map.legacy_sub_icb_name,
     
     -- Practice organisational details from OLIDS
     org.type_code AS practice_type_code,
