@@ -1,0 +1,6 @@
+measurement,sex,direction,threshold,unit,source_reference
+haemoglobin,Any,low,110,g/L,Qadmission paper
+platelets,Any,high,480,10*9/L,QAdmissions paper
+alt,Any,high,120,[IU]/L,3x normal as per sps nhs resource
+ggt,Any,high,150,[IU]/L,3x normal as per sps nhs resource
+bilirubin,Any,high,63,umol/L,3x normal as per sps nhs resource
