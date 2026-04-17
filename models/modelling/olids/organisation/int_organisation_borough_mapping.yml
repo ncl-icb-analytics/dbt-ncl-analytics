@@ -26,6 +26,18 @@ models:
       meta:
         owner:
           name: EddieDavison92
+    data_tests:
+      # Catch silent breakage from misspelled or missing borough values inside
+      # the WNL footprint. Intentional NULLs outside WNL boroughs are allowed.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >
+              sub_icb_code IS NOT NULL
+              OR borough_registered NOT IN (
+                'Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey',
+                'Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
+                'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster'
+              )
     columns:
       - name: practice_code
         description: 'GP practice identifier. Not unique - practices may appear multiple times if they have multiple PCN relationships.'
@@ -37,17 +49,6 @@ models:
         description: 'Historic CCG code used for borough mapping'
       - name: sub_icb_code
         description: 'Sub-ICB / place-based partnership ODS code derived from borough — QMJ for NCL boroughs (Camden, Islington, Barnet, Enfield, Haringey), QRV for NWL boroughs (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside WNL.'
-        data_tests:
-          # Catch silent breakage from misspelled or missing borough values inside
-          # the WNL footprint. Intentional NULLs outside WNL boroughs are allowed.
-          - dbt_utils.expression_is_true:
-              expression: >
-                sub_icb_code IS NOT NULL
-                OR borough_registered NOT IN (
-                  'Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey',
-                  'Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
-                  'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster'
-                )
       - name: sub_icb_name
         description: 'Sub-ICB display name (NHS North Central London / NHS North West London). NULL outside WNL.'
       - name: network_code
