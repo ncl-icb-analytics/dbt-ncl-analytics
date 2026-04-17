@@ -8,7 +8,7 @@
 /*
 Practice Dimension
 Contains comprehensive practice details including organisational hierarchy.
-Sources from Dictionary.dbo.OrganisationMatrixPracticeView and OLIDS organisation data.
+Sourced from Dictionary's OrganisationMatrixPracticeView combined with OLIDS organisation data.
 Note: Deduplicates by organisation_id to ensure uniqueness when multiple practice codes map to same organisation.
 */
 

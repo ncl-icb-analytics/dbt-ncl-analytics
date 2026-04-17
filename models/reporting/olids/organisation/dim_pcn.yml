@@ -106,10 +106,10 @@ models:
         description: 'Surrogate key for STP organisation'
 
       - name: sub_icb_code
-        description: 'Sub-ICB / place-based partnership ODS code (QMJ NCL, QRV NWL) derived from the PCN predominant borough.'
+        description: 'Sub-ICB / place-based partnership ODS code (QMJ NCL, QRV NWL) derived from the PCN predominant borough. NULL for any PCN whose majority borough falls outside the WNL borough set.'
 
       - name: sub_icb_name
-        description: 'Sub-ICB display name (NHS North Central London / NHS North West London).'
+        description: 'Sub-ICB display name (NHS North Central London / NHS North West London). NULL for any PCN whose majority borough falls outside the WNL borough set.'
 
       - name: sk_pcn_dict_id
         description: 'Dictionary organisation surrogate key for PCN'
