@@ -53,9 +53,7 @@ validated AS (
     SELECT
         *,
         inferred_value < 0 AS is_negative,
-        inferred_value >= 1000 AS is_extreme_outlier,
-        (NOT (inferred_value < 0 OR inferred_value >= 1000 OR confidence = 'NONE')
-         AND inferred_value IS NOT NULL) AS is_valid
+        inferred_value >= 1000 AS is_extreme_outlier
     FROM standardised
 )
 
@@ -80,14 +78,13 @@ SELECT
     confidence,
     is_negative,
     is_extreme_outlier,
-    is_valid,
     CASE
-        WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Invalid'
-        WHEN inferred_value < 0 THEN 'Invalid'
+        WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Abnormal'
+        WHEN inferred_value < 0 THEN 'Abnormal'
         WHEN inferred_value < 25 THEN 'Low'
         WHEN inferred_value < 50 THEN 'Intermediate'
         WHEN inferred_value < 1000 THEN 'HIGH'
-        ELSE 'Invalid'
+        ELSE 'Abnormal'
 
 
     END AS feno_category

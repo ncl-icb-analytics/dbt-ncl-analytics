@@ -5,8 +5,9 @@
 }}
 
 /*
-Latest valid eosinophil count per person.
-Filters to valid observations only and returns the most recent per person.
+Latest eosinophil count per person.
+Filters to observations with confidence != 'NONE' and non-negative values,
+then returns the most recent per person.
 */
 
 SELECT
@@ -26,10 +27,9 @@ SELECT
     unit_was_changed,
     conversion_reason,
     confidence,
-    is_valid,
     eosinophil_category
 FROM {{ ref('int_eosinophil_count') }}
-WHERE is_valid = TRUE
+WHERE confidence != 'NONE' AND NOT is_negative
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id
     ORDER BY clinical_effective_date DESC, id DESC

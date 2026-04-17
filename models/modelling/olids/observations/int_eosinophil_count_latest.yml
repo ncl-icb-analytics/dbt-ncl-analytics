@@ -1,8 +1,8 @@
 models:
   - name: int_eosinophil_count_latest
     description: >
-      Latest valid eosinophil count per person. Filters to valid observations only
-      (is_valid = TRUE) and returns the most recent per person.
+      Latest eosinophil count per person. Filters to observations with
+      confidence != 'NONE' and non-negative values, then returns the most recent per person.
     config:
       meta:
         owner:
@@ -46,7 +46,5 @@ models:
         description: Human-readable explanation of standardisation action taken
       - name: confidence
         description: Confidence level in the inferred value
-      - name: is_valid
-        description: Always TRUE in this model (pre-filtered)
       - name: eosinophil_category
         description: Clinical severity category based on inferred value
