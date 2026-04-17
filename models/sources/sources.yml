@@ -4,8 +4,8 @@ sources:
   schema: '"AIC_DEV"'
   description: AIC pipelines
   tables:
-  - name: INT_CMCMS_CURRENT
-    identifier: '"INT_CMCMS_CURRENT"'
+  - name: INT_CCMS_CURRENT
+    identifier: '"INT_CCMS_CURRENT"'
     columns:
     - name: PERSON_ID
       data_type: TEXT
@@ -19,7 +19,7 @@ sources:
     identifier: '"BASE_ATHENA__CONCEPT"'
     columns:
     - name: CONCEPT_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONCEPT_NAME
       data_type: TEXT
     - name: DOMAIN_ID
@@ -42,22 +42,22 @@ sources:
     identifier: '"BASE_CCMS_DMD_CODES"'
     columns:
     - name: CONDITIONID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONDITIONNAME
       data_type: TEXT
     - name: PRODUCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYTERM
       data_type: TEXT
   - name: BASE_CCMS_SNOMED_CODES
     identifier: '"BASE_CCMS_SNOMED_CODES"'
     columns:
     - name: CONDITIONID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONDITIONNAME
       data_type: TEXT
     - name: CONCEPTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYTERM
       data_type: TEXT
   - name: BASE_GOV__IMD_2019
@@ -72,9 +72,9 @@ sources:
     - name: LA_NAME_2019
       data_type: TEXT
     - name: IMD_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD_DECILE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: BASE_GOV__WARD_NAMES
     identifier: '"BASE_GOV__WARD_NAMES"'
     columns:
@@ -86,27 +86,61 @@ sources:
     identifier: '"BASE_NHSBSA__APID_VPID"'
     columns:
     - name: APID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: VPID
+      data_type: NUMBER(38,0)
+  - name: STG_CCMS__FINAL_FLAGS
+    identifier: '"STG_CCMS__FINAL_FLAG"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ALCOHOLPROBLEMS 
+      data_type: NUMBER
+    - name: ANXIETYORDEPRESSION
+      data_type: NUMBER
+    - name: ATRIALFIBRILLATION
+      data_type: NUMBER
+    - name: CANCERINTHELAST5YEARS
+      data_type: NUMBER
+    - name: CHRONICKIDNEYDISEASE
+      data_type: NUMBER
+    - name: CHRONICLIVERDISEASEANDVIRALHEPATITIS
+      data_type: NUMBER
+    - name: CONSTIPATION
+      data_type: NUMBER
+    - name: COPD
+      data_type: NUMBER
+    - name: DEMENTIA
+      data_type: NUMBER
+    - name: DIABETES
+      data_type: NUMBER
+    - name: DISORDEROFPROSTATE
+      data_type: NUMBER
+    - name: EPILEPSY
+      data_type: NUMBER
+    - name: HEARTFAILURE
+      data_type: NUMBER
+    - name: IRRITABLEBOWELSYNDROME
+      data_type: NUMBER
+    - name: LEARNINGDISABILITY
+      data_type: NUMBER
+    - name: MULTIPLESCLEROSIS
+      data_type: NUMBER
+    - name: PAINFULCONDITION
+      data_type: NUMBER
+    - name: PARKINSONISM
+      data_type: NUMBER
+    - name: PERIPHVASCDISEASELEG
+      data_type: NUMBER
+    - name: PSYCHOACTIVESUBSTANCEMISUSE
+      data_type: NUMBER
+    - name: SCHIZOPHRENIAORBIPOLARDISORDER
       data_type: NUMBER
 - name: c_ltcs
   database: '"PUBLISHED_REPORTING__DIRECT_CARE"'
   schema: '"C_LTCS"'
   description: C-LTCS tables
   tables:
-  - name: MDT_LOOKUP
-    identifier: MDT_LOOKUP
-    columns:
-    - name: AREA_CODE
-      data_type: TEXT
-    - name: AREA_NAME
-      data_type: TEXT
-    - name: PRACTICE_CODE
-      data_type: TEXT
-    - name: PRACTICE_NAME
-      data_type: TEXT
-    - name: MDT_DATE
-      data_type: DATE
   - name: STATUS_LOG
     identifier: STATUS_LOG
     columns:
