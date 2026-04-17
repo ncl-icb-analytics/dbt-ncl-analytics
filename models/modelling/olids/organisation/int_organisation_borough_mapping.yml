@@ -12,8 +12,8 @@ models:
 
       • Hardcoded CCG-to-borough mapping covering all London ICB constituents
 
-      • Derives legacy_sub_icb_code (QMJ NCL / QRV NWL) from borough so the merged
-      WNL ICB can still be split into its pre-merger structure
+      • Derives sub_icb_code (QMJ NCL / QRV NWL) from borough so the merged WNL
+      ICB can be split into its place-based partnerships
 
       • Special handling for cross-borough services (Medicus Select Care Y03103 assigned
       to Enfield)
@@ -35,10 +35,10 @@ models:
         description: 'Borough assignment for the practice based on historic CCG relationships'
       - name: practice_historic_ccg
         description: 'Historic CCG code used for borough mapping'
-      - name: legacy_sub_icb_code
-        description: 'Legacy sub-ICB ODS code derived from borough — QMJ for NCL boroughs (Camden, Islington, Barnet, Enfield, Haringey), QRV for NWL boroughs (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside WNL.'
-      - name: legacy_sub_icb_name
-        description: 'Legacy sub-ICB display name (NHS North Central London / NHS North West London).'
+      - name: sub_icb_code
+        description: 'Sub-ICB / place-based partnership ODS code derived from borough — QMJ for NCL boroughs (Camden, Islington, Barnet, Enfield, Haringey), QRV for NWL boroughs (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside WNL.'
+      - name: sub_icb_name
+        description: 'Sub-ICB display name (NHS North Central London / NHS North West London).'
       - name: network_code
         description: 'Primary Care Network (PCN) identifier that the practice belongs
           to'

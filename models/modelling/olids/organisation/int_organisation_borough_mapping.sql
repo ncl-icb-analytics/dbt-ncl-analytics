@@ -143,18 +143,18 @@ SELECT
     pbf.practice_code,
     pbf.borough AS borough_registered,
     pbf.historic_ccg AS practice_historic_ccg,
-    -- Legacy sub-ICB derived from borough. Useful when comparing the merged
-    -- WNL ICB (Z9B2Z) against its constituent legacy entities (NCL/NWL).
+    -- Sub-ICB / place-based partnership derived from borough. Z9B2Z (WNL)
+    -- is composed of two place-based partnerships: NCL and NWL.
     CASE
         WHEN pbf.borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'QMJ'
         WHEN pbf.borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
                              'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'QRV'
-    END AS legacy_sub_icb_code,
+    END AS sub_icb_code,
     CASE
         WHEN pbf.borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'NHS North Central London'
         WHEN pbf.borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
                              'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'NHS North West London'
-    END AS legacy_sub_icb_name,
+    END AS sub_icb_name,
 
     -- PCN mapping
     pp.network_code,

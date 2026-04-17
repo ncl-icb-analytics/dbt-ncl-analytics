@@ -38,18 +38,18 @@ SELECT DISTINCT
     
     -- Borough information
     borough_map.pcn_borough,
-    -- Legacy sub-ICB derived from PCN's predominant borough. Useful when
-    -- comparing the merged WNL ICB against its constituent legacy entities.
+    -- Sub-ICB / place-based partnership derived from PCN's predominant borough.
+    -- Z9B2Z (WNL) is composed of two place-based partnerships: NCL and NWL.
     CASE
         WHEN borough_map.pcn_borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'QMJ'
         WHEN borough_map.pcn_borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
                                          'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'QRV'
-    END AS legacy_sub_icb_code,
+    END AS sub_icb_code,
     CASE
         WHEN borough_map.pcn_borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'NHS North Central London'
         WHEN borough_map.pcn_borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
                                          'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'NHS North West London'
-    END AS legacy_sub_icb_name,
+    END AS sub_icb_name,
     
     -- PCN membership details
     pp.member_practice_count,
