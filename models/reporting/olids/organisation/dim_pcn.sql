@@ -20,7 +20,7 @@ WITH pcn_practices AS (
     FROM {{ ref('stg_dictionary_dbo_organisationmatrixpracticeview') }}
     WHERE network_code IS NOT NULL
         AND practice_code IS NOT NULL
-        AND stp_code = 'QMJ'
+        AND stp_code IN ('Z9B2Z', 'QMJ', 'QRV')  -- WNL merged + legacy NCL/NWL
     GROUP BY network_code
 )
 
@@ -75,4 +75,4 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} AS dict_org
 LEFT JOIN {{ ref('int_organisation_borough_mapping') }} AS borough_map
     ON dict.network_code = borough_map.network_code
 WHERE dict.network_code IS NOT NULL
-    AND dict.stp_code = 'QMJ'
+    AND dict.stp_code IN ('Z9B2Z', 'QMJ', 'QRV')  -- WNL merged + legacy NCL/NWL

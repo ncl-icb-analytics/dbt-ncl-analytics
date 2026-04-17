@@ -72,7 +72,7 @@ practice_pcn AS (
     FROM {{ ref('stg_dictionary_dbo_organisationmatrixpracticeview') }}
     WHERE practice_code IS NOT NULL
         AND network_code IS NOT NULL
-        AND stp_code IN ('QMJ', 'QMF', 'QRV', 'QWE', 'QKK')  -- All London ICBs
+        AND stp_code IN ('Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK')  -- All London ICBs (Z9B2Z = merged WNL from Apr 2026; QMJ/QRV retained as legacy)
 ),
 
 -- Get historic CCG relationships from OrganisationDescendent paths (for borough mapping)

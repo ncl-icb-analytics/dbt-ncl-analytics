@@ -4,7 +4,7 @@ models:
 
       Key Features:
 
-      • One row per PCN filtered to North Central London (STPCode = QMJ)
+      • One row per PCN filtered to West and North London ICB (STPCode Z9B2Z + legacy QMJ/QRV)
 
       • Borough-prefixed PCN names for geographic clarity
 
@@ -90,12 +90,12 @@ models:
         description: 'Surrogate key for commissioner organisation'
 
       - name: stp_code
-        description: 'STP code (always QMJ for North Central London in this dataset)'
+        description: 'STP/ICB code — Z9B2Z (merged WNL ICB) + legacy QMJ (NCL) / QRV (NWL) for historical continuity'
         tests:
           - not_null
           - accepted_values:
               arguments:
-                values: ['QMJ']
+                values: ['Z9B2Z', 'QMJ', 'QRV']
 
       - name: stp_name
         description: 'STP name (NHS North Central London Integrated Care Board)'

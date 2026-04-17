@@ -132,12 +132,12 @@ models:
         description: 'Surrogate key for commissioner organisation'
 
       - name: stp_code
-        description: 'STP/ICB code (London ICBs: QMJ, QMF, QRV, QWE, QKK)'
+        description: 'STP/ICB code (London ICBs: Z9B2Z WNL, QMF NEL, QWE SWL, QKK SEL; legacy QMJ/QRV retained for historical continuity)'
         tests:
           - not_null
           - accepted_values:
               arguments:
-                values: ['QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
+                values: ['Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
 
       - name: stp_name
         description: 'STP/ICB name (London Integrated Care Boards)'
