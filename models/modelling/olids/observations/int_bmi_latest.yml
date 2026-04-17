@@ -8,6 +8,8 @@ models:
 
       • Latest valid BMI per person with ethnicity-adjusted thresholds
 
+      • Heights and weights recorded under age 18 are excluded upstream so paediatric measurements never feed calculated BMI
+
       • Includes both standard and ethnicity-adjusted categorisations
 
       • Provides ethnicity context for clinical decision-making
@@ -32,7 +34,8 @@ models:
             thresholds  (overweight ≥23, obese ≥27.5) to reflect increased risk at
             lower BMI levels.
             Age restriction: Adult BMI categories are only clinically appropriate
-            for ages 18+.
+            for ages 18+. Heights and weights with age_at_event < 18 are excluded
+            upstream so paediatric measurements never feed calculated BMI.
           is_qof: false
           source_column: "bmi_category"
           sort_order: "BRF_1_BMI_CATEGORIES"

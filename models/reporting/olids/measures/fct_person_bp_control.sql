@@ -4,9 +4,13 @@
         cluster_by=['person_id'])
 }}
 
--- Blood Pressure Control Status (Matching Legacy Superior Design)
--- Applies patient-specific BP thresholds with priority ranking
--- Includes clinical context, risk-based timeliness assessment, and hypertension staging
+-- Blood Pressure Control Status
+-- Applies patient-specific NG136 BP targets with priority ranking (most stringent first).
+-- Targets come from the bp_thresholds seed, which holds both CLINIC and HBPM_ABPM
+-- variants for each TARGET_UPPER rule (HBPM_ABPM is clinic -5 mmHg per NG136 rec 1.4.22).
+-- The join below selects the variant matching the latest reading source so control is
+-- scored on the same scale as the reading.
+-- Also produces NG136 hypertension staging using the measurement-appropriate thresholds.
 
 WITH latest_bp AS (
     -- Get most recent BP event (paired systolic/diastolic) for each person
@@ -29,6 +33,11 @@ patient_characteristics AS (
         bp.diastolic_value AS latest_diastolic_value,
         bp.is_home_bp_event,
         bp.is_abpm_bp_event,
+        -- Reading source used to pick CLINIC vs HBPM_ABPM threshold variant
+        CASE
+            WHEN COALESCE(bp.is_home_bp_event, FALSE) OR COALESCE(bp.is_abpm_bp_event, FALSE) THEN 'HBPM_ABPM'
+            ELSE 'CLINIC'
+        END AS reading_measurement_context,
         age.age,
 
         -- Diabetes status (Type 2 specifically for BP thresholds)
@@ -61,11 +70,15 @@ patient_characteristics AS (
 ),
 
 ranked_thresholds AS (
-    -- Apply BP thresholds with priority ranking (most stringent first)
+    -- Apply BP thresholds with priority ranking (most stringent first).
+    -- Also filter to the measurement_context that matches the reading source
+    -- (CLINIC vs HBPM_ABPM) so HBPM/ABPM readings are scored against the
+    -- NG136 -5 mmHg variant rather than the clinic target.
     SELECT
         pc.*,
         thr.threshold_rule_id,
         thr.patient_group,
+        thr.measurement_context AS applied_measurement_context,
         thr.systolic_threshold,
         thr.diastolic_threshold,
 
@@ -80,8 +93,9 @@ ranked_thresholds AS (
         END AS priority_rank
 
     FROM patient_characteristics AS pc
-    INNER JOIN {{ ref('stg_reference_bp_thresholds') }} AS thr
-        ON (
+    INNER JOIN {{ ref('bp_thresholds') }} AS thr
+        ON thr.measurement_context = pc.reading_measurement_context
+        AND (
             -- Age-based thresholds (everyone gets one of these)
             (thr.patient_group = 'AGE_LT_80' AND pc.age < 80)
             OR (thr.patient_group = 'AGE_GE_80' AND pc.age >= 80)
@@ -104,24 +118,30 @@ ranked_thresholds AS (
     WHERE
         thr.threshold_type = 'TARGET_UPPER'
         AND thr.operator = 'BELOW'
+    -- threshold_rule_id is unique per seed row, giving a deterministic order when
+    -- priority_rank ties (it shouldn't tie today — patient_groups map 1:1 to rank —
+    -- but the belt-and-braces tie-break guards against future threshold additions)
     QUALIFY
-        ROW_NUMBER() OVER (PARTITION BY pc.person_id ORDER BY priority_rank ASC)
-        = 1
+        ROW_NUMBER() OVER (
+            PARTITION BY pc.person_id
+            ORDER BY priority_rank ASC, thr.threshold_rule_id ASC
+        ) = 1
 ),
 
 with_staging AS (
-    -- Add hypertension staging based on NICE NG136 diagnostic thresholds
-    -- Uses ABPM/HBPM thresholds if reading is from home/ABPM, otherwise clinic thresholds
+    -- Add NG136 hypertension staging. The ranked_thresholds join has already picked the
+    -- measurement-appropriate TARGET_UPPER row (CLINIC or HBPM_ABPM -5 mmHg variant), so
+    -- rt.systolic_threshold / rt.diastolic_threshold are the values to compare against.
+    -- Staging uses the same canonical ambulatory flag (applied_measurement_context) as
+    -- the control comparison so both paths share one source of truth for reading source.
     SELECT
         rt.*,
+        rt.applied_measurement_context = 'HBPM_ABPM' AS is_ambulatory_reading,
 
-        -- Determine if using ABPM/HBPM thresholds (more lenient) or clinic thresholds
-        COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) AS is_ambulatory_reading,
-
-        -- Systolic stage (using appropriate thresholds)
+        -- Systolic stage (using measurement-appropriate thresholds)
         CASE
             WHEN rt.latest_systolic_value >= 180 THEN 3  -- Stage 3: ≥180 (same for both)
-            WHEN COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) THEN
+            WHEN rt.applied_measurement_context = 'HBPM_ABPM' THEN
                 CASE
                     WHEN rt.latest_systolic_value >= 150 THEN 2  -- Stage 2 ABPM/HBPM: ≥150
                     WHEN rt.latest_systolic_value >= 135 THEN 1  -- Stage 1 ABPM/HBPM: ≥135
@@ -135,10 +155,10 @@ with_staging AS (
                 END
         END AS systolic_stage,
 
-        -- Diastolic stage (using appropriate thresholds)
+        -- Diastolic stage (using measurement-appropriate thresholds)
         CASE
             WHEN rt.latest_diastolic_value >= 120 THEN 3  -- Stage 3: ≥120 (same for both)
-            WHEN COALESCE(rt.is_home_bp_event, FALSE) OR COALESCE(rt.is_abpm_bp_event, FALSE) THEN
+            WHEN rt.applied_measurement_context = 'HBPM_ABPM' THEN
                 CASE
                     WHEN rt.latest_diastolic_value >= 95 THEN 2  -- Stage 2 ABPM/HBPM: ≥95
                     WHEN rt.latest_diastolic_value >= 85 THEN 1  -- Stage 1 ABPM/HBPM: ≥85
@@ -173,13 +193,15 @@ SELECT
     ws.latest_acr_value,
     ws.threshold_rule_id AS applied_threshold_rule_id,
 
-    -- Applied threshold details
+    -- Applied threshold details — the row selected from bp_thresholds already matches
+    -- the latest reading's measurement context (CLINIC or HBPM_ABPM -5 mmHg variant)
     ws.patient_group AS applied_patient_group,
+    ws.applied_measurement_context,
     ws.systolic_threshold AS applied_systolic_threshold,
     ws.diastolic_threshold AS applied_diastolic_threshold,
     (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2') AS has_t2dm,
 
-    -- BP control status calculations
+    -- BP control: compare against the measurement-appropriate target
     COALESCE(
         ws.latest_systolic_value IS NOT NULL
         AND ws.latest_systolic_value < ws.systolic_threshold,

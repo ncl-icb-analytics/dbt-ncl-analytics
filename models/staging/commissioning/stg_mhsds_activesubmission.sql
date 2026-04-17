@@ -1,3 +1,11 @@
+{{
+    config(
+        materialized = 'table',
+        tags=['mhsds']
+        )
+}}
+
+
 select
     org_id_provider,
     uniq_submission_id,
