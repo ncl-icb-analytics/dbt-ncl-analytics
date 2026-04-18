@@ -90,6 +90,8 @@ SELECT
     -- Practice and geography
     d.practice_code,
     d.borough_registered,
+    d.sub_icb_code,
+    d.sub_icb_name,
     d.practice_postcode,
     d.practice_lsoa,
     d.practice_msoa,
