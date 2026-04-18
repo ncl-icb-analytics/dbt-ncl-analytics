@@ -196,6 +196,8 @@ DIMENSIONS(
     practice.pcn_name AS pcn_name COMMENT = 'PCN name of the prescribing practice',
     practice.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN with borough prefix',
     practice.borough_registered AS borough_registered COMMENT = 'Borough of the prescribing practice',
+    practice.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the prescribing practice — QMJ for NCL boroughs, QRV for NWL. NULL outside WNL.',
+    practice.sub_icb_name AS sub_icb_name COMMENT = 'Sub-ICB display name (NHS North Central London / NHS North West London) of the prescribing practice. NULL outside WNL.',
 
     -- Patient demographics (current snapshot)
     demographics.gender AS gender COMMENT = 'Patient gender (Male, Female, Unknown)',
