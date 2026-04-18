@@ -7,13 +7,19 @@
 
 /*
 Organisation Borough Mapping
-Maps practices and PCNs to North Central London boroughs using current organisational hierarchy.
-Uses Dictionary.dbo.OrganisationDescendent for GP Practice -> PCN -> CCG -> ICB hierarchy.
+Maps practices and PCNs to London boroughs using current organisational hierarchy. Now
+covers all London ICBs including the merged West and North London entry (Z9B2Z) alongside
+the legacy NCL/NWL codes; the full London borough set is enumerated via borough_ccgs.
+Uses Dictionary's OrganisationDescendent for GP Practice -> PCN -> CCG -> ICB hierarchy.
+
+Also derives the canonical sub_icb_code / sub_icb_name (place-based partnership: NCL or NWL)
+at both practice level (from borough_registered) and PCN level (from pcn_borough). Downstream
+dims read these directly rather than re-implementing the borough-to-sub-ICB CASE.
 
 Special handling:
 - Medicus Select Care (Y03103) manually assigned to Enfield borough regardless of CCG history,
   as they provide cross-borough services but parent organisation is Enfield-based.
-- Filters to London practices only (maintains existing behaviour)
+- Filters to London practices only (maintains existing behaviour).
 */
 
 WITH borough_ccgs AS (
@@ -72,7 +78,7 @@ practice_pcn AS (
     FROM {{ ref('stg_dictionary_dbo_organisationmatrixpracticeview') }}
     WHERE practice_code IS NOT NULL
         AND network_code IS NOT NULL
-        AND stp_code IN ('QMJ', 'QMF', 'QRV', 'QWE', 'QKK')  -- All London ICBs
+        AND stp_code IN ('Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK')  -- All London ICBs (Z9B2Z = merged WNL from Apr 2026; QMJ/QRV retained as legacy)
 ),
 
 -- Get historic CCG relationships from OrganisationDescendent paths (for borough mapping)
@@ -143,11 +149,35 @@ SELECT
     pbf.practice_code,
     pbf.borough AS borough_registered,
     pbf.historic_ccg AS practice_historic_ccg,
-    
+    -- Sub-ICB / place-based partnership derived from borough. Z9B2Z (WNL)
+    -- is composed of two place-based partnerships: NCL and NWL.
+    CASE
+        WHEN pbf.borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'QMJ'
+        WHEN pbf.borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
+                             'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'QRV'
+    END AS sub_icb_code,
+    CASE
+        WHEN pbf.borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'NHS North Central London'
+        WHEN pbf.borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
+                             'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'NHS North West London'
+    END AS sub_icb_name,
+
     -- PCN mapping
     pp.network_code,
     pcnbf.borough AS pcn_borough,
-    pcnbf.borough_practice_count AS pcn_borough_practice_count
+    pcnbf.borough_practice_count AS pcn_borough_practice_count,
+    -- PCN-level sub-ICB derived from PCN's predominant borough. Same logic as
+    -- sub_icb_code above but at PCN grain so dim_pcn doesn't need to re-derive.
+    CASE
+        WHEN pcnbf.borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'QMJ'
+        WHEN pcnbf.borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
+                               'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'QRV'
+    END AS pcn_sub_icb_code,
+    CASE
+        WHEN pcnbf.borough IN ('Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey') THEN 'NHS North Central London'
+        WHEN pcnbf.borough IN ('Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
+                               'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster') THEN 'NHS North West London'
+    END AS pcn_sub_icb_name
 
 FROM borough_registered_final pbf
 LEFT JOIN practice_pcn pp

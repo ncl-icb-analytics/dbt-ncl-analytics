@@ -8,7 +8,7 @@
 /*
 PCN (Primary Care Network) Dimension
 Contains PCN details and member practice information.
-Sources from Dictionary.dbo.OrganisationMatrixPracticeView.
+Sourced from Dictionary's OrganisationMatrixPracticeView.
 Includes borough context for PCN naming.
 */
 
@@ -20,7 +20,10 @@ WITH pcn_practices AS (
     FROM {{ ref('stg_dictionary_dbo_organisationmatrixpracticeview') }}
     WHERE network_code IS NOT NULL
         AND practice_code IS NOT NULL
-        AND stp_code = 'QMJ'
+        -- Z9B2Z-only is intentional and diverges from dim_practice. The 4 practices
+        -- still under legacy QMJ/QRV STP codes have zero OLIDS appointments — keeping
+        -- them here would re-introduce empty PCN rows that match no fact data.
+        AND stp_code = 'Z9B2Z'  -- WNL ICB (merged NCL + NWL, Apr 2026)
     GROUP BY network_code
 )
 
@@ -38,6 +41,11 @@ SELECT DISTINCT
     
     -- Borough information
     borough_map.pcn_borough,
+    -- Sub-ICB / place-based partnership for the PCN. Centralised in
+    -- int_organisation_borough_mapping (pcn_sub_icb_code/name) so the
+    -- borough-to-sub-ICB CASE lives in exactly one place.
+    borough_map.pcn_sub_icb_code AS sub_icb_code,
+    borough_map.pcn_sub_icb_name AS sub_icb_name,
     
     -- PCN membership details
     pp.member_practice_count,
@@ -75,4 +83,4 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} AS dict_org
 LEFT JOIN {{ ref('int_organisation_borough_mapping') }} AS borough_map
     ON dict.network_code = borough_map.network_code
 WHERE dict.network_code IS NOT NULL
-    AND dict.stp_code = 'QMJ'
+    AND dict.stp_code = 'Z9B2Z'  -- WNL ICB (merged NCL + NWL, Apr 2026)

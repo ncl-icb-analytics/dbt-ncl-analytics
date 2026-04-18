@@ -8,7 +8,7 @@
 /*
 Practice Dimension
 Contains comprehensive practice details including organisational hierarchy.
-Sources from Dictionary.dbo.OrganisationMatrixPracticeView and OLIDS organisation data.
+Sourced from Dictionary's OrganisationMatrixPracticeView combined with OLIDS organisation data.
 Note: Deduplicates by organisation_id to ensure uniqueness when multiple practice codes map to same organisation.
 */
 
@@ -35,6 +35,8 @@ WITH practice_org_joined AS (
     borough_map.borough_registered,
     borough_map.pcn_borough,
     borough_map.practice_historic_ccg,
+    borough_map.sub_icb_code,
+    borough_map.sub_icb_name,
     
     -- Practice organisational details from OLIDS
     org.type_code AS practice_type_code,
@@ -144,11 +146,12 @@ LEFT JOIN {{ ref('int_organisation_borough_mapping') }} AS borough_map
     ON dict.practice_code = borough_map.practice_code
 WHERE dict.practice_code IS NOT NULL
     AND dict.stp_code IN (
-        'QMJ',  -- NHS NORTH CENTRAL LONDON INTEGRATED CARE BOARD
-        'QMF',  -- NHS NORTH EAST LONDON INTEGRATED CARE BOARD
-        'QRV',  -- NHS NORTH WEST LONDON INTEGRATED CARE BOARD
-        'QWE',  -- NHS SOUTH WEST LONDON INTEGRATED CARE BOARD
-        'QKK'   -- NHS SOUTH EAST LONDON INTEGRATED CARE BOARD
+        'Z9B2Z', -- NHS WEST AND NORTH LONDON INTEGRATED CARE BOARD (merged NCL + NWL from Apr 2026)
+        'QMJ',   -- NHS NORTH CENTRAL LONDON (legacy, retained for historical continuity)
+        'QRV',   -- NHS NORTH WEST LONDON (legacy, retained for historical continuity)
+        'QMF',   -- NHS NORTH EAST LONDON INTEGRATED CARE BOARD
+        'QWE',   -- NHS SOUTH WEST LONDON INTEGRATED CARE BOARD
+        'QKK'    -- NHS SOUTH EAST LONDON INTEGRATED CARE BOARD
     )
 )
 

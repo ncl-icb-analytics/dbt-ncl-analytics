@@ -14,7 +14,7 @@ models:
 
       • Complete organisational hierarchy (Practice > PCN > Commissioner > STP)
 
-      • Filtered to London ICBs: North Central, North East, North West, South East, South West
+      • Filtered to London ICBs: West and North London (merged NCL + NWL), North East, South East, South West
 
       Purpose: Supports practice-level reporting, geographic analysis, and organisational hierarchy navigation.'
 
@@ -132,12 +132,18 @@ models:
         description: 'Surrogate key for commissioner organisation'
 
       - name: stp_code
-        description: 'STP/ICB code (London ICBs: QMJ, QMF, QRV, QWE, QKK)'
+        description: 'STP/ICB code (London ICBs: Z9B2Z WNL, QMF NEL, QWE SWL, QKK SEL; legacy QMJ/QRV retained for historical continuity)'
         tests:
           - not_null
           - accepted_values:
               arguments:
-                values: ['QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
+                values: ['Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
+
+      - name: sub_icb_code
+        description: 'Sub-ICB / place-based partnership ODS code (QMJ NCL, QRV NWL) for practices in the merged WNL ICB. NULL outside WNL boroughs.'
+
+      - name: sub_icb_name
+        description: 'Sub-ICB display name (NHS North Central London / NHS North West London). NULL outside WNL boroughs.'
 
       - name: stp_name
         description: 'STP/ICB name (London Integrated Care Boards)'
