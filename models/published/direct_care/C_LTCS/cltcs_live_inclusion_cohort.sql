@@ -3,18 +3,38 @@
         materialized='table')
 }}
 
+{%
+    set in_scope_borough_list = ['Haringey']
+%}
 
 /*
 Inclusion criteria cohort for CLTCS
 
 Clinical Purpose:
-- Supporting the C-LTCS product by identifying patients with relevant conditions and recent outpatient activity
+- Supporting the Haringey test-bed MDT arms by identifying patients with: relevant conditions and/or frailty and recent outpatient activity
 
 Testing:
 - Actual table will use cambridge multimorbidity logic and filter to relevant appointments once finalised
 
+TO DO:
+
+Change inclusion criteria to cover agreed definitions in meeting
+Shift cohort to use PDS for core demographic data
+
 */
-with conditions_inclusion as (
+with in_scope_practice_list as (
+    select  practice_code, area_code, area_name
+    from {{ ref('cltcs_organisations_in_scope')}}
+),
+
+registrant_population as (
+    select  sk_patient_id, practice_code, practice_name
+    from {{ ref('dim_person_demographics_basic')}}
+    where practice_code in (select distinct practice_code from in_scope_practice_list)
+        and date_of_death is null
+        and date_of_birth < date_trunc('month', dateadd(year, -18, current_date))
+),
+conditions_inclusion as (
     select distinct person_id, 1 as has_condition
     from {{ ref('dim_person_conditions')}}
     where cardiovascular_conditions + respiratory_conditions + metabolic_conditions > 3
@@ -73,14 +93,15 @@ potentially_fragmented_person_ids as (
     HAVING COUNT(DISTINCT p.sk_patient_id) > 1
     ORDER BY patient_count DESC
 )
-select pp.sk_patient_id as patient_id
+
+select rp.sk_patient_id as patient_id
     ,pp.hx_flake as re_id_key
     ,pp.person_id as olids_id
-    ,pd.practice_code
-    ,pd.practice_name
-    ,'PCN' as area_type 
-    ,pd.pcn_code as area_code
-    ,pd.pcn_name as area_name
+    ,rp.practice_code
+    ,rp.practice_name
+    ,'Neighbourhood' as area_type 
+    ,ip.area_code
+    ,ip.area_name
     ,pd.main_language
     ,pd.age
     ,pd.gender
@@ -88,15 +109,18 @@ select pp.sk_patient_id as patient_id
     ,case when pc.has_condition = 1 or op.has_recent_op = 1 then 1 else 0 end as eligible
     ,case when pp.sk_patient_id in (select sk_patient_id from potentially_fragmented_sk_patient_ids) then 1 else 0 end as fragmented_sk_patient_id_flag -- poor mapping of multiple person_ids to one sk_patient_id
     ,case when pp.person_id in (select person_id from potentially_fragmented_person_ids) then 1 else 0 end as fragmented_person_id_flag -- poor mapping of multiple sk_patient_ids to one person_id
-from {{ref('dim_person_pseudo')}} pp
+from registrant_population rp
+left join {{ref('dim_person_pseudo')}} pp
+    on rp.sk_patient_id = pp.sk_patient_id
+left join in_scope_practice_list ip
+    on rp.practice_code = ip.practice_code
 left join conditions_inclusion pc
     on pc.person_id = pp.person_id
 left join op_inclusion op
     on op.sk_patient_id = pp.sk_patient_id
 left join {{ref('dim_person_demographics')}} pd
     on pd.person_id = pp.person_id
-where pd.is_deceased = FALSE 
-    and area_code in (select distinct pcn_code from {{ ref('stg_c_ltcs_mdt_lookup') }}) -- replace this with a lookup table of areas
-    and pd.age >= 18
+where (pd.is_deceased = false or pd.is_deceased is null)
+    and (pd.age >= 18 or pd.age is null)
   --  and fragmented_sk_patient_id_flag = 0 -- keep warning for awareness of person/patient mapping issues
 -- and fragmented_person_id_flag = 0

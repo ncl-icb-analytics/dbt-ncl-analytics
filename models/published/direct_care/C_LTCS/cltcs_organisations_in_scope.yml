@@ -1,7 +1,7 @@
 
 models:
-  - name: pcn_info
-    description: PCN and practice information for C-LTCS participating PCNs. One
+  - name: cltcs_organisations_in_scope
+    description: Neighbourhood and practice information for C-LTCS participating areas. One
       row per practice.
     config:
       meta:

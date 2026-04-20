@@ -15,6 +15,7 @@ SELECT
     gp_practice_code AS practice_code,
     practice_name AS practice_name,
     borough AS local_authority,
-    neighbourhood_name AS neighbourhood_registered
+    neighbourhood_name AS neighbourhood_registered,
+    neighbourhood_code
 FROM {{ ref('stg_reference_lookup_ncl_gp_practice') }}
 WHERE gp_practice_code IS NOT NULL

@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: raw_aic_stg_ccms_final_flags
+    description: Raw layer (AIC pipelines) passthrough for final Cambridge comorbidity condition flags.
+    columns:
+      - name: person_id
+        description: Person identifier from the upstream AIC source table.
+        tests:
+          - not_null
+          - unique
