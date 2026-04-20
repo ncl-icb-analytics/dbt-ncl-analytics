@@ -83,7 +83,7 @@ SELECT
         WHEN inferred_value < 0 THEN 'Abnormal'
         WHEN inferred_value < 25 THEN 'Low'
         WHEN inferred_value < 50 THEN 'Intermediate'
-        WHEN inferred_value < 1000 THEN 'HIGH'
+        WHEN inferred_value < 1000 THEN 'High'
         ELSE 'Abnormal'
 
 
