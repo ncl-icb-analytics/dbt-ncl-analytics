@@ -120,7 +120,7 @@ left join op_inclusion op
     on op.sk_patient_id = pp.sk_patient_id
 left join {{ref('dim_person_demographics')}} pd
     on pd.person_id = pp.person_id
-where pd.is_deceased = false
-    and pd.age >= 18
+where (pd.is_deceased = false or pd.is_deceased is null)
+    and (pd.age >= 18 or pd.age is null)
   --  and fragmented_sk_patient_id_flag = 0 -- keep warning for awareness of person/patient mapping issues
 -- and fragmented_person_id_flag = 0
