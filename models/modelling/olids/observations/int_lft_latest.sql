@@ -76,10 +76,6 @@ SELECT
     COALESCE(j.alt_value > t.alt_uln, FALSE)
         OR COALESCE(j.ggt_value > t.ggt_uln, FALSE)
         OR COALESCE(j.bilirubin_value > t.bilirubin_uln, FALSE) AS high_lft,
-    GREATEST(
-        COALESCE(j.alt_date, DATE '1900-01-01'),
-        COALESCE(j.ggt_date, DATE '1900-01-01'),
-        COALESCE(j.bilirubin_date, DATE '1900-01-01')
-    ) AS last_lft_date
+    GREATEST_IGNORE_NULLS(j.alt_date, j.ggt_date, j.bilirubin_date) AS last_lft_date 
 FROM joined j
 CROSS JOIN thresholds t
