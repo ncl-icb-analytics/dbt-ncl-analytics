@@ -90,7 +90,7 @@ sources:
     - name: VPID
       data_type: NUMBER(38,0)
   - name: STG_CCMS__FINAL_FLAGS
-    identifier: '"STG_CCMS__FINAL_FLAG"'
+    identifier: '"STG_CCMS__FINAL_FLAGS"'
     columns:
     - name: PERSON_ID
       data_type: TEXT
