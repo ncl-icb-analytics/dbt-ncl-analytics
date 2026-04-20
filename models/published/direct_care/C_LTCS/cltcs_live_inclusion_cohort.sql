@@ -11,7 +11,7 @@
 Inclusion criteria cohort for CLTCS
 
 Clinical Purpose:
-- Supporting the C-LTCS product by identifying patients with relevant conditions and recent outpatient activity
+- Supporting the Haringey test-bed MDT arms by identifying patients with: relevant conditions and/or frailty and recent outpatient activity
 
 Testing:
 - Actual table will use cambridge multimorbidity logic and filter to relevant appointments once finalised
@@ -20,16 +20,19 @@ TO DO:
 
 Change inclusion criteria to cover agreed definitions in meeting
 Shift cohort to use PDS for core demographic data
+
 */
 with in_scope_practice_list as (
-    select  practice_code, neighbourhood_code, neighbourhood_name
-    from {{ ref('dim_practice_neighbourhood')}}
-    where local_authority in '{{ in_scope_borough_list }}'),
+    select  practice_code, area_code, area_name
+    from {{ ref('cltcs_organisations_in_scope')}}
+),
+
 registrant_population as (
     select  sk_patient_id, practice_code, practice_name
     from {{ ref('dim_person_demographics_basic')}}
-    where practice_code in (select distinct practice_code from (select practice_code from in_scope_practice_list) and is_deceased = FALSE)  
-    and age >= 18
+    where practice_code in (select distinct practice_code from in_scope_practice_list)
+        and date_of_death is null
+        and date_of_birth < date_trunc('month', dateadd(year, -18, current_date))
 ),
 conditions_inclusion as (
     select distinct person_id, 1 as has_condition
@@ -90,14 +93,15 @@ potentially_fragmented_person_ids as (
     HAVING COUNT(DISTINCT p.sk_patient_id) > 1
     ORDER BY patient_count DESC
 )
+
 select rp.sk_patient_id as patient_id
     ,pp.hx_flake as re_id_key
     ,pp.person_id as olids_id
     ,rp.practice_code
     ,rp.practice_name
     ,'Neighbourhood' as area_type 
-    ,ip.neighbourhood_code as area_code
-    ,ip.neighbourhood_name as area_name
+    ,ip.area_code
+    ,ip.area_name
     ,pd.main_language
     ,pd.age
     ,pd.gender
@@ -116,7 +120,7 @@ left join op_inclusion op
     on op.sk_patient_id = pp.sk_patient_id
 left join {{ref('dim_person_demographics')}} pd
     on pd.person_id = pp.person_id
-where pd.is_deceased = FALSE 
+where pd.is_deceased = false
     and pd.age >= 18
   --  and fragmented_sk_patient_id_flag = 0 -- keep warning for awareness of person/patient mapping issues
 -- and fragmented_person_id_flag = 0

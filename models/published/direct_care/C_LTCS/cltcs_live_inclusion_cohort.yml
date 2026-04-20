@@ -1,6 +1,6 @@
 
 models:
-  - name: inclusion_cohort
+  - name: cltcs_live_inclusion_cohort
     description: Patients eligible for C-LTCS based on multimorbidity and 
       outpatient activity. One row per patient with eligibility flag.
     config:
