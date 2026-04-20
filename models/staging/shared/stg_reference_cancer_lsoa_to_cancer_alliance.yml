@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: stg_reference_cancer_lsoa_to_cancer_alliance
+    description: "Staging model for LSOA to Cancer Alliance mappings. Provides cleaned column names and data types for the reference lookup.\nContact: jake.kealey@nhs.net"
+    config:
+      meta:
+        owner:
+          name: JakeKea
+    columns:
+      - name: lsoa_2021_code
+        data_type: varchar
+        description: "Official Lower Layer Super Output Area 2021 code."
+        tests:
+          - unique
+          - not_null
+      - name: lsoa_2021_name
+        data_type: varchar
+        description: "LSOA 2021 name"
+      - name: ons_sub_icb_code
+        data_type: varchar
+        description: "ONS Sub-ICB code"
+      - name: sub_icb_code
+        data_type: varchar
+        description: "Sub-ICB code"
+      - name: sub_icb_name
+        data_type: varchar
+        description: "Sub-ICB name"
+      - name: ons_icb_code
+        data_type: varchar
+        description: "ONS ICB code"
+      - name: icb_code
+        data_type: varchar
+        description: "ICB code"
+      - name: icb_name
+        data_type: varchar
+        description: "ICB name"
+      - name: cancer_alliance_code
+        data_type: varchar
+        description: "Cancer Alliance code"
+      - name: cancer_alliance_name
+        data_type: varchar
+        description: "Cancer Alliance name"
+      - name: borough_code
+        data_type: varchar
+        description: "Local Authority (borough) code"
+      - name: borough_name
+        data_type: varchar
+        description: "Local Authority (borough) name"

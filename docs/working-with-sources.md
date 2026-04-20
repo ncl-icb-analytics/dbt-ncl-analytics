@@ -9,14 +9,14 @@ Every source table gets a generated **raw model** in `models/raw/<domain>/`. Raw
 A generated raw model looks like this:
 
 ```sql
--- models/raw/shared/raw_reference_bp_thresholds.sql (generated)
+-- models/raw/shared/raw_reference_imd_2025.sql (generated)
 {{ config(description="Raw layer (Analyst-managed reference datasets...)...") }}
 select
-    "THRESHOLD_RULE_ID" as threshold_rule_id,
-    "PROGRAMME_OR_GUIDELINE" as programme_or_guideline,
-    "SYSTOLIC_THRESHOLD"    as systolic_threshold,
+    "LSOA_CODE_2021" as lsoa_code_2021,
+    "LSOA_NAME_2021" as lsoa_name_2021,
+    "INDEX_OF_MULTIPLE_DEPRIVATION_IMD_SCORE" as index_of_multiple_deprivation_imd_score,
     -- ...
-from {{ source('reference_analyst_managed', 'BP_THRESHOLDS') }}
+from {{ source('reference_analyst_managed', 'IMD_2025') }}
 ```
 
 Rules:
@@ -30,10 +30,10 @@ Staging models (`stg_`*) should always reference raw models via `ref()`, never t
 
 ```sql
 -- Correct (in a staging model)
-select * from {{ ref('raw_reference_bp_thresholds') }}
+select * from {{ ref('raw_reference_imd_2025') }}
 
 -- Avoid - bypasses the raw layer and its cleaned column names
-select * from {{ source('reference_analyst_managed', 'BP_THRESHOLDS') }}
+select * from {{ source('reference_analyst_managed', 'IMD_2025') }}
 ```
 
 This gives the project one place where source column names are mapped, quoted identifiers are handled, and the interface between dbt and Snowflake is defined.
@@ -106,8 +106,8 @@ Step 2 of the pipeline compares manual YAML files against the live Snowflake sch
 
 ```
 Manual source drift check - 2 warning(s) across 14 table(s):
-  [drift] manual_analyst_managed.yml: reference_analyst_managed.BP_THRESHOLDS declares columns not in source: ['THRESHOLD_RULE_ID']
-  [drift] manual_analyst_managed.yml: reference_analyst_managed.IMD_2025 source has undeclared columns: ['NEW_SCORE_COLUMN']
+  [drift] manual_analyst_managed.yml: reference_analyst_managed.IMD_2025 declares columns not in source: ['NEW_SCORE_COLUMN']
+  [drift] manual_analyst_managed.yml: reference_analyst_managed.PRACTICE_NEIGHBOURHOOD_LOOKUP source has undeclared columns: ['NEW_PCN_FIELD']
 ```
 
 

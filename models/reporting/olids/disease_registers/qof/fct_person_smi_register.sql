@@ -24,7 +24,7 @@ Used for serious mental illness quality measures including:
 */
 
 WITH smi_diagnoses AS (
-    -- Per QOF MH001: MH1_REG is "ever diagnosed" — no remission exclusion
+    -- Per QOF MH001: MH1_REG is "ever diagnosed" — no remission exclusion. HAS_MH_DIAGNOSIS = TRUE
     SELECT
         person_id,
         MIN(
@@ -39,8 +39,7 @@ WITH smi_diagnoses AS (
         MAX(
             CASE WHEN is_resolved_code THEN clinical_effective_date END
         ) AS latest_resolved_date,
-        --for QOF keep in ever had any diagnosis 
-        TRUE AS has_active_smi_diagnosis,
+        --TRUE AS has_active_smi_diagnosis, See below for revised logic to account for resolved codes
          -- For SMI health checks flag whether the resolved code is reported on or after the latest diagnosis date
         COALESCE(
     (
@@ -62,11 +61,23 @@ WITH smi_diagnoses AS (
     ),
     FALSE
 ) AS has_recent_resolved_code,
-        --ARRAY_AGG(DISTINCT concept_code) AS all_smi_concept_codes,
+-- has_active_smi_diagnosis is simply the inverse of has_recent_resolved_code
+      NOT COALESCE(
+         (
+              MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
+              AND MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) IS NOT NULL
+              AND MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END)
+                  >= MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END)
+          )
+          OR
+          (
+              MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) IS NOT NULL
+              AND MAX(CASE WHEN is_diagnosis_code THEN 1 ELSE 0 END) = 0
+          ),
+          FALSE
+      ) AS has_active_smi_diagnosis,
         ARRAY_AGG(DISTINCT CASE WHEN is_diagnosis_code THEN concept_code END) AS all_smi_concept_codes,
-        --ARRAY_AGG(DISTINCT concept_display) AS all_smi_concept_displays,
         ARRAY_AGG(DISTINCT CASE WHEN is_diagnosis_code THEN concept_display END) AS all_smi_concept_displays,
-      --ARRAY_CONSTRUCT() AS all_resolved_concept_codes,
         ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_code END) AS all_resolved_concept_codes,
         ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_display END) AS all_resolved_concept_displays
     FROM {{ ref('int_smi_diagnoses_all') }}
@@ -126,11 +137,11 @@ combined_smi_eligibility AS (
         smi.all_resolved_concept_codes,
         smi.all_resolved_concept_displays,
         
-        -- SMI Register Logic: Active SMI diagnosis OR recent lithium therapy
+        -- SMI Register Logic: Any SMI diagnosis (active or not) OR recent lithium therapy
        
         COALESCE(smi.person_id, lith.person_id) AS person_id,
         (
-            smi.has_active_smi_diagnosis = TRUE
+            (smi.latest_diagnosis_date IS NOT NULL OR smi.latest_resolved_date IS NOT NULL)
             OR
             (lith.recent_lithium_orders_count > 0)
         ) AS is_on_register,
