@@ -80,6 +80,7 @@ SELECT
     is_extreme_outlier,
     CASE
         WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Abnormal'
+        WHEN inferred_value < 0 THEN 'Abnormal'
         WHEN inferred_value < 10 THEN 'Severe Thrombocytopenia'
         WHEN inferred_value < 50 THEN 'Moderate Thrombocytopenia'
         WHEN inferred_value < 150 THEN 'Mild Thrombocytopenia'
