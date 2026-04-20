@@ -91,7 +91,7 @@ classified AS (
         vb.ABSOLUTE_UPPER AS upper_limit,
         vb.CANONICAL_EXPONENT AS canonical_exponent,
         vb.BIOLOGICAL_LOWER AS biological_lower,
-        vb.BIOLOGICAL_UPPER AS biological_upper,
+        vb.BIOLOGICAL_UPPER AS biological_upper, -- passed through for downstream outlier flags
         ur.MULTIPLY_BY AS seed_multiply_by,
         ur.PRE_OFFSET AS seed_pre_offset,
         ur.POST_OFFSET AS seed_post_offset,
