@@ -98,6 +98,8 @@ WITH base AS (
 
         -- Geographic Information
         hist.borough_registered,
+        hist.sub_icb_code,
+        hist.sub_icb_name,
         hist.practice_postcode,
         hist.practice_lsoa,
         hist.practice_msoa,

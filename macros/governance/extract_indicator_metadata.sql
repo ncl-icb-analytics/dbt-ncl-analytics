@@ -154,10 +154,24 @@
           
         {% endfor %}
         
+        {# Collect model-level indicator ids so inherited column meta can be skipped.
+           dbt-fusion propagates model config.meta to every column, so without this
+           each column re-emits the model indicator N times (Snowflake MERGE in
+           archive_definitions then fails with a duplicate-row error). #}
+        {% set model_indicator_ids = [] %}
+        {% if model_meta and model_meta.get('id') %}
+          {% do model_indicator_ids.append(model_meta.id) %}
+        {% endif %}
+        {% for ind_meta in model_indicators %}
+          {% if ind_meta.get('id') %}
+            {% do model_indicator_ids.append(ind_meta.id) %}
+          {% endif %}
+        {% endfor %}
+
         {# Process column-level indicators (for future BRFs) #}
         {% for column in node.columns.values() %}
           {% set col_meta = column.get('meta', {}).get('indicator', {}) %}
-          {% if col_meta %}
+          {% if col_meta and col_meta.get('id') not in model_indicator_ids %}
             
             {# Generate sort order #}
             {% set sort_order = '' %}

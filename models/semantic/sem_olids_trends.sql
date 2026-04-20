@@ -71,6 +71,8 @@ DIMENSIONS(
     trends.pcn_name AS pcn_name COMMENT = 'PCN name',
     trends.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN with borough prefix',
     trends.borough_registered AS borough_registered COMMENT = 'Borough of registration',
+    trends.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the registered practice: QMJ = NHS North Central London (Camden, Islington, Barnet, Enfield, Haringey); QRV = NHS North West London (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside the WNL footprint.',
+    trends.sub_icb_name AS sub_icb_name COMMENT = 'Sub-ICB display name (NHS North Central London or NHS North West London) of the registered practice. NULL outside the WNL footprint.',
     trends.neighbourhood_registered AS neighbourhood_registered COMMENT = 'NCL neighbourhood',
 
     -- Geography
