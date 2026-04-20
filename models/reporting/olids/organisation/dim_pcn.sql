@@ -67,10 +67,10 @@ SELECT DISTINCT
     dict.commissioner_name,
     dict.sk_organisation_id_commissioner AS sk_commissioner_id,
     
-    -- STP relationship
-    dict.stp_code,
-    dict.stp_name,
-    dict.sk_organisation_id_stp AS sk_stp_id,
+    -- ICB relationship (top-level; Dictionary still labels the column "STP" upstream)
+    dict.stp_code AS icb_code,
+    dict.stp_name AS icb_name,
+    dict.sk_organisation_id_stp AS sk_icb_id,
     
     -- Dictionary surrogate keys
     dict.sk_organisation_id_network AS sk_pcn_dict_id
