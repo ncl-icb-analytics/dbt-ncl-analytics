@@ -36,15 +36,15 @@ models:
 
       - name: area_type
         data_type: varchar
-        description: "Area type (PCN of registered GP practice in this context)"
+        description: "Area type used for GP practice attribution"
 
       - name: area_code
         data_type: varchar
-        description: "Area code (PCN in this context)"
+        description: "Area code of in scope area"
 
       - name: area_name
         data_type: varchar
-        description: "Area name (PCN name in this context)"
+        description: "Area name of in scope area"
 
       - name: main_language
         data_type: varchar
