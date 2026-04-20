@@ -37,5 +37,7 @@ models:
           boundary analysis'
 
       - name: neighbourhood_registered
-        description: 'Practice neighbourhood classification for community context
-          analysis'
+        description: 'Practice neighbourhood grouping to support integrated neighbourhood programme (name)'
+      
+      - name: neighbourhood_code
+        description: 'Practice neighbourhood grouping to support integrated neighbourhood programme (code)'
