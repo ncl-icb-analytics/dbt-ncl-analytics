@@ -341,8 +341,8 @@ SELECT
     dp.pcn_name_with_borough,
 
     -- ICB Information
-    dp.stp_code AS icb_code,
-    dp.stp_name AS icb_name,
+    dp.icb_code,
+    dp.icb_name,
 
     -- Geographic Information (practice-based)
     dp.borough_registered,
@@ -417,8 +417,8 @@ LEFT JOIN (
         practice_msoa,
         practice_latitude,
         practice_longitude,
-        stp_code,
-        stp_name
+        icb_code,
+        icb_name
     FROM {{ ref('dim_practice') }}
     QUALIFY ROW_NUMBER() OVER (PARTITION BY practice_code ORDER BY practice_type_desc NULLS LAST) = 1
 ) dp ON pwa.practice_code = dp.practice_code

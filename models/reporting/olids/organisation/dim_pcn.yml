@@ -4,13 +4,13 @@ models:
 
       Key Features:
 
-      • One row per PCN filtered to West and North London ICB (STPCode Z9B2Z)
+      • One row per PCN filtered to West and North London ICB (Z9B2Z)
 
       • Borough-prefixed PCN names for geographic clarity
 
       • Member practice arrays with counts for network analysis
 
-      • Complete organisational hierarchy linking to commissioners and STP
+      • Complete organisational hierarchy linking to commissioners and ICB
 
       • Address and operational details from Dictionary sources
 
@@ -89,21 +89,21 @@ models:
       - name: sk_commissioner_id
         description: 'Surrogate key for commissioner organisation'
 
-      - name: stp_code
-        description: 'STP/ICB code — Z9B2Z (West and North London ICB, merged NCL + NWL from Apr 2026)'
+      - name: icb_code
+        description: 'ICB code — Z9B2Z (West and North London ICB, merged NCL + NWL from Apr 2026). Sourced from Dictionary STPCode.'
         tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['Z9B2Z']
 
-      - name: stp_name
-        description: 'STP name (NHS West and North London Integrated Care Board)'
+      - name: icb_name
+        description: 'ICB display name (NHS West and North London Integrated Care Board)'
         tests:
           - not_null
 
-      - name: sk_stp_id
-        description: 'Surrogate key for STP organisation'
+      - name: sk_icb_id
+        description: 'Surrogate key for ICB organisation'
 
       - name: sub_icb_code
         description: 'Legacy ICB ODS code (QMJ NCL, QRV NWL) derived from the PCN''s commissioner via ODS hierarchy. All PCNs in dim_pcn are Z9B2Z so this always resolves to QMJ or QRV.'
