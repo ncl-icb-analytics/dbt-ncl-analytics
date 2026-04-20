@@ -140,10 +140,17 @@ models:
                 values: ['Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
 
       - name: sub_icb_code
-        description: 'Sub-ICB / place-based partnership ODS code (QMJ NCL, QRV NWL) for practices in the merged WNL ICB. NULL outside WNL boroughs.'
+        description: 'Legacy ICB ODS code derived from the practice''s commissioner via ODS hierarchy. WNL practices resolve to QMJ (NCL) or QRV (NWL) depending on pre-merger parent. Non-merged ICBs resolve to the ICB code itself (QMF, QKK, QWE).'
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['QMJ', 'QRV', 'QMF', 'QWE', 'QKK']
 
       - name: sub_icb_name
-        description: 'Sub-ICB display name (NHS North Central London / NHS North West London). NULL outside WNL boroughs.'
+        description: 'Legacy ICB display name sourced from Dictionary.Organisation.'
+        tests:
+          - not_null
 
       - name: stp_name
         description: 'STP/ICB name (London Integrated Care Boards)'

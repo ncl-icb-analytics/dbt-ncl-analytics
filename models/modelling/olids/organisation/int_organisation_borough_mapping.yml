@@ -1,64 +1,68 @@
 models:
   - name: int_organisation_borough_mapping
-    description: 'Organisation borough mapping for West and North London practices
-      and PCNs with historic CCG relationships.
+    description: 'Organisation borough and legacy sub-ICB mapping for London practices and PCNs.
 
-      Key Features:
+      Key features:
 
-      • Maps practices to boroughs using historic CCG relationships via organisational
-      hierarchy
+      • Borough derived from historic CCG relationships in OrganisationDescendent (contractual
+      view of how practices were commissioned through NHSE, not strict geography).
 
-      • Maps PCNs to boroughs based on majority practice allocation
+      • One row per practice. Multiple historic CCG paths are resolved by preferring the
+      most recent relationship (active first, then latest end date, then latest start date).
 
-      • Hardcoded CCG-to-borough mapping covering all London ICB constituents
+      • Sub-ICB (legacy NCL / NWL / etc.) derived from the RO98 commissioner''s RO261 parent
+      in ODS, excluding the merged WNL ICB (Z9B2Z). Preserves the pre-2026-04-01 QMJ/QRV
+      identities NHSE retained as ended-but-extant parent edges. Non-merged ICBs resolve
+      to themselves.
 
-      • Derives sub_icb_code (QMJ NCL / QRV NWL) from borough so the merged WNL
-      ICB can be split into its place-based partnerships
+      • PCN borough from majority member borough; PCN sub-ICB from the PCN''s single
+      commissioner (verified one-to-one).
 
-      • Special handling for cross-borough services (Medicus Select Care Y03103 assigned
-      to Enfield)
+      • Special handling: Medicus Select Care (Y03103) pinned to Enfield.
 
-      • Uses most recent relationship for each practice-borough combination
-
-      Purpose: Provide borough context for London practices and PCNs for geographic
-      analysis.'
+      Purpose: single source of truth for borough and legacy sub-ICB context consumed by
+      dim_practice and dim_pcn.'
     config:
       meta:
         owner:
           name: EddieDavison92
     data_tests:
-      # Catch silent breakage from misspelled or missing borough values inside
-      # the WNL footprint. Intentional NULLs outside WNL boroughs are allowed.
+      # Every in-scope practice should resolve to a sub-ICB via its commissioner.
       - dbt_utils.expression_is_true:
           arguments:
-            expression: >
-              sub_icb_code IS NOT NULL
-              OR borough_registered NOT IN (
-                'Camden', 'Islington', 'Barnet', 'Enfield', 'Haringey',
-                'Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow',
-                'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster'
-              )
+            expression: sub_icb_code IS NOT NULL
     columns:
       - name: practice_code
-        description: 'GP practice identifier. Not unique - practices may appear multiple times if they have multiple PCN relationships.'
+        description: 'GP practice identifier. Unique after the practice-grain dedup.'
         tests:
           - not_null
+          - unique
       - name: borough_registered
-        description: 'Borough assignment for the practice based on historic CCG relationships'
+        description: 'Borough assignment for the practice based on historic CCG relationships.
+          Contractual view — boundary practices stay with the CCG that contracted them.'
       - name: practice_historic_ccg
-        description: 'Historic CCG code used for borough mapping'
+        description: 'Historic CCG code used for the borough assignment.'
+      - name: commissioner_code
+        description: 'Current RO98 sub-ICB / place-based partnership commissioner code from
+          OrganisationMatrixPracticeView (e.g. 93C, W2U3Z, A3A8R, 72Q, 36L).'
       - name: sub_icb_code
-        description: 'Sub-ICB / place-based partnership ODS code derived from borough — QMJ for NCL boroughs (Camden, Islington, Barnet, Enfield, Haringey), QRV for NWL boroughs (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside WNL.'
+        description: 'Legacy ICB ODS code. For WNL (merged Apr 2026): QMJ (NCL) or QRV
+          (NWL) depending on the commissioner''s pre-merger parent. For ICBs that have
+          not merged: the ICB code itself (QMF, QKK, QWE).'
+        tests:
+          - not_null
       - name: sub_icb_name
-        description: 'Sub-ICB display name (NHS North Central London / NHS North West London). NULL outside WNL.'
+        description: 'Legacy ICB display name sourced from Dictionary.Organisation.'
+        tests:
+          - not_null
       - name: network_code
-        description: 'Primary Care Network (PCN) identifier that the practice belongs
-          to'
+        description: 'Primary Care Network (PCN) identifier that the practice belongs to.'
       - name: pcn_borough
-        description: 'Borough assignment for the PCN based on majority practice allocation'
+        description: 'Borough assignment for the PCN based on majority member borough.'
       - name: pcn_borough_practice_count
-        description: 'Number of practices within the PCN assigned to this borough'
+        description: 'Number of practices within the PCN assigned to this borough.'
       - name: pcn_sub_icb_code
-        description: 'Sub-ICB / place-based partnership ODS code at the PCN grain — derived from pcn_borough using the same mapping as sub_icb_code. NULL outside WNL.'
+        description: 'Legacy sub-ICB code at the PCN grain, derived from the PCN''s
+          commissioner via ODS (same logic as sub_icb_code).'
       - name: pcn_sub_icb_name
-        description: 'Sub-ICB display name at the PCN grain. NULL outside WNL.'
+        description: 'Legacy sub-ICB display name at the PCN grain.'
