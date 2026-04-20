@@ -316,11 +316,22 @@ sources:
 
   # C-LTCS tables
   - source_name: c_ltcs
-    database: DEV__PUBLISHED_REPORTING__DIRECT_CARE
+    database: PUBLISHED_REPORTING__DIRECT_CARE
     schema: C_LTCS
     description: C-LTCS tables
     raw_prefix: raw_c_ltcs
     domain: commissioning
+    manual: true
+  
+    # AIC dev tables
+  - source_name: aic
+    database: DATA_LAKE__NCL
+    schema: AIC_DEV
+    description: parallel pipeline for AIC
+    raw_prefix: raw_aic
+    domain: shared
+    manual: true
+
 
   # Central Performance Analytics Team (CPAT PMCT)
   - source_name: pmct

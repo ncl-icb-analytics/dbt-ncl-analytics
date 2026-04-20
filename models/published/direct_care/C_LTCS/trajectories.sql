@@ -22,7 +22,7 @@ with date_spine as(
 ),
 inclusion_list as(
     select distinct patient_id
-    from {{ ref('inclusion_cohort')}}
+    from {{ ref('cltcs_live_inclusion_cohort')}}
     where eligible = 1
 ), 
 activity as(
