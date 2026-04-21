@@ -151,10 +151,10 @@ models:
       - name: hes_admitprior_cat
         data_type: number
         description: >
-          Number of emergency inpatient spells in the prior 365 days, capped
+          Number of emergency inpatient spells in the prior 12 months, capped
           at 3 (so possible values are 0, 1, 2, 3+). Sourced from
-          stg_sus_apc_spell rows where spell_admission_admission_sub_type = 'EMR'.
-          Joined on sk_patient_id.
+          fct_person_sus_ip_recent.apc_nel_12mo (non-elective emergency spells,
+          admission_method codes 21-28 / 2A-2D). Joined on sk_patient_id.
         data_tests:
           - not_null
           - accepted_values:

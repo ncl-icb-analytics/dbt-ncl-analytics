@@ -130,18 +130,15 @@ medication_flags AS (
     GROUP BY person_id
 ),
 
--- Count emergency inpatient spells in the prior 365 days, capped at 3 to
--- produce the QAdmissions hes_admitprior_cat bucket (0 / 1 / 2 / 3+).
--- Keys on sk_patient_id, not person_id.
+-- Emergency inpatient spells in the prior 12 months, capped at 3 to produce
+-- the QAdmissions hes_admitprior_cat bucket (0 / 1 / 2 / 3+). Sourced from
+-- fct_person_sus_ip_recent.apc_nel_12mo (non-elective emergency spells,
+-- admission_method codes 21-28 / 2A-2D). Keys on sk_patient_id.
 emergency_admissions AS (
     SELECT
         sk_patient_id,
-        LEAST(COUNT(*), 3) AS hes_admitprior_cat
-    FROM {{ ref('stg_sus_apc_spell') }}
-    WHERE spell_admission_admission_sub_type = 'EMR'
-      AND spell_admission_date >= DATEADD(day, -365, CURRENT_DATE())
-      AND spell_admission_date <  CURRENT_DATE()
-    GROUP BY sk_patient_id
+        LEAST(apc_nel_12mo, 3) AS hes_admitprior_cat
+    FROM {{ ref('fct_person_sus_ip_recent') }}
 ),
 
 -- Lab thresholds from the qadmissions_lab_thresholds seed, pivoted to one row.
