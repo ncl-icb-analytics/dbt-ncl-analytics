@@ -24,10 +24,30 @@ INNER JOIN {{ ref('stg_mhsds_activesubmission') }} a ON mpi.uniq_submission_id =
 INNER JOIN {{ ref('int_smi_population_base') }} smi on TO_VARCHAR(smi.sk_patient_id) = mpi.sk_patient_id
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE smi on TO_VARCHAR(smi.sk_patient_id) = mpi.sk_patient_id
 where ORG_ID_PROV in ('G6V2S') --,'TAF') use NLFT code only C&I legacy patients are not found in the NLFT EPR system
-and DMIC_CCG_CODE = '93C'
-and HAS_ACTIVE_SMI_DIAGNOSIS
-
-order by 1
+and mpi.DMIC_CCG_CODE = '93C'
+and smi.HAS_ACTIVE_SMI_DIAGNOSIS
+and mpi.pers_death_date is null -- extra check to exclude people who have died as they will not be in the EPR system and therefore will not have case finding data. This is in addition to the death date check in the population base definition.
+)
+--ward code look up
+,WARD_DETAILS AS (
+select distinct ward_code, site_name 
+from (
+select distinct ward_code, site_id_of_ward,
+CASE 
+WHEN site_id_of_ward in ('A0G9K','RRP01') and ward_code in ('SHANNONW','MBTRE','MBTHA','NewBeg') THEN 'Edgware'
+WHEN site_id_of_ward in ('A3C5P','RRP01') and ward_code in ('MBKEN2') THEN 'Barnet'
+WHEN site_id_of_ward in ('RRP07','A1D5T') and ward_code in ('FXAvew') THEN 'Avesbury'
+WHEN site_id_of_ward in ( 'A1D5T','RRP02','A1X5K','RRP16') THEN 'Chase Farm' 
+WHEN site_id_of_ward in ('A3D2M', 'RRP03','RRP46') THEN 'St Anns'
+WHEN site_id_of_ward in ('RRP23') THEN 'Edgware'
+WHEN site_id_of_ward in ('A5E8R','TAF72') THEN 'Highgate'
+WHEN ward_code in ('VWardOakP') THEN 'Chase Farm' 
+WHEN ward_code in ('SUNSTONE', 'ROSEQUARTZ') THEN 'Highgate'
+ELSE 'Unknown' END AS site_name
+--FROM MODELLING.DBT_STAGING.STG_MHSDS_MHS903WARDDETAILS 
+FROM {{ ref('stg_mhsds_mhs903warddetails') }}
+where ORG_ID_PROV in ('G6V2S')
+) a
 )
 --DEFINE SMI POP
 ,SMIPOPULATION as (
@@ -87,6 +107,8 @@ WHERE HAS_ACTIVE_SMI_DIAGNOSIS
     ,'NLFT' as provider
     ,sp.uniq_hosp_prov_spell_num as spell_number
     ,ws.uniq_ward_stay_id
+    ,ws.ward_code
+    ,wd.site_name
     ,DATE(sp.start_date_hosp_prov_spell) as spell_start_date
     ,DATE(sp.disch_date_hosp_prov_spell) as spell_discharge_date
     ,sp.disch_date_hosp_prov_spell is null as is_current_spell  
@@ -102,13 +124,13 @@ WHERE HAS_ACTIVE_SMI_DIAGNOSIS
     WHEN ws.hospital_bed_type_name = 'Acute Older Adult Mental Health Care (Organic and Functional)' THEN 'Acute Older Adult Mental Health Care'
     WHEN ws.hospital_bed_type_name = 'Adult Mental Health Rehabilitation (Mainstream Service)' THEN 'Adult Mental Health Rehabilitation'
     WHEN ws.hospital_bed_type_name = 'General Child and Young Person - Young Person (13 years up to and including 17 years)' THEN 'General Child and Young Person'
-    ELSE ws.hospital_bed_type_name END AS ward_type
-    ,ws.ward_code
+    ELSE ws.hospital_bed_type_name END AS ward_type  
 FROM {{ ref('stg_mhsds_spell') }} sp
 --FROM MODELLING.DBT_STAGING.STG_MHSDS_spell sp
 INNER JOIN SMIPOPULATION p ON p.mpi_person_id = sp.person_id
 LEFT JOIN {{ ref('stg_mhsds_mhs502wardstay') }} ws on sp.uniq_hosp_prov_spell_num = ws.uniq_hosp_prov_spell_num
 --LEFT JOIN MODELLING.DBT_STAGING.STG_MHSDS_MHS502WARDSTAY ws on sp.uniq_hosp_prov_spell_num = ws.uniq_hosp_prov_spell_num
+LEFT JOIN WARD_DETAILS wd on ws.ward_code = wd.ward_code
 WHERE sp.DM_ICB_COMMISSIONER = '93C'
 AND sp.ORG_ID_PROV in ('G6V2S')--,'TAF','RNK','RRP') use NLFT code only C&I legacy patients are not found in the NLFT EPR system
 --deduplicate selecting latest ward_start_date only
@@ -124,6 +146,7 @@ sk_patient_id
 ,admission_type
 ,ward_type
 ,ward_code
+,site_name
 ,spell_number
 ,spell_start_date
 ,start_date_ward_stay
@@ -142,6 +165,9 @@ QUALIFY ROW_NUMBER() OVER (PARTITION BY sp.mpi_person_id ORDER BY spell_start_da
 --final add back in population characteristics and health check flags and local patient id for NFLT.
 select 
 p.person_id
+--add in 2 IDs for testing purposes only. sk_patient_id and sp.mpi_person_id. REMOVE THESE FOR FINAL OUTPUT IN VIEW
+,sp.sk_patient_id
+,sp.mpi_person_id
 ,p.hx_flake
 ,loc.local_patient_id 
 ,sp.spell_number
@@ -151,6 +177,7 @@ p.person_id
 ,sp.admission_type
 ,sp.ward_type
 ,sp.ward_code
+,sp.site_name
 ,p.age
 ,p.age_band_5y
 ,p.gender
