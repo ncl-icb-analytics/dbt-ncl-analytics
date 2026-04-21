@@ -5,8 +5,8 @@ models:
     description: >
       Input feature set for the QAdmissions 1-year emergency-admission risk
       model registered in Snowflake's model registry. One row per active,
-      non-deceased person in dim_person_demographics with a recorded gender
-      of Male or Female.
+      non-deceased person in dim_person_demographics aged 18-100 (inclusive)
+      with a recorded gender of Male or Female.
 
       This model does NOT compute a risk score - it only assembles the
       input features that the registered model consumes. See
@@ -42,9 +42,14 @@ models:
 
       - name: age
         data_type: number
-        description: "Current age in years"
+        description: "Current age in years. Restricted to 18-100 inclusive (QAdmissions eligibility)."
         data_tests:
           - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 18
+                max_value: 100
+                inclusive: true
 
       - name: gender
         data_type: number

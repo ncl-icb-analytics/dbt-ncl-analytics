@@ -50,6 +50,7 @@ WITH base_spine AS (
     WHERE is_active = TRUE
       AND is_deceased = FALSE
       AND gender IN ('Male', 'Female')
+      AND age BETWEEN 18 AND 100
 ),
 
 conditions AS (
