@@ -346,6 +346,8 @@ SELECT
 
     -- Geographic Information (practice-based)
     dp.borough_registered,
+    dp.sub_icb_code,
+    dp.sub_icb_name,
     dp.practice_postcode_dict AS practice_postcode,
     dp.practice_lsoa,
     dp.practice_msoa,
@@ -408,6 +410,8 @@ LEFT JOIN (
         pcn_name,
         pcn_name_with_borough,
         borough_registered,
+        sub_icb_code,
+        sub_icb_name,
         practice_postcode_dict,
         practice_lsoa,
         practice_msoa,
