@@ -1,4 +1,4 @@
-select patient_id
+select cast(patient_id as varchar) as patient_id
     , area_code
     , intervention_date
     , action
