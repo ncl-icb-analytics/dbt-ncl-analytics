@@ -222,7 +222,7 @@ DIMENSIONS(
     bp_control.is_diagnosed_htn AS is_diagnosed_htn WITH SYNONYMS = ('on HTN register', 'diagnosed hypertension') COMMENT = 'On hypertension register',
 
     -- HbA1c Categories
-    hba1c.hba1c_category AS hba1c_category COMMENT = 'HbA1c clinical band using IFCC mmol/mol. Bands: Normal (<42), Prediabetes (42–47.9, NICE non-diabetic hyperglycaemia), Diabetes - At NICE Target (48–53.9, NICE NG28 target), Diabetes - Elevated (54–57.9, above NICE target but still within QOF DM021 threshold <=58), Diabetes - Above Target (58–74.9, misses QOF DM021), Diabetes - High Risk (75–85.9), Diabetes - Very High Risk (>=86).',
+    hba1c.hba1c_category AS hba1c_category COMMENT = 'HbA1c clinical band using IFCC mmol/mol. Bands: Normal (<42), Prediabetes (42–47.9, NICE non-diabetic hyperglycaemia), Diabetes - At NICE Target (48–53.9, NICE NG28 target), Diabetes - Elevated (54–58.0, above NICE target but still within QOF DM021 threshold <=58), Diabetes - Above Target (>58–74.9, misses QOF DM021), Diabetes - High Risk (75–85.9), Diabetes - Very High Risk (>=86).',
     hba1c.meets_qof_target AS meets_qof_target WITH SYNONYMS = ('HbA1c controlled', 'at target') COMMENT = 'HbA1c <=58 mmol/mol (QOF target)',
     hba1c.indicates_diabetes AS indicates_diabetes COMMENT = 'HbA1c >=48 mmol/mol (diabetes diagnostic)',
 
