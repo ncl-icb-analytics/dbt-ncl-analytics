@@ -1,0 +1,46 @@
+version: 2
+models:
+  - name: int_lft_latest
+    description: >
+      Composite liver function test (LFT) status per person. One row per person who has
+      at least one latest valid ALT, GGT, or bilirubin observation. Exposes each component's
+      latest value and date, per-component high flags, and a single composite `high_lft`
+      flag that is TRUE when any component is above its clinical ULN. ULNs are sourced
+      from the qadmissions_lab_thresholds seed.
+    config:
+      meta:
+        owner:
+          name: ThomasShallcross
+    columns:
+      - name: person_id
+        description: Person identifier
+        data_tests:
+          - not_null
+          - unique
+      - name: alt_value
+        description: Latest valid ALT value in [IU]/L (NULL if person has no valid ALT observation)
+      - name: alt_date
+        description: Clinical effective date of the latest ALT observation
+      - name: ggt_value
+        description: Latest valid GGT value in [IU]/L (NULL if person has no valid GGT observation)
+      - name: ggt_date
+        description: Clinical effective date of the latest GGT observation
+      - name: bilirubin_value
+        description: Latest valid bilirubin value in umol/L (NULL if person has no valid bilirubin observation)
+      - name: bilirubin_date
+        description: Clinical effective date of the latest bilirubin observation
+      - name: is_high_alt
+        description: TRUE if alt_value exceeds the ALT ULN from qadmissions_lab_thresholds, NULL if alt_value is NULL
+      - name: is_high_ggt
+        description: TRUE if ggt_value exceeds the GGT ULN from qadmissions_lab_thresholds, NULL if ggt_value is NULL
+      - name: is_high_bilirubin
+        description: TRUE if bilirubin_value exceeds the bilirubin ULN from qadmissions_lab_thresholds, NULL if bilirubin_value is NULL
+      - name: high_lft
+        description: TRUE if any of ALT, GGT, or bilirubin is above its ULN
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
+      - name: last_lft_date
+        description: Most recent date across the ALT, GGT, and bilirubin component observations

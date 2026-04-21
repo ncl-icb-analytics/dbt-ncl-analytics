@@ -46,8 +46,6 @@ models:
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
         description: TRUE if inferred value exceeds 100 x10*9/L
-      - name: is_valid
-        description: Always FALSE in this model (pre-filtered to issues)
       - name: eosinophil_category
         description: Clinical severity category from base model
       - name: eosinophil_category_with_issues

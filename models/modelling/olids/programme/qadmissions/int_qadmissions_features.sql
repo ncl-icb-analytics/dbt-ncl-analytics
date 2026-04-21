@@ -50,6 +50,7 @@ WITH base_spine AS (
     WHERE is_active = TRUE
       AND is_deceased = FALSE
       AND gender IN ('Male', 'Female')
+      AND age BETWEEN 18 AND 100
 ),
 
 conditions AS (
@@ -130,18 +131,47 @@ medication_flags AS (
     GROUP BY person_id
 ),
 
--- Count emergency inpatient spells in the prior 365 days, capped at 3 to
--- produce the QAdmissions hes_admitprior_cat bucket (0 / 1 / 2 / 3+).
--- Keys on sk_patient_id, not person_id.
+-- Emergency inpatient spells in the prior 12 months, capped at 3 to produce
+-- the QAdmissions hes_admitprior_cat bucket (0 / 1 / 2 / 3+). Sourced from
+-- fct_person_sus_ip_recent.apc_nel_12mo (non-elective emergency spells,
+-- admission_method codes 21-28 / 2A-2D). Keys on sk_patient_id.
 emergency_admissions AS (
     SELECT
         sk_patient_id,
-        LEAST(COUNT(*), 3) AS hes_admitprior_cat
-    FROM {{ ref('stg_sus_apc_spell') }}
-    WHERE spell_admission_admission_sub_type = 'EMR'
-      AND spell_admission_date >= DATEADD(day, -365, CURRENT_DATE())
-      AND spell_admission_date <  CURRENT_DATE()
-    GROUP BY sk_patient_id
+        LEAST(apc_nel_12mo, 3) AS hes_admitprior_cat
+    FROM {{ ref('fct_person_sus_ip_recent') }}
+),
+
+-- Lab thresholds from the qadmissions_lab_thresholds seed, pivoted to one row.
+lab_thresholds AS (
+    SELECT
+        MAX(CASE WHEN measurement = 'haemoglobin' AND direction = 'low'  THEN threshold END) AS hb_threshold,
+        MAX(CASE WHEN measurement = 'platelets'   AND direction = 'high' THEN threshold END) AS platelet_threshold
+    FROM {{ ref('qadmissions_lab_thresholds') }}
+),
+
+-- Latest haemoglobin value per person.
+hb_latest AS (
+    SELECT
+        person_id,
+        inferred_value AS hb_value
+    FROM {{ ref('int_haemoglobin_latest') }}
+),
+
+-- Latest platelet value per person.
+platelets_latest AS (
+    SELECT
+        person_id,
+        inferred_value AS platelet_value
+    FROM {{ ref('int_platelets_latest') }}
+),
+
+-- Composite LFT flag per person (TRUE if any of ALT, GGT, bilirubin above threshold).
+lft_latest AS (
+    SELECT
+        person_id,
+        high_lft
+    FROM {{ ref('int_lft_latest') }}
 )
 
 SELECT
@@ -196,10 +226,11 @@ SELECT
     -- Prior emergency admissions (0 / 1 / 2 / 3+) in previous 365 days.
     COALESCE(adm.hes_admitprior_cat, 0)                                    AS hes_admitprior_cat,
 
-    -- Group 5 placeholders - replaced in later implementation steps.
-    0                                                  AS c_hb,            -- TODO Step 3: replace with int_haemoglobin_latest threshold logic
-    0                                                  AS high_lft,        -- TODO Step 3: replace with int_lft_latest threshold logic
-    0                                                  AS high_platlet,    -- TODO Step 3: replace with int_platelets_latest threshold logic
+    -- Lab features from observation intermediates.
+    -- Thresholds sourced from qadmissions_lab_thresholds seed.
+    COALESCE(hb.hb_value < t.hb_threshold, FALSE)                           AS c_hb,
+    COALESCE(lft.high_lft, FALSE)                                          AS high_lft,
+    COALESCE(plt.platelet_value > t.platelet_threshold, FALSE)             AS high_platelet,
     FALSE                                              AS b_falls,         -- TODO Step 4: replace with int_falls_diagnoses_all
     FALSE                                              AS b_malabsorption, -- TODO Step 4: replace with int_malabsorption_diagnoses_all
     FALSE                                              AS b_vte,           -- TODO Step 4: replace with int_vte_diagnoses_all
@@ -209,9 +240,13 @@ SELECT
     1                                                  AS ethrisk          -- TODO Step 2: replace with mapping from int_ethnicity_qof.cluster_id via qadmissions_eth2016_to_ethrisk9 seed
 
 FROM base_spine                 base
+CROSS JOIN lab_thresholds       t
 LEFT JOIN conditions            cond ON base.person_id     = cond.person_id
 LEFT JOIN bmi                        ON base.person_id     = bmi.person_id
 LEFT JOIN diabetes              diab ON base.person_id     = diab.person_id
 LEFT JOIN smoking               smk  ON base.person_id     = smk.person_id
 LEFT JOIN medication_flags      med  ON base.person_id     = med.person_id
 LEFT JOIN emergency_admissions  adm  ON base.sk_patient_id = adm.sk_patient_id
+LEFT JOIN hb_latest             hb   ON base.person_id     = hb.person_id
+LEFT JOIN platelets_latest      plt  ON base.person_id     = plt.person_id
+LEFT JOIN lft_latest            lft  ON base.person_id     = lft.person_id

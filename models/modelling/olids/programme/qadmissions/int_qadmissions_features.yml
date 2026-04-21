@@ -5,8 +5,8 @@ models:
     description: >
       Input feature set for the QAdmissions 1-year emergency-admission risk
       model registered in Snowflake's model registry. One row per active,
-      non-deceased person in dim_person_demographics with a recorded gender
-      of Male or Female.
+      non-deceased person in dim_person_demographics aged 18-100 (inclusive)
+      with a recorded gender of Male or Female.
 
       This model does NOT compute a risk score - it only assembles the
       input features that the registered model consumes. See
@@ -14,9 +14,9 @@ models:
       planning/qadmissions/overview.md for the required ClinRisk disclaimer.
 
       Placeholder columns (defaulted until their source intermediates land):
-      c_hb, high_lft, high_platlet, b_falls, b_malabsorption, b_vte, town,
-      alcohol_cat6, ethrisk. b_liverpancreas is partial (chronic liver
-      disease only; pancreatic disease component to follow).
+      b_falls, b_malabsorption, b_vte, town, alcohol_cat6, ethrisk.
+      b_liverpancreas is partial (chronic liver disease only; pancreatic
+      disease component to follow).
     config:
       meta:
         owner:
@@ -42,9 +42,14 @@ models:
 
       - name: age
         data_type: number
-        description: "Current age in years"
+        description: "Current age in years. Restricted to 18-100 inclusive (QAdmissions eligibility)."
         data_tests:
           - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 18
+                max_value: 100
+                inclusive: true
 
       - name: gender
         data_type: number
@@ -151,10 +156,10 @@ models:
       - name: hes_admitprior_cat
         data_type: number
         description: >
-          Number of emergency inpatient spells in the prior 365 days, capped
+          Number of emergency inpatient spells in the prior 12 months, capped
           at 3 (so possible values are 0, 1, 2, 3+). Sourced from
-          stg_sus_apc_spell rows where spell_admission_admission_sub_type = 'EMR'.
-          Joined on sk_patient_id.
+          fct_person_sus_ip_recent.apc_nel_12mo (non-elective emergency spells,
+          admission_method codes 21-28 / 2A-2D). Joined on sk_patient_id.
         data_tests:
           - not_null
           - accepted_values:
@@ -162,16 +167,31 @@ models:
                 values: [0, 1, 2, 3]
 
       - name: c_hb
-        data_type: number
-        description: "TODO Step 3: low-haemoglobin flag. Currently defaulted to 0 until int_haemoglobin_latest and sex-specific thresholds land."
+        data_type: boolean
+        description: "Low-haemoglobin flag. TRUE if latest haemoglobin value is below the threshold from qadmissions_lab_thresholds seed, FALSE otherwise (including NULL haemoglobin)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: high_lft
-        data_type: number
-        description: "TODO Step 3: high liver-function-test flag. Currently defaulted to 0 until int_lft_latest lands."
+        data_type: boolean
+        description: "High liver-function-test flag. TRUE if any of ALT, GGT, or bilirubin exceeds its threshold from qadmissions_lab_thresholds seed, FALSE otherwise."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
-      - name: high_platlet
-        data_type: number
-        description: "TODO Step 3: high platelet flag. Currently defaulted to 0 until int_platelets_latest lands."
+      - name: high_platelet
+        data_type: boolean
+        description: "High platelet flag. TRUE if latest platelet count exceeds the threshold from qadmissions_lab_thresholds seed, FALSE otherwise (including NULL platelets)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: b_falls
         data_type: boolean

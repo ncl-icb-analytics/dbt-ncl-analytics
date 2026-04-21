@@ -1,11 +1,11 @@
 version: 2
 models:
-  - name: int_eosinophil_count
+  - name: int_alt_all
     description: >
-      Blood eosinophil count observations with unit standardisation and data quality flags.
-      One row per observation using the EOS_COUNT cluster. Applies a value-first standardisation
+      ALT (alanine aminotransferase) observations with unit standardisation and data quality flags.
+      One row per observation using the ALT_LEVELS cluster. Applies a value-first standardisation
       workflow via the standardise_count_observation macro to infer correct units and values,
-      then categorises by clinical severity. Standard unit: 10*9/L.
+      then categorises by clinical severity. Standard unit: [IU]/L.
     config:
       meta:
         owner:
@@ -48,7 +48,7 @@ models:
       - name: expected_measurement_type
         description: Always COUNT for this model
       - name: inferred_unit
-        description: Standardised unit after inference (10*9/L or NULL if NONE confidence)
+        description: Standardised unit after inference ([IU]/L or NULL if NONE confidence)
       - name: inferred_value
         description: Standardised numeric value after any conversion
       - name: value_was_converted
@@ -66,16 +66,15 @@ models:
       - name: is_negative
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
-        description: TRUE if inferred value exceeds 100 x10*9/L
-      - name: eosinophil_category
+        description: TRUE if inferred value exceeds the BIOLOGICAL_UPPER bound from the observation_value_bounds seed
+      - name: alt_category
         description: Clinical severity category based on inferred value
         data_tests:
           - accepted_values:
               arguments:
                 values:
                   - 'Abnormal'
-                  - 'Eosinopenia'
                   - 'Normal'
-                  - 'Eosinophilia'
-                  - 'Hypereosinophilia'
-                  - 'Severe Hypereosinophilia'
+                  - 'Mildly Elevated'
+                  - 'Moderately Elevated'
+                  - 'Severely Elevated'

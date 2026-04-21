@@ -1,8 +1,9 @@
+version: 2
 models:
-  - name: int_eosinophil_count_latest
+  - name: int_platelets_latest
     description: >
-      Latest eosinophil count per person. Filters to observations with
-      confidence != 'NONE' and non-negative values, then returns the most recent per person.
+      Latest valid platelet count observation per person. Filters to observations with
+      confidence != 'NONE' and non-negative values, returns the most recent per person.
     config:
       meta:
         owner:
@@ -19,7 +20,7 @@ models:
           - not_null
           - unique
       - name: clinical_effective_date
-        description: Date of the most recent valid eosinophil count observation
+        description: Date of the most recent valid platelet count observation
       - name: concept_code
         description: SNOMED code for the observation
       - name: code_description
@@ -46,5 +47,5 @@ models:
         description: Human-readable explanation of standardisation action taken
       - name: confidence
         description: Confidence level in the inferred value
-      - name: eosinophil_category
+      - name: platelets_category
         description: Clinical severity category based on inferred value

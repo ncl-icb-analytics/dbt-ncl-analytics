@@ -215,10 +215,20 @@ seeds:
         DEFINITION_NAME: varchar(50)
         CONFIG_ID: varchar(50)
         CONFIG_VERSION: varchar(20)
-        LOWER_LIMIT: float
-        UPPER_LIMIT: float
+        ABSOLUTE_LOWER: float
+        ABSOLUTE_UPPER: float
         CANONICAL_EXPONENT: integer
-        EXPECTED_LOWER: float
+        BIOLOGICAL_LOWER: float
+        BIOLOGICAL_UPPER: float
+
+    qadmissions_lab_thresholds:
+      +column_types:
+        measurement: varchar(50)
+        sex: varchar(10)
+        direction: varchar(10)
+        threshold: float
+        unit: varchar(20)
+        source_reference: varchar(100)
 
 snapshots:
   wnl_analytics:

@@ -5,9 +5,8 @@
 }}
 
 /*
-Latest eosinophil count per person.
-Filters to observations with confidence != 'NONE' and non-negative values,
-then returns the most recent per person.
+Latest valid bilirubin observation per person.
+Excludes NONE confidence and negative values, returns the most recent per person.
 */
 
 SELECT
@@ -27,9 +26,10 @@ SELECT
     unit_was_changed,
     conversion_reason,
     confidence,
-    eosinophil_category
-FROM {{ ref('int_eosinophil_count') }}
-WHERE confidence != 'NONE' AND NOT is_negative
+    bilirubin_category
+FROM {{ ref('int_bilirubin_all') }}
+WHERE confidence != 'NONE'
+  AND NOT is_negative
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id
     ORDER BY clinical_effective_date DESC, id DESC

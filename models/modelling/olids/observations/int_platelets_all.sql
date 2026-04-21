@@ -5,15 +5,15 @@
 }}
 
 /*
-All Fractional Exhaled Nitric Oxide measurements with unit standardisation and data quality flags
+All platelet count observations with unit standardisation and data quality flags.
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 Uses the standardise_count_observation macro for value-first unit inference.
-Standard unit: parts per billion (ppb).
+Standard unit: 10*9/L.
 */
 
 WITH raw_observations AS (
     SELECT *
-    FROM ({{ get_observations("'FENO'") }})
+    FROM ({{ get_observations("'PLATELET_COUNT'") }})
 ),
 
 deduplicated AS (
@@ -43,7 +43,7 @@ base_observations AS (
 
 {{ standardise_count_observation(
     base_cte='base_observations',
-    measurement='feno',
+    measurement='platelet_count',
     value_column='result_value'
 ) }}
 
@@ -53,7 +53,7 @@ validated AS (
     SELECT
         *,
         inferred_value < 0 AS is_negative,
-        inferred_value >= 1000 AS is_extreme_outlier
+        inferred_value > biological_upper AS is_extreme_outlier
     FROM standardised
 )
 
@@ -81,11 +81,11 @@ SELECT
     CASE
         WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Abnormal'
         WHEN inferred_value < 0 THEN 'Abnormal'
-        WHEN inferred_value < 25 THEN 'Low'
-        WHEN inferred_value < 50 THEN 'Intermediate'
-        WHEN inferred_value < 1000 THEN 'High'
-        ELSE 'Abnormal'
-
-
-    END AS feno_category
+        WHEN inferred_value < 10 THEN 'Severe Thrombocytopenia'
+        WHEN inferred_value < 50 THEN 'Moderate Thrombocytopenia'
+        WHEN inferred_value < 150 THEN 'Mild Thrombocytopenia'
+        WHEN inferred_value <= 400 THEN 'Normal'
+        WHEN inferred_value <= 1000 THEN 'Thrombocytosis'
+        ELSE 'Severe Thrombocytosis'
+    END AS platelets_category
 FROM validated

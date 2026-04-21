@@ -1,0 +1,23 @@
+seeds:
+  - name: observation_standard_units
+    description: >
+      Canonical unit definitions for clinical observations. Consumed by the
+      standardise_count_observation macro's canonical_unit CTE via CROSS JOIN -
+      if a measurement has no PRIMARY_UNIT=TRUE row the CROSS JOIN silently
+      returns zero rows and wipes every observation for that measurement.
+    columns:
+      - name: DEFINITION_NAME
+        description: Measurement identifier (e.g. eosinophil_count)
+        data_tests:
+          - not_null
+          - unique:
+              config:
+                where: "PRIMARY_UNIT = TRUE"
+      - name: UNIT
+        description: Canonical unit code (UCUM where practical)
+        data_tests:
+          - not_null
+      - name: PRIMARY_UNIT
+        description: Whether this row is the canonical/primary unit for the measurement
+        data_tests:
+          - not_null

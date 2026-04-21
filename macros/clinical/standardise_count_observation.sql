@@ -8,8 +8,8 @@
     and corresponding unit.
 
     Uses a 3-pass approach:
-      Pass 1 - Accept values already in plausible range (defined by observation_value_bounds seed),
-               regardless of recorded unit.
+      Pass 1 - Accept values already in plausible range (defined by ABSOLUTE_LOWER / ABSOLUTE_UPPER
+               in the observation_value_bounds seed), regardless of recorded unit.
 
       Pass 2 - For out-of-range values, look at the unit and apply known conversion factors
                from the seed table if possible (e.g. {cells}/uL -> 10*9/L via x0.001).
@@ -17,7 +17,7 @@
       Pass 3 - For remaining out-of-range values, check if the value is unambiguously
                a raw base-unit recording (e.g. cells/L instead of 10*9/L) by dividing
                by 10^CANONICAL_EXPONENT and checking the result falls in
-               [EXPECTED_LOWER, UPPER_LIMIT]. Controlled by the observation_value_bounds
+               [BIOLOGICAL_LOWER, ABSOLUTE_UPPER]. Controlled by the observation_value_bounds
                seed — CANONICAL_EXPONENT IS NULL disables Pass 3.
 
     Unit classification after LEFT JOIN to seed:
@@ -73,7 +73,7 @@ canonical_unit AS (
 
 -- Look up the plausible value range and Pass 3 configuration for this measurement
 value_bounds AS (
-    SELECT LOWER_LIMIT, UPPER_LIMIT, CANONICAL_EXPONENT, EXPECTED_LOWER
+    SELECT ABSOLUTE_LOWER, ABSOLUTE_UPPER, CANONICAL_EXPONENT, BIOLOGICAL_LOWER, BIOLOGICAL_UPPER
     FROM {{ ref('observation_value_bounds') }}
     WHERE DEFINITION_NAME = '{{ measurement }}'
 ),
@@ -87,10 +87,11 @@ classified AS (
         base.result_unit_display AS original_result_unit_display,
         base.{{ value_column }} AS original_result_value,
         cu.CONVERT_TO_UNIT AS canonical_unit_code,
-        vb.LOWER_LIMIT AS lower_limit,
-        vb.UPPER_LIMIT AS upper_limit,
+        vb.ABSOLUTE_LOWER AS lower_limit,
+        vb.ABSOLUTE_UPPER AS upper_limit,
         vb.CANONICAL_EXPONENT AS canonical_exponent,
-        vb.EXPECTED_LOWER AS expected_lower,
+        vb.BIOLOGICAL_LOWER AS biological_lower,
+        vb.BIOLOGICAL_UPPER AS biological_upper, -- passed through for downstream outlier flags
         ur.MULTIPLY_BY AS seed_multiply_by,
         ur.PRE_OFFSET AS seed_pre_offset,
         ur.POST_OFFSET AS seed_post_offset,
@@ -129,7 +130,7 @@ pass_assigned AS (
             -- Pass 3: value is unambiguously in raw base-unit scale
             WHEN canonical_exponent IS NOT NULL
              AND numeric_value > upper_limit
-             AND (numeric_value / POWER(10, canonical_exponent)) >= expected_lower
+             AND (numeric_value / POWER(10, canonical_exponent)) >= biological_lower
              AND (numeric_value / POWER(10, canonical_exponent)) <= upper_limit
                 THEN 'pass_3'
             ELSE 'no_match'

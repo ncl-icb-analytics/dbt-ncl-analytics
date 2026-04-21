@@ -1,8 +1,9 @@
+version: 2
 models:
-  - name: int_eosinophil_count_latest
+  - name: int_ggt_latest
     description: >
-      Latest eosinophil count per person. Filters to observations with
-      confidence != 'NONE' and non-negative values, then returns the most recent per person.
+      Latest valid GGT observation per person. Filters to observations with
+      confidence != 'NONE' and non-negative values, returns the most recent per person.
     config:
       meta:
         owner:
@@ -19,7 +20,7 @@ models:
           - not_null
           - unique
       - name: clinical_effective_date
-        description: Date of the most recent valid eosinophil count observation
+        description: Date of the most recent valid GGT observation
       - name: concept_code
         description: SNOMED code for the observation
       - name: code_description
@@ -35,7 +36,7 @@ models:
       - name: expected_measurement_type
         description: Always COUNT for this model
       - name: inferred_unit
-        description: Standardised unit (10*9/L)
+        description: Standardised unit ([IU]/L)
       - name: inferred_value
         description: Standardised numeric value after any conversion
       - name: value_was_converted
@@ -46,5 +47,5 @@ models:
         description: Human-readable explanation of standardisation action taken
       - name: confidence
         description: Confidence level in the inferred value
-      - name: eosinophil_category
+      - name: ggt_category
         description: Clinical severity category based on inferred value

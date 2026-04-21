@@ -53,9 +53,7 @@ validated AS (
     SELECT
         *,
         inferred_value < 0 AS is_negative,
-        inferred_value > 100 AS is_extreme_outlier,
-        (NOT (inferred_value < 0 OR inferred_value > 100 OR confidence = 'NONE')
-         AND inferred_value IS NOT NULL) AS is_valid
+        inferred_value > 100 AS is_extreme_outlier
     FROM standardised
 )
 
@@ -80,15 +78,17 @@ SELECT
     confidence,
     is_negative,
     is_extreme_outlier,
-    is_valid,
     CASE
-        WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Invalid'
-        WHEN inferred_value < 0 THEN 'Invalid'
+        WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Abnormal'
+        WHEN inferred_value < 0 THEN 'Abnormal'
         WHEN inferred_value < 0.04 THEN 'Eosinopenia'
         WHEN inferred_value <= 0.5 THEN 'Normal'
-        WHEN inferred_value <= 1.5 THEN 'Mild Eosinophilia'
-        WHEN inferred_value <= 5.0 THEN 'Moderate Eosinophilia'
-        WHEN inferred_value <= 100 THEN 'Severe Eosinophilia'
-        ELSE 'Invalid'
+        WHEN inferred_value <= 1.5 THEN 'Eosinophilia'
+        WHEN inferred_value <= 5.0 THEN 'Hypereosinophilia'
+        WHEN inferred_value <= 100 THEN 'Severe Hypereosinophilia'
+        ELSE 'Abnormal'
+        -- bounds taken from:
+            -- https://b-s-h.org.uk/guidelines/guidelines/investigation-and-management-of-eosinophilia
+            -- https://www.rightdecisions.scot.nhs.uk/tam-treatments-and-medicines-nhs-highland/adult-therapeutic-guidelines/haematology/eosinophilia-guidelines/
     END AS eosinophil_category
 FROM validated

@@ -51,14 +51,6 @@ models:
         description: Standardised unit after inference (ppb or NULL if NONE confidence)
       - name: inferred_value
         description: Standardised numeric value after any conversion
-        data_tests:
-          - dbt_utils.accepted_range:
-              config:
-                where: "is_valid = TRUE"
-              arguments:
-                min_value: 0
-                max_value: 1000
-                inclusive: true
       - name: value_was_converted
         description: TRUE if the numeric value was mathematically converted
       - name: unit_was_changed
@@ -75,15 +67,13 @@ models:
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
         description: TRUE if inferred value exceeds 1000 ppb
-      - name: is_valid
-        description: TRUE if inferred value is plausible and usable for analysis
       - name: feno_category
         description: Clinical severity category based on inferred FeNO value in ppb
         data_tests:
           - accepted_values:
               arguments:
                 values:
-                  - 'Invalid'
+                  - 'Abnormal'
                   - 'Low'
                   - 'Intermediate'
-                  - 'HIGH'
+                  - 'High'

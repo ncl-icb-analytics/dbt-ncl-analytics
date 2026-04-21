@@ -50,14 +50,6 @@ models:
         description: Standardised unit after inference (% or NULL if NONE confidence)
       - name: inferred_value
         description: Standardised numeric value (unchanged from original for percentages)
-        data_tests:
-          - dbt_utils.accepted_range:
-              config:
-                where: "is_valid = TRUE"
-              arguments:
-                min_value: 0
-                max_value: 100
-                inclusive: true
       - name: value_was_converted
         description: TRUE if the numeric value was mathematically changed during standardisation
       - name: unit_was_changed
@@ -74,15 +66,13 @@ models:
         description: TRUE if inferred value is negative
       - name: is_extreme_outlier
         description: TRUE if inferred value exceeds 80%
-      - name: is_valid
-        description: TRUE if inferred value is plausible and usable for analysis
       - name: eosinophil_category
         description: Clinical category based on inferred percentage value
         data_tests:
           - accepted_values:
               arguments:
                 values:
-                  - 'Invalid'
+                  - 'Abnormal'
                   - 'Normal'
                   - 'Elevated'
                   - 'Very Elevated'
