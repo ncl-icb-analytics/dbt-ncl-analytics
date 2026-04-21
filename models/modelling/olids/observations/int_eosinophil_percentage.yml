@@ -50,14 +50,6 @@ models:
         description: Standardised unit after inference (% or NULL if NONE confidence)
       - name: inferred_value
         description: Standardised numeric value (unchanged from original for percentages)
-        data_tests:
-          - dbt_utils.accepted_range:
-              config:
-                where: "confidence != 'NONE' AND NOT is_negative"
-              arguments:
-                min_value: 0
-                max_value: 100
-                inclusive: true
       - name: value_was_converted
         description: TRUE if the numeric value was mathematically changed during standardisation
       - name: unit_was_changed

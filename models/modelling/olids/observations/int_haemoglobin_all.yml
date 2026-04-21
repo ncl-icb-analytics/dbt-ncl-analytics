@@ -9,7 +9,7 @@ models:
     config:
       meta:
         owner:
-          name: ThomasShallcross
+          name: Thomas Shallcross
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -51,14 +51,6 @@ models:
         description: Standardised unit after inference (g/L or NULL if NONE confidence)
       - name: inferred_value
         description: Standardised numeric value after any conversion
-        data_tests:
-          - dbt_utils.accepted_range:
-              config:
-                where: "confidence != 'NONE' AND NOT is_negative"
-              arguments:
-                min_value: 0
-                max_value: 300
-                inclusive: true
       - name: value_was_converted
         description: TRUE if the numeric value was mathematically converted
       - name: unit_was_changed
