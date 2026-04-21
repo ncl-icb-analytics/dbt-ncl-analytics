@@ -179,7 +179,7 @@ models:
               arguments:
                 values: [true, false]
 
-      - name: high_platlet
+      - name: high_platelet
         data_type: boolean
         description: "High platelet flag. TRUE if latest platelet count exceeds the threshold from qadmissions_lab_thresholds seed, FALSE otherwise (including NULL platelets)."
         data_tests:

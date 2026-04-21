@@ -232,7 +232,7 @@ SELECT
     -- Thresholds sourced from qadmissions_lab_thresholds seed.
     COALESCE(hb.hb_value < t.hb_threshold, FALSE)                           AS c_hb,
     COALESCE(lft.high_lft, FALSE)                                          AS high_lft,
-    COALESCE(plt.platelet_value > t.platelet_threshold, FALSE)             AS high_platlet,
+    COALESCE(plt.platelet_value > t.platelet_threshold, FALSE)             AS high_platelet,
     FALSE                                              AS b_falls,         -- TODO Step 4: replace with int_falls_diagnoses_all
     FALSE                                              AS b_malabsorption, -- TODO Step 4: replace with int_malabsorption_diagnoses_all
     FALSE                                              AS b_vte,           -- TODO Step 4: replace with int_vte_diagnoses_all

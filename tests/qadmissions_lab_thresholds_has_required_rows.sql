@@ -3,7 +3,7 @@
 -- and (platelets, high). If either row is missing the CTE's MAX(CASE ...)
 -- silently returns NULL, the hb_value < hb_threshold and
 -- platelet_value > platelet_threshold comparisons become NULL, and the outer
--- COALESCE(..., FALSE) flips c_hb / high_platlet to FALSE for every person.
+-- COALESCE(..., FALSE) flips c_hb / high_platelet to FALSE for every person.
 --
 -- The test fails when the SELECT returns rows. It returns one row per
 -- required (measurement, direction) combination that is absent from the seed.
