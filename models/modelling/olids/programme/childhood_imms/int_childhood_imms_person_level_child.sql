@@ -61,22 +61,22 @@ SELECT
   ,COALESCE(
     -- Rule 1 for those born on/after 1 January 2025: prefer MMRV_1 
     MAX(CASE
-            WHEN BORN_JAN_2025_FLAG = 'Yes' AND vaccine_id = 'MMRV_1' THEN vaccination_status END),
+            WHEN BORN_JAN_2025_FLAG AND vaccine_id = 'MMRV_1' THEN vaccination_status END),
     MAX(CASE
-            WHEN BORN_JAN_2025_FLAG = 'Yes' AND vaccine_id in ('MMRV_1B','MMRV_1C') THEN vaccination_status END),
+            WHEN BORN_JAN_2025_FLAG AND vaccine_id in ('MMRV_1B','MMRV_1C') THEN vaccination_status END),
  -- Rule 2 for those born on/after 1 July 2024: prefer MMRV_1B
     MAX(CASE
-            WHEN BORN_JUL_2024_FLAG = 'Yes' AND vaccine_id = 'MMRV_1B' THEN vaccination_status END),
+            WHEN BORN_JUL_2024_FLAG AND vaccine_id = 'MMRV_1B' THEN vaccination_status END),
     MAX(CASE
-            WHEN BORN_JUL_2024_FLAG = 'Yes' AND vaccine_id in ('MMRV_1','MMRV_1C') THEN vaccination_status END),
+            WHEN BORN_JUL_2024_FLAG AND vaccine_id in ('MMRV_1','MMRV_1C') THEN vaccination_status END),
     -- Rule 3 for those born on or after 1st September 2022: prefer MMR_1 as first dose but also MMRV_1C in place of MMR_2 for second dose
     MAX(CASE
-            WHEN BORN_SEP_2022_FLAG = 'Yes' AND vaccine_id = 'MMRV_1C' THEN vaccination_status END),
+            WHEN BORN_SEP_2022_FLAG AND vaccine_id = 'MMRV_1C' THEN vaccination_status END),
     MAX(CASE
-            WHEN BORN_SEP_2022_FLAG = 'Yes' AND vaccine_id in ('MMRV_1','MMRV_1B') THEN vaccination_status END),
+            WHEN BORN_SEP_2022_FLAG AND vaccine_id in ('MMRV_1','MMRV_1B') THEN vaccination_status END),
     --Rule 4 for those born before September 2022 Prefer MMR 1 as first dose 
     MAX(CASE
-            WHEN (BORN_JAN_2025_FLAG = 'No' AND BORN_JUL_2024_FLAG = 'No' AND BORN_SEP_2022_FLAG = 'No') AND vaccine_id in ('MMRV_1','MMRV_1B','MMRV_1C') THEN vaccination_status END)
+            WHEN (BORN_JAN_2025_FLAG = FALSE AND BORN_JUL_2024_FLAG = FALSE AND BORN_SEP_2022_FLAG = FALSE) AND vaccine_id in ('MMRV_1','MMRV_1B','MMRV_1C') THEN vaccination_status END)
             
 ) AS mmrv_status_dose_1
 	,MAX(CASE WHEN vaccine_id in ('MMRV_1','MMRV_1B','MMRV_1C') THEN cv.vaccination_date END) as mmrv_date_dose_1
@@ -86,20 +86,20 @@ SELECT
     ,COALESCE(
      -- Rule 1 for those born on/after 1 January 2025: prefer MMRV_2
     MAX(CASE
-            WHEN BORN_JAN_2025_FLAG = 'Yes' AND vaccine_id = 'MMRV_2' THEN vaccination_status END),
+            WHEN BORN_JAN_2025_FLAG AND vaccine_id = 'MMRV_2' THEN vaccination_status END),
     MAX(CASE
-            WHEN BORN_JAN_2025_FLAG = 'Yes' AND vaccine_id in ('MMRV_2B') THEN vaccination_status END),
+            WHEN BORN_JAN_2025_FLAG AND vaccine_id in ('MMRV_2B') THEN vaccination_status END),
  -- Rule 2 for those born on/after 1 July 2024: prefer MMRV_2B
     MAX(CASE
-            WHEN BORN_JUL_2024_FLAG = 'Yes' AND vaccine_id = 'MMRV_2B' THEN vaccination_status END),
+            WHEN BORN_JUL_2024_FLAG AND vaccine_id = 'MMRV_2B' THEN vaccination_status END),
     MAX(CASE
-            WHEN BORN_JUL_2024_FLAG = 'Yes' AND vaccine_id in ('MMRV_2') THEN vaccination_status END),
+            WHEN BORN_JUL_2024_FLAG AND vaccine_id in ('MMRV_2') THEN vaccination_status END),
  -- Rule 3 for those born on or after 1st September 2022. MMRV_1C replaces MMR_2 
     MAX(CASE
-            WHEN BORN_SEP_2022_FLAG = 'Yes' AND vaccine_id in ('MMRV_2','MMRV_2B') THEN vaccination_status END),
+            WHEN BORN_SEP_2022_FLAG AND vaccine_id in ('MMRV_2','MMRV_2B') THEN vaccination_status END),
 --Rule 4 for those born before September 2022 Prefer MMR2 
     MAX(CASE
-            WHEN (BORN_JAN_2025_FLAG = 'No' AND BORN_JUL_2024_FLAG = 'No' AND BORN_SEP_2022_FLAG = 'No') AND vaccine_id in ('MMRV_2','MMRV_2') THEN vaccination_status END)           
+            WHEN (BORN_JAN_2025_FLAG = FALSE AND BORN_JUL_2024_FLAG = FALSE AND BORN_SEP_2022_FLAG = FALSE) AND vaccine_id in ('MMRV_2','MMRV_2') THEN vaccination_status END)           
    ) AS mmrv_status_dose_2
 	,MAX(CASE WHEN vaccine_id in ('MMRV_2','MMRV_2B') THEN cv.vaccination_date END) as mmrv_date_dose_2
  	,MAX(CASE WHEN vaccine_id = '4IN1_1' THEN cv.vaccination_status END) as fourin1_status_dose_1

@@ -19,15 +19,16 @@ SELECT
     pmab.person_id,
     pmab.age,
     pmab.is_deceased,
+    pmab.is_active,
     pmab.birth_date_approx,
     -- Born after specific dates flags
     CASE WHEN pmab.birth_date_approx >= '2022-09-01' 
-    AND pmab.birth_date_approx < '2024-07-01' THEN 'Yes'
-        ELSE 'No' END AS born_sep_2022_flag,
-    CASE WHEN pmab.birth_date_approx >= '2024-07-01' THEN 'Yes'
-        ELSE 'No' END AS born_jul_2024_flag,
-    CASE WHEN pmab.birth_date_approx >= '2025-01-01' THEN 'Yes'
-        ELSE 'No' END AS born_jan_2025_flag,
+    AND pmab.birth_date_approx < '2024-07-01' THEN TRUE
+        ELSE FALSE END AS born_sep_2022_flag,
+    CASE WHEN pmab.birth_date_approx >= '2024-07-01' THEN TRUE
+        ELSE FALSE END AS born_jul_2024_flag,
+    CASE WHEN pmab.birth_date_approx >= '2025-01-01' THEN TRUE
+        ELSE FALSE END AS born_jan_2025_flag,
     -- Birthday milestones
     DATEADD(YEAR, 1, pmab.birth_date_approx) as first_bday,
     DATEADD(YEAR, 12, pmab.birth_date_approx) as twelfth_bday,

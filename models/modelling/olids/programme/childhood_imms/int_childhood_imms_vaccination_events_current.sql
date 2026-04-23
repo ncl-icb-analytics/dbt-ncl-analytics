@@ -100,9 +100,9 @@ where not exists (
         END AS EVENT_TYPE,
          -- Determine if the event was out of schedule for any of the events not just (clut.administered_cluster_id,clut.drug_cluster_id )
         CASE 
-            WHEN datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) > el.ELIGIBLE_AGE_TO_DAYS + 15 THEN 'Yes' 
-            WHEN datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) < el.ELIGIBLE_AGE_FROM_DAYS - 15 THEN 'Yes' 
-           ELSE 'No' 
+            WHEN datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) > el.ELIGIBLE_AGE_TO_DAYS + 15 THEN TRUE 
+            WHEN datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) < el.ELIGIBLE_AGE_FROM_DAYS - 15 THEN TRUE 
+           ELSE FALSE 
         END AS OUT_OF_SCHEDULE      
     FROM {{ ref('int_childhood_imms_currently_eligible') }} el 
     INNER JOIN VACCS_COMBINED clut on clut.PERSON_ID = el.PERSON_ID
@@ -203,11 +203,11 @@ OR (dose_number = 4 AND row_num = 4)
 select *
 ,CASE 
 --new vaccines that don't apply for those for born on or after 1st Jan 2025
-WHEN VACCINE_ID in ('PCV_1','MENB_2','MMR_1','MMRV_1B','MMRV_1C','MMR_2','MMRV_2B','HIBMENC_1')  AND (BORN_JAN_2025_FLAG = 'Yes')  THEN 'Not applicable'
+WHEN VACCINE_ID in ('PCV_1','MENB_2','MMR_1','MMRV_1B','MMRV_1C','MMR_2','MMRV_2B','HIBMENC_1')  AND BORN_JAN_2025_FLAG  THEN 'Not applicable'
 --new vaccines that don't apply for those for born on or after 1st July 2024
-WHEN VACCINE_ID in ('PCV_1','MENB_2','MMRV_1','MMRV_1C','MMR_2','MMRV_2','HIBMENC_1')  AND (BORN_JUL_2024_FLAG = 'Yes')  THEN 'Not applicable'
+WHEN VACCINE_ID in ('PCV_1','MENB_2','MMRV_1','MMRV_1C','MMR_2','MMRV_2','HIBMENC_1')  AND BORN_JUL_2024_FLAG  THEN 'Not applicable'
 --new vaccines that don't apply for those for born on or after 22nd September 2022
-WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMR_2','MMRV_2','MMRV_2B','6IN1_4')  AND (BORN_SEP_2022_FLAG = 'Yes')  THEN 'Not applicable'
+WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMR_2','MMRV_2','MMRV_2B','6IN1_4')  AND BORN_SEP_2022_FLAG  THEN 'Not applicable'
 --new vaccines that don't apply for those for born before 22nd September 2022
 WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMRV_1C','MMRV_2','MMRV_2B','6IN1_4')  AND BIRTH_DATE_APPROX < '2022-09-01'  THEN 'Not applicable'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE >= CURRENT_DATE() THEN 'Not due yet'
