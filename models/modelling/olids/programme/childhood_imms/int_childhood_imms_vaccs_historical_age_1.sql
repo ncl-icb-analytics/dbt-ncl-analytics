@@ -71,7 +71,7 @@ where p.age = 1
     LEFT JOIN HIST1YRBASE v2 
     ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2' AND v2.EVENT_TYPE LIKE 'Admin%'
     WHERE v1.VACCINE_ID = 'MENB_1' and v1.EVENT_TYPE LIKE 'Admin%'
-   AND v1.BORN_JUL_2024_FLAG = 'No'
+   AND v1.BORN_JUL_2024_FLAG = FALSE
    )
    -- Creating CTE for MenB (dose 1 and 2 and booster) born on or after 1st July 2024 receive their vaccination at 12 weeks
 ,MENB1B AS (
@@ -87,7 +87,7 @@ where p.age = 1
     LEFT JOIN HIST1YRBASE v2 
     ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2B' AND v2.EVENT_TYPE LIKE 'Admin%'
     WHERE v1.VACCINE_ID = 'MENB_1' and v1.EVENT_TYPE LIKE 'Admin%'
-    AND v1.BORN_JUL_2024_FLAG = 'Yes'
+    AND (v1.BORN_JUL_2024_FLAG OR v1.BORN_JAN_2025_FLAG)
    )
 -- Creating CTE for PCV (dose 1 and 2) for infants born on or after January 1, 2020 and before 1st July 2024 receive their vaccination at 12 weeks
 ,PCV1 AS (
@@ -100,7 +100,7 @@ where p.age = 1
          FROM HIST1YRBASE v1
        WHERE v1.VACCINE_ID = 'PCV_1' AND v1.EVENT_TYPE LIKE 'Admin%'
        AND v1.BIRTH_DATE_APPROX >= '2020-01-16'
-       AND v1.BORN_JUL_2024_FLAG = 'No'  
+       AND v1.BORN_JUL_2024_FLAG = FALSE  
          )
 -- Creating CTE for PCV (dose 1) Children born on or after 1st July 2024 receive their vaccination at 16 weeks
 ,PCV1B AS (
@@ -112,7 +112,7 @@ where p.age = 1
         ROUND(MONTHS_BETWEEN(v1.EVENT_DATE, v1.BIRTH_DATE_APPROX)) AS pcv_first_event_age_mths
          FROM HIST1YRBASE v1
        WHERE v1.VACCINE_ID = 'PCV_1B' AND v1.EVENT_TYPE LIKE 'Admin%' 
-       AND v1.BORN_JUL_2024_FLAG = 'Yes'
+       AND (v1.BORN_JUL_2024_FLAG OR v1.BORN_JAN_2025_FLAG)
 ) 
 ,COMBINED AS (
 SELECT DISTINCT

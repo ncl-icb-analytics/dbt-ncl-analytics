@@ -36,11 +36,11 @@ ec.PERSON_ID
 --ADJUST VACCINATION STATUS WHERE VACCINATION EVENTS ARE MISSING
 ,CASE
 --new vaccines that don't apply for those for born on or after 1st Jan 2025
-WHEN ve.VACCINATION_STATUS IS NULL AND ec.BORN_JAN_2025_FLAG = 'Yes' AND ec.VACCINE_ID in ('PCV_1','MENB_2','MMR_1','MMRV_1B','MMRV_1C','MMR_2','MMRV_2B','HIBMENC_1') THEN 'Not applicable'
+WHEN ve.VACCINATION_STATUS IS NULL AND ec.BORN_JAN_2025_FLAG AND ec.VACCINE_ID in ('PCV_1','MENB_2','MMR_1','MMRV_1B','MMRV_1C','MMR_2','MMRV_2B','HIBMENC_1') THEN 'Not applicable'
 --new vaccines that don't apply for those for born on or after 1st July 2024
-WHEN ve.VACCINATION_STATUS IS NULL AND ec.BORN_JUL_2024_FLAG = 'Yes' AND ec.VACCINE_ID in ('PCV_1','MENB_2','MMR_1','MMRV_1','MMRV_1C','MMR_2','MMRV_2','HIBMENC_1') THEN 'Not applicable'
+WHEN ve.VACCINATION_STATUS IS NULL AND ec.BORN_JUL_2024_FLAG AND ec.VACCINE_ID in ('PCV_1','MENB_2','MMR_1','MMRV_1','MMRV_1C','MMR_2','MMRV_2','HIBMENC_1') THEN 'Not applicable'
 --new vaccines that don't apply for those for born on or after 22nd September 2022
-WHEN ve.VACCINATION_STATUS IS NULL AND ec.BORN_SEP_2022_FLAG = 'Yes' AND ec.VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMR_2','MMRV_2','MMRV_2B','6IN1_4') THEN 'Not applicable'
+WHEN ve.VACCINATION_STATUS IS NULL AND ec.BORN_SEP_2022_FLAG AND ec.VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMR_2','MMRV_2','MMRV_2B','6IN1_4') THEN 'Not applicable'
 --new vaccines that don't apply for those for born before 22nd September 2022
 WHEN ve.VACCINATION_STATUS IS NULL AND ec.BIRTH_DATE_APPROX < '2022-09-01' AND ec.VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMRV_1C','MMRV_2','MMRV_2B','6IN1_4') THEN 'Not applicable'
 --apply final rules for those with no vaccination events observed

@@ -77,7 +77,7 @@ WHERE AGE = 1
     LEFT JOIN VACC1YRBASE v2 
     ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
     WHERE v1.VACCINE_ID = 'MENB_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
-    AND v1.BORN_JUL_2024_FLAG = 'No'
+    AND v1.BORN_JUL_2024_FLAG = FALSE
 )
 -- -- Creating CTE for MenB (dose 1 and 2) Children born on or after 1st July 2024 receive their 2nd vaccination at 12 weeks
 ,MENB1B AS (
@@ -95,7 +95,7 @@ WHERE AGE = 1
     LEFT JOIN VACC1YRBASE v2 
     ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID = 'MENB_2B' AND v2.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
     WHERE v1.VACCINE_ID = 'MENB_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule')
-    AND (v1.BORN_JUL_2024_FLAG = 'Yes' OR v1.BORN_JAN_2025_FLAG = 'Yes')
+    AND (v1.BORN_JUL_2024_FLAG OR v1.BORN_JAN_2025_FLAG)
 )
 -- Creating CTE for PCV (dose 1) Children born before 1st July 2024 receive their vaccination at 12 weeks
 ,PCV1 AS (
@@ -108,7 +108,7 @@ WHERE AGE = 1
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS pcv_first_event_age_mths
          FROM VACC1YRBASE v1
         WHERE v1.VACCINE_ID = 'PCV_1' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule') 
-      AND BORN_JUL_2024_FLAG = 'No'
+      AND BORN_JUL_2024_FLAG = FALSE
 ) 
 
 -- Creating CTE for PCV (dose 1) Children born on or after 1st July 2024 receive their vaccination at 16 weeks
@@ -122,7 +122,7 @@ WHERE AGE = 1
         ROUND(MONTHS_BETWEEN(v1.VACCINATION_DATE, v1.BIRTH_DATE_APPROX)) AS pcv_first_event_age_mths
          FROM VACC1YRBASE v1
         WHERE v1.VACCINE_ID = 'PCV_1B' AND v1.VACCINATION_STATUS in ('Completed', 'OutofSchedule') 
-       AND (v1.BORN_JUL_2024_FLAG = 'Yes' OR v1.BORN_JAN_2025_FLAG = 'Yes')
+       AND (v1.BORN_JUL_2024_FLAG OR v1.BORN_JAN_2025_FLAG)
 )  
 ,COMBINED AS (
 SELECT distinct

@@ -9,12 +9,12 @@ p.analysis_month
 ,p.vaccination_metric
 ,'5 YEARS' as reporting_age
 ,CASE
-WHEN p.Vaccination_metric ='All vaccinations 5 Years' THEN 12
-WHEN p.Vaccination_metric ='6-in-1 (dose 1,2,3) 5 Years' THEN 13
-WHEN p.Vaccination_metric ='4-in-1 (dose 1) 5 Years' THEN 14
-WHEN p.Vaccination_metric ='Hib/MenC 5 Years' THEN 15
-WHEN p.Vaccination_metric ='MMR (dose 1) 5 Years' THEN 16
-WHEN p.Vaccination_metric ='MMR (dose 2) 5 Years' THEN 17
+WHEN p.Vaccination_metric ='All vaccinations 5 Years' THEN 15
+WHEN p.Vaccination_metric ='6-in-1 (3 doses) 5 Years' THEN 16
+WHEN p.Vaccination_metric ='4-in-1 (dose 1) 5 Years' THEN 17
+WHEN p.Vaccination_metric ='Hib/MenC 5 Years' THEN 18
+WHEN p.Vaccination_metric ='MMR (dose 1) 5 Years' THEN 19
+WHEN p.Vaccination_metric ='MMR (dose 2) 5 Years' THEN 20 
 END As VACC_ORDER 
 ,p.residential_borough
 ,p.residential_neighbourhood
@@ -30,7 +30,7 @@ FROM (
 ------- 5 YEAR METRICS FROM HISTORICAL 
 --sixin1_5y 
 select 
- '6-in-1 (dose 1,2,3) 5 Years' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
+ '6-in-1 (3 doses) 5 Years' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(sixin1_comp_by_5) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_5') }}
 group by all
