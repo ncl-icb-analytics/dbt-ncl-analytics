@@ -13,7 +13,7 @@ with in_scope_practice_list as (
 
 select 
     -- practice details
-      dp.practice_code
+      ip.practice_code
     , dp.practice_name
     , dp.borough_registered
     , ap.active_patient_count
@@ -26,6 +26,6 @@ select
     , dp.practice_latitude
     , dp.practice_longitude
     
-from {{ref('dim_practice')}} dp
-inner join in_scope_practice_list ip on dp.practice_code = ip.practice_code
+from in_scope_practice_list ip 
+left join {{ref('dim_practice')}} dp on dp.practice_code = ip.practice_code
 left join {{ref('fct_organisation_active_patients')}} ap on dp.organisation_id = ap.organisation_id
