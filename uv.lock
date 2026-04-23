@@ -350,7 +350,7 @@ requires-dist = [
     { name = "pandas", specifier = "==2.3.3" },
     { name = "pyyaml", specifier = "==6.0.2" },
     { name = "ruamel-yaml", specifier = ">=0.18.0" },
-    { name = "snowflake-connector-python", extras = ["pandas"], specifier = ">=4.3.0" },
+    { name = "snowflake-connector-python", extras = ["pandas"], specifier = "==4.3.0" },
 ]
 
 [[package]]
