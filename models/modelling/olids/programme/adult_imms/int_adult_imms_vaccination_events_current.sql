@@ -52,10 +52,10 @@ WITH IMMS_CODE_OBS as (
          -- Determine if the event was out of schedule (only for Administration)
         CASE 
             WHEN clut.codeclusterid = clut.administered_cluster_id 
-            AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) > el.ELIGIBLE_AGE_TO_DAYS + 15 THEN 'Yes' 
+            AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) > el.ELIGIBLE_AGE_TO_DAYS + 15 THEN TRUE 
             WHEN clut.codeclusterid = clut.administered_cluster_id 
-            AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) < el.ELIGIBLE_AGE_FROM_DAYS - 15 THEN 'Yes' 
-            ELSE 'No' 
+            AND datediff(day,el.BIRTH_DATE_APPROX,clut.event_date) < el.ELIGIBLE_AGE_FROM_DAYS - 15 THEN TRUE 
+            ELSE FALSE 
         END AS OUT_OF_SCHEDULE    
     FROM {{ ref('int_adult_imms_currently_eligible') }} el 
     INNER JOIN IMMS_CODE_OBS clut on clut.PERSON_ID = el.PERSON_ID
