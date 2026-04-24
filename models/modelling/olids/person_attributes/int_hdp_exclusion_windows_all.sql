@@ -72,7 +72,7 @@ pregnancy_windows AS (
             WHEN has_hdp_code = 1
                 THEN DATEADD(
                     'week',
-                    {{ var('hdp_postpartum_weeks', 8) }},
+                    {{ gp_bp_registry_hdp_postpartum_weeks() }},
                     episode_end
                 )
             ELSE episode_end
@@ -104,7 +104,7 @@ standalone_windows AS (
         hdp_code_date AS window_start,
         DATEADD(
             'week',
-            {{ var('hdp_postpartum_weeks', 8) }},
+            {{ gp_bp_registry_hdp_postpartum_weeks() }},
             hdp_code_date
         ) AS window_end,
         'hdp_standalone' AS reason

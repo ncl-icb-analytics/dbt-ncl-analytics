@@ -73,7 +73,7 @@ episode_flags AS (
                 OR prev_event_type IN ('delivery', 'pregnancy_loss')
                 OR DATEDIFF(
                     'day', prev_date, clinical_effective_date
-                ) > {{ var('max_pregnancy_episode_weeks', 42) }} * 7
+                ) > {{ gp_bp_registry_max_pregnancy_episode_weeks() }} * 7
             ) THEN 1
             ELSE 0
         END AS is_new_episode
@@ -138,7 +138,7 @@ episodes_resolved AS (
         END AS outcome_type,
         DATEADD(
             'week',
-            {{ var('max_pregnancy_episode_weeks', 42) }},
+            {{ gp_bp_registry_max_pregnancy_episode_weeks() }},
             episode_start
         ) AS max_episode_end
     FROM episodes_agg

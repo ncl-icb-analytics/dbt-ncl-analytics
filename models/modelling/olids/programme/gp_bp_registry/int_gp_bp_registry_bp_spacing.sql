@@ -59,7 +59,7 @@ chain AS (
         AND r.reading_rank > c.reading_rank
         AND r.effective_date >= DATEADD(
             'week',
-            {{ var('min_reading_gap_weeks', 4) }},
+            {{ gp_bp_registry_min_reading_gap_weeks() }},
             c.effective_date
         )
     QUALIFY ROW_NUMBER() OVER (
@@ -87,7 +87,7 @@ SELECT
     span_start,
     span_end,
     span_days,
-    qualifying_reading_count >= {{ var('min_qualifying_readings', 4) }}
-        AND span_days >= {{ var('min_span_months', 36) }} * 30
+    qualifying_reading_count >= {{ gp_bp_registry_min_qualifying_readings() }}
+        AND span_days >= {{ gp_bp_registry_min_span_months() }} * 30
         AS meets_bp_criteria
 FROM summary
