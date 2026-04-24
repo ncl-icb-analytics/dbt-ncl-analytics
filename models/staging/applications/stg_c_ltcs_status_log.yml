@@ -12,7 +12,8 @@ models:
         description: "Unique patient identifier from commissioning data [sk_patient_id]"
         tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
+              arguments:
+                column_type: varchar
 
       - name: area_code
         data_type: varchar

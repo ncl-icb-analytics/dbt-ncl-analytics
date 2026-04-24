@@ -1,8 +1,8 @@
 {{ config(materialized='table') }}
 
--- Intermediate model for LTC LCS RS Base Population
--- Reusable base population for LTC LCS register stratification.
--- Matches the EMIS LTC LCS Base by taking the union of the LTC register populations.
+-- LTC LCS Model of Care base population.
+-- Union of all LTC LCS disease registers. Persons not on any of these registers
+-- are excluded from downstream MOC / risk stratification reporting.
 
 with register_population as (
     select person_id from {{ ref('fct_person_atrial_fibrillation_register') }}

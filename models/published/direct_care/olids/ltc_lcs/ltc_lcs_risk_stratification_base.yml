@@ -1,0 +1,290 @@
+models:
+  - name: ltc_lcs_risk_stratification_base
+    description: |
+      LTC LCS person-level risk stratification and Model of Care activity summary.
+      One row per person on any LTC LCS disease register (AF, CKD, CHD, Diabetes, Hypertension,
+      NAFLD, Asthma Adult, Asthma CYP, COPD, Heart Failure, PAD, Stroke/TIA).
+
+      Each condition column holds the highest risk group (HRC/HR/MR/MRa/MRb/LR) or null if
+      not stratified. overall_risk_group mirrors the EMIS [GROUP4- LR] rollup — HRC/HR/MR
+      where stratified, LR as the residual for anyone else on the MOC base.
+
+      MOC columns cover the full pathway: per-stage activity flags and dates (last 12m),
+      pathway-aware stage completion (HRCS/HRS/MRS/LRS), current status and next action,
+      data-quality flags for missing prior stages, stage durations, and care plan expiry.
+
+      Population health inclusion flags (learning disability, SMI, pregnancy) are surfaced
+      for cohort filtering alongside standard demographics.
+
+      Direct-care variant — no Type 1 opt-out filter.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          arguments:
+            column_name: person_id
+    columns:
+      # ============================================================
+      # Identifiers
+      # ============================================================
+      - name: person_id
+        description: Unique person identifier
+        data_tests:
+          - not_null
+          - unique
+      - name: sk_patient_id
+        description: Surrogate patient key used for linking to other datasets in the warehouse
+      - name: hx_flake
+        description: "HxFlake pseudonymised key (XX-XXX-XXX, 10 chars) for patient re-identification. Reversible transformation from sk_patient_id via dim_person_pseudo."
+      - name: postcode_hash
+        description: Hashed postcode
+      - name: uprn_hash
+        description: Hashed UPRN (Unique Property Reference Number)
+
+      # ============================================================
+      # Person status
+      # ============================================================
+      - name: is_active
+        description: Current GP registration status
+      - name: is_deceased
+        description: Deceased flag
+
+      # ============================================================
+      # Demographics: core
+      # ============================================================
+      - name: gender
+        description: |
+          Person's gender. Four possible values: Female, Male, Indeterminate sex,
+          Finding related to biological sex.
+          Each person has exactly one gender value here — treat as a filter or
+          group-by dimension, not a value to sum.
+          To avoid double-counting or under-counting when splitting by gender:
+          include all four categories (Female + Male + Indeterminate sex +
+          Finding related to biological sex) — they sum to the total persons.
+          Do NOT combine only Female + Male and compare that total to the full
+          cohort; the small Indeterminate / Finding categories would be missed.
+      - name: age
+        description: Current age in years
+      - name: age_band_5y
+        description: "5-year age band (0-4, 5-9, 10-14, ..., 80-84, 85+)"
+      - name: age_band_10y
+        description: "10-year age band (0-9, 10-19, ..., 70-79, 80+)"
+      - name: age_band_nhs
+        description: "NHS standard age band (0-4, 5-14, 15-24, 25-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+)"
+      - name: age_band_esp
+        description: "ESP 2013 age band (<1, 1-4, 5-9, 10-14, ..., 85-89, 90+). Join key for age-standardised rate calculations."
+      - name: age_life_stage
+        description: "Life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly)"
+
+      # ============================================================
+      # Demographics: ethnicity
+      # ============================================================
+      - name: ethnicity_category
+        description: "High-level ethnicity (Asian, Black, Mixed, Other, White, Unknown)"
+      - name: ethnicity_subcategory
+        description: Ethnicity subcategory (free-text from ethnicity reference data, e.g. 'Asian Indian', 'Black African')
+      - name: ethnicity_granular
+        description: Most detailed ethnicity classification (SNOMED-mapped granular label)
+
+      # ============================================================
+      # Demographics: language
+      # ============================================================
+      - name: main_language
+        description: Main spoken language recorded for the person
+      - name: language_type
+        description: "Language type (Spoken, Sign, Other Communication Method, Not Recorded)"
+      - name: interpreter_needed
+        description: True if an interpreter is recorded as required
+      - name: interpreter_type
+        description: Interpreter service type / language (e.g. Polish, Romanian, British Sign Language)
+
+      # ============================================================
+      # Geography: residence
+      # ============================================================
+      - name: lsoa_code
+        description: Residence LSOA 2021 code
+      - name: lsoa_name
+        description: Residence LSOA 2021 name
+      - name: ward_code
+        description: Residence electoral ward code
+      - name: ward_name
+        description: Residence electoral ward name
+      - name: borough_resident
+        description: London borough of residence (any of the 33 London boroughs, or non-London locations)
+      - name: neighbourhood_resident
+        description: "Integrated Neighbourhood Team area covering the patient's residence (Central/East/North/South/West Camden; Central/East/West Haringey; Central/North/South Islington; East/North/South/Southeast/West Barnet; Northeast/Northwest/Southeast/Southwest Enfield)"
+      - name: icb_code_resident
+        description: Residence ICB code
+      - name: icb_resident
+        description: Residence ICB name
+
+      # ============================================================
+      # Geography: GP practice registration
+      # ============================================================
+      - name: practice_code
+        description: Registered GP practice code
+      - name: practice_name
+        description: Registered GP practice name
+      - name: pcn_code
+        description: Primary Care Network code
+      - name: pcn_name
+        description: Primary Care Network name
+      - name: borough_registered
+        description: "Borough of registered GP practice (Barnet, Camden, Enfield, Haringey, Islington — the 5 NCL boroughs)"
+      - name: neighbourhood_registered
+        description: "Integrated Neighbourhood Team area covering the registered GP practice (Central/East/North/South/West Camden; Central/East/West Haringey; Central/North/South Islington; East/North/South/Southeast/West Barnet; Northeast/Northwest/Southeast/Southwest Enfield)"
+
+      # ============================================================
+      # Deprivation
+      # ============================================================
+      - name: imd_decile_19
+        description: "IMD 2019 decile (1-10; 1 = most deprived, 10 = least deprived)"
+      - name: imd_quintile_19
+        description: "IMD 2019 quintile label (Most Deprived, Second Most Deprived, Third Most Deprived, Second Least Deprived, Least Deprived, Unknown)"
+
+      # ============================================================
+      # Age-standardisation weights (ESP 2013)
+      # ============================================================
+      - name: esp_weight
+        description: |
+          ESP 2013 population weight for the person's age_band_esp (out of 100,000 total).
+          To compute an age-standardised rate (ASR, per 100,000):
+            1. Within the cohort, group event counts and person-years by age_band_esp
+            2. Work out the crude rate for each age band: rate_b = events_b / person_years_b
+            3. ASR = SUM(rate_b * esp_weight_b) / 100000
+          Or using esp_proportion: ASR = SUM(rate_b * esp_proportion_b). The result is one
+          rate per 100,000 that is comparable across cohorts with different age profiles.
+      - name: esp_proportion
+        description: ESP 2013 weight as a proportion (esp_weight / 100,000). For an age-standardised rate, multiply each age band's crude rate by this and sum across age_band_esp.
+
+      # ============================================================
+      # Population health inclusion filters
+      # ============================================================
+      - name: has_learning_disability
+        description: QOF Learning Disability register flag
+      - name: has_severe_mental_illness
+        description: QOF Severe Mental Illness register flag
+      - name: is_currently_pregnant
+        description: Currently pregnant flag
+
+      # ============================================================
+      # Risk stratification: per-condition
+      # ============================================================
+      - name: chd_risk_group
+        description: Highest CHD risk group (HRC/HR/MR)
+      - name: ckd_risk_group
+        description: Highest CKD risk group (HRC/HR/MR)
+      - name: copd_risk_group
+        description: Highest COPD risk group (HRC/HR/MR)
+      - name: diabetes_risk_group
+        description: Highest Diabetes risk group (HRC/HR/MR/MRa/MRb/LR)
+      - name: hf_risk_group
+        description: Highest Heart Failure risk group (HR/MR)
+      - name: hypertension_risk_group
+        description: Highest Hypertension risk group (HRC/HR/MRa/MRb/LR)
+
+      # ============================================================
+      # Risk stratification: overall
+      # ============================================================
+      - name: overall_risk_group
+        description: Highest risk group across all conditions (HRC/HR/MR/LR)
+      - name: overall_risk_rank
+        description: Numeric rank of overall_risk_group (1=HRC highest, 5=LR lowest)
+      - name: in_any_risk_group
+        description: True if person is in any condition risk group
+
+      # ============================================================
+      # MOC: pathway identity
+      # ============================================================
+      - name: moc_pathway
+        description: EMIS pathway family that applies to this person (HRCS/HRS/MRS/LRS), derived from overall_risk_group
+
+      # ============================================================
+      # MOC: activity flags + dates (last 12 months), in pathway order
+      # ============================================================
+      - name: moc_check_test_completed
+        description: Check & Test appointment completed in last 12 months
+      - name: moc_check_test_date
+        description: Latest Check & Test appointment date
+      - name: moc_mdt_review_completed
+        description: MDT review completed in last 12 months
+      - name: moc_mdt_review_date
+        description: Latest MDT review date
+      - name: moc_careplan_sharing_completed
+        description: Care plan shared with patient in last 12 months
+      - name: moc_careplan_sharing_date
+        description: Latest care plan sharing date
+      - name: moc_stage_2_completed
+        description: Stage 2 done using pathway-specific rule (HRCS/HRS = MDT review OR careplan sharing; MRS/LRS = careplan sharing only)
+      - name: moc_stage_2_date
+        description: Effective stage 2 date (earliest MDT / careplan for HRCS/HRS; careplan for MRS/LRS)
+      - name: moc_discussion_completed
+        description: Discussion appointment completed in last 12 months
+      - name: moc_discussion_date
+        description: Latest discussion appointment date
+      - name: moc_followup_completed
+        description: Follow-up appointment completed in last 12 months
+      - name: moc_followup_date
+        description: Latest follow-up appointment date
+      - name: moc_declined
+        description: Model of Care declined event recorded in last 12 months (raw flag, stays true even if person later re-engages)
+      - name: moc_declined_date
+        description: Latest MoC declined date
+      - name: moc_re_engaged_after_decline
+        description: True if the person declined in last 12m but has since had a progression activity recorded after the decline
+      - name: moc_any_activity_12m
+        description: True if any MOC activity (including declined) recorded in last 12 months
+
+      # ============================================================
+      # MOC: progression summary
+      # ============================================================
+      - name: moc_stage_completed
+        description: Furthest MOC pathway stage reached in the last 12 months (0-4)
+      - name: moc_stage_completed_label
+        description: Readable label for the furthest MOC stage reached (Not started / Check & Test / MDT / Careplan / Careplan sharing / Discussion / Follow-up)
+      - name: moc_pathway_status
+        description: "Overall MOC cycle state (Not started / In progress / Cycle complete / Declined)"
+      - name: moc_next_action
+        description: "Next MOC action needed (Check & Test / MDT / Careplan / Careplan sharing / Discussion / Follow-up); NULL when no action is required (cycle complete or declined)"
+      - name: moc_cycle_complete
+        description: True if all four MOC stages recorded in the last 12m
+
+      # ============================================================
+      # MOC: data quality - missing prior stages
+      # ============================================================
+      - name: moc_missing_check_test
+        description: True if a later stage is recorded but Check & Test is absent in the last 12m
+      - name: moc_missing_stage_2
+        description: True if discussion or follow-up is recorded but stage 2 is absent in the last 12m
+      - name: moc_missing_discussion
+        description: True if follow-up is recorded but discussion is absent in the last 12m
+      - name: moc_has_missing_priors
+        description: True if the person has reached a later stage but is missing any earlier stage in the last 12m
+
+      # ============================================================
+      # MOC: stage durations (days)
+      # ============================================================
+      - name: moc_days_check_test_to_stage_2
+        description: Days between check & test and stage 2 (null if either missing; negative if out of order)
+      - name: moc_days_stage_2_to_discussion
+        description: Days between stage 2 and discussion (null if either missing; negative if out of order)
+      - name: moc_days_discussion_to_followup
+        description: Days between discussion and follow-up (null if either missing; negative if out of order)
+      - name: moc_days_check_test_to_followup
+        description: End-to-end MOC cycle duration in days (check & test → follow-up)
+
+      # ============================================================
+      # MOC: expiry dates
+      # ============================================================
+      - name: moc_careplan_expires_date
+        description: Date the current care plan expires (discussion / PCSP-agreed date + 12 months); NULL if no discussion on record
+      - name: moc_next_expiry_date
+        description: Earliest date on which any currently-counted MOC event drops out of the 12m rolling window; NULL if no MOC activity
+
+      # ============================================================
+      # Metadata
+      # ============================================================
+      - name: table_refresh_date
+        description: Timestamp when the row was built
