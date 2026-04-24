@@ -12,12 +12,12 @@ dem.PERSON_ID
 --RSV catch up eligibility flag - turning 80 after 1st September 2024
 ,CASE
     WHEN dem.BIRTH_DATE_APPROX >= '1944-09-01' AND dem.BIRTH_DATE_APPROX <='1945-08-31'
-    THEN 'YES' ELSE 'NO' 
+    THEN TRUE ELSE FALSE 
 END AS TURN_80_AFTER_SEP_2024
 --Shingles programme eligibility flag - turning 65 after 1st September 2023
 ,CASE
     WHEN dem.BIRTH_DATE_APPROX >= '1958-09-01' AND dem.BIRTH_DATE_APPROX <= '1959-08-31'
-    THEN 'YES' ELSE 'NO' 
+    THEN TRUE ELSE FALSE 
 END AS TURN_65_AFTER_SEP_2023
 ,dem.GENDER
 ,CASE
@@ -99,9 +99,11 @@ ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 ,dem.WARD_CODE
 ,dem.WARD_NAME
 ,dem.LSOA_CODE_21
+,dem.IS_ACTIVE
+,dem.is_deceased
 FROM {{ ref('dim_person_demographics') }} dem
 LEFT JOIN {{ ref('dim_person_age') }} age on age.PERSON_ID = dem.PERSON_ID
 LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
-WHERE dem.is_active = 'TRUE' 
+WHERE dem.is_active 
 AND dem.IS_DECEASED = FALSE
 AND dem.age >= 65

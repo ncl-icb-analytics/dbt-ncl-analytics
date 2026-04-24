@@ -29,6 +29,7 @@ CURRENT_DATE AS RUN_DATE
 ,p.GENDER
 ,p.AGE
 ,p.TURN_80_AFTER_SEP_2024
+,p.TURN_65_AFTER_SEP_2023
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.ethnicity_subcategory
