@@ -1,6 +1,10 @@
 models:
   - name: stg_aic_int_ccms_final_flags
     description: Staging model for AI Centre CCMS final condition flags by person.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
     columns:
       - name: person_id
         description: Person identifier.
