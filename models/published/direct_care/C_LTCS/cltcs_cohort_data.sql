@@ -75,6 +75,14 @@ select il.patient_id
     , pc.musculoskeletal_conditions as musculoskeletal_conditions
     , pc.neurology_conditions
     , pc.geriatric_conditions
+    -- frailty flags
+    , fr.efi_score
+    , fr.category as efi_category
+    , rockwood.frailty_level
+    , rockwood.frailty_category
+
+    -- mulimorb flags
+    , ccms.cambridge_comorbidity_score
     -- Lifestyle and behavioural factors
     , br.smoking_status
     , br.smoking_risk_sort_key
@@ -110,6 +118,7 @@ select il.patient_id
     ,rat.oe_ratio as op_oe_ratio
     ,zeroifnull(apca.apc_12mo) as apc_12mo
     ,zeroifnull(apca.apc_los_12mo) as apc_los_12mo
+    ,zeroifnull(apca.apc_nel_12mo) as apc_nel_12mo
     ,zeroifnull(aea.ae_t1_12mo) as ae_t1_12mo
     ,zeroifnull(aea.ae_inj_12mo) as ae_inj_12mo
     ,zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo
@@ -141,6 +150,7 @@ select il.patient_id
     ,cs.score_activation
     ,cs.score_coordination
     ,cs.score_treatment
+    ,cs.score_frailty
     -- Other relevant annual activity (LTC LCS, C-LTCS review)
 
 from inclusion_list il
@@ -180,3 +190,9 @@ left join  {{ ref('stg_c_ltcs_op_oe_ratio') }} rat
     on il.patient_id  = rat.patient_id 
 left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
+left join {{ref('stg_aic_int_efi2_scores')}} fr
+    on il.olids_id = fr.person_id
+left join {{ref('stg_aic_int_ccms_current')}} ccms
+    on il.olids_id = ccms.person_id
+left join {{ref('int_rockwood_latest')}} rockwood
+    on il.olids_id = rockwood.person_id
