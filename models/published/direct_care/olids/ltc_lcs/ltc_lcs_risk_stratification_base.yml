@@ -139,10 +139,10 @@ models:
       # ============================================================
       # Deprivation
       # ============================================================
-      - name: imd_decile_19
-        description: "IMD 2019 decile (1-10; 1 = most deprived, 10 = least deprived)"
-      - name: imd_quintile_19
-        description: "IMD 2019 quintile label (Most Deprived, Second Most Deprived, Third Most Deprived, Second Least Deprived, Least Deprived, Unknown)"
+      - name: imd_decile_25
+        description: "IMD 2025 decile (1-10; 1 = most deprived, 10 = least deprived)"
+      - name: imd_quintile_25
+        description: "IMD 2025 quintile label (Most Deprived, Second Most Deprived, Third Most Deprived, Second Least Deprived, Least Deprived, Unknown)"
 
       # ============================================================
       # Age-standardisation weights (ESP 2013)
