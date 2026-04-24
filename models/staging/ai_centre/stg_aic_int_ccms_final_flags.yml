@@ -1,0 +1,55 @@
+models:
+  - name: stg_aic_int_ccms_final_flags
+    description: Staging model for AI Centre CCMS final condition flags by person.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
+    columns:
+      - name: person_id
+        description: Person identifier.
+        tests:
+          - unique
+          - not_null
+      - name: alcoholproblems
+        description: Alcohol problems condition flag.
+      - name: anxietyordepression
+        description: Anxiety or depression condition flag.
+      - name: atrialfibrillation
+        description: Atrial fibrillation condition flag.
+      - name: cancerinthelast5_years
+        description: Cancer in last five years condition flag.
+      - name: chronickidneydisease
+        description: Chronic kidney disease condition flag.
+      - name: chronicliverdiseaseandviralhepatitis
+        description: Chronic liver disease and viral hepatitis condition flag.
+      - name: constipation
+        description: Constipation condition flag.
+      - name: copd
+        description: Chronic obstructive pulmonary disease condition flag.
+      - name: dementia
+        description: Dementia condition flag.
+      - name: diabetes
+        description: Diabetes condition flag.
+      - name: disorderofprostate
+        description: Disorder of prostate condition flag.
+      - name: epilepsy
+        description: Epilepsy condition flag.
+      - name: heartfailure
+        description: Heart failure condition flag.
+      - name: irritablebowelsyndrome
+        description: Irritable bowel syndrome condition flag.
+      - name: learningdisability
+        description: Learning disability condition flag.
+      - name: multiplesclerosis
+        description: Multiple sclerosis condition flag.
+      - name: painfulcondition
+        description: Painful condition flag.
+      - name: parkinsonism
+        description: Parkinsonism condition flag.
+      - name: periphvascdiseaseleg
+        description: Peripheral vascular disease of leg condition flag.
+      - name: psychoactivesubstancemisuse
+        description: Psychoactive substance misuse condition flag.
+      - name: schizophreniaorbipolardisorder
+        description: Schizophrenia or bipolar disorder condition flag.

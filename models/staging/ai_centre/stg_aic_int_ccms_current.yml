@@ -1,0 +1,27 @@
+models:
+  - name: stg_aic_int_ccms_current
+    description: Staging model for AI Centre Cambridge Comorbidity Score current records.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
+    columns:
+      - name: person_id
+        description: Person identifier.
+        tests:
+          - unique
+          - not_null
+      - name: cambridge_comorbidity_score
+        description: Cambridge Comorbidity Score for the person.
+      - name: ccms_current_id
+        description: Record identifier for the current CCMS entry.
+      - name: last_updated
+        description: Timestamp when the record was last updated.
+    tests:
+      - dbt_utils.recency:
+          config:
+            severity: warn
+          arguments:
+            field: last_updated
+            datepart: month
+            interval: 2

@@ -15,6 +15,23 @@ sources:
       data_type: TEXT
     - name: LAST_UPDATED
       data_type: TIMESTAMP_TZ
+  - name: INT_EFI2_SCORES
+    identifier: '"INT_EFI2_SCORES"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: END_DATE
+      data_type: DATE
+    - name: EFI_SCORE
+      data_type: NUMBER
+    - name: CATEGORY
+      data_type: VARCHAR
+    - name: AGE_AT_END
+      data_type: NUMBER
+    - name: GENDER
+      data_type: VARCHAR
+    - name: DATE_OF_DEATH
+      data_type: DATE
   - name: BASE_ATHENA__CONCEPT
     identifier: '"BASE_ATHENA__CONCEPT"'
     columns:
