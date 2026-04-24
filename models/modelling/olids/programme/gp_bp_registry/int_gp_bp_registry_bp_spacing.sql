@@ -9,11 +9,12 @@ Per-person assessment of the BP spacing inclusion criterion:
 "BP recorded on >= 4 separate dates >= 4 weeks apart over at least 36 consecutive months."
 
 Method:
-  - Greedy chain walk over each person's eligible BP readings (date-ordered):
-    * Take the earliest reading as chain position 1.
-    * Walk forward, including the next reading whose date is at least
-      min_reading_gap_weeks (default 4) after the previously included reading.
-    * Repeat until no further reading qualifies.
+  - Rank each person's eligible readings by date.
+  - Precompute next_rank for every reading: the rank of the earliest subsequent
+    reading at least min_reading_gap_weeks later. Non-recursive; uses a
+    non-equi self-join with MIN aggregation.
+  - Recursive CTE then walks the chain by jumping reading_rank -> next_rank;
+    the recursive term does no window aggregation (Snowflake restriction).
   - A person meets the criterion when the chain reaches
     min_qualifying_readings (default 4) and the span from first to last
     reading in the chain is at least min_span_months (default 36).
@@ -33,38 +34,55 @@ WITH RECURSIVE eligible AS (
 
 ),
 
+next_jump AS (
+
+    -- For every reading, find the rank of the earliest next reading
+    -- that is at least min_reading_gap_weeks later. NULL when no such reading exists.
+    SELECT
+        c.person_id,
+        c.reading_rank AS current_rank,
+        MIN(n.reading_rank) AS next_rank
+    FROM eligible c
+    LEFT JOIN eligible n
+        ON n.person_id = c.person_id
+        AND n.reading_rank > c.reading_rank
+        AND n.effective_date >= DATEADD(
+            'week',
+            {{ gp_bp_registry_min_reading_gap_weeks() }},
+            c.effective_date
+        )
+    GROUP BY c.person_id, c.reading_rank
+
+),
+
 chain AS (
 
-    -- Anchor: earliest reading per person is chain position 1
+    -- Anchor: earliest reading per person (rank 1)
     SELECT
         person_id,
-        effective_date,
         reading_rank,
+        effective_date,
         1 AS chain_position
     FROM eligible
     WHERE reading_rank = 1
 
     UNION ALL
 
-    -- Recursive step: include the earliest subsequent reading
-    -- that is at least min_reading_gap_weeks after the current chain reading
+    -- Recursive step: jump to next_rank via the precomputed next_jump table.
+    -- No window functions here - Snowflake requirement.
     SELECT
-        r.person_id,
-        r.effective_date,
-        r.reading_rank,
+        e.person_id,
+        e.reading_rank,
+        e.effective_date,
         c.chain_position + 1
     FROM chain c
-    INNER JOIN eligible r
-        ON r.person_id = c.person_id
-        AND r.reading_rank > c.reading_rank
-        AND r.effective_date >= DATEADD(
-            'week',
-            {{ gp_bp_registry_min_reading_gap_weeks() }},
-            c.effective_date
-        )
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY c.person_id, c.chain_position ORDER BY r.effective_date
-    ) = 1
+    INNER JOIN next_jump nj
+        ON nj.person_id = c.person_id
+        AND nj.current_rank = c.reading_rank
+    INNER JOIN eligible e
+        ON e.person_id = c.person_id
+        AND e.reading_rank = nj.next_rank
+    WHERE nj.next_rank IS NOT NULL
 
 ),
 
