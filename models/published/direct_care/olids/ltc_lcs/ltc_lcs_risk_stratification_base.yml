@@ -245,7 +245,7 @@ models:
       - name: moc_stage_completed_label
         description: Readable label for the furthest MOC stage reached (Not started / Check & Test / MDT / Careplan / Careplan sharing / Discussion / Follow-up)
       - name: moc_pathway_status
-        description: "Overall MOC cycle state (Not started / In progress / Cycle complete / Declined)"
+        description: "Overall MOC cycle state: 'Not started' | 'In progress' | 'Cycle complete' (all four stages recorded, equivalent to moc_cycle_complete=true) | 'Declined'"
       - name: moc_next_action
         description: "Next MOC action needed (Check & Test / MDT / Careplan / Careplan sharing / Discussion / Follow-up); NULL when no action is required (cycle complete or declined)"
       - name: moc_cycle_complete

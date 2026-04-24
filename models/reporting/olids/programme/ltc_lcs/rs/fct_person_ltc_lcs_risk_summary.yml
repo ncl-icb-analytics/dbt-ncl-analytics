@@ -132,8 +132,10 @@ models:
         description: |
           Overall state of the person's current MOC cycle. One of:
           'Not started' (no activity recorded),
-          'In progress' (at least one stage done, cycle not yet complete),
-          'Cycle complete' (all four stages recorded in the last 12m),
+          'In progress' (at least one stage done, cycle not yet complete — includes
+          follow-up recorded with missing priors, where moc_has_missing_priors=true),
+          'Cycle complete' (all four stages recorded in the last 12m; equivalent to
+          moc_cycle_complete=true),
           'Declined' (MoC declined is the most recent MOC event).
           Use alongside moc_next_action to filter the pending-action list.
         data_tests:

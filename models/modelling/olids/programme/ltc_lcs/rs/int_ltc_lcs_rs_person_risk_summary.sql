@@ -64,6 +64,9 @@ ranked as (
             when 'MRA' then 4
             when 'MRB' then 4
             when 'LR'  then 5
+            -- Defensive fallback: any unexpected value treated as LR so the overall
+            -- rollup stays non-null. Per-condition accepted_values tests surface the anomaly.
+            else 5
         end as risk_rank
     from all_rs
 ),
@@ -109,6 +112,7 @@ select
         when 3 then 'MR'
         when 4 then 'MR'
         when 5 then 'LR'
+        else 'LR'
     end as overall_risk_group,
     overall_risk_rank
 from pivoted

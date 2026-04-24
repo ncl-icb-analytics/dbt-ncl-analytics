@@ -204,12 +204,19 @@ select
         when moc_check_test_completed then 'Check & Test'
         else 'Not started'
     end as moc_stage_completed_label,
+    -- 'Cycle complete' requires all four stages (same condition as moc_cycle_complete).
+    -- People with follow-up recorded but missing priors stay 'In progress' so the
+    -- status aligns with moc_cycle_complete and moc_has_missing_priors.
     case
         when moc_declined_is_latest then 'Declined'
-        when moc_followup_completed then 'Cycle complete'
+        when moc_check_test_completed
+            and moc_stage_2_completed
+            and moc_discussion_completed
+            and moc_followup_completed then 'Cycle complete'
         when moc_check_test_completed
             or moc_stage_2_completed
-            or moc_discussion_completed then 'In progress'
+            or moc_discussion_completed
+            or moc_followup_completed then 'In progress'
         else 'Not started'
     end as moc_pathway_status,
     case

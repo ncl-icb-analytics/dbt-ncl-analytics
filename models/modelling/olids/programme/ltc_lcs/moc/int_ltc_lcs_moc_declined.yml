@@ -11,7 +11,8 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.at_least_one:
-          column_name: person_id
+          arguments:
+            column_name: person_id
       - valuesets_have_codes:
           arguments:
             valuesets:
@@ -19,14 +20,14 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: latest_declined_date
         description: Most recent MoC declined date within the last 12 months
-        tests:
+        data_tests:
           - not_null
       - name: moc_declined
         description: Always true — row presence indicates a PCSP declined event in the last 12 months
-        tests:
+        data_tests:
           - not_null
