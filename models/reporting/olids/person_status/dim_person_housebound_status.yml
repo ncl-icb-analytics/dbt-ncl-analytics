@@ -1,10 +1,8 @@
-version: 2
 models:
   - name: dim_person_housebound_status
     description: 'Latest housebound status for persons.
 
-      One row per person with their most recent housebound status from HOUSEBOUND
-      or NO_LONGER_HOUSEBOUND clusters.'
+      One row per person with their most recent housebound status from HOUSEBOUND or NO_LONGER_HOUSEBOUND clusters.'
     config:
       meta:
         owner:
@@ -30,4 +28,5 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Housebound', 'Not Housebound']
+              arguments:
+                values: ['Housebound', 'Not Housebound']

@@ -28,3 +28,7 @@ models:
         data_type: array
         description: "Count of outpatient attendances per month in each of the 18
           months prior to the last month ending"
+
+      - name: gp_encounters_sl
+        data_type: array
+        description: "Count of GP appointments per month in each of the 18 months prior to the last month ending"

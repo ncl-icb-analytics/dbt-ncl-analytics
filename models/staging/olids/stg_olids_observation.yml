@@ -1,9 +1,6 @@
-version: 2
 models:
   - name: stg_olids_observation
-    description: Clinical observations including test results, vital signs, and 
-      diagnoses. Deduplicated by id - note that deleted records are not filtered
-      as lds_is_deleted is not used in this table.
+    description: Clinical observations including test results, vital signs, and diagnoses. Deduplicated by id - note that deleted records are not filtered as lds_is_deleted is not used in this table.
     config:
       meta:
         owner:
@@ -18,24 +15,19 @@ models:
       - name: person_id
         description: Foreign key to person.id - person-level identifier
       - name: encounter_id
-        description: Foreign key to encounter.id - encounter when observation 
-          was made
+        description: Foreign key to encounter.id - encounter when observation was made
       - name: practitioner_id
-        description: Foreign key to practitioner.id - practitioner who made the 
-          observation
+        description: Foreign key to practitioner.id - practitioner who made the observation
       - name: parent_observation_id
-        description: Foreign key to observation.id - parent observation if this 
-          is a sub-observation
+        description: Foreign key to observation.id - parent observation if this is a sub-observation
       - name: clinical_effective_date
         description: Date the observation was clinically effective
       - name: date_precision_concept_id
-        description: Foreign key to concept.id - precision of the clinical 
-          effective date
+        description: Foreign key to concept.id - precision of the clinical effective date
       - name: result_value
         description: Numeric result value of the observation
       - name: result_value_units_concept_id
-        description: Foreign key to concept.id - unit of measure for the result 
-          value
+        description: Foreign key to concept.id - unit of measure for the result value
       - name: result_date
         description: Date the result was obtained
       - name: result_text
@@ -47,8 +39,7 @@ models:
       - name: problem_end_date
         description: Date the problem ended, if applicable
       - name: observation_source_concept_id
-        description: Foreign key to concept.id - source concept for the 
-          observation type
+        description: Foreign key to concept.id - source concept for the observation type
       - name: source_code
         description: Source code for the observation concept
       - name: source_display
@@ -64,15 +55,13 @@ models:
       - name: age_at_event_neonate
         description: Patient age in days for neonates (0-28 days)
       - name: episodicity_concept_id
-        description: Foreign key to concept.id - episodicity classification 
-          (first, new, review)
+        description: Foreign key to concept.id - episodicity classification (first, new, review)
       - name: is_primary
         description: Boolean indicating if this is the primary observation
       - name: date_recorded
         description: Date the record was entered into the system
       - name: is_problem_deleted
-        description: Boolean indicating if the associated problem has been 
-          deleted
+        description: Boolean indicating if the associated problem has been deleted
       - name: is_confidential
         description: Boolean indicating if the record is marked as confidential
       - name: lds_is_deleted
@@ -96,11 +85,10 @@ models:
       - name: result_unit_display
         description: Display text for the result unit
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

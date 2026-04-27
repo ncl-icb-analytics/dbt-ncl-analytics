@@ -1,0 +1,54 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_hf_pg3_mr
+    description: |
+      Heart Failure Register Priority Group 3 - Medium Risk.
+      NB: There is no PG1 for HF.
+
+      Patients on Heart Failure register meeting:
+      - Rule 1: Not in PG2 high-risk cohort
+      - Rule 2: Heart failure coded in last 6 months (include on pass)
+      - Rule 3: New York Heart Association Classification I - IV (include on pass)
+      - Rule 4: Oedema (not present or of feet) (include on pass)
+      - Rule 5: Latest left ventricular ejection fraction < 50 (exclude on fail)
+      - Rule 6: Rule 6: Dapagliflozin, Empagliflozin, Canagliflozin, Ertugliflozin L-pyroglutamic acid within 6 months (or adverse reaction) (include on fail)
+      - Rule 7: MRAs within 6 months (or adverse reaction) (include on fail)
+      - Rule 8: beta blockers within last 6 months (include on fail)
+      - Rule 9: ace inhibitors within last 6 months (or adverse reaction) (include on fail)
+
+    config:
+      meta:
+        owner:
+          name: Peter Shakeshaft
+    tests:
+      - dbt_utils.at_least_one:
+          arguments:
+            column_name: person_id
+      - valuesets_have_codes:
+          arguments:
+            valuesets:
+              - on_hf_reg_pg3_mr_vs1
+              - on_hf_reg_pg3_mr_vs2
+              - on_hf_reg_pg3_mr_vs3
+              - on_hf_reg_pg3_mr_vs4
+              - on_hf_reg_pg3_mr_vs5
+              - on_hf_reg_pg3_mr_vs6
+              - on_hf_reg_pg3_mr_vs7
+              - on_hf_reg_pg3_mr_vs8
+              - on_hf_reg_pg3_mr_vs9
+              - on_hf_reg_pg3_mr_vs10
+              - on_hf_reg_pg3_mr_vs11
+              - on_hf_reg_pg3_mr_vs12
+              - on_hf_reg_pg3_mr_vs13
+              - on_hf_reg_pg3_mr_vs14
+              - on_hf_reg_pg3_mr_vs15
+              - on_hf_reg_pg3_mr_vs16
+              - on_hf_reg_pg3_mr_vs17
+              - on_hf_reg_pg3_mr_vs18
+              - on_hf_reg_pg3_mr_vs19
+              - on_hf_reg_pg3_mr_vs20
+    columns:
+      - name: person_id
+        data_tests:
+          - not_null
+          - unique

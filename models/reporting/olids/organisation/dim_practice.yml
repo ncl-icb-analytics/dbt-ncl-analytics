@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: dim_practice
-    description: 'Practice dimension with organisational hierarchy spanning multiple
-      London ICBs.
+    description: 'Practice dimension with organisational hierarchy spanning multiple London ICBs.
 
       Key Features:
 
@@ -14,13 +12,11 @@ models:
 
       • Geographic coordinates and LSOA/MSOA mapping for spatial analysis
 
-      • Complete organisational hierarchy (Practice > PCN > Commissioner > STP)
+      • Complete organisational hierarchy (Practice > PCN > Commissioner > ICB)
 
-      • Filtered to London ICBs: North Central, North East, North West, South East,
-      South West
+      • Filtered to London ICBs: West and North London (merged NCL + NWL), North East, South East, South West
 
-      Purpose: Supports practice-level reporting, geographic analysis, and organisational
-      hierarchy navigation.'
+      Purpose: Supports practice-level reporting, geographic analysis, and organisational hierarchy navigation.'
 
     config:
       meta:
@@ -56,8 +52,7 @@ models:
         description: 'Borough where practice is located'
 
       - name: pcn_borough
-        description: 'Borough where practices PCN is located (may differ from practice
-          borough)'
+        description: 'Borough where practices PCN is located (may differ from practice borough)'
 
       - name: practice_historic_ccg
         description: 'Historic CCG association for temporal analysis'
@@ -136,20 +131,34 @@ models:
       - name: sk_commissioner_id
         description: 'Surrogate key for commissioner organisation'
 
-      - name: stp_code
-        description: 'STP/ICB code (London ICBs: QMJ, QMF, QRV, QWE, QKK)'
+      - name: icb_code
+        description: 'ICB code (London ICBs: Z9B2Z WNL, QMF NEL, QWE SWL, QKK SEL; legacy QMJ/QRV retained for historical continuity). Sourced from Dictionary STPCode.'
         tests:
           - not_null
           - accepted_values:
-              values: ['QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
+              arguments:
+                values: ['Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK']
 
-      - name: stp_name
-        description: 'STP/ICB name (London Integrated Care Boards)'
+      - name: sub_icb_code
+        description: 'Legacy ICB ODS code derived from the practice''s commissioner via ODS hierarchy. WNL practices resolve to QMJ (NCL) or QRV (NWL) depending on pre-merger parent. Non-merged ICBs resolve to the ICB code itself (QMF, QKK, QWE).'
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['QMJ', 'QRV', 'QMF', 'QWE', 'QKK']
+
+      - name: sub_icb_name
+        description: 'Legacy ICB display name sourced from Dictionary.Organisation.'
         tests:
           - not_null
 
-      - name: sk_stp_id
-        description: 'Surrogate key for STP organisation'
+      - name: icb_name
+        description: 'ICB display name (London Integrated Care Boards)'
+        tests:
+          - not_null
+
+      - name: sk_icb_id
+        description: 'Surrogate key for ICB organisation'
 
       - name: sk_practice_id
         description: 'Dictionary surrogate key for practice'

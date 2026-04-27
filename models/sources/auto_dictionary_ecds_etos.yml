@@ -13,7 +13,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -23,13 +23,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -37,7 +37,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: AccomodationStatus
     identifier: '"AccomodationStatus"'
     columns:
@@ -46,7 +46,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -56,13 +56,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -70,7 +70,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Acuity
     identifier: '"Acuity"'
     columns:
@@ -79,7 +79,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -89,13 +89,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -103,7 +103,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: ArrivalMode
     identifier: '"ArrivalMode"'
     columns:
@@ -112,7 +112,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -122,13 +122,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -136,7 +136,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: AttendanceSource
     identifier: '"AttendanceSource"'
     columns:
@@ -145,7 +145,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -155,13 +155,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -169,7 +169,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: ChiefComplaint
     identifier: '"ChiefComplaint"'
     columns:
@@ -178,7 +178,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -196,13 +196,13 @@ sources:
     - name: Flag_Female
       data_type: BOOLEAN
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -210,7 +210,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CodedAssessmentToolType
     identifier: '"CodedAssessmentToolType"'
     columns:
@@ -219,7 +219,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -229,13 +229,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -243,7 +243,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CodedFinding
     identifier: '"CodedFinding"'
     columns:
@@ -252,7 +252,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -262,13 +262,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -276,7 +276,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CodedObservation
     identifier: '"CodedObservation"'
     columns:
@@ -285,7 +285,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -295,13 +295,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -309,7 +309,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Comorbidity
     identifier: '"Comorbidity"'
     columns:
@@ -318,7 +318,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -328,13 +328,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -342,7 +342,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Diagnosis
     identifier: '"Diagnosis"'
     columns:
@@ -351,7 +351,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -387,13 +387,13 @@ sources:
     - name: ICD11_Description
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -401,7 +401,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DiagnosisQualifier
     identifier: '"DiagnosisQualifier"'
     columns:
@@ -410,7 +410,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -420,13 +420,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -434,7 +434,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DischargeDestination
     identifier: '"DischargeDestination"'
     columns:
@@ -443,7 +443,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -453,13 +453,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -467,7 +467,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DischargeFollowUp
     identifier: '"DischargeFollowUp"'
     columns:
@@ -476,7 +476,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -486,13 +486,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -500,7 +500,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DischargeStatus
     identifier: '"DischargeStatus"'
     columns:
@@ -509,7 +509,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -519,13 +519,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -533,7 +533,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: InjuryActivityStatus
     identifier: '"InjuryActivityStatus"'
     columns:
@@ -542,7 +542,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -552,13 +552,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -566,7 +566,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: InjuryActivityType
     identifier: '"InjuryActivityType"'
     columns:
@@ -575,7 +575,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -585,13 +585,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -599,7 +599,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: InjuryDrugAlcohol
     identifier: '"InjuryDrugAlcohol"'
     columns:
@@ -608,7 +608,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -618,13 +618,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -632,7 +632,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: InjuryIntent
     identifier: '"InjuryIntent"'
     columns:
@@ -641,7 +641,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -651,13 +651,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -665,7 +665,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: InjuryMechanism
     identifier: '"InjuryMechanism"'
     columns:
@@ -674,7 +674,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -684,13 +684,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -698,7 +698,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: InterpreterLanguage
     identifier: '"InterpreterLanguage"'
     columns:
@@ -707,7 +707,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -723,13 +723,13 @@ sources:
     - name: CDS_Investigation_Mapping_That_Is_Used_For_HRG_Grouping
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -737,7 +737,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Investigation
     identifier: '"Investigation"'
     columns:
@@ -762,13 +762,13 @@ sources:
     - name: CDS_Investigation_Mapping_That_Is_Used_For_HRG_Grouping
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -776,7 +776,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: PlaceofInjury
     identifier: '"PlaceofInjury"'
     columns:
@@ -785,7 +785,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -795,13 +795,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -809,7 +809,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: ReferredToService
     identifier: '"ReferredToService"'
     columns:
@@ -818,7 +818,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -828,13 +828,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -842,7 +842,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Safeguarding
     identifier: '"Safeguarding"'
     columns:
@@ -851,7 +851,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -861,13 +861,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -875,7 +875,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: SicknessAbsenceCategory
     identifier: '"SicknessAbsenceCategory"'
     columns:
@@ -884,7 +884,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -900,13 +900,13 @@ sources:
     - name: CDS_Treatment_Mapping_That_Is_Used_For_HRG_Grouping
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -914,7 +914,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: SpokenLanguage
     identifier: '"SpokenLanguage"'
     columns:
@@ -923,7 +923,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -933,13 +933,13 @@ sources:
     - name: ECDS_Group1
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -947,7 +947,7 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Treatment
     identifier: '"Treatment"'
     columns:
@@ -956,7 +956,7 @@ sources:
     - name: REFSET_UniqueID
       data_type: TEXT
     - name: SNOMED_Code
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_UK_Preferred_Term
       data_type: TEXT
     - name: SNOMED_Fully_Specified_Name
@@ -972,13 +972,13 @@ sources:
     - name: CDS_Treatment_Mapping_That_Is_Used_For_HRG_Grouping
       data_type: TEXT
     - name: Sort1
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sort4
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Notes
       data_type: TEXT
     - name: Valid_From
@@ -986,4 +986,4 @@ sources:
     - name: Valid_To
       data_type: TIMESTAMP_NTZ
     - name: dv_IsActive
-      data_type: NUMBER
+      data_type: NUMBER(38,0)

@@ -10,6 +10,8 @@ models:
 
       • Date validation: Missing or future dates
 
+      • Partial paediatric scope: inherits int_bmi_all filtering — HEIGHT and WEIGHT inputs with age_at_event < 18 are excluded from the calculated BMI path, but recorded BMI values (BMIVAL_COD) are not age-filtered at source and paediatric recorded BMI may still appear here
+
       Purpose: Supports BMI data validation and clinical review of extreme values.'
     config:
       meta:
@@ -63,4 +65,5 @@ models:
 
     tests:
       - cluster_ids_exist:
-          cluster_ids: BMIVAL_COD
+          arguments:
+            cluster_ids: BMIVAL_COD

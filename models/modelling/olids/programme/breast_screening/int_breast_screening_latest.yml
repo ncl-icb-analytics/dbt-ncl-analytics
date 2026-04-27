@@ -1,16 +1,14 @@
-﻿version: 2
 models:
   - name: int_breast_screening_latest
-    description: 'NHS breast screening programme observations from clinical records.
-      One row per breast screening observation using BRCANSCR_COD, BRCANSCRDEC_COD
-      PCD Refset clusters for core programme tracking.'
+    description: 'NHS breast screening programme observations from clinical records. One row per breast screening observation using BRCANSCR_COD, BRCANSCRDEC_COD PCD Refset clusters for core programme tracking.'
     config:
       meta:
         owner:
           name: KateHomer55
     tests:
       - cluster_ids_exist:
-          cluster_ids: BRCANSCR_COD, BRCANSCRDEC_COD
+          arguments:
+            cluster_ids: BRCANSCR_COD, BRCANSCRDEC_COD
     columns:
       - name: id
         description: 'Unique identifier for the observation'
@@ -30,4 +28,3 @@ models:
         description: 'Flag indicating if this is a completed screening (BRCANSCR_COD)'
       - name: is_declined_screening
         description: 'Flag indicating if screening was declined (BRCANSCRDEC_COD)'
-

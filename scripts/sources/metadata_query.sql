@@ -15,6 +15,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'PDS'
@@ -28,6 +30,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'CSDS'
@@ -41,6 +45,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'WL'
@@ -54,6 +60,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'SUS_UNIFIED_OP'
@@ -67,6 +75,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'SUS_UNIFIED_APC'
@@ -80,6 +90,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'SUS_UNIFIED_ECDS'
@@ -93,6 +105,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'ERS'
@@ -106,6 +120,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'EPD_PRIMARY_CARE'
@@ -119,6 +135,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'MHSDS'
@@ -132,6 +150,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'DEATHS'
@@ -145,6 +165,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'BIRTHS'
@@ -158,6 +180,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'SOCIAL_CARE'
@@ -171,6 +195,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'dbo'
@@ -184,6 +210,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'ECDS_ETOS'
@@ -197,6 +225,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'OP'
@@ -210,6 +240,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'IP'
@@ -223,6 +255,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'E-Referral'
@@ -236,6 +270,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'OLIDS'
@@ -249,9 +285,26 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'Snomed'
+  
+  UNION ALL
+  
+    -- nhsd_snomed: NHS Digital SNOMED CT reporting model with concept status and history
+  SELECT 
+    'Dictionary' as database_name,
+    'NHSD_SnomedReportingModel' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "Dictionary".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'NHSD_SnomedReportingModel'
   
   UNION ALL
   
@@ -262,6 +315,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'TERMINOLOGY'
@@ -275,22 +330,11 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'PTL'
-  
-  UNION ALL
-  
-    -- reference_analyst_managed: Analyst-managed reference datasets and business rules
-  SELECT 
-    'DATA_LAKE__NCL' as database_name,
-    'ANALYST_MANAGED' as schema_name,
-    table_name,
-    column_name,
-    data_type,
-    ordinal_position
-  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'ANALYST_MANAGED'
   
   UNION ALL
   
@@ -301,6 +345,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'DATA_MANAGEMENT'
@@ -314,6 +360,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'CANCER__CWT_ALLIANCE'
@@ -327,6 +375,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'CANCER__EMIS'
@@ -340,6 +390,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'CANCER__SCREENING'
@@ -353,6 +405,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'FINGERTIPS'
@@ -366,6 +420,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'PHENOLAB_DEV'
@@ -379,6 +435,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'LOCAL_PROVIDER_FLOWS'
@@ -392,6 +450,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'FACT_PATIENT'
@@ -405,9 +465,26 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'FACT_PRACTICE'
+  
+  UNION ALL
+  
+    -- reference_analyst_managed: Analyst-managed reference datasets and business rules
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'ANALYST_MANAGED' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'ANALYST_MANAGED'
   
   UNION ALL
   
@@ -418,6 +495,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "MODELLING".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'LOOKUP_NCL'
@@ -426,14 +505,31 @@ WITH schema_metadata AS (
   
     -- c_ltcs: C-LTCS tables
   SELECT 
-    'DEV__PUBLISHED_REPORTING__DIRECT_CARE' as database_name,
+    'PUBLISHED_REPORTING__DIRECT_CARE' as database_name,
     'C_LTCS' as schema_name,
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
-  FROM "DEV__PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
+  FROM "PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'C_LTCS'
+  
+  UNION ALL
+  
+    -- aic: parallel pipeline for AIC
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'AIC_DEV' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'AIC_DEV'
   
   UNION ALL
   
@@ -444,6 +540,8 @@ WITH schema_metadata AS (
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'PMCT'
@@ -454,7 +552,11 @@ SELECT
   schema_name as "SCHEMA_NAME", 
   table_name as "TABLE_NAME",
   column_name as "COLUMN_NAME",
-  data_type as "DATA_TYPE",
+  CASE
+    WHEN UPPER(data_type) IN ('NUMBER', 'DECIMAL', 'NUMERIC') AND numeric_precision IS NOT NULL
+      THEN UPPER(data_type) || '(' || numeric_precision || ',' || COALESCE(numeric_scale, 0) || ')'
+    ELSE data_type
+  END as "DATA_TYPE",
   ordinal_position as "ORDINAL_POSITION"
 FROM schema_metadata
 ORDER BY database_name, schema_name, table_name, ordinal_position;

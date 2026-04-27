@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: stg_reference_imd2025
     description: Index of Multiple Deprivation 2025 by LSOA 2021

@@ -8,6 +8,7 @@
 --Capture the FOUR IN 1 dose 1 vaccination events for this population
   SELECT 
         v.PERSON_ID
+        ,v.age
         ,v.practice_code
         ,v.EVENT_DATE AS fourin1_dose1_date 
         ,TO_NUMBER(TO_CHAR(v.event_date, 'YYYYMM')) AS fourin1_dose1_sort
@@ -16,4 +17,4 @@
         FROM {{ ref('int_childhood_imms_dose_base_child') }} v
          --FROM DEV__MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_DOSE_BASE_CHILD v
         --restrict to administered doses only
-       WHERE v.VACCINE_ID = '4IN1_1' AND v.EVENT_TYPE = 'Administration'
+       WHERE v.VACCINE_ID = '4IN1_1' AND v.EVENT_TYPE LIKE 'Admin%'

@@ -1,0 +1,145 @@
+version: 2
+sources:
+- name: nhsd_snomed
+  database: '"Dictionary"'
+  schema: '"NHSD_SnomedReportingModel"'
+  description: NHS Digital SNOMED CT reporting model with concept status and history
+  tables:
+  - name: SCT_Concept
+    identifier: '"SCT_Concept"'
+    columns:
+    - name: Id
+      data_type: NUMBER(38,0)
+    - name: EffectiveTime
+      data_type: TIMESTAMP_NTZ
+    - name: Active
+      data_type: BOOLEAN
+    - name: ModuleId
+      data_type: NUMBER(38,0)
+    - name: DefinitionStatusId
+      data_type: NUMBER(38,0)
+  - name: SCT_Description
+    identifier: '"SCT_Description"'
+    columns:
+    - name: Id
+      data_type: NUMBER(38,0)
+    - name: EffectiveTime
+      data_type: TIMESTAMP_NTZ
+    - name: Active
+      data_type: BOOLEAN
+    - name: ModuleId
+      data_type: NUMBER(38,0)
+    - name: ConceptId
+      data_type: NUMBER(38,0)
+    - name: LanguageCode
+      data_type: TEXT
+    - name: TypeId
+      data_type: NUMBER(38,0)
+    - name: Term
+      data_type: TEXT
+    - name: CaseSignificanceId
+      data_type: NUMBER(38,0)
+    - name: DescriptionType
+      data_type: TEXT
+  - name: SCT_History
+    identifier: '"SCT_History"'
+    columns:
+    - name: OldConceptId
+      data_type: NUMBER(38,0)
+    - name: OldConceptStatus
+      data_type: NUMBER(38,0)
+    - name: NewConceptId
+      data_type: NUMBER(38,0)
+    - name: NewConceptStatus
+      data_type: NUMBER(38,0)
+    - name: Path
+      data_type: TEXT
+    - name: IsAmbiguous
+      data_type: BOOLEAN
+    - name: Iterations
+      data_type: NUMBER(38,0)
+    - name: OldConceptFullySpecifiedName
+      data_type: TEXT
+    - name: OldConceptFullySpecifiedNameTagCount
+      data_type: NUMBER(38,0)
+    - name: NewConceptFullySpecifiedName
+      data_type: TEXT
+    - name: NewConceptFullySpecifiedNameStatus
+      data_type: NUMBER(38,0)
+    - name: TopLevelHierarchyIdenticalFlag
+      data_type: BOOLEAN
+    - name: FullySpecifiedNameTaglessIdenticalFlag
+      data_type: BOOLEAN
+    - name: FullySpecifiedNameTagIdenticalFlag
+      data_type: BOOLEAN
+  - name: SCT_Query
+    identifier: '"SCT_Query"'
+    columns:
+    - name: SuperTypeId
+      data_type: NUMBER(38,0)
+    - name: SubTypeId
+      data_type: NUMBER(38,0)
+    - name: Provenance
+      data_type: NUMBER(38,0)
+  - name: SCT_RefSet_Lang
+    identifier: '"SCT_RefSet_Lang"'
+    columns:
+    - name: Id
+      data_type: TEXT
+    - name: EffectiveTime
+      data_type: TIMESTAMP_NTZ
+    - name: Active
+      data_type: BOOLEAN
+    - name: ModuleId
+      data_type: NUMBER(38,0)
+    - name: RefSetId
+      data_type: NUMBER(38,0)
+    - name: ReferencedComponentId
+      data_type: NUMBER(38,0)
+    - name: AcceptabilityId
+      data_type: NUMBER(38,0)
+  - name: SCT_RefSet_Simple
+    identifier: '"SCT_RefSet_Simple"'
+    columns:
+    - name: Id
+      data_type: TEXT
+    - name: EffectiveTime
+      data_type: TIMESTAMP_NTZ
+    - name: Active
+      data_type: BOOLEAN
+    - name: ModuleId
+      data_type: NUMBER(38,0)
+    - name: RefSetId
+      data_type: NUMBER(38,0)
+    - name: ReferencedComponentId
+      data_type: NUMBER(38,0)
+  - name: SCT_Relationship
+    identifier: '"SCT_Relationship"'
+    columns:
+    - name: Id
+      data_type: NUMBER(38,0)
+    - name: EffectiveTime
+      data_type: TIMESTAMP_NTZ
+    - name: Active
+      data_type: BOOLEAN
+    - name: ModuleId
+      data_type: NUMBER(38,0)
+    - name: SourceId
+      data_type: NUMBER(38,0)
+    - name: DestinationId
+      data_type: NUMBER(38,0)
+    - name: RelationshipGroup
+      data_type: NUMBER(38,0)
+    - name: TypeId
+      data_type: NUMBER(38,0)
+    - name: CharacteristicTypeId
+      data_type: NUMBER(38,0)
+    - name: ModifierId
+      data_type: NUMBER(38,0)
+  - name: SCT_Transitive_Closure
+    identifier: '"SCT_Transitive_Closure"'
+    columns:
+    - name: SuperTypeId
+      data_type: NUMBER(38,0)
+    - name: SubTypeId
+      data_type: NUMBER(38,0)

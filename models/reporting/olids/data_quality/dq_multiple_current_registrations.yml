@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: dq_multiple_current_registrations
     description: 'Patient registration data quality issues where individuals have

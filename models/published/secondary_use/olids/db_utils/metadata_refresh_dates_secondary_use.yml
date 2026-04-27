@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: metadata_refresh_dates_secondary_use
     description: |
@@ -19,4 +17,5 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

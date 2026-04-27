@@ -268,6 +268,7 @@ periods_with_attributes AS (
 SELECT
     -- Core identifiers
     pwa.person_id,
+    ppu.person_uuid,
     bd.sk_patient_id,
 
     -- SCD-2 fields
@@ -323,7 +324,7 @@ SELECT
     pwa.ethnicity_display_sort_key,
 
     -- Language
-    lang.language AS main_language,
+    COALESCE(lang.language, 'Not Recorded') AS main_language,
     lang.language_type,
     lang.interpreter_type,
     COALESCE(lang.interpreter_needed, FALSE) AS interpreter_needed,
@@ -340,11 +341,13 @@ SELECT
     dp.pcn_name_with_borough,
 
     -- ICB Information
-    dp.stp_code AS icb_code,
-    dp.stp_name AS icb_name,
+    dp.icb_code,
+    dp.icb_name,
 
     -- Geographic Information (practice-based)
     dp.borough_registered,
+    dp.sub_icb_code,
+    dp.sub_icb_name,
     dp.practice_postcode_dict AS practice_postcode,
     dp.practice_lsoa,
     dp.practice_msoa,
@@ -370,14 +373,21 @@ SELECT
     pwa.ward_code,
     pwa.ward_name,
     pwa.imd_decile_19,
-    pwa.imd_quintile_19,
+    COALESCE(pwa.imd_quintile_19, 'Unknown') AS imd_quintile_19,
     pwa.imd_quintile_numeric_19,
     pwa.imd_decile_25,
-    pwa.imd_quintile_25,
+    COALESCE(pwa.imd_quintile_25, 'Unknown') AS imd_quintile_25,
     pwa.imd_quintile_numeric_25,
     pwa.neighbourhood_resident
 
 FROM periods_with_attributes pwa
+
+-- Join person_uuid for backwards compatibility (one row per person)
+LEFT JOIN (
+    SELECT person_id, ANY_VALUE(person_uuid) AS person_uuid
+    FROM {{ ref('int_patient_person_unique') }}
+    GROUP BY person_id
+) ppu ON pwa.person_id = ppu.person_id
 
 -- Join birth/death
 INNER JOIN {{ ref('dim_person_birth_death') }} bd
@@ -400,13 +410,15 @@ LEFT JOIN (
         pcn_name,
         pcn_name_with_borough,
         borough_registered,
+        sub_icb_code,
+        sub_icb_name,
         practice_postcode_dict,
         practice_lsoa,
         practice_msoa,
         practice_latitude,
         practice_longitude,
-        stp_code,
-        stp_name
+        icb_code,
+        icb_name
     FROM {{ ref('dim_practice') }}
     QUALIFY ROW_NUMBER() OVER (PARTITION BY practice_code ORDER BY practice_type_desc NULLS LAST) = 1
 ) dp ON pwa.practice_code = dp.practice_code

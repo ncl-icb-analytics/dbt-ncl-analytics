@@ -1,0 +1,27 @@
+seeds:
+  - name: observation_unit_rules
+    description: >
+      Per-measurement unit conversion rules consumed by the
+      standardise_count_observation macro. Each row maps a recorded
+      CONVERT_FROM_UNIT to the measurement's canonical CONVERT_TO_UNIT via
+      MULTIPLY_BY / PRE_OFFSET / POST_OFFSET. Rows where CONVERT_TO_UNIT /
+      MULTIPLY_BY are intentionally NULL flag the CONVERT_FROM_UNIT as excluded
+      for that measurement.
+    columns:
+      - name: DEFINITION_NAME
+        description: Measurement identifier (e.g. eosinophil_count)
+        data_tests:
+          - not_null
+      - name: CONVERT_FROM_UNIT
+        description: >
+          Recorded unit code to match against result_unit_code. NOT NULL because
+          the LEFT JOIN in standardise_count_observation keys on this column;
+          a NULL here would match every row with a NULL result_unit_code.
+        data_tests:
+          - not_null
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - DEFINITION_NAME
+              - CONVERT_FROM_UNIT

@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized = 'table',
+        tags=['mhsds']
+        )
+}}
 select
     person_id,
     pseudo_nhs_number as sk_patient_id

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_geography_london_areas
     description: 'London area identification using LSOA reference data.

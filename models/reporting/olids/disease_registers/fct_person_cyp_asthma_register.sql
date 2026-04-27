@@ -71,7 +71,8 @@ asthma_medications AS (
         MAX(mapped_concept_code) AS latest_asthma_medication_concept_code,
         MAX(mapped_concept_display) AS latest_asthma_medication_concept_display,
         COUNT(*) AS recent_asthma_medication_count
-    FROM {{ ref('int_asthma_medications_12m') }}
+    FROM {{ ref('int_asthma_medications_all') }}
+    WHERE order_date >= CURRENT_DATE() - INTERVAL '12 months'
     GROUP BY person_id
 ),
 

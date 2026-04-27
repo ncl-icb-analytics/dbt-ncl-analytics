@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_olids_patient
-    description: Patient demographic records from GP systems. Deduplicated by id
-      and filtered to exclude deleted records.
+    description: Patient demographic records from GP systems. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
@@ -28,11 +26,9 @@ models:
       - name: gender_source_code
         description: Source code for the gender concept (from concept map)
       - name: gender_source_display
-        description: Source display name for the gender concept (from concept 
-          map)
+        description: Source display name for the gender concept (from concept map)
       - name: registered_practice_id
-        description: Foreign key to organisation.id - GP practice where patient 
-          is registered
+        description: Foreign key to organisation.id - GP practice where patient is registered
       - name: birth_year
         description: Year of birth
       - name: birth_month
@@ -42,13 +38,11 @@ models:
       - name: death_month
         description: Month of death (1-12), if deceased
       - name: is_spine_sensitive
-        description: Boolean indicating if the patient has requested sensitive 
-          data handling
+        description: Boolean indicating if the patient has requested sensitive data handling
       - name: is_confidential
         description: Boolean indicating if the record is marked as confidential
       - name: is_dummy_patient
-        description: Boolean indicating if this is a test or dummy patient 
-          record
+        description: Boolean indicating if this is a test or dummy patient record
       - name: record_owner_organisation_code
         description: Organisation code of the record owner
       - name: lds_id
@@ -58,14 +52,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

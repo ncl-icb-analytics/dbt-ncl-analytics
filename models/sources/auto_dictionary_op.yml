@@ -9,7 +9,7 @@ sources:
     identifier: '"AttendanceOutcomes"'
     columns:
     - name: SK_AttendanceOutcome
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_AttendanceOutcome
       data_type: TEXT
     - name: AttendanceOutcome
@@ -22,7 +22,7 @@ sources:
     identifier: '"AttendanceTypes"'
     columns:
     - name: SK_AttendanceType
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_AttendanceTypeCode
       data_type: TEXT
     - name: AttendantType
@@ -37,7 +37,7 @@ sources:
     identifier: '"DNAIndicators"'
     columns:
     - name: SK_DNAIndicatorID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_DNACode
       data_type: TEXT
     - name: DNAIndicatorDesc
@@ -52,7 +52,7 @@ sources:
     identifier: '"MedicalStaffTypeSeeingPatient"'
     columns:
     - name: SK_MedicalStaffTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_MedicalStaffTypeID
       data_type: TEXT
     - name: MedicalStaffTypeSeeingPatient
@@ -61,7 +61,7 @@ sources:
     identifier: '"PriorityType"'
     columns:
     - name: SK_PriorityTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_PriorityTypeCode
       data_type: TEXT
     - name: PriorityTypeDesc
@@ -74,7 +74,7 @@ sources:
     identifier: '"ServiceTypeRequested"'
     columns:
     - name: SK_ServiceTypeRequestedID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_ServiceTypeRequestedCode
       data_type: TEXT
     - name: ServiceTypeRequestedDescription
@@ -83,7 +83,7 @@ sources:
     identifier: '"SourceOfReferrals"'
     columns:
     - name: SK_SourceOfReferral
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_SourceOfReferralCode
       data_type: TEXT
     - name: ReferralType

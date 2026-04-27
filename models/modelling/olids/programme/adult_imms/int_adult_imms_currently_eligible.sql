@@ -33,17 +33,17 @@ ELSE DATE((BIRTH_DATE_APPROX + sched.ELIGIBLE_AGE_TO_DAYS)) END AS ELIGIBLE_TO_D
 --CURRENTLY ELIGIBLE
 CASE 
 --SHINGLES
-WHEN p.TURN_65_AFTER_SEP_2023 = 'YES' AND sched.VACCINE_ID in ('SHING_1','SHING_2') AND CURRENT_DATE > '2023-09-01' AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN 'Yes' 
-WHEN p.TURN_65_AFTER_SEP_2023 = 'NO' AND sched.VACCINE_ID in ('SHING_1B','SHING_2B') AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
-AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN 'Yes' 
+WHEN p.TURN_65_AFTER_SEP_2023 AND sched.VACCINE_ID in ('SHING_1','SHING_2') AND CURRENT_DATE > '2023-09-01' AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE 
+WHEN p.TURN_65_AFTER_SEP_2023 = FALSE AND sched.VACCINE_ID in ('SHING_1B','SHING_2B') AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
+AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE 
 --RSV
-WHEN p.TURN_80_AFTER_SEP_2024 = 'YES' AND sched.VACCINE_ID = 'RSV_1B' AND CURRENT_DATE > '2024-09-01' AND CURRENT_DATE < '2026-03-31' THEN 'Yes' 
-WHEN p.TURN_80_AFTER_SEP_2024 = 'NO' AND sched.VACCINE_ID = 'RSV_1' AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
-AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN 'Yes'
+WHEN p.TURN_80_AFTER_SEP_2024 AND sched.VACCINE_ID = 'RSV_1B' AND CURRENT_DATE > '2024-09-01' AND CURRENT_DATE < '2026-03-31' THEN TRUE 
+WHEN p.TURN_80_AFTER_SEP_2024 = FALSE AND sched.VACCINE_ID = 'RSV_1' AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
+AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE
 --PPV
 WHEN sched.VACCINE_ID = 'PPV_1' AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
-AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN 'Yes' 
-ELSE 'No' END AS CURRENTLY_ELIGIBLE
+AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE 
+ELSE FALSE END AS CURRENTLY_ELIGIBLE
 FROM {{ ref('int_adult_imms_current_population') }} p
 CROSS JOIN 
      {{ ref('stg_reference_imms_schedule_adult_latest') }} sched

@@ -1,0 +1,46 @@
+models:
+  - name: int_adhd_diagnoses_all
+    description: 'ADHD diagnosis and remission observations for neurodevelopmental condition register management.
+
+      One row per observation using ADHD_COD (diagnosis) and ADHDREM_COD (remission) clusters.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation'
+        tests:
+          - unique
+          - not_null
+
+      - name: person_id
+        description: 'Patient identifier'
+
+      - name: clinical_effective_date
+        description: 'Date when ADHD observation was clinically effective'
+
+      - name: concept_code
+        description: 'Clinical code for ADHD diagnosis or remission'
+
+      - name: concept_display
+        description: 'Human-readable description of the clinical code'
+
+      - name: source_cluster_id
+        description: 'Cluster identifier (ADHD_COD or ADHDREM_COD)'
+
+      - name: is_diagnosis_code
+        description: 'Flag indicating ADHD diagnosis code (ADHD_COD cluster)'
+
+      - name: is_resolved_code
+        description: 'Flag indicating ADHD remission code (ADHDREM_COD cluster)'
+
+      - name: adhd_observation_type
+        description: 'Categorised ADHD observation type (ADHD Diagnosis or ADHD Remission)'
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: ADHD_COD, ADHDREM_COD

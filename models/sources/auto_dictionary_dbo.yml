@@ -9,7 +9,7 @@ sources:
     identifier: '"ActivityLocationType"'
     columns:
     - name: SK_ActivityLocationTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_ActivityLocationTypeCode
       data_type: TEXT
     - name: ActivityLocationTypeCategory
@@ -24,7 +24,7 @@ sources:
     identifier: '"AdminCategories"'
     columns:
     - name: SK_AdminCategoryID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_AdminCategoryCode
       data_type: TEXT
     - name: AdminCategoryName
@@ -36,29 +36,29 @@ sources:
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: BK_AdminCategoryCode_TinyInt
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Age
     identifier: '"Age"'
     columns:
     - name: SK_AgeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Age
       data_type: TEXT
     - name: SK_AgeBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_AgeBandGPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: AgeBand
     identifier: '"AgeBand"'
     columns:
     - name: SK_AgeBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_AgeBand
       data_type: TEXT
     - name: AgeBandStarts
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeBandEnds
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CreatedDateTime
       data_type: TIMESTAMP_NTZ
     - name: LastUpdateDateTime
@@ -67,39 +67,39 @@ sources:
     identifier: '"AgeBand_AgeBandGP_Lookup"'
     columns:
     - name: SK_AgeBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_AgeBandGPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: AgeBand_GP
     identifier: '"AgeBand_GP"'
     columns:
     - name: SK_AgeBandGPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_AgeBandGP
       data_type: TEXT
     - name: AgeBandStarts
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AgeBandEnds
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CreatedDateTime
       data_type: TIMESTAMP_NTZ
     - name: LastUpdateDateTime
       data_type: TIMESTAMP_NTZ
     - name: SK_AgeBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_AgeBand
       data_type: TEXT
   - name: AllSPGs
     identifier: '"AllSPGs"'
     columns:
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Level
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Type
       data_type: TEXT
     - name: OriginalID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Code
       data_type: TEXT
     - name: Name
@@ -113,7 +113,7 @@ sources:
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: IsTestOrganisation
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsDormant
       data_type: BOOLEAN
     - name: IsActive
@@ -122,9 +122,9 @@ sources:
     identifier: '"BNF_Chapter"'
     columns:
     - name: SK_BNFChapterID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_BNFChapterParentID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Chapter_Code
       data_type: TEXT
     - name: Chapter_Code_Alt
@@ -136,7 +136,7 @@ sources:
     - name: Chapter_Path
       data_type: TEXT
     - name: Chapter_Path_Depth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsOfficialBNF
       data_type: BOOLEAN
     - name: URL
@@ -149,11 +149,11 @@ sources:
     identifier: '"BNF_Hierarchy"'
     columns:
     - name: SK_BNFID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_BNFParentID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TypeNum
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Type
       data_type: TEXT
     - name: Code
@@ -163,7 +163,7 @@ sources:
     - name: Path
       data_type: TEXT
     - name: Path_Depth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
@@ -172,13 +172,13 @@ sources:
     identifier: '"BNF_Substance_Product_Presentation"'
     columns:
     - name: SK_BNFID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_BNFParentID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_BNFChapterID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TypeNum
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Type
       data_type: TEXT
     - name: Code
@@ -188,7 +188,7 @@ sources:
     - name: Path
       data_type: TEXT
     - name: Path_Depth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsSubstance
       data_type: BOOLEAN
     - name: IsProduct
@@ -202,38 +202,38 @@ sources:
     - name: IsGeneric
       data_type: BOOLEAN
     - name: SK_BNFID_GenericEquivalent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CCGByPractice
     identifier: '"CCGByPractice"'
     columns:
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_ServiceProvider
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ServiceProviderCode
       data_type: TEXT
     - name: ServiceProviderName
       data_type: TEXT
     - name: ProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ProviderGroup
       data_type: TEXT
     - name: CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerCode
       data_type: TEXT
     - name: Commissioner
       data_type: TEXT
     - name: PODID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PODGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PODCode
       data_type: TEXT
     - name: POD
@@ -241,9 +241,9 @@ sources:
     - name: PODName
       data_type: TEXT
     - name: STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPCode
       data_type: TEXT
     - name: STP
@@ -265,40 +265,40 @@ sources:
     - name: CommissioningCountry
       data_type: TEXT
     - name: SK_Organisation_ID_ServiceProvider
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Organisation_ID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CCGByPracticeNational
     identifier: '"CCGByPracticeNational"'
     columns:
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_ServiceProvider
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ServiceProviderCode
       data_type: TEXT
     - name: ServiceProviderName
       data_type: TEXT
     - name: ProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ProviderGroup
       data_type: TEXT
     - name: CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerCode
       data_type: TEXT
     - name: Commissioner
       data_type: TEXT
     - name: PODID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PODGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PODCode
       data_type: TEXT
     - name: POD
@@ -306,9 +306,9 @@ sources:
     - name: PODName
       data_type: TEXT
     - name: STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPCode
       data_type: TEXT
     - name: STP
@@ -330,14 +330,14 @@ sources:
     - name: CommissioningCountry
       data_type: TEXT
     - name: SK_Organisation_ID_ServiceProvider
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Organisation_ID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CarerSupportIndicator
     identifier: '"CarerSupportIndicator"'
     columns:
     - name: SK_CarerSupportIndicatorID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_CarerSupportIndicator
       data_type: TEXT
     - name: CarerSupportIndicator
@@ -346,11 +346,11 @@ sources:
     identifier: '"Commissioner"'
     columns:
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerName
       data_type: TEXT
     - name: CommissionerType
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerCode
       data_type: TEXT
     - name: StartDate
@@ -362,7 +362,7 @@ sources:
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsCustomer
       data_type: BOOLEAN
     - name: IsTestOrganisation
@@ -371,46 +371,46 @@ sources:
     identifier: '"CommissionerMatrix"'
     columns:
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerOrgID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: NumberOfPractices
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: CommissionerMatrixNational
     identifier: '"CommissionerMatrixNational"'
     columns:
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerOrgID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
@@ -419,11 +419,11 @@ sources:
     identifier: '"CommissionerPCTCCG"'
     columns:
     - name: SK_CommissionerID_PCT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerID_CCG
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PODName
       data_type: TEXT
     - name: Region
@@ -436,7 +436,7 @@ sources:
     identifier: '"CommissioningLocation"'
     columns:
     - name: SK_CCGLocationId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerCode
       data_type: TEXT
     - name: CommissioningRegionCode
@@ -463,7 +463,7 @@ sources:
     identifier: '"Consultant"'
     columns:
     - name: SK_ConsultantID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GMCCode
       data_type: TEXT
     - name: Surname
@@ -473,7 +473,7 @@ sources:
     - name: GMCName
       data_type: TEXT
     - name: SexCode
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Specialty_Function_Code
       data_type: TEXT
     - name: Location_Organisation_Code
@@ -486,11 +486,11 @@ sources:
     identifier: '"ConsultantProvider"'
     columns:
     - name: SK_ConsultantID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_SpecialtyID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartDate
       data_type: TIMESTAMP_NTZ
     - name: EndDate
@@ -503,18 +503,18 @@ sources:
     identifier: '"CostBand"'
     columns:
     - name: SK_CostBandID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CostBandLabel
       data_type: TEXT
     - name: CostBandStart
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CostBandEnd
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: DateBankHoliday
     identifier: '"DateBankHoliday"'
     columns:
     - name: SK_Date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FullDate
       data_type: TIMESTAMP_NTZ
     - name: Holiday
@@ -531,9 +531,9 @@ sources:
     - name: SK_DateTime
       data_type: TEXT
     - name: SK_Date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Time
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FullDateTime
       data_type: TIMESTAMP_NTZ
     - name: FullDate
@@ -544,45 +544,45 @@ sources:
     identifier: '"Dates"'
     columns:
     - name: SK_Date
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FullDate
       data_type: TIMESTAMP_NTZ
     - name: Day
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateSuffix
       data_type: TEXT
     - name: DayOfWeek
       data_type: TEXT
     - name: DayOfWeekNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DayOfYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WeekOfYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ISOWeekOfYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WeekOfMonthNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CalendarMonthNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CalendarMonthName
       data_type: TEXT
     - name: CalendarQuarterNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CalendarQuarterName
       data_type: TEXT
     - name: CalendarYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FiscalCalendarMonthNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FiscalCalendarMonthName
       data_type: TEXT
     - name: FiscalCalendarQuarterNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FiscalCalendarQuarterName
       data_type: TEXT
     - name: FiscalCalendarYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FiscalCalendarYearName
       data_type: TEXT
     - name: IsWeekend
@@ -594,9 +594,9 @@ sources:
     - name: IsEndOfFiscalYear
       data_type: BOOLEAN
     - name: DayOfFiscalYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WeekOfFiscalYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsEndOfWeek
       data_type: BOOLEAN
     - name: IsEndOfQuarter
@@ -622,17 +622,17 @@ sources:
     - name: EndOfFiscalYearDate
       data_type: TIMESTAMP_NTZ
     - name: ISODayOfWeekNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsLeapYear
       data_type: BOOLEAN
     - name: ISOWeekOfFiscalYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartOfISOWeekDate
       data_type: TIMESTAMP_NTZ
     - name: EndOfISOWeekDate
       data_type: TIMESTAMP_NTZ
     - name: ISOWeekOfMonthNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsEndOfISOWeek
       data_type: BOOLEAN
     - name: FiscalCalendarQuarterNameQ
@@ -646,7 +646,7 @@ sources:
     - name: DayName
       data_type: TEXT
     - name: DayOfQuarterNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FiscalCalendarMonthNameM
       data_type: TEXT
     - name: FiscalCalendarMonthNameYM
@@ -655,28 +655,28 @@ sources:
     identifier: '"Dates_Month_Year"'
     columns:
     - name: SK_YearMonth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MonthNum
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MonthName
       data_type: TEXT
     - name: CalendarMonthNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CalendarYearNumber
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartOfMonthDate
       data_type: TIMESTAMP_NTZ
     - name: EndOfMonthDate
       data_type: TIMESTAMP_NTZ
     - name: SK_Date_StartOfMonth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Date_EndOfMonth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Diagnosis
     identifier: '"Diagnosis"'
     columns:
     - name: SK_DiagnosisID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Code
       data_type: TEXT
     - name: AltCode
@@ -688,17 +688,17 @@ sources:
     - name: Modifiers
       data_type: TEXT
     - name: Chapter_Number
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Chapter
       data_type: TEXT
     - name: SubChapter
       data_type: TEXT
     - name: Gender_Mask
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Min_Age
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Max_Age
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
@@ -717,7 +717,7 @@ sources:
     identifier: '"ElectoralWard"'
     columns:
     - name: SK_ElectoralWardID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CountryCode
       data_type: TEXT
     - name: CountryName
@@ -743,14 +743,14 @@ sources:
     - name: ONS_Ward_Code_9char
       data_type: TEXT
     - name: SK_ElectoralWard_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsActive
       data_type: BOOLEAN
   - name: Ethnicity
     identifier: '"Ethnicity"'
     columns:
     - name: SK_EthnicityID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_EthnicityCode
       data_type: TEXT
     - name: EthnicityHESCode
@@ -775,7 +775,7 @@ sources:
     identifier: '"Ethnicity2"'
     columns:
     - name: SK_EthnicityID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EthnicityCategory
       data_type: TEXT
     - name: EthnicityDesc
@@ -784,7 +784,7 @@ sources:
     identifier: '"EthnicityCode"'
     columns:
     - name: SK_EthnicityID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EthnicityCodeType
       data_type: TEXT
     - name: EthnicCategoryCode
@@ -802,23 +802,23 @@ sources:
     - name: Description
       data_type: TEXT
     - name: Priority
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Snomed
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: F&ALevel
     identifier: '"F&ALevel"'
     columns:
     - name: SK_LevelID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LevelName
       data_type: TEXT
   - name: F&AMapping
     identifier: '"F&AMapping"'
     columns:
     - name: SK_PODID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_LevelID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Finance/Activity
       data_type: TEXT
     - name: Description
@@ -827,14 +827,14 @@ sources:
     identifier: '"F&AParentChild"'
     columns:
     - name: SK_PARENT_PODID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CHILD_PODID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: GP
     identifier: '"GP"'
     columns:
     - name: SK_GPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GP_Code
       data_type: TEXT
     - name: GP_Name
@@ -842,19 +842,19 @@ sources:
     - name: Contact_Telephone_Number
       data_type: TEXT
     - name: SK_OrganisationID_NationalGrouping
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_HealthAuthority
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_CurrentCareOrg
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartDate
       data_type: TIMESTAMP_NTZ
     - name: EndDate
       data_type: TIMESTAMP_NTZ
     - name: SK_OrganisationID_ParentOrg
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Join_Parent_Date
       data_type: TIMESTAMP_NTZ
     - name: Left_Parent_Date
@@ -864,17 +864,17 @@ sources:
     - name: LastUpdated
       data_type: TIMESTAMP_NTZ
     - name: SK_GP_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_NationalGrouping_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_HealthAuthority_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CurrentCareOrg_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Postcode_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ParentOrg_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GMC_GivenName
       data_type: TEXT
     - name: GMC_Surname
@@ -885,7 +885,7 @@ sources:
     identifier: '"Gender"'
     columns:
     - name: SK_GenderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Gender
       data_type: TEXT
     - name: GenderCode
@@ -902,7 +902,7 @@ sources:
     identifier: '"HRG"'
     columns:
     - name: SK_HRGID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: HRGCode
       data_type: TEXT
     - name: HRGDescription
@@ -925,20 +925,20 @@ sources:
     identifier: '"HRGTrimPoint"'
     columns:
     - name: SK_HRGID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_TariffTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FiscalYear
       data_type: TEXT
     - name: IsElectiveStay
       data_type: BOOLEAN
     - name: TrimPointDays
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: HRGTrimPoint_Pivoted
     identifier: '"HRGTrimPoint_Pivoted"'
     columns:
     - name: SK_HRGID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TariffType
       data_type: TEXT
     - name: TariffTypeDesc
@@ -946,14 +946,14 @@ sources:
     - name: FiscalYear
       data_type: TEXT
     - name: Elective_TrimPointDays
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Non-Elective_TrimPointDays
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: Language
     identifier: '"Language"'
     columns:
     - name: SK_LanguageID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LanguageSpoken
       data_type: TEXT
     - name: CDSCode
@@ -968,13 +968,13 @@ sources:
     identifier: '"MainCommissionerProvider"'
     columns:
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Provider
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartDate
       data_type: TIMESTAMP_NTZ
     - name: EndDate
@@ -983,7 +983,7 @@ sources:
     identifier: '"ONSAreaCollections"'
     columns:
     - name: SK_AreaCollectionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AreaCode
       data_type: TEXT
     - name: AreaName
@@ -1041,7 +1041,7 @@ sources:
     identifier: '"OperationStatus"'
     columns:
     - name: SK_OperationStatusID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_OperationStatus
       data_type: TEXT
     - name: OperationStatus
@@ -1050,27 +1050,27 @@ sources:
     identifier: '"Organisation"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Organisation_Code
       data_type: TEXT
     - name: Organisation_Name
       data_type: TEXT
     - name: SK_OrganisationTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_NationalGrouping
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_HealthAuthority
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_CurrentCareOrg
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartDate
       data_type: TIMESTAMP_NTZ
     - name: EndDate
       data_type: TIMESTAMP_NTZ
     - name: SK_OrganisationID_ParentOrg
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Join_Parent_Date
       data_type: TIMESTAMP_NTZ
     - name: Left_Parent_Date
@@ -1080,9 +1080,9 @@ sources:
     - name: LastUpdated
       data_type: TIMESTAMP_NTZ
     - name: SK_PrescribingSettingID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationStatusID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Address_Line_1
       data_type: TEXT
     - name: Address_Line_2
@@ -1094,21 +1094,21 @@ sources:
     - name: Address_Line_5
       data_type: TEXT
     - name: SK_Organisation_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationType_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_NationalGrouping_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_HealthAuthority_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CurrentCareOrg_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Postcode_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ParentOrg_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PrescribingSetting_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Country
       data_type: TEXT
     - name: CodeAssignedBy
@@ -1133,19 +1133,19 @@ sources:
     identifier: '"OrganisationDescendent"'
     columns:
     - name: SK_OrganisationID_Root
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrganisationCode_Root
       data_type: TEXT
     - name: OrganisationPrimaryRole_Root
       data_type: TEXT
     - name: SK_OrganisationID_Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrganisationCode_Parent
       data_type: TEXT
     - name: OrganisationPrimaryRole_Parent
       data_type: TEXT
     - name: SK_OrganisationID_Child
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrganisationCode_Child
       data_type: TEXT
     - name: OrganisationPrimaryRole_Child
@@ -1159,7 +1159,7 @@ sources:
     - name: Path
       data_type: TEXT
     - name: Depth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PathStartDate
       data_type: TIMESTAMP_NTZ
     - name: PathEndDate
@@ -1172,7 +1172,7 @@ sources:
     identifier: '"OrganisationFormerName"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Organisation_Name
       data_type: TEXT
     - name: StartDate
@@ -1183,42 +1183,42 @@ sources:
     identifier: '"OrganisationHierarchyPractice"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Parent
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Level
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationLookup
     identifier: '"OrganisationLookup"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Organisation_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationMatrixCommissioner
     identifier: '"OrganisationMatrixCommissioner"'
     columns:
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_STP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationMatrixCommissionerView
     identifier: '"OrganisationMatrixCommissionerView"'
     columns:
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerCode
       data_type: TEXT
     - name: CommissionerName
       data_type: TEXT
     - name: SK_OrganisationID_STP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPCode
       data_type: TEXT
     - name: STPName
@@ -1227,36 +1227,36 @@ sources:
     identifier: '"OrganisationMatrixPractice"'
     columns:
     - name: SK_OrganisationID_Practice
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Network
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_STP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationMatrixPracticeView
     identifier: '"OrganisationMatrixPracticeView"'
     columns:
     - name: SK_OrganisationID_Practice
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PracticeCode
       data_type: TEXT
     - name: PracticeName
       data_type: TEXT
     - name: SK_OrganisationID_Network
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NetworkCode
       data_type: TEXT
     - name: NetworkName
       data_type: TEXT
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerCode
       data_type: TEXT
     - name: CommissionerName
       data_type: TEXT
     - name: SK_OrganisationID_STP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPCode
       data_type: TEXT
     - name: STPName
@@ -1265,16 +1265,16 @@ sources:
     identifier: '"OrganisationONSCode"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ONS_Code
       data_type: TEXT
   - name: OrganisationRelationship
     identifier: '"OrganisationRelationship"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Target
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TargetRelationshipType
       data_type: TEXT
     - name: TargetPrimaryRoleType
@@ -1296,7 +1296,7 @@ sources:
     - name: EndDate
       data_type: TIMESTAMP_NTZ
     - name: UniqueRelationshipID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationRelationshipType
     identifier: '"OrganisationRelationshipType"'
     columns:
@@ -1308,7 +1308,7 @@ sources:
     identifier: '"OrganisationRole"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RoleType
       data_type: TEXT
     - name: LegalStartDate
@@ -1328,7 +1328,7 @@ sources:
     - name: EndDate
       data_type: TIMESTAMP_NTZ
     - name: UniqueRoleID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationRoleType
     identifier: '"OrganisationRoleType"'
     columns:
@@ -1340,7 +1340,7 @@ sources:
     identifier: '"OrganisationStatus"'
     columns:
     - name: SK_OrganisationStatusID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_OrganisationStatus
       data_type: TEXT
     - name: OrganisationStatus
@@ -1349,13 +1349,13 @@ sources:
     identifier: '"OrganisationSuccessor"'
     columns:
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Successor
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Succession_Effective_Date
       data_type: TIMESTAMP_NTZ
     - name: SK_OrganisationID_FinalSuccessor
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqueKey
       data_type: BINARY
     - name: SuccessorType
@@ -1365,12 +1365,12 @@ sources:
     - name: SuccessorAssignedBy
       data_type: TEXT
     - name: UniqueSuccessorID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OrganisationType
     identifier: '"OrganisationType"'
     columns:
     - name: SK_OrganisationTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OrganisationType
       data_type: TEXT
     - name: ShortOrganisationType
@@ -1382,16 +1382,16 @@ sources:
     - name: IsLocationCode
       data_type: BOOLEAN
     - name: SK_ServiceProviderTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: OutputArea
     identifier: '"OutputArea"'
     columns:
     - name: SK_OutputAreaID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OutputAreaParentID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CensusYear
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OACode
       data_type: TEXT
     - name: OAName
@@ -1399,9 +1399,9 @@ sources:
     - name: OAType
       data_type: TEXT
     - name: GeoEasting
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GeoNorthing
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GeoLatitude
       data_type: FLOAT
     - name: GeoLongitude
@@ -1411,9 +1411,9 @@ sources:
     - name: GeoCentroid
       data_type: GEOMETRY
     - name: PopEasting
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PopNorthing
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PopLatitude
       data_type: FLOAT
     - name: PopLongitude
@@ -1432,7 +1432,7 @@ sources:
     identifier: '"OverseasVisitorStatusClassification"'
     columns:
     - name: SK_OverseasVisitorStatusClassificationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_OverseasVisitorStatusClassification
       data_type: TEXT
     - name: OverseasVisitorStatusClassification
@@ -1441,18 +1441,18 @@ sources:
     identifier: '"PODCommissioners"'
     columns:
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: PODGroups
     identifier: '"PODGroups"'
     columns:
     - name: SK_PodGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PodDisplay
       data_type: TEXT
     - name: PodDataset
@@ -1469,13 +1469,13 @@ sources:
     identifier: '"PODTeams"'
     columns:
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PODTeamCode
       data_type: TEXT
     - name: PODTeamName
       data_type: TEXT
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsTestOrganisation
       data_type: BOOLEAN
     - name: Region
@@ -1484,7 +1484,7 @@ sources:
     identifier: '"PartialPostcode"'
     columns:
     - name: SK_PartialPostcode
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Postcode
       data_type: TEXT
     - name: Longitude
@@ -1499,7 +1499,7 @@ sources:
     identifier: '"PatientClassification"'
     columns:
     - name: SK_PatientClassificationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_PatientClassificationCode
       data_type: TEXT
     - name: PatientClassificationName
@@ -1510,7 +1510,7 @@ sources:
     identifier: '"Postcode"'
     columns:
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Postcode_8_chars
       data_type: TEXT
     - name: Postcode_single_space_e_Gif
@@ -1548,9 +1548,9 @@ sources:
     - name: yr2011_MSOA
       data_type: TEXT
     - name: Latitude
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: Longitude
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: FirstCreated
       data_type: TIMESTAMP_NTZ
     - name: LastUpdated
@@ -1568,18 +1568,18 @@ sources:
     - name: MSOA
       data_type: TEXT
     - name: SK_PseudoPostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_Postcode_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: PostcodeRegions
     identifier: '"PostcodeRegions"'
     columns:
     - name: OSNorthing
       data_type: TEXT
     - name: Longitude
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: Latitude
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: GeoPoint_text
       data_type: TEXT
     - name: GeoPoint
@@ -1587,7 +1587,7 @@ sources:
     - name: LocalAuthority
       data_type: TEXT
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Postcode
       data_type: TEXT
     - name: PostcodeFixed
@@ -1620,31 +1620,31 @@ sources:
     identifier: '"PracticeMatrix"'
     columns:
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderOrgID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_NetworkID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerOrgID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CCGLocationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsPracticeActive
       data_type: BOOLEAN
     - name: IsPracticeDormant
@@ -1654,38 +1654,38 @@ sources:
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: NetworkCount
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: HasGPExtract
       data_type: BOOLEAN
   - name: PracticeMatrixNational
     identifier: '"PracticeMatrixNational"'
     columns:
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderOrgID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_NetworkID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerOrgID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CCGLocationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsPracticeActive
       data_type: BOOLEAN
     - name: IsPracticeDormant
@@ -1698,7 +1698,7 @@ sources:
     identifier: '"PrescribingSetting"'
     columns:
     - name: SK_PrescribingSettingID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_PrescribingSetting
       data_type: TEXT
     - name: PrescribingSetting
@@ -1707,7 +1707,7 @@ sources:
     identifier: '"Procedure"'
     columns:
     - name: SK_ProcedureCode
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Code
       data_type: TEXT
     - name: Alt_Code
@@ -1725,7 +1725,7 @@ sources:
     - name: Method_Of_Delivery_Code
       data_type: TEXT
     - name: OPCS_Version
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: IsOnlySecondaryCode
       data_type: BOOLEAN
     - name: IsOnlyFemales
@@ -1746,7 +1746,7 @@ sources:
     identifier: '"RTTPeriodStatus"'
     columns:
     - name: SK_RTTPeriodStatusID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_RTTPeriodStatusCode
       data_type: TEXT
     - name: RTTPeriodStatusCategory
@@ -1759,13 +1759,13 @@ sources:
     identifier: '"ReadCodes"'
     columns:
     - name: SK_ReadCodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ReadCode
       data_type: TEXT
     - name: Term
       data_type: TEXT
     - name: SnomedCTCode
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: InNationalDataset
       data_type: BOOLEAN
     - name: DateCreated
@@ -1775,9 +1775,9 @@ sources:
     - name: IsSensitive
       data_type: BOOLEAN
     - name: SK_ReadCodeParentID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_BNFChapterID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsReadV2
       data_type: BOOLEAN
     - name: IsCTV3
@@ -1785,16 +1785,16 @@ sources:
     - name: ReadCodeAlt
       data_type: TEXT
     - name: SK_ReadCodeParentID_ReadV2
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ReadCodeParentID_CTV3
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MatchesReadCodeRegex
       data_type: BOOLEAN
   - name: ResidentialInstitute
     identifier: '"ResidentialInstitute"'
     columns:
     - name: SK_ResidentialInstituteID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Cipher
       data_type: TEXT
     - name: ResidentialInstituteCode
@@ -1804,7 +1804,7 @@ sources:
     - name: AttractsGlobalSumUplift
       data_type: BOOLEAN
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
@@ -1813,7 +1813,7 @@ sources:
     identifier: '"SLAM_PODGroup"'
     columns:
     - name: SK_SLAMPODGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Trust_Code
       data_type: TEXT
     - name: POD_Code
@@ -1839,18 +1839,18 @@ sources:
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: BeginMonth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EndMonth
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BeginYear
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: EndYear
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: STP
     identifier: '"STP"'
     columns:
     - name: SK_STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPCode
       data_type: TEXT
     - name: STPName
@@ -1860,44 +1860,44 @@ sources:
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ODSCode
       data_type: TEXT
     - name: SK_OrganisationID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: STPByCommissioner
     identifier: '"STPByCommissioner"'
     columns:
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerOrgID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CommissionerCode
       data_type: TEXT
     - name: CommissionerName
       data_type: TEXT
     - name: SK_PODTeamID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PODTeamGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PODTeamCode
       data_type: TEXT
     - name: PODTeamName
       data_type: TEXT
     - name: SK_STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_STPGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: STPCode
       data_type: TEXT
     - name: STPName
       data_type: TEXT
     - name: SK_PCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NumberOfPractices
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
@@ -1906,22 +1906,22 @@ sources:
     identifier: '"STPCommissioner"'
     columns:
     - name: SK_STPID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_CommissionerID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationID_Commissioner
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: SK_OrganisationID_STP
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: SUSTariffTypes
     identifier: '"SUSTariffTypes"'
     columns:
     - name: SK_TariffTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_TariffType
       data_type: TEXT
     - name: TariffDescription
@@ -1934,15 +1934,15 @@ sources:
     identifier: '"ServiceProvider"'
     columns:
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ServiceProviderCode
       data_type: TEXT
     - name: ServiceProviderName
       data_type: TEXT
     - name: ServiceProviderType
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_PostcodeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartDate
       data_type: TIMESTAMP_NTZ
     - name: EndDate
@@ -1952,7 +1952,7 @@ sources:
     - name: DateUpdated
       data_type: TIMESTAMP_NTZ
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsActive
       data_type: BOOLEAN
     - name: IsMainSite
@@ -1967,13 +1967,13 @@ sources:
     identifier: '"ServiceProviderGroup"'
     columns:
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ServiceProviderGroupName
       data_type: TEXT
     - name: ServiceProviderGroupCode
       data_type: TEXT
     - name: SK_ServiceProviderTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartDate
       data_type: TIMESTAMP_NTZ
     - name: EndDate
@@ -1984,28 +1984,28 @@ sources:
     identifier: '"ServiceProviderGroupNational"'
     columns:
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ServiceProviderGroupName
       data_type: TEXT
     - name: ServiceProviderGroupCode
       data_type: TEXT
     - name: SK_ServiceProviderTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: StartDate
       data_type: TIMESTAMP_NTZ
     - name: EndDate
       data_type: TIMESTAMP_NTZ
     - name: IsTestOrganisation
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: ServiceProviderHierarchy
     identifier: '"ServiceProviderHierarchy"'
     columns:
     - name: SK_ServiceProviderGroupID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderGroupParentID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Level
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DateCreated
       data_type: TIMESTAMP_NTZ
     - name: DateUpdated
@@ -2014,14 +2014,14 @@ sources:
     identifier: '"ServiceProviderTypes"'
     columns:
     - name: SK_ServiceProviderTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ServiceProviderTypeDescription
       data_type: TEXT
   - name: Specialties
     identifier: '"Specialties"'
     columns:
     - name: SK_SpecialtyID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_SpecialtyCode
       data_type: TEXT
     - name: SpecialtyName
@@ -2044,11 +2044,11 @@ sources:
     identifier: '"Staff"'
     columns:
     - name: SK_StaffID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_ServiceProviderID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_OrganisationTypeID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FirstName
       data_type: TEXT
     - name: Surname
@@ -2065,17 +2065,17 @@ sources:
     identifier: '"Times"'
     columns:
     - name: SK_Time
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FullTime
       data_type: TIMESTAMP_NTZ
     - name: FullTime12H
       data_type: TEXT
     - name: Hours
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Hours12H
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Minutes
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TimeSuffex
       data_type: TEXT
     - name: IsMorning
@@ -2085,13 +2085,13 @@ sources:
     - name: Hours12HName
       data_type: TEXT
     - name: QuarterOfDay
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: QuarterOfDayName
       data_type: TEXT
     - name: QuarterOfDayNameShort
       data_type: TEXT
     - name: QuarterOfHour
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: QuarterOfHourName
       data_type: TEXT
     - name: QuarterOfHourShort
@@ -2100,7 +2100,7 @@ sources:
     identifier: '"Unit"'
     columns:
     - name: SK_UnitID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UnitSymbol
       data_type: TEXT
     - name: UnitName
@@ -2108,7 +2108,7 @@ sources:
     - name: QuantityName
       data_type: TEXT
     - name: SIPower
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IsStandardUnit
       data_type: BOOLEAN
     - name: IsDerivedUnit
@@ -2117,9 +2117,9 @@ sources:
     identifier: '"UnitConversion"'
     columns:
     - name: SK_UnitID_Source
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SK_UnitID_Target
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Subtrahend
       data_type: FLOAT
     - name: Multiplier
@@ -2132,14 +2132,14 @@ sources:
     identifier: '"UnitMapping"'
     columns:
     - name: SK_UnitID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UnitLabel
       data_type: TEXT
   - name: Urgent_Emergency_Care_Activity_Type
     identifier: '"Urgent_Emergency_Care_Activity_Type"'
     columns:
     - name: SK_Urgent_Emergency_Care_Activity_Type_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: BK_Urgent_Emergency_Care_Activity_Type_Code
       data_type: TEXT
     - name: Urgent_Emergency_Care_Activity_Type_Description
@@ -2152,7 +2152,7 @@ sources:
     identifier: '"Wards"'
     columns:
     - name: SK_WardID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: WardCode
       data_type: TEXT
     - name: WardName

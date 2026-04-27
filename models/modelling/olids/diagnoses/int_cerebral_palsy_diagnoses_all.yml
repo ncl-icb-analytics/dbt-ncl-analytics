@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: int_cerebral_palsy_diagnoses_all
-    description: 'Cerebral palsy diagnosis observations for neurological condition
-      register management.
+    description: 'Cerebral palsy diagnosis observations for neurological condition register management.
 
       Key Features:
 
@@ -14,8 +12,7 @@ models:
 
       • No resolution codes as cerebral palsy is a lifelong condition
 
-      Purpose: Provide observation-level data for cerebral palsy tracking and support
-      services planning.'
+      Purpose: Provide observation-level data for cerebral palsy tracking and support services planning.'
     config:
       meta:
         owner:
@@ -24,7 +21,8 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: CEREBRALP_COD
+          arguments:
+            cluster_ids: CEREBRALP_COD
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -40,11 +38,8 @@ models:
       - name: concept_display
         description: 'Human-readable description of the cerebral palsy diagnosis'
       - name: source_cluster_id
-        description: 'Source cluster identifier (CEREBRALP_COD for cerebral palsy
-          diagnoses)'
+        description: 'Source cluster identifier (CEREBRALP_COD for cerebral palsy diagnoses)'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating diagnosis code (always TRUE for cerebral
-          palsy observations)'
+        description: 'Boolean flag indicating diagnosis code (always TRUE for cerebral palsy observations)'
       - name: cerebral_palsy_observation_type
         description: 'Type of cerebral palsy observation (always "Cerebral Palsy Diagnosis")'
-

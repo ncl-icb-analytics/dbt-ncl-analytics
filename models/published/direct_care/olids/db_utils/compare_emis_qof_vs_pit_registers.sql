@@ -39,10 +39,10 @@ person_practices AS (
         h.practice_name
     FROM {{ ref('dim_person_demographics_historical') }} h
     INNER JOIN validated_practices vp ON h.practice_code = vp.practice_code
-    WHERE h.effective_start_date <= '{{ var("qof_reference_date") }}'::DATE
-      AND (h.effective_end_date IS NULL OR h.effective_end_date > '{{ var("qof_reference_date") }}'::DATE)
+    WHERE h.effective_start_date <= {{ qof_reference_date() }}
+      AND (h.effective_end_date IS NULL OR h.effective_end_date > {{ qof_reference_date() }})
       AND h.is_active = TRUE
-      AND (h.is_deceased = FALSE OR h.death_date_approx > '{{ var("qof_reference_date") }}'::DATE)
+      AND (h.is_deceased = FALSE OR h.death_date_approx > {{ qof_reference_date() }})
 ),
 
 -- Get pit register data for each person

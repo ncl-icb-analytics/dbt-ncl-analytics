@@ -1,0 +1,402 @@
+
+models:
+  - name: cltcs_cohort_data
+    description: "Expanded cohort-level dataset for C-LTCS. One row per eligible patient with trajectories, practice and demographic fields, condition flags, risk factors, activity, waiting list metrics, polypharmacy and scores."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: patient_id
+        data_type: number
+        description: "Unique patient identifier from commissioning data [sk_patient_id]"
+        data_tests:
+          - unique:
+              config:
+                severity: warn
+                warn_if: ">1"
+          - not_null
+
+      - name: area_code
+        data_type: varchar
+        description: "Area code (PCN in this context)"
+
+      - name: practice_code
+        data_type: varchar
+        description: "Current registered GP practice ODS code"
+
+      - name: practice_name
+        data_type: varchar
+        description: "Current registered GP practice name"
+
+      - name: age
+        data_type: number
+        description: "Patient age in years"
+
+      - name: main_language
+        data_type: varchar
+        description: "Patient primary spoken language"
+
+      - name: gender
+        data_type: varchar
+        description: "Patient gender"
+
+      - name: ethnicity_category
+        data_type: varchar
+        description: "Patient ethnicity category"
+
+      - name: main_language_flag
+        data_type: number
+        description: "Flag indicating main language is not English or Not Recorded (1=yes, 0=no)"
+
+      - name: ae_encounters_sl
+        data_type: array
+        description: "18‑month sparkline array of A&E encounters"
+
+      - name: ip_encounters_sl
+        data_type: array
+        description: "18‑month sparkline array of inpatient encounters"
+
+      - name: op_encounters_sl
+        data_type: array
+        description: "18‑month sparkline array of outpatient encounters"
+
+      - name: gp_encounters_sl
+        data_type: array
+        description: "18‑month sparkline array of GP encounters"
+
+      - name: has_atrial_fibrillation
+        data_type: boolean
+        description: "Flag for atrial fibrillation"
+
+      - name: has_asthma
+        data_type: boolean
+        description: "Flag for asthma"
+
+      - name: has_cancer
+        data_type: boolean
+        description: "Flag for cancer"
+
+      - name: has_coronary_heart_disease
+        data_type: boolean
+        description: "Flag for coronary heart disease"
+
+      - name: has_chronic_kidney_disease
+        data_type: boolean
+        description: "Flag for chronic kidney disease"
+
+      - name: has_copd
+        data_type: boolean
+        description: "Flag for COPD"
+
+      - name: has_cyp_asthma
+        data_type: boolean
+        description: "Flag for CYP asthma"
+
+      - name: has_dementia
+        data_type: boolean
+        description: "Flag for dementia"
+
+      - name: has_depression
+        data_type: boolean
+        description: "Flag for depression"
+
+      - name: has_diabetes
+        data_type: boolean
+        description: "Flag for diabetes"
+
+      - name: has_epilepsy
+        data_type: boolean
+        description: "Flag for epilepsy"
+
+      - name: has_familial_hypercholesterolaemia
+        data_type: boolean
+        description: "Flag for familial hypercholesterolaemia"
+
+      - name: has_gestational_diabetes
+        data_type: boolean
+        description: "Flag for gestational diabetes"
+
+      - name: has_frailty
+        data_type: boolean
+        description: "Flag for frailty"
+
+      - name: has_heart_failure
+        data_type: boolean
+        description: "Flag for heart failure"
+
+      - name: has_hypertension
+        data_type: boolean
+        description: "Flag for hypertension"
+
+      - name: has_learning_disability
+        data_type: boolean
+        description: "Flag for learning disability"
+
+      - name: has_learning_disability_under_14
+        data_type: boolean
+        description: "Learning disability for children under 14 (specialist settings cohort)"
+
+      - name: has_nafld
+        data_type: boolean
+        description: "Flag for non‑alcoholic fatty liver disease"
+
+      - name: has_non_diabetic_hyperglycaemia
+        data_type: boolean
+        description: "Flag for non‑diabetic hyperglycaemia"
+
+      - name: has_obesity
+        data_type: boolean
+        description: "Flag for obesity"
+
+      - name: has_osteoporosis
+        data_type: boolean
+        description: "Flag for osteoporosis"
+
+      - name: has_peripheral_arterial_disease
+        data_type: boolean
+        description: "Flag for peripheral arterial disease"
+
+      - name: has_palliative_care
+        data_type: boolean
+        description: "Flag for inclusion on palliative care register"
+
+      - name: has_rheumatoid_arthritis
+        data_type: boolean
+        description: "Flag for rheumatoid arthritis"
+
+      - name: has_severe_mental_illness
+        data_type: boolean
+        description: "Flag for severe mental illness"
+
+      - name: has_stroke_tia
+        data_type: boolean
+        description: "Flag for stroke/TIA"
+
+      - name: total_conditions
+        data_type: number
+        description: "Total count of long‑term conditions"
+
+      - name: total_qof_conditions
+        data_type: number
+        description: "Total count of QOF long‑term conditions"
+
+      - name: total_non_qof_conditions
+        data_type: number
+        description: "Total count of non‑QOF long‑term conditions"
+
+      - name: cardiovascular_conditions
+        data_type: number
+        description: "Count of cardiovascular conditions"
+
+      - name: respiratory_conditions
+        data_type: number
+        description: "Count of respiratory conditions"
+
+      - name: mental_health_conditions
+        data_type: number
+        description: "Count of mental health conditions"
+
+      - name: metabolic_conditions
+        data_type: number
+        description: "Count of metabolic conditions"
+
+      - name: musculoskeletal_conditions
+        data_type: number
+        description: "Count of musculoskeletal conditions"
+
+      - name: neurology_conditions
+        data_type: number
+        description: "Count of neurology conditions"
+
+      - name: geriatric_conditions
+        data_type: number
+        description: "Count of geriatric conditions"
+
+      - name: smoking_status
+        data_type: varchar
+        description: "Latest recorded smoking status"
+
+      - name: smoking_risk_sort_key
+        data_type: number
+        description: "Smoking risk sort key used in scoring"
+
+      - name: bmi_category
+        data_type: varchar
+        description: "Latest BMI category"
+
+      - name: bmi_value
+        data_type: number
+        description: "Latest BMI value"
+
+      - name: bmi_risk_sort_key
+        data_type: number
+        description: "BMI risk sort key used in scoring"
+
+      - name: alcohol_status
+        data_type: varchar
+        description: "Latest alcohol status"
+
+      - name: alcohol_risk_sort_key
+        data_type: number
+        description: "Alcohol risk sort key used in scoring"
+
+      - name: is_currently_pregnant
+        data_type: boolean
+        description: "Flag indicating current pregnancy status"
+
+      - name: asthma_testing_no_diagnosis
+        data_type: boolean
+        description: "Asthma management flag – testing without diagnosis"
+
+      - name: asthma_diagnosis_no_testing
+        data_type: boolean
+        description: "Asthma management flag – diagnosis without testing"
+
+      - name: asthma_diagnosis_no_act
+        data_type: boolean
+        description: "Asthma management flag – diagnosis without asthma control test"
+
+      - name: asthma_salbutamol_only
+        data_type: boolean
+        description: "Asthma management flag – salbutamol only"
+
+      - name: asthma_salbutamol_repeats
+        data_type: boolean
+        description: "Asthma management flag – repeated salbutamol"
+
+      - name: is_overall_bp_controlled
+        data_type: boolean
+        description: "Flag for most recent overall blood pressure control"
+
+      - name: latest_systolic_value
+        data_type: number
+        description: "Most recent systolic blood pressure value"
+
+      - name: latest_diastolic_value
+        data_type: number
+        description: "Most recent diastolic blood pressure value"
+
+      - name: latest_bp_date
+        data_type: date
+        description: "Date of most recent blood pressure reading"
+
+      - name: care_processes_completed
+        data_type: number
+        description: "Count of completed diabetes care processes"
+
+      - name: latest_hba1c_value
+        data_type: number
+        description: "Latest HBA1c value used for cohort view"
+
+      - name: latest_hba1c_date
+        data_type: date
+        description: "Date of latest HBA1c measurement"
+
+      - name: op_att_tot_12mo
+        data_type: number
+        description: "Total outpatient attendances in last 12 months"
+
+      - name: op_spec_12mo
+        data_type: number
+        description: "Distinct outpatient specialties in last 12 months"
+
+      - name: op_prov_12mo
+        data_type: number
+        description: "Distinct outpatient providers in last 12 months"
+
+      - name: op_predicted
+        data_type: number
+        description: "Predicted outpatient activity in last 12 months"
+
+      - name: op_oe_ratio
+        data_type: number
+        description: "Outpatient observed/expected ratio"
+
+      - name: apc_12mo
+        data_type: number
+        description: "Total inpatient admissions in last 12 months"
+
+      - name: apc_los_12mo
+        data_type: number
+        description: "Total inpatient length of stay in last 12 months"
+
+      - name: ae_t1_12mo
+        data_type: number
+        description: "A&E type 1 attendances in last 12 months"
+
+      - name: ae_inj_12mo
+        data_type: number
+        description: "A&E injury attendances in last 12 months"
+
+      - name: ae_tot_12mo
+        data_type: number
+        description: "Total A&E attendances in last 12 months"
+
+      - name: gp_att_tot_12mo
+        data_type: number
+        description: "Total GP attended encounters in last 12 months"
+
+      - name: gp_app_tot_12mo
+        data_type: number
+        description: "Total GP appointments in last 12 months"
+
+      - name: gp_dna_tot_12mo
+        data_type: number
+        description: "Total GP DNAs in last 12 months"
+
+      - name: wl_total_count
+        data_type: number
+        description: "Total current waiting list items"
+
+      - name: wl_provider_count
+        data_type: number
+        description: "Distinct providers on current waiting list"
+
+      - name: wl_specialty_count
+        data_type: number
+        description: "Distinct specialties on current waiting list"
+
+      - name: has_same_tfc_multiple_providers_flag
+        data_type: boolean
+        description: "Flag indicating same treatment function code with multiple providers"
+
+      - name: current_waiting_list_arrays
+        data_type: variant
+        description: "Structured representation of current waiting list details"
+
+      - name: medication_count
+        data_type: number
+        description: "Current medication count (polypharmacy)"
+
+      - name: medication_name_list
+        data_type: array
+        description: "Array of current medication names (truncated when empty)"
+
+      - name: is_polypharmacy_5plus
+        data_type: boolean
+        description: "Flag for 5 or more concurrent medications"
+
+      - name: attendance_difficulty_score
+        data_type: number
+        description: "Composite score for anticipated appointment attendance difficulty"
+
+      - name: medications_recent_12mo
+        data_type: variant
+        description: "Structured representation of recent medications in last 12 months"
+
+      - name: unique_active_ingredient_count_12mo
+        data_type: number
+        description: "Count of unique active ingredients in last 12 months"
+
+      - name: score_activation
+        data_type: number
+        description: "Activation sub‑score from cltcs_score_activation"
+
+      - name: score_coordination
+        data_type: number
+        description: "Coordination sub‑score from cltcs_score_coordination"
+
+      - name: score_treatment
+        data_type: number
+        description: "Treatment sub‑score from cltcs_score_treatment"

@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=-UvwnojTTqk&t=796s
 
 ### Fusion vs dbt Core
 
-This project uses **dbt Core** (Python, v1.9.4) for all builds, tests, and deployments. That hasn't changed. Fusion runs alongside dbt Core purely as an IDE tool — it parses your project independently to power editor features but never executes models or writes to Snowflake.
+This project uses **dbt Core** (Python, v1.10.15) for all builds, tests, and deployments. Fusion runs alongside dbt Core purely as an IDE tool — it parses your project independently to power editor features but never executes models or writes to Snowflake.
 
 | | dbt Core | dbt Fusion |
 |---|---|---|
@@ -60,7 +60,7 @@ The lineage view opens in a panel showing how that column flows upstream and dow
 
 **Using column selectors in lineage:**
 
-In the lineage panel, you can use the `column:` prefix to filter to a specific column. For example: `+column:model.ncl_analytics.dim_practice.practice_code+` shows everything upstream and downstream of that specific column.
+In the lineage panel, you can use the `column:` prefix to filter to a specific column. For example: `+column:model.wnl_analytics.dim_practice.practice_code+` shows everything upstream and downstream of that specific column.
 
 This is particularly useful for impact analysis — before changing a column, you can see every model that uses it.
 

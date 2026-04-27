@@ -1,5 +1,8 @@
 {{
-    config(materialized = 'table')
+    config(
+        materialized = 'table',
+        tags=['mhsds']
+        )
 }}
 
 WITH deduplicated AS (
@@ -23,4 +26,11 @@ select
     , refer_rejection_date
     , refer_reject_reason
     , refer_clos_reason
+    --adding additional fields to help categorise referrals.
+    , care_prof_team_local_id
+    , source_of_referral_mh
+    , service_type_name
+    , clin_resp_priority_type
+    , dm_icb_commissioner
+    , uniq_submission_id
 from deduplicated 

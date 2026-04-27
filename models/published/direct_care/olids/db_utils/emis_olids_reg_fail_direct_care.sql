@@ -13,7 +13,7 @@ Practices NOT meeting EMIS acceptance criteria for Regular registrations.
 These practices require investigation before use in analyses.
 
 Validation Criteria: >=2% variance AND >=5 persons difference
-Snapshot Date: 04/11/2025 (from EMIS extract)
+Snapshot Date: Derived from EMIS seed extract_date
 Registration Type: Regular only (excludes Temporary, Emergency, etc.)
 
 Issue Categories:

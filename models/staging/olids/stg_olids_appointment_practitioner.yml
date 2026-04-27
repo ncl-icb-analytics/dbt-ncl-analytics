@@ -1,16 +1,13 @@
-version: 2
 models:
   - name: stg_olids_appointment_practitioner
-    description: Junction table linking appointments to practitioners. 
-      Deduplicated by id and filtered to exclude deleted records.
+    description: Junction table linking appointments to practitioners. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
       - name: id
-        description: Primary key - unique identifier for this 
-          appointment-practitioner link
+        description: Primary key - unique identifier for this appointment-practitioner link
         tests:
           - not_null
       - name: appointment_id
@@ -30,14 +27,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

@@ -1,11 +1,13 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_af_62
-    description: 'AF case finding for patients 65+ without recent pulse check.
+    description: >
+      AF case finding for patients 65+ without recent pulse check.
 
-      Identifies patients aged 65+ with no pulse rate/rhythm check in last year.
+      Identifies patients aged 65+ with no pulse rate/rhythm check in last 3 years
+      (aligned with EMIS ICB_CF_AF_62_woEX). Excludes patients already in AF_61
+      medication case finding (mutual exclusivity per EMIS ICB_CF_AF_62_BASE).
 
-      One row per person aged 65+ without pulse check in last 12 months.'
+      One row per person aged 65+ without pulse check in last 3 years.
 
     config:
       meta:
@@ -14,10 +16,11 @@ models:
           type: "CASE_FINDING"
           category: "AF"
           clinical_domain: "Cardiovascular Case Finding"
-          name_short: "65+ no pulse check"
-          description_short: "Patients 65+ without pulse check in last year"
+          name_short: "AF_62: 65+, no pulse check"
+          description_short: "65+ without pulse check in last 3 years, excluding AF_61"
           description_long: >
-            Age 65+, no pulse rate/rhythm check in last year.
+            Age 65+, no pulse rate/rhythm check in last 3 years. Excludes patients
+            already identified in AF_61 medication case finding (mutual exclusivity).
           is_qof: false
           source_column: "person_id"
           sort_order: "LTC_LCS_AF_62"
@@ -27,10 +30,10 @@ models:
           code_clusters:
             - cluster_id: "LCS_PULSE_RATE"
               category: "MONITORING"
-              time_window: "12_MONTHS"
+              time_window: "36_MONTHS"
             - cluster_id: "LCS_PULSE_RHYTHM"
               category: "MONITORING"
-              time_window: "12_MONTHS"
+              time_window: "36_MONTHS"
             - cluster_id: "ATRIAL_FIBRILLATION"
               category: "EXCLUSION"
             - cluster_id: "ATRIAL_FLUTTER"
@@ -45,10 +48,16 @@ models:
               sort_order: 1
             - population_group: "OLDER_ADULTS"
               threshold_type: "MONITORING_WINDOW"
-              threshold_value: "12"
+              threshold_value: "36"
               threshold_operator: "GREATER_THAN"
               threshold_unit: "months"
-              description: "No pulse check in last year"
+              description: "No pulse check in last 3 years"
               sort_order: 2
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        data_tests:
+          - unique
+          - not_null

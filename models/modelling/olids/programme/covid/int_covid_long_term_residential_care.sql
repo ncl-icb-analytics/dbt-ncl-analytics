@@ -14,9 +14,13 @@ This is a key eligibility group for COVID campaigns.
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ covid_campaign_config(var('covid_current_campaign', 'covid_2025_autumn')) }})
+    SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
-    SELECT * FROM ({{ covid_campaign_config(var('covid_previous_campaign', 'covid_2024_autumn')) }})
+    SELECT * FROM ({{ covid_spring_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_autumn_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_spring_config() }})
 ),
 
 -- Step 1: Find people with any residence codes (for all campaigns)
@@ -31,6 +35,7 @@ people_with_residence_codes AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_care_home = TRUE
 ),
 
 -- Step 2: Find people with long-term care residence codes (for all campaigns)
@@ -45,6 +50,7 @@ people_with_longterm_care_codes AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
+        AND cc.eligible_care_home = TRUE
 ),
 
 -- Step 3: Get latest residence code for each person/campaign

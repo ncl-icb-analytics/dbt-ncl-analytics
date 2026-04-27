@@ -33,6 +33,20 @@ models:
       - name: spec_comm
       - name: spell_commissioning_tariff_calculation_final_price
 
+
     tests:
+      - elementary.volume_anomalies:
+          description: "Detects anomalous daily row counts for APC spells."
+
+          arguments:
+            timestamp_column: 'spell_admission_date'
+      - elementary.dimension_anomalies:
+          description: "Monitors for missing or unusual volumes from specific Trusts."
+          arguments:
+            dimensions:
+              - 'SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER'
+            timestamp_column: 'spell_admission_date'
+            sensitivity: 3
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

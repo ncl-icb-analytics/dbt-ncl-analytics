@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_dictionary_dbo_organisation
-    description: Organisation reference data including providers, commissioners,
-      and practices
+    description: Organisation reference data including providers, commissioners, and practices
     config:
       meta:
         owner:
@@ -29,4 +27,5 @@ models:
         description: Organisation status
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

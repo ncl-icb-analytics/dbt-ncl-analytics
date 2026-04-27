@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: int_adult_imms_vaccination_status_current
     description: Vaccination status for adults. One row per person per vaccine.

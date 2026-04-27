@@ -1,16 +1,13 @@
-version: 2
 models:
   - name: int_creatinine_latest
-    description: 'Most recent valid serum creatinine measurement per person for kidney
-      function assessment.
+    description: 'Most recent valid serum creatinine measurement per person for kidney function assessment.
 
-      One row per person with their latest creatinine including clinical creatinine
-      categorisation and elevated creatinine flags.'
+      One row per person with their latest creatinine including clinical creatinine categorisation and elevated creatinine flags.'
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:
@@ -25,8 +22,7 @@ models:
           category: "LABORATORY_RESULT"
           clinical_domain: "Nephrology"
           name_short: "Latest Creatinine"
-          description_short: "Most recent serum creatinine measurement for kidney
-            function assessment"
+          description_short: "Most recent serum creatinine measurement for kidney function assessment"
           description_long: >
             Latest valid serum creatinine measurement per person supporting kidney
             function assessment

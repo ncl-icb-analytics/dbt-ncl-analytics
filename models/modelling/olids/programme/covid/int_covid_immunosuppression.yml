@@ -1,19 +1,16 @@
-version: 2
 models:
   - name: int_covid_immunosuppression
     description: 'COVID immunosuppression eligibility determination.
 
       Grain: One row per person per campaign who meets immunosuppression criteria
 
-      Identifies people: • Diagnosed with immunosuppression (any time) • Recent immunosuppressant
-      medication (6 months) • Recent chemotherapy/radiotherapy (6 months) • Age varies
-      by campaign (any age 2024/25, 6 months-74 years 2025/26)
+      Identifies people: • Diagnosed with immunosuppression (any time) • Recent immunosuppressant medication (6 months) • Recent chemotherapy/radiotherapy (6 months) • Age varies by campaign (any age 2024/25, 6 months-74 years 2025/26)
 
       Used by: Mart models for eligibility determination'
     tests:
       - cluster_ids_exist:
-          cluster_ids: IMMDX_COV_COD,IMMRX_COD,IMM_ADM_COD,DXT_CHEMO_COD
-
+          arguments:
+            cluster_ids: IMMDX_COV_COD,IMMRX_COD,IMM_ADM_COD,DXT_CHEMO_COD
     config:
       meta:
         indicator:
@@ -103,8 +100,7 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying immunosuppression event (diagnosis, medication,
-          admin, or treatment)'
+        description: 'Date of qualifying immunosuppression event (diagnosis, medication, admin, or treatment)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description
@@ -114,7 +110,6 @@ models:
       - name: age_months_at_ref_date
         description: 'Age in months at campaign reference date'
       - name: age_years_at_ref_date
-        description: 'Age in years at campaign reference date (eligibility varies
-          by campaign)'
+        description: 'Age in years at campaign reference date (eligibility varies by campaign)'
       - name: created_at
         description: 'Audit timestamp for record creation (campaign audit end date)'

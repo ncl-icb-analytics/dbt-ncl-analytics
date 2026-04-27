@@ -1,0 +1,9 @@
+DEFINITION_ID,DEFINITION_NAME,CONFIG_ID,CONFIG_VERSION,UNIT,PRIMARY_UNIT
+,eosinophil_count,,,10*9/L,TRUE
+,eosinophil_percentage,,,%,TRUE
+,feno,,,ppb,TRUE
+,haemoglobin_est,,,g/L,TRUE
+,platelet_count,,,10*9/L,TRUE
+,bilirubin_level,,,umol/L,TRUE
+,ggt_lft_cod,,,[IU]/L,TRUE
+,alt_levels,,,[IU]/L,TRUE

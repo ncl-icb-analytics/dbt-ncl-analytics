@@ -1,0 +1,91 @@
+{{
+    config(
+        materialized='table',
+        cluster_by=['person_id', 'clinical_effective_date'])
+}}
+
+/*
+All platelet count observations with unit standardisation and data quality flags.
+Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
+Uses the standardise_count_observation macro for value-first unit inference.
+Standard unit: 10*9/L.
+*/
+
+WITH raw_observations AS (
+    SELECT *
+    FROM ({{ get_observations("'PLATELET_COUNT'") }})
+),
+
+deduplicated AS (
+    {{ deduplicate_table(
+        table='raw_observations',
+        partition_cols=['person_id', 'clinical_effective_date', 'result_value', 'result_unit_code', 'mapped_concept_code'],
+        order_cols=['date_recorded', 'id']
+    ) }}
+),
+
+base_observations AS (
+    SELECT
+        id,
+        person_id,
+        clinical_effective_date,
+        result_value,
+        result_unit_code,
+        result_unit_display,
+        mapped_concept_code AS concept_code,
+        mapped_concept_display AS code_description,
+        cluster_id AS source_cluster_id
+    FROM deduplicated
+    WHERE clinical_effective_date IS NOT NULL
+      AND clinical_effective_date <= CURRENT_DATE()
+      AND result_value IS NOT NULL
+),
+
+{{ standardise_count_observation(
+    base_cte='base_observations',
+    measurement='platelet_count',
+    value_column='result_value'
+) }}
+
+,
+
+validated AS (
+    SELECT
+        *,
+        inferred_value < 0 AS is_negative,
+        inferred_value > biological_upper AS is_extreme_outlier
+    FROM standardised
+)
+
+SELECT
+    id,
+    person_id,
+    clinical_effective_date,
+    concept_code,
+    code_description,
+    source_cluster_id,
+    original_result_value,
+    original_result_unit_display,
+    original_result_unit_code,
+    'COUNT' AS expected_measurement_type,
+    inferred_unit,
+    inferred_value,
+    value_was_converted,
+    CASE WHEN inferred_unit IS NULL THEN NULL
+         ELSE inferred_unit IS DISTINCT FROM original_result_unit_code
+    END AS unit_was_changed,
+    conversion_reason,
+    confidence,
+    is_negative,
+    is_extreme_outlier,
+    CASE
+        WHEN inferred_value IS NULL OR confidence = 'NONE' THEN 'Abnormal'
+        WHEN inferred_value < 0 THEN 'Abnormal'
+        WHEN inferred_value < 10 THEN 'Severe Thrombocytopenia'
+        WHEN inferred_value < 50 THEN 'Moderate Thrombocytopenia'
+        WHEN inferred_value < 150 THEN 'Mild Thrombocytopenia'
+        WHEN inferred_value <= 400 THEN 'Normal'
+        WHEN inferred_value <= 1000 THEN 'Thrombocytosis'
+        ELSE 'Severe Thrombocytosis'
+    END AS platelets_category
+FROM validated

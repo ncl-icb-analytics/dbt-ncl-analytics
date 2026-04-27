@@ -22,7 +22,7 @@ with date_spine as(
 ),
 inclusion_list as(
     select distinct patient_id
-    from {{ ref('inclusion_cohort')}}
+    from {{ ref('cltcs_live_inclusion_cohort')}}
     where eligible = 1
 ), 
 activity as(
@@ -33,7 +33,9 @@ activity as(
     , op_encounters
     , gp_encounters
     from {{ref('fct_person_activity_by_month')}}
-    where activity_month between dateadd(month, -13, current_date()) and current_date()
+    where activity_month between
+        (select min(activity_month) from date_spine)
+        and (select max(activity_month) from date_spine)
 )
 
 select il.patient_id

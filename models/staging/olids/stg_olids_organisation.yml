@@ -1,9 +1,6 @@
-version: 2
 models:
   - name: stg_olids_organisation
-    description: Healthcare organisations including GP practices, hospitals, and
-      other providers. Deduplicated by id and filtered to exclude deleted 
-      records.
+    description: Healthcare organisations including GP practices, hospitals, and other providers. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
@@ -27,8 +24,7 @@ models:
       - name: postcode
         description: Postcode of the organisation
       - name: parent_organisation_id
-        description: Foreign key to organisation.id - parent organisation if 
-          part of a hierarchy
+        description: Foreign key to organisation.id - parent organisation if part of a hierarchy
       - name: open_date
         description: Date the organisation opened
       - name: close_date
@@ -44,14 +40,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

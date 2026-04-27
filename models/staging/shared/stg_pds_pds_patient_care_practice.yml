@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_pds_pds_patient_care_practice
     description: Personal Demographics Service patient GP practice registration
@@ -8,9 +7,10 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - row_id
-            - sk_patient_id
+          arguments:
+            combination_of_columns:
+              - row_id
+              - sk_patient_id
     columns:
       - name: row_id
         description: Row identifier
@@ -27,8 +27,7 @@ models:
       - name: event_to_date
         description: Registration effective to date (null if current)
       - name: registered_reason_for_removal
-        description: Reason for removal from practice list (sourced from 
-          stg_pds_pds_reason_for_removal)
+        description: Reason for removal from practice list (sourced from stg_pds_pds_reason_for_removal)
       - name: der_ccg_of_registration
         description: CCG of registration
       - name: der_current_ccg_of_registration

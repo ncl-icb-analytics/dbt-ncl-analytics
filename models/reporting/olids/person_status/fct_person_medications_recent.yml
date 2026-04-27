@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: fct_person_medications_recent
     description: |
@@ -27,13 +25,11 @@ models:
           - not_null
           - unique
           - relationships:
-              to: ref('dim_person')
-              field: person_id
-
+              arguments:
+                to: ref('dim_person')
+                field: person_id
       - name: medications_recent_30d
-        description: Array of medication objects for prescriptions in last 30 
-          days. Each object contains 'medication_name' and 'prescription_count'.
-          Empty array if no medications in last 30 days.
+        description: Array of medication objects for prescriptions in last 30 days. Each object contains 'medication_name' and 'prescription_count'. Empty array if no medications in last 30 days.
         data_tests:
           - not_null
 
@@ -42,53 +38,45 @@ models:
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 0
-
+              arguments:
+                min_value: 0
       - name: unique_medication_count_30d
-        description: Count of distinct medication names prescribed in the last 
-          30 days
+        description: Count of distinct medication names prescribed in the last 30 days
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 0
-
+              arguments:
+                min_value: 0
       - name: unique_active_ingredient_count_30d
-        description: Count of distinct active ingredients (VTMs) prescribed in 
-          the last 30 days. Medications without VTM mapping are excluded from 
-          this count.
+        description: Count of distinct active ingredients (VTMs) prescribed in the last 30 days. Medications without VTM mapping are excluded from this count.
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 0
-
+              arguments:
+                min_value: 0
       - name: medications_recent_12mo
-        description: Array of medication objects for prescriptions in last year 
-          (365 days). Each object contains 'medication_name' and 
-          'prescription_count'. Empty array if no medications in last year.
+        description: Array of medication objects for prescriptions in last year (365 days). Each object contains 'medication_name' and 'prescription_count'. Empty array if no medications in last year.
         data_tests:
           - not_null
 
       - name: total_prescriptions_12mo
-        description: Total count of prescription orders in the last year (365 
-          days)
+        description: Total count of prescription orders in the last year (365 days)
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 0
-
+              arguments:
+                min_value: 0
       - name: unique_medication_count_12mo
-        description: Count of distinct medication names prescribed in the last 
-          year (365 days)
+        description: Count of distinct medication names prescribed in the last year (365 days)
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 0
-
+              arguments:
+                min_value: 0
       - name: unique_active_ingredient_count_12mo
-        description: Count of distinct active ingredients (VTMs) prescribed in 
-          the last year (365 days). Medications without VTM mapping are excluded
-          from this count.
+        description: Count of distinct active ingredients (VTMs) prescribed in the last year (365 days). Medications without VTM mapping are excluded from this count.
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 0
+              arguments:
+                min_value: 0

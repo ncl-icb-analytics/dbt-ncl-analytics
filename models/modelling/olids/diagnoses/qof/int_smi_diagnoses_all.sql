@@ -6,45 +6,54 @@
 
 /*
 All serious mental illness (SMI) diagnosis observations from clinical records.
-Uses QOF SMI cluster IDs:
-- MH_COD: Mental health diagnoses (schizophrenia, bipolar disorder, other psychoses)
-- MHREM_COD: Mental health remission codes
+Uses MH_COD cluster for mental health diagnoses (schizophrenia, bipolar disorder, other psychoses).
 
-Clinical Purpose:
-- QOF SMI register data collection
-- Mental health care pathway monitoring
-- SMI treatment tracking
-- Resolution status tracking
-
-QOF Context:
-SMI register includes persons with mental health diagnosis codes who have not
-been resolved (no recent remission codes). Resolution logic applied in downstream fact models.
-Age restrictions typically ≥18 years applied in fact layer.
-
-Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
-This is OBSERVATION-LEVEL data - one row per SMI observation.
-Use this model as input for fct_person_smi_register.sql which applies QOF business rules.
+Per QOF MH001 spec, MH1_REG is "ever diagnosed" with no remission exclusion.
+MHREM_COD is not used — the register includes all patients with MH_DAT != Null.
+8.8.2026 KH SMI health checks core or enhanced are only performed on SMI patients not in remission so we need to keep resolved status logic in
+Use group by to aggregate records where identical clinical_effective_date, person_id and concept_code appear twice because they are in both MH_COD and MHREM_COD.
 */
-
-SELECT
+With base_observations as (
+SELECT 
     obs.id,
     obs.person_id,
     obs.clinical_effective_date,
     obs.mapped_concept_code AS concept_code,
     obs.mapped_concept_display AS concept_display,
-    obs.cluster_id AS source_cluster_id,
-
-    -- SMI-specific flags (observation-level only)
-    CASE WHEN obs.cluster_id = 'MH_COD' THEN TRUE ELSE FALSE END AS is_diagnosis_code,
-    CASE WHEN obs.cluster_id = 'MHREM_COD' THEN TRUE ELSE FALSE END AS is_resolved_code,
-
-    -- SMI observation type determination
+   CASE
+    WHEN MAX(CASE WHEN obs.cluster_id = 'MHREM_COD' THEN 1 ELSE 0 END) = 1
+        THEN 'SMI Resolved'
+    ELSE 'SMI Diagnosis'
+    END AS smi_observation_type,
+ -- SMI-specific flags (observation-level only)
+ /* Coalesce cluster with MHREM_COD taking precedence*/
     CASE
-        WHEN obs.cluster_id = 'MH_COD' THEN 'SMI Diagnosis'
-        WHEN obs.cluster_id = 'MHREM_COD' THEN 'SMI Resolved'
-        ELSE 'Unknown'
-    END AS smi_observation_type
+        WHEN MAX(CASE WHEN obs.cluster_id = 'MHREM_COD' THEN 1 ELSE 0 END) = 1
+            THEN 'MHREM_COD'
+        WHEN MAX(CASE WHEN obs.cluster_id = 'MH_COD' THEN 1 ELSE 0 END) = 1
+            THEN 'MH_COD'
+        ELSE NULL
+    END AS source_cluster_id,
+    /* Diagnosis is only true if it exists AND resolved does NOT exist */
+    CASE
+        WHEN MAX(CASE WHEN obs.cluster_id = 'MHREM_COD' THEN 1 ELSE 0 END) = 1
+            THEN FALSE
+        WHEN MAX(CASE WHEN obs.cluster_id = 'MH_COD' THEN 1 ELSE 0 END) = 1
+            THEN TRUE
+        ELSE FALSE
+    END AS is_diagnosis_code,
 
-FROM ({{ get_observations("'MH_COD', 'MHREM_COD'", source='PCD') }}) obs
-
+    /* Resolved wins if present */
+    CASE
+        WHEN MAX(CASE WHEN obs.cluster_id = 'MHREM_COD' THEN 1 ELSE 0 END) = 1
+            THEN TRUE
+        ELSE FALSE
+    END AS is_resolved_code
+    
+FROM ({{ get_observations("'MH_COD','MHREM_COD'", source='PCD') }}) obs
+GROUP BY ALL
 ORDER BY person_id, clinical_effective_date, id
+)
+SELECT *
+FROM base_observations
+QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1

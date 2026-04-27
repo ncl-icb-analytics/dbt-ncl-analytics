@@ -1,7 +1,6 @@
 models:
   - name: dq_cholesterol_issues
-    description: 'Data quality issues in cholesterol measurements requiring clinical
-      review.
+    description: 'Data quality issues in cholesterol measurements requiring clinical review.
 
       Quality Criteria:
 
@@ -11,8 +10,7 @@ models:
 
       • Date validation: Missing or future dates
 
-      Purpose: Supports cholesterol data validation and clinical review of extreme
-      values.'
+      Purpose: Supports cholesterol data validation and clinical review of extreme values.'
     config:
       meta:
         owner:
@@ -56,4 +54,5 @@ models:
 
     tests:
       - cluster_ids_exist:
-          cluster_ids: CHOL2_COD
+          arguments:
+            cluster_ids: CHOL2_COD

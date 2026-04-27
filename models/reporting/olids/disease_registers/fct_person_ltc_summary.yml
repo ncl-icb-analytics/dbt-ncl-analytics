@@ -1,11 +1,8 @@
-version: 2
 models:
   - name: fct_person_ltc_summary
-    description: 'Long-term conditions summary combining all QOF and clinical disease
-      registers.
+    description: 'Long-term conditions summary combining all QOF and clinical disease registers.
 
-      One row per person per condition with standardised condition codes, clinical
-      domains, diagnosis dates and QOF status.'
+      One row per person per condition with standardised condition codes, clinical domains, diagnosis dates and QOF status.'
 
     config:
       meta:
@@ -13,12 +10,16 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - person_id
-            - condition_code
+          arguments:
+            combination_of_columns:
+              - person_id
+              - condition_code
+      - condition_codes_match_seed:
+          arguments:
+            seed_model: ltc_register_denominator_rules
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:

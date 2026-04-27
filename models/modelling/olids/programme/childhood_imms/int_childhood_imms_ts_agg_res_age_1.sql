@@ -10,9 +10,9 @@ p.analysis_month
 ,'1 YEAR' as reporting_age
 ,CASE
 WHEN p.Vaccination_metric ='All vaccinations 1 Year' THEN 1
-WHEN p.Vaccination_metric ='6-in-1 (dose 1,2,3) 1 Year' THEN 2
-WHEN p.Vaccination_metric ='Rotavirus (dose 1,2) 1 Year' THEN 3
-WHEN p.Vaccination_metric ='Men B (dose 1,2) 1 Year' THEN 4
+WHEN p.Vaccination_metric ='6-in-1 (3 doses) 1 Year' THEN 2
+WHEN p.Vaccination_metric ='Rotavirus (2 doses) 1 Year' THEN 3
+WHEN p.Vaccination_metric ='Men B (2 doses) 1 Year' THEN 4
 WHEN p.Vaccination_metric ='PCV (dose 1) 1 Year' THEN 5
 END As VACC_ORDER 
 ,p.residential_borough
@@ -29,7 +29,7 @@ FROM (
 ------- 1 YEAR METRICS FROM HISTORICAL 
 --sixin1_1y 
 select 
- '6-in-1 (dose 1,2,3) 1 Year' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
+ '6-in-1 (3 doses) 1 Year' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(sixin1_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by all
@@ -38,7 +38,7 @@ group by all
 UNION
 --rotavirus_1y 
 select 
- 'Rotavirus (dose 1,2) 1 Year' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
+ 'Rotavirus (2 doses) 1 Year' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(rota_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by all
@@ -46,7 +46,7 @@ group by all
 UNION
 --menb_1y 
 select 
- 'Men B (dose 1,2) 1 Year' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
+ 'Men B (2 doses) 1 Year' as vaccination_metric, analysis_month, residential_borough, residential_neighbourhood, ward_name, ethcat_order, ethnicity_category, imd_quintile, imdquintile_order, 
 sum(menb_comp_by_1) as numerator, count(*) as denominator 
 FROM {{ ref('int_childhood_imms_vaccs_historical_age_1') }}
 group by all

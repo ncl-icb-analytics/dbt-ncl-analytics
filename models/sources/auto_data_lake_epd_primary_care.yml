@@ -44,9 +44,9 @@ sources:
     - name: HighVolVaccineIndicator
       data_type: BOOLEAN
     - name: ItemActualCost
-      data_type: NUMBER
+      data_type: NUMBER(18,4)
     - name: ItemCount
-      data_type: NUMBER
+      data_type: NUMBER(18,4)
     - name: ItemID
       data_type: TEXT
     - name: ItemNIC
@@ -68,7 +68,7 @@ sources:
     - name: PaidCDIndicator
       data_type: TEXT
     - name: PaidDisallowedReason
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PaidDissallowedIndicator
       data_type: BOOLEAN
     - name: PaidDrugStrength
@@ -90,7 +90,7 @@ sources:
     - name: PaiddmdCode
       data_type: TEXT
     - name: PatientAge
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PatientCCG
       data_type: TEXT
     - name: PatientGPCCG
@@ -134,7 +134,7 @@ sources:
     - name: ProcessingPeriodDate
       data_type: DATE
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCostCentreODSCCGCode
       data_type: TEXT
     - name: dmicCostCentreLSOACCGCode
@@ -142,7 +142,7 @@ sources:
     - name: dmicDispensedPharmacyLSOACCGCode
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicDateAdded
       data_type: TIMESTAMP_NTZ
     - name: dmicRecordHash
@@ -155,7 +155,7 @@ sources:
     identifier: '"MedsHeader"'
     columns:
     - name: DatSerVer
-      data_type: NUMBER
+      data_type: NUMBER(18,4)
     - name: OrgIdProvider
       data_type: TEXT
     - name: RPStartDate
@@ -167,7 +167,7 @@ sources:
     - name: FileType
       data_type: TEXT
     - name: TotalRecords
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqSubmissionID
       data_type: TEXT
     - name: dmicProcessedPeriod
@@ -175,8 +175,8 @@ sources:
     - name: Unique_MonthID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicDateAdded
       data_type: TIMESTAMP_NTZ

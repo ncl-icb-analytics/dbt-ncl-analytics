@@ -1,13 +1,12 @@
-version: 2
 models:
   - name: int_referral_ndpp_all
-    description: 'NHS Diabetes Prevention Programme outcomes using PCD REFSET DPPOFF_COD.
-      One row per person per date. Includes invitations and declines.'
+    description: 'NHS Diabetes Prevention Programme outcomes using PCD REFSET DPPOFF_COD. One row per person per date. Includes invitations and declines.'
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - person_id
-            - clinical_effective_date
+          arguments:
+            combination_of_columns:
+              - person_id
+              - clinical_effective_date
     config:
       meta:
         owner:

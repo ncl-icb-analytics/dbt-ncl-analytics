@@ -7,7 +7,7 @@
 }}
 --ALL CHECKS PER PERSON PER MONTH AS INT_SMI_SIX_CHECKS_HISTORICAL
 --TEST 1 BMI
---latest BMI code that falls within the year prior to the month end date categorise as MET or NOT MET
+--latest BMI code that falls within the year prior to the month end date categorise as MET or NOT MET and SMI is not resolved for that MONTH.
 WITH BMI AS (
 select 
 b.person_id
@@ -16,13 +16,14 @@ b.person_id
 ,b.bmi_category
 ,b.BMI_VALUE
 ,CASE
-WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As BMI_LAST_12M
+WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+END As BMI_LAST_12M
 ,ROW_NUMBER() OVER (PARTITION BY b.person_id, p.analysis_month ORDER BY CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 1 ELSE 0 END DESC, clinical_effective_date desc) as row_num
 FROM {{ ref('int_bmi_all') }} b
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_BMI_ALL b
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
 QUALIFY row_num = 1
 )
 --TEST 2 GLUCOSE HBA1C
@@ -31,19 +32,19 @@ QUALIFY row_num = 1
 select 
 b.person_id
 ,p.analysis_month
---,DATEADD('month', -12, p.analysis_month) AS MONTH_12LESS
 ,DATE(b.clinical_effective_date) as HBA1C_date
 ,b.HBA1C_CATEGORY
 --HBA1C values are undergoing maintenance to correct unit display issues so currently not included but will be added back once resolved.
 --,b.HBA1C_DISPLAY
 ,CASE
-WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As HBA1C_LAST_12M
+WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+END As HBA1C_LAST_12M
 ,ROW_NUMBER() OVER (PARTITION BY b.person_id, p.analysis_month ORDER BY CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 1 ELSE 0 END DESC, clinical_effective_date desc) as row_num
 FROM {{ ref('int_hba1c_all') }} b
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_HBA1C_ALL b
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
 QUALIFY row_num = 1
 )
 --TEST 3 CHOLESTEROL
@@ -52,18 +53,18 @@ QUALIFY row_num = 1
 select 
 c.person_id
 ,p.analysis_month
---,DATEADD('month', -12, p.analysis_month) AS MONTH_12LESS
 ,DATE(c.clinical_effective_date) as Cholesterol_date
 ,c.CHOLESTEROL_CATEGORY
 ,c.CHOLESTEROL_VALUE
 ,CASE
-WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As CHOL_LAST_12M
+WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+END As CHOL_LAST_12M
 ,ROW_NUMBER() OVER (PARTITION BY c.person_id, p.analysis_month ORDER BY CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 1 ELSE 0 END DESC, clinical_effective_date desc) as row_num
 FROM {{ ref('int_cholesterol_all') }} c
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_cholesterol_all c
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
 QUALIFY row_num = 1
 )
 --TEST 4 BLOOD PRESSURE
@@ -76,13 +77,14 @@ bp.person_id
 ,bp.SYSTOLIC_VALUE
 ,bp.DIASTOLIC_VALUE
 ,CASE
-WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As BP_LAST_12M
+WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+END As BP_LAST_12M
 ,ROW_NUMBER() OVER (PARTITION BY bp.person_id, p.analysis_month ORDER BY CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 1 ELSE 0 END DESC, clinical_effective_date desc) as row_num
 FROM {{ ref('int_blood_pressure_all') }} bp
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_BLOOD_PRESSURE_ALL bp
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
 QUALIFY row_num = 1
 )
 -- # TEST 5 SMOKING STATUS
@@ -94,13 +96,14 @@ s.person_id
 ,DATE(s.clinical_effective_date) as SMOK_date
 ,s.SMOKING_STATUS
 ,CASE
-WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As SMOK_LAST_12M
+WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+END As SMOK_LAST_12M
 ,ROW_NUMBER() OVER (PARTITION BY s.person_id, p.analysis_month ORDER BY CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 1 ELSE 0 END DESC, clinical_effective_date desc) as row_num
 FROM {{ ref('int_smoking_status_all') }} s
 --FROM MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_SMOKING_STATUS_ALL s
 INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
 QUALIFY row_num = 1
 )
 
@@ -123,7 +126,8 @@ WITH all_audit_scores AS (
         ,p.analysis_month
         ,DATE(a.clinical_effective_date) AS audit_date
         ,CASE
-    WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As ASSESSED_LAST_12M
+    WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+    END As ASSESSED_LAST_12M
         ,a.audit_type
         ,a.risk_category as ALCOHOL_RISK_CATEGORY
         -- Prefer full AUDIT if same date
@@ -133,7 +137,7 @@ WITH all_audit_scores AS (
         INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
         --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
         WHERE is_valid_score = TRUE 
-        AND clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+        AND clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
         QUALIFY rn = 1               
     ) a
      QUALIFY row_num = 1
@@ -155,12 +159,14 @@ WITH all_audit_scores AS (
         ,p.analysis_month
        ,d.concept_display
        ,DATE(d.clinical_effective_date) AS disorder_date
-    ,CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As ASSESSED_LAST_12M
+    ,CASE 
+    WHEN clinical_effective_date >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+    END As ASSESSED_LAST_12M
     FROM {{ ref('int_alcohol_misuse_disorders') }} d
     --FROM MODELLING.OLIDS_OBSERVATIONS.int_alcohol_misuse_disorders d
     INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
     --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-    where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+    where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
       ) a
    QUALIFY row_num = 1
     )
@@ -180,7 +186,9 @@ WITH all_audit_scores AS (
     a.person_id
     ,p.analysis_month
     ,a.clinical_effective_date as alcohol_assessment_date
-     ,CASE WHEN clinical_effective_date  >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' END As ASSESSED_LAST_12M
+     ,CASE 
+     WHEN clinical_effective_date >= DATEADD('month', -12, p.analysis_month) AND clinical_effective_date <= p.analysis_month THEN 'Met' ELSE 'Not Met' 
+     END As ASSESSED_LAST_12M
     ,a.alcohol_risk_category
     ,a.result_value as alcohol_units
     ,a.result_unit_display as unit_display
@@ -188,7 +196,7 @@ WITH all_audit_scores AS (
     --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_alcohol_all a
     INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
     --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)
-    where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }})
+    where clinical_effective_date <= (select MAX(analysis_month) from {{ ref('int_smi_population_historical') }}) 
    ) a
      QUALIFY row_num = 1
     )
@@ -222,6 +230,8 @@ QUALIFY rowno = 1
 SELECT 
         p.person_id
         ,p.analysis_month
+        ,p.has_smi
+        ,p.fiscal_year_label
         ,p.PRACTICE_NAME
         ,p.PRACTICE_CODE
         ,CASE WHEN b.person_id IS NULL THEN 'Not Met' ELSE b.BMI_LAST_12M END AS BMI_CHECK_12M

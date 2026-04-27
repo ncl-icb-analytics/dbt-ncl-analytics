@@ -1,0 +1,16 @@
+models:
+  - name: int_smi_cf_secondary_care
+    description: Person Level Intermediate table holding Case Finding data for 
+      people on the SMI register who have had an inpatient spell at NLFT in the last 6 months or who have a current inpatient spell. This includes number of checks missed and vulnerabilities. This dataset will be used to understand the characteristics of people on the SMI register who have had an inpatient spell at NLFT in the last 6 months or who have a current inpatient spell, and to identify any potential gaps in care or 
+      vulnerabilities. Note that the MHSDS active submission is 6 weeks behind current date, so this dataset will not include people who have commenced an inpatient spell at NLFT in the last 6 weeks.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique

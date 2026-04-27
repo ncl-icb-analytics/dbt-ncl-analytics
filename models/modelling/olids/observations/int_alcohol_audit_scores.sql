@@ -43,6 +43,7 @@ WITH base_observations AS (
     WHERE obs.clinical_effective_date IS NOT NULL
       AND obs.result_value IS NOT NULL
       AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
+      AND obs.age_at_event >= 16 -- Population health threshold: exclude alcohol observations recorded before age 16
 ),
 
 observations_with_demographics AS (

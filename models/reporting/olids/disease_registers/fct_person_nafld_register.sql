@@ -5,20 +5,18 @@
 }}
 
 /*
-Non-Alcoholic Fatty Liver Disease (NAFLD) register fact table - one row per person.
-Applies NAFLD register inclusion criteria.
+Metabolic dysfunction-associated steatotic liver disease (MASLD/NAFLD) register fact table - one row per person.
+Applies register inclusion criteria using the terminology-managed MASLD diagnosis cluster.
 
 Clinical Purpose:
-- NAFLD diagnosis tracking and monitoring
+- MASLD/NAFLD diagnosis tracking and monitoring
 - Liver health assessment
 - Clinical register (NOT part of QOF)
 
 Business Logic:
-- Any NAFLD diagnosis code (hardcoded SNOMED concepts)
+- Any diagnosis code in the MASLD_DX_CODES cluster
 - No age restrictions
 - No resolution codes
-
-⚠️ TODO: Update with proper cluster ID once NAFLD_COD becomes available in REFERENCE.
 
 Includes only active patients as per standard population requirements.
 This table provides one row per person for analytical use.

@@ -1,18 +1,16 @@
-version: 2
 models:
   - name: int_covid_vaccination_declined
     description: 'COVID vaccination decline tracking.
 
       Grain: One row per person per campaign who declined vaccination
 
-      Identifies people: • Vaccination decline codes (COVDECL_COD) • Within campaign
-      tracking period • All ages eligible
+      Identifies people: • Vaccination decline codes (COVDECL_COD) • Within campaign tracking period • All ages eligible
 
       Used by: Mart models for uptake and status determination'
     tests:
       - cluster_ids_exist:
-          cluster_ids: COVDECL_COD
-
+          arguments:
+            cluster_ids: COVDECL_COD
     config:
       meta:
         indicator:

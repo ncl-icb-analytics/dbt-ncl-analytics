@@ -19,7 +19,7 @@ sources:
     - name: SOURCECLUSTERDESCRIPTION
       data_type: TEXT
     - name: SNOMEDCONCEPTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CODEDESCRIPTION
       data_type: TEXT
     - name: SOURCE
@@ -67,7 +67,7 @@ sources:
     - name: SOURCECLUSTERDESCRIPTION
       data_type: TEXT
     - name: SNOMEDCONCEPTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CODEDESCRIPTION
       data_type: TEXT
     - name: SOURCE
@@ -142,15 +142,15 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: LAST_ATTEMPTED_REFRESH
       data_type: TIMESTAMP_NTZ
-    - name: LAST_ERROR_MESSAGE
-      data_type: NUMBER
     - name: ECL_EXPRESSION_HASH
       data_type: TEXT
     - name: RECORD_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LAST_REFRESHED_BY
       data_type: TEXT
     - name: LAST_ATTEMPTED_BY
+      data_type: TEXT
+    - name: LAST_ERROR_MESSAGE
       data_type: TEXT
   - name: ECL_CLUSTERS
     identifier: '"ECL_CLUSTERS"'
@@ -175,7 +175,7 @@ sources:
     identifier: '"ECL_CLUSTER_CHANGES"'
     columns:
     - name: CHANGE_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CLUSTER_ID
       data_type: TEXT
     - name: CHANGE_TYPE
@@ -208,9 +208,9 @@ sources:
     - name: DEPRIORITISE_FLAG
       data_type: BOOLEAN
     - name: PREFERENCE_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CATEGORY_SORT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DISPLAY_SORT_KEY
       data_type: TEXT
   - name: LTC_LCS_CODES
@@ -254,6 +254,8 @@ sources:
       data_type: TEXT
     - name: EXCLUDE_CHILDREN
       data_type: BOOLEAN
+    - name: IS_DESCENDANT
+      data_type: BOOLEAN
   - name: LTC_LCS_FAILED_CODES
     identifier: '"LTC_LCS_FAILED_CODES"'
     columns:
@@ -295,13 +297,23 @@ sources:
     columns:
     - name: REPORT_ID
       data_type: TEXT
+    - name: REPORT_XML_ID
+      data_type: TEXT
     - name: REPORT_NAME
       data_type: TEXT
     - name: SEARCH_NAME
       data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: PARENT_TYPE
+      data_type: TEXT
+    - name: PARENT_REPORT_ID
+      data_type: TEXT
     - name: FOLDER_PATH
       data_type: TEXT
     - name: XML_FILE_NAME
+      data_type: TEXT
+    - name: EQUIVALENCE_FILTER_SETTING
       data_type: TEXT
     - name: PARSED_AT
       data_type: TIMESTAMP_NTZ
@@ -313,17 +325,65 @@ sources:
     - name: REPORT_ID
       data_type: TEXT
     - name: VALUESET_INDEX
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: VALUESET_HASH
       data_type: TEXT
     - name: VALUESET_FRIENDLY_NAME
       data_type: TEXT
     - name: CODE_SYSTEM
       data_type: TEXT
+    - name: ECL_EXPRESSION
+      data_type: TEXT
     - name: EXPANSION_ERROR
       data_type: TEXT
     - name: EXPANDED_AT
       data_type: TIMESTAMP_NTZ
+  - name: OPENCODELISTS
+    identifier: '"OPENCODELISTS"'
+    columns:
+    - name: CODELIST_ORG
+      data_type: TEXT
+    - name: CODELIST_SLUG
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: VERSION_HASH
+      data_type: TEXT
+    - name: CODING_SYSTEM
+      data_type: TEXT
+    - name: CODE
+      data_type: TEXT
+    - name: TERM
+      data_type: TEXT
+    - name: CLUSTER_ID
+      data_type: TEXT
+  - name: OPENCODELISTS_INGEST_LOG
+    identifier: '"OPENCODELISTS_INGEST_LOG"'
+    columns:
+    - name: RUN_ID
+      data_type: NUMBER(38,0)
+    - name: RUN_START
+      data_type: TIMESTAMP_NTZ
+    - name: RUN_END
+      data_type: TIMESTAMP_NTZ
+    - name: FULL_REBUILD
+      data_type: BOOLEAN
+    - name: STATUS
+      data_type: TEXT
+    - name: CODELISTS_AVAILABLE
+      data_type: NUMBER(38,0)
+    - name: CODELISTS_LOADED
+      data_type: NUMBER(38,0)
+    - name: CODES_LOADED
+      data_type: NUMBER(38,0)
+    - name: REQUESTS_MADE
+      data_type: NUMBER(38,0)
+    - name: FAILED_REQUESTS
+      data_type: NUMBER(38,0)
+    - name: DURATION_SECONDS
+      data_type: FLOAT
+    - name: ERROR_MESSAGE
+      data_type: TEXT
   - name: PCD_REFSET_LATEST
     identifier: '"PCD_REFSET_LATEST"'
     columns:
@@ -332,7 +392,7 @@ sources:
     - name: CLUSTER_DESCRIPTION
       data_type: TEXT
     - name: SNOMED_CODE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SNOMED_CODE_DESCRIPTION
       data_type: TEXT
     - name: PCD_REFSET_ID

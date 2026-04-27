@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: cltcs_activities_in_scope
@@ -15,6 +14,10 @@ models:
         data_tests:
           - unique
           - not_null
+
+      - name: PRIMARY_CARE_PROVIDER
+        data_type: varchar
+        description: "Current registered GP practice ODS code from PDS"
 
       - name: cancer
         data_type: number

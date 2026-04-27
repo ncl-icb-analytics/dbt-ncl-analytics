@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_csds_bridging
-    description: Bridging table linking CSDS person identifiers to Pseudonymised
-      NHS numbers
+    description: Bridging table linking CSDS person identifiers to Pseudonymised NHS numbers
     config:
       meta:
         owner:
@@ -17,4 +15,5 @@ models:
         description: Pseudonymised NHS number (surrogate key for patient)
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

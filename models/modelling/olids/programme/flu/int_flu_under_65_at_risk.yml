@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: int_flu_under_65_at_risk
-    description: 'Flu vaccination eligibility parent category for people under 65
-      years with clinical risk factors.
+    description: 'Flu vaccination eligibility parent category for people under 65 years with clinical risk factors.
 
       Key Features:
 
@@ -16,8 +14,7 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Provides single view of under 65 at-risk cohort whilst preserving individual
-      condition details for analysis.'
+      Purpose: Provides single view of under 65 at-risk cohort whilst preserving individual condition details for analysis.'
     config:
       meta:
         indicator:
@@ -26,8 +23,7 @@ models:
           category: "FLU"
           clinical_domain: "Programme Management"
           name_short: "Flu Eligible Under 65 At Risk"
-          description_short: "People under 65 with clinical risk factors eligible
-            for flu vaccination"
+          description_short: "People under 65 with clinical risk factors eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility parent category combining all clinical condition-based
             eligibility for people under 65 years. Aggregates diabetes, heart disease,
@@ -89,12 +85,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'

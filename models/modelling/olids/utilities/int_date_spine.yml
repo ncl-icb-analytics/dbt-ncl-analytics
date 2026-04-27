@@ -1,12 +1,8 @@
-version: 2
-
 models:
   - name: int_date_spine
     description: 'Comprehensive date dimension table for temporal analysis.
 
-      Pre-calculates all date attributes and relative flags for a 10-year monthly
-      spine. Centralises date logic to eliminate repetitive date calculations across
-      models.
+      Pre-calculates all date attributes and relative flags for a 10-year monthly spine. Centralises date logic to eliminate repetitive date calculations across models.
 
       Key Features:
 
@@ -22,8 +18,7 @@ models:
 
       • Clustered by month_start_date for optimal join performance
 
-      Purpose: Single source of truth for all date-related calculations in temporal
-      analyses.'
+      Purpose: Single source of truth for all date-related calculations in temporal analyses.'
     config:
       meta:
         owner:
@@ -50,13 +45,15 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [1, 2, 3, 4]
+              arguments:
+                values: [1, 2, 3, 4]
       - name: month_number
         description: Month number (1-12)
         tests:
           - not_null
           - accepted_values:
-              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
       - name: month_name
         description: Full month name (e.g., 'January')
 
@@ -100,7 +97,8 @@ models:
         description: UK financial quarter number (1-4, where 1 is Apr-Jun)
         tests:
           - accepted_values:
-              values: [1, 2, 3, 4]
+              arguments:
+                values: [1, 2, 3, 4]
       - name: financial_quarter_label
         description: UK financial quarter label (Q1-Q4)
 

@@ -17,7 +17,13 @@ WITH base_observations AS (
         obs.id,
         obs.person_id,
         obs.clinical_effective_date,
-        CAST(obs.result_value AS NUMBER(10,3)) AS fev1_fvc_ratio,
+        -- Normalise: values >1 are percentages (e.g. 70 = 0.70)
+        CASE
+            WHEN CAST(obs.result_value AS NUMBER(10,3)) > 1.0
+                THEN CAST(obs.result_value AS NUMBER(10,3)) / 100.0
+            ELSE CAST(obs.result_value AS NUMBER(10,3))
+        END AS fev1_fvc_ratio,
+        CAST(obs.result_value AS NUMBER(10,3)) AS fev1_fvc_ratio_raw,
         obs.result_unit_display,
         obs.mapped_concept_code AS concept_code,
         obs.mapped_concept_display AS code_description,
@@ -33,6 +39,7 @@ SELECT
     ID,
     clinical_effective_date,
     fev1_fvc_ratio,
+    fev1_fvc_ratio_raw,
     result_unit_display,
     original_result_value,
     concept_code,
@@ -47,10 +54,10 @@ SELECT
     END AS is_below_0_7,
 
     -- Enhanced analytics flags
-    -- Validate spirometry reading
+    -- Validate spirometry reading (fev1_fvc_ratio is already normalised)
     CASE
-        WHEN source_cluster_id = 'FEV1FVCL70_COD' THEN TRUE -- Pre-coded values are valid
-        WHEN source_cluster_id = 'FEV1FVC_COD' AND fev1_fvc_ratio BETWEEN 0.1 AND 2.0 THEN TRUE -- Valid ratio range
+        WHEN source_cluster_id = 'FEV1FVCL70_COD' THEN TRUE
+        WHEN source_cluster_id = 'FEV1FVC_COD' AND fev1_fvc_ratio BETWEEN 0.1 AND 1.0 THEN TRUE
         ELSE FALSE
     END AS is_valid_spirometry,
 

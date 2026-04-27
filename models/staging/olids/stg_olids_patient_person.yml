@@ -1,22 +1,18 @@
-version: 2
 models:
   - name: stg_olids_patient_person
-    description: Junction table linking patient records to person records for 
-      identity management. Deduplicated by id using lds_start_date_time.
+    description: Junction table linking patient records to person records for identity management. Deduplicated by id using lds_start_date_time.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
       - name: id
-        description: Primary key - unique identifier for this patient-person 
-          link
+        description: Primary key - unique identifier for this patient-person link
         tests:
           - unique
           - not_null
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
       - name: lds_id
         description: LDS system identifier
       - name: lds_business_key
@@ -32,8 +28,7 @@ models:
       - name: person_id
         description: Foreign key to person.id
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag from LDS
       - name: lds_lakehouse_date_processed
@@ -44,4 +39,5 @@ models:
         description: LDS record identifier for person
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

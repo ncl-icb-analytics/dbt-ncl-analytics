@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: stg_reference_bnf_polypharmacy_exclusions
     description: |
@@ -18,9 +16,9 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 40
-          max_value: 100
-
+          arguments:
+            min_value: 40
+            max_value: 100
     columns:
       - name: bnf_chapter_code
         description: |
@@ -43,4 +41,5 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]

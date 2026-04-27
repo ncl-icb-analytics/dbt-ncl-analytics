@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: fct_cervical_screening_status
     description: 'Cervical screening programme status for eligible females aged 25-64

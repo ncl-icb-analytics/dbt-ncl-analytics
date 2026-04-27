@@ -1,13 +1,10 @@
-version: 2
 models:
   - name: int_flu_diabetes
-    description: 'Flu vaccination eligibility for people with diabetes or Addisons
-      disease with resolution logic.
+    description: 'Flu vaccination eligibility for people with diabetes or Addisons disease with resolution logic.
 
       Key Features:
 
-      • Two eligibility pathways: Addisons disease (ADDIS_COD) or active diabetes
-      (DIAB_COD)
+      • Two eligibility pathways: Addisons disease (ADDIS_COD) or active diabetes (DIAB_COD)
 
       • Exclusion logic for resolved diabetes (DMRES_COD superseding DIAB_COD)
 
@@ -19,8 +16,7 @@ models:
 
       • Deduplicates to best qualifying event per person
 
-      Purpose: Identify people eligible for flu vaccination due to diabetes or related
-      conditions.'
+      Purpose: Identify people eligible for flu vaccination due to diabetes or related conditions.'
     config:
       meta:
         indicator:
@@ -29,8 +25,7 @@ models:
           category: "FLU"
           clinical_domain: "Cardiometabolic"
           name_short: "Flu Eligible Diabetes"
-          description_short: "People with diabetes or Addisons disease eligible for
-            flu vaccination"
+          description_short: "People with diabetes or Addisons disease eligible for flu vaccination"
           description_long: >
             Flu vaccination eligibility for people with diabetes mellitus or Addisons
             disease.
@@ -65,12 +60,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
@@ -85,8 +81,7 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying diagnosis (earliest Addisons or latest active
-          diabetes)'
+        description: 'Date of qualifying diagnosis (earliest Addisons or latest active diabetes)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

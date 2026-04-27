@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_sus_ae_procedure
@@ -8,10 +7,17 @@ models:
       meta:
         owner:
           name: Emily Baldwin
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
     columns:
       - name: event_id
         data_type: varchar
         description: "Unique identifier for the record"
+        data_tests:
+          - not_null
+          - unique
 
       - name: sk_patient_id
         data_type: varchar

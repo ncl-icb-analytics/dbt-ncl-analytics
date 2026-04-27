@@ -6,16 +6,20 @@ Business Rule: Person is eligible if they have:
 2. Pregnancy code in 8 months before campaign with no subsequent delivery
 
 Simplified rule aligned with flu pregnancy logic.
-Eligible in all COVID campaigns (both 2024/25 and 2025/26).
+Eligible in 2024/25 campaigns; not eligible in 2025/26.
 */
 
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
     -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ covid_campaign_config(var('covid_current_campaign', 'covid_2025_autumn')) }})
+    SELECT * FROM ({{ covid_autumn_config() }})
     UNION ALL
-    SELECT * FROM ({{ covid_campaign_config(var('covid_previous_campaign', 'covid_2024_autumn')) }})
+    SELECT * FROM ({{ covid_spring_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_autumn_config() }})
+    UNION ALL
+    SELECT * FROM ({{ covid_previous_spring_config() }})
 ),
 
 -- Step 1: Find pregnancy/delivery codes during campaign periods (for all campaigns)  
@@ -31,7 +35,8 @@ pregnancy_during_campaign_periods AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.pregnancy_current_start
         AND obs.clinical_effective_date <= cc.pregnancy_current_end
-    GROUP BY 
+        AND cc.eligible_pregnancy = TRUE
+    GROUP BY
         cc.campaign_id, obs.person_id, cc.campaign_reference_date
 ),
 
@@ -49,6 +54,7 @@ pregnancy_before_campaign AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.pregnancy_lookback_start
         AND obs.clinical_effective_date < cc.pregnancy_current_start
+        AND cc.eligible_pregnancy = TRUE
     GROUP BY 
         cc.campaign_id, obs.person_id, cc.pregnancy_lookback_start,
         cc.pregnancy_current_start, cc.campaign_reference_date

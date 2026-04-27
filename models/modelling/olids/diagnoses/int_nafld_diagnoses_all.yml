@@ -1,21 +1,17 @@
-version: 2
 models:
   - name: int_nafld_diagnoses_all
-    description: 'Non-Alcoholic Fatty Liver Disease diagnosis observations for liver
-      health assessment.
+    description: 'MASLD / NAFLD diagnosis observations for liver health assessment.
 
       Key Features:
 
-      • Uses hardcoded SNOMED concepts (pending NAFLD_COD cluster availability)
+      • Uses the terminology-managed MASLD_DX_CODES cluster
 
-      • Tracks NAFLD diagnosis observations
+      • Captures modern MASLD terminology and legacy NAFLD/NASH diagnoses
 
-      • Supports liver health assessment
+      • Supports liver health assessment and LTC LCS register logic
 
-      • Potential for future QOF register development
-
-      Purpose: Provide observation-level data for NAFLD tracking until proper cluster
-      ID becomes available.'
+      Purpose: Provide observation-level MASLD / NAFLD diagnosis data for
+      downstream register models.'
     config:
       meta:
         owner:
@@ -32,20 +28,18 @@ models:
       - name: person_id
         description: 'Unique identifier for the person'
       - name: clinical_effective_date
-        description: 'Date when the NAFLD observation was recorded'
+        description: 'Date when the MASLD / NAFLD observation was recorded'
       - name: concept_code
-        description: 'SNOMED concept code for NAFLD diagnosis (197315008, 1197739005,
-          1231824009, 442685003, 722866000, 503681000000108)'
+        description: 'SNOMED concept code for the MASLD / NAFLD diagnosis'
       - name: concept_display
-        description: 'Human-readable description of the NAFLD diagnosis'
+        description: 'Human-readable description of the MASLD / NAFLD diagnosis'
       - name: source_cluster_id
-        description: 'Source cluster identifier (HARDCODED_NAFLD pending proper cluster)'
+        description: 'Source cluster identifier, expected to be MASLD_DX_CODES'
       - name: patient_id
         description: 'Patient identifier from source system'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating diagnosis code (always TRUE for NAFLD
-          observations)'
+        description: 'Boolean flag indicating diagnosis code (always TRUE for these observations)'
       - name: nafld_observation_type
-        description: 'Type of NAFLD observation (always "NAFLD Diagnosis")'
+        description: 'Type of liver diagnosis observation'
       - name: numeric_value
         description: 'Numeric result value from the observation if available'

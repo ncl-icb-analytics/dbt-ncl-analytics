@@ -14,6 +14,10 @@ Business Logic:
    - BPH or Gout ('CKD_BPH_GOUT')
    - Lithium/Sulfasalazine/Tacrolimus medications in last 6 months
    - Valid microhaematuria (complex logic with UACR and urine tests)
+   NOTE: In EMIS CKD_64_1D, Rules 2-3 (AKI, BPH/gout, meds) are "informational"
+   (pass → include, fail → next rule), meaning they annotate but don't gate inclusion.
+   Rule 4 (haematuria + linked criteria) is the actual inclusion gate. Our implementation
+   treats all conditions as OR-based inclusion criteria which is a broader interpretation.
 
 3. eGFR Exclusion:
    - Must NOT have had eGFR test in last 12 months

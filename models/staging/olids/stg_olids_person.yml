@@ -1,9 +1,6 @@
-version: 2
 models:
   - name: stg_olids_person
-    description: Person-level demographic records used for patient identity 
-      management across systems. Deduplicated by id with NHS number hashes 
-      aggregated into array.
+    description: Person-level demographic records used for patient identity management across systems. Deduplicated by id with NHS number hashes aggregated into array.
     config:
       meta:
         owner:
@@ -15,8 +12,7 @@ models:
           - unique
           - not_null
       - name: nhs_number_hashes
-        description: Array of distinct hashed NHS numbers associated with this 
-          person (one person may have multiple NHS number hashes)
+        description: Array of distinct hashed NHS numbers associated with this person (one person may have multiple NHS number hashes)
       - name: title
         description: Person title (Mr, Mrs, Dr, etc.)
       - name: gender_concept_id
@@ -31,4 +27,5 @@ models:
         description: Month of death (1-12), if deceased
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_inhaled_corticosteroid_medications_all
     description: 'Inhaled corticosteroid medication orders using BNF classification

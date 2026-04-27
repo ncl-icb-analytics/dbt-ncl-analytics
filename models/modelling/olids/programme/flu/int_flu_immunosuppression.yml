@@ -1,13 +1,10 @@
-version: 2
 models:
   - name: int_flu_immunosuppression
-    description: 'Flu vaccination eligibility for people with immunosuppression using
-      pathway logic.
+    description: 'Flu vaccination eligibility for people with immunosuppression using pathway logic.
 
       Key Features:
 
-      • Four eligibility pathways: diagnosis (IMMDX_COD), medication (IMMRX_COD),
-      admin codes (IMMADM_COD), or chemotherapy/radiotherapy (DXT_CHEMO_COD)
+      • Four eligibility pathways: diagnosis (IMMDX_COD), medication (IMMRX_COD), admin codes (IMMADM_COD), or chemotherapy/radiotherapy (DXT_CHEMO_COD)
 
       • Time-limited medication and treatment pathways (6 months lookback from campaign)
 
@@ -17,8 +14,7 @@ models:
 
       • Generates data for current and previous flu campaigns automatically
 
-      Purpose: Identify people eligible for flu vaccination due to immunosuppression
-      from causes.'
+      Purpose: Identify people eligible for flu vaccination due to immunosuppression from causes.'
     config:
       meta:
         indicator:
@@ -74,12 +70,13 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
@@ -94,8 +91,7 @@ models:
         tests:
           - not_null
       - name: qualifying_event_date
-        description: 'Date of qualifying immunosuppression event (diagnosis, medication,
-          or treatment)'
+        description: 'Date of qualifying immunosuppression event (diagnosis, medication, or treatment)'
       - name: reference_date
         description: 'Campaign reference date used for eligibility assessment'
       - name: description

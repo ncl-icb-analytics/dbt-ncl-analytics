@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_sus_ae_clinical_treatments_snomed
     description: SUS A&E clinical treatments (SNOMED CT)
@@ -8,11 +7,13 @@ models:
           name: Emily Baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - primarykey_id
-            - snomed_id
+          arguments:
+            combination_of_columns:
+              - primarykey_id
+              - snomed_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: primarykey_id
         description: Primary key from main A&E attendance (FK)
@@ -23,8 +24,7 @@ models:
         tests:
           - not_null
       - name: rownumber_id
-        description: Sequence number for ordering treatments within an 
-          attendance
+        description: Sequence number for ordering treatments within an attendance
         tests:
           - not_null
       - name: code

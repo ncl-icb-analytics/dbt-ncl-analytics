@@ -2,24 +2,24 @@
 
 ## Overview
 
-This documentation covers versioning for the prod state of the dim_person_demographics_basic model ([DIM_PERSON_DEMOGRAPHICS_BASIC | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/REPORTING/schemas/COMMISSIONING_REPORTING/table/DIM_PERSON_DEMOGRAPHICS_BASIC)).
+This documentation covers versioning for the prod state of the dim_person_demographics_basic model ([DIM_PERSON_DEMOGRAPHICS_BASIC | Table](https://app.snowflake.com/atkjncu/wnl/#/data/databases/REPORTING/schemas/COMMISSIONING_REPORTING/table/DIM_PERSON_DEMOGRAPHICS_BASIC)).
 
-A more raw view of the combined demographic data is available in the intermediate combined model ([INT_PERSON_PMI_COMBINED | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_COMBINED/data-preview)). This table contains the data source and event date for each patient used in the final table.
+A more raw view of the combined demographic data is available in the intermediate combined model ([INT_PERSON_PMI_COMBINED | Table](https://app.snowflake.com/atkjncu/wnl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_COMBINED/data-preview)). This table contains the data source and event date for each patient used in the final table.
 
 Currently the following datasets are used in the Demographics Basic table:
-- PDS ([INT_PERSON_PMI_DATASET_PDS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_PDS))
-- SUS ([INT_PERSON_PMI_DATASET_SUS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_SUS))
-- Ethnicity National Data Sets ([INT_PERSON_PMI_DATASET_ETHNICITY_NATIONAL_DATA_SETS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_ETHNICITY_NATIONAL_DATA_SETS))
+- PDS ([INT_PERSON_PMI_DATASET_PDS | Table](https://app.snowflake.com/atkjncu/wnl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_PDS))
+- SUS ([INT_PERSON_PMI_DATASET_SUS | Table](https://app.snowflake.com/atkjncu/wnl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_SUS))
+- Ethnicity National Data Sets ([INT_PERSON_PMI_DATASET_ETHNICITY_NATIONAL_DATA_SETS | Table](https://app.snowflake.com/atkjncu/wnl/#/data/databases/MODELLING/schemas/COMMISSIONING_MODELLING/table/INT_PERSON_PMI_DATASET_ETHNICITY_NATIONAL_DATA_SETS))
 
-Note that the logic for the PDS Snapshot table largely follows the same logic as the Demographics Basic table but is limited to data available in PDS only (with ethnicity data supplemented using Ethnicity National Data Sets) ([DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/REPORTING/schemas/COMMISSIONING_REPORTING/table/DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS)).
+Note that the logic for the PDS Snapshot table largely follows the same logic as the Demographics Basic table but is limited to data available in PDS only (with ethnicity data supplemented using Ethnicity National Data Sets) ([DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS | Table](https://app.snowflake.com/atkjncu/wnl/#/data/databases/REPORTING/schemas/COMMISSIONING_REPORTING/table/DIM_SNAPSHOT_PERSON_PDS_DEMOGRAPHICS)).
 
 ## Version History
-### V1.0 - 22/01/2026
+### V1.0.0 - 22/01/2026
 * Initial version of dim_person_demographics_basic created.
 * Initial data sources included:
     - PDS
     - SUS
-    - Ethnicity National Data Sets ([ETHNICITY_NATIONAL_DATA_SETS | Table](https://app.snowflake.com/atkjncu/ncl/#/data/databases/MODELLING/schemas/LOOKUP_NCL/table/ETHNICITY_NATIONAL_DATA_SETS))
+    - Ethnicity National Data Sets ([ETHNICITY_NATIONAL_DATA_SETS | Table](https://app.snowflake.com/atkjncu/wnl/#/data/databases/MODELLING/schemas/LOOKUP_NCL/table/ETHNICITY_NATIONAL_DATA_SETS))
 * Core demographic attributes (note these core fields are expanded using joins to lookup tables in the final table):
     - SK Patient ID (Pseudonymised NHS Number)
     - Gender
@@ -33,7 +33,7 @@ Note that the logic for the PDS Snapshot table largely follows the same logic as
     - NCL Registered Flag (At time of refresh)
     - NCL Resident Flag (At time of refresh)
 
-### V1.1 - 26/01/2026
+### V1.1.0 - 26/01/2026
 * The logic to determine which dataset to pull from is more advanced:
   * Previous logic: Use PDS where it exists otherwise SUS (expect for ethnicity data where ETHNICITY_NATIONAL_DATA_SETS | Table is used when possible)
   * New logic: Custom per field but typically:
@@ -42,3 +42,8 @@ Note that the logic for the PDS Snapshot table largely follows the same logic as
 * Cleaned up some of the ethnicity codes in the ethnicity data set and truncated to 1 digit (as 95% of codes only used 1 digit simplified ethnicity codes so why mix and match)
 * Renamed resident fields to all include residence_ as a prefix for consistency
 * Added some logic for registered borough and neighbourhood to replace NULLs with more informative values like 'Non-NCL' or 'Unknown due to practice closure'
+
+### V1.1.1 - 02/03/2026
+* Modified the registered GP practice logic to only consider non-PDS sources for the population outside of NCL (in order to reduce known false positives)
+* Adjusted logic so that patients registered to a closed GP practice are now listed with no registered practice in the final output
+* Added Residence ICB fields in the final output

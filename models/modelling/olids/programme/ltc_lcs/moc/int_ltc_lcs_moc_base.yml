@@ -1,0 +1,23 @@
+models:
+  - name: int_ltc_lcs_moc_base
+    description: |
+      LTC LCS Model of Care base population. One row per person on any LTC LCS
+      disease register. Included registers:
+      Atrial Fibrillation, CKD, CHD, Diabetes, Hypertension, NAFLD, Asthma (Adult),
+      Asthma (CYP), COPD, Heart Failure, PAD, Stroke/TIA.
+      Used to gate downstream risk stratification and MOC activity reporting to
+      the LTC LCS cohort.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          arguments:
+            column_name: person_id
+    columns:
+      - name: person_id
+        description: Unique person identifier
+        data_tests:
+          - not_null
+          - unique

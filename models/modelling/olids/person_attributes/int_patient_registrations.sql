@@ -34,13 +34,13 @@ raw_registrations AS (
         eoc.id AS registration_record_id,
         eoc.patient_id,
         ptp.person_id,
-        eoc.organisation_id,
+        eoc.organisation_id_publisher,
         eoc.episode_of_care_start_date AS registration_start_datetime,
         eoc.episode_of_care_end_date AS registration_end_datetime,
         eoc.care_manager_practitioner_id AS practitioner_id,
         eoc.id AS episode_of_care_id,
-        -- Get practice details from record_owner_organisation_code for consistency
-        eoc.record_owner_organisation_code AS practice_ods_code,
+        -- Get practice details from organisation_code_publisher for consistency
+        eoc.organisation_code_publisher AS practice_ods_code,
         dp.practice_name,
         -- Get patient details
         p.sk_patient_id,
@@ -50,14 +50,14 @@ raw_registrations AS (
     INNER JOIN patient_to_person AS ptp
         ON eoc.patient_id = ptp.patient_id
     LEFT JOIN {{ ref('dim_practice') }} AS dp
-        ON eoc.record_owner_organisation_code = dp.practice_code
+        ON eoc.organisation_code_publisher = dp.practice_code
     LEFT JOIN {{ ref('stg_olids_patient') }} AS p
         ON eoc.patient_id = p.id
     LEFT JOIN patient_deceased_status AS pds
         ON eoc.patient_id = pds.patient_id
     WHERE eoc.episode_of_care_start_date IS NOT NULL
         AND eoc.patient_id IS NOT NULL
-        AND eoc.organisation_id IS NOT NULL
+        AND eoc.organisation_id_publisher IS NOT NULL
         -- Regular episodes only (excludes Temporary, Emergency, etc.)
         AND eoc.episode_type_source_code = 'Regular'
         -- Exclude Left episodes with no end date (DQ issue: marked Left but never closed)
@@ -65,7 +65,7 @@ raw_registrations AS (
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
             ptp.person_id,
-            eoc.organisation_id,
+            eoc.organisation_id_publisher,
             eoc.episode_of_care_start_date,
             eoc.episode_of_care_end_date,
             eoc.care_manager_practitioner_id
@@ -177,7 +177,7 @@ SELECT
     prs.person_id,
     prs.patient_id,
     prs.sk_patient_id,
-    prs.organisation_id,
+    prs.organisation_id_publisher,
     prs.practice_name,
     prs.practice_ods_code,
 

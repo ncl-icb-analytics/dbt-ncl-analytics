@@ -1,12 +1,15 @@
-version: 2
 models:
   - name: int_ltc_lcs_cf_exclusions
-    description: 'Patients with existing Long Term Conditions who should be excluded
-      from case finding programmes.
+    description: >
+      Patients with existing Long Term Conditions relevant to case finding exclusions.
 
-      One row per person with any excluding LTC condition across 13 major conditions:
-      CKD, AF, COPD, HTN, CHD, Stroke/TIA, PAD, HF, T2DM, hyperlipidaemia, NAFLD,
-      asthma with boolean flags and composite exclusion indicator.'
+      One row per person with boolean flags for 13 conditions: CKD, AF, COPD, HTN, CHD,
+      Stroke/TIA, PAD, HF, Diabetes (all types), Hyperlipidaemia, NAFLD, Asthma, CYP Asthma.
+
+      Provides separate composite flags mirroring EMIS population searches:
+      - has_metabolic_excluding_condition (ICS_METABOLIC_LTC equivalent): metabolic/CV conditions only
+      - has_respiratory_excluding_condition (ICS_RESP_LTC equivalent): COPD, Asthma, CYP Asthma
+      - has_excluding_condition: combined (legacy, prefer specific flags)
     config:
       meta:
         owner:

@@ -1,4 +1,4 @@
-# Contributing to NCL Analytics dbt Project
+# Contributing to WNL ICB Analytics dbt Project
 
 Welcome! This guide will help you get set up to contribute to this project.
 
@@ -58,8 +58,8 @@ You'll need the following information from Snowflake (ask your team lead if you 
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics
-cd dbt-ncl-analytics
+git clone https://github.com/wnl-icb-analytics/dbt-analytics
+cd dbt-analytics
 ```
 
 ### Step 2: Set Up Python Environment
@@ -91,7 +91,7 @@ pip install -r requirements.txt
 
 </details>
 
-**Important**: This project uses dbt-core 1.9.4 for Snowflake compatibility. Do not upgrade dbt packages.
+**Important**: This project targets dbt-core 1.10.15 for Snowflake compatibility. Use `arguments:` for generic test arguments and run dbt autofix for deprecation cleanups when needed.
 
 ### Step 3: Configure Snowflake Connection
 
@@ -108,7 +108,13 @@ SNOWFLAKE_WAREHOUSE=ANALYST_WH
 SNOWFLAKE_ROLE=ANALYST
 ```
 
-The `profiles.yml` is already configured to read from your `.env` file.
+Optional for PAT-based auth:
+
+```bash
+SNOWFLAKE_PAT=your-programmatic-access-token
+```
+
+The `profiles.yml` is already configured to read from your `.env` file. If `SNOWFLAKE_PAT` is present, dbt uses it as the password and skips browser-based authentication.
 
 ### Step 4: Initialise Your Development Environment
 
@@ -127,7 +133,45 @@ dbt deps    # Install dbt packages
 dbt debug   # Test connection
 ```
 
-Your browser will open for Snowflake authentication. Look for "All checks passed!" in the output.
+If you are using `externalbrowser`, your browser will open for Snowflake authentication. Look for "All checks passed!" in the output.
+
+## GitHub Codespaces
+
+Codespaces should use GitHub Codespaces secrets for Snowflake credentials. Do not commit credentials into the repository.
+
+### Recommended Codespaces secrets
+
+- `SNOWFLAKE_ACCOUNT`
+- `SNOWFLAKE_USER`
+- `SNOWFLAKE_ROLE`
+- `SNOWFLAKE_WAREHOUSE`
+- `SNOWFLAKE_PAT`
+
+`SNOWFLAKE_PAT` is the preferred Codespaces auth method because it is non-interactive and each developer can create their own token in Snowflake.
+
+### Create Codespaces secrets from an existing local `.env`
+
+If you already have a working local `.env`, you can upload the supported Snowflake values to your personal Codespaces secrets for this repository:
+
+```powershell
+.\scripts\setup_codespaces_secrets.ps1
+```
+
+This uses GitHub CLI to create user-level Codespaces secrets scoped to this repository.
+
+### Create a codespace
+
+1. In GitHub, open the repository and choose **Code** -> **Codespaces** -> **New with options**.
+2. Confirm the recommended secrets if prompted.
+3. Create the codespace on this branch.
+4. Wait for the dev container to finish setup.
+5. Run `dbt debug` to confirm the Snowflake connection.
+
+### How credentials work inside Codespaces
+
+- Codespaces secrets are exposed as environment variables in the running codespace.
+- You do not need a `.env` file inside the codespace if the required secrets are already set.
+- The setup scripts will use existing environment variables before creating a `.env` template.
 
 ### Helper Scripts
 
@@ -208,6 +252,12 @@ Create a test commit:
 git commit --allow-empty -m "test: verify signed commits"
 ```
 
+Fix line-endings using this command (thx Kate)
+
+```bash
+$file = "$env:USERPROFILE\.ssh\allowed_signers"; $content = [System.IO.File]::ReadAllText($file); [System.IO.File]::WriteAllText($file, $content.Replace("`r`n", "`n"), [System.Text.Encoding]::UTF8); Write-Host "Line endings converted from CRLF to LF"
+```
+
 Check the signature:
 
 ```bash
@@ -231,7 +281,7 @@ Never work directly on main. Always create a new branch:
 
 ```bash
 # Create and switch to a new feature branch
-git switch -c feature/your-feature-name
+git switch -c feat/your-feature-name
 
 # Or for bug fixes
 git switch -c fix/your-bug-fix
@@ -269,7 +319,7 @@ git commit -m "docs: update setup instructions in CONTRIBUTING"
 
 1. **Push your branch:**
    ```bash
-   git push -u origin feature/your-feature-name
+   git push -u origin feat/your-feature-name
    ```
 
    The `-u origin branch-name` creates the branch on GitHub and links it to your local branch. After this first push, you can use just `git push` for subsequent updates.
@@ -294,7 +344,7 @@ git switch main
 git pull
 
 # Switch back to your feature branch
-git switch feature/your-feature-name
+git switch feat/your-feature-name
 
 # Merge main into your branch
 git merge main
@@ -320,7 +370,7 @@ git switch main
 git pull
 
 # Go back to your feature branch
-git switch feature/your-feature-name
+git switch feat/your-feature-name
 
 # Restore your saved changes
 git stash pop
@@ -360,7 +410,7 @@ This repository commits `dbt_packages/` to ensure consistent package versions. W
 
 ## Getting Help
 
-- Check existing [GitHub Issues](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/issues)
+- Check existing [GitHub Issues](https://github.com/wnl-icb-analytics/dbt-analytics/issues)
 - Review the [Development Guide](docs/development-guide.md) for advanced workflows
 - Create a new issue with details about your problem
 

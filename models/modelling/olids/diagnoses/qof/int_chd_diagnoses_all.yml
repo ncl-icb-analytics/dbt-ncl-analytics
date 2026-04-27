@@ -1,10 +1,8 @@
-version: 2
 models:
   - name: int_chd_diagnoses_all
     description: 'Coronary heart disease diagnosis observations for QOF register management.
 
-      One row per diagnosis observation using CHD_COD cluster. No resolution codes
-      as this is a lifelong condition.'
+      One row per diagnosis observation using CHD_COD cluster. No resolution codes as this is a lifelong condition.'
     config:
       meta:
         owner:
@@ -38,4 +36,5 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: CHD_COD
+          arguments:
+            cluster_ids: CHD_COD

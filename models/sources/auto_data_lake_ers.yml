@@ -21,13 +21,13 @@ sources:
     identifier: '"ebsx00Header"'
     columns:
     - name: Version
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: OrgID_Referrer
       data_type: TEXT
     - name: UniqSubmissionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ebsx00_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: File_Type
       data_type: TEXT
     - name: RP_StartDate
@@ -37,15 +37,15 @@ sources:
     - name: Unique_MonthID
       data_type: TEXT
     - name: Total_ebsx02
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TotalRecords
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicMonthId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCodeReferrer
       data_type: TEXT
     - name: dmicDSCRO
@@ -58,7 +58,7 @@ sources:
     - name: SK
       data_type: TEXT
     - name: SEQNO
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UBRN_ID
       data_type: TEXT
     - name: E_REFERRAL_PATHWAY_START
@@ -72,15 +72,15 @@ sources:
     - name: PRIORITY_CD
       data_type: TEXT
     - name: REFERRING_CLINICIAN_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REFERRING_ORG_ID
       data_type: TEXT
     - name: PATIENT_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PATIENT_AGE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REGISTERED_CLINICIAN_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REGISTERED_ORG_ID
       data_type: TEXT
     - name: GUIDANCE_STATE_CD
@@ -88,9 +88,9 @@ sources:
     - name: GUIDANCE_OVERRIDE_CD
       data_type: TEXT
     - name: SHORTLIST_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ACTION_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ACTION_DT_TM
       data_type: TIMESTAMP_NTZ
     - name: ACTION_CD
@@ -106,27 +106,27 @@ sources:
     - name: ACTION_REASON_CD
       data_type: TEXT
     - name: SERVICE_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: APPT_DT_TM
       data_type: TIMESTAMP_NTZ
     - name: SERVICE_DEFINED_FREEZE_TIME_BREACH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIORITY_TIME_LIMIT_BREACH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REBOOKED_TO_ACTION_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: NAMED_CLINICIAN_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: INITIAL_UBRN_ID
       data_type: TEXT
     - name: PREVIOUS_UBRN_ID
       data_type: TEXT
     - name: ALLOCATED_CLINICIAN_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: USER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PROXY_USER_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CLINICAL_ASSESSMENT_OUTCOME_CD
       data_type: TEXT
     - name: PROBLEM_CD
@@ -144,7 +144,7 @@ sources:
     - name: SEARCHED_IWT
       data_type: TEXT
     - name: SEARCHED_DISTANCE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PATIENTS_PARTIAL_POSTCODE
       data_type: TEXT
     - name: UBRN
@@ -284,15 +284,15 @@ sources:
     - name: SERVICE_SPECIALTY_DESC
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UniqSubmissionID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Unique_MonthID
       data_type: TEXT
     - name: ebsx02_ID
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicDateAdded
       data_type: TIMESTAMP_NTZ
     - name: dmicCCGofRegistration

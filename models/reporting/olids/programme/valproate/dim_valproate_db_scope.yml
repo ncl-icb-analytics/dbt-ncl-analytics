@@ -1,11 +1,8 @@
-version: 2
 models:
   - name: dim_valproate_db_scope
-    description: 'Valproate monitoring dashboard scope for child-bearing age cohort
-      with recent prescriptions.
+    description: 'Valproate monitoring dashboard scope for child-bearing age cohort with recent prescriptions.
 
-      One row per non-male person aged 0-55 years with valproate prescriptions in
-      last 6 months.'
+      One row per non-male person aged 0-55 years with valproate prescriptions in last 6 months.'
 
     config:
       meta:
@@ -13,8 +10,8 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:

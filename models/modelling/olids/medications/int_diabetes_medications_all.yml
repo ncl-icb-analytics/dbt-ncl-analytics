@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_diabetes_medications_all
     description: 'Diabetes medication orders using BNF classification for insulin

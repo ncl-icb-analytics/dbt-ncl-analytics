@@ -1,19 +1,42 @@
-version: 2
-# Manual sources - these override auto-generation
-# If a source is defined here, it will be used instead of auto-generating from metadata
-# Sources can be fully manual (not in source_mappings.yml) or override auto-generated sources (in source_mappings.yml)
-
 sources:
 - name: aic
   database: '"DATA_LAKE__NCL"'
   schema: '"AIC_DEV"'
   description: AIC pipelines
   tables:
+  - name: INT_CCMS_CURRENT
+    identifier: '"INT_CCMS_CURRENT"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: CAMBRIDGE_COMORBIDITY_SCORE
+      data_type: NUMBER
+    - name: CCMS_CURRENT_ID
+      data_type: TEXT
+    - name: LAST_UPDATED
+      data_type: TIMESTAMP_TZ
+  - name: INT_EFI2_SCORES
+    identifier: '"INT_EFI2_SCORES"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: END_DATE
+      data_type: DATE
+    - name: EFI_SCORE
+      data_type: NUMBER
+    - name: CATEGORY
+      data_type: VARCHAR
+    - name: AGE_AT_END
+      data_type: NUMBER
+    - name: GENDER
+      data_type: VARCHAR
+    - name: DATE_OF_DEATH
+      data_type: DATE
   - name: BASE_ATHENA__CONCEPT
     identifier: '"BASE_ATHENA__CONCEPT"'
     columns:
     - name: CONCEPT_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONCEPT_NAME
       data_type: TEXT
     - name: DOMAIN_ID
@@ -36,22 +59,22 @@ sources:
     identifier: '"BASE_CCMS_DMD_CODES"'
     columns:
     - name: CONDITIONID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONDITIONNAME
       data_type: TEXT
     - name: PRODUCTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYTERM
       data_type: TEXT
   - name: BASE_CCMS_SNOMED_CODES
     identifier: '"BASE_CCMS_SNOMED_CODES"'
     columns:
     - name: CONDITIONID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONDITIONNAME
       data_type: TEXT
     - name: CONCEPTID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PRIMARYTERM
       data_type: TEXT
   - name: BASE_GOV__IMD_2019
@@ -66,9 +89,9 @@ sources:
     - name: LA_NAME_2019
       data_type: TEXT
     - name: IMD_RANK
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IMD_DECILE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
   - name: BASE_GOV__WARD_NAMES
     identifier: '"BASE_GOV__WARD_NAMES"'
     columns:
@@ -80,121 +103,156 @@ sources:
     identifier: '"BASE_NHSBSA__APID_VPID"'
     columns:
     - name: APID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: VPID
+      data_type: NUMBER(38,0)
+  - name: STG_CCMS__FINAL_FLAGS
+    identifier: '"STG_CCMS__FINAL_FLAGS"'
+    columns:
+    - name: PERSON_ID
+      data_type: TEXT
+    - name: ALCOHOLPROBLEMS 
       data_type: NUMBER
-
-# Override auto-generated sources with manual table definitions
-# These sources ARE in source_mappings.yml but have manual table definitions here
-
+    - name: ANXIETYORDEPRESSION
+      data_type: NUMBER
+    - name: ATRIALFIBRILLATION
+      data_type: NUMBER
+    - name: CANCERINTHELAST5YEARS
+      data_type: NUMBER
+    - name: CHRONICKIDNEYDISEASE
+      data_type: NUMBER
+    - name: CHRONICLIVERDISEASEANDVIRALHEPATITIS
+      data_type: NUMBER
+    - name: CONSTIPATION
+      data_type: NUMBER
+    - name: COPD
+      data_type: NUMBER
+    - name: DEMENTIA
+      data_type: NUMBER
+    - name: DIABETES
+      data_type: NUMBER
+    - name: DISORDEROFPROSTATE
+      data_type: NUMBER
+    - name: EPILEPSY
+      data_type: NUMBER
+    - name: HEARTFAILURE
+      data_type: NUMBER
+    - name: IRRITABLEBOWELSYNDROME
+      data_type: NUMBER
+    - name: LEARNINGDISABILITY
+      data_type: NUMBER
+    - name: MULTIPLESCLEROSIS
+      data_type: NUMBER
+    - name: PAINFULCONDITION
+      data_type: NUMBER
+    - name: PARKINSONISM
+      data_type: NUMBER
+    - name: PERIPHVASCDISEASELEG
+      data_type: NUMBER
+    - name: PSYCHOACTIVESUBSTANCEMISUSE
+      data_type: NUMBER
+    - name: SCHIZOPHRENIAORBIPOLARDISORDER
+      data_type: NUMBER
 - name: c_ltcs
-  database: '"DEV__PUBLISHED_REPORTING__DIRECT_CARE"'
+  database: '"PUBLISHED_REPORTING__DIRECT_CARE"'
   schema: '"C_LTCS"'
   description: C-LTCS tables
   tables:
-  - name: 'MDT_LOOKUP'
-    identifier: 'MDT_LOOKUP'
-    columns:
-    - name: PCN_CODE
-      data_type: TEXT
-    - name: MDT_DATE
-      data_type: DATE
-  - name: 'STATUS_LOG'
-    identifier: 'STATUS_LOG'
+  - name: STATUS_LOG
+    identifier: STATUS_LOG
     columns:
     - name: PATIENT_ID
-      data_type: NUMBER
-    - name: PCN_CODE
+      data_type: NUMBER(38,0)
+    - name: AREA_CODE
       data_type: TEXT
-    - name: MDT_DATE
+    - name: INTERVENTION_DATE
       data_type: DATE
     - name: ACTION
       data_type: TEXT
     - name: ACTION_DATE
-      data_type: TIMESTAMP_TZ
-    - name: CRITERIA
+      data_type: TIMESTAMP_NTZ
+    - name: DETAIL
       data_type: TEXT
-  - name: 'OP_OE_RATIO'
-    identifier: 'OP_OE_RATIO'
+    - name: INTERVENTION_NAME
+      data_type: TEXT
+  - name: OP_OE_RATIO
+    identifier: OP_OE_RATIO
     columns:
     - name: PATIENT_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: OE_RATIO
-      data_type: NUMBER
+      data_type: NUMBER(38,17)
     - name: PREDICTED
-      data_type: NUMBER
+      data_type: NUMBER(38,1)
     - name: OP_ATT_TOT_12MO
-      data_type: NUMBER
-
-
+      data_type: NUMBER(38,0)
 - name: pmct
   database: '"DATA_LAKE"'
   schema: '"PMCT"'
   description: Central Performance Analytics Team (PMCT)
   tables:
-    - name: 'DiagnosticsMonthlySourceAppendReviseProvComm'
-      identifier: '"DiagnosticsMonthlySourceAppendReviseProvComm"'
-      columns:
-      - name: 'Period'
-        data_type: TEXT
-      - name: 'Provider Parent Org Code'
-        data_type: TEXT
-      - name: 'Provider Parent Name'
-        data_type: TEXT
-      - name: 'Provider Org Code'
-        data_type: TEXT
-      - name: 'Provider Org Name'
-        data_type: TEXT
-      - name: 'Commissioner Parent Org Code'
-        data_type: TEXT
-      - name: 'Commissioner Parent Name'
-        data_type: TEXT
-      - name: 'Commissioner Org Code'
-        data_type: TEXT
-      - name: 'Commissioner Org Name'
-        data_type: TEXT
-      - name: 'Diagnostic Tests Sort Order'
-        data_type: NUMBER
-      - name: 'Diagnostic Tests'
-        data_type: TEXT
-      - name: '00 < 01 Week'
-        data_type: NUMBER
-      - name: '01 < 02 Weeks'
-        data_type: NUMBER
-      - name: '02 < 03 Weeks'
-        data_type: NUMBER
-      - name: '03 < 04 Weeks'
-        data_type: NUMBER
-      - name: '04 < 05 Weeks'
-        data_type: NUMBER
-      - name: '05 < 06 Weeks'
-        data_type: NUMBER
-      - name: '06 < 07 Weeks'
-        data_type: NUMBER
-      - name: '07 < 08 Weeks'
-        data_type: NUMBER
-      - name: '08 < 09 Weeks'
-        data_type: NUMBER
-      - name: '09 < 10 Weeks'
-        data_type: NUMBER
-      - name: '10 < 11 Weeks'
-        data_type: NUMBER
-      - name: '11 < 12 Weeks'
-        data_type: NUMBER
-      - name: '12 < 13 Weeks'
-        data_type: NUMBER
-      - name: '13+ Weeks'
-        data_type: NUMBER
-      - name: 'Total WL'
-        data_type: NUMBER
-      - name: 'Waiting List Activity'
-        data_type: NUMBER
-      - name: 'Planned Activity'
-        data_type: NUMBER
-      - name: 'Unscheduled Activity'
-        data_type: NUMBER
-      - name: 'Total Activity'
-        data_type: NUMBER
-      - name: 'CreateTS'
-        data_type: TIMESTAMP_NTZ
-
+  - name: DiagnosticsMonthlySourceAppendReviseProvComm
+    identifier: '"DiagnosticsMonthlySourceAppendReviseProvComm"'
+    columns:
+    - name: Period
+      data_type: TEXT
+    - name: Provider Parent Org Code
+      data_type: TEXT
+    - name: Provider Parent Name
+      data_type: TEXT
+    - name: Provider Org Code
+      data_type: TEXT
+    - name: Provider Org Name
+      data_type: TEXT
+    - name: Commissioner Parent Org Code
+      data_type: TEXT
+    - name: Commissioner Parent Name
+      data_type: TEXT
+    - name: Commissioner Org Code
+      data_type: TEXT
+    - name: Commissioner Org Name
+      data_type: TEXT
+    - name: Diagnostic Tests Sort Order
+      data_type: FLOAT
+    - name: Diagnostic Tests
+      data_type: TEXT
+    - name: 00 < 01 Week
+      data_type: FLOAT
+    - name: 01 < 02 Weeks
+      data_type: FLOAT
+    - name: 02 < 03 Weeks
+      data_type: FLOAT
+    - name: 03 < 04 Weeks
+      data_type: FLOAT
+    - name: 04 < 05 Weeks
+      data_type: FLOAT
+    - name: 05 < 06 Weeks
+      data_type: FLOAT
+    - name: 06 < 07 Weeks
+      data_type: FLOAT
+    - name: 07 < 08 Weeks
+      data_type: FLOAT
+    - name: 08 < 09 Weeks
+      data_type: FLOAT
+    - name: 09 < 10 Weeks
+      data_type: FLOAT
+    - name: 10 < 11 Weeks
+      data_type: FLOAT
+    - name: 11 < 12 Weeks
+      data_type: FLOAT
+    - name: 12 < 13 Weeks
+      data_type: FLOAT
+    - name: 13+ Weeks
+      data_type: FLOAT
+    - name: Total WL
+      data_type: FLOAT
+    - name: Waiting List Activity
+      data_type: FLOAT
+    - name: Planned Activity
+      data_type: FLOAT
+    - name: Unscheduled Activity
+      data_type: FLOAT
+    - name: Total Activity
+      data_type: FLOAT
+    - name: CreateTS
+      data_type: TIMESTAMP_NTZ

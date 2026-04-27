@@ -89,6 +89,8 @@ SELECT
   has_frailty,
   has_learning_disability,
   has_osteoporosis,
+  has_osteoarthritis,
+  has_chronic_liver_disease,
   has_palliative_care,
   has_rheumatoid_arthritis,
   total_conditions,

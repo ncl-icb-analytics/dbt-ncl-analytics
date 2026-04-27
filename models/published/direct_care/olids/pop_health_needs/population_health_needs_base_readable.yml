@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: population_health_needs_base_readable
     description: >
@@ -12,8 +10,8 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         description: Unique identifier for the person
@@ -150,6 +148,10 @@ models:
         description: Presence of learning disability
       - name: has_osteoporosis
         description: Presence of osteoporosis
+      - name: has_osteoarthritis
+        description: Presence of osteoarthritis
+      - name: has_chronic_liver_disease
+        description: Presence of chronic liver disease
       - name: has_palliative_care
         description: Receiving palliative care
       - name: has_rheumatoid_arthritis

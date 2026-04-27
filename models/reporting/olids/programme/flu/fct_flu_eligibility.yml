@@ -1,15 +1,10 @@
-version: 2
-
 models:
   - name: fct_flu_eligibility
-    description: 'Flu vaccination eligibility determination across all eligibility
-      pathways.
+    description: 'Flu vaccination eligibility determination across all eligibility pathways.
 
       Grain: One row per person per campaign per risk group they qualify for
 
-      Contains: • Person demographics and age calculations • Eligibility category
-      and specific risk group • Qualifying event dates and priority ranking • Campaign-specific
-      eligibility rules
+      Contains: • Person demographics and age calculations • Eligibility category and specific risk group • Qualifying event dates and priority ranking • Campaign-specific eligibility rules
 
       Note: People eligible for multiple risk groups appear in multiple rows'
     config:
@@ -60,13 +55,14 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - campaign_id
-            - person_id
-            - risk_group
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
+              - risk_group
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         description: Unique person identifier

@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_olids_medication_order
-    description: Medication orders and prescriptions issued in GP systems. 
-      Deduplicated by id and filtered to exclude deleted records.
+    description: Medication orders and prescriptions issued in GP systems. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
@@ -19,11 +17,9 @@ models:
       - name: patient_id
         description: Foreign key to patient.id
       - name: medication_statement_id
-        description: Foreign key to medication_statement.id - associated 
-          medication statement
+        description: Foreign key to medication_statement.id - associated medication statement
       - name: encounter_id
-        description: Foreign key to encounter.id - encounter when medication was
-          ordered
+        description: Foreign key to encounter.id - encounter when medication was ordered
       - name: practitioner_id
         description: Foreign key to practitioner.id - prescriber
       - name: observation_id
@@ -31,25 +27,21 @@ models:
       - name: allergy_intolerance_id
         description: Foreign key to allergy_intolerance.id - related allergy
       - name: diagnostic_order_id
-        description: Foreign key to diagnostic_order.id - related diagnostic 
-          order
+        description: Foreign key to diagnostic_order.id - related diagnostic order
       - name: referral_request_id
         description: Foreign key to referral_request.id - related referral
       - name: clinical_effective_date
         description: Date the medication order was clinically effective
       - name: date_precision_concept_id
-        description: Foreign key to concept.id - precision of the clinical 
-          effective date
+        description: Foreign key to concept.id - precision of the clinical effective date
       - name: date_precision_code
         description: Code value for the date precision concept
       - name: date_precision_display
         description: Display name for the date precision concept
       - name: date_precision_source_code
-        description: Source code for the date precision concept (from concept 
-          map)
+        description: Source code for the date precision concept (from concept map)
       - name: date_precision_source_display
-        description: Source display name for the date precision concept (from 
-          concept map)
+        description: Source display name for the date precision concept (from concept map)
       - name: dose
         description: Dosage instructions as text
       - name: quantity_value
@@ -63,8 +55,7 @@ models:
       - name: medication_name
         description: Name of the medication ordered
       - name: medication_order_source_concept_id
-        description: Foreign key to concept.id - source concept for the 
-          medication
+        description: Foreign key to concept.id - source concept for the medication
       - name: source_code
         description: Source code for the medication order concept
       - name: source_display
@@ -100,8 +91,7 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: medication_statement_source_concept_id
-        description: Foreign key to concept.id - source concept for associated 
-          statement
+        description: Foreign key to concept.id - source concept for associated statement
       - name: statement_medication_name
         description: Medication name from the associated statement
       - name: mapped_concept_id
@@ -111,14 +101,12 @@ models:
       - name: mapped_concept_display
         description: Display text of the mapped concept
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

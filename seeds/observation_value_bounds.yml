@@ -1,0 +1,24 @@
+seeds:
+  - name: observation_value_bounds
+    description: >
+      Plausible value ranges and Pass 3 configuration for clinical observations.
+      Each measurement should have exactly one row. ABSOLUTE_LOWER and
+      ABSOLUTE_UPPER drive the Pass 1 plausibility check in
+      standardise_count_observation - if either is NULL the BETWEEN comparison
+      evaluates to NULL and every observation silently falls through to
+      no_match. CANONICAL_EXPONENT / BIOLOGICAL_LOWER / BIOLOGICAL_UPPER are
+      optional (CANONICAL_EXPONENT IS NULL disables Pass 3 by design).
+    columns:
+      - name: DEFINITION_NAME
+        description: Measurement identifier (e.g. eosinophil_count)
+        data_tests:
+          - unique
+          - not_null
+      - name: ABSOLUTE_LOWER
+        description: Lower bound of the Pass 1 plausible range
+        data_tests:
+          - not_null
+      - name: ABSOLUTE_UPPER
+        description: Upper bound of the Pass 1 plausible range
+        data_tests:
+          - not_null

@@ -1,7 +1,7 @@
 with source as (
     select *
     from {{ ref('raw_reference_emis_qof_v50_register_counts') }}
-    where reference_date = '{{ var("qof_reference_date") }}'
+    where reference_date = {{ qof_reference_date() }}
         and (
             indicator_description like '%on the%register%'
             or indicator_code = 'DEP1_REG'

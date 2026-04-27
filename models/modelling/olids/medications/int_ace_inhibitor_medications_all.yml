@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ace_inhibitor_medications_all
     description: 'ACE inhibitor medication orders using BNF classification for cardiovascular

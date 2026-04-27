@@ -1,0 +1,15 @@
+﻿models:
+  - name: smi_lifestyle_es_dm
+    description: Person Level Database model view holding more detail on 
+      lifestyle factors for people on the SMI register for Enhanced Service reporting.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+

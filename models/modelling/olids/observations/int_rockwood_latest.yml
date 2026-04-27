@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: int_rockwood_latest
     description: 'Latest Rockwood Clinical Frailty Scale score per person.
@@ -12,8 +10,9 @@ models:
           name: EddieDavison92
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - person_id
+          arguments:
+            combination_of_columns:
+              - person_id
 
     columns:
       - name: person_id
@@ -42,19 +41,16 @@ models:
         description: Source cluster identifier (ROCKWOOD_SCORES)
 
       - name: rockwood_score
-        description: Most recent numeric Rockwood Clinical Frailty Scale score 
-          (1-9)
+        description: Most recent numeric Rockwood Clinical Frailty Scale score (1-9)
 
       - name: rockwood_description
         description: Clinical description of the latest Rockwood score level
 
       - name: frailty_level
-        description: Latest specific Rockwood frailty level (Level 1-9 with 
-          description)
+        description: Latest specific Rockwood frailty level (Level 1-9 with description)
 
       - name: frailty_category
-        description: Latest grouped frailty category (Fit, Vulnerable, Mild 
-          Frailty, Moderate Frailty, Severe Frailty)
+        description: Latest grouped frailty category (Fit, Vulnerable, Mild Frailty, Moderate Frailty, Severe Frailty)
 
       - name: is_valid_rockwood_code
         description: Flag indicating if concept code is a valid Rockwood score

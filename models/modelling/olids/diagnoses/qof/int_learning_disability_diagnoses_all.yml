@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_learning_disability_diagnoses_all
     description: >
@@ -44,4 +43,5 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: LD_COD, LDREM_COD
+          arguments:
+            cluster_ids: LD_COD, LDREM_COD

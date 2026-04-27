@@ -1,12 +1,8 @@
-version: 2
-
 models:
   - name: fct_person_condition_episodes
-    description: 'Clinical condition episodes fact table tracking historical condition
-      episodes without QOF restrictions.
+    description: 'Clinical condition episodes fact table tracking historical condition episodes without QOF restrictions.
 
-      Captures multiple on/off cycles per person per condition for comprehensive clinical
-      tracking.
+      Captures multiple on/off cycles per person per condition for comprehensive clinical tracking.
 
       Key Features:
 
@@ -18,8 +14,7 @@ models:
 
       • Unified schema across all diagnosis-based conditions
 
-      Purpose: Enables analysis of condition patterns, episode durations, and patient
-      journeys across the complete clinical history.'
+      Purpose: Enables analysis of condition patterns, episode durations, and patient journeys across the complete clinical history.'
     config:
       meta:
         indicators:
@@ -29,8 +24,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Respiratory"
             name_short: "Asthma Episodes"
-            description_short: "Simplified asthma condition episodes with resolved
-              state tracking"
+            description_short: "Simplified asthma condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for asthma using diagnosis and resolved codes without
               QOF restrictions.
@@ -53,8 +47,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Respiratory"
             name_short: "COPD Episodes"
-            description_short: "Simplified COPD condition episodes with resolved state
-              tracking"
+            description_short: "Simplified COPD condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for COPD using diagnosis and resolved codes without
               QOF restrictions.
@@ -79,8 +72,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Cardiovascular"
             name_short: "Atrial Fibrillation Episodes"
-            description_short: "Simplified atrial fibrillation condition episodes
-              with resolved state tracking"
+            description_short: "Simplified atrial fibrillation condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for atrial fibrillation using diagnosis and resolved
               codes without QOF restrictions.
@@ -103,8 +95,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Cardiovascular"
             name_short: "Coronary Heart Disease Episodes"
-            description_short: "Simplified CHD condition episodes with diagnosis tracking
-              only"
+            description_short: "Simplified CHD condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for coronary heart disease using diagnosis codes only.
               Permanent condition with no resolved state tracking - captures diagnosis
@@ -124,8 +115,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Cardiovascular"
             name_short: "Heart Failure Episodes"
-            description_short: "Simplified heart failure condition episodes with resolved
-              state tracking"
+            description_short: "Simplified heart failure condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for heart failure using diagnosis and resolved codes
               without QOF restrictions.
@@ -150,8 +140,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Cardiometabolic"
             name_short: "Hypertension Episodes"
-            description_short: "Simplified hypertension condition episodes with resolved
-              state tracking"
+            description_short: "Simplified hypertension condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for hypertension using diagnosis and resolved codes
               without QOF restrictions.
@@ -174,8 +163,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Cardiometabolic"
             name_short: "Diabetes Episodes"
-            description_short: "Simplified diabetes condition episodes with resolved
-              state tracking"
+            description_short: "Simplified diabetes condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for diabetes using diagnosis and resolved codes without
               QOF restrictions.
@@ -198,8 +186,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Cardiometabolic"
             name_short: "Non-Diabetic Hyperglycaemia Episodes"
-            description_short: "Simplified NDH condition episodes with diagnosis tracking
-              only"
+            description_short: "Simplified NDH condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for non-diabetic hyperglycaemia using diagnosis codes
               only without QOF restrictions.
@@ -215,6 +202,30 @@ models:
             code_clusters:
               - cluster_id: "NDH_COD"
                 category: "INCLUSION"
+          - id: "CONDITION_EPISODES_OB"
+            type: "CONDITION"
+            category: "SIMPLIFIED_CONDITION_MODEL"
+            clinical_domain: "Metabolic"
+            name_short: "Obesity Episodes"
+            description_short: "BMI-derived obesity episodes with start and resolution tracking"
+            description_long: >
+              Episode tracking for obesity using dated BMI measurements rather than
+              diagnosis register codes.
+              Episode starts are triggered when BMI first enters an obesity category
+              and end when a later BMI falls below the obesity threshold.
+              Supports repeated on/off cycles for longitudinal weight-status analysis.
+              BMI sourced from int_bmi_all — HEIGHT and WEIGHT inputs with age_at_event < 18 are excluded from the calculated BMI path so paediatric heights/weights cannot drive calculated obesity episodes. Recorded BMI values (BMIVAL_COD) are still included regardless of age, so a paediatric recorded BMI could seed an obesity episode.
+            is_qof: false
+            source_column: "current_condition_status"
+            sort_order: "CONDITION_EPISODES_OB"
+            usage_contexts:
+              - "POPULATION_HEALTH_NEEDS_DASHBOARD"
+              - "HISTORICAL_CONDITION_TRACKING"
+            code_clusters:
+              - cluster_id: "BMIVAL_COD"
+                category: "INCLUSION"
+              - cluster_id: "CALCULATED"
+                category: "INCLUSION"
 
           # Renal Conditions
           - id: "CONDITION_EPISODES_CKD"
@@ -222,8 +233,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Nephrology"
             name_short: "Chronic Kidney Disease Episodes"
-            description_short: "Simplified CKD condition episodes with resolved state
-              tracking"
+            description_short: "Simplified CKD condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for chronic kidney disease using diagnosis and resolved
               codes without QOF restrictions.
@@ -248,8 +258,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Mental Health"
             name_short: "Dementia Episodes"
-            description_short: "Simplified dementia condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified dementia condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for dementia using diagnosis codes only.
               Progressive condition with no resolved state tracking - captures diagnosis
@@ -269,8 +278,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Mental Health"
             name_short: "Depression Episodes"
-            description_short: "Simplified depression condition episodes with resolved
-              state tracking"
+            description_short: "Simplified depression condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for depression using diagnosis and resolved codes without
               QOF restrictions.
@@ -293,8 +301,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Mental Health"
             name_short: "Severe Mental Illness Episodes"
-            description_short: "Simplified SMI condition episodes with resolved state
-              tracking"
+            description_short: "Simplified SMI condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for severe mental illness using diagnosis and resolved
               codes without QOF restrictions.
@@ -319,8 +326,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurology"
             name_short: "Epilepsy Episodes"
-            description_short: "Simplified epilepsy condition episodes with resolved
-              state tracking"
+            description_short: "Simplified epilepsy condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for epilepsy using diagnosis and resolved codes without
               QOF restrictions.
@@ -343,8 +349,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurology"
             name_short: "Stroke and TIA Episodes"
-            description_short: "Simplified stroke/TIA condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified stroke/TIA condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for stroke and TIA using diagnosis codes only.
               Permanent condition with no resolved state tracking - captures diagnosis
@@ -364,8 +369,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurology"
             name_short: "Parkinsons Disease Episodes"
-            description_short: "Simplified Parkinsons condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified Parkinsons condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for Parkinsons disease using diagnosis codes only.
               Progressive condition with no resolved state tracking - captures diagnosis
@@ -385,8 +389,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurology"
             name_short: "Cerebral Palsy Episodes"
-            description_short: "Simplified cerebral palsy condition episodes with
-              diagnosis tracking only"
+            description_short: "Simplified cerebral palsy condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for cerebral palsy using diagnosis codes only.
               Lifelong condition with no resolved state tracking - captures diagnosis
@@ -406,8 +409,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurology"
             name_short: "Motor Neurone Disease Episodes"
-            description_short: "Simplified MND condition episodes with diagnosis tracking
-              only"
+            description_short: "Simplified MND condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for motor neurone disease using diagnosis codes only.
               Progressive condition with no resolved state tracking - captures diagnosis
@@ -427,8 +429,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurology"
             name_short: "Multiple Sclerosis Episodes"
-            description_short: "Simplified MS condition episodes with diagnosis tracking
-              only"
+            description_short: "Simplified MS condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for multiple sclerosis using diagnosis codes only.
               Chronic condition with no resolved state tracking - captures diagnosis
@@ -448,8 +449,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Mental Health"
             name_short: "Anxiety Episodes"
-            description_short: "Simplified anxiety condition episodes with resolved
-              state tracking"
+            description_short: "Simplified anxiety condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for anxiety using diagnosis and resolved codes without
               QOF restrictions.
@@ -472,8 +472,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Endocrine"
             name_short: "Hypothyroidism Episodes"
-            description_short: "Simplified hypothyroidism condition episodes with
-              diagnosis tracking only"
+            description_short: "Simplified hypothyroidism condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for hypothyroidism using diagnosis codes only.
               Chronic condition with no resolved state tracking - captures diagnosis
@@ -493,8 +492,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurodevelopmental"
             name_short: "Autism Episodes"
-            description_short: "Simplified autism condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified autism condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for autism spectrum disorder using diagnosis codes
               only.
@@ -517,8 +515,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Neurodevelopmental"
             name_short: "Learning Disability Episodes"
-            description_short: "Simplified learning disability condition episodes
-              with diagnosis tracking only"
+            description_short: "Simplified learning disability condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for learning disability using diagnosis codes only
               without QOF restrictions.
@@ -541,8 +538,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Oncology"
             name_short: "Cancer Episodes"
-            description_short: "Simplified cancer condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified cancer condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for cancer using diagnosis codes only without QOF restrictions.
               Permanent condition with no resolved state tracking - captures diagnosis
@@ -564,8 +560,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Genetics"
             name_short: "Familial Hypercholesterolaemia Episodes"
-            description_short: "Simplified familial hypercholesterolaemia condition
-              episodes with diagnosis tracking only"
+            description_short: "Simplified familial hypercholesterolaemia condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for familial hypercholesterolaemia using diagnosis
               codes only without QOF restrictions.
@@ -588,8 +583,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Geriatric"
             name_short: "Frailty Episodes"
-            description_short: "Simplified frailty condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified frailty condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for frailty using diagnosis codes only without QOF
               restrictions.
@@ -612,8 +606,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Maternity"
             name_short: "Gestational Diabetes Episodes"
-            description_short: "Simplified gestational diabetes condition episodes
-              with diagnosis tracking only"
+            description_short: "Simplified gestational diabetes condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for gestational diabetes using diagnosis codes only
               without QOF restrictions.
@@ -636,8 +629,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Hepatology"
             name_short: "NAFLD Episodes"
-            description_short: "Simplified NAFLD condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified NAFLD condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for NAFLD using diagnosis codes only without QOF restrictions.
               Progressive condition with no resolved state tracking - captures diagnosis
@@ -659,8 +651,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Musculoskeletal"
             name_short: "Osteoporosis Episodes"
-            description_short: "Simplified osteoporosis condition episodes with diagnosis
-              tracking only"
+            description_short: "Simplified osteoporosis condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for osteoporosis using diagnosis codes only without
               QOF restrictions.
@@ -681,8 +672,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Musculoskeletal"
             name_short: "Rheumatoid Arthritis Episodes"
-            description_short: "Simplified rheumatoid arthritis condition episodes
-              with diagnosis tracking only"
+            description_short: "Simplified rheumatoid arthritis condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for rheumatoid arthritis using diagnosis codes only.
               Progressive condition with no resolved state tracking - captures diagnosis
@@ -704,8 +694,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Cardiovascular"
             name_short: "Peripheral Arterial Disease Episodes"
-            description_short: "Simplified PAD condition episodes with diagnosis tracking
-              only"
+            description_short: "Simplified PAD condition episodes with diagnosis tracking only"
             description_long: >
               Episode tracking for peripheral arterial disease using diagnosis codes
               only.
@@ -728,8 +717,7 @@ models:
             category: "SIMPLIFIED_CONDITION_MODEL"
             clinical_domain: "Palliative Care"
             name_short: "Palliative Care Episodes"
-            description_short: "Simplified palliative care condition episodes with
-              resolved state tracking"
+            description_short: "Simplified palliative care condition episodes with resolved state tracking"
             description_long: >
               Episode tracking for palliative care using diagnosis and resolved codes
               without QOF restrictions.
@@ -757,8 +745,7 @@ models:
           - not_null
 
       - name: condition_name
-        description: 'Human-readable condition name (e.g., "Depression", "Gestational
-          Diabetes")'
+        description: 'Human-readable condition name (e.g., "Depression", "Gestational Diabetes")'
         tests:
           - not_null
 
@@ -767,38 +754,44 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values:
-                - 'AST'
-                - 'AF'
-                - 'CAN'
-                - 'CHD'
-                - 'CKD'
-                - 'COPD'
-                - 'DEM'
-                - 'DEP'
-                - 'DM'
-                - 'EP'
-                - 'FH'
-                - 'FRAIL'
-                - 'GESTDIAB'
-                - 'HF'
-                - 'HTN'
-                - 'LD'
-                - 'NAFLD'
-                - 'NDH'
-                - 'OST'
-                - 'PAD'
-                - 'PC'
-                - 'RA'
-                - 'SMI'
-                - 'STIA'
-                - 'PD'
-                - 'CEREBRALP'
-                - 'MND'
-                - 'MS'
-                - 'ANX'
-                - 'THY'
-                - 'AUTISM'
+              arguments:
+                values:
+                  - 'AST'
+                  - 'AF'
+                  - 'CAN'
+                  - 'CHD'
+                  - 'CKD'
+                  - 'COPD'
+                  - 'DEM'
+                  - 'DEP'
+                  - 'DM'
+                  - 'EP'
+                  - 'FH'
+                  - 'FRAIL'
+                  - 'GESTDIAB'
+                  - 'HF'
+                  - 'HTN'
+                  - 'LD'
+                  - 'NAFLD'
+                  - 'NDH'
+                  - 'OA'
+                  - 'OB'
+                  - 'OST'
+                  - 'PAD'
+                  - 'PC'
+                  - 'RA'
+                  - 'SMI'
+                  - 'SMI_RES'
+                  - 'STIA'
+                  - 'PD'
+                  - 'CEREBRALP'
+                  - 'MND'
+                  - 'MS'
+                  - 'ANX'
+                  - 'THY'
+                  - 'AUTISM'
+                  - 'ADHD'
+                  - 'CLD'
 
       - name: clinical_domain
         description: 'Clinical specialty domain for the condition'
@@ -811,8 +804,8 @@ models:
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: '>= 1'
-
+              arguments:
+                expression: '>= 1'
       - name: episode_start_date
         description: 'Date the episode started (first diagnosis/onset event)'
         tests:
@@ -823,32 +816,35 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['active', 'resolved']
+              arguments:
+                values: ['active', 'resolved']
 
       - name: episode_duration_days
         description: 'Duration of resolved episodes in days (NULL for active episodes)'
         tests:
           - dbt_utils.expression_is_true:
-              expression: '>= 0'
               config:
                 where: 'episode_duration_days IS NOT NULL'
 
+              arguments:
+                expression: '>= 0'
       - name: total_episodes_for_condition
         description: 'Total number of episodes for this person-condition combination'
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: '>= episode_number'
-
+              arguments:
+                expression: '>= episode_number'
       - name: current_condition_status
         description: 'Current status for the most recent episode of this condition'
         tests:
           - accepted_values:
-              values: ['active', 'resolved']
               config:
                 where: 'current_condition_status IS NOT NULL'
 
     # Additional relationship and business logic tests
+              arguments:
+                values: ['active', 'resolved']
     tests:
       # Ensure each person-condition-episode combination is unique
       - unique:
@@ -857,25 +853,27 @@ models:
       # Ensure episode start dates are not in the future
       - dbt_utils.expression_is_true:
           name: episode_start_date_not_future
-          expression: 'episode_start_date <= CURRENT_DATE'
-
-      # Ensure episode end dates are after start dates when present
+          arguments:
+            expression: 'episode_start_date <= CURRENT_DATE'
       - dbt_utils.expression_is_true:
           name: episode_end_after_start
-          expression: 'episode_end_date >= episode_start_date'
           config:
             where: 'episode_end_date IS NOT NULL'
 
       # Ensure resolved episodes have end dates
+          arguments:
+            expression: 'episode_end_date >= episode_start_date'
       - dbt_utils.expression_is_true:
           name: resolved_episodes_have_end_dates
-          expression: 'episode_end_date IS NOT NULL'
           config:
             where: "episode_status = 'resolved'"
 
       # Ensure active episodes don't have end dates or duration
+          arguments:
+            expression: 'episode_end_date IS NOT NULL'
       - dbt_utils.expression_is_true:
           name: active_episodes_no_end_data
-          expression: 'episode_end_date IS NULL AND episode_duration_days IS NULL'
           config:
             where: "episode_status = 'active'"
+          arguments:
+            expression: 'episode_end_date IS NULL AND episode_duration_days IS NULL'

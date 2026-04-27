@@ -1,12 +1,10 @@
-version: 2
-
 models:
   - name: population_health_needs_demographics_ltcs
-    description: 'Aggregate patient counts by age, ethnicity, PCN, neighbourhood,
-      IMD quintile, LTCs for population health needs dashboard.'
+    description: 'Aggregate patient counts by age, ethnicity, PCN, neighbourhood, IMD quintile, LTCs for population health needs dashboard.'
     tests:
       - dbt_utils.expression_is_true:
-          expression: "patient_count >= 1"
+          arguments:
+            expression: "patient_count >= 1"
     config:
       materialized: view
       meta:
@@ -44,11 +42,9 @@ models:
       - name: borough_registered
         description: Borough of the patient's GP practice.
       - name: practice_imd_quintile_19
-        description: Index of Multiple Deprivation quintile (2019) of the 
-          patient's GP practice.
+        description: Index of Multiple Deprivation quintile (2019) of the patient's GP practice.
       - name: patient_imd_quintile_19
-        description: Index of Multiple Deprivation quintile (2019) of the 
-          patient.
+        description: Index of Multiple Deprivation quintile (2019) of the patient.
       - name: has_atrial_fibrillation
       - name: has_coronary_heart_disease
       - name: has_heart_failure
@@ -75,11 +71,14 @@ models:
       - name: has_multiple_sclerosis
       - name: has_hypothyroidism
       - name: has_autism
+      - name: has_adhd
       - name: has_familial_hypercholesterolaemia
       - name: has_frailty
       - name: has_learning_disability
       - name: has_learning_disability_under_14
       - name: has_osteoporosis
+      - name: has_osteoarthritis
+      - name: has_chronic_liver_disease
       - name: has_palliative_care
       - name: has_rheumatoid_arthritis
       - name: patient_count

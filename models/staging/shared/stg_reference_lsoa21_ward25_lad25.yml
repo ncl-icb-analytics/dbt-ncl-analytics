@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_reference_lsoa21_ward25_lad25
-    description: LSOA 2021 to Ward 2025 and Local Authority District 2025 
-      geography mapping
+    description: LSOA 2021 to Ward 2025 and Local Authority District 2025 geography mapping
     config:
       meta:
         owner:
@@ -31,4 +29,5 @@ models:
         description: Flag indicating if this is a residential LSOA
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

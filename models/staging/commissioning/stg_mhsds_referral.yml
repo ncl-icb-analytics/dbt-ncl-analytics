@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_mhsds_referral
     description: MHSDS referral requests (deduplicated)
@@ -21,7 +20,7 @@ models:
 
       - name: prim_reason_referral_mh
         description: The primary presenting condition or symptom for which the patient was referred to a Mental Health Service
-      
+
       - name: decision_to_treat_date
         description: The date that it was first identified that the patient needs mental health treatment, but the formal service request has not yet been created. However, the patient may be formally under the care of the Home Treatment Service. This applies to home treatments.
 
@@ -36,10 +35,30 @@ models:
 
       - name: refer_reject_reason
         description: The reason that a Referral Request has been rejected by the SERVICE.
-      
+
       - name: refer_clos_reason
         description: The reason that a Referral Request has been closed. A Referral Request can be closed as a result of a Patient being discharged from the SERVICE. Cancelled referrals such as those entered onto a system in error should not be submitted within the data set.
 
+      - name: care_prof_team_local_id
+        description: A unique local CARE PROFESSIONAL TEAM IDENTIFIER code within a Health Care Provider.
+
+      - name: source_of_referral_mh
+        description: Describes the source of referral - GP, Internal, Police, Local Authority etc.
+
+      - name: service_type_name
+        description: Describes the type of SERVICE or team that the CARE PROFESSIONAL is associated with, within a Mental Health Service.
+
+      - name: clin_resp_priority_type
+        description: Describes clinical response priority of a SERVICE REQUEST (eg emergency, urgent, routine).
+
+      - name: dm_icb_commissioner
+        description: The ICB (Integrated Care Board) that commissioned the referral.
+
+      - name: uniq_submission_id
+        description: The unique identifier for the submission of the data, which is used to link records across the MHSDS datasets.
+
+
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

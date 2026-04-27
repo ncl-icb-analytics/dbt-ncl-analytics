@@ -1,9 +1,9 @@
-version: 2
 models:
   - name: dim_person_inactive_patients
-    description: Dimension table providing inactive patient status at person 
-      level. Includes only deceased patients and patients from closed/obsolete 
-      practices. Excludes dummy patients.
+    description: >
+      Inactive patients dimension — thin wrapper over dim_person_demographics
+      filtered to deceased patients and patients from closed/obsolete practices.
+      Excludes dummy patients. Ref: issue #641.
     config:
       meta:
         owner:
@@ -11,6 +11,6 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier - primary key'
-        tests:
+        data_tests:
           - unique
           - not_null

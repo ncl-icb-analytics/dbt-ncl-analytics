@@ -5,20 +5,18 @@
 }}
 
 -- LTC Summary Fact Table
--- Comprehensive summary of all long-term condition registers
--- Union of all QOF disease registers for analytical and reporting purposes
+-- Comprehensive summary of all long-term condition registers.
+-- Condition metadata (name/domain/qof) is sourced from ltc_register_denominator_rules
+-- to keep register categorisation centralized.
 
 WITH condition_union AS (
     -- Atrial Fibrillation
     SELECT
         person_id,
         'AF' AS condition_code,
-        'Atrial Fibrillation' AS condition_name,
-        'Cardiovascular' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_atrial_fibrillation_register') }}
     WHERE is_on_register = TRUE
 
@@ -28,12 +26,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'AST' AS condition_code,
-        'Asthma' AS condition_name,
-        'Respiratory' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_asthma_register') }}
     WHERE is_on_register = TRUE
 
@@ -43,12 +38,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'CAN' AS condition_code,
-        'Cancer' AS condition_name,
-        'Oncology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_cancer_register') }}
     WHERE is_on_register = TRUE
 
@@ -58,12 +50,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'CHD' AS condition_code,
-        'Coronary Heart Disease' AS condition_name,
-        'Cardiovascular' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_chd_register') }}
     WHERE is_on_register = TRUE
 
@@ -73,12 +62,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'CKD' AS condition_code,
-        'Chronic Kidney Disease' AS condition_name,
-        'Renal' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_ckd_register') }}
     WHERE is_on_register = TRUE
 
@@ -88,12 +74,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'COPD' AS condition_code,
-        'Chronic Obstructive Pulmonary Disease' AS condition_name,
-        'Respiratory' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_copd_register') }}
     WHERE is_on_register = TRUE
 
@@ -103,12 +86,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'CYP_AST' AS condition_code,
-        'Children and Young People Asthma' AS condition_name,
-        'Respiratory' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_cyp_asthma_register') }}
     WHERE is_on_register = TRUE
 
@@ -118,12 +98,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'DEM' AS condition_code,
-        'Dementia' AS condition_name,
-        'Mental Health' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_dementia_register') }}
     WHERE is_on_register = TRUE
 
@@ -133,12 +110,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'DEP' AS condition_code,
-        'Depression' AS condition_name,
-        'Mental Health' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_depression_register') }}
     WHERE is_on_register = TRUE
 
@@ -148,12 +122,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'DM' AS condition_code,
-        'Diabetes Mellitus' AS condition_name,
-        'Metabolic' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_diabetes_register') }}
     WHERE is_on_register = TRUE
 
@@ -163,12 +134,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'EP' AS condition_code,
-        'Epilepsy' AS condition_name,
-        'Neurology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_epilepsy_register') }}
     WHERE is_on_register = TRUE
 
@@ -178,12 +146,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'FH' AS condition_code,
-        'Familial Hypercholesterolaemia' AS condition_name,
-        'Genetics' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_familial_hypercholesterolaemia_register') }}
     WHERE is_on_register = TRUE
 
@@ -193,12 +158,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'HF' AS condition_code,
-        'Heart Failure' AS condition_name,
-        'Cardiovascular' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_heart_failure_register') }}
     WHERE is_on_register = TRUE
 
@@ -208,12 +170,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'HTN' AS condition_code,
-        'Hypertension' AS condition_name,
-        'Cardiovascular' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_hypertension_register') }}
     WHERE is_on_register = TRUE
 
@@ -223,12 +182,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'LD' AS condition_code,
-        'Learning Disability' AS condition_name,
-        'Neurodevelopmental' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_learning_disability_register') }}
     WHERE is_on_register = TRUE
 
@@ -238,12 +194,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'LD_U14' AS condition_code,
-        'Learning Disability (Under 14)' AS condition_name,
-        'Neurodevelopmental' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_learning_disability_register_under_14') }}
     WHERE is_on_register = TRUE
 
@@ -253,12 +206,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'NAFLD' AS condition_code,
-        'Non-Alcoholic Fatty Liver Disease' AS condition_name,
-        'Hepatology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_nafld_register') }}
     WHERE is_on_register = TRUE
 
@@ -268,12 +218,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'NDH' AS condition_code,
-        'Non-Diabetic Hyperglycaemia' AS condition_name,
-        'Metabolic' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_ndh_register') }}
     WHERE is_on_register = TRUE
 
@@ -283,12 +230,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'OB' AS condition_code,
-        'Obesity' AS condition_name,
-        'Metabolic' AS clinical_domain,
         is_on_register,
         latest_valid_bmi_date AS earliest_diagnosis_date,
-        latest_bmi_date AS latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_bmi_date AS latest_diagnosis_date
     FROM {{ ref('fct_person_obesity_register') }}
     WHERE is_on_register = TRUE
 
@@ -298,13 +242,22 @@ WITH condition_union AS (
     SELECT
         person_id,
         'OST' AS condition_code,
-        'Osteoporosis' AS condition_name,
-        'Musculoskeletal' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_osteoporosis_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Osteoarthritis
+    SELECT
+        person_id,
+        'OA' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_osteoarthritis_register') }}
     WHERE is_on_register = TRUE
 
     UNION ALL
@@ -313,12 +266,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'PAD' AS condition_code,
-        'Peripheral Arterial Disease' AS condition_name,
-        'Cardiovascular' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_pad_register') }}
     WHERE is_on_register = TRUE
 
@@ -328,12 +278,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'PC' AS condition_code,
-        'Palliative Care' AS condition_name,
-        'Palliative Care' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_palliative_care_register') }}
     WHERE is_on_register = TRUE
 
@@ -343,12 +290,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'RA' AS condition_code,
-        'Rheumatoid Arthritis' AS condition_name,
-        'Musculoskeletal' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_rheumatoid_arthritis_register') }}
     WHERE is_on_register = TRUE
 
@@ -358,12 +302,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'SMI' AS condition_code,
-        'Severe Mental Illness' AS condition_name,
-        'Mental Health' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_smi_register') }}
     WHERE is_on_register = TRUE
 
@@ -373,12 +314,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'STIA' AS condition_code,
-        'Stroke and TIA' AS condition_name,
-        'Neurology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        TRUE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_stroke_tia_register') }}
     WHERE is_on_register = TRUE
 
@@ -388,12 +326,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'GESTDIAB' AS condition_code,
-        'Gestational Diabetes' AS condition_name,
-        'Maternity' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_gestational_diabetes_register') }}
     WHERE is_on_register = TRUE
 
@@ -403,12 +338,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'FRAIL' AS condition_code,
-        'Frailty' AS condition_name,
-        'Geriatric' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_frailty_register') }}
     WHERE is_on_register = TRUE
 
@@ -418,12 +350,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'PD' AS condition_code,
-        'Parkinsons Disease' AS condition_name,
-        'Neurology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_parkinsons_register') }}
     WHERE is_on_register = TRUE
 
@@ -433,12 +362,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'CEREBRALP' AS condition_code,
-        'Cerebral Palsy' AS condition_name,
-        'Neurology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_cerebral_palsy_register') }}
     WHERE is_on_register = TRUE
 
@@ -448,12 +374,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'MND' AS condition_code,
-        'Motor Neurone Disease' AS condition_name,
-        'Neurology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_mnd_register') }}
     WHERE is_on_register = TRUE
 
@@ -463,12 +386,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'MS' AS condition_code,
-        'Multiple Sclerosis' AS condition_name,
-        'Neurology' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_ms_register') }}
     WHERE is_on_register = TRUE
 
@@ -478,12 +398,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'ANX' AS condition_code,
-        'Anxiety' AS condition_name,
-        'Mental Health' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_anxiety_register') }}
     WHERE is_on_register = TRUE
 
@@ -493,12 +410,9 @@ WITH condition_union AS (
     SELECT
         person_id,
         'THY' AS condition_code,
-        'Hypothyroidism' AS condition_name,
-        'Endocrine' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_hypothyroidism_register') }}
     WHERE is_on_register = TRUE
 
@@ -508,27 +422,56 @@ WITH condition_union AS (
     SELECT
         person_id,
         'AUTISM' AS condition_code,
-        'Autism Spectrum Disorder' AS condition_name,
-        'Neurodevelopmental' AS clinical_domain,
         is_on_register,
         earliest_diagnosis_date,
-        latest_diagnosis_date,
-        FALSE AS is_qof
+        latest_diagnosis_date
     FROM {{ ref('fct_person_autism_register') }}
     WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- ADHD
+    SELECT
+        person_id,
+        'ADHD' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_adhd_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Chronic Liver Disease
+    SELECT
+        person_id,
+        'CLD' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_chronic_liver_disease_register') }}
+    WHERE is_on_register = TRUE
+),
+
+condition_metadata AS (
+    SELECT
+        UPPER(condition_code) AS condition_code,
+        condition_name,
+        clinical_domain,
+        CAST(is_qof AS BOOLEAN) AS is_qof
+    FROM {{ ref('ltc_register_denominator_rules') }}
 )
 
 SELECT
-    person_id,
-    condition_code,
-    condition_name,
-    clinical_domain,
-    is_on_register,
-    is_qof,
-    earliest_diagnosis_date,
-    latest_diagnosis_date,
-
-    -- Derived metrics for easier analysis
-
-FROM condition_union
-ORDER BY person_id, condition_code
+    cu.person_id,
+    cu.condition_code,
+    cm.condition_name,
+    cm.clinical_domain,
+    cu.is_on_register,
+    cm.is_qof,
+    cu.earliest_diagnosis_date,
+    cu.latest_diagnosis_date
+FROM condition_union AS cu
+INNER JOIN condition_metadata AS cm
+    ON cu.condition_code = cm.condition_code
+ORDER BY cu.person_id, cu.condition_code

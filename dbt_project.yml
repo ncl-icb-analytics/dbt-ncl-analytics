@@ -1,51 +1,31 @@
-name: 'ncl_analytics'
+name: 'wnl_analytics'
 version: '1.20.1'
 config-version: 2
 
-profile: 'ncl_analytics'
+profile: 'wnl_analytics'
 
 flags:
   partial_parse: true
 
 # Display connection info when dbt runs start
+  require_generic_test_arguments_property: true
 on-run-start:
   - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
-target-path: "target"
 clean-targets:
   - "target"
   - "dbt_modules"
 
 model-paths: ["models"]
 
-# Configure dbt audit schema naming
+# Configuration moved to macros/config/ - see macros/config/README.md
 vars:
   dbt_audit_schema: "test_audit"
-
-  # QOF reference date for point-in-time register calculations
-  # Set to match EMIS extract date for validation
-  qof_reference_date: "2025-11-04"
-
-  # Schema generation configuration
-  # Domains listed here will have schema names automatically derived from subdomain folder structure
-  # Pattern: {DOMAIN}_{SUBDOMAIN} e.g. models/modelling/olids/diagnoses/ → OLIDS_DIAGNOSES
   auto_schema_domains: ['olids']
-
-  # Flu campaign configuration - Change these values to run for different campaign years
-  flu_current_campaign: "Flu 2025-26"     # Current flu campaign (Supported: Flu 2023-24, Flu 2024-25, Flu 2025-26)
-  flu_previous_campaign: "Flu 2024-25"    # Previous flu campaign (for year-over-year comparison)
-  flu_audit_end_date: "CURRENT_DATE"      # Default audit end date
-
-  # COVID campaign configuration - Multi-campaign support
-  covid_current_autumn: "COVID Autumn 2025"    # Current autumn campaign
-  covid_current_spring: "COVID Spring 2025"    # Current spring campaign
-  covid_previous_autumn: "COVID Autumn 2024"   # Previous autumn campaign
-  covid_previous_spring: "COVID Spring 2025"   # Previous spring campaign (for comparison)
-  covid_audit_end_date: "2025-06-30"    
-  
-  # Elementary configuration - disable upload of artifacts on run end for non-prod targets
+  qof_reference_date: "2025-11-04"  # EMIS QOF extract date, override via --vars
+  # Elementary observability
   disable_dbt_artifacts_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
   disable_run_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
   disable_tests_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
@@ -57,7 +37,7 @@ tests:
   +schema: "test_audit"
 
 models:
-  ncl_analytics:
+  wnl_analytics:
     +materialized: table
     +persist_docs:
       columns: true
@@ -116,6 +96,16 @@ models:
         definitions:
           +database: "{{ target.database.replace('MODELLING', 'REPORTING') }}"
 
+    # Semantic layer - Snowflake Semantic Views for Cortex Analyst
+    semantic:
+      +enabled: true
+      +materialized: semantic_view
+      +database: "REPORTING"
+      +schema: "SEMANTIC"
+      +tags: ["semantic"]
+      +meta:
+        custom_message: "Snowflake Semantic View - Includes OLIDS data - don't publish/share outputs without DAC approval. Query via SEMANTIC_VIEW() function."
+
     # Published layer - production-ready datasets for end users
     published:
       +enabled: true
@@ -152,10 +142,11 @@ models:
     +schema: "DBT_OBSERVABILITY"
 
 seeds:
-  ncl_analytics:
+  wnl_analytics:
     +database: "DATA_LAKE__NCL"
     +schema: "DBT_SEEDS"
     +quote_columns: false
+    +post-hook: ["{{ add_model_comment() }}"]
 
     bnf_polypharmacy_exclusions:
       +column_types:
@@ -182,7 +173,7 @@ seeds:
         GP_PRACTICE: varchar(200)
         LIST_SIZE: integer
         EXTRACT_DATE: varchar(10)
-    
+
     asthma_testing_codelist:
       +column_types:
         CODE: varchar(50)
@@ -194,12 +185,53 @@ seeds:
         DEFINITION_NAME: varchar(200)
         DEFINITION_VERSION: varchar(200)
         DEFINITION_SOURCE: varchar(200)
-        VERSION_DATETIME:	varchar(200)
+        VERSION_DATETIME: varchar(200)
         UPLOADED_DATETIME: varchar(200)
 
+    observation_unit_rules:
+      +column_types:
+        DEFINITION_ID: varchar(50)
+        DEFINITION_NAME: varchar(50)
+        CONFIG_ID: varchar(50)
+        CONFIG_VERSION: varchar(20)
+        CONVERT_FROM_UNIT: varchar(50)
+        CONVERT_TO_UNIT: varchar(20)
+        MULTIPLY_BY: float
+        PRE_OFFSET: float
+        POST_OFFSET: float
 
+    observation_standard_units:
+      +column_types:
+        DEFINITION_ID: varchar(50)
+        DEFINITION_NAME: varchar(50)
+        CONFIG_ID: varchar(50)
+        CONFIG_VERSION: varchar(20)
+        UNIT: varchar(20)
+        PRIMARY_UNIT: boolean
+
+    observation_value_bounds:
+      +column_types:
+        DEFINITION_ID: varchar(50)
+        DEFINITION_NAME: varchar(50)
+        CONFIG_ID: varchar(50)
+        CONFIG_VERSION: varchar(20)
+        ABSOLUTE_LOWER: float
+        ABSOLUTE_UPPER: float
+        CANONICAL_EXPONENT: integer
+        BIOLOGICAL_LOWER: float
+        BIOLOGICAL_UPPER: float
+
+    qadmissions_lab_thresholds:
+      +column_types:
+        measurement: varchar(50)
+        sex: varchar(10)
+        direction: varchar(10)
+        threshold: float
+        unit: varchar(20)
+        source_reference: varchar(100)
 
 snapshots:
-  ncl_analytics:
+  wnl_analytics:
     +database: "MODELLING"
-    +schema: "DBT_SNAPSHOTS"
+    +target_schema: "DBT_SNAPSHOTS"
+    +post-hook: ["{{ add_model_comment() }}"]

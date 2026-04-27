@@ -1,7 +1,6 @@
 models:
   - name: dq_blood_pressure_issues
-    description: 'Data quality issues in blood pressure measurements requiring clinical
-      review or data correction.
+    description: 'Data quality issues in blood pressure measurements requiring clinical review or data correction.
 
       Issue Types:
 
@@ -50,17 +49,15 @@ models:
         description: Whether diastolic BP is out of range (<20 or >200 mmHg)
 
       - name: is_coding_ambiguous
-        description: Whether BP coding is ambiguous (generic BP_COD without 
-          specific codes)
+        description: Whether BP coding is ambiguous (generic BP_COD without specific codes)
 
       - name: is_orphaned_reading
-        description: Whether reading is orphaned (systolic without diastolic or 
-          vice versa)
+        description: Whether reading is orphaned (systolic without diastolic or vice versa)
 
       - name: is_date_missing
         description: Whether clinical effective date is missing
 
     tests:
       - cluster_ids_exist:
-          cluster_ids: ABPM_COD, BP_COD, DIASBP_COD, HOMEAMBBP_COD, HOMEBP_COD, 
-            SYSBP_COD
+          arguments:
+            cluster_ids: ABPM_COD, BP_COD, DIASBP_COD, HOMEAMBBP_COD, HOMEBP_COD, SYSBP_COD

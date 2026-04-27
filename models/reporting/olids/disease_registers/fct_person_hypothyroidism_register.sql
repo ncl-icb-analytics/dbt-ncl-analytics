@@ -5,25 +5,12 @@
 }}
 
 /*
-**Hypothyroidism Register - Clinical Quality Measures**
-
-Simple Register
+Hypothyroidism Register
 
 Business Logic:
-- Presence of hypothyroidism diagnosis (THY_COD) = on register
+- Presence of hypothyroidism diagnosis (HYPOTHY_COD or THY_COD) = on register
 - No resolution codes (chronic condition)
-
-Note:
-- There are no resolved codes for hypothyroidism (chronic endocrine condition)
-- No specific age restrictions, though more common in older adults, particularly women
-- Latest diagnosis date used for care planning
-
-Clinical Context:
-Used for hypothyroidism quality measures including:
-- Endocrine care pathway monitoring
-- Medication management (levothyroxine monitoring)
-- Thyroid function test monitoring
-- Care planning and support services
+- No age restrictions
 */
 
 WITH hypothyroidism_diagnoses AS (

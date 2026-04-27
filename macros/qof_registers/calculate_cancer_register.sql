@@ -22,6 +22,7 @@
         WHERE clinical_effective_date <= {{ reference_date_expr }}
           AND clinical_effective_date >= '2003-04-01'
           AND is_diagnosis_code = TRUE
+          AND is_first_or_new_episode = TRUE
     ),
 
     cancer_person_aggregates AS (

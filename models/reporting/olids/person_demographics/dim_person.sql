@@ -13,6 +13,7 @@ WITH person_patients AS (
     -- Get all patient relationships for each person
     SELECT
         pp.person_id,
+        ANY_VALUE(pp.person_uuid) AS person_uuid,
         ARRAY_AGG(DISTINCT p.sk_patient_id) AS sk_patient_ids,
         ARRAY_AGG(DISTINCT p.id) AS patient_ids,
         COUNT(DISTINCT p.id) AS total_patients
@@ -54,6 +55,7 @@ current_practices AS (
 -- Final aggregation
 SELECT
     pp.person_id,
+    pp.person_uuid,
     pp.sk_patient_ids,
     pp.patient_ids,
     cp.current_practice_id,

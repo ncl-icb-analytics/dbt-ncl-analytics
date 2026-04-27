@@ -1,13 +1,13 @@
-# NCL Analytics dbt Project
+# WNL ICB Analytics dbt Project
 
-[![Last Commit](https://img.shields.io/github/last-commit/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/commits/main)
-[![Commit Activity](https://img.shields.io/github/commit-activity/m/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulse)
-[![Open PRs](https://img.shields.io/github/issues-pr/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls)
-[![Merged PRs](https://badgen.net/github/merged-prs/ncl-icb-analytics/dbt-ncl-analytics)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/pulls?q=is%3Amerged)
-[![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/EddieDavison92/fe9920551839b7a85d0f47dfd527e62b/raw/coverage.json)](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/actions/workflows/test-coverage.yml)
+[![Last Commit](https://img.shields.io/github/last-commit/wnl-icb-analytics/dbt-analytics)](https://github.com/wnl-icb-analytics/dbt-analytics/commits/main)
+[![Commit Activity](https://img.shields.io/github/commit-activity/m/wnl-icb-analytics/dbt-analytics)](https://github.com/wnl-icb-analytics/dbt-analytics/pulse)
+[![Open PRs](https://img.shields.io/github/issues-pr/wnl-icb-analytics/dbt-analytics)](https://github.com/wnl-icb-analytics/dbt-analytics/pulls)
+[![Merged PRs](https://badgen.net/github/merged-prs/wnl-icb-analytics/dbt-analytics)](https://github.com/wnl-icb-analytics/dbt-analytics/pulls?q=is%3Amerged)
+[![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/EddieDavison92/fe9920551839b7a85d0f47dfd527e62b/raw/coverage.json)](https://github.com/wnl-icb-analytics/dbt-analytics/actions/workflows/test-coverage.yml)
 [![License](https://img.shields.io/badge/license-OGL%20v3%20|%20MIT-blue)](LICENSE)
 
-dbt project for NCL ICB Analytics healthcare data transformations.
+dbt project for WNL ICB Analytics healthcare data transformations.
 
 ## Quick Start
 
@@ -16,13 +16,24 @@ dbt project for NCL ICB Analytics healthcare data transformations.
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 # Clone and setup
-git clone https://github.com/ncl-icb-analytics/dbt-ncl-analytics && cd dbt-ncl-analytics
+git clone https://github.com/wnl-icb-analytics/dbt-analytics && cd dbt-analytics
 uv sync
 cp env.example .env    # Edit with your Snowflake credentials
 .\start_dbt.ps1 && dbt deps && dbt debug
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signing.
+
+## Codespaces
+
+This repository supports GitHub Codespaces for cloud-based dbt development.
+
+- Store Snowflake credentials as Codespaces secrets, not in committed files.
+- `SNOWFLAKE_PAT` is the recommended auth method for Codespaces.
+- If `SNOWFLAKE_PAT` is set, dbt uses it as the password and skips browser auth.
+- If no PAT or password is set, the project falls back to `externalbrowser`.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md#github-codespaces) for setup.
 
 ## What This Project Does
 
@@ -87,7 +98,7 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 | [Snapshots Guide](docs/snapshots-guide.md) | Tracking historical changes with SCDs |
 | [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
 | [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
-| [Working with Sources](docs/working-with-sources.md) | Source generation workflow |
+| [Working with Sources](docs/working-with-sources.md) | Adding sources, regenerating raw models, and handling drift |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 
 ## Learning dbt
@@ -128,9 +139,9 @@ The naming logic is in `macros/overrides/generate_database_name.sql` and `genera
 
 ### Technology Stack
 
-- **dbt-core 1.9.4** - Do not upgrade to 1.10+
+- **dbt-core 1.10.15** - Snowflake-supported runtime target
 - **Snowflake** - Cloud data warehouse
-- **Python 3.8+** - Scripting and automation
+- **Python 3.11** - Scripting and automation
 
 ## License
 

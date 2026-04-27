@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: sem_olids_observations
+    description: |
+      OLIDS Clinical Observations semantic view. OLIDS is the One London
+      Integrated Data Set — primary care data from system suppliers,
+      unified by the One London team.
+
+      Semantic model for clinical observations with category-based metrics
+      for population health analysis. Focuses on proportions at target
+      rather than raw averages.
+
+      Includes ESP 2013 weights (age_band_esp, esp_weight, esp_proportion)
+      for age-standardised rate calculation across areas.
+
+      Design Principles:
+      - Categories over averages (% at target vs mean value)
+      - Patient-specific thresholds where applicable (BP control)
+      - Pre-computed clinical classifications from int/fct models
+
+      Grain: One row per person (latest observation values)
+
+      Tables Included:
+      - dim_person_demographics: Base population
+      - int_blood_pressure_latest / fct_person_bp_control: BP and control status
+      - int_hba1c_latest: HbA1c with NICE categories
+      - int_cholesterol_latest / int_cholesterol_ldl_latest: Total and LDL cholesterol
+      - int_bmi_latest: BMI with ethnicity-adjusted categories (adults 18+ only; heights and weights under age 18 excluded upstream)
+      - int_waist_circumference_latest: Waist circumference with risk categories
+      - int_egfr_latest: eGFR with CKD staging
+      - int_creatinine_latest: Serum creatinine
+      - int_qrisk_latest: QRISK cardiovascular risk
+      - int_urine_acr_latest: Urine ACR
+      - int_efi_latest: Electronic Frailty Index (GP-coded only, incomplete coverage)
+      - int_rockwood_latest: Rockwood Clinical Frailty Scale
+      - int_foot_examination_latest: Diabetic foot examination
+      - int_retinal_screening_latest: Diabetic retinal screening
+      - fct_person_diabetes_8_care_processes: DM 8 care process completion
+      - esp_2013: European Standard Population weights
+
+    config:
+      materialized: semantic_view
+      schema: SEMANTIC
+      meta:
+        owner:
+          name: Eddie Davison

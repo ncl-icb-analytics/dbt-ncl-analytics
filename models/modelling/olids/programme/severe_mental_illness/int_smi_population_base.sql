@@ -15,6 +15,7 @@ dem.PERSON_ID
 ,dem.AGE
 ,dem.AGE_BAND_5Y
 ,dem.AGE_BAND_NHS
+,dem.BIRTH_DATE_APPROX
 ,CASE
 WHEN dem.age_band_nhs = '5-14' THEN 1
 WHEN dem.age_band_nhs = '15-24' THEN 2
@@ -120,10 +121,13 @@ ELSE la.RESIDENT_FLAG END as RESIDENTIAL_LOC
 ,ltc.HAS_PERIPHERAL_ARTERIAL_DISEASE as HAS_PAD
 ,smi.IS_ON_LITHIUM
 ,smi.HAS_ACTIVE_SMI_DIAGNOSIS
+,smi.HAS_RECENT_RESOLVED_CODE
 FROM {{ ref('dim_person_demographics') }} dem 
 INNER JOIN {{ ref('fct_person_smi_register') }} smi using (PERSON_ID)
 LEFT JOIN {{ ref('dim_person_conditions') }} ltc using (PERSON_ID)
 LEFT JOIN {{ ref('person_pseudo') }} AS ID  using (PERSON_ID)
 LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
 LEFT JOIN {{ ref('dim_person_homeless') }} hom using (PERSON_ID)
-where dem.is_active = TRUE
+where dem.is_active = TRUE 
+and dem.is_deceased = FALSE
+

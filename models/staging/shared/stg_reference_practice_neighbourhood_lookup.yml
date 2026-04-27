@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_practice_neighbourhood_lookup
     description: GP practice to neighbourhood, PCN, and local authority mapping
@@ -22,4 +21,5 @@ models:
         description: NCL practice neighbourhood
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

@@ -90,6 +90,8 @@ SELECT
     -- Practice and geography
     d.practice_code,
     d.borough_registered,
+    d.sub_icb_code,
+    d.sub_icb_name,
     d.practice_postcode,
     d.practice_lsoa,
     d.practice_msoa,
@@ -154,6 +156,7 @@ SELECT
     COALESCE(c.has_frail, FALSE) as has_frail,
     COALESCE(c.has_ra, FALSE) as has_ra,
     COALESCE(c.has_ost, FALSE) as has_ost,
+    COALESCE(c.has_oa, FALSE) as has_oa,
     COALESCE(c.has_nafld, FALSE) as has_nafld,
     COALESCE(c.has_fh, FALSE) as has_fh,
     
@@ -180,6 +183,7 @@ SELECT
     COALESCE(c.new_frail, FALSE) as new_frail,
     COALESCE(c.new_ra, FALSE) as new_ra,
     COALESCE(c.new_ost, FALSE) as new_ost,
+    COALESCE(c.new_oa, FALSE) as new_oa,
     COALESCE(c.new_nafld, FALSE) as new_nafld,
     COALESCE(c.new_fh, FALSE) as new_fh,
     
@@ -230,8 +234,11 @@ LEFT JOIN (
         MAX(CASE WHEN condition_code = 'FRAIL' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_frail,
         MAX(CASE WHEN condition_code = 'RA' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_ra,
         MAX(CASE WHEN condition_code = 'OST' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_ost,
+        MAX(CASE WHEN condition_code = 'OA' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_oa,
         MAX(CASE WHEN condition_code = 'NAFLD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_nafld,
         MAX(CASE WHEN condition_code = 'FH' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_fh,
+        MAX(CASE WHEN condition_code = 'ADHD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_adhd,
+        MAX(CASE WHEN condition_code = 'CLD' AND has_active_episode THEN 1 ELSE 0 END)::BOOLEAN as has_cld,
 
         -- New episode flags (new_*)
         MAX(CASE WHEN condition_code = 'AST' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_ast,
@@ -256,8 +263,11 @@ LEFT JOIN (
         MAX(CASE WHEN condition_code = 'FRAIL' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_frail,
         MAX(CASE WHEN condition_code = 'RA' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_ra,
         MAX(CASE WHEN condition_code = 'OST' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_ost,
+        MAX(CASE WHEN condition_code = 'OA' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_oa,
         MAX(CASE WHEN condition_code = 'NAFLD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_nafld,
         MAX(CASE WHEN condition_code = 'FH' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_fh,
+        MAX(CASE WHEN condition_code = 'ADHD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_adhd,
+        MAX(CASE WHEN condition_code = 'CLD' AND has_new_episode THEN 1 ELSE 0 END)::BOOLEAN as new_cld,
 
         -- Summary metrics
         COUNT(DISTINCT CASE WHEN has_active_episode THEN condition_code END) as total_active_conditions,

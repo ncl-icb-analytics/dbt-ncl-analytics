@@ -1,0 +1,29 @@
+{{
+    config(
+        description="Raw layer (AIC pipelines). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.AIC_DEV.STG_CCMS__FINAL_FLAGS \ndbt: source(''aic'', ''STG_CCMS__FINAL_FLAGS'') \nColumns:\n  PERSON_ID -> person_id\n  ALCOHOLPROBLEMS -> alcoholproblems\n  ANXIETYORDEPRESSION -> anxietyordepression\n  ATRIALFIBRILLATION -> atrialfibrillation\n  CANCERINTHELAST5YEARS -> cancerinthelast5_years\n  CHRONICKIDNEYDISEASE -> chronickidneydisease\n  CHRONICLIVERDISEASEANDVIRALHEPATITIS -> chronicliverdiseaseandviralhepatitis\n  CONSTIPATION -> constipation\n  COPD -> copd\n  DEMENTIA -> dementia\n  DIABETES -> diabetes\n  DISORDEROFPROSTATE -> disorderofprostate\n  EPILEPSY -> epilepsy\n  HEARTFAILURE -> heartfailure\n  IRRITABLEBOWELSYNDROME -> irritablebowelsyndrome\n  LEARNINGDISABILITY -> learningdisability\n  MULTIPLESCLEROSIS -> multiplesclerosis\n  PAINFULCONDITION -> painfulcondition\n  PARKINSONISM -> parkinsonism\n  PERIPHVASCDISEASELEG -> periphvascdiseaseleg\n  PSYCHOACTIVESUBSTANCEMISUSE -> psychoactivesubstancemisuse\n  SCHIZOPHRENIAORBIPOLARDISORDER -> schizophreniaorbipolardisorder"
+    )
+}}
+select
+    person_id,
+   alcoholproblems,
+    anxietyordepression,
+    atrialfibrillation,
+    cancerinthelast5_years,
+    chronickidneydisease,
+    chronicliverdiseaseandviralhepatitis,
+    constipation,
+    copd,
+    dementia,
+    diabetes,
+    disorderofprostate,
+    epilepsy,
+    heartfailure,
+    irritablebowelsyndrome,
+    learningdisability,
+    multiplesclerosis,
+    painfulcondition,
+    parkinsonism,
+    periphvascdiseaseleg,
+    psychoactivesubstancemisuse,
+    schizophreniaorbipolardisorder
+from {{ ref('raw_aic_stg_ccms_final_flags') }}

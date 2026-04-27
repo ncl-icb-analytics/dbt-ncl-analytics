@@ -1,12 +1,19 @@
-version: 2
 models:
   - name: dim_ltc_lcs_cf_summary
     description: 'LTC case finding summary aggregating indicators across multiple
       condition areas.
 
-      One row per person meeting criteria for atrial fibrillation, CKD, cardiovascular,
+      One row per person meeting criteria for atrial fibrillation, heart failure, CKD, cardiovascular,
       diabetes, or hypertension case finding.'
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
     config:
       meta:
         owner:
           name: EddieDavison92
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

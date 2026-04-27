@@ -1,0 +1,41 @@
+version: 2
+models:
+  - name: sem_olids_appointments
+    description: |
+      OLIDS GP Appointments semantic view. OLIDS is the One London Integrated
+      Data Set — primary care data from system suppliers, unified by the
+      One London team.
+
+      Combines cleaned appointment data with patient demographics, long-term
+      condition flags, appointment-owning practice details (from dim_practice),
+      and PSSRU unit costs for GP access KPI reporting, DNA equity analysis,
+      workforce mix and appointment costing.
+
+      Grain: one row per appointment (appointment_id).
+
+      Scope: built from int_appointment_gp_clean_recent which restricts
+      to the rolling last 60 months of appointment data. This matches
+      OLIDS retention — anything older has been silently truncated to
+      currently-registered patients only and would bias historical
+      analysis. Apply the same 5-year caveat to any historical
+      comparisons drawn from this view.
+
+      Practice attribution: practice_code, practice_name, pcn_code,
+      pcn_name, borough come from dim_practice joined via the appointment's
+      record_owner_organisation_code — this is the practice that delivered
+      the appointment. The registered_* columns (registered_practice_name,
+      registered_pcn_name, registered_borough, registered_neighbourhood)
+      come from dim_person_demographics and reflect the patient's CURRENT
+      registration, which may differ if the patient has since transferred
+      or attended via NHS-wide access.
+
+      Patient demographics (age bands, ethnicity, IMD) reflect the
+      patient's current state, not their state at appointment time.
+      Use age_at_event for event-time age cohorting.
+
+    config:
+      materialized: semantic_view
+      schema: SEMANTIC
+      meta:
+        owner:
+          name: Eddie Davison

@@ -5,7 +5,8 @@ models:
       One row per referral per patient (SERVICE_REQUEST_IDENTIFIER + NHS_NUMBER).
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns: [referral_id, sk_patient_id]
+          arguments:
+            combination_of_columns: [referral_id, sk_patient_id]
     columns:
       - name: sk_patient_id
         description: "Pseudo-anonymised patient identifier (NHS_NUMBER)"

@@ -9,7 +9,7 @@ sources:
     identifier: '"PDS_Address"'
     columns:
     - name: RowID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Pseudo NHS Number
       data_type: TEXT
     - name: derPostcodeSector
@@ -33,9 +33,9 @@ sources:
     - name: derCurrentyr2021LSOAofResidence_FromPostcode
       data_type: TEXT
     - name: dmicPostcodeTypeId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicPostcodeWellbeingTypeId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derIcbOfResidence
       data_type: TEXT
     - name: derCurrentIcbOfResidence
@@ -46,7 +46,7 @@ sources:
     identifier: '"PDS_Address_CareHomeSimilarity"'
     columns:
     - name: RowID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Pseudo NHS Number
       data_type: TEXT
     - name: derPostcodeSector
@@ -70,9 +70,9 @@ sources:
     - name: derCurrentyr2021LSOAofResidence_FromPostcode
       data_type: TEXT
     - name: dmicPostcodeTypeId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicPostcodeWellbeingTypeId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: derIcbOfResidence
       data_type: TEXT
     - name: derCurrentIcbOfResidence
@@ -141,7 +141,7 @@ sources:
     identifier: '"PDS_Patient_Care_Practice"'
     columns:
     - name: RowID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Pseudo NHS Number
       data_type: TEXT
     - name: Primary Care Provider
@@ -164,7 +164,7 @@ sources:
     identifier: '"PDS_Person"'
     columns:
     - name: RowID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Pseudo NHS Number
       data_type: TEXT
     - name: YearMonth_Of_Birth
@@ -187,7 +187,7 @@ sources:
     identifier: '"PDS_Person_Merger"'
     columns:
     - name: RowID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Pseudo NHS Number
       data_type: TEXT
     - name: Pseudo Superseded NHS Number
@@ -200,7 +200,7 @@ sources:
     identifier: '"PDS_Reason_For_Removal"'
     columns:
     - name: RowID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Pseudo NHS Number
       data_type: TEXT
     - name: Reason for Removal
@@ -209,3 +209,26 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: Reason for Removal Business Effective To Date
       data_type: TIMESTAMP_NTZ
+  - name: WNL.PDS_Patient_Care_Practice
+    identifier: '"WNL.PDS_Patient_Care_Practice"'
+    columns:
+    - name: RowID
+      data_type: NUMBER(38,0)
+    - name: Pseudo NHS Number
+      data_type: TEXT
+    - name: Primary Care Provider
+      data_type: TEXT
+    - name: Primary Care Provider Business Effective From Date
+      data_type: TIMESTAMP_NTZ
+    - name: Primary Care Provider Business Effective To Date
+      data_type: TIMESTAMP_NTZ
+    - name: Reason for Removal
+      data_type: TEXT
+    - name: derCcgOfRegistration
+      data_type: TEXT
+    - name: derCurrentCcgOfRegistration
+      data_type: TEXT
+    - name: derIcbOfRegistration
+      data_type: TEXT
+    - name: derCurrentIcbOfRegistration
+      data_type: TEXT

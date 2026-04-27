@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_reference_ltc_lcs_failed_codes
     description: Codes that failed translation or expansion during processing
@@ -8,7 +7,8 @@ models:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: failed_code_id
         description: Unique identifier for this failed code entry

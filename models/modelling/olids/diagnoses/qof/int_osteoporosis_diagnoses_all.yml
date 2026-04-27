@@ -1,10 +1,8 @@
-version: 2
 models:
   - name: int_osteoporosis_diagnoses_all
     description: 'Osteoporosis diagnosis observations for QOF register management.
 
-      One row per diagnosis observation using OSTEO_COD cluster. DXA scan confirmation
-      logic handled in fact layer.'
+      One row per diagnosis observation using OSTEO_COD cluster. DXA scan confirmation logic handled in fact layer.'
     config:
       meta:
         owner:
@@ -41,4 +39,5 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: OSTEO_COD
+          arguments:
+            cluster_ids: OSTEO_COD

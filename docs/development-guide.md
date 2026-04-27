@@ -1,6 +1,6 @@
 # Development Guide
 
-This guide covers advanced development patterns and technical details for working with the NCL Analytics dbt project.
+This guide covers advanced development patterns and technical details for working with the WNL ICB Analytics dbt project.
 
 ## Daily Development Workflow
 
@@ -383,7 +383,7 @@ This project uses several dbt packages (committed to `dbt_packages/` for Snowfla
 - **dbt_date** - Date manipulation helpers
 - **codegen** - Code generation utilities
 
-This project uses dbt-core 1.9.4 for Snowflake compatibility. Do not upgrade to dbt 1.10+ or use the new `arguments:` property in test definitions.
+This project targets dbt-core 1.10.15 for Snowflake compatibility. Generic test arguments should use the `arguments:` property.
 
 ## Working with Profiles
 
@@ -434,7 +434,7 @@ cat .env
 
 ### Getting Help
 
-- Check [GitHub Issues](https://github.com/ncl-icb-analytics/dbt-ncl-analytics/issues)
+- Check [GitHub Issues](https://github.com/wnl-icb-analytics/dbt-analytics/issues)
 - Review dbt error messages carefully
 - Use `dbt compile` to see generated SQL
 - Check `target/compiled/` and `target/run/` for debugging

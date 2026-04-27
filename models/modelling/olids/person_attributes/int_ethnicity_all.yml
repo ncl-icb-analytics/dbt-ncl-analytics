@@ -1,10 +1,6 @@
-version: 2
 models:
   - name: int_ethnicity_all
-    description: Intermediate table containing all dated Observation records 
-      that map to a valid code in the ETHNICITY_CODES reference table. Used as a
-      source for DIM_PERSON_ETHNICITY to find the latest valid record per 
-      person.
+    description: Intermediate table containing all dated Observation records that map to a valid code in the ETHNICITY_CODES reference table. Used as a source for DIM_PERSON_ETHNICITY to find the latest valid record per person.
 
     config:
       meta:
@@ -12,8 +8,8 @@ models:
           name: EddieDavison92
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:

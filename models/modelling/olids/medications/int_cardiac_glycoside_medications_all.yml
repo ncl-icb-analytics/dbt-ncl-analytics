@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_cardiac_glycoside_medications_all
     description: 'Cardiac glycoside medication orders using BNF classification for

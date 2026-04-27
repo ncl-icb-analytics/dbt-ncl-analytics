@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: fct_household_members
-    description: 'Bridge table linking patients to households with demographic and
-      practice context.
+    description: 'Bridge table linking patients to households with demographic and practice context.
 
       Key Features:
 
@@ -12,8 +10,7 @@ models:
 
       • Practice and PCN organisational context
 
-      Purpose: Enables household-level health analysis by linking residents to dwelling
-      geography.'
+      Purpose: Enables household-level health analysis by linking residents to dwelling geography.'
     config:
       meta:
         owner:
@@ -39,13 +36,15 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
       - name: is_deceased
         description: 'Flag indicating if patient is deceased'
         tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
       - name: gender
         description: 'Patient gender (Male, Female, Indeterminate, Not Known)'
       - name: age
@@ -62,7 +61,8 @@ models:
         description: 'Flag indicating if interpreter services are required'
         tests:
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
       - name: practice_code
         description: 'GP practice code where patient is registered'
       - name: practice_name

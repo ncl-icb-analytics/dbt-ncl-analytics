@@ -25,7 +25,7 @@ sources:
     identifier: '"CYP000Header"'
     columns:
     - name: DATA SET VERSION NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (CODE OF PROVIDER)
@@ -47,7 +47,7 @@ sources:
     - name: END PROCESSING DATE TIME
       data_type: TIMESTAMP_NTZ
     - name: CYP000 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNIQUE SUBMISSION ID
       data_type: TEXT
     - name: BSP UNIQUE ID
@@ -59,87 +59,87 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: TOTAL CYP001 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP002 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP003 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP004 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP005 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP006 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP007 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP101 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP102 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP103 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP104 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP105 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP201 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP202 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP301 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP401 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP402 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP403 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP404 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP501 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP502 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP601 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP602 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP603 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP604 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP605 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP606 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP607 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP608 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP609 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP610 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP611 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP612 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP613 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP901 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL RECORDS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYPHS SUBMISSION RECORD COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TOTAL CYP008 POST PROCESSING ROW COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicMonthId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCG
       data_type: TEXT
   - name: CYP001MPI
@@ -204,9 +204,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP001 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -240,27 +240,27 @@ sources:
     - name: ELECTORAL WARD OF USUAL ADDRESS
       data_type: TEXT
     - name: AGE OF PATIENT AT REPORTING PERIOD START (DAYS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE OF PATIENT AT REPORTING PERIOD END (DAYS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT DEATH (DAYS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CCG OF RESIDENCE)
       data_type: TEXT
     - name: ORGANISATION CODE (CCG OF RESIDENCE)
       data_type: TEXT
     - name: AGE OF PATIENT AT REPORTING PERIOD START (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_OF_PATIENT_AT_RP_START
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE OF PATIENT AT REPORTING PERIOD END (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_OF_PATIENT_AT_RP_END
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT DEATH (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_DEATH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -284,11 +284,11 @@ sources:
     - name: ORGANISATION IDENTIFIER (ICB OF RESIDENCE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicEthnicCategoryGroup
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -331,9 +331,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP002 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -363,9 +363,9 @@ sources:
     - name: ORGANISATION IDENTIFIER (ICB OF GP PRACTICE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -400,9 +400,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP003 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -416,11 +416,11 @@ sources:
     - name: BSP UNIQUE ID
       data_type: TEXT
     - name: AGE AT ACCOMMODATION STATUS DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT ACCOMMODATION STATUS DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_ACCOMMODATION_STATUS_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -432,9 +432,9 @@ sources:
     - name: AGE BAND (ACCOMMODATION STATUS DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -473,9 +473,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP004 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: PERSON ID
@@ -491,9 +491,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -530,9 +530,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP005 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: PERSON ID
@@ -548,9 +548,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -577,9 +577,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP006 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: PERSON ID
@@ -593,9 +593,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -626,9 +626,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP007 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: PERSON ID
@@ -642,9 +642,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -675,9 +675,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP008 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: PERSON ID
@@ -687,9 +687,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicDSCRO
@@ -752,9 +752,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP101 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -770,17 +770,17 @@ sources:
     - name: UNIQUE SERVICE REQUEST IDENTIFIER
       data_type: TEXT
     - name: AGE AT SERVICE REFERRAL RECEIVED DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT SERVICE REFERRAL DISCHARGE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT SERVICE REFERRAL RECEIVED DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_SERVICE_REFERRAL_RECEIVED_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT SERVICE REFERRAL DISCHARGE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_SERVICE_REFERRAL_DISCHARGE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -796,9 +796,9 @@ sources:
     - name: AGE BAND (SERVICE DISCHARGE DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -841,9 +841,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP102 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -861,17 +861,17 @@ sources:
     - name: UNIQUE CARE PROFESSIONAL TEAM LOCAL IDENTIFIER
       data_type: TEXT
     - name: AGE AT SERVICE REFERRAL CLOSURE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT SERVICE REFERRAL REJECTION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT SERVICE REFERRAL CLOSURE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_SERVICE_REFERRAL_CLOSURE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT SERVICE REFERRAL REJECTION (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_SERVICE_REFERRAL_REJECTION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -887,9 +887,9 @@ sources:
     - name: AGE BAND (REFERRAL REJECTION DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -914,9 +914,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP103 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -938,9 +938,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -985,9 +985,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP104 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1003,19 +1003,19 @@ sources:
     - name: UNIQUE SERVICE REQUEST IDENTIFIER
       data_type: TEXT
     - name: AGE AT REFERRAL TO TREATMENT START DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT REFERRAL TO TREATMENT END DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TIME BETWEEN REFERRAL TO TREATMENT START AND END DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT REFERRAL TO TREATMENT START DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_REFERRAL_TO_TREATMENT_START_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT REFERRAL TO TREATMENT END DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_REFERRAL_TO_TREATMENT_END_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -1037,9 +1037,9 @@ sources:
     - name: AGE BAND (RTT END DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1074,9 +1074,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP105 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1098,9 +1098,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1135,7 +1135,7 @@ sources:
     - name: ADMINISTRATIVE CATEGORY CODE
       data_type: TEXT
     - name: CLINICAL CONTACT DURATION OF CARE CONTACT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONSULTATION TYPE
       data_type: TEXT
     - name: CARE CONTACT SUBJECT
@@ -1171,9 +1171,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP201 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1193,27 +1193,27 @@ sources:
     - name: UNIQUE CARE CONTACT IDENTIFIER
       data_type: TEXT
     - name: AGE AT CARE CONTACT DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TIME BETWEEN REFERRAL AND CARE CONTACT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CONTACT LOCATION DISTANCE FROM HOME
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT CARE CONTACT DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_CARE_CONTACT_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: AGE GROUP (CARE CONTACT DATE)
       data_type: TEXT
     - name: DERIVED BODY MASS INDEX
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: AGE BAND (CARE CONTACT DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1248,7 +1248,7 @@ sources:
     - name: CARE PROFESSIONAL LOCAL IDENTIFIER
       data_type: TEXT
     - name: CLINICAL CONTACT DURATION OF CARE ACTIVITY
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: PROCEDURE SCHEME IN USE (COMMUNITY CARE)
       data_type: TEXT
     - name: PROCEDURE SCHEME IN USE
@@ -1274,9 +1274,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP202 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1330,11 +1330,11 @@ sources:
     - name: DERIVED PERSON WEIGHT
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicActivityDate
       data_type: TIMESTAMP_NTZ
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1363,13 +1363,13 @@ sources:
     - name: ORGANISATION CODE (CODE OF COMMISSIONER)
       data_type: TEXT
     - name: CLINICAL CONTACT DURATION OF GROUP SESSION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: GROUP SESSION TYPE (COMMUNITY CARE)
       data_type: TEXT
     - name: GROUP SESSION TYPE CODE (COMMUNITY CARE)
       data_type: TEXT
     - name: NUMBER OF GROUP SESSION PARTICIPANTS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ACTIVITY LOCATION TYPE CODE
       data_type: TEXT
     - name: ORGANISATION SITE IDENTIFIER (OF TREATMENT)
@@ -1385,7 +1385,7 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: CYP301 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1397,11 +1397,11 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Unique_GroupSessionId
       data_type: TEXT
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1432,9 +1432,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP401 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1454,9 +1454,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1483,9 +1483,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP402 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: PERSON ID
@@ -1499,9 +1499,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1532,9 +1532,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP403 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: PERSON ID
@@ -1542,15 +1542,15 @@ sources:
     - name: UNIQUE SUBMISSION ID
       data_type: TEXT
     - name: AGE AT CHILD PROTECTION PLAN START DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT CHILD PROTECTION PLAN END DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DURATION SPENT ON CHILD PROTECTION PLAN
       data_type: TEXT
     - name: AGE AT CHILD PROTECTION PLAN START DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT CHILD PROTECTION PLAN END DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -1562,9 +1562,9 @@ sources:
     - name: AGE BAND (CHILD PROTECTION PLAN END DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1593,9 +1593,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP404 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1615,9 +1615,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1654,9 +1654,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP501 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1670,13 +1670,13 @@ sources:
     - name: BSP UNIQUE ID
       data_type: TEXT
     - name: AGE AT IMMUNISATION DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SCHOOL YEAR AT IMMUNISATION DATE
       data_type: TEXT
     - name: AGE AT IMMUNISATION DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_IMMUNISATION_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -1698,9 +1698,9 @@ sources:
     - name: MAPPED OPCS-4 PROCEDURE DESCRIPTION
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1733,9 +1733,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP502 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1749,13 +1749,13 @@ sources:
     - name: BSP UNIQUE ID
       data_type: TEXT
     - name: AGE AT IMMUNISATION DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SCHOOL YEAR AT IMMUNISATION DATE
       data_type: TEXT
     - name: AGE AT IMMUNISATION DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_IMMUNISATION_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -1765,9 +1765,9 @@ sources:
     - name: AGE BAND (IMMUNISATION DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1800,9 +1800,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP601 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1834,9 +1834,9 @@ sources:
     - name: MASTER ICD-10 PREVIOUS DIAGNOSIS DESCRIPTION
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1865,9 +1865,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP602 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1887,9 +1887,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -1922,9 +1922,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP603 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -1938,13 +1938,13 @@ sources:
     - name: BSP UNIQUE ID
       data_type: TEXT
     - name: AGE AT NEWBORN HEARING SERVICE REQUEST DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_NEWBORN_HEARING_SERVICE_REQUEST_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT NEWBORN HEARING PROCEDURE DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_NEWBORN_HEARING_PROCEDURE_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -1952,9 +1952,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2002,9 +2002,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP604 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2018,9 +2018,9 @@ sources:
     - name: BSP UNIQUE ID
       data_type: TEXT
     - name: AGE AT BLOOD SPOT COMPLETION DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_BLOOD_SPOT_COMPLETION_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: TIME TAKEN TO RECEIVE BLOOD SPOT RESULT
       data_type: TEXT
     - name: RECORD START DATE
@@ -2030,9 +2030,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2067,9 +2067,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP605 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2083,9 +2083,9 @@ sources:
     - name: BSP UNIQUE ID
       data_type: TEXT
     - name: AGE AT 6-8 WEEK PHYSICAL EXAMINATION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_6_8_WEEK_PHYSICAL_EXAMINATION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -2093,9 +2093,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2128,9 +2128,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP606 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2164,9 +2164,9 @@ sources:
     - name: MASTER ICD-10 PROVISIONAL DIAGNOSIS DESCRIPTION
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2197,9 +2197,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP607 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2233,9 +2233,9 @@ sources:
     - name: MASTER ICD-10 PRIMARY DIAGNOSIS DESCRIPTION
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2266,9 +2266,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP608 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2302,9 +2302,9 @@ sources:
     - name: MASTER ICD-10 SECONDARY DIAGNOSIS DESCRIPTION
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2333,9 +2333,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP609 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2351,11 +2351,11 @@ sources:
     - name: UNIQUE SERVICE REQUEST IDENTIFIER
       data_type: TEXT
     - name: AGE AT ASSESSMENT TOOL (REFERRAL) COMPLETION DATE (DAYS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT ASSESSMENT TOOL (REFERRAL) COMPLETION DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_ASSESSMENT_TOLL_REFERRAL_COMPLETION_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: RECORD START DATE
       data_type: TIMESTAMP_NTZ
     - name: RECORD END DATE
@@ -2367,9 +2367,9 @@ sources:
     - name: AGE BAND (ASSESSMENT COMPLETION DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2394,9 +2394,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP610 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2412,21 +2412,21 @@ sources:
     - name: UNIQUE CARE ACTIVITY IDENTIFIER
       data_type: TEXT
     - name: AGE AT BREASTFEEDING STATUS OBSERVATION DATE (DAYS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT BREASTFEEDING STATUS OBSERVATION DATE (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_BREASTFEEDING_STATUS_OBSERVATION_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: AGE BAND (BREASTFEEDING STATUS DATE)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicObservationDate
       data_type: TIMESTAMP_NTZ
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2447,17 +2447,17 @@ sources:
     - name: CARE ACTIVITY IDENTIFIER
       data_type: TEXT
     - name: PERSON WEIGHT
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: PERSON HEIGHT IN METRES
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: PERSON LENGTH IN CENTIMETRES
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP611 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2473,11 +2473,11 @@ sources:
     - name: UNIQUE CARE ACTIVITY IDENTIFIER
       data_type: TEXT
     - name: AGE AT BMI OBSERVATION (DAYS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AGE AT BMI OBSERVATION (YEARS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_BMI_OBSERVATION
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SCHOOL YEAR AT BMI OBSERVATION
       data_type: TEXT
     - name: UNIQUE MONTH ID
@@ -2487,11 +2487,11 @@ sources:
     - name: AGE BAND (BMI OBSERVATION)
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicObservationDate
       data_type: TIMESTAMP_NTZ
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2518,9 +2518,9 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: RECORD NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CYP612 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2536,9 +2536,9 @@ sources:
     - name: UNIQUE CARE ACTIVITY IDENTIFIER
       data_type: TEXT
     - name: AGE AT  ASSESSMENT TOOL (CONTACT) COMPLETION DATE (DAYS)
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: IC_AGE_AT_ASSESSMENT_TOOL_CONTACT_COMPLETION_DATE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: ASQ SCORE BAND
@@ -2546,11 +2546,11 @@ sources:
     - name: SNOMED CT ASSESSMENT PREFERRED TERM
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicObservationDate
       data_type: TIMESTAMP_NTZ
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2581,7 +2581,7 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: CYP613 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2593,9 +2593,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG
@@ -2624,7 +2624,7 @@ sources:
     - name: EFFECTIVE FROM
       data_type: TIMESTAMP_NTZ
     - name: CYP901 UNIQUE ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ORGANISATION IDENTIFIER (CODE OF PROVIDER)
       data_type: TEXT
     - name: ORGANISATION CODE (PROVIDER)
@@ -2640,9 +2640,9 @@ sources:
     - name: UNIQUE MONTH ID
       data_type: TEXT
     - name: dmicImportLogId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicSystemId
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmicCCGCode
       data_type: TEXT
     - name: dmicCCG

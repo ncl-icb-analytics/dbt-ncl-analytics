@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_nhs_health_check_latest
     description: 'Most recent NHS Health Check completion per person for programme

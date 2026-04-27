@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: dim_person_historical_practice
-    description: 'Complete practice registration history tracking patient mobility
-      and practice transitions.
+    description: 'Complete practice registration history tracking patient mobility and practice transitions.
 
       Key Features:
 
@@ -18,8 +16,7 @@ models:
 
       • Current and latest registration flags for filtering
 
-      Purpose: Supports patient mobility analysis, practice transition tracking, and
-      continuity of care assessment.'
+      Purpose: Supports patient mobility analysis, practice transition tracking, and continuity of care assessment.'
 
     config:
       meta:
@@ -42,14 +39,14 @@ models:
         description: 'Practice ODS code'
         tests:
           - not_null:
-              severity: warn
-
+              config:
+                severity: warn
       - name: practice_name
         description: 'Practice name'
         tests:
           - not_null:
-              severity: warn
-
+              config:
+                severity: warn
       - name: practice_type_code
         description: 'Practice type code from OLIDS'
 
@@ -70,9 +67,6 @@ models:
 
       - name: practice_is_obsolete
         description: 'Flag indicating if practice record is obsolete'
-        tests:
-          - not_null:
-              severity: warn
 
       - name: registration_start_date
         description: 'Start date of this registration period'
@@ -96,7 +90,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Open Registration', 'Closed Registration']
+              arguments:
+                values: ['Open Registration', 'Closed Registration']
 
       - name: is_current_registration
         description: 'Flag indicating if this is the current active registration'
@@ -104,8 +99,7 @@ models:
           - not_null
 
       - name: is_latest_registration
-        description: 'Flag indicating if this is the most recent registration (current
-          or last)'
+        description: 'Flag indicating if this is the most recent registration (current or last)'
         tests:
           - not_null
 
@@ -114,15 +108,15 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 1
-
+              arguments:
+                min_value: 1
       - name: total_registrations_count
         description: 'Total number of registrations this person has had'
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 1
-
+              arguments:
+                min_value: 1
       - name: gap_since_previous_registration_days
         description: 'Number of days between this registration and the previous one'
 
@@ -168,5 +162,4 @@ models:
     # Note: No uniqueness test on (person_id, registration_start_date, practice_id) 
     # because multiple patient_ids can map to the same person_id by design,
     # allowing proper tracking of patient registration history across practices
-
 

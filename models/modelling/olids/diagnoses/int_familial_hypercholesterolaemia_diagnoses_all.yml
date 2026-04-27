@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: int_familial_hypercholesterolaemia_diagnoses_all
-    description: 'Familial hypercholesterolaemia diagnosis observations for QOF register
-      data collection and genetic cardiovascular risk assessment.
+    description: 'Familial hypercholesterolaemia diagnosis observations for QOF register data collection and genetic cardiovascular risk assessment.
 
       Key Features:
 
@@ -14,8 +12,7 @@ models:
 
       • No resolution codes as FH is a genetic condition
 
-      Purpose: Provide observation-level data for FH monitoring and intensive cholesterol
-      management.'
+      Purpose: Provide observation-level data for FH monitoring and intensive cholesterol management.'
     config:
       meta:
         owner:
@@ -24,7 +21,8 @@ models:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
-          cluster_ids: FHYP_COD
+          arguments:
+            cluster_ids: FHYP_COD
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
@@ -42,5 +40,4 @@ models:
       - name: source_cluster_id
         description: 'Source cluster identifier (FHYP_COD for FH diagnoses)'
       - name: is_diagnosis_code
-        description: 'Boolean flag indicating if the code represents an FH diagnosis
-          (always TRUE for FHYP_COD cluster)'
+        description: 'Boolean flag indicating if the code represents an FH diagnosis (always TRUE for FHYP_COD cluster)'

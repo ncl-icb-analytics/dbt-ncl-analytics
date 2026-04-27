@@ -1,0 +1,46 @@
+models:
+  - name: int_chronic_liver_disease_diagnoses_all
+    description: 'Chronic liver disease and cirrhosis diagnosis observations for hepatology register management.
+
+      One row per observation using CLDATRISK1_COD (CLD diagnosis) and CIRRHOSIS_COD (cirrhosis) clusters.'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation'
+        tests:
+          - unique
+          - not_null
+
+      - name: person_id
+        description: 'Patient identifier'
+
+      - name: clinical_effective_date
+        description: 'Date when CLD observation was clinically effective'
+
+      - name: concept_code
+        description: 'Clinical code for CLD or cirrhosis diagnosis'
+
+      - name: concept_display
+        description: 'Human-readable description of the clinical code'
+
+      - name: source_cluster_id
+        description: 'Cluster identifier (CLDATRISK1_COD or CIRRHOSIS_COD)'
+
+      - name: is_diagnosis_code
+        description: 'Flag indicating CLD or cirrhosis diagnosis (always TRUE)'
+
+      - name: is_cirrhosis_code
+        description: 'Flag indicating cirrhosis diagnosis code (CIRRHOSIS_COD cluster)'
+
+      - name: cld_observation_type
+        description: 'Categorised CLD observation type (Chronic Liver Disease Diagnosis or Cirrhosis Diagnosis)'
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: CLDATRISK1_COD, CIRRHOSIS_COD

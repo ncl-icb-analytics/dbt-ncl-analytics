@@ -71,7 +71,7 @@ sources:
     - name: DMIC_FATHER_MONTH_OF_BIRTH
       data_type: TEXT
     - name: DMIC_FATHER_AGE_AT_BIRTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: FATHER_NSSEC
       data_type: TEXT
     - name: DMIC_FATHER_NSSEC_Description
@@ -87,7 +87,7 @@ sources:
     - name: DMIC_MOTHER_MONTH_OF_BIRTH
       data_type: TEXT
     - name: DMIC_MOTHER_AGE_AT_BIRTH
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: MOTHER_MARRIAGEDATE
       data_type: TEXT
     - name: MOTHER_NSSEC
@@ -239,9 +239,9 @@ sources:
     - name: DMIC_RECORD_VALID_IS_LATEST
       data_type: BOOLEAN
     - name: DMIC_IMPORT_LOG_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: DMIC_ROW_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: dmIcbCommissioner
       data_type: TEXT
     - name: dmSubIcbCommissioner

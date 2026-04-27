@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_olids_procedure_request
-    description: Procedure requests and interventions ordered or performed. 
-      Deduplicated by id and filtered to exclude deleted records.
+    description: Procedure requests and interventions ordered or performed. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
@@ -18,23 +16,19 @@ models:
       - name: patient_id
         description: Foreign key to patient.id
       - name: encounter_id
-        description: Foreign key to encounter.id - encounter when procedure was 
-          requested
+        description: Foreign key to encounter.id - encounter when procedure was requested
       - name: practitioner_id
-        description: Foreign key to practitioner.id - practitioner who requested
-          the procedure
+        description: Foreign key to practitioner.id - practitioner who requested the procedure
       - name: clinical_effective_date
         description: Date the procedure request was clinically effective
       - name: date_precision_concept_id
-        description: Foreign key to concept.id - precision of the clinical 
-          effective date
+        description: Foreign key to concept.id - precision of the clinical effective date
       - name: date_recorded
         description: Date the record was entered into the system
       - name: description
         description: Text description of the procedure
       - name: procedure_request_source_concept_id
-        description: Foreign key to concept.id - source concept for the 
-          procedure type
+        description: Foreign key to concept.id - source concept for the procedure type
       - name: status_concept_id
         description: Foreign key to concept.id - status of the procedure request
       - name: age_at_event
@@ -58,14 +52,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

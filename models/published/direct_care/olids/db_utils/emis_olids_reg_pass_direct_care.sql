@@ -13,7 +13,7 @@ Practices meeting EMIS acceptance criteria for Regular registrations.
 Use this table for inner joins to filter datasets to practices with validated registration data.
 
 Validation Criteria: <2% variance OR <5 persons difference
-Snapshot Date: 04/11/2025 (from EMIS extract)
+Snapshot Date: Derived from EMIS seed extract_date
 Registration Type: Regular only (excludes Temporary, Emergency, etc.)
 Methodology: EMIS comparison using Regular episode type filtering
 

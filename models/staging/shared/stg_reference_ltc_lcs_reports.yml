@@ -1,15 +1,14 @@
-version: 2
 models:
   - name: stg_reference_ltc_lcs_reports
-    description: Reports from EMIS XML extracts processed through terminology 
-      server
+    description: Reports from EMIS XML extracts processed through terminology server
     config:
       meta:
         owner:
           name: Eddie Davison
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: report_id
         description: Unique identifier for each report

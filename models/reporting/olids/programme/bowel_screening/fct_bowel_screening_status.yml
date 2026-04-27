@@ -1,4 +1,3 @@
-﻿version: 2
 models:
   - name: fct_bowel_screening_status
     description: 'Bowel screening programme status for people aged 50-74 years only.

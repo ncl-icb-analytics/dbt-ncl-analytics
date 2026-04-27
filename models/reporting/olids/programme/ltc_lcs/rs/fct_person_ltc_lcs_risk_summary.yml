@@ -1,0 +1,197 @@
+version: 2
+models:
+  - name: fct_person_ltc_lcs_risk_summary
+    description: |
+      Person-level summary of LTC LCS risk stratification and Model of Care activity.
+      One row per person on the LTC LCS MOC base population: any LTC LCS disease
+      register (AF, CKD, CHD, Diabetes, Hypertension, NAFLD, Asthma Adult, Asthma CYP,
+      COPD, Heart Failure, PAD, Stroke/TIA).
+
+      Each condition column holds the highest risk group the person is in
+      (HRC > HR > MR > MRa/MRb > LR); columns are null for conditions the person is
+      not stratified against (e.g. only Diabetes and Hypertension have per-condition LR
+      searches in EMIS). overall_risk_group mirrors the EMIS [GROUP4- LR] rollup: it
+      falls back to 'LR' for any MOC base member not stratified into HRC/HR/MR at any
+      condition.
+
+      MOC flags indicate whether each pathway activity was recorded in the last 12 months.
+      Pathway progression is surfaced via moc_pathway (HRCS/HRS/MRS/LRS),
+      moc_stage_completed, moc_pathway_status, moc_next_action, and care plan expiry dates.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          arguments:
+            column_name: person_id
+    columns:
+      - name: person_id
+        description: Unique person identifier
+        data_tests:
+          - not_null
+          - unique
+      - name: chd_risk_group
+        description: Highest CHD risk group (HRC/HR/MR) or null if not on CHD register pathway
+      - name: ckd_risk_group
+        description: Highest CKD risk group (HRC/HR/MR) or null if not on CKD register pathway
+      - name: copd_risk_group
+        description: Highest COPD risk group (HRC/HR/MR) or null if not on COPD register pathway
+      - name: diabetes_risk_group
+        description: Highest Diabetes risk group (HRC/HR/MR/MRa/MRb/LR) or null if not on Diabetes register pathway
+      - name: hf_risk_group
+        description: Highest Heart Failure risk group (HR/MR) or null if not on HF register pathway
+      - name: hypertension_risk_group
+        description: Highest Hypertension risk group (HRC/HR/MRa/MRb/LR) or null if not on HTN register pathway
+      - name: overall_risk_group
+        description: Highest risk group across all conditions (HRC/HR/MR/LR); MRa/MRb collapse to MR; LR is the residual for MOC base members not stratified higher
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['HRC', 'HR', 'MR', 'LR']
+      - name: overall_risk_rank
+        description: Numeric rank of overall_risk_group (1=HRC highest, 5=LR lowest)
+      - name: in_any_risk_group
+        description: True if person is in any condition risk group (i.e. stratified via a per-condition rs model)
+        data_tests:
+          - not_null
+      - name: moc_check_test_completed
+        description: Check & Test appointment completed in last 12 months
+        data_tests:
+          - not_null
+      - name: moc_check_test_date
+        description: Latest Check & Test appointment date (null if none)
+      - name: moc_mdt_review_completed
+        description: MDT review completed in last 12 months
+        data_tests:
+          - not_null
+      - name: moc_mdt_review_date
+        description: Latest MDT review date (null if none)
+      - name: moc_careplan_sharing_completed
+        description: Care plan shared with patient in last 12 months
+        data_tests:
+          - not_null
+      - name: moc_careplan_sharing_date
+        description: Latest care plan sharing date (null if none)
+      - name: moc_discussion_completed
+        description: Discussion appointment (PCSP agreed) completed in last 12 months
+        data_tests:
+          - not_null
+      - name: moc_discussion_date
+        description: Latest discussion appointment date (null if none)
+      - name: moc_followup_completed
+        description: Follow-up appointment (review of PCSP) completed in last 12 months
+        data_tests:
+          - not_null
+      - name: moc_followup_date
+        description: Latest follow-up appointment date (null if none)
+      - name: moc_declined
+        description: Model of Care declined event recorded in last 12 months (raw flag, regardless of later re-engagement)
+        data_tests:
+          - not_null
+      - name: moc_declined_date
+        description: Latest MoC declined date (null if none)
+      - name: moc_re_engaged_after_decline
+        description: True if the person declined in last 12m but has since had a progression activity recorded after the decline
+        data_tests:
+          - not_null
+      - name: moc_any_activity_12m
+        description: True if any MOC activity (including declined) recorded in last 12 months
+        data_tests:
+          - not_null
+      - name: moc_pathway
+        description: EMIS pathway family that applies to this person (HRCS/HRS/MRS/LRS), derived from overall_risk_group
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['HRCS', 'HRS', 'MRS', 'LRS']
+      - name: moc_stage_2_completed
+        description: |
+          Stage 2 completion using pathway-specific logic. For HRCS/HRS this is
+          MDT review OR care plan sharing in last 12m; for MRS/LRS this is care
+          plan sharing only (MDT review is not part of the MR/LR pathway).
+        data_tests:
+          - not_null
+      - name: moc_stage_completed
+        description: Furthest MOC pathway stage reached in the last 12 months (0-4)
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3, 4]
+      - name: moc_stage_completed_label
+        description: |
+          Readable label for the furthest stage reached. One of 'Not started',
+          'Check & Test', 'MDT / Careplan' (HRCS/HRS only), 'Careplan sharing'
+          (MRS/LRS only), 'Discussion', 'Follow-up'. Unnumbered because MR/LR
+          pathways skip the MDT step.
+        data_tests:
+          - not_null
+      - name: moc_pathway_status
+        description: |
+          Overall state of the person's current MOC cycle. One of:
+          'Not started' (no activity recorded),
+          'In progress' (at least one stage done, cycle not yet complete — includes
+          follow-up recorded with missing priors, where moc_has_missing_priors=true),
+          'Cycle complete' (all four stages recorded in the last 12m; equivalent to
+          moc_cycle_complete=true),
+          'Declined' (MoC declined is the most recent MOC event).
+          Use alongside moc_next_action to filter the pending-action list.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Not started', 'In progress', 'Cycle complete', 'Declined']
+      - name: moc_next_action
+        description: |
+          Next pathway action the person needs, or NULL if no action is required
+          (cycle complete or declined). One of 'Check & Test', 'MDT / Careplan'
+          (HRCS/HRS), 'Careplan sharing' (MRS/LRS), 'Discussion', 'Follow-up'.
+          Filter WHERE moc_next_action IS NOT NULL to get the action list.
+      - name: moc_missing_check_test
+        description: True if a later stage is recorded but Check & Test is absent in the last 12m
+        data_tests:
+          - not_null
+      - name: moc_missing_stage_2
+        description: True if discussion or follow-up is recorded but stage 2 (MDT/Careplan for HRCS/HRS; Careplan for MRS/LRS) is absent in the last 12m
+        data_tests:
+          - not_null
+      - name: moc_missing_discussion
+        description: True if follow-up is recorded but discussion is absent in the last 12m
+        data_tests:
+          - not_null
+      - name: moc_has_missing_priors
+        description: True if the person has reached a later stage but is missing any earlier stage in the last 12m
+        data_tests:
+          - not_null
+      - name: moc_cycle_complete
+        description: True if all four MOC stages (check&test, stage 2, discussion, follow-up) are recorded in the last 12m
+        data_tests:
+          - not_null
+      - name: moc_stage_2_date
+        description: Effective stage 2 date (earliest of MDT review / careplan sharing for HRCS/HRS; careplan sharing for MRS/LRS). Null if stage 2 not done.
+      - name: moc_days_check_test_to_stage_2
+        description: Days between check & test and stage 2. Null if either is missing; negative if stage 2 was recorded before check & test.
+      - name: moc_days_stage_2_to_discussion
+        description: Days between stage 2 and discussion. Null if either is missing; negative if out of order.
+      - name: moc_days_discussion_to_followup
+        description: Days between discussion and follow-up. Null if either is missing; negative if out of order.
+      - name: moc_days_check_test_to_followup
+        description: End-to-end cycle duration in days (check & test → follow-up). Null if either endpoint is missing.
+      - name: moc_careplan_expires_date
+        description: |
+          Date the current care plan expires (discussion / PCSP-agreed date + 12 months).
+          The discussion appointment is when the care plan is agreed, so this is the
+          natural 12-month anniversary of the care plan. Null if no discussion on record.
+      - name: moc_next_expiry_date
+        description: |
+          Earliest date on which any currently-counted MOC event drops out of the 12m
+          rolling window. For 'Cycle complete' persons this is when the status will
+          lapse (earliest stage anniversary). For 'In progress' it is the oldest kept
+          activity + 12m. For 'Declined' it is the decline date + 12m. Null if no
+          MOC activity is recorded.
+      - name: table_refresh_date
+        description: Timestamp when the row was built
+        data_tests:
+          - not_null

@@ -1,42 +1,79 @@
-version: 2
 models:
   - name: int_hba1c_all
-    description: 'HbA1c measurements for diabetes diagnosis, monitoring and management
-      with dual unit support.
+    description: 'HbA1c measurements for diabetes diagnosis, monitoring and management with dual unit support.
 
-      One row per HbA1c observation handling both IFCC (mmol/mol) and DCCT (%) measurement
-      types with clinical categorisation and QOF target achievement flags.'
+      One row per HbA1c observation handling both IFCC (mmol/mol) and DCCT (%) measurement types with clinical categorisation and QOF target achievement flags.'
     config:
       meta:
         owner:
           name: EddieDavison92
     tests:
       - cluster_ids_exist:
-          cluster_ids: DCCTHBA1C_COD, IFCCHBAM_COD
+          arguments:
+            cluster_ids: DCCTHBA1C_COD, IFCCHBAM_COD
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - id
-            - source_cluster_id
+          arguments:
+            combination_of_columns:
+              - id
+              - source_cluster_id
     columns:
       - name: id
-        description: Identifier for each HbA1c observation (may not be unique if
-          observation maps to multiple clusters)
-        tests:
+        description: Identifier for each HbA1c observation (may not be unique if observation maps to multiple clusters)
+        data_tests:
           - not_null
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - not_null
       - name: measurement_type
         description: Type of HbA1c measurement (IFCC, DCCT, or UNKNOWN)
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
-              values: ['IFCC', 'DCCT', 'UNKNOWN']
+              arguments:
+                values: ['IFCC', 'DCCT', 'UNKNOWN']
       - name: is_valid_hba1c
-        description: Flag indicating if HbA1c value is within valid range for 
-          its measurement type
-        tests:
+        description: Flag indicating if HbA1c value is within valid range for its measurement type
+        data_tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
+                quote: false
+      - name: hba1c_category
+        description: >
+          Clinical band derived from the standardised IFCC value (mmol/mol).
+          Bands align with NICE NG28 targets and QOF indicator DM021 (<=58 mmol/mol, inclusive).
+          Values: Normal (<42), Prediabetes (42–47.9, NICE non-diabetic hyperglycaemia),
+          Diabetes - At NICE Target (48–53.9), Diabetes - Elevated (54–58.0, above NICE target but still within QOF),
+          Diabetes - Above Target (>58–74.9, misses QOF), Diabetes - High Risk (75–85.9),
+          Diabetes - Very High Risk (>=86), Invalid (null or out of range).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Normal'
+                  - 'Prediabetes'
+                  - 'Diabetes - At NICE Target'
+                  - 'Diabetes - Elevated (within QOF)'
+                  - 'Diabetes - Above Target'
+                  - 'Diabetes - High Risk'
+                  - 'Diabetes - Very High Risk'
+                  - 'Invalid'
+      - name: indicates_diabetes
+        description: HbA1c >=48 mmol/mol (NICE NG28 diagnostic threshold for diabetes).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
+                quote: false
+      - name: meets_qof_target
+        description: HbA1c <=58 mmol/mol (QOF indicator DM021 glycaemic control threshold, inclusive).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
+                quote: false

@@ -1,9 +1,6 @@
-﻿version: 2
-
 models:
   - name: smi_population_base_dm
-    description: Database model view holding demographics and core metrics for 
-      people on the SMI register
+    description: Database model view holding demographics and core metrics for people on the SMI register
 
     config:
       meta:
@@ -11,11 +8,10 @@ models:
           name: KateHomer55
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1
     columns:
       - name: person_id
         tests:
           - unique
           - not_null
-

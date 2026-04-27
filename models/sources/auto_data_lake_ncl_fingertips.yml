@@ -9,9 +9,9 @@ sources:
     identifier: '"INDICATOR_AREA_MISMATCH_LOG"'
     columns:
     - name: INDICATOR_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AREA_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AREA_TYPE_DATA
       data_type: TEXT
     - name: AREA_TYPE_META
@@ -20,7 +20,7 @@ sources:
     identifier: '"INDICATOR_DATA"'
     columns:
     - name: Indicator ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Indicator Name
       data_type: TEXT
     - name: Parent Code
@@ -34,7 +34,7 @@ sources:
     - name: Area Type
       data_type: TEXT
     - name: AREA_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Sex
       data_type: TEXT
     - name: Age
@@ -56,9 +56,9 @@ sources:
     - name: Upper CI 99.8 limit
       data_type: FLOAT
     - name: Count
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Denominator
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Value note
       data_type: TEXT
     - name: Recent Trend
@@ -68,7 +68,7 @@ sources:
     - name: Compared to percentiles
       data_type: TEXT
     - name: Time period Sortable
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: New data
       data_type: TEXT
     - name: Compared to goal
@@ -83,9 +83,9 @@ sources:
     identifier: '"INDICATOR_UPDATE_LOG"'
     columns:
     - name: INDICATOR_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AREA_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AREA_TYPE
       data_type: TEXT
     - name: DATE_UPDATED_LOCAL
@@ -98,16 +98,16 @@ sources:
     identifier: '"INGESTION_ERROR_LOG"'
     columns:
     - name: INDICATOR_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: AREA_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: _TIMESTAMP
       data_type: TIMESTAMP_NTZ
   - name: METADATA_AREA
     identifier: '"METADATA_AREA"'
     columns:
     - name: AREA_ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Name
       data_type: TEXT
     - name: Short
@@ -115,14 +115,14 @@ sources:
     - name: Class
       data_type: TEXT
     - name: Sequence
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CanBeDisplayedOnMap
       data_type: BOOLEAN
   - name: METADATA_INDICATOR
     identifier: '"METADATA_INDICATOR"'
     columns:
     - name: Indicator ID
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: Indicator
       data_type: TEXT
     - name: Indicator number

@@ -43,6 +43,10 @@ WITH base_population AS (
 
 egfr_readings AS (
     -- Get all eGFR readings with values > 0
+    -- NOTE: EMIS uses two value sets: vs1 (8 codes, broader incl. cystatin C) for existence check,
+    -- and vs2 (6 codes, narrower excl. cystatin C) for the consecutive <60 check.
+    -- EGFR_COD maps to vs2 (narrower), EGFR_COD_LCS may include broader codes.
+    -- Using EGFR_COD only for the consecutive check to match EMIS vs2 logic.
     SELECT
         person_id,
         clinical_effective_date,
@@ -51,7 +55,7 @@ egfr_readings AS (
         mapped_concept_display AS concept_display
     FROM {{ ref('int_ltc_lcs_ckd_observations') }}
     WHERE
-        cluster_id IN ('EGFR_COD_LCS', 'EGFR_COD')
+        cluster_id = 'EGFR_COD'
         AND result_value IS NOT NULL
         AND cast(result_value AS number) > 0
 ),

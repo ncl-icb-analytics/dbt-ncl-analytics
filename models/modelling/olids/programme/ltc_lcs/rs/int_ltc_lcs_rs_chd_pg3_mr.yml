@@ -1,0 +1,27 @@
+models:
+  - name: int_ltc_lcs_rs_chd_pg3_mr
+    description: |
+      CHD Register Priority Group 3 - Medium Risk identification.
+
+      Patients on the CHD register are included if ALL of the following apply:
+      - Rule 1: Not in PG1 HRC or PG2 HR
+      - Rule 2: CHD recorded more than one year ago
+      - Rule 3: Statins ordered in last 6 month AND most recent Non HDL cholesterol level > 2.5
+    config:
+      meta:
+        owner:
+          name: Peter Shakeshaft
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+      - valuesets_have_codes:
+          arguments:
+            valuesets:
+              - on_chd_reg_pg3_mr_vs1
+              - on_chd_reg_pg3_mr_vs2
+              - on_chd_reg_pg3_mr_vs3
+    columns:
+      - name: person_id
+        tests:
+          - not_null
+          - unique

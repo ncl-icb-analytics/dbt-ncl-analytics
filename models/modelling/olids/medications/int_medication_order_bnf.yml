@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: int_medication_order_bnf
+    description: |
+      Medication orders enriched with BNF classification and prescription details.
+      Grain: one row per medication order (issue).
+
+      Joins SNOMED → BNF mapping (96% coverage) and medication statement for
+      prescription type (Acute/Repeat/Repeat Dispensing/Automatic) and active status.
+
+      BNF hierarchy: bnf_chapter (2-digit) → bnf_section (4-digit) →
+      bnf_paragraph (6-digit) → bnf_code (full 15-character product code).
+
+      Materialised as a view — can be changed to table if performance requires.
+
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+
+    data_tests:
+      - not_null:
+          column_name: medication_order_id
+      - unique:
+          column_name: medication_order_id

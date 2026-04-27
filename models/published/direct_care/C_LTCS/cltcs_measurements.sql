@@ -13,13 +13,12 @@ Clinical Purpose:
 */
 {% set measurement_cutoff = -5 %}
 with inclusion_list as (
-    select olids_id, patient_id,pcn_code
-    from {{ ref('inclusion_cohort')}}
-    where eligible = 1
+    select *
+    from {{ ref('cltcs_full_detailed_patient_list')}}
 ),
 hba1c_measurements as(
     select il.patient_id,
-        il.pcn_code,
+        il.area_code,
         hb.clinical_effective_date,
         hb.id as measurement_id,
         hb.hba1c_ifcc as value,
@@ -40,7 +39,7 @@ hba1c_measurements as(
 ),
 blood_pressure_measurements_systolic as(
     select il.patient_id,
-        il.pcn_code,
+        il.area_code,
         bp.clinical_effective_date,
         bp.systolic_observation_id as measurement_id,
         bp.systolic_value as value,
@@ -57,7 +56,7 @@ blood_pressure_measurements_systolic as(
 ),
 blood_pressure_measurements_diastolic as(
     select il.patient_id,
-        il.pcn_code,
+        il.area_code,
         bp.clinical_effective_date,
         bp.diastolic_observation_id as measurement_id,
         bp.diastolic_value as value,
@@ -74,7 +73,7 @@ blood_pressure_measurements_diastolic as(
 ),
 egfr_measurements as(
     select il.patient_id,
-        il.pcn_code,
+        il.area_code,
         egfr.clinical_effective_date,
         egfr.id as measurement_id,
         egfr.egfr_value as value,
@@ -92,7 +91,7 @@ egfr_measurements as(
 ),
 urine_acr_measurements as(
     select il.patient_id,
-        il.pcn_code,
+        il.area_code,
         acr.clinical_effective_date,
         acr.id as measurement_id,
         acr.acr_value as value,
@@ -110,7 +109,7 @@ urine_acr_measurements as(
 ),
 total_cholesterol_measurements as(
     select il.patient_id,
-        il.pcn_code,
+        il.area_code,
         cholesterol.clinical_effective_date,
         cholesterol.id as measurement_id,
         cholesterol.cholesterol_value as value,
@@ -128,7 +127,7 @@ total_cholesterol_measurements as(
 ),
 ldl_cholesterol_measurements as(
     select il.patient_id,
-        il.pcn_code,
+        il.area_code,
         ldl.clinical_effective_date,
         ldl.id as measurement_id,
         ldl.cholesterol_value as value,
@@ -160,7 +159,7 @@ complete_measurements as (
     select * from ldl_cholesterol_measurements)
 
 select patient_id, 
-    pcn_code, 
+    area_code, 
     clinical_effective_date,
     measurement_type, 
     measurement_id, 

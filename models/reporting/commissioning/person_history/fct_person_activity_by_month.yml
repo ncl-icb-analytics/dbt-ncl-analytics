@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: fct_person_activity_by_month
@@ -7,6 +6,15 @@ models:
       meta:
         owner:
           name: Jessica Roberts
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - sk_patient_id
+              - activity_month
     columns:
       - name: sk_patient_id
         description: "Unique identifier for the person"

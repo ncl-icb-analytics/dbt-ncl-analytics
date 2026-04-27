@@ -1,76 +1,58 @@
-version: 2
 models:
   - name: stg_olids_medication_statement
-    description: Medication statements representing current or historical 
-      medication use. Deduplicated by id and filtered to exclude deleted 
-      records.
+    description: Medication statements representing current or historical medication use. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
       - name: id
-        description: Primary key - unique identifier for this medication 
-          statement
+        description: Primary key - unique identifier for this medication statement
         tests:
           - unique
           - not_null
       - name: organisation_id
-        description: Foreign key to organisation.id - organisation managing the 
-          statement
+        description: Foreign key to organisation.id - organisation managing the statement
       - name: person_id
         description: Foreign key to person.id - person-level identifier
       - name: patient_id
         description: Foreign key to patient.id
       - name: encounter_id
-        description: Foreign key to encounter.id - encounter when statement was 
-          recorded
+        description: Foreign key to encounter.id - encounter when statement was recorded
       - name: practitioner_id
-        description: Foreign key to practitioner.id - practitioner who recorded 
-          the statement
+        description: Foreign key to practitioner.id - practitioner who recorded the statement
       - name: observation_id
         description: Foreign key to observation.id - related observation
       - name: allergy_intolerance_id
         description: Foreign key to allergy_intolerance.id - related allergy
       - name: diagnostic_order_id
-        description: Foreign key to diagnostic_order.id - related diagnostic 
-          order
+        description: Foreign key to diagnostic_order.id - related diagnostic order
       - name: referral_request_id
         description: Foreign key to referral_request.id - related referral
       - name: authorisation_type_concept_id
-        description: Foreign key to concept.id - type of authorisation (acute, 
-          repeat, automatic, etc.)
+        description: Foreign key to concept.id - type of authorisation (acute, repeat, automatic, etc.)
       - name: authorisation_type_source_code
-        description: Source code for the authorisation type concept (from 
-          concept map)
+        description: Source code for the authorisation type concept (from concept map)
       - name: authorisation_type_source_display
-        description: Source display name for the authorisation type concept 
-          (from concept map)
+        description: Source display name for the authorisation type concept (from concept map)
       - name: authorisation_type_code
-        description: Code value for the authorisation type concept 
-          (target/mapped code)
+        description: Code value for the authorisation type concept (target/mapped code)
       - name: authorisation_type_display
-        description: Display name for the authorisation type concept 
-          (target/mapped display)
+        description: Display name for the authorisation type concept (target/mapped display)
       - name: date_precision_concept_id
-        description: Foreign key to concept.id - precision of the clinical 
-          effective date
+        description: Foreign key to concept.id - precision of the clinical effective date
       - name: date_precision_code
         description: Code value for the date precision concept
       - name: date_precision_display
         description: Display name for the date precision concept
       - name: date_precision_source_code
-        description: Source code for the date precision concept (from concept 
-          map)
+        description: Source code for the date precision concept (from concept map)
       - name: date_precision_source_display
-        description: Source display name for the date precision concept (from 
-          concept map)
+        description: Source display name for the date precision concept (from concept map)
       - name: medication_statement_source_concept_id
-        description: Foreign key to concept.id - source concept for the 
-          medication
+        description: Foreign key to concept.id - source concept for the medication
       - name: mapped_concept_id
-        description: Foreign key to concept.id - mapped standardized concept for
-          the medication
+        description: Foreign key to concept.id - mapped standardized concept for the medication
       - name: mapped_concept_code
         description: Code of the mapped medication concept
       - name: mapped_concept_display
@@ -110,8 +92,7 @@ models:
       - name: date_recorded
         description: Date the record was entered into the system
       - name: is_active
-        description: Boolean indicating if the medication statement is currently
-          active
+        description: Boolean indicating if the medication statement is currently active
       - name: is_confidential
         description: Boolean indicating if the record is marked as confidential
       - name: is_deleted
@@ -127,14 +108,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

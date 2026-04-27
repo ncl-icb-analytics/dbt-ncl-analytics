@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: fct_person_polypharmacy_current
     description: |
@@ -37,16 +35,16 @@ models:
           - not_null
           - unique
           - relationships:
-              to: ref('dim_person')
-              field: person_id
-
+              arguments:
+                to: ref('dim_person')
+                field: person_id
       - name: medication_count
         description: Count of current polypharmacy-scope medications
         data_tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "> 0"
-
+              arguments:
+                expression: "> 0"
       - name: medication_bnf_list
         description: Array of BNF codes for current medications
         data_tests:
@@ -65,19 +63,21 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
 
       - name: is_polypharmacy_10plus
         description: Severe/complex polypharmacy flag (10+ medications)
         data_tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
 
       - name: medication_count_band
-        description: Medication count grouped into reporting bands (1-4, 5-9, 
-          10-14, 15+)
+        description: Medication count grouped into reporting bands (1-4, 5-9, 10-14, 15+)
         data_tests:
           - not_null
           - accepted_values:
-              values: ['1-4', '5-9', '10-14', '15+']
+              arguments:
+                values: ['1-4', '5-9', '10-14', '15+']

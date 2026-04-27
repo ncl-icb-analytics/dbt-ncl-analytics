@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_dictionary_dbo_hrg
-    description: Healthcare Resource Groups (HRG) reference data for procedure 
-      and diagnosis groupings
+    description: Healthcare Resource Groups (HRG) reference data for procedure and diagnosis groupings
     config:
       meta:
         owner:
@@ -27,4 +25,5 @@ models:
         description: HRG version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

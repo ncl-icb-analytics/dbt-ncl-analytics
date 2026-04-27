@@ -1,4 +1,3 @@
-version: 2
 
 models:
   - name: int_emis_olids_practice_registration_comparison

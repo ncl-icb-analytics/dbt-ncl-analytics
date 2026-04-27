@@ -77,6 +77,9 @@ Write-Host ""
 # Disable AWS metadata service checks (prevents connection pool warnings on Azure)
 [System.Environment]::SetEnvironmentVariable('AWS_EC2_METADATA_DISABLED', 'true', 'Process')
 
+# Detect whether Snowflake credentials are already present in the environment
+$hasSnowflakeEnv = [bool]($env:SNOWFLAKE_ACCOUNT -and $env:SNOWFLAKE_USER -and ($env:SNOWFLAKE_PAT -or $env:SNOWFLAKE_PASSWORD -or $env:SNOWFLAKE_AUTHENTICATOR -eq "externalbrowser"))
+
 # Load project-specific environment variables
 Write-Host "Loading environment variables from .env..." -ForegroundColor Cyan
 
@@ -111,15 +114,59 @@ if (Test-Path $envPath) {
         if ($env:SNOWFLAKE_WAREHOUSE) {
             Write-Host "  SNOWFLAKE_WAREHOUSE: $env:SNOWFLAKE_WAREHOUSE" -ForegroundColor Gray
         }
+        if ($env:SNOWFLAKE_PAT) {
+            $patPrefix = $env:SNOWFLAKE_PAT.Substring(0, [Math]::Min(8, $env:SNOWFLAKE_PAT.Length))
+            Write-Host "  SNOWFLAKE_PAT: $patPrefix..." -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_PASSWORD) {
+            Write-Host "  SNOWFLAKE_PASSWORD: [set]" -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_AUTHENTICATOR) {
+            Write-Host "  SNOWFLAKE_AUTHENTICATOR: $env:SNOWFLAKE_AUTHENTICATOR" -ForegroundColor Gray
+        }
     }
 } else {
-    if (Test-Path "env.example") {
+    if ($hasSnowflakeEnv) {
+        Write-Host "[OK] No .env file found - using existing environment variables" -ForegroundColor Green
+        if ($env:SNOWFLAKE_ACCOUNT) {
+            $accountPrefix = $env:SNOWFLAKE_ACCOUNT.Substring(0, [Math]::Min(10, $env:SNOWFLAKE_ACCOUNT.Length))
+            Write-Host "  SNOWFLAKE_ACCOUNT: $accountPrefix..." -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_USER) {
+            Write-Host "  SNOWFLAKE_USER: $env:SNOWFLAKE_USER" -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_ROLE) {
+            Write-Host "  SNOWFLAKE_ROLE: $env:SNOWFLAKE_ROLE" -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_WAREHOUSE) {
+            Write-Host "  SNOWFLAKE_WAREHOUSE: $env:SNOWFLAKE_WAREHOUSE" -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_PAT) {
+            $patPrefix = $env:SNOWFLAKE_PAT.Substring(0, [Math]::Min(8, $env:SNOWFLAKE_PAT.Length))
+            Write-Host "  SNOWFLAKE_PAT: $patPrefix..." -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_PASSWORD) {
+            Write-Host "  SNOWFLAKE_PASSWORD: [set]" -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_AUTHENTICATOR) {
+            Write-Host "  SNOWFLAKE_AUTHENTICATOR: $env:SNOWFLAKE_AUTHENTICATOR" -ForegroundColor Gray
+        }
+        if ($env:SNOWFLAKE_PAT) {
+            Write-Host "  Auth method: SNOWFLAKE_PAT" -ForegroundColor Gray
+        } elseif ($env:SNOWFLAKE_PASSWORD) {
+            Write-Host "  Auth method: SNOWFLAKE_PASSWORD" -ForegroundColor Gray
+        } else {
+            Write-Host "  Auth method: externalbrowser" -ForegroundColor Gray
+        }
+    } elseif (Test-Path "env.example") {
         Copy-Item "env.example" ".env"
         Write-Host "[WARNING] No .env file found - created from template" -ForegroundColor Yellow
     } else {
         Write-Host "[WARNING] No .env file found and no env.example template" -ForegroundColor Yellow
     }
-    $actions += 'Update credentials in .env, then open a new terminal'
+    if (-not $hasSnowflakeEnv) {
+        $actions += 'Update credentials in .env, then open a new terminal'
+    }
 }
 Write-Host ""
 

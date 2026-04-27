@@ -4,8 +4,8 @@
 
     Business Logic:
     - Age ≥18 at reference date
-    - Active depression diagnosis (latest diagnosis > latest resolution)
-    - Latest diagnosis on/after 2006-04-01 (QOF date threshold)
+    - Latest first/new episode of depression on/after 2006-04-01
+    - Unresolved (no DEPRES_COD after latest first/new episode)
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -18,7 +18,8 @@
             person_id,
             clinical_effective_date,
             is_diagnosis_code,
-            is_resolved_code
+            is_resolved_code,
+            is_first_or_new_episode
         FROM {{ ref('int_depression_diagnoses_all') }}
         WHERE clinical_effective_date <= {{ reference_date_expr }}
     ),
@@ -26,8 +27,8 @@
     depression_person_aggregates AS (
         SELECT
             person_id,
-            MIN(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) AS earliest_diagnosis_date,
-            MAX(CASE WHEN is_diagnosis_code THEN clinical_effective_date END) AS latest_diagnosis_date,
+            MIN(CASE WHEN is_diagnosis_code AND is_first_or_new_episode THEN clinical_effective_date END) AS earliest_diagnosis_date,
+            MAX(CASE WHEN is_diagnosis_code AND is_first_or_new_episode THEN clinical_effective_date END) AS latest_diagnosis_date,
             MAX(CASE WHEN is_resolved_code THEN clinical_effective_date END) AS latest_resolved_date
         FROM depression_diagnoses_filtered
         GROUP BY person_id

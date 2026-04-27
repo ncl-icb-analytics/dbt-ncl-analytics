@@ -1,16 +1,11 @@
-version: 2
 models:
   - name: int_foot_examination_all
-    description: 'Diabetic foot examination procedures with risk assessment for diabetes
-      care monitoring and QOF reporting.
-
-      One row per foot examination event using multiple foot-related clusters with
-      bilateral foot assessment and Townson scale integration.'
+    description: 'Diabetic foot examination events for QOF DM019 reporting. Uses PCD cluster FOOTEXAM_COD (153 codes: neuropathy, monofilament, pedal pulses, ABPI, diabetic foot screen, Townson scale, laterality-specific risk findings) plus FEPU_COD / FEDEC_COD for unsuitable/declined and AMPL_COD / AMPR_COD / CONABL_COD / CONABR_COD for permanent exemption. One row per person per examination date. Codes with no left/right keyword and not Townson are treated as bilateral (both feet checked).'
     config:
       meta:
         owner:
           name: EddieDavison92
     tests:
       - cluster_ids_exist:
-          cluster_ids: AMPL_COD, AMPR_COD, CONABL_COD, CONABR_COD, FEDEC_COD, 
-            FEPU_COD, FRC_COD
+          arguments:
+            cluster_ids: AMPL_COD, AMPR_COD, CONABL_COD, CONABR_COD, FEDEC_COD, FEPU_COD, FOOTEXAM_COD

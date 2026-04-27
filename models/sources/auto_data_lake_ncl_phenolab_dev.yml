@@ -236,7 +236,7 @@ sources:
     - name: STANDARD_UNIT
       data_type: TEXT
     - name: SOURCE_UNIT_COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: SOURCE_UNIT_LQ
       data_type: FLOAT
     - name: SOURCE_UNIT_MEDIAN

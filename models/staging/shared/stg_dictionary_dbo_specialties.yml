@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_dictionary_dbo_specialties
-    description: Medical specialties reference data including treatment 
-      functions
+    description: Medical specialties reference data including treatment functions
     config:
       meta:
         owner:
@@ -27,4 +25,5 @@ models:
         description: Whether this is a main specialty code
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

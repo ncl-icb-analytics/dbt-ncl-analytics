@@ -67,6 +67,10 @@ for file in "$@"; do
     # Skip raw/ layer - tests not required
     [[ "$file" == */raw/* ]] && continue
 
+    # Skip semantic/ layer - Snowflake semantic views are not queryable via
+    # standard SELECT and the dbt_semantic_view package itself defines no tests
+    [[ "$file" == models/semantic/* ]] && continue
+
     model_name=$(basename "$file" .sql)
     model_dir=$(dirname "$file")
 

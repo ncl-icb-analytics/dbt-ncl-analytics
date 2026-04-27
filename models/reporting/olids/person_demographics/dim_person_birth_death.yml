@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: dim_person_birth_death
-    description: 'Person vital statistics with birth and death information using statistical
-      midpoint methodology.
+    description: 'Person vital statistics with birth and death information using statistical midpoint methodology.
 
       Key Features:
 
@@ -16,8 +14,7 @@ models:
 
       • Fallback to current registration patient for surrogate key consistency
 
-      Purpose: Foundation for age calculations, demographic analysis, and mortality
-      tracking.'
+      Purpose: Foundation for age calculations, demographic analysis, and mortality tracking.'
     config:
       meta:
         owner:
@@ -41,9 +38,9 @@ models:
         tests:
           - not_null
           - dbt_utils.accepted_range:
-              min_value: 1
-              max_value: 12
-
+              arguments:
+                min_value: 1
+                max_value: 12
       - name: birth_date_approx
         description: 'Approximate birth date using statistical midpoint of birth month'
         tests:
@@ -55,18 +52,20 @@ models:
       - name: death_month
         description: 'Month of death (NULL if still living)'
       - name: death_date_approx
-        description: 'Approximate death date using statistical midpoint of death month
-          (NULL if still living)'
+        description: 'Approximate death date using statistical midpoint of death month (NULL if still living)'
       - name: is_deceased
         description: 'Flag indicating if person is deceased'
         tests:
           - not_null
           - accepted_values:
-              values: [true, false]
-
+              arguments:
+                values: [true, false]
+      - name: death_source_flag
+        description: 'Flag indicating the source of death information'
       - name: is_dummy_patient
         description: 'Flag indicating if record comes from dummy patient data'
         tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]

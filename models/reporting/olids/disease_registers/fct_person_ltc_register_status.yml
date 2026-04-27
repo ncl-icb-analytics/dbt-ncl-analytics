@@ -1,0 +1,45 @@
+models:
+  - name: fct_person_ltc_register_status
+    description: |
+      Person-level long-term condition register status dataset, with one row per person per condition.
+      Designed for denominator and numerator analytics across disease registers.
+
+      Denominator = count where is_eligible_denominator = TRUE.
+      Numerator = count where is_on_register = TRUE.
+      Rate = numerator / denominator.
+
+      Includes condition metadata (condition_code, condition_name, clinical_domain, is_qof),
+      person attributes (age, is_active, is_deceased), and age-rule bounds (min_age, max_age)
+      used to derive denominator eligibility.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+
+    columns:
+      - name: person_id
+        data_tests:
+          - not_null
+
+      - name: condition_code
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('ltc_register_denominator_rules')
+                field: condition_code
+
+      - name: is_eligible_denominator
+        data_tests:
+          - not_null
+
+      - name: is_on_register
+        data_tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - person_id
+              - condition_code

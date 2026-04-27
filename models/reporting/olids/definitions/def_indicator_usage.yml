@@ -1,11 +1,8 @@
-version: 2
-
 models:
   - name: def_indicator_usage
     description: 'Usage contexts for each indicator.
 
-      Tracks where indicators are used across dashboards, reports, and programmes.
-      Use this table to understand where indicators are used in dashboards and reports.'
+      Tracks where indicators are used across dashboards, reports, and programmes. Use this table to understand where indicators are used in dashboards and reports.'
     config:
       meta:
         owner:
@@ -16,9 +13,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('def_indicator')
-              field: indicator_id
-
+              arguments:
+                to: ref('def_indicator')
+                field: indicator_id
       - name: usage_context
         description: Where this indicator is used
         tests:

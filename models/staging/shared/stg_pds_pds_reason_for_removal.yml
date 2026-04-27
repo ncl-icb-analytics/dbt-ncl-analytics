@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_pds_pds_reason_for_removal
     description: PDS reason for removal from GP practice registration
@@ -8,9 +7,10 @@ models:
           name: Eddie Davison
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - row_id
-            - sk_patient_id
+          arguments:
+            combination_of_columns:
+              - row_id
+              - sk_patient_id
     columns:
       - name: row_id
         description: Row identifier
@@ -21,8 +21,7 @@ models:
         tests:
           - not_null
       - name: reason_for_removal
-        description: Reason code for removal from GP practice (e.g., death, 
-          moved away, transferred)
+        description: Reason code for removal from GP practice (e.g., death, moved away, transferred)
       - name: reason_for_removal_business_effective_from_date
         description: Date from which removal reason is effective
       - name: reason_for_removal_business_effective_to_date

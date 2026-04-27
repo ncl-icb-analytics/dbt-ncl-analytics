@@ -62,6 +62,8 @@ def generate_sql_query(mappings_data):
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "{database}".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema NOT IN ('INFORMATION_SCHEMA')"""
@@ -79,6 +81,8 @@ def generate_sql_query(mappings_data):
     table_name,
     column_name,
     data_type,
+    numeric_precision,
+    numeric_scale,
     ordinal_position
   FROM "{database}".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = '{schema}'"""
@@ -94,7 +98,11 @@ def generate_sql_query(mappings_data):
     query_parts.append('  schema_name as "SCHEMA_NAME", ')
     query_parts.append('  table_name as "TABLE_NAME",')
     query_parts.append('  column_name as "COLUMN_NAME",')
-    query_parts.append('  data_type as "DATA_TYPE",')
+    query_parts.append('  CASE')
+    query_parts.append("    WHEN UPPER(data_type) IN ('NUMBER', 'DECIMAL', 'NUMERIC') AND numeric_precision IS NOT NULL")
+    query_parts.append("      THEN UPPER(data_type) || '(' || numeric_precision || ',' || COALESCE(numeric_scale, 0) || ')'")
+    query_parts.append("    ELSE data_type")
+    query_parts.append('  END as "DATA_TYPE",')
     query_parts.append('  ordinal_position as "ORDINAL_POSITION"')
     query_parts.append("FROM schema_metadata")
     query_parts.append("ORDER BY database_name, schema_name, table_name, ordinal_position;")

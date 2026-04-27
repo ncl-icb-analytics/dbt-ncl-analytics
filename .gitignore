@@ -8,6 +8,7 @@ dbt_packages/
 # Environment variables
 .env
 .env.*
+.envrc
 
 # Python
 venv/
@@ -37,6 +38,7 @@ Thumbs.db
 !seeds/*.csv
 *.xlsx
 *.parquet
+*.pdf
 
 
 # Temporary files

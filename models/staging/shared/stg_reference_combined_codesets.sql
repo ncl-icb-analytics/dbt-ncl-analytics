@@ -1,7 +1,9 @@
 select
     cluster_id,
-    cluster_description,
+    min(cluster_description) as cluster_description,
     code,
-    code_description,
+    min(code_description) as code_description,
     source
 from {{ ref('raw_reference_combined_codesets') }}
+where code is not null
+group by cluster_id, code, source

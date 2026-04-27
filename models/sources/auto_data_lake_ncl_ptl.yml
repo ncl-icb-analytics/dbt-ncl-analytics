@@ -11,7 +11,7 @@ sources:
     - name: CENSUS_DATE
       data_type: DATE
     - name: CENSUS_DATE_NUMERIC
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: LOAD_DATE
       data_type: TIMESTAMP_NTZ
     - name: SUBMISSION_ID
@@ -57,7 +57,7 @@ sources:
     - name: PROVIDER_SITE
       data_type: TEXT
     - name: COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CCG_CODE
       data_type: TEXT
     - name: GP_PRACTICE_CODE
@@ -67,7 +67,7 @@ sources:
     - name: ETHNICITY
       data_type: TEXT
     - name: AGE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REFERRAL_RECEIVED_DATE
       data_type: DATE
     - name: REFERRAL_SOURCE
@@ -79,7 +79,7 @@ sources:
     - name: ASI_FLAG
       data_type: TEXT
     - name: RTT_WAIT_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADMITTED_NONADMITTED_LIST
       data_type: TEXT
     - name: HAS_HAD_FIRST_OP
@@ -132,7 +132,7 @@ sources:
     - name: PROVIDER_SITE
       data_type: TEXT
     - name: COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CCG_CODE
       data_type: TEXT
     - name: GP_PRACTICE_CODE
@@ -142,7 +142,7 @@ sources:
     - name: ETHNICITY
       data_type: TEXT
     - name: AGE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REFERRAL_RECEIVED_DATE
       data_type: DATE
     - name: REFERRAL_SOURCE
@@ -154,7 +154,7 @@ sources:
     - name: ASI_FLAG
       data_type: TEXT
     - name: RTT_WAIT_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADMITTED_NONADMITTED
       data_type: TEXT
     - name: HAS_HAD_FIRST_OP
@@ -197,7 +197,7 @@ sources:
     - name: PROVIDER_SITE
       data_type: TEXT
     - name: COUNT
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: CCG_CODE
       data_type: TEXT
     - name: GP_PRACTICE_CODE
@@ -207,7 +207,7 @@ sources:
     - name: ETHNICITY
       data_type: TEXT
     - name: AGE
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: REFERRAL_RECEIVED_DATE
       data_type: DATE
     - name: REFERRAL_SOURCE
@@ -219,7 +219,7 @@ sources:
     - name: ASI_FLAG
       data_type: TEXT
     - name: RTT_WAIT_DAYS
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: ADMITTED_NONADMITTED_LIST
       data_type: TEXT
     - name: HAS_HAD_FIRST_OP

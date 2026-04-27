@@ -1,19 +1,19 @@
-version: 2
 models:
   - name: stg_reference_ltc_lcs_expanded_concepts
-    description: Expanded SNOMED codes from valuesets after terminology server 
-      processing
+    description: Expanded SNOMED codes from valuesets after terminology server processing
     config:
       meta:
         owner:
           name: Eddie Davison
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - concept_id
-            - valueset_id
+          arguments:
+            combination_of_columns:
+              - concept_id
+              - valueset_id
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1
     columns:
       - name: concept_id
         description: Unique identifier for this concept

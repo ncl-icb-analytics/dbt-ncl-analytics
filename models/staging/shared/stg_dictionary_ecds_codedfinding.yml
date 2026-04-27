@@ -1,8 +1,6 @@
-version: 2
 models:
   - name: stg_dictionary_ecds_codedfinding
-    description: ECDS coded finding reference data mapping SNOMED codes to ECDS 
-      descriptions
+    description: ECDS coded finding reference data mapping SNOMED codes to ECDS descriptions
     config:
       meta:
         owner:
@@ -29,4 +27,5 @@ models:
         description: Whether code is currently active
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

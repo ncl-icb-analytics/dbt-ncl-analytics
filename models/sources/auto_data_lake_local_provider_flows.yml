@@ -11,7 +11,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -82,7 +82,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -131,7 +131,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -144,7 +144,7 @@ sources:
       data_type: TEXT
     - name: Version
       data_type: TEXT
-    - name: NHSNumber
+    - name: SK_PATIENT_ID
       data_type: TEXT
     - name: MRN
       data_type: TEXT
@@ -260,7 +260,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -329,7 +329,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -442,7 +442,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -517,7 +517,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -606,7 +606,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -665,7 +665,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY
@@ -724,7 +724,7 @@ sources:
     - name: METADATA_FILE_PATH
       data_type: TEXT
     - name: METADATA_FILE_ROW_NUMBER
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
     - name: METADATA_RECORD_INGESTION_TIMESTAMP
       data_type: TIMESTAMP_LTZ
     - name: METADATA_FILE_CONTENT_KEY

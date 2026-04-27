@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_referral_ndpp_latest
     description: 'Latest NDPP outcome per person. One row per person with most recent NDPP event.

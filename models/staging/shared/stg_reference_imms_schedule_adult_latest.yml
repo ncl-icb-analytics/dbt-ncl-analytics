@@ -1,8 +1,6 @@
-﻿version: 1
 models:
   - name: stg_reference_imms_schedule_adult_latest
-    description: Immunisation schedule with age eligibility, intervals, and code
-      cluster mappings for adults aged 65 and over
+    description: Immunisation schedule with age eligibility, intervals, and code cluster mappings for adults aged 65 and over
     config:
       meta:
         owner:
@@ -35,5 +33,5 @@ models:
         description: FK to combined_codesets cluster for drug codes
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
-
+          arguments:
+            min_value: 1

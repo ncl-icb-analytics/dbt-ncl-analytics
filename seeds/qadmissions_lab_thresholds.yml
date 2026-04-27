@@ -1,0 +1,28 @@
+version: 2
+
+seeds:
+  - name: qadmissions_lab_thresholds
+    description: >
+      Per-measurement clinical thresholds consumed by QAdmissions feature
+      engineering. The int_qadmissions_features lab_thresholds CTE pivots the
+      (haemoglobin, low) and (platelets, high) rows into scalar thresholds; if
+      either row is absent the pivot silently yields NULL and downstream
+      comparisons collapse to FALSE for every person. The column-level tests
+      below guard the inputs; the existence of the required rows themselves is
+      asserted by tests/qadmissions_lab_thresholds_has_required_rows.sql.
+    columns:
+      - name: measurement
+        description: Measurement identifier (e.g. haemoglobin, platelets, alt)
+        data_tests:
+          - not_null
+      - name: direction
+        description: Direction of the threshold
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [low, high]
+      - name: threshold
+        description: Threshold value in the specified unit
+        data_tests:
+          - not_null

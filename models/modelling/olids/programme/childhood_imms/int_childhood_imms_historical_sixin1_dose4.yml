@@ -1,0 +1,14 @@
+models:
+  - name: int_childhood_imms_historical_sixin1_dose4
+    description: Intermediate table holding sixin1 dose 4 vaccination events for the historical population aged under 11. Person level
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique

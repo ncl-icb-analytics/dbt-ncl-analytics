@@ -1,11 +1,11 @@
 -- Gets list of attendances and diagnoses before the start of current month
- {{ config(materialized="table") }}
+ {{ config(materialized="table", static_analysis="off") }}
 
 SELECT
         ip.VISIT_OCCURRENCE_ID AS primary_id,
         'IP' AS pod_group,
         ip.POD AS pod,
-        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(ip.END_DATE) AS FIN_YEAR,
+        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(TO_DATE(ip.END_DATE)) AS FIN_YEAR,
         MOD(MONTH(ip.END_DATE) + 8, 12) + 1 AS fin_month,
         ip.SK_PATIENT_ID AS patient_id,
         ip.local_patient_identifier,
@@ -24,7 +24,7 @@ SELECT
         ip.reg_practice_at_event,
         DATEDIFF(MM,ip.END_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago -- use this in int_myria_conditions to flag 6 mth/1 year/2 year periods
     FROM
-       {{ ref("int_sus_ip_encounters") }} ip
+       {{ ref("obt_encounter_apc") }} ip
     LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx
         ON ip.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE 
@@ -36,7 +36,7 @@ SELECT
         op.VISIT_OCCURRENCE_ID AS primary_id,
         'OP' AS pod_group,
         op.POD AS pod,
-        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(op.START_DATE) AS FIN_YEAR,
+        REPORTING.MAIN_DATA.DETERMINE_FISCAL_YEAR(TO_DATE(op.START_DATE)) AS FIN_YEAR,
         MOD(MONTH(op.START_DATE) + 8, 12) + 1 AS fin_month,
         op.SK_PATIENT_ID AS patient_id,
         op.local_patient_identifier,
@@ -55,7 +55,7 @@ SELECT
         op.reg_practice_at_event,
         DATEDIFF(MM,op.START_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago
     FROM 
-       {{ ref("int_sus_op_encounters") }} op
+       {{ ref("obt_encounter_outpatient") }} op
     LEFT JOIN {{ ref("int_sus_op_diagnosis") }} dx
         ON op.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE
@@ -87,7 +87,7 @@ SELECT
         ae.reg_practice_at_event,
         DATEDIFF(MM,ae.START_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago
     FROM 
-       {{ ref("int_sus_ae_encounters") }} ae
+       {{ ref("obt_encounter_uec") }} ae
     LEFT JOIN {{ ref("int_sus_ae_diagnosis") }} dx
         ON ae.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE

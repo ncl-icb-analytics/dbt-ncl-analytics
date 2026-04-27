@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: stg_dictionary_ecds_treatment
     description: ECDS treatment reference data with HRG grouping mappings
@@ -8,13 +7,13 @@ models:
           name: Emily Baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ecds_unique_id
-            - valid_from
+          arguments:
+            combination_of_columns:
+              - ecds_unique_id
+              - valid_from
     columns:
       - name: ecds_unique_id
-        description: ECDS unique identifier (part of composite key with 
-          valid_from)
+        description: ECDS unique identifier (part of composite key with valid_from)
         tests:
           - not_null
       - name: snomed_code
@@ -25,4 +24,5 @@ models:
         description: Valid from date (part of composite key with ecds_unique_id)
         tests:
           - not_null:
-              severity: warn
+              config:
+                severity: warn

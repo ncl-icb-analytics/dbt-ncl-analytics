@@ -1,16 +1,13 @@
-version: 2
 models:
   - name: stg_olids_patient_registered_practitioner_in_role
-    description: Registration history linking patients to their registered GPs 
-      and practices. Deduplicated by id and filtered to exclude deleted records.
+    description: Registration history linking patients to their registered GPs and practices. Deduplicated by id and filtered to exclude deleted records.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
       - name: id
-        description: Primary key - unique identifier for this registration 
-          record
+        description: Primary key - unique identifier for this registration record
         tests:
           - unique
           - not_null
@@ -23,8 +20,7 @@ models:
       - name: practitioner_id
         description: Foreign key to practitioner.id - registered GP
       - name: episode_of_care_id
-        description: Foreign key to episode_of_care.id - associated episode of 
-          care
+        description: Foreign key to episode_of_care.id - associated episode of care
       - name: start_date
         description: Start date of this GP registration
       - name: end_date
@@ -38,14 +34,12 @@ models:
       - name: lds_initial_data_received_date
         description: Date when data was initially received by LDS
       - name: lds_start_date_time
-        description: LDS datetime stamp from which the record version was 
-          correct - used for deduplication to get the latest record
+        description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
-        description: Deletion flag - records with TRUE are filtered out in this 
-          staging layer
+        description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
-        description: LDS assigned unique identifier for the source record 
-          version
+        description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1
+          arguments:
+            min_value: 1

@@ -1,4 +1,3 @@
-version: 2
 models:
   - name: int_ltc_lcs_rs_dm_pg3a_mra
     description: |
@@ -22,13 +21,14 @@ models:
       - dbt_utils.at_least_one:
           column_name: person_id
       - valuesets_have_codes:
-          valuesets:
-            - on_dm_reg_priority_group_3a_mra_vs1
-            - on_dm_reg_priority_group_3a_mra_vs2
-            - on_dm_reg_priority_group_3a_mra_vs3
-            - on_dm_reg_priority_group_3a_mra_vs4
-            - on_dm_reg_priority_group_3a_mra_vs5
-            - on_dm_reg_priority_group_3a_mra_vs6
+          arguments:
+            valuesets:
+              - on_dm_reg_priority_group_3a_mra_vs1
+              - on_dm_reg_priority_group_3a_mra_vs2
+              - on_dm_reg_priority_group_3a_mra_vs3
+              - on_dm_reg_priority_group_3a_mra_vs4
+              - on_dm_reg_priority_group_3a_mra_vs5
+              - on_dm_reg_priority_group_3a_mra_vs6
     columns:
       - name: person_id
         tests:
