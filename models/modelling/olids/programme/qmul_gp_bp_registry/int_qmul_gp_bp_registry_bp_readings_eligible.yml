@@ -1,8 +1,8 @@
 models:
-  - name: int_gp_bp_registry_bp_readings_eligible
-    description: 'BP readings eligible for inclusion in the GP BP Registry cohort.
+  - name: int_qmul_gp_bp_registry_bp_readings_eligible
+    description: 'BP readings eligible for inclusion in the QMUL GP BP Registry cohort.
 
-      Paired systolic + diastolic BP events (from int_blood_pressure_all) for persons in the registry base population, with readings dropped if the event date falls inside any pregnancy or HDP exclusion window.
+      Paired systolic + diastolic BP events (from int_blood_pressure_all) for persons in the registry base population, with readings dropped if the event date falls inside any pregnancy or HDP exclusion window or outside the study extraction period (qmul_gp_bp_registry_extraction_start_date / _end_date, default 2010-01-01 to 2025-12-31).
       One row per retained reading.'
     config:
       meta:

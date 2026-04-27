@@ -30,7 +30,7 @@ WITH RECURSIVE eligible AS (
         ROW_NUMBER() OVER (
             PARTITION BY person_id ORDER BY effective_date
         ) AS reading_rank
-    FROM {{ ref('int_gp_bp_registry_bp_readings_eligible') }}
+    FROM {{ ref('int_qmul_gp_bp_registry_bp_readings_eligible') }}
 
 ),
 
@@ -48,7 +48,7 @@ next_jump AS (
         AND n.reading_rank > c.reading_rank
         AND n.effective_date >= DATEADD(
             'week',
-            {{ gp_bp_registry_min_reading_gap_weeks() }},
+            {{ qmul_gp_bp_registry_min_reading_gap_weeks() }},
             c.effective_date
         )
     GROUP BY c.person_id, c.reading_rank
@@ -86,6 +86,21 @@ chain AS (
 
 ),
 
+chain_with_anchor AS (
+
+    -- Tag every chain step with the chain's first reading date so we can
+    -- pick out the earliest step that satisfies the full inclusion rule
+    -- (>= min_qualifying_readings AND span from chain start >= min_span_months).
+    SELECT
+        c.person_id,
+        c.reading_rank,
+        c.effective_date,
+        c.chain_position,
+        MIN(c.effective_date) OVER (PARTITION BY c.person_id) AS chain_anchor_date
+    FROM chain c
+
+),
+
 summary AS (
 
     SELECT
@@ -93,8 +108,16 @@ summary AS (
         MAX(chain_position) AS qualifying_reading_count,
         MIN(effective_date) AS span_start,
         MAX(effective_date) AS span_end,
-        DATEDIFF('day', MIN(effective_date), MAX(effective_date)) AS span_days
-    FROM chain
+        DATEDIFF('day', MIN(effective_date), MAX(effective_date)) AS span_days,
+        MIN(
+            CASE
+                WHEN chain_position >= {{ qmul_gp_bp_registry_min_qualifying_readings() }}
+                 AND DATEDIFF('day', chain_anchor_date, effective_date)
+                     >= {{ qmul_gp_bp_registry_min_span_months() }} * 30
+                THEN effective_date
+            END
+        ) AS inclusion_first_met_date
+    FROM chain_with_anchor
     GROUP BY person_id
 
 )
@@ -105,7 +128,6 @@ SELECT
     span_start,
     span_end,
     span_days,
-    qualifying_reading_count >= {{ gp_bp_registry_min_qualifying_readings() }}
-        AND span_days >= {{ gp_bp_registry_min_span_months() }} * 30
-        AS meets_bp_criteria
+    inclusion_first_met_date,
+    inclusion_first_met_date IS NOT NULL AS meets_bp_criteria
 FROM summary

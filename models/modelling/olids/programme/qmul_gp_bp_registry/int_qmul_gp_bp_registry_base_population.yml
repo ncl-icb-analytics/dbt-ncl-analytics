@@ -1,8 +1,8 @@
 models:
-  - name: int_gp_bp_registry_base_population
-    description: 'Base population for the GP BP Registry research cohort (QMUL).
+  - name: int_qmul_gp_bp_registry_base_population
+    description: 'Base population for the QMUL GP BP Registry research cohort.
 
-      Includes adults (>= 18) with an active hypertension diagnosis and at least one oral antihypertensive medication order.
+      Persons on the QOF hypertension register (adult, active HTN diagnosis) with at least one oral antihypertensive medication order on record.
       Downstream models apply BP reading count and spacing rules, and exclude BP readings taken during pregnancy/HDP windows.'
     config:
       meta:

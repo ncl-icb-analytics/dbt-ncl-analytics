@@ -12,9 +12,9 @@ models can filter observations (e.g. BP readings) with a single join.
 Window sources:
   - pregnancy: an episode from int_pregnancy_episodes_all with no HDP code inside it.
   - pregnancy_hdp: an episode that contains at least one HDP code; episode_end extended
-    by hdp_postpartum_weeks to cover persistent HDP-related BP after delivery.
+    by hdp_postpartum_extension_weeks to cover persistent HDP-related BP after delivery.
   - hdp_standalone: an HDP code with no linked pregnancy episode; window runs from the
-    code date forward by hdp_postpartum_weeks.
+    code date forward by hdp_postpartum_extension_weeks.
 
 One row per window per person.
 */
@@ -72,7 +72,7 @@ pregnancy_windows AS (
             WHEN has_hdp_code = 1
                 THEN DATEADD(
                     'week',
-                    {{ gp_bp_registry_hdp_postpartum_weeks() }},
+                    {{ hdp_postpartum_extension_weeks() }},
                     episode_end
                 )
             ELSE episode_end
@@ -104,7 +104,7 @@ standalone_windows AS (
         hdp_code_date AS window_start,
         DATEADD(
             'week',
-            {{ gp_bp_registry_hdp_postpartum_weeks() }},
+            {{ hdp_postpartum_extension_weeks() }},
             hdp_code_date
         ) AS window_end,
         'hdp_standalone' AS reason

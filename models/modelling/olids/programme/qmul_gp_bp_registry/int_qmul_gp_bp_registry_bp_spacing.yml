@@ -1,6 +1,6 @@
 models:
-  - name: int_gp_bp_registry_bp_spacing
-    description: 'Per-person BP spacing assessment for the GP BP Registry cohort inclusion rule.
+  - name: int_qmul_gp_bp_registry_bp_spacing
+    description: 'Per-person BP spacing assessment for the QMUL GP BP Registry cohort inclusion rule.
 
       Greedy chain walk over each person''s eligible BP readings: takes the earliest reading, then the next reading at least min_reading_gap_weeks later, and so on.
       A person meets the criterion when the chain reaches min_qualifying_readings (default 4) and spans at least min_span_months (default 36).
@@ -30,7 +30,9 @@ models:
         description: 'Date of the last reading in the chain'
       - name: span_days
         description: 'Days from span_start to span_end'
+      - name: inclusion_first_met_date
+        description: 'Date the spacing rule is first satisfied: earliest reading where chain_position >= min_qualifying_readings and span from chain start >= min_span_months. NULL if never satisfied.'
       - name: meets_bp_criteria
-        description: 'TRUE if qualifying_reading_count >= min_qualifying_readings AND span_days >= min_span_months * 30'
+        description: 'TRUE if inclusion_first_met_date IS NOT NULL'
         tests:
           - not_null

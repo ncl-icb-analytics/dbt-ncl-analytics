@@ -10,10 +10,10 @@ Pregnancy episodes constructed from int_pregnancy_observations_all.
 Episode logic:
   - episode_start = first pregnancy code that is not preceded by an open episode.
   - A new episode begins when a pregnancy code follows either a delivery/loss code
-    or a gap longer than max_pregnancy_episode_weeks from the prior observation.
+    or a gap longer than pregnancy_episode_max_weeks from the prior observation.
   - episode_end = earliest subsequent delivery/loss code, else
-    episode_start + max_pregnancy_episode_weeks (fallback).
-  - episode_end is capped at episode_start + max_pregnancy_episode_weeks even when
+    episode_start + pregnancy_episode_max_weeks (fallback).
+  - episode_end is capped at episode_start + pregnancy_episode_max_weeks even when
     an outcome code exists, guarding against mis-dated outcome records.
 
 One row per pregnancy episode per person. Used by exclusion-window and cohort models.
@@ -73,7 +73,7 @@ episode_flags AS (
                 OR prev_event_type IN ('delivery', 'pregnancy_loss')
                 OR DATEDIFF(
                     'day', prev_date, clinical_effective_date
-                ) > {{ gp_bp_registry_max_pregnancy_episode_weeks() }} * 7
+                ) > {{ pregnancy_episode_max_weeks() }} * 7
             ) THEN 1
             ELSE 0
         END AS is_new_episode
@@ -138,7 +138,7 @@ episodes_resolved AS (
         END AS outcome_type,
         DATEADD(
             'week',
-            {{ gp_bp_registry_max_pregnancy_episode_weeks() }},
+            {{ pregnancy_episode_max_weeks() }},
             episode_start
         ) AS max_episode_end
     FROM episodes_agg

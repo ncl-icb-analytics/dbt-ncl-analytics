@@ -1,8 +1,8 @@
 models:
-  - name: fct_gp_bp_registry_cohort
-    description: 'Final GP BP Registry research cohort (QMUL).
+  - name: fct_qmul_gp_bp_registry_cohort
+    description: 'Final QMUL GP BP Registry research cohort.
 
-      Adults with an active hypertension diagnosis and at least one oral antihypertensive medication order, whose eligible BP readings (post pregnancy/HDP-window exclusion) meet the spacing rule: at least min_qualifying_readings readings spaced min_reading_gap_weeks apart, spanning min_span_months.
+      Persons on the QOF hypertension register with at least one oral antihypertensive medication order, whose eligible BP readings (post pregnancy/HDP-window exclusion, within the 2010-2025 extraction window) meet the spacing rule: at least qmul_gp_bp_registry_min_qualifying_readings readings spaced qmul_gp_bp_registry_min_reading_gap_weeks apart, spanning qmul_gp_bp_registry_min_span_months.
       One row per included person.'
     config:
       meta:
@@ -43,3 +43,7 @@ models:
         description: 'Date of the last reading in the chain'
       - name: span_days
         description: 'Days from span_start to span_end'
+      - name: inclusion_first_met_date
+        description: 'Date the patient first satisfies the BP spacing rule. Anchor for downstream extraction of BP / antihypertensive data within the inclusion window and beyond.'
+        tests:
+          - not_null
