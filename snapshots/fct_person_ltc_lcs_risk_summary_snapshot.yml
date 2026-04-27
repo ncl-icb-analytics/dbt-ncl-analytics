@@ -1,0 +1,23 @@
+snapshots:
+  - name: fct_person_ltc_lcs_risk_summary_snapshot
+    relation: ref('fct_person_ltc_lcs_risk_summary')
+    description: >
+      Historical snapshot of LTC LCS condition risk groups per person so movement
+      between risk groups can be tracked over time. Tracks condition-level and
+      overall risk group columns only; Model of Care activity flags and
+      demographics are intentionally excluded.
+    config:
+      strategy: check
+      unique_key: [person_id]
+      updated_at: table_refresh_date
+      hard_deletes: invalidate
+      check_cols:
+        - chd_risk_group
+        - ckd_risk_group
+        - copd_risk_group
+        - diabetes_risk_group
+        - hf_risk_group
+        - hypertension_risk_group
+        - overall_risk_group
+        - overall_risk_rank
+        - in_any_risk_group
