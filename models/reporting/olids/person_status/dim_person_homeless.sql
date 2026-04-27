@@ -30,7 +30,7 @@ WHERE cluster_id in ('RESIDE_COD', 'HOMELESS_COD')
        INNER JOIN homeless_codes cc ON obs.mapped_concept_code = cc.code
        WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= CURRENT_DATE
-        AND cc.cluster_id = 'RESIDE_COD' 
+        AND cc.cluster_id IN ('RESIDE_COD', 'HOMELESS_COD')
        QUALIFY ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY clinical_effective_date DESC ) = 1
 )
 -- Identify people currently homeless by checking if the latest code is in HOMELESS_COD cluster
