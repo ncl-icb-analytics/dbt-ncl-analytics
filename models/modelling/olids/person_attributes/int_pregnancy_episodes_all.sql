@@ -8,13 +8,18 @@
 Pregnancy episodes constructed from int_pregnancy_observations_all.
 
 Episode logic:
-  - episode_start = first pregnancy code that is not preceded by an open episode.
-  - A new episode begins when a pregnancy code follows either a delivery/loss code
-    or a gap longer than pregnancy_episode_max_weeks from the prior observation.
-  - episode_end = earliest subsequent delivery/loss code, else
+  - A pregnancy code starts a new episode if not preceded by an open episode (no
+    prior code, prior code was an outcome, or prior code more than
+    pregnancy_episode_max_weeks ago).
+  - A delivery / pregnancy_loss code can also start a new episode under the
+    same conditions. This catches "orphan" outcomes where antenatal care was
+    delivered outside primary care and only the delivery / loss notification
+    reached the GP record. For these episodes, episode_start is back-dated
+    by pregnancy_episode_max_weeks from the outcome date (estimated conception).
+  - episode_end = earliest subsequent delivery / loss code in the episode, else
     episode_start + pregnancy_episode_max_weeks (fallback).
-  - episode_end is capped at episode_start + pregnancy_episode_max_weeks even when
-    an outcome code exists, guarding against mis-dated outcome records.
+  - episode_end is capped at episode_start + pregnancy_episode_max_weeks even
+    when an outcome code exists, guarding against mis-dated outcome records.
 
 One row per pregnancy episode per person. Used by exclusion-window and cohort models.
 */
@@ -68,7 +73,17 @@ episode_flags AS (
         clinical_effective_date,
         event_type,
         CASE
+            -- A pregnancy code starts a new episode if not inside an open one
             WHEN event_type = 'pregnancy' AND (
+                prev_date IS NULL
+                OR prev_event_type IN ('delivery', 'pregnancy_loss')
+                OR DATEDIFF(
+                    'day', prev_date, clinical_effective_date
+                ) > {{ pregnancy_episode_max_weeks() }} * 7
+            ) THEN 1
+            -- An outcome code starts an "orphan" episode when no recent pregnancy
+            -- code precedes it (otherwise it just closes an existing episode)
+            WHEN event_type IN ('delivery', 'pregnancy_loss') AND (
                 prev_date IS NULL
                 OR prev_event_type IN ('delivery', 'pregnancy_loss')
                 OR DATEDIFF(
@@ -101,13 +116,16 @@ episodes_agg AS (
     SELECT
         person_id,
         episode_number,
-        MIN(clinical_effective_date) AS episode_start,
+        MIN(
+            CASE WHEN event_type = 'pregnancy' THEN clinical_effective_date END
+        ) AS first_pregnancy_date,
         MIN(
             CASE WHEN event_type = 'delivery' THEN clinical_effective_date END
         ) AS delivery_date,
         MIN(
             CASE WHEN event_type = 'pregnancy_loss' THEN clinical_effective_date END
-        ) AS loss_date
+        ) AS loss_date,
+        MIN(clinical_effective_date) AS earliest_event_date
     FROM episode_assignment
     WHERE episode_number >= 1
     GROUP BY person_id, episode_number
@@ -119,9 +137,10 @@ episodes_resolved AS (
     SELECT
         person_id,
         episode_number,
-        episode_start,
+        first_pregnancy_date,
         delivery_date,
         loss_date,
+        -- Earliest outcome (delivery or loss), if any
         CASE
             WHEN delivery_date IS NULL AND loss_date IS NULL THEN NULL
             WHEN loss_date IS NULL THEN delivery_date
@@ -130,17 +149,25 @@ episodes_resolved AS (
             ELSE loss_date
         END AS outcome_date,
         CASE
-            WHEN delivery_date IS NULL AND loss_date IS NULL
+            WHEN first_pregnancy_date IS NOT NULL
+                 AND delivery_date IS NULL AND loss_date IS NULL
+                THEN 'fallback_max_duration'
+            WHEN first_pregnancy_date IS NULL
+                 AND delivery_date IS NULL AND loss_date IS NULL
                 THEN 'fallback_max_duration'
             WHEN loss_date IS NULL OR delivery_date <= loss_date
                 THEN 'delivery'
             ELSE 'pregnancy_loss'
         END AS outcome_type,
-        DATEADD(
-            'week',
-            {{ pregnancy_episode_max_weeks() }},
-            episode_start
-        ) AS max_episode_end
+        -- Episode anchor for orphan outcomes: back-date from the outcome
+        COALESCE(
+            first_pregnancy_date,
+            DATEADD(
+                'week',
+                -1 * {{ pregnancy_episode_max_weeks() }},
+                earliest_event_date
+            )
+        ) AS episode_start_raw
     FROM episodes_agg
 
 )
@@ -148,14 +175,23 @@ episodes_resolved AS (
 SELECT
     person_id,
     episode_number AS episode_id,
-    episode_start,
+    episode_start_raw AS episode_start,
     LEAST(
-        COALESCE(outcome_date, max_episode_end),
-        max_episode_end
+        COALESCE(outcome_date, DATEADD(
+            'week',
+            {{ pregnancy_episode_max_weeks() }},
+            episode_start_raw
+        )),
+        DATEADD(
+            'week',
+            {{ pregnancy_episode_max_weeks() }},
+            episode_start_raw
+        )
     ) AS episode_end,
     outcome_type,
     delivery_date,
-    loss_date
+    loss_date,
+    first_pregnancy_date IS NULL AS is_orphan_outcome_episode
 
 FROM episodes_resolved
 
