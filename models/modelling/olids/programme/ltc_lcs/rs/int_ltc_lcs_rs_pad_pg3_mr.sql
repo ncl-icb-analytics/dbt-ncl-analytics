@@ -17,9 +17,9 @@ with pad_reg as (
     select distinct DR.person_id
      from DEV__REPORTING.OLIDS_DISEASE_REGISTERS.FCT_PERSON_PAD_REGISTER DR
      -- Rule 1: Excludes Priority Groups 1 (HRC) and 2 (HR)
-       left join DEV__MODELLING.DBT_DEV.PAD_HRC_Test_CS HRC
+       left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg1_hrc HRC
     on DR.person_id = HRC.person_id
-        left join DEV__MODELLING.DBT_DEV.PAD_HR_Test_CS HR
+        left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr HR
     on DR.person_id = HR.person_id
     where 
         HRC.person_id is null
@@ -31,13 +31,13 @@ with pad_reg as (
 --OUTPUT
 
 select distinct DR.person_id from pad_reg DR
-left join DEV__MODELLING.DBT_DEV.PAD_MR_Rule2_Test_CS R2
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r2 R2
 on DR.person_id = R2.person_id
-left join DEV__MODELLING.DBT_DEV.PAD_MR_Rule2_Test_CS R3
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r3 R3
 on DR.person_id = R3.person_id
-left join DEV__MODELLING.DBT_DEV.PAD_MR_Rule2_Test_CS R4
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r4 R4
 on DR.person_id = R4.person_id
-left join DEV__MODELLING.DBT_DEV.PAD_MR_Rule2_Test_CS R5
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r5 R5
 on DR.person_id = R5.person_id
 where
 R2.PERSON_ID is not null

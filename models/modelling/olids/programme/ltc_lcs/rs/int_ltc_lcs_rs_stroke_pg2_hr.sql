@@ -34,7 +34,7 @@ from  DEV__REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS
 select DR.person_id, AGE.age from stroketia_reg DR
 inner join patient_age AGE
 on DR.person_id = AGE.person_id
-left join DEV__MODELLING.DBT_DEV.STROKE_HRC_Test_CS HRC
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg1_hrc HRC
 on DR.person_id = HRC.person_id
 where HRC.person_id is null
 )
@@ -43,17 +43,17 @@ where HRC.person_id is null
 
 select HR.person_id
  from HR_subgroup HR
-left join DEV__MODELLING.DBT_DEV.STROKE_HR_Rule2_Test_CS R2
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg2_hr_r2 R2
 on HR.person_id = R2.person_id
-left join DEV__MODELLING.DBT_DEV.STROKE_HR_Rule3_Test_CS R3
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg2_hr_r3 R3
 on HR.person_id = R3.person_id
-left join DEV__MODELLING.DBT_DEV.STROKE_HR_Rule4_Test_CS R4
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg2_hr_r4 R4
 on HR.person_id = R4.person_id
-left join DEV__MODELLING.DBT_DEV.STROKE_HR_Rule4_Test_CS R5
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg2_hr_r5 R5
 on HR.person_id = R5.person_id
-left join DEV__MODELLING.DBT_DEV.STROKE_HR_Rule4_Test_CS R7
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg2_hr_r7 R7
 on HR.person_id = R7.person_id
-left join DEV__MODELLING.DBT_DEV.STROKE_HR_Rule4_Test_CS R8
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg2_hr_r8 R8
 on HR.person_id = R8.person_id
 
 where

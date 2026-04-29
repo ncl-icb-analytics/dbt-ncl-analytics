@@ -15,7 +15,7 @@ on_nafld_reg_pg3_mr_vs3 as (
         {{ get_ltc_lcs_observations_latest("'on_nafld_reg_pg3_mr_vs3'") }}
 )
 
-select distinct NR.person_id from DEV__MODELLING.DBT_DEV.NAFLD_Register_Test_CS NR
+select distinct NR.person_id from DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_nafld_reg NR
 
 left outer join on_nafld_reg_pg3_mr_vs1 VS1
 on NR.PERSON_ID = VS1.PERSON_ID

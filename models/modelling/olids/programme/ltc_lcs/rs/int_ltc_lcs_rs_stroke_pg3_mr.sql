@@ -39,9 +39,9 @@ with stroketia_reg as (
 ,  MR_subgroup as (
 --Rule 1: Exclude patients from Priority Group 1 or 2
 select DR.person_id from stroketia_reg DR
-left join DEV__MODELLING.DBT_DEV.STROKE_HRC_Test_CS HRC
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg1_hrc HRC
 on DR.person_id = HRC.person_id
-left join DEV__MODELLING.DBT_DEV.STROKE_HR_Test_CS HR
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg2_hr HR
 on DR.person_id = HR.person_id
 where HRC.person_id is null  -- exclude HRC patients
 and 
@@ -51,7 +51,7 @@ HR.person_id is null   -- exclude HR patients
 
 select distinct MR.person_id
  from MR_subgroup MR
-left join DEV__MODELLING.DBT_DEV.STROKE_MR_rule2_Test_CS R2
+left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_stroke_pg3_mr_r2 R2
  on MR.person_id = R2.person_id
 
 left join on_stroketia_reg_pg3_mr_vs3 VS3
