@@ -8,12 +8,13 @@ SELECT DISTINCT
 dem.PERSON_ID
 ,dem.BIRTH_DATE_APPROX
 ,dem.AGE 
+,dem.AGE_BAND_5Y
 ,age.AGE_DAYS_APPROX
 --RSV catch up eligibility flag - turning 80 after 1st September 2024
-,CASE
-    WHEN dem.BIRTH_DATE_APPROX >= '1944-09-01' AND dem.BIRTH_DATE_APPROX <='1945-08-31'
-    THEN TRUE ELSE FALSE 
-END AS TURN_80_AFTER_SEP_2024
+-- ,CASE
+--     WHEN dem.BIRTH_DATE_APPROX >= '1944-09-01' AND dem.BIRTH_DATE_APPROX <='1945-08-31'
+--     THEN TRUE ELSE FALSE 
+-- END AS TURN_80_AFTER_SEP_2024
 --Shingles programme eligibility flag - turning 65 after 1st September 2023
 ,CASE
     WHEN dem.BIRTH_DATE_APPROX >= '1958-09-01' AND dem.BIRTH_DATE_APPROX <= '1959-08-31'
@@ -101,9 +102,15 @@ ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 ,dem.LSOA_CODE_21
 ,dem.IS_ACTIVE
 ,dem.is_deceased
+,CASE WHEN (ch.PERSON_ID IS NOT NULL OR cch.PERSON_ID IS NOT NULL) THEN TRUE ELSE FALSE END AS IS_CARE_HOME_RESIDENT
+,ch.RESIDENCE_STATUS
+,ch.RESIDENCE_TYPE
 FROM {{ ref('dim_person_demographics') }} dem
 LEFT JOIN {{ ref('dim_person_age') }} age on age.PERSON_ID = dem.PERSON_ID
 LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
+LEFT JOIN {{ ref('dim_person_care_home') }} ch using (PERSON_ID)
+LEFT JOIN {{ ref('int_covid_long_term_residential_care') }} cch using (PERSON_ID)
 WHERE dem.is_active 
 AND dem.IS_DECEASED = FALSE
-AND dem.age >= 65
+--decrease lower age limit to include residents in care homes aligning with COVID_LT_CARE.
+AND dem.age >= 60

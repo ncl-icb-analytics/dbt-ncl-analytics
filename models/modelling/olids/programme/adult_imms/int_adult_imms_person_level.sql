@@ -7,9 +7,9 @@
 with vacc_status_adult as (
 SELECT
   cv.person_id
-,MAX(CASE WHEN vaccine_id = 'PNEUMO_1' THEN cv.vaccination_status END) as pneumo_status_dose_1
-,MAX(CASE WHEN vaccine_id = 'PNEUMO_1' THEN cv.vaccination_date END) as pneumo_date_dose_1
-,MAX(CASE WHEN vaccine_id = 'PNEUMO_1' THEN cv.AGE_AT_EVENT END) as pneumo_age_event_dose_1
+,MAX(CASE WHEN vaccine_id = 'PPV_1' THEN cv.vaccination_status END) as ppv_status_dose_1
+,MAX(CASE WHEN vaccine_id = 'PPV_1' THEN cv.vaccination_date END) as ppv_date_dose_1
+,MAX(CASE WHEN vaccine_id = 'PPV_1' THEN cv.AGE_AT_EVENT END) as ppv_age_event_dose_1
 ,MAX(CASE WHEN vaccine_id in ('SHING_1','SHING_1B') THEN cv.vaccination_status END) as shing_status_dose_1
 ,MAX(CASE WHEN vaccine_id in ('SHING_1','SHING_1B') THEN cv.vaccination_date END) as shing_date_dose_1
 ,MAX(CASE WHEN vaccine_id in ('SHING_1','SHING_1B') THEN cv.AGE_AT_EVENT END) as shing_age_event_dose_1
@@ -28,7 +28,7 @@ CURRENT_DATE AS RUN_DATE
 ,v.person_id
 ,p.GENDER
 ,p.AGE
-,p.TURN_80_AFTER_SEP_2024
+,p.IS_CARE_HOME_RESIDENT
 ,p.TURN_65_AFTER_SEP_2023
 ,p.ethnicity_category
 ,p.ethcat_order
@@ -50,9 +50,9 @@ CURRENT_DATE AS RUN_DATE
 ,p.ward_code
 ,p.ward_name
 ,p.lsoa_code_21
-,v.pneumo_status_dose_1 
-,v.pneumo_date_dose_1
-,v.pneumo_age_event_dose_1
+,v.ppv_status_dose_1 
+,v.ppv_date_dose_1
+,v.ppv_age_event_dose_1
 ,v.shing_status_dose_1 
 ,v.shing_age_event_dose_1
 ,v.shing_status_dose_2 

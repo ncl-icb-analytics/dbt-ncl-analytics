@@ -9,7 +9,7 @@
 SELECT 
          PERSON_ID 
         ,AGE AS CURRENT_AGE
-        ,TURN_80_AFTER_SEP_2024
+        ,IS_CARE_HOME_RESIDENT
         ,VACCINE_ID as VACCINE_ID_FIRST
         ,VACCINATION_DATE AS rsv_first_date
         ,VACCINATION_STATUS AS rsv_first_status
