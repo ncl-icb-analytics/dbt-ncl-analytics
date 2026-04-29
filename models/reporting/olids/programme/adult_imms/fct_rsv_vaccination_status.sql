@@ -12,10 +12,10 @@ eligible AS (
         person_id
         ,age
        ,TRUE as eligible
-        ,TURN_80_AFTER_SEP_2024
+        ,IS_CARE_HOME_RESIDENT
     FROM {{ ref('int_adult_imms_current_population') }}
     --FROM DEV__MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_CURRENT_POPULATION
-    where age between 75 and 79 or TURN_80_AFTER_SEP_2024 = 'YES'
+    where age >= 75 or IS_CARE_HOME_RESIDENT = 'YES'
 )
 -- RSV SINGLE DOSE
 ,rsv as (
