@@ -9,14 +9,11 @@ models:
       with a recorded gender of Male or Female.
 
       This model does NOT compute a risk score - it only assembles the
-      input features that the registered model consumes. See
-      planning/qadmissions/plan.md for the full feature-to-source map and
-      planning/qadmissions/overview.md for the required ClinRisk disclaimer.
+      input features that the registered model consumes. See the file
+      header for the required ClinRisk disclaimer.
 
-      Placeholder columns (defaulted until their source intermediates land):
-      b_falls, b_malabsorption, b_vte, town, alcohol_cat6, ethrisk.
-      b_liverpancreas is partial (chronic liver disease only; pancreatic
-      disease component to follow).
+      Placeholder columns still defaulted until their source intermediates
+      land: alcohol_cat6, ethrisk.
     config:
       meta:
         owner:
@@ -195,26 +192,50 @@ models:
 
       - name: b_falls
         data_type: boolean
-        description: "TODO Step 4: falls history. Currently defaulted to FALSE until int_falls_diagnoses_all lands."
+        description: "TRUE if the person has any coded falls observation (history of falls). Sourced from int_falls_observations_all using the QAdmissions FALLS_COD_Q codelist."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: b_malabsorption
         data_type: boolean
-        description: "TODO Step 4: malabsorption (coeliac / IBD / post-resection). Currently defaulted to FALSE until int_malabsorption_diagnoses_all lands."
+        description: "TRUE if the person has any coded malabsorption diagnosis (coeliac disease, IBD, or post-resection). Sourced from int_malabsorption_diagnoses_all using the QAdmissions MALABSORPTION_COD_Q codelist."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: b_vte
         data_type: boolean
-        description: "TODO Step 4: venous thromboembolism (DVT / PE). Currently defaulted to FALSE until int_vte_diagnoses_all lands."
+        description: "TRUE if the person has any coded venous thromboembolism diagnosis (DVT or PE). Sourced from int_vte_diagnoses_all using the QAdmissions VENOUS_THROMBOEMBOLISM_COD_Q codelist."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: b_liverpancreas
         data_type: boolean
-        description: >
-          Chronic liver disease OR pancreatic disease. PARTIAL - currently
-          sourced only from dim_person_conditions.has_chronic_liver_disease
-          until int_pancreatic_disease_diagnoses_all lands (Step 4).
+        description: "TRUE if the person has any coded chronic liver disease or chronic pancreatitis diagnosis. Sourced from int_liver_pancreatitis_diagnoses_all using the QAdmissions LIVER_DISEASE_OR_CHRONIC_PANCREATITIS_COD_Q codelist (a single combined cluster per the QAdmissions paper)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: town
-        data_type: number
-        description: "TODO Step 5: Townsend deprivation score. Currently defaulted to 0 (national mean) until the LSOA Townsend seed and int_qadmissions_townsend land."
+        data_type: float
+        description: >
+          Townsend Deprivation Score for the person's residential LSOA
+          (higher = more deprived). Sourced from int_qadmissions_townsend,
+          which bridges dim_person_demographics.lsoa_code_21 to the
+          qadmissions_townsend_lsoa_2011 seed via stg_reference_lsoa2011_lsoa2021.
+          NULL when no LSOA recorded or when the LSOA does not match the
+          England-and-Wales bridge (e.g. Scottish or NI residence) - NULL
+          is passed through to the registered QAdmissions model.
 
       - name: alcohol_cat6
         data_type: number

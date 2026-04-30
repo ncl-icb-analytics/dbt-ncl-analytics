@@ -66,8 +66,7 @@ conditions AS (
         has_severe_mental_illness,
         has_coronary_heart_disease,
         has_stroke_tia,
-        has_peripheral_arterial_disease,
-        has_chronic_liver_disease
+        has_peripheral_arterial_disease
     FROM {{ ref('dim_person_conditions') }}
 ),
 
@@ -172,6 +171,38 @@ lft_latest AS (
         person_id,
         high_lft
     FROM {{ ref('int_lft_latest') }}
+),
+
+-- Person-level flags from the four QAdmissions paper-faithful diagnosis /
+-- observation intermediates. Each collapses observation-level rows to one
+-- row per person via SELECT DISTINCT, with TRUE meaning "ever coded".
+falls_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_falls
+    FROM {{ ref('int_falls_observations_all') }}
+),
+
+malabsorption_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_malabsorption
+    FROM {{ ref('int_malabsorption_diagnoses_all') }}
+),
+
+vte_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_vte
+    FROM {{ ref('int_vte_diagnoses_all') }}
+),
+
+liver_pancreatitis_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_liver_pancreatitis
+    FROM {{ ref('int_liver_pancreatitis_diagnoses_all') }}
+),
+
+-- Townsend Deprivation Score per person (NULL where the LSOA does not
+-- bridge to a Townsend-mapped 2011 LSOA, e.g. non-English residence).
+townsend AS (
+    SELECT
+        person_id,
+        townsend_score
+    FROM {{ ref('int_qadmissions_townsend') }}
 )
 
 SELECT
@@ -228,25 +259,39 @@ SELECT
 
     -- Lab features from observation intermediates.
     -- Thresholds sourced from qadmissions_lab_thresholds seed.
-    COALESCE(hb.hb_value < t.hb_threshold, FALSE)                           AS c_hb,
+    COALESCE(hb.hb_value < t.hb_threshold, FALSE)                          AS c_hb,
     COALESCE(lft.high_lft, FALSE)                                          AS high_lft,
     COALESCE(plt.platelet_value > t.platelet_threshold, FALSE)             AS high_platelet,
-    FALSE                                              AS b_falls,         -- TODO Step 4: replace with int_falls_diagnoses_all
-    FALSE                                              AS b_malabsorption, -- TODO Step 4: replace with int_malabsorption_diagnoses_all
-    FALSE                                              AS b_vte,           -- TODO Step 4: replace with int_vte_diagnoses_all
-    COALESCE(cond.has_chronic_liver_disease, FALSE)    AS b_liverpancreas, -- TODO Step 4: OR with int_pancreatic_disease_diagnoses_all
-    0                                                  AS town,            -- TODO Step 5: replace with int_qadmissions_townsend score
-    0                                                  AS alcohol_cat6,    -- TODO Step 2: replace with mapping from int_alcohol_audit_scores via qadmissions_alcohol_audit_to_cat6 seed
-    1                                                  AS ethrisk          -- TODO Step 2: replace with mapping from int_ethnicity_qof.cluster_id via qadmissions_eth2016_to_ethrisk9 seed
 
-FROM base_spine                 base
-CROSS JOIN lab_thresholds       t
-LEFT JOIN conditions            cond ON base.person_id     = cond.person_id
-LEFT JOIN bmi                        ON base.person_id     = bmi.person_id
-LEFT JOIN diabetes              diab ON base.person_id     = diab.person_id
-LEFT JOIN smoking               smk  ON base.person_id     = smk.person_id
-LEFT JOIN medication_flags      med  ON base.person_id     = med.person_id
-LEFT JOIN emergency_admissions  adm  ON base.sk_patient_id = adm.sk_patient_id
-LEFT JOIN hb_latest             hb   ON base.person_id     = hb.person_id
-LEFT JOIN platelets_latest      plt  ON base.person_id     = plt.person_id
-LEFT JOIN lft_latest            lft  ON base.person_id     = lft.person_id
+    -- Diagnosis / observation flags from QAdmissions paper-faithful clusters.
+    COALESCE(fls.has_falls, FALSE)                                         AS b_falls,
+    COALESCE(mal.has_malabsorption, FALSE)                                 AS b_malabsorption,
+    COALESCE(vte.has_vte, FALSE)                                           AS b_vte,
+    COALESCE(lp.has_liver_pancreatitis, FALSE)                             AS b_liverpancreas,
+
+    -- Townsend Deprivation Score (NULL passes through to the registered
+    -- model for persons with no LSOA / non-English residence).
+    twn.townsend_score                                                     AS town,
+
+    -- Placeholder defaults (sourced features still to land):
+    --   alcohol_cat6 -> mapping from int_alcohol_audit_scores
+    --   ethrisk      -> mapping from int_ethnicity_qof.cluster_id
+    0                                                                      AS alcohol_cat6,
+    1                                                                      AS ethrisk
+
+FROM base_spine                       base
+CROSS JOIN lab_thresholds             t
+LEFT JOIN conditions                  cond ON base.person_id     = cond.person_id
+LEFT JOIN bmi                              ON base.person_id     = bmi.person_id
+LEFT JOIN diabetes                    diab ON base.person_id     = diab.person_id
+LEFT JOIN smoking                     smk  ON base.person_id     = smk.person_id
+LEFT JOIN medication_flags            med  ON base.person_id     = med.person_id
+LEFT JOIN emergency_admissions        adm  ON base.sk_patient_id = adm.sk_patient_id
+LEFT JOIN hb_latest                   hb   ON base.person_id     = hb.person_id
+LEFT JOIN platelets_latest            plt  ON base.person_id     = plt.person_id
+LEFT JOIN lft_latest                  lft  ON base.person_id     = lft.person_id
+LEFT JOIN falls_flags                 fls  ON base.person_id     = fls.person_id
+LEFT JOIN malabsorption_flags         mal  ON base.person_id     = mal.person_id
+LEFT JOIN vte_flags                   vte  ON base.person_id     = vte.person_id
+LEFT JOIN liver_pancreatitis_flags    lp   ON base.person_id     = lp.person_id
+LEFT JOIN townsend                    twn  ON base.person_id     = twn.person_id

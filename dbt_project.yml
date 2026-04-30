@@ -230,6 +230,13 @@ seeds:
         unit: varchar(20)
         source_reference: varchar(100)
 
+    qadmissions_townsend_lsoa_2011:
+      +column_types:
+        lsoa_2011_code: varchar(9)
+        lsoa_2011_label: varchar(100)
+        townsend_score: float
+        townsend_quintile: integer
+
 snapshots:
   wnl_analytics:
     +database: "MODELLING"
