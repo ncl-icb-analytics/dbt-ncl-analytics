@@ -6,6 +6,7 @@
 }}
 --people aged 75+ who are eligible who have received RSV vaccine. Latest vaccination recorded
 --people eligible either turned 80 after Sept 2024 (RSV_1B) or are currently 75-79 for the Catch Up programme (RSV_1)
+--April 1st 2026 this is extended to people in care homes for older adults so includes those aged 60 onwards.
 SELECT 
          PERSON_ID 
         ,AGE AS CURRENT_AGE

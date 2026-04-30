@@ -10,13 +10,37 @@ SELECT
 ,MAX(CASE WHEN vaccine_id = 'PPV_1' THEN cv.vaccination_status END) as ppv_status_dose_1
 ,MAX(CASE WHEN vaccine_id = 'PPV_1' THEN cv.vaccination_date END) as ppv_date_dose_1
 ,MAX(CASE WHEN vaccine_id = 'PPV_1' THEN cv.AGE_AT_EVENT END) as ppv_age_event_dose_1
-,MAX(CASE WHEN vaccine_id in ('SHING_1','SHING_1B') THEN cv.vaccination_status END) as shing_status_dose_1
+-- Shingles Dose 1
+  ,COALESCE(
+    -- Rule 1 for those turned 65 on after 1st sep 2023 prefer SHING_1
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 AND vaccine_id = 'SHING_1' THEN vaccination_status END),
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 AND vaccine_id = 'SHING_1B' THEN vaccination_status END),
+ -- Rule 2 for those turned 65 BEFORE 1st sep 2023 prefer SHING_1B
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 = FALSE AND vaccine_id = 'SHING_1B' THEN vaccination_status END),
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 = FALSE AND vaccine_id = 'SHING_1' THEN vaccination_status END)           
+) AS shing_status_dose_1
 ,MAX(CASE WHEN vaccine_id in ('SHING_1','SHING_1B') THEN cv.vaccination_date END) as shing_date_dose_1
 ,MAX(CASE WHEN vaccine_id in ('SHING_1','SHING_1B') THEN cv.AGE_AT_EVENT END) as shing_age_event_dose_1
-,MAX(CASE WHEN vaccine_id in ('SHING_2','SHING_2B') THEN cv.vaccination_status END) as shing_status_dose_2
+-- Shingles Dose 2
+  ,COALESCE(
+    -- Rule 1 for those turned 65 on after 1st sep 2023 prefer SHING_1
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 AND vaccine_id = 'SHING_2' THEN vaccination_status END),
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 AND vaccine_id = 'SHING_2B' THEN vaccination_status END),
+ -- Rule 2 for those turned 65 BEFORE 1st sep 2023 prefer SHING_1B
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 = FALSE AND vaccine_id = 'SHING_2B' THEN vaccination_status END),
+    MAX(CASE WHEN TURN_65_AFTER_SEP_2023 = FALSE AND vaccine_id = 'SHING_2' THEN vaccination_status END)           
+) AS shing_status_dose_2
 ,MAX(CASE WHEN vaccine_id in ('SHING_2','SHING_2B') THEN cv.vaccination_date END) as shing_date_dose_2
 ,MAX(CASE WHEN vaccine_id in ('SHING_2','SHING_2B') THEN cv.AGE_AT_EVENT END) as shing_age_event_dose_2
-,MAX(CASE WHEN vaccine_id in ('RSV_1','RSV_1B') THEN cv.vaccination_status END) as rsv_status_dose_1
+-- RSV
+  ,COALESCE(
+    -- Rule 1 for those AGED 75 or OLDER starting 1st April 2026 prefer RSV_1
+    MAX(CASE WHEN IS_CARE_HOME_RESIDENT = FALSE AND vaccine_id = 'RSV_1' THEN vaccination_status END),
+    MAX(CASE WHEN IS_CARE_HOME_RESIDENT = FALSE AND vaccine_id = 'RSV_1B' THEN vaccination_status END),
+ -- Rule 2 for those IN A CARE HOME FOR OLDER PEOPLE  prefer RSV_1B
+    MAX(CASE WHEN IS_CARE_HOME_RESIDENT AND vaccine_id = 'RSV_1B' THEN vaccination_status END),
+    MAX(CASE WHEN IS_CARE_HOME_RESIDENT AND vaccine_id = 'RSV_1' THEN vaccination_status END)           
+) AS rsv_status_dose_1
 ,MAX(CASE WHEN vaccine_id in ('RSV_1','RSV_1B') THEN cv.vaccination_date END) as rsv_date_dose_1
 ,MAX(CASE WHEN vaccine_id in ('RSV_1','RSV_1B') THEN cv.AGE_AT_EVENT END) as rsv_age_event_dose_1
 FROM {{ ref('int_adult_imms_vaccination_status_current') }} cv
@@ -28,6 +52,7 @@ CURRENT_DATE AS RUN_DATE
 ,v.person_id
 ,p.GENDER
 ,p.AGE
+,p.AGE_BAND_5Y
 ,p.IS_CARE_HOME_RESIDENT
 ,p.TURN_65_AFTER_SEP_2023
 ,p.ethnicity_category
@@ -54,6 +79,7 @@ CURRENT_DATE AS RUN_DATE
 ,v.ppv_date_dose_1
 ,v.ppv_age_event_dose_1
 ,v.shing_status_dose_1 
+,v.shing_date_dose_1
 ,v.shing_age_event_dose_1
 ,v.shing_status_dose_2 
 ,v.shing_date_dose_2
