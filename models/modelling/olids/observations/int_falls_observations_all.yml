@@ -13,25 +13,26 @@ models:
       meta:
         owner:
           name: Thomas Shallcross
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
-          column_name: id
+          arguments:
+            column_name: id
       - cluster_ids_exist:
           arguments:
             cluster_ids: FALLS_COD_Q
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation.'
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id
         description: 'Patient identifier.'
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
         description: 'Date the fall was clinically effective. Filtered to non-null and not in the future.'
-        tests:
+        data_tests:
           - not_null
       - name: concept_code
         description: 'SNOMED concept code for the falls observation.'
