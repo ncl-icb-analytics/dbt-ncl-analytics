@@ -1,0 +1,47 @@
+models:
+  - name: int_vte_diagnoses_all
+    description: >
+      All coded venous thromboembolism (VTE) diagnosis observations, used
+      as the source for the QAdmissions feature `b_vte`. The
+      `VENOUS_THROMBOEMBOLISM_COD_Q` cluster combines deep vein thrombosis
+      and pulmonary embolism codes into a single QResearch-curated codelist
+      taken from the QAdmissions 2023 paper.
+
+      Observation-level data: one row per coded diagnosis. The wide feature
+      row aggregates to person grain in int_qadmissions_features. No
+      resolution codes are included - the feature is "ever diagnosed",
+      reflecting that prior VTE is a long-term risk marker.
+    config:
+      meta:
+        owner:
+          name: Thomas Shallcross
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: VENOUS_THROMBOEMBOLISM_COD_Q
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation.'
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: 'Patient identifier.'
+        tests:
+          - not_null
+      - name: clinical_effective_date
+        description: 'Date when the VTE diagnosis was clinically effective.'
+        tests:
+          - not_null
+      - name: concept_code
+        description: 'SNOMED concept code for the VTE diagnosis.'
+      - name: concept_display
+        description: 'Human-readable description of the SNOMED concept.'
+      - name: source_cluster_id
+        description: 'Source cluster identifier (always VENOUS_THROMBOEMBOLISM_COD_Q).'
+      - name: is_diagnosis_code
+        description: 'Flag indicating VTE diagnosis (always TRUE).'
+      - name: vte_observation_type
+        description: 'Categorised observation type (always "VTE Diagnosis").'

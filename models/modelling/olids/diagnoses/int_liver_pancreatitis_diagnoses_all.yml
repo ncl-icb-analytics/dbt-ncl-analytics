@@ -1,0 +1,49 @@
+models:
+  - name: int_liver_pancreatitis_diagnoses_all
+    description: >
+      All coded chronic liver disease and chronic pancreatitis diagnosis
+      observations, used as the sole source for the QAdmissions feature
+      `b_liverpancreas`. The `LIVER_DISEASE_OR_CHRONIC_PANCREATITIS_COD_Q`
+      cluster is the QAdmissions 2023 paper's combined codelist covering
+      chronic liver disease (including cirrhosis) and chronic pancreatitis
+      in one set.
+
+      Observation-level data: one row per coded diagnosis. The wide feature
+      row aggregates to person grain in int_qadmissions_features. No
+      resolution codes are included - the feature is "ever diagnosed".
+      Pancreatic neoplasms are not in scope here; cancer is covered by
+      `b_anycancer` via dim_person_conditions.has_cancer.
+    config:
+      meta:
+        owner:
+          name: Thomas Shallcross
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: LIVER_DISEASE_OR_CHRONIC_PANCREATITIS_COD_Q
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation.'
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: 'Patient identifier.'
+        tests:
+          - not_null
+      - name: clinical_effective_date
+        description: 'Date when the chronic liver disease or pancreatitis diagnosis was clinically effective.'
+        tests:
+          - not_null
+      - name: concept_code
+        description: 'SNOMED concept code for the diagnosis.'
+      - name: concept_display
+        description: 'Human-readable description of the SNOMED concept.'
+      - name: source_cluster_id
+        description: 'Source cluster identifier (always LIVER_DISEASE_OR_CHRONIC_PANCREATITIS_COD_Q).'
+      - name: is_diagnosis_code
+        description: 'Flag indicating chronic liver disease or chronic pancreatitis diagnosis (always TRUE).'
+      - name: liver_pancreatitis_observation_type
+        description: 'Categorised observation type (always "Liver Disease or Chronic Pancreatitis Diagnosis").'

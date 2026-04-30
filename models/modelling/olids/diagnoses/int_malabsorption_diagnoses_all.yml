@@ -1,0 +1,46 @@
+models:
+  - name: int_malabsorption_diagnoses_all
+    description: >
+      All coded malabsorption diagnosis observations, used as the source for
+      the QAdmissions feature `b_malabsorption`. The `MALABSORPTION_COD_Q`
+      cluster covers coeliac disease, inflammatory bowel disease, and
+      post-resection / surgical malabsorption in a single combined codelist
+      taken from the QAdmissions 2023 paper.
+
+      Observation-level data: one row per coded diagnosis. The wide feature
+      row aggregates to person grain in int_qadmissions_features. No
+      resolution codes are included - the feature is "ever diagnosed".
+    config:
+      meta:
+        owner:
+          name: Thomas Shallcross
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: MALABSORPTION_COD_Q
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation.'
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: 'Patient identifier.'
+        tests:
+          - not_null
+      - name: clinical_effective_date
+        description: 'Date when the malabsorption diagnosis was clinically effective.'
+        tests:
+          - not_null
+      - name: concept_code
+        description: 'SNOMED concept code for the malabsorption diagnosis.'
+      - name: concept_display
+        description: 'Human-readable description of the SNOMED concept.'
+      - name: source_cluster_id
+        description: 'Source cluster identifier (always MALABSORPTION_COD_Q).'
+      - name: is_diagnosis_code
+        description: 'Flag indicating malabsorption diagnosis (always TRUE).'
+      - name: malabsorption_observation_type
+        description: 'Categorised observation type (always "Malabsorption Diagnosis").'
