@@ -23,6 +23,16 @@ hba1c_measurements as(
         hb.id as measurement_id,
         hb.hba1c_ifcc as value,
         hb.hba1c_category as category,
+        case
+            when hb.hba1c_category = 'Normal' then 0
+            when hb.hba1c_category = 'Prediabetes' then 1
+            when hb.hba1c_category = 'Diabetes - At NICE Target' then 2
+            when hb.hba1c_category = 'Diabetes - Elevated (within QOF)' then 3
+            when hb.hba1c_category = 'Diabetes - Above Target' then 4
+            when hb.hba1c_category = 'Diabetes - High Risk' then 5
+            when hb.hba1c_category = 'Diabetes - Very High Risk' then 6
+            else 10
+        end as colour_mapping,
         'hba1c' as measurement_type
     from {{ ref('int_hba1c_all')}} hb 
     inner join inclusion_list il on il.olids_id = hb.person_id
@@ -44,6 +54,11 @@ blood_pressure_measurements_systolic as(
         bp.systolic_observation_id as measurement_id,
         bp.systolic_value as value,
         case when bp.is_home_bp_event then 'HOME' when bp.is_abpm_bp_event then 'ABPM' else 'CLINIC' end as category,
+        case
+            when bp.is_home_bp_event then 1
+            when bp.is_abpm_bp_event then 2
+            else 0
+        end as colour_mapping,
         'blood_pressure_systolic' as measurement_type,
     from {{ ref('int_blood_pressure_all')}} bp 
     inner join inclusion_list il on il.olids_id = bp.person_id
@@ -61,6 +76,11 @@ blood_pressure_measurements_diastolic as(
         bp.diastolic_observation_id as measurement_id,
         bp.diastolic_value as value,
         case when bp.is_home_bp_event then 'HOME' when bp.is_abpm_bp_event then 'ABPM' else 'CLINIC' end as category,
+        case
+            when bp.is_home_bp_event then 1
+            when bp.is_abpm_bp_event then 2
+            else 0
+        end as colour_mapping,
         'blood_pressure_diastolic' as measurement_type,
     from {{ ref('int_blood_pressure_all')}} bp 
     inner join inclusion_list il on il.olids_id = bp.person_id
@@ -78,6 +98,15 @@ egfr_measurements as(
         egfr.id as measurement_id,
         egfr.egfr_value as value,
         egfr.ckd_stage as category,
+        case
+            when egfr.ckd_stage = 'Normal/High (≥90)' then 0
+            when egfr.ckd_stage = 'Mild decrease (60-89)' then 1
+            when egfr.ckd_stage = 'CKD Stage 3a (45-59)' then 2
+            when egfr.ckd_stage = 'CKD Stage 3b (30-44)' then 3
+            when egfr.ckd_stage = 'CKD Stage 4 (15-29)' then 4
+            when egfr.ckd_stage = 'CKD Stage 5 (<15)' then 5
+            else 10
+        end as colour_mapping,
         'egfr' as measurement_type,
     from {{ ref('int_egfr_all')}} egfr 
     inner join inclusion_list il on il.olids_id = egfr.person_id
@@ -96,6 +125,13 @@ urine_acr_measurements as(
         acr.id as measurement_id,
         acr.acr_value as value,
         acr.acr_category as category,
+        case
+            when acr.acr_category = 'Normal (<3)' then 0
+            when acr.acr_category = 'Mildly Increased (3-30)' then 1
+            when acr.acr_category = 'Moderately Increased (30-300)' then 2
+            when acr.acr_category = 'Severely Increased (≥300)' then 3
+            else 10
+        end as colour_mapping,
         'urine_acr' as measurement_type,
     from {{ ref('int_urine_acr_all')}} acr 
     inner join inclusion_list il on il.olids_id = acr.person_id
@@ -114,6 +150,12 @@ total_cholesterol_measurements as(
         cholesterol.id as measurement_id,
         cholesterol.cholesterol_value as value,
         cholesterol.cholesterol_category as category,
+        case
+            when cholesterol.cholesterol_category = 'Desirable' then 0
+            when cholesterol.cholesterol_category = 'Borderline High' then 1
+            when cholesterol.cholesterol_category = 'High' then 2
+            else 10
+        end as colour_mapping,
         'total_cholesterol' as measurement_type,
     from {{ ref('int_cholesterol_all')}} cholesterol 
     inner join inclusion_list il on il.olids_id = cholesterol.person_id
@@ -132,6 +174,11 @@ ldl_cholesterol_measurements as(
         ldl.id as measurement_id,
         ldl.cholesterol_value as value,
         ldl.ldl_cvd_target_met as category,
+        case
+            when ldl.ldl_cvd_target_met = 'Met' then 0
+            when ldl.ldl_cvd_target_met = 'Not Met' then 1
+            else 10
+        end as colour_mapping,
         'ldl_cholesterol' as measurement_type,
     from {{ ref('int_cholesterol_ldl_all')}} ldl 
     inner join inclusion_list il on il.olids_id = ldl.person_id
@@ -164,5 +211,6 @@ select patient_id,
     measurement_type, 
     measurement_id, 
     value, 
-    category
+    category,
+    colour_mapping
 from complete_measurements

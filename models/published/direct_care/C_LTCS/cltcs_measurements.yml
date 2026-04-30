@@ -39,6 +39,16 @@ models:
         data_type: varchar
         description: "Clinical category of the measurement"
 
+      - name: colour_mapping
+        data_type: number
+        description: "Numeric colour mapping derived from category. Value 10 indicates an unmapped category."
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "<> 10"
+              config:
+                severity: warn
+
       - name: measurement_type
         data_type: varchar
         description: "Type of measurement"
