@@ -194,6 +194,15 @@ vte_flags AS (
 liver_pancreatitis_flags AS (
     SELECT DISTINCT person_id, TRUE AS has_liver_pancreatitis
     FROM {{ ref('int_liver_pancreatitis_diagnoses_all') }}
+),
+
+-- Townsend Deprivation Score per person (NULL where the LSOA does not
+-- bridge to a Townsend-mapped 2011 LSOA, e.g. non-English residence).
+townsend AS (
+    SELECT
+        person_id,
+        townsend_score
+    FROM {{ ref('int_qadmissions_townsend') }}
 )
 
 SELECT
@@ -260,11 +269,13 @@ SELECT
     COALESCE(vte.has_vte, FALSE)                                           AS b_vte,
     COALESCE(lp.has_liver_pancreatitis, FALSE)                             AS b_liverpancreas,
 
+    -- Townsend Deprivation Score (NULL passes through to the registered
+    -- model for persons with no LSOA / non-English residence).
+    twn.townsend_score                                                     AS town,
+
     -- Placeholder defaults (sourced features still to land):
-    --   town         -> int_qadmissions_townsend score (Townsend deprivation)
     --   alcohol_cat6 -> mapping from int_alcohol_audit_scores
     --   ethrisk      -> mapping from int_ethnicity_qof.cluster_id
-    0                                                                      AS town,
     0                                                                      AS alcohol_cat6,
     1                                                                      AS ethrisk
 
@@ -283,3 +294,4 @@ LEFT JOIN falls_flags                 fls  ON base.person_id     = fls.person_id
 LEFT JOIN malabsorption_flags         mal  ON base.person_id     = mal.person_id
 LEFT JOIN vte_flags                   vte  ON base.person_id     = vte.person_id
 LEFT JOIN liver_pancreatitis_flags    lp   ON base.person_id     = lp.person_id
+LEFT JOIN townsend                    twn  ON base.person_id     = twn.person_id

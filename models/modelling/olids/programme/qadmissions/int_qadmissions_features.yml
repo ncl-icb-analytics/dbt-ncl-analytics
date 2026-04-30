@@ -13,7 +13,7 @@ models:
       header for the required ClinRisk disclaimer.
 
       Placeholder columns still defaulted until their source intermediates
-      land: town, alcohol_cat6, ethrisk.
+      land: alcohol_cat6, ethrisk.
     config:
       meta:
         owner:
@@ -227,8 +227,15 @@ models:
                 values: [true, false]
 
       - name: town
-        data_type: number
-        description: "TODO Step 5: Townsend deprivation score. Currently defaulted to 0 (national mean) until the LSOA Townsend seed and int_qadmissions_townsend land."
+        data_type: float
+        description: >
+          Townsend Deprivation Score for the person's residential LSOA
+          (higher = more deprived). Sourced from int_qadmissions_townsend,
+          which bridges dim_person_demographics.lsoa_code_21 to the
+          qadmissions_townsend_lsoa_2011 seed via stg_reference_lsoa2011_lsoa2021.
+          NULL when no LSOA recorded or when the LSOA does not match the
+          England-and-Wales bridge (e.g. Scottish or NI residence) - NULL
+          is passed through to the registered QAdmissions model.
 
       - name: alcohol_cat6
         data_type: number
