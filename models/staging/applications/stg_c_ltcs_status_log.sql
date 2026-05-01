@@ -5,4 +5,8 @@ select cast(patient_id as varchar) as patient_id
     , action_date
     , detail
     , intervention_name
+    , stream_action
+    , is_update
+    , replicated_at
+    , source_row_id
 from {{ ref('raw_c_ltcs_status_log') }}
