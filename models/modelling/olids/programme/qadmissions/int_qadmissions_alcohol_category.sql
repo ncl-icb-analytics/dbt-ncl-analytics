@@ -46,6 +46,7 @@ Grain: one row per person who has at least one valid Full AUDIT score.
 WITH full_audit AS (
     SELECT
         person_id,
+        id AS observation_id,
         clinical_effective_date,
         audit_score,
         CASE
@@ -69,7 +70,14 @@ SELECT
     clinical_effective_date
 FROM full_audit
 WHERE alcohol_cat6 IS NOT NULL
+-- Tertiary keys (audit_score, observation_id) make the row pick
+-- deterministic when several Full AUDIT records share the same cat6
+-- and date.
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id
-    ORDER BY alcohol_cat6 DESC, clinical_effective_date DESC
+    ORDER BY
+        alcohol_cat6 DESC,
+        clinical_effective_date DESC,
+        audit_score DESC,
+        observation_id ASC
 ) = 1

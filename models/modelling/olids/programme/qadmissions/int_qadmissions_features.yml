@@ -259,10 +259,12 @@ models:
           QAdmissions ethnicity risk group (1..9: 1=White/NotRecorded,
           2=Indian, 3=Pakistani, 4=Bangladeshi, 5=OtherAsian,
           6=BlackCaribbean, 7=BlackAfrican, 8=Chinese, 9=OtherEthnicGroup).
-          Sourced from int_qadmissions_ethrisk, which joins int_ethnicity_qof
-          to the qadmissions_eth2016_to_ethrisk9 seed and defaults
-          unmatched clusters to 1. Persons with no ethnicity record
-          also default to 1.
+          Sourced from int_qadmissions_ethrisk, which joins
+          dim_person_ethnicity_combi to the qadmissions_eth2016_to_ethrisk9
+          seed on the `ethnicity` subcategory text and defaults unmatched
+          subcategories to 1. Persons with no usable ethnicity record
+          (absent from dim_person_ethnicity_combi at source) also default
+          to 1.
         data_tests:
           - not_null
           - accepted_values:

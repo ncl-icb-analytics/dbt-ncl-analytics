@@ -31,6 +31,8 @@ models:
           - not_null
       - name: latest_ethnicity_date
         description: 'Clinical effective date of the latest ethnicity record.'
+        data_tests:
+          - not_null
       - name: ethrisk
         description: 'QAdmissions ethrisk integer (1..9). Defaults to 1 for any subcategory not present in the seed.'
         data_tests:
