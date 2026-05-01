@@ -203,6 +203,25 @@ townsend AS (
         person_id,
         townsend_score
     FROM {{ ref('int_qadmissions_townsend') }}
+),
+
+-- Alcohol category 0..5 derived from Full AUDIT scores. NULL passes
+-- through for persons with no Full AUDIT record.
+alcohol AS (
+    SELECT
+        person_id,
+        alcohol_cat6
+    FROM {{ ref('int_qadmissions_alcohol_category') }}
+),
+
+-- Ethrisk 1..9 derived from int_ethnicity_qof joined to the
+-- qadmissions_eth2016_to_ethrisk9 seed. Persons with no ethnicity
+-- record default to 1 (NotRecorded -> 1, same group as White).
+ethrisk_lookup AS (
+    SELECT
+        person_id,
+        ethrisk
+    FROM {{ ref('int_qadmissions_ethrisk') }}
 )
 
 SELECT
@@ -273,11 +292,13 @@ SELECT
     -- model for persons with no LSOA / non-English residence).
     twn.townsend_score                                                     AS town,
 
-    -- Placeholder defaults (sourced features still to land):
-    --   alcohol_cat6 -> mapping from int_alcohol_audit_scores
-    --   ethrisk      -> mapping from int_ethnicity_qof.cluster_id
-    0                                                                      AS alcohol_cat6,
-    1                                                                      AS ethrisk
+    -- Alcohol category 0..5 from Full AUDIT (highest cat6 ever recorded
+    -- per person). NULL for persons with no Full AUDIT record.
+    alc.alcohol_cat6                                                       AS alcohol_cat6,
+
+    -- Ethnicity risk group 1..9. Persons with no ethnicity record
+    -- default to 1 (NotRecorded -> 1 per QResearch).
+    COALESCE(eth.ethrisk, 1)                                               AS ethrisk
 
 FROM base_spine                       base
 CROSS JOIN lab_thresholds             t
@@ -295,3 +316,5 @@ LEFT JOIN malabsorption_flags         mal  ON base.person_id     = mal.person_id
 LEFT JOIN vte_flags                   vte  ON base.person_id     = vte.person_id
 LEFT JOIN liver_pancreatitis_flags    lp   ON base.person_id     = lp.person_id
 LEFT JOIN townsend                    twn  ON base.person_id     = twn.person_id
+LEFT JOIN alcohol                     alc  ON base.person_id     = alc.person_id
+LEFT JOIN ethrisk_lookup              eth  ON base.person_id     = eth.person_id
