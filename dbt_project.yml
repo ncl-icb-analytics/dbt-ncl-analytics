@@ -239,7 +239,7 @@ seeds:
 
     qadmissions_eth2016_to_ethrisk9:
       +column_types:
-        ethnicity: varchar(60)
+        ethnicity_subcategory: varchar(60)
         ethrisk: integer
         qadmissions_label: varchar(30)
 

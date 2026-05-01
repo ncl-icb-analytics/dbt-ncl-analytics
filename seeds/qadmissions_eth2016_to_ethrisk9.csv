@@ -1,9 +1,14 @@
-ethnicity,ethrisk,qadmissions_label
+ethnicity_subcategory,ethrisk,qadmissions_label
 White: British,1,White
 White: Irish,1,White
 White: Other White,1,White
 White: Roma,1,White
 White: Traveller,1,White
+Not Recorded,1,White
+Not Stated,1,White
+Not stated,1,White
+Recorded Not Known,1,White
+Refused,1,White
 Asian: Indian,2,Indian
 Asian: Pakistani,3,Pakistani
 Asian: Bangladeshi,4,Bangladeshi

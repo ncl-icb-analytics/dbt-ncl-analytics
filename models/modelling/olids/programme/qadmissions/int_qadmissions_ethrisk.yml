@@ -4,17 +4,15 @@ models:
   - name: int_qadmissions_ethrisk
     description: >
       Ethnicity risk group (1..9) per person for the QAdmissions feature
-      `ethrisk`. Joins dim_person_ethnicity_combi (one row per person
-      with their latest non-blank ethnicity subcategory, drawn from
-      both GP coded and event-level sources) to the
-      qadmissions_eth2016_to_ethrisk9 seed and defaults unmatched
-      subcategories to 1 (White / NotRecorded) per QResearch convention.
+      `ethrisk`. Joins dim_person_ethnicity (one row per person with
+      their latest ethnicity_subcategory, COALESCED to "Not Recorded"
+      when no record exists) to the qadmissions_eth2016_to_ethrisk9
+      seed. Defaults unmatched subcategories to 1 (White / NotRecorded)
+      per QResearch convention; the qadmissions_ethnicity_mapping_complete
+      singular test fails when an unmatched subcategory appears so data
+      drift is surfaced.
 
-      Grain: one row per person who has any usable ethnicity record.
-      Persons with no record - or those whose ethnicity is Recorded Not
-      Known / Not Recorded / Not Stated / Refused (filtered out by
-      dim_person_ethnicity_combi at source) - do not appear here; the
-      consuming int_qadmissions_features model COALESCEs to 1 for them.
+      Grain: one row per person in dim_person_ethnicity.
     config:
       meta:
         owner:
@@ -25,14 +23,12 @@ models:
         data_tests:
           - unique
           - not_null
-      - name: ethnicity
-        description: 'Subcategory text from dim_person_ethnicity_combi (e.g. "White: British", "Asian: Indian").'
+      - name: ethnicity_subcategory
+        description: 'Subcategory text from dim_person_ethnicity (e.g. "White: British", "Asian: Indian", "Not Recorded").'
         data_tests:
           - not_null
       - name: latest_ethnicity_date
-        description: 'Clinical effective date of the latest ethnicity record.'
-        data_tests:
-          - not_null
+        description: 'Clinical effective date of the latest ethnicity record. NULL for persons with no usable record.'
       - name: ethrisk
         description: 'QAdmissions ethrisk integer (1..9). Defaults to 1 for any subcategory not present in the seed.'
         data_tests:

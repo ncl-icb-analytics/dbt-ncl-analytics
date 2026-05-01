@@ -260,11 +260,12 @@ models:
           2=Indian, 3=Pakistani, 4=Bangladeshi, 5=OtherAsian,
           6=BlackCaribbean, 7=BlackAfrican, 8=Chinese, 9=OtherEthnicGroup).
           Sourced from int_qadmissions_ethrisk, which joins
-          dim_person_ethnicity_combi to the qadmissions_eth2016_to_ethrisk9
-          seed on the `ethnicity` subcategory text and defaults unmatched
-          subcategories to 1. Persons with no usable ethnicity record
-          (absent from dim_person_ethnicity_combi at source) also default
-          to 1.
+          dim_person_ethnicity to the qadmissions_eth2016_to_ethrisk9
+          seed on `ethnicity_subcategory` text. The seed includes
+          explicit "Not Recorded" / "Not Stated" / "Refused" /
+          "Recorded Not Known" rows mapping to 1, so every person -
+          including those without a usable ethnicity record - is
+          matched.
         data_tests:
           - not_null
           - accepted_values:
