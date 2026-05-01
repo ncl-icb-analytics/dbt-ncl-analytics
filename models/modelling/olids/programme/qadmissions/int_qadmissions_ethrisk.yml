@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: int_qadmissions_ethrisk
+    description: >
+      Ethnicity risk group (1..9) per person for the QAdmissions feature
+      `ethrisk`. Joins dim_person_ethnicity_combi (one row per person
+      with their latest non-blank ethnicity subcategory, drawn from
+      both GP coded and event-level sources) to the
+      qadmissions_eth2016_to_ethrisk9 seed and defaults unmatched
+      subcategories to 1 (White / NotRecorded) per QResearch convention.
+
+      Grain: one row per person who has any usable ethnicity record.
+      Persons with no record - or those whose ethnicity is Recorded Not
+      Known / Not Recorded / Not Stated / Refused (filtered out by
+      dim_person_ethnicity_combi at source) - do not appear here; the
+      consuming int_qadmissions_features model COALESCEs to 1 for them.
+    config:
+      meta:
+        owner:
+          name: Thomas Shallcross
+    columns:
+      - name: person_id
+        description: 'OLIDS-native unique person identifier. Primary key of this model.'
+        data_tests:
+          - unique
+          - not_null
+      - name: ethnicity
+        description: 'Subcategory text from dim_person_ethnicity_combi (e.g. "White: British", "Asian: Indian").'
+        data_tests:
+          - not_null
+      - name: latest_ethnicity_date
+        description: 'Clinical effective date of the latest ethnicity record.'
+      - name: ethrisk
+        description: 'QAdmissions ethrisk integer (1..9). Defaults to 1 for any subcategory not present in the seed.'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      - name: qadmissions_label
+        description: 'Human-readable QAdmissions group label corresponding to ethrisk.'
+        data_tests:
+          - not_null
