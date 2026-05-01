@@ -1,6 +1,6 @@
 select cast(patient_id as varchar) as patient_id
     , area_code
-    , practice_cod
+    , practice_code
     , cohort_event
     , is_active
     , event_written_at

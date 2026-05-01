@@ -201,7 +201,7 @@ sources:
       data_type: TEXT
     - name: AREA_CODE
       data_type: TEXT
-    - name: PRACTICE_COD
+    - name: PRACTICE_CODE
       data_type: TEXT
     - name: COHORT_EVENT
       data_type: TEXT
