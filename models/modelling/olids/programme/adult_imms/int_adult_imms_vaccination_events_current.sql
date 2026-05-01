@@ -178,7 +178,7 @@ QUALIFY
 	EVENT_DATE,
 	OUT_OF_SCHEDULE,
     ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE ORDER BY EVENT_DATE ASC) AS row_num, 
-  --  COUNT(*) OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE) AS TOTAL_EVENTS no longer required
+    COUNT(*) OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE) AS TOTAL_EVENTS 
     FROM IMM_ADM_DECLINED_CONFLICT     
           ) 
 --SELECT FINAL VACCINATIONS DATASET DE-DUPLICATION BY EVENT_DATE and DOSE 
@@ -205,6 +205,8 @@ WHERE
 --deduplicate where codes are non dose specific RSV, PPV, SHINGLES
 (dose_number = 1 AND row_num = 1)
 OR (dose_number = 2 AND row_num = 2)
+--allow for single code for second dose of Shingles
+OR (VACCINE_ID in ('SHING_2','SHING_2B') AND total_events = 1)
 )
 --ADD VACCINATION STATUS FOR EVENTS.
 select *
