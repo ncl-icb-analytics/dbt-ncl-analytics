@@ -12,8 +12,8 @@ models:
       input features that the registered model consumes. See the file
       header for the required ClinRisk disclaimer.
 
-      Placeholder columns still defaulted until their source intermediates
-      land: alcohol_cat6, ethrisk.
+      All feature columns are now sourced from real intermediates - no
+      placeholders remain.
     config:
       meta:
         owner:
@@ -239,8 +239,35 @@ models:
 
       - name: alcohol_cat6
         data_type: number
-        description: "TODO Step 2: alcohol category (0-5) from AUDIT scores. Currently defaulted to 0 (non-drinker) until the qadmissions_alcohol_audit_to_cat6 mapping seed lands."
+        description: >
+          QAdmissions alcohol category (0..5: NonDrinker, Trivial, Light,
+          Moderate, Heavy, VeryHeavy). Sourced from int_qadmissions_alcohol_category,
+          which derives cat6 from int_alcohol_audit_scores filtered to
+          Full AUDIT and takes the highest cat6 ever recorded per person.
+          NULL when the person has no Full AUDIT record - NULL is passed
+          through to the registered QAdmissions model.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3, 4, 5]
+              config:
+                where: "alcohol_cat6 IS NOT NULL"
 
       - name: ethrisk
         data_type: number
-        description: "TODO Step 2: ethnicity risk group (1-9). Currently defaulted to 1 (White / not stated) until the qadmissions_eth2016_to_ethrisk9 mapping seed lands."
+        description: >
+          QAdmissions ethnicity risk group (1..9: 1=White/NotRecorded,
+          2=Indian, 3=Pakistani, 4=Bangladeshi, 5=OtherAsian,
+          6=BlackCaribbean, 7=BlackAfrican, 8=Chinese, 9=OtherEthnicGroup).
+          Sourced from int_qadmissions_ethrisk, which joins
+          dim_person_ethnicity to the qadmissions_eth2016_to_ethrisk9
+          seed on `ethnicity_subcategory` text. The seed includes
+          explicit "Not Recorded" / "Not Stated" / "Refused" /
+          "Recorded Not Known" rows mapping to 1, so every person -
+          including those without a usable ethnicity record - is
+          matched.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9]

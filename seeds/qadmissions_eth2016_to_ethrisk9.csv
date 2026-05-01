@@ -1,0 +1,25 @@
+ethnicity_subcategory,ethrisk,qadmissions_label
+White: British,1,WhiteOrNone
+White: Irish,1,WhiteOrNone
+White: Other White,1,WhiteOrNone
+White: Roma,1,WhiteOrNone
+White: Traveller,1,WhiteOrNone
+Not Recorded,1,WhiteOrNone
+Not Stated,1,WhiteOrNone
+Not stated,1,WhiteOrNone
+Recorded Not Known,1,WhiteOrNone
+Refused,1,WhiteOrNone
+Asian: Indian,2,Indian
+Asian: Pakistani,3,Pakistani
+Asian: Bangladeshi,4,Bangladeshi
+Asian: Other Asian,5,OtherAsian
+Mixed: White and Asian,5,OtherAsian
+Black: Caribbean,6,BlackCaribbean
+Black: Other Black,6,BlackCaribbean
+Black: African,7,BlackAfrican
+Asian: Chinese,8,Chinese
+Mixed: White and Black African,9,OtherEthnicGroup
+Mixed: White and Black Caribbean,9,OtherEthnicGroup
+Mixed: Other Mixed,9,OtherEthnicGroup
+Other: Arab,9,OtherEthnicGroup
+Other: Other,9,OtherEthnicGroup
