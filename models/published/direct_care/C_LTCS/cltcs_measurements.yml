@@ -42,7 +42,7 @@ models:
       - name: colour_mapping
         data_type: number
         description: "Numeric colour mapping derived from category. Value 10 indicates an unmapped category."
-        tests:
+        data_tests:
           - dbt_utils.expression_is_true:
               arguments:
                 expression: "<> 10"

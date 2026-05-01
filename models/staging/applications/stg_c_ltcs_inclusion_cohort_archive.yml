@@ -19,7 +19,7 @@ models:
         data_type: varchar
         description: "Area code associated with the cohort event"
 
-      - name: practice_cod
+      - name: practice_code
         data_type: varchar
         description: "Practice code associated with the cohort event"
 
