@@ -1,0 +1,20 @@
+ethnicity,ethrisk,qadmissions_label
+White: British,1,White
+White: Irish,1,White
+White: Other White,1,White
+White: Roma,1,White
+White: Traveller,1,White
+Asian: Indian,2,Indian
+Asian: Pakistani,3,Pakistani
+Asian: Bangladeshi,4,Bangladeshi
+Asian: Other Asian,5,OtherAsian
+Mixed: White and Asian,5,OtherAsian
+Black: Caribbean,6,BlackCaribbean
+Black: Other Black,6,BlackCaribbean
+Black: African,7,BlackAfrican
+Asian: Chinese,8,Chinese
+Mixed: White and Black African,9,OtherEthnicGroup
+Mixed: White and Black Caribbean,9,OtherEthnicGroup
+Mixed: Other Mixed,9,OtherEthnicGroup
+Other: Arab,9,OtherEthnicGroup
+Other: Other,9,OtherEthnicGroup
