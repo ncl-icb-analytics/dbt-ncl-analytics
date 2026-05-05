@@ -125,6 +125,18 @@ select il.patient_id
     ,zeroifnull(gpa.gp_att_tot_12mo) as gp_att_tot_12mo
     ,zeroifnull(gpa.gp_app_tot_12mo) as gp_app_tot_12mo
     ,zeroifnull(gpa.gp_dna_tot_12mo) as gp_dna_tot_12mo
+    -- existing LTC LCS flags
+    , lcs.chd_risk_group
+    , lcs.ckd_risk_group
+    , lcs.copd_risk_group
+    , lcs.diabetes_risk_group
+    , lcs.hf_risk_group
+    , lcs.hypertension_risk_group
+    , lcs.overall_risk_group
+    , lcs.overall_risk_rank
+    , lcs.in_any_risk_group
+    , lcs.moc_stage_completed_label
+    , lcs.moc_pathway_status
     -- Current waiting list counts and flags
     ,zeroifnull(wl.wl_current_total_count) as wl_total_count
     ,zeroifnull(wl.wl_current_distinct_providers_count) as wl_provider_count
@@ -196,3 +208,5 @@ left join {{ref('stg_aic_int_ccms_current')}} ccms
     on il.olids_id = ccms.person_id
 left join {{ref('int_rockwood_latest')}} rockwood
     on il.olids_id = rockwood.person_id
+left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
+    on il.olids_id = lcs.person_id
