@@ -23,6 +23,14 @@ encoding_features as(
         , case when  am.salbutamol_repeats  = TRUE then 1 else 0 end as asthma_salbutamol_repeats_flag
         , case when bp.latest_bp_date between dateadd(month, -6, current_date()) and current_date() then bp.is_overall_bp_controlled else null end as is_recent_bp_controlled -- assuming bp control only relevant if recent, replace with more nuanced logic that ascerts likely control given redings history and time
         , case when is_recent_bp_controlled = FALSE then 1 else 0 end as is_overall_bp_controlled_flag
+        , {{ encode_ltc_lcs_risk_group('lcs.chd_risk_group') }} as chd_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.ckd_risk_group') }} as ckd_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.copd_risk_group') }} as copd_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.diabetes_risk_group') }} as diabetes_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.hf_risk_group') }} as hf_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.hypertension_risk_group') }} as hypertension_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.overall_risk_group') }} as overall_risk_group_sort_key
+        , lcs.moc_stage_completed
       from inclusion_list il
     left join {{ref('dim_person_conditions')}} pc
         on il.olids_id = pc.person_id
@@ -42,12 +50,15 @@ encoding_features as(
         on il.olids_id = bp.person_id
     left join {{ref('stg_aic_int_ccms_current')}} ccms
         on il.olids_id = ccms.person_id
+    left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
+        on il.olids_id = lcs.person_id
 )
 
 select
     patient_id,
     area_code,
-    ( smoking_risk_sort_key 
+    ( 
+        smoking_risk_sort_key 
     + bmi_risk_sort_key 
     + alcohol_risk_sort_key
     + cambridge_comorbidity_score * 2
@@ -61,5 +72,14 @@ select
     + asthma_diagnosis_no_act_flag 
     + asthma_salbutamol_only_flag*5 
     + asthma_salbutamol_repeats_flag*5 
-    + is_overall_bp_controlled_flag*5 ) as score_treatment
+    + is_overall_bp_controlled_flag*5  
+    + chd_risk_group_sort_key
+    + ckd_risk_group_sort_key
+    + copd_risk_group_sort_key
+    + diabetes_risk_group_sort_key
+    + hf_risk_group_sort_key
+    + hypertension_risk_group_sort_key
+    + overall_risk_group_sort_key
+    - zeroifnull(moc_stage_completed) 
+        )as score_treatment
 from encoding_features

@@ -1,6 +1,5 @@
-{%
-    set in_scope_borough_list = ['Haringey']
-%}
+{% set in_scope_borough_list = ['Haringey'] %}
+{% set in_scope_neighbourhood_list = ['East Camden'] %}
 
 with in_scope_practice_list as (
     select  local_authority, practice_code, neighbourhood_code, neighbourhood_registered
@@ -8,7 +7,13 @@ with in_scope_practice_list as (
     where local_authority in (
         {% for b in in_scope_borough_list %}
             '{{ b }}'{% if not loop.last %}, {% endif %}
-        {% endfor %})
+        {% endfor %}
+    )
+    or neighbourhood_registered in (
+        {% for n in in_scope_neighbourhood_list %}
+            '{{ n }}'{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    )
 )
 
 select 
