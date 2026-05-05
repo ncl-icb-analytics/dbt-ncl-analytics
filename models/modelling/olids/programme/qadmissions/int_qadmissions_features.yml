@@ -12,8 +12,7 @@ models:
       input features that the registered model consumes. See the file
       header for the required ClinRisk disclaimer.
 
-      All feature columns are now sourced from real intermediates - no
-      placeholders remain.
+      Documentation available: https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/docs/model_documentation/int_qadmissions_features.md
     config:
       meta:
         owner:
@@ -122,9 +121,7 @@ models:
           Smoking category. 0 = never smoked, 1 = ex-smoker, 3 = current smoker.
           Category 2 (light smoker with CPD) and categories 4-5 (moderate/heavy
           smokers) cannot be produced from the available data - CPD is not
-          captured. Current smokers therefore map to category 3. See plan.md
-          decision 1.
-        data_tests:
+          captured. Current smokers therefore map to category 3. 
           - not_null
           - accepted_values:
               arguments:
