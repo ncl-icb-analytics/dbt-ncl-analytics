@@ -47,14 +47,14 @@ models:
                 max_value: 100
                 inclusive: true
 
-      - name: gender
-        data_type: number
-        description: "Sex for QAdmissions. 0 = female, 1 = male."
+      - name: sex
+        data_type: varchar
+        description: "Sex for QAdmissions."
         data_tests:
           - not_null
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: ['male', 'female']
 
       - name: bmi
         data_type: float
