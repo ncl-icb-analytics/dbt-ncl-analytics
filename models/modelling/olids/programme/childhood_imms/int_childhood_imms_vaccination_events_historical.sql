@@ -23,8 +23,8 @@ SELECT DISTINCT
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_OBSERVATION o
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
     --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = o.patient_id
-    LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
-    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
+    INNER JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
+    --INNER JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on o.mapped_concept_code  = clut.CODE 
     --JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE 
     --no future dates
@@ -53,8 +53,8 @@ SELECT DISTINCT
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_MEDICATION_ORDER m
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = m.patient_id
     --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = m.patient_id
-    LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
-    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
+    INNER JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
+    --INNER JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on m.mapped_concept_code  = clut.CODE 
     --JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on m.mapped_concept_code  = clut.CODE 
      --no future dates

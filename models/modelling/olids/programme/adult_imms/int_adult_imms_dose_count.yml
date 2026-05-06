@@ -1,0 +1,16 @@
+models:
+  - name: int_adult_imms_dose_count
+    description: Intermediate table holding historical imms population aged 60+ and any vaccinations associated with 
+      them and the practice they were registered.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Identifier for the person. There may be > 1 person if 
+          registered at multiple practices
+        data_tests:
+          - not_null
+
