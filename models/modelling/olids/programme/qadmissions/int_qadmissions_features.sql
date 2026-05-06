@@ -234,7 +234,7 @@ SELECT
     base.person_id,
     base.sk_patient_id,
     base.age,
-    CASE WHEN base.gender = 'Male' THEN 1 ELSE 0 END                       AS gender,
+    CASE WHEN base.gender = 'Male' THEN 'male' ELSE 'female' END           AS sex,
     bmi.bmi_value                                                          AS bmi,
 
     -- Constants
@@ -242,8 +242,8 @@ SELECT
     {{ var('qadmissions_horizon_years', 1) }}                              AS surv,
 
     -- Disease booleans from dim_person_conditions
-    COALESCE(cond.has_atrial_fibrillation, FALSE)                          AS b_AF,
-    COALESCE(cond.has_heart_failure, FALSE)                                AS b_CCF,
+    COALESCE(cond.has_atrial_fibrillation, FALSE)                          AS b_af,
+    COALESCE(cond.has_heart_failure, FALSE)                                AS b_ccf,
     COALESCE(cond.has_cancer, FALSE)                                       AS b_anycancer,
     COALESCE(cond.has_asthma, FALSE)
         OR COALESCE(cond.has_copd, FALSE)                                  AS b_asthmacopd,
