@@ -9,9 +9,6 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        columns:
-          - name: person_id
-            description: Unique identifier for the person
-            data_tests:
+        data_tests:
               - not_null
               - unique
