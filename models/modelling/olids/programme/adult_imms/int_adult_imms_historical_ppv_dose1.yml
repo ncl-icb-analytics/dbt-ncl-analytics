@@ -1,0 +1,14 @@
+models:
+  - name: int_adult_imms_historical_ppv_dose1
+    description: Intermediate table holding ppv dose 1 vaccination events for the historical population aged 60 and over. Person level
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        tests:
+          - not_null
+          - unique
