@@ -1,6 +1,10 @@
 models:
   - name: int_adult_imms_dose_base
     description: Intermediate table holding historical imms population by practice over the age of 60 and any vaccinations associated with 
+    config:
+      meta:
+        owner:
+          name: KateHomer55
       them.
 
     config:
