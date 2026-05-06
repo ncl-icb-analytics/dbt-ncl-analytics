@@ -6,6 +6,7 @@
 }}
 SELECT DISTINCT
 dem.PERSON_ID
+,dem.sk_patient_id
 ,dem.BIRTH_DATE_APPROX
 ,dem.AGE 
 ,dem.AGE_BAND_5Y
@@ -102,13 +103,14 @@ ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 ,dem.LSOA_CODE_21
 ,dem.IS_ACTIVE
 ,dem.is_deceased
-,CASE WHEN (ch.PERSON_ID IS NOT NULL OR cch.PERSON_ID IS NOT NULL) THEN TRUE ELSE FALSE END AS IS_CARE_HOME_RESIDENT
-,ch.RESIDENCE_STATUS
-,ch.RESIDENCE_TYPE
+--use the Covid LT care flag as it seems most accurate.
+,CASE WHEN cch.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_CARE_HOME_RESIDENT
+-- ,ch.RESIDENCE_STATUS
+-- ,ch.RESIDENCE_TYPE
 FROM {{ ref('dim_person_demographics') }} dem
 LEFT JOIN {{ ref('dim_person_age') }} age on age.PERSON_ID = dem.PERSON_ID
 LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
-LEFT JOIN {{ ref('dim_person_care_home') }} ch using (PERSON_ID)
+--LEFT JOIN {{ ref('dim_person_care_home') }} ch using (PERSON_ID)
 LEFT JOIN {{ ref('int_covid_long_term_residential_care') }} cch using (PERSON_ID)
 WHERE dem.is_active 
 AND dem.IS_DECEASED = FALSE
