@@ -11,6 +11,6 @@ models:
       - name: person_id
         description: Identifier for the person. There may be > 1 person if 
           registered at multiple practices
-        tests:
+        data_tests:
           - not_null
 
