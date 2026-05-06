@@ -45,7 +45,7 @@ SELECT DISTINCT
         clut.schedule_dose as dose_number,
         DATE(m.clinical_effective_date) as EVENT_DATE,
         --m."age_at_event" is from EMIS. It either rounds years up or down
-         m.age_at_event AS AGE_AT_EVENT,
+         m.age_at_event AS AGE_AT_EVENT
     FROM {{ ref('stg_olids_medication_order') }} m
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_MEDICATION_ORDER m
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = m.patient_id
