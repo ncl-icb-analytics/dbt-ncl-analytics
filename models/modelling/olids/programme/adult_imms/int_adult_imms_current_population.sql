@@ -115,4 +115,4 @@ LEFT JOIN {{ ref('int_covid_long_term_residential_care') }} cch using (PERSON_ID
 WHERE dem.is_active 
 AND dem.IS_DECEASED = FALSE
 --decrease lower age limit to include residents in care homes aligning with COVID_LT_CARE.
-AND dem.age >= 60
+AND dem.age >= 65
