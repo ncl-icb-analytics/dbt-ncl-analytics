@@ -4,6 +4,10 @@ sources:
   database: '"DATA_LAKE__NCL"'
   schema: '"SDL"'
   description: ServicesDataLocal canonical-named feeds (CNWL et al. spreadsheet submissions, remapped via servicesdatalocal-remapping pipeline)
+  config:
+    meta:
+      owner:
+        name: Eddie Davison
   tables:
   - name: MHCORL
     identifier: '"MHCORL"'

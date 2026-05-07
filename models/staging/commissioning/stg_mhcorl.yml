@@ -27,22 +27,22 @@ models:
     columns:
       - name: meta_sk_row_id
         description: Surrogate row key from the SDL pipeline.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: meta_file_id
         description: SDL source file id. Trace back to Log_ProcessingEvent.
-        tests:
+        data_tests:
           - not_null
       - name: meta_row_id
       - name: meta_batch_id
       - name: meta_partition_date
         description: Activity month (first day) from the SDL meta layer. Use this for time-series rollups.
-        tests:
+        data_tests:
           - not_null
       - name: meta_provider_code
         description: ODS provider code populated by the SDL pipeline.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -57,7 +57,7 @@ models:
           Pseudonymised NHS-number-derived patient hash. Matches sk_patient_id in
           stg_csds_*, stg_mhsds_*, stg_sus_*. Use for cross-dataset joins.
           Sourced from MHCORL.SK_PATIENT_ID_NHS_NUMBER.
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
@@ -69,7 +69,7 @@ models:
 
       - name: reporting_month
         description: Month number 1-12.
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 1
@@ -94,7 +94,7 @@ models:
         description: |
           Canonicalised: Male / Female / Not specified / Not known / Indeterminate / Other.
           Source has 25+ raw variants per provider (1/2/M/F/Male/Female/...).
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['Male', 'Female', 'Not specified', 'Not known', 'Indeterminate', 'Other']
@@ -105,7 +105,7 @@ models:
             * 'White - X' / 'Asian or Asian British - X' etc. prefixed forms — RRP00
             * bare names (British, Indian, Caribbean, ...) — RV300
           Aggregations that don't fit a single bucket (BME, NON BME) → NULL.
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values:
@@ -132,7 +132,7 @@ models:
           NHS 6 broad ethnicity grouping derived from the same letter code as
           ethnicity_17: White / Mixed / Asian or Asian British /
           Black or Black British / Other Ethnic Groups / Unknown.
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values:
@@ -171,7 +171,7 @@ models:
       - name: duration_of_contact_minutes
       - name: appointment_sequence_id
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1000000

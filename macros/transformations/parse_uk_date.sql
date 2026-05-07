@@ -46,12 +46,3 @@
             then try_to_timestamp({{ col }}, 'MM/DD/YYYY HH12:MI:SS AM')
     end
 {% endmacro %}
-
-{% macro parse_uk_timestamp(col) %}
-    coalesce(
-        try_to_timestamp({{ col }}),
-        try_to_timestamp({{ col }}, 'DD/MM/YYYY HH24:MI:SS'),
-        try_to_timestamp({{ col }}, 'DD/MM/YYYY HH:MI:SS'),
-        try_to_timestamp({{ col }}, 'DD/MM/YYYY')
-    )
-{% endmacro %}
