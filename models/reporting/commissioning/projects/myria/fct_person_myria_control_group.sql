@@ -76,7 +76,11 @@ from
 where
     (NCLProvider_count >= 1 OR Non_NCLProvider_count >= 1) -- 1 NEL attendance at any provider
     AND local_authority IN ('Barnet','Enfield','Camden','Islington','Haringey') -- all NCL patients
-    AND patient_id NOT IN (select distinct patient_id from {{ ref("fct_person_myria_high_risk_patients") }} ) -- need exclusive cohorts
+        AND NOT EXISTS (
+                        select 1
+                        from {{ ref("fct_person_myria_high_risk_patients") }} hrp
+                        where hrp.patient_id = int_myria_conditions.patient_id
+                        ) -- need exclusive cohorts
     AND age_at_most_recent_nel_admission >= 18 -- otherwise criteria the same
     AND
     (heart_failure = 1 
