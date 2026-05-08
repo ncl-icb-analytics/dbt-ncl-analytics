@@ -94,8 +94,7 @@ potentially_fragmented_person_ids as (
     ORDER BY patient_count DESC
 )
 
-select rp.sk_patient_id as patient_id
-    ,pp.hx_flake as re_id_key
+select cast(rp.sk_patient_id as varchar) as patient_id
     ,pp.person_id as olids_id
     ,rp.practice_code
     ,rp.practice_name

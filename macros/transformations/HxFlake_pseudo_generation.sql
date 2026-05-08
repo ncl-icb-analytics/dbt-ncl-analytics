@@ -5,7 +5,7 @@ LEFT(
             REVERSE(
                 RIGHT(
                     LPAD(
-                        TO_CHAR({{ sk_patient_id }}, 'XXXXXXXXX'),
+                        TO_CHAR(TO_NUMBER({{ sk_patient_id }}), 'XXXXXXXXX'),
                         9,
                         0
                     ),
@@ -21,7 +21,7 @@ LEFT(
                 REVERSE(
                     RIGHT(
                         LPAD(
-                            TO_CHAR({{ sk_patient_id }}, 'XXXXXXXXX'),
+                            TO_CHAR(TO_NUMBER({{ sk_patient_id }}), 'XXXXXXXXX'),
                             9,
                             0
                         ),
@@ -39,7 +39,7 @@ LEFT(
             REVERSE(
                 RIGHT(
                     LPAD(
-                        TO_CHAR({{ sk_patient_id }}, 'XXXXXXXXX'),
+                        TO_CHAR(TO_NUMBER({{ sk_patient_id }}), 'XXXXXXXXX'),
                         9,
                         0
                     ),

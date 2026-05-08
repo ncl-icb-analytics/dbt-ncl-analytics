@@ -22,6 +22,7 @@ with inclusion_list as (
     )
 
 select il.patient_id
+      ,{{ hxflake_pseudo_generation('il.patient_id') }} AS re_id_key
  --   , il.fragmented_sk_patient_id_flag -- include as DQ check later, excluded for now
 --  , il.fragmented_person_id_flag
     , il.area_code
