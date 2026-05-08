@@ -19,7 +19,8 @@
 
     Grain
       One row per active, non-deceased person in dim_person_demographics whose
-      recorded gender is Male or Female.
+      recorded gender is Male or Female, age is between 18-100, townsend score is 
+      not null
 
     AGPL / ClinRisk attribution
       QAdmissions is published by ClinRisk Ltd under the GNU Affero General
@@ -117,15 +118,15 @@ medication_orders AS (
 ),
 
 -- Aggregate to person grain. QAdmissions defines each medication boolean as
--- "two or more prescriptions in the prior six months".
+-- "prescribed in the prior six months".
 medication_flags AS (
     SELECT
         person_id,
-        COUNT(CASE WHEN med_class = 'anticoagulant'  THEN 1 END) >= 2 AS b_anticoagulant,
-        COUNT(CASE WHEN med_class = 'antidepressant' THEN 1 END) >= 2 AS b_antidepressant,
-        COUNT(CASE WHEN med_class = 'antipsychotic'  THEN 1 END) >= 2 AS b_antipsychotic,
-        COUNT(CASE WHEN med_class = 'corticosteroid' THEN 1 END) >= 2 AS b_corticosteroids,
-        COUNT(CASE WHEN med_class = 'nsaid'          THEN 1 END) >= 2 AS b_nsaid
+        COUNT(CASE WHEN med_class = 'anticoagulant'  THEN 1 END) >= 1 AS b_anticoagulant,
+        COUNT(CASE WHEN med_class = 'antidepressant' THEN 1 END) >= 1 AS b_antidepressant,
+        COUNT(CASE WHEN med_class = 'antipsychotic'  THEN 1 END) >= 1 AS b_antipsychotic,
+        COUNT(CASE WHEN med_class = 'corticosteroid' THEN 1 END) >= 1 AS b_corticosteroids,
+        COUNT(CASE WHEN med_class = 'nsaid'          THEN 1 END) >= 1 AS b_nsaid
     FROM medication_orders
     GROUP BY person_id
 ),
@@ -266,7 +267,7 @@ SELECT
         ELSE                            0
     END                                                                    AS smoke_cat,
 
-    -- Medication booleans (>=2 prescriptions in prior 6 months)
+    -- Medication booleans 
     COALESCE(med.b_anticoagulant,   FALSE)                                 AS b_anticoagulant,
     COALESCE(med.b_antidepressant,  FALSE)                                 AS b_antidepressant,
     COALESCE(med.b_antipsychotic,   FALSE)                                 AS b_antipsychotic,
@@ -288,13 +289,9 @@ SELECT
     COALESCE(vte.has_vte, FALSE)                                           AS b_vte,
     COALESCE(lp.has_liver_pancreatitis, FALSE)                             AS b_liverpancreas,
 
-    -- Townsend Deprivation Score (NULL passes through to the registered
-    -- model for persons with no LSOA / non-English residence).
     twn.townsend_score                                                     AS town,
 
-    -- Alcohol category 0..5 from Full AUDIT (highest cat6 ever recorded
-    -- per person). NULL for persons with no Full AUDIT record.
-    alc.alcohol_cat6                                                       AS alcohol_cat6,
+    COALESCE(alc.alcohol_cat6, 0)                                          AS alcohol_cat6,
 
     -- Ethnicity risk group 1..9. Persons with no ethnicity record
     -- default to 1 (NotRecorded -> 1 per QResearch).
@@ -318,3 +315,4 @@ LEFT JOIN liver_pancreatitis_flags    lp   ON base.person_id     = lp.person_id
 LEFT JOIN townsend                    twn  ON base.person_id     = twn.person_id
 LEFT JOIN alcohol                     alc  ON base.person_id     = alc.person_id
 LEFT JOIN ethrisk_lookup              eth  ON base.person_id     = eth.person_id
+WHERE town IS NOT NULL
