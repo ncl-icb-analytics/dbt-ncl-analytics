@@ -45,13 +45,12 @@ pds_patient_check as
         AND pp.event_from_date <= rfr.event_from_date -- Reason for removal must start after the record exists
     INNER JOIN {{ ref("stg_pds_pds_patient_care_practice") }} pc
         ON pp.sk_patient_id = pc.sk_patient_id
-        AND pp.date_of_death IS NULL -- patient not dead
-        AND pp.event_to_date IS NULL
         AND pc.event_to_date IS NULL
     LEFT JOIN {{ ref("dim_practice_neighbourhood") }} gp ON pc.practice_code = gp.practice_code -- find most recent practice information
     WHERE
-    rfr.reason_for_removal IS NULL
-    AND gp.practice_code IS NOT NULL
+    rfr.reason_for_removal IS NULL -- not removed 
+    AND pp.event_to_date IS NULL -- current patient state
+    AND gp.practice_code IS NOT NULL -- are currently NCL patient
     )
  SELECT 
     att_dx.patient_id,
@@ -277,6 +276,7 @@ LEFT JOIN most_recent_nel_admission nel ON att_dx.patient_id = nel.patient_id
 LEFT JOIN pds_patient_check ppc ON att_dx.patient_id = ppc.sk_patient_id
 WHERE
     att_dx.patient_id IS NOT null
-    AND death.sk_patient_id IS null -- remove dead patients
+    AND death.sk_patient_id IS NULL -- remove dead patients (registry)
+    AND ppc.date_of_death IS NULL -- remove dead patients (PDS)
 GROUP BY 
     ALL
