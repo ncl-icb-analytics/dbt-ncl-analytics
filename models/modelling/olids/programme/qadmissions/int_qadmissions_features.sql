@@ -206,8 +206,8 @@ townsend AS (
     FROM {{ ref('int_qadmissions_townsend') }}
 ),
 
--- Alcohol category 0..5 derived from Full AUDIT scores. NULL passes
--- through for persons with no Full AUDIT record.
+-- Alcohol category 0..5 derived from Full AUDIT scores. 
+
 alcohol AS (
     SELECT
         person_id,
@@ -315,4 +315,3 @@ LEFT JOIN liver_pancreatitis_flags    lp   ON base.person_id     = lp.person_id
 LEFT JOIN townsend                    twn  ON base.person_id     = twn.person_id
 LEFT JOIN alcohol                     alc  ON base.person_id     = alc.person_id
 LEFT JOIN ethrisk_lookup              eth  ON base.person_id     = eth.person_id
-WHERE town IS NOT NULL
