@@ -1,4 +1,8 @@
-{{ config(materialized="table") }}
+{{ 
+    config(
+        materialized='table',
+        tags='daily')
+    }}
 
 with most_recent_bh_admission as -- gets most recent non-elective BH admission for local patient identifier
 (

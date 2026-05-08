@@ -1,4 +1,8 @@
-{{ config(materialized="table") }}
+{{ 
+    config(
+        materialized='table',
+        tags='daily')
+    }}
 
 select 
     patient_id,
