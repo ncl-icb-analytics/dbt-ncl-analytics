@@ -15,8 +15,9 @@ models:
     columns:
       - name: patient_id
         description: "Unique patient identifier."
-        tests:
+        data_tests:
           - not_null
+          - unique
 
       - name: hospital_number_most_recent_nel_bh
         description: "Trust-provided patient identifier. (local patient identifier).
