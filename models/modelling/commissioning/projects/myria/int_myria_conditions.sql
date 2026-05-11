@@ -40,17 +40,12 @@ pds_patient_check as
     gp.practice_name,
     gp.local_authority
     FROM {{ ref("stg_pds_pds_person") }} pp
-    LEFT JOIN {{ref('stg_pds_pds_reason_for_removal')}} rfr
-        ON rfr.sk_patient_id = pp.sk_patient_id 
-        AND pp.event_from_date <= rfr.event_from_date -- Reason for removal must start after the record exists
     INNER JOIN {{ ref("stg_pds_pds_patient_care_practice") }} pc
         ON pp.sk_patient_id = pc.sk_patient_id
         AND pc.event_to_date IS NULL
     LEFT JOIN {{ ref("dim_practice_neighbourhood") }} gp ON pc.practice_code = gp.practice_code -- find most recent practice information
     WHERE
-    rfr.reason_for_removal IS NULL -- not removed 
-    AND pp.event_to_date IS NULL -- current patient state
-    AND gp.practice_code IS NOT NULL -- are currently NCL patient
+    pp.event_to_date IS NULL -- current patient state
     )
  SELECT 
     att_dx.patient_id,
@@ -258,7 +253,11 @@ pds_patient_check as
     -- R54 - Age-related physical debility, Z91.81 - History of falling
     MAX(CASE WHEN LEFT(UPPER(diag_code), 3) IN ('R54') OR UPPER(diag_code) IN ('Z91.81', 'Z9181') THEN 1 ELSE 0 END) AS frailty_falls,
 
-    CASE WHEN ppc.sk_patient_id IS NULL THEN 0 ELSE 1 END AS is_on_pds,
+    CASE WHEN ppc.practice_code IS NULL THEN 0 ELSE 1 END AS is_on_pds, -- flag NCL gps
+
+    CASE WHEN ppc.date_of_death IS NOT NULL THEN 1 ELSE 0 END AS is_dead_pds,
+
+    CASE WHEN death.sk_patient_id IS NOT NULL THEN 1 ELSE 0 END AS is_dead_death_registry,
 
     CURRENT_TIMESTAMP() AS refresh_date
 FROM 
@@ -276,7 +275,5 @@ LEFT JOIN most_recent_nel_admission nel ON att_dx.patient_id = nel.patient_id
 LEFT JOIN pds_patient_check ppc ON att_dx.patient_id = ppc.sk_patient_id
 WHERE
     att_dx.patient_id IS NOT null
-    AND death.sk_patient_id IS NULL -- remove dead patients (registry)
-    AND ppc.date_of_death IS NULL -- remove dead patients (PDS)
 GROUP BY 
     ALL

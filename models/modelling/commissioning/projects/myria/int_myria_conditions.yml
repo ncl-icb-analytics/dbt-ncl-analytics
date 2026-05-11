@@ -6,7 +6,7 @@ models:
       Aggregates patient-level activity flags for non-elective inpatient admissions
       in past two years with site- and provider-specific indicators. (Time periods for NEL
       counts and flags are based on discharge date).
-      Excludes patients who died before the start of this month. Flags patients that have received
+      Flags dead patients via PDS and death registry. Flags patients that have received
       diagnoses for certain conditions in any POD.
     config:
       meta:
@@ -182,6 +182,15 @@ models:
       - name: frailty_falls
         description: "Flag (1/0) if patient has frailty or history of falls (ICD-10
           R54, Z91.81)."
+
       - name: is_on_pds
         description: "Binary flag for whether patient is registered at an NCL GP on
           PDS at time of running (1 if yes, 0 if no)."
+
+      - name: is_dead_pds
+        description: "Binary flag for whether patient has a recorded death on
+          PDS at time of running (1 if yes, 0 if no)."
+
+      - name: is_dead_death_registry
+        description: "Binary flag for whether patient has a recorded death on
+          the death registry at time of running (1 if yes, 0 if no)."

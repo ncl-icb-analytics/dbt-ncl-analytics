@@ -82,6 +82,8 @@ where
                         where hrp.patient_id = int_myria_conditions.patient_id
                         ) -- need exclusive cohorts
     AND age_at_most_recent_nel_admission >= 18 -- otherwise criteria the same
+    AND is_dead_pds = 0
+    AND is_dead_death_registry = 0
     AND
     (heart_failure = 1 
     or copd = 1 
