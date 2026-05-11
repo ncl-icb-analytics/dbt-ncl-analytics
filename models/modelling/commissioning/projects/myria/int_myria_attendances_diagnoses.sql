@@ -1,5 +1,10 @@
 -- Gets list of attendances and diagnoses before the start of current month
- {{ config(materialized="table", static_analysis="off") }}
+{{ 
+    config(
+        materialized='table',
+        static_analysis='off',
+        tags='daily')
+    }}
 
 SELECT
         ip.VISIT_OCCURRENCE_ID AS primary_id,
