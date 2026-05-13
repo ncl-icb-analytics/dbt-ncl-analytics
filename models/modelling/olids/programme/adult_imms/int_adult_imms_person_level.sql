@@ -55,6 +55,8 @@ CURRENT_DATE AS RUN_DATE
 ,p.AGE_BAND_5Y
 ,p.IS_CARE_HOME_RESIDENT
 ,p.TURN_65_AFTER_SEP_2023
+,p.TURN_75_AFTER_SEP_2024
+,p.TURN_80_AFTER_SEP_2024
 ,p.ethnicity_category
 ,p.ethcat_order
 ,p.ethnicity_subcategory

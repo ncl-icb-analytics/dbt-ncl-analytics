@@ -1,6 +1,6 @@
 ﻿models:
   - name: int_adult_imms_rsv_vaccination_given
-    description: Intermediate table holding RSV vaccinations that are completed (including those that are out of schedule) in adults currently aged 60+. 
+    description: Intermediate table holding RSV vaccinations that are completed (including those that are out of schedule) in adults currently aged 65+. 
       One line per person
 
     config:
