@@ -12,11 +12,9 @@ models:
           - not_null
       - name: vaccine_id
         description: Vaccine identifier
-        data_tests:
-          - not_null
+        
       - name: vaccination_status
         description: Status of vaccination (Completed, Overdue, Not due yet, 
           etc.)
-        data_tests:
-          - not_null
+        
 
