@@ -51,6 +51,12 @@ select
     lds_datetime_data_acquired,
     lds_initial_data_received_date,
 
+    -- BNF classification (pre-computed upstream in dbt-olids)
+    bnf_chapter,
+    bnf_section,
+    bnf_code,
+    bnf_name,
+
     -- Metadata
     lds_start_date_time,
     lds_is_deleted,
