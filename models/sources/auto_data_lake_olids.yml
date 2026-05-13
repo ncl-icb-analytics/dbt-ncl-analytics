@@ -933,6 +933,43 @@ sources:
       data_type: TEXT
     - name: AUTHORISATION_TYPE_DISPLAY
       data_type: TEXT
+  - name: NDOO_HASHED
+    identifier: '"NDOO_HASHED"'
+    columns:
+    - name: ID
+      data_type: TEXT
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: NHS_NUMBER_HASH
+      data_type: TEXT
+    - name: PREFERENCE_TYPE
+      data_type: TEXT
+    - name: PREFERENCE_STATUS
+      data_type: TEXT
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_BATCH_ID
+      data_type: TEXT
+    - name: LDS_FILE_ID
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: EFFECTIVE_FROM
+      data_type: TIMESTAMP_NTZ
+    - name: EFFECTIVE_TO
+      data_type: TIMESTAMP_NTZ
+    - name: IS_LATEST
+      data_type: NUMBER(38,0)
+    - name: LAKEHOUSE_DATE_PROCESSED
+      data_type: DATE
+    - name: HIGH_WATERMARK_DATE_TIME
+      data_type: TIMESTAMP_NTZ
   - name: OBSERVATION
     identifier: '"OBSERVATION"'
     columns:
@@ -1364,11 +1401,9 @@ sources:
       data_type: NUMBER(38,0)
     - name: PERSON_UUID
       data_type: TEXT
-    - name: NHS_NUMBER_HASH
+    - name: MATCHED_NHS_NO_HASH
       data_type: BINARY
-    - name: TITLE
-      data_type: TEXT
-    - name: GENDER_CONCEPT_ID
+    - name: GENDER
       data_type: TEXT
     - name: BIRTH_YEAR
       data_type: NUMBER(38,0)
@@ -1378,6 +1413,52 @@ sources:
       data_type: NUMBER(38,0)
     - name: DEATH_MONTH
       data_type: NUMBER(38,0)
+    - name: COMPOSITE_ID
+      data_type: TEXT
+    - name: DEATH_NOTIFICATION_STATUS
+      data_type: TEXT
+    - name: POSTCODE_HASH
+      data_type: BINARY
+    - name: PREFERRED_CONTACT_METHOD
+      data_type: TEXT
+    - name: NOMINATED_PHARMACY
+      data_type: TEXT
+    - name: DISPENSING_DOCTOR
+      data_type: TEXT
+    - name: MEDICAL_APPLIANCE_SUPPLIER
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GP_REGISTRATION_DATE
+      data_type: DATE
+    - name: AS_AT_DATE
+      data_type: DATE
+    - name: SENSITIVITY_FLAG
+      data_type: TEXT
+    - name: ERROR_SUCCESS_CODE
+      data_type: TEXT
+    - name: LDS_RECORD_ID
+      data_type: TEXT
+    - name: LDS_ID
+      data_type: TEXT
+    - name: LDS_BUSINESS_KEY
+      data_type: TEXT
+    - name: LDS_DATASET_ID
+      data_type: TEXT
+    - name: LDS_CDM_EVENT_ID
+      data_type: TEXT
+    - name: LDS_DATETIME_DATA_ACQUIRED
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_INITIAL_DATA_RECEIVED_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: LDS_START_DATE_TIME
+      data_type: TIMESTAMP_NTZ
+    - name: LDS_LAKEHOUSE_DATE_PROCESSED
+      data_type: DATE
+    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
+      data_type: TIMESTAMP_NTZ
   - name: POSTCODE_HASH
     identifier: '"POSTCODE_HASH"'
     columns:

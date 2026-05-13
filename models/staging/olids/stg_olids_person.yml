@@ -1,22 +1,22 @@
 models:
   - name: stg_olids_person
-    description: Person-level demographic records used for patient identity management across systems. Deduplicated by id with NHS number hashes aggregated into array.
+    description: Person-level demographic records from native OLIDS PERSON. One row per person.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
       - name: id
-        description: Primary key - unique identifier for this person
+        description: Primary key - numeric person_id (generate_person_id hash), matches person_id on other OLIDS tables
         tests:
           - unique
           - not_null
-      - name: nhs_number_hashes
-        description: Array of distinct hashed NHS numbers associated with this person (one person may have multiple NHS number hashes)
-      - name: title
-        description: Person title (Mr, Mrs, Dr, etc.)
-      - name: gender_concept_id
-        description: Foreign key to concept.id - person gender
+      - name: person_uuid
+        description: Native person UUID
+      - name: matched_nhs_no_hash
+        description: Hashed NHS number (BINARY) - join key to NDOO_HASHED and other hash-keyed tables
+      - name: composite_id
+        description: Composite identifier from upstream
       - name: birth_year
         description: Year of birth
       - name: birth_month
@@ -25,6 +25,32 @@ models:
         description: Year of death, if deceased
       - name: death_month
         description: Month of death (1-12), if deceased
+      - name: death_notification_status
+        description: Death notification status
+      - name: postcode_hash
+        description: Hash of registered postcode
+      - name: sensitivity_flag
+        description: Record sensitivity flag
+      - name: gp_practice_code
+        description: Registered practice ODS code
+      - name: gp_registration_date
+        description: Date of registration with current GP practice
+      - name: as_at_date
+        description: Snapshot reference date for registration fields
+      - name: preferred_contact_method
+        description: Preferred contact method
+      - name: nominated_pharmacy
+        description: Nominated pharmacy
+      - name: dispensing_doctor
+        description: Dispensing doctor
+      - name: medical_appliance_supplier
+        description: Medical appliance supplier
+      - name: lds_is_deleted
+        description: Soft-delete flag
+      - name: lds_start_date_time
+        description: Incremental high-water column
+      - name: lds_datetime_data_acquired
+        description: Datetime data was acquired
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

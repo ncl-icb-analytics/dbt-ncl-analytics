@@ -1,0 +1,37 @@
+models:
+  - name: int_person_ndoo_status
+    description: Latest National Data Opt-Out preference per person. One row per (person_id, preference_type). Resolved from NDOO_HASHED via nhs_number_hash join to PERSON.matched_nhs_no_hash.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - person_id
+              - preference_type
+    columns:
+      - name: person_id
+        description: Resolved person_id from PERSON.id
+        tests:
+          - not_null
+      - name: preference_type
+        description: Normalised preference type (e.g. NATIONAL_DATA_OPT_OUT)
+        tests:
+          - not_null
+      - name: preference_status
+        description: Normalised preference status (e.g. OPT_IN, OPT_OUT)
+        tests:
+          - not_null
+      - name: is_opted_in
+        description: TRUE when preference_status = 'OPT_IN'
+        tests:
+          - not_null
+      - name: effective_from
+        description: Validity start of the latest preference record
+      - name: effective_to
+        description: Validity end of the latest preference record

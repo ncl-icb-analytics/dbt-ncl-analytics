@@ -2,7 +2,7 @@ models:
   - name: childhood_imms_person_level_child_dm_secondary_use
     description: |
       Childhood immunisations person-level data for children, for secondary use.
-      Filtered to exclude patients with Type 1 opt-outs via dim_person_secondary_use_allowed.
+      Filtered to patients allowed for secondary use via dim_person_secondary_use_allowed (National Data Opt-Out OPT_IN and no active Type 1 opt-out).
       See childhood_imms_person_level_child_dm in published_reporting_direct_care for full details.
 
     config:

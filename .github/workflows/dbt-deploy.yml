@@ -29,6 +29,13 @@ jobs:
   deploy-models:
     name: Deploy Changed Models + Downstream
     runs-on: ubuntu-latest
+    # Skip if the merge commit message contains [skip deploy] or [skip-deploy].
+    # Manual workflow_dispatch always runs.
+    if: |
+      github.event_name == 'workflow_dispatch' || (
+        !contains(github.event.head_commit.message, '[skip deploy]') &&
+        !contains(github.event.head_commit.message, '[skip-deploy]')
+      )
     # Queue deploys sequentially - don't cancel, wait for previous to finish
     concurrency:
       group: dbt-deploy-prod

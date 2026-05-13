@@ -7,8 +7,9 @@
 
 /*
 Type 1 opt-out status dimension.
-Holds latest Type 1 opt-out status (dissent from secondary use of primary care data).
+Holds latest Type 1 opt-out status (dissent from secondary use of primary care data) from clinical observations.
 Only includes persons with Type 1 opt-out records.
+Feeds dim_person_secondary_use_allowed alongside int_person_ndoo_status.
 */
 
 WITH latest_opt_out_status AS (
