@@ -2,7 +2,7 @@ models:
   - name: covid_flu_dashboard_base_secondary_use
     description: |
       COVID and Flu Dashboard base table for secondary use.
-      Filtered to exclude patients with Type 1 opt-outs via dim_person_secondary_use_allowed.
+      Filtered to patients allowed for secondary use via dim_person_secondary_use_allowed (National Data Opt-Out OPT_IN and no active Type 1 opt-out).
       See covid_flu_dashboard_base in published_reporting_direct_care for full details.
 
     config:

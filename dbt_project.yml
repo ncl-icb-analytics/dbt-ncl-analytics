@@ -61,7 +61,7 @@ models:
       +post-hook: ["{{ add_model_comment() }}"]
       olids:
         +meta:
-          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
 
     # Modelling layer - business logic and transformations
     modelling:
@@ -76,7 +76,7 @@ models:
         +schema: "COMMISSIONING_MODELLING"
       olids:
         +meta:
-          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
 
     # Reporting layer - aggregated and analytical models
     reporting:
@@ -91,7 +91,7 @@ models:
         +schema: "COMMISSIONING_REPORTING"
       olids:
         +meta:
-          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
         # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         definitions:
           +database: "{{ target.database.replace('MODELLING', 'REPORTING') }}"
@@ -104,7 +104,7 @@ models:
       +schema: "SEMANTIC"
       +tags: ["semantic"]
       +meta:
-        custom_message: "Snowflake Semantic View - Includes OLIDS data - don't publish/share outputs without DAC approval. Query via SEMANTIC_VIEW() function."
+        custom_message: "Snowflake Semantic View - Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering. Query via SEMANTIC_VIEW() function."
 
     # Published layer - production-ready datasets for end users
     published:
@@ -118,7 +118,7 @@ models:
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         olids:
           +meta:
-            custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+            custom_message: "Includes OLIDS data - direct care use; opt-out filtering NOT applied. For secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id."
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         C_LTCS:
           +meta:
@@ -128,7 +128,7 @@ models:
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         olids:
           +meta:
-            custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+            custom_message: "Includes OLIDS data already filtered via REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED (National Data Opt-Out and Type 1 opt-outs excluded). Safe to use for secondary purposes."
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
           +post-hook:
             - "{{ add_model_comment() }}"
