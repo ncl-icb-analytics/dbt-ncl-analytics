@@ -60,5 +60,9 @@ select
     "SOURCE_SYSTEM" as source_system,
     "TARGET_SYSTEM" as target_system,
     "AUTHORISATION_TYPE_CODE" as authorisation_type_code,
-    "AUTHORISATION_TYPE_DISPLAY" as authorisation_type_display
+    "AUTHORISATION_TYPE_DISPLAY" as authorisation_type_display,
+    "BNF_CHAPTER" as bnf_chapter,
+    "BNF_SECTION" as bnf_section,
+    "BNF_CODE" as bnf_code,
+    "BNF_NAME" as bnf_name
 from {{ source('olids', 'MEDICATION_STATEMENT') }}

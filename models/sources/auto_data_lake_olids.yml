@@ -816,6 +816,14 @@ sources:
       data_type: TEXT
     - name: TARGET_SYSTEM
       data_type: TEXT
+    - name: BNF_CHAPTER
+      data_type: TEXT
+    - name: BNF_SECTION
+      data_type: TEXT
+    - name: BNF_CODE
+      data_type: TEXT
+    - name: BNF_NAME
+      data_type: TEXT
   - name: MEDICATION_STATEMENT
     identifier: '"MEDICATION_STATEMENT"'
     columns:
@@ -932,6 +940,14 @@ sources:
     - name: AUTHORISATION_TYPE_CODE
       data_type: TEXT
     - name: AUTHORISATION_TYPE_DISPLAY
+      data_type: TEXT
+    - name: BNF_CHAPTER
+      data_type: TEXT
+    - name: BNF_SECTION
+      data_type: TEXT
+    - name: BNF_CODE
+      data_type: TEXT
+    - name: BNF_NAME
       data_type: TEXT
   - name: NDOO_HASHED
     identifier: '"NDOO_HASHED"'
