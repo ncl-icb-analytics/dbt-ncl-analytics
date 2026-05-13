@@ -1,6 +1,10 @@
 {% macro get_medication_orders(bnf_code=none, cluster_id=none, source=none, include_history=false) %}
     -- Optional source parameter to filter to specific refset (e.g., 'LTC_LCS')
     -- include_history=true expands cluster codes with retired SNOMED predecessors via SCT_History
+    --
+    -- BNF filtering uses pre-computed columns from stg_olids_medication_order
+    -- (clustered on bnf_chapter, mapped_concept_code in dbt-olids), so 2/4-char
+    -- prefixes prune to a tiny number of partitions automatically.
     {% if bnf_code is none and cluster_id is none %}
     {{ exceptions.raise_compiler_error("Must provide either bnf_code or cluster_id parameter to get_medication_orders macro") }}
 {% endif %}
@@ -24,6 +28,22 @@
         {{ exceptions.raise_compiler_error("get_medication_orders requires non-empty cluster_id values") }}
     {% endif %}
     {% set cluster_ids_str = cleaned_cluster_ids | join("','") %}
+{% endif %}
+
+{# Build the BNF prefix filter: pick the cluster-key column that matches the prefix length #}
+{% set bnf_filter = '' %}
+{% if bnf_code is not none %}
+    {% set bnf_prefix = bnf_code | string | trim %}
+    {% if bnf_prefix | length == 2 %}
+        {% set bnf_filter = "AND mo.bnf_chapter = '" ~ bnf_prefix ~ "'" %}
+    {% elif bnf_prefix | length == 4 %}
+        {% set bnf_filter = "AND mo.bnf_section = '" ~ bnf_prefix ~ "'" %}
+    {% elif bnf_prefix | length >= 15 %}
+        {% set bnf_filter = "AND mo.bnf_code = '" ~ bnf_prefix ~ "'" %}
+    {% else %}
+        {# Mid-length prefix (e.g. 6 chars for paragraph): use chapter for pruning + LIKE for precision #}
+        {% set bnf_filter = "AND mo.bnf_chapter = '" ~ bnf_prefix[:2] ~ "' AND mo.bnf_code LIKE '" ~ bnf_prefix ~ "%'" %}
+    {% endif %}
 {% endif %}
 
     {%- if cluster_id is not none -%}
@@ -76,21 +96,19 @@
         mo.mapped_concept_code,
         mo.mapped_concept_display,
         cc.cluster_id,
-        bnf.bnf_code,
-        bnf.bnf_name
+        mo.bnf_chapter,
+        mo.bnf_section,
+        mo.bnf_code,
+        mo.bnf_name
     FROM {{ ref('stg_olids_medication_order') }} mo
     JOIN {{ ref('int_patient_person_unique') }} pp
         ON mo.patient_id = pp.patient_id
     INNER JOIN {% if include_history %}expanded_codes{% else %}cluster_codes{% endif %} cc
         ON mo.mapped_concept_code = cc.mapped_concept_code
-    LEFT JOIN {{ ref('stg_reference_bnf_latest') }} bnf
-        ON mo.mapped_concept_code = bnf.snomed_code
     WHERE mo.clinical_effective_date IS NOT NULL
-    {% if bnf_code is not none %}
-        AND bnf.bnf_code LIKE '{{ bnf_code }}%'
-    {% endif %}
+    {{ bnf_filter }}
     {%- else -%}
-    -- BNF code path without cluster filtering
+    -- BNF-only path: prune via mo.bnf_chapter / bnf_section / bnf_code (clustered upstream)
     SELECT
         mo.id AS medication_order_id,
         mo.medication_statement_id,
@@ -108,16 +126,14 @@
         mo.mapped_concept_code,
         mo.mapped_concept_display,
         NULL AS cluster_id,
-        bnf.bnf_code,
-        bnf.bnf_name
+        mo.bnf_chapter,
+        mo.bnf_section,
+        mo.bnf_code,
+        mo.bnf_name
     FROM {{ ref('stg_olids_medication_order') }} mo
     JOIN {{ ref('int_patient_person_unique') }} pp
         ON mo.patient_id = pp.patient_id
-    LEFT JOIN {{ ref('stg_reference_bnf_latest') }} bnf
-        ON mo.mapped_concept_code = bnf.snomed_code
     WHERE mo.clinical_effective_date IS NOT NULL
-    {% if bnf_code is not none %}
-        AND bnf.bnf_code LIKE '{{ bnf_code }}%'
-    {% endif %}
+    {{ bnf_filter }}
     {%- endif -%}
 {% endmacro %}
