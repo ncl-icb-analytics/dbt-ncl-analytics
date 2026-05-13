@@ -10,7 +10,8 @@
 #
 # Snowflake objects:
 #   - Role: DBT_ADMIN
-#   - Warehouse: WH_NCL_ENGINEERING_XS
+#   - Warehouse: WH_NCL_ENGINEERING_XS for FETCH + ADD VERSION,
+#                WH_WNL_ENGINEERING_M for EXECUTE DBT PROJECT (7200s timeout)
 #   - Database/Schema: ACCOUNT_ADMIN.DBT_MANAGEMENT
 #   - Git repo: REPO__GITHUB__DBT_NCL_ANALYTICS
 #   - dbt project: DBT_NCL_ANALYTICS__MAIN
@@ -201,7 +202,12 @@ jobs:
                   print(f"Deploying {file_count} changed models + downstream: {select}")
                   args = f"build --target snowflake-prod --select {select}"
 
+              # Switch to the M warehouse for the build itself. WH_NCL_ENGINEERING_XS
+              # has statement_timeout = 3600s; EXECUTE DBT PROJECT routinely needs
+              # longer. WH_WNL_ENGINEERING_M has 7200s and is the same warehouse the
+              # scheduled tasks use. FETCH/ADD VERSION above stay on XS (cheap).
               print(f"Executing: dbt {args}")
+              cur.execute("USE WAREHOUSE WH_WNL_ENGINEERING_M")
               cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__MAIN ARGS = '{args}'")
 
               results = cur.fetchall()

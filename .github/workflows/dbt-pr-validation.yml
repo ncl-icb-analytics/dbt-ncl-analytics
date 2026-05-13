@@ -10,7 +10,8 @@
 #
 # Snowflake objects:
 #   - Role: DBT_ADMIN
-#   - Warehouse: WH_NCL_ENGINEERING_XS
+#   - Warehouse: WH_NCL_ENGINEERING_XS for FETCH + ADD VERSION,
+#                WH_WNL_ENGINEERING_M for EXECUTE DBT PROJECT (7200s timeout)
 #   - Database/Schema: ACCOUNT_ADMIN.DBT_MANAGEMENT
 #   - Git repo: REPO__GITHUB__DBT_NCL_ANALYTICS
 #   - dbt project: DBT_NCL_ANALYTICS__CI
@@ -217,7 +218,11 @@ jobs:
                   print(f"Validating {file_count} changed models: {select}")
                   args = f"build --target snowflake-dev --select {select}"
 
+              # Switch to the M warehouse for the build itself. WH_NCL_ENGINEERING_XS
+              # has statement_timeout = 3600s; large PR validations can exceed it.
+              # WH_WNL_ENGINEERING_M has 7200s. FETCH/ADD VERSION above stay on XS.
               print(f"Executing: dbt {args}")
+              cur.execute("USE WAREHOUSE WH_WNL_ENGINEERING_M")
               cur.execute(f"EXECUTE DBT PROJECT DBT_NCL_ANALYTICS__CI ARGS = '{args}'")
 
               results = cur.fetchall()
