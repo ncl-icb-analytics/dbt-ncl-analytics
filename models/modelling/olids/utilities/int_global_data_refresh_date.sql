@@ -27,6 +27,10 @@ date_practice_counts AS (
     INNER JOIN practice_list p
         ON o.record_owner_organisation_code = p.practice_code
     WHERE o.clinical_effective_date < CURRENT_DATE()
+        -- Most-recent valid-data date is always within recent weeks; constrain
+        -- the scan to the last 3 months so the clinical_effective_date cluster
+        -- key prunes the OBSERVATION scan (was a near-full ~1.6B row scan).
+        AND o.clinical_effective_date >= DATEADD('month', -3, CURRENT_DATE())
     GROUP BY o.clinical_effective_date::date
 )
 
