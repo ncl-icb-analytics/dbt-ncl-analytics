@@ -22,9 +22,14 @@ This gives a complete picture of vaccination patterns across the population.
 ) }}
 
 WITH
--- All eligible people (from eligibility table)
+-- All eligible people (from eligibility table). One row per (campaign_id, person_id).
+-- fct_flu_eligibility carries one row per (person, eligibility rule) and stamps
+-- created_at = CURRENT_DATE at build time. A SELECT DISTINCT here would preserve
+-- duplicates whenever rule firings have different created_at (e.g. a partial
+-- rebuild leaves some int_flu_* rows from a previous build day). Dedup
+-- deterministically by keeping the most recent rule firing per person.
 all_eligible_people AS (
-    SELECT DISTINCT
+    SELECT
         campaign_id,
         person_id,
         birth_date_approx,
@@ -33,6 +38,10 @@ all_eligible_people AS (
         reference_date,
         created_at
     FROM {{ ref('fct_flu_eligibility') }}
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY campaign_id, person_id
+        ORDER BY created_at DESC, reference_date DESC
+    ) = 1
 ),
 
 -- All vaccination administration records (both campaigns automatically included from intermediate models)
