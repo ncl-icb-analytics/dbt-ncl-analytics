@@ -1,7 +1,6 @@
 with inclusion_list as (
-    select patient_id,
-        area_code
-    from {{ ref('cltcs_full_detailed_patient_list') }}
+    select patient_id, area_code, olids_id
+    from {{ ref('cltcs_patient_list')}}
 ),
 activation_score as (
     select patient_id,

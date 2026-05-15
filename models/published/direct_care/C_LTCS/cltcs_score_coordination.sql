@@ -1,8 +1,8 @@
 
 
 with inclusion_list as (
-    select *
-    from {{ ref('cltcs_full_detailed_patient_list')}}
+    select patient_id, area_code, olids_id
+    from {{ ref('cltcs_patient_list')}}
     ), 
 
 encoding_features as(
@@ -36,5 +36,5 @@ encoding_features as(
 select
     patient_id,
     area_code,
-    (wl_total_count * wl_provider_count) + op_att_tot_12mo/3 + op_prov_12mo*2 + op_spec_12mo*2 - gp_att_tot_12mo*4 - ae_tot_12mo - apc_los_12mo + op_oe_ratio * 3 + has_same_tfc_multiple_providers_flag_flag * 2 as score_coordination
+    (wl_total_count * wl_provider_count) + op_att_tot_12mo/3 + op_prov_12mo*2 + op_spec_12mo*2 - gp_att_tot_12mo*4 - ae_tot_12mo - apc_los_12mo + has_same_tfc_multiple_providers_flag_flag * 2 as score_coordination
 from encoding_features

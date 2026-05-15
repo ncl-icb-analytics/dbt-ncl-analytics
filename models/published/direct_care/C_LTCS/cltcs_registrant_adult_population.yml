@@ -1,8 +1,7 @@
 
 models:
-  - name: cltcs_live_inclusion_cohort
-    description: Patients eligible for C-LTCS based on multimorbidity and 
-      outpatient activity. One row per patient with eligibility flag.
+  - name: cltcs_registrant_adult_population
+    description: Adult living patients registered at GP practices in scope for C-LTCS. One row per patient.
     config:
       meta:
         owner:
