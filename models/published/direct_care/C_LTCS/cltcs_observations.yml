@@ -1,14 +1,11 @@
-version: 2
-
 models:
   - name: cltcs_observations
     description: >
-      Coded GP observations for patients in the C-LTCS cohort over a rolling
-      1 year window. Sourced directly from stg_olids_observation to capture
-      all observations with minimal filtering (the intermediate observation
-      layer is concept-specific and would drop uncovered concepts). One row
-      per observation. Includes a future-date data quality fix (falls back
-      to date_recorded when clinical_effective_date > date_recorded).
+      Coded GP observations for patients in the C-LTCS cohort. Rolling 1 year
+      window with up to 100 most recent observations per patient when volume
+      exceeds that cap. Sourced from stg_olids_observation (not concept-specific
+      intermediate models). One row per observation. Snowflake table clustered
+      on patient_id.
     config:
       meta:
         owner:
@@ -30,7 +27,7 @@ models:
 
       - name: area_code
         data_type: varchar
-        description: "Area code (PCN of registered GP practice in this context)"
+        description: "Area code (Neighbourhood of registered GP practice in this context)"
         data_tests:
           - not_null
 
@@ -85,9 +82,9 @@ models:
       - name: episodicity_display
         data_type: varchar
         description: >
-          Resolved display value for the observation's episodicity concept
+          Resolved display value for the observation episodicity concept
           (e.g. New, Review, Ended). Falls back to the raw episodicity_concept_id
-          when no mapping is found.
+          when no primary concept map match is found.
 
       - name: practitioner_title
         data_type: varchar

@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        cluster_by=['patient_id'])
 }}
 
 
@@ -9,8 +10,10 @@ Patient data processing for CLTCS
 
 Clinical Purpose:
 - All coded GP observations for patients in the C-LTCS cohort over a rolling
-  1 year window. Minimal filtering by design so downstream consumers can
-  decide how to summarise (e.g. by concept, episodicity, problem flag).
+  1 year window, capped at the 100 most recent observations per patient when
+  volume exceeds that limit. Minimal filtering by design so downstream
+  consumers can decide how to summarise (e.g. by concept, episodicity,
+  problem flag).
 
 Source choice:
 - stg_olids_observation is used directly because the intermediate observation
@@ -19,11 +22,12 @@ Source choice:
   observations" feed the staging layer is the correct grain.
 */
 
-{% set observation_cutoff = -6 %}
+{% set observation_cutoff = -1 %}
+{% set max_observations_per_patient = 100 %}
 
 with inclusion_list as (
-    select patient_id, area_code, olids_id
-    from {{ ref('cltcs_patient_list')}}
+    select *
+    from {{ ref('cltcs_patient_list') }}
 ),
 
 gp_observations as (
@@ -45,7 +49,7 @@ gp_observations as (
         o.result_text,
         o.result_unit_display,
         o.is_problem,
-        coalesce(epi_target_concept.display, o.episodicity_concept_id) as episodicity_display,
+        coalesce(episodicity_concept.display, o.episodicity_concept_id) as episodicity_display,
         p.last_name as practitioner_last_name,
         p.first_name as practitioner_first_name,
         p.title as practitioner_title
@@ -54,9 +58,13 @@ gp_observations as (
         on il.olids_id = o.person_id
     left join {{ ref('stg_olids_practitioner') }} p
         on o.practitioner_id = p.id
-    {{ join_concept_display('o.episodicity_concept_id', 'epi_', is_primary_only=true) }}
+    left join {{ ref('stg_olids_concept_map') }} episodicity_map
+        on o.episodicity_concept_id = episodicity_map.source_code_id
+        and episodicity_map.is_primary = true
+    left join {{ ref('stg_olids_concept') }} episodicity_concept
+        on episodicity_map.target_code_id = episodicity_concept.id
     where o.clinical_effective_date is not null
-        and o.clinical_effective_date between dateadd(month, {{ observation_cutoff }}, current_date()) and current_date()
+        and o.clinical_effective_date between dateadd(year, {{ observation_cutoff }}, current_date()) and current_date()
 )
 
 select
@@ -76,3 +84,7 @@ select
     practitioner_first_name,
     practitioner_last_name
 from gp_observations
+qualify row_number() over (
+    partition by patient_id
+    order by clinical_effective_date desc, observation_id desc
+) <= {{ max_observations_per_patient }}
