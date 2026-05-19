@@ -78,6 +78,8 @@ WITH practice_org_joined AS (
     dict.stp_code AS icb_code,
     dict.stp_name AS icb_name,
     dict.sk_organisation_id_stp AS sk_icb_id,
+    -- WNL = merged ICB (Z9B2Z) plus legacy NCL (QMJ) and NWL (QRV) codes still in use
+    (dict.stp_code IN ('Z9B2Z', 'QMJ', 'QRV')) AS is_wnl_practice,
     
     -- Dictionary surrogate keys
     dict.sk_organisation_id_practice AS sk_practice_id,

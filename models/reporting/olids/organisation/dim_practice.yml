@@ -168,6 +168,11 @@ models:
       - name: sk_icb_id
         description: 'Surrogate key for ICB organisation'
 
+      - name: is_wnl_practice
+        description: 'TRUE when practice belongs to West and North London ICB (merged Z9B2Z, or legacy NCL/QMJ and NWL/QRV codes).'
+        tests:
+          - not_null
+
       - name: sk_practice_id
         description: 'Dictionary surrogate key for practice'
 
