@@ -1,7 +1,7 @@
 
 with inclusion_list as (
-    select *
-    from {{ ref('cltcs_full_detailed_patient_list')}}
+    select patient_id, area_code, olids_id
+    from {{ ref('cltcs_patient_list')}}
     ),
 
 encoding_features as(
@@ -36,5 +36,5 @@ encoding_features as(
 )
 select patient_id,
     area_code,
-    ae_greater_gp_12mo_flag*5+(ae_tot_12mo_plus_10/gp_att_tot_12mo_plus_10)/2 + main_language_flag*5 + has_severe_mental_illness_flag*10 + has_learning_disability_flag*10 + musculoskeletal_conditions_flag*10 + op_oe_ratio_flag*2 - gp_att_tot_12mo as score_activation
+    ae_greater_gp_12mo_flag*5+(ae_tot_12mo_plus_10/gp_att_tot_12mo_plus_10)/2 + main_language_flag*5 + has_severe_mental_illness_flag*10 + has_learning_disability_flag*10 + musculoskeletal_conditions_flag*10 - gp_att_tot_12mo as score_activation
 from encoding_features
