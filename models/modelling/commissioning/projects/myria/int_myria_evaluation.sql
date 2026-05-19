@@ -32,46 +32,37 @@ with date_range as (-- Generate days for 2 years
     WHERE
     pp.event_to_date IS NULL -- current patient state
     )
-, eligible as ( -- 5,737
-    SELECT
-        PATIENT_ID,
-        DATE('22-Jan-2026') as eligibility_date
+, eligible as ( 
+    --Jan no results
+    SELECT PATIENT_ID, DATE('22-Jan-2026') as eligibility_date
     FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} 
     --FROM MODELLING.DBT_SNAPSHOTS.FCT_PERSON_MYRIA_HIGH_RISK_PATIENTS_PUBLISHED_SNAPSHOT
     WHERE DATE('22-Jan-2026') between DBT_VALID_FROM AND COALESCE(DBT_VALID_TO,CURRENT_DATE())
 
     UNION
-
-    SELECT
-        PATIENT_ID,
-        DATE('16-Feb-2026') as eligibility_date
+    --feb extract n=5015
+    SELECT PATIENT_ID, DATE('16-Feb-2026') as eligibility_date
     FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} 
     --FROM MODELLING.DBT_SNAPSHOTS.FCT_PERSON_MYRIA_HIGH_RISK_PATIENTS_PUBLISHED_SNAPSHOT
     WHERE DATE('16-Feb-2026') between DBT_VALID_FROM AND COALESCE(DBT_VALID_TO,CURRENT_DATE())
 
     UNION
-
-    SELECT
-        PATIENT_ID,
-        DATE('17-Mar-2026') as eligibility_date
+    --mar extract n=5257
+    SELECT PATIENT_ID, DATE('17-Mar-2026') as eligibility_date
     FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} 
     --FROM MODELLING.DBT_SNAPSHOTS.FCT_PERSON_MYRIA_HIGH_RISK_PATIENTS_PUBLISHED_SNAPSHOT
     WHERE DATE('17-Mar-2026') between DBT_VALID_FROM AND COALESCE(DBT_VALID_TO,CURRENT_DATE())
 
     UNION
-
-    SELECT
-        PATIENT_ID,
-        DATE('15-Apr-2026') as eligibility_date
+    --apr extract n=5638
+    SELECT PATIENT_ID, DATE('15-Apr-2026') as eligibility_date
     FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} 
     --FROM MODELLING.DBT_SNAPSHOTS.FCT_PERSON_MYRIA_HIGH_RISK_PATIENTS_PUBLISHED_SNAPSHOT
     WHERE DATE('15-Apr-2026') between DBT_VALID_FROM AND COALESCE(DBT_VALID_TO,CURRENT_DATE())
 
     UNION
-
-    SELECT
-        PATIENT_ID,
-        DATE('15-May-2026') as eligibility_date
+    --may extract n=5710
+    SELECT PATIENT_ID, DATE('15-May-2026') as eligibility_date
     FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} 
     --FROM MODELLING.DBT_SNAPSHOTS.FCT_PERSON_MYRIA_HIGH_RISK_PATIENTS_PUBLISHED_SNAPSHOT
     WHERE DATE('15-May-2026') between DBT_VALID_FROM AND COALESCE(DBT_VALID_TO,CURRENT_DATE())
@@ -99,10 +90,9 @@ with date_range as (-- Generate days for 2 years
     SELECT SK_PATIENT_ID
     FROM {{ ref('stg_pds_pds_address') }} 
     --FROM MODELLING.DBT_STAGING.STG_PDS_PDS_ADDRESS 
-    --WHERE '01-JAN-2026' BETWEEN C.USUAL_ADDRESS_BUSINESS_EFFECTIVE_FROM_DATE AND C.USUAL_ADDRESS_BUSINESS_EFFECTIVE_TO_DATE
-        --OR '30-APR-2026' BETWEEN C.USUAL_ADDRESS_BUSINESS_EFFECTIVE_FROM_DATE AND C.USUAL_ADDRESS_BUSINESS_EFFECTIVE_TO_DATE
-    WHERE '01-JAN-2026' BETWEEN event_from_date AND event_to_date
-        OR '30-APR-2026' BETWEEN event_from_date AND event_to_date
+     --WHERE ('01-JAN-2026' BETWEEN event_from_date AND event_to_date OR '30-APR-2026' BETWEEN event_from_date AND event_to_date)
+   --If the row range overlaps your range but doesn't include either endpoint, it could fail so use logic below (500 more patients)
+    WHERE event_from_date <= '2026-04-30' AND event_to_date >= '2026-01-01'
     AND DER_CQC_CARE_HOME_CODE IS NOT NULL
     QUALIFY ( ROW_NUMBER() OVER (PARTITION BY SK_PATIENT_ID ORDER BY event_from_date DESC) = 1 )
 )
@@ -123,8 +113,8 @@ with date_range as (-- Generate days for 2 years
         ON e.patient_id = d.sk_patient_id
     LEFT JOIN pds_deaths AS pd 
         ON e.patient_id = pd.sk_patient_id
-    --LEFT JOIN FROM {{ ref('myria_enrolled_patients_20250507') }} m -- myria uploads are not in raw dbt yet. Failed upload.
-    LEFT JOIN DATA_LAKE__NCL.ANALYST_MANAGED.MYRIA_ENROLLED_PATIENTS_20250507 as m
+    LEFT JOIN {{ ref('raw_reference_myria_enrolled_patients_20250507') }} m 
+    --LEFT JOIN DATA_LAKE__NCL.ANALYST_MANAGED.MYRIA_ENROLLED_PATIENTS_20250507 as m
         ON e.hex_id = m.hx_id
     LEFT JOIN care_homes AS c 
         ON e.patient_id = c.SK_PATIENT_ID -- identify care home patients patients
