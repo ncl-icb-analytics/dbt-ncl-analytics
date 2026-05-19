@@ -86,6 +86,14 @@ models:
       - name: practice_end_date
         description: 'Practice end date from Dictionary (NULL if still active)'
 
+      - name: practice_status
+        description: 'ODS practice status from Dictionary (Active, Inactive, or NULL/Unknown)'
+
+      - name: is_active_practice
+        description: 'TRUE when ODS status is Active and end date is NULL or in the future. Use this for filtering to operationally live practices.'
+        tests:
+          - not_null
+
       - name: practice_address_line_1
         description: 'Practice address line 1 from Dictionary'
 
