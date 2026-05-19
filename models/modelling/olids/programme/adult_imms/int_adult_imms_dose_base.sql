@@ -27,5 +27,5 @@ LEFT JOIN {{ ref('int_adult_imms_vaccination_events_historical') }} v using (PER
 LEFT JOIN {{ ref('dim_person_care_home') }} ch using (PERSON_ID)
 LEFT JOIN {{ ref('int_covid_long_term_residential_care') }} cch using (PERSON_ID)
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_VACCINATION_EVENTS_HISTORICAL v using (PERSON_ID)
---restrict by AGE to 60 or over
-WHERE p.age >= 60
+--restrict by AGE to 65 or over
+WHERE p.age >= 65

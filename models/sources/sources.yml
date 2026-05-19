@@ -8,9 +8,9 @@ sources:
     identifier: '"INT_CCMS_CURRENT"'
     columns:
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: CAMBRIDGE_COMORBIDITY_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(38,18)
     - name: CCMS_CURRENT_ID
       data_type: TEXT
     - name: LAST_UPDATED
@@ -19,17 +19,17 @@ sources:
     identifier: '"INT_EFI2_SCORES"'
     columns:
     - name: PERSON_ID
-      data_type: TEXT
+      data_type: NUMBER(38,0)
     - name: END_DATE
       data_type: DATE
     - name: EFI_SCORE
-      data_type: NUMBER
+      data_type: NUMBER(16,3)
     - name: CATEGORY
-      data_type: VARCHAR
+      data_type: TEXT
     - name: AGE_AT_END
-      data_type: NUMBER
+      data_type: NUMBER(9,0)
     - name: GENDER
-      data_type: VARCHAR
+      data_type: TEXT
     - name: DATE_OF_DEATH
       data_type: DATE
   - name: BASE_ATHENA__CONCEPT
@@ -110,51 +110,54 @@ sources:
     identifier: '"STG_CCMS__FINAL_FLAGS"'
     columns:
     - name: PERSON_ID
-      data_type: TEXT
-    - name: ALCOHOLPROBLEMS 
-      data_type: NUMBER
+      data_type: NUMBER(38,0)
+    - name: ALCOHOLPROBLEMS
+      data_type: NUMBER(1,0)
     - name: ANXIETYORDEPRESSION
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: ATRIALFIBRILLATION
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CANCERINTHELAST5YEARS
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CHRONICKIDNEYDISEASE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CHRONICLIVERDISEASEANDVIRALHEPATITIS
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: CONSTIPATION
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: COPD
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: DEMENTIA
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: DIABETES
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: DISORDEROFPROSTATE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: EPILEPSY
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: HEARTFAILURE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: IRRITABLEBOWELSYNDROME
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: LEARNINGDISABILITY
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: MULTIPLESCLEROSIS
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: PAINFULCONDITION
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: PARKINSONISM
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: PERIPHVASCDISEASELEG
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: PSYCHOACTIVESUBSTANCEMISUSE
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
     - name: SCHIZOPHRENIAORBIPOLARDISORDER
-      data_type: NUMBER
+      data_type: NUMBER(1,0)
 - name: c_ltcs
-  database: "{{ 'PUBLISHED_REPORTING__DIRECT_CARE' if target.name in ['prod', 'snowflake-prod'] else ('DEV__PUBLISHED_REPORTING__DIRECT_CARE' if target.name in ['dev', 'snowflake-dev'] else target.name | upper | trim ~ '__PUBLISHED_REPORTING__DIRECT_CARE') }}"
+  database: '{{ ''PUBLISHED_REPORTING__DIRECT_CARE'' if target.name in [''prod'',
+    ''snowflake-prod''] else (''DEV__PUBLISHED_REPORTING__DIRECT_CARE'' if target.name
+    in [''dev'', ''snowflake-dev''] else target.name | upper | trim ~ ''__PUBLISHED_REPORTING__DIRECT_CARE'')
+    }}'
   schema: '"C_LTCS"'
   description: C-LTCS tables
   tables:
@@ -175,7 +178,7 @@ sources:
       data_type: TEXT
     - name: INTERVENTION_NAME
       data_type: TEXT
-    - name: STREAM_ACTION 
+    - name: STREAM_ACTION
       data_type: TEXT
     - name: IS_UPDATE
       data_type: BOOLEAN

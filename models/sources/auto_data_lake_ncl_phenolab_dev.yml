@@ -65,6 +65,43 @@ sources:
       data_type: TEXT
     - name: CORE_CONCEPT_ID
       data_type: TEXT
+  - name: DEV_MEASUREMENTS
+    identifier: '"DEV_MEASUREMENTS"'
+    columns:
+    - name: PERSON_ID
+      data_type: NUMBER(38,0)
+    - name: VISIT_OCCURRENCE_ID
+      data_type: TEXT
+    - name: VISIT_OCCURRENCE_TYPE
+      data_type: TEXT
+    - name: AGE_AT_EVENT
+      data_type: TEXT
+    - name: CLINICAL_EFFECTIVE_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: MEASUREMENT_DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: MEASUREMENT_VALUE_AS_NUMBER
+      data_type: FLOAT
+    - name: MEASUREMENT_UNIT
+      data_type: TEXT
+    - name: MEASUREMENT_SOURCE_VALUE
+      data_type: FLOAT
+    - name: MEASUREMENT_SOURCE_UNIT
+      data_type: TEXT
+    - name: LOWER_LIMIT
+      data_type: FLOAT
+    - name: UPPER_LIMIT
+      data_type: FLOAT
+    - name: NO_UNIT_MAPPING
+      data_type: BOOLEAN
+    - name: BELOW_BOUND
+      data_type: BOOLEAN
+    - name: ABOVE_BOUND
+      data_type: BOOLEAN
   - name: HDRUK_DEFINITIONS
     identifier: '"HDRUK_DEFINITIONS"'
     columns:
