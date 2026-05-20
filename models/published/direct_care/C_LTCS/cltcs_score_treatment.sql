@@ -226,13 +226,13 @@ remapped_scores as (
         round((clipped_score_medication + 3) / 6.0 * 100, 1) as score_medication_0_100,
         round((clipped_score_illness_uec + 3) / 6.0 * 100, 1) as score_illness_uec_0_100,
         round((clipped_score_barriers + 3) / 6.0 * 100, 1) as score_barriers_0_100,
-        (score_biomarker_gaps_0_100 * 1 + score_care_gaps_0_100 * 1 + score_complexity_0_100 * 1 + score_medication_0_100 * 1 + score_illness_uec_0_100 * 1 + score_barriers_0_100 * 1) /6 as score_treatment
+        (score_biomarker_gaps_0_100 * 1 + score_care_gaps_0_100 * 1 + score_complexity_0_100 * 1 + score_medication_0_100 * 1 + score_illness_uec_0_100 * 1 + score_barriers_0_100 * 1) /6 as raw_score_treatment
     from clipped_scores
 )
 
 select
     *,
-    score_treatment * (
+    raw_score_treatment * (
         case
             when age is null then 1.0
             else (
@@ -243,5 +243,5 @@ select
                 - 0.15 * least(greatest(age - 60, 0), 40) / 40.0
             )
         end
-    ) as age_adjusted_score_treatment
+    ) as score_treatment
 from remapped_scores

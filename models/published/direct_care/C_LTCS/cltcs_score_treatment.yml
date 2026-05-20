@@ -19,6 +19,6 @@ models:
         data_tests:
           - not_null
 
-      - name: age_adjusted_score_treatment
+      - name: score_treatment
         data_type: number
         description: "score_treatment with age multiplier: +15% max at age 18 (flat below 18), linear to neutral at 60, then up to -15% penalty from age 100+"
