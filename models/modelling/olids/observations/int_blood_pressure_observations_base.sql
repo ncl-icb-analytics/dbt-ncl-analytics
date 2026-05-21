@@ -14,7 +14,7 @@ Raw BP observations with row classification flags.
 Shared foundation for int_blood_pressure_all and dq_blood_pressure_issues.
 
 Incremental Strategy:
-- Uses lds_start_date_time (LDS processing timestamp) to catch late-arriving data
+- Uses lds_start_datetime (LDS processing timestamp) to catch late-arriving data
 - Merge on id to handle updates
 
 Note: Future date handling (clinical_effective_date > date_recorded) is applied
@@ -28,7 +28,7 @@ WITH base_observations AS (
         obs.clinical_effective_date,  -- Already corrected by macro if needed
         obs.clinical_effective_date_raw,  -- Original value from macro
         obs.date_recorded,
-        obs.lds_start_date_time,
+        obs.lds_start_datetime,
         obs.result_value,
         obs.mapped_concept_code AS concept_code,
         obs.mapped_concept_display AS concept_display,
@@ -37,7 +37,7 @@ WITH base_observations AS (
     WHERE obs.result_value IS NOT NULL
       AND obs.person_id IS NOT NULL
     {% if is_incremental() %}
-      AND obs.lds_start_date_time > (SELECT MAX(lds_start_date_time) FROM {{ this }})
+      AND obs.lds_start_datetime > (SELECT MAX(lds_start_datetime) FROM {{ this }})
     {% endif %}
 )
 
@@ -49,7 +49,7 @@ SELECT
     -- Keep original values for audit/DQ
     clinical_effective_date_raw,
     date_recorded,
-    lds_start_date_time,
+    lds_start_datetime,
     
     result_value,
     'mmHg' AS result_unit_display,

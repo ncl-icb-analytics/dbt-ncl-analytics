@@ -41,7 +41,7 @@ models:
               - sds_role_group
     columns:
       - name: practice_code
-        description: GP practice ODS code (record_owner_organisation_code from the appointment).
+        description: GP practice ODS code (publisher_organisation_code from the appointment).
         data_tests:
           - not_null
       - name: report_month

@@ -2,7 +2,7 @@ models:
   - name: int_blood_pressure_observations_base
     description: |
       Base blood pressure observations with row classification flags.
-      Incremental model using lds_start_date_time to handle late-arriving data.
+      Incremental model using lds_start_datetime to handle late-arriving data.
 
       Shared foundation for:
       - int_blood_pressure_all (valid, paired BP events)
@@ -40,7 +40,7 @@ models:
         description: Original clinical_effective_date before future date correction
       - name: date_recorded
         description: Date the observation was recorded in the clinical system
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: |
           London Data Service processing timestamp. Used as incremental key
           to correctly handle late-arriving data.
