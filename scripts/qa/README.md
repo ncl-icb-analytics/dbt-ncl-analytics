@@ -9,8 +9,10 @@ Built for the OLIDS 2026 schema migration but reusable for any breaking change.
    ```bash
    python scripts/qa/capture_model_row_counts.py --label pre-olids-2026
    ```
-   Writes to `DATA_LAKE__NCL.DBT_OBSERVABILITY.MODEL_ROW_COUNT_BASELINE` and
-   snapshots `qa/baseline_pre-olids-2026.json`.
+   Writes to `DATA_LAKE__NCL.DBT_OBSERVABILITY.MODEL_ROW_COUNT_BASELINE` (the
+   canonical store) and snapshots `qa/baseline_pre-olids-2026.json` for local
+   reference. `qa/baseline_*.json` is gitignored — Snowflake is the source of
+   truth.
 
 2. **Apply change**, redeploy to prod (or a comparable env).
 
