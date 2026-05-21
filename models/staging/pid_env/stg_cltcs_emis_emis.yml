@@ -2,35 +2,23 @@ models:
   - name: stg_cltcs_emis_emis
     description: >
       CLTCS EMIS extract (clinical and demographic patient attributes). Source raw_cltcs_emis_emis.
-      Latest ingest per sk_patient_id and usual GP organisation code, then one row per patient when
-      any row matches PDS registered practice_code from dim_person_demographics_basic; if none match,
-      all EMIS GP rows are retained. registered_practice_mismatch_flag is true when EMIS usual GP
-      organisation code is distinct from PDS registered practice_code.
-      data_tests:
-        - not_null
-        - unique:
-            config:
-              severity: warn
+      One row per sk_patient_id and usual GP organisation code (practice_code), keeping the
+      latest ingested record when duplicates exist. PDS registration filtering is applied in
+      cltcs_emis_extract.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - sk_patient_id
+              - practice_code
     columns:
       - name: sk_patient_id
         data_type: varchar
         description: Pseudonymised NHS number (surrogate key for patient)
         data_tests:
           - not_null
-          - unique:
-              config:
-                severity: warn
 
       - name: practice_code
         description: Usual GP organisation code from the EMIS extract
-        data_tests:
-          - not_null
-          
-      - name: registered_practice_code
-        description: GP practice_code from dim_person_demographics_basic (PDS registration)
-      - name: registered_practice_mismatch_flag
-        description: >
-          True when practice_code is distinct from registered_practice_code
-          (including null vs non-null)
         data_tests:
           - not_null
