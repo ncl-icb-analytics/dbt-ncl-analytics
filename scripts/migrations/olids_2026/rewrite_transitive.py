@@ -28,6 +28,9 @@ RENAMES_FILE = pathlib.Path(__file__).with_name("column_renames.yml")
 SCAN_DIRS = [
     REPO / "models",
     REPO / "macros",
+    REPO / "analyses",   # exploratory queries / DQ reports that ref staging
+    REPO / "tests",      # custom data tests
+    REPO / "snapshots",  # rare, but possible
 ]
 # Files matching `ref('NAME')` — captures NAME.
 REF_PATTERN = re.compile(r"""\{\{\s*ref\(\s*['"]([\w]+)['"]\s*\)\s*\}\}""", re.IGNORECASE)

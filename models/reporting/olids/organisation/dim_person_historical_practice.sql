@@ -30,8 +30,11 @@ WITH enriched_registrations AS (
         ipr.has_changed_practice,
         ipr.practitioner_id,
         -- Add organisation details
-        o.type_code AS practice_type_code,
-        o.type_desc AS practice_type_desc,
+        -- type_code / type_desc were removed in the 2026 OLIDS schema
+        -- realignment (issue #747). Preserved as NULL / the new `description`
+        -- column to keep downstream column names stable.
+        CAST(NULL AS VARCHAR) AS practice_type_code,
+        o.description AS practice_type_desc,
         o.postcode AS practice_postcode,
         o.parent_organisation_id AS practice_parent_org_id,
         o.open_date AS practice_open_date,
