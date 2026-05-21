@@ -48,7 +48,25 @@ sources:
   - name: episodes.derived
     identifier: '"episodes.derived"'
     columns:
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: EPISODES_ID
+      data_type: NUMBER(38,0)
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
+    - name: CqcCareHomeCode
+      data_type: TEXT
+    - name: dmicICBCommissioner
+      data_type: TEXT
+    - name: dmicSubICBCommissioner
+      data_type: TEXT
+    - name: dmicICBRegistrationSubmitted
+      data_type: TEXT
     - name: dmicICBResidenceSubmitted
+      data_type: TEXT
+    - name: dmicSubICBRegistrationSubmitted
+      data_type: TEXT
+    - name: dmicSubICBResidenceSubmitted
       data_type: TEXT
     - name: dmicCommissionerDerivationReason
       data_type: TEXT
@@ -56,75 +74,57 @@ sources:
       data_type: TEXT
     - name: dmicElectoralWardCode
       data_type: TEXT
-    - name: dmicSubICBCommissioner
-      data_type: TEXT
-    - name: dmicICBRegistrationSubmitted
-      data_type: TEXT
-    - name: EPISODES_ID
-      data_type: NUMBER(38,0)
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
-    - name: dmicSubICBRegistrationSubmitted
-      data_type: TEXT
-    - name: dmicSubICBResidenceSubmitted
-      data_type: TEXT
-    - name: CqcCareHomeCode
-      data_type: TEXT
-    - name: dmicICBCommissioner
-      data_type: TEXT
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
   - name: spell
     identifier: '"spell"'
     columns:
-    - name: spell.patient.registration_derived.responsible_ccg_from_pds
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: type
       data_type: TEXT
-    - name: spell.patient.residence.postcode Pseudo
+    - name: action
       data_type: TEXT
-    - name: spell.patient.residence.postcode_is_valid
+    - name: schema_version
+      data_type: NUMBER(38,0)
+    - name: system.report.as_at
+      data_type: TIMESTAMP_NTZ
+    - name: system.report.date_range
+      data_type: TEXT
+    - name: system.report.clear_data
       data_type: BOOLEAN
-    - name: spell.patient.residence.residence_ccg
+    - name: system.report.grouper_version
       data_type: TEXT
-    - name: spell.patient.residence_derived.postcode_from_pds Pseudo
+    - name: system.report.tariff_version
       data_type: TEXT
-    - name: spell.patient.residence_derived.residence_ccg_from_patient_postcode
+    - name: system.report.query_identifier
       data_type: TEXT
-    - name: spell.patient.residence_derived.postcode_district
+    - name: system.report.query_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.report.query_time
       data_type: TEXT
-    - name: spell.patient.residence_derived.oa_11
+    - name: system.interchange.received_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.interchange.received_time
       data_type: TEXT
-    - name: spell.patient.residence_derived.msoa_11
+    - name: system.transaction.cds_activity_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.record.identifier
       data_type: TEXT
-    - name: spell.patient.residence_derived.lsoa_11
+    - name: system.record.version
       data_type: TEXT
-    - name: spell.patient.residence_derived.country
+    - name: system.record.cds_group_indicator
       data_type: TEXT
-    - name: spell.patient.residence_derived.government_office_region
+    - name: spell.hospital_provider_spell_number
       data_type: TEXT
-    - name: spell.patient.residence_derived.residence_county
+    - name: spell.open_spell_indicator
       data_type: TEXT
-    - name: spell.patient.residence_derived.local_authority_district
-      data_type: TEXT
-    - name: spell.patient.residence_derived.parliamentary_constituency
-      data_type: TEXT
-    - name: spell.patient.residence_derived.ed_county_code
-      data_type: TEXT
-    - name: spell.patient.residence_derived.ed_district_code
-      data_type: TEXT
-    - name: spell.patient.residence_derived.electoral_ward_1998
-      data_type: TEXT
-    - name: spell.patient.residence_derived.index_of_multiple_deprivation.decile
-      data_type: TEXT
-    - name: spell.patient.residence_derived.index_of_multiple_deprivation.decile_description
-      data_type: TEXT
-    - name: spell.patient.residence_derived.rural_urban_indicator
-      data_type: TEXT
-    - name: spell.patient.residence_derived.cancer_registry
-      data_type: TEXT
-    - name: spell.patient.residence_derived.grid_reference
-      data_type: TEXT
-    - name: spell.patient.mental_health_act_legal_status.classification
-      data_type: TEXT
+    - name: spell.pbr_included_episodes_in_spell
+      data_type: NUMBER(38,0)
+    - name: spell.pbr_excluded_episodes_in_spell
+      data_type: NUMBER(38,0)
+    - name: spell.has_data_quality_error
+      data_type: NUMBER(38,0)
     - name: spell.patient.identity.nhs_number.value Pseudo
       data_type: TEXT
     - name: spell.patient.identity.nhs_number.status
@@ -173,54 +173,54 @@ sources:
       data_type: TEXT
     - name: spell.patient.registration_derived.general_practice_from_pds
       data_type: TEXT
-    - name: spell.referral_to_treatment.patient_pathway_identifier.value Pseudo
+    - name: spell.patient.registration_derived.responsible_ccg_from_pds
       data_type: TEXT
-    - name: spell.referral_to_treatment.patient_pathway_identifier.issuer
+    - name: spell.patient.residence.postcode Pseudo
       data_type: TEXT
-    - name: spell.referral_to_treatment.period_status
+    - name: spell.patient.residence.postcode_is_valid
+      data_type: BOOLEAN
+    - name: spell.patient.residence.residence_ccg
       data_type: TEXT
-    - name: spell.referral_to_treatment.waiting_time_measurement_type
+    - name: spell.patient.residence_derived.postcode_from_pds Pseudo
       data_type: TEXT
-    - name: spell.referral_to_treatment.period_start_date
-      data_type: TIMESTAMP_NTZ
-    - name: spell.discharge.to_hospital_at_home
+    - name: spell.patient.residence_derived.residence_ccg_from_patient_postcode
       data_type: TEXT
-    - name: spell.commissioning.service_agreement.provider_reference_number
+    - name: spell.patient.residence_derived.postcode_district
       data_type: TEXT
-    - name: spell.patient.mother.nhs_number.value Pseudo
+    - name: spell.patient.residence_derived.oa_11
       data_type: TEXT
-    - name: spell.patient.mother.nhs_number.status
+    - name: spell.patient.residence_derived.msoa_11
       data_type: TEXT
-    - name: spell.patient.mother.local_patient_identifier.value
+    - name: spell.patient.residence_derived.lsoa_11
       data_type: TEXT
-    - name: spell.patient.mother.local_patient_identifier.issuer
+    - name: spell.patient.residence_derived.country
       data_type: TEXT
-    - name: spell.patient.mother.birth_date
-      data_type: TIMESTAMP_NTZ
-    - name: spell.patient.mother.birth_month
-      data_type: NUMBER(38,0)
-    - name: spell.patient.mother.birth_year
-      data_type: NUMBER(38,0)
-    - name: spell.patient.mother.age_range
+    - name: spell.patient.residence_derived.government_office_region
       data_type: TEXT
-    - name: spell.patient.mother.postcode Pseudo
+    - name: spell.patient.residence_derived.residence_county
       data_type: TEXT
-    - name: spell.patient.mother.residence_ccg
+    - name: spell.patient.residence_derived.local_authority_district
       data_type: TEXT
-    - name: spell.patient.mother.postcode_from_pds Pseudo
+    - name: spell.patient.residence_derived.parliamentary_constituency
       data_type: TEXT
-    - name: spell.patient.mother.residence_ccg_from_pds
+    - name: spell.patient.residence_derived.ed_county_code
       data_type: TEXT
-    - name: spell.patient.mother.general_practice_from_pds
+    - name: spell.patient.residence_derived.ed_district_code
       data_type: TEXT
-    - name: spell.patient.mother.responsible_ccg_from_pds
+    - name: spell.patient.residence_derived.electoral_ward_1998
       data_type: TEXT
-    - name: spell.discharge.ready_date
-      data_type: TIMESTAMP_NTZ
-    - name: spell.referral_to_treatment.period_end_date
-      data_type: TIMESTAMP_NTZ
-    - name: spell.referral_to_treatment.period_length
-      data_type: NUMBER(38,0)
+    - name: spell.patient.residence_derived.index_of_multiple_deprivation.decile
+      data_type: TEXT
+    - name: spell.patient.residence_derived.index_of_multiple_deprivation.decile_description
+      data_type: TEXT
+    - name: spell.patient.residence_derived.rural_urban_indicator
+      data_type: TEXT
+    - name: spell.patient.residence_derived.cancer_registry
+      data_type: TEXT
+    - name: spell.patient.residence_derived.grid_reference
+      data_type: TEXT
+    - name: spell.patient.mental_health_act_legal_status.classification
+      data_type: TEXT
     - name: spell.patient.overseas_visitor.classification
       data_type: TEXT
     - name: spell.referral.referrer
@@ -271,54 +271,6 @@ sources:
       data_type: TEXT
     - name: spell.care_location.organisation_geographies.ccg_from_treatment_site.value
       data_type: TEXT
-    - name: spell.commissioning.tariff_calculation.admission_type
-      data_type: TEXT
-    - name: spell.commissioning.tariff_calculation.patient_type
-      data_type: TEXT
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.unadjusted_days
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.critical_care_days
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.rehabilitation_days
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.palliative_care_days
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.qualifying_days
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.trim_point
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.excess_bed_days
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.pbr_delayed_discharge_days
-      data_type: NUMBER(38,0)
-    - name: spell.commissioning.tariff_calculation.tariff_applied
-      data_type: TEXT
-    - name: spell.commissioning.tariff_calculation.initial_tariff
-      data_type: NUMBER(38,18)
-    - name: spell.commissioning.tariff_calculation.per_diem_rate
-      data_type: NUMBER(38,18)
-    - name: spell.commissioning.tariff_calculation.excess_bed_days_tariff
-      data_type: NUMBER(38,18)
-    - name: spell.commissioning.tariff_calculation.market_forces_factor
-      data_type: NUMBER(38,18)
-    - name: spell.commissioning.tariff_calculation.final_price
-      data_type: NUMBER(38,18)
-    - name: spell.commissioning.commissioner_assignment.commissioner
-      data_type: TEXT
-    - name: spell.commissioning.commissioner_assignment.flowchart_reference
-      data_type: TEXT
-    - name: spell.referral.direct_access_indicator
-      data_type: TEXT
-    - name: spell.commissioning.service_agreement.line_number
-      data_type: TEXT
-    - name: spell.commissioning.commissioner_assignment.nhse_planning_commissioner
-      data_type: TEXT
-    - name: spell.patient.identity.carer_support_indicator
-      data_type: TEXT
-    - name: spell.commissioning.tariff_calculation.aggregate_unbundled_tariff
-      data_type: NUMBER(38,0)
-    - name: spell.referral_to_treatment.ubrn.issuer
-      data_type: TEXT
     - name: spell.care_location.organisation_geographies.ccg_from_treatment_site.origin
       data_type: TEXT
     - name: spell.care_location.organisation_geographies.lsoa_provider_distance.value
@@ -367,53 +319,101 @@ sources:
       data_type: NUMBER(38,0)
     - name: spell.commissioning.tariff_calculation.spell_type
       data_type: TEXT
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: type
+    - name: spell.commissioning.tariff_calculation.admission_type
       data_type: TEXT
-    - name: action
+    - name: spell.commissioning.tariff_calculation.patient_type
       data_type: TEXT
-    - name: schema_version
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.unadjusted_days
       data_type: NUMBER(38,0)
-    - name: system.report.as_at
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.critical_care_days
+      data_type: NUMBER(38,0)
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.rehabilitation_days
+      data_type: NUMBER(38,0)
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.palliative_care_days
+      data_type: NUMBER(38,0)
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.qualifying_days
+      data_type: NUMBER(38,0)
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.trim_point
+      data_type: NUMBER(38,0)
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.excess_bed_days
+      data_type: NUMBER(38,0)
+    - name: spell.commissioning.tariff_calculation.pbr_length_of_stay.pbr_delayed_discharge_days
+      data_type: NUMBER(38,0)
+    - name: spell.commissioning.tariff_calculation.tariff_applied
+      data_type: TEXT
+    - name: spell.commissioning.tariff_calculation.initial_tariff
+      data_type: NUMBER(38,18)
+    - name: spell.commissioning.tariff_calculation.per_diem_rate
+      data_type: NUMBER(38,18)
+    - name: spell.commissioning.tariff_calculation.excess_bed_days_tariff
+      data_type: NUMBER(38,18)
+    - name: spell.commissioning.tariff_calculation.market_forces_factor
+      data_type: NUMBER(38,18)
+    - name: spell.commissioning.tariff_calculation.final_price
+      data_type: NUMBER(38,18)
+    - name: spell.commissioning.commissioner_assignment.commissioner
+      data_type: TEXT
+    - name: spell.commissioning.commissioner_assignment.flowchart_reference
+      data_type: TEXT
+    - name: spell.referral.direct_access_indicator
+      data_type: TEXT
+    - name: spell.commissioning.service_agreement.line_number
+      data_type: TEXT
+    - name: spell.commissioning.commissioner_assignment.nhse_planning_commissioner
+      data_type: TEXT
+    - name: spell.patient.identity.carer_support_indicator
+      data_type: TEXT
+    - name: spell.commissioning.tariff_calculation.aggregate_unbundled_tariff
+      data_type: NUMBER(38,0)
+    - name: spell.referral_to_treatment.ubrn.issuer
+      data_type: TEXT
+    - name: spell.referral_to_treatment.patient_pathway_identifier.value Pseudo
+      data_type: TEXT
+    - name: spell.referral_to_treatment.patient_pathway_identifier.issuer
+      data_type: TEXT
+    - name: spell.referral_to_treatment.period_status
+      data_type: TEXT
+    - name: spell.referral_to_treatment.waiting_time_measurement_type
+      data_type: TEXT
+    - name: spell.referral_to_treatment.period_start_date
       data_type: TIMESTAMP_NTZ
-    - name: system.report.date_range
+    - name: spell.discharge.to_hospital_at_home
       data_type: TEXT
-    - name: system.report.clear_data
-      data_type: BOOLEAN
-    - name: system.report.grouper_version
+    - name: spell.commissioning.service_agreement.provider_reference_number
       data_type: TEXT
-    - name: system.report.tariff_version
+    - name: spell.patient.mother.nhs_number.value Pseudo
       data_type: TEXT
-    - name: system.report.query_identifier
+    - name: spell.patient.mother.nhs_number.status
       data_type: TEXT
-    - name: system.report.query_date
+    - name: spell.patient.mother.local_patient_identifier.value
+      data_type: TEXT
+    - name: spell.patient.mother.local_patient_identifier.issuer
+      data_type: TEXT
+    - name: spell.patient.mother.birth_date
       data_type: TIMESTAMP_NTZ
-    - name: system.report.query_time
-      data_type: TEXT
-    - name: system.interchange.received_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.interchange.received_time
-      data_type: TEXT
-    - name: system.transaction.cds_activity_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.record.identifier
-      data_type: TEXT
-    - name: system.record.version
-      data_type: TEXT
-    - name: system.record.cds_group_indicator
-      data_type: TEXT
-    - name: spell.hospital_provider_spell_number
-      data_type: TEXT
-    - name: spell.open_spell_indicator
-      data_type: TEXT
-    - name: spell.pbr_included_episodes_in_spell
+    - name: spell.patient.mother.birth_month
       data_type: NUMBER(38,0)
-    - name: spell.pbr_excluded_episodes_in_spell
+    - name: spell.patient.mother.birth_year
       data_type: NUMBER(38,0)
-    - name: spell.has_data_quality_error
+    - name: spell.patient.mother.age_range
+      data_type: TEXT
+    - name: spell.patient.mother.postcode Pseudo
+      data_type: TEXT
+    - name: spell.patient.mother.residence_ccg
+      data_type: TEXT
+    - name: spell.patient.mother.postcode_from_pds Pseudo
+      data_type: TEXT
+    - name: spell.patient.mother.residence_ccg_from_pds
+      data_type: TEXT
+    - name: spell.patient.mother.general_practice_from_pds
+      data_type: TEXT
+    - name: spell.patient.mother.responsible_ccg_from_pds
+      data_type: TEXT
+    - name: spell.discharge.ready_date
+      data_type: TIMESTAMP_NTZ
+    - name: spell.referral_to_treatment.period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: spell.referral_to_treatment.period_length
       data_type: NUMBER(38,0)
     - name: spell.commissioning.pss_grouping.national_programme_code
       data_type: TEXT
@@ -474,10 +474,6 @@ sources:
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
-    - name: tariff
-      data_type: NUMBER(38,18)
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: UNBUNDLED_HRG_ID
       data_type: NUMBER(38,0)
     - name: code
@@ -486,25 +482,15 @@ sources:
       data_type: NUMBER(38,0)
     - name: multiple_applies
       data_type: BOOLEAN
+    - name: tariff
+      data_type: NUMBER(38,18)
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
     - name: tariff_applied
       data_type: TEXT
   - name: spell.commissioning.service_agreements
     identifier: '"spell.commissioning.service_agreements"'
     columns:
-    - name: commissioner_assignment_period_end_date
-      data_type: TIMESTAMP_NTZ
-    - name: commissioning_serial_number
-      data_type: TEXT
-    - name: line_number
-      data_type: TEXT
-    - name: commissioner_reference_number
-      data_type: TEXT
-    - name: provider_reference_number
-      data_type: TEXT
-    - name: service_code
-      data_type: TEXT
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
@@ -519,6 +505,20 @@ sources:
       data_type: TEXT
     - name: commissioner_assignment_period_start_date
       data_type: TIMESTAMP_NTZ
+    - name: commissioner_assignment_period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: commissioning_serial_number
+      data_type: TEXT
+    - name: line_number
+      data_type: TEXT
+    - name: commissioner_reference_number
+      data_type: TEXT
+    - name: provider_reference_number
+      data_type: TEXT
+    - name: service_code
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: spell.commissioning.tariff_calculation.exclusion_reasons
     identifier: '"spell.commissioning.tariff_calculation.exclusion_reasons"'
     columns:
@@ -662,14 +662,6 @@ sources:
   - name: spell.critical_care_consolidated.allocated_episodes.daily_activities.codes
     identifier: '"spell.critical_care_consolidated.allocated_episodes.daily_activities.codes"'
     columns:
-    - name: DAILY_ACTIVITIES_ID
-      data_type: NUMBER(38,0)
-    - name: CODES_ID
-      data_type: NUMBER(38,0)
-    - name: codes
-      data_type: TEXT
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
@@ -677,6 +669,14 @@ sources:
     - name: CRITICAL_CARE_CONSOLIDATED_ID
       data_type: NUMBER(38,0)
     - name: ALLOCATED_EPISODES_ID
+      data_type: NUMBER(38,0)
+    - name: DAILY_ACTIVITIES_ID
+      data_type: NUMBER(38,0)
+    - name: CODES_ID
+      data_type: NUMBER(38,0)
+    - name: codes
+      data_type: TEXT
+    - name: dmicImportLogId
       data_type: NUMBER(38,0)
   - name: spell.critical_care_consolidated.allocated_episodes.daily_activities.high_cost_drugs
     identifier: '"spell.critical_care_consolidated.allocated_episodes.daily_activities.high_cost_drugs"'
@@ -719,11 +719,23 @@ sources:
   - name: spell.derived
     identifier: '"spell.derived"'
     columns:
-    - name: dmicSubICBResidenceSubmitted
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
+    - name: CqcCareHomeCode
+      data_type: TEXT
+    - name: dmicICBCommissioner
+      data_type: TEXT
+    - name: dmicSubICBCommissioner
+      data_type: TEXT
+    - name: dmicICBRegistrationSubmitted
       data_type: TEXT
     - name: dmicICBResidenceSubmitted
       data_type: TEXT
     - name: dmicSubICBRegistrationSubmitted
+      data_type: TEXT
+    - name: dmicSubICBResidenceSubmitted
       data_type: TEXT
     - name: dmicCommissionerDerivationReason
       data_type: TEXT
@@ -731,66 +743,54 @@ sources:
       data_type: TEXT
     - name: dmicElectoralWardCode
       data_type: TEXT
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
-    - name: dmicSubICBCommissioner
-      data_type: TEXT
-    - name: dmicICBRegistrationSubmitted
-      data_type: TEXT
-    - name: CqcCareHomeCode
-      data_type: TEXT
-    - name: dmicICBCommissioner
-      data_type: TEXT
   - name: spell.episodes
     identifier: '"spell.episodes"'
     columns:
-    - name: commissioning.grouping.code_cleaning_applied
-      data_type: BOOLEAN
-    - name: commissioning.tariff_calculation.excluded_from_pbr
+    - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
-    - name: commissioning.tariff_calculation.pbr_length_of_stay.critical_care_days
+    - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
-    - name: commissioning.tariff_calculation.pbr_length_of_stay.rehabilitation_days
+    - name: EPISODES_ID
       data_type: NUMBER(38,0)
-    - name: commissioning.tariff_calculation.pbr_length_of_stay.palliative_care_days
-      data_type: NUMBER(38,0)
-    - name: commissioning.tariff_calculation.pbr_length_of_stay.pbr_delayed_discharge_days
-      data_type: NUMBER(38,0)
-    - name: system.transaction.cds_update_type
-      data_type: NUMBER(38,0)
-    - name: system.transaction.cds_applicable_date
+    - name: system.interchange.cds_control_reference
+      data_type: TEXT
+    - name: system.interchange.cds_record_identifier
+      data_type: TEXT
+    - name: system.interchange.received_date
       data_type: TIMESTAMP_NTZ
-    - name: system.transaction.cds_applicable_time
+    - name: system.interchange.received_time
       data_type: TEXT
-    - name: referral.direct_access_indicator
+    - name: system.interchange.cds_message_version_number
       data_type: TEXT
-    - name: first_regular_day_or_night_admission
+    - name: system.interchange.cds_message_reference
       data_type: TEXT
-    - name: commissioning.service_agreement.line_number
+    - name: system.interchange.identifier
       data_type: TEXT
-    - name: patient.identity.carer_support_indicator
+    - name: system.transaction.cds_record_type
       data_type: TEXT
-    - name: referral_to_treatment.ubrn.issuer
+    - name: system.transaction.cds_unique_identifier
       data_type: TEXT
-    - name: referral_to_treatment.patient_pathway_identifier.value Pseudo
-      data_type: TEXT
-    - name: referral_to_treatment.patient_pathway_identifier.issuer
-      data_type: TEXT
-    - name: referral_to_treatment.period_status
-      data_type: TEXT
-    - name: referral_to_treatment.waiting_time_measurement_type
-      data_type: TEXT
-    - name: referral_to_treatment.period_start_date
+    - name: system.transaction.cds_activity_date
       data_type: TIMESTAMP_NTZ
-    - name: discharge.to_hospital_at_home
+    - name: system.transaction.cds_sender
       data_type: TEXT
-    - name: care_professional.local_sub_specialty
+    - name: system.transaction.cds_extract_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_extract_time
       data_type: TEXT
-    - name: commissioning.service_agreement.provider_reference_number
+    - name: system.transaction.cds_protocol_identifier
       data_type: TEXT
-    - name: patient.mother.nhs_number.value Pseudo
+    - name: system.transaction.cds_bulk_replacement_group
+      data_type: TEXT
+    - name: system.transaction.cds_report_period_start_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_report_period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_prime_recipient
+      data_type: TEXT
+    - name: system.record.identifier
+      data_type: TEXT
+    - name: system.record.version
       data_type: TEXT
     - name: system.record.cds_group_indicator
       data_type: TEXT
@@ -838,52 +838,6 @@ sources:
       data_type: TEXT
     - name: patient.identity.marital_status
       data_type: TEXT
-    - name: start_time
-      data_type: TEXT
-    - name: end_date
-      data_type: TIMESTAMP_NTZ
-    - name: end_time
-      data_type: TEXT
-    - name: duration
-      data_type: NUMBER(38,0)
-    - name: last_episode_indicator
-      data_type: TEXT
-    - name: neonatal_level_of_care
-      data_type: TEXT
-    - name: psychiatric_patient_status
-      data_type: TEXT
-    - name: dominant_episode_flag
-      data_type: TEXT
-    - name: care_professional.consultant
-      data_type: TEXT
-    - name: care_professional.main_specialty
-      data_type: TEXT
-    - name: care_professional.treatment_function
-      data_type: TEXT
-    - name: clinical_coding.grouper_derived.dominant_procedure
-      data_type: TEXT
-    - name: clinical_coding.procedure.operation_status
-      data_type: TEXT
-    - name: commissioning.service_agreement.provider
-      data_type: TEXT
-    - name: commissioning.service_agreement.provider_derived
-      data_type: TEXT
-    - name: commissioning.service_agreement.commissioner
-      data_type: TEXT
-    - name: commissioning.service_agreement.is_commissioner_recognised
-      data_type: BOOLEAN
-    - name: commissioning.service_agreement.commissioner_derived
-      data_type: TEXT
-    - name: commissioning.service_agreement.commissioning_serial_number
-      data_type: TEXT
-    - name: commissioning.service_agreement.commissioner_reference_number
-      data_type: TEXT
-    - name: commissioning.grouping.core_hrg
-      data_type: TEXT
-    - name: commissioning.grouping.grouping_method
-      data_type: TEXT
-    - name: commissioning.grouping.programme_budgeting_category
-      data_type: TEXT
     - name: patient.registration.general_practitioner
       data_type: TEXT
     - name: patient.registration.general_practice
@@ -929,52 +883,6 @@ sources:
     - name: patient.residence_derived.electoral_ward_1998
       data_type: TEXT
     - name: patient.residence_derived.index_of_multiple_deprivation.decile
-      data_type: TEXT
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: EPISODES_ID
-      data_type: NUMBER(38,0)
-    - name: system.interchange.cds_control_reference
-      data_type: TEXT
-    - name: system.interchange.cds_record_identifier
-      data_type: TEXT
-    - name: system.interchange.received_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.interchange.received_time
-      data_type: TEXT
-    - name: system.interchange.cds_message_version_number
-      data_type: TEXT
-    - name: system.interchange.cds_message_reference
-      data_type: TEXT
-    - name: system.interchange.identifier
-      data_type: TEXT
-    - name: system.transaction.cds_record_type
-      data_type: TEXT
-    - name: system.transaction.cds_unique_identifier
-      data_type: TEXT
-    - name: system.transaction.cds_activity_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.transaction.cds_sender
-      data_type: TEXT
-    - name: system.transaction.cds_extract_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.transaction.cds_extract_time
-      data_type: TEXT
-    - name: system.transaction.cds_protocol_identifier
-      data_type: TEXT
-    - name: system.transaction.cds_bulk_replacement_group
-      data_type: TEXT
-    - name: system.transaction.cds_report_period_start_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.transaction.cds_report_period_end_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.transaction.cds_prime_recipient
-      data_type: TEXT
-    - name: system.record.identifier
-      data_type: TEXT
-    - name: system.record.version
       data_type: TEXT
     - name: patient.residence_derived.index_of_multiple_deprivation.decile_description
       data_type: TEXT
@@ -1024,6 +932,98 @@ sources:
       data_type: NUMBER(38,0)
     - name: start_date
       data_type: TIMESTAMP_NTZ
+    - name: start_time
+      data_type: TEXT
+    - name: end_date
+      data_type: TIMESTAMP_NTZ
+    - name: end_time
+      data_type: TEXT
+    - name: duration
+      data_type: NUMBER(38,0)
+    - name: last_episode_indicator
+      data_type: TEXT
+    - name: neonatal_level_of_care
+      data_type: TEXT
+    - name: psychiatric_patient_status
+      data_type: TEXT
+    - name: dominant_episode_flag
+      data_type: TEXT
+    - name: care_professional.consultant
+      data_type: TEXT
+    - name: care_professional.main_specialty
+      data_type: TEXT
+    - name: care_professional.treatment_function
+      data_type: TEXT
+    - name: clinical_coding.grouper_derived.dominant_procedure
+      data_type: TEXT
+    - name: clinical_coding.procedure.operation_status
+      data_type: TEXT
+    - name: commissioning.service_agreement.provider
+      data_type: TEXT
+    - name: commissioning.service_agreement.provider_derived
+      data_type: TEXT
+    - name: commissioning.service_agreement.commissioner
+      data_type: TEXT
+    - name: commissioning.service_agreement.is_commissioner_recognised
+      data_type: BOOLEAN
+    - name: commissioning.service_agreement.commissioner_derived
+      data_type: TEXT
+    - name: commissioning.service_agreement.commissioning_serial_number
+      data_type: TEXT
+    - name: commissioning.service_agreement.commissioner_reference_number
+      data_type: TEXT
+    - name: commissioning.grouping.core_hrg
+      data_type: TEXT
+    - name: commissioning.grouping.grouping_method
+      data_type: TEXT
+    - name: commissioning.grouping.programme_budgeting_category
+      data_type: TEXT
+    - name: commissioning.grouping.code_cleaning_applied
+      data_type: BOOLEAN
+    - name: commissioning.tariff_calculation.excluded_from_pbr
+      data_type: NUMBER(38,0)
+    - name: commissioning.tariff_calculation.pbr_length_of_stay.critical_care_days
+      data_type: NUMBER(38,0)
+    - name: commissioning.tariff_calculation.pbr_length_of_stay.rehabilitation_days
+      data_type: NUMBER(38,0)
+    - name: commissioning.tariff_calculation.pbr_length_of_stay.palliative_care_days
+      data_type: NUMBER(38,0)
+    - name: commissioning.tariff_calculation.pbr_length_of_stay.pbr_delayed_discharge_days
+      data_type: NUMBER(38,0)
+    - name: system.transaction.cds_update_type
+      data_type: NUMBER(38,0)
+    - name: system.transaction.cds_applicable_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_applicable_time
+      data_type: TEXT
+    - name: referral.direct_access_indicator
+      data_type: TEXT
+    - name: first_regular_day_or_night_admission
+      data_type: TEXT
+    - name: commissioning.service_agreement.line_number
+      data_type: TEXT
+    - name: patient.identity.carer_support_indicator
+      data_type: TEXT
+    - name: referral_to_treatment.ubrn.issuer
+      data_type: TEXT
+    - name: referral_to_treatment.patient_pathway_identifier.value Pseudo
+      data_type: TEXT
+    - name: referral_to_treatment.patient_pathway_identifier.issuer
+      data_type: TEXT
+    - name: referral_to_treatment.period_status
+      data_type: TEXT
+    - name: referral_to_treatment.waiting_time_measurement_type
+      data_type: TEXT
+    - name: referral_to_treatment.period_start_date
+      data_type: TIMESTAMP_NTZ
+    - name: discharge.to_hospital_at_home
+      data_type: TEXT
+    - name: care_professional.local_sub_specialty
+      data_type: TEXT
+    - name: commissioning.service_agreement.provider_reference_number
+      data_type: TEXT
+    - name: patient.mother.nhs_number.value Pseudo
+      data_type: TEXT
     - name: patient.mother.nhs_number.status
       data_type: TEXT
     - name: patient.mother.local_patient_identifier.value
@@ -1172,12 +1172,12 @@ sources:
   - name: spell.episodes.care_location
     identifier: '"spell.episodes.care_location"'
     columns:
-    - name: end_date
-      data_type: TIMESTAMP_NTZ
-    - name: security_level
-      data_type: TEXT
-    - name: start_time
-      data_type: TEXT
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: EPISODES_ID
+      data_type: NUMBER(38,0)
     - name: CARE_LOCATION_ID
       data_type: NUMBER(38,0)
     - name: site_code_of_treatment
@@ -1186,20 +1186,6 @@ sources:
       data_type: TEXT
     - name: type
       data_type: TEXT
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: EPISODES_ID
-      data_type: NUMBER(38,0)
-    - name: night_period_availability
-      data_type: TEXT
-    - name: start_date
-      data_type: TIMESTAMP_NTZ
-    - name: end_time
-      data_type: TEXT
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: stage
       data_type: TEXT
     - name: ward_stay_sequence_number
@@ -1214,9 +1200,33 @@ sources:
       data_type: TEXT
     - name: day_period_availability
       data_type: TEXT
+    - name: night_period_availability
+      data_type: TEXT
+    - name: start_date
+      data_type: TIMESTAMP_NTZ
+    - name: end_date
+      data_type: TIMESTAMP_NTZ
+    - name: security_level
+      data_type: TEXT
+    - name: start_time
+      data_type: TEXT
+    - name: end_time
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: spell.episodes.care_professionals
     identifier: '"spell.episodes.care_professionals"'
     columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: EPISODES_ID
+      data_type: NUMBER(38,0)
+    - name: CARE_PROFESSIONALS_ID
+      data_type: NUMBER(38,0)
+    - name: professional_registration_issuer
+      data_type: TEXT
     - name: professional_registration_identifier
       data_type: TEXT
     - name: main_specialty
@@ -1229,16 +1239,6 @@ sources:
       data_type: TEXT
     - name: dmicImportLogId
       data_type: NUMBER(38,0)
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: EPISODES_ID
-      data_type: NUMBER(38,0)
-    - name: CARE_PROFESSIONALS_ID
-      data_type: NUMBER(38,0)
-    - name: professional_registration_issuer
-      data_type: TEXT
   - name: spell.episodes.clinical_coding.coded_scored_assessments
     identifier: '"spell.episodes.clinical_coding.coded_scored_assessments"'
     columns:
@@ -1284,19 +1284,19 @@ sources:
   - name: spell.episodes.clinical_coding.diagnosis.icd
     identifier: '"spell.episodes.clinical_coding.diagnosis.icd"'
     columns:
-    - name: present_on_admission
-      data_type: TEXT
-    - name: dmicImportLogId
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: EPISODES_ID
       data_type: NUMBER(38,0)
     - name: ICD_ID
       data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: EPISODES_ID
-      data_type: NUMBER(38,0)
-    - name: ROWNUMBER_ID
+    - name: present_on_admission
+      data_type: TEXT
+    - name: dmicImportLogId
       data_type: NUMBER(38,0)
   - name: spell.episodes.clinical_coding.diagnosis.read
     identifier: '"spell.episodes.clinical_coding.diagnosis.read"'
@@ -1416,28 +1416,28 @@ sources:
   - name: spell.episodes.clinical_coding.procedure.opcs
     identifier: '"spell.episodes.clinical_coding.procedure.opcs"'
     columns:
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
-    - name: main_operating_professional.registration_issuer
-      data_type: TEXT
-    - name: date
-      data_type: TIMESTAMP_NTZ
-    - name: main_operating_professional.identifier
-      data_type: TEXT
-    - name: responsible_anaesthetist.identifier
-      data_type: TEXT
-    - name: responsible_anaesthetist.registration_issuer
-      data_type: TEXT
-    - name: EPISODES_ID
-      data_type: NUMBER(38,0)
     - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: EPISODES_ID
       data_type: NUMBER(38,0)
     - name: OPCS_ID
       data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
+    - name: date
+      data_type: TIMESTAMP_NTZ
+    - name: main_operating_professional.identifier
+      data_type: TEXT
+    - name: main_operating_professional.registration_issuer
+      data_type: TEXT
+    - name: responsible_anaesthetist.identifier
+      data_type: TEXT
+    - name: responsible_anaesthetist.registration_issuer
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: spell.episodes.clinical_coding.procedure.snomed
     identifier: '"spell.episodes.clinical_coding.procedure.snomed"'
     columns:
@@ -1480,33 +1480,19 @@ sources:
       data_type: NUMBER(38,0)
     - name: UNBUNDLED_HRG_ID
       data_type: NUMBER(38,0)
-    - name: tariff
-      data_type: NUMBER(38,18)
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
     - name: adult_cc_tariff_days
       data_type: NUMBER(38,0)
     - name: multiple_applies
       data_type: BOOLEAN
+    - name: tariff
+      data_type: NUMBER(38,18)
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: spell.episodes.commissioning.service_agreements
     identifier: '"spell.episodes.commissioning.service_agreements"'
     columns:
-    - name: commissioner_assignment_period_end_date
-      data_type: TIMESTAMP_NTZ
-    - name: commissioning_serial_number
-      data_type: TEXT
-    - name: line_number
-      data_type: TEXT
-    - name: commissioner_reference_number
-      data_type: TEXT
-    - name: provider_reference_number
-      data_type: TEXT
-    - name: service_code
-      data_type: TEXT
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
@@ -1523,6 +1509,20 @@ sources:
       data_type: TEXT
     - name: commissioner_assignment_period_start_date
       data_type: TIMESTAMP_NTZ
+    - name: commissioner_assignment_period_end_date
+      data_type: TIMESTAMP_NTZ
+    - name: commissioning_serial_number
+      data_type: TEXT
+    - name: line_number
+      data_type: TEXT
+    - name: commissioner_reference_number
+      data_type: TEXT
+    - name: provider_reference_number
+      data_type: TEXT
+    - name: service_code
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: spell.episodes.commissioning.tariff_calculation.exclusion_reasons
     identifier: '"spell.episodes.commissioning.tariff_calculation.exclusion_reasons"'
     columns:
@@ -1788,18 +1788,18 @@ sources:
   - name: spell.episodes.system.transaction.cds_copy_recipients
     identifier: '"spell.episodes.system.transaction.cds_copy_recipients"'
     columns:
-    - name: EPISODES_ID
-      data_type: NUMBER(38,0)
     - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
-    - name: dmicImportLogId
+    - name: EPISODES_ID
       data_type: NUMBER(38,0)
     - name: CDS_COPY_RECIPIENTS_ID
       data_type: NUMBER(38,0)
     - name: cds_copy_recipients
       data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: system.transaction.cds_recipients
     identifier: '"system.transaction.cds_recipients"'
     columns:
@@ -1807,9 +1807,9 @@ sources:
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: CDS_RECIPIENTS_ID
       data_type: NUMBER(38,0)
     - name: cds_recipients
       data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
