@@ -56,6 +56,6 @@ SELECT
 
 FROM ({{ get_observations("'DEPR_COD', 'DEPRES_COD'", source='PCD') }}) obs
 LEFT JOIN {{ ref('stg_olids_enriched_concept_map') }} ecm
-    ON obs.episodicity_concept_id = ecm.source_code_id
+    ON obs.episodicity_concept_id = ecm.source_concept_id
 
 ORDER BY person_id, clinical_effective_date, id

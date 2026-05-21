@@ -39,7 +39,7 @@ SELECT
     dp.patient_ids,
     TRUE AS is_active,
     bd.is_deceased,
-    p.is_dummy_patient,
+    p.is_test_patient,
     p.is_confidential,
     p.is_spine_sensitive,
     p.birth_year,
@@ -54,8 +54,8 @@ SELECT
     cr.total_registrations_count,
     cr.has_changed_practice,
     cr.practitioner_id,
-    p.record_owner_organisation_code AS record_owner_org_code,
-    p.lds_datetime_data_acquired AS latest_record_date
+    p.publisher_organisation_code AS record_owner_org_code,
+    p.lds_datetime_first_acquired AS latest_record_date
 FROM {{ ref('dim_person') }} AS dp
 INNER JOIN current_registrations AS cr
     ON dp.person_id = cr.person_id
@@ -69,4 +69,4 @@ WHERE
     -- alive + non-dummy. Filtering here means the cluster_by sort and table
     -- write only process the active cohort (~2.2M rows, not 2.4M).
     COALESCE(bd.is_deceased, FALSE) = FALSE
-    AND COALESCE(p.is_dummy_patient, FALSE) = FALSE
+    AND COALESCE(p.is_test_patient, FALSE) = FALSE

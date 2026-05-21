@@ -109,7 +109,7 @@ INNER JOIN (
                 PARTITION BY organisation_code 
                 ORDER BY 
                     CASE WHEN is_obsolete = FALSE THEN 0 ELSE 1 END,  -- Prefer active records
-                    lds_datetime_data_acquired DESC,  -- Then most recent data
+                    lds_datetime_first_acquired DESC,  -- Then most recent data
                     id DESC  -- Finally by ID as tiebreaker
             ) AS rn
         FROM {{ ref('stg_olids_organisation') }}

@@ -20,10 +20,10 @@ and classifies contact modes and slot categories for downstream analysis.
 
 Duration methodology:
 - For untimed/list schedules (open-book triage, duty doctor, eConsult lists),
-  planned_duration is inherited from the whole session — duration_minutes is NULL
+  planned_duration_mins is inherited from the whole session — duration_minutes is NULL
 - For timed schedules:
-  - Use actual_duration if recorded and shorter than planned (GP finished early)
-  - Otherwise use planned_duration (the booked slot length)
+  - Use actual_duration_mins if recorded and shorter than planned (GP finished early)
+  - Otherwise use planned_duration_mins (the booked slot length)
   - Cap at 60 minutes (anything above is a session/day-length data quality issue)
   - Default NULLs and 0s to 10 minutes (PSSRU-convention GP consultation length)
 */
@@ -37,11 +37,11 @@ with appointments as (
         a.practitioner_in_role_id,
         a.schedule_id,
         a.start_date,
-        a.date_time_booked,
+        a.datetime_booked,
 
         -- Raw durations (cleaned below after joining schedule)
-        a.planned_duration,
-        a.actual_duration,
+        a.planned_duration_mins,
+        a.actual_duration_mins,
 
         -- Status
         a.appointment_status_source_code,
@@ -60,7 +60,7 @@ with appointments as (
         a.contact_mode_source_code,
         -- 'Not an Appointment' is a practice data-entry label rather than a
         -- genuine non-appointment — profiling (2026-04) showed all 44k such
-        -- rows have a populated date_time_booked, sit on real schedules,
+        -- rows have a populated datetime_booked, sit on real schedules,
         -- and span the full range of slot categories including 13.5k
         -- Urgent and 10.4k Routine consultations that feed the access
         -- KPIs. They're real clinical activity where the contact mode
@@ -136,16 +136,16 @@ with appointments as (
         END as urgency,
         -- Same-day: booked and seen on the same day (NHSE standard definition)
         CASE
-            WHEN a.date_time_booked IS NOT NULL
-                AND DATE(a.date_time_booked) = DATE(a.start_date)
+            WHEN a.datetime_booked IS NOT NULL
+                AND DATE(a.datetime_booked) = DATE(a.start_date)
                 THEN TRUE
             ELSE FALSE
         END as is_same_day,
         -- Calendar days from booking to the appointment slot time
         -- (0 = same day; NULL when booking time is not recorded)
         CASE
-            WHEN a.date_time_booked IS NOT NULL
-                THEN DATEDIFF('day', DATE(a.date_time_booked), DATE(a.start_date))
+            WHEN a.datetime_booked IS NOT NULL
+                THEN DATEDIFF('day', DATE(a.datetime_booked), DATE(a.start_date))
         END as booking_to_slot_days,
 
         -- UK fiscal year start (Apr-Mar) — used for costing and any
@@ -156,18 +156,18 @@ with appointments as (
         END as fiscal_year_start,
 
         -- Patient experience
-        a.patient_wait,
-        a.patient_delay,
+        a.patient_wait_mins,
+        a.patient_delay_mins,
 
         -- Booking
         a.booking_method_source_code as booking_method,
 
         -- Context
-        a.type as local_slot_type,
+        a.appointment_type as local_slot_type,
         a.context_type,
         a.service_setting,
         a.age_at_event,
-        a.record_owner_organisation_code
+        a.publisher_organisation_code
 
     from {{ ref('stg_olids_appointment') }} as a
     where a.context_type = 'Care Related Encounter'
@@ -199,14 +199,14 @@ practitioner_roles as (
 ),
 
 schedules as (
-    -- Schedule is the container for appointments; type indicates whether
+    -- Schedule is the container for appointments; appointment_type indicates whether
     -- the schedule is timed (normal bookable slots) or untimed (open books
-    -- like duty doctor / triage sessions where planned_duration is meaningless)
+    -- like duty doctor / triage sessions where planned_duration_mins is meaningless)
     select
         s.id as schedule_id,
-        s.type as schedule_type,
+        s.appointment_type as schedule_type,
         CASE
-            WHEN s.type IN ('Untimed Appointments', 'List') THEN TRUE
+            WHEN s.appointment_type IN ('Untimed Appointments', 'List') THEN TRUE
             ELSE FALSE
         END as is_untimed_session
     from {{ ref('stg_olids_schedule') }} as s
@@ -233,14 +233,14 @@ cleaned as (
     a.organisation_id,
     a.schedule_id,
     a.start_date,
-    a.date_time_booked,
+    a.datetime_booked,
 
     -- Raw durations
-    a.planned_duration,
-    a.actual_duration,
+    a.planned_duration_mins,
+    a.actual_duration_mins,
 
     -- Cleaned duration (timed schedules only)
-    -- For untimed/list schedules, planned_duration is meaningless (inherited from
+    -- For untimed/list schedules, planned_duration_mins is meaningless (inherited from
     -- the whole session), so duration_minutes is NULL. Downstream aggregations
     -- will correctly skip these rather than using a fabricated default.
     -- For timed schedules: use actual if reliably shorter than planned, else
@@ -251,16 +251,16 @@ cleaned as (
             COALESCE(
                 CASE
                     -- Actual is reliable when shorter than planned (GP finished early)
-                    WHEN a.actual_duration > 0
-                         AND a.planned_duration > 0
-                         AND a.actual_duration < a.planned_duration
-                        THEN a.actual_duration
+                    WHEN a.actual_duration_mins > 0
+                         AND a.planned_duration_mins > 0
+                         AND a.actual_duration_mins < a.planned_duration_mins
+                        THEN a.actual_duration_mins
                     -- Otherwise prefer planned slot length
-                    WHEN a.planned_duration > 0
-                        THEN a.planned_duration
+                    WHEN a.planned_duration_mins > 0
+                        THEN a.planned_duration_mins
                     -- If only actual is recorded (planned NULL/0), use it
-                    WHEN a.actual_duration > 0
-                        THEN a.actual_duration
+                    WHEN a.actual_duration_mins > 0
+                        THEN a.actual_duration_mins
                     ELSE 10
                 END,
                 10
@@ -306,8 +306,8 @@ cleaned as (
     a.booking_to_slot_days,
 
     -- Patient experience
-    a.patient_wait,
-    a.patient_delay,
+    a.patient_wait_mins,
+    a.patient_delay_mins,
 
     -- Fiscal year (for costing and financial-year rollups)
     a.fiscal_year_start,
@@ -317,7 +317,7 @@ cleaned as (
     a.local_slot_type,
     a.service_setting,
     a.age_at_event,
-    a.record_owner_organisation_code
+    a.publisher_organisation_code
 
     from appointments as a
     left join practitioner_roles as pr

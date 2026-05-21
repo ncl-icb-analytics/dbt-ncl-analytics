@@ -4,7 +4,7 @@
     Returns observations for one or more LTC LCS valuesets via two parallel paths:
       - 'mapped': observation.mapped_concept_code = expanded_concepts.snomed_code
                   (uses terminology-server-expanded SNOMED codes)
-      - 'source': observation.observation_source_concept_id -> enriched_concept_map.source_code_id
+      - 'source': observation.observation_source_concept_id -> enriched_concept_map.source_concept_id
                   -> original_codes.original_code (uses raw EMIS codes preserved pre-translation)
     Path 'source' recovers observations for valuesets where the terminology server failed
     to translate EMIS codes to SNOMED. When both paths match the same observation, the
@@ -46,7 +46,7 @@ with matched_observations as (
         o.person_id,
         o.clinical_effective_date,
         o.result_value,
-        o.result_value_units_concept_id,
+        o.result_units_source_concept_id,
         o.result_unit_display,
         o.result_text,
         o.is_problem,
@@ -55,7 +55,7 @@ with matched_observations as (
         o.mapped_concept_id as concept_id,
         o.mapped_concept_code as concept_code,
         o.mapped_concept_display as concept_display,
-        o.episodicity_concept_id,
+        o.episodicity_source_concept_id,
         ec.valueset_id,
         vs.valueset_friendly_name,
         'mapped' as match_path
@@ -79,7 +79,7 @@ with matched_observations as (
         o.person_id,
         o.clinical_effective_date,
         o.result_value,
-        o.result_value_units_concept_id,
+        o.result_units_source_concept_id,
         o.result_unit_display,
         o.result_text,
         o.is_problem,
@@ -88,13 +88,13 @@ with matched_observations as (
         o.mapped_concept_id as concept_id,
         o.mapped_concept_code as concept_code,
         o.mapped_concept_display as concept_display,
-        o.episodicity_concept_id,
+        o.episodicity_source_concept_id,
         oc.valueset_id,
         vs.valueset_friendly_name,
         'source' as match_path
     from {{ ref('stg_olids_observation') }} as o
     inner join {{ ref('stg_olids_enriched_concept_map') }} as ecm
-        on o.observation_source_concept_id = ecm.source_code_id
+        on o.observation_source_concept_id = ecm.source_concept_id
     inner join {{ ref('stg_reference_ltc_lcs_original_codes') }} as oc
         on ecm.source_code = oc.original_code
     left join {{ ref('stg_reference_ltc_lcs_valuesets') }} as vs

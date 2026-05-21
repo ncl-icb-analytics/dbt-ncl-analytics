@@ -10,7 +10,7 @@
     LEFT JOIN {{ ref('stg_olids_concept') }} AS {{ source_alias }}
         ON {{ source_column }} = {{ source_alias }}.id
     LEFT JOIN {{ ref('stg_olids_concept_map') }} AS {{ map_alias }}
-        ON {{ source_column }} = {{ map_alias }}.source_code_id
+        ON {{ source_column }} = {{ map_alias }}.source_concept_id
     LEFT JOIN {{ ref('stg_olids_concept') }} AS {{ target_alias }}
-        ON {{ map_alias }}.target_code_id = {{ target_alias }}.id
+        ON {{ map_alias }}.target_concept_id = {{ target_alias }}.id
 {% endmacro %}
