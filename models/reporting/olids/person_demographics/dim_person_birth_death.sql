@@ -42,7 +42,7 @@ patient_candidates AS (
         pds.is_deceased,
         pds.death_source_flag,
         pds.death_date_approx,
-        p.is_dummy_patient,
+        p.is_test_patient,
         CASE WHEN p.birth_year IS NOT NULL AND p.birth_month IS NOT NULL THEN 1 ELSE 0 END AS has_dob
     FROM {{ ref('int_patient_person_unique') }} AS pp
     INNER JOIN {{ ref('stg_olids_patient') }} AS p

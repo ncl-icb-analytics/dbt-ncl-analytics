@@ -19,15 +19,17 @@ select
     lds_lakehouse_date_processed,
     lds_lakehouse_datetime_updated,
     lds_source_record_id,
-    lds_record_id_person
+    lds_record_id_person,
 
-    -- TODO(olids-2026): expose new upstream columns
-    -- lds_end_datetime,
-    -- lds_registrar_event_id,
-    -- lds_datetime_update_acquired_person,
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    lds_end_datetime,
+    lds_registrar_event_id,
+    lds_datetime_update_acquired_person
 from {{ ref('raw_olids_patient_person') }}
 where person_id is not null
+-- OLIDS 2026: source-side `id` removed; the natural key is (patient_id, person_uuid).
 qualify row_number() over (
-    partition by id
+    partition by patient_id, person_uuid
     order by lds_start_datetime desc
 ) = 1

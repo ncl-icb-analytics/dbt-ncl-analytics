@@ -103,7 +103,7 @@ with matched_orders as (
         'source' as match_path
     from {{ ref('stg_olids_medication_order') }} as mo
     inner join {{ ref('stg_olids_enriched_concept_map') }} as ecm
-        on mo.medication_order_source_concept_id = ecm.source_code_id
+        on mo.medication_order_source_concept_id = ecm.source_concept_id
     inner join {{ ref('stg_reference_ltc_lcs_original_codes') }} as oc
         on ecm.source_code = oc.original_code
     left join {{ ref('stg_reference_ltc_lcs_valuesets') }} as vs

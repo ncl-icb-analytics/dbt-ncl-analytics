@@ -6,6 +6,11 @@ models:
         owner:
           name: EddieDavison92
     columns:
+      - name: concept_id
+        description: Primary key (UUID) replacing the removed `id` column.
+        tests:
+          - unique
+          - not_null
       - name: system
         description: Coding system or terminology (e.g., SNOMED CT, Read, ICD-10)
       - name: code

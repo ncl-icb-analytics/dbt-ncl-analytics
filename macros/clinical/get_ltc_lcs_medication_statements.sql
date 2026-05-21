@@ -110,7 +110,7 @@ with matched_statements as (
         'source' as match_path
     from {{ ref('stg_olids_medication_statement') }} as ms
     inner join {{ ref('stg_olids_enriched_concept_map') }} as ecm
-        on ms.medication_statement_source_concept_id = ecm.source_code_id
+        on ms.medication_statement_source_concept_id = ecm.source_concept_id
     inner join {{ ref('stg_reference_ltc_lcs_original_codes') }} as oc
         on ecm.source_code = oc.original_code
     left join {{ ref('stg_reference_ltc_lcs_valuesets') }} as vs

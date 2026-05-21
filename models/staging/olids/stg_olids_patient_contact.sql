@@ -15,10 +15,11 @@ select
     -- Metadata
     lds_start_datetime,
     lds_is_deleted,
-    lds_source_record_id
+    lds_source_record_id,
 
-    -- TODO(olids-2026): expose new upstream columns
-    -- contact_type,
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    contact_type
 from {{ ref('raw_olids_patient_contact') }}
 where coalesce(lds_is_deleted, false) = false
     and person_id is not null

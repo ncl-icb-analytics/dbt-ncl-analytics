@@ -32,14 +32,15 @@ select
     -- Metadata
     lds_is_deleted,
     lds_start_datetime,
-    lds_datetime_first_acquired
+    lds_datetime_first_acquired,
 
-    -- TODO(olids-2026): expose new upstream columns
-    -- person_record_type,
-    -- person_version_id,
-    -- sk_patient_id,
-    -- lds_datetime_first_acquired_person,
-    -- lds_datetime_update_acquired_person,
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    person_record_type,
+    person_version_id,
+    sk_patient_id,
+    lds_datetime_first_acquired_person,
+    lds_datetime_update_acquired_person
 from {{ ref('raw_olids_person') }}
 qualify row_number() over (
     partition by id

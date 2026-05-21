@@ -18,12 +18,13 @@ select distinct
     source_system,
     target_code,
     target_display,
-    target_system
+    target_system,
 
-    -- TODO(olids-2026): expose new upstream columns
-    -- mapped_item_id,
-    -- lakehouse_datetime_updated,
-    -- lakehouse_date_processed,
-    -- lds_is_deleted,
-    -- lds_start_datetime,
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    mapped_item_id,
+    lakehouse_datetime_updated,
+    lakehouse_date_processed,
+    lds_is_deleted,
+    lds_start_datetime
 from {{ ref('raw_olids_concept_map') }}

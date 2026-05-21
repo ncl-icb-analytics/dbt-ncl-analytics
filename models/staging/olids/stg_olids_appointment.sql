@@ -49,12 +49,13 @@ select
     -- Metadata
     lds_start_datetime,
     lds_is_deleted,
-    lds_source_record_id
+    lds_source_record_id,
 
-    -- TODO(olids-2026): expose new upstream columns
-    -- publisher_organisation_id,
-    -- publisher_organisation_code,
-    -- author_organisation_id,
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    publisher_organisation_id,
+    publisher_organisation_code,
+    author_organisation_id
 from {{ ref('raw_olids_appointment') }}
 where coalesce(lds_is_deleted, false) = false
     and person_id is not null

@@ -146,16 +146,30 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
             out.append(_post_select_rewrite(line))
             continue
         if in_select and not seen_from and re.match(r"\s*from\b", line, re.IGNORECASE):
-            # About to leave SELECT list. Emit additions before FROM, as a separate
-            # column block. (Codemod adds them; we don't know the real source column
-            # naming, so they go in as commented placeholders for manual review.)
+            # About to leave SELECT list. Emit additions before FROM as real SELECT
+            # columns so downstream consumers can reference them. Adds a trailing
+            # comma to the prior last column.
             if rules.additions and not additions_emitted:
                 indent = "    "
-                out.append(f"{indent}-- TODO(olids-2026): expose new upstream columns")
-                for col in rules.additions:
-                    out.append(f"{indent}-- {col},")
+                # Find the last non-blank line in `out` that's a SELECT-list column
+                # (i.e. doesn't start with `--`) and add a trailing comma if missing.
+                for i in range(len(out) - 1, -1, -1):
+                    candidate = out[i].rstrip()
+                    if not candidate.strip():
+                        continue
+                    if candidate.lstrip().startswith("--"):
+                        continue
+                    if not candidate.endswith(","):
+                        out[i] = candidate + ","
+                    break
+                out.append("")
+                out.append(f"{indent}-- New columns exposed by the 2026 OLIDS schema realignment (issue #747)")
+                for j, col in enumerate(rules.additions):
+                    comma = "," if j < len(rules.additions) - 1 else ""
+                    out.append(f"{indent}{col}{comma}")
                 additions_emitted = True
                 report.additions.extend(rules.additions)
+                emitted_select_cols.extend(rules.additions)
             seen_from = True
             in_select = False
             out.append(line)

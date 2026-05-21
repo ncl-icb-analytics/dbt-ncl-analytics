@@ -9,7 +9,7 @@
 
 SELECT
     a.person_id,
-    a.organisation_id,
+    a.provider_organisation_id,
     'GP_APPOINTMENTS_12M' AS measure_id,
     age.age,
     COUNT(a.id) AS appointment_count,
@@ -25,5 +25,5 @@ WHERE
     AND a.start_date <= CURRENT_DATE()
 GROUP BY
     a.person_id,
-    a.organisation_id,
+    a.provider_organisation_id,
     age.age
