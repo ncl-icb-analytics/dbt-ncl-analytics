@@ -13,9 +13,14 @@ models:
           - not_null
       - name: source_concept_id
         description: Foreign key to concept.concept_id - source concept being mapped from
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_olids_concept')
+                field: concept_id
       - name: target_concept_id
         description: Foreign key to concept.concept_id - target concept being mapped to
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('stg_olids_concept')

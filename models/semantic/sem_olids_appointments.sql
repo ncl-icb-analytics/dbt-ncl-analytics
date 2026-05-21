@@ -104,7 +104,7 @@ DIMENSIONS(
     appt.is_untimed_session AS is_untimed_session COMMENT = 'TRUE if parent schedule is an open/untimed session (duty doctor, eConsult list). Duration is NULL for these.',
 
     -- Appointment-owning practice (the practice that delivered the appointment)
-    appt.practice_code AS publisher_organisation_code WITH SYNONYMS = ('practice code', 'GP practice', 'ODS code') COMMENT = 'ODS code of the practice that owns this appointment',
+    appt.publisher_organisation_code AS publisher_organisation_code WITH SYNONYMS = ('practice code', 'GP practice', 'ODS code') COMMENT = 'ODS code of the practice that owns this appointment',
     practice.practice_name AS practice_name COMMENT = 'Name of the practice that owns this appointment',
     practice.pcn_code AS pcn_code COMMENT = 'PCN code of the appointment-owning practice',
     practice.pcn_name AS pcn_name COMMENT = 'PCN name of the appointment-owning practice',

@@ -44,7 +44,7 @@ models:
       - name: episode_of_care_end_date
         description: End date of the episode of care
       - name: care_manager_practitioner_in_role_id
-        description: Foreign key to practitioner.id - care manager responsible for the episode
+        description: Foreign key to practitioner_in_role.id - care manager responsible for the episode
       - name: lds_id
         description: LDS system identifier
       - name: publisher_organisation_code

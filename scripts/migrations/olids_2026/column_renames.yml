@@ -148,9 +148,8 @@ tables:
     renames:
       date_precision_concept_id: clinical_effective_date_precision_source_concept_id
       status_concept_id: status_source_concept_id
-    removes:
-      # B: lds_end_date_time was on procedure_request? not in issue; leave as default behaviour
-      []
+    # B: lds_end_date_time was on procedure_request? not in issue; leave as default behaviour
+    removes: []
 
   stg_olids_referral_request:
     raw: raw_olids_referral_request

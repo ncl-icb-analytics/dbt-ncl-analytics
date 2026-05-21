@@ -27,8 +27,12 @@ select
     lds_registrar_event_id,
     lds_datetime_update_acquired_person
 from {{ ref('raw_olids_patient_person') }}
-where person_id is not null
 -- OLIDS 2026: source-side `id` removed; the natural key is (patient_id, person_uuid).
+-- Filter every partitioning column so null components can't silently collapse
+-- unrelated rows into the same partition.
+where patient_id is not null
+  and person_uuid is not null
+  and person_id is not null
 qualify row_number() over (
     partition by patient_id, person_uuid
     order by lds_start_datetime desc

@@ -1,11 +1,23 @@
 models:
   - name: stg_olids_patient_person
-    description: Junction table linking patient records to person records for identity management. The source-side `id` column was removed in the 2026 OLIDS schema realignment; rows are now keyed by (patient_id, person_uuid) and deduplicated on that natural key using lds_start_datetime.
+    description: Junction table linking patient records to person records for identity management. The source-side `id` column was removed in the 2026 OLIDS schema realignment; rows are now keyed on the natural pair (patient_id, person_uuid) and deduplicated on that key using lds_start_datetime.
     config:
       meta:
         owner:
           name: EddieDavison92
     columns:
+      - name: patient_id
+        description: Foreign key to patient.id. Part of the natural primary key.
+        data_tests:
+          - not_null
+      - name: person_uuid
+        description: Person UUID — part of the natural primary key, distinct from person_id.
+        data_tests:
+          - not_null
+      - name: person_id
+        description: Foreign key to person.id.
+        data_tests:
+          - not_null
       - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
       - name: lds_id
@@ -14,10 +26,6 @@ models:
         description: Datetime when data was acquired by LDS
       - name: lds_source_dataset_id
         description: LDS dataset identifier
-      - name: patient_id
-        description: Foreign key to patient.id
-      - name: person_id
-        description: Foreign key to person.id
       - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
@@ -28,7 +36,12 @@ models:
         description: Datetime when record was last updated in lakehouse
       - name: lds_record_id_person
         description: LDS record identifier for person
-    tests:
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - patient_id
+              - person_uuid
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

@@ -62,7 +62,7 @@ gp_observations as (
         on o.episodicity_source_concept_id = episodicity_map.source_concept_id
         and episodicity_map.is_primary = true
     left join {{ ref('stg_olids_concept') }} episodicity_concept
-        on episodicity_map.target_concept_id = episodicity_concept.id
+        on episodicity_map.target_concept_id = episodicity_concept.concept_id
     where o.clinical_effective_date is not null
         and o.clinical_effective_date between dateadd(year, {{ observation_cutoff }}, current_date()) and current_date()
 )

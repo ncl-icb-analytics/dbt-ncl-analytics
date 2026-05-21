@@ -35,8 +35,6 @@ models:
         description: Pattern used for the address match
       - name: lds_id
         description: LDS system identifier
-      - name: lds_registrar_event_id
-        description: LDS registrar event identifier
       - name: publisher_organisation_code
         description: Organisation code of the record owner
       - name: lds_datetime_first_acquired
