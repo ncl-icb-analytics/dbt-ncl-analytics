@@ -22,14 +22,24 @@ excluded_list as ( -- no rereview or reconsideration within a year?
     where action in ('Reject', 'Case closed') 
     and action_date between dateadd(year, -1, current_date()) and current_date()
 ),
+emis_list as (
+    select ed.patient_id, ed.area_code, pp.person_id as olids_id,'emis' as source
+    from {{ ref('cltcs_emis_data') }} ed
+    left join {{ref('dim_person_pseudo')}} pp on pp.sk_patient_id = ed.patient_id
+),
 complete_list as (
     select * from registrant_list
     union all
     select * from shortlisted_list
+    union all
+    select * from emis_list
 ),
 
 expanded_registrant_list as (
-    select patient_id, area_code, olids_id, source
+    select patient_id
+        , area_code
+        , olids_id
+        , source
     from complete_list c
     where not exists (
     select 1
@@ -37,13 +47,21 @@ expanded_registrant_list as (
     where e.patient_id = c.patient_id)
     qualify row_number() over (
         partition by patient_id
-        order by case when source = 'shortlist' then 0 else 1 end
+        order by case
+            when source = 'emis' then 0
+            when source = 'shortlist' then 1
+            when source = 'registrant' then 2
+            else 3
+        end
     ) = 1)
 
 select erl.patient_id
     , erl.area_code
     , erl.olids_id
     , erl.source
+    , case when exists (select 1 from shortlisted_list sl where sl.patient_id = erl.patient_id) then 1 else 0 end as shortlist_flag
+    , case when exists (select 1 from emis_list el where el.patient_id = erl.patient_id) then 1 else 0 end as emis_flag
+    , case when exists (select 1 from registrant_list rl where rl.patient_id = erl.patient_id) then 1 else 0 end as registrant_flag
     , pc.total_conditions
     , fr.category 
     , ccms.cambridge_comorbidity_score
@@ -64,7 +82,7 @@ left join {{ref('stg_aic_int_ccms_current')}} ccms
 left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
     on erl.olids_id = lcs.person_id
 where
-    erl.source = 'shortlist' or
+    erl.source in ('shortlist', 'emis') or
     (pc.total_conditions > 2 
     and (ccms.cambridge_comorbidity_score > 1.5
         or fr.category in ('MODERATE FRAILTY', 'SEVERE FRAILTY')
