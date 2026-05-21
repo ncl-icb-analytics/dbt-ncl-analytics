@@ -5,6 +5,10 @@ models:
       One row per sk_patient_id and usual GP organisation code (practice_code), keeping the
       latest ingested record when duplicates exist. PDS registration filtering is applied in
       cltcs_emis_extract.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
