@@ -50,7 +50,7 @@
         o.clinical_effective_date AS clinical_effective_date_raw,  -- Original value for audit
         o.date_recorded,
         o.result_value,
-        o.result_units_source_concept_id,
+        o.result_value_units_concept_id,
         o.result_unit_code,
         o.result_unit_display,
         o.result_text,
@@ -60,9 +60,9 @@
         o.mapped_concept_id,
         o.mapped_concept_code,
         o.mapped_concept_display,
-        o.episodicity_source_concept_id,
+        o.episodicity_concept_id,
         o.age_at_event,
-        o.lds_start_datetime,
+        o.lds_start_date_time,
         cc.cluster_id,
         cc.cluster_description,
         cc.code_description

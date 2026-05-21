@@ -17,7 +17,7 @@ WITH ndoo_resolved AS (
         n.preference_status,
         n.effective_from,
         n.effective_to,
-        n.lds_start_datetime
+        n.lds_start_date_time
     FROM {{ ref('stg_olids_ndoo_hashed') }} n
     INNER JOIN {{ ref('int_patient_person_unique') }} pp
         ON TRY_TO_NUMBER(n.sk_patient_id) = pp.sk_patient_id
@@ -35,5 +35,5 @@ SELECT
 FROM ndoo_resolved
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id, preference_type
-    ORDER BY COALESCE(effective_from, lds_start_datetime) DESC, lds_start_datetime DESC
+    ORDER BY COALESCE(effective_from, lds_start_date_time) DESC, lds_start_date_time DESC
 ) = 1

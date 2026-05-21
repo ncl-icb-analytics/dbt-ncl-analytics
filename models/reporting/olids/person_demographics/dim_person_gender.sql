@@ -24,14 +24,14 @@ WITH current_patient_per_person AS (
 ),
 
 best_patient_with_gender AS (
-    -- Choose a single best patient per person: prefer one with a gender_source_concept_id
+    -- Choose a single best patient per person: prefer one with a gender_concept_id
     SELECT
         pp.person_id,
         p.id AS patient_id,
-        p.gender_source_concept_id,
+        p.gender_concept_id,
         ROW_NUMBER() OVER (
             PARTITION BY pp.person_id
-            ORDER BY CASE WHEN p.gender_source_concept_id IS NOT NULL THEN 1 ELSE 2 END,
+            ORDER BY CASE WHEN p.gender_concept_id IS NOT NULL THEN 1 ELSE 2 END,
                      p.id DESC
         ) AS rn
     FROM {{ ref('int_patient_person_unique') }} AS pp
