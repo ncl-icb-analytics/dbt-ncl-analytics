@@ -1,0 +1,12 @@
+models:
+  - name: stg_cltcs_emis_ptl
+    description: CLTCS EMIS PTL extract (patient tracking list / MDT outcomes). Source raw_cltcs_emis_ptl.
+    columns:
+      - name: sk_patient_id
+        data_type: varchar
+        description: Pseudonymised NHS number (surrogate key for patient)
+        data_tests:
+          - not_null
+          - unique:
+              config:
+                severity: warn
