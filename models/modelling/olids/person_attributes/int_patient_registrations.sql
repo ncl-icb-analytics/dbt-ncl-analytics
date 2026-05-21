@@ -177,7 +177,7 @@ SELECT
     prs.person_id,
     prs.patient_id,
     prs.sk_patient_id,
-    prs.organisation_id_publisher,
+    prs.publisher_organisation_id,
     prs.practice_name,
     prs.practice_ods_code,
 

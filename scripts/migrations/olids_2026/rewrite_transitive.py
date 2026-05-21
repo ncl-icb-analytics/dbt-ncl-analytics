@@ -196,8 +196,13 @@ def main() -> int:
         if yml is not None:
             files_to_process.add(yml)
 
-    # Compile pattern per rename
-    patterns = [(re.compile(rf"(?<![\w.]){re.escape(old)}\b"), old, new) for old, new in safe_renames.items()]
+    # Compile pattern per rename. Unlike the first downstream pass, the
+    # transitive pass does NOT use a negative lookbehind for `.` — we want
+    # to rewrite both standalone `planned_duration` and qualified
+    # `appt.planned_duration` references. The OLIDS-specific column names
+    # in `safe_renames` don't appear in non-OLIDS code, so dotted matches
+    # are safe.
+    patterns = [(re.compile(rf"(?<!\w){re.escape(old)}\b"), old, new) for old, new in safe_renames.items()]
 
     touched_counts: dict[pathlib.Path, dict[str, int]] = defaultdict(dict)
     removed_hits: dict[pathlib.Path, dict[str, int]] = defaultdict(dict)
@@ -220,7 +225,7 @@ def main() -> int:
         for col in removes:
             if col in NOISY_REMOVES:
                 continue
-            n = len(re.findall(rf"(?<![\w.]){re.escape(col)}\b", new_text))
+            n = len(re.findall(rf"(?<!\w){re.escape(col)}\b", new_text))
             if n:
                 removed_hits[path][col] = n
 
