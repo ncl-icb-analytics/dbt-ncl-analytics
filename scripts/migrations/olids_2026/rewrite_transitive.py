@@ -48,6 +48,10 @@ EXCLUDE_FILE_STEMS = {
     "stg_olids_appointment_practitioner",
 }
 
+# Records any file the codemod couldn't open (permissions, encoding, missing).
+# Surfaced at the end and used to exit non-zero so a partial run isn't silent.
+READ_FAILURES: list[tuple[pathlib.Path, str]] = []
+
 
 def load_safe_renames():
     """Return (rename_map, remove_set, drop_set).
@@ -124,7 +128,8 @@ def build_ref_graph(scan_paths: list[pathlib.Path]) -> tuple[dict[str, pathlib.P
             name_to_path.setdefault(stem, p)
             try:
                 text = p.read_text(encoding="utf-8", errors="replace")
-            except Exception:
+            except OSError as exc:
+                READ_FAILURES.append((p, str(exc)))
                 continue
             refs = {m.group(1).lower() for m in REF_PATTERN.finditer(text)}
             path_to_refs[p] = refs
@@ -213,7 +218,8 @@ def main() -> int:
     for path in sorted(files_to_process):
         try:
             text = path.read_text(encoding="utf-8", errors="replace")
-        except Exception:
+        except OSError as exc:
+            READ_FAILURES.append((path, str(exc)))
             continue
         new_text = text
         for pat, old, new in patterns:
@@ -259,6 +265,18 @@ def main() -> int:
 
     if args.dry_run:
         print("\n[DRY RUN] No files written.")
+
+    if READ_FAILURES:
+        print(f"\n--- File read failures ({len(READ_FAILURES)}) ---", file=sys.stderr)
+        for path, err in READ_FAILURES:
+            print(f"  {path}: {err}", file=sys.stderr)
+        print(
+            "\nExiting non-zero because some files could not be read — the "
+            "rewrite is partial. Re-run after fixing the underlying issue.",
+            file=sys.stderr,
+        )
+        return 1
+
     return 0
 
 

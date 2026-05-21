@@ -372,7 +372,7 @@ def main() -> int:
 
     unhandled = sorted({c for r in reports for c in r.unchanged_cols})
     if unhandled:
-        print(f"\nUnhandled columns (pass-through, may want review):")
+        print("\nUnhandled columns (pass-through, may want review):")
         for c in unhandled:
             print(f"  - {c}")
 

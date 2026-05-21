@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -39,6 +40,19 @@ EXCLUDE_SCHEMA_PATTERNS = [
 ]
 
 BASELINE_TABLE = "DATA_LAKE__NCL.DBT_OBSERVABILITY.MODEL_ROW_COUNT_BASELINE"
+
+# Snowflake unquoted identifier rule (uppercase letters, digits, underscore).
+# Used to validate any identifier we splice into SQL — Snowflake parameters
+# only bind values, not identifiers, so we have to gate this ourselves.
+_IDENT_RE = re.compile(r"^[A-Z_][A-Z0-9_]*$")
+
+
+def _safe_ident(name: str, *, kind: str = "identifier") -> str:
+    """Validate and quote a Snowflake identifier."""
+    upper = name.upper()
+    if not _IDENT_RE.fullmatch(upper):
+        raise ValueError(f"Invalid {kind}: {name!r}")
+    return f'"{upper}"'
 
 CREATE_BASELINE_DDL = f"""
 CREATE TABLE IF NOT EXISTS {BASELINE_TABLE} (
@@ -84,9 +98,12 @@ def discover_models(
     """Return (db, schema, name, table_type) for every table/view in scope."""
     parts = []
     for db in databases:
+        qdb = _safe_ident(db, kind="database")
+        # `db` is now validated as an unquoted Snowflake identifier, so it's
+        # safe to splice as both literal and identifier.
         parts.append(
-            f"SELECT '{db}' AS table_catalog, table_schema, table_name, table_type "
-            f"FROM {db}.INFORMATION_SCHEMA.TABLES "
+            f"SELECT '{db.upper()}' AS table_catalog, table_schema, table_name, table_type "
+            f"FROM {qdb}.INFORMATION_SCHEMA.TABLES "
             f"WHERE table_type IN ('BASE TABLE', 'VIEW')"
         )
     where_exclusions = " AND ".join(
@@ -107,6 +124,7 @@ def fetch_recent_row_count_log(
     log_window_days: int,
 ) -> dict[tuple[str, str, str], tuple[int, datetime]]:
     """Return latest (row_count, run_started_at) per (db, schema, model)."""
+    window = int(log_window_days)  # coerce; never interpolate untrusted text
     sql = f"""
     WITH ranked AS (
       SELECT
@@ -120,7 +138,7 @@ def fetch_recent_row_count_log(
           ORDER BY run_started_at DESC
         ) AS rn
       FROM DATA_LAKE__NCL.DBT_OBSERVABILITY.ROW_COUNT_LOG
-      WHERE run_started_at >= DATEADD('day', -{log_window_days}, CURRENT_TIMESTAMP())
+      WHERE run_started_at >= DATEADD('day', -{window}, CURRENT_TIMESTAMP())
     )
     SELECT database_name, schema_name, model_name, row_count, run_started_at
     FROM ranked
@@ -145,12 +163,21 @@ def live_count(
     statement_timeout_seconds: int,
 ) -> tuple[Optional[int], Optional[str]]:
     """Run a COUNT(*) and return (count, error)."""
+    # Defensive: db/schema/name come from INFORMATION_SCHEMA, but validate
+    # anyway so a corrupt index can't construct arbitrary SQL.
+    try:
+        qdb = _safe_ident(db, kind="database")
+        qschema = _safe_ident(schema, kind="schema")
+        qname = _safe_ident(name, kind="table")
+    except ValueError as exc:
+        return None, str(exc)
+    timeout = int(statement_timeout_seconds)
     conn = conn_factory()
     try:
         cur = conn.cursor()
         try:
-            cur.execute(f"ALTER SESSION SET STATEMENT_TIMEOUT_IN_SECONDS = {statement_timeout_seconds}")
-            cur.execute(f'SELECT COUNT(*) FROM "{db}"."{schema}"."{name}"')
+            cur.execute(f"ALTER SESSION SET STATEMENT_TIMEOUT_IN_SECONDS = {timeout}")
+            cur.execute(f"SELECT COUNT(*) FROM {qdb}.{qschema}.{qname}")
             (count,) = cur.fetchone()
             return int(count), None
         finally:
@@ -167,13 +194,12 @@ def write_baseline(
     captured_at: datetime,
     counts: list[ModelCount],
 ) -> None:
+    # DDL outside the transaction (CREATE TABLE IF NOT EXISTS is idempotent
+    # and Snowflake auto-commits DDL anyway). Replace + insert is wrapped in
+    # an explicit transaction so a failed insert can't leave the label empty.
     cur = conn.cursor()
     try:
         cur.execute(CREATE_BASELINE_DDL)
-        cur.execute(
-            f"DELETE FROM {BASELINE_TABLE} WHERE label = %s",
-            (label,),
-        )
         rows = [
             (
                 label,
@@ -189,13 +215,23 @@ def write_baseline(
             )
             for c in counts
         ]
-        cur.executemany(
-            f"INSERT INTO {BASELINE_TABLE} "
-            f"(label, captured_at, database_name, schema_name, model_name, "
-            f"table_type, row_count, source, source_run_at, error) "
-            f"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            rows,
-        )
+        cur.execute("BEGIN")
+        try:
+            cur.execute(
+                f"DELETE FROM {BASELINE_TABLE} WHERE label = %s",
+                (label,),
+            )
+            cur.executemany(
+                f"INSERT INTO {BASELINE_TABLE} "
+                f"(label, captured_at, database_name, schema_name, model_name, "
+                f"table_type, row_count, source, source_run_at, error) "
+                f"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                rows,
+            )
+            cur.execute("COMMIT")
+        except Exception:
+            cur.execute("ROLLBACK")
+            raise
     finally:
         cur.close()
 

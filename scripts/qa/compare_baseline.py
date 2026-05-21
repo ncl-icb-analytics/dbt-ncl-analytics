@@ -122,7 +122,11 @@ def main() -> int:
     for k in keys:
         b = before.get(k)
         a = after.get(k)
-        if b and a and b.model_name in args.ignore:
+        # Apply --ignore even when a model is one-sided (e.g. known-fail dropped
+        # from after, or added in before only). Fall back to the key triplet so
+        # a fully-missing model still respects the ignore list.
+        model_name = (b.model_name if b else a.model_name if a else k[2])
+        if model_name in args.ignore:
             continue
         b_count = b.row_count if b else None
         a_count = a.row_count if a else None
@@ -183,8 +187,14 @@ def main() -> int:
         )
 
     if args.csv_out:
+        # Use an explicit field list so an empty diff still emits a header
+        # row instead of raising IndexError on diffs[0].
+        fieldnames = [
+            "database_name", "schema_name", "model_name", "status",
+            "before", "after", "delta", "pct", "before_error", "after_error",
+        ]
         with args.csv_out.open("w", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=list(diffs[0].keys()))
+            w = csv.DictWriter(f, fieldnames=fieldnames)
             w.writeheader()
             w.writerows(diffs)
         print(f"\nCSV: {args.csv_out}")

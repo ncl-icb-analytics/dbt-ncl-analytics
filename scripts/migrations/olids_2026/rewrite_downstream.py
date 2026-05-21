@@ -51,6 +51,11 @@ REF_ALIAS_PATTERN = re.compile(
     r"""\{\{\s*ref\(\s*['"](stg_olids_\w+|raw_olids_\w+)['"]\s*\)\s*\}\}\s+(?:as\s+)?([a-z_]\w*)""",
     re.IGNORECASE,
 )
+# Same idea for hardcoded `DBT_STAGING.STG_OLIDS_X alias` / `DBT_RAW.RAW_OLIDS_X alias`.
+HARDCODED_ALIAS_PATTERN = re.compile(
+    r"""\b(?:DBT_STAGING|DBT_RAW)\.(STG_OLIDS_\w+|RAW_OLIDS_\w+)\s+(?:as\s+)?([a-z_]\w*)""",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -114,16 +119,18 @@ def collect_refs(text: str) -> set[str]:
 
 
 def collect_aliases(text: str) -> dict[str, str]:
-    """Map alias -> table for each `ref('stg_olids_X') as alias` occurrence."""
+    """Map alias -> table for each `ref('stg_olids_X') as alias` or
+    `DBT_STAGING.STG_OLIDS_X alias` occurrence."""
     out: dict[str, str] = {}
-    for m in REF_ALIAS_PATTERN.finditer(text):
-        table = m.group(1).lower()
-        alias = m.group(2).lower()
-        # If an alias maps to multiple tables across joins, mark ambiguous.
-        if alias in out and out[alias] != table:
-            out[alias] = "__ambiguous__"
-        else:
-            out[alias] = table
+    for pattern in (REF_ALIAS_PATTERN, HARDCODED_ALIAS_PATTERN):
+        for m in pattern.finditer(text):
+            table = m.group(1).lower()
+            alias = m.group(2).lower()
+            # If an alias maps to multiple tables across joins, mark ambiguous.
+            if alias in out and out[alias] != table:
+                out[alias] = "__ambiguous__"
+            else:
+                out[alias] = table
     return out
 
 
@@ -266,7 +273,7 @@ def main() -> int:
         if rep.removed_hits:
             removed_hits.append(rep)
 
-    print(f"=== Downstream rewrite summary ===\n")
+    print("=== Downstream rewrite summary ===\n")
     print(f"Files with renames applied: {len(touched)}")
     print(f"Files with ambiguous columns (manual review): {len(ambiguous)}")
     print(f"Files referencing removed columns (manual review): {len(removed_hits)}")
