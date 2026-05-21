@@ -64,11 +64,11 @@ models:
         description: Parent schedule identifier (appointment book session)
       - name: start_date
         description: Appointment start date and time
-      - name: date_time_booked
+      - name: datetime_booked
         description: When the appointment was booked
-      - name: planned_duration
+      - name: planned_duration_mins
         description: Raw planned slot duration in minutes (unreliable for untimed schedules)
-      - name: actual_duration
+      - name: actual_duration_mins
         description: >
           Raw actual duration in minutes. Unreliable when longer than planned
           because GPs often press the "send in" / "left" buttons well after
@@ -78,7 +78,7 @@ models:
           Cleaned duration in minutes for costing and averaging.
           NULL for untimed/list schedules (where the source duration is
           inherited from a whole session and meaningless).
-          For timed schedules: actual_duration if reliably shorter than
+          For timed schedules: actual_duration_mins if reliably shorter than
           planned, otherwise planned. Capped at 60 minutes, defaults to
           10 minutes when the source is NULL or zero.
       - name: schedule_type
@@ -248,11 +248,11 @@ models:
             an intentional data quality signal, not a bug. Extend the
             seed lower bound in analysis/inflation_indices/build_seed.py
             if genuine pre-2000 coverage is needed.
-      - name: patient_wait
+      - name: patient_wait_mins
         description: >
           Minutes the patient waited beyond their scheduled time.
           Populated for ~48% of appointments.
-      - name: patient_delay
+      - name: patient_delay_mins
         description: >
           Minutes the patient arrived late for their appointment.
           Populated for ~41% of appointments.
@@ -268,7 +268,7 @@ models:
         description: Service setting where the appointment took place
       - name: age_at_event
         description: Patient age at the time of the appointment
-      - name: record_owner_organisation_code
+      - name: publisher_organisation_code
         description: Practice ODS code (e.g. E85012)
 
   - name: int_appointment_gp_clean_recent

@@ -24,7 +24,7 @@ WITH current_patient_per_person AS (
 ),
 
 best_patient_with_gender AS (
-    -- Choose a single best patient per person: prefer one with a gender_concept_id
+    -- Choose a single best patient per person: prefer one with a gender_source_concept_id
     SELECT
         pp.person_id,
         p.id AS patient_id,

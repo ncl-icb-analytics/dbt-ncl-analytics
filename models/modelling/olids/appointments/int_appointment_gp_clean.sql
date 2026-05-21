@@ -20,10 +20,10 @@ and classifies contact modes and slot categories for downstream analysis.
 
 Duration methodology:
 - For untimed/list schedules (open-book triage, duty doctor, eConsult lists),
-  planned_duration is inherited from the whole session — duration_minutes is NULL
+  planned_duration_mins is inherited from the whole session — duration_minutes is NULL
 - For timed schedules:
-  - Use actual_duration if recorded and shorter than planned (GP finished early)
-  - Otherwise use planned_duration (the booked slot length)
+  - Use actual_duration_mins if recorded and shorter than planned (GP finished early)
+  - Otherwise use planned_duration_mins (the booked slot length)
   - Cap at 60 minutes (anything above is a session/day-length data quality issue)
   - Default NULLs and 0s to 10 minutes (PSSRU-convention GP consultation length)
 */
@@ -60,7 +60,7 @@ with appointments as (
         a.contact_mode_source_code,
         -- 'Not an Appointment' is a practice data-entry label rather than a
         -- genuine non-appointment — profiling (2026-04) showed all 44k such
-        -- rows have a populated date_time_booked, sit on real schedules,
+        -- rows have a populated datetime_booked, sit on real schedules,
         -- and span the full range of slot categories including 13.5k
         -- Urgent and 10.4k Routine consultations that feed the access
         -- KPIs. They're real clinical activity where the contact mode
@@ -201,7 +201,7 @@ practitioner_roles as (
 schedules as (
     -- Schedule is the container for appointments; type indicates whether
     -- the schedule is timed (normal bookable slots) or untimed (open books
-    -- like duty doctor / triage sessions where planned_duration is meaningless)
+    -- like duty doctor / triage sessions where planned_duration_mins is meaningless)
     select
         s.id as schedule_id,
         s.type as schedule_type,
@@ -240,7 +240,7 @@ cleaned as (
     a.actual_duration_mins,
 
     -- Cleaned duration (timed schedules only)
-    -- For untimed/list schedules, planned_duration is meaningless (inherited from
+    -- For untimed/list schedules, planned_duration_mins is meaningless (inherited from
     -- the whole session), so duration_minutes is NULL. Downstream aggregations
     -- will correctly skip these rather than using a fabricated default.
     -- For timed schedules: use actual if reliably shorter than planned, else

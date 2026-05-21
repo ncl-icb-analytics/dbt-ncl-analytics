@@ -83,7 +83,7 @@ models:
         data_type: varchar
         description: >
           Resolved display value for the observation episodicity concept
-          (e.g. New, Review, Ended). Falls back to the raw episodicity_concept_id
+          (e.g. New, Review, Ended). Falls back to the raw episodicity_source_concept_id
           when no primary concept map match is found.
 
       - name: practitioner_title

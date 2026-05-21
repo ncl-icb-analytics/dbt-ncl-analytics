@@ -16,7 +16,7 @@ select
     id as encounter_id
     , person_id
     , start_date
-    , actual_duration
+    , actual_duration_mins
     , national_slot_category_name
     , service_setting
     , appointment_status_code as code

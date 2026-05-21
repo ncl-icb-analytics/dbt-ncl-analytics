@@ -77,7 +77,7 @@ models:
         tests:
           - not_null
 
-      - name: is_dummy_patient
+      - name: is_test_patient
         description: 'Dummy patient record flag'
         tests:
           - not_null

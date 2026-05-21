@@ -39,7 +39,7 @@ raw_registrations AS (
         eoc.episode_of_care_end_date AS registration_end_datetime,
         eoc.care_manager_practitioner_in_role_id AS practitioner_id,
         eoc.id AS episode_of_care_id,
-        -- Get practice details from organisation_code_publisher for consistency
+        -- Get practice details from publisher_organisation_code for consistency
         eoc.publisher_organisation_code AS practice_ods_code,
         dp.practice_name,
         -- Get patient details

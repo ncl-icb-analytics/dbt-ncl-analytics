@@ -62,7 +62,7 @@ models:
                 values: [true, false]
       - name: death_source_flag
         description: 'Flag indicating the source of death information'
-      - name: is_dummy_patient
+      - name: is_test_patient
         description: 'Flag indicating if record comes from dummy patient data'
         tests:
           - not_null

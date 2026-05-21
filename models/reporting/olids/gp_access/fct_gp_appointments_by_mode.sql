@@ -16,7 +16,7 @@ and costing analysis.
 */
 
 select
-    record_owner_organisation_code as practice_code,
+    publisher_organisation_code as practice_code,
     DATE_TRUNC('month', start_date) as report_month,
     contact_mode,
     practitioner_role_group,
@@ -25,6 +25,6 @@ select
     SUM(CASE WHEN is_dna THEN 1 ELSE 0 END) as dna_count,
     ROUND(AVG(duration_minutes), 1) as avg_duration_minutes,
     ROUND(AVG(booking_to_slot_days), 1) as avg_booking_to_slot_days,
-    ROUND(AVG(patient_wait), 1) as avg_patient_wait_minutes
+    ROUND(AVG(patient_wait_mins), 1) as avg_patient_wait_minutes
 from {{ ref('int_appointment_gp_clean_recent') }}
 group by practice_code, report_month, contact_mode, practitioner_role_group
