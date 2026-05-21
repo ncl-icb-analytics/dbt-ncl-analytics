@@ -20,13 +20,11 @@ models:
         description: LDS system identifier
       - name: lds_record_id_user
         description: LDS user record identifier
-      - name: record_owner_organisation_code
+      - name: publisher_organisation_code
         description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer

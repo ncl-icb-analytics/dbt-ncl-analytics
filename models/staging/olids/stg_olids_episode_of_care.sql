@@ -3,8 +3,8 @@ select
     id,
 
     -- Business columns
-    organisation_id_publisher,
-    organisation_id_managing,
+    publisher_organisation_id,
+    provider_organisation_id,
     patient_id,
     person_id,
     episode_type_source_concept_id,
@@ -19,18 +19,21 @@ select
     episode_status_source_display,
     episode_of_care_start_date,
     episode_of_care_end_date,
-    care_manager_practitioner_id,
+    care_manager_practitioner_in_role_id,
     lds_id,
-    organisation_code_publisher,
-    organisation_code_managing,
+    publisher_organisation_code,
     lds_datetime_source_record_acquired,
     lds_datetime_source_record_updated,
 
     -- Metadata
-    lds_start_date_time,
+    lds_start_datetime,
     lds_is_deleted,
     lds_source_record_id
 
+    -- TODO(olids-2026): expose new upstream columns
+    -- care_manager_organisation_id,
+    -- care_manager_organisation_code,
+    -- author_organisation_id,
 from {{ ref('raw_olids_episode_of_care') }}
 where coalesce(lds_is_deleted, false) = false
     and person_id is not null

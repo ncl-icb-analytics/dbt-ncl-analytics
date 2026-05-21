@@ -6,9 +6,9 @@ models:
         owner:
           name: EddieDavison92
     columns:
-      - name: source_code_id
+      - name: source_concept_id
         description: Foreign key to concept.id - source concept being mapped from
-      - name: target_code_id
+      - name: target_concept_id
         description: Foreign key to concept.id - target concept being mapped to
         tests:
           - relationships:

@@ -4,24 +4,24 @@ select
 
     -- Business columns
     organisation_code,
-    assigning_authority_code,
+    organisation_code_assinging_authority,
     name,
-    type_code,
-    type_desc,
     postcode,
     parent_organisation_id,
     open_date,
     close_date,
     is_obsolete,
     lds_id,
-    record_owner_organisation_code,
-    lds_datetime_data_acquired,
-    lds_initial_data_received_date,
+    publisher_organisation_code,
+    lds_datetime_first_acquired,
 
     -- Metadata
-    lds_start_date_time,
+    lds_start_datetime,
     lds_is_deleted,
-    lds_record_id
+    lds_source_record_id
 
+    -- TODO(olids-2026): expose new upstream columns
+    -- description,
+    -- location_type_source_concept_id,
 from {{ ref('raw_olids_organisation') }}
 where coalesce(lds_is_deleted, false) = false

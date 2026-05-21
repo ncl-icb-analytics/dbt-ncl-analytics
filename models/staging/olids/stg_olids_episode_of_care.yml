@@ -11,9 +11,9 @@ models:
         tests:
           - unique
           - not_null
-      - name: organisation_id_publisher
+      - name: publisher_organisation_id
         description: Foreign key to organisation.id - data controller organisation that published the record
-      - name: organisation_id_managing
+      - name: provider_organisation_id
         description: Foreign key to organisation.id - organisation delivering the episode of care
       - name: patient_id
         description: Foreign key to patient.id
@@ -43,19 +43,17 @@ models:
         description: Start date of the episode of care
       - name: episode_of_care_end_date
         description: End date of the episode of care
-      - name: care_manager_practitioner_id
+      - name: care_manager_practitioner_in_role_id
         description: Foreign key to practitioner.id - care manager responsible for the episode
       - name: lds_id
         description: LDS system identifier
-      - name: organisation_code_publisher
+      - name: publisher_organisation_code
         description: ODS code of the data controller organisation that published the record
-      - name: organisation_code_managing
-        description: ODS code of the organisation delivering the episode of care
       - name: lds_datetime_source_record_acquired
         description: Datetime when source record was first acquired by LDS
       - name: lds_datetime_source_record_updated
         description: Datetime when source record update was acquired by LDS
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer

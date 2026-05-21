@@ -96,7 +96,7 @@ SQL_COL_AS_LINE = re.compile(
     re.IGNORECASE,
 )
 
-YML_NAME_LINE = re.compile(r"^(\s*-\s*name:\s*)([a-z_][a-z0-9_]*)\s*$", re.IGNORECASE)
+YML_NAME_LINE = re.compile(r"^(\s*)(-\s*name:\s*)([a-z_][a-z0-9_]*)\s*$", re.IGNORECASE)
 
 
 @dataclass
@@ -114,21 +114,36 @@ class FileReport:
 def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
     """Rewrite a stg SQL: rename/remove/type_cast on SELECT list lines.
 
-    Operates on the SELECT list only (lines between `select` and the first
-    `from`). Lines outside that window are left alone — this protects the
-    `where ... lds_is_deleted` and `qualify` clauses.
+    Operates on the SELECT list line-by-line. After the SELECT list ends,
+    the remaining clauses (WHERE / QUALIFY / ORDER BY) get a whole-word
+    rename pass so that references like `order by lds_start_date_time desc`
+    track the renames.
     """
     lines = text.splitlines(keepends=False)
     out: list[str] = []
     in_select = False
     seen_from = False
     additions_emitted = False
+    emitted_select_cols: list[str] = []
+
+    def _post_select_rewrite(line: str) -> str:
+        rewritten = line
+        for old, new in rules.renames.items():
+            if old == new:
+                continue
+            rewritten = re.sub(rf"\b{re.escape(old)}\b", new, rewritten)
+        return rewritten
 
     for line in lines:
         stripped = line.strip().lower()
         if not in_select and stripped.startswith("select"):
             in_select = True
             out.append(line)
+            continue
+        if not in_select and not seen_from:
+            # Pre-SELECT block (config, jinja, comments) — apply identifier rewrite
+            # to catch things like `cluster_by=['source_code_id']`.
+            out.append(_post_select_rewrite(line))
             continue
         if in_select and not seen_from and re.match(r"\s*from\b", line, re.IGNORECASE):
             # About to leave SELECT list. Emit additions before FROM, as a separate
@@ -147,7 +162,7 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
             continue
 
         if not in_select:
-            out.append(line)
+            out.append(_post_select_rewrite(line) if seen_from else line)
             continue
 
         # Inside SELECT list — try to recognise a column line
@@ -176,6 +191,7 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
             comma = (m_as.group(4) if is_alias_line else m_simple.group(3)) or ","
             cast_expr = rules.type_casts[col]
             out.append(f"{indent}{cast_expr}{comma}")
+            emitted_select_cols.append(col)
             report.cast.append(col)
             continue
 
@@ -186,6 +202,11 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
 
         if col in rules.renames:
             new = rules.renames[col]
+            if new in emitted_select_cols:
+                # Source kept both old + new under different names; the renamed
+                # output would collide. Drop this line.
+                report.removed.append(f"{col} (collision with existing {new})")
+                continue
             if is_alias_line:
                 indent = m_as.group(1)
                 expr = m_as.group(2)  # `... AS `
@@ -198,11 +219,18 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
                 comma = m_simple.group(3) or ""
                 trailing = m_simple.group(4) or ""
                 out.append(f"{indent}{new}{comma} {trailing}".rstrip())
+            emitted_select_cols.append(new)
             report.renamed.append((col, new))
             continue
 
         # No rule matched — pass through, record for the unhandled report.
+        if col in emitted_select_cols:
+            # Pre-existing duplicate (e.g. `lds_registrar_event_id` already in
+            # the old SELECT and now also produced by renaming `registrar_event_id`).
+            report.removed.append(f"{col} (duplicate)")
+            continue
         out.append(line)
+        emitted_select_cols.append(col)
         if col not in {"id", "person_id", "patient_id", "encounter_id",
                        "practitioner_id", "lds_is_deleted"}:
             report.unchanged_cols.append(col)
@@ -232,18 +260,21 @@ def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
             out.append(line)
             continue
 
-        col = m.group(2).lower()
+        leading = m.group(1)  # whitespace before `-`
+        prefix = m.group(2)   # `- name: `
+        col = m.group(3).lower()
+        list_item_indent = len(leading)  # column position of the `-`
 
         if col in rules.removes:
             report.removed.append(col)
-            # Skip this line and any deeper-indented continuation (description, tests).
+            # Skip this line and any continuation lines indented past the `-`.
             skip_next_col_block = True
-            skip_indent = len(m.group(1)) - 2  # subtract `- ` length to get list-item indent
+            skip_indent = list_item_indent
             continue
 
         if col in rules.renames:
             new = rules.renames[col]
-            out.append(f"{m.group(1)}{new}")
+            out.append(f"{leading}{prefix}{new}")
             report.renamed.append((col, new))
             continue
 

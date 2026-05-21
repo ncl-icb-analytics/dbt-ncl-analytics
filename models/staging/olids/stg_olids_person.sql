@@ -8,7 +8,6 @@ select
 
     -- Identifiers
     matched_nhs_no_hash,
-    composite_id,
 
     -- Demographics
     birth_year,
@@ -21,8 +20,8 @@ select
 
     -- Registration
     gp_practice_code,
-    gp_registration_date,
-    as_at_date,
+    CAST(gp_registration_date AS DATE) AS gp_registration_date,
+    CAST(as_at_date AS DATE) AS as_at_date,
 
     -- Contact / nominated services
     preferred_contact_method,
@@ -32,13 +31,19 @@ select
 
     -- Metadata
     lds_is_deleted,
-    lds_start_date_time,
-    lds_datetime_data_acquired
+    lds_start_datetime,
+    lds_datetime_first_acquired
 
+    -- TODO(olids-2026): expose new upstream columns
+    -- person_record_type,
+    -- person_version_id,
+    -- sk_patient_id,
+    -- lds_datetime_first_acquired_person,
+    -- lds_datetime_update_acquired_person,
 from {{ ref('raw_olids_person') }}
 qualify row_number() over (
     partition by id
     order by gp_registration_date desc nulls last,
-             lds_start_date_time desc nulls last,
+             lds_start_datetime desc nulls last,
              gp_practice_code desc nulls last
 ) = 1

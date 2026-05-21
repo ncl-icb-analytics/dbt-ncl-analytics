@@ -11,7 +11,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: organisation_id
+      - name: provider_organisation_id
         description: Foreign key to organisation.id - organisation where referral was made
       - name: person_id
         description: Foreign key to person.id - person-level identifier
@@ -25,17 +25,17 @@ models:
         description: Unique booking reference number (UBRN) for the referral
       - name: clinical_effective_date
         description: Date the referral request was clinically effective
-      - name: date_precision_concept_id
+      - name: clinical_effective_date_precision_source_concept_id
         description: Foreign key to concept.id - precision of the clinical effective date
       - name: requester_organisation_id
         description: Foreign key to organisation.id - organisation making the referral
       - name: recipient_organisation_id
         description: Foreign key to organisation.id - organisation receiving the referral
-      - name: referral_request_priority_concept_id
+      - name: referral_request_priority_source_concept_id
         description: Foreign key to concept.id - priority of the referral (routine, urgent, two-week-wait, etc.)
-      - name: referral_request_type_concept_id
+      - name: referral_request_type_source_concept_id
         description: Foreign key to concept.id - type of referral
-      - name: referral_request_specialty_concept_id
+      - name: referral_request_specialty_source_concept_id
         description: Foreign key to concept.id - specialty to which the referral is made
       - name: mode
         description: Mode of the referral
@@ -55,17 +55,17 @@ models:
         description: Date the record was entered into the system
       - name: lds_id
         description: LDS system identifier
-      - name: record_owner_organisation_code
+      - name: publisher_organisation_code
         description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
       - name: lds_data_initial_received_date
         description: Date when data was initially received by LDS
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:

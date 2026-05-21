@@ -15,8 +15,6 @@ models:
         description: Native person UUID
       - name: matched_nhs_no_hash
         description: Hashed NHS number (BINARY) - join key to NDOO_HASHED and other hash-keyed tables
-      - name: composite_id
-        description: Composite identifier from upstream
       - name: birth_year
         description: Year of birth
       - name: birth_month
@@ -47,9 +45,9 @@ models:
         description: Medical appliance supplier
       - name: lds_is_deleted
         description: Soft-delete flag
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: Incremental high-water column
-      - name: lds_datetime_data_acquired
+      - name: lds_datetime_first_acquired
         description: Datetime data was acquired
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:

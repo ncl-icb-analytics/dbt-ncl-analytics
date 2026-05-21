@@ -6,28 +6,19 @@ models:
         owner:
           name: EddieDavison92
     columns:
-      - name: id
-        description: Primary key - unique identifier for this patient-person link
-        tests:
-          - unique
-          - not_null
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
       - name: lds_id
         description: LDS system identifier
-      - name: lds_business_key
-        description: LDS business key identifier
-      - name: lds_cdm_event_id
-        description: LDS CDM event identifier
-      - name: lds_datetime_data_acquired
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
-      - name: lds_dataset_id
+      - name: lds_source_dataset_id
         description: LDS dataset identifier
       - name: patient_id
         description: Foreign key to patient.id
       - name: person_id
         description: Foreign key to person.id
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag from LDS

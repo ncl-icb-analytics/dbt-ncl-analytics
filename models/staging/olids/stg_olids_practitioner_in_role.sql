@@ -4,20 +4,19 @@ select
 
     -- Business columns
     practitioner_id,
-    organisation_id,
+    employer_organisation_id,
     role_code,
     role,
     date_employment_start,
     date_employment_end,
     lds_id,
-    record_owner_organisation_code,
-    lds_datetime_data_acquired,
-    lds_initial_data_received_date,
+    publisher_organisation_code,
+    lds_datetime_first_acquired,
 
     -- Metadata
-    lds_start_date_time,
+    lds_start_datetime,
     lds_is_deleted,
-    lds_record_id
+    lds_source_record_id
 
 from {{ ref('raw_olids_practitioner_in_role') }}
 where coalesce(lds_is_deleted, false) = false

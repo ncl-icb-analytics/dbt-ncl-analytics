@@ -6,13 +6,6 @@ models:
         owner:
           name: EddieDavison92
     columns:
-      - name: id
-        description: Primary key - unique identifier for this concept
-        tests:
-          - unique
-          - not_null
-      - name: lds_id
-        description: LDS system identifier
       - name: system
         description: Coding system or terminology (e.g., SNOMED CT, Read, ICD-10)
       - name: code

@@ -6,19 +6,17 @@ select
     gmc_code,
     title,
     first_name,
-    last_name,
+    surname,
     name,
     is_obsolete,
-    lds_end_date_time,
     lds_id,
-    record_owner_organisation_code,
-    lds_datetime_data_acquired,
-    lds_initial_data_received_date,
+    publisher_organisation_code,
+    lds_datetime_first_acquired,
 
     -- Metadata
-    lds_start_date_time,
+    lds_start_datetime,
     lds_is_deleted,
-    lds_record_id
+    lds_source_record_id
 
 from {{ ref('raw_olids_practitioner') }}
 where coalesce(lds_is_deleted, false) = false
