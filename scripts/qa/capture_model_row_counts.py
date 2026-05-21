@@ -132,7 +132,9 @@ def fetch_recent_row_count_log(
         rows = cur.fetchall()
     finally:
         cur.close()
-    return {(db, sch, name): (int(cnt), ts) for db, sch, name, cnt, ts in rows}
+    # ROW_COUNT_LOG stores model identifiers in lowercase; INFORMATION_SCHEMA
+    # returns them uppercase. Index by upper() for case-insensitive lookup.
+    return {(db.upper(), sch.upper(), name.upper()): (int(cnt), ts) for db, sch, name, cnt, ts in rows}
 
 
 def live_count(
@@ -286,7 +288,7 @@ def main() -> int:
         needs_live: list[tuple[str, str, str, str]] = []
         for db, schema, name, ttype in models:
             if ttype == "BASE TABLE":
-                hit = log_index.get((db, schema, name))
+                hit = log_index.get((db.upper(), schema.upper(), name.upper()))
                 if hit is not None:
                     cnt, run_at = hit
                     from_log.append(
