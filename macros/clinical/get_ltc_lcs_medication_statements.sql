@@ -3,7 +3,7 @@
 {#
     Returns medication statements for one or more LTC LCS valuesets via two parallel paths:
       - 'mapped': medication_statement.mapped_concept_code = expanded_concepts.snomed_code
-      - 'source': medication_statement.medication_statement_source_concept_id -> enriched_concept_map.source_code_id
+      - 'source': medication_statement.medication_statement_source_concept_id -> enriched_concept_map.source_concept_id
                   -> original_codes.original_code
     Path 'source' recovers statements for valuesets where the terminology server failed
     to translate EMIS codes to SNOMED. When both paths match the same statement, the

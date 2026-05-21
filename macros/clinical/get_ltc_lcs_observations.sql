@@ -4,7 +4,7 @@
     Returns observations for one or more LTC LCS valuesets via two parallel paths:
       - 'mapped': observation.mapped_concept_code = expanded_concepts.snomed_code
                   (uses terminology-server-expanded SNOMED codes)
-      - 'source': observation.observation_source_concept_id -> enriched_concept_map.source_code_id
+      - 'source': observation.observation_source_concept_id -> enriched_concept_map.source_concept_id
                   -> original_codes.original_code (uses raw EMIS codes preserved pre-translation)
     Path 'source' recovers observations for valuesets where the terminology server failed
     to translate EMIS codes to SNOMED. When both paths match the same observation, the

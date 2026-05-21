@@ -4,7 +4,7 @@
     Returns the latest medication order per (person, valueset) for one or more LTC LCS
     valuesets via two parallel paths:
       - 'mapped': medication_order.mapped_concept_code = expanded_concepts.snomed_code
-      - 'source': medication_order.medication_order_source_concept_id -> enriched_concept_map.source_code_id
+      - 'source': medication_order.medication_order_source_concept_id -> enriched_concept_map.source_concept_id
                   -> original_codes.original_code
     Latest is picked across both paths combined; ties on date prefer the 'mapped' row.
 
