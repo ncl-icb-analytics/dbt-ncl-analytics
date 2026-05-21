@@ -1,0 +1,167 @@
+version: 2
+sources:
+- name: cltcs_emis_extract
+  database: '"DATA_LAKE__NCL"'
+  schema: '"CLTCS"'
+  description: EMIS extract for c-ltcs pipeline from PID environment via MESH
+  tables:
+  - name: EMIS
+    identifier: '"EMIS"'
+    columns:
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: LTC_LCS
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: PATIENT_DETAILS_USUAL_GP_S_ORGANISATION_CODE
+      data_type: TEXT
+    - name: PATIENT_DETAILS_AGE
+      data_type: NUMBER(2,0)
+    - name: PATIENT_DETAILS_DATE_OF_BIRTH
+      data_type: DATE
+    - name: PATIENT_DETAILS_GENDER
+      data_type: TEXT
+    - name: PATIENT_DETAILS_ETHNIC_ORIGIN
+      data_type: TEXT
+    - name: PATIENT_DETAILS_TOWNSEND_SCORE
+      data_type: NUMBER(3,2)
+    - name: PATIENT_DETAILS_LOWER_LAYER_AREA_2001
+      data_type: TEXT
+    - name: PATIENT_DETAILS_MIDDLE_LAYER_AREA_2001
+      data_type: TEXT
+    - name: PATIENT_DETAILS_LOWER_LAYER_AREA_2011
+      data_type: TEXT
+    - name: PATIENT_DETAILS_MIDDLE_LAYER_AREA_2011
+      data_type: TEXT
+    - name: RECORD_OF_INTERPRETER_INFORMATION_EXISTS
+      data_type: BOOLEAN
+    - name: HOMELESSNESS_EXISTS
+      data_type: BOOLEAN
+    - name: HOUSEBOUND_EXISTS
+      data_type: BOOLEAN
+    - name: CARE_HOME_RESIDENT_EXISTS
+      data_type: BOOLEAN
+    - name: CARDIOVASCULAR_DISEASE_EXISTS
+      data_type: BOOLEAN
+    - name: ATRIAL_FIBRILLATION_EXISTS
+      data_type: BOOLEAN
+    - name: HYPERTENSION_EXISTS
+      data_type: BOOLEAN
+    - name: HYPERLIPIDAEMIA_EXISTS
+      data_type: BOOLEAN
+    - name: DIABETES_EXISTS
+      data_type: BOOLEAN
+    - name: CHRONIC_KIDNEY_DISEASE_EXISTS
+      data_type: BOOLEAN
+    - name: NA_FATTY_LIVER_DISEASE_EXISTS
+      data_type: BOOLEAN
+    - name: COPD_EXISTS
+      data_type: BOOLEAN
+    - name: ASTHMA_EXISTS
+      data_type: BOOLEAN
+    - name: SERIOUS_MI_EXISTS
+      data_type: BOOLEAN
+    - name: LEARNING_DISABILITY_EXISTS
+      data_type: BOOLEAN
+    - name: FRAILTY_EXISTS
+      data_type: BOOLEAN
+    - name: SMOKING_STATUS_DATE
+      data_type: DATE
+    - name: SMOKING_STATUS_CODE_TERM
+      data_type: TEXT
+    - name: SMOKING_STATUS_VALUE
+      data_type: NUMBER(5,2)
+    - name: BMI_DATE
+      data_type: DATE
+    - name: BMI_CODE_TERM
+      data_type: TEXT
+    - name: BMI_VALUE
+      data_type: NUMBER(9,3)
+    - name: O_E_BP_READING_DATE
+      data_type: DATE
+    - name: O_E_BP_READING_CODE_TERM
+      data_type: TEXT
+    - name: O_E_BP_READING_VALUE
+      data_type: NUMBER(4,1)
+    - name: O_E_BP_READING_SECONDARY_VALUE
+      data_type: NUMBER(3,0)
+    - name: HBA1C_DATE
+      data_type: DATE
+    - name: HBA1C_CODE_TERM
+      data_type: TEXT
+    - name: HBA1C_VALUE
+      data_type: NUMBER(6,3)
+    - name: EGFR_DATE
+      data_type: DATE
+    - name: EGFR_CODE_TERM
+      data_type: TEXT
+    - name: EGFR_VALUE
+      data_type: NUMBER(5,2)
+    - name: UACR_DATE
+      data_type: DATE
+    - name: UACR_CODE_TERM
+      data_type: TEXT
+    - name: UACR_VALUE
+      data_type: NUMBER(7,3)
+    - name: TC_DATE
+      data_type: DATE
+    - name: TC_CODE_TERM
+      data_type: TEXT
+    - name: TC_VALUE
+      data_type: NUMBER(5,2)
+    - name: LDL_DATE
+      data_type: DATE
+    - name: LDL_CODE_TERM
+      data_type: TEXT
+    - name: LDL_VALUE
+      data_type: NUMBER(6,3)
+    - name: MOC_CHECK_TEST_APPOINTMENT_ON_DATE
+      data_type: DATE
+    - name: MOC_FOLLOW_UP_APPOINTMENT_ON_DATE
+      data_type: DATE
+    - name: RPT_COUNT_COUNT
+      data_type: NUMBER(2,0)
+    - name: RECORD_SOURCE
+      data_type: TEXT
+    - name: GP_PRACTICE_WARNING_FLAG
+      data_type: NUMBER(1,0)
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER(38,0)
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
+  - name: PTL
+    identifier: '"PTL"'
+    columns:
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: PCN_CODE
+      data_type: TEXT
+    - name: RECORD_SOURCE
+      data_type: TEXT
+    - name: DEMOGRAPHICS_DATE_OF_MDT
+      data_type: TEXT
+    - name: SUMMARIES_DESKTOP_REVIEW_OUTCOME
+      data_type: TEXT
+    - name: MDT_IMPACT_SCORE
+      data_type: TEXT
+    - name: MDT_CLINICIAN_VALUE
+      data_type: TEXT
+    - name: MDT_SUITABLE_CASE_STUDY
+      data_type: TEXT
+    - name: METADATA_FILE_PATH
+      data_type: TEXT
+    - name: METADATA_FILE_ROW_NUMBER
+      data_type: NUMBER(38,0)
+    - name: METADATA_RECORD_INGESTION_TIMESTAMP
+      data_type: TIMESTAMP_LTZ
+    - name: METADATA_FILE_CONTENT_KEY
+      data_type: TEXT
+    - name: METADATA_FILE_LAST_MODIFIED
+      data_type: TEXT
