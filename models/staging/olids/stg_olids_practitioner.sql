@@ -10,7 +10,9 @@ select
     name,
     is_obsolete,
     lds_id,
-    publisher_organisation_code,
+    -- practitioner doesn't have publisher_organisation_code in the new schema —
+    -- the cross-cutting record_owner_organisation_code rename doesn't apply to
+    -- this table because the source column has been removed entirely.
     lds_datetime_first_acquired,
 
     -- Metadata

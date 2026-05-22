@@ -11,8 +11,8 @@ models:
         tests:
           - unique
           - not_null
-      - name: provider_organisation_id
-        description: Foreign key to organisation.id - organisation where referral was made
+      - name: publisher_organisation_id
+        description: "Foreign key to organisation.id - publisher organisation for this referral (post-2026 OLIDS rename — was organisation_id)"
       - name: person_id
         description: Foreign key to person.id - person-level identifier
       - name: patient_id

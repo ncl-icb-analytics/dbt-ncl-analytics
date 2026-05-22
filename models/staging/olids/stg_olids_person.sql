@@ -32,8 +32,8 @@ select
     -- Metadata
     lds_is_deleted,
     lds_start_datetime,
-    lds_datetime_first_acquired,
-
+    -- person doesn't carry plain lds_datetime_first_acquired in the new schema —
+    -- only the *_person variants below.
 
     -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
     person_record_type,

@@ -57,13 +57,12 @@ tables:
       date_time_sent_in: datetime_sent_in
       type: appointment_type
     additions:
-      # New columns surfaced upstream we may want to expose
+      # New columns surfaced upstream we may want to expose. publisher_organisation_code
+      # is the rename target from record_owner_organisation_code (already in SELECT via
+      # cross-cutting rename). author_organisation_id is NOT on stable_appointment —
+      # do not add (verified via scripts/migrations/olids_2026/verify_against_dbt_olids.py).
       - name: publisher_organisation_id
         description: "Foreign key to organisation.id — the publisher (data-producer) organisation for this appointment record. New in the 2026 OLIDS schema realignment (issue #747)."
-      - name: publisher_organisation_code
-        description: "ODS code of the publisher organisation. New in the 2026 OLIDS schema realignment (issue #747)."
-      - name: author_organisation_id
-        description: "Foreign key to organisation.id — the organisation that authored this appointment record. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_appointment_practitioner:
     raw: raw_olids_appointment_practitioner
@@ -99,6 +98,10 @@ tables:
       organisation_id_managing: provider_organisation_id
       organisation_code_publisher: publisher_organisation_code
       care_manager_practitioner_id: care_manager_practitioner_in_role_id
+      # Verified against stable_episode_of_care: source-record LDS datetimes
+      # have been folded into the cross-cutting first/update_acquired pair.
+      lds_datetime_source_record_acquired: lds_datetime_first_acquired
+      lds_datetime_source_record_updated: lds_datetime_update_acquired
     removes:
       # B: no managing equivalent in new schema
       - organisation_code_managing
@@ -163,7 +166,9 @@ tables:
   stg_olids_referral_request:
     raw: raw_olids_referral_request
     renames:
-      organisation_id: provider_organisation_id
+      # Verified against stable_referral_request: organisation_id -> publisher_organisation_id
+      # (not provider_organisation_id as the cross-cutting default would give).
+      organisation_id: publisher_organisation_id
       date_precision_concept_id: clinical_effective_date_precision_source_concept_id
       referral_request_priority_concept_id: referral_request_priority_source_concept_id
       referral_request_type_concept_id: referral_request_type_source_concept_id
@@ -332,14 +337,15 @@ tables:
     needs_manual_review:
       - "`id` is removed; `mapped_item_id` (VARCHAR — to accommodate synthetic EMIS-backfill rows) is the new PK."
     additions:
+      # Verified against dbt-olids stable_concept_map. stable does NOT have
+      # lakehouse_datetime_updated, lakehouse_date_processed, or lds_is_deleted —
+      # the LDS metadata pattern that applies to clinical tables doesn't
+      # apply to concept_map. Only mapped_item_id, concept_map_id and
+      # lds_start_datetime are valid additions here.
       - name: mapped_item_id
         description: "Primary key (VARCHAR) — replaces the removed `id` column. VARCHAR rather than UUID so it can carry synthetic EMIS-backfill values too. New in the 2026 OLIDS schema realignment (issue #747)."
-      - name: lakehouse_datetime_updated
-        description: "Lakehouse timestamp when this concept-map row was last updated. New in the 2026 OLIDS schema realignment (issue #747)."
-      - name: lakehouse_date_processed
-        description: "Lakehouse processing date for this concept-map row. New in the 2026 OLIDS schema realignment (issue #747)."
-      - name: lds_is_deleted
-        description: "Deletion flag from LDS. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: concept_map_id
+        description: "Identifier of the concept map this row belongs to. New in the 2026 OLIDS schema realignment (issue #747)."
       - name: lds_start_datetime
         description: "LDS datetime stamp from which the record version was correct. New in the 2026 OLIDS schema realignment (issue #747)."
 

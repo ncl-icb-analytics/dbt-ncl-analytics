@@ -41,8 +41,6 @@ models:
         description: Boolean indicating if the record is marked as confidential
       - name: is_deleted
         description: Boolean indicating if the clinical record has been deleted
-      - name: lds_end_date_time
-        description: End datetime for this procedure request
       - name: lds_id
         description: LDS system identifier
       - name: publisher_organisation_code

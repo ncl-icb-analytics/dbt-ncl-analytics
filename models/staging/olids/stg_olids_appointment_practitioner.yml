@@ -14,12 +14,8 @@ models:
         description: Foreign key to appointment.id
       - name: practitioner_id
         description: Foreign key to practitioner.id
-      - name: lds_end_date_time
-        description: End datetime for this practitioner assignment
       - name: lds_id
         description: LDS system identifier
-      - name: lds_record_id_user
-        description: LDS user record identifier
       - name: publisher_organisation_code
         description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
       - name: lds_datetime_first_acquired

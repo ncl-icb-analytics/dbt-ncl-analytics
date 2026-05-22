@@ -10,7 +10,8 @@ select
     date_employment_start,
     date_employment_end,
     lds_id,
-    publisher_organisation_code,
+    -- practitioner_in_role doesn't have publisher_organisation_code in the new
+    -- schema (the source column has been removed for this table).
     lds_datetime_first_acquired,
 
     -- Metadata

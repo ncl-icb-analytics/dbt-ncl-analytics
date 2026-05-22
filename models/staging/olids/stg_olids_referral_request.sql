@@ -3,7 +3,8 @@ select
     id,
 
     -- Business columns
-    provider_organisation_id,
+    -- stable_referral_request exposes publisher_organisation_id (not provider_).
+    publisher_organisation_id,
     person_id,
     patient_id,
     encounter_id,

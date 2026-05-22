@@ -23,8 +23,6 @@ select distinct
 
     -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
     mapped_item_id,
-    lakehouse_datetime_updated,
-    lakehouse_date_processed,
-    lds_is_deleted,
+    concept_map_id,
     lds_start_datetime
 from {{ ref('raw_olids_concept_map') }}

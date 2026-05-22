@@ -47,8 +47,6 @@ models:
         description: Soft-delete flag
       - name: lds_start_datetime
         description: Incremental high-water column
-      - name: lds_datetime_first_acquired
-        description: Datetime data was acquired
       - name: person_record_type
         description: "Type / category of the person record. New in the 2026 OLIDS schema realignment (issue #747)."
       - name: person_version_id

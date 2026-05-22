@@ -7,7 +7,6 @@ select
 
     -- Business columns
     lds_id,
-    lds_datetime_first_acquired,
     lds_source_dataset_id,
     patient_id,
     person_id,
@@ -19,7 +18,7 @@ select
     lds_lakehouse_date_processed,
     lds_lakehouse_datetime_updated,
     lds_source_record_id,
-    lds_record_id_person,
+    lds_source_record_id_person,
 
 
     -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)

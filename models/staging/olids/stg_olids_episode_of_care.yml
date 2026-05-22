@@ -49,10 +49,10 @@ models:
         description: LDS system identifier
       - name: publisher_organisation_code
         description: ODS code of the data controller organisation that published the record
-      - name: lds_datetime_source_record_acquired
-        description: Datetime when source record was first acquired by LDS
-      - name: lds_datetime_source_record_updated
-        description: Datetime when source record update was acquired by LDS
+      - name: lds_datetime_first_acquired
+        description: "Datetime when the source record was first acquired by LDS (post-2026 OLIDS rename — was lds_datetime_source_record_acquired)"
+      - name: lds_datetime_update_acquired
+        description: "Datetime when the source record update was acquired by LDS (post-2026 OLIDS rename — was lds_datetime_source_record_updated)"
       - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted

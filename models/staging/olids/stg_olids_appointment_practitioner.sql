@@ -5,9 +5,7 @@ select
     -- Business columns
     appointment_id,
     practitioner_id,
-    lds_end_date_time,
     lds_id,
-    lds_record_id_user,
     publisher_organisation_code,
     lds_datetime_first_acquired,
 

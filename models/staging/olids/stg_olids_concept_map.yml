@@ -49,12 +49,8 @@ models:
         description: Target concept display name
       - name: target_system
         description: Target concept system
-      - name: lakehouse_datetime_updated
-        description: "Lakehouse timestamp when this concept-map row was last updated. New in the 2026 OLIDS schema realignment (issue #747)."
-      - name: lakehouse_date_processed
-        description: "Lakehouse processing date for this concept-map row. New in the 2026 OLIDS schema realignment (issue #747)."
-      - name: lds_is_deleted
-        description: "Deletion flag from LDS. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: concept_map_id
+        description: "Identifier of the concept map this row belongs to. New in the 2026 OLIDS schema realignment (issue #747)."
       - name: lds_start_datetime
         description: "LDS datetime stamp from which the record version was correct. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:

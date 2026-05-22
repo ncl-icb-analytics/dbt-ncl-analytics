@@ -53,8 +53,7 @@ select
 
 
     -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
-    publisher_organisation_id,
-    author_organisation_id
+    publisher_organisation_id
 from {{ ref('raw_olids_appointment') }}
 where coalesce(lds_is_deleted, false) = false
     and person_id is not null

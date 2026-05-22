@@ -17,7 +17,6 @@ select
     age_at_event_baby,
     age_at_event_neonate,
     is_confidential,
-    lds_end_date_time,
     lds_id,
     publisher_organisation_code,
     lds_datetime_first_acquired,

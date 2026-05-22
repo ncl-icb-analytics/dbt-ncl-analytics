@@ -16,7 +16,9 @@ select
     match_pattern,
     lds_id,
     publisher_organisation_code,
-    lds_datetime_first_acquired,
+    -- patient_uprn doesn't carry lds_datetime_first_acquired on stable —
+    -- only lds_datetime_update_acquired is exposed for this table.
+    lds_datetime_update_acquired,
 
     -- Metadata
     lds_start_datetime,

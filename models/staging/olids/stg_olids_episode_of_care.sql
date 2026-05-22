@@ -22,8 +22,8 @@ select
     care_manager_practitioner_in_role_id,
     lds_id,
     publisher_organisation_code,
-    lds_datetime_source_record_acquired,
-    lds_datetime_source_record_updated,
+    lds_datetime_first_acquired,
+    lds_datetime_update_acquired,
 
     -- Metadata
     lds_start_datetime,
