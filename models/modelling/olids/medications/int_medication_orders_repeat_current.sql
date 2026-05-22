@@ -8,7 +8,8 @@
 
 /*
 Latest repeat medication orders that are currently active based on duration.
-Filters to repeat prescriptions using authorisation_type_source_concept_id = '182918009'.
+Filters to repeat prescriptions by joining medication_statement.authorisation_type_code
+against the REPEAT_PRESCRIPTION codeset (see CTE below).
 
 Currency logic:
 - Takes the most recent order for each person × medication combination

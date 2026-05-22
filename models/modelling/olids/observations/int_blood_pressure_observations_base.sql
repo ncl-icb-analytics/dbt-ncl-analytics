@@ -37,7 +37,13 @@ WITH base_observations AS (
     WHERE obs.result_value IS NOT NULL
       AND obs.person_id IS NOT NULL
     {% if is_incremental() %}
-      AND obs.lds_start_datetime > (SELECT MAX(lds_start_datetime) FROM {{ this }})
+      -- COALESCE so the first incremental run (target empty) doesn't compare
+      -- against NULL and exclude every row; '1900-01-01' is safely earlier
+      -- than any real lds_start_datetime.
+      AND obs.lds_start_datetime > COALESCE(
+        (SELECT MAX(lds_start_datetime) FROM {{ this }}),
+        '1900-01-01'::TIMESTAMP_NTZ
+      )
     {% endif %}
 )
 

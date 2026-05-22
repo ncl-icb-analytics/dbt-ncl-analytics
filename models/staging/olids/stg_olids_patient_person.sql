@@ -35,5 +35,7 @@ where patient_id is not null
   and person_id is not null
 qualify row_number() over (
     partition by patient_id, person_uuid
-    order by lds_start_datetime desc
+    -- lds_source_record_id is a deterministic tiebreaker when two rows
+    -- share an lds_start_datetime — keeps the dedup output stable across runs.
+    order by lds_start_datetime desc, lds_source_record_id desc
 ) = 1

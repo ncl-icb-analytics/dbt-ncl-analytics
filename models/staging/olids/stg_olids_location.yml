@@ -37,6 +37,8 @@ models:
         description: Postcode of the location
       - name: managing_organisation_id
         description: Foreign key to organisation.id - organisation managing this location
+      - name: location_type_source_concept_id
+        description: Foreign key to concept.concept_id - source concept describing the location type. New in the 2026 OLIDS schema realignment (issue #747).
       - name: open_date
         description: Date the location opened
       - name: close_date

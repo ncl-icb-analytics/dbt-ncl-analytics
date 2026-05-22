@@ -4,6 +4,10 @@ select
 
     -- Business columns
     organisation_code,
+    -- NB: 'assinging' (sic) is the upstream column name. Per issue #747, the
+    -- new DATA_LAKE.OLIDS schema misspells this and the project must match the
+    -- source column verbatim. Do not "fix" to 'assigning' — the SELECT will
+    -- fail at runtime if the names diverge.
     organisation_code_assinging_authority,
     name,
     postcode,
