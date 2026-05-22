@@ -142,9 +142,9 @@ sources:
       data_type: TEXT
     - name: Cancelled_Flag
       data_type: TEXT
-    - name: CCG_OF_REGISTRATION_CODE
+    - name: SUB_ICB_CODE_FROM_GP_PRACTICE_CODE
       data_type: TEXT
-    - name: PLACE_OF_DEATH_CCG_CODE
+    - name: PLACE_OF_DEATH_SUB_ICB_CODE
       data_type: TEXT
     - name: PLACE_OF_DEATH_ORG_CODE
       data_type: TEXT
@@ -154,7 +154,7 @@ sources:
       data_type: TEXT
     - name: WARD_OF_RESIDENCE_CODE
       data_type: TEXT
-    - name: CCG_OF_RESIDENCE_CODE
+    - name: SUB_ICB_OF_RESIDENCE_CODE
       data_type: TEXT
     - name: COUNTY_DISTRICT_OF_RES_CODE
       data_type: TEXT
