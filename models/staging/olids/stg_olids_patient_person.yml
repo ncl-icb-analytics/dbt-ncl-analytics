@@ -37,11 +37,11 @@ models:
       - name: lds_record_id_person
         description: LDS record identifier for person
       - name: lds_end_datetime
-        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+        description: "LDS datetime stamp when the record version stopped being correct. New in the 2026 OLIDS schema realignment (issue #747)."
       - name: lds_registrar_event_id
-        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+        description: "LDS registrar event identifier for the patient-person record. New in the 2026 OLIDS schema realignment (issue #747)."
       - name: lds_datetime_update_acquired_person
-        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+        description: "LDS datetime stamp when an update for the linked person record was acquired. New in the 2026 OLIDS schema realignment (issue #747)."
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:

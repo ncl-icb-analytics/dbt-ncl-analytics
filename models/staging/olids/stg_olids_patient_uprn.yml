@@ -46,7 +46,7 @@ models:
       - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
       - name: patient_address_id
-        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+        description: "Foreign key to patient_address.id — links this UPRN match to the patient_address record it was matched against. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           config:

@@ -314,9 +314,12 @@ tables:
     needs_manual_review:
       - "`id` is removed; `concept_id` (UUID) is the new PK. Downstream joins on stg_olids_concept.id (especially join_concept_display macro) must switch to concept_id."
     additions:
-      - concept_id
-      - lds_is_deleted
-      - lds_start_datetime
+      - name: concept_id
+        description: "Primary key (UUID) — replaces the removed `id` column. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_is_deleted
+        description: "Deletion flag from LDS. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_start_datetime
+        description: "LDS datetime stamp from which the record version was correct. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_concept_map:
     raw: raw_olids_concept_map
@@ -329,11 +332,16 @@ tables:
     needs_manual_review:
       - "`id` is removed; `mapped_item_id` (VARCHAR — to accommodate synthetic EMIS-backfill rows) is the new PK."
     additions:
-      - mapped_item_id
-      - lakehouse_datetime_updated
-      - lakehouse_date_processed
-      - lds_is_deleted
-      - lds_start_datetime
+      - name: mapped_item_id
+        description: "Primary key (VARCHAR) — replaces the removed `id` column. VARCHAR rather than UUID so it can carry synthetic EMIS-backfill values too. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lakehouse_datetime_updated
+        description: "Lakehouse timestamp when this concept-map row was last updated. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lakehouse_date_processed
+        description: "Lakehouse processing date for this concept-map row. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_is_deleted
+        description: "Deletion flag from LDS. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_start_datetime
+        description: "LDS datetime stamp from which the record version was correct. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_enriched_concept_map:
     raw: raw_olids_enriched_concept_map

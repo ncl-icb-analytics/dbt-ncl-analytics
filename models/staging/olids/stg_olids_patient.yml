@@ -56,9 +56,9 @@ models:
       - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
       - name: person_id
-        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+        description: "Foreign key to person.id — now exposed directly on the patient record. New in the 2026 OLIDS schema realignment (issue #747); previously only available via patient_person."
       - name: local_patient_id
-        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+        description: "Local (practice-system) patient identifier. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

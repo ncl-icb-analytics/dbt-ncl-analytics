@@ -12,9 +12,9 @@ models:
           - unique
           - not_null
       - name: location_id
-        description: Foreign key to location_name.id - location_name where schedule applies
+        description: Foreign key to location.id - location where schedule applies
       - name: location_name
-        description: Text description of the location_name
+        description: 'Name / text label for the location (post-2026 OLIDS rename — was the column named `location` at source)'
       - name: practitioner_id
         description: Foreign key to practitioner.id - practitioner whose schedule this is
       - name: start_date

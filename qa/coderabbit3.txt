@@ -1,0 +1,38 @@
+
+=== models/staging/olids/stg_olids_concept_map.yml:59 | PRRT_kwDOPYHaXs6ECUcl | cid=3286708028 | 2026-05-22T07:36:19Z ===
+_?? Potential issue_ | _? Minor_ | _? Quick win_
+
+**Replace placeholder descriptions with final column semantics.**
+
+Lines 53, 55, 57, and 59 still contain ?manual review recommended? placeholder text. Please finalise these descriptions so the model metadata is complete and trustworthy at cutover.
+
+   
+As per coding guidelines: ?YAML files define model metadata, tests, and sources. Focus on completeness, not formatting.?
+
+
+
+=== models/staging/olids/stg_olids_patient_uprn.yml:49 | PRRT_kwDOPYHaXs6ECUcp | cid=3286708034 | 2026-05-22T07:36:19Z ===
+_?? Potential issue_ | _? Minor_ | _? Quick win_
+
+**Replace the placeholder `patient_address_id` description.**
+
+This lands incomplete model metadata. The column is now part of the staging contract, so the YAML should describe what it represents rather than leaving a manual-review note.
+
+
+
+=== models/staging/olids/stg_olids_schedule.yml:17 | PRRT_kwDOPYHaXs6ECUcx | cid=3286708042 | 2026-05-22T07:36:19Z ===
+_?? Potential issue_ | _? Minor_ | _? Quick win_
+
+**Fix incorrect FK target in `location_id` description.**
+
+Line 15 currently references `location_name.id`, which is inconsistent with the ID key semantics and can mislead downstream users of the docs.
+
+
+
+=== scripts/migrations/olids_2026/rewrite_staging.py:274 | PRRT_kwDOPYHaXs6ECUc7 | cid=3286708054 | 2026-05-22T07:36:19Z ===
+_?? Potential issue_ | _? Major_ | _? Quick win_
+
+**Don?t rewrite free-text `description:` values mechanically.**
+
+`_rewrite_yml_text()` now rewrites every retained non-`- name:` line. On the next codemod rerun, that will turn descriptions like `was record_owner_organisation_code` into `was publisher_organisation_code`, which is wrong and loses the migration note. Please scope this pass to structured identifier-bearing keys and leave prose descriptions to the manual sweep.
+
