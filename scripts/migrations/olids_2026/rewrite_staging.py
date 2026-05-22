@@ -41,11 +41,27 @@ class TableRules:
     removes: list[str] = field(default_factory=list)
     type_casts: dict[str, str] = field(default_factory=dict)
     overrides: dict[str, str] = field(default_factory=dict)
-    additions: list[str] = field(default_factory=list)
+    # additions[col] = description (empty string if no description supplied).
+    # Supports both forms in YAML: a bare list of strings, or a list of
+    # `{name, description}` dicts.
+    additions: dict[str, str] = field(default_factory=dict)
     delete: bool = False
     delete_reason: Optional[str] = None
     unchanged: bool = False
     needs_manual_review: list[str] = field(default_factory=list)
+
+
+def _parse_additions(raw) -> dict[str, str]:
+    """Accept either ['col1', 'col2'] or [{'name': 'col1', 'description': '...'}]."""
+    out: dict[str, str] = {}
+    if not raw:
+        return out
+    for item in raw:
+        if isinstance(item, str):
+            out[item] = ""
+        elif isinstance(item, dict) and "name" in item:
+            out[item["name"]] = item.get("description") or ""
+    return out
 
 
 def load_rules() -> dict[str, TableRules]:
@@ -76,7 +92,7 @@ def load_rules() -> dict[str, TableRules]:
             removes=removes,
             type_casts=cfg.get("type_casts") or {},
             overrides=cfg.get("overrides") or {},
-            additions=cfg.get("additions") or [],
+            additions=_parse_additions(cfg.get("additions")),
             delete=bool(cfg.get("delete", False)),
             delete_reason=cfg.get("delete_reason"),
             unchanged=bool(cfg.get("unchanged", False)),
@@ -257,21 +273,49 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
 
 
 def _rewrite_yml_text(line: str, rules: TableRules) -> str:
-    """Whole-word rewrite of renamed identifiers inside YAML body text.
+    """Rewrite renamed identifiers inside structured YAML reference keys.
 
-    Catches descriptions, test arguments, and any other free-text mention of
-    a renamed column so the YAML stays internally consistent with the column
-    names declared by `- name:` lines. Skips lines that are themselves a
-    `- name:` declaration (those are handled by the structured pass).
+    Scoped narrowly to lines that carry a single column identifier as their
+    value:
+      - `field: <identifier>` (relationships test argument)
+      - `column_name: <identifier>` / `column: <identifier>` (other tests)
+      - `- <identifier>` items under `combination_of_columns:`-style lists
+
+    Free-text descriptions are NOT rewritten — they often contain rename audit
+    notes (e.g. "post-2026 OLIDS rename — was record_owner_organisation_code")
+    and a mechanical rewrite would eat those references on every rerun. Prose
+    drift is handled by an explicit manual sweep when needed.
     """
     if YML_NAME_LINE.match(line):
         return line
-    rewritten = line
-    for old, new in rules.renames.items():
-        if old == new:
-            continue
-        rewritten = re.sub(rf"\b{re.escape(old)}\b", new, rewritten)
-    return rewritten
+    # Match `<indent><key>: <identifier>` where key signals a column reference
+    m = re.match(r"^(\s*)(field|column|column_name):\s*([a-z_][a-z0-9_]*)\s*$", line, re.IGNORECASE)
+    if m:
+        indent, key, ident = m.group(1), m.group(2), m.group(3).lower()
+        for old, new in rules.renames.items():
+            if old == new:
+                continue
+            if ident == old:
+                return f"{indent}{key}: {new}"
+        return line
+    # Match `<indent>- <identifier>` items inside a sequence — typically used
+    # under `combination_of_columns:`. Conservative: only rewrites when the
+    # whole value is a bare identifier (no quotes, no expression).
+    m = re.match(r"^(\s*-\s*)([a-z_][a-z0-9_]*)\s*$", line, re.IGNORECASE)
+    if m:
+        indent, ident = m.group(1), m.group(2).lower()
+        for old, new in rules.renames.items():
+            if old == new:
+                continue
+            if ident == old:
+                return f"{indent}{new}"
+    return line
+
+
+_PLACEHOLDER_DESCRIPTION_RE = re.compile(
+    r"^(\s*)description:\s*New column exposed by the 2026 OLIDS schema realignment.*"
+    r"Manual review recommended.*$"
+)
 
 
 def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
@@ -280,6 +324,10 @@ def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
     skip_next_col_block = False
     skip_indent: Optional[int] = None
     last_column_indent: Optional[int] = None  # leading-whitespace col of last kept `- name:`
+    # Track the most recently emitted `- name:` so we can backfill the
+    # description when we hit a stale placeholder line for an addition that
+    # has a real description in column_renames.yml.
+    last_addition_name: Optional[str] = None
 
     for line in lines:
         # If we're inside a removed column's block, skip continuation lines
@@ -294,6 +342,16 @@ def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
 
         m = YML_NAME_LINE.match(line)
         if not m:
+            # Replace stale placeholder descriptions with the canonical
+            # description from column_renames.yml when one exists.
+            pm = _PLACEHOLDER_DESCRIPTION_RE.match(line)
+            if pm and last_addition_name and rules.additions.get(last_addition_name):
+                indent = pm.group(1)
+                desc = rules.additions[last_addition_name]
+                escaped = desc.replace("\\", "\\\\").replace('"', '\\"')
+                out.append(f'{indent}description: "{escaped}"')
+                last_addition_name = None
+                continue
             out.append(_rewrite_yml_text(line, rules))
             continue
 
@@ -313,11 +371,13 @@ def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
             new = rules.renames[col]
             out.append(f"{leading}{prefix}{new}")
             last_column_indent = list_item_indent
+            last_addition_name = new if new in rules.additions else None
             report.renamed.append((col, new))
             continue
 
         out.append(line)
         last_column_indent = list_item_indent
+        last_addition_name = col if col in rules.additions else None
 
     # Append additions as bare `- name:` entries at the end of the columns
     # block so downstream documentation matches the SQL SELECT additions.
@@ -347,17 +407,19 @@ def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
         leading = " " * last_column_indent
         addition_lines = []
         appended: list[str] = []
-        for col in rules.additions:
+        for col, desc in rules.additions.items():
             if col in {old for old in rules.removes}:
                 continue
             if col.lower() in existing_names:
                 continue  # already declared in YAML
             addition_lines.append(f"{leading}- name: {col}")
-            addition_lines.append(
-                f"{leading}  description: "
-                f"New column exposed by the 2026 OLIDS schema realignment (issue #747). "
-                f"Manual review recommended to set a meaningful description."
-            )
+            if desc:
+                # Quote with double quotes so embedded apostrophes survive YAML
+                escaped = desc.replace("\\", "\\\\").replace('"', '\\"')
+                addition_lines.append(f'{leading}  description: "{escaped}"')
+            # Else: emit the column with no description rather than a fake
+            # placeholder. Reviewers see an incomplete metadata block and can
+            # backfill once the source is live and semantics are clearer.
             appended.append(col)
         if addition_lines:
             out = out[:insert_at] + addition_lines + out[insert_at:]

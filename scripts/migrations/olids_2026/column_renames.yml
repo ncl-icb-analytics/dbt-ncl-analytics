@@ -58,9 +58,12 @@ tables:
       type: appointment_type
     additions:
       # New columns surfaced upstream we may want to expose
-      - publisher_organisation_id
-      - publisher_organisation_code
-      - author_organisation_id
+      - name: publisher_organisation_id
+        description: "Foreign key to organisation.id — the publisher (data-producer) organisation for this appointment record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: publisher_organisation_code
+        description: "ODS code of the publisher organisation. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: author_organisation_id
+        description: "Foreign key to organisation.id — the organisation that authored this appointment record. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_appointment_practitioner:
     raw: raw_olids_appointment_practitioner
@@ -84,8 +87,10 @@ tables:
       # B: removed at source; switch to provider_organisation_id
       - service_provider_organisation_id
     additions:
-      - provider_organisation_id
-      - author_organisation_id
+      - name: provider_organisation_id
+        description: "Foreign key to organisation.id — the provider organisation for this encounter. Replaces service_provider_organisation_id in the 2026 OLIDS schema realignment (issue #747)."
+      - name: author_organisation_id
+        description: "Foreign key to organisation.id — the organisation that authored this encounter record. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_episode_of_care:
     raw: raw_olids_episode_of_care
@@ -98,9 +103,12 @@ tables:
       # B: no managing equivalent in new schema
       - organisation_code_managing
     additions:
-      - care_manager_organisation_id
-      - care_manager_organisation_code
-      - author_organisation_id
+      - name: care_manager_organisation_id
+        description: "Foreign key to organisation.id — the organisation responsible for managing care during this episode. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: care_manager_organisation_code
+        description: "ODS code of the care-manager organisation. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: author_organisation_id
+        description: "Foreign key to organisation.id — the organisation that authored this episode-of-care record. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_flag:
     raw: raw_olids_flag
@@ -115,7 +123,8 @@ tables:
     removes:
       - type_code
     additions:
-      - location_type_source_concept_id
+      - name: location_type_source_concept_id
+        description: "Foreign key to concept.concept_id — source concept describing the location type. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_location_contact:
     raw: raw_olids_location_contact
@@ -175,8 +184,10 @@ tables:
       - type_code
       - type_desc
     additions:
-      - description
-      - location_type_source_concept_id
+      - name: description
+        description: "Free-text description of the organisation. New in the 2026 OLIDS schema realignment (issue #747); partially replaces the removed type_code and type_desc columns."
+      - name: location_type_source_concept_id
+        description: "Foreign key to concept.concept_id — source concept describing the organisation's location type. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_patient:
     raw: raw_olids_patient
@@ -185,9 +196,11 @@ tables:
       is_dummy_patient: is_test_patient
       gender_concept_id: gender_source_concept_id
     additions:
-      # B: now exposed directly on PATIENT
-      - person_id
-      - local_patient_id
+      # B: now exposed directly on PATIENT (previously only on patient_person)
+      - name: person_id
+        description: "Foreign key to person.id — now exposed directly on the patient record. New in the 2026 OLIDS schema realignment (issue #747); previously only available via patient_person."
+      - name: local_patient_id
+        description: "Local (practice-system) patient identifier. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_patient_address:
     raw: raw_olids_patient_address
@@ -202,7 +215,8 @@ tables:
       # B: per-table — description removed in favour of new contact_type text column
       - description
     additions:
-      - contact_type
+      - name: contact_type
+        description: "Free-text contact type (e.g. phone, email). New in the 2026 OLIDS schema realignment (issue #747); replaces the removed `description` column."
 
   stg_olids_patient_person:
     raw: raw_olids_patient_person
@@ -215,9 +229,12 @@ tables:
     needs_manual_review:
       - "Synthesize id column from (patient_id, person_uuid) for legacy downstream consumers, OR rewrite consumers to use the natural key."
     additions:
-      - lds_end_datetime
-      - lds_registrar_event_id
-      - lds_datetime_update_acquired_person
+      - name: lds_end_datetime
+        description: "LDS datetime stamp when the record version stopped being correct. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_registrar_event_id
+        description: "LDS registrar event identifier for the patient-person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_update_acquired_person
+        description: "LDS datetime stamp when an update for the linked person record was acquired. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_patient_registered_practitioner_in_role:
     raw: raw_olids_patient_registered_practitioner_in_role
@@ -239,7 +256,8 @@ tables:
       masked_uprn: "TO_VARCHAR(masked_uprn) AS masked_uprn"
       masked_usrn: "TO_VARCHAR(masked_usrn) AS masked_usrn"
     additions:
-      - patient_address_id
+      - name: patient_address_id
+        description: "Foreign key to patient_address.id — links this UPRN match to the patient_address record it was matched against. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_person:
     raw: raw_olids_person
@@ -250,11 +268,16 @@ tables:
     removes:
       - composite_id
     additions:
-      - person_record_type
-      - person_version_id
-      - sk_patient_id
-      - lds_datetime_first_acquired_person
-      - lds_datetime_update_acquired_person
+      - name: person_record_type
+        description: "Type / category of the person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: person_version_id
+        description: "Version identifier for the person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: sk_patient_id
+        description: "Surrogate key linking this person to a patient record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_first_acquired_person
+        description: "LDS datetime stamp when the linked person record was first acquired. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_update_acquired_person
+        description: "LDS datetime stamp when an update for the linked person record was acquired. New in the 2026 OLIDS schema realignment (issue #747)."
 
   stg_olids_practitioner:
     raw: raw_olids_practitioner
