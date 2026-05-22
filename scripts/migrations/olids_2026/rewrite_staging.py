@@ -148,8 +148,12 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
         if in_select and not seen_from and re.match(r"\s*from\b", line, re.IGNORECASE):
             # About to leave SELECT list. Emit additions before FROM as real SELECT
             # columns so downstream consumers can reference them. Adds a trailing
-            # comma to the prior last column.
-            if rules.additions and not additions_emitted:
+            # comma to the prior last column. Idempotent: skip any addition
+            # already present in the existing SELECT.
+            additions_to_emit = [
+                c for c in (rules.additions or []) if c not in emitted_select_cols
+            ]
+            if additions_to_emit and not additions_emitted:
                 indent = "    "
                 # Find the last non-blank line in `out` that's a SELECT-list column
                 # (i.e. doesn't start with `--`) and add a trailing comma if missing.
@@ -164,12 +168,12 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
                     break
                 out.append("")
                 out.append(f"{indent}-- New columns exposed by the 2026 OLIDS schema realignment (issue #747)")
-                for j, col in enumerate(rules.additions):
-                    comma = "," if j < len(rules.additions) - 1 else ""
+                for j, col in enumerate(additions_to_emit):
+                    comma = "," if j < len(additions_to_emit) - 1 else ""
                     out.append(f"{indent}{col}{comma}")
                 additions_emitted = True
-                report.additions.extend(rules.additions)
-                emitted_select_cols.extend(rules.additions)
+                report.additions.extend(additions_to_emit)
+                emitted_select_cols.extend(additions_to_emit)
             seen_from = True
             in_select = False
             out.append(line)
@@ -252,11 +256,30 @@ def rewrite_sql(text: str, rules: TableRules, report: FileReport) -> str:
     return "\n".join(out) + ("\n" if text.endswith("\n") else "")
 
 
+def _rewrite_yml_text(line: str, rules: TableRules) -> str:
+    """Whole-word rewrite of renamed identifiers inside YAML body text.
+
+    Catches descriptions, test arguments, and any other free-text mention of
+    a renamed column so the YAML stays internally consistent with the column
+    names declared by `- name:` lines. Skips lines that are themselves a
+    `- name:` declaration (those are handled by the structured pass).
+    """
+    if YML_NAME_LINE.match(line):
+        return line
+    rewritten = line
+    for old, new in rules.renames.items():
+        if old == new:
+            continue
+        rewritten = re.sub(rf"\b{re.escape(old)}\b", new, rewritten)
+    return rewritten
+
+
 def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
     lines = text.splitlines(keepends=False)
     out: list[str] = []
     skip_next_col_block = False
     skip_indent: Optional[int] = None
+    last_column_indent: Optional[int] = None  # leading-whitespace col of last kept `- name:`
 
     for line in lines:
         # If we're inside a removed column's block, skip continuation lines
@@ -271,7 +294,7 @@ def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
 
         m = YML_NAME_LINE.match(line)
         if not m:
-            out.append(line)
+            out.append(_rewrite_yml_text(line, rules))
             continue
 
         leading = m.group(1)  # whitespace before `-`
@@ -289,10 +312,56 @@ def rewrite_yml(text: str, rules: TableRules, report: FileReport) -> str:
         if col in rules.renames:
             new = rules.renames[col]
             out.append(f"{leading}{prefix}{new}")
+            last_column_indent = list_item_indent
             report.renamed.append((col, new))
             continue
 
         out.append(line)
+        last_column_indent = list_item_indent
+
+    # Append additions as bare `- name:` entries at the end of the columns
+    # block so downstream documentation matches the SQL SELECT additions.
+    # Idempotent: scan the rendered output for existing `- name: <col>` lines
+    # and skip additions already declared.
+    if rules.additions and last_column_indent is not None:
+        existing_names: set[str] = set()
+        for ln in out:
+            mm = YML_NAME_LINE.match(ln)
+            if mm:
+                existing_names.add(mm.group(3).lower())
+        # Find the right insertion point: just before the table-level `tests:`
+        # / `data_tests:` / `config:` key (or end of file). Walk backwards.
+        insert_at = len(out)
+        for i in range(len(out) - 1, -1, -1):
+            s = out[i].lstrip(" ")
+            indent = len(out[i]) - len(s)
+            if not s:
+                continue
+            if indent <= last_column_indent - 2 and (
+                s.startswith("tests:")
+                or s.startswith("data_tests:")
+                or s.startswith("config:")
+            ):
+                insert_at = i
+                break
+        leading = " " * last_column_indent
+        addition_lines = []
+        appended: list[str] = []
+        for col in rules.additions:
+            if col in {old for old in rules.removes}:
+                continue
+            if col.lower() in existing_names:
+                continue  # already declared in YAML
+            addition_lines.append(f"{leading}- name: {col}")
+            addition_lines.append(
+                f"{leading}  description: "
+                f"New column exposed by the 2026 OLIDS schema realignment (issue #747). "
+                f"Manual review recommended to set a meaningful description."
+            )
+            appended.append(col)
+        if addition_lines:
+            out = out[:insert_at] + addition_lines + out[insert_at:]
+            report.additions.extend(appended)
 
     return "\n".join(out) + ("\n" if text.endswith("\n") else "")
 

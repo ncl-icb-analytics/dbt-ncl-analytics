@@ -49,6 +49,16 @@ models:
         description: Incremental high-water column
       - name: lds_datetime_first_acquired
         description: Datetime data was acquired
+      - name: person_record_type
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: person_version_id
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: sk_patient_id
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: lds_datetime_first_acquired_person
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: lds_datetime_update_acquired_person
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

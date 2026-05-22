@@ -12,7 +12,6 @@ Do not include Lithium as this is already catpured in int_lithium_medications_al
 */
 
 --date that medication data was first acquired from the Practice systems
---(post-2026 OLIDS rename: lds_datetime_data_acquired -> lds_datetime_first_acquired)
 WITH Medsupload as (
 SELECT 
     MAX(lds_datetime_first_acquired) AS lds_datetime_first_acquired

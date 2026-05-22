@@ -21,6 +21,10 @@ models:
         description: Boolean indicating if this concept has been mapped to a standard terminology
       - name: use_count
         description: Number of times this concept is used in the dataset
+      - name: lds_is_deleted
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: lds_start_datetime
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

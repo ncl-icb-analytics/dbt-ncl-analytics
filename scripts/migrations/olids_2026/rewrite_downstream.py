@@ -141,6 +141,9 @@ class FileReport:
     ambiguous_columns: dict[str, set[str]] = field(default_factory=dict)
     removed_hits: dict[str, int] = field(default_factory=dict)
     in_scope_tables: list[str] = field(default_factory=list)
+    # Files referencing models that are slated for deletion (e.g. stg_olids_flag).
+    # Surfaced for manual review even when no rename context applies.
+    deleted_refs: list[str] = field(default_factory=list)
 
 
 def process_file(
@@ -152,18 +155,29 @@ def process_file(
         return None
 
     ctx = RenameContext(cross_cutting_keys=set(cross_cutting_keys))
+    deleted_refs: set[str] = set()
     for ref in refs:
         rules = table_rules.get(ref)
-        if not rules or rules.get("delete"):
+        if not rules:
+            continue
+        if rules.get("delete"):
+            # Track deleted-table refs separately so a file that only
+            # references a deleted model (e.g. stale `ref('stg_olids_flag')`)
+            # surfaces in the manual-review report instead of returning None.
+            deleted_refs.add(ref)
             continue
         ctx.add_table(ref, rules["renames"], rules["removes"])
 
-    if not ctx.rename_targets and not ctx.removed_cols:
+    if not ctx.rename_targets and not ctx.removed_cols and not deleted_refs:
         return None
 
     aliases = collect_aliases(text)  # alias -> table
 
-    report = FileReport(path=path, in_scope_tables=sorted(ctx.in_scope_tables))
+    report = FileReport(
+        path=path,
+        in_scope_tables=sorted(ctx.in_scope_tables),
+        deleted_refs=sorted(deleted_refs),
+    )
     new_text = text
 
     # 1) Qualified rewrites: alias.col -> alias.new_col. Driven by per-table
@@ -181,32 +195,32 @@ def process_file(
                 key = f"{alias}.{old} -> {alias}.{new}"
                 report.renamed_counts[key] = report.renamed_counts.get(key, 0) + n
 
-    # 2) Unqualified rewrites: only for cross-cutting renames (LDS metadata,
-    #    publisher_organisation_code) which apply to every in-scope table. Skip
-    #    if the column maps to multiple new names anywhere in scope.
+    # 2) Unqualified rewrites: cross-cutting renames always; table-specific
+    #    renames too when only one in-scope table contributes to them (the
+    #    rename is unambiguous in the file's context, so unqualified bare
+    #    references to the old column can be safely rewritten). Skip when the
+    #    same old name maps to multiple new names across in-scope tables.
+    contributors: dict[str, set[str]] = defaultdict(set)
+    for tname, renames in ctx.per_table_renames.items():
+        for old in renames:
+            contributors[old].add(tname)
+
     for old, targets in sorted(ctx.rename_targets.items()):
-        if old not in ctx.cross_cutting_keys:
-            continue  # table-specific rename — already handled via aliases
         if len(targets) != 1:
             report.ambiguous_columns[old] = targets
             continue
+        # Table-specific rename + multiple in-scope tables = unsafe to do
+        # unqualified rewrite (might touch a different table's column with
+        # the same name). The aliased pass above handles the safe cases.
+        if old not in ctx.cross_cutting_keys and len(contributors[old]) > 1:
+            continue
         new = next(iter(targets))
         # Don't rewrite `alias.old` again — qualified pass already handled.
-        # The whole-word pattern would match those too. Use negative lookbehind
-        # to skip dotted references entirely (they're alias.col patterns).
         pattern = re.compile(rf"(?<![\w.]){re.escape(old)}\b")
         new_text, n = pattern.subn(new, new_text)
         if n:
             key = f"{old} -> {new}"
             report.renamed_counts[key] = report.renamed_counts.get(key, 0) + n
-
-    # 3) Track ambiguous table-specific renames where the file uses unqualified
-    #    references. We still want to flag for manual review.
-    for old, targets in sorted(ctx.rename_targets.items()):
-        if old in ctx.cross_cutting_keys:
-            continue
-        if len(targets) > 1:
-            report.ambiguous_columns[old] = targets
 
     # 4) Detect removed columns still being referenced (post-rewrite text).
     #    Only flag if NO in-scope table keeps the column (i.e. all in-scope
@@ -261,6 +275,7 @@ def main() -> int:
     touched: list[FileReport] = []
     ambiguous: list[FileReport] = []
     removed_hits: list[FileReport] = []
+    deleted_ref_files: list[FileReport] = []
 
     for path in walk_files(scan):
         rep = process_file(path, table_rules, cross_cutting_keys, args.dry_run)
@@ -272,12 +287,22 @@ def main() -> int:
             ambiguous.append(rep)
         if rep.removed_hits:
             removed_hits.append(rep)
+        if rep.deleted_refs:
+            deleted_ref_files.append(rep)
 
     print("=== Downstream rewrite summary ===\n")
     print(f"Files with renames applied: {len(touched)}")
     print(f"Files with ambiguous columns (manual review): {len(ambiguous)}")
     print(f"Files referencing removed columns (manual review): {len(removed_hits)}")
+    print(f"Files referencing deleted models (manual review): {len(deleted_ref_files)}")
     print()
+
+    if deleted_ref_files:
+        print("--- DELETED model refs (manual review) ---")
+        for rep in deleted_ref_files:
+            rel = rep.path.relative_to(REPO)
+            print(f"  {rel}: refs {', '.join(rep.deleted_refs)}")
+        print()
 
     if touched:
         print("--- Renames applied ---")

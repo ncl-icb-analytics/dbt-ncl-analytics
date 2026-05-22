@@ -49,6 +49,14 @@ models:
         description: Target concept display name
       - name: target_system
         description: Target concept system
+      - name: lakehouse_datetime_updated
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: lakehouse_date_processed
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: lds_is_deleted
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: lds_start_datetime
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

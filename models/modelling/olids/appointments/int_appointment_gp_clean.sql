@@ -199,7 +199,7 @@ practitioner_roles as (
 ),
 
 schedules as (
-    -- Schedule is the container for appointments; type indicates whether
+    -- Schedule is the container for appointments; appointment_type indicates whether
     -- the schedule is timed (normal bookable slots) or untimed (open books
     -- like duty doctor / triage sessions where planned_duration_mins is meaningless)
     select

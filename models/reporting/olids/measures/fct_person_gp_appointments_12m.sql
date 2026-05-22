@@ -1,7 +1,7 @@
 {{
     config(
         materialized='table',
-        cluster_by=['person_id', 'organisation_id'])
+        cluster_by=['person_id', 'provider_organisation_id'])
 }}
 
 -- GP Appointments 12-Month Fact Table

@@ -78,7 +78,7 @@ models:
           - not_null
 
       - name: is_test_patient
-        description: 'Dummy patient record flag'
+        description: 'Test patient record flag (post-2026 OLIDS rename — was is_dummy_patient)'
         tests:
           - not_null
 

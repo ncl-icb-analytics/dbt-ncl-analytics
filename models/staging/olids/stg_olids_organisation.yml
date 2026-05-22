@@ -30,7 +30,7 @@ models:
       - name: lds_id
         description: LDS system identifier
       - name: publisher_organisation_code
-        description: Organisation code of the record owner
+        description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
       - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
       - name: lds_start_datetime
@@ -39,6 +39,10 @@ models:
         description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
+      - name: description
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
+      - name: location_type_source_concept_id
+        description: New column exposed by the 2026 OLIDS schema realignment (issue #747). Manual review recommended to set a meaningful description.
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
