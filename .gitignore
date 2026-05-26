@@ -49,6 +49,8 @@ qa/diff_*.csv
 qa/*.txt
 qa/PR_BODY.md
 qa/reply_*.py
+qa/build_*.py
+qa/current_*.md
 
 
 # Temporary files

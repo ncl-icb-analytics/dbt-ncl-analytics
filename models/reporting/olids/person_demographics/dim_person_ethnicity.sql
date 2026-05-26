@@ -65,7 +65,7 @@ persons_with_ethnicity AS (
 all_persons AS (
     SELECT 
         person_id,
-        sk_patient_ids[0] AS sk_patient_id  -- Get first sk_patient_id from array
+        sk_patient_ids[0]::VARCHAR AS sk_patient_id  -- VARIANT element → strip JSON quotes
     FROM {{ ref('dim_person') }}
 )
 
