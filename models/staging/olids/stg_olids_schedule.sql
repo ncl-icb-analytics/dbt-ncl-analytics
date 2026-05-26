@@ -1,3 +1,7 @@
+{{ config(materialized='table') }}
+
+-- Materialised as a table because the qualify row_number() dedup below would
+-- otherwise re-run on every downstream query (default for staging is view).
 select
     -- Primary key
     id,

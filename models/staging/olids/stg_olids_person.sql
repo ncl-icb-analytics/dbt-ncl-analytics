@@ -1,6 +1,10 @@
+{{ config(materialized='table') }}
+
 -- Native OLIDS PERSON can carry multiple rows per id when a person has multiple
 -- practice registrations recorded. Dedup to one row per person using the most
--- recent gp_registration_date (with deterministic tie-breakers).
+-- recent gp_registration_date (with deterministic tie-breakers). Materialised
+-- as a table so the window-function dedup runs once at build time, not on
+-- every downstream query.
 select
     -- Primary key
     id,
