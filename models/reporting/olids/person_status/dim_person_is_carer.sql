@@ -14,7 +14,7 @@ WITH observation_clusters AS (
     -- First, collect all cluster IDs and determine carer status for each observation
     SELECT
         o.ID,
-        ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR) WITHIN GROUP (ORDER BY o.cluster_id) AS cluster_ids,
+        ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR) WITHIN GROUP (ORDER BY o.cluster_id::VARCHAR) AS cluster_ids,
         -- Pre-calculate carer status based on clusters
         CASE
             WHEN ARRAY_CONTAINS('NOTACARER_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) THEN FALSE
