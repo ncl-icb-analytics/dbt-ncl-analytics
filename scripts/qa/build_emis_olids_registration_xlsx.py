@@ -224,8 +224,10 @@ def build_practice_sheet(wb: Workbook, practices: list[dict]) -> None:
                 cell.number_format = "#,##0"
             if ci == 7:
                 cell.number_format = "+#,##0;-#,##0;0"
-            if ci in (8, 9):
+            if ci == 8:
                 cell.number_format = "+0.00%;-0.00%;0.00%"
+            if ci == 9:
+                cell.number_format = "0.00%"
             if ci == 11:
                 cell.alignment = WRAP_TOP
 

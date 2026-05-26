@@ -13,8 +13,8 @@ models:
           - not_null
       - name: organisation_code
         description: Organisation code (e.g., ODS code)
-      - name: organisation_code_assinging_authority
-        description: Code of the authority that assigned the organisation code
+      - name: organisation_code_assigning_authority
+        description: Code of the authority that assigned the organisation code. Renamed at staging from the upstream `organisation_code_assinging_authority` (sic) typo.
       - name: name
         description: Name of the organisation
       - name: postcode

@@ -31,9 +31,10 @@ olids_regular_counts as (
 ),
 
 practices as (
-    -- Canonical practice name/borough from dim_practice. EMIS seed values are
-    -- kept as a fallback for practices that have merged or closed and no longer
-    -- appear in the OLIDS organisation feed.
+    -- Current dim_practice — used only as a fallback when the 2021 EMIS seed
+    -- lacks a name/borough. The 2021 extract is the source of truth for
+    -- historical labels; dim_practice carries today's names and would rewrite
+    -- history if it took precedence.
     select
         practice_code,
         practice_name,
@@ -44,8 +45,8 @@ practices as (
 comparison as (
     select
         coalesce(e.practice_code, o.practice_code) as practice_code,
-        coalesce(p.practice_name, e.practice_name) as practice_name,
-        coalesce(p.borough, e.borough) as borough,
+        coalesce(e.practice_name, p.practice_name) as practice_name,
+        coalesce(e.borough, p.borough) as borough,
         coalesce(e.emis_list_size, 0) as emis_list_size,
         coalesce(o.olids_regular_count, 0) as olids_regular_count,
         e.extract_date,

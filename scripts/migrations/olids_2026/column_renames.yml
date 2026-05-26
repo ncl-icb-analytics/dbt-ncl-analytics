@@ -179,12 +179,11 @@ tables:
   stg_olids_organisation:
     raw: raw_olids_organisation
     renames:
-      # B: per-table — the new upstream column is misspelled at source
-      # ("assinging" not "assigning"). Issue #747 calls this out explicitly:
-      # "typo in upstream source — flagged but used as-is". We must match the
-      # source column name verbatim; do NOT "fix" the spelling here or the
-      # SELECT will fail at runtime.
-      assigning_authority_code: organisation_code_assinging_authority
+      # B: per-table — the upstream column is misspelled at source
+      # ("assinging" not "assigning") per #747. The raw layer mirrors the
+      # source verbatim; staging aliases to the corrected spelling so
+      # downstream consumers see the right name.
+      assigning_authority_code: organisation_code_assigning_authority
     removes:
       - type_code
       - type_desc
