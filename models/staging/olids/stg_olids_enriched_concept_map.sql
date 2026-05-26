@@ -1,7 +1,9 @@
+-- Trimmed to match the actual ENRICHED_CONCEPT_MAP column set in
+-- DATA_LAKE.OLIDS post-2026 realignment (issue #747). The old SELECT
+-- listed id / lds_id / lds_source_dataset_id, none of which exist on
+-- the new stable model — only the columns below are present.
 select
-    id,
-    lds_id,
-    lds_source_dataset_id,
+    mapped_item_id,
     concept_map_id,
     concept_map_resource_id,
     concept_map_url,

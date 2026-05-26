@@ -40,8 +40,10 @@ WITH base_observations AS (
       -- COALESCE so the first incremental run (target empty) doesn't compare
       -- against NULL and exclude every row; '1900-01-01' is safely earlier
       -- than any real lds_start_datetime.
+      -- Alias the target as `t` so Snowflake doesn't treat the subquery's
+      -- bare `lds_start_datetime` as correlated against outer obs.
       AND obs.lds_start_datetime > COALESCE(
-        (SELECT MAX(lds_start_datetime) FROM {{ this }}),
+        (SELECT MAX(t.lds_start_datetime) FROM {{ this }} AS t),
         '1900-01-01'::TIMESTAMP_NTZ
       )
     {% endif %}
