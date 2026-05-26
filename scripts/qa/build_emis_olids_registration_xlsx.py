@@ -193,7 +193,7 @@ def build_practice_sheet(wb: Workbook, practices: list[dict]) -> None:
     cols = [
         "Practice code", "Practice name", "Borough", "PCN",
         "EMIS list", "OLIDS count", "Difference", "% variance",
-        "|% variance|", "Category", "Notes",
+        "Abs % variance", "Category", "Notes",
     ]
     write_header_row(ws, 1, cols)
 
