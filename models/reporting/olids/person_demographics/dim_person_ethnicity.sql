@@ -73,7 +73,11 @@ SELECT
     ap.person_id,
     COALESCE(pwe.sk_patient_id, ap.sk_patient_id) AS sk_patient_id,
     pwe.latest_ethnicity_date,
-    COALESCE(pwe.concept_id, 'Not Recorded') AS concept_id,
+    -- concept_id is a UUID at source (post-2026 OLIDS retyping). It stays
+    -- UUID-typed here, NULL when the person has no recorded ethnicity. The
+    -- text fields below (snomed_code, term, ethnicity_*) carry the
+    -- 'Not Recorded' display fallback for downstream consumers.
+    pwe.concept_id,
     COALESCE(pwe.snomed_code, 'Not Recorded') AS snomed_code,
     COALESCE(pwe.term, 'Not Recorded') AS term,
     COALESCE(pwe.ethnicity_category, 'Not Recorded') AS ethnicity_category,

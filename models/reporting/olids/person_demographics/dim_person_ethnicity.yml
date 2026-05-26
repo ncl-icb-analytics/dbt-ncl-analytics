@@ -86,7 +86,7 @@ models:
         description: 'Clinical effective date of latest ethnicity recording'
 
       - name: concept_id
-        description: 'SNOMED concept ID for ethnicity ("Not Recorded" if none available)'
+        description: 'OLIDS concept UUID for ethnicity. NULL when the person has no recorded ethnicity (consumers should treat NULL as "Not Recorded" and use the term / ethnicity_* text columns for display).'
         tests:
           - not_null
 
