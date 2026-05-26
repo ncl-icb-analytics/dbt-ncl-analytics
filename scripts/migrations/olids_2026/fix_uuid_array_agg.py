@@ -38,7 +38,11 @@ OLIDS_PATH_FRAGMENTS = [
 # UUID-typed columns from the 2026 OLIDS retyping), and only when not
 # already cast (the `(?!::)` lookahead).
 
-_COL = r"(?:[a-z_][a-z0-9_]*\.)?(?:[a-z_][a-z0-9_]*_id|id)"
+# Negative lookahead excludes columns that are NOT UUID-typed but happen to
+# end in `_id`. cluster_id / source_cluster_id are VARCHAR (SNOMED cluster
+# codes); casting them is unnecessary noise.
+_NON_UUID_ID_COLS = r"(?!(?:[a-z_]*\.)?(?:source_)?cluster_id\b)"
+_COL = rf"{_NON_UUID_ID_COLS}(?:[a-z_][a-z0-9_]*\.)?(?:[a-z_][a-z0-9_]*_id|id)"
 
 PATTERNS = [
     # ARRAY_AGG(DISTINCT <col>) — preserved trailing ) check needed

@@ -23,10 +23,13 @@ WITH aggregated_events AS (
 
         -- Metadata for traceability
         ANY_VALUE(result_unit_display) AS result_unit_display,
-        ARRAY_AGG(DISTINCT id::VARCHAR) WITHIN GROUP (ORDER BY id::VARCHAR) AS all_ids,
+        -- ORDER BY dropped on id: it's UUID; lexicographic ordering is
+        -- meaningless. The DISTINCT cast is still required for ARRAY_AGG to
+        -- accept the UUID type.
+        ARRAY_AGG(DISTINCT id::VARCHAR) AS all_ids,
         ARRAY_AGG(DISTINCT concept_code) WITHIN GROUP (ORDER BY concept_code) AS all_concept_codes,
         ARRAY_AGG(DISTINCT concept_display) WITHIN GROUP (ORDER BY concept_display) AS all_concept_displays,
-        ARRAY_AGG(DISTINCT source_cluster_id::VARCHAR) WITHIN GROUP (ORDER BY source_cluster_id::VARCHAR) AS all_source_cluster_ids,
+        ARRAY_AGG(DISTINCT source_cluster_id) WITHIN GROUP (ORDER BY source_cluster_id) AS all_source_cluster_ids,
 
         -- Flags for specific code presence (for ambiguity checking)
         BOOLOR_AGG(source_cluster_id = 'SYSBP_COD') AS had_sysbp_cod,

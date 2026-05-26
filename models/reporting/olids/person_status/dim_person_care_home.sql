@@ -14,16 +14,16 @@ WITH observation_clusters AS (
     -- First, collect all cluster IDs and determine residence status for each observation
     SELECT
         o.ID,
-        ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR) WITHIN GROUP (ORDER BY o.cluster_id::VARCHAR) AS cluster_ids,
+        ARRAY_AGG(DISTINCT o.cluster_id) WITHIN GROUP (ORDER BY o.cluster_id) AS cluster_ids,
         -- Pre-calculate residence status based on clusters
         CASE
-            WHEN ARRAY_CONTAINS('CAREHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) THEN 'Care Home'
-            WHEN ARRAY_CONTAINS('NURSEHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) THEN 'Nursing Home'
-            WHEN ARRAY_CONTAINS('TEMPCARHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) THEN 'Temporary Care Home'
+            WHEN ARRAY_CONTAINS('CAREHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id)) THEN 'Care Home'
+            WHEN ARRAY_CONTAINS('NURSEHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id)) THEN 'Nursing Home'
+            WHEN ARRAY_CONTAINS('TEMPCARHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id)) THEN 'Temporary Care Home'
             ELSE NULL
         END AS residence_type,
         -- Determine if temporary
-        ARRAY_CONTAINS('TEMPCARHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) AS is_temporary
+        ARRAY_CONTAINS('TEMPCARHOME_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id)) AS is_temporary
     FROM (
         {{ get_observations("'CAREHOME_COD', 'NURSEHOME_COD', 'TEMPCARHOME_COD'") }}
     ) o

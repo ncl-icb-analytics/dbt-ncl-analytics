@@ -14,12 +14,12 @@ WITH observation_clusters AS (
     -- First, collect all cluster IDs and determine carer status for each observation
     SELECT
         o.ID,
-        ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR) WITHIN GROUP (ORDER BY o.cluster_id::VARCHAR) AS cluster_ids,
+        ARRAY_AGG(DISTINCT o.cluster_id) WITHIN GROUP (ORDER BY o.cluster_id) AS cluster_ids,
         -- Pre-calculate carer status based on clusters
         CASE
-            WHEN ARRAY_CONTAINS('NOTACARER_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) THEN FALSE
-            WHEN ARRAY_CONTAINS('ISACARER_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) OR
-                 ARRAY_CONTAINS('UNPAIDCARER_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id::VARCHAR)) THEN TRUE
+            WHEN ARRAY_CONTAINS('NOTACARER_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id)) THEN FALSE
+            WHEN ARRAY_CONTAINS('ISACARER_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id)) OR
+                 ARRAY_CONTAINS('UNPAIDCARER_COD'::VARIANT, ARRAY_AGG(DISTINCT o.cluster_id)) THEN TRUE
             ELSE NULL
         END AS is_carer
     FROM (
