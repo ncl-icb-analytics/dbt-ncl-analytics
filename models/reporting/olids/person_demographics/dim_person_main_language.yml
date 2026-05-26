@@ -67,8 +67,6 @@ models:
 
       - name: concept_id
         description: 'OLIDS concept UUID for language preference. NULL when the person has no recorded language (consumers should treat NULL as "Not Recorded" and use the term / language text columns for display).'
-        tests:
-          - not_null
 
       - name: concept_code
         description: 'SNOMED concept code for language preference ("Not Recorded" if none available)'
