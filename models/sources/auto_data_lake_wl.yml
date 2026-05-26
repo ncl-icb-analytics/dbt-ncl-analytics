@@ -232,6 +232,8 @@ sources:
       data_type: TEXT
     - name: UNIQUE_BOOKING_REFERENCE_NUMBER
       data_type: TEXT
+    - name: PATIENT_NOT_PRESENT
+      data_type: TEXT
   - name: WL_Diagnostics_Data
     identifier: '"WL_Diagnostics_Data"'
     columns:
