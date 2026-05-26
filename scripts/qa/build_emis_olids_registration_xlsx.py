@@ -250,67 +250,73 @@ def build_rollup_sheet(
     ws["A1"].font = TITLE_FONT
     ws.merge_cells("A1:G1")
 
-    cols = [group_label, "Practices", "EMIS list", "OLIDS count", "Net diff", "Net %", "Avg |%| per practice"]
+    cols = [group_label, "Practices", "Passing", "Pass rate", "EMIS list", "OLIDS count", "Net diff", "Net %"]
     write_header_row(ws, 3, cols)
 
     groups: dict[str, dict] = {}
     for p in practices:
         key = p[group_field] or "(unknown)"
-        g = groups.setdefault(key, {"n": 0, "emis": 0, "olids": 0, "diff": 0, "abs_pct_sum": 0, "abs_pct_n": 0})
+        g = groups.setdefault(key, {"n": 0, "passing": 0, "emis": 0, "olids": 0, "diff": 0})
         g["n"] += 1
+        if p["VARIANCE_CATEGORY"] == "Meets Criteria":
+            g["passing"] += 1
         g["emis"] += p["EMIS_LIST_SIZE"] or 0
         g["olids"] += p["OLIDS_REGULAR_COUNT"] or 0
         g["diff"] += p["DIFFERENCE"] or 0
-        ap = p["ABSOLUTE_PERCENT_DIFFERENCE"]
-        if ap is not None:
-            g["abs_pct_sum"] += ap
-            g["abs_pct_n"] += 1
 
     rows = []
     for key, g in groups.items():
         net_pct = g["diff"] / g["emis"] if g["emis"] else None
-        avg_abs = g["abs_pct_sum"] / g["abs_pct_n"] / 100 if g["abs_pct_n"] else None
-        rows.append([key, g["n"], g["emis"], g["olids"], g["diff"], net_pct, avg_abs])
+        pass_rate = g["passing"] / g["n"] if g["n"] else None
+        rows.append([key, g["n"], g["passing"], pass_rate, g["emis"], g["olids"], g["diff"], net_pct])
 
     # Sort by absolute net % descending (worst on top), nulls last
-    rows.sort(key=lambda r: (r[5] is None, -abs(r[5] or 0)))
+    rows.sort(key=lambda r: (r[7] is None, -abs(r[7] or 0)))
 
+    # Column mapping: 1=group, 2=practices, 3=passing, 4=pass_rate, 5=emis, 6=olids, 7=diff, 8=net%
     for ridx, row_vals in enumerate(rows, start=4):
         for ci, val in enumerate(row_vals, 1):
             cell = ws.cell(row=ridx, column=ci, value=val)
             cell.border = BORDER
-            if ci in (3, 4):
+            if ci == 4:
+                cell.number_format = "0%"
+            if ci in (5, 6):
                 cell.number_format = "#,##0"
-            if ci == 5:
-                cell.number_format = "+#,##0;-#,##0;0"
-            if ci == 6:
-                cell.number_format = "+0.00%;-0.00%;0.00%"
             if ci == 7:
-                cell.number_format = "0.00%"
+                cell.number_format = "+#,##0;-#,##0;0"
+            if ci == 8:
+                cell.number_format = "+0.00%;-0.00%;0.00%"
 
     # Total row
+    total_n = sum(r[1] for r in rows)
+    total_pass = sum(r[2] for r in rows)
+    total_emis = sum(r[5] for r in rows)
+    total_diff = sum(r[7] for r in rows)
     totals = [
         "TOTAL",
-        sum(r[1] for r in rows),
-        sum(r[2] for r in rows),
-        sum(r[3] for r in rows),
-        sum(r[4] for r in rows),
-        (sum(r[4] for r in rows) / sum(r[2] for r in rows)) if sum(r[2] for r in rows) else None,
-        None,
+        total_n,
+        total_pass,
+        total_pass / total_n if total_n else None,
+        total_emis,
+        sum(r[6] for r in rows),
+        total_diff,
+        total_diff / total_emis if total_emis else None,
     ]
     total_row = len(rows) + 4
     for ci, val in enumerate(totals, 1):
         cell = ws.cell(row=total_row, column=ci, value=val)
         cell.border = BORDER
         cell.font = LABEL_FONT
-        if ci in (3, 4):
+        if ci == 4:
+            cell.number_format = "0%"
+        if ci in (5, 6):
             cell.number_format = "#,##0"
-        if ci == 5:
+        if ci == 7:
             cell.number_format = "+#,##0;-#,##0;0"
-        if ci == 6:
+        if ci == 8:
             cell.number_format = "+0.00%;-0.00%;0.00%"
 
-    apply_widths(ws, [(1, 40), (2, 12), (3, 14), (4, 14), (5, 14), (6, 12), (7, 18)])
+    apply_widths(ws, [(1, 40), (2, 11), (3, 10), (4, 10), (5, 14), (6, 14), (7, 12), (8, 10)])
     ws.freeze_panes = "A4"
 
 
