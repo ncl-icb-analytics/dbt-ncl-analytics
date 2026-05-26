@@ -102,7 +102,7 @@ WITH ndh_diagnoses AS (
         ) AS prd_diagnosis_displays,
 
         -- All observation IDs
-        ARRAY_AGG(DISTINCT ID) AS all_IDs
+        ARRAY_AGG(DISTINCT ID::VARCHAR) AS all_IDs
 
     FROM {{ ref('int_ndh_diagnoses_all') }}
     GROUP BY person_id

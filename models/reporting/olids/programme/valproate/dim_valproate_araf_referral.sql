@@ -7,7 +7,7 @@ WITH person_level_araf_referral_aggregation AS (
         person_id,
         min(araf_referral_event_date) AS earliest_araf_referral_event_date,
         max(araf_referral_event_date) AS latest_araf_referral_event_date,
-        array_agg(DISTINCT araf_referral_ID)
+        array_agg(DISTINCT araf_referral_ID::VARCHAR)
             AS all_araf_referral_IDs,
         array_agg(DISTINCT araf_referral_concept_code)
             AS all_araf_referral_concept_codes,
