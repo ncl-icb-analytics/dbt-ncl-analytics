@@ -49,7 +49,11 @@ gp_observations as (
         o.result_text,
         o.result_unit_display,
         o.is_problem,
-        coalesce(episodicity_concept.display, o.episodicity_source_concept_id) as episodicity_display,
+        -- Cast the UUID fallback to VARCHAR so the COALESCE output type is
+        -- VARCHAR (the display column is user-facing text). Without the cast
+        -- Snowflake picks UUID as the unified type and chokes on real text
+        -- values like 'Episodicities' from the concept display.
+        coalesce(episodicity_concept.display, o.episodicity_source_concept_id::VARCHAR) as episodicity_display,
         p.surname as practitioner_last_name,
         p.first_name as practitioner_first_name,
         p.title as practitioner_title
