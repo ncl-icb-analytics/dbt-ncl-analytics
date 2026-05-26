@@ -45,11 +45,22 @@ olids_regular_counts as (
     from {{ ref('int_olids_regular_registrations_at_point_in_time') }}
 ),
 
+practices as (
+    -- Canonical practice name/borough from dim_practice. EMIS seed values are
+    -- kept as a fallback for practices that have merged or closed and no longer
+    -- appear in the OLIDS organisation feed (e.g. Roman Way → Islington Central).
+    select
+        practice_code,
+        practice_name,
+        borough_registered as borough
+    from {{ ref('dim_practice') }}
+),
+
 comparison as (
     select
         coalesce(e.practice_code, o.practice_code) as practice_code,
-        e.practice_name,
-        e.borough,
+        coalesce(p.practice_name, e.practice_name) as practice_name,
+        coalesce(p.borough, e.borough) as borough,
         coalesce(e.emis_list_size, 0) as emis_list_size,
         coalesce(o.olids_regular_count, 0) as olids_regular_count,
         e.extract_date,
@@ -81,6 +92,8 @@ comparison as (
     from emis_registrations as e
     full outer join olids_regular_counts as o
         on e.practice_code = o.practice_code
+    left join practices as p
+        on coalesce(e.practice_code, o.practice_code) = p.practice_code
 )
 
 select
