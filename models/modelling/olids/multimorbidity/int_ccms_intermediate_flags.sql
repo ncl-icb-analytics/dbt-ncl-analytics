@@ -39,7 +39,7 @@ snomed_codes_filtered AS (
         conceptid::VARCHAR AS conceptid,
         conditionid,
         conditionname
-    FROM {{ ref('raw_aic_base_ccms_snomed_codes') }}
+    FROM {{ ref('stg_aic_base_ccms_snomed_codes') }}
 ),
 
 pmi AS (
