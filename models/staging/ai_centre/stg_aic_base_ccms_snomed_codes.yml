@@ -3,7 +3,7 @@ models:
     description: |
       Staging wrapper for the AIC-published CCMS SNOMED codelist
       (BASE_CCMS_SNOMED_CODES). Used by the in-house CCMS pipeline
-      under modelling/olids/multimorbidity.
+      under modelling/olids/risk_stratification.
     config:
       meta:
         owner:
