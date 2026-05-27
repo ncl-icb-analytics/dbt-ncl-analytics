@@ -96,7 +96,7 @@ encoding_features as(
         on il.olids_id = am.person_id
     left join {{ref('fct_person_bp_control')}} bp
         on il.olids_id = bp.person_id
-    left join {{ref('stg_aic_int_ccms_current')}} ccms
+    left join {{ref('dim_person_ccms')}} ccms
         on il.olids_id = ccms.person_id
     left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
         on il.olids_id = lcs.person_id

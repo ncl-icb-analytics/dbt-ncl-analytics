@@ -77,7 +77,7 @@ left join {{ref('fct_person_medications_recent')}} rm
     on erl.olids_id = rm.person_id
 left join {{ref('stg_aic_int_efi2_scores')}} fr
     on erl.olids_id = fr.person_id
-left join {{ref('stg_aic_int_ccms_current')}} ccms
+left join {{ref('dim_person_ccms')}} ccms
     on erl.olids_id = ccms.person_id
 left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
     on erl.olids_id = lcs.person_id

@@ -205,7 +205,7 @@ left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
 left join {{ref('stg_aic_int_efi2_scores')}} fr
     on il.olids_id = fr.person_id
-left join {{ref('stg_aic_int_ccms_current')}} ccms
+left join {{ref('dim_person_ccms')}} ccms
     on il.olids_id = ccms.person_id
 left join {{ref('int_rockwood_latest')}} rockwood
     on il.olids_id = rockwood.person_id
