@@ -88,7 +88,7 @@ WITH palliative_care_diagnoses AS (
             AS no_longer_indicated_displays,
 
         -- Latest observation details
-        ARRAY_AGG(DISTINCT observation_id) AS all_observation_ids
+        ARRAY_AGG(DISTINCT observation_id::VARCHAR) AS all_observation_ids
 
     FROM {{ ref('int_palliative_care_diagnoses_all') }}
     GROUP BY person_id

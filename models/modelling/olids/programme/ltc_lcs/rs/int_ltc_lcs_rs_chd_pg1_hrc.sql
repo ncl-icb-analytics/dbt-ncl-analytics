@@ -22,7 +22,7 @@ rule_1a_first_new_flare_up as (
         *
         from ({{ get_ltc_lcs_observations("on_chd_reg_pg1_hrc_vs1") }})) o
     left join {{ ref('stg_olids_enriched_concept_map') }} ecm
-        on o.episodicity_concept_id = ecm.source_code_id -- join episodiity for first/new/flare-up
+        on o.episodicity_source_concept_id = ecm.source_concept_id -- join episodiity for first/new/flare-up
     where 
     clinical_effective_date >= dateadd(month, -1, current_date())
         and ecm.source_display in ('First','New','Flare Up')

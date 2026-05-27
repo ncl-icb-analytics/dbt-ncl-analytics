@@ -225,7 +225,11 @@ SELECT
     ap.person_id,
     COALESCE(pwl.sk_patient_id, NULL) AS sk_patient_id,
     pwl.latest_language_date,
-    COALESCE(pwl.concept_id, 'Not Recorded') AS concept_id,
+    -- concept_id is a UUID at source (post-2026 OLIDS retyping). It stays
+    -- UUID-typed here, NULL when the person has no recorded language. The
+    -- text fields below (concept_code, term, language, language_type) carry
+    -- the 'Not Recorded' display fallback for downstream consumers.
+    pwl.concept_id,
     COALESCE(pwl.concept_code, 'Not Recorded') AS concept_code,
     COALESCE(pwl.term, 'Not Recorded') AS term,
     COALESCE(pwl.language, 'Not Recorded') AS language,

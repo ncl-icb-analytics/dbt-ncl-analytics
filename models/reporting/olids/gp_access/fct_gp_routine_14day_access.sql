@@ -16,7 +16,7 @@ Denominator: All routine attended appointments with a booking date
 */
 
 select
-    record_owner_organisation_code as practice_code,
+    publisher_organisation_code as practice_code,
     DATE_TRUNC('month', start_date) as report_month,
     COUNT(*) as routine_attended_total,
     SUM(CASE WHEN booking_to_slot_days <= 14 THEN 1 ELSE 0 END) as routine_within_14d,

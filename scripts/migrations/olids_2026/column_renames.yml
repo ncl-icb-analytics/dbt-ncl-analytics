@@ -1,0 +1,365 @@
+# OLIDS 2026 column rename mapping
+# Source: github.com/wnl-icb-analytics/dbt-analytics/issues/747
+# Strategy: propagate new names downstream (no aliasing back to old names).
+#
+# Defaults apply to every table unless the table-specific section overrides them.
+# `overrides:` per table specifies columns where the default rename should NOT apply
+# (i.e. the source kept the old name).
+#
+# Type changes (TEXT -> UUID for id cols) are tolerated implicitly — Snowflake
+# auto-casts. Explicit casts (`type_casts:`) are required only where the runtime
+# semantics shift (DATE -> TIMESTAMP_NTZ for person.as_at_date; TEXT -> BINARY
+# for patient_uprn.masked_*).
+
+version: 1
+issue: 747
+
+defaults:
+  # A1: LDS metadata renames (cross-cutting)
+  renames:
+    lds_record_id: lds_source_record_id
+    lds_dataset_id: lds_source_dataset_id
+    lds_start_date_time: lds_start_datetime
+    lds_datetime_data_acquired: lds_datetime_first_acquired
+    # A4: organisation columns (cross-cutting)
+    record_owner_organisation_code: publisher_organisation_code
+  # Columns removed from upstream — drop from staging SELECT and YAML
+  removes:
+    - lds_initial_data_received_date
+    - lds_business_key
+
+tables:
+
+  # ----- Clinical event tables -----
+
+  stg_olids_allergy_intolerance:
+    raw: raw_olids_allergy_intolerance
+    renames:
+      # A3: concept ID infix
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+
+  stg_olids_appointment:
+    raw: raw_olids_appointment
+    renames:
+      # A4: clinical-table default org rename
+      organisation_id: provider_organisation_id
+      # A3: concept ID infix
+      appointment_status_concept_id: status_source_concept_id
+      booking_method_concept_id: booking_method_source_concept_id
+      contact_mode_concept_id: contact_mode_source_concept_id
+      # B: per-table
+      planned_duration: planned_duration_mins
+      actual_duration: actual_duration_mins
+      patient_wait: patient_wait_mins
+      patient_delay: patient_delay_mins
+      date_time_booked: datetime_booked
+      date_time_left: datetime_left
+      date_time_sent_in: datetime_sent_in
+      type: appointment_type
+    additions:
+      # New columns surfaced upstream we may want to expose. publisher_organisation_code
+      # is the rename target from record_owner_organisation_code (already in SELECT via
+      # cross-cutting rename). author_organisation_id is NOT on stable_appointment —
+      # do not add (verified via scripts/migrations/olids_2026/verify_against_dbt_olids.py).
+      - name: publisher_organisation_id
+        description: "Foreign key to organisation.id — the publisher (data-producer) organisation for this appointment record. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_appointment_practitioner:
+    raw: raw_olids_appointment_practitioner
+    # B exception: source kept old lds_record_id naming on this table
+    overrides:
+      lds_record_id: lds_record_id
+
+  stg_olids_diagnostic_order:
+    raw: raw_olids_diagnostic_order
+    renames:
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+      # B: per-table — units rename differs between observation and diagnostic_order
+      result_value_units_concept_id: result_measurement_units_source_concept_id
+      episodicity_concept_id: episodicity_source_concept_id
+
+  stg_olids_encounter:
+    raw: raw_olids_encounter
+    renames:
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+    removes:
+      # B: removed at source; switch to provider_organisation_id
+      - service_provider_organisation_id
+    additions:
+      - name: provider_organisation_id
+        description: "Foreign key to organisation.id — the provider organisation for this encounter. Replaces service_provider_organisation_id in the 2026 OLIDS schema realignment (issue #747)."
+      - name: author_organisation_id
+        description: "Foreign key to organisation.id — the organisation that authored this encounter record. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_episode_of_care:
+    raw: raw_olids_episode_of_care
+    renames:
+      organisation_id_publisher: publisher_organisation_id
+      organisation_id_managing: provider_organisation_id
+      organisation_code_publisher: publisher_organisation_code
+      care_manager_practitioner_id: care_manager_practitioner_in_role_id
+      # Verified against stable_episode_of_care: source-record LDS datetimes
+      # have been folded into the cross-cutting first/update_acquired pair.
+      lds_datetime_source_record_acquired: lds_datetime_first_acquired
+      lds_datetime_source_record_updated: lds_datetime_update_acquired
+    removes:
+      # B: no managing equivalent in new schema
+      - organisation_code_managing
+    additions:
+      - name: care_manager_organisation_id
+        description: "Foreign key to organisation.id — the organisation responsible for managing care during this episode. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: care_manager_organisation_code
+        description: "ODS code of the care-manager organisation. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: author_organisation_id
+        description: "Foreign key to organisation.id — the organisation that authored this episode-of-care record. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_flag:
+    raw: raw_olids_flag
+    # OLIDS_COMMON.FLAG removed entirely; staging model and its dependents are deleted in Phase 3.
+    delete: true
+    delete_reason: "OLIDS_COMMON.FLAG removed at source (always 0 rows; was a planned future table)."
+
+  stg_olids_location:
+    raw: raw_olids_location
+    renames:
+      type_desc: type_description
+    removes:
+      - type_code
+    additions:
+      - name: location_type_source_concept_id
+        description: "Foreign key to concept.concept_id — source concept describing the location type. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_location_contact:
+    raw: raw_olids_location_contact
+    renames:
+      contact_type_concept_id: contact_type_source_concept_id
+
+  stg_olids_medication_order:
+    raw: raw_olids_medication_order
+    renames:
+      organisation_id: provider_organisation_id
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+
+  stg_olids_medication_statement:
+    raw: raw_olids_medication_statement
+    renames:
+      organisation_id: provider_organisation_id
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+      authorisation_type_concept_id: authorisation_type_source_concept_id
+
+  stg_olids_observation:
+    raw: raw_olids_observation
+    renames:
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+      # B: per-table — units rename differs from diagnostic_order
+      result_value_units_concept_id: result_units_source_concept_id
+      episodicity_concept_id: episodicity_source_concept_id
+
+  stg_olids_procedure_request:
+    raw: raw_olids_procedure_request
+    renames:
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+      status_concept_id: status_source_concept_id
+    # B: lds_end_date_time was on procedure_request? not in issue; leave as default behaviour
+    removes: []
+
+  stg_olids_referral_request:
+    raw: raw_olids_referral_request
+    renames:
+      # Verified against stable_referral_request: organisation_id -> publisher_organisation_id
+      # (not provider_organisation_id as the cross-cutting default would give).
+      organisation_id: publisher_organisation_id
+      date_precision_concept_id: clinical_effective_date_precision_source_concept_id
+      referral_request_priority_concept_id: referral_request_priority_source_concept_id
+      referral_request_type_concept_id: referral_request_type_source_concept_id
+      referral_request_specialty_concept_id: referral_request_specialty_source_concept_id
+
+  # ----- Patient / person / org -----
+
+  stg_olids_organisation:
+    raw: raw_olids_organisation
+    renames:
+      # B: per-table — the upstream column is misspelled at source
+      # ("assinging" not "assigning") per #747. The raw layer mirrors the
+      # source verbatim; staging aliases to the corrected spelling so
+      # downstream consumers see the right name.
+      assigning_authority_code: organisation_code_assigning_authority
+    removes:
+      - type_code
+      - type_desc
+    additions:
+      - name: description
+        description: "Free-text description of the organisation. New in the 2026 OLIDS schema realignment (issue #747); partially replaces the removed type_code and type_desc columns."
+      - name: location_type_source_concept_id
+        description: "Foreign key to concept.concept_id — source concept describing the organisation's location type. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_patient:
+    raw: raw_olids_patient
+    renames:
+      registered_practice_id: registered_practice_organisation_id
+      is_dummy_patient: is_test_patient
+      gender_concept_id: gender_source_concept_id
+    additions:
+      # B: now exposed directly on PATIENT (previously only on patient_person)
+      - name: person_id
+        description: "Foreign key to person.id — now exposed directly on the patient record. New in the 2026 OLIDS schema realignment (issue #747); previously only available via patient_person."
+      - name: local_patient_id
+        description: "Local (practice-system) patient identifier. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_patient_address:
+    raw: raw_olids_patient_address
+    renames:
+      address_type_concept_id: address_type_source_concept_id
+
+  stg_olids_patient_contact:
+    raw: raw_olids_patient_contact
+    renames:
+      contact_type_concept_id: contact_type_source_concept_id
+    removes:
+      # B: per-table — description removed in favour of new contact_type text column
+      - description
+    additions:
+      - name: contact_type
+        description: "Free-text contact type (e.g. phone, email). New in the 2026 OLIDS schema realignment (issue #747); replaces the removed `description` column."
+
+  stg_olids_patient_person:
+    raw: raw_olids_patient_person
+    renames: {}
+    # B: source-side `id` removed. Downstream consumers must re-key on (patient_id, person_uuid).
+    # Phase 3 manual: synthesize id := concat(patient_id, '|', person_uuid) for legacy callers.
+    removes:
+      - id
+      - lds_cdm_event_id
+    needs_manual_review:
+      - "Synthesize id column from (patient_id, person_uuid) for legacy downstream consumers, OR rewrite consumers to use the natural key."
+    additions:
+      - name: lds_end_datetime
+        description: "LDS datetime stamp when the record version stopped being correct. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_registrar_event_id
+        description: "LDS registrar event identifier for the patient-person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_update_acquired_person
+        description: "LDS datetime stamp when an update for the linked person record was acquired. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_patient_registered_practitioner_in_role:
+    raw: raw_olids_patient_registered_practitioner_in_role
+    renames:
+      organisation_id: publisher_organisation_id
+    removes:
+      # B: per-table — practitioner_id dropped at source; use practitioner_in_role_id
+      - practitioner_id
+
+  stg_olids_patient_uprn:
+    raw: raw_olids_patient_uprn
+    renames:
+      registrar_event_id: lds_registrar_event_id
+      post_code_quality: postcode_quality
+      uprn_property_classification: classification
+    type_casts:
+      # B: TEXT -> BINARY at source. Cast to varchar for parity with text-hash comparisons.
+      masked_postcode: "TO_VARCHAR(masked_postcode) AS masked_postcode"
+      masked_uprn: "TO_VARCHAR(masked_uprn) AS masked_uprn"
+      masked_usrn: "TO_VARCHAR(masked_usrn) AS masked_usrn"
+    additions:
+      - name: patient_address_id
+        description: "Foreign key to patient_address.id — links this UPRN match to the patient_address record it was matched against. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_person:
+    raw: raw_olids_person
+    type_casts:
+      # B: DATE -> TIMESTAMP_NTZ at source. Cast back to DATE for downstream parity.
+      as_at_date: "CAST(as_at_date AS DATE) AS as_at_date"
+      gp_registration_date: "CAST(gp_registration_date AS DATE) AS gp_registration_date"
+    removes:
+      - composite_id
+    additions:
+      - name: person_record_type
+        description: "Type / category of the person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: person_version_id
+        description: "Version identifier for the person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: sk_patient_id
+        description: "Surrogate key linking this person to a patient record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_first_acquired_person
+        description: "LDS datetime stamp when the linked person record was first acquired. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_update_acquired_person
+        description: "LDS datetime stamp when an update for the linked person record was acquired. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_practitioner:
+    raw: raw_olids_practitioner
+    renames:
+      last_name: surname
+    removes:
+      - lds_end_date_time
+
+  stg_olids_practitioner_in_role:
+    raw: raw_olids_practitioner_in_role
+    renames:
+      # B: per-table — practitioner_in_role uses employer_organisation_id
+      organisation_id: employer_organisation_id
+
+  stg_olids_schedule:
+    raw: raw_olids_schedule
+    renames:
+      organisation_id: publisher_organisation_id
+      location: location_name
+
+  stg_olids_schedule_practitioner:
+    raw: raw_olids_schedule_practitioner
+    # No table-specific renames beyond defaults.
+
+  # ----- Terminology -----
+
+  stg_olids_concept:
+    raw: raw_olids_concept
+    # PK changed: id removed, concept_id is the new PK.
+    renames: {}
+    removes:
+      - id
+      - lds_id
+    needs_manual_review:
+      - "`id` is removed; `concept_id` (UUID) is the new PK. Downstream joins on stg_olids_concept.id (especially join_concept_display macro) must switch to concept_id."
+    additions:
+      - name: concept_id
+        description: "Primary key (UUID) — replaces the removed `id` column. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_is_deleted
+        description: "Deletion flag from LDS. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_start_datetime
+        description: "LDS datetime stamp from which the record version was correct. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_concept_map:
+    raw: raw_olids_concept_map
+    renames:
+      source_code_id: source_concept_id
+      target_code_id: target_concept_id
+    removes:
+      - id
+      - lds_id
+    needs_manual_review:
+      - "`id` is removed; `mapped_item_id` (VARCHAR — to accommodate synthetic EMIS-backfill rows) is the new PK."
+    additions:
+      # Verified against dbt-olids stable_concept_map. stable does NOT have
+      # lakehouse_datetime_updated, lakehouse_date_processed, or lds_is_deleted —
+      # the LDS metadata pattern that applies to clinical tables doesn't
+      # apply to concept_map. Only mapped_item_id, concept_map_id and
+      # lds_start_datetime are valid additions here.
+      - name: mapped_item_id
+        description: "Primary key (VARCHAR) — replaces the removed `id` column. VARCHAR rather than UUID so it can carry synthetic EMIS-backfill values too. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: concept_map_id
+        description: "Identifier of the concept map this row belongs to. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_start_datetime
+        description: "LDS datetime stamp from which the record version was correct. New in the 2026 OLIDS schema realignment (issue #747)."
+
+  stg_olids_enriched_concept_map:
+    raw: raw_olids_enriched_concept_map
+    renames:
+      source_code_id: source_concept_id
+      target_code_id: target_concept_id
+
+  # ----- Unchanged at source (per issue #747) -----
+
+  stg_olids_postcode_hash:
+    raw: raw_olids_postcode_hash
+    unchanged: true
+
+  stg_olids_ndoo_hashed:
+    raw: raw_olids_ndoo_hashed
+    unchanged: true

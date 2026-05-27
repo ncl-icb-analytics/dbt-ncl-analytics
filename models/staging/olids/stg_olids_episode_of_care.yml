@@ -11,9 +11,9 @@ models:
         tests:
           - unique
           - not_null
-      - name: organisation_id_publisher
+      - name: publisher_organisation_id
         description: Foreign key to organisation.id - data controller organisation that published the record
-      - name: organisation_id_managing
+      - name: provider_organisation_id
         description: Foreign key to organisation.id - organisation delivering the episode of care
       - name: patient_id
         description: Foreign key to patient.id
@@ -43,24 +43,28 @@ models:
         description: Start date of the episode of care
       - name: episode_of_care_end_date
         description: End date of the episode of care
-      - name: care_manager_practitioner_id
-        description: Foreign key to practitioner.id - care manager responsible for the episode
+      - name: care_manager_practitioner_in_role_id
+        description: Foreign key to practitioner_in_role.id - care manager responsible for the episode
       - name: lds_id
         description: LDS system identifier
-      - name: organisation_code_publisher
+      - name: publisher_organisation_code
         description: ODS code of the data controller organisation that published the record
-      - name: organisation_code_managing
-        description: ODS code of the organisation delivering the episode of care
-      - name: lds_datetime_source_record_acquired
-        description: Datetime when source record was first acquired by LDS
-      - name: lds_datetime_source_record_updated
-        description: Datetime when source record update was acquired by LDS
-      - name: lds_start_date_time
+      - name: lds_datetime_first_acquired
+        description: "Datetime when the source record was first acquired by LDS (post-2026 OLIDS rename — was lds_datetime_source_record_acquired)"
+      - name: lds_datetime_update_acquired
+        description: "Datetime when the source record update was acquired by LDS (post-2026 OLIDS rename — was lds_datetime_source_record_updated)"
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
+      - name: care_manager_organisation_id
+        description: "Foreign key to organisation.id — the organisation responsible for managing care during this episode. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: care_manager_organisation_code
+        description: "ODS code of the care-manager organisation. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: author_organisation_id
+        description: "Foreign key to organisation.id — the organisation that authored this episode-of-care record. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

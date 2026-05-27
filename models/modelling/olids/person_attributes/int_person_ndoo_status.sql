@@ -17,7 +17,10 @@ WITH ndoo_resolved AS (
         n.preference_status,
         n.effective_from,
         n.effective_to,
-        n.lds_start_date_time
+        -- NDOO_HASHED retains the old lds_start_date_time naming (one of the
+        -- two tables explicitly excluded from the 2026 OLIDS rename per #747).
+        -- Alias it to the new convention so downstream sees a consistent name.
+        n.lds_start_date_time AS lds_start_datetime
     FROM {{ ref('stg_olids_ndoo_hashed') }} n
     INNER JOIN {{ ref('int_patient_person_unique') }} pp
         ON TRY_TO_NUMBER(n.sk_patient_id) = pp.sk_patient_id
@@ -35,5 +38,5 @@ SELECT
 FROM ndoo_resolved
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id, preference_type
-    ORDER BY COALESCE(effective_from, lds_start_date_time) DESC, lds_start_date_time DESC
+    ORDER BY COALESCE(effective_from, lds_start_datetime) DESC, lds_start_datetime DESC
 ) = 1

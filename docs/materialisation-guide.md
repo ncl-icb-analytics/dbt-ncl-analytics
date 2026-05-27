@@ -192,7 +192,7 @@ from {{ ref('stg_observations') }}
 where result_value is not null
 
 {% if is_incremental() %}
-    and lds_start_date_time > (select max(lds_start_date_time) from {{ this }})
+    and lds_start_datetime > (select max(lds_start_datetime) from {{ this }})
 {% endif %}
 ```
 
@@ -261,7 +261,7 @@ Pick a column that reliably identifies new or changed records:
 
 | Column type | Example | Notes |
 |------------|---------|-------|
-| Processing timestamp | `lds_start_date_time` | Best choice — catches late-arriving data |
+| Processing timestamp | `lds_start_datetime` | Best choice — catches late-arriving data |
 | Event timestamp | `created_at` | Good for append-only data |
 | Updated timestamp | `updated_at` | Good for mutable records |
 | Business date | `analysis_month` | Good for periodic data |
@@ -293,14 +293,14 @@ with base_observations as (
         obs.id,
         obs.person_id,
         obs.clinical_effective_date,
-        obs.lds_start_date_time,
+        obs.lds_start_datetime,
         obs.result_value,
         obs.mapped_concept_code as concept_code
     from ({{ get_observations("'BP_COD', 'SYSBP_COD', 'DIASBP_COD'") }}) obs
     where obs.result_value is not null
       and obs.person_id is not null
     {% if is_incremental() %}
-      and obs.lds_start_date_time > (select max(lds_start_date_time) from {{ this }})
+      and obs.lds_start_datetime > (select max(lds_start_datetime) from {{ this }})
     {% endif %}
 )
 
@@ -308,7 +308,7 @@ select
     id,
     person_id,
     clinical_effective_date as effective_date,
-    lds_start_date_time,
+    lds_start_datetime,
     result_value,
     concept_code,
     (concept_code = 'SYSBP_COD') as is_systolic_row,

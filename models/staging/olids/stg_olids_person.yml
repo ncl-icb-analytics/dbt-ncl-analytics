@@ -15,8 +15,6 @@ models:
         description: Native person UUID
       - name: matched_nhs_no_hash
         description: Hashed NHS number (BINARY) - join key to NDOO_HASHED and other hash-keyed tables
-      - name: composite_id
-        description: Composite identifier from upstream
       - name: birth_year
         description: Year of birth
       - name: birth_month
@@ -47,10 +45,18 @@ models:
         description: Medical appliance supplier
       - name: lds_is_deleted
         description: Soft-delete flag
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: Incremental high-water column
-      - name: lds_datetime_data_acquired
-        description: Datetime data was acquired
+      - name: person_record_type
+        description: "Type / category of the person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: person_version_id
+        description: "Version identifier for the person record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: sk_patient_id
+        description: "Surrogate key linking this person to a patient record. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_first_acquired_person
+        description: "LDS datetime stamp when the linked person record was first acquired. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_datetime_update_acquired_person
+        description: "LDS datetime stamp when an update for the linked person record was acquired. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

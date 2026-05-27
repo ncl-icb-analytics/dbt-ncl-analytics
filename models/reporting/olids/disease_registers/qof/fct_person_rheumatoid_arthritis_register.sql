@@ -46,7 +46,7 @@ WITH ra_diagnoses AS (
             AS ra_diagnosis_displays,
 
         -- Latest observation details
-        ARRAY_AGG(DISTINCT ID) AS all_IDs
+        ARRAY_AGG(DISTINCT ID::VARCHAR) AS all_IDs
 
     FROM {{ ref('int_rheumatoid_arthritis_diagnoses_all') }}
     GROUP BY person_id

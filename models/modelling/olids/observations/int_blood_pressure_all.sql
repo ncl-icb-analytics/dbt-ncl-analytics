@@ -53,8 +53,8 @@ SELECT
 
     -- Traceability metadata for audit and debugging
     ANY_VALUE(result_unit_display) AS result_unit_display,
-    MAX(CASE WHEN is_systolic_row THEN id ELSE NULL END) AS systolic_observation_id,
-    MAX(CASE WHEN is_diastolic_row THEN id ELSE NULL END) AS diastolic_observation_id,
+    MAX(CASE WHEN is_systolic_row THEN id::VARCHAR ELSE NULL END) AS systolic_observation_id,
+    MAX(CASE WHEN is_diastolic_row THEN id::VARCHAR ELSE NULL END) AS diastolic_observation_id,
     ARRAY_AGG(DISTINCT concept_code) WITHIN GROUP (ORDER BY concept_code) AS all_concept_codes,
     ARRAY_AGG(DISTINCT concept_display) WITHIN GROUP (ORDER BY concept_display) AS all_concept_displays,
     ARRAY_AGG(DISTINCT source_cluster_id) WITHIN GROUP (ORDER BY source_cluster_id) AS all_source_cluster_ids

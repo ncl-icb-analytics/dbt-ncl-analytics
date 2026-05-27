@@ -14,7 +14,7 @@ WITH enriched_registrations AS (
     SELECT
         ipr.person_id,
         ipr.sk_patient_id,
-        ipr.organisation_id_publisher AS practice_id,
+        ipr.publisher_organisation_id AS practice_id,
         ipr.practice_name,
         ipr.practice_ods_code AS practice_code,
         ipr.registration_start_date,
@@ -30,8 +30,11 @@ WITH enriched_registrations AS (
         ipr.has_changed_practice,
         ipr.practitioner_id,
         -- Add organisation details
-        o.type_code AS practice_type_code,
-        o.type_desc AS practice_type_desc,
+        -- type_code / type_desc were removed in the 2026 OLIDS schema
+        -- realignment (issue #747). Preserved as NULL / the new `description`
+        -- column to keep downstream column names stable.
+        CAST(NULL AS VARCHAR) AS practice_type_code,
+        o.description AS practice_type_desc,
         o.postcode AS practice_postcode,
         o.parent_organisation_id AS practice_parent_org_id,
         o.open_date AS practice_open_date,
@@ -49,7 +52,7 @@ WITH enriched_registrations AS (
         END AS age_at_registration_start
     FROM {{ ref('int_patient_registrations') }} AS ipr
     LEFT JOIN {{ ref('stg_olids_organisation') }} AS o
-        ON ipr.organisation_id_publisher = o.id
+        ON ipr.publisher_organisation_id = o.id
     LEFT JOIN {{ ref('stg_olids_patient') }} AS p
         ON ipr.patient_id = p.id
     -- person_id filtering handled upstream in int_patient_registrations

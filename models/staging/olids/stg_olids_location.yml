@@ -13,9 +13,7 @@ models:
           - not_null
       - name: name
         description: Name of the location
-      - name: type_code
-        description: Type code for the location
-      - name: type_desc
+      - name: type_description
         description: Type description for the location
       - name: is_primary_location
         description: Boolean indicating if this is the primary location
@@ -39,6 +37,8 @@ models:
         description: Postcode of the location
       - name: managing_organisation_id
         description: Foreign key to organisation.id - organisation managing this location
+      - name: location_type_source_concept_id
+        description: Foreign key to concept.concept_id - source concept describing the location type. New in the 2026 OLIDS schema realignment (issue #747).
       - name: open_date
         description: Date the location opened
       - name: close_date
@@ -47,17 +47,15 @@ models:
         description: Boolean indicating if the location record is obsolete
       - name: lds_id
         description: LDS system identifier
-      - name: record_owner_organisation_code
-        description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
+      - name: publisher_organisation_code
+        description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:

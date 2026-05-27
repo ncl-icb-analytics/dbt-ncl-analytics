@@ -29,8 +29,8 @@ SELECT
     mo.medication_statement_id,
     pp.person_id,
     mo.patient_id,
-    mo.organisation_id,
-    mo.record_owner_organisation_code AS practice_code,
+    mo.provider_organisation_id,
+    mo.publisher_organisation_code AS practice_code,
 
     -- Order details
     mo.clinical_effective_date AS order_date,

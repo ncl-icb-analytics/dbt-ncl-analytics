@@ -4,7 +4,7 @@ models:
 
       Key Features:
 
-      • One row per person derived from gender_concept_id mappings
+      • One row per person derived from gender_source_concept_id mappings
 
       • Standardised categories: Male, Female, Unknown
 

@@ -22,10 +22,10 @@ WITH practice_list AS (
 date_practice_counts AS (
     SELECT
         o.clinical_effective_date::date AS obs_date,
-        COUNT(DISTINCT o.record_owner_organisation_code) AS practice_count
+        COUNT(DISTINCT o.publisher_organisation_code) AS practice_count
     FROM {{ ref('stg_olids_observation') }} o
     INNER JOIN practice_list p
-        ON o.record_owner_organisation_code = p.practice_code
+        ON o.publisher_organisation_code = p.practice_code
     WHERE o.clinical_effective_date < CURRENT_DATE()
         -- Most-recent valid-data date is always within recent weeks; constrain
         -- the scan to the last 3 months so the clinical_effective_date cluster

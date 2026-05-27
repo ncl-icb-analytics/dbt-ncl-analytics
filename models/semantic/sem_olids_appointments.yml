@@ -22,7 +22,7 @@ models:
 
       Practice attribution: practice_code, practice_name, pcn_code,
       pcn_name, borough come from dim_practice joined via the appointment's
-      record_owner_organisation_code — this is the practice that delivered
+      publisher_organisation_code — this is the practice that delivered
       the appointment. The registered_* columns (registered_practice_name,
       registered_pcn_name, registered_borough, registered_neighbourhood)
       come from dim_person_demographics and reflect the patient's CURRENT

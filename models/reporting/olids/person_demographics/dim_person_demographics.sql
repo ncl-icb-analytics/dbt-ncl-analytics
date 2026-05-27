@@ -45,7 +45,7 @@ WITH base AS (
         -- Status Flags
         hist.is_active,
         hist.is_deceased,
-        hist.is_dummy_patient,
+        hist.is_test_patient,
         hist.inactive_reason,
 
         -- Basic Demographics

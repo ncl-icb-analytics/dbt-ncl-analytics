@@ -30,11 +30,23 @@ olids_regular_counts as (
     from {{ ref('int_olids_regular_registrations_at_point_in_time_2021') }}
 ),
 
+practices as (
+    -- Current dim_practice — used only as a fallback when the 2021 EMIS seed
+    -- lacks a name/borough. The 2021 extract is the source of truth for
+    -- historical labels; dim_practice carries today's names and would rewrite
+    -- history if it took precedence.
+    select
+        practice_code,
+        practice_name,
+        borough_registered as borough
+    from {{ ref('dim_practice') }}
+),
+
 comparison as (
     select
         coalesce(e.practice_code, o.practice_code) as practice_code,
-        e.practice_name,
-        e.borough,
+        coalesce(e.practice_name, p.practice_name) as practice_name,
+        coalesce(e.borough, p.borough) as borough,
         coalesce(e.emis_list_size, 0) as emis_list_size,
         coalesce(o.olids_regular_count, 0) as olids_regular_count,
         e.extract_date,
@@ -57,6 +69,8 @@ comparison as (
     from emis_registrations as e
     full outer join olids_regular_counts as o
         on e.practice_code = o.practice_code
+    left join practices as p
+        on coalesce(e.practice_code, o.practice_code) = p.practice_code
 )
 
 select

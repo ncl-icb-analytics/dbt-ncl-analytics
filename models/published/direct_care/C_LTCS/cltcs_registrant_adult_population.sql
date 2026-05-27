@@ -62,7 +62,7 @@ potentially_fragmented_sk_patient_ids as (
     SELECT
     p.sk_patient_id,
     COUNT(DISTINCT pp.person_id) as person_count,
-    ARRAY_AGG(DISTINCT pp.person_id) as person_ids
+    ARRAY_AGG(DISTINCT pp.person_id::VARCHAR) as person_ids
     FROM {{ ref('stg_olids_patient') }} p
     JOIN {{ ref('stg_olids_patient_person') }} pp ON p.id = pp.patient_id
     GROUP BY p.sk_patient_id
@@ -73,7 +73,7 @@ potentially_fragmented_person_ids as (
     SELECT
         pp.person_id,
         COUNT(DISTINCT p.sk_patient_id) as patient_count,
-        ARRAY_AGG(DISTINCT p.sk_patient_id) as sk_patient_ids
+        ARRAY_AGG(DISTINCT p.sk_patient_id::VARCHAR) as sk_patient_ids
     FROM {{ ref('stg_olids_patient') }} p
     JOIN {{ ref('stg_olids_patient_person') }} pp ON p.id = pp.patient_id
     GROUP BY pp.person_id
