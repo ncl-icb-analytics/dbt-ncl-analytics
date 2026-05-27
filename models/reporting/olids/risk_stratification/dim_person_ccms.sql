@@ -5,7 +5,7 @@
 }}
 
 /*
-Published Cambridge Comorbidity Score per person.
+Reporting-layer Cambridge Comorbidity Score per person.
 
 Joins the in-house computed score (int_ccms_score) to dim_person — only
 persons with at least one linked patient record appear here.
