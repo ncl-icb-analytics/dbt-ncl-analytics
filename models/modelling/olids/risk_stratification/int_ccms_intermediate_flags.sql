@@ -42,10 +42,17 @@ snomed_codes_filtered AS (
     FROM {{ ref('stg_aic_base_ccms_snomed_codes') }}
 ),
 
+over_16s as (
+    select person_id
+    from {{ref('dim_person_age')}}
+    where age_at_least >= 16
+),
+
 pmi AS (
-    SELECT DISTINCT person_id
-    FROM {{ ref('int_patient_person_unique') }}
-    WHERE person_id IS NOT NULL
+    SELECT DISTINCT p.person_id
+    FROM {{ ref('int_patient_person_unique') }} p
+    INNER JOIN over_16s o ON p.person_id = o.person_id
+    WHERE p.person_id IS NOT NULL
 ),
 
 -- Observations joined to CCMS SNOMED codelist, pre-filtered to the date windows
