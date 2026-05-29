@@ -49,12 +49,17 @@ TABLES(
 
     status AS {{ ref('dim_person_status_summary') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Vulnerability factors, polypharmacy, smoking, alcohol, and data sharing status'
+        COMMENT = 'Vulnerability factors, polypharmacy, smoking, alcohol, and data sharing status',
+
+    ccms AS {{ ref('dim_person_ccms') }}
+        PRIMARY KEY (person_id)
+        COMMENT = 'Cambridge Comorbidity Score (2022 modified, 20-category weighted sum). Continuous score only — the CCMS literature does not define risk bands. Only populated for persons aged 16+.'
 )
 
 RELATIONSHIPS(
     conditions (person_id) REFERENCES demographics,
-    status (person_id) REFERENCES demographics
+    status (person_id) REFERENCES demographics,
+    ccms (person_id) REFERENCES demographics
 )
 
 FACTS(
@@ -66,6 +71,10 @@ FACTS(
     conditions.respiratory_conditions AS respiratory_conditions COMMENT = 'Count of respiratory conditions (Asthma, COPD)',
     conditions.mental_health_conditions AS mental_health_conditions COMMENT = 'Count of mental health conditions (Depression, SMI, Dementia, Anxiety)',
     conditions.metabolic_conditions AS metabolic_conditions COMMENT = 'Count of metabolic conditions (Diabetes, NDH, CKD, Obesity)',
+    conditions.musculoskeletal_conditions AS musculoskeletal_conditions COMMENT = 'Count of musculoskeletal conditions (RA, Osteoporosis, Osteoarthritis)',
+    conditions.neurology_conditions AS neurology_conditions COMMENT = 'Count of neurology conditions (Epilepsy, Stroke/TIA, Parkinsons, Cerebral Palsy, MND, MS)',
+    conditions.geriatric_conditions AS geriatric_conditions COMMENT = 'Count of geriatric conditions (Frailty)',
+    ccms.cambridge_comorbidity_score AS cambridge_comorbidity_score WITH SYNONYMS = ('CCMS', 'comorbidity score', 'Cambridge score') COMMENT = 'Cambridge Comorbidity Score (2022 modified, 20-category weighted sum). Higher = greater comorbidity burden; can be negative. Continuous score per the CCMS literature — no external clinical cut-points exist. Only populated for persons aged 16+.',
     status.medication_count AS medication_count COMMENT = 'Number of current medications',
     status.behavioural_risk_count AS behavioural_risk_count COMMENT = 'Count of behavioural risk factors',
     demographics.esp_weight AS esp_weight COMMENT = 'ESP 2013 population weight for this persons age band (out of 100,000 total). Use with age_band_esp for age-standardised rate calculation.',
@@ -279,6 +288,10 @@ METRICS(
     conditions.multimorbidity_count AS COUNT(DISTINCT CASE WHEN conditions.total_conditions >= 2 THEN conditions.person_id END) COMMENT = 'Patients with 2+ conditions',
     conditions.complex_multimorbidity_count AS COUNT(DISTINCT CASE WHEN conditions.total_conditions >= 4 THEN conditions.person_id END) COMMENT = 'Patients with 4+ conditions',
 
+    -- Comorbidity Burden (CCMS)
+    ccms.avg_ccms AS AVG(ccms.cambridge_comorbidity_score) COMMENT = 'Average Cambridge Comorbidity Score (16+ cohort)',
+    ccms.patients_with_ccms AS COUNT(DISTINCT ccms.person_id) COMMENT = 'Patients with a CCMS (aged 16+)',
+
     -- Smoking
     status.current_smoker_count AS COUNT(DISTINCT CASE WHEN status.smoking_status = 'Current Smoker' THEN status.person_id END) COMMENT = 'Current smokers',
     status.ex_smoker_count AS COUNT(DISTINCT CASE WHEN status.smoking_status = 'Ex-Smoker' THEN status.person_id END) COMMENT = 'Ex-smokers',
@@ -298,4 +311,4 @@ METRICS(
 
 COMMENT = 'OLIDS Population Health Semantic View - NCL registered population with demographics, all condition registers (QOF v50), diabetes type, vulnerability factors, and risk behaviours. Source: OLIDS (One London Integrated Data Set — primary care data from system suppliers, unified by the One London team). Grain: one row per person (current state). ESP 2013 weights available via age_band_esp for age-standardised rate calculation.'
 AI_SQL_GENERATION 'Always filter to is_active = TRUE unless the user explicitly asks about deceased or inactive patients. Use borough_registered for practice-based geography and borough_resident for residence-based geography. IMD 2025 (imd_decile_25, imd_quintile_25) is preferred over IMD 2019. Condition registers are built to QOF Business Rules v50. AGE-STANDARDISED RATES: To calculate an age-standardised rate (ASR) using ESP 2013 (the standard used by ONS/OHID/Fingertips), use this pattern: WITH strata AS (SELECT <area_column>, age_band_esp, COUNT(DISTINCT CASE WHEN <condition> THEN person_id END) AS cases, COUNT(DISTINCT person_id) AS pop, ANY_VALUE(esp_proportion) AS esp_prop FROM <this_view> WHERE is_active = TRUE GROUP BY <area_column>, age_band_esp) SELECT <area_column>, SUM(cases) AS crude_cases, SUM(pop) AS crude_pop, ROUND(SUM((cases / NULLIF(pop, 0)) * esp_prop) * 100000, 1) AS asr_per_100k FROM strata GROUP BY <area_column>. For age-AND-sex standardisation, add gender to the GROUP BY in both the strata CTE and the outer query dimensions, or group strata by age_band_esp+gender and collapse in the outer sum. For internal NCL comparison instead of ESP, replace esp_prop with (pop / SUM(pop) OVER ()) to use the NCL population structure as the standard.'
-AI_QUESTION_CATEGORIZATION 'Use this view for questions about: condition prevalence (all 38 conditions), diabetes type (T1/T2), demographics, multimorbidity, vulnerability, smoking, polypharmacy, and population counts. For clinical biomarkers (BP, HbA1c, BMI, cholesterol) use sem_olids_observations. For trends over time use sem_olids_trends.'
+AI_QUESTION_CATEGORIZATION 'Use this view for questions about: condition prevalence (all 38 conditions), diabetes type (T1/T2), demographics, multimorbidity, Cambridge Comorbidity Score (CCMS), vulnerability, smoking, polypharmacy, and population counts. CCMS (cambridge_comorbidity_score) is a continuous weighted score (higher = greater comorbidity burden, can be negative) with NO published risk bands and is NULL for under-16s — report it as a number or average, do not invent thresholds. For clinical biomarkers (BP, HbA1c, BMI, cholesterol) use sem_olids_observations. For serial/over-time biomarker readings use sem_olids_observations_history. For trends over time use sem_olids_trends.'

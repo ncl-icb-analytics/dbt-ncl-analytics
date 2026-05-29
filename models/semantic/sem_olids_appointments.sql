@@ -98,7 +98,6 @@ DIMENSIONS(
     appt.practitioner_role_group AS practitioner_role_group WITH SYNONYMS = ('HCP type', 'staff type', 'role') COMMENT = 'Analytical role grouping (GP, Nurse, Pharmacist, HCA, Physician Associate, Paramedic, Physiotherapist, Care Navigator, Counsellor, Mental Health Practitioner, Health & Wellbeing Coach, Social Prescriber, Dietitian, Podiatrist, Occupational Therapist, Other Direct Patient Care, Admin/Non-Clinical, Unknown)',
     appt.sds_role_group AS sds_role_group WITH SYNONYMS = ('SDS group', 'NHS role group') COMMENT = 'Official NHS Digital SDS role group (GP, Nurses, Other Direct Patient Care, Admin/Data Quality, Unknown) — aligns with national GPAD publications',
     appt.role_name AS role_name COMMENT = 'Raw practitioner role name as recorded by the practice',
-    appt.practitioner_name AS practitioner_name COMMENT = 'Clinician full name — personal data, restrict access accordingly',
     appt.is_arrs_role AS is_arrs_role WITH SYNONYMS = ('ARRS', 'additional roles') COMMENT = 'TRUE where the SDS code unambiguously identifies an ARRS-scheme role',
     appt.schedule_type AS schedule_type COMMENT = 'Raw schedule type from OLIDS',
     appt.is_untimed_session AS is_untimed_session COMMENT = 'TRUE if parent schedule is an open/untimed session (duty doctor, eConsult list). Duration is NULL for these.',
@@ -127,7 +126,9 @@ DIMENSIONS(
     demographics.age_life_stage AS age_life_stage COMMENT = 'Current life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown). Drifts — use age_at_event for historical.',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
     demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
+    demographics.ethnicity_granular AS ethnicity_granular COMMENT = 'Detailed ethnicity classification (Unknown if not recorded)',
     demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
+    demographics.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
 
     -- Patient registration status
     demographics.is_active AS is_active COMMENT = 'Patient currently registered with an NCL GP practice',
@@ -137,6 +138,7 @@ DIMENSIONS(
     demographics.ward_code AS ward_code COMMENT = 'Patient electoral ward 2025 code (residence-based)',
     demographics.ward_name AS ward_name COMMENT = 'Patient electoral ward 2025 name (residence-based)',
     demographics.borough_resident AS borough_resident COMMENT = 'Patient borough of residence',
+    demographics.is_london_resident AS is_london_resident COMMENT = 'Patient resides in Greater London',
     demographics.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Patient NCL neighbourhood of residence',
 
     -- Deprivation (patient residence)
