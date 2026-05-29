@@ -15,7 +15,7 @@ encoding_features as(
         ---- hba1c
         , case when hba1c.clinical_effective_date between dateadd(month, -6, current_date()) and current_date() and hba1c.meets_qof_target = false then 1 else 0 end as poor_recent_hba1c_control_flag
         , case when dpr.person_id is not null and dcp.hba1c_completed_in_last_12m = false then 1 else 0 end as hba1c_monitoring_overdue_flag
-        , case when hba1c.latest_hba1c_value > 90 then 1 else 0 end as hba1c_dangerous_flag
+        , case when hba1c.hba1c_ifcc > 90 then 1 else 0 end as hba1c_dangerous_flag        
         -- ckd and egfr (intervals by latest eGFR mL/min/1.73m²: 45-59 yearly, 30-44 6-monthly, <30 ~quarterly)
         , case
             when eg.clinical_effective_date is null then 0
