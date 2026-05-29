@@ -4,17 +4,6 @@ sources:
   schema: '"AIC_DEV"'
   description: AIC pipelines
   tables:
-  - name: INT_CCMS_CURRENT
-    identifier: '"INT_CCMS_CURRENT"'
-    columns:
-    - name: PERSON_ID
-      data_type: NUMBER(38,0)
-    - name: CAMBRIDGE_COMORBIDITY_SCORE
-      data_type: NUMBER(38,18)
-    - name: CCMS_CURRENT_ID
-      data_type: TEXT
-    - name: LAST_UPDATED
-      data_type: TIMESTAMP_TZ
   - name: INT_EFI2_SCORES
     identifier: '"INT_EFI2_SCORES"'
     columns:
@@ -106,53 +95,6 @@ sources:
       data_type: NUMBER(38,0)
     - name: VPID
       data_type: NUMBER(38,0)
-  - name: STG_CCMS__FINAL_FLAGS
-    identifier: '"STG_CCMS__FINAL_FLAGS"'
-    columns:
-    - name: PERSON_ID
-      data_type: NUMBER(38,0)
-    - name: ALCOHOLPROBLEMS
-      data_type: NUMBER(1,0)
-    - name: ANXIETYORDEPRESSION
-      data_type: NUMBER(1,0)
-    - name: ATRIALFIBRILLATION
-      data_type: NUMBER(1,0)
-    - name: CANCERINTHELAST5YEARS
-      data_type: NUMBER(1,0)
-    - name: CHRONICKIDNEYDISEASE
-      data_type: NUMBER(1,0)
-    - name: CHRONICLIVERDISEASEANDVIRALHEPATITIS
-      data_type: NUMBER(1,0)
-    - name: CONSTIPATION
-      data_type: NUMBER(1,0)
-    - name: COPD
-      data_type: NUMBER(1,0)
-    - name: DEMENTIA
-      data_type: NUMBER(1,0)
-    - name: DIABETES
-      data_type: NUMBER(1,0)
-    - name: DISORDEROFPROSTATE
-      data_type: NUMBER(1,0)
-    - name: EPILEPSY
-      data_type: NUMBER(1,0)
-    - name: HEARTFAILURE
-      data_type: NUMBER(1,0)
-    - name: IRRITABLEBOWELSYNDROME
-      data_type: NUMBER(1,0)
-    - name: LEARNINGDISABILITY
-      data_type: NUMBER(1,0)
-    - name: MULTIPLESCLEROSIS
-      data_type: NUMBER(1,0)
-    - name: PAINFULCONDITION
-      data_type: NUMBER(1,0)
-    - name: PARKINSONISM
-      data_type: NUMBER(1,0)
-    - name: PERIPHVASCDISEASELEG
-      data_type: NUMBER(1,0)
-    - name: PSYCHOACTIVESUBSTANCEMISUSE
-      data_type: NUMBER(1,0)
-    - name: SCHIZOPHRENIAORBIPOLARDISORDER
-      data_type: NUMBER(1,0)
 - name: c_ltcs
   database: '{{ ''PUBLISHED_REPORTING__DIRECT_CARE'' if target.name in [''prod'',
     ''snowflake-prod''] else (''DEV__PUBLISHED_REPORTING__DIRECT_CARE'' if target.name
