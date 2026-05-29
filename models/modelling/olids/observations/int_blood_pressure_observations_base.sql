@@ -32,8 +32,13 @@ WITH base_observations AS (
         obs.result_value,
         obs.mapped_concept_code AS concept_code,
         obs.mapped_concept_display AS concept_display,
-        obs.cluster_id AS source_cluster_id
+        obs.cluster_id AS source_cluster_id,
+        -- Parent observation links systolic + diastolic of the same reading.
+        -- Used downstream to pair within a reading rather than by date.
+        src.parent_observation_id
     FROM ({{ get_observations("'BP_COD', 'SYSBP_COD', 'DIASBP_COD', 'HOMEAMBBP_COD', 'ABPM_COD', 'HOMEBP_COD'") }}) obs
+    LEFT JOIN {{ ref('stg_olids_observation') }} src
+        ON obs.id = src.id
     WHERE obs.result_value IS NOT NULL
       AND obs.person_id IS NOT NULL
     {% if is_incremental() %}
@@ -64,7 +69,8 @@ SELECT
     concept_code,
     concept_display,
     source_cluster_id,
-    
+    parent_observation_id,
+
     -- BP type classification flags
     (source_cluster_id = 'SYSBP_COD' OR
      (source_cluster_id = 'BP_COD' AND concept_display ILIKE '%systolic%')) AS is_systolic_row,

@@ -2,7 +2,8 @@ models:
   - name: int_blood_pressure_latest
     description: 'Latest blood pressure event per person with paired systolic/diastolic
       values, clinical context flags (Home/ABPM), and hypertensive range indicator.
-      One row per person containing their most recent BP event.'
+      One row per person containing their most recent BP event (the representative
+      reading of their latest BP date, selected upstream in int_blood_pressure_all).'
     config:
       meta:
         owner:
@@ -17,20 +18,31 @@ models:
         description: Date of most recent blood pressure measurement
         tests:
           - not_null
+      - name: clinical_effective_date
+        description: Backward-compatibility alias for effective_date
       - name: systolic_value
-        description: Systolic blood pressure value in mmHg
+        description: Systolic blood pressure value in mmHg (representative reading)
         tests:
           - not_null
       - name: diastolic_value
-        description: Diastolic blood pressure value in mmHg
+        description: Diastolic blood pressure value in mmHg (representative reading)
         tests:
           - not_null
       - name: is_home_bp_event
-        description: 'Boolean flag indicating if this BP was recorded as home blood
-          pressure'
+        description: 'Boolean flag indicating the representative reading was recorded as home blood pressure'
       - name: is_abpm_bp_event
-        description: 'Boolean flag indicating if this BP was recorded as ambulatory
-          blood pressure monitoring'
+        description: 'Boolean flag indicating the representative reading was recorded as ambulatory blood pressure monitoring'
       - name: is_hypertensive_range
-        description: 'Boolean flag for stage 1 hypertension threshold: ≥140/90 mmHg
-          (clinic) or ≥135/85 mmHg (home/ABPM)'
+        description: 'Boolean flag (date-level, any reading): ≥140/90 mmHg (clinic) or ≥135/85 mmHg (home/ABPM)'
+      - name: result_unit_display
+        description: 'Unit of measurement for blood pressure values (always mmHg)'
+      - name: systolic_observation_id
+        description: 'Observation identifier for the systolic reading of the representative paired event'
+      - name: diastolic_observation_id
+        description: 'Observation identifier for the diastolic reading of the representative paired event'
+      - name: all_concept_codes
+        description: 'Array of all clinical concept codes used in observations for the latest BP event date'
+      - name: all_concept_displays
+        description: 'Array of all clinical concept display names used in observations for the latest BP event date'
+      - name: all_source_cluster_ids
+        description: 'Array of all source cluster identifiers used in observations for the latest BP event date'
