@@ -11,10 +11,11 @@ encoding_features as(
         -- biomarker and monitoring gaps 
         ---- blood pressure
         , case when bp.latest_bp_date between dateadd(month, -6, current_date()) and current_date() and bp.is_overall_bp_controlled = false then 1 else 0 end as poor_recent_bp_control_flag
-        , case when bp.latest_bp_date < dateadd(month, -12, current_date()) or bp.latest_bp_date is null then 1 else 0 end as bp_monitoring_overdue_flag
-        ---- hba1c
+        , case when bp.latest_bp_date < dateadd(month, -12, current_date()) or bp.latest_bp_date is null and hpr.person_id is not null then 1 else 0 end as bp_monitoring_overdue_flag
+        ---- hba1c 
         , case when hba1c.clinical_effective_date between dateadd(month, -6, current_date()) and current_date() and hba1c.meets_qof_target = false then 1 else 0 end as poor_recent_hba1c_control_flag
-        , case when dcp.hba1c_completed_in_last_12m = false then 1 else 0 end as hba1c_monitoring_overdue_flag
+        , case when dpr.person_id is not null and dcp.hba1c_completed_in_last_12m = false then 1 else 0 end as hba1c_monitoring_overdue_flag
+        , case when hba1c.hba1c_ifcc > 90 then 1 else 0 end as hba1c_dangerous_flag        
         -- ckd and egfr (intervals by latest eGFR mL/min/1.73m²: 45-59 yearly, 30-44 6-monthly, <30 ~quarterly)
         , case
             when eg.clinical_effective_date is null then 0
@@ -102,6 +103,10 @@ encoding_features as(
         on il.olids_id = lcs.person_id
     left join {{ref('fct_person_polypharmacy_current')}} polyp
         on il.olids_id = polyp.person_id
+    left join {{ref('fct_person_diabetes_register')}} dpr
+        on il.olids_id = dpr.person_id
+    left join {{ref('fct_person_hypertension_register')}} hpr
+        on il.olids_id = hpr.person_id
     left join {{ref('fct_person_diabetes_8_care_processes')}} dcp
         on il.olids_id = dcp.person_id
     left join {{ref('fct_person_diabetes_triple_target')}} dt
@@ -126,6 +131,7 @@ domain_sub_scores as (
         (
             poor_recent_bp_control_flag * 2
             + poor_recent_hba1c_control_flag *2
+            + hba1c_dangerous_flag * 4
             + bp_monitoring_overdue_flag
             + hba1c_monitoring_overdue_flag
             + egfr_overdue_flag
