@@ -19,7 +19,7 @@ WITH IMMS_CODE_OBS as (
         o.age_at_event AS AGE_AT_EVENT
     FROM {{ ref('stg_olids_observation') }} o
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_OBSERVATION o
-    LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
+   LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
     --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = o.patient_id
     INNER JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
      --INNER JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
@@ -72,6 +72,7 @@ where not exists (
      SELECT distinct
         el.PERSON_ID,
         el.BIRTH_DATE_APPROX,
+        el.AGE,
         el.AGE_BAND_5Y,
         el.IS_CARE_HOME_RESIDENT,
         el.IS_IMMUNOSUPPRESSED,
@@ -124,6 +125,7 @@ SELECT
     IS_IMMUNOSUPPRESSED,
     IS_PREGNANT,
     TURN_65_AFTER_SEP_2023,
+    AGE,
     AGE_BAND_5Y,
     AGE_DAYS_APPROX,
     AGE_AT_EVENT,
@@ -174,6 +176,7 @@ QUALIFY
     IS_PREGNANT,
     TURN_65_AFTER_SEP_2023,
     AGE_DAYS_APPROX,
+    AGE,
     AGE_AT_EVENT,
     AGE_BAND_5Y,
     VACCINE_ORDER,
@@ -191,7 +194,7 @@ QUALIFY
     FROM IMM_ADM_DECLINED_CONFLICT     
           ) 
 --SELECT FINAL VACCINATIONS DATASET DE-DUPLICATION BY EVENT_DATE and DOSE 
-,FINAL_VACCS as (
+,DOSE_DEDUP as (
  SELECT 
 	PERSON_ID,
     BIRTH_DATE_APPROX,
@@ -201,6 +204,7 @@ QUALIFY
     TURN_65_AFTER_SEP_2023,
     AGE_DAYS_APPROX,
 	AGE_AT_EVENT,
+    AGE,
     AGE_BAND_5Y,
     VACCINE_ORDER,
 	VACCINE_ID,
@@ -218,26 +222,51 @@ WHERE
 (dose_number = 1 AND row_num = 1)
 OR (dose_number = 2 AND row_num = 2)
 --allow for single code for second dose of Shingles
-OR (VACCINE_ID in ('SHING_2','SHING_2B') AND total_events = 1)
+OR (VACCINE_ID in ('SHING_2','SHING_2B','SHING_2C') AND total_events = 1)
 )
+--in some cases someone has been vaccinated and then had a subsequent contraindicated code added. Choose earlier Admin
+,ADMIN_CONTRA_CONFLICT as (
+select *,
+ROW_NUMBER() OVER (
+            PARTITION BY person_id, vaccine_id
+            ORDER BY
+                CASE
+                    WHEN EVENT_TYPE LIKE 'Admin%' THEN 1
+                    WHEN EVENT_TYPE = 'Contraindicated' THEN 2
+                    ELSE 3
+                END,
+                event_date DESC
+        ) AS rownum
+FROM DOSE_DEDUP
+)
+
 --ADD VACCINATION STATUS FOR EVENTS.
 select *
 ,CASE 
---1st April 2026 introduce RSV for older adult care home residents - RSV_1 is not relevant.
-WHEN VACCINE_ID in ('RSV_1','RSV_1C')  AND IS_CARE_HOME_RESIDENT THEN 'Not applicable'
-WHEN VACCINE_ID in ('RSV_1B','RSV_1C')  AND IS_CARE_HOME_RESIDENT = FALSE  THEN 'Not applicable'
-WHEN VACCINE_ID in ('RSV_1','RSV_1B')  AND IS_PREGNANT THEN 'Not applicable'
--- Shingles cases where vaccine_ids are not applicable.
-WHEN VACCINE_ID in ('SHING_1','SHING_2','SHING_1C','SHING_2C')  AND TURN_65_AFTER_SEP_2023 = FALSE  THEN 'Not applicable'
-WHEN VACCINE_ID in ('SHING_1B','SHING_2B', 'SHING_1C', 'SHING_2C')  AND TURN_65_AFTER_SEP_2023  THEN 'Not applicable'
-WHEN VACCINE_ID in ('SHING_1','SHING_2','SHING_1B','SHING_2B')  AND IS_IMMUNOSUPPRESSED  THEN 'Not applicable'
+--Routine aged 75+ RSV_1
+WHEN IS_CARE_HOME_RESIDENT = FALSE AND IS_PREGNANT = FALSE AND VACCINE_ID in ('RSV_1B','RSV_1C') THEN 'Not applicable'
+--1st April 2026 introduce RSV_1B for older adult care home residents 
+WHEN IS_CARE_HOME_RESIDENT AND IS_PREGNANT = FALSE AND VACCINE_ID in ('RSV_1','RSV_1C') THEN 'Not applicable'
+--RSV for pregnant women RSV_1C
+WHEN IS_PREGNANT AND IS_CARE_HOME_RESIDENT = FALSE AND VACCINE_ID in ('RSV_1','RSV_1B') THEN 'Not applicable'
+-- Shingles turns 65 after 2023 SHING_1 and SHING_2
+WHEN TURN_65_AFTER_SEP_2023 AND IS_IMMUNOSUPPRESSED = FALSE AND VACCINE_ID in ('SHING_1B','SHING_2B', 'SHING_1C', 'SHING_2C') THEN 'Not applicable'
+-- Shingles routine catch up 70-79 SHING_1B and SHING_2B
+WHEN TURN_65_AFTER_SEP_2023 = FALSE AND IS_IMMUNOSUPPRESSED = FALSE AND VACCINE_ID in ('SHING_1','SHING_2', 'SHING_1C', 'SHING_2C') THEN 'Not applicable'
+--Shingles for 18+ immunosuppressed SHING_1C and SHING_2C
+WHEN IS_IMMUNOSUPPRESSED AND TURN_65_AFTER_SEP_2023 = FALSE AND VACCINE_ID in ('SHING_1','SHING_2','SHING_1B','SHING_2B') THEN 'Not applicable'
+--PPV_1 routine for people aged 65+
+WHEN IS_IMMUNOSUPPRESSED = FALSE AND VACCINE_ID in ('PPV_1B') THEN 'Not applicable'
+--PPV_1B for immunosuppressed and other conditions 
+WHEN IS_IMMUNOSUPPRESSED AND VACCINE_ID in ('PPV_1') THEN 'Not applicable'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE >= CURRENT_DATE() THEN 'Not due yet'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE < CURRENT_DATE() AND AGE_DAYS_APPROX < maximum_age_days THEN 'Overdue'
-WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
-WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'
+WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = FALSE THEN 'Completed'  
+WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE THEN 'OutofSchedule'
 WHEN EVENT_DATE IS NULL AND AGE_DAYS_APPROX > maximum_age_days THEN 'No longer eligible'
 WHEN EVENT_TYPE = 'Declined' THEN 'Declined'  
 WHEN EVENT_TYPE = 'Contraindicated' THEN 'Contraindicated' 
 END as VACCINATION_STATUS
-from FINAL_VACCS
-QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID ORDER BY EVENT_DATE DESC) = 1
+--,ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID ORDER BY EVENT_DATE DESC) as rownum
+from ADMIN_CONTRA_CONFLICT
+where rownum = 1

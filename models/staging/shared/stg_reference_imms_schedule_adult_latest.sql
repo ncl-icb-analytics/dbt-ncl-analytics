@@ -4,7 +4,7 @@ select
     vaccine_name,
     dose_number,
     diseases_protected_against,
-    vaccine_code,
+    -- vaccine_code,
     trade_name,
     administration_route,
     schedule_age,

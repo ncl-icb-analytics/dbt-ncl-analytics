@@ -49,9 +49,11 @@ WHEN sched.VACCINE_ID = 'RSV_1B' AND IS_CARE_HOME_RESIDENT AND AGE_DAYS_APPROX >
 AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE
 WHEN sched.VACCINE_ID = 'RSV_1C' AND IS_PREGNANT AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
 AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE
---PPV
+--PPV add in immunosuppressed vaccinations from age 2 +
 WHEN sched.VACCINE_ID = 'PPV_1' AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
 AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE 
+WHEN sched.VACCINE_ID = 'PPV_1B' AND p.IS_IMMUNOSUPPRESSED AND p.AGE >= 2 AND AGE_DAYS_APPROX >= sched.eligible_age_from_days 
+AND AGE_DAYS_APPROX <= sched.eligible_age_to_days THEN TRUE
 ELSE FALSE END AS CURRENTLY_ELIGIBLE
 FROM {{ ref('int_adult_imms_current_population') }} p
 --FROM MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_CURRENT_POPULATION p
