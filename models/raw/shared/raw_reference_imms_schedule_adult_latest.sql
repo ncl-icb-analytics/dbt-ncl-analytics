@@ -9,7 +9,7 @@ select
     "VACCINE_NAME" as vaccine_name,
     "DOSE_NUMBER" as dose_number,
     "DISEASES_PROTECTED_AGAINST" as diseases_protected_against,
-    "VACCINE_CODE" as vaccine_code,
+    -- "VACCINE_CODE" as vaccine_code,
     "TRADE_NAME" as trade_name,
     "ADMINISTRATION_ROUTE" as administration_route,
     "SCHEDULE_AGE" as schedule_age,
