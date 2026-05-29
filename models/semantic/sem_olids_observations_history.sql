@@ -37,7 +37,9 @@
     - Long format: filter to ONE observation_type before reading `value`.
       Values are only comparable within a single biomarker.
     - For "latest N", window with ROW_NUMBER() OVER (PARTITION BY person_id,
-      observation_type ORDER BY clinical_effective_date DESC).
+      observation_type ORDER BY clinical_effective_date DESC,
+      observation_event_id DESC) — the event id breaks ties when a person has
+      multiple readings of one biomarker on the same date.
     - Blood pressure is split into 'Systolic BP' and 'Diastolic BP' rows.
 
     Biomarkers: Systolic BP, Diastolic BP, Total Cholesterol, LDL Cholesterol,
@@ -65,6 +67,7 @@ FACTS(
 
 DIMENSIONS(
     -- Observation
+    obs.observation_event_id AS observation_event_id COMMENT = 'Stable per-event surrogate key. Use as the final ORDER BY tiebreaker in latest-N windows so tied clinical_effective_dates rank deterministically.',
     obs.observation_type AS observation_type WITH SYNONYMS = ('biomarker', 'measurement', 'test') COMMENT = 'Biomarker label. Filter to one value before aggregating: Systolic BP, Diastolic BP, Total Cholesterol, LDL Cholesterol, QRISK, HbA1c, BMI, Waist Circumference, eGFR, Creatinine, Urine ACR, ALT, GGT, Bilirubin, Haemoglobin, Platelets, Eosinophils.',
     obs.observation_group AS observation_group COMMENT = 'Clinical group (Cardiovascular, Metabolic, Renal, Liver, Haematology)',
     obs.clinical_effective_date AS clinical_effective_date WITH SYNONYMS = ('observation date', 'test date', 'date') COMMENT = 'Date of the reading',
@@ -122,5 +125,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS Clinical Observations History Semantic View - every recorded biomarker reading (one row per person x biomarker x date) for serial, latest-N, trajectory, variability, and recheck-interval analysis. Long format: filter to a single observation_type before reading value. Biomarkers: BP (systolic/diastolic), cholesterol, LDL, QRISK, HbA1c, BMI, waist, eGFR, creatinine, urine ACR, ALT, GGT, bilirubin, haemoglobin, platelets, eosinophils.'
-AI_SQL_GENERATION 'Always filter to a single observation_type before aggregating or comparing value — values across types are not comparable (different units). For latest-N questions ("last 2 HbA1c"), use ROW_NUMBER() OVER (PARTITION BY person_id, observation_type ORDER BY clinical_effective_date DESC) and filter the rank. For CHANGE / trajectory questions ("whose BMI or waist circumference rose in the last X months"), per person take the latest reading and a baseline reading (the most recent reading on or before DATEADD(month, -X, latest_date)), then difference them; require both to exist. Blood pressure is two types: Systolic BP and Diastolic BP. Always filter to is_active = TRUE unless asked otherwise. RETENTION: full history is retained for currently-registered persons but only ~5 years for left/deceased persons, so this view is NOT capped at 60 months — use it for per-person trajectories and change within the currently-registered cohort. Do NOT compute long-run population cross-sections (e.g. average value by calendar year going back >5 years) as if representative — pre-5-year data is survivor-biased toward people still registered. This view is for over-time analysis; for the single latest value per biomarker use sem_olids_observations.'
+AI_SQL_GENERATION 'Always filter to a single observation_type before aggregating or comparing value — values across types are not comparable (different units). For latest-N questions ("last 2 HbA1c"), use ROW_NUMBER() OVER (PARTITION BY person_id, observation_type ORDER BY clinical_effective_date DESC, observation_event_id DESC) and filter the rank — the event id is a deterministic tiebreaker for multiple readings on the same date. For CHANGE / trajectory questions ("whose BMI or waist circumference rose in the last X months"), per person take the latest reading and a baseline reading (the most recent reading on or before DATEADD(month, -X, latest_date)), then difference them; require both to exist. Blood pressure is two types: Systolic BP and Diastolic BP. Always filter to is_active = TRUE unless asked otherwise. RETENTION: full history is retained for currently-registered persons but only ~5 years for left/deceased persons, so this view is NOT capped at 60 months — use it for per-person trajectories and change within the currently-registered cohort. Do NOT compute long-run population cross-sections (e.g. average value by calendar year going back >5 years) as if representative — pre-5-year data is survivor-biased toward people still registered. This view is for over-time analysis; for the single latest value per biomarker use sem_olids_observations.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: serial biomarker readings, latest-2 / last-N values, trends in an individual or cohort over time, variability, rate of change, time between readings, and recheck intervals. For the single most recent value per biomarker (current state) use sem_olids_observations. For condition prevalence/demographics use sem_olids_population. For condition incidence/prevalence trends use sem_olids_trends.'

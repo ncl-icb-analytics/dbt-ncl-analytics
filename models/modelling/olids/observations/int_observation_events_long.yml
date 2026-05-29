@@ -23,12 +23,12 @@ models:
     columns:
       - name: observation_event_id
         description: Surrogate key per observation event. Best-effort unique across person/type/date/source id/value.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id
         description: Person identifier (joins to dim_person_demographics).
-        tests:
+        data_tests:
           - not_null
       - name: observation_type
         description: >
@@ -36,15 +36,15 @@ models:
           LDL Cholesterol, QRISK, HbA1c, BMI, Waist Circumference, eGFR,
           Creatinine, Urine ACR, ALT, GGT, Bilirubin, Haemoglobin, Platelets,
           Eosinophils). Filter to a single type before aggregating value.
-        tests:
+        data_tests:
           - not_null
       - name: observation_group
         description: Clinical group (Cardiovascular, Metabolic, Renal, Liver, Haematology).
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
         description: Date of the observation.
-        tests:
+        data_tests:
           - not_null
       - name: value
         description: Numeric result in the unit given by `unit`. Only comparable within a single observation_type.

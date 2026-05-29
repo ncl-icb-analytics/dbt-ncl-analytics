@@ -26,6 +26,11 @@ models:
       - int_observation_events_long: long-format biomarker history
       - dim_person_demographics: patient demographics, geography, deprivation
 
+      Column-level dbt tests are intentionally not defined on this semantic_view.
+      Uniqueness / not-null integrity is enforced upstream on
+      int_observation_events_long, because semantic_view models are not
+      validated as standard queryable relations.
+
     config:
       materialized: semantic_view
       schema: SEMANTIC
