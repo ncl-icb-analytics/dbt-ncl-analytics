@@ -40,6 +40,8 @@ models:
           it was in the future, in which case date_recorded is used as fallback.
         tests:
           - not_null
+      - name: clinical_effective_date
+        description: Backward-compatibility alias for effective_date
       - name: systolic_value
         description: Systolic blood pressure value in mmHg
         tests:

@@ -45,9 +45,10 @@ WITH valid_observations AS (
     SELECT *
     FROM {{ ref('int_blood_pressure_observations_base') }}
     WHERE effective_date IS NOT NULL
-      -- Broad plausible value filter
-      AND result_value > 20
-      AND result_value < 350
+      -- Broad plausible value filter (inclusive, matching the typed ranges
+      -- enforced in the readings HAVING clause: 40-350 / 20-200)
+      AND result_value >= 20
+      AND result_value <= 350
       AND effective_date <= CURRENT_DATE() -- Exclude future dates
 ),
 
