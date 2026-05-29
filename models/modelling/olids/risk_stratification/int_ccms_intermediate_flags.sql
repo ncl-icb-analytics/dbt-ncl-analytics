@@ -165,33 +165,45 @@ meds_flags AS (
     GROUP BY person_id
 ),
 
--- eGFR: take the two most recent values per person; flag if both <60.
--- daily_min collapses same-day repeat tests to a single minimum value.
-egfr_calculations AS (
-    SELECT
+-- eGFR flags for CKD
+
+-- Take the daily minimum 
+/*
+- eGFR can be calculated via multiple methods, and many systems report more than one of these variants for each test
+- Some methods underestimate risk in particular groups, so taking the minimum value is the conservative approach
+    */
+daily_egfr as (
+    select
         person_id,
         clinical_effective_date,
-        result_value::FLOAT AS egfr_value,
-        MIN(result_value::FLOAT) OVER (
-            PARTITION BY person_id, clinical_effective_date
-        ) AS daily_min_egfr,
-        ROW_NUMBER() OVER (
-            PARTITION BY person_id
-            ORDER BY clinical_effective_date DESC
-        ) AS date_rank
-    FROM obs_with_conditions
-    WHERE conditionname = 'eGFR'
-        AND result_value IS NOT NULL
+        min(result_value::float) as daily_min_egfr
+    from obs_with_conditions
+    where conditionname = 'eGFR'
+    and result_value is not null
+    group by person_id, clinical_effective_date
 ),
 
-egfr_flag AS (
-    SELECT
+-- Rank distinct eGFR measurement days, most recent first
+ranked_egfr_days as (
+    select
         person_id,
-        1 AS egfr
-    FROM egfr_calculations
-    WHERE date_rank <= 2
-    GROUP BY person_id
-    HAVING MAX(daily_min_egfr) < 60
+        clinical_effective_date,
+        daily_min_egfr,
+        row_number() over (
+            partition by person_id
+            order by clinical_effective_date desc
+        ) as date_rank
+    from daily_egfr
+),
+
+-- Require at least two eGFR measurement days, with both below 60
+egfr_flag as (
+    select person_id, 1 as egfr
+    from ranked_egfr_days
+    where date_rank <= 2
+    group by person_id
+    having count(*) = 2
+    and max(daily_min_egfr) < 60
 )
 
 SELECT

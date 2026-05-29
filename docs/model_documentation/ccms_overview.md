@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The pipeline computes a person-level Cambridge Comorbidity Score (CCMS) for adults aged 16+ to support risk stratification and downstream modelling.
+The pipeline computes a person-level modified Cambridge Comorbidity Score (CCMS) (Ruby et al., 2023; implemented in alignment with the modified score) for adults aged 16+ to support risk stratification and downstream modelling.
 This implementation has been migrated from the London AIC version of CCMS. For migration details, assumptions, and change history, review the pull request.
 
 ## Outstanding issues
@@ -11,8 +11,8 @@ This implementation has been migrated from the London AIC version of CCMS. For m
 - Local unit testing
 
 ## Relevant Literature
-- Payne RA, et al. (2020). *The Cambridge Multimorbidity Score: a clinically useful tool for predicting mortality in primary care.* [https://doi.org/10.3399/bjgp20X709433](https://doi.org/10.3399/bjgp20X709433)
-- Brilleman SL, et al. (2022). *Updating and validating the Cambridge Multimorbidity Score in England.* [https://bjgp.org/content/73/731/e435](https://bjgp.org/content/73/731/e435)
+- Modified CCMS implemented here, 21-condition version Table 2: Ruby et al., (2023) *Development of a modified Cambridge Multimorbidity Score for use with SNOMED CT: an observational English primary care sentinel network study* [Open source URL](https://bjgp.org/content/73/731/e435) 
+- Original CCMS: Payne et al., (2020) *Development and validation of the Cambridge Multimorbidity Score* [Open source URL](https://www.cmaj.ca/content/192/5/E107?ijkey=b4745227e4040e3b66e0da42da9e3ceb3500c3a3&keytype2=tf_ipsecsha)
 
 ## Model Flow
 The pipeline uses staged CCMS codelists (`stg_aic_base_ccms_snomed_codes`, `stg_aic_base_ccms_dmd_codes`) and OLIDS observations/medication data.
