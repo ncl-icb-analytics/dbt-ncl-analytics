@@ -6,13 +6,15 @@ models:
 
       • Event-based design: one row per person per date
 
-      • Pairs systolic and diastolic values from multiple observations
+      • Pairs systolic and diastolic within a single reading via parent_observation_id (not max systolic / max diastolic of the date), avoiding fabricated pairs on multi-reading days
 
-      • Identifies clinical context (Home BP, ABPM)
+      • Selects one representative reading per date by the lowest-systolic rule (time-of-day is not usable: all observations are stored at midnight/01:00)
+
+      • Identifies clinical context (Home BP, ABPM) of the representative reading
 
       • Filters invalid readings: requires both systolic and diastolic values with plausible ranges (Systolic: 40-350 mmHg, Diastolic: 20-200 mmHg)
 
-      • Flags hypertensive range: ≥140/90 mmHg (clinic) or ≥135/85 mmHg (home/ABPM)
+      • Flags hypertensive range (date-level, any reading): ≥140/90 mmHg (clinic) or ≥135/85 mmHg (home/ABPM)
 
       • Uses six BP cluster types: BP_COD, SYSBP_COD, DIASBP_COD, HOMEAMBBP_COD, ABPM_COD, HOMEBP_COD
 
@@ -57,17 +59,17 @@ models:
                 max_value: 200
                 inclusive: true
       - name: is_home_bp_event
-        description: 'Boolean flag indicating if any observation on this date was recorded as home blood pressure (HOMEBP_COD, HOMEAMBBP_COD)'
+        description: 'Boolean flag indicating the representative reading was recorded as home blood pressure (HOMEBP_COD, HOMEAMBBP_COD)'
       - name: is_abpm_bp_event
-        description: 'Boolean flag indicating if any observation on this date was recorded as ambulatory blood pressure monitoring (ABPM_COD)'
+        description: 'Boolean flag indicating the representative reading was recorded as ambulatory blood pressure monitoring (ABPM_COD)'
       - name: is_hypertensive_range
-        description: 'Boolean flag for stage 1 hypertension threshold: ≥140/90 mmHg (clinic) or ≥135/85 mmHg (home/ABPM)'
+        description: 'Boolean flag (date-level, any reading): ≥140/90 mmHg (clinic) or ≥135/85 mmHg (home/ABPM)'
       - name: result_unit_display
         description: 'Unit of measurement for blood pressure values (always mmHg)'
-      - name: systolic_id
-        description: 'Observation identifier for the systolic reading used in this consolidated event'
-      - name: diastolic_id
-        description: 'Observation identifier for the diastolic reading used in this consolidated event'
+      - name: systolic_observation_id
+        description: 'Observation identifier for the systolic reading of the representative paired event'
+      - name: diastolic_observation_id
+        description: 'Observation identifier for the diastolic reading of the representative paired event'
       - name: all_concept_codes
         description: 'Array of all clinical concept codes used in observations for this BP event date'
       - name: all_concept_displays
