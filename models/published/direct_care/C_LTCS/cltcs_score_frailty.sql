@@ -63,7 +63,7 @@ encoding_features as (
         on il.patient_id = apca.sk_patient_id
     left join {{ ref('fct_person_bp_control') }} bp
         on il.olids_id = bp.person_id
-    left join {{ ref('stg_aic_int_ccms_current') }} ccms
+    left join {{ ref('dim_person_ccms') }} ccms
         on il.olids_id = ccms.person_id
     left join {{ ref('stg_aic_int_efi2_scores') }} efi
         on il.olids_id = efi.person_id

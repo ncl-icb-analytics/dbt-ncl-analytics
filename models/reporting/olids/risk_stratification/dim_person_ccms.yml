@@ -1,0 +1,29 @@
+models:
+  - name: dim_person_ccms
+    description: |
+      Cambridge Comorbidity Score per person, computed in-house from OLIDS.
+      Replaces the AIC passthrough (stg_aic_int_ccms_current). One row per
+      person in dim_person.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: ccms_score_id
+        description: Surrogate key from int_ccms_score.
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: Person identifier (joins to dim_person).
+        tests:
+          - unique
+          - not_null
+      - name: cambridge_comorbidity_score
+        description: Weighted Cambridge Comorbidity Score. Can be negative.
+        tests:
+          - not_null
+      - name: last_updated
+        description: Timestamp the underlying int_ccms_score row was generated.
+        tests:
+          - not_null
