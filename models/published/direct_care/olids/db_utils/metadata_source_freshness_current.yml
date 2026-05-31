@@ -1,0 +1,67 @@
+models:
+  - name: metadata_source_freshness_current
+    description: |
+      Current-state freshness signals for the semantic-layer's logical source
+      systems and OLIDS core subdomains.
+
+      OLIDS freshness is split across episode-of-care, appointments,
+      observations, and medications. Those subdomains use consensus event/update
+      dates across publisher organisations, excluding future-dated records, so
+      the signal reflects true source-data currency rather than warehouse table
+      modification timestamps.
+
+      Top-level `olids` is a rollup row using the floor of those four
+      subdomains. PDS and Deaths Registry currently use source-table
+      `LAST_ALTERED` as a first-pass technical freshness signal.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 7
+    columns:
+      - name: source_key
+        description: Stable identifier for the logical source or sub-source.
+        tests:
+          - unique
+          - not_null
+      - name: display_name
+        description: Human-friendly source label for UI surfaces.
+      - name: parent_source_key
+        description: Parent rollup source key, where applicable.
+      - name: source_group
+        description: Broad source grouping.
+      - name: sort_order
+        description: Display ordering for app-facing views.
+      - name: include_in_rollup
+        description: Whether the source should contribute to freshness rollups.
+      - name: is_reference_data
+        description: Whether the source is reference data rather than an operational data feed.
+      - name: warn_after_hours
+        description: Hours since the latest freshness timestamp before the status turns amber.
+      - name: breach_after_hours
+        description: Hours since the latest freshness timestamp before the status turns red.
+      - name: basis_models
+        description: Pipe-delimited list of staging models used to derive the freshness signal.
+      - name: freshness_date
+        description: Date-level freshness signal for the source.
+      - name: freshness_ts
+        description: Timestamp used for lag and status derivation.
+      - name: contributing_organisation_count
+        description: Number of publisher organisations contributing to the chosen consensus date.
+      - name: consensus_threshold
+        description: Minimum contributing-organisation threshold for OLIDS consensus rows.
+      - name: freshness_basis
+        description: High-level description of how freshness was measured.
+      - name: basis_detail
+        description: Human-readable explanation of the specific freshness calculation.
+      - name: measured_at
+        description: Timestamp when the row was evaluated.
+      - name: lag_hours
+        description: Hours between freshness timestamp and evaluation time.
+      - name: lag_days
+        description: Whole-day lag between freshness date and evaluation date.
+      - name: freshness_status
+        description: Derived green/amber/red/error state based on configured thresholds.

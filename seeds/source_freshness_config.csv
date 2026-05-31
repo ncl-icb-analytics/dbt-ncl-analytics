@@ -1,0 +1,8 @@
+source_key,display_name,parent_source_key,source_group,sort_order,include_in_rollup,is_reference_data,warn_after_hours,breach_after_hours,basis_models
+olids,OLIDS,,olids,10,true,false,96,504,stg_olids_episode_of_care|stg_olids_appointment|stg_olids_observation|stg_olids_medication_order|stg_olids_medication_statement
+olids_episode_of_care,OLIDS episode of care,olids,olids,11,true,false,96,504,stg_olids_episode_of_care
+olids_appointments,OLIDS appointments,olids,olids,12,true,false,96,504,stg_olids_appointment
+olids_observations,OLIDS observations,olids,olids,13,true,false,96,504,stg_olids_observation
+olids_medications,OLIDS medications,olids,olids,14,true,false,96,504,stg_olids_medication_order|stg_olids_medication_statement
+pds,PDS,,pds,20,true,false,72,168,stg_pds_pds_person
+registries_deaths,Deaths Registry,,deaths,30,true,false,168,336,stg_registries_deaths

@@ -1,0 +1,49 @@
+models:
+  - name: metadata_pipeline_health_current
+    description: |
+      Current dbt project health rollup for the semantic-layer freshness UI.
+
+      Reads the latest prod Elementary invocation and summarises model/test
+      outcomes so the app can surface whether downstream refreshes were blocked
+      by dbt failures even when source data itself is fresh.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: pipeline_key
+        description: Stable identifier for the pipeline rollup row.
+      - name: display_name
+        description: Human-friendly label for the pipeline-health surface.
+      - name: invocation_id
+        description: Latest Elementary/dbt invocation identifier.
+      - name: command
+        description: dbt command used for the latest invocation.
+      - name: target_name
+        description: Target environment name for the latest invocation.
+      - name: full_refresh
+        description: Whether the latest invocation was executed with full refresh.
+      - name: run_started_at
+        description: Start time of the latest invocation.
+      - name: run_completed_at
+        description: Completion time of the latest invocation.
+      - name: generated_at
+        description: Timestamp when Elementary uploaded the invocation record.
+      - name: latest_result_completed_at
+        description: Latest completion timestamp among the invocation's run results.
+      - name: model_result_count
+        description: Number of model results captured for the latest invocation.
+      - name: model_success_count
+        description: Number of successful model results in the latest invocation.
+      - name: model_non_success_count
+        description: Number of non-success model results in the latest invocation.
+      - name: test_result_count
+        description: Number of test results captured for the latest invocation.
+      - name: failing_test_count
+        description: Number of failed or errored tests in the latest invocation.
+      - name: error_result_count
+        description: Number of errored run results across all resource types.
+      - name: lag_hours
+        description: Hours since the latest invocation completed.
+      - name: pipeline_status
+        description: Derived current pipeline-health state.

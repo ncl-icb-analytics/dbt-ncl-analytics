@@ -1,0 +1,46 @@
+version: 2
+
+seeds:
+  - name: source_freshness_config
+    description: |
+      Lightweight configuration for semantic-layer source freshness.
+
+      Defines the logical sources and sub-sources we want to surface, how they
+      roll up, and the expected freshness thresholds used to derive
+      green/amber/red status in downstream models.
+    config:
+      column_types:
+        source_key: varchar(100)
+        display_name: varchar(200)
+        parent_source_key: varchar(100)
+        source_group: varchar(100)
+        sort_order: integer
+        include_in_rollup: boolean
+        is_reference_data: boolean
+        warn_after_hours: integer
+        breach_after_hours: integer
+        basis_models: varchar(500)
+    columns:
+      - name: source_key
+        description: Stable identifier for the logical source or sub-source.
+        tests:
+          - unique
+          - not_null
+      - name: display_name
+        description: Human-friendly label for UI surfaces.
+      - name: parent_source_key
+        description: Parent source for rollups (for example OLIDS subdomains roll up to `olids`).
+      - name: source_group
+        description: Broad domain grouping used for ordering and future filtering.
+      - name: sort_order
+        description: Display order in app-facing freshness views.
+      - name: include_in_rollup
+        description: Whether this source should contribute to a user-facing freshness rollup.
+      - name: is_reference_data
+        description: Marks sources that should not be treated as operational data freshness signals.
+      - name: warn_after_hours
+        description: Hours since latest freshness timestamp before the status turns amber.
+      - name: breach_after_hours
+        description: Hours since latest freshness timestamp before the status turns red.
+      - name: basis_models
+        description: Pipe-delimited list of staging models that underpin the freshness signal.
