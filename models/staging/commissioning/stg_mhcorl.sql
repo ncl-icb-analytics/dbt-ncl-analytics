@@ -53,9 +53,11 @@
 --     the dominant RRP00 feed, so cross-provider use is impossible.
 --
 -- Coverage caveats (cannot be fixed in this model):
---   * RRP00 (CNWL, ~90% volume), RNK00 (NMUH), RAT00 (Whittington) are the
---     only providers still submitting from 2024-04 onwards.
---   * RV300 (RFL) stopped 2023-09; smaller providers stopped earlier.
+--   * RRP00 (Barnet, Enfield & Haringey MH Trust, ~93% volume), RNK00
+--     (Tavistock & Portman), RAT00 (NELFT) are the only providers still
+--     submitting from 2024-04 onwards.
+--   * RV300 (CNWL) stopped 2023-09; RKL00 (West London NHS Trust) and other
+--     smaller providers stopped earlier.
 --   * 2021 is missing RRP00 entirely — dq_tier='transitional' flags this.
 
 with src as (

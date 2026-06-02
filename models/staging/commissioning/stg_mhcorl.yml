@@ -17,9 +17,11 @@ models:
       rationale. Raw values for gender / ethnicity etc. live in source.
 
       Coverage caveats:
-        * RRP00 (CNWL, ~90% volume), RNK00 (NMUH), RAT00 (Whittington) are the
-          only providers still submitting from 2024-04 onwards.
-        * RV300 (RFL) stopped 2023-09. Smaller historic providers stopped earlier.
+        * RRP00 (Barnet, Enfield & Haringey MH Trust, ~93% volume), RNK00
+          (Tavistock & Portman), RAT00 (NELFT) are the only providers still
+          submitting from 2024-04 onwards.
+        * RV300 (CNWL) stopped 2023-09. RKL00 (West London NHS Trust) and other
+          smaller historic providers stopped earlier.
     config:
       meta:
         owner:
@@ -173,8 +175,8 @@ models:
       - name: in_month_activity_actual
         description: |
           Provider-reported in-month activity count (IN_MONTH_ACTIVITY_ACTUAL),
-          cast to numeric (can be fractional). Effectively NMUH-only: RNK00
-          populates it 100%, all other providers 0% (~5% of rows overall).
+          cast to numeric (can be fractional). Effectively Tavistock & Portman-only:
+          RNK00 populates it 100%, all other providers 0% (~5% of rows overall).
 
     data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
