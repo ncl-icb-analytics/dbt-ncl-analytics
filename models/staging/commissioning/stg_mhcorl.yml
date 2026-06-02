@@ -170,6 +170,10 @@ models:
         description: Coalesced from consultation_type / contact_type.
       - name: duration_of_contact_minutes
       - name: appointment_sequence_id
+      - name: in_month_activity_actual
+        description: |
+          Provider-reported in-month activity count (IN_MONTH_ACTIVITY_ACTUAL),
+          cast to numeric. Sparsely populated — only some providers submit it.
 
     data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:

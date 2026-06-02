@@ -45,7 +45,8 @@
 --   * Provider/site/ward/consultant cols that only one small provider (RNK00,
 --     5.5% of volume) populates — analytically unusable for cross-provider
 --     rollups; re-derive in a provider-specific intermediate if needed.
---   * Sparse cost/activity cols (cost, unit_cost, in_month_*).
+--   * Sparse cost/activity cols (cost, unit_cost, in_month_price_actual).
+--     (in_month_activity_actual is retained — surfaced on request despite sparse fill.)
 --   * Sparse clinical cols (primary_diagnosis 0.8%, cluster 0.1%, etc.).
 --   * mhsds_person_id (0.12% — only RWK00 2018 + RRP00 2017).
 --   * RNK00/RAT00-only date cols (start_date, date_accepted, etc.) — 0% for
@@ -290,7 +291,10 @@ normalised as (
                                                 as contact_type,
         try_to_number(duration_of_contact_minutes)
                                                 as duration_of_contact_minutes,
-        appointment_sequence_id                 as appointment_sequence_id
+        appointment_sequence_id                 as appointment_sequence_id,
+        -- Provider-reported in-month activity count. Sparse (only some providers
+        -- populate it) but surfaced on request; cast to numeric, decimals retained.
+        try_to_double(in_month_activity_actual) as in_month_activity_actual
 
     from src
 )
