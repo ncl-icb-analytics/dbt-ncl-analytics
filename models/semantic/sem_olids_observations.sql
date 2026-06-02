@@ -166,9 +166,9 @@ FACTS(
     lft.bilirubin_value AS bilirubin_value COMMENT = 'Latest total bilirubin (umol/L)',
 
     -- Haematology
-    haemoglobin.inferred_value AS haemoglobin_value WITH SYNONYMS = ('Hb', 'haemoglobin') COMMENT = 'Latest haemoglobin (g/L)',
-    platelets.inferred_value AS platelet_count WITH SYNONYMS = ('platelets', 'PLT') COMMENT = 'Latest platelet count (10^9/L)',
-    eosinophils.inferred_value AS eosinophil_count WITH SYNONYMS = ('eosinophils', 'eos') COMMENT = 'Latest blood eosinophil count (10^9/L)',
+    haemoglobin.haemoglobin_value AS inferred_value WITH SYNONYMS = ('Hb', 'haemoglobin') COMMENT = 'Latest haemoglobin (g/L)',
+    platelets.platelet_count AS inferred_value WITH SYNONYMS = ('platelets', 'PLT') COMMENT = 'Latest platelet count (10^9/L)',
+    eosinophils.eosinophil_count AS inferred_value WITH SYNONYMS = ('eosinophils', 'eos') COMMENT = 'Latest blood eosinophil count (10^9/L)',
 
     -- Frailty
     efi.latest_efi_score_preferred AS latest_efi_score_preferred COMMENT = 'Electronic Frailty Index score (0-1). Uses most recent of eFI or eFI2.',
@@ -198,10 +198,10 @@ DIMENSIONS(
     rockwood.latest_rockwood_date AS clinical_effective_date COMMENT = 'Date of latest Rockwood assessment',
     foot_exam.latest_foot_exam_date AS clinical_effective_date COMMENT = 'Date of latest foot examination',
     retinal.latest_retinal_date AS clinical_effective_date COMMENT = 'Date of latest retinal screening',
-    lft.last_lft_date AS clinical_effective_date COMMENT = 'Date of latest liver function test (most recent of ALT/GGT/bilirubin)',
-    haemoglobin.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest haemoglobin',
-    platelets.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest platelet count',
-    eosinophils.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest eosinophil count',
+    lft.last_lft_date AS last_lft_date COMMENT = 'Date of latest liver function test (most recent of ALT/GGT/bilirubin)',
+    haemoglobin.latest_haemoglobin_date AS clinical_effective_date COMMENT = 'Date of latest haemoglobin',
+    platelets.latest_platelets_date AS clinical_effective_date COMMENT = 'Date of latest platelet count',
+    eosinophils.latest_eosinophil_date AS clinical_effective_date COMMENT = 'Date of latest eosinophil count',
 
     -- Core Demographics
     demographics.gender AS gender COMMENT = 'Patient gender (Male, Female, Unknown)',
