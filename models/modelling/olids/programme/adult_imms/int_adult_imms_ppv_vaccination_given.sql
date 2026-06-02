@@ -4,13 +4,18 @@
         tags=['adult_imms'],
         cluster_by=['person_id'])
 }}
---people aged 65+ who are eligible who have had a PPV vaccine. One dose only needed.Latest vaccination recorded
+--people aged 65+ who are eligible who have had a PPV vaccine. And/Or people who are in a PPV clinical risk group (includes immunosuppression) aged 2+. Latest vaccination recorded. 
+--One dose only needed.Latest vaccination recorded
  SELECT 
         PERSON_ID
         ,AGE AS CURRENT_AGE
+        ,IN_PPV_CLINICAL_RISK_GROUP
         ,VACCINE_ID
         ,VACCINATION_DATE 
         ,VACCINATION_STATUS 
 	    ,AGE_AT_EVENT 
+          --in case there are multiple records for declined on the same day.
+        ,ROW_NUMBER() OVER (PARTITION BY PERSON_ID ORDER BY VACCINATION_DATE ASC) AS row_num
         FROM {{ ref('int_adult_imms_vaccination_status_current') }} 
-    WHERE VACCINE_ID = 'PPV_1' AND VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    WHERE VACCINE_ID in ('PPV_1','PPV_1B') AND VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+    QUALIFY rownum = 1

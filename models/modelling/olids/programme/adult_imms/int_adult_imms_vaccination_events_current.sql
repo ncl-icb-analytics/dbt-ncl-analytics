@@ -76,6 +76,7 @@ where not exists (
         el.AGE_BAND_5Y,
         el.IS_CARE_HOME_RESIDENT,
         el.IS_IMMUNOSUPPRESSED,
+        el.IN_PPV_CLINICAL_RISK_GROUP,
         el.IS_PREGNANT,
         el.TURN_65_AFTER_SEP_2023,
         el.AGE_DAYS_APPROX,
@@ -123,6 +124,7 @@ SELECT
     BIRTH_DATE_APPROX,
     IS_CARE_HOME_RESIDENT,
     IS_IMMUNOSUPPRESSED,
+    IN_PPV_CLINICAL_RISK_GROUP,
     IS_PREGNANT,
     TURN_65_AFTER_SEP_2023,
     AGE,
@@ -173,6 +175,7 @@ QUALIFY
     BIRTH_DATE_APPROX,
     IS_CARE_HOME_RESIDENT,
     IS_IMMUNOSUPPRESSED,
+    IN_PPV_CLINICAL_RISK_GROUP,
     IS_PREGNANT,
     TURN_65_AFTER_SEP_2023,
     AGE_DAYS_APPROX,
@@ -200,6 +203,7 @@ QUALIFY
     BIRTH_DATE_APPROX,
     IS_CARE_HOME_RESIDENT,
     IS_IMMUNOSUPPRESSED,
+    IN_PPV_CLINICAL_RISK_GROUP,
     IS_PREGNANT,
     TURN_65_AFTER_SEP_2023,
     AGE_DAYS_APPROX,
@@ -243,22 +247,29 @@ FROM DOSE_DEDUP
 --ADD VACCINATION STATUS FOR EVENTS.
 select *
 ,CASE 
---Routine aged 75+ RSV_1
-WHEN IS_CARE_HOME_RESIDENT = FALSE AND IS_PREGNANT = FALSE AND VACCINE_ID in ('RSV_1B','RSV_1C') THEN 'Not applicable'
---1st April 2026 introduce RSV_1B for older adult care home residents 
-WHEN IS_CARE_HOME_RESIDENT AND IS_PREGNANT = FALSE AND VACCINE_ID in ('RSV_1','RSV_1C') THEN 'Not applicable'
---RSV for pregnant women RSV_1C
-WHEN IS_PREGNANT AND IS_CARE_HOME_RESIDENT = FALSE AND VACCINE_ID in ('RSV_1','RSV_1B') THEN 'Not applicable'
+---PPV-------------------------------------------------------------------WHEN VACCINATIONS EXIST
+--PPV_1 routine for people aged 65+
+WHEN IN_PPV_CLINICAL_RISK_GROUP = FALSE AND VACCINE_ID in ('PPV_1B') THEN 'Not applicable'
+--PPV_1B for immunosuppressed and other conditions 
+WHEN IN_PPV_CLINICAL_RISK_GROUP AND VACCINE_ID in ('PPV_1') THEN 'Not applicable'
+--SHINGLES---------------------------------------------------------------WHEN VACCINATIONS EXIST
 -- Shingles turns 65 after 2023 SHING_1 and SHING_2
 WHEN TURN_65_AFTER_SEP_2023 AND IS_IMMUNOSUPPRESSED = FALSE AND VACCINE_ID in ('SHING_1B','SHING_2B', 'SHING_1C', 'SHING_2C') THEN 'Not applicable'
 -- Shingles routine catch up 70-79 SHING_1B and SHING_2B
 WHEN TURN_65_AFTER_SEP_2023 = FALSE AND IS_IMMUNOSUPPRESSED = FALSE AND VACCINE_ID in ('SHING_1','SHING_2', 'SHING_1C', 'SHING_2C') THEN 'Not applicable'
 --Shingles for 18+ immunosuppressed SHING_1C and SHING_2C
 WHEN IS_IMMUNOSUPPRESSED AND TURN_65_AFTER_SEP_2023 = FALSE AND VACCINE_ID in ('SHING_1','SHING_2','SHING_1B','SHING_2B') THEN 'Not applicable'
---PPV_1 routine for people aged 65+
-WHEN IS_IMMUNOSUPPRESSED = FALSE AND VACCINE_ID in ('PPV_1B') THEN 'Not applicable'
---PPV_1B for immunosuppressed and other conditions 
-WHEN IS_IMMUNOSUPPRESSED AND VACCINE_ID in ('PPV_1') THEN 'Not applicable'
+-- Shingles turns 65 after 2023 AND IS_IMMUNOSUPPRESSED SHING_1 and SHING_2 OR SHING_1C and SHING_2C
+WHEN IS_IMMUNOSUPPRESSED AND TURN_65_AFTER_SEP_2023 AND VACCINE_ID in ('SHING_1B','SHING_2B') THEN 'Not applicable'
+--RSV---------------------------------------------------------------------WHEN VACCINATIONS EXIST
+--Routine aged 75+ RSV_1
+WHEN IS_CARE_HOME_RESIDENT = FALSE AND IS_PREGNANT = FALSE AND VACCINE_ID in ('RSV_1B','RSV_1C') THEN 'Not applicable'
+--1st April 2026 introduce RSV_1B for older adult care home residents 
+WHEN IS_CARE_HOME_RESIDENT AND IS_PREGNANT = FALSE AND VACCINE_ID in ('RSV_1','RSV_1C') THEN 'Not applicable'
+--RSV for pregnant women RSV_1C
+WHEN IS_PREGNANT AND IS_CARE_HOME_RESIDENT = FALSE AND VACCINE_ID in ('RSV_1','RSV_1B') THEN 'Not applicable'
+WHEN IS_PREGNANT AND IS_CARE_HOME_RESIDENT AND VACCINE_ID in ('RSV_1') THEN 'Not applicable'
+---ALL vaccs----------------------------------------------------------------------
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE >= CURRENT_DATE() THEN 'Not due yet'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE < CURRENT_DATE() AND AGE_DAYS_APPROX < maximum_age_days THEN 'Overdue'
 WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = FALSE THEN 'Completed'  
