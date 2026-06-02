@@ -173,7 +173,8 @@ models:
       - name: in_month_activity_actual
         description: |
           Provider-reported in-month activity count (IN_MONTH_ACTIVITY_ACTUAL),
-          cast to numeric. Sparsely populated — only some providers submit it.
+          cast to numeric (can be fractional). Effectively NMUH-only: RNK00
+          populates it 100%, all other providers 0% (~5% of rows overall).
 
     data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
