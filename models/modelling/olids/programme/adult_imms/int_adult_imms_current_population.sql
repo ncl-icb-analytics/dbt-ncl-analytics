@@ -10,7 +10,7 @@ select distinct person_id
 FROM (
 SELECT person_id, risk_group, reference_date
     --from REPORTING.OLIDS_PROGRAMME.FCT_COVID_ELIGIBILITY
-    {{ ref('fct_covid_eligibility') }}
+    FROM {{ ref('fct_covid_eligibility') }}
    WHERE risk_group 
    in ('Chronic Respiratory Disease','Asplenia/Spleen Dysfunction','Chronic Heart Disease','Chronic Kidney Disease','Diabetes','Chronic Liver Disease','Immunosuppression')
    QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, RISK_GROUP ORDER BY REFERENCE_DATE DESC) = 1
