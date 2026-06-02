@@ -10,13 +10,15 @@
 --April 1st 2026 this is extended to people in care homes for older adults.(RSV_1B) proxy age 50+.
 SELECT 
          PERSON_ID 
-        ,AGE AS CURRENT_AGE
+       ,AGE AS CURRENT_AGE
         ,IS_CARE_HOME_RESIDENT
-        ,IS_IMMUNOSUPPRESSED
         ,IS_PREGNANT
-        ,VACCINE_ID as VACCINE_ID_FIRST
-        ,VACCINATION_DATE AS rsv_first_date
-        ,VACCINATION_STATUS AS rsv_first_status
-        ,AGE_AT_EVENT as  rsv_first_event_age
+        ,VACCINE_ID 
+        ,VACCINATION_DATE 
+        ,VACCINATION_STATUS 
+        ,AGE_AT_EVENT 
+        --in case there are multiple records for declined on the same day for where IS_PREGNANT and IS_CARE_HOME_RESIDENT are both TRUE.
+        ,ROW_NUMBER() OVER (PARTITION BY PERSON_ID ORDER BY VACCINATION_DATE ASC) AS row_num
     FROM {{ ref('int_adult_imms_vaccination_status_current') }}
     WHERE VACCINE_ID in ('RSV_1','RSV_1B','RSV_1C') and VACCINATION_STATUS in ('Declined')  
+    QUALIFY rownum = 1

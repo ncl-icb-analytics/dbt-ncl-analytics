@@ -6,14 +6,15 @@
         cluster_by=['person_id'])
 }}
 WITH
--- All eligible people (from adult current vaccination population meeting age 65+ ) 
+-- All eligible people (from adult current vaccination population meeting age 65+ or who are in a clinical risk group for pneumococcal) 
 eligible AS (
     SELECT 
         person_id
         ,age
+        ,IN_PPV_CLINICAL_RISK_GROUP
     FROM {{ ref('int_adult_imms_current_population') }}
     --FROM DEV__MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_CURRENT_POPULATION
-    where age >= 65
+    where age >= 65 OR IN_PPV_CLINICAL_RISK_GROUP
 )
 
 -- PPV SINGLE DOSE (PPV or PCV - starting 2026)

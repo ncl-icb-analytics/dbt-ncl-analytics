@@ -13,11 +13,21 @@ SELECT
         ,AGE AS CURRENT_AGE
         ,IS_CARE_HOME_RESIDENT
         ,IS_PREGNANT
-        ,TURN_75_AFTER_SEP_2024
-        ,TURN_80_AFTER_SEP_2024
-        ,VACCINE_ID as VACCINE_ID_FIRST
-        ,VACCINATION_DATE AS rsv_first_date
-        ,VACCINATION_STATUS AS rsv_first_status
-        ,AGE_AT_EVENT as  rsv_first_event_age
+        ,VACCINE_ID 
+        ,VACCINATION_DATE 
+        ,VACCINATION_STATUS 
+        ,AGE_AT_EVENT 
+        --This row prioritises 'Completed' over 'OutofSchedule' where IS_PREGNANT and IS_CARE_HOME_RESIDENT are BOTH TRUE (rare cases where there is someone under 50 in a care home setting)
+        ,ROW_NUMBER() OVER (
+            PARTITION BY person_id
+            ORDER BY
+                CASE
+                    WHEN VACCINATION_STATUS = 'Completed' THEN 1
+                    WHEN VACCINATION_STATUS = 'OutofSchedule' THEN 2
+                    ELSE 3
+                END,
+                VACCINATION_DATE DESC) as rownum
     FROM {{ ref('int_adult_imms_vaccination_status_current') }}
-    WHERE VACCINE_ID in ('RSV_1','RSV_1B','RSV_1C') and VACCINATION_STATUS in ('Completed', 'OutofSchedule')  
+    --FROM MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_VACCINATION_STATUS_CURRENT
+    WHERE VACCINE_ID in ('RSV_1','RSV_1B','RSV_1C') and VACCINATION_STATUS in ('Completed', 'OutofSchedule') 
+    QUALIFY rownum = 1  

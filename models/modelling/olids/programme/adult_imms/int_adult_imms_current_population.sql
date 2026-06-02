@@ -4,6 +4,19 @@
         tags=['adult_imms'],
         cluster_by=['person_id'])
 }}
+--define PPV clinical risk groups using COVID. NEED TO ADD Cochlear Implant and CSF leak once SNOMED codelists are available.
+WITH PPV_clinical_risk_groups AS (
+select distinct person_id
+FROM (
+SELECT person_id, risk_group, reference_date
+    --from REPORTING.OLIDS_PROGRAMME.FCT_COVID_ELIGIBILITY
+    {{ ref('fct_covid_eligibility') }}
+   WHERE risk_group 
+   in ('Chronic Respiratory Disease','Asplenia/Spleen Dysfunction','Chronic Heart Disease','Chronic Kidney Disease','Diabetes','Chronic Liver Disease','Immunosuppression')
+   QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, RISK_GROUP ORDER BY REFERENCE_DATE DESC) = 1
+) a
+)
+
 SELECT DISTINCT
 dem.PERSON_ID
 ,dem.sk_patient_id
@@ -26,9 +39,12 @@ END AS TURN_75_AFTER_SEP_2024
     WHEN dem.BIRTH_DATE_APPROX > '1957-09-01' AND dem.BIRTH_DATE_APPROX <= '1958-09-01'
     THEN TRUE ELSE FALSE 
 END AS TURN_65_AFTER_SEP_2023
-,CASE WHEN ch.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_CARE_HOME_RESIDENT
 --use the general care home flag as this is more complete than the COVID group.
+,CASE WHEN ch.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_CARE_HOME_RESIDENT
+--general immunosuppression flag for Shingles programme eligibility
 ,CASE WHEN imm.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_IMMUNOSUPPRESSED
+--PPV clinical risk group flag which includes immunosuppression but also other risk groups eligible for PPV
+,CASE WHEN ppv.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IN_PPV_CLINICAL_RISK_GROUP
 ,CASE WHEN preg.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_PREGNANT
 ,dem.GENDER
 ,CASE
@@ -119,9 +135,10 @@ LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = de
 LEFT JOIN {{ ref('dim_person_care_home') }} ch using (PERSON_ID)
 LEFT JOIN (SELECT DISTINCT PERSON_ID FROM {{ ref('int_covid_immunosuppression') }}) imm on imm.person_id = dem.person_id
 --LEFT JOIN (SELECT DISTINCT PERSON_ID FROM MODELLING.OLIDS_PROGRAMME.INT_COVID_IMMUNOSUPPRESSION) imm on imm.person_id = dem.person_id
+LEFT JOIN PPV_clinical_risk_groups ppv on ppv.person_id = dem.person_id
 LEFT JOIN (select person_id from {{ ref('fct_person_pregnancy_status') }} where is_child_bearing_age_12_55) preg on preg.person_id = dem.person_id
 --LEFT JOIN (select person_id from REPORTING.OLIDS_PERSON_STATUS.fct_person_pregnancy_status where is_child_bearing_age_12_55) preg on preg.person_id = dem.person_id
 WHERE dem.is_active 
 AND dem.IS_DECEASED = FALSE
 --remove lower age limit to include residents needing the Shingles vaccine aged 18+ and currently pregnant women (of childbearing age 12-55). 
-AND dem.age >= 12
+AND dem.age >= 18

@@ -5,16 +5,17 @@
         cluster_by=['person_id'])
 }}
 WITH
--- All eligible people (from adult current vaccination population meeting age 65+ or catch up campaign 70-79)
+-- All eligible people (from adult current vaccination population meeting age 65+ or catch up campaign 70-79 or identified as age 18+ and immunosuppressed)
 eligible AS (
     SELECT 
         person_id
         ,age
        ,TRUE as eligible
         ,TURN_65_AFTER_SEP_2023
+        ,IS_IMMUNOSUPPRESSED
     FROM {{ ref('int_adult_imms_current_population') }}
     --FROM DEV__MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_CURRENT_POPULATION
-    where age between 70 and 79 or TURN_65_AFTER_SEP_2023 = 'YES'
+    where age between 70 and 79 or TURN_65_AFTER_SEP_2023 OR IS_IMMUNOSUPPRESSED
 )
 
 -- SHINGLES DOSE 1
