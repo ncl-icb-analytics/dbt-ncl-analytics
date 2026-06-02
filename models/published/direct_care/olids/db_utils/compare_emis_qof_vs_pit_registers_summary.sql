@@ -28,7 +28,13 @@ WITH validated_practices AS (
 ),
 
 person_practices AS (
-    -- Filter to patients actively registered at reference date, at validated practices only
+    -- Filter to patients registered at the reference date, at validated practices only.
+    -- Death handling: QOF registers retain patients who died within the reporting period
+    -- (death is not deregistration), and EMIS extracts run on the live practice list where
+    -- the recently deceased have not yet been deregistered. So we keep a patient if they are
+    -- currently active OR died within qof_recent_death_months before the reference date.
+    -- Excluding all deceased (the previous behaviour) under-counted death-heavy registers,
+    -- most visibly Palliative Care (~-9%). Window anchored on qof_reference_date().
     SELECT
         h.person_id,
         h.practice_code,
@@ -37,8 +43,13 @@ person_practices AS (
     INNER JOIN validated_practices vp ON h.practice_code = vp.practice_code
     WHERE h.effective_start_date <= {{ qof_reference_date() }}
       AND (h.effective_end_date IS NULL OR h.effective_end_date >= {{ qof_reference_date() }})
-      AND h.is_active = TRUE
-      AND (h.is_deceased = FALSE OR h.death_date_approx > {{ qof_reference_date() }})
+      AND (
+          h.is_active = TRUE
+          OR (
+              h.death_date_approx > DATEADD('month', -{{ var('qof_recent_death_months') }}, {{ qof_reference_date() }})
+              AND h.death_date_approx <= {{ qof_reference_date() }}
+          )
+      )
 ),
 
 -- Get pit register data for each person
