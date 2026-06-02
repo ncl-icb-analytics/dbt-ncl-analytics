@@ -168,7 +168,12 @@ QUALIFY
 -- keep only rows that are not beaten by a future better priority
     AND priority = best_future_priority
 )
---IDENTIFY DUPLICATE ROWS WHERE SAME CODE CAN BE USED FOR DIFFERENT DOSES
+/*
+Keep all SHING_1 / 1B / 1C rows (even duplicates on same day)
+Remove SHING_2 / 2B / 2C ONLY when they occur on the same EVENT_DATE as a dose 1
+Keep SHING_2 if it’s on a different date (valid second dose)
+Leave all other vaccines untouched
+*/
 ,IMM_ADM_DOSE_DEDUP as (
 	SELECT 
 	PERSON_ID,
@@ -192,42 +197,20 @@ QUALIFY
     EVENT_TYPE,
 	EVENT_DATE,
 	OUT_OF_SCHEDULE,
-    ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE ORDER BY EVENT_DATE ASC) AS row_num, 
-    COUNT(*) OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE) AS TOTAL_EVENTS 
-    FROM IMM_ADM_DECLINED_CONFLICT     
-          ) 
---SELECT FINAL VACCINATIONS DATASET DE-DUPLICATION BY EVENT_DATE and DOSE 
-,DOSE_DEDUP as (
- SELECT 
-	PERSON_ID,
-    BIRTH_DATE_APPROX,
-    IS_CARE_HOME_RESIDENT,
-    IS_IMMUNOSUPPRESSED,
-    IN_PPV_CLINICAL_RISK_GROUP,
-    IS_PREGNANT,
-    TURN_65_AFTER_SEP_2023,
-    AGE_DAYS_APPROX,
-	AGE_AT_EVENT,
-    AGE,
-    AGE_BAND_5Y,
-    VACCINE_ORDER,
-	VACCINE_ID,
-	VACCINE_NAME,
-	DOSE_NUMBER,
-    ELIGIBLE_FROM_DATE,
-    ELIGIBLE_TO_DATE,
-    MAXIMUM_AGE_DAYS,
-    EVENT_TYPE,
-	EVENT_DATE,
-	OUT_OF_SCHEDULE
-	FROM IMM_ADM_DOSE_DEDUP
-WHERE 
---deduplicate where codes are non dose specific RSV, PPV, SHINGLES
-(dose_number = 1 AND row_num = 1)
-OR (dose_number = 2 AND row_num = 2)
---allow for single code for second dose of Shingles
-OR (VACCINE_ID in ('SHING_2','SHING_2B','SHING_2C') AND total_events = 1)
-)
+   --  ROW_NUMBER() OVER (PARTITION BY PERSON_ID, VACCINE_ID ORDER BY EVENT_DATE ASC) AS row_num, 
+   -- COUNT(*) OVER (PARTITION BY PERSON_ID, VACCINE_ID, EVENT_TYPE) AS TOTAL_EVENTS
+    --COUNT(*) OVER (PARTITION BY PERSON_ID, VACCINE_NAME, DOSE_NUMBER) AS TOTAL_EVENTS 
+    FROM IMM_ADM_DECLINED_CONFLICT  
+     QUALIFY NOT (
+    -- Identify SHING dose 2 records
+    VACCINE_ID LIKE 'SHING_2%'
+    -- Check if a dose 1 exists on same day for same person
+    AND COUNT_IF(
+        VACCINE_ID LIKE 'SHING_1%'
+    ) OVER (
+        PARTITION BY PERSON_ID, EVENT_DATE
+    ) > 0
+          ) )
 --in some cases someone has been vaccinated and then had a subsequent contraindicated code added. Choose earlier Admin
 ,ADMIN_CONTRA_CONFLICT as (
 select *,
@@ -241,7 +224,7 @@ ROW_NUMBER() OVER (
                 END,
                 event_date DESC
         ) AS rownum
-FROM DOSE_DEDUP
+FROM IMM_ADM_DOSE_DEDUP
 )
 
 --ADD VACCINATION STATUS FOR EVENTS.
