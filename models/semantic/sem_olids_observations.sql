@@ -26,6 +26,8 @@
     - Cardiovascular: BP, BP control, cholesterol, LDL, QRISK
     - Metabolic: HbA1c, BMI, waist circumference
     - Renal: eGFR (CKD staging), creatinine, urine ACR
+    - Liver: ALT, GGT, bilirubin, composite high-LFT flag
+    - Haematology: haemoglobin (anaemia), platelets, eosinophils
     - Frailty: Electronic Frailty Index (eFI/eFI2), Rockwood Clinical Frailty Scale
     - Diabetes care: Foot examination, retinal screening, DM 8 care processes
 #}
@@ -97,7 +99,23 @@ TABLES(
 
     dm8cp AS {{ ref('fct_person_diabetes_8_care_processes') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Diabetes 8 care processes completion status (12-month lookback). Only populated for persons on the diabetes register.'
+        COMMENT = 'Diabetes 8 care processes completion status (12-month lookback). Only populated for persons on the diabetes register.',
+
+    lft AS {{ ref('int_lft_latest') }}
+        PRIMARY KEY (person_id)
+        COMMENT = 'Latest liver function tests (ALT, GGT, bilirubin) with high flags vs clinical upper reference limits. Pairs with NAFLD/chronic liver disease registers.',
+
+    haemoglobin AS {{ ref('int_haemoglobin_latest') }}
+        PRIMARY KEY (person_id)
+        COMMENT = 'Latest haemoglobin with anaemia category',
+
+    platelets AS {{ ref('int_platelets_latest') }}
+        PRIMARY KEY (person_id)
+        COMMENT = 'Latest platelet count with category',
+
+    eosinophils AS {{ ref('int_eosinophil_count_latest') }}
+        PRIMARY KEY (person_id)
+        COMMENT = 'Latest blood eosinophil count with category. Relevant to asthma/COPD phenotyping and biologic eligibility.'
 )
 
 RELATIONSHIPS(
@@ -116,7 +134,11 @@ RELATIONSHIPS(
     rockwood (person_id) REFERENCES demographics,
     foot_exam (person_id) REFERENCES demographics,
     retinal (person_id) REFERENCES demographics,
-    dm8cp (person_id) REFERENCES demographics
+    dm8cp (person_id) REFERENCES demographics,
+    lft (person_id) REFERENCES demographics,
+    haemoglobin (person_id) REFERENCES demographics,
+    platelets (person_id) REFERENCES demographics,
+    eosinophils (person_id) REFERENCES demographics
 )
 
 FACTS(
@@ -137,6 +159,16 @@ FACTS(
     egfr.egfr_value AS egfr_value COMMENT = 'eGFR value (mL/min/1.73m2)',
     creatinine.creatinine_value AS creatinine_value COMMENT = 'Serum creatinine (umol/L)',
     acr.acr_value AS acr_value COMMENT = 'Urine ACR (mg/mmol)',
+
+    -- Liver function
+    lft.alt_value AS alt_value WITH SYNONYMS = ('ALT', 'alanine aminotransferase') COMMENT = 'Latest ALT (U/L)',
+    lft.ggt_value AS ggt_value WITH SYNONYMS = ('GGT', 'gamma GT') COMMENT = 'Latest GGT (U/L)',
+    lft.bilirubin_value AS bilirubin_value COMMENT = 'Latest total bilirubin (umol/L)',
+
+    -- Haematology
+    haemoglobin.inferred_value AS haemoglobin_value WITH SYNONYMS = ('Hb', 'haemoglobin') COMMENT = 'Latest haemoglobin (g/L)',
+    platelets.inferred_value AS platelet_count WITH SYNONYMS = ('platelets', 'PLT') COMMENT = 'Latest platelet count (10^9/L)',
+    eosinophils.inferred_value AS eosinophil_count WITH SYNONYMS = ('eosinophils', 'eos') COMMENT = 'Latest blood eosinophil count (10^9/L)',
 
     -- Frailty
     efi.latest_efi_score_preferred AS latest_efi_score_preferred COMMENT = 'Electronic Frailty Index score (0-1). Uses most recent of eFI or eFI2.',
@@ -166,6 +198,10 @@ DIMENSIONS(
     rockwood.latest_rockwood_date AS clinical_effective_date COMMENT = 'Date of latest Rockwood assessment',
     foot_exam.latest_foot_exam_date AS clinical_effective_date COMMENT = 'Date of latest foot examination',
     retinal.latest_retinal_date AS clinical_effective_date COMMENT = 'Date of latest retinal screening',
+    lft.last_lft_date AS clinical_effective_date COMMENT = 'Date of latest liver function test (most recent of ALT/GGT/bilirubin)',
+    haemoglobin.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest haemoglobin',
+    platelets.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest platelet count',
+    eosinophils.clinical_effective_date AS clinical_effective_date COMMENT = 'Date of latest eosinophil count',
 
     -- Core Demographics
     demographics.gender AS gender COMMENT = 'Patient gender (Male, Female, Unknown)',
@@ -177,13 +213,18 @@ DIMENSIONS(
     demographics.age_life_stage AS age_life_stage COMMENT = 'Life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown)',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
     demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
+    demographics.ethnicity_granular AS ethnicity_granular COMMENT = 'Detailed ethnicity classification (Unknown if not recorded)',
+    demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
+    demographics.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
     demographics.is_active AS is_active COMMENT = 'Currently registered',
+    demographics.is_deceased AS is_deceased COMMENT = 'Deceased status',
 
     -- Organisation
     demographics.practice_code AS practice_code COMMENT = 'GP practice ODS code',
     demographics.practice_name AS practice_name COMMENT = 'GP practice name',
     demographics.pcn_code AS pcn_code COMMENT = 'Primary Care Network code',
     demographics.pcn_name AS pcn_name COMMENT = 'Primary Care Network name',
+    demographics.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN name with borough prefix',
     demographics.borough_registered AS borough_registered COMMENT = 'Registration borough',
     demographics.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the registered practice: QMJ = NHS North Central London (Camden, Islington, Barnet, Enfield, Haringey); QRV = NHS North West London (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside the WNL footprint.',
     demographics.sub_icb_name AS sub_icb_name COMMENT = 'Sub-ICB display name (NHS North Central London or NHS North West London) of the registered practice. NULL outside the WNL footprint.',
@@ -194,6 +235,7 @@ DIMENSIONS(
     demographics.ward_code AS ward_code COMMENT = 'Electoral ward 2025 code',
     demographics.ward_name AS ward_name COMMENT = 'Electoral ward 2025 name',
     demographics.borough_resident AS borough_resident COMMENT = 'Residence borough',
+    demographics.is_london_resident AS is_london_resident COMMENT = 'Resides in Greater London',
     demographics.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Residence neighbourhood',
 
     -- Deprivation
@@ -261,6 +303,17 @@ DIMENSIONS(
     acr.is_microalbuminuria AS is_microalbuminuria COMMENT = 'Microalbuminuria present',
     acr.is_macroalbuminuria AS is_macroalbuminuria COMMENT = 'Macroalbuminuria present',
 
+    -- Liver Function
+    lft.is_high_alt AS is_high_alt COMMENT = 'ALT above clinical upper reference limit',
+    lft.is_high_ggt AS is_high_ggt COMMENT = 'GGT above clinical upper reference limit',
+    lft.is_high_bilirubin AS is_high_bilirubin COMMENT = 'Bilirubin above clinical upper reference limit',
+    lft.high_lft AS high_lft WITH SYNONYMS = ('abnormal LFT', 'deranged LFTs') COMMENT = 'Any of ALT/GGT/bilirubin above its upper reference limit',
+
+    -- Haematology
+    haemoglobin.haemoglobin_category AS haemoglobin_category WITH SYNONYMS = ('anaemia category') COMMENT = 'Haemoglobin category (e.g. Anaemia, Normal, High)',
+    platelets.platelets_category AS platelets_category WITH SYNONYMS = ('thrombocytopenia category') COMMENT = 'Platelet count category (e.g. Low, Normal, High)',
+    eosinophils.eosinophil_category AS eosinophil_category COMMENT = 'Eosinophil count category (e.g. Normal, Raised). Raised eosinophils inform asthma/COPD biologic eligibility.',
+
     -- Electronic Frailty Index
     efi.latest_efi_type_preferred AS latest_efi_type_preferred COMMENT = 'eFI algorithm type (EFI, EFI2). Uses most recent available. Only where explicitly GP-coded.',
     efi.latest_efi_category_preferred AS latest_efi_category_preferred WITH SYNONYMS = ('frailty category', 'eFI category') COMMENT = 'eFI frailty category (Fit, Mildly Frail, Moderately Frail, Severely Frail). Only where explicitly GP-coded — not dynamically estimated. Coverage is incomplete. For population frailty prevalence, use has_frailty from sem_olids_population instead.',
@@ -311,7 +364,7 @@ METRICS(
     -- HbA1c
     hba1c.patients_with_hba1c AS COUNT(DISTINCT hba1c.person_id) COMMENT = 'Patients with HbA1c',
     hba1c.hba1c_at_target_count AS COUNT(DISTINCT CASE WHEN hba1c.meets_qof_target THEN hba1c.person_id END) COMMENT = 'Patients with HbA1c at QOF target',
-    hba1c.hba1c_above_target_count AS COUNT(DISTINCT CASE WHEN NOT hba1c.meets_qof_target AND hba1c.person_id IS NOT NULL THEN hba1c.person_id END) COMMENT = 'Patients with HbA1c above QOF target',
+    hba1c.hba1c_above_target_count AS COUNT(DISTINCT CASE WHEN NOT hba1c.meets_qof_target THEN hba1c.person_id END) COMMENT = 'Patients with HbA1c above QOF target',
     hba1c.hba1c_high_risk_count AS COUNT(DISTINCT CASE WHEN hba1c.hba1c_category = 'Diabetes - High Risk' THEN hba1c.person_id END) COMMENT = 'Patients with HbA1c 75-85 (high risk)',
     hba1c.hba1c_very_high_risk_count AS COUNT(DISTINCT CASE WHEN hba1c.hba1c_category = 'Diabetes - Very High Risk' THEN hba1c.person_id END) COMMENT = 'Patients with HbA1c >=86 (very high risk)',
     hba1c.hba1c_poor_control_count AS COUNT(DISTINCT CASE WHEN hba1c.hba1c_category IN ('Diabetes - High Risk', 'Diabetes - Very High Risk') THEN hba1c.person_id END) COMMENT = 'Patients with HbA1c >=75 (poor control)',
@@ -381,6 +434,15 @@ METRICS(
     dm8cp.dm_patients_count AS COUNT(DISTINCT dm8cp.person_id) COMMENT = 'Patients on diabetes register (in DM 8CP model)',
     dm8cp.dm_all_8cp_count AS COUNT(DISTINCT CASE WHEN dm8cp.all_processes_completed THEN dm8cp.person_id END) COMMENT = 'DM patients with all 8 care processes completed',
 
+    -- Liver Function
+    lft.patients_with_lft AS COUNT(DISTINCT lft.person_id) COMMENT = 'Patients with any liver function test',
+    lft.high_lft_count AS COUNT(DISTINCT CASE WHEN lft.high_lft THEN lft.person_id END) COMMENT = 'Patients with any abnormal LFT (ALT/GGT/bilirubin above reference)',
+
+    -- Haematology
+    haemoglobin.patients_with_haemoglobin AS COUNT(DISTINCT haemoglobin.person_id) COMMENT = 'Patients with haemoglobin',
+    platelets.patients_with_platelets AS COUNT(DISTINCT platelets.person_id) COMMENT = 'Patients with platelet count',
+    eosinophils.patients_with_eosinophils AS COUNT(DISTINCT eosinophils.person_id) COMMENT = 'Patients with eosinophil count',
+
     -- Averages
     bp.avg_systolic_bp AS AVG(bp.systolic_value) COMMENT = 'Average systolic BP',
     bp.avg_diastolic_bp AS AVG(bp.diastolic_value) COMMENT = 'Average diastolic BP',
@@ -393,9 +455,14 @@ METRICS(
     acr.avg_acr AS AVG(acr.acr_value) COMMENT = 'Average ACR',
     efi.avg_efi_score AS AVG(efi.latest_efi_score_preferred) COMMENT = 'Average eFI score',
     rockwood.avg_rockwood AS AVG(rockwood.rockwood_score) COMMENT = 'Average Rockwood score',
-    dm8cp.avg_dm_care_processes AS AVG(dm8cp.care_processes_completed) COMMENT = 'Average DM care processes completed (of 8)'
+    dm8cp.avg_dm_care_processes AS AVG(dm8cp.care_processes_completed) COMMENT = 'Average DM care processes completed (of 8)',
+    lft.avg_alt AS AVG(lft.alt_value) COMMENT = 'Average ALT (U/L)',
+    lft.avg_ggt AS AVG(lft.ggt_value) COMMENT = 'Average GGT (U/L)',
+    haemoglobin.avg_haemoglobin AS AVG(haemoglobin.inferred_value) COMMENT = 'Average haemoglobin (g/L)',
+    platelets.avg_platelets AS AVG(platelets.inferred_value) COMMENT = 'Average platelet count (10^9/L)',
+    eosinophils.avg_eosinophils AS AVG(eosinophils.inferred_value) COMMENT = 'Average eosinophil count (10^9/L)'
 )
 
-COMMENT = 'OLIDS Clinical Observations Semantic View - Biomarkers, frailty scores, diabetes care processes, and screening with category-based metrics. Includes patient-specific BP thresholds, eFI/Rockwood frailty, DM 8 care processes, foot exam and retinal screening. Grain: one row per person (latest values). ESP 2013 weights available via age_band_esp.'
+COMMENT = 'OLIDS Clinical Observations Semantic View - Biomarkers, frailty scores, diabetes care processes, and screening with category-based metrics. Includes patient-specific BP thresholds, liver function (ALT/GGT/bilirubin), haematology (haemoglobin/platelets/eosinophils), eFI/Rockwood frailty, DM 8 care processes, foot exam and retinal screening. Grain: one row per person (latest values). ESP 2013 weights available via age_band_esp.'
 AI_SQL_GENERATION 'Always filter to is_active = TRUE unless asked otherwise. For BP control queries, use bp_controlled_count and patients_with_bp_assessment to calculate control rate. Prefer category-based counts over averages for population health questions. BP control uses patient-specific thresholds based on T2DM, CKD, and age. DM 8 care processes (dm8cp table) are only populated for persons on the diabetes register — filter to dm8cp metrics when analysing diabetes care. The 8 processes are: HbA1c, BP, cholesterol, creatinine, urine ACR, foot exam, BMI, and smoking status — each checked within last 12 months. AGE-STANDARDISED RATES: To calculate an age-standardised rate (ASR) using ESP 2013 (the standard used by ONS/OHID/Fingertips), use this pattern: WITH strata AS (SELECT <area_column>, age_band_esp, COUNT(DISTINCT CASE WHEN <condition_or_category> THEN person_id END) AS cases, COUNT(DISTINCT person_id) AS pop, ANY_VALUE(esp_proportion) AS esp_prop FROM <this_view> WHERE is_active = TRUE GROUP BY <area_column>, age_band_esp) SELECT <area_column>, SUM(cases) AS crude_cases, SUM(pop) AS crude_pop, ROUND(SUM((cases / NULLIF(pop, 0)) * esp_prop) * 100000, 1) AS asr_per_100k FROM strata GROUP BY <area_column>. For internal NCL comparison instead of ESP, replace esp_prop with (pop / SUM(pop) OVER ()) to use the NCL population structure as the standard.'
-AI_QUESTION_CATEGORIZATION 'Use this view for questions about: BP control, HbA1c control, cholesterol, BMI, waist circumference, eGFR, CKD staging, creatinine, QRISK, ACR, frailty (eFI, Rockwood), diabetic foot examination, retinal screening, diabetes 8 care processes, and all clinical biomarkers. For condition prevalence and demographics use sem_olids_population. For trends over time use sem_olids_trends.'
+AI_QUESTION_CATEGORIZATION 'Use this view for questions about: BP control, HbA1c control, cholesterol, BMI, waist circumference, eGFR, CKD staging, creatinine, QRISK, ACR, liver function (ALT, GGT, bilirubin, abnormal LFTs), haemoglobin/anaemia, platelets, eosinophils, frailty (eFI, Rockwood), diabetic foot examination, retinal screening, diabetes 8 care processes, and all latest clinical biomarkers. This view holds the LATEST value per biomarker only — for serial readings, latest-2, or trajectory over time use sem_olids_observations_history. For condition prevalence and demographics use sem_olids_population. For condition trends over time use sem_olids_trends.'

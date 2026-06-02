@@ -93,6 +93,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
     from 
         {{ ref('obt_appointment_gp') }} gpa
     left join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
+    where gpa.code not in ('3', '0') -- Attended
     group by 
         pp.sk_patient_id, date_trunc('month', start_date)
 )
