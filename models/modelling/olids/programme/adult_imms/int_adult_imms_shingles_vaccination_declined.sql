@@ -24,4 +24,14 @@ SELECT
     LEFT JOIN {{ ref('int_adult_imms_vaccination_status_current') }}  v2 
     ON v1.PERSON_ID = v2.PERSON_ID AND v2.VACCINE_ID in ('SHING_2','SHING_2B','SHING_2C') AND v2.VACCINATION_STATUS in ('Declined')  
     AND v1.VACCINATION_DATE <> v2.VACCINATION_DATE
-    WHERE v1.VACCINE_ID in ('SHING_1','SHING_1B','SHING_1C') and v1.VACCINATION_STATUS in ('Declined')  
+    WHERE v1.VACCINE_ID in ('SHING_1','SHING_1B','SHING_1C') and v1.VACCINATION_STATUS in ('Declined')
+-- Guard one row per person. Upstream can leave several applicable SHING_1/SHING_2 variants live when
+-- the 'Not applicable' rules don't cover overlapping eligibility (e.g. turned-65 AND immunosuppressed);
+-- the self-join then multiplies them. Keep the most recent dose pair.
+-- Real fix is upstream mutual-exclusion in int_adult_imms_vaccination_events_current.
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY v1.PERSON_ID
+        ORDER BY v1.VACCINATION_DATE DESC,
+                 v2.VACCINATION_DATE DESC NULLS LAST,
+                 v1.VACCINE_ID
+    ) = 1

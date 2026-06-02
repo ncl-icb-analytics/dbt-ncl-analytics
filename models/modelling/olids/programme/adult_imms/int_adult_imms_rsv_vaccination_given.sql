@@ -20,4 +20,14 @@ SELECT
         ,VACCINATION_STATUS AS rsv_first_status
         ,AGE_AT_EVENT as  rsv_first_event_age
     FROM {{ ref('int_adult_imms_vaccination_status_current') }}
-    WHERE VACCINE_ID in ('RSV_1','RSV_1B','RSV_1C') and VACCINATION_STATUS in ('Completed', 'OutofSchedule')  
+    WHERE VACCINE_ID in ('RSV_1','RSV_1B','RSV_1C') and VACCINATION_STATUS in ('Completed', 'OutofSchedule')
+-- Guard one row per person. Upstream can leave several applicable RSV variants live when the
+-- 'Not applicable' rules don't cover overlapping eligibility (e.g. care-home AND pregnant).
+-- Keep the most complete, most recent. Real fix is upstream mutual-exclusion in
+-- int_adult_imms_vaccination_events_current.
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY PERSON_ID
+        ORDER BY CASE WHEN VACCINATION_STATUS = 'Completed' THEN 0 ELSE 1 END,
+                 VACCINATION_DATE DESC,
+                 VACCINE_ID
+    ) = 1
