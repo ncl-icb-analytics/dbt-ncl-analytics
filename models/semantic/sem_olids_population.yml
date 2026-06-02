@@ -21,6 +21,7 @@ models:
       - dim_person_demographics: Core demographics, registration, geography
       - dim_person_conditions: Boolean flags for all 38 conditions + diabetes type + summary counts
       - dim_person_status_summary: Vulnerability, risk behaviours, polypharmacy, data sharing
+      - dim_person_ccms: Cambridge Comorbidity Score (continuous weighted score, 16+ only)
       - esp_2013: European Standard Population weights
 
     config:
