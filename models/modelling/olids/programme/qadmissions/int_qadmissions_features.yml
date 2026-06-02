@@ -242,8 +242,6 @@ models:
           Moderate, Heavy, VeryHeavy). Sourced from int_qadmissions_alcohol_category,
           which derives cat6 from int_alcohol_audit_scores filtered to
           Full AUDIT and takes the highest cat6 ever recorded per person.
-          NULL when the person has no Full AUDIT record - NULL is passed
-          through to the registered QAdmissions model.
         data_tests:
           - accepted_values:
               arguments:

@@ -17,11 +17,12 @@ Testing:
 */
 
 with inclusion_list as (
-    select *
-    from {{ ref('cltcs_full_detailed_patient_list')}}
+    select patient_id, area_code, olids_id
+    from {{ ref('cltcs_patient_list')}}
     )
 
 select il.patient_id
+      ,{{ hxflake_pseudo_generation('il.patient_id') }} AS re_id_key
  --   , il.fragmented_sk_patient_id_flag -- include as DQ check later, excluded for now
 --  , il.fragmented_person_id_flag
     , il.area_code
@@ -204,7 +205,7 @@ left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
 left join {{ref('stg_aic_int_efi2_scores')}} fr
     on il.olids_id = fr.person_id
-left join {{ref('stg_aic_int_ccms_current')}} ccms
+left join {{ref('dim_person_ccms')}} ccms
     on il.olids_id = ccms.person_id
 left join {{ref('int_rockwood_latest')}} rockwood
     on il.olids_id = rockwood.person_id

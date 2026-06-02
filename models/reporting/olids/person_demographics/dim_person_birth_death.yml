@@ -62,8 +62,8 @@ models:
                 values: [true, false]
       - name: death_source_flag
         description: 'Flag indicating the source of death information'
-      - name: is_dummy_patient
-        description: 'Flag indicating if record comes from dummy patient data'
+      - name: is_test_patient
+        description: 'Flag indicating if the record is a test patient (post-2026 OLIDS rename — was is_dummy_patient)'
         tests:
           - not_null
           - accepted_values:

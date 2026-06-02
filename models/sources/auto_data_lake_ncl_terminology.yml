@@ -399,6 +399,39 @@ sources:
       data_type: TEXT
     - name: SERVICE_AND_RULESET
       data_type: TEXT
+  - name: Q_ADMISSIONS
+    identifier: '"Q_ADMISSIONS"'
+    columns:
+    - name: CODE
+      data_type: NUMBER(38,0)
+    - name: CODE_DESCRIPTION
+      data_type: TEXT
+    - name: VOCABULARY
+      data_type: TEXT
+    - name: CODELIST_ID
+      data_type: TEXT
+    - name: CODELIST_NAME
+      data_type: TEXT
+    - name: CODELIST_VERSION
+      data_type: TEXT
+    - name: DEFINITION_ID
+      data_type: TEXT
+    - name: DEFINITION_NAME
+      data_type: TEXT
+    - name: DEFINITION_VERSION
+      data_type: NUMBER(38,0)
+    - name: DEFINITION_SOURCE
+      data_type: TEXT
+    - name: VERSION_DATETIME
+      data_type: TEXT
+    - name: UPLOADED_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: SOURCE_TABLE
+      data_type: TEXT
+    - name: DBID
+      data_type: TEXT
+    - name: CORE_CONCEPT_ID
+      data_type: NUMBER(38,0)
   - name: UKHSA_COVID_LATEST
     identifier: '"UKHSA_COVID_LATEST"'
     columns:

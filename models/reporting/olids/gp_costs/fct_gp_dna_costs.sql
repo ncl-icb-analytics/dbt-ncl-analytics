@@ -26,7 +26,7 @@ practice level. For role-level cost analysis use fct_gp_appointment_costs.
 */
 
 select
-    record_owner_organisation_code as practice_code,
+    publisher_organisation_code as practice_code,
     DATE_TRUNC('month', start_date) as report_month,
     -- Functionally determined by report_month; MAX() gives the same
     -- value for every row in the group and keeps the GROUP BY honest
@@ -91,5 +91,5 @@ select
 from {{ ref('int_appointment_gp_clean_recent') }}
 where is_attended = TRUE or is_dna = TRUE
 group by
-    record_owner_organisation_code,
+    publisher_organisation_code,
     DATE_TRUNC('month', start_date)

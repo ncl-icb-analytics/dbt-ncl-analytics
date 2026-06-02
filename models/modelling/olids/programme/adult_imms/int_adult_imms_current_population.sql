@@ -12,15 +12,24 @@ dem.PERSON_ID
 ,dem.AGE_BAND_5Y
 ,age.AGE_DAYS_APPROX
 --RSV catch up eligibility flag - turning 80 after 1st September 2024
--- ,CASE
---     WHEN dem.BIRTH_DATE_APPROX >= '1944-09-01' AND dem.BIRTH_DATE_APPROX <='1945-08-31'
---     THEN TRUE ELSE FALSE 
--- END AS TURN_80_AFTER_SEP_2024
+,CASE
+     WHEN dem.BIRTH_DATE_APPROX > '1943-09-01' AND dem.BIRTH_DATE_APPROX <= '1944-09-01'
+    THEN TRUE ELSE FALSE 
+END AS TURN_80_AFTER_SEP_2024
+--RSV routine - turning 75-79 after 1st September 2024
+,CASE
+    WHEN dem.BIRTH_DATE_APPROX > '1944-09-01' AND dem.BIRTH_DATE_APPROX <= '1949-09-01'
+    THEN TRUE ELSE FALSE 
+END AS TURN_75_AFTER_SEP_2024
 --Shingles programme eligibility flag - turning 65 after 1st September 2023
 ,CASE
-    WHEN dem.BIRTH_DATE_APPROX >= '1958-09-01' AND dem.BIRTH_DATE_APPROX <= '1959-08-31'
+    WHEN dem.BIRTH_DATE_APPROX > '1957-09-01' AND dem.BIRTH_DATE_APPROX <= '1958-09-01'
     THEN TRUE ELSE FALSE 
 END AS TURN_65_AFTER_SEP_2023
+,CASE WHEN ch.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_CARE_HOME_RESIDENT
+--use the general care home flag as this is more complete than the COVID group.
+,CASE WHEN imm.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_IMMUNOSUPPRESSED
+,CASE WHEN preg.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_PREGNANT
 ,dem.GENDER
 ,CASE
 WHEN dem.ETHNICITY_CATEGORY = 'Not Recorded' THEN 'Unknown'
@@ -103,16 +112,16 @@ ELSE dem.MAIN_LANGUAGE END AS MAIN_LANGUAGE
 ,dem.LSOA_CODE_21
 ,dem.IS_ACTIVE
 ,dem.is_deceased
---use the Covid LT care flag as it seems most accurate.
-,CASE WHEN cch.PERSON_ID IS NOT NULL THEN TRUE ELSE FALSE END AS IS_CARE_HOME_RESIDENT
--- ,ch.RESIDENCE_STATUS
--- ,ch.RESIDENCE_TYPE
 FROM {{ ref('dim_person_demographics') }} dem
-LEFT JOIN {{ ref('dim_person_age') }} age on age.PERSON_ID = dem.PERSON_ID
+LEFT JOIN {{ ref('dim_person_age') }} age using (PERSON_ID)
 LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = dem.LSOA_CODE_21
---LEFT JOIN {{ ref('dim_person_care_home') }} ch using (PERSON_ID)
-LEFT JOIN {{ ref('int_covid_long_term_residential_care') }} cch using (PERSON_ID)
+--LEFT JOIN REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_CARE_HOME
+LEFT JOIN {{ ref('dim_person_care_home') }} ch using (PERSON_ID)
+LEFT JOIN (SELECT DISTINCT PERSON_ID FROM {{ ref('int_covid_immunosuppression') }}) imm on imm.person_id = dem.person_id
+--LEFT JOIN (SELECT DISTINCT PERSON_ID FROM MODELLING.OLIDS_PROGRAMME.INT_COVID_IMMUNOSUPPRESSION) imm on imm.person_id = dem.person_id
+LEFT JOIN (select person_id from {{ ref('fct_person_pregnancy_status') }} where is_child_bearing_age_12_55) preg on preg.person_id = dem.person_id
+--LEFT JOIN (select person_id from REPORTING.OLIDS_PERSON_STATUS.fct_person_pregnancy_status where is_child_bearing_age_12_55) preg on preg.person_id = dem.person_id
 WHERE dem.is_active 
 AND dem.IS_DECEASED = FALSE
---decrease lower age limit to include residents in care homes aligning with COVID_LT_CARE.
-AND dem.age >= 60
+--remove lower age limit to include residents needing the Shingles vaccine aged 18+ and currently pregnant women (of childbearing age 12-55). 
+AND dem.age >= 12

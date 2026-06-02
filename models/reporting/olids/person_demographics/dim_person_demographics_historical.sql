@@ -287,7 +287,7 @@ SELECT
         ELSE FALSE
     END AS is_active,
     bd.is_deceased,
-    bd.is_dummy_patient,
+    bd.is_test_patient,
     CASE
         WHEN pwa.practice_code IS NULL THEN 'No registration history'
         WHEN bd.is_deceased

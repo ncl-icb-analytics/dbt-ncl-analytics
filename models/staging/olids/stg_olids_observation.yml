@@ -22,11 +22,11 @@ models:
         description: Foreign key to observation.id - parent observation if this is a sub-observation
       - name: clinical_effective_date
         description: Date the observation was clinically effective
-      - name: date_precision_concept_id
+      - name: clinical_effective_date_precision_source_concept_id
         description: Foreign key to concept.id - precision of the clinical effective date
       - name: result_value
         description: Numeric result value of the observation
-      - name: result_value_units_concept_id
+      - name: result_units_source_concept_id
         description: Foreign key to concept.id - unit of measure for the result value
       - name: result_date
         description: Date the result was obtained
@@ -54,7 +54,7 @@ models:
         description: Patient age in months for babies (0-24 months)
       - name: age_at_event_neonate
         description: Patient age in days for neonates (0-28 days)
-      - name: episodicity_concept_id
+      - name: episodicity_source_concept_id
         description: Foreign key to concept.id - episodicity classification (first, new, review)
       - name: is_primary
         description: Boolean indicating if this is the primary observation
@@ -68,12 +68,10 @@ models:
         description: Deletion flag from LDS
       - name: lds_id
         description: LDS system identifier
-      - name: record_owner_organisation_code
-        description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
+      - name: publisher_organisation_code
+        description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
       - name: mapped_concept_id
         description: Foreign key to concept.id - mapped standardized concept
       - name: mapped_concept_code
@@ -84,9 +82,9 @@ models:
         description: Code for the result unit
       - name: result_unit_display
         description: Display text for the result unit
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:

@@ -11,10 +11,10 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 Do not include Lithium as this is already catpured in int_lithium_medications_all
 */
 
---date that medication data was last acquired from the Practice systems
+--date that medication data was first acquired from the Practice systems
 WITH Medsupload as (
 SELECT 
-    MAX(lds_datetime_data_acquired) AS lds_datetime_data_acquired
+    MAX(lds_datetime_first_acquired) AS lds_datetime_first_acquired
     FROM {{ ref('stg_olids_medication_order') }}
 )
 --Chapter 4.2.1 Antipsychotic Drugs
@@ -87,5 +87,5 @@ FROM (
 ) a
 
 --ensure there are orders only up to the data acquired date
-WHERE ORDER_DATE <= (SELECT lds_datetime_data_acquired from Medsupload)
+WHERE ORDER_DATE <= (SELECT lds_datetime_first_acquired from Medsupload)
 ORDER BY person_id, order_date DESC

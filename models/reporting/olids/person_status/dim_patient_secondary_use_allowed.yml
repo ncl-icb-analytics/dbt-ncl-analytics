@@ -1,0 +1,18 @@
+
+models:
+  - name: dim_patient_secondary_use_allowed
+    description: 'sk_patient_id-grain allow-list for secondary use. One row per sk_patient_id where AT LEAST ONE linked person is allowed for secondary use. INNER JOIN to this from OLIDS models keyed by sk_patient_id. (Note: int_patient_person_unique is not actually unique on sk_patient_id — ~400k sk_patient_ids map to multiple persons upstream — so we collapse via DISTINCT to preserve the dim grain.)'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: sk_patient_id
+        description: 'Surrogate patient key - primary key'
+        tests:
+          - unique
+          - not_null
+      - name: is_allowed_secondary_use
+        description: Always TRUE for rows in this dim (presence implies allowed)
+        tests:
+          - not_null

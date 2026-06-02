@@ -66,13 +66,18 @@ SELECT
     record_type,
     neo_nate_flag,
     cancelled_flag,
-    ccg_of_registration_code,
-    place_of_death_ccg_code,
+    -- CCGs were abolished in 2022 and replaced by sub-ICBs; the deaths
+    -- source caught up in the same window as the OLIDS schema regen.
+    -- Renamed: ccg_of_registration_code -> sub_icb_code_from_gp_practice_code,
+    -- place_of_death_ccg_code -> place_of_death_sub_icb_code,
+    -- ccg_of_residence_code -> sub_icb_of_residence_code.
+    sub_icb_code_from_gp_practice_code,
+    place_of_death_sub_icb_code,
     place_of_death_org_code,
     place_of_death_ula_code,
     ula_of_residence_code,
     ward_of_residence_code,
-    ccg_of_residence_code,
+    sub_icb_of_residence_code,
     county_district_of_res_code,
     county_of_residence_code,
     gor_of_residence_code,

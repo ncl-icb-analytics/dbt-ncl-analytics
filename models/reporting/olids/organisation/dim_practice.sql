@@ -39,8 +39,12 @@ WITH practice_org_joined AS (
     borough_map.sub_icb_name,
     
     -- Practice organisational details from OLIDS
-    org.type_code AS practice_type_code,
-    org.type_desc AS practice_type_desc,
+    -- type_code / type_desc were removed in the 2026 OLIDS schema realignment
+    -- (issue #747). The replacement free-text `description` is exposed here as
+    -- practice_type_desc to preserve the downstream column name; practice_type_code
+    -- is no longer available from OLIDS.
+    CAST(NULL AS VARCHAR) AS practice_type_code,
+    org.description AS practice_type_desc,
     org.postcode AS practice_postcode,
     org.open_date AS practice_open_date,
     org.close_date AS practice_close_date,
@@ -50,6 +54,10 @@ WITH practice_org_joined AS (
     -- Enhanced practice details from Dictionary Organisation
     dict_org.start_date AS practice_start_date,
     dict_org.end_date AS practice_end_date,
+    dict_org.status AS practice_status,
+    -- Operationally active when ODS marks the practice Active and the end date has not passed
+    (COALESCE(dict_org.status, 'Unknown') = 'Active'
+        AND (dict_org.end_date IS NULL OR dict_org.end_date > CURRENT_DATE())) AS is_active_practice,
     dict_org.address_line_1 AS practice_address_line_1,
     dict_org.address_line_2 AS practice_address_line_2,
     dict_org.address_line_3 AS practice_address_line_3,
@@ -74,6 +82,8 @@ WITH practice_org_joined AS (
     dict.stp_code AS icb_code,
     dict.stp_name AS icb_name,
     dict.sk_organisation_id_stp AS sk_icb_id,
+    -- WNL = merged ICB (Z9B2Z) plus legacy NCL (QMJ) and NWL (QRV) codes still in use
+    (dict.stp_code IN ('Z9B2Z', 'QMJ', 'QRV')) AS is_wnl_practice,
     
     -- Dictionary surrogate keys
     dict.sk_organisation_id_practice AS sk_practice_id,
@@ -103,7 +113,7 @@ INNER JOIN (
                 PARTITION BY organisation_code 
                 ORDER BY 
                     CASE WHEN is_obsolete = FALSE THEN 0 ELSE 1 END,  -- Prefer active records
-                    lds_datetime_data_acquired DESC,  -- Then most recent data
+                    lds_datetime_first_acquired DESC,  -- Then most recent data
                     id DESC  -- Finally by ID as tiebreaker
             ) AS rn
         FROM {{ ref('stg_olids_organisation') }}
@@ -118,6 +128,7 @@ LEFT JOIN (
         organisation_name,
         start_date,
         end_date,
+        status,
         address_line_1,
         address_line_2,
         address_line_3,

@@ -6,15 +6,38 @@ models:
         owner:
           name: EddieDavison92
     columns:
-      - name: source_code_id
-        description: Foreign key to concept.id - source concept being mapped from
-      - name: target_code_id
-        description: Foreign key to concept.id - target concept being mapped to
-        tests:
+      - name: mapped_item_id
+        description: New primary key (VARCHAR) replacing the removed `id` column. Carries synthetic EMIS-backfill values too, hence VARCHAR rather than UUID.
+        data_tests:
+          - unique:
+              config:
+                # Known upstream duplicates in concept_map; the project consumes
+                # int_enriched_concept_map (which de-duplicates and back-fills)
+                # rather than stg_olids_concept_map directly. Tracked, not blocking.
+                severity: warn
+          - not_null
+      - name: source_concept_id
+        description: Foreign key to concept.concept_id - source concept being mapped from
+        data_tests:
           - relationships:
+              config:
+                # Known upstream gap: concept_map references concept_ids not present
+                # in stg_olids_concept. Downstream uses int_enriched_concept_map.
+                severity: warn
               arguments:
                 to: ref('stg_olids_concept')
-                field: id
+                field: concept_id
+      - name: target_concept_id
+        description: Foreign key to concept.concept_id - target concept being mapped to
+        data_tests:
+          - relationships:
+              config:
+                # Same upstream gap as source_concept_id; downstream uses
+                # int_enriched_concept_map which back-fills missing concepts.
+                severity: warn
+              arguments:
+                to: ref('stg_olids_concept')
+                field: concept_id
       - name: is_primary
         description: Boolean indicating if this is the primary mapping for the source concept
       - name: equivalence
@@ -39,6 +62,10 @@ models:
         description: Target concept display name
       - name: target_system
         description: Target concept system
+      - name: concept_map_id
+        description: "Identifier of the concept map this row belongs to. New in the 2026 OLIDS schema realignment (issue #747)."
+      - name: lds_start_datetime
+        description: "LDS datetime stamp from which the record version was correct. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

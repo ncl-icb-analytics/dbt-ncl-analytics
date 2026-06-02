@@ -1,0 +1,48 @@
+{{
+    config(
+        description="Raw layer (Data management reference datasets). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE__NCL.DATA_MANAGEMENT.WNL_ORGANISATION \ndbt: source(''reference_data_management'', ''WNL_ORGANISATION'') \nColumns:\n  SUB_ICB_CODE -> sub_icb_code\n  SK_OrganisationID -> sk_organisation_id\n  Organisation_Code -> organisation_code\n  Organisation_Name -> organisation_name\n  SK_OrganisationTypeID -> sk_organisation_type_id\n  SK_OrganisationID_NationalGrouping -> sk_organisation_id_national_grouping\n  SK_OrganisationID_HealthAuthority -> sk_organisation_id_health_authority\n  SK_OrganisationID_CurrentCareOrg -> sk_organisation_id_current_care_org\n  SK_PostcodeID -> sk_postcode_id\n  StartDate -> start_date\n  EndDate -> end_date\n  SK_OrganisationID_ParentOrg -> sk_organisation_id_parent_org\n  Join_Parent_Date -> join_parent_date\n  Left_Parent_Date -> left_parent_date\n  FirstCreated -> first_created\n  LastUpdated -> last_updated\n  SK_PrescribingSettingID -> sk_prescribing_setting_id\n  SK_OrganisationStatusID -> sk_organisation_status_id\n  Address_Line_1 -> address_line_1\n  Address_Line_2 -> address_line_2\n  Address_Line_3 -> address_line_3\n  Address_Line_4 -> address_line_4\n  Address_Line_5 -> address_line_5\n  SK_Organisation_ID -> sk_organisation_id_1\n  SK_OrganisationType_ID -> sk_organisation_type_id_1\n  SK_NationalGrouping_ID -> sk_national_grouping_id\n  SK_HealthAuthority_ID -> sk_health_authority_id\n  SK_CurrentCareOrg_ID -> sk_current_care_org_id\n  SK_Postcode_ID -> sk_postcode_id_1\n  SK_ParentOrg_ID -> sk_parent_org_id\n  SK_PrescribingSetting_ID -> sk_prescribing_setting_id_1\n  Country -> country\n  CodeAssignedBy -> code_assigned_by\n  UPRN -> uprn\n  LastChangeDate -> last_change_date\n  OrganisationPrimaryRole -> organisation_primary_role\n  StartDate_Legal -> start_date_legal\n  EndDate_Legal -> end_date_legal\n  StartDate_Operational -> start_date_operational\n  EndDate_Operational -> end_date_operational\n  Status -> status"
+    )
+}}
+select
+    "SUB_ICB_CODE" as sub_icb_code,
+    "SK_OrganisationID" as sk_organisation_id,
+    "Organisation_Code" as organisation_code,
+    "Organisation_Name" as organisation_name,
+    "SK_OrganisationTypeID" as sk_organisation_type_id,
+    "SK_OrganisationID_NationalGrouping" as sk_organisation_id_national_grouping,
+    "SK_OrganisationID_HealthAuthority" as sk_organisation_id_health_authority,
+    "SK_OrganisationID_CurrentCareOrg" as sk_organisation_id_current_care_org,
+    "SK_PostcodeID" as sk_postcode_id,
+    "StartDate" as start_date,
+    "EndDate" as end_date,
+    "SK_OrganisationID_ParentOrg" as sk_organisation_id_parent_org,
+    "Join_Parent_Date" as join_parent_date,
+    "Left_Parent_Date" as left_parent_date,
+    "FirstCreated" as first_created,
+    "LastUpdated" as last_updated,
+    "SK_PrescribingSettingID" as sk_prescribing_setting_id,
+    "SK_OrganisationStatusID" as sk_organisation_status_id,
+    "Address_Line_1" as address_line_1,
+    "Address_Line_2" as address_line_2,
+    "Address_Line_3" as address_line_3,
+    "Address_Line_4" as address_line_4,
+    "Address_Line_5" as address_line_5,
+    "SK_Organisation_ID" as sk_organisation_id_1,
+    "SK_OrganisationType_ID" as sk_organisation_type_id_1,
+    "SK_NationalGrouping_ID" as sk_national_grouping_id,
+    "SK_HealthAuthority_ID" as sk_health_authority_id,
+    "SK_CurrentCareOrg_ID" as sk_current_care_org_id,
+    "SK_Postcode_ID" as sk_postcode_id_1,
+    "SK_ParentOrg_ID" as sk_parent_org_id,
+    "SK_PrescribingSetting_ID" as sk_prescribing_setting_id_1,
+    "Country" as country,
+    "CodeAssignedBy" as code_assigned_by,
+    "UPRN" as uprn,
+    "LastChangeDate" as last_change_date,
+    "OrganisationPrimaryRole" as organisation_primary_role,
+    "StartDate_Legal" as start_date_legal,
+    "EndDate_Legal" as end_date_legal,
+    "StartDate_Operational" as start_date_operational,
+    "EndDate_Operational" as end_date_operational,
+    "Status" as status
+from {{ source('reference_data_management', 'WNL_ORGANISATION') }}

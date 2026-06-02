@@ -26,7 +26,7 @@ SELECT
     -- Status
     is_active,
     is_deceased,
-    is_dummy_patient,
+    is_test_patient,
     inactive_reason,
 
     -- Demographics
@@ -53,5 +53,5 @@ SELECT
 
 FROM {{ ref('dim_person_demographics') }}
 WHERE is_active = FALSE
-    AND is_dummy_patient = FALSE
+    AND is_test_patient = FALSE
     AND inactive_reason IS NOT NULL

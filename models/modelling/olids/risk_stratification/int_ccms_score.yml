@@ -1,0 +1,33 @@
+models:
+  - name: int_ccms_score
+    description: |
+      Cambridge Comorbidity Score per person — weighted sum of the 20 final
+      flags using the published 2022 modified CCMS coefficients
+      (Payne et al. 2020 / Brilleman et al. 2022,
+      https://bjgp.org/content/73/731/e435).
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: ccms_score_id
+        description: |
+          Surrogate key over (person_id, cambridge_comorbidity_score,
+          last_updated). Changes whenever the score for a person changes or
+          when the table is rebuilt.
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: Person identifier.
+        tests:
+          - unique
+          - not_null
+      - name: cambridge_comorbidity_score
+        description: Weighted Cambridge Comorbidity Score. Can be negative.
+        tests:
+          - not_null
+      - name: last_updated
+        description: Timestamp the row was generated.
+        tests:
+          - not_null

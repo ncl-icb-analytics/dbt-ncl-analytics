@@ -7,7 +7,7 @@ WITH person_level_neurology_aggregation AS (
         person_id,
         min(neurology_event_date) AS earliest_neurology_event_date,
         max(neurology_event_date) AS latest_neurology_event_date,
-        array_agg(DISTINCT neurology_ID)
+        array_agg(DISTINCT neurology_ID::VARCHAR)
             AS all_neurology_IDs,
         array_agg(DISTINCT neurology_concept_code)
             AS all_neurology_concept_codes,

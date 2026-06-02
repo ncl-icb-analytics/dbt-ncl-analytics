@@ -17,7 +17,7 @@ models:
         description: Surrogate key for patient identification
       - name: title
         description: Patient title (Mr, Mrs, Dr, etc.)
-      - name: gender_concept_id
+      - name: gender_source_concept_id
         description: Foreign key to concept.id - patient gender
       - name: gender_code
         description: Code value for the gender concept
@@ -27,7 +27,7 @@ models:
         description: Source code for the gender concept (from concept map)
       - name: gender_source_display
         description: Source display name for the gender concept (from concept map)
-      - name: registered_practice_id
+      - name: registered_practice_organisation_id
         description: Foreign key to organisation.id - GP practice where patient is registered
       - name: birth_year
         description: Year of birth
@@ -41,22 +41,24 @@ models:
         description: Boolean indicating if the patient has requested sensitive data handling
       - name: is_confidential
         description: Boolean indicating if the record is marked as confidential
-      - name: is_dummy_patient
+      - name: is_test_patient
         description: Boolean indicating if this is a test or dummy patient record
-      - name: record_owner_organisation_code
-        description: Organisation code of the record owner
+      - name: publisher_organisation_code
+        description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
       - name: lds_id
         description: LDS system identifier
-      - name: lds_datetime_data_acquired
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
+      - name: person_id
+        description: "Foreign key to person.id — now exposed directly on the patient record. New in the 2026 OLIDS schema realignment (issue #747); previously only available via patient_person."
+      - name: local_patient_id
+        description: "Local (practice-system) patient identifier. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

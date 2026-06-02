@@ -3,9 +3,6 @@
         materialized='table')
 }}
 
-{%
-    set in_scope_borough_list = ['Haringey']
-%}
 
 /*
 Inclusion criteria cohort for CLTCS
@@ -33,16 +30,6 @@ registrant_population as (
     where practice_code in (select distinct practice_code from in_scope_practice_list)
         and date_of_death is null
         and date_of_birth < date_trunc('month', dateadd(year, -18, current_date))
-),
-conditions_inclusion as (
-    select distinct person_id, 1 as has_condition
-    from {{ ref('dim_person_conditions')}}
-    where cardiovascular_conditions + respiratory_conditions + metabolic_conditions > 3
-),
-op_inclusion as(
-    select distinct sk_patient_id, 1 as has_recent_op
-    from {{ ref('fct_person_sus_op_recent')}}
-    where op_att_tot_12mo > 2
 ),
 -- sk_patient_multimapping_GP_reg as ( -- do we really want to handle like this or warn?
 --     SELECT
@@ -75,7 +62,7 @@ potentially_fragmented_sk_patient_ids as (
     SELECT
     p.sk_patient_id,
     COUNT(DISTINCT pp.person_id) as person_count,
-    ARRAY_AGG(DISTINCT pp.person_id) as person_ids
+    ARRAY_AGG(DISTINCT pp.person_id::VARCHAR) as person_ids
     FROM {{ ref('stg_olids_patient') }} p
     JOIN {{ ref('stg_olids_patient_person') }} pp ON p.id = pp.patient_id
     GROUP BY p.sk_patient_id
@@ -86,7 +73,7 @@ potentially_fragmented_person_ids as (
     SELECT
         pp.person_id,
         COUNT(DISTINCT p.sk_patient_id) as patient_count,
-        ARRAY_AGG(DISTINCT p.sk_patient_id) as sk_patient_ids
+        ARRAY_AGG(DISTINCT p.sk_patient_id::VARCHAR) as sk_patient_ids
     FROM {{ ref('stg_olids_patient') }} p
     JOIN {{ ref('stg_olids_patient_person') }} pp ON p.id = pp.patient_id
     GROUP BY pp.person_id
@@ -94,8 +81,7 @@ potentially_fragmented_person_ids as (
     ORDER BY patient_count DESC
 )
 
-select rp.sk_patient_id as patient_id
-    ,pp.hx_flake as re_id_key
+select cast(rp.sk_patient_id as varchar) as patient_id
     ,pp.person_id as olids_id
     ,rp.practice_code
     ,rp.practice_name
@@ -106,7 +92,6 @@ select rp.sk_patient_id as patient_id
     ,pd.age
     ,pd.gender
     ,pd.ethnicity_category
-    ,case when pc.has_condition = 1 or op.has_recent_op = 1 then 1 else 0 end as eligible
     ,case when pp.sk_patient_id in (select sk_patient_id from potentially_fragmented_sk_patient_ids) then 1 else 0 end as fragmented_sk_patient_id_flag -- poor mapping of multiple person_ids to one sk_patient_id
     ,case when pp.person_id in (select person_id from potentially_fragmented_person_ids) then 1 else 0 end as fragmented_person_id_flag -- poor mapping of multiple sk_patient_ids to one person_id
 from registrant_population rp
@@ -114,13 +99,10 @@ left join {{ref('dim_person_pseudo')}} pp
     on rp.sk_patient_id = pp.sk_patient_id
 left join in_scope_practice_list ip
     on rp.practice_code = ip.practice_code
-left join conditions_inclusion pc
-    on pc.person_id = pp.person_id
-left join op_inclusion op
-    on op.sk_patient_id = pp.sk_patient_id
 left join {{ref('dim_person_demographics')}} pd
     on pd.person_id = pp.person_id
 where (pd.is_deceased = false or pd.is_deceased is null)
     and (pd.age >= 18 or pd.age is null)
+
   --  and fragmented_sk_patient_id_flag = 0 -- keep warning for awareness of person/patient mapping issues
 -- and fragmented_person_id_flag = 0

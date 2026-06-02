@@ -11,7 +11,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: registrar_event_id
+      - name: lds_registrar_event_id
         description: Registrar event identifier
       - name: masked_uprn
         description: Masked Unique Property Reference Number
@@ -21,13 +21,13 @@ models:
         description: Masked postcode
       - name: address_format_quality
         description: Quality indicator for address format
-      - name: post_code_quality
+      - name: postcode_quality
         description: Quality indicator for postcode
       - name: matched_with_assign
         description: Boolean or indicator for matching with assignment
       - name: qualifier
         description: Qualifier for the address match
-      - name: uprn_property_classification
+      - name: classification
         description: Property classification code
       - name: algorithm
         description: Algorithm used for address matching
@@ -35,20 +35,18 @@ models:
         description: Pattern used for the address match
       - name: lds_id
         description: LDS system identifier
-      - name: lds_registrar_event_id
-        description: LDS registrar event identifier
-      - name: record_owner_organisation_code
-        description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
-        description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
-      - name: lds_start_date_time
+      - name: publisher_organisation_code
+        description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
+      - name: lds_datetime_update_acquired
+        description: "Datetime when an update for this record was acquired by LDS. patient_uprn does not carry the first-acquired counterpart in the new schema."
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
+      - name: patient_address_id
+        description: "Foreign key to patient_address.id — links this UPRN match to the patient_address record it was matched against. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           config:

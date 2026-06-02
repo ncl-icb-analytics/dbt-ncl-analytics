@@ -38,7 +38,7 @@ person_level_ppp_aggregation AS (
         person_id,
         min(ppp_event_date) AS earliest_ppp_event_date,
         max(ppp_event_date) AS latest_ppp_event_date,
-        array_agg(DISTINCT ppp_ID) AS all_ppp_IDs,
+        array_agg(DISTINCT ppp_ID::VARCHAR) AS all_ppp_IDs,
         array_agg(DISTINCT ppp_concept_code) AS all_ppp_concept_codes,
         array_agg(DISTINCT ppp_concept_display) AS all_ppp_concept_displays,
         array_agg(DISTINCT ppp_categories[0]) AS all_ppp_code_categories_applied

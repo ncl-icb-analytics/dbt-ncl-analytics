@@ -242,7 +242,7 @@ sources:
     description: Fingertips indicator data
     raw_prefix: raw_reference
     domain: shared
-
+  
   # Phenolab schema in DATA_LAKE__NCL
   - source_name: phenolab
     database: DATA_LAKE__NCL
@@ -266,6 +266,14 @@ sources:
     schema: LOCAL_PROVIDER_FLOWS
     description: Providers submissions from PID environment via MESH
     raw_prefix: raw_lpf
+    domain: pid_env
+
+    # CLTCS EMIS extract
+  - source_name: cltcs_emis_extract
+    database: DATA_LAKE__NCL
+    schema: CLTCS
+    description: EMIS extract for c-ltcs pipeline from PID environment via MESH
+    raw_prefix: raw_cltcs_emis
     domain: pid_env
 
   # ========================================

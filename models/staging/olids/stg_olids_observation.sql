@@ -9,9 +9,9 @@ select
     practitioner_id,
     parent_observation_id,
     clinical_effective_date,
-    date_precision_concept_id,
+    clinical_effective_date_precision_source_concept_id,
     result_value,
-    result_value_units_concept_id,
+    result_units_source_concept_id,
     result_date,
     result_text,
     is_problem,
@@ -25,16 +25,15 @@ select
     age_at_event,
     age_at_event_baby,
     age_at_event_neonate,
-    episodicity_concept_id,
+    episodicity_source_concept_id,
     is_primary,
     date_recorded,
     is_problem_deleted,
     is_confidential,
     lds_is_deleted,
     lds_id,
-    record_owner_organisation_code,
-    lds_datetime_data_acquired,
-    lds_initial_data_received_date,
+    publisher_organisation_code,
+    lds_datetime_first_acquired,
     mapped_concept_id,
     mapped_concept_code,
     mapped_concept_display,
@@ -42,8 +41,8 @@ select
     result_unit_display,
 
     -- Metadata
-    lds_start_date_time,
-    lds_record_id
+    lds_start_datetime,
+    lds_source_record_id
 
 from {{ ref('raw_olids_observation') }}
 where coalesce(lds_is_deleted, false) = false

@@ -42,7 +42,7 @@ patient_candidates AS (
         pds.is_deceased,
         pds.death_source_flag,
         pds.death_date_approx,
-        p.is_dummy_patient,
+        p.is_test_patient,
         CASE WHEN p.birth_year IS NOT NULL AND p.birth_month IS NOT NULL THEN 1 ELSE 0 END AS has_dob
     FROM {{ ref('int_patient_person_unique') }} AS pp
     INNER JOIN {{ ref('stg_olids_patient') }} AS p
@@ -90,7 +90,7 @@ SELECT
     bp.death_date_approx,
     bp.is_deceased,
     bp.death_source_flag,
-    COALESCE(bp.is_dummy_patient, FALSE) AS is_dummy_patient
+    COALESCE(bp.is_test_patient, FALSE) AS is_test_patient
 FROM persons_with_patients AS ap
 INNER JOIN best_patient AS bp
     ON ap.person_id = bp.person_id

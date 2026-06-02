@@ -1,4 +1,8 @@
-{{ config(materialized="table") }}
+{{ 
+    config(
+        materialized='table',
+        tags='daily')
+    }}
 
 select 
     patient_id,
@@ -75,6 +79,8 @@ where
     barnet_hospital_count >= 1
     AND local_authority IN ('Barnet','Enfield')
     AND age_at_most_recent_nel_admission >= 18
+    AND is_dead_pds = 0
+    AND is_dead_death_registry = 0
     AND
     (heart_failure = 1 
     or copd = 1 

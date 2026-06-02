@@ -3,27 +3,30 @@ select
     id,
 
     -- Business columns
-    registrar_event_id,
-    masked_uprn,
-    masked_usrn,
-    masked_postcode,
+    lds_registrar_event_id,
+    TO_VARCHAR(masked_uprn) AS masked_uprn,
+    TO_VARCHAR(masked_usrn) AS masked_usrn,
+    TO_VARCHAR(masked_postcode) AS masked_postcode,
     address_format_quality,
-    post_code_quality,
+    postcode_quality,
     matched_with_assign,
     qualifier,
-    uprn_property_classification,
+    classification,
     algorithm,
     match_pattern,
     lds_id,
-    lds_registrar_event_id,
-    record_owner_organisation_code,
-    lds_datetime_data_acquired,
-    lds_initial_data_received_date,
+    publisher_organisation_code,
+    -- patient_uprn doesn't carry lds_datetime_first_acquired on stable —
+    -- only lds_datetime_update_acquired is exposed for this table.
+    lds_datetime_update_acquired,
 
     -- Metadata
-    lds_start_date_time,
+    lds_start_datetime,
     lds_is_deleted,
-    lds_record_id
+    lds_source_record_id,
 
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    patient_address_id
 from {{ ref('raw_olids_patient_uprn') }}
 where coalesce(lds_is_deleted, false) = false

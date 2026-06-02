@@ -1,16 +1,54 @@
+{{ config(materialized='table') }}
+
+-- Native OLIDS PERSON can carry multiple rows per id when a person has multiple
+-- practice registrations recorded. Dedup to one row per person using the most
+-- recent gp_registration_date (with deterministic tie-breakers). Materialised
+-- as a table so the window-function dedup runs once at build time, not on
+-- every downstream query.
 select
     -- Primary key
     id,
-    any_value(person_uuid) as person_uuid,
+    person_uuid,
 
-    -- Business columns
-    array_agg(distinct nhs_number_hash) as nhs_number_hashes,
-    max(title) as title,
-    max(gender_concept_id) as gender_concept_id,
-    max(birth_year) as birth_year,
-    max(birth_month) as birth_month,
-    max(death_year) as death_year,
-    max(death_month) as death_month
+    -- Identifiers
+    matched_nhs_no_hash,
 
+    -- Demographics
+    birth_year,
+    birth_month,
+    death_year,
+    death_month,
+    death_notification_status,
+    postcode_hash,
+    sensitivity_flag,
+
+    -- Registration
+    gp_practice_code,
+    CAST(gp_registration_date AS DATE) AS gp_registration_date,
+    CAST(as_at_date AS DATE) AS as_at_date,
+
+    -- Contact / nominated services
+    preferred_contact_method,
+    nominated_pharmacy,
+    dispensing_doctor,
+    medical_appliance_supplier,
+
+    -- Metadata
+    lds_is_deleted,
+    lds_start_datetime,
+    -- person doesn't carry plain lds_datetime_first_acquired in the new schema —
+    -- only the *_person variants below.
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    person_record_type,
+    person_version_id,
+    sk_patient_id,
+    lds_datetime_first_acquired_person,
+    lds_datetime_update_acquired_person
 from {{ ref('raw_olids_person') }}
-group by id
+qualify row_number() over (
+    partition by id
+    order by gp_registration_date desc nulls last,
+             lds_start_datetime desc nulls last,
+             gp_practice_code desc nulls last
+) = 1

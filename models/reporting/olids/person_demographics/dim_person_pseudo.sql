@@ -32,59 +32,7 @@ SELECT
     bd.sk_patient_id,
 
     -- HxFlake Pseudonym Generation (exact formula match)
-    LEFT(
-         SUBSTR(
-             TRIM(
-                 REVERSE(
-                     RIGHT(
-                         LPAD(
-                             TO_CHAR(bd.sk_patient_id, 'XXXXXXXXX'),
-                             9,
-                             0
-                         ),
-                         10
-                     )
-                 )
-             ) || '0000000000',
-             1,
-             2
-         ) || '-' || RPAD(
-             SUBSTR(
-                 TRIM(
-                     REVERSE(
-                         RIGHT(
-                             LPAD(
-                                 TO_CHAR(bd.sk_patient_id, 'XXXXXXXXX'),
-                                 9,
-                                 0
-                             ),
-                             10
-                         )
-                     )
-                 ) || '0000000000',
-                 3,
-                 4
-             ),
-             3,
-             '0'
-         ) || '-' || SUBSTR(
-             TRIM(
-                 REVERSE(
-                     RIGHT(
-                         LPAD(
-                             TO_CHAR(bd.sk_patient_id, 'XXXXXXXXX'),
-                             9,
-                             0
-                         ),
-                         10
-                     )
-                 )
-             ) || '0000000000',
-             6,
-             3
-         ) || '0000000000',
-         10
-     ) AS hx_flake
+    {{ hxflake_pseudo_generation('bd.sk_patient_id') }} AS hx_flake
 
 FROM {{ ref('dim_person_birth_death') }} bd
 WHERE bd.sk_patient_id IS NOT NULL

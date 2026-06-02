@@ -20,7 +20,7 @@ END As VACC_ORDER
 ,p.is_care_home_resident
 ,p.vaccination_count 
 FROM (
-------- ADULT IMMUNISATION DOSE COUNTS (60+ POPULATION)
+------- ADULT IMMUNISATION DOSE COUNTS (65+ POPULATION)
 --PPV Dose 1
 select 
  'PPV (dose 1)' as vaccination_dose, ppv_dose1_fiscal as fiscal_year,  practice_code, ppv_dose1_sort as month_year, ppv_dose1_label as month_label,  age_band_5y, is_care_home_resident, count(person_id) as vaccination_count
