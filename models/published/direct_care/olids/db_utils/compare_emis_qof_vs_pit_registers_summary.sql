@@ -42,7 +42,7 @@ person_practices AS (
     FROM {{ ref('dim_person_demographics_historical') }} h
     INNER JOIN validated_practices vp ON h.practice_code = vp.practice_code
     WHERE h.effective_start_date <= {{ qof_reference_date() }}
-      AND (h.effective_end_date IS NULL OR h.effective_end_date >= {{ qof_reference_date() }})
+      AND (h.effective_end_date IS NULL OR h.effective_end_date > {{ qof_reference_date() }})
       AND (
           h.is_active = TRUE
           OR (
