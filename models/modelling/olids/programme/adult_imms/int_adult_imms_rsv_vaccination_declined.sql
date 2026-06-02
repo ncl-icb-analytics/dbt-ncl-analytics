@@ -18,7 +18,7 @@ SELECT
         ,VACCINATION_STATUS 
         ,AGE_AT_EVENT 
         --in case there are multiple records for declined on the same day for where IS_PREGNANT and IS_CARE_HOME_RESIDENT are both TRUE.
-        ,ROW_NUMBER() OVER (PARTITION BY PERSON_ID ORDER BY VACCINATION_DATE ASC) AS row_num
+        ,ROW_NUMBER() OVER (PARTITION BY PERSON_ID ORDER BY VACCINATION_DATE ASC) AS rownum
     FROM {{ ref('int_adult_imms_vaccination_status_current') }}
     WHERE VACCINE_ID in ('RSV_1','RSV_1B','RSV_1C') and VACCINATION_STATUS in ('Declined')  
     QUALIFY rownum = 1
