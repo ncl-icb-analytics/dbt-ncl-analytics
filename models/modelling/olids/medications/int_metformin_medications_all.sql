@@ -36,7 +36,12 @@ WITH metformin_orders_base AS (
         'METFORMIN_RX' AS cluster_id,
         -- A combination product contains metformin plus another antidiabetic ingredient
         -- (caught here but coded by BNF under 6.1.2.3 rather than the biguanide paragraph).
-        CASE WHEN mo.bnf_code LIKE '0601022%' THEN FALSE ELSE TRUE END AS is_combination
+        -- NULL bnf_code is left unknown rather than assumed to be a combination.
+        CASE
+            WHEN mo.bnf_code IS NULL THEN NULL
+            WHEN mo.bnf_code LIKE '0601022%' THEN FALSE
+            ELSE TRUE
+        END AS is_combination
     FROM ({{ get_medication_orders(cluster_id='METFORMIN_RX') }}) mo
 ),
 
