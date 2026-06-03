@@ -664,7 +664,7 @@ def main() -> None:
             desc_out = desc
         rows.append(f"{code},{desc_out},{sds_group},{analytical},{arrs}")
 
-    out_path = Path(__file__).resolve().parents[2] / "seeds" / "sds_role_groups.csv"
+    out_path = Path(__file__).resolve().parents[3] / "seeds" / "sds_role_groups.csv"
     out_path.write_text("\n".join(rows) + "\n", encoding="utf-8")
     print(f"Wrote {len(rows) - 1} rows to {out_path}")
 
