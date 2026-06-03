@@ -1,0 +1,50 @@
+models:
+  - name: dim_person_hospice_resident
+    description: 'Latest hospice resident status for persons living in a hospice.
+
+      One row per person with a HOSPICE_RESIDENT_COD record. "Lives in hospice" is a
+      RESIDE_COD residence type, so residency is current only when the hospice event is
+      more recent than any other RESIDE_COD code and any HOSPICE_DISCHARGE_COD record.
+
+      Hospice involvement is not routinely or consistently coded in OLIDS primary care
+      (GP) data, so counts are low and should be read as a floor, not true prevalence.
+      Deceased persons are retained (no active/death filter) as hospice cohorts are
+      largely end-of-life. For the broader palliative/end-of-life population see
+      fct_person_palliative_care_register (QOF).'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Person identifier
+        tests:
+          - unique
+          - not_null
+      - name: sk_patient_id
+        description: Surrogate key for patient
+      - name: latest_hospice_resident_date
+        description: Date of most recent hospice resident observation
+        tests:
+          - not_null
+      - name: latest_other_residence_date
+        description: Date of most recent non-hospice RESIDE_COD residence code (NULL if none)
+      - name: latest_discharge_date
+        description: Date of most recent hospice discharge observation (NULL if none)
+      - name: concept_code
+        description: SNOMED concept code of the latest resident observation
+      - name: code_description
+        description: Term for the latest resident observation
+      - name: source_cluster_id
+        description: Source cluster ID of the latest resident observation
+      - name: is_hospice_resident
+        description: Currently living in a hospice (hospice event not superseded by a later residence code or discharge)
+        tests:
+          - not_null
+      - name: hospice_resident_status
+        description: Text description of resident status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Hospice Resident', 'No Longer Hospice Resident']
