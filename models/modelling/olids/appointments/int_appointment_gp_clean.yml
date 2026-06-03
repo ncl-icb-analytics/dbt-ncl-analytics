@@ -246,7 +246,7 @@ models:
             quality artefacts) will therefore have a NULL nominal cost
             even though base_prices cost is populated — the NULL is
             an intentional data quality signal, not a bug. Extend the
-            seed lower bound in analysis/inflation_indices/build_seed.py
+            seed lower bound in scripts/seeds/inflation_indices/build_seed.py
             if genuine pre-2000 coverage is needed.
       - name: patient_wait_mins
         description: >

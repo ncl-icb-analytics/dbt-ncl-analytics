@@ -10,7 +10,7 @@ seeds:
 
       Source: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice/sds-role-groups
       The canonical NHS Digital page is updated in-place when SDS publishes
-      new codes. To refresh this seed, re-run analysis/sds_role_groups/build_seed.py
+      new codes. To refresh this seed, re-run scripts/seeds/sds_role_groups/build_seed.py
       after updating the RAW list from the latest HTML table.
 
       Columns:
