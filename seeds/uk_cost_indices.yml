@@ -19,7 +19,7 @@ seeds:
 
       If genuine pre-2000 coverage is needed: the HMT GDP deflator
       series goes back to 1955-56; bump the `>= 2000` filter in
-      analysis/inflation_indices/build_seed.py and regenerate.
+      scripts/seeds/inflation_indices/build_seed.py and regenerate.
 
       Columns:
       * gdp_deflator  — HMT / ONS GDP deflator at market prices, fiscal year,
@@ -54,7 +54,7 @@ seeds:
       forecasts forward to 2030-31. CPI / CPIH are exposed alongside for
       sensitivity analysis or contracts that explicitly specify them.
 
-      Re-run analysis/inflation_indices/build_seed.py after downloading the
+      Re-run scripts/seeds/inflation_indices/build_seed.py after downloading the
       latest HMT GDP deflator XLSX and fresh ONS CPI / CPIH JSON to refresh.
     config:
       meta:
