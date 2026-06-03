@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
@@ -14,15 +14,18 @@ models:
     columns:
       - name: person_id
         description: 'Person identifier'
-        tests:
+        data_tests:
           - not_null
       - name: medication_order_id
         description: 'Unique medication order identifier'
+        data_tests:
+          - not_null
+          - unique
       - name: medication_statement_id
         description: 'Related medication statement identifier'
       - name: order_date
         description: 'Date medication was ordered'
-        tests:
+        data_tests:
           - not_null
       - name: order_medication_name
         description: 'Name of medication as ordered'
