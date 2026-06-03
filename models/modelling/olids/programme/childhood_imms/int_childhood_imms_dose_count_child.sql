@@ -9,6 +9,11 @@
 SELECT DISTINCT
 v.PERSON_ID 
 ,v.age
+,v.imd_quintile
+,v.imdquintile_order
+,v.ethnicity_category
+,v.ethcat_order
+,v.BOROUGH_REGISTERED
 ,v.practice_code
 ,sixin1_dose1_label
 ,sixin1_dose1_fiscal
