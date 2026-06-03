@@ -7,8 +7,10 @@
 /*
 All diabetes medication orders including insulins, antidiabetic drugs, and hypoglycaemia treatments.
 Uses BNF classification (6.1.x) with detailed medication type categorisation.
-GLP-1 receptor agonists are broken out of BNF 6.1.2.3 (Other antidiabetic drugs) using
-int_glp1_medications_all, which categorises them to active ingredient via SNOMED clusters.
+GLP-1 receptor agonists, SGLT2 inhibitors and DPP-4 inhibitors are broken out of BNF
+6.1.2.3 (Other antidiabetic drugs) using int_glp1_medications_all /
+int_sglt2_medications_all / int_dpp4_medications_all, which categorise them to active
+ingredient via SNOMED clusters.
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 */
 
@@ -23,6 +25,29 @@ glp1 AS (
         glp1_drug,
         is_dual_gip_glp1
     FROM {{ ref('int_glp1_medications_all') }}
+),
+
+-- SGLT2 inhibitor classification by active ingredient, joined back on order id
+sglt2 AS (
+    SELECT
+        medication_order_id,
+        sglt2_drug
+    FROM {{ ref('int_sglt2_medications_all') }}
+),
+
+-- DPP-4 inhibitor classification by active ingredient, joined back on order id
+dpp4 AS (
+    SELECT
+        medication_order_id,
+        dpp4_drug
+    FROM {{ ref('int_dpp4_medications_all') }}
+),
+
+-- Metformin (incl. combinations) by cluster membership, joined back on order id
+metformin AS (
+    SELECT
+        medication_order_id
+    FROM {{ ref('int_metformin_medications_all') }}
 )
 
 SELECT
@@ -51,31 +76,31 @@ SELECT
     END AS diabetes_medication_type,
 
     -- Antidiabetic drug class classification (BNF 6.1.2 subcodes).
-    -- GLP-1 RAs are flagged from the SNOMED cluster (they sit within 6.1.2.3 by BNF).
+    -- GLP-1 RAs, SGLT2 inhibitors and DPP-4 inhibitors are flagged from SNOMED clusters (all sit within 6.1.2.3 by BNF).
     CASE
         WHEN g.medication_order_id IS NOT NULL THEN 'GLP1_RECEPTOR_AGONIST'
+        WHEN s.medication_order_id IS NOT NULL THEN 'SGLT2_INHIBITOR'
+        WHEN d.medication_order_id IS NOT NULL THEN 'DPP4_INHIBITOR'
         WHEN bo.bnf_code LIKE '0601021%' THEN 'SULPHONYLUREAS'            -- 6.1.2.1: Sulphonylureas
         WHEN bo.bnf_code LIKE '0601022%' THEN 'BIGUANIDES'                -- 6.1.2.2: Biguanides (metformin)
         WHEN bo.bnf_code LIKE '0601023%' THEN 'OTHER_ANTIDIABETICS'       -- 6.1.2.3: Other antidiabetic drugs
         ELSE NULL
     END AS antidiabetic_drug_class,
 
-    -- GLP-1 RA active ingredient (null for non-GLP-1 orders)
+    -- GLP-1 RA / SGLT2 / DPP-4 active ingredient (null for orders not in that class)
     g.glp1_drug,
-
-    -- Insulin type classification (corrected BNF 6.1.1 subcodes)
-    CASE
-        WHEN bo.bnf_code LIKE '0601011%' THEN 'SHORT_ACTING'              -- 6.1.1.1: Short-acting insulins
-        WHEN bo.bnf_code LIKE '0601012%' THEN 'INTERMEDIATE_LONG_ACTING'   -- 6.1.1.2: Intermediate and long-acting insulins
-        ELSE NULL
-    END AS insulin_type,
+    s.sglt2_drug,
+    d.dpp4_drug,
 
     -- Key medication flags (corrected BNF codes)
     CASE WHEN bo.bnf_code LIKE '0601011%' OR bo.bnf_code LIKE '0601012%' THEN TRUE ELSE FALSE END AS is_insulin,
-    CASE WHEN bo.bnf_code LIKE '0601022%' THEN TRUE ELSE FALSE END AS is_metformin,
+    -- Metformin flag from the SNOMED cluster so it also catches combination products (BNF codes these under 6.1.2.3)
+    CASE WHEN m.medication_order_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_metformin,
     CASE WHEN bo.bnf_code LIKE '0601021%' THEN TRUE ELSE FALSE END AS is_sulphonylurea,
     CASE WHEN g.medication_order_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_glp1_ra,
     COALESCE(g.is_dual_gip_glp1, FALSE) AS is_dual_gip_glp1,
+    CASE WHEN s.medication_order_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_sglt2_inhibitor,
+    CASE WHEN d.medication_order_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_dpp4_inhibitor,
 
 
     -- Order recency flags
@@ -92,4 +117,10 @@ SELECT
 FROM base_orders bo
 LEFT JOIN glp1 g
     ON bo.medication_order_id = g.medication_order_id
+LEFT JOIN sglt2 s
+    ON bo.medication_order_id = s.medication_order_id
+LEFT JOIN dpp4 d
+    ON bo.medication_order_id = d.medication_order_id
+LEFT JOIN metformin m
+    ON bo.medication_order_id = m.medication_order_id
 ORDER BY bo.person_id, bo.order_date DESC

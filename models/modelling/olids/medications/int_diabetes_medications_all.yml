@@ -1,8 +1,9 @@
 models:
   - name: int_diabetes_medications_all
     description: 'Diabetes medication orders using BNF classification for insulin
-      and antidiabetic drugs. GLP-1 receptor agonists are broken out of BNF 6.1.2.3
-      via int_glp1_medications_all (SNOMED clusters).'
+      and antidiabetic drugs. GLP-1 receptor agonists, SGLT2 inhibitors and DPP-4
+      inhibitors are broken out of BNF 6.1.2.3 via int_glp1_medications_all /
+      int_sglt2_medications_all / int_dpp4_medications_all (SNOMED clusters).'
     config:
       meta:
         owner:
@@ -43,21 +44,27 @@ models:
         description: 'BNF-based diabetes medication type (insulin, antidiabetic, hypoglycaemia
           treatment)'
       - name: antidiabetic_drug_class
-        description: 'Antidiabetic drug class (GLP-1 receptor agonist, sulphonylureas, biguanides, other)'
+        description: 'Antidiabetic drug class (GLP-1 receptor agonist, SGLT2 inhibitor, DPP-4 inhibitor, sulphonylureas, biguanides, other)'
       - name: glp1_drug
         description: 'GLP-1 RA active ingredient (null for non-GLP-1 orders); see int_glp1_medications_all'
-      - name: insulin_type
-        description: 'Insulin type (short acting, intermediate/long acting)'
+      - name: sglt2_drug
+        description: 'SGLT2 inhibitor active ingredient (null for non-SGLT2 orders); see int_sglt2_medications_all'
+      - name: dpp4_drug
+        description: 'DPP-4 inhibitor active ingredient (null for non-DPP-4 orders); see int_dpp4_medications_all'
       - name: is_insulin
         description: 'Flag for insulin medications'
       - name: is_metformin
-        description: 'Flag for metformin medications'
+        description: 'Flag for metformin medications, including fixed-dose combinations (from METFORMIN_RX cluster); see int_metformin_medications_all'
       - name: is_sulphonylurea
         description: 'Flag for sulphonylurea medications'
       - name: is_glp1_ra
         description: 'Flag for GLP-1 receptor agonist medications'
       - name: is_dual_gip_glp1
         description: 'Flag for tirzepatide (dual GIP/GLP-1 receptor agonist)'
+      - name: is_sglt2_inhibitor
+        description: 'Flag for SGLT2 inhibitor medications'
+      - name: is_dpp4_inhibitor
+        description: 'Flag for DPP-4 inhibitor medications'
       - name: is_recent_3m
         description: 'Order within last 3 months'
       - name: is_recent_6m
