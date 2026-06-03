@@ -8,8 +8,27 @@
 --Creating a base table for vaccinations for this population to be joined against in further analysis n~2.5 million rows 
 SELECT DISTINCT
 p.PERSON_ID
---adding age to cross checks against FDP figures.
+--adding age to cross checks against FDP figures. June 2026. Add IMD and Ethnicity to chck against Ardens DEMOGRAPHICS.
 ,p.AGE
+,COALESCE(p.imd_quintile_25, 'Unknown') AS imd_quintile
+,CASE
+    WHEN p.imd_quintile_25 = 'Most Deprived' THEN 1
+    WHEN p.imd_quintile_25 = 'Second Most Deprived' THEN 2
+    WHEN p.imd_quintile_25 = 'Third Most Deprived' THEN 3
+    WHEN p.imd_quintile_25 = 'Second Least Deprived' THEN 4
+    WHEN p.imd_quintile_25 = 'Least Deprived' THEN 5
+    ELSE 6
+    END AS imdquintile_order
+,p.ethnicity_category
+,CASE
+      WHEN p.ethnicity_category = 'Asian' THEN 1
+      WHEN p.ethnicity_category = 'Black' THEN 2
+      WHEN p.ethnicity_category = 'Mixed' THEN 3
+      WHEN p.ethnicity_category = 'Other' THEN 4
+      WHEN p.ethnicity_category = 'White' THEN 5
+      WHEN p.ethnicity_category = 'Unknown' THEN 6
+    END AS ethcat_order
+,p.BOROUGH_REGISTERED
 ,p.practice_code
 ,v.VACCINE_ID
 ,v.VACCINE_NAME
