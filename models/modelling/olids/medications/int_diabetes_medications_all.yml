@@ -1,7 +1,8 @@
 models:
   - name: int_diabetes_medications_all
     description: 'Diabetes medication orders using BNF classification for insulin
-      and antidiabetic drugs.'
+      and antidiabetic drugs. GLP-1 receptor agonists are broken out of BNF 6.1.2.3
+      via int_glp1_medications_all (SNOMED clusters).'
     config:
       meta:
         owner:
@@ -42,7 +43,9 @@ models:
         description: 'BNF-based diabetes medication type (insulin, antidiabetic, hypoglycaemia
           treatment)'
       - name: antidiabetic_drug_class
-        description: 'Antidiabetic drug class (sulphonylureas, biguanides, other)'
+        description: 'Antidiabetic drug class (GLP-1 receptor agonist, sulphonylureas, biguanides, other)'
+      - name: glp1_drug
+        description: 'GLP-1 RA active ingredient (null for non-GLP-1 orders); see int_glp1_medications_all'
       - name: insulin_type
         description: 'Insulin type (short acting, intermediate/long acting)'
       - name: is_insulin
@@ -51,6 +54,10 @@ models:
         description: 'Flag for metformin medications'
       - name: is_sulphonylurea
         description: 'Flag for sulphonylurea medications'
+      - name: is_glp1_ra
+        description: 'Flag for GLP-1 receptor agonist medications'
+      - name: is_dual_gip_glp1
+        description: 'Flag for tirzepatide (dual GIP/GLP-1 receptor agonist)'
       - name: is_recent_3m
         description: 'Order within last 3 months'
       - name: is_recent_6m
