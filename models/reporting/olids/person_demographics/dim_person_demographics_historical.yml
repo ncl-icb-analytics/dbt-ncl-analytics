@@ -58,7 +58,7 @@ models:
         description: 'End date of this demographic period (NULL if current, SCD-2)'
 
       - name: is_current
-        description: 'Flag indicating if this is the current period for the person (SCD-2)'
+        description: 'Flag for the latest retained period per person. Computed after the registration filter, so deceased patients (whose open-ended period is dropped) keep a current row (SCD-2).'
         tests:
           - not_null
 

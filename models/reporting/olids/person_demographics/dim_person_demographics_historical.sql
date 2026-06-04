@@ -274,7 +274,18 @@ SELECT
     -- SCD-2 fields
     pwa.effective_start_date,
     pwa.effective_end_date,
-    pwa.is_current,
+    -- is_current = latest retained period per person (computed after the
+    -- practice_code filter below; window functions evaluate after WHERE).
+    -- Deceased patients' open-ended ghost period lacks a registration and is
+    -- dropped, so flagging the open period (effective_end_date IS NULL) would
+    -- leave them with no current row. See issue #744.
+    CASE
+        WHEN ROW_NUMBER() OVER (
+            PARTITION BY pwa.person_id
+            ORDER BY pwa.effective_start_date DESC
+        ) = 1 THEN TRUE
+        ELSE FALSE
+    END AS is_current,
     pwa.period_sequence,
 
     -- Status flags (temporal: was the registration active at the END of this period?)
