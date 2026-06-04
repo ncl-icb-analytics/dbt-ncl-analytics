@@ -4563,17 +4563,6 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: dmicDataset
       data_type: TEXT
-  - name: MHSDS_RelatedOrganisation
-    identifier: '"MHSDS_RelatedOrganisation"'
-    columns:
-    - name: RecordNumber
-      data_type: TEXT
-    - name: SourceObject
-      data_type: TEXT
-    - name: SourceColumn
-      data_type: TEXT
-    - name: OrganisationCode_Related
-      data_type: TEXT
   - name: bridging
     identifier: '"bridging"'
     columns:
