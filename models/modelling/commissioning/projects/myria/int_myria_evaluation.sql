@@ -4,6 +4,7 @@
         tags=['myria_eval'])
 }}
 /*Testing latest version of Myria evaluation script v18. Aggregated by week prior to intervention -53 to current week by myria_status
+THIS does not use the PROPENSITY MATCH GROUPS. REFER TO 260604_early_evaluation_diff_of_diff_v2_Propensity_Matched_KH.sql which uses the PROPENSITY MATCHED INPUT.
 --KH Adjustments to the V18 script: 
 1) Use HEX_FLAKE macro on eligible population
 2) Combined CTE for registry and PDS deaths selecting the earliest date for each person.
@@ -84,7 +85,26 @@ UNION
 , eligible_date as (
     SELECT
         patient_id,
-        {{ hxflake_pseudo_generation('patient_id') }} AS hex_id,
+         CASE
+  WHEN TRY_TO_NUMBER(s.PATIENT_ID) IS NULL THEN NULL
+  ELSE
+    CONCAT(
+      SUBSTR(
+        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+        1, 2
+      ),
+      '-',
+      SUBSTR(
+        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+        3, 3
+      ),
+      '-',
+      SUBSTR(
+        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+        6, 3
+      )
+    )
+END AS HEX_ID,
         eligibility_date
     FROM ELIGIBLE
     qualify row_number() over(partition by patient_id order by eligibility_date) = 1

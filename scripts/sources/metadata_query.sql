@@ -488,6 +488,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- sdl: ServicesDataLocal canonical-named feeds (mental health, community, 111, etc.)
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'SDL' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SDL'
+  
+  UNION ALL
+  
     -- reference_analyst_managed: Analyst-managed reference datasets and business rules
   SELECT 
     'DATA_LAKE__NCL' as database_name,
