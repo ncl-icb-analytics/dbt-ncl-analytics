@@ -10,7 +10,7 @@ EMIS List Size - Staging
 
 Stages EMIS list size reference data with proper date type conversion.
 Source: emis_list_size seed file
-Extract Date: 04/11/2025
+Extract Date: 02/06/2026
 
 Data Quality Notes:
 - Converts EXTRACT_DATE from VARCHAR to DATE

@@ -21,6 +21,35 @@ with inclusion_list as (
     from {{ ref('cltcs_patient_list')}}
     )
 
+, hr_hrc_ltc_lcs_conditions as (
+    select
+        person_id
+        , chd_risk_group
+        , ckd_risk_group
+        , copd_risk_group
+        , diabetes_risk_group
+        , hf_risk_group
+        , hypertension_risk_group
+        , coalesce(
+            array_compact(array_construct(
+                case when chd_risk_group in ('HR', 'HRC') then 'CHD' end
+                , case when ckd_risk_group in ('HR', 'HRC') then 'CKD' end
+                , case when copd_risk_group in ('HR', 'HRC') then 'COPD' end
+                , case when diabetes_risk_group in ('HR', 'HRC') then 'Diabetes' end
+                , case when hf_risk_group in ('HR', 'HRC') then 'Heart Failure' end
+                , case when hypertension_risk_group in ('HR', 'HRC') then 'Hypertension' end
+            ))
+            , array_construct()
+        ) as hr_hrc_ltc_lcs_conditions
+        , zeroifnull({{ encode_ltc_lcs_risk_group('chd_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('ckd_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('copd_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('diabetes_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('hf_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('hypertension_risk_group') }}) as overall_risk_group_sort_key
+        , overall_risk_group
+        , overall_risk_rank
+        , in_any_risk_group
+        , moc_stage_completed_label
+        , moc_pathway_status
+    from {{ ref('fct_person_ltc_lcs_risk_summary') }}
+    )
+
 select il.patient_id
       ,{{ hxflake_pseudo_generation('il.patient_id') }} AS re_id_key
  --   , il.fragmented_sk_patient_id_flag -- include as DQ check later, excluded for now
@@ -133,6 +162,8 @@ select il.patient_id
     , lcs.diabetes_risk_group
     , lcs.hf_risk_group
     , lcs.hypertension_risk_group
+    , coalesce(lcs.hr_hrc_ltc_lcs_conditions, array_construct()) as hr_hrc_ltc_lcs_conditions
+    , zeroifnull(lcs.overall_risk_group_sort_key) as overall_risk_group_sort_key
     , lcs.overall_risk_group
     , lcs.overall_risk_rank
     , lcs.in_any_risk_group
@@ -145,7 +176,7 @@ select il.patient_id
     ,wl.same_tfc_multiple_providers_flag as has_same_tfc_multiple_providers_flag
     ,wl.current_waiting_list_arrays
     -- polypharmacy, high risk drugs, suspected non-adherence
-    ,polyp.medication_count
+    ,zeroifnull(polyp.medication_count) as medication_count
     ,CASE 
         WHEN polyp.medication_name_list IS NULL THEN NULL
         WHEN ARRAY_SIZE(polyp.medication_name_list) = 0 THEN NULL
@@ -154,8 +185,8 @@ select il.patient_id
     ,polyp.is_polypharmacy_5plus
     , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
     -- Recent medications (last 30 days and last year)
-    ,rm.medications_recent_12mo
-    ,rm.unique_active_ingredient_count_12mo
+    ,rm.medications_recent_12mo as medications_recent_12mo
+    ,zeroifnull(rm.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
     -- Current referrals
 
     -- Current risk scores?
@@ -209,5 +240,5 @@ left join {{ref('dim_person_ccms')}} ccms
     on il.olids_id = ccms.person_id
 left join {{ref('int_rockwood_latest')}} rockwood
     on il.olids_id = rockwood.person_id
-left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
+left join hr_hrc_ltc_lcs_conditions lcs
     on il.olids_id = lcs.person_id
