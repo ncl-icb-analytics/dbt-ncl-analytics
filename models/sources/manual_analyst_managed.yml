@@ -167,8 +167,6 @@ sources:
       data_type: TEXT
     - name: DISEASES_PROTECTED_AGAINST
       data_type: TEXT
-    - name: VACCINE_CODE
-      data_type: TEXT
     - name: TRADE_NAME
       data_type: TEXT
     - name: ADMINISTRATION_ROUTE
