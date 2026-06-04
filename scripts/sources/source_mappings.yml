@@ -305,6 +305,18 @@ sources:
   # tagged `manual: true` are skipped by the metadata query and source YAML
   # generation steps; their column lists come from the manual YAML instead.
 
+  # ServicesDataLocal remapped feeds (CNWL et al. spreadsheet submissions)
+  # See https://github.com/.../servicesdatalocal-remapping
+  # Many tables in this schema; only MHCORL is currently consumed downstream
+  # so we declare it manually to avoid auto-pulling 30+ unused feeds.
+  - source_name: sdl
+    database: DATA_LAKE__NCL
+    schema: SDL
+    description: ServicesDataLocal canonical-named feeds (mental health, community, 111, etc.)
+    raw_prefix: raw_sdl
+    domain: commissioning
+    manual: true
+
   # ANALYST_MANAGED - volatile schema; only explicitly listed tables are used
   - source_name: reference_analyst_managed
     database: DATA_LAKE__NCL
