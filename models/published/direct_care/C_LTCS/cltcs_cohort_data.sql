@@ -41,13 +41,7 @@ with inclusion_list as (
             ))
             , array_construct()
         ) as hr_hrc_ltc_lcs_conditions
-        , zeroifnull({{ encode_ltc_lcs_risk_group('chd_risk_group') }}) as chd_risk_group_sort_key
-        , zeroifnull({{ encode_ltc_lcs_risk_group('ckd_risk_group') }}) as ckd_risk_group_sort_key
-        , zeroifnull({{ encode_ltc_lcs_risk_group('copd_risk_group') }}) as copd_risk_group_sort_key
-        , zeroifnull({{ encode_ltc_lcs_risk_group('diabetes_risk_group') }}) as diabetes_risk_group_sort_key
-        , zeroifnull({{ encode_ltc_lcs_risk_group('hf_risk_group') }}) as hf_risk_group_sort_key
-        , zeroifnull({{ encode_ltc_lcs_risk_group('hypertension_risk_group') }}) as hypertension_risk_group_sort_key
-        , chd_risk_group_sort_key + ckd_risk_group_sort_key + copd_risk_group_sort_key + diabetes_risk_group_sort_key + hf_risk_group_sort_key + hypertension_risk_group_sort_key as overall_risk_group_sort_key
+        , zeroifnull({{ encode_ltc_lcs_risk_group('chd_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('ckd_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('copd_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('diabetes_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('hf_risk_group') }}) + zeroifnull({{ encode_ltc_lcs_risk_group('hypertension_risk_group') }}) as overall_risk_group_sort_key
         , overall_risk_group
         , overall_risk_rank
         , in_any_risk_group
