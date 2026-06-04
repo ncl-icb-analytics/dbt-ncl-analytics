@@ -33,7 +33,6 @@ WITH glp1_orders_base AS (
         mo.bnf_code,
         mo.bnf_name
     FROM ({{ get_medication_orders(cluster_id='GLP1RA_RX') }}) mo
-    WHERE mo.order_date <= CURRENT_DATE()
 ),
 
 -- Per-ingredient sub-clusters used to label each order by active ingredient.
