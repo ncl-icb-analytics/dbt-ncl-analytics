@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_reference_cancer_trust_to_cancer_alliance
+    description: "Staging model for NHS Trust (ODS) to Cancer Alliance mappings.\nContact: jake.kealey@nhs.net"
+    config:
+      meta:
+        owner:
+          name: JakeKea
+    columns:
+      - name: provider_code
+        data_type: varchar
+        description: "ODS code for the provider."
+        tests:
+          - unique
+          - not_null
+      - name: provider_name
+        data_type: varchar
+        description: "Full legal name of the provider."
+        tests:
+          - not_null
+      - name: cancer_alliance_name
+        data_type: varchar
+        description: "Name of the Cancer Alliance the trust is a member of."
