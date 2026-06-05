@@ -1,7 +1,7 @@
 version: 2
 
 seeds:
-  - name: trust_ods_to_cancer_alliance
+  - name: provider_ods_to_cancer_alliance
     description: |
       Mapping of NHS Trust ODS codes to Cancer Alliance names and codes. Please check the source for the methodology used.
       Source: Fisher L, Speed V. Identifying the NHS Trusts within Cancer Alliances. Bennett Institute for Applied Data Science, University of Oxford. 2026. https://www.bennett.ox.ac.uk/blog/2026/04/identifying-the-nhs-trusts-within-cancer-alliances/ doi:10.53764/oph.4e5ieyekuv
