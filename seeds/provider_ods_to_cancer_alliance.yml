@@ -8,12 +8,12 @@ seeds:
     columns:
       - name: ods_code
         description: Provider code.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: ods_name
         description: Provider name.
-        tests:
+        data_tests:
           - not_null
       - name: cancer_alliance_name
         description: Name of the Cancer Alliance. Can be null if the trust is not part of a Cancer Alliance (typically a result of not delivering cancer care).

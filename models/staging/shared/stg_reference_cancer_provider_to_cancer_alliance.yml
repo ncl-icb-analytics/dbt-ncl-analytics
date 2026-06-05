@@ -11,13 +11,13 @@ models:
       - name: provider_code
         data_type: varchar
         description: "ODS code for the provider."
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: provider_name
         data_type: varchar
         description: "Full legal name of the provider."
-        tests:
+        data_tests:
           - not_null
       - name: cancer_alliance_name
         data_type: varchar
