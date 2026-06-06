@@ -31,7 +31,7 @@
             is_diagnosis_code,
             is_resolved_code
         FROM {{ ref('int_copd_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
     ),
 
     copd_person_aggregates AS (
@@ -102,7 +102,7 @@
             is_below_0_7,
             is_valid_spirometry
         FROM {{ ref('int_spirometry_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
           AND is_valid_spirometry = TRUE
           AND is_below_0_7 = TRUE
     ),

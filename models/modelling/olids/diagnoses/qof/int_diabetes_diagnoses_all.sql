@@ -30,6 +30,7 @@ WITH diabetes_observations_all_clusters AS (
         obs.id,
         obs.person_id,
         obs.clinical_effective_date,
+        obs.date_recorded,
         obs.mapped_concept_code AS concept_code,
         obs.mapped_concept_display AS concept_display,
         obs.cluster_id AS source_cluster_id
@@ -42,6 +43,7 @@ diabetes_observations_categorised AS (
         d.id,
         d.person_id,
         d.clinical_effective_date,
+        d.date_recorded,
         d.concept_code,
         d.concept_display,
 
@@ -64,13 +66,14 @@ diabetes_observations_categorised AS (
             ELSE 'UNKNOWN'
         END AS source_cluster_id
     FROM diabetes_observations_all_clusters d
-    GROUP BY d.id, d.person_id, d.clinical_effective_date, d.concept_code, d.concept_display
+    GROUP BY d.id, d.person_id, d.clinical_effective_date, d.date_recorded, d.concept_code, d.concept_display
 )
 
 SELECT
     c.id,
     c.person_id,
     c.clinical_effective_date,
+    c.date_recorded,
     c.concept_code,
     c.concept_display,
     c.source_cluster_id,

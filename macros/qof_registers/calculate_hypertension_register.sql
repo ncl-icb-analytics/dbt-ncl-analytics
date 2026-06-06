@@ -19,7 +19,7 @@
             is_diagnosis_code,
             is_resolved_code
         FROM {{ ref('int_hypertension_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
     ),
 
     hypertension_person_aggregates AS (

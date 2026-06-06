@@ -22,7 +22,7 @@
             is_stage_1_2_code,
             is_resolved_code
         FROM {{ ref('int_ckd_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
     ),
 
     ckd_person_aggregates AS (

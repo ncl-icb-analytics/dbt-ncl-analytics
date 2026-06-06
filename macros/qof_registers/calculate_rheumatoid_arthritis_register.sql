@@ -18,7 +18,7 @@
             clinical_effective_date,
             is_diagnosis_code
         FROM {{ ref('int_rheumatoid_arthritis_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
     ),
 
     ra_person_aggregates AS (

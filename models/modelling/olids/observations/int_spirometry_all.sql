@@ -17,6 +17,7 @@ WITH base_observations AS (
         obs.id,
         obs.person_id,
         obs.clinical_effective_date,
+        obs.date_recorded,
         -- Normalise: values >1 are percentages (e.g. 70 = 0.70)
         CASE
             WHEN CAST(obs.result_value AS NUMBER(10,3)) > 1.0
@@ -38,6 +39,7 @@ SELECT
     person_id,
     ID,
     clinical_effective_date,
+    date_recorded,
     fev1_fvc_ratio,
     fev1_fvc_ratio_raw,
     result_unit_display,

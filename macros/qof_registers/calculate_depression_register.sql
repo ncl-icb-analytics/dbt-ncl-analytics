@@ -21,7 +21,7 @@
             is_resolved_code,
             is_first_or_new_episode
         FROM {{ ref('int_depression_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
     ),
 
     depression_person_aggregates AS (
