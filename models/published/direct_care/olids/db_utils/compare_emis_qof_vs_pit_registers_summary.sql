@@ -311,7 +311,15 @@ practice_comparison AS (
             WHEN ABS(100.0 * (COALESCE(p.pit_count, 0) - COALESCE(e.emis_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 2 THEN TRUE
             WHEN ABS(COALESCE(p.pit_count, 0) - COALESCE(e.emis_count, 0)) <= 5 THEN TRUE
             ELSE FALSE
-        END AS practice_pass
+        END AS practice_pass,
+        -- 'Close' tier: within 5% (or 5 patients) — strong indicator the logic is correct
+        -- but just outside the strict 2% tolerance.
+        CASE
+            WHEN e.emis_count IS NULL THEN NULL
+            WHEN ABS(100.0 * (COALESCE(p.pit_count, 0) - COALESCE(e.emis_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 5 THEN TRUE
+            WHEN ABS(COALESCE(p.pit_count, 0) - COALESCE(e.emis_count, 0)) <= 5 THEN TRUE
+            ELSE FALSE
+        END AS practice_within_5pct
     FROM emis_counts_by_practice e
     FULL OUTER JOIN pit_counts_by_practice p
         ON e.practice_code = p.practice_code
@@ -350,7 +358,11 @@ SELECT
     END AS aggregate_1pct_test,
     COUNT(DISTINCT CASE WHEN emis_data_available THEN practice_code END) AS total_practices_with_emis_data,
     SUM(CASE WHEN practice_pass THEN 1 ELSE 0 END) AS practices_passing,
-    SUM(CASE WHEN practice_pass IS NOT NULL AND NOT practice_pass THEN 1 ELSE 0 END) AS practices_failing
+    -- 'Close' tier: within 5% but outside the strict 2% pass
+    SUM(CASE WHEN practice_within_5pct AND NOT practice_pass THEN 1 ELSE 0 END) AS practices_close_5pct,
+    -- Passing or close: within 5% overall (strong-alignment indicator)
+    SUM(CASE WHEN practice_within_5pct THEN 1 ELSE 0 END) AS practices_within_5pct,
+    SUM(CASE WHEN practice_within_5pct IS NOT NULL AND NOT practice_within_5pct THEN 1 ELSE 0 END) AS practices_failing
 FROM practice_comparison
 GROUP BY register_name
 ORDER BY

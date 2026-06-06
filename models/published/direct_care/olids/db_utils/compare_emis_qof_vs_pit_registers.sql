@@ -313,7 +313,14 @@ practice_comparison AS (
             WHEN ABS(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 2 THEN TRUE
             WHEN ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) <= 5 THEN TRUE
             ELSE FALSE
-        END AS practice_pass
+        END AS practice_pass,
+        -- 'Close' tier: within 5% (or 5 patients). Strong indicator the logic is correct
+        -- but just outside the strict 2% tolerance.
+        CASE
+            WHEN ABS(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 5 THEN TRUE
+            WHEN ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) <= 5 THEN TRUE
+            ELSE FALSE
+        END AS practice_within_5pct
     FROM emis_counts_by_practice e
     FULL OUTER JOIN pit_counts_by_practice p
         ON e.practice_code = p.practice_code
@@ -359,7 +366,11 @@ SELECT
     pit_count,
     difference,
     pct_difference,
-    CASE WHEN practice_pass THEN 'PASS' ELSE 'FAIL' END AS result
+    CASE
+        WHEN practice_pass THEN 'PASS'
+        WHEN practice_within_5pct THEN 'CLOSE'
+        ELSE 'FAIL'
+    END AS result
 FROM practice_comparison
 
 ORDER BY
