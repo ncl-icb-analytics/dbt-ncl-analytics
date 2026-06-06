@@ -288,10 +288,7 @@ emis_counts_by_practice AS (
     SELECT
         e.practice_code,
         e.register_name,
-        e.population_count AS emis_count,
-        -- EMIS list-size denominator for this register/practice (same source + date as the
-        -- register count). The register count is drawn from this registered population.
-        e.parent_population AS emis_list_size
+        e.population_count AS emis_count
     FROM {{ ref('stg_reference_emis_qof_v50_register_counts') }} e
     INNER JOIN validated_practices vp ON e.practice_code = vp.practice_code
 ),
@@ -302,7 +299,6 @@ practice_comparison AS (
         COALESCE(e.practice_code, p.practice_code) AS practice_code,
         COALESCE(e.register_name, p.register_name) AS register_name,
         e.emis_count,
-        e.emis_list_size,
         COALESCE(p.pit_count, 0) AS pit_count,
         CASE WHEN e.emis_count IS NULL THEN FALSE ELSE TRUE END AS emis_data_available,
         COALESCE(p.pit_count, 0) - COALESCE(e.emis_count, 0) AS difference,
@@ -353,18 +349,6 @@ SELECT
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
         ELSE ABS(ROUND(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0), 2))
     END AS abs_pct_difference,
-    -- EMIS list-size denominator (sum of parent_population over validated practices) and the
-    -- register's prevalence within it. Lets the count gap be read against the denominator:
-    -- the OLIDS as-of-ref population is within ~0.3% of this, so a residual count gap is
-    -- register prevalence (coding density), not a list-size difference.
-    CASE
-        WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
-        ELSE SUM(emis_list_size)
-    END AS total_emis_list_size,
-    CASE
-        WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
-        ELSE ROUND(100.0 * SUM(emis_count) / NULLIF(SUM(emis_list_size), 0), 2)
-    END AS emis_register_prevalence_pct,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN 'N/A'
         WHEN ABS(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
@@ -374,8 +358,6 @@ SELECT
     SUM(CASE WHEN practice_pass THEN 1 ELSE 0 END) AS practices_passing,
     -- 'Close' tier: within 5% but outside the strict 2% pass
     SUM(CASE WHEN practice_within_5pct AND NOT practice_pass THEN 1 ELSE 0 END) AS practices_close_5pct,
-    -- Passing or close: within 5% overall (strong-alignment indicator)
-    SUM(CASE WHEN practice_within_5pct THEN 1 ELSE 0 END) AS practices_within_5pct,
     SUM(CASE WHEN practice_within_5pct IS NOT NULL AND NOT practice_within_5pct THEN 1 ELSE 0 END) AS practices_failing
 FROM practice_comparison
 GROUP BY register_name
