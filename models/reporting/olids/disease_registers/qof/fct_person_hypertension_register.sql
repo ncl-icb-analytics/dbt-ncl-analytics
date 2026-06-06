@@ -120,11 +120,13 @@ register_logic AS (
             ELSE FALSE -- Currently resolved
         END AS has_active_htn_diagnosis,
         -- QOF v50 HYP_REG: unresolved hypertension diagnosis, no age restriction.
+        -- Use >= : a resolution on/before the latest diagnosis does not resolve the register
+        -- (HYPRES_DAT is the latest resolution STRICTLY after the latest diagnosis).
         COALESCE(
             diag.earliest_diagnosis_date IS NOT NULL -- Has HTN diagnosis
             AND (
                 diag.latest_resolved_date IS NULL -- Never resolved
-                OR diag.latest_diagnosis_date > diag.latest_resolved_date -- Re-diagnosed after resolution
+                OR diag.latest_diagnosis_date >= diag.latest_resolved_date -- not resolved after latest diagnosis
             ), FALSE
         ) AS is_on_register,
 

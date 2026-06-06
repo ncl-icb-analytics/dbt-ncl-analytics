@@ -36,10 +36,17 @@
         SELECT
             diag.person_id,
             'Hypertension' AS register_name,
-            -- Unresolved hypertension diagnosis (HYPLAT_DAT ≠ Null AND HYPRES_DAT = Null);
-            -- no age restriction per QOF v50.
+            -- Unresolved hypertension diagnosis (HYPLAT_DAT ≠ Null AND HYPRES_DAT = Null).
+            -- HYPRES_DAT is the latest resolution STRICTLY after the latest diagnosis, so a
+            -- resolution on/before the latest diagnosis does not resolve the register: use >=.
+            -- Explicit NULL check (no '1900-01-01' sentinel, which collided with null-dated
+            -- diagnosis codes coalesced to 1900). No age restriction per QOF v50.
             COALESCE(
-                diag.latest_diagnosis_date > COALESCE(diag.latest_resolved_date, '1900-01-01'),
+                diag.latest_diagnosis_date IS NOT NULL
+                AND (
+                    diag.latest_resolved_date IS NULL
+                    OR diag.latest_diagnosis_date >= diag.latest_resolved_date
+                ),
                 FALSE
             ) AS is_on_register
         FROM hypertension_person_aggregates diag
