@@ -2,9 +2,9 @@
     {#
     Calculates Rheumatoid Arthritis register status at a given reference date.
 
-    Business Logic:
-    - Age ≥16 at first RA diagnosis
-    - Active RA diagnosis (no resolution codes in RA)
+    QOF v50 RA_REG (CQRS 001):
+    - PAT_AGE >= 16 at the achievement/reference date (NOT age at diagnosis)
+    - RARTH_DAT ≠ Null (any RARTH_COD diagnosis; no resolution codes in RA)
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -30,26 +30,26 @@
         GROUP BY person_id
     ),
 
-    age_at_diagnosis AS (
+    age_at_reference AS (
         SELECT
-            diag.person_id,
-            diag.earliest_diagnosis_date,
-            bd.birth_date_approx,
-            DATEDIFF('year', bd.birth_date_approx, diag.earliest_diagnosis_date) AS age_at_first_diagnosis
-        FROM ra_person_aggregates diag
-        INNER JOIN {{ ref('dim_person_birth_death') }} bd ON diag.person_id = bd.person_id
-        WHERE bd.birth_date_approx IS NOT NULL
+            person_id,
+            DATEDIFF('year', birth_date_approx, {{ reference_date_expr }}) AS age
+        FROM {{ ref('dim_person_birth_death') }}
+        WHERE birth_date_approx IS NOT NULL
     ),
 
     ra_register_logic AS (
         SELECT
-            age.person_id,
+            diag.person_id,
             'Rheumatoid Arthritis' AS register_name,
+            -- PAT_AGE >= 16 at reference date AND a RARTH_COD diagnosis on record
             COALESCE(
-                age.age_at_first_diagnosis >= 16,
+                diag.earliest_diagnosis_date IS NOT NULL
+                AND age.age >= 16,
                 FALSE
             ) AS is_on_register
-        FROM age_at_diagnosis age
+        FROM ra_person_aggregates diag
+        LEFT JOIN age_at_reference age ON diag.person_id = age.person_id
     )
 
     SELECT
