@@ -1,7 +1,8 @@
 models:
   - name: int_lithium_medications_all
-    description: 'Lithium medication orders using BNF classification for bipolar disorder
-      and depression management.'
+    description: 'Lithium medication orders from the LIT_COD cluster (QOF lithium
+      prescription codes, MH2_REG). BNF 040203 is not used as it covers non-lithium
+      mania drugs.'
     config:
       meta:
         owner:
@@ -18,6 +19,8 @@ models:
         description: 'Date medication was ordered'
         tests:
           - not_null
+      - name: date_recorded
+        description: 'Date the medication order was recorded in the source system'
       - name: order_medication_name
         description: 'Name of medication as ordered'
       - name: order_dose
