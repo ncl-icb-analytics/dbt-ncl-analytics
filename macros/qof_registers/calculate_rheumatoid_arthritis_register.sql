@@ -33,7 +33,9 @@
     age_at_reference AS (
         SELECT
             person_id,
-            DATEDIFF('year', birth_date_approx, {{ reference_date_expr }}) AS age
+            -- Completed years at the reference date (month-accurate, matching dim_person_age)
+            -- so a patient is not counted a year older before their birthday.
+            FLOOR(DATEDIFF('month', birth_date_approx, {{ reference_date_expr }}) / 12) AS age
         FROM {{ ref('dim_person_birth_death') }}
         WHERE birth_date_approx IS NOT NULL
     ),
