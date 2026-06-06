@@ -1,0 +1,3 @@
+predecessor_code,successor_code,predecessor_name,successor_name,note
+E83049,E83035,Langstone Way Surgery,Wentworth Group Practice - Finchley,Langstone merged into Wentworth - OLIDS attributes patients to successor while the EMIS v50 extract still reports them under the old code
+F83007,F83010,Roman Way Medical Centre,Islington Central Medical Centre,Roman Way merged into Islington Central - OLIDS attributes patients to successor while the EMIS v50 extract still reports them under the old code

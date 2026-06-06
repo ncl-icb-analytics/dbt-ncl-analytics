@@ -148,6 +148,14 @@ seeds:
     +quote_columns: false
     +post-hook: ["{{ add_model_comment() }}"]
 
+    practice_merges:
+      +column_types:
+        predecessor_code: varchar(10)
+        successor_code: varchar(10)
+        predecessor_name: varchar(200)
+        successor_name: varchar(200)
+        note: varchar(500)
+
     bnf_polypharmacy_exclusions:
       +column_types:
         bnf_chapter_code: varchar(10)
