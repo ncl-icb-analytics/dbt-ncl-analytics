@@ -303,6 +303,7 @@ practice_comparison AS (
         COALESCE(e.practice_code, p.practice_code) AS practice_code,
         COALESCE(e.register_name, p.register_name) AS register_name,
         COALESCE(e.emis_count, 0) AS emis_count,
+        CASE WHEN e.emis_count IS NULL THEN 0 ELSE 1 END AS emis_available,
         COALESCE(p.pit_count, 0) AS pit_count,
         COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0) AS difference,
         ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) AS abs_difference,
@@ -328,15 +329,20 @@ practice_comparison AS (
     WHERE e.register_name IS NOT NULL OR p.register_name IS NOT NULL
 ),
 
--- Aggregate comparison (1% threshold)
+-- Aggregate comparison (1% threshold). Registers with no EMIS reference at any
+-- practice are N/A (unknown), not FAIL - missing EMIS is not a zero count.
 aggregate_comparison AS (
     SELECT
         register_name,
-        SUM(emis_count) AS total_emis_count,
+        CASE WHEN MAX(emis_available) = 0 THEN NULL ELSE SUM(emis_count) END AS total_emis_count,
         SUM(pit_count) AS total_pit_count,
-        SUM(emis_count) - SUM(pit_count) AS total_difference,
-        ROUND(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0), 2) AS pct_difference,
+        CASE WHEN MAX(emis_available) = 0 THEN NULL ELSE SUM(emis_count) - SUM(pit_count) END AS total_difference,
         CASE
+            WHEN MAX(emis_available) = 0 THEN NULL
+            ELSE ROUND(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0), 2)
+        END AS pct_difference,
+        CASE
+            WHEN MAX(emis_available) = 0 THEN 'N/A'
             WHEN ABS(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
             ELSE 'FAIL'
         END AS aggregate_pass
