@@ -145,9 +145,12 @@
             person_id,
             registration_start_date AS reg_dat
         FROM {{ ref('dim_person_historical_practice') }}
-        WHERE is_current_registration = TRUE
-          AND registration_start_date > {{ reference_date_expr }} - INTERVAL '12 months'
+        -- Registered as of the reference date (point-in-time), NOT is_current_registration
+        -- which reflects status today. Mirror the QOF GMS rule: registration started in the
+        -- 12 months up to the reference date and not ended (death-adjusted) by then.
+        WHERE registration_start_date > {{ reference_date_expr }} - INTERVAL '12 months'
           AND registration_start_date <= {{ reference_date_expr }}
+          AND (effective_end_date IS NULL OR effective_end_date > {{ reference_date_expr }})
     ),
 
     rule_3_qualifiers AS (
