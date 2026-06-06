@@ -19,7 +19,7 @@
             clinical_effective_date,
             is_any_ndh_type_code
         FROM {{ ref('int_ndh_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
           AND is_any_ndh_type_code = TRUE
     ),
 
@@ -38,7 +38,7 @@
             is_general_diabetes_code,
             is_diabetes_resolved_code
         FROM {{ ref('int_diabetes_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
     ),
 
     diabetes_person_aggregates AS (

@@ -20,7 +20,7 @@
             is_diagnosis_code,
             is_exclusion_code
         FROM {{ ref('int_learning_disability_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR date_recorded <= {{ reference_date_expr }})
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
     ),
 
     learning_disability_person_aggregates AS (
