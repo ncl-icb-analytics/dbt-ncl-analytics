@@ -28,16 +28,13 @@ WITH validated_practices AS (
 ),
 
 person_practices AS (
-    -- Registered, active patients at validated practices whose demographic period spans the
-    -- reference date. No death-retention window: per the QOF GMS rule death is a deregistration
-    -- (DEREG_DAT <= ACHV is rejected), so the artificial "retain deaths within N months" window
-    -- has been removed as it is not spec-aligned.
-    -- KNOWN LIMITATION: is_active reflects registration status *today*, not at the reference
-    -- date. Against a back-dated reference (currently a ~7-month rewind) this under-counts
-    -- death-heavy registers (Palliative Care, Heart Failure, PAD, AF) by patients who were
-    -- registered at the reference date but have since died or left. A fresher EMIS comparison
-    -- (reference date close to today) and upstream OLIDS episode-of-care fixes resolve this;
-    -- it is not corrected here with a synthetic window.
+    -- Point-in-time population: patients registered AND alive as of the reference (EMIS extract)
+    -- date, at validated practices. Uses the registration's death-adjusted end date
+    -- (registration_effective_end_date = death date if deceased, else deregistration date) rather
+    -- than is_active, which reflects status *today* and so dropped patients registered at the
+    -- reference date who have since died/left (under-counting death-heavy registers against a
+    -- back-dated reference). Per the QOF GMS rule death is a deregistration (DEREG_DAT <= ACHV
+    -- rejected), so a patient deceased or deregistered by the reference date is out of scope.
     SELECT
         h.person_id,
         h.practice_code,
@@ -46,7 +43,8 @@ person_practices AS (
     INNER JOIN validated_practices vp ON h.practice_code = vp.practice_code
     WHERE h.effective_start_date <= {{ qof_reference_date() }}
       AND (h.effective_end_date IS NULL OR h.effective_end_date > {{ qof_reference_date() }})
-      AND h.is_active = TRUE
+      AND (h.registration_effective_end_date IS NULL
+           OR h.registration_effective_end_date > {{ qof_reference_date() }})
 ),
 
 -- Get pit register data for each person
@@ -290,7 +288,10 @@ emis_counts_by_practice AS (
     SELECT
         e.practice_code,
         e.register_name,
-        e.population_count AS emis_count
+        e.population_count AS emis_count,
+        -- EMIS list-size denominator for this register/practice (same source + date as the
+        -- register count). The register count is drawn from this registered population.
+        e.parent_population AS emis_list_size
     FROM {{ ref('stg_reference_emis_qof_v50_register_counts') }} e
     INNER JOIN validated_practices vp ON e.practice_code = vp.practice_code
 ),
@@ -301,6 +302,7 @@ practice_comparison AS (
         COALESCE(e.practice_code, p.practice_code) AS practice_code,
         COALESCE(e.register_name, p.register_name) AS register_name,
         e.emis_count,
+        e.emis_list_size,
         COALESCE(p.pit_count, 0) AS pit_count,
         CASE WHEN e.emis_count IS NULL THEN FALSE ELSE TRUE END AS emis_data_available,
         COALESCE(p.pit_count, 0) - COALESCE(e.emis_count, 0) AS difference,
@@ -351,6 +353,18 @@ SELECT
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
         ELSE ABS(ROUND(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0), 2))
     END AS abs_pct_difference,
+    -- EMIS list-size denominator (sum of parent_population over validated practices) and the
+    -- register's prevalence within it. Lets the count gap be read against the denominator:
+    -- the OLIDS as-of-ref population is within ~0.3% of this, so a residual count gap is
+    -- register prevalence (coding density), not a list-size difference.
+    CASE
+        WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
+        ELSE SUM(emis_list_size)
+    END AS total_emis_list_size,
+    CASE
+        WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
+        ELSE ROUND(100.0 * SUM(emis_count) / NULLIF(SUM(emis_list_size), 0), 2)
+    END AS emis_register_prevalence_pct,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN 'N/A'
         WHEN ABS(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'

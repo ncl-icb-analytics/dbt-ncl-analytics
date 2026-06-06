@@ -32,16 +32,13 @@ WITH validated_practices AS (
 ),
 
 person_practices AS (
-    -- Registered, active patients at validated practices whose demographic period spans the
-    -- reference date. No death-retention window: per the QOF GMS rule death is a deregistration
-    -- (DEREG_DAT <= ACHV is rejected), so the artificial "retain deaths within N months" window
-    -- has been removed as it is not spec-aligned.
-    -- KNOWN LIMITATION: is_active reflects registration status *today*, not at the reference
-    -- date. Against a back-dated reference (currently a ~7-month rewind) this under-counts
-    -- death-heavy registers (Palliative Care, Heart Failure, PAD, AF) by patients who were
-    -- registered at the reference date but have since died or left. A fresher EMIS comparison
-    -- (reference date close to today) and upstream OLIDS episode-of-care fixes resolve this;
-    -- it is not corrected here with a synthetic window.
+    -- Point-in-time population: patients registered AND alive as of the reference (EMIS extract)
+    -- date, at validated practices. Uses the registration's death-adjusted end date
+    -- (registration_effective_end_date = death date if deceased, else deregistration date) rather
+    -- than is_active, which reflects status *today* and so dropped patients registered at the
+    -- reference date who have since died/left (under-counting death-heavy registers against a
+    -- back-dated reference). Per the QOF GMS rule death is a deregistration (DEREG_DAT <= ACHV
+    -- rejected), so a patient deceased or deregistered by the reference date is out of scope.
     SELECT
         h.person_id,
         h.practice_code,
@@ -50,7 +47,8 @@ person_practices AS (
     INNER JOIN validated_practices vp ON h.practice_code = vp.practice_code
     WHERE h.effective_start_date <= {{ qof_reference_date() }}
       AND (h.effective_end_date IS NULL OR h.effective_end_date > {{ qof_reference_date() }})
-      AND h.is_active = TRUE
+      AND (h.registration_effective_end_date IS NULL
+           OR h.registration_effective_end_date > {{ qof_reference_date() }})
 ),
 
 -- Get pit register data for each person
