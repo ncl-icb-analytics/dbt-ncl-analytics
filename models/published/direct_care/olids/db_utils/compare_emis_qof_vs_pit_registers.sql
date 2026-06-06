@@ -343,6 +343,8 @@ aggregate_comparison AS (
         END AS pct_difference,
         CASE
             WHEN MAX(emis_available) = 0 THEN 'N/A'
+            -- Zero EMIS baseline: % is undefined, so judge directly - exact match (pit also 0) PASSES.
+            WHEN SUM(emis_count) = 0 THEN CASE WHEN SUM(pit_count) = 0 THEN 'PASS' ELSE 'FAIL' END
             WHEN ABS(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
             ELSE 'FAIL'
         END AS aggregate_pass

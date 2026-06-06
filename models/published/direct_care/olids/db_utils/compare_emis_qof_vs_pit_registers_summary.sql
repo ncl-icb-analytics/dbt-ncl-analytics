@@ -351,6 +351,8 @@ SELECT
     END AS abs_pct_difference,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN 'N/A'
+        -- Zero EMIS baseline: % undefined, so judge directly - exact match (pit also 0) PASSES.
+        WHEN SUM(emis_count) = 0 THEN CASE WHEN SUM(pit_count) = 0 THEN 'PASS' ELSE 'FAIL' END
         WHEN ABS(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
         ELSE 'FAIL'
     END AS aggregate_1pct_test,
