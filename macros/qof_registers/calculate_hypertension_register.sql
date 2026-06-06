@@ -2,9 +2,10 @@
     {#
     Calculates Hypertension register status at a given reference date.
 
-    Business Logic:
-    - Age ≥18 at reference date
-    - Active hypertension diagnosis (latest diagnosis > latest resolution)
+    QOF v50 HYP_REG (CQRS 001):
+    - HYPLAT_DAT ≠ Null AND HYPRES_DAT = Null: an unresolved hypertension diagnosis
+      (latest diagnosis after the latest resolution). NO age restriction - the register
+      is all-ages. PAT_AGE applies only to the BP-target indicator denominators, not here.
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -31,26 +32,17 @@
         GROUP BY person_id
     ),
 
-    age_at_reference AS (
-        SELECT
-            person_id,
-            birth_date_approx,
-            FLOOR(DATEDIFF('month', birth_date_approx, {{ reference_date_expr }}) / 12) AS age
-        FROM {{ ref('dim_person_birth_death') }}
-        WHERE birth_date_approx IS NOT NULL
-    ),
-
     hypertension_register_logic AS (
         SELECT
             diag.person_id,
             'Hypertension' AS register_name,
+            -- Unresolved hypertension diagnosis (HYPLAT_DAT ≠ Null AND HYPRES_DAT = Null);
+            -- no age restriction per QOF v50.
             COALESCE(
-                age.age >= 18
-                AND diag.latest_diagnosis_date > COALESCE(diag.latest_resolved_date, '1900-01-01'),
+                diag.latest_diagnosis_date > COALESCE(diag.latest_resolved_date, '1900-01-01'),
                 FALSE
             ) AS is_on_register
         FROM hypertension_person_aggregates diag
-        LEFT JOIN age_at_reference age ON diag.person_id = age.person_id
     )
 
     SELECT
