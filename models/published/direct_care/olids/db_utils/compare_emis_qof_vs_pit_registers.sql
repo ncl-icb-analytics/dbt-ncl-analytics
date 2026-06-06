@@ -310,6 +310,7 @@ practice_comparison AS (
         ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) AS abs_difference,
         ROUND(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0), 2) AS pct_difference,
         CASE
+            WHEN e.emis_count IS NULL THEN NULL  -- no EMIS reference: unknown, not zero
             WHEN ABS(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 2 THEN TRUE
             WHEN ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) <= 5 THEN TRUE
             ELSE FALSE
@@ -317,6 +318,7 @@ practice_comparison AS (
         -- 'Close' tier: within 5% (or 5 patients). Strong indicator the logic is correct
         -- but just outside the strict 2% tolerance.
         CASE
+            WHEN e.emis_count IS NULL THEN NULL  -- no EMIS reference: unknown, not zero
             WHEN ABS(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 5 THEN TRUE
             WHEN ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) <= 5 THEN TRUE
             ELSE FALSE
@@ -367,6 +369,7 @@ SELECT
     difference,
     pct_difference,
     CASE
+        WHEN practice_pass IS NULL THEN 'N/A'  -- no EMIS reference for this practice/register
         WHEN practice_pass THEN 'PASS'
         WHEN practice_within_5pct THEN 'CLOSE'
         ELSE 'FAIL'
