@@ -332,28 +332,32 @@ SELECT
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN 'No data available'
         ELSE CAST(SUM(emis_count) AS VARCHAR)
     END AS total_emis_count,
-    SUM(pit_count) AS total_olids_count,
+    -- Only sum pit where an EMIS reference exists for that (practice, register) cell. Cells with
+    -- no EMIS row have no counterpart to compare against, so their OLIDS patients would inflate
+    -- the OLIDS total. Merged practices keep their EMIS reference and stay in (the predecessor's
+    -- count offsets the successor's at aggregate), so the total stays correct.
+    SUM(CASE WHEN emis_data_available THEN pit_count ELSE 0 END) AS total_olids_count,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
-        ELSE SUM(pit_count) - SUM(emis_count)
+        ELSE SUM(CASE WHEN emis_data_available THEN pit_count ELSE 0 END) - SUM(emis_count)
     END AS total_difference,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
-        ELSE ABS(SUM(pit_count) - SUM(emis_count))
+        ELSE ABS(SUM(CASE WHEN emis_data_available THEN pit_count ELSE 0 END) - SUM(emis_count))
     END AS total_abs_difference,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
-        ELSE ROUND(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0), 2)
+        ELSE ROUND(100.0 * (SUM(CASE WHEN emis_data_available THEN pit_count ELSE 0 END) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0), 2)
     END AS pct_difference,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN NULL
-        ELSE ABS(ROUND(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0), 2))
+        ELSE ABS(ROUND(100.0 * (SUM(CASE WHEN emis_data_available THEN pit_count ELSE 0 END) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0), 2))
     END AS abs_pct_difference,
     CASE
         WHEN MAX(CASE WHEN emis_data_available THEN 1 ELSE 0 END) = 0 THEN 'N/A'
         -- Zero EMIS baseline: % undefined, so judge directly - exact match (pit also 0) PASSES.
-        WHEN SUM(emis_count) = 0 THEN CASE WHEN SUM(pit_count) = 0 THEN 'PASS' ELSE 'FAIL' END
-        WHEN ABS(100.0 * (SUM(pit_count) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
+        WHEN SUM(emis_count) = 0 THEN CASE WHEN SUM(CASE WHEN emis_data_available THEN pit_count ELSE 0 END) = 0 THEN 'PASS' ELSE 'FAIL' END
+        WHEN ABS(100.0 * (SUM(CASE WHEN emis_data_available THEN pit_count ELSE 0 END) - SUM(emis_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
         ELSE 'FAIL'
     END AS aggregate_1pct_test,
     COUNT(DISTINCT CASE WHEN emis_data_available THEN practice_code END) AS total_practices_with_emis_data,

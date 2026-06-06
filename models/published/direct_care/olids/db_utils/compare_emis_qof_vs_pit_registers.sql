@@ -332,20 +332,25 @@ practice_comparison AS (
 -- Aggregate comparison (1% threshold). Registers with no EMIS reference at any
 -- practice are N/A (unknown), not FAIL - missing EMIS is not a zero count.
 aggregate_comparison AS (
+    -- Only sum pit where an EMIS reference exists for that (practice, register) cell
+    -- (emis_available = 1). Cells with no EMIS row (emis_available = 0) have no counterpart
+    -- to compare against, so counting their OLIDS patients would inflate the OLIDS total.
+    -- Merged practices are NOT excluded: they keep their EMIS reference, and the predecessor
+    -- practice's count offsets the successor's at aggregate, so the total stays correct.
     SELECT
         register_name,
         CASE WHEN MAX(emis_available) = 0 THEN NULL ELSE SUM(emis_count) END AS total_emis_count,
-        SUM(pit_count) AS total_pit_count,
-        CASE WHEN MAX(emis_available) = 0 THEN NULL ELSE SUM(emis_count) - SUM(pit_count) END AS total_difference,
+        SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END) AS total_pit_count,
+        CASE WHEN MAX(emis_available) = 0 THEN NULL ELSE SUM(emis_count) - SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END) END AS total_difference,
         CASE
             WHEN MAX(emis_available) = 0 THEN NULL
-            ELSE ROUND(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0), 2)
+            ELSE ROUND(100.0 * (SUM(emis_count) - SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END)) / NULLIF(SUM(emis_count), 0), 2)
         END AS pct_difference,
         CASE
             WHEN MAX(emis_available) = 0 THEN 'N/A'
             -- Zero EMIS baseline: % is undefined, so judge directly - exact match (pit also 0) PASSES.
-            WHEN SUM(emis_count) = 0 THEN CASE WHEN SUM(pit_count) = 0 THEN 'PASS' ELSE 'FAIL' END
-            WHEN ABS(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
+            WHEN SUM(emis_count) = 0 THEN CASE WHEN SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END) = 0 THEN 'PASS' ELSE 'FAIL' END
+            WHEN ABS(100.0 * (SUM(emis_count) - SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
             ELSE 'FAIL'
         END AS aggregate_pass
     FROM practice_comparison
