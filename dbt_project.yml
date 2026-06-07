@@ -25,7 +25,6 @@ vars:
   dbt_audit_schema: "test_audit"
   auto_schema_domains: ['olids']
   qof_reference_date: "2025-11-04"  # EMIS QOF extract date, override via --vars
-  qof_recent_death_months: 3  # register comparison retains patients who died within this many months before qof_reference_date (mirrors EMIS deregistration lag); override via --vars
   # Elementary observability
   disable_dbt_artifacts_autoupload: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
   disable_run_results: "{{ target.name not in ['prod', 'snowflake-prod'] }}"
@@ -148,6 +147,14 @@ seeds:
     +schema: "DBT_SEEDS"
     +quote_columns: false
     +post-hook: ["{{ add_model_comment() }}"]
+
+    practice_merges:
+      +column_types:
+        predecessor_code: varchar(10)
+        successor_code: varchar(10)
+        predecessor_name: varchar(200)
+        successor_name: varchar(200)
+        note: varchar(500)
 
     bnf_polypharmacy_exclusions:
       +column_types:

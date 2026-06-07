@@ -32,13 +32,13 @@ WITH validated_practices AS (
 ),
 
 person_practices AS (
-    -- Filter to patients registered at the reference date, at validated practices only.
-    -- Death handling: QOF registers retain patients who died within the reporting period
-    -- (death is not deregistration), and EMIS extracts run on the live practice list where
-    -- the recently deceased have not yet been deregistered. So we keep a patient if they are
-    -- currently active OR died within qof_recent_death_months before the reference date.
-    -- Excluding all deceased (the previous behaviour) under-counted death-heavy registers,
-    -- most visibly Palliative Care (~-9%). Window anchored on qof_reference_date().
+    -- Point-in-time population: patients registered AND alive as of the reference (EMIS extract)
+    -- date, at validated practices. Uses the registration's death-adjusted end date
+    -- (registration_effective_end_date = death date if deceased, else deregistration date) rather
+    -- than is_active, which reflects status *today* and so dropped patients registered at the
+    -- reference date who have since died/left (under-counting death-heavy registers against a
+    -- back-dated reference). Per the QOF GMS rule death is a deregistration (DEREG_DAT <= ACHV
+    -- rejected), so a patient deceased or deregistered by the reference date is out of scope.
     SELECT
         h.person_id,
         h.practice_code,
@@ -47,13 +47,8 @@ person_practices AS (
     INNER JOIN validated_practices vp ON h.practice_code = vp.practice_code
     WHERE h.effective_start_date <= {{ qof_reference_date() }}
       AND (h.effective_end_date IS NULL OR h.effective_end_date > {{ qof_reference_date() }})
-      AND (
-          h.is_active = TRUE
-          OR (
-              h.death_date_approx > DATEADD('month', -{{ var('qof_recent_death_months') }}, {{ qof_reference_date() }})
-              AND h.death_date_approx <= {{ qof_reference_date() }}
-          )
-      )
+      AND (h.registration_effective_end_date IS NULL
+           OR h.registration_effective_end_date > {{ qof_reference_date() }})
 ),
 
 -- Get pit register data for each person
@@ -308,15 +303,25 @@ practice_comparison AS (
         COALESCE(e.practice_code, p.practice_code) AS practice_code,
         COALESCE(e.register_name, p.register_name) AS register_name,
         COALESCE(e.emis_count, 0) AS emis_count,
+        CASE WHEN e.emis_count IS NULL THEN 0 ELSE 1 END AS emis_available,
         COALESCE(p.pit_count, 0) AS pit_count,
         COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0) AS difference,
         ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) AS abs_difference,
         ROUND(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0), 2) AS pct_difference,
         CASE
+            WHEN e.emis_count IS NULL THEN NULL  -- no EMIS reference: unknown, not zero
             WHEN ABS(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 2 THEN TRUE
             WHEN ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) <= 5 THEN TRUE
             ELSE FALSE
-        END AS practice_pass
+        END AS practice_pass,
+        -- 'Close' tier: within 5% (or 5 patients). Strong indicator the logic is correct
+        -- but just outside the strict 2% tolerance.
+        CASE
+            WHEN e.emis_count IS NULL THEN NULL  -- no EMIS reference: unknown, not zero
+            WHEN ABS(100.0 * (COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) / NULLIF(COALESCE(e.emis_count, 0), 0)) <= 5 THEN TRUE
+            WHEN ABS(COALESCE(e.emis_count, 0) - COALESCE(p.pit_count, 0)) <= 5 THEN TRUE
+            ELSE FALSE
+        END AS practice_within_5pct
     FROM emis_counts_by_practice e
     FULL OUTER JOIN pit_counts_by_practice p
         ON e.practice_code = p.practice_code
@@ -324,16 +329,28 @@ practice_comparison AS (
     WHERE e.register_name IS NOT NULL OR p.register_name IS NOT NULL
 ),
 
--- Aggregate comparison (1% threshold)
+-- Aggregate comparison (1% threshold). Registers with no EMIS reference at any
+-- practice are N/A (unknown), not FAIL - missing EMIS is not a zero count.
 aggregate_comparison AS (
+    -- Only sum pit where an EMIS reference exists for that (practice, register) cell
+    -- (emis_available = 1). Cells with no EMIS row (emis_available = 0) have no counterpart
+    -- to compare against, so counting their OLIDS patients would inflate the OLIDS total.
+    -- Merged practices are NOT excluded: they keep their EMIS reference, and the predecessor
+    -- practice's count offsets the successor's at aggregate, so the total stays correct.
     SELECT
         register_name,
-        SUM(emis_count) AS total_emis_count,
-        SUM(pit_count) AS total_pit_count,
-        SUM(emis_count) - SUM(pit_count) AS total_difference,
-        ROUND(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0), 2) AS pct_difference,
+        CASE WHEN MAX(emis_available) = 0 THEN NULL ELSE SUM(emis_count) END AS total_emis_count,
+        SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END) AS total_pit_count,
+        CASE WHEN MAX(emis_available) = 0 THEN NULL ELSE SUM(emis_count) - SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END) END AS total_difference,
         CASE
-            WHEN ABS(100.0 * (SUM(emis_count) - SUM(pit_count)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
+            WHEN MAX(emis_available) = 0 THEN NULL
+            ELSE ROUND(100.0 * (SUM(emis_count) - SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END)) / NULLIF(SUM(emis_count), 0), 2)
+        END AS pct_difference,
+        CASE
+            WHEN MAX(emis_available) = 0 THEN 'N/A'
+            -- Zero EMIS baseline: % is undefined, so judge directly - exact match (pit also 0) PASSES.
+            WHEN SUM(emis_count) = 0 THEN CASE WHEN SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END) = 0 THEN 'PASS' ELSE 'FAIL' END
+            WHEN ABS(100.0 * (SUM(emis_count) - SUM(CASE WHEN emis_available = 1 THEN pit_count ELSE 0 END)) / NULLIF(SUM(emis_count), 0)) <= 1 THEN 'PASS'
             ELSE 'FAIL'
         END AS aggregate_pass
     FROM practice_comparison
@@ -362,7 +379,12 @@ SELECT
     pit_count,
     difference,
     pct_difference,
-    CASE WHEN practice_pass THEN 'PASS' ELSE 'FAIL' END AS result
+    CASE
+        WHEN practice_pass IS NULL THEN 'N/A'  -- no EMIS reference for this practice/register
+        WHEN practice_pass THEN 'PASS'
+        WHEN practice_within_5pct THEN 'CLOSE'
+        ELSE 'FAIL'
+    END AS result
 FROM practice_comparison
 
 ORDER BY

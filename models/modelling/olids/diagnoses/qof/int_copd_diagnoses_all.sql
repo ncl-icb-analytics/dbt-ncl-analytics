@@ -17,8 +17,9 @@ Clinical Purpose:
 - Resolution status tracking
 
 Key QOF Requirements:
-- Pre-April 2023: Diagnosis alone sufficient for register
-- Post-April 2023: Requires spirometry confirmation (FEV1/FVC <0.7) OR unable-to-have-spirometry status
+- Register is diagnosis-based: any unresolved COPD diagnosis qualifies (v50 Rule 4 catch-all).
+- Spirometry (FEV1/FVC <0.7) within the diagnosis/registration window populates the
+  FEV1FVCDIAG/FEV1FVCREG dates used by downstream indicators, not register inclusion.
 
 Includes ALL persons (active, inactive, deceased) following intermediate layer principles.
 This is OBSERVATION-LEVEL data - one row per COPD observation.
@@ -29,6 +30,7 @@ SELECT
     obs.id,
     obs.person_id,
     obs.clinical_effective_date,
+    obs.date_recorded,
     obs.mapped_concept_code AS concept_code,
     obs.mapped_concept_display AS concept_display,
     obs.cluster_id AS source_cluster_id,

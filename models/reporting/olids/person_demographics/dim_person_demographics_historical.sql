@@ -297,6 +297,10 @@ SELECT
         WHEN pwa.registration_effective_end_date >= COALESCE(pwa.effective_end_date, CURRENT_DATE()) THEN TRUE
         ELSE FALSE
     END AS is_active,
+    -- Death-adjusted registration end (= death date if deceased, else deregistration date,
+    -- NULL if open). Enables point-in-time "registered + alive as of date X" tests without the
+    -- current-status bias of is_active. NULL OR > X means registered and alive as of X.
+    pwa.registration_effective_end_date,
     bd.is_deceased,
     bd.is_test_patient,
     CASE

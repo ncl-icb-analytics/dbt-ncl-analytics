@@ -46,7 +46,45 @@ mapped as (
         excluded,
         status
     from source
+),
+
+merged as (
+    -- Credit merged-predecessor practices to their successor: OLIDS attributes the
+    -- patients to the successor while the EMIS v50 extract still reports them under the
+    -- old code. Remap via the practice_merges seed and re-aggregate so merged practices
+    -- compare like-for-like. Not yet captured in the ODS OrganisationSuccessor dictionary.
+    select
+        m.reference_date,
+        any_value(m.indicator_code) as indicator_code,
+        any_value(m.indicator_description) as indicator_description,
+        coalesce(pm.successor_code, m.practice_code) as practice_code,
+        any_value(coalesce(pm.successor_name, m.practice_name)) as practice_name,
+        m.register_name,
+        sum(m.population_count) as population_count,
+        sum(m.parent_population) as parent_population,
+        sum(m.males) as males,
+        sum(m.females) as females,
+        sum(m.excluded) as excluded,
+        any_value(m.status) as status
+    from mapped m
+    left join {{ ref('practice_merges') }} pm
+        on m.practice_code = pm.predecessor_code
+    where m.register_name is not null
+    group by m.reference_date, coalesce(pm.successor_code, m.practice_code), m.register_name
 )
 
-select * from mapped
-where register_name is not null
+select
+    reference_date,
+    indicator_code,
+    indicator_description,
+    practice_code,
+    practice_name,
+    register_name,
+    population_count,
+    parent_population,
+    round(100.0 * population_count / nullif(parent_population, 0), 2) as percentage,
+    males,
+    females,
+    excluded,
+    status
+from merged

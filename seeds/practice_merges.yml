@@ -1,0 +1,25 @@
+seeds:
+  - name: practice_merges
+    description: >
+      GP practice merges where OLIDS attributes the predecessor's patients to the
+      successor practice, but the EMIS QOF v50 reference extract still reports them
+      under the old (predecessor) code. Used to credit predecessor register counts to
+      the successor in stg_reference_emis_qof_v50_register_counts so merged practices
+      compare like-for-like against OLIDS. Not yet reflected in the ODS
+      OrganisationSuccessor dictionary (predecessors still show as Active there).
+    columns:
+      - name: predecessor_code
+        description: ODS code of the merged/closed practice still reported in the EMIS extract.
+        tests:
+          - not_null
+          - unique
+      - name: successor_code
+        description: ODS code of the practice the patients moved to (where OLIDS attributes them).
+        tests:
+          - not_null
+      - name: predecessor_name
+        description: Name of the predecessor practice.
+      - name: successor_name
+        description: Name of the successor practice.
+      - name: note
+        description: Context for the merge.

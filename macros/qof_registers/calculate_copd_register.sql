@@ -9,11 +9,14 @@
     - Rule 4: EUNRESCOPD_DAT >= 01/04/2023 → all remaining patients included (no spirometry code required per QOF v50)
 
     EUNRESCOPD_DAT (Field 22):
-    - If no resolved codes → COPD_DAT (earliest diagnosis)
-    - Else → COPD1_DAT (earliest diagnosis after latest resolved)
+    - If COPDRES_DAT and COPDRES1_DAT are both NULL → COPD_DAT (earliest diagnosis)
+    - Else → COPD1_DAT (earliest diagnosis after latest resolved code). When the patient
+      is fully resolved (resolved code with no later diagnosis) COPD1_DAT is NULL, so
+      EUNRESCOPD_DAT is NULL and the patient is correctly off the register.
 
-    Note: Previous implementation incorrectly required SPIRPU_COD for Rule 4. QOF v50 spec
-    Rule 4 simply states: "If EUNRESCOPD_DAT >= 01/04/2023 → Select" for all remaining patients.
+    Note: Rule 4 (EUNRESCOPD_DAT >= 01/04/2023 → Select) is the spec's catch-all and makes
+    Rules 2-3 non-gating for the register; the register is diagnosis-based. The spirometry
+    rules populate FEV1FVCDIAG/REG dates used by downstream indicators, not the register.
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -28,7 +31,7 @@
             is_diagnosis_code,
             is_resolved_code
         FROM {{ ref('int_copd_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
     ),
 
     copd_person_aggregates AS (
@@ -80,9 +83,12 @@
             qf.copdres1_dat,
             c1.copd1_dat,
             -- EUNRESCOPD_DAT (Field 22): per exact QOF specification
+            -- If no resolved codes → COPD_DAT; otherwise → COPD1_DAT (may be NULL).
+            -- COPD1_DAT is NULL when the patient has a resolved code with no later
+            -- diagnosis (fully resolved) → EUNRESCOPD_DAT NULL → off register.
             CASE
                 WHEN qf.copdres_dat IS NULL AND qf.copdres1_dat IS NULL THEN qf.copd_dat
-                ELSE COALESCE(c1.copd1_dat, qf.copd_dat)
+                ELSE c1.copd1_dat
             END AS eunrescopd_dat
         FROM copd_qof_fields qf
         LEFT JOIN copd1_dat_calc c1 ON qf.person_id = c1.person_id
@@ -96,7 +102,7 @@
             is_below_0_7,
             is_valid_spirometry
         FROM {{ ref('int_spirometry_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
           AND is_valid_spirometry = TRUE
           AND is_below_0_7 = TRUE
     ),
@@ -139,9 +145,12 @@
             person_id,
             registration_start_date AS reg_dat
         FROM {{ ref('dim_person_historical_practice') }}
-        WHERE is_current_registration = TRUE
-          AND registration_start_date > {{ reference_date_expr }} - INTERVAL '12 months'
+        -- Registered as of the reference date (point-in-time), NOT is_current_registration
+        -- which reflects status today. Mirror the QOF GMS rule: registration started in the
+        -- 12 months up to the reference date and not ended (death-adjusted) by then.
+        WHERE registration_start_date > {{ reference_date_expr }} - INTERVAL '12 months'
           AND registration_start_date <= {{ reference_date_expr }}
+          AND (effective_end_date IS NULL OR effective_end_date > {{ reference_date_expr }})
     ),
 
     rule_3_qualifiers AS (

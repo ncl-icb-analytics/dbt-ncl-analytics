@@ -18,6 +18,7 @@ SELECT
     obs.id,
     obs.person_id,
     obs.clinical_effective_date,
+    obs.date_recorded,
     obs.mapped_concept_code AS concept_code,
     obs.mapped_concept_display AS concept_display,
    CASE
@@ -56,4 +57,7 @@ ORDER BY person_id, clinical_effective_date, id
 )
 SELECT *
 FROM base_observations
-QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY PERSON_ID) = 1
+-- Deterministic de-duplication: keep the earliest-recorded copy so the observation
+-- counts under a point-in-time date_recorded <= reference_date cut if it was recorded
+-- by then; id breaks any remaining ties.
+QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, CONCEPT_CODE, CLINICAL_EFFECTIVE_DATE ORDER BY date_recorded ASC NULLS FIRST, id) = 1

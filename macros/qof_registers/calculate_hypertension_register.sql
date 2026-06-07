@@ -2,9 +2,10 @@
     {#
     Calculates Hypertension register status at a given reference date.
 
-    Business Logic:
-    - Age ≥18 at reference date
-    - Active hypertension diagnosis (latest diagnosis > latest resolution)
+    QOF v50 HYP_REG (CQRS 001):
+    - HYPLAT_DAT ≠ Null AND HYPRES_DAT = Null: an unresolved hypertension diagnosis
+      (latest diagnosis after the latest resolution). NO age restriction - the register
+      is all-ages. PAT_AGE applies only to the BP-target indicator denominators, not here.
 
     Parameters:
         reference_date_expr: SQL expression for reference date (default: CURRENT_DATE())
@@ -19,7 +20,7 @@
             is_diagnosis_code,
             is_resolved_code
         FROM {{ ref('int_hypertension_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
     ),
 
     hypertension_person_aggregates AS (
@@ -31,26 +32,24 @@
         GROUP BY person_id
     ),
 
-    age_at_reference AS (
-        SELECT
-            person_id,
-            birth_date_approx,
-            DATEDIFF('year', birth_date_approx, {{ reference_date_expr }}) AS age
-        FROM {{ ref('dim_person_birth_death') }}
-        WHERE birth_date_approx IS NOT NULL
-    ),
-
     hypertension_register_logic AS (
         SELECT
             diag.person_id,
             'Hypertension' AS register_name,
+            -- Unresolved hypertension diagnosis (HYPLAT_DAT ≠ Null AND HYPRES_DAT = Null).
+            -- HYPRES_DAT is the latest resolution STRICTLY after the latest diagnosis, so a
+            -- resolution on/before the latest diagnosis does not resolve the register: use >=.
+            -- Explicit NULL check (no '1900-01-01' sentinel, which collided with null-dated
+            -- diagnosis codes coalesced to 1900). No age restriction per QOF v50.
             COALESCE(
-                age.age >= 18
-                AND diag.latest_diagnosis_date > COALESCE(diag.latest_resolved_date, '1900-01-01'),
+                diag.latest_diagnosis_date IS NOT NULL
+                AND (
+                    diag.latest_resolved_date IS NULL
+                    OR diag.latest_diagnosis_date >= diag.latest_resolved_date
+                ),
                 FALSE
             ) AS is_on_register
         FROM hypertension_person_aggregates diag
-        LEFT JOIN age_at_reference age ON diag.person_id = age.person_id
     )
 
     SELECT

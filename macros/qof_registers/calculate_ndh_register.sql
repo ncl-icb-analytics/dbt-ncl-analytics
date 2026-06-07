@@ -2,8 +2,8 @@
     {#
     Calculates NDH (Non-Diabetic Hyperglycaemia) register status at a given reference date.
 
-    Business Logic:
-    - Age ≥18 at first NDH diagnosis
+    Business Logic (QOF v50 NDH register):
+    - PAT_AGE >= 18 at the achievement/reference date (NOT age at diagnosis)
     - Has NDH/IGT/PRD diagnosis
     - Never had diabetes OR diabetes is resolved
 
@@ -19,7 +19,7 @@
             clinical_effective_date,
             is_any_ndh_type_code
         FROM {{ ref('int_ndh_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
           AND is_any_ndh_type_code = TRUE
     ),
 
@@ -38,7 +38,7 @@
             is_general_diabetes_code,
             is_diabetes_resolved_code
         FROM {{ ref('int_diabetes_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
     ),
 
     diabetes_person_aggregates AS (
@@ -50,31 +50,33 @@
         GROUP BY person_id
     ),
 
-    age_at_diagnosis AS (
+    age_at_reference AS (
         SELECT
-            ndh.person_id,
-            ndh.earliest_diagnosis_date,
-            bd.birth_date_approx,
-            DATEDIFF('year', bd.birth_date_approx, ndh.earliest_diagnosis_date) AS age_at_first_ndh
-        FROM ndh_person_aggregates ndh
-        INNER JOIN {{ ref('dim_person_birth_death') }} bd ON ndh.person_id = bd.person_id
-        WHERE bd.birth_date_approx IS NOT NULL
+            person_id,
+            -- Completed years at the reference date (month-accurate, matching dim_person_age)
+            -- so a patient is not counted a year older before their birthday.
+            FLOOR(DATEDIFF('month', birth_date_approx, {{ reference_date_expr }}) / 12) AS age
+        FROM {{ ref('dim_person_birth_death') }}
+        WHERE birth_date_approx IS NOT NULL
     ),
 
     ndh_register_logic AS (
         SELECT
-            age.person_id,
+            ndh.person_id,
             'NDH' AS register_name,
+            -- PAT_AGE >= 18 at reference date AND an NDH diagnosis AND no active diabetes
             COALESCE(
-                age.age_at_first_ndh >= 18
+                age.age >= 18
+                AND ndh.earliest_diagnosis_date IS NOT NULL
                 AND (
                     dm.latest_diabetes_date IS NULL
                     OR dm.latest_resolved_date > dm.latest_diabetes_date
                 ),
                 FALSE
             ) AS is_on_register
-        FROM age_at_diagnosis age
-        LEFT JOIN diabetes_person_aggregates dm ON age.person_id = dm.person_id
+        FROM ndh_person_aggregates ndh
+        LEFT JOIN age_at_reference age ON ndh.person_id = age.person_id
+        LEFT JOIN diabetes_person_aggregates dm ON ndh.person_id = dm.person_id
     )
 
     SELECT
