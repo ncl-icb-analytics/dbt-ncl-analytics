@@ -195,9 +195,15 @@ if (Test-Path $envPath) {
 Write-Host ""
 
 # ---------------------------------------------------------------------------
-# 7. dbt packages
+# 7. dbt packages - install if missing, or if packages.yml changed since last install
 # ---------------------------------------------------------------------------
-if (-not (Test-Path "dbt_packages")) {
+$needDeps = -not (Test-Path "dbt_packages")
+if (-not $needDeps -and (Test-Path "packages.yml")) {
+    if ((Get-Item "packages.yml").LastWriteTimeUtc -gt (Get-Item "dbt_packages").LastWriteTimeUtc) {
+        $needDeps = $true
+    }
+}
+if ($needDeps) {
     Write-Host "Installing dbt packages (dbt deps)..." -ForegroundColor Cyan
     try { dbt deps } catch { $actions += "Run 'dbt deps' to install dbt packages" }
     Write-Host ""

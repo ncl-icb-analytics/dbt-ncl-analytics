@@ -198,9 +198,15 @@ fi
 echo ""
 
 # ---------------------------------------------------------------------------
-# 7. dbt packages
+# 7. dbt packages - install if missing, or if packages.yml changed since last install
 # ---------------------------------------------------------------------------
+need_deps=false
 if [ ! -d "dbt_packages" ]; then
+    need_deps=true
+elif [ -f "packages.yml" ] && [ "packages.yml" -nt "dbt_packages" ]; then
+    need_deps=true
+fi
+if [ "$need_deps" = true ]; then
     echo "Installing dbt packages (dbt deps)..."
     dbt deps || actions+=("Run 'dbt deps' to install dbt packages")
     echo ""
