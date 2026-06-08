@@ -24,9 +24,9 @@ moc_check_test as (
     from {{ ref('int_ltc_lcs_moc_check_test') }}
 ),
 
-moc_mdt_review as (
-    select person_id, latest_completed_date, mdt_review_completed
-    from {{ ref('int_ltc_lcs_moc_mdt_review') }}
+moc_remote_desktop_review as (
+    select person_id, latest_completed_date, remote_desktop_review_completed
+    from {{ ref('int_ltc_lcs_moc_remote_desktop_review') }}
 ),
 
 moc_careplan_sharing as (
@@ -66,8 +66,8 @@ joined as (
 
         coalesce(ct.check_test_completed, false) as moc_check_test_completed,
         ct.latest_completed_date as moc_check_test_date,
-        coalesce(mdt.mdt_review_completed, false) as moc_mdt_review_completed,
-        mdt.latest_completed_date as moc_mdt_review_date,
+        coalesce(rdr.remote_desktop_review_completed, false) as moc_remote_desktop_review_completed,
+        rdr.latest_completed_date as moc_remote_desktop_review_date,
         coalesce(cps.careplan_sharing_completed, false) as moc_careplan_sharing_completed,
         cps.latest_completed_date as moc_careplan_sharing_date,
         coalesce(dsc.discussion_completed, false) as moc_discussion_completed,
@@ -79,7 +79,7 @@ joined as (
     from moc_base p
     left join rs on p.person_id = rs.person_id
     left join moc_check_test ct on p.person_id = ct.person_id
-    left join moc_mdt_review mdt on p.person_id = mdt.person_id
+    left join moc_remote_desktop_review rdr on p.person_id = rdr.person_id
     left join moc_careplan_sharing cps on p.person_id = cps.person_id
     left join moc_discussion dsc on p.person_id = dsc.person_id
     left join moc_followup fu on p.person_id = fu.person_id
@@ -97,27 +97,27 @@ with_pathway as (
             when 'MR'  then 'MRS'
             when 'LR'  then 'LRS'
         end as moc_pathway,
-        -- Stage 2 is "MDT review OR careplan sharing" for HRCS / HRS,
-        -- but "careplan sharing only" for MRS / LRS (no MDT step).
+        -- Stage 2 is "Remote Desktop Review (RDR) OR careplan sharing" for HRCS / HRS,
+        -- but "careplan sharing only" for MRS / LRS (no RDR step).
         case
             when upper(j.overall_risk_group) in ('HRC', 'HR')
-                then (j.moc_mdt_review_completed or j.moc_careplan_sharing_completed)
+                then (j.moc_remote_desktop_review_completed or j.moc_careplan_sharing_completed)
             else j.moc_careplan_sharing_completed
         end as moc_stage_2_completed,
         -- Effective stage 2 date: earliest valid stage-2 event per pathway.
         case
             when upper(j.overall_risk_group) in ('HRC', 'HR') then
                 case
-                    when j.moc_mdt_review_date is null then j.moc_careplan_sharing_date
-                    when j.moc_careplan_sharing_date is null then j.moc_mdt_review_date
-                    when j.moc_mdt_review_date <= j.moc_careplan_sharing_date then j.moc_mdt_review_date
+                    when j.moc_remote_desktop_review_date is null then j.moc_careplan_sharing_date
+                    when j.moc_careplan_sharing_date is null then j.moc_remote_desktop_review_date
+                    when j.moc_remote_desktop_review_date <= j.moc_careplan_sharing_date then j.moc_remote_desktop_review_date
                     else j.moc_careplan_sharing_date
                 end
             else j.moc_careplan_sharing_date
         end as moc_stage_2_date,
         (
             j.moc_check_test_completed
-            or j.moc_mdt_review_completed
+            or j.moc_remote_desktop_review_completed
             or j.moc_careplan_sharing_completed
             or j.moc_discussion_completed
             or j.moc_followup_completed
@@ -126,7 +126,7 @@ with_pathway as (
         -- Latest progression activity date (excludes decline)
         greatest(
             coalesce(j.moc_check_test_date, '1900-01-01'),
-            coalesce(j.moc_mdt_review_date, '1900-01-01'),
+            coalesce(j.moc_remote_desktop_review_date, '1900-01-01'),
             coalesce(j.moc_careplan_sharing_date, '1900-01-01'),
             coalesce(j.moc_discussion_date, '1900-01-01'),
             coalesce(j.moc_followup_date, '1900-01-01')
@@ -173,8 +173,8 @@ select
     -- MOC activity flags (last 12 months)
     moc_check_test_completed,
     moc_check_test_date,
-    moc_mdt_review_completed,
-    moc_mdt_review_date,
+    moc_remote_desktop_review_completed,
+    moc_remote_desktop_review_date,
     moc_careplan_sharing_completed,
     moc_careplan_sharing_date,
     moc_discussion_completed,
@@ -200,7 +200,7 @@ select
         when moc_followup_completed then 'Follow-up'
         when moc_discussion_completed then 'Discussion'
         when moc_stage_2_completed then
-            case when moc_pathway in ('HRCS', 'HRS') then 'MDT / Careplan' else 'Careplan sharing' end
+            case when moc_pathway in ('HRCS', 'HRS') then 'RDR / Careplan' else 'Careplan sharing' end
         when moc_check_test_completed then 'Check & Test'
         else 'Not started'
     end as moc_stage_completed_label,
@@ -225,7 +225,7 @@ select
         when moc_discussion_completed then 'Follow-up'
         when moc_stage_2_completed then 'Discussion'
         when moc_check_test_completed then
-            case when moc_pathway in ('HRCS', 'HRS') then 'MDT / Careplan' else 'Careplan sharing' end
+            case when moc_pathway in ('HRCS', 'HRS') then 'RDR / Careplan' else 'Careplan sharing' end
         else 'Check & Test'
     end as moc_next_action,
 

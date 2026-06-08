@@ -1,7 +1,7 @@
 models:
-  - name: int_ltc_lcs_moc_mdt_review
+  - name: int_ltc_lcs_moc_remote_desktop_review
     description: |
-      LTC LCS Model of Care - MDT review completed.
+      LTC LCS Model of Care - Remote Desktop Review (RDR) completed.
 
       Flags persons with a Chronic disease management annual review completed event
       (<< 888461000000107) recorded in the last 12 months. One row per person.
@@ -24,10 +24,10 @@ models:
           - not_null
           - unique
       - name: latest_completed_date
-        description: Most recent MDT review date within the last 12 months
+        description: Most recent Remote Desktop Review (RDR) date within the last 12 months
         data_tests:
           - not_null
-      - name: mdt_review_completed
-        description: Always true — row presence indicates an MDT review event in the last 12 months
+      - name: remote_desktop_review_completed
+        description: Always true — row presence indicates a Remote Desktop Review (RDR) event in the last 12 months
         data_tests:
           - not_null
