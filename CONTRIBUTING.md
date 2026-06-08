@@ -97,10 +97,10 @@ SNOWFLAKE_WAREHOUSE=your-warehouse
 SNOWFLAKE_ROLE=your-role
 ```
 
-Auth: leave it there for **browser SSO** (the default). For a **PAT or password**, set
-`SNOWFLAKE_PASSWORD` (a PAT goes in the password field); add
-`SNOWFLAKE_AUTHENTICATOR=username_password_mfa` if your account uses MFA. `profiles.yml`
-reads these from `.env`.
+Auth: leave it there for **browser SSO** (the default). For a **PAT**, set `SNOWFLAKE_PAT`
+(Fusion authenticates via `programmatic_access_token`). For an **account password**, set
+`SNOWFLAKE_PASSWORD` (used with MFA). `profiles.yml` picks the authenticator from whichever
+you set.
 
 ### Step 4: Initialise Your Development Environment
 

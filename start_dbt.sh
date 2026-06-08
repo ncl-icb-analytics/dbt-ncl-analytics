@@ -162,7 +162,7 @@ new_dbt_env_file() {
     echo "  1) Browser SSO (externalbrowser)   [default, recommended]"
     echo "  2) Programmatic Access Token (PAT)"
     echo "  3) Account password + MFA"
-    echo "     (2 and 3 both store SNOWFLAKE_PASSWORD - a PAT goes in the password field)"
+    echo "     (PAT -> SNOWFLAKE_PAT/token; password -> SNOWFLAKE_PASSWORD)"
     read -r -p "Selection [1]: " choice
     [ -z "$choice" ] && choice=1
 
@@ -175,7 +175,7 @@ new_dbt_env_file() {
         [ -n "$warehouse" ] && echo "SNOWFLAKE_WAREHOUSE=$warehouse"
     } > "$path"
     case "$choice" in
-        2) read -r -s -p "Paste your PAT: " secret; echo ""; echo "SNOWFLAKE_PASSWORD=$secret" >> "$path" ;;
+        2) read -r -s -p "Paste your PAT: " secret; echo ""; echo "SNOWFLAKE_PAT=$secret" >> "$path" ;;
         3) read -r -s -p "Account password: " secret; echo ""; echo "SNOWFLAKE_PASSWORD=$secret" >> "$path"; echo "SNOWFLAKE_AUTHENTICATOR=username_password_mfa" >> "$path" ;;
         *) echo "SNOWFLAKE_AUTHENTICATOR=externalbrowser" >> "$path" ;;
     esac

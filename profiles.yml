@@ -17,10 +17,11 @@ wnl_analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
-      password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
-      # Fusion accepts externalbrowser / username_password_mfa / etc. but NOT 'snowflake'.
-      # For password or PAT (in the password field), authenticator must be omitted.
-      {% if env_var('SNOWFLAKE_AUTHENTICATOR', '') %}authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR') }}"{% elif not env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) %}authenticator: externalbrowser{% endif %}
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', '') }}"
+      token: "{{ env_var('SNOWFLAKE_PAT', '') }}"
+      # Authenticator: externalbrowser (SSO) | username_password_mfa (uses password) |
+      # programmatic_access_token (uses token = PAT). Auto-picked from whichever secret is set.
+      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'programmatic_access_token' if env_var('SNOWFLAKE_PAT', '') else ('username_password_mfa' if env_var('SNOWFLAKE_PASSWORD', '') else 'externalbrowser')) }}"
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_DEV
@@ -33,10 +34,11 @@ wnl_analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
-      password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
-      # Fusion accepts externalbrowser / username_password_mfa / etc. but NOT 'snowflake'.
-      # For password or PAT (in the password field), authenticator must be omitted.
-      {% if env_var('SNOWFLAKE_AUTHENTICATOR', '') %}authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR') }}"{% elif not env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) %}authenticator: externalbrowser{% endif %}
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', '') }}"
+      token: "{{ env_var('SNOWFLAKE_PAT', '') }}"
+      # Authenticator: externalbrowser (SSO) | username_password_mfa (uses password) |
+      # programmatic_access_token (uses token = PAT). Auto-picked from whichever secret is set.
+      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'programmatic_access_token' if env_var('SNOWFLAKE_PAT', '') else ('username_password_mfa' if env_var('SNOWFLAKE_PASSWORD', '') else 'externalbrowser')) }}"
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_PROD

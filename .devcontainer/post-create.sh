@@ -22,12 +22,15 @@ fusion_version=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/de
 curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$fusion_version" --target "$fusion_target" --update
 export PATH="$HOME/.local/bin:$PATH"
 
-# Python tooling for the helper scripts in scripts/ (not needed for dbt itself).
+# Python tooling for the helper scripts in scripts/ (optional - not needed for dbt).
+# Best-effort: a failure here must not fail container creation.
 if ! command -v uv >/dev/null 2>&1; then
-    curl -LsSf https://astral.sh/uv/install.sh | sh
+    curl -LsSf https://astral.sh/uv/install.sh | sh || echo "[warn] uv install failed"
     export PATH="$HOME/.local/bin:$PATH"
 fi
-uv sync
+if command -v uv >/dev/null 2>&1; then
+    uv sync || echo "[warn] uv sync failed (Python helper scripts unavailable)"
+fi
 
 # dbt packages
 dbt deps || true

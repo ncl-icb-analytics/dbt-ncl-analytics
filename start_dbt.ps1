@@ -167,7 +167,7 @@ function New-DbtEnvFile {
     Write-Host "  1) Browser SSO (externalbrowser)   [default, recommended]" -ForegroundColor Gray
     Write-Host "  2) Programmatic Access Token (PAT)" -ForegroundColor Gray
     Write-Host "  3) Account password + MFA" -ForegroundColor Gray
-    Write-Host "     (2 and 3 both store SNOWFLAKE_PASSWORD - a PAT goes in the password field)" -ForegroundColor DarkGray
+    Write-Host "     (PAT -> SNOWFLAKE_PAT/token; password -> SNOWFLAKE_PASSWORD)" -ForegroundColor DarkGray
     $choice = Read-Host "Selection [1]"
     if (-not $choice) { $choice = '1' }
 
@@ -178,7 +178,7 @@ function New-DbtEnvFile {
     if ($role)      { $lines += "SNOWFLAKE_ROLE=$role" }
     if ($warehouse) { $lines += "SNOWFLAKE_WAREHOUSE=$warehouse" }
     switch ($choice) {
-        '2' { $lines += "SNOWFLAKE_PASSWORD=$(Read-HostSecret 'Paste your PAT')" }
+        '2' { $lines += "SNOWFLAKE_PAT=$(Read-HostSecret 'Paste your PAT')" }
         '3' {
             $lines += "SNOWFLAKE_PASSWORD=$(Read-HostSecret 'Account password')"
             $lines += "SNOWFLAKE_AUTHENTICATOR=username_password_mfa"
