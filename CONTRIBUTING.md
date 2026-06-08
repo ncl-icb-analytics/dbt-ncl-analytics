@@ -93,8 +93,8 @@ Then fill in `.env`:
 ```bash
 SNOWFLAKE_ACCOUNT=your-account-identifier
 SNOWFLAKE_USER=your.username
-SNOWFLAKE_WAREHOUSE=WH_WNL_ENGINEERING_M
-SNOWFLAKE_ROLE=DBT_ADMIN
+SNOWFLAKE_WAREHOUSE=your-warehouse
+SNOWFLAKE_ROLE=your-role
 ```
 
 Auth: leave it there for **browser SSO** (the default). For a **PAT or password**, set
