@@ -10,4 +10,4 @@ packages:
   - package: elementary-data/elementary
     version: 0.22.1
   - package: Snowflake-Labs/dbt_semantic_view
-    version: 1.0.3
+    version: 1.0.5
