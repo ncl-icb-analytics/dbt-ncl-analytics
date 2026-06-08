@@ -78,26 +78,29 @@ for the helper scripts in `scripts/`.
 
 ### Step 3: Configure Snowflake Connection
 
+The first time you open a terminal with no `.env`, `start_dbt.ps1` walks you through
+setup interactively: it asks for your account, user, role and warehouse, then your
+auth method (browser SSO by default, or PAT / password+MFA), and writes `.env` for you.
+
+To configure it by hand instead:
+
 ```bash
 cp env.example .env
 ```
 
-Open `.env` in VS Code and fill in your Snowflake details:
+Then fill in `.env`:
 
 ```bash
 SNOWFLAKE_ACCOUNT=your-account-identifier
 SNOWFLAKE_USER=your.username
-SNOWFLAKE_WAREHOUSE=ANALYST_WH
-SNOWFLAKE_ROLE=ANALYST
+SNOWFLAKE_WAREHOUSE=WH_WNL_ENGINEERING_M
+SNOWFLAKE_ROLE=DBT_ADMIN
 ```
 
-Optional for PAT-based auth:
-
-```bash
-SNOWFLAKE_PAT=your-programmatic-access-token
-```
-
-The `profiles.yml` is already configured to read from your `.env` file. If `SNOWFLAKE_PAT` is present, dbt uses it as the password and skips browser-based authentication.
+Auth: leave it there for **browser SSO** (the default). For a **PAT or password**, set
+`SNOWFLAKE_PASSWORD` (a PAT goes in the password field); add
+`SNOWFLAKE_AUTHENTICATOR=username_password_mfa` if your account uses MFA. `profiles.yml`
+reads these from `.env`.
 
 ### Step 4: Initialise Your Development Environment
 
