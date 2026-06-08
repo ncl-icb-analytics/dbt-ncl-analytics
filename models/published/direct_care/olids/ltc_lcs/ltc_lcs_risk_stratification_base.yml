@@ -284,6 +284,30 @@ models:
         description: Earliest date on which any currently-counted MOC event drops out of the 12m rolling window; NULL if no MOC activity
 
       # ============================================================
+      # Outcome: hypertension BP control
+      # ============================================================
+      - name: htn_bp_controlled_rolling
+        description: "Current position: true if the HTN register member's last known BP in the trailing 12 months is well controlled (<= 140/90 if age <= 80, <= 150/90 if age > 80). Null for non-HTN-register persons. False if on register but no qualifying reading in window."
+      - name: htn_bp_control_rolling_has_reading
+        description: True if the person has a qualifying paired BP reading in the trailing 12 months. Null for non-HTN-register persons.
+      - name: htn_bp_control_rolling_bp_date
+        description: Date of the last known paired BP reading in the trailing 12 months (null if none / not on register)
+      - name: htn_bp_control_rolling_systolic
+        description: Systolic value (mmHg) of the last known reading in the trailing 12 months
+      - name: htn_bp_control_rolling_diastolic
+        description: Diastolic value (mmHg) of the last known reading in the trailing 12 months
+      - name: htn_bp_controlled_fy
+        description: "Current financial year: true if the HTN register member's last known BP since 1 April (current FY) is well controlled (<= 140/90 if age <= 80, <= 150/90 if age > 80). Null for non-HTN-register persons. False if on register but no qualifying reading in window."
+      - name: htn_bp_control_fy_has_reading
+        description: True if the person has a qualifying paired BP reading in the current FY. Null for non-HTN-register persons.
+      - name: htn_bp_control_fy_bp_date
+        description: Date of the last known paired BP reading in the current FY (null if none / not on register)
+      - name: htn_bp_control_fy_systolic
+        description: Systolic value (mmHg) of the last known reading in the current FY
+      - name: htn_bp_control_fy_diastolic
+        description: Diastolic value (mmHg) of the last known reading in the current FY
+
+      # ============================================================
       # Metadata
       # ============================================================
       - name: table_refresh_date

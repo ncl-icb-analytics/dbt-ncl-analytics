@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: fct_person_ltc_lcs_outcomes_htn_bp_control
+    description: |
+      LTC LCS outcome: hypertension good blood pressure control - ROLLING (current position).
+
+      One row per person on the hypertension register (is_on_register = true). is_bp_controlled
+      is true when the person's last known paired BP reading in the trailing 12 months meets the
+      strict good-control target:
+        - age <= 80: systolic <= 140 AND diastolic <= 90
+        - age >  80: systolic <= 150 AND diastolic <= 90
+
+      Deliberately simplified vs NICE/NG136: no clinic-vs-home/ABPM threshold split and no
+      ACR/CKD/diabetes target tightening - every reading is scored on the same clinic thresholds.
+      Register members with no qualifying reading in the window are uncontrolled
+      (is_bp_controlled = false, has_bp_in_window = false). Control logic lives in the shared
+      get_ltc_lcs_htn_bp_control macro; the _fy and _fy_last variants apply the same logic over
+      financial-year windows.
+    config:
+      meta:
+        indicator:
+          id: "LTC_LCS_OUTCOMES_HTN_BP_CONTROL"
+          type: "OUTCOME"
+          category: "OUTCOMES"
+          clinical_domain: "Cardiovascular"
+          name_short: "HTN BP control (rolling)"
+          description_short: "Hypertension register members with well-controlled BP (last known reading, rolling 12 months)"
+          description_long: >
+            Percentage of people on the hypertension register whose last known blood pressure in
+            the trailing 12 months is well controlled: systolic <= 140 and diastolic <= 90 for
+            those aged <= 80, or systolic <= 150 and diastolic <= 90 for those aged > 80.
+            Strict QOF-style good-control rule; does not adjust thresholds for home/ABPM
+            measurement context or for ACR/CKD/diabetes.
+          is_qof: false
+          source_column: "is_bp_controlled"
+          sort_order: "LTC_LCS_OUTCOME_001"
+          usage_contexts:
+            - "LTC_LCS_DASHBOARD"
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          arguments:
+            column_name: person_id
+    columns:
+      - name: person_id
+        description: Unique person identifier (one row per hypertension register member)
+        data_tests:
+          - not_null
+          - unique
+      - name: age
+        description: Current age in years (from the hypertension register / dim_person_age)
+      - name: latest_bp_date
+        description: Date of the last known paired BP reading within the window (null if none)
+      - name: latest_systolic_value
+        description: Systolic value (mmHg) of the last known paired reading in the window (null if none)
+      - name: latest_diastolic_value
+        description: Diastolic value (mmHg) of the last known paired reading in the window (null if none)
+      - name: is_home_bp_event
+        description: True if the representative reading was a home BP measurement (carried for traceability; not used to alter thresholds)
+      - name: is_abpm_bp_event
+        description: True if the representative reading was an ABPM measurement (carried for traceability; not used to alter thresholds)
+      - name: systolic_threshold
+        description: Applied systolic good-control threshold (140 if age <= 80, else 150)
+      - name: diastolic_threshold
+        description: Applied diastolic good-control threshold (always 90)
+      - name: has_bp_in_window
+        description: True if the person has at least one qualifying paired BP reading within the window
+        data_tests:
+          - not_null
+      - name: is_bp_controlled
+        description: True if the last known reading in the window is at/below both the systolic and diastolic targets. False (not null) for register members with no reading in window.
+        data_tests:
+          - not_null
