@@ -139,9 +139,13 @@ if ! command -v uv &> /dev/null; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 if command -v uv &> /dev/null; then
-    uv sync
-    [ -f ".venv/bin/activate" ] && source .venv/bin/activate
-    echo "[OK] Python tooling ready"
+    if uv sync; then
+        [ -f ".venv/bin/activate" ] && source .venv/bin/activate
+        echo "[OK] Python tooling ready"
+    else
+        echo "[WARNING] uv sync failed - scripts/ Python tools may be incomplete"
+        actions+=("Re-run 'uv sync' for the Python helper scripts")
+    fi
 else
     echo "[WARNING] uv unavailable - scripts/ Python tools skipped (install: curl -LsSf https://astral.sh/uv/install.sh | sh)"
     actions+=("Install uv to run the Python helper scripts (optional)")

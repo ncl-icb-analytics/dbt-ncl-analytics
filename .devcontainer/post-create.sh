@@ -35,7 +35,11 @@ if command -v uv >/dev/null 2>&1; then
 fi
 
 # dbt packages
-dbt deps || true
+if command -v dbt >/dev/null 2>&1; then
+    dbt deps || echo "[warn] dbt deps failed - run 'dbt deps' once credentials are available"
+else
+    echo "[warn] dbt unavailable - skipping dbt deps"
+fi
 
 if [ -n "${SNOWFLAKE_PAT:-}" ]; then
     echo "Codespaces bootstrap complete. Snowflake PAT detected."

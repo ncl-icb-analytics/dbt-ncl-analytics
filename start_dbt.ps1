@@ -136,8 +136,13 @@ if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
 }
 if (Get-Command uv -ErrorAction SilentlyContinue) {
     uv sync
-    if (Test-Path ".venv\Scripts\Activate.ps1") { & ".venv\Scripts\Activate.ps1" }
-    Write-Host "[OK] Python tooling ready" -ForegroundColor Green
+    if ($LASTEXITCODE -eq 0) {
+        if (Test-Path ".venv\Scripts\Activate.ps1") { & ".venv\Scripts\Activate.ps1" }
+        Write-Host "[OK] Python tooling ready" -ForegroundColor Green
+    } else {
+        Write-Host "[WARNING] uv sync failed - scripts/ Python tools may be incomplete" -ForegroundColor Yellow
+        $actions += "Re-run 'uv sync' for the Python helper scripts"
+    }
 } else {
     Write-Host "[WARNING] uv unavailable - scripts/ Python tools skipped" -ForegroundColor Yellow
     $actions += "Install uv to run the Python helper scripts (optional)"

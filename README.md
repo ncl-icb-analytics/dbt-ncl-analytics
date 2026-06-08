@@ -11,16 +11,17 @@ dbt project for WNL ICB Analytics healthcare data transformations.
 
 ## Quick Start
 
-```bash
+```powershell
 # Clone
 git clone https://github.com/wnl-icb-analytics/dbt-analytics && cd dbt-analytics
 
 # Configure credentials
-cp env.example .env    # Edit with your Snowflake credentials
+Copy-Item env.example .env    # Edit with your Snowflake credentials
 
 # Bootstrap: installs the dbt Fusion engine, configures git hooks, loads .env
 .\start_dbt.ps1
-dbt deps && dbt debug
+dbt deps
+dbt debug
 ```
 
 dbt runs on the [Fusion engine](docs/dbt-fusion-guide.md) (installed by `start_dbt.ps1`),
