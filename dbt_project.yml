@@ -10,7 +10,7 @@ flags:
 # Display connection info when dbt runs start
   require_generic_test_arguments_property: true
 on-run-start:
-  - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
+  - "{% if execute %}{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
@@ -100,6 +100,8 @@ models:
     semantic:
       +enabled: true
       +materialized: semantic_view
+      # Semantic-view DDL is not standard SELECT SQL; skip Fusion static analysis.
+      +static_analysis: "off"
       +database: "REPORTING"
       +schema: "SEMANTIC"
       +tags: ["semantic"]
@@ -183,20 +185,6 @@ seeds:
         GP_PRACTICE: varchar(200)
         LIST_SIZE: integer
         EXTRACT_DATE: varchar(10)
-
-    asthma_testing_codelist:
-      +column_types:
-        CODE: varchar(50)
-        CODE_DESCRIPTION: varchar(200)
-        VOCABULARY: varchar(200)
-        CODELIST_ID: varchar(200)
-        CODELIST_NAME: varchar(200)
-        CODELIST_VERSION: varchar(200)
-        DEFINITION_NAME: varchar(200)
-        DEFINITION_VERSION: varchar(200)
-        DEFINITION_SOURCE: varchar(200)
-        VERSION_DATETIME: varchar(200)
-        UPLOADED_DATETIME: varchar(200)
 
     observation_unit_rules:
       +column_types:
