@@ -126,43 +126,12 @@ If you are using `externalbrowser`, your browser will open for Snowflake authent
 
 ## GitHub Codespaces
 
-Codespaces should use GitHub Codespaces secrets for Snowflake credentials. Do not commit credentials into the repository.
+Codespaces installs everything on creation (Fusion, Python tooling, packages) and
+authenticates with your Codespaces secrets - no local install, no `.env`. See
+**[Developing in GitHub Codespaces](docs/codespaces.md)** for the walkthrough:
+which secrets to add, scoping them to the repo, and how auth works.
 
-### Recommended Codespaces secrets
-
-- `SNOWFLAKE_ACCOUNT`
-- `SNOWFLAKE_USER`
-- `SNOWFLAKE_ROLE`
-- `SNOWFLAKE_WAREHOUSE`
-- `SNOWFLAKE_PAT`
-
-`SNOWFLAKE_PAT` is the preferred Codespaces auth method because it is non-interactive and each developer can create their own token in Snowflake.
-
-### Create Codespaces secrets from an existing local `.env`
-
-If you already have a working local `.env`, you can upload the supported Snowflake values to your personal Codespaces secrets for this repository:
-
-```powershell
-.\scripts\setup_codespaces_secrets.ps1
-```
-
-This uses GitHub CLI to create user-level Codespaces secrets scoped to this repository.
-
-### Create a codespace
-
-1. In GitHub, open the repository and choose **Code** -> **Codespaces** -> **New with options**.
-2. Confirm the recommended secrets if prompted.
-3. Create the codespace on this branch.
-4. Wait for the dev container to finish setup.
-5. Run `dbt debug` to confirm the Snowflake connection.
-
-### How credentials work inside Codespaces
-
-- Codespaces secrets are exposed as environment variables in the running codespace.
-- You do not need a `.env` file inside the codespace if the required secrets are already set.
-- The setup scripts will use existing environment variables before creating a `.env` template.
-
-### Helper Scripts
+## Helper Scripts
 
 Two scripts in the project root make development easier:
 

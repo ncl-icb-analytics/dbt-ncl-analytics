@@ -30,14 +30,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signi
 
 ## Codespaces
 
-This repository supports GitHub Codespaces for cloud-based dbt development.
-
-- Store Snowflake credentials as Codespaces secrets, not in committed files.
-- `SNOWFLAKE_PAT` is the recommended auth method for Codespaces.
-- If `SNOWFLAKE_PAT` is set, dbt uses it as the password and skips browser auth.
-- If no PAT or password is set, the project falls back to `externalbrowser`.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md#github-codespaces) for setup.
+Cloud dev with no local install: add your Snowflake secrets once (a PAT is the
+recommended auth), create a codespace, and Fusion + packages are set up
+automatically. See **[Developing in GitHub Codespaces](docs/codespaces.md)**.
 
 ## What This Project Does
 
@@ -102,6 +97,7 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 | [Snapshots Guide](docs/snapshots-guide.md) | Tracking historical changes with SCDs |
 | [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
 | [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
+| [GitHub Codespaces](docs/codespaces.md) | Cloud dev: add secrets, create a codespace, how auth works |
 | [Working with Sources](docs/working-with-sources.md) | Adding sources, regenerating raw models, and handling drift |
 | [CHANGELOG.md](CHANGELOG.md) | Release history |
 
