@@ -18,7 +18,9 @@ wnl_analytics:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
       password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
-      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'snowflake' if env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) else 'externalbrowser') }}"
+      # Fusion accepts externalbrowser / username_password_mfa / etc. but NOT 'snowflake'.
+      # For password or PAT (in the password field), authenticator must be omitted.
+      {% if env_var('SNOWFLAKE_AUTHENTICATOR', '') %}authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR') }}"{% elif not env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) %}authenticator: externalbrowser{% endif %}
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_DEV
@@ -32,7 +34,9 @@ wnl_analytics:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
       password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
-      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'snowflake' if env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) else 'externalbrowser') }}"
+      # Fusion accepts externalbrowser / username_password_mfa / etc. but NOT 'snowflake'.
+      # For password or PAT (in the password field), authenticator must be omitted.
+      {% if env_var('SNOWFLAKE_AUTHENTICATOR', '') %}authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR') }}"{% elif not env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) %}authenticator: externalbrowser{% endif %}
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_PROD
