@@ -133,13 +133,17 @@ fi
 # 5. Python venv for the helper scripts in scripts/ (optional - not needed for dbt)
 # ---------------------------------------------------------------------------
 echo "Syncing Python tooling for scripts/..."
+if ! command -v uv &> /dev/null; then
+    echo "[INFO] uv not found - installing..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh || echo "[WARNING] uv install failed"
+    export PATH="$HOME/.local/bin:$PATH"
+fi
 if command -v uv &> /dev/null; then
     uv sync
     [ -f ".venv/bin/activate" ] && source .venv/bin/activate
     echo "[OK] Python tooling ready"
 else
-    echo "[INFO] uv not installed - the scripts/ Python tools are unavailable until you install it:"
-    echo "  curl -LsSf https://astral.sh/uv/install.sh | sh"
+    echo "[WARNING] uv unavailable - scripts/ Python tools skipped (install: curl -LsSf https://astral.sh/uv/install.sh | sh)"
     actions+=("Install uv to run the Python helper scripts (optional)")
 fi
 echo ""

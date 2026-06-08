@@ -128,13 +128,18 @@ if (Test-Path ".venv\Scripts\dbt.exe") {
 # 5. Python venv for the helper scripts in scripts/ (optional - not needed for dbt)
 # ---------------------------------------------------------------------------
 Write-Host "Syncing Python tooling for scripts/..." -ForegroundColor Cyan
+if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
+    Write-Host "[INFO] uv not found - installing..." -ForegroundColor Cyan
+    try { Invoke-RestMethod https://astral.sh/uv/install.ps1 | Invoke-Expression } catch { Write-Host "[WARNING] uv install failed: $_" -ForegroundColor Yellow }
+    $uvBin = Join-Path $env:USERPROFILE '.local\bin'
+    if ($env:PATH -notlike "*$uvBin*") { $env:PATH = "$uvBin;$env:PATH" }
+}
 if (Get-Command uv -ErrorAction SilentlyContinue) {
     uv sync
     if (Test-Path ".venv\Scripts\Activate.ps1") { & ".venv\Scripts\Activate.ps1" }
     Write-Host "[OK] Python tooling ready" -ForegroundColor Green
 } else {
-    Write-Host "[INFO] uv not installed - the scripts/ Python tools are unavailable until you install it:" -ForegroundColor Cyan
-    Write-Host '  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"' -ForegroundColor Gray
+    Write-Host "[WARNING] uv unavailable - scripts/ Python tools skipped" -ForegroundColor Yellow
     $actions += "Install uv to run the Python helper scripts (optional)"
 }
 Write-Host ""

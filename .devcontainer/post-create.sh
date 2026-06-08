@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail  # no -e: log step failures but always finish (never fail container creation)
 
 # Codespaces/devcontainer bootstrap (headless, runs once at container creation).
 # Snowflake credentials come from Codespaces secrets injected as env vars and read
@@ -19,8 +19,10 @@ fusion_target="${arch_part}-${os_part}"
 fusion_version=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/dev/null \
     | python3 -c "import sys,json;print(json.load(sys.stdin).get('stable',{}).get('tag','').lstrip('v'))" 2>/dev/null) || true
 [ -z "$fusion_version" ] && fusion_version="$FUSION_FALLBACK_VERSION"
-curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$fusion_version" --target "$fusion_target" --update
+curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$fusion_version" --target "$fusion_target" --update \
+    || echo "[warn] dbt Fusion installer returned non-zero (continuing)"
 export PATH="$HOME/.local/bin:$PATH"
+command -v dbt >/dev/null 2>&1 && echo "[OK] $(dbt --version 2>&1 | head -1)" || echo "[warn] dbt not on PATH after install"
 
 # Python tooling for the helper scripts in scripts/ (optional - not needed for dbt).
 # Best-effort: a failure here must not fail container creation.
