@@ -133,6 +133,8 @@ models:
           +post-hook:
             - "{{ add_model_comment() }}"
             - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'S251_EXEMPT', 'TRUE') }}"
             - "{{ log_row_count() }}"
 
   # Elementary observability configuration
