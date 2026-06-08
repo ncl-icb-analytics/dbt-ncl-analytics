@@ -1,14 +1,14 @@
 models:
-  - name: population_health_needs_base_secondary_use
+  - name: valproate_dashboard_base_secondary_use
     description: |
-      Population health needs base table for secondary use (Section 251 exempt).
+      Valproate dashboard base population (one row per person), for secondary use (Section 251 exempt).
       Published under a Section 251 exemption as a HealtheIntent replacement dashboard; opt-out filtering is intentionally NOT applied. Passthrough of the direct care base.
-      See population_health_needs_base in published_reporting_direct_care for full details.
+      See view_valproate_dashboard_base in published_reporting_direct_care for full details.
 
     config:
       meta:
         owner:
-          name: EddieDavison92
+          name: KateHomer55
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

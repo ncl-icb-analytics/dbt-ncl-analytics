@@ -5,7 +5,7 @@ models:
       One row per person on any LTC LCS disease register (AF, CKD, CHD, Diabetes, Hypertension,
       NAFLD, Asthma Adult, Asthma CYP, COPD, Heart Failure, PAD, Stroke/TIA).
 
-      Filtered to patients allowed for secondary use via dim_person_secondary_use_allowed (National Data Opt-Out OPT_IN and no active Type 1 opt-out).
+      Published under a Section 251 exemption as a HealtheIntent replacement dashboard; opt-out filtering is intentionally NOT applied. Passthrough of the direct care base.
       See ltc_lcs_risk_stratification_base in published_reporting_direct_care for full details.
     config:
       meta:
@@ -20,7 +20,7 @@ models:
       # Identifiers
       # ============================================================
       - name: person_id
-        description: Unique person identifier (opt-out filtered)
+        description: Unique person identifier (s251 exempt - not opt-out filtered)
         tests:
           - not_null
           - unique

@@ -2,20 +2,22 @@
     config(
         materialized='table',
         alias='population_health_needs_base_readable',
-        tags=['secondary_use_opt_out']
+        tags=['secondary_use_s251_exempt'],
+        meta={
+            'custom_message': 'Includes OLIDS data published for secondary use under a Section 251 exemption as a HealtheIntent replacement dashboard. National Data Opt-Out and Type 1 opt-out filtering is intentionally NOT applied. Approved for this s251 purpose only.'
+        }
     )
 }}
 
 /*
-Population Health Needs Base Readable - Secondary Use
+Population Health Needs Base Readable - Secondary Use (Section 251 exempt)
 
-Secondary use version with opt-out filtering applied.
-Only includes patients allowed for secondary use via dim_person_secondary_use_allowed.
+Secondary use variant published under a Section 251 exemption as a HealtheIntent
+replacement dashboard. Opt-out filtering is intentionally NOT applied - this is a
+passthrough of the direct care base for the approved s251 purpose.
 
 See population_health_needs_base_readable in published_reporting_direct_care for full documentation.
 */
 
-SELECT base.*
-FROM {{ ref('population_health_needs_base_readable') }} base
-INNER JOIN {{ ref('dim_person_secondary_use_allowed') }} allowed
-    ON base.person_id = allowed.person_id
+SELECT *
+FROM {{ ref('population_health_needs_base_readable') }}
