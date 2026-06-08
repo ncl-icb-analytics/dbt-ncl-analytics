@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Codespaces/devcontainer bootstrap (headless, runs once at container creation).
+# Snowflake credentials come from Codespaces secrets injected as env vars and read
+# by profiles.yml via env_var(), so there is no interactive .env onboarding here
+# (that lives in start_dbt.ps1 / start_dbt.sh for local machines). Mirrors their
+# Fusion-only setup: install Fusion, sync the scripts/ Python env, install packages.
+
 git config core.hooksPath .githooks
 
 # Install the dbt Fusion engine (dbt runs on Fusion, not a Python package).
