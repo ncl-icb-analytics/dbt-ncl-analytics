@@ -166,6 +166,22 @@ select
     rs.moc_next_expiry_date,
 
     -- ============================================================
+    -- Outcome: hypertension BP control (HTN register members only; null otherwise)
+    -- Rolling = current position (last known BP, trailing 12 months);
+    -- FY = current financial year YTD (last known BP since 1 April).
+    -- ============================================================
+    htn_roll.is_bp_controlled as htn_bp_controlled_rolling,
+    htn_roll.has_bp_in_window as htn_bp_control_rolling_has_reading,
+    htn_roll.latest_bp_date as htn_bp_control_rolling_bp_date,
+    htn_roll.latest_systolic_value as htn_bp_control_rolling_systolic,
+    htn_roll.latest_diastolic_value as htn_bp_control_rolling_diastolic,
+    htn_fy.is_bp_controlled as htn_bp_controlled_fy,
+    htn_fy.has_bp_in_window as htn_bp_control_fy_has_reading,
+    htn_fy.latest_bp_date as htn_bp_control_fy_bp_date,
+    htn_fy.latest_systolic_value as htn_bp_control_fy_systolic,
+    htn_fy.latest_diastolic_value as htn_bp_control_fy_diastolic,
+
+    -- ============================================================
     -- Metadata
     -- ============================================================
     rs.table_refresh_date
@@ -178,3 +194,7 @@ left join {{ ref('dim_person_conditions') }} cond
     on rs.person_id = cond.person_id
 left join {{ ref('fct_person_pregnancy_status') }} preg
     on rs.person_id = preg.person_id
+left join {{ ref('fct_person_ltc_lcs_outcomes_htn_bp_control') }} htn_roll
+    on rs.person_id = htn_roll.person_id
+left join {{ ref('fct_person_ltc_lcs_outcomes_htn_bp_control_fy') }} htn_fy
+    on rs.person_id = htn_fy.person_id
