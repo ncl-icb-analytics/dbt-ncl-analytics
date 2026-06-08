@@ -7,12 +7,24 @@
 # dbt runs on the Fusion engine (installed to ~/.local/bin), NOT a Python
 # package. The .venv exists only for the Python tooling in scripts/.
 
-# Pin a Fusion version to override "track latest stable" (e.g. 2.0.0-preview.175).
-# Leave empty to always track the latest stable release.
+# Pin a Fusion version to override the default (e.g. 2.0.0-preview.188).
+# Leave empty to track the latest version from versions.json.
 FUSION_VERSION_PIN=""
+# Used only if versions.json can't be reached and no pin is set.
+FUSION_FALLBACK_VERSION="2.0.0-preview.188"
 
 actions=()
 install_dir="$HOME/.local/bin"
+# Installer platform target (its auto-detection is currently unreliable, so we pass it).
+case "$(uname -s)" in
+    Darwin) os_part="apple-darwin" ;;
+    *)      os_part="unknown-linux-gnu" ;;
+esac
+case "$(uname -m)" in
+    arm64|aarch64) arch_part="aarch64" ;;
+    *)             arch_part="x86_64" ;;
+esac
+fusion_target="${arch_part}-${os_part}"
 
 # Ensure the Fusion install dir is on PATH for this session.
 case ":$PATH:" in
@@ -53,46 +65,54 @@ echo ""
 # 3. dbt Fusion engine
 # ---------------------------------------------------------------------------
 echo "Checking dbt Fusion engine..."
+resolve_fusion_version() {
+    if [ -n "$FUSION_VERSION_PIN" ]; then echo "$FUSION_VERSION_PIN"; return; fi
+    local tag
+    tag=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/dev/null \
+        | python3 -c "import sys,json;print(json.load(sys.stdin).get('stable',{}).get('tag','').lstrip('v'))" 2>/dev/null)
+    if [ -n "$tag" ]; then echo "$tag"; else echo "$FUSION_FALLBACK_VERSION"; fi
+}
+
 install_fusion() {
-    local version="$1"
-    if [ -n "$version" ]; then
-        curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update --version "$version"
+    local version="$1" mode="$2"
+    if [ "$mode" = "update" ]; then
+        curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$version" --target "$fusion_target" --update
     else
-        curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
+        curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$version" --target "$fusion_target"
     fi
 }
 
-if ! command -v dbt &> /dev/null; then
-    echo "[INFO] dbt not found - installing dbt Fusion..."
-    if install_fusion "$FUSION_VERSION_PIN"; then
+dbt_present=false
+command -v dbt &> /dev/null && dbt_present=true
+# Throttle the latest-version lookup to once per day (skipped when pinned or missing).
+marker="${TMPDIR:-/tmp}/wnl_fusion_update_check"
+today=$(date +%Y-%m-%d)
+checked_today=false
+[ -f "$marker" ] && [ "$(cat "$marker")" = "$today" ] && checked_today=true
+
+if [ "$dbt_present" = false ] || [ -n "$FUSION_VERSION_PIN" ] || [ "$checked_today" = false ]; then
+    desired=$(resolve_fusion_version)
+    current=""
+    [ "$dbt_present" = true ] && current=$(dbt --version 2>&1 | head -1)
+    if ! echo "$current" | grep -q "$desired"; then
+        echo "[INFO] Installing dbt Fusion $desired..."
+        if [ "$dbt_present" = true ]; then install_fusion "$desired" update; else install_fusion "$desired" install; fi
         export PATH="$install_dir:$PATH"
-        echo "[OK] dbt Fusion installed"
     else
-        echo "[WARNING] Could not install dbt Fusion automatically."
-        echo "  Install manually: curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh"
-        actions+=("Install dbt Fusion (see CONTRIBUTING.md)")
+        echo "[OK] dbt Fusion $desired"
     fi
-elif [ -n "$FUSION_VERSION_PIN" ]; then
-    if dbt --version 2>&1 | grep -q "$FUSION_VERSION_PIN"; then
-        echo "[OK] dbt Fusion pinned at $FUSION_VERSION_PIN"
-    else
-        echo "[INFO] Pinning dbt Fusion to $FUSION_VERSION_PIN..."
-        install_fusion "$FUSION_VERSION_PIN" && echo "[OK] dbt Fusion pinned at $FUSION_VERSION_PIN"
-    fi
+    [ -z "$FUSION_VERSION_PIN" ] && echo "$today" > "$marker"
 else
-    # Track latest stable, throttled to one check per day to keep terminals snappy.
-    marker="${TMPDIR:-/tmp}/wnl_fusion_update_check"
-    today=$(date +%Y-%m-%d)
-    last=$([ -f "$marker" ] && cat "$marker" || echo "")
-    if [ "$last" != "$today" ]; then
-        echo "[INFO] Checking for dbt Fusion updates..."
-        dbt system update || echo "[WARNING] Update check failed"
-        echo "$today" > "$marker"
-    else
-        echo "[OK] dbt Fusion checked for updates today"
-    fi
+    echo "[OK] dbt Fusion checked for updates today"
 fi
-command -v dbt &> /dev/null && echo "  $(dbt --version 2>&1 | head -1)"
+
+if ! command -v dbt &> /dev/null; then
+    echo "[WARNING] dbt Fusion not available - install manually:"
+    echo "  curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version $FUSION_FALLBACK_VERSION --target $fusion_target"
+    actions+=("Install dbt Fusion (see CONTRIBUTING.md)")
+else
+    echo "  $(dbt --version 2>&1 | head -1)"
+fi
 echo ""
 
 # ---------------------------------------------------------------------------

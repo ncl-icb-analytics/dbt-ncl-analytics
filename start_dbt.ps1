@@ -13,12 +13,18 @@
 # dbt itself is the Fusion binary (installed to %USERPROFILE%\.local\bin), NOT a
 # Python package. The .venv exists only for the Python tooling in scripts/.
 
-# Pin a Fusion version to override "track latest stable" (e.g. '2.0.0-preview.175').
-# Leave empty to always track the latest stable release.
+# Pin a Fusion version to override the default (e.g. '2.0.0-preview.188').
+# Leave empty to track the latest version from versions.json.
 $FusionVersionPin = ''
+# Used only if versions.json can't be reached and no pin is set.
+$FusionFallbackVersion = '2.0.0-preview.188'
 
 $actions = @()
 $installDir = Join-Path $env:USERPROFILE '.local\bin'
+# Installer platform target. The installer's auto-detection is currently
+# unreliable, so we pass it (and the version) explicitly.
+$arch = if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') { 'aarch64' } else { 'x86_64' }
+$fusionTarget = "$arch-pc-windows-msvc"
 
 # Ensure the Fusion install dir is on PATH for this session.
 if ($env:PATH -notlike "*$installDir*") {
@@ -59,42 +65,42 @@ Write-Host ""
 # ---------------------------------------------------------------------------
 Write-Host "Checking dbt Fusion engine..." -ForegroundColor Cyan
 
+function Resolve-FusionVersion {
+    if ($FusionVersionPin) { return $FusionVersionPin }
+    try {
+        $v = Invoke-RestMethod 'https://public.cdn.getdbt.com/fs/versions.json'
+        if ($v.stable.tag) { return ($v.stable.tag -replace '^v', '') }
+    } catch {}
+    return $FusionFallbackVersion
+}
+
 function Install-Fusion {
-    param([string]$Version)
+    param([string]$Version, [switch]$Update)
     $installer = [scriptblock]::Create((Invoke-RestMethod 'https://public.cdn.getdbt.com/fs/install/install.ps1'))
-    if ($Version) { & $installer -Update -Version $Version } else { & $installer -Update }
+    if ($Update) { & $installer -Version $Version -Target $fusionTarget -Update }
+    else { & $installer -Version $Version -Target $fusionTarget }
 }
 
 try {
-    $dbtCmd = Get-Command dbt -ErrorAction SilentlyContinue
-    if (-not $dbtCmd) {
-        Write-Host "[INFO] dbt not found - installing dbt Fusion..." -ForegroundColor Cyan
-        Install-Fusion -Version $FusionVersionPin
-        if ($env:PATH -notlike "*$installDir*") { $env:PATH = "$installDir;$env:PATH" }
-        Write-Host "[OK] dbt Fusion installed" -ForegroundColor Green
-    }
-    elseif ($FusionVersionPin) {
-        $current = (dbt --version 2>&1) -join "`n"
-        if ($current -notmatch [regex]::Escape($FusionVersionPin)) {
-            Write-Host "[INFO] Pinning dbt Fusion to $FusionVersionPin..." -ForegroundColor Cyan
-            Install-Fusion -Version $FusionVersionPin
-            Write-Host "[OK] dbt Fusion pinned at $FusionVersionPin" -ForegroundColor Green
+    $dbtPresent = [bool](Get-Command dbt -ErrorAction SilentlyContinue)
+    # Throttle the latest-version lookup to once per day (skipped when pinned or missing).
+    $marker = Join-Path $env:TEMP 'wnl_fusion_update_check'
+    $today = (Get-Date).ToString('yyyy-MM-dd')
+    $checkedToday = (Test-Path $marker) -and ((Get-Content $marker -Raw).Trim() -eq $today)
+
+    if (-not $dbtPresent -or $FusionVersionPin -or -not $checkedToday) {
+        $desired = Resolve-FusionVersion
+        $current = if ($dbtPresent) { (dbt --version 2>&1) -join ' ' } else { '' }
+        if ($current -notmatch [regex]::Escape($desired)) {
+            Write-Host "[INFO] Installing dbt Fusion $desired..." -ForegroundColor Cyan
+            Install-Fusion -Version $desired -Update:$dbtPresent
+            if ($env:PATH -notlike "*$installDir*") { $env:PATH = "$installDir;$env:PATH" }
         } else {
-            Write-Host "[OK] dbt Fusion pinned at $FusionVersionPin" -ForegroundColor Green
+            Write-Host "[OK] dbt Fusion $desired" -ForegroundColor Green
         }
-    }
-    else {
-        # Track latest stable, throttled to one check per day to keep terminals snappy.
-        $marker = Join-Path $env:TEMP 'wnl_fusion_update_check'
-        $today = (Get-Date).ToString('yyyy-MM-dd')
-        $last = if (Test-Path $marker) { (Get-Content $marker -Raw).Trim() } else { '' }
-        if ($last -ne $today) {
-            Write-Host "[INFO] Checking for dbt Fusion updates..." -ForegroundColor Cyan
-            try { dbt system update } catch { Write-Host "[WARNING] Update check failed: $_" -ForegroundColor Yellow }
-            Set-Content -Path $marker -Value $today
-        } else {
-            Write-Host "[OK] dbt Fusion checked for updates today" -ForegroundColor Green
-        }
+        if (-not $FusionVersionPin) { Set-Content -Path $marker -Value $today }
+    } else {
+        Write-Host "[OK] dbt Fusion checked for updates today" -ForegroundColor Green
     }
     Write-Host "  $((dbt --version 2>&1) | Select-Object -First 1)" -ForegroundColor Gray
 } catch {
