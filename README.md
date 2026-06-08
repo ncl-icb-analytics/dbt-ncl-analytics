@@ -99,7 +99,6 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 | [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
 | [GitHub Codespaces](docs/codespaces.md) | Cloud dev: add secrets, create a codespace, how auth works |
 | [Working with Sources](docs/working-with-sources.md) | Adding sources, regenerating raw models, and handling drift |
-| [CHANGELOG.md](CHANGELOG.md) | Release history |
 
 ## Learning dbt
 
