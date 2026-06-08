@@ -61,12 +61,12 @@ models:
           - not_null
       - name: moc_check_test_date
         description: Latest Check & Test appointment date (null if none)
-      - name: moc_mdt_review_completed
-        description: MDT review completed in last 12 months
+      - name: moc_remote_desktop_review_completed
+        description: Remote Desktop Review (RDR) completed in last 12 months
         data_tests:
           - not_null
-      - name: moc_mdt_review_date
-        description: Latest MDT review date (null if none)
+      - name: moc_remote_desktop_review_date
+        description: Latest Remote Desktop Review (RDR) date (null if none)
       - name: moc_careplan_sharing_completed
         description: Care plan shared with patient in last 12 months
         data_tests:
@@ -109,8 +109,8 @@ models:
       - name: moc_stage_2_completed
         description: |
           Stage 2 completion using pathway-specific logic. For HRCS/HRS this is
-          MDT review OR care plan sharing in last 12m; for MRS/LRS this is care
-          plan sharing only (MDT review is not part of the MR/LR pathway).
+          Remote Desktop Review (RDR) OR care plan sharing in last 12m; for MRS/LRS
+          this is care plan sharing only (RDR is not part of the MR/LR pathway).
         data_tests:
           - not_null
       - name: moc_stage_completed
@@ -123,9 +123,9 @@ models:
       - name: moc_stage_completed_label
         description: |
           Readable label for the furthest stage reached. One of 'Not started',
-          'Check & Test', 'MDT / Careplan' (HRCS/HRS only), 'Careplan sharing'
+          'Check & Test', 'RDR / Careplan' (HRCS/HRS only), 'Careplan sharing'
           (MRS/LRS only), 'Discussion', 'Follow-up'. Unnumbered because MR/LR
-          pathways skip the MDT step.
+          pathways skip the RDR step.
         data_tests:
           - not_null
       - name: moc_pathway_status
@@ -146,7 +146,7 @@ models:
       - name: moc_next_action
         description: |
           Next pathway action the person needs, or NULL if no action is required
-          (cycle complete or declined). One of 'Check & Test', 'MDT / Careplan'
+          (cycle complete or declined). One of 'Check & Test', 'RDR / Careplan'
           (HRCS/HRS), 'Careplan sharing' (MRS/LRS), 'Discussion', 'Follow-up'.
           Filter WHERE moc_next_action IS NOT NULL to get the action list.
       - name: moc_missing_check_test
@@ -154,7 +154,7 @@ models:
         data_tests:
           - not_null
       - name: moc_missing_stage_2
-        description: True if discussion or follow-up is recorded but stage 2 (MDT/Careplan for HRCS/HRS; Careplan for MRS/LRS) is absent in the last 12m
+        description: True if discussion or follow-up is recorded but stage 2 (RDR/Careplan for HRCS/HRS; Careplan for MRS/LRS) is absent in the last 12m
         data_tests:
           - not_null
       - name: moc_missing_discussion
@@ -170,7 +170,7 @@ models:
         data_tests:
           - not_null
       - name: moc_stage_2_date
-        description: Effective stage 2 date (earliest of MDT review / careplan sharing for HRCS/HRS; careplan sharing for MRS/LRS). Null if stage 2 not done.
+        description: Effective stage 2 date (earliest of Remote Desktop Review (RDR) / careplan sharing for HRCS/HRS; careplan sharing for MRS/LRS). Null if stage 2 not done.
       - name: moc_days_check_test_to_stage_2
         description: Days between check & test and stage 2. Null if either is missing; negative if stage 2 was recorded before check & test.
       - name: moc_days_stage_2_to_discussion

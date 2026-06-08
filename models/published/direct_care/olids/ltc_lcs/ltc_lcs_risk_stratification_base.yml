@@ -208,18 +208,18 @@ models:
         description: Check & Test appointment completed in last 12 months
       - name: moc_check_test_date
         description: Latest Check & Test appointment date
-      - name: moc_mdt_review_completed
-        description: MDT review completed in last 12 months
-      - name: moc_mdt_review_date
-        description: Latest MDT review date
+      - name: moc_remote_desktop_review_completed
+        description: Remote Desktop Review (RDR) completed in last 12 months
+      - name: moc_remote_desktop_review_date
+        description: Latest Remote Desktop Review (RDR) date
       - name: moc_careplan_sharing_completed
         description: Care plan shared with patient in last 12 months
       - name: moc_careplan_sharing_date
         description: Latest care plan sharing date
       - name: moc_stage_2_completed
-        description: Stage 2 done using pathway-specific rule (HRCS/HRS = MDT review OR careplan sharing; MRS/LRS = careplan sharing only)
+        description: Stage 2 done using pathway-specific rule (HRCS/HRS = Remote Desktop Review (RDR) OR careplan sharing; MRS/LRS = careplan sharing only)
       - name: moc_stage_2_date
-        description: Effective stage 2 date (earliest MDT / careplan for HRCS/HRS; careplan for MRS/LRS)
+        description: Effective stage 2 date (earliest RDR / careplan for HRCS/HRS; careplan for MRS/LRS)
       - name: moc_discussion_completed
         description: Discussion appointment completed in last 12 months
       - name: moc_discussion_date
@@ -243,11 +243,11 @@ models:
       - name: moc_stage_completed
         description: Furthest MOC pathway stage reached in the last 12 months (0-4)
       - name: moc_stage_completed_label
-        description: Readable label for the furthest MOC stage reached (Not started / Check & Test / MDT / Careplan / Careplan sharing / Discussion / Follow-up)
+        description: Readable label for the furthest MOC stage reached (Not started / Check & Test / RDR / Careplan / Careplan sharing / Discussion / Follow-up)
       - name: moc_pathway_status
         description: "Overall MOC cycle state: 'Not started' | 'In progress' | 'Cycle complete' (all four stages recorded, equivalent to moc_cycle_complete=true) | 'Declined'"
       - name: moc_next_action
-        description: "Next MOC action needed (Check & Test / MDT / Careplan / Careplan sharing / Discussion / Follow-up); NULL when no action is required (cycle complete or declined)"
+        description: "Next MOC action needed (Check & Test / RDR / Careplan / Careplan sharing / Discussion / Follow-up); NULL when no action is required (cycle complete or declined)"
       - name: moc_cycle_complete
         description: True if all four MOC stages recorded in the last 12m
 

@@ -119,8 +119,8 @@ select
     -- ============================================================
     rs.moc_check_test_completed,
     rs.moc_check_test_date,
-    rs.moc_mdt_review_completed,
-    rs.moc_mdt_review_date,
+    rs.moc_remote_desktop_review_completed,
+    rs.moc_remote_desktop_review_date,
     rs.moc_careplan_sharing_completed,
     rs.moc_careplan_sharing_date,
     rs.moc_stage_2_completed,
