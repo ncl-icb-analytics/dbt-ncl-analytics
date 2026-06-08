@@ -18,7 +18,7 @@ WITH person_level_araf_aggregation AS (
         ) AS latest_new_araf_date,
         boolor_agg(is_specific_araf_form_code)
             AS has_specific_araf_form_meeting_lookback,
-        array_agg(DISTINCT araf_ID) AS all_araf_IDs,
+        array_agg(DISTINCT araf_ID::VARCHAR) AS all_araf_IDs,
         array_agg(DISTINCT araf_concept_code) AS all_araf_concept_codes,
         array_agg(DISTINCT araf_concept_display) AS all_araf_concept_displays,
         array_agg(DISTINCT araf_code_category)

@@ -13,14 +13,10 @@ models:
           - not_null
       - name: organisation_code
         description: Organisation code (e.g., ODS code)
-      - name: assigning_authority_code
-        description: Code of the authority that assigned the organisation code
+      - name: organisation_code_assigning_authority
+        description: Code of the authority that assigned the organisation code. Renamed at staging from the upstream `organisation_code_assinging_authority` (sic) typo.
       - name: name
         description: Name of the organisation
-      - name: type_code
-        description: Type code for the organisation
-      - name: type_desc
-        description: Type description for the organisation
       - name: postcode
         description: Postcode of the organisation
       - name: parent_organisation_id
@@ -33,18 +29,20 @@ models:
         description: Boolean indicating if the organisation record is obsolete
       - name: lds_id
         description: LDS system identifier
-      - name: record_owner_organisation_code
-        description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
+      - name: publisher_organisation_code
+        description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
+      - name: description
+        description: "Free-text description of the organisation. New in the 2026 OLIDS schema realignment (issue #747); partially replaces the removed type_code and type_desc columns."
+      - name: location_type_source_concept_id
+        description: "Foreign key to concept.concept_id — source concept describing the organisation's location type. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

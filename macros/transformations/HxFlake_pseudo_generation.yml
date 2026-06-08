@@ -1,0 +1,11 @@
+
+macros:
+  - name: hxflake_pseudo_generation
+    description: >
+      Generates an HxFlake pseudonym in XX-XXX-XXX format from a patient surrogate key for re-id API use
+
+
+    arguments:
+      - name: sk_patient_id
+        type: string
+        description: Universal commissioning data patient ID

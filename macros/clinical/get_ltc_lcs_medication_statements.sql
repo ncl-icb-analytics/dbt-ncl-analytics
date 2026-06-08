@@ -3,7 +3,7 @@
 {#
     Returns medication statements for one or more LTC LCS valuesets via two parallel paths:
       - 'mapped': medication_statement.mapped_concept_code = expanded_concepts.snomed_code
-      - 'source': medication_statement.medication_statement_source_concept_id -> enriched_concept_map.source_code_id
+      - 'source': medication_statement.medication_statement_source_concept_id -> enriched_concept_map.source_concept_id
                   -> original_codes.original_code
     Path 'source' recovers statements for valuesets where the terminology server failed
     to translate EMIS codes to SNOMED. When both paths match the same statement, the
@@ -110,7 +110,7 @@ with matched_statements as (
         'source' as match_path
     from {{ ref('stg_olids_medication_statement') }} as ms
     inner join {{ ref('stg_olids_enriched_concept_map') }} as ecm
-        on ms.medication_statement_source_concept_id = ecm.source_code_id
+        on ms.medication_statement_source_concept_id = ecm.source_concept_id
     inner join {{ ref('stg_reference_ltc_lcs_original_codes') }} as oc
         on ecm.source_code = oc.original_code
     left join {{ ref('stg_reference_ltc_lcs_valuesets') }} as vs

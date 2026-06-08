@@ -2,7 +2,9 @@
 macros:
   - name: ensure_governance_tags
     description: >
-      Creates DATA_CATEGORY Snowflake tags in schemas containing models tagged with 'secondary_use_opt_out'.
-      Called in on-run-start to ensure tags exist before models apply them.
+      Creates Snowflake governance tags before models apply them (called in on-run-start).
+      Creates DATA_CATEGORY in any schema containing models tagged 'secondary_use_opt_out' or
+      'secondary_use_s251_exempt', and additionally creates S251_EXEMPT in schemas containing
+      'secondary_use_s251_exempt' models (Section 251 exempt HealtheIntent replacement dashboards).
 
 

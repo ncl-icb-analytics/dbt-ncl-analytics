@@ -41,7 +41,7 @@ WITH pregnancy_aggregated AS (
         ARRAY_AGG(DISTINCT 
             CASE 
                 WHEN clinical_effective_date >= DATEADD(MONTH, -9, CURRENT_DATE())
-                THEN source_cluster_id 
+                THEN source_cluster_id::VARCHAR 
             END
         ) AS all_preg_source_cluster_ids
     FROM {{ ref('int_pregnancy_observations_all') }}

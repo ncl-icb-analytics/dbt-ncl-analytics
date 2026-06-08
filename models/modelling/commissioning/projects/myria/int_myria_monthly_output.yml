@@ -1,0 +1,12 @@
+models:
+  - name: int_myria_monthly_output
+    description: A table holding eligible patients from the snapshot FCT_PERSON_MYRIA_HIGH_RISK_PATIENTS_PUBLISHED_SNAPSHOT where dbt_valid_to is null. This table is used for the monthly output of Myria to RFL.It includes added flags to check patient status (deceased or unregistered), palliative care and borough of residence. This is done by comparing to OLIDS.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1

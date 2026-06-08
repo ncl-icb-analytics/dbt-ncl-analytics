@@ -1,0 +1,60 @@
+models:
+  - name: dim_person_hospice_care
+    description: 'Latest hospice care status for persons under a hospice service.
+
+      One row per person with a HOSPICE_FULLCARE_COD or HOSPICE_ATHOME_COD record.
+      Each service flag is current when its latest event is not superseded by a later
+      HOSPICE_DISCHARGE_COD record.
+
+      Hospice involvement is not routinely or consistently coded in OLIDS primary care
+      (GP) data, so counts are low and should be read as a floor, not true prevalence.
+      Deceased persons are retained (no active/death filter) as hospice cohorts are
+      largely end-of-life. For the broader palliative/end-of-life population see
+      fct_person_palliative_care_register (QOF).'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Person identifier
+        tests:
+          - unique
+          - not_null
+      - name: sk_patient_id
+        description: Surrogate key for patient
+      - name: latest_hospice_care_date
+        description: Date of most recent hospice care observation (either service)
+        tests:
+          - not_null
+      - name: latest_full_care_date
+        description: Date of most recent full clinical care observation (NULL if none)
+      - name: latest_at_home_date
+        description: Date of most recent hospice-at-home / community service observation (NULL if none)
+      - name: latest_discharge_date
+        description: Date of most recent hospice discharge observation (NULL if none)
+      - name: concept_code
+        description: SNOMED concept code of the latest care observation
+      - name: code_description
+        description: Term for the latest care observation
+      - name: source_cluster_id
+        description: Source cluster ID of the latest care observation
+      - name: is_hospice_full_care
+        description: Currently under full clinical care by a hospice
+        tests:
+          - not_null
+      - name: is_hospice_at_home
+        description: Currently under a hospice-at-home / community hospice service
+        tests:
+          - not_null
+      - name: is_under_hospice_care
+        description: Currently under any hospice service (full care or at-home)
+        tests:
+          - not_null
+      - name: hospice_care_status
+        description: Text description of hospice care status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Under Hospice Care', 'Discharged from Hospice']

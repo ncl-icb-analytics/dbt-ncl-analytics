@@ -102,7 +102,7 @@ WITH ndh_diagnoses AS (
         ) AS prd_diagnosis_displays,
 
         -- All observation IDs
-        ARRAY_AGG(DISTINCT ID) AS all_IDs
+        ARRAY_AGG(DISTINCT ID::VARCHAR) AS all_IDs
 
     FROM {{ ref('int_ndh_diagnoses_all') }}
     GROUP BY person_id
@@ -151,7 +151,10 @@ register_inclusion AS (
         ds.earliest_diabetes_diagnosis_date,
         ds.latest_diabetes_resolved_date,
 
-        -- Age at first NDH diagnosis calculation using current age (approximation)
+        -- Age at the reference date (current), per QOF PAT_AGE at ACHV_DAT
+        age.age AS age_at_reference,
+
+        -- Age at first NDH diagnosis (approximation, for analytics/traceability only)
         CASE
             WHEN nd.earliest_diagnosis_date IS NOT NULL
                 THEN
@@ -159,14 +162,10 @@ register_inclusion AS (
                     - DATEDIFF(YEAR, nd.earliest_diagnosis_date, CURRENT_DATE())
         END AS age_at_first_ndh_diagnosis,
 
-        -- QOF register logic: Age ≥18 + NDH + (never diabetes OR diabetes resolved)
+        -- QOF register logic: PAT_AGE >=18 at reference + NDH + (never diabetes OR resolved)
         COALESCE(
             nd.earliest_diagnosis_date IS NOT NULL
-            AND (
-                age.age
-                - DATEDIFF(YEAR, nd.earliest_diagnosis_date, CURRENT_DATE())
-            )
-            >= 18
+            AND age.age >= 18
             AND (
                 COALESCE(ds.has_diabetes_diagnosis, FALSE) = FALSE
                 OR COALESCE(ds.is_diabetes_resolved, FALSE) = TRUE
@@ -175,33 +174,21 @@ register_inclusion AS (
 
         -- Clinical interpretation
         CASE
-            WHEN
-                nd.earliest_diagnosis_date IS NOT NULL
-                AND (
-                    age.age
-                    - DATEDIFF(YEAR, nd.earliest_diagnosis_date, CURRENT_DATE())
-                )
-                >= 18
+            WHEN nd.earliest_diagnosis_date IS NOT NULL
+                AND age.age >= 18
                 AND (
                     COALESCE(ds.has_diabetes_diagnosis, FALSE) = FALSE
                     OR COALESCE(ds.is_diabetes_resolved, FALSE) = TRUE
                 )
                 THEN 'Active NDH - eligible for diabetes prevention'
-            WHEN
-                nd.earliest_diagnosis_date IS NOT NULL
-                AND (
-                    age.age
-                    - DATEDIFF(YEAR, nd.earliest_diagnosis_date, CURRENT_DATE())
-                )
-                < 18
+            WHEN nd.earliest_diagnosis_date IS NOT NULL AND age.age < 18
                 THEN 'NDH diagnosis (age <18 - excluded from QOF)'
-            WHEN
-                nd.earliest_diagnosis_date IS NOT NULL
+            WHEN nd.earliest_diagnosis_date IS NOT NULL
                 AND COALESCE(ds.has_diabetes_diagnosis, FALSE) = TRUE
                 AND COALESCE(ds.is_diabetes_resolved, FALSE) = FALSE
                 THEN 'NDH diagnosis (excluded - unresolved diabetes)'
             ELSE 'No NDH diagnosis'
-        END AS ndh_status,
+        END AS ndh_status
 
 
     FROM ndh_diagnoses AS nd

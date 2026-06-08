@@ -32,6 +32,10 @@ models:
       - int_creatinine_latest: Serum creatinine
       - int_qrisk_latest: QRISK cardiovascular risk
       - int_urine_acr_latest: Urine ACR
+      - int_lft_latest: Liver function (ALT, GGT, bilirubin) with high flags
+      - int_haemoglobin_latest: Haemoglobin with anaemia category
+      - int_platelets_latest: Platelet count with category
+      - int_eosinophil_count_latest: Blood eosinophil count with category
       - int_efi_latest: Electronic Frailty Index (GP-coded only, incomplete coverage)
       - int_rockwood_latest: Rockwood Clinical Frailty Scale
       - int_foot_examination_latest: Diabetic foot examination

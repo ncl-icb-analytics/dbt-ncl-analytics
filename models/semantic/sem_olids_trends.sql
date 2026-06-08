@@ -63,6 +63,9 @@ DIMENSIONS(
     -- Ethnicity
     trends.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
     trends.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
+    trends.ethnicity_granular AS ethnicity_granular COMMENT = 'Detailed ethnicity classification (Unknown if not recorded)',
+    trends.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
+    trends.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
 
     -- Organisation
     trends.practice_code AS practice_code COMMENT = 'GP practice code',
@@ -79,6 +82,7 @@ DIMENSIONS(
     trends.lsoa_code_21 AS lsoa_code_21 COMMENT = 'LSOA 2021 code',
     trends.ward_code AS ward_code COMMENT = 'Electoral ward code',
     trends.ward_name AS ward_name COMMENT = 'Electoral ward name',
+    trends.is_london_resident AS is_london_resident COMMENT = 'Resides in Greater London',
     trends.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Residence neighbourhood',
 
     -- Deprivation

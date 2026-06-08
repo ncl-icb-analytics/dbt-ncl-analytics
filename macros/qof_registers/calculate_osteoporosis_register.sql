@@ -25,7 +25,7 @@
             clinical_effective_date,
             is_diagnosis_code
         FROM {{ ref('int_osteoporosis_diagnoses_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
           AND is_diagnosis_code = TRUE
     ),
 
@@ -43,7 +43,7 @@
             person_id,
             clinical_effective_date
         FROM {{ ref('int_fragility_fractures_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
     ),
 
     fragility_person_aggregates AS (
@@ -65,7 +65,7 @@
             is_dxa_t_score_measurement,
             validated_t_score
         FROM {{ ref('int_dxa_scans_all') }}
-        WHERE clinical_effective_date <= {{ reference_date_expr }}
+        WHERE clinical_effective_date <= {{ reference_date_expr }} AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= {{ reference_date_expr }})
     ),
 
     dxa_person_aggregates AS (
@@ -81,7 +81,7 @@
         SELECT
             person_id,
             birth_date_approx,
-            DATEDIFF('year', birth_date_approx, {{ reference_date_expr }}) AS age
+            FLOOR(DATEDIFF('month', birth_date_approx, {{ reference_date_expr }}) / 12) AS age
         FROM {{ ref('dim_person_birth_death') }}
         WHERE birth_date_approx IS NOT NULL
     ),

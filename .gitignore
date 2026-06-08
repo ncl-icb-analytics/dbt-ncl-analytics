@@ -40,6 +40,18 @@ Thumbs.db
 *.parquet
 *.pdf
 
+# QA baseline snapshots — canonical copies live in
+# DATA_LAKE__NCL.DBT_OBSERVABILITY.MODEL_ROW_COUNT_BASELINE
+qa/baseline_*.json
+qa/diff_*.json
+qa/diff_*.csv
+# Scratch notes used while triaging review comments etc.
+qa/*.txt
+qa/PR_BODY.md
+qa/reply_*.py
+qa/build_*.py
+qa/current_*.md
+
 
 # Temporary files
 table_metadata.*

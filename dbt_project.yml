@@ -1,5 +1,5 @@
 name: 'wnl_analytics'
-version: '1.20.1'
+version: '2.0.0'
 config-version: 2
 
 profile: 'wnl_analytics'
@@ -10,7 +10,7 @@ flags:
 # Display connection info when dbt runs start
   require_generic_test_arguments_property: true
 on-run-start:
-  - "{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}"
+  - "{% if execute %}{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
@@ -61,7 +61,7 @@ models:
       +post-hook: ["{{ add_model_comment() }}"]
       olids:
         +meta:
-          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
 
     # Modelling layer - business logic and transformations
     modelling:
@@ -76,7 +76,7 @@ models:
         +schema: "COMMISSIONING_MODELLING"
       olids:
         +meta:
-          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
 
     # Reporting layer - aggregated and analytical models
     reporting:
@@ -91,7 +91,7 @@ models:
         +schema: "COMMISSIONING_REPORTING"
       olids:
         +meta:
-          custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+          custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
         # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         definitions:
           +database: "{{ target.database.replace('MODELLING', 'REPORTING') }}"
@@ -100,11 +100,13 @@ models:
     semantic:
       +enabled: true
       +materialized: semantic_view
+      # Semantic-view DDL is not standard SELECT SQL; skip Fusion static analysis.
+      +static_analysis: "off"
       +database: "REPORTING"
       +schema: "SEMANTIC"
       +tags: ["semantic"]
       +meta:
-        custom_message: "Snowflake Semantic View - Includes OLIDS data - don't publish/share outputs without DAC approval. Query via SEMANTIC_VIEW() function."
+        custom_message: "Snowflake Semantic View - Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering. Query via SEMANTIC_VIEW() function."
 
     # Published layer - production-ready datasets for end users
     published:
@@ -118,7 +120,7 @@ models:
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         olids:
           +meta:
-            custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+            custom_message: "Includes OLIDS data - direct care use; opt-out filtering NOT applied. For secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id."
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         C_LTCS:
           +meta:
@@ -128,11 +130,13 @@ models:
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         olids:
           +meta:
-            custom_message: "Includes OLIDS data - don't publish/share outputs without DAC approval"
+            custom_message: "Includes OLIDS data already filtered via REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED (National Data Opt-Out and Type 1 opt-outs excluded). Safe to use for secondary purposes."
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
           +post-hook:
             - "{{ add_model_comment() }}"
             - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
+            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'S251_EXEMPT', 'TRUE') }}"
             - "{{ log_row_count() }}"
 
   # Elementary observability configuration
@@ -147,6 +151,14 @@ seeds:
     +schema: "DBT_SEEDS"
     +quote_columns: false
     +post-hook: ["{{ add_model_comment() }}"]
+
+    practice_merges:
+      +column_types:
+        predecessor_code: varchar(10)
+        successor_code: varchar(10)
+        predecessor_name: varchar(200)
+        successor_name: varchar(200)
+        note: varchar(500)
 
     bnf_polypharmacy_exclusions:
       +column_types:
@@ -173,20 +185,6 @@ seeds:
         GP_PRACTICE: varchar(200)
         LIST_SIZE: integer
         EXTRACT_DATE: varchar(10)
-
-    asthma_testing_codelist:
-      +column_types:
-        CODE: varchar(50)
-        CODE_DESCRIPTION: varchar(200)
-        VOCABULARY: varchar(200)
-        CODELIST_ID: varchar(200)
-        CODELIST_NAME: varchar(200)
-        CODELIST_VERSION: varchar(200)
-        DEFINITION_NAME: varchar(200)
-        DEFINITION_VERSION: varchar(200)
-        DEFINITION_SOURCE: varchar(200)
-        VERSION_DATETIME: varchar(200)
-        UPLOADED_DATETIME: varchar(200)
 
     observation_unit_rules:
       +column_types:
@@ -229,6 +227,19 @@ seeds:
         threshold: float
         unit: varchar(20)
         source_reference: varchar(100)
+
+    qadmissions_townsend_lsoa_2011:
+      +column_types:
+        lsoa_2011_code: varchar(9)
+        lsoa_2011_label: varchar(100)
+        townsend_score: float
+        townsend_quintile: integer
+
+    qadmissions_eth2016_to_ethrisk9:
+      +column_types:
+        ethnicity_subcategory: varchar(60)
+        ethrisk: integer
+        qadmissions_label: varchar(30)
 
 snapshots:
   wnl_analytics:

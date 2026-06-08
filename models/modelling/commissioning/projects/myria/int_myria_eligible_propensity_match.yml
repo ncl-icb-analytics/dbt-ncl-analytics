@@ -1,0 +1,12 @@
+models:
+  - name: int_myria_eligible_propensity_match
+    description: Intermediate table for Myria propensity score matching. Using eligible patients from FCT_PERSON_MYRIA_HIGH_RISK_PATIENTS_PUBLISHED_SNAPSHOT matched to OLIDS population and to the latest Myria enrolled patient file.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1

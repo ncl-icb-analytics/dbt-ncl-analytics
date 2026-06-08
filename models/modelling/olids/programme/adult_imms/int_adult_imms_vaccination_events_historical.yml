@@ -1,0 +1,13 @@
+models:
+  - name: int_adult_imms_vaccination_events_historical
+    description: Intermediate table holding vaccination events for historical adult imms population for time series.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        data_tests:
+          - not_null

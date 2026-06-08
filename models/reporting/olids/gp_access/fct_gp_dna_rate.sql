@@ -19,7 +19,7 @@ practice-level demographics for equity analysis.
 */
 
 select
-    record_owner_organisation_code as practice_code,
+    publisher_organisation_code as practice_code,
     DATE_TRUNC('month', start_date) as report_month,
     SUM(CASE WHEN is_attended OR is_dna THEN 1 ELSE 0 END) as total_appointments,
     SUM(CASE WHEN is_attended THEN 1 ELSE 0 END) as attended,

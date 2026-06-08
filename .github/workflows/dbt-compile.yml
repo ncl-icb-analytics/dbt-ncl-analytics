@@ -1,0 +1,74 @@
+# dbt Compile Gate (Fusion)
+#
+# Fast pre-merge SQL gate using the dbt Fusion engine's static analysis.
+# Catches broken refs/sources, Jinja/YAML errors, SQL syntax, and (where the
+# target catalog is populated) column/type errors - before merge.
+#
+#   pull_request -> compile against DEV   (ci-dev target, every PR commit)
+#   merge_group  -> compile against PROD  (ci-prod target, before deploy)
+#
+# Auth: key-pair (reuses the secrets the deploy workflow already uses).
+# Compile is read-only (no materialization); it only reads schema metadata.
+
+name: dbt Compile
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'macros/**'
+      - 'dbt_project.yml'
+      - 'profiles.yml'
+      - 'packages.yml'
+  merge_group:
+
+jobs:
+  compile:
+    name: Fusion compile
+    runs-on: ubuntu-latest
+    concurrency:
+      group: dbt-compile-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+    env:
+      DBT_TARGET: ${{ github.event_name == 'merge_group' && 'ci-prod' || 'ci-dev' }}
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
+      SNOWFLAKE_ROLE: DBT_ADMIN
+      SNOWFLAKE_WAREHOUSE: WH_NCL_ENGINEERING_XS
+      SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE__PASSPHRASE }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Install dbt Fusion
+        run: |
+          FALLBACK=2.0.0-preview.188
+          ver=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/dev/null \
+            | python3 -c "import sys,json;print(json.load(sys.stdin).get('stable',{}).get('tag','').lstrip('v'))" 2>/dev/null) || true
+          [ -z "$ver" ] && ver=$FALLBACK
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$ver" --target x86_64-unknown-linux-gnu --update
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Write Snowflake private key
+        env:
+          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE__PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.snowflake
+          printf '%s\n' "$SNOWFLAKE_PRIVATE_KEY" > ~/.snowflake/rsa_key.p8
+          chmod 600 ~/.snowflake/rsa_key.p8
+          echo "SNOWFLAKE_PRIVATE_KEY_PATH=$HOME/.snowflake/rsa_key.p8" >> "$GITHUB_ENV"
+
+      - name: Install dbt packages
+        run: dbt deps
+
+      - name: dbt compile
+        run: dbt compile --target "$DBT_TARGET" --profiles-dir .
+
+      - name: Cleanup credentials
+        if: always()
+        run: rm -f ~/.snowflake/rsa_key.p8

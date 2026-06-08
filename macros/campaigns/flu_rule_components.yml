@@ -123,7 +123,7 @@ macros:
 
     arguments:
       - name: threshold
-        type: number
+        type: float
         description: BMI threshold value
 
       - name: reference_date

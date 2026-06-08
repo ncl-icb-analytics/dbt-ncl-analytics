@@ -5,15 +5,12 @@ select
     -- Business columns
     appointment_id,
     practitioner_id,
-    lds_end_date_time,
     lds_id,
-    lds_record_id_user,
-    record_owner_organisation_code,
-    lds_datetime_data_acquired,
-    lds_initial_data_received_date,
+    publisher_organisation_code,
+    lds_datetime_first_acquired,
 
     -- Metadata
-    lds_start_date_time,
+    lds_start_datetime,
     lds_is_deleted,
     lds_record_id
 

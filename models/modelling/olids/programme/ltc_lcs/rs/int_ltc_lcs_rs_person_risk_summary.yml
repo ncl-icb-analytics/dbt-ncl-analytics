@@ -1,0 +1,71 @@
+version: 2
+models:
+  - name: int_ltc_lcs_rs_person_risk_summary
+    description: |
+      Person-level roll-up of LTC LCS risk stratification across conditions.
+
+      One row per person who appears in any condition-level rs model. Each condition
+      column holds the highest risk group the person is in for that condition
+      (HRC > HR > MR > MRa/MRb > LR). overall_risk_group is the highest risk group
+      the person is in across all conditions; MRa/MRb are both reported as MR.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          arguments:
+            column_name: person_id
+    columns:
+      - name: person_id
+        description: Unique person identifier
+        data_tests:
+          - not_null
+          - unique
+      - name: chd_risk_group
+        description: Highest CHD risk group the person is in (HRC/HR/MR); null if not stratified
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['HRC', 'HR', 'MR']
+      - name: ckd_risk_group
+        description: Highest CKD risk group the person is in (HRC/HR/MR); null if not stratified
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['HRC', 'HR', 'MR']
+      - name: copd_risk_group
+        description: Highest COPD risk group the person is in (HRC/HR/MR); null if not stratified
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['HRC', 'HR', 'MR']
+      - name: diabetes_risk_group
+        description: Highest Diabetes risk group the person is in (HRC/HR/MR/MRa/MRb/LR); null if not stratified
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['HRC', 'HR', 'MR', 'MRa', 'MRb', 'LR']
+      - name: hf_risk_group
+        description: Highest Heart Failure risk group the person is in (HR/MR); null if not stratified
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['HR', 'MR']
+      - name: hypertension_risk_group
+        description: Highest Hypertension risk group the person is in (HRC/HR/MRa/MRb/LR); null if not stratified
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['HRC', 'HR', 'MRa', 'MRb', 'LR']
+      - name: overall_risk_group
+        description: Highest risk group the person is in across all conditions (HRC/HR/MR/LR); MRa/MRb collapse to MR
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['HRC', 'HR', 'MR', 'LR']
+      - name: overall_risk_rank
+        description: Numeric rank of overall_risk_group (1=HRC highest, 5=LR lowest)
+        data_tests:
+          - not_null

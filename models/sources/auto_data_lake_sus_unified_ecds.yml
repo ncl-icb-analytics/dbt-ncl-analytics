@@ -12,19 +12,17 @@ sources:
       data_type: NUMBER(38,0)
     - name: dmicCustomerCode
       data_type: TEXT
-    - name: dmicDerivedCCGofResidence
-      data_type: BOOLEAN
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: dmicPrimeRecipient
-      data_type: BOOLEAN
-    - name: dmicDerivedCCGofGPPrac
-      data_type: BOOLEAN
-    - name: dmicShortRecipient
       data_type: BOOLEAN
     - name: dmicSubmittedCCG
       data_type: BOOLEAN
     - name: dmicSubmittedCCGOfResidence
+      data_type: BOOLEAN
+    - name: dmicDerivedCCGofResidence
+      data_type: BOOLEAN
+    - name: dmicDerivedCCGofGPPrac
+      data_type: BOOLEAN
+    - name: dmicShortRecipient
       data_type: BOOLEAN
     - name: dmicSubmittedProvider
       data_type: BOOLEAN
@@ -32,6 +30,8 @@ sources:
       data_type: BOOLEAN
     - name: dmicDerivedGPPractice
       data_type: BOOLEAN
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: InsertDeleteLog
     identifier: '"InsertDeleteLog"'
     columns:
@@ -105,43 +105,43 @@ sources:
   - name: clinical.coded_observations
     identifier: '"clinical.coded_observations"'
     columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: CODED_OBSERVATIONS_ID
+      data_type: NUMBER(38,0)
+    - name: code
+      data_type: TEXT
     - name: is_code_approved
       data_type: BOOLEAN
     - name: value
       data_type: TEXT
-    - name: code
+    - name: ucum_unit_of_measurement
       data_type: TEXT
-    - name: CODED_OBSERVATIONS_ID
-      data_type: NUMBER(38,0)
     - name: timestamp
       data_type: TIMESTAMP_NTZ
     - name: dmicImportLogId
       data_type: NUMBER(38,0)
-    - name: ucum_unit_of_measurement
-      data_type: TEXT
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
   - name: clinical.coded_scored_assessments
     identifier: '"clinical.coded_scored_assessments"'
     columns:
-    - name: dmicImportLogId
+    - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
     - name: CODED_SCORED_ASSESSMENTS_ID
       data_type: NUMBER(38,0)
+    - name: tool_type.code
+      data_type: TEXT
+    - name: tool_type.is_code_approved
+      data_type: BOOLEAN
     - name: person_score
       data_type: TEXT
     - name: validation_timestamp
       data_type: TIMESTAMP_NTZ
-    - name: tool_type.is_code_approved
-      data_type: BOOLEAN
-    - name: tool_type.code
-      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: clinical.comorbidities
     identifier: '"clinical.comorbidities"'
     columns:
@@ -160,16 +160,6 @@ sources:
   - name: clinical.diagnoses.snomed
     identifier: '"clinical.diagnoses.snomed"'
     columns:
-    - name: is_applicable_to_females
-      data_type: BOOLEAN
-    - name: is_applicable_to_males
-      data_type: BOOLEAN
-    - name: is_qualifier_approved
-      data_type: BOOLEAN
-    - name: is_notifiable_disease
-      data_type: BOOLEAN
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
     - name: ROWNUMBER_ID
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
@@ -184,16 +174,26 @@ sources:
       data_type: BOOLEAN
     - name: equivalent_ae_code
       data_type: TEXT
+    - name: is_primary
+      data_type: BOOLEAN
+    - name: qualifier
+      data_type: TEXT
+    - name: is_qualifier_approved
+      data_type: BOOLEAN
     - name: sequence_number
       data_type: NUMBER(38,0)
     - name: is_aec_related
       data_type: BOOLEAN
     - name: is_allergy_related
       data_type: BOOLEAN
-    - name: is_primary
+    - name: is_applicable_to_females
       data_type: BOOLEAN
-    - name: qualifier
-      data_type: TEXT
+    - name: is_applicable_to_males
+      data_type: BOOLEAN
+    - name: is_notifiable_disease
+      data_type: BOOLEAN
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
   - name: clinical.diagnoses.snomed.max_core_diagnoses
     identifier: '"clinical.diagnoses.snomed.max_core_diagnoses"'
     columns:
@@ -241,47 +241,47 @@ sources:
   - name: clinical.investigations.snomed
     identifier: '"clinical.investigations.snomed"'
     columns:
-    - name: is_code_approved
-      data_type: BOOLEAN
-    - name: dmicImportLogId
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
     - name: SNOMED_ID
       data_type: NUMBER(38,0)
     - name: code
       data_type: TEXT
+    - name: is_code_approved
+      data_type: BOOLEAN
     - name: equivalent_ae_code
       data_type: TEXT
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
     - name: date
       data_type: TIMESTAMP_NTZ
     - name: time
       data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
     - name: timestamp
       data_type: TIMESTAMP_NTZ
   - name: clinical.participants
     identifier: '"clinical.participants"'
     columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
     - name: PARTICIPANTS_ID
       data_type: NUMBER(38,0)
     - name: identifier
       data_type: TEXT
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
-    - name: clinical_responsibility_timestamp
-      data_type: TIMESTAMP_NTZ
     - name: issuer
       data_type: TEXT
     - name: tier
       data_type: TEXT
     - name: has_discharge_responsibility
       data_type: TEXT
-    - name: ROWNUMBER_ID
+    - name: dmicImportLogId
       data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
+    - name: clinical_responsibility_timestamp
+      data_type: TIMESTAMP_NTZ
   - name: clinical.treatments.snomed
     identifier: '"clinical.treatments.snomed"'
     columns:
@@ -289,22 +289,22 @@ sources:
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
+    - name: SNOMED_ID
+      data_type: NUMBER(38,0)
+    - name: code
+      data_type: TEXT
+    - name: is_code_approved
+      data_type: BOOLEAN
     - name: equivalent_ae_code
       data_type: TEXT
+    - name: date
+      data_type: TIMESTAMP_NTZ
     - name: time
       data_type: TEXT
     - name: dmicImportLogId
       data_type: NUMBER(38,0)
-    - name: is_code_approved
-      data_type: BOOLEAN
-    - name: SNOMED_ID
-      data_type: NUMBER(38,0)
-    - name: date
-      data_type: TIMESTAMP_NTZ
     - name: timestamp
       data_type: TIMESTAMP_NTZ
-    - name: code
-      data_type: TEXT
   - name: commissioning.national_pricing.exclusion_reasons
     identifier: '"commissioning.national_pricing.exclusion_reasons"'
     columns:
@@ -352,16 +352,8 @@ sources:
   - name: derived
     identifier: '"derived"'
     columns:
-    - name: dmicSubICBRegistrationSubmitted
-      data_type: TEXT
-    - name: dmicElectoralWardCode
-      data_type: TEXT
     - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
-    - name: dmicSubICBResidenceSubmitted
-      data_type: TEXT
-    - name: dmicCommissionerDerivationReason
-      data_type: TEXT
     - name: CqcCareHomeCode
       data_type: TEXT
     - name: dmicICBCommissioner
@@ -372,66 +364,74 @@ sources:
       data_type: TEXT
     - name: dmicICBResidenceSubmitted
       data_type: TEXT
+    - name: dmicSubICBRegistrationSubmitted
+      data_type: TEXT
+    - name: dmicSubICBResidenceSubmitted
+      data_type: TEXT
+    - name: dmicCommissionerDerivationReason
+      data_type: TEXT
     - name: dmicImportLogId
       data_type: NUMBER(38,0)
     - name: dmicLSOA2021
       data_type: TEXT
+    - name: dmicElectoralWardCode
+      data_type: TEXT
   - name: emergency_care
     identifier: '"emergency_care"'
     columns:
-    - name: patient.usual_address.index_of_multiple_deprivation.decile_description
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: patient.nhs_number.value Pseudo
       data_type: TEXT
-    - name: patient.usual_address.rural_urban_indicator
+    - name: patient.usual_address.postcode Pseudo
       data_type: TEXT
-    - name: patient.usual_address.cancer_registry
+    - name: patient.ethnic_category
       data_type: TEXT
-    - name: patient.usual_address.commissioning_region
+    - name: patient.local_patient_identifier.value
       data_type: TEXT
-    - name: patient.residence_ccg
+    - name: attendance.arrival.attendance_identifier
       data_type: TEXT
-    - name: patient.residence_ccg_from_patient_postcode
+    - name: referral.patient_pathway_identifier.value Pseudo
       data_type: TEXT
-    - name: patient.hes_ccg_from_patient_postcode
+    - name: system.interchange.identifier
       data_type: TEXT
-    - name: patient.stated_gender
+    - name: system.interchange.received_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.interchange.schema_version
       data_type: TEXT
-    - name: patient.accommodation_status.code
+    - name: system.transaction.cds_protocol_identifier
       data_type: TEXT
-    - name: patient.accommodation_status.is_code_approved
-      data_type: BOOLEAN
-    - name: patient.preferred_spoken_language.code
+    - name: system.transaction.cds_unique_identifier
       data_type: TEXT
-    - name: patient.preferred_spoken_language.is_code_approved
-      data_type: BOOLEAN
-    - name: patient.accessible_information_professional_required.code
+    - name: system.transaction.cds_update_type
+      data_type: NUMBER(38,0)
+    - name: system.transaction.cds_applicable_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.transaction.cds_applicable_time
       data_type: TEXT
-    - name: patient.accessible_information_professional_required.is_code_approved
-      data_type: BOOLEAN
-    - name: patient.overseas_visitor_charging_category
+    - name: system.record.identifier
       data_type: TEXT
-    - name: patient.gp_registration.general_practitioner
+    - name: system.record.version
       data_type: TEXT
-    - name: patient.gp_registration.general_practice
+    - name: system.record.cds_record_identifier
       data_type: TEXT
-    - name: patient.gp_registration.pds_general_practice
+    - name: system.record.cds_record_type
       data_type: TEXT
-    - name: patient.gp_registration.responsible_ccg_from_general_practice
+    - name: system.record.cds_group_indicator
+      data_type: NUMBER(38,0)
+    - name: system.record.finished_indicator
+      data_type: NUMBER(38,0)
+    - name: system.record.cds_activity_date
+      data_type: TIMESTAMP_NTZ
+    - name: system.record.sender
       data_type: TEXT
-    - name: patient.gp_registration.hes_ccg_from_general_practice
+    - name: system.record.prime_recipient
       data_type: TEXT
-    - name: patient.gp_registration.hes_responsible_ccg.value
+    - name: system.record.provider
       data_type: TEXT
-    - name: patient.gp_registration.hes_responsible_ccg.origin
-      data_type: TEXT
-    - name: attendance.unique_identifier
-      data_type: TEXT
-    - name: attendance.location.site
-      data_type: TEXT
-    - name: attendance.location.hes_provider_3
-      data_type: TEXT
-    - name: attendance.location.hes_provider_5
-      data_type: TEXT
-    - name: attendance.location.postcode_district
+    - name: system.record.commissioner
       data_type: TEXT
     - name: system.report.query_identifier
       data_type: TEXT
@@ -489,59 +489,59 @@ sources:
       data_type: TEXT
     - name: patient.usual_address.index_of_multiple_deprivation.decile
       data_type: TEXT
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: patient.nhs_number.value Pseudo
+    - name: patient.usual_address.index_of_multiple_deprivation.decile_description
       data_type: TEXT
-    - name: patient.usual_address.postcode Pseudo
+    - name: patient.usual_address.rural_urban_indicator
       data_type: TEXT
-    - name: patient.ethnic_category
+    - name: patient.usual_address.cancer_registry
       data_type: TEXT
-    - name: patient.local_patient_identifier.value
+    - name: patient.usual_address.commissioning_region
       data_type: TEXT
-    - name: attendance.arrival.attendance_identifier
+    - name: patient.residence_ccg
       data_type: TEXT
-    - name: referral.patient_pathway_identifier.value Pseudo
+    - name: patient.residence_ccg_from_patient_postcode
       data_type: TEXT
-    - name: system.interchange.identifier
+    - name: patient.hes_ccg_from_patient_postcode
       data_type: TEXT
-    - name: system.interchange.received_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.interchange.schema_version
+    - name: patient.stated_gender
       data_type: TEXT
-    - name: system.transaction.cds_protocol_identifier
+    - name: patient.accommodation_status.code
       data_type: TEXT
-    - name: system.transaction.cds_unique_identifier
+    - name: patient.accommodation_status.is_code_approved
+      data_type: BOOLEAN
+    - name: patient.preferred_spoken_language.code
       data_type: TEXT
-    - name: system.transaction.cds_update_type
-      data_type: NUMBER(38,0)
-    - name: system.transaction.cds_applicable_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.transaction.cds_applicable_time
+    - name: patient.preferred_spoken_language.is_code_approved
+      data_type: BOOLEAN
+    - name: patient.accessible_information_professional_required.code
       data_type: TEXT
-    - name: system.record.identifier
+    - name: patient.accessible_information_professional_required.is_code_approved
+      data_type: BOOLEAN
+    - name: patient.overseas_visitor_charging_category
       data_type: TEXT
-    - name: system.record.version
+    - name: patient.gp_registration.general_practitioner
       data_type: TEXT
-    - name: system.record.cds_record_identifier
+    - name: patient.gp_registration.general_practice
       data_type: TEXT
-    - name: system.record.cds_record_type
+    - name: patient.gp_registration.pds_general_practice
       data_type: TEXT
-    - name: system.record.cds_group_indicator
-      data_type: NUMBER(38,0)
-    - name: system.record.finished_indicator
-      data_type: NUMBER(38,0)
-    - name: system.record.cds_activity_date
-      data_type: TIMESTAMP_NTZ
-    - name: system.record.sender
+    - name: patient.gp_registration.responsible_ccg_from_general_practice
       data_type: TEXT
-    - name: system.record.prime_recipient
+    - name: patient.gp_registration.hes_ccg_from_general_practice
       data_type: TEXT
-    - name: system.record.provider
+    - name: patient.gp_registration.hes_responsible_ccg.value
       data_type: TEXT
-    - name: system.record.commissioner
+    - name: patient.gp_registration.hes_responsible_ccg.origin
+      data_type: TEXT
+    - name: attendance.unique_identifier
+      data_type: TEXT
+    - name: attendance.location.site
+      data_type: TEXT
+    - name: attendance.location.hes_provider_3
+      data_type: TEXT
+    - name: attendance.location.hes_provider_5
+      data_type: TEXT
+    - name: attendance.location.postcode_district
       data_type: TEXT
     - name: attendance.location.government_office_region
       data_type: TEXT
@@ -709,62 +709,6 @@ sources:
       data_type: TEXT
     - name: clinical.acuity.is_code_approved
       data_type: BOOLEAN
-    - name: attendance.clinically_ready_to_proceed.time_since_arrival
-      data_type: NUMBER(38,0)
-    - name: referral.ubrn.value Pseudo
-      data_type: TEXT
-    - name: referral.ubrn.issuer
-      data_type: TEXT
-    - name: patient.name.suffix
-      data_type: TEXT
-    - name: clinical.disease_notification_code
-      data_type: TEXT
-    - name: clinical.disease_notification_description
-      data_type: TEXT
-    - name: schema_version
-      data_type: TEXT
-    - name: attendance.location.activity_type
-      data_type: TEXT
-    - name: attendance.arrival.timestamp
-      data_type: TIMESTAMP_NTZ
-    - name: attendance.arrival.consultation_mechanism
-      data_type: TEXT
-    - name: attendance.initial_assessment.timestamp
-      data_type: TIMESTAMP_NTZ
-    - name: attendance.seen_for_treatment.timestamp
-      data_type: TIMESTAMP_NTZ
-    - name: attendance.extended_care_episode_identifier
-      data_type: TEXT
-    - name: attendance.departure.timestamp
-      data_type: TIMESTAMP_NTZ
-    - name: attendance.decision_to_admit.timestamp
-      data_type: TIMESTAMP_NTZ
-    - name: clinical.coding.fit_note.assessment_date
-      data_type: TIMESTAMP_NTZ
-    - name: clinical.coding.fit_note.condition
-      data_type: TEXT
-    - name: clinical.coding.fit_note.condition_approved
-      data_type: BOOLEAN
-    - name: clinical.coding.fit_note.diagnosis
-      data_type: TEXT
-    - name: clinical.coding.fit_note.diagnosis_code_approved
-      data_type: BOOLEAN
-    - name: clinical.coding.fit_note.start_date
-      data_type: TIMESTAMP_NTZ
-    - name: clinical.coding.fit_note.end_date
-      data_type: TIMESTAMP_NTZ
-    - name: clinical.coding.fit_note.duration
-      data_type: TEXT
-    - name: clinical.coding.fit_note.recorded_date
-      data_type: TIMESTAMP_NTZ
-    - name: clinical.coding.fit_note.follow_up_assessment_required_indicator
-      data_type: TEXT
-    - name: clinical.coding.fit_note.issuer
-      data_type: TEXT
-    - name: attendance.discharge.information_given.indicator
-      data_type: TEXT
-    - name: clinical.injury.timestamp
-      data_type: TIMESTAMP_NTZ
     - name: attendance.decision_to_admit.date
       data_type: TIMESTAMP_NTZ
     - name: attendance.decision_to_admit.time
@@ -821,6 +765,62 @@ sources:
       data_type: TEXT
     - name: attendance.clinically_ready_to_proceed.timestamp
       data_type: TIMESTAMP_NTZ
+    - name: attendance.clinically_ready_to_proceed.time_since_arrival
+      data_type: NUMBER(38,0)
+    - name: referral.ubrn.value Pseudo
+      data_type: TEXT
+    - name: referral.ubrn.issuer
+      data_type: TEXT
+    - name: patient.name.suffix
+      data_type: TEXT
+    - name: clinical.disease_notification_code
+      data_type: TEXT
+    - name: clinical.disease_notification_description
+      data_type: TEXT
+    - name: schema_version
+      data_type: TEXT
+    - name: attendance.location.activity_type
+      data_type: TEXT
+    - name: attendance.arrival.timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: attendance.arrival.consultation_mechanism
+      data_type: TEXT
+    - name: attendance.initial_assessment.timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: attendance.seen_for_treatment.timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: attendance.extended_care_episode_identifier
+      data_type: TEXT
+    - name: attendance.departure.timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: attendance.decision_to_admit.timestamp
+      data_type: TIMESTAMP_NTZ
+    - name: clinical.coding.fit_note.assessment_date
+      data_type: TIMESTAMP_NTZ
+    - name: clinical.coding.fit_note.condition
+      data_type: TEXT
+    - name: clinical.coding.fit_note.condition_approved
+      data_type: BOOLEAN
+    - name: clinical.coding.fit_note.diagnosis
+      data_type: TEXT
+    - name: clinical.coding.fit_note.diagnosis_code_approved
+      data_type: BOOLEAN
+    - name: clinical.coding.fit_note.start_date
+      data_type: TIMESTAMP_NTZ
+    - name: clinical.coding.fit_note.end_date
+      data_type: TIMESTAMP_NTZ
+    - name: clinical.coding.fit_note.duration
+      data_type: TEXT
+    - name: clinical.coding.fit_note.recorded_date
+      data_type: TIMESTAMP_NTZ
+    - name: clinical.coding.fit_note.follow_up_assessment_required_indicator
+      data_type: TEXT
+    - name: clinical.coding.fit_note.issuer
+      data_type: TEXT
+    - name: attendance.discharge.information_given.indicator
+      data_type: TEXT
+    - name: clinical.injury.timestamp
+      data_type: TIMESTAMP_NTZ
     - name: commissioning.commissioner_assignment.commissioner
       data_type: TEXT
     - name: commissioning.commissioner_assignment.flowchart_reference
@@ -828,6 +828,16 @@ sources:
   - name: patient.mental_health_act_legal_status
     identifier: '"patient.mental_health_act_legal_status"'
     columns:
+    - name: ROWNUMBER_ID
+      data_type: NUMBER(38,0)
+    - name: PRIMARYKEY_ID
+      data_type: NUMBER(38,0)
+    - name: MENTAL_HEALTH_ACT_LEGAL_STATUS_ID
+      data_type: NUMBER(38,0)
+    - name: classification
+      data_type: TEXT
+    - name: start_date
+      data_type: TIMESTAMP_NTZ
     - name: start_time
       data_type: TEXT
     - name: expiry_date
@@ -839,16 +849,6 @@ sources:
     - name: assignment_timestamp
       data_type: TIMESTAMP_NTZ
     - name: expiry_timestamp
-      data_type: TIMESTAMP_NTZ
-    - name: ROWNUMBER_ID
-      data_type: NUMBER(38,0)
-    - name: PRIMARYKEY_ID
-      data_type: NUMBER(38,0)
-    - name: MENTAL_HEALTH_ACT_LEGAL_STATUS_ID
-      data_type: NUMBER(38,0)
-    - name: classification
-      data_type: TEXT
-    - name: start_date
       data_type: TIMESTAMP_NTZ
   - name: patient.social_and_personal_circumstances
     identifier: '"patient.social_and_personal_circumstances"'
@@ -872,9 +872,9 @@ sources:
       data_type: NUMBER(38,0)
     - name: PRIMARYKEY_ID
       data_type: NUMBER(38,0)
-    - name: dmicImportLogId
+    - name: COPY_RECIPIENTS_ID
       data_type: NUMBER(38,0)
     - name: copy_recipients
       data_type: TEXT
-    - name: COPY_RECIPIENTS_ID
+    - name: dmicImportLogId
       data_type: NUMBER(38,0)

@@ -1,0 +1,45 @@
+version: 2
+
+seeds:
+  - name: qadmissions_eth2016_to_ethrisk9
+    description: >
+      Maps the `ethnicity_subcategory` text exposed by dim_person_ethnicity
+      to the QAdmissions ethrisk-9 group expected by the registered
+      QAdmissions model.
+
+      Ethrisk numbering follows the published QAdmissions C reference
+      and the Python wrapper's ETHNICITY_MAP:
+
+        1 = White / NotRecorded (default)
+        2 = Indian
+        3 = Pakistani
+        4 = Bangladeshi
+        5 = Other Asian
+        6 = Black Caribbean
+        7 = Black African
+        8 = Chinese
+        9 = Other Ethnic Group
+
+      All "no record" subcategories ("Not Recorded", "Not Stated",
+      "Not stated", "Recorded Not Known", "Refused") collapse to 1
+      alongside the explicit White subcategories - matching the
+      QAdmissions paper convention that NotRecorded shares group 1
+      with White. dim_person_ethnicity COALESCEs missing records to
+      "Not Recorded" so every person is matched by this seed.
+    columns:
+      - name: ethnicity_subcategory
+        description: 'Subcategory text from dim_person_ethnicity.ethnicity_subcategory (e.g. "White: British", "Asian: Indian", "Not Recorded").'
+        data_tests:
+          - unique
+          - not_null
+      - name: ethrisk
+        description: 'QAdmissions ethrisk integer (1..9).'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      - name: qadmissions_label
+        description: 'Human-readable QAdmissions group label corresponding to ethrisk.'
+        data_tests:
+          - not_null

@@ -20,11 +20,9 @@ models:
         description: Foreign key to appointment.id - associated appointment
       - name: episode_of_care_id
         description: Foreign key to episode_of_care.id - associated episode of care
-      - name: service_provider_organisation_id
-        description: Foreign key to organisation.id - organisation providing the service
       - name: clinical_effective_date
         description: Date the encounter was clinically effective
-      - name: date_precision_concept_id
+      - name: clinical_effective_date_precision_source_concept_id
         description: Foreign key to concept.id - precision of the clinical effective date
       - name: location
         description: Location where the encounter took place
@@ -50,18 +48,20 @@ models:
         description: Boolean indicating if the clinical record has been deleted
       - name: lds_id
         description: LDS system identifier
-      - name: record_owner_organisation_code
-        description: Organisation code of the record owner
-      - name: lds_datetime_data_acquired
+      - name: publisher_organisation_code
+        description: "ODS code of the publisher organisation (post-2026 OLIDS rename — was record_owner_organisation_code)"
+      - name: lds_datetime_first_acquired
         description: Datetime when data was acquired by LDS
-      - name: lds_initial_data_received_date
-        description: Date when data was initially received by LDS
-      - name: lds_start_date_time
+      - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lds_is_deleted
         description: Deletion flag - records with TRUE are filtered out in this staging layer
-      - name: lds_record_id
+      - name: lds_source_record_id
         description: LDS assigned unique identifier for the source record version
+      - name: provider_organisation_id
+        description: "Foreign key to organisation.id — the provider organisation for this encounter. Replaces service_provider_organisation_id in the 2026 OLIDS schema realignment (issue #747)."
+      - name: author_organisation_id
+        description: "Foreign key to organisation.id — the organisation that authored this encounter record. New in the 2026 OLIDS schema realignment (issue #747)."
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

@@ -2,21 +2,23 @@
     config(
         materialized='table',
         alias='ltc_lcs_cf_dashboard_base',
-        tags=['secondary_use_opt_out'],
-        cluster_by=['indicator_category', 'indicator_id']
+        tags=['secondary_use_s251_exempt'],
+        cluster_by=['indicator_category', 'indicator_id'],
+        meta={
+            'custom_message': 'Includes OLIDS data published for secondary use under a Section 251 exemption as a HealtheIntent replacement dashboard. National Data Opt-Out and Type 1 opt-out filtering is intentionally NOT applied. Approved for this s251 purpose only.'
+        }
     )
 }}
 
 /*
-LTC/LCS Case Finding Dashboard Base Table - Secondary Use
+LTC/LCS Case Finding Dashboard Base Table - Secondary Use (Section 251 exempt)
 
-Secondary use version with opt-out filtering applied.
-Only includes patients allowed for secondary use via dim_person_secondary_use_allowed.
+Secondary use variant published under a Section 251 exemption as a HealtheIntent
+replacement dashboard. Opt-out filtering is intentionally NOT applied - this is a
+passthrough of the direct care base for the approved s251 purpose.
 
 See ltc_lcs_cf_dashboard_base in published_reporting_direct_care for full documentation.
 */
 
-SELECT base.*
-FROM {{ ref('ltc_lcs_cf_dashboard_base') }} base
-INNER JOIN {{ ref('dim_person_secondary_use_allowed') }} allowed
-    ON base.person_id = allowed.person_id
+SELECT *
+FROM {{ ref('ltc_lcs_cf_dashboard_base') }}

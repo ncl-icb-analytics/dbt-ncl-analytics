@@ -39,7 +39,7 @@ R1290 generic Pharmacist).
 */
 
 select
-    record_owner_organisation_code as practice_code,
+    publisher_organisation_code as practice_code,
     DATE_TRUNC('month', start_date) as report_month,
     practitioner_role_group,
     -- Part of the grain: a handful of analytical role groups span two
@@ -85,7 +85,7 @@ select
 
 from {{ ref('int_appointment_gp_clean_recent') }}
 group by
-    record_owner_organisation_code,
+    publisher_organisation_code,
     DATE_TRUNC('month', start_date),
     practitioner_role_group,
     sds_role_group

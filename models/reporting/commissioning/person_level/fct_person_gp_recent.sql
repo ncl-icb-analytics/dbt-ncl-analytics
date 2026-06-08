@@ -5,7 +5,7 @@ base_encounters as (
         pp.sk_patient_id
         , encounter_id
         , start_date
-        , actual_duration
+        , actual_duration_mins
         , national_slot_category_name
         , service_setting
         , code

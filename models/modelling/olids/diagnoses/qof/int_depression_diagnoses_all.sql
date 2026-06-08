@@ -30,10 +30,11 @@ SELECT
     obs.id,
     obs.person_id,
     obs.clinical_effective_date,
+    obs.date_recorded,
     obs.mapped_concept_code AS concept_code,
     obs.mapped_concept_display AS concept_display,
     obs.cluster_id AS source_cluster_id,
-    obs.episodicity_concept_id,
+    obs.episodicity_source_concept_id,
     ecm.target_code AS episodicity_code,
     ecm.target_display AS episodicity_display,
 
@@ -56,6 +57,6 @@ SELECT
 
 FROM ({{ get_observations("'DEPR_COD', 'DEPRES_COD'", source='PCD') }}) obs
 LEFT JOIN {{ ref('stg_olids_enriched_concept_map') }} ecm
-    ON obs.episodicity_concept_id = ecm.source_code_id
+    ON obs.episodicity_source_concept_id = ecm.source_concept_id
 
 ORDER BY person_id, clinical_effective_date, id

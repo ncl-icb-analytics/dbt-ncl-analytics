@@ -1,0 +1,20 @@
+models:
+  - name: valproate_dashboard_base_secondary_use
+    description: |
+      Valproate dashboard base population (one row per person), for secondary use (Section 251 exempt).
+      Published under a Section 251 exemption as a HealtheIntent replacement dashboard; opt-out filtering is intentionally NOT applied. Passthrough of the direct care base.
+      See view_valproate_dashboard_base in published_reporting_direct_care for full details.
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: person_id
+        tests:
+          - unique
+          - not_null

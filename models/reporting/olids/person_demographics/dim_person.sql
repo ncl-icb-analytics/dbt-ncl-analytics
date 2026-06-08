@@ -14,8 +14,8 @@ WITH person_patients AS (
     SELECT
         pp.person_id,
         ANY_VALUE(pp.person_uuid) AS person_uuid,
-        ARRAY_AGG(DISTINCT p.sk_patient_id) AS sk_patient_ids,
-        ARRAY_AGG(DISTINCT p.id) AS patient_ids,
+        ARRAY_AGG(DISTINCT p.sk_patient_id::VARCHAR) AS sk_patient_ids,
+        ARRAY_AGG(DISTINCT p.id::VARCHAR) AS patient_ids,
         COUNT(DISTINCT p.id) AS total_patients
     FROM {{ ref('int_patient_person_unique') }} AS pp
     INNER JOIN {{ ref('stg_olids_patient') }} AS p
@@ -27,7 +27,7 @@ person_practices AS (
     -- Get all practice relationships from the historical practice dimension
     SELECT
         person_id,
-        ARRAY_AGG(DISTINCT practice_id) AS practice_ids,
+        ARRAY_AGG(DISTINCT practice_id::VARCHAR) AS practice_ids,
         ARRAY_AGG(DISTINCT practice_code) AS practice_codes,
         ARRAY_AGG(DISTINCT practice_name) AS practice_names,
         COUNT(DISTINCT practice_id) AS total_practices

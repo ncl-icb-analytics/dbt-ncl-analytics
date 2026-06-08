@@ -9,14 +9,10 @@ models:
       with a recorded gender of Male or Female.
 
       This model does NOT compute a risk score - it only assembles the
-      input features that the registered model consumes. See
-      planning/qadmissions/plan.md for the full feature-to-source map and
-      planning/qadmissions/overview.md for the required ClinRisk disclaimer.
+      input features that the registered model consumes. See the file
+      header for the required ClinRisk disclaimer.
 
-      Placeholder columns (defaulted until their source intermediates land):
-      b_falls, b_malabsorption, b_vte, town, alcohol_cat6, ethrisk.
-      b_liverpancreas is partial (chronic liver disease only; pancreatic
-      disease component to follow).
+      Documentation available: https://github.com/ncl-icb-analytics/dbt-ncl-analytics/blob/main/docs/model_documentation/int_qadmissions_features.md
     config:
       meta:
         owner:
@@ -51,14 +47,14 @@ models:
                 max_value: 100
                 inclusive: true
 
-      - name: gender
-        data_type: number
-        description: "Sex for QAdmissions. 0 = female, 1 = male."
+      - name: sex
+        data_type: varchar
+        description: "Sex for QAdmissions."
         data_tests:
           - not_null
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: ['male', 'female']
 
       - name: bmi
         data_type: float
@@ -125,8 +121,7 @@ models:
           Smoking category. 0 = never smoked, 1 = ex-smoker, 3 = current smoker.
           Category 2 (light smoker with CPD) and categories 4-5 (moderate/heavy
           smokers) cannot be produced from the available data - CPD is not
-          captured. Current smokers therefore map to category 3. See plan.md
-          decision 1.
+          captured. Current smokers therefore map to category 3. 
         data_tests:
           - not_null
           - accepted_values:
@@ -195,31 +190,80 @@ models:
 
       - name: b_falls
         data_type: boolean
-        description: "TODO Step 4: falls history. Currently defaulted to FALSE until int_falls_diagnoses_all lands."
+        description: "TRUE if the person has any coded falls observation (history of falls). Sourced from int_falls_observations_all using the QAdmissions FALLS_COD_Q codelist."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: b_malabsorption
         data_type: boolean
-        description: "TODO Step 4: malabsorption (coeliac / IBD / post-resection). Currently defaulted to FALSE until int_malabsorption_diagnoses_all lands."
+        description: "TRUE if the person has any coded malabsorption diagnosis (coeliac disease, IBD, or post-resection). Sourced from int_malabsorption_diagnoses_all using the QAdmissions MALABSORPTION_COD_Q codelist."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: b_vte
         data_type: boolean
-        description: "TODO Step 4: venous thromboembolism (DVT / PE). Currently defaulted to FALSE until int_vte_diagnoses_all lands."
+        description: "TRUE if the person has any coded venous thromboembolism diagnosis (DVT or PE). Sourced from int_vte_diagnoses_all using the QAdmissions VENOUS_THROMBOEMBOLISM_COD_Q codelist."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: b_liverpancreas
         data_type: boolean
-        description: >
-          Chronic liver disease OR pancreatic disease. PARTIAL - currently
-          sourced only from dim_person_conditions.has_chronic_liver_disease
-          until int_pancreatic_disease_diagnoses_all lands (Step 4).
+        description: "TRUE if the person has any coded chronic liver disease or chronic pancreatitis diagnosis. Sourced from int_liver_pancreatitis_diagnoses_all using the QAdmissions LIVER_DISEASE_OR_CHRONIC_PANCREATITIS_COD_Q codelist (a single combined cluster per the QAdmissions paper)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
 
       - name: town
-        data_type: number
-        description: "TODO Step 5: Townsend deprivation score. Currently defaulted to 0 (national mean) until the LSOA Townsend seed and int_qadmissions_townsend land."
+        data_type: float
+        description: >
+          Townsend Deprivation Score for the person's residential LSOA
+          (higher = more deprived). Sourced from int_qadmissions_townsend,
+          which bridges dim_person_demographics.lsoa_code_21 to the
+          qadmissions_townsend_lsoa_2011 seed via stg_reference_lsoa2011_lsoa2021.
+          NULL when no LSOA recorded or when the LSOA does not match the
+          England-and-Wales bridge (e.g. Scottish or NI residence) - NULL
+          is passed through to the registered QAdmissions model.
 
       - name: alcohol_cat6
         data_type: number
-        description: "TODO Step 2: alcohol category (0-5) from AUDIT scores. Currently defaulted to 0 (non-drinker) until the qadmissions_alcohol_audit_to_cat6 mapping seed lands."
+        description: >
+          QAdmissions alcohol category (0..5: NonDrinker, Trivial, Light,
+          Moderate, Heavy, VeryHeavy). Sourced from int_qadmissions_alcohol_category,
+          which derives cat6 from int_alcohol_audit_scores filtered to
+          Full AUDIT and takes the highest cat6 ever recorded per person.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3, 4, 5]
+              config:
+                where: "alcohol_cat6 IS NOT NULL"
 
       - name: ethrisk
         data_type: number
-        description: "TODO Step 2: ethnicity risk group (1-9). Currently defaulted to 1 (White / not stated) until the qadmissions_eth2016_to_ethrisk9 mapping seed lands."
+        description: >
+          QAdmissions ethnicity risk group (1..9: 1=White/NotRecorded,
+          2=Indian, 3=Pakistani, 4=Bangladeshi, 5=OtherAsian,
+          6=BlackCaribbean, 7=BlackAfrican, 8=Chinese, 9=OtherEthnicGroup).
+          Sourced from int_qadmissions_ethrisk, which joins
+          dim_person_ethnicity to the qadmissions_eth2016_to_ethrisk9
+          seed on `ethnicity_subcategory` text. The seed includes
+          explicit "Not Recorded" / "Not Stated" / "Refused" /
+          "Recorded Not Known" rows mapping to 1, so every person -
+          including those without a usable ethnicity record - is
+          matched.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9]

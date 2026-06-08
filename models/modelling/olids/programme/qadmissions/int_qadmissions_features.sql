@@ -19,7 +19,8 @@
 
     Grain
       One row per active, non-deceased person in dim_person_demographics whose
-      recorded gender is Male or Female.
+      recorded gender is Male or Female, age is between 18-100, townsend score is 
+      not null
 
     AGPL / ClinRisk attribution
       QAdmissions is published by ClinRisk Ltd under the GNU Affero General
@@ -66,8 +67,7 @@ conditions AS (
         has_severe_mental_illness,
         has_coronary_heart_disease,
         has_stroke_tia,
-        has_peripheral_arterial_disease,
-        has_chronic_liver_disease
+        has_peripheral_arterial_disease
     FROM {{ ref('dim_person_conditions') }}
 ),
 
@@ -118,15 +118,15 @@ medication_orders AS (
 ),
 
 -- Aggregate to person grain. QAdmissions defines each medication boolean as
--- "two or more prescriptions in the prior six months".
+-- "prescribed in the prior six months".
 medication_flags AS (
     SELECT
         person_id,
-        COUNT(CASE WHEN med_class = 'anticoagulant'  THEN 1 END) >= 2 AS b_anticoagulant,
-        COUNT(CASE WHEN med_class = 'antidepressant' THEN 1 END) >= 2 AS b_antidepressant,
-        COUNT(CASE WHEN med_class = 'antipsychotic'  THEN 1 END) >= 2 AS b_antipsychotic,
-        COUNT(CASE WHEN med_class = 'corticosteroid' THEN 1 END) >= 2 AS b_corticosteroids,
-        COUNT(CASE WHEN med_class = 'nsaid'          THEN 1 END) >= 2 AS b_nsaid
+        COUNT(CASE WHEN med_class = 'anticoagulant'  THEN 1 END) >= 1 AS b_anticoagulant,
+        COUNT(CASE WHEN med_class = 'antidepressant' THEN 1 END) >= 1 AS b_antidepressant,
+        COUNT(CASE WHEN med_class = 'antipsychotic'  THEN 1 END) >= 1 AS b_antipsychotic,
+        COUNT(CASE WHEN med_class = 'corticosteroid' THEN 1 END) >= 1 AS b_corticosteroids,
+        COUNT(CASE WHEN med_class = 'nsaid'          THEN 1 END) >= 1 AS b_nsaid
     FROM medication_orders
     GROUP BY person_id
 ),
@@ -172,6 +172,57 @@ lft_latest AS (
         person_id,
         high_lft
     FROM {{ ref('int_lft_latest') }}
+),
+
+-- Person-level flags from the four QAdmissions paper-faithful diagnosis /
+-- observation intermediates. Each collapses observation-level rows to one
+-- row per person via SELECT DISTINCT, with TRUE meaning "ever coded".
+falls_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_falls
+    FROM {{ ref('int_falls_observations_all') }}
+),
+
+malabsorption_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_malabsorption
+    FROM {{ ref('int_malabsorption_diagnoses_all') }}
+),
+
+vte_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_vte
+    FROM {{ ref('int_vte_diagnoses_all') }}
+),
+
+liver_pancreatitis_flags AS (
+    SELECT DISTINCT person_id, TRUE AS has_liver_pancreatitis
+    FROM {{ ref('int_liver_pancreatitis_diagnoses_all') }}
+),
+
+-- Townsend Deprivation Score per person (NULL where the LSOA does not
+-- bridge to a Townsend-mapped 2011 LSOA, e.g. non-English residence).
+townsend AS (
+    SELECT
+        person_id,
+        townsend_score
+    FROM {{ ref('int_qadmissions_townsend') }}
+),
+
+-- Alcohol category 0..5 derived from Full AUDIT scores. 
+
+alcohol AS (
+    SELECT
+        person_id,
+        alcohol_cat6
+    FROM {{ ref('int_qadmissions_alcohol_category') }}
+),
+
+-- Ethrisk 1..9 derived from int_ethnicity_qof joined to the
+-- qadmissions_eth2016_to_ethrisk9 seed. Persons with no ethnicity
+-- record default to 1 (NotRecorded -> 1, same group as White).
+ethrisk_lookup AS (
+    SELECT
+        person_id,
+        ethrisk
+    FROM {{ ref('int_qadmissions_ethrisk') }}
 )
 
 SELECT
@@ -184,7 +235,7 @@ SELECT
     base.person_id,
     base.sk_patient_id,
     base.age,
-    CASE WHEN base.gender = 'Male' THEN 1 ELSE 0 END                       AS gender,
+    CASE WHEN base.gender = 'Male' THEN 'male' ELSE 'female' END           AS sex,
     bmi.bmi_value                                                          AS bmi,
 
     -- Constants
@@ -192,8 +243,8 @@ SELECT
     {{ var('qadmissions_horizon_years', 1) }}                              AS surv,
 
     -- Disease booleans from dim_person_conditions
-    COALESCE(cond.has_atrial_fibrillation, FALSE)                          AS b_AF,
-    COALESCE(cond.has_heart_failure, FALSE)                                AS b_CCF,
+    COALESCE(cond.has_atrial_fibrillation, FALSE)                          AS b_af,
+    COALESCE(cond.has_heart_failure, FALSE)                                AS b_ccf,
     COALESCE(cond.has_cancer, FALSE)                                       AS b_anycancer,
     COALESCE(cond.has_asthma, FALSE)
         OR COALESCE(cond.has_copd, FALSE)                                  AS b_asthmacopd,
@@ -216,7 +267,7 @@ SELECT
         ELSE                            0
     END                                                                    AS smoke_cat,
 
-    -- Medication booleans (>=2 prescriptions in prior 6 months)
+    -- Medication booleans 
     COALESCE(med.b_anticoagulant,   FALSE)                                 AS b_anticoagulant,
     COALESCE(med.b_antidepressant,  FALSE)                                 AS b_antidepressant,
     COALESCE(med.b_antipsychotic,   FALSE)                                 AS b_antipsychotic,
@@ -228,25 +279,39 @@ SELECT
 
     -- Lab features from observation intermediates.
     -- Thresholds sourced from qadmissions_lab_thresholds seed.
-    COALESCE(hb.hb_value < t.hb_threshold, FALSE)                           AS c_hb,
+    COALESCE(hb.hb_value < t.hb_threshold, FALSE)                          AS c_hb,
     COALESCE(lft.high_lft, FALSE)                                          AS high_lft,
     COALESCE(plt.platelet_value > t.platelet_threshold, FALSE)             AS high_platelet,
-    FALSE                                              AS b_falls,         -- TODO Step 4: replace with int_falls_diagnoses_all
-    FALSE                                              AS b_malabsorption, -- TODO Step 4: replace with int_malabsorption_diagnoses_all
-    FALSE                                              AS b_vte,           -- TODO Step 4: replace with int_vte_diagnoses_all
-    COALESCE(cond.has_chronic_liver_disease, FALSE)    AS b_liverpancreas, -- TODO Step 4: OR with int_pancreatic_disease_diagnoses_all
-    0                                                  AS town,            -- TODO Step 5: replace with int_qadmissions_townsend score
-    0                                                  AS alcohol_cat6,    -- TODO Step 2: replace with mapping from int_alcohol_audit_scores via qadmissions_alcohol_audit_to_cat6 seed
-    1                                                  AS ethrisk          -- TODO Step 2: replace with mapping from int_ethnicity_qof.cluster_id via qadmissions_eth2016_to_ethrisk9 seed
 
-FROM base_spine                 base
-CROSS JOIN lab_thresholds       t
-LEFT JOIN conditions            cond ON base.person_id     = cond.person_id
-LEFT JOIN bmi                        ON base.person_id     = bmi.person_id
-LEFT JOIN diabetes              diab ON base.person_id     = diab.person_id
-LEFT JOIN smoking               smk  ON base.person_id     = smk.person_id
-LEFT JOIN medication_flags      med  ON base.person_id     = med.person_id
-LEFT JOIN emergency_admissions  adm  ON base.sk_patient_id = adm.sk_patient_id
-LEFT JOIN hb_latest             hb   ON base.person_id     = hb.person_id
-LEFT JOIN platelets_latest      plt  ON base.person_id     = plt.person_id
-LEFT JOIN lft_latest            lft  ON base.person_id     = lft.person_id
+    -- Diagnosis / observation flags from QAdmissions paper-faithful clusters.
+    COALESCE(fls.has_falls, FALSE)                                         AS b_falls,
+    COALESCE(mal.has_malabsorption, FALSE)                                 AS b_malabsorption,
+    COALESCE(vte.has_vte, FALSE)                                           AS b_vte,
+    COALESCE(lp.has_liver_pancreatitis, FALSE)                             AS b_liverpancreas,
+
+    twn.townsend_score                                                     AS town,
+
+    COALESCE(alc.alcohol_cat6, 0)                                          AS alcohol_cat6,
+
+    -- Ethnicity risk group 1..9. Persons with no ethnicity record
+    -- default to 1 (NotRecorded -> 1 per QResearch).
+    COALESCE(eth.ethrisk, 1)                                               AS ethrisk
+
+FROM base_spine                       base
+CROSS JOIN lab_thresholds             t
+LEFT JOIN conditions                  cond ON base.person_id     = cond.person_id
+LEFT JOIN bmi                              ON base.person_id     = bmi.person_id
+LEFT JOIN diabetes                    diab ON base.person_id     = diab.person_id
+LEFT JOIN smoking                     smk  ON base.person_id     = smk.person_id
+LEFT JOIN medication_flags            med  ON base.person_id     = med.person_id
+LEFT JOIN emergency_admissions        adm  ON base.sk_patient_id = adm.sk_patient_id
+LEFT JOIN hb_latest                   hb   ON base.person_id     = hb.person_id
+LEFT JOIN platelets_latest            plt  ON base.person_id     = plt.person_id
+LEFT JOIN lft_latest                  lft  ON base.person_id     = lft.person_id
+LEFT JOIN falls_flags                 fls  ON base.person_id     = fls.person_id
+LEFT JOIN malabsorption_flags         mal  ON base.person_id     = mal.person_id
+LEFT JOIN vte_flags                   vte  ON base.person_id     = vte.person_id
+LEFT JOIN liver_pancreatitis_flags    lp   ON base.person_id     = lp.person_id
+LEFT JOIN townsend                    twn  ON base.person_id     = twn.person_id
+LEFT JOIN alcohol                     alc  ON base.person_id     = alc.person_id
+LEFT JOIN ethrisk_lookup              eth  ON base.person_id     = eth.person_id

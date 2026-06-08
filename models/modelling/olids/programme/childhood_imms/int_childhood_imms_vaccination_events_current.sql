@@ -22,8 +22,8 @@ SELECT DISTINCT
    --FROM MODELLING.DBT_STAGING.STG_OLIDS_OBSERVATION o
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = o.patient_id
     --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = o.patient_id
-    LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
-    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
+    INNER JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
+    --INNER JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on o.mapped_concept_code  = clut.CODE
     -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE 
     WHERE o.clinical_effective_date <= CURRENT_DATE
@@ -48,8 +48,8 @@ SELECT DISTINCT
     --FROM MODELLING.DBT_STAGING.STG_OLIDS_MEDICATION_ORDER m
     LEFT JOIN  {{ ref('int_patient_person_unique') }} pp on pp.PATIENT_ID = m.patient_id
     --LEFT JOIN  MODELLING.OLIDS_PERSON_ATTRIBUTES.INT_PATIENT_PERSON_UNIQUE pp on pp.PATIENT_ID = m.patient_id
-    LEFT JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
-    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
+    INNER JOIN {{ ref('dim_person_demographics') }} dem ON pp.PERSON_ID = dem.PERSON_ID
+    --INNER JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS dem ON pp.PERSON_ID = dem.PERSON_ID
     JOIN {{ ref('int_childhood_imms_code_dose') }} clut on m.mapped_concept_code  = clut.CODE
     -- JOIN MODELLING.OLIDS_PROGRAMME.INT_CHILDHOOD_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE
     WHERE m.clinical_effective_date <= CURRENT_DATE
@@ -212,8 +212,8 @@ WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMR_2','MMRV_2','MMRV
 WHEN VACCINE_ID in ('PCV_1B','MENB_2B','MMRV_1','MMRV_1B','MMRV_1C','MMRV_2','MMRV_2B','6IN1_4')  AND BIRTH_DATE_APPROX < '2022-09-01'  THEN 'Not applicable'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE >= CURRENT_DATE() THEN 'Not due yet'
 WHEN EVENT_DATE IS NULL AND ELIGIBLE_FROM_DATE < CURRENT_DATE() AND AGE_DAYS_APPROX < maximum_age_days THEN 'Overdue'
-WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = 'No' THEN 'Completed'  
-WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = 'Yes' THEN 'OutofSchedule'
+WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE = FALSE THEN 'Completed'  
+WHEN EVENT_TYPE LIKE ('Admin%') AND OUT_OF_SCHEDULE THEN 'OutofSchedule'
 WHEN EVENT_DATE IS NULL AND AGE_DAYS_APPROX > maximum_age_days THEN 'No longer eligible'
 WHEN EVENT_TYPE = 'Declined' THEN 'Declined'  
 WHEN EVENT_TYPE = 'Contraindicated' THEN 'Contraindicated' 

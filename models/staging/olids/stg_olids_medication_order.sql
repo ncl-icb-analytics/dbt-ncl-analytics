@@ -3,7 +3,7 @@ select
     id,
 
     -- Business columns
-    organisation_id,
+    provider_organisation_id,
     person_id,
     patient_id,
     medication_statement_id,
@@ -14,7 +14,7 @@ select
     diagnostic_order_id,
     referral_request_id,
     clinical_effective_date,
-    date_precision_concept_id,
+    clinical_effective_date_precision_source_concept_id,
     date_precision_code,
     date_precision_display,
     date_precision_source_code,
@@ -39,19 +39,24 @@ select
     is_confidential,
     issue_method_description,
     lds_id,
-    record_owner_organisation_code,
-    lds_datetime_data_acquired,
-    lds_initial_data_received_date,
+    publisher_organisation_code,
+    lds_datetime_first_acquired,
     medication_statement_source_concept_id,
     statement_medication_name,
     mapped_concept_id,
     mapped_concept_code,
     mapped_concept_display,
 
+    -- BNF classification (pre-computed upstream in dbt-olids)
+    bnf_chapter,
+    bnf_section,
+    bnf_code,
+    bnf_name,
+
     -- Metadata
-    lds_start_date_time,
+    lds_start_datetime,
     lds_is_deleted,
-    lds_record_id
+    lds_source_record_id
 
 from {{ ref('raw_olids_medication_order') }}
 where coalesce(lds_is_deleted, false) = false

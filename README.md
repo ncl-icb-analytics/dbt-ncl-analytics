@@ -11,29 +11,29 @@ dbt project for WNL ICB Analytics healthcare data transformations.
 
 ## Quick Start
 
-```bash
-# Install uv if you don't have it
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# Clone and setup
+```powershell
+# Clone
 git clone https://github.com/wnl-icb-analytics/dbt-analytics && cd dbt-analytics
-uv sync
-cp env.example .env    # Edit with your Snowflake credentials
-.\start_dbt.ps1 && dbt deps && dbt debug
+
+# Configure credentials
+Copy-Item env.example .env    # Edit with your Snowflake credentials
+
+# Bootstrap: installs the dbt Fusion engine, configures git hooks, loads .env
+.\start_dbt.ps1
+dbt deps
+dbt debug
 ```
+
+dbt runs on the [Fusion engine](docs/dbt-fusion-guide.md) (installed by `start_dbt.ps1`),
+not a Python package. `uv` is only needed for the Python helper scripts in `scripts/`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signing.
 
 ## Codespaces
 
-This repository supports GitHub Codespaces for cloud-based dbt development.
-
-- Store Snowflake credentials as Codespaces secrets, not in committed files.
-- `SNOWFLAKE_PAT` is the recommended auth method for Codespaces.
-- If `SNOWFLAKE_PAT` is set, dbt uses it as the password and skips browser auth.
-- If no PAT or password is set, the project falls back to `externalbrowser`.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md#github-codespaces) for setup.
+Cloud dev with no local install: add your Snowflake secrets once (a PAT is the
+recommended auth), create a codespace, and Fusion + packages are set up
+automatically. See **[Developing in GitHub Codespaces](docs/codespaces.md)**.
 
 ## What This Project Does
 
@@ -48,7 +48,7 @@ Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, 
 
 | Script | Description |
 |--------|-------------|
-| `.\start_dbt.ps1` | **Run first** - Loads `.env` credentials into your session |
+| `.\start_dbt.ps1` | Installs/updates dbt Fusion, configures hooks, loads `.env` (auto-runs on terminal open) |
 | `.\build_changed` | Build only changed models (auto-detects from git diff) |
 
 **Flags for `build_changed`:**
@@ -59,7 +59,7 @@ Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, 
 
 ## Common Commands
 
-Always run `.\start_dbt.ps1` first in each terminal session.
+The VS Code workspace runs `.\start_dbt.ps1` automatically when you open a terminal.
 
 | Command | Description |
 |---------|-------------|
@@ -98,8 +98,8 @@ Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Publi
 | [Snapshots Guide](docs/snapshots-guide.md) | Tracking historical changes with SCDs |
 | [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
 | [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
+| [GitHub Codespaces](docs/codespaces.md) | Cloud dev: add secrets, create a codespace, how auth works |
 | [Working with Sources](docs/working-with-sources.md) | Adding sources, regenerating raw models, and handling drift |
-| [CHANGELOG.md](CHANGELOG.md) | Release history |
 
 ## Learning dbt
 
@@ -139,9 +139,9 @@ The naming logic is in `macros/overrides/generate_database_name.sql` and `genera
 
 ### Technology Stack
 
-- **dbt-core 1.10.15** - Snowflake-supported runtime target
+- **dbt Fusion engine** - Rust-based dbt runtime (local dev + Snowflake native execution)
 - **Snowflake** - Cloud data warehouse
-- **Python 3.11** - Scripting and automation
+- **Python 3.11** - Helper scripts in `scripts/` only (not dbt)
 
 ## License
 

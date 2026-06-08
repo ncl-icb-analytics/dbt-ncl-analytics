@@ -130,7 +130,7 @@ qof_field_calculations_extended AS (
                 THEN
                     qfc.copd_dat  -- No resolved codes: return earliest diagnosis
             ELSE
-                COALESCE(cdc.copd1_dat, qfc.copd_dat)  -- Return COPD1_DAT if exists, else COPD_DAT
+                cdc.copd1_dat  -- Return COPD1_DAT; NULL when fully resolved → off register
         END AS eunrescopd_dat
 
     FROM qof_field_calculations AS qfc

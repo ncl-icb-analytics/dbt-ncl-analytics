@@ -35,7 +35,7 @@ current_addresses AS (
         ORDER BY
             CASE WHEN pa.end_date IS NULL THEN 0 ELSE 1 END,  -- Active addresses first
             pa.start_date DESC NULLS LAST,
-            pa.lds_datetime_data_acquired DESC NULLS LAST
+            pa.lds_datetime_first_acquired DESC NULLS LAST
     ) = 1
 ),
 

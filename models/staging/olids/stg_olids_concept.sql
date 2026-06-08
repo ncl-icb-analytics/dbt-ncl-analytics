@@ -5,14 +5,17 @@
 
 select
     -- Primary key
-    id,
 
     -- Business columns
-    lds_id,
     system,
     code,
     display,
     is_mapped,
-    use_count
+    use_count,
 
+
+    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
+    concept_id,
+    lds_is_deleted,
+    lds_start_datetime
 from {{ ref('raw_olids_concept') }}

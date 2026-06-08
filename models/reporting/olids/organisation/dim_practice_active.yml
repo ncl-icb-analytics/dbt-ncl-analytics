@@ -1,0 +1,34 @@
+models:
+  - name: dim_practice_active
+    description: 'Active practices only — filtered view of dim_practice where is_active_practice = TRUE
+      (ODS status Active and end date NULL or future). Use when reports should exclude closed,
+      retired, or dormant practices. Column set matches dim_practice.'
+
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: organisation_id
+        description: 'OLIDS internal organisation ID for practice'
+        tests:
+          - not_null
+          - unique
+
+      - name: practice_code
+        description: 'Practice ODS code'
+        tests:
+          - not_null
+
+      - name: practice_name
+        description: 'Cleaned practice name'
+        tests:
+          - not_null
+
+      - name: is_active_practice
+        description: 'Always TRUE in this model'
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true]

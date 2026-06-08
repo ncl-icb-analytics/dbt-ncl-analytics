@@ -167,25 +167,19 @@ sources:
       data_type: TEXT
     - name: DISEASES_PROTECTED_AGAINST
       data_type: TEXT
-    - name: VACCINE_CODE
-      data_type: TEXT
     - name: TRADE_NAME
       data_type: TEXT
     - name: ADMINISTRATION_ROUTE
       data_type: TEXT
     - name: SCHEDULE_AGE
       data_type: TEXT
-    - name: MINIMUM_AGE_DAYS
-      data_type: NUMBER(38,0)
-    - name: MAXIMUM_AGE_DAYS
-      data_type: NUMBER(38,0)
-    - name: MINIMUM_INTERVAL_DAYS
-      data_type: NUMBER(38,0)
     - name: NEXT_DOSE_VACCINE_ID
       data_type: TEXT
     - name: ELIGIBLE_AGE_FROM_DAYS
       data_type: NUMBER(38,0)
     - name: ELIGIBLE_AGE_TO_DAYS
+      data_type: NUMBER(38,0)
+    - name: MAXIMUM_AGE_DAYS
       data_type: NUMBER(38,0)
     - name: ADMINISTERED_CLUSTER_ID
       data_type: TEXT
@@ -292,3 +286,30 @@ sources:
       data_type: TEXT
     - name: PRACTICENEIGHBOURHOOD
       data_type: TEXT
+  - name: MYRIA_ENROLLED_PATIENTS_20250507
+    identifier: '"MYRIA_ENROLLED_PATIENTS_20250507"'
+    columns:
+    - name: HX_ID
+      data_type: TEXT
+    - name: ACTIVATED_DATE
+      data_type: DATE
+    - name: ENROLLED_DATE
+      data_type: DATE
+    - name: ONBOARDED_DATE
+      data_type: DATE
+    - name: DISCHARGED_DATE
+      data_type: DATE
+  - name: MYRIA_ENROLLED_PATIENTS_20260603
+    identifier: '"MYRIA_ENROLLED_PATIENTS_20260603"'
+    columns:
+    - name: HX_ID
+      data_type: TEXT
+    - name: ACTIVATED_DATE
+      data_type: DATE
+    - name: ENROLLED_DATE
+      data_type: DATE
+    - name: ONBOARDED_DATE
+      data_type: DATE
+    - name: DISCHARGED_DATE
+      data_type: DATE
+  

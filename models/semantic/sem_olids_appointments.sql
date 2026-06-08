@@ -27,7 +27,7 @@
 
     Practice Attribution:
     - practice_code / practice_name / pcn_name / borough come from dim_practice
-      joined via the appointment's record_owner_organisation_code — this is the
+      joined via the appointment's publisher_organisation_code — this is the
       practice that delivered the appointment.
     - registered_* columns come from the patient's CURRENT registration in
       dim_person_demographics and may differ (e.g. patient transferred since
@@ -55,16 +55,16 @@ TABLES(
 RELATIONSHIPS(
     appt (person_id) REFERENCES demographics,
     appt (person_id) REFERENCES conditions,
-    appt (record_owner_organisation_code) REFERENCES practice (practice_code),
+    appt (publisher_organisation_code) REFERENCES practice (practice_code),
     appt (practitioner_role_group) REFERENCES costs
 )
 
 FACTS(
     appt.duration_minutes AS duration_minutes COMMENT = 'Cleaned appointment duration in minutes',
-    appt.planned_duration AS planned_duration COMMENT = 'Original planned slot duration in minutes',
+    appt.planned_duration_mins AS planned_duration_mins COMMENT = 'Original planned slot duration in minutes',
     appt.booking_to_slot_days AS booking_to_slot_days COMMENT = 'Calendar days from booking to the appointment slot time (0 = same day)',
-    appt.patient_wait AS patient_wait COMMENT = 'Minutes patient waited beyond scheduled time',
-    appt.patient_delay AS patient_delay COMMENT = 'Minutes patient arrived late',
+    appt.patient_wait_mins AS patient_wait_mins COMMENT = 'Minutes patient waited beyond scheduled time',
+    appt.patient_delay_mins AS patient_delay_mins COMMENT = 'Minutes patient arrived late',
     appt.age_at_event AS age_at_event COMMENT = 'Patient age at appointment (event-time, stable for historical analysis)',
     demographics.age AS age COMMENT = 'Patient current age (drifts over time — use age_at_event for historical cohorting)',
     conditions.total_conditions AS total_conditions COMMENT = 'Total active long-term conditions',
@@ -98,13 +98,12 @@ DIMENSIONS(
     appt.practitioner_role_group AS practitioner_role_group WITH SYNONYMS = ('HCP type', 'staff type', 'role') COMMENT = 'Analytical role grouping (GP, Nurse, Pharmacist, HCA, Physician Associate, Paramedic, Physiotherapist, Care Navigator, Counsellor, Mental Health Practitioner, Health & Wellbeing Coach, Social Prescriber, Dietitian, Podiatrist, Occupational Therapist, Other Direct Patient Care, Admin/Non-Clinical, Unknown)',
     appt.sds_role_group AS sds_role_group WITH SYNONYMS = ('SDS group', 'NHS role group') COMMENT = 'Official NHS Digital SDS role group (GP, Nurses, Other Direct Patient Care, Admin/Data Quality, Unknown) — aligns with national GPAD publications',
     appt.role_name AS role_name COMMENT = 'Raw practitioner role name as recorded by the practice',
-    appt.practitioner_name AS practitioner_name COMMENT = 'Clinician full name — personal data, restrict access accordingly',
     appt.is_arrs_role AS is_arrs_role WITH SYNONYMS = ('ARRS', 'additional roles') COMMENT = 'TRUE where the SDS code unambiguously identifies an ARRS-scheme role',
     appt.schedule_type AS schedule_type COMMENT = 'Raw schedule type from OLIDS',
     appt.is_untimed_session AS is_untimed_session COMMENT = 'TRUE if parent schedule is an open/untimed session (duty doctor, eConsult list). Duration is NULL for these.',
 
     -- Appointment-owning practice (the practice that delivered the appointment)
-    appt.practice_code AS record_owner_organisation_code WITH SYNONYMS = ('practice code', 'GP practice', 'ODS code') COMMENT = 'ODS code of the practice that owns this appointment',
+    appt.publisher_organisation_code AS publisher_organisation_code WITH SYNONYMS = ('practice code', 'GP practice', 'ODS code') COMMENT = 'ODS code of the practice that owns this appointment',
     practice.practice_name AS practice_name COMMENT = 'Name of the practice that owns this appointment',
     practice.pcn_code AS pcn_code COMMENT = 'PCN code of the appointment-owning practice',
     practice.pcn_name AS pcn_name COMMENT = 'PCN name of the appointment-owning practice',
@@ -127,7 +126,9 @@ DIMENSIONS(
     demographics.age_life_stage AS age_life_stage COMMENT = 'Current life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown). Drifts — use age_at_event for historical.',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
     demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
+    demographics.ethnicity_granular AS ethnicity_granular COMMENT = 'Detailed ethnicity classification (Unknown if not recorded)',
     demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
+    demographics.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
 
     -- Patient registration status
     demographics.is_active AS is_active COMMENT = 'Patient currently registered with an NCL GP practice',
@@ -137,6 +138,7 @@ DIMENSIONS(
     demographics.ward_code AS ward_code COMMENT = 'Patient electoral ward 2025 code (residence-based)',
     demographics.ward_name AS ward_name COMMENT = 'Patient electoral ward 2025 name (residence-based)',
     demographics.borough_resident AS borough_resident COMMENT = 'Patient borough of residence',
+    demographics.is_london_resident AS is_london_resident COMMENT = 'Patient resides in Greater London',
     demographics.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Patient NCL neighbourhood of residence',
 
     -- Deprivation (patient residence)
@@ -185,7 +187,7 @@ METRICS(
     appt.avg_duration AS AVG(appt.duration_minutes) COMMENT = 'Average duration (minutes)',
     appt.total_duration AS SUM(appt.duration_minutes) COMMENT = 'Total appointment minutes',
     appt.avg_booking_to_slot_days AS AVG(appt.booking_to_slot_days) COMMENT = 'Average days from booking to the appointment slot',
-    appt.avg_patient_wait AS AVG(appt.patient_wait) COMMENT = 'Average wait beyond scheduled time (minutes)'
+    appt.avg_patient_wait AS AVG(appt.patient_wait_mins) COMMENT = 'Average wait beyond scheduled time (minutes)'
 )
 
 COMMENT = 'OLIDS GP Appointments with practice details, patient demographics, conditions, and PSSRU costs. Grain: one row per appointment. practice_code/practice_name = appointment-owning practice; registered_* = patient current registration (may differ). Supports GP contract access KPIs, DNA equity analysis, workforce mix, and utilisation by condition/deprivation.'

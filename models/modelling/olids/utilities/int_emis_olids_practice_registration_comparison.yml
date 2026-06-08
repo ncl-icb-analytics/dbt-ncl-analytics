@@ -31,10 +31,12 @@ models:
           - not_null
 
       - name: practice_name
-        description: GP practice name
+        description: GP practice name from dim_practice; falls back to the EMIS
+          seed value for merged/closed practices no longer in the OLIDS feed.
 
       - name: borough
-        description: Borough name
+        description: Registered borough from dim_practice; falls back to the EMIS
+          seed value for merged/closed practices no longer in the OLIDS feed.
 
       - name: emis_list_size
         description: Number of registered patients from EMIS extract

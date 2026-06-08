@@ -5,3 +5,6 @@
 # Make GitHub recognise YAML files (important for dbt projects)
 *.yml linguist-detectable=true
 *.yaml linguist-detectable=true
+
+# Shell scripts must stay LF so they run on macOS/Linux/Codespaces
+*.sh text eol=lf

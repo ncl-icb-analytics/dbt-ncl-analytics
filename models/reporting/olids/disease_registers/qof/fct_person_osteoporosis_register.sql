@@ -60,7 +60,7 @@ WITH osteoporosis_diagnoses AS (
             AS osteoporosis_diagnosis_displays,
 
         -- Latest observation details
-        ARRAY_AGG(DISTINCT ID) AS all_IDs
+        ARRAY_AGG(DISTINCT ID::VARCHAR) AS all_IDs
 
     FROM {{ ref('int_osteoporosis_diagnoses_all') }}
     GROUP BY person_id

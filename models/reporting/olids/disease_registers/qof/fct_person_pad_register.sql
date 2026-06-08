@@ -48,7 +48,7 @@ WITH pad_diagnoses AS (
             AS pad_diagnosis_displays,
 
         -- Latest observation details
-        ARRAY_AGG(DISTINCT ID) AS all_IDs
+        ARRAY_AGG(DISTINCT ID::VARCHAR) AS all_IDs
 
     FROM {{ ref('int_pad_diagnoses_all') }}
     GROUP BY person_id

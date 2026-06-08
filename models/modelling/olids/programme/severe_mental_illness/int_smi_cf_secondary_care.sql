@@ -21,7 +21,8 @@ FROM {{ ref('stg_mhsds_mpi') }} mpi
 --FROM MODELLING.DBT_STAGING.STG_MHSDS_MPI mpi
 INNER JOIN {{ ref('stg_mhsds_activesubmission') }} a ON mpi.uniq_submission_id = a.uniq_submission_id
 --inner join MODELLING.DBT_STAGING.STG_MHSDS_ACTIVESUBMISSION a  on mpi.uniq_submission_id = a.uniq_submission_id
-INNER JOIN {{ ref('int_smi_population_base') }} smi on TO_VARCHAR(smi.sk_patient_id) = mpi.sk_patient_id
+--convert STG_MHSDS_MPI sk_patient_id to number for more effective joins until changed upstream.
+INNER JOIN {{ ref('int_smi_population_base') }} smi on smi.sk_patient_id = TO_NUMBER(mpi.sk_patient_id)
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE smi on TO_VARCHAR(smi.sk_patient_id) = mpi.sk_patient_id
 where ORG_ID_PROV in ('G6V2S') --,'TAF') use NLFT code only C&I legacy patients are not found in the NLFT EPR system
 and mpi.DMIC_CCG_CODE = '93C'
@@ -52,7 +53,7 @@ where ORG_ID_PROV in ('G6V2S')
 --DEFINE SMI POP
 ,SMIPOPULATION as (
 SELECT DISTINCT
-TO_VARCHAR(smi.sk_patient_id) AS sk_patient_id
+smi.sk_patient_id
 ,b.mpi_person_id
 ,smi.person_id
 ,smi.hx_flake
@@ -96,7 +97,7 @@ FROM {{ ref('int_smi_population_base') }} smi
 LEFT JOIN {{ ref('int_smi_casefinding') }} cf on smi.person_id = cf.person_id
 --LEFT JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_CASEFINDING cf on smi.person_id = cf.person_id
 --this bridging is in DBT and includes any person who has had activity at NLFT.
-INNER JOIN (SELECT DISTINCT mpi_person_id, sk_patient_id FROM LOCAL_ID) b ON TO_VARCHAR(smi.sk_patient_id) = b.sk_patient_id
+INNER JOIN (SELECT DISTINCT mpi_person_id, sk_patient_id FROM LOCAL_ID) b ON smi.sk_patient_id = b.sk_patient_id
 WHERE HAS_ACTIVE_SMI_DIAGNOSIS
 )
 --Inpatient stays that started in the last 6 months or are currently active for people on the SMI register. Some people have multiple spells and ward stays, so we select the latest ward stay only.

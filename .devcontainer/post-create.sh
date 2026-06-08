@@ -1,15 +1,44 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail  # no -e: log step failures but always finish (never fail container creation)
+
+# Codespaces/devcontainer bootstrap (headless, runs once at container creation).
+# Snowflake credentials come from Codespaces secrets injected as env vars and read
+# by profiles.yml via env_var(), so there is no interactive .env onboarding here
+# (that lives in start_dbt.ps1 / start_dbt.sh for local machines). Mirrors their
+# Fusion-only setup: install Fusion, sync the scripts/ Python env, install packages.
 
 git config core.hooksPath .githooks
 
+# Install the dbt Fusion engine (dbt runs on Fusion, not a Python package).
+# The installer's auto-detection of latest version + platform is currently
+# unreliable, so resolve both explicitly from versions.json.
+FUSION_FALLBACK_VERSION="2.0.0-preview.188"
+case "$(uname -m)" in arm64|aarch64) arch_part="aarch64" ;; *) arch_part="x86_64" ;; esac
+case "$(uname -s)" in Darwin) os_part="apple-darwin" ;; *) os_part="unknown-linux-gnu" ;; esac
+fusion_target="${arch_part}-${os_part}"
+fusion_version=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/dev/null \
+    | python3 -c "import sys,json;print(json.load(sys.stdin).get('stable',{}).get('tag','').lstrip('v'))" 2>/dev/null) || true
+[ -z "$fusion_version" ] && fusion_version="$FUSION_FALLBACK_VERSION"
+curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$fusion_version" --target "$fusion_target" --update \
+    || echo "[warn] dbt Fusion installer returned non-zero (continuing)"
+export PATH="$HOME/.local/bin:$PATH"
+command -v dbt >/dev/null 2>&1 && echo "[OK] $(dbt --version 2>&1 | head -1)" || echo "[warn] dbt not on PATH after install"
+
+# Python tooling for the helper scripts in scripts/ (optional - not needed for dbt).
+# Best-effort: a failure here must not fail container creation.
+if ! command -v uv >/dev/null 2>&1; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh || echo "[warn] uv install failed"
+    export PATH="$HOME/.local/bin:$PATH"
+fi
 if command -v uv >/dev/null 2>&1; then
-    uv sync
-    uv run dbt deps
+    uv sync || echo "[warn] uv sync failed (Python helper scripts unavailable)"
+fi
+
+# dbt packages
+if command -v dbt >/dev/null 2>&1; then
+    dbt deps || echo "[warn] dbt deps failed - run 'dbt deps' once credentials are available"
 else
-    python -m pip install --upgrade pip
-    python -m pip install -r requirements.txt
-    dbt deps
+    echo "[warn] dbt unavailable - skipping dbt deps"
 fi
 
 if [ -n "${SNOWFLAKE_PAT:-}" ]; then

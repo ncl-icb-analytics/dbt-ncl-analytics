@@ -7,7 +7,7 @@ WITH person_level_psych_aggregation AS (
         person_id,
         min(psych_event_date) AS earliest_psych_event_date,
         max(psych_event_date) AS latest_psych_event_date,
-        array_agg(DISTINCT psych_ID) AS all_psych_IDs,
+        array_agg(DISTINCT psych_ID::VARCHAR) AS all_psych_IDs,
         array_agg(DISTINCT psych_concept_code) AS all_psych_concept_codes,
         array_agg(DISTINCT psych_concept_display) AS all_psych_concept_displays,
         array_agg(DISTINCT psych_code_category)

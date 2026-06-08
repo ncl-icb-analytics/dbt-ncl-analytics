@@ -242,7 +242,7 @@ sources:
     description: Fingertips indicator data
     raw_prefix: raw_reference
     domain: shared
-
+  
   # Phenolab schema in DATA_LAKE__NCL
   - source_name: phenolab
     database: DATA_LAKE__NCL
@@ -266,6 +266,14 @@ sources:
     schema: LOCAL_PROVIDER_FLOWS
     description: Providers submissions from PID environment via MESH
     raw_prefix: raw_lpf
+    domain: pid_env
+
+    # CLTCS EMIS extract
+  - source_name: cltcs_emis_extract
+    database: DATA_LAKE__NCL
+    schema: CLTCS
+    description: EMIS extract for c-ltcs pipeline from PID environment via MESH
+    raw_prefix: raw_cltcs_emis
     domain: pid_env
 
   # ========================================
@@ -296,6 +304,18 @@ sources:
   # the raw_prefix and domain to use when generating raw models. Entries
   # tagged `manual: true` are skipped by the metadata query and source YAML
   # generation steps; their column lists come from the manual YAML instead.
+
+  # ServicesDataLocal remapped feeds (CNWL et al. spreadsheet submissions)
+  # See https://github.com/.../servicesdatalocal-remapping
+  # Many tables in this schema; only MHCORL is currently consumed downstream
+  # so we declare it manually to avoid auto-pulling 30+ unused feeds.
+  - source_name: sdl
+    database: DATA_LAKE__NCL
+    schema: SDL
+    description: ServicesDataLocal canonical-named feeds (mental health, community, 111, etc.)
+    raw_prefix: raw_sdl
+    domain: commissioning
+    manual: true
 
   # ANALYST_MANAGED - volatile schema; only explicitly listed tables are used
   - source_name: reference_analyst_managed

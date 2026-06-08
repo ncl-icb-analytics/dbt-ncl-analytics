@@ -7,9 +7,9 @@
 /*
 **Serious Mental Illness (SMI) Register - QOF Mental Health Quality Measures**
 
-Business Logic:
-- Mental health diagnosis (MH_COD) NOT in remission (latest_diagnosis > latest_remission OR no remission)
-- OR lithium therapy in last 6 months and not stopped
+Business Logic (QOF v50 MH001, aligned with the calculate_smi_register macro at reference = today):
+- MH1_REG: has an MH_COD diagnosis (resolved or not — remission does not exclude from the register)
+- MH2_REG: LIT_COD lithium in the last 6 months, not subsequently stopped (LITSTP_COD)
 - No age restrictions for SMI register
 - Based on legacy fct_person_dx_smi.sql
 - Amended 8.4.26 KH Include 'Has_resolved_code' flag for use in SMI health checks
@@ -81,36 +81,48 @@ WITH smi_diagnoses AS (
         ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_code END) AS all_resolved_concept_codes,
         ARRAY_AGG(DISTINCT CASE WHEN is_resolved_code THEN concept_display END) AS all_resolved_concept_displays
     FROM {{ ref('int_smi_diagnoses_all') }}
+    WHERE clinical_effective_date <= CURRENT_DATE()
+        AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= CURRENT_DATE())
     GROUP BY person_id
 ),
 
-lithium_medications AS (
+-- MH2_REG: latest LITSTP_COD stop code, used to exclude stopped lithium
+lithium_stops AS (
+    SELECT
+        person_id,
+        MAX(CAST(clinical_effective_date AS DATE)) AS litstp_dat
+    FROM ({{ get_observations("'LITSTP_COD'", source='PCD') }})
+    WHERE clinical_effective_date <= CURRENT_DATE()
+        AND (date_recorded IS NULL OR CAST(date_recorded AS DATE) <= CURRENT_DATE())
+    GROUP BY person_id
+),
 
+-- Lithium (LIT_COD) orders in the 6 months up to today (LIT_DAT > today - 6 months)
+lithium_recent AS (
     SELECT
         lith.person_id,
-        MAX(lith.order_date) AS latest_lithium_order_date,
-        MIN(
-            CASE
-                WHEN
-                    lith.order_date >= CURRENT_DATE - INTERVAL '6 months'
-                    THEN lith.order_date
-            END
-        ) AS earliest_recent_lithium_date,
-        COUNT(
-            CASE
-                WHEN
-                    lith.order_date >= CURRENT_DATE - INTERVAL '6 months'
-                    THEN 1
-            END
-        ) AS recent_lithium_orders_count,
+        MAX(CAST(lith.order_date AS DATE)) AS latest_lithium_order_date,
+        MIN(CAST(lith.order_date AS DATE)) AS earliest_recent_lithium_date,
+        COUNT(*) AS recent_lithium_orders_count,
         ARRAY_AGG(DISTINCT lith.mapped_concept_code)
             AS all_lithium_concept_codes,
         ARRAY_AGG(DISTINCT lith.mapped_concept_display)
             AS all_lithium_concept_displays
-
     FROM {{ ref('int_lithium_medications_all') }} AS lith
-    WHERE lith.order_date >= CURRENT_DATE - INTERVAL '6 months'  -- Only recent lithium orders
+    WHERE CAST(lith.order_date AS DATE) <= CURRENT_DATE()
+        AND CAST(lith.order_date AS DATE) > DATEADD('month', -6, CURRENT_DATE())
+        AND (lith.date_recorded IS NULL OR CAST(lith.date_recorded AS DATE) <= CURRENT_DATE())
     GROUP BY lith.person_id
+),
+
+-- Exclude patients whose lithium was stopped after their latest order (LITSTP_DAT > LIT_DAT)
+lithium_medications AS (
+    SELECT lr.*
+    FROM lithium_recent AS lr
+    LEFT JOIN lithium_stops AS s
+        ON lr.person_id = s.person_id
+        AND s.litstp_dat > lr.latest_lithium_order_date
+    WHERE s.person_id IS NULL
 ),
 
 combined_smi_eligibility AS (
@@ -141,7 +153,8 @@ combined_smi_eligibility AS (
        
         COALESCE(smi.person_id, lith.person_id) AS person_id,
         (
-            (smi.latest_diagnosis_date IS NOT NULL OR smi.latest_resolved_date IS NOT NULL)
+            -- MH1_REG: has an MH_COD diagnosis (resolved or not). MH2_REG: recent lithium, not stopped.
+            smi.latest_diagnosis_date IS NOT NULL
             OR
             (lith.recent_lithium_orders_count > 0)
         ) AS is_on_register,

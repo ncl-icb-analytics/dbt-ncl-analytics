@@ -31,6 +31,10 @@
     - Inhaled corticosteroids (ICS)
     - Valproate: with product type, indication, dose category (clinical safety)
     - Diabetes medications
+    - GLP-1 receptor agonists: by active ingredient (semaglutide, tirzepatide, etc.)
+    - SGLT2 inhibitors: by active ingredient (dapagliflozin, empagliflozin, etc.)
+    - DPP-4 inhibitors: by active ingredient (sitagliptin, linagliptin, etc.)
+    - Metformin: incl. fixed-dose combinations (combo-inclusive count)
     - Respiratory: asthma meds, inhaled corticosteroids
     - NSAIDs, PPIs, systemic corticosteroids
     - Antibacterials
@@ -97,7 +101,23 @@ TABLES(
 
     diabetes_meds AS {{ ref('int_diabetes_medications_all') }}
         PRIMARY KEY (medication_order_id)
-        COMMENT = 'Diabetes medication orders',
+        COMMENT = 'Diabetes medication orders (BNF 6.1). GLP-1 RAs broken out via glp1_drug / is_glp1_ra.',
+
+    glp1 AS {{ ref('int_glp1_medications_all') }}
+        PRIMARY KEY (medication_order_id)
+        COMMENT = 'GLP-1 receptor agonist orders (SNOMED cluster GLP1RA_RX) categorised to active ingredient (glp1_drug). Captures both diabetes (BNF 6.1) and obesity (BNF 4.5) indications; use is_diabetes_indication to split. Tirzepatide flagged via is_dual_gip_glp1.',
+
+    sglt2 AS {{ ref('int_sglt2_medications_all') }}
+        PRIMARY KEY (medication_order_id)
+        COMMENT = 'SGLT2 inhibitor orders (SNOMED cluster SGLT2I_RX) categorised to active ingredient (sglt2_drug: dapagliflozin, empagliflozin, canagliflozin, ertugliflozin). Includes fixed-dose combinations. Prescribed across diabetes/HF/CKD — indication comes from registers, not the drug.',
+
+    dpp4 AS {{ ref('int_dpp4_medications_all') }}
+        PRIMARY KEY (medication_order_id)
+        COMMENT = 'DPP-4 inhibitor (gliptin) orders (SNOMED cluster DPP4I_RX) categorised to active ingredient (dpp4_drug: sitagliptin, linagliptin, saxagliptin, vildagliptin, alogliptin). Includes fixed-dose combinations.',
+
+    metformin AS {{ ref('int_metformin_medications_all') }}
+        PRIMARY KEY (medication_order_id)
+        COMMENT = 'Metformin orders (SNOMED cluster METFORMIN_RX), including fixed-dose combinations that BNF codes outside the biguanide paragraph. Use is_combination to split plain metformin from combinations.',
 
     antibacterials AS {{ ref('int_antibacterial_medications_all') }}
         PRIMARY KEY (medication_order_id)
@@ -149,6 +169,10 @@ RELATIONSHIPS(
     antidepressants (medication_order_id) REFERENCES rx,
     valproate (medication_order_id) REFERENCES rx,
     diabetes_meds (medication_order_id) REFERENCES rx,
+    glp1 (medication_order_id) REFERENCES rx,
+    sglt2 (medication_order_id) REFERENCES rx,
+    dpp4 (medication_order_id) REFERENCES rx,
+    metformin (medication_order_id) REFERENCES rx,
     antibacterials (medication_order_id) REFERENCES rx,
     ace_inhibitors (medication_order_id) REFERENCES rx,
     arbs (medication_order_id) REFERENCES rx,
@@ -208,7 +232,9 @@ DIMENSIONS(
     demographics.age_life_stage AS age_life_stage COMMENT = 'Life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown)',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
     demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
+    demographics.ethnicity_granular AS ethnicity_granular COMMENT = 'Detailed ethnicity classification (Unknown if not recorded)',
     demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
+    demographics.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
     demographics.is_active AS is_active COMMENT = 'Patient currently registered',
 
     -- Patient geography (residence)
@@ -274,7 +300,21 @@ DIMENSIONS(
     -- Valproate classification (only populated for valproate orders — clinical safety)
     valproate.valproate_product_type AS valproate_product_type COMMENT = 'Valproate type (SODIUM_VALPROATE, VALPROIC_ACID, EPILIM, DEPAKOTE). Only for valproate orders.',
     valproate.clinical_indication AS clinical_indication COMMENT = 'Valproate indication (ANTI_EPILEPTIC, MOOD_STABILISER). Only for valproate orders.',
-    valproate.dose_category AS dose_category COMMENT = 'Valproate dose category (LOW, MODERATE, HIGH, UNKNOWN). Only for valproate orders.'
+    valproate.dose_category AS dose_category COMMENT = 'Valproate dose category (LOW, MODERATE, HIGH, UNKNOWN). Only for valproate orders.',
+
+    -- GLP-1 RA classification (only populated for GLP-1 orders)
+    glp1.glp1_drug AS glp1_drug COMMENT = 'GLP-1 RA active ingredient (SEMAGLUTIDE, DULAGLUTIDE, LIRAGLUTIDE, EXENATIDE, LIXISENATIDE, ALBIGLUTIDE, TIRZEPATIDE, OTHER_GLP1RA). Only for GLP-1 orders.',
+    glp1.is_dual_gip_glp1 AS is_dual_gip_glp1 COMMENT = 'Tirzepatide (dual GIP/GLP-1 agonist). Only for GLP-1 orders.',
+    glp1.is_diabetes_indication AS is_diabetes_indication COMMENT = 'GLP-1 order under BNF 6.1 (diabetes) vs obesity/other. Only for GLP-1 orders.',
+
+    -- SGLT2 inhibitor classification (only populated for SGLT2 orders)
+    sglt2.sglt2_drug AS sglt2_drug COMMENT = 'SGLT2 inhibitor active ingredient (DAPAGLIFLOZIN, EMPAGLIFLOZIN, CANAGLIFLOZIN, ERTUGLIFLOZIN, OTHER_SGLT2I). Only for SGLT2 orders.',
+
+    -- DPP-4 inhibitor classification (only populated for DPP-4 orders)
+    dpp4.dpp4_drug AS dpp4_drug COMMENT = 'DPP-4 inhibitor active ingredient (SITAGLIPTIN, LINAGLIPTIN, SAXAGLIPTIN, VILDAGLIPTIN, ALOGLIPTIN, OTHER_DPP4I). Only for DPP-4 orders.',
+
+    -- Metformin classification (only populated for metformin orders)
+    metformin.is_combination AS is_combination COMMENT = 'Metformin fixed-dose combination (vs plain metformin). Only for metformin orders.'
 )
 
 METRICS(
@@ -299,6 +339,14 @@ METRICS(
     antidepressants.antidepressant_order_count AS COUNT(antidepressants.medication_order_id) COMMENT = 'Antidepressant orders',
     antibacterials.antibacterial_order_count AS COUNT(antibacterials.medication_order_id) COMMENT = 'Antibacterial orders',
     diabetes_meds.diabetes_med_order_count AS COUNT(diabetes_meds.medication_order_id) COMMENT = 'Diabetes medication orders',
+    glp1.glp1_order_count AS COUNT(glp1.medication_order_id) COMMENT = 'GLP-1 receptor agonist orders',
+    glp1.glp1_patient_count AS COUNT(DISTINCT glp1.person_id) COMMENT = 'Patients with GLP-1 receptor agonist orders',
+    sglt2.sglt2_order_count AS COUNT(sglt2.medication_order_id) COMMENT = 'SGLT2 inhibitor orders',
+    sglt2.sglt2_patient_count AS COUNT(DISTINCT sglt2.person_id) COMMENT = 'Patients with SGLT2 inhibitor orders',
+    dpp4.dpp4_order_count AS COUNT(dpp4.medication_order_id) COMMENT = 'DPP-4 inhibitor orders',
+    dpp4.dpp4_patient_count AS COUNT(DISTINCT dpp4.person_id) COMMENT = 'Patients with DPP-4 inhibitor orders',
+    metformin.metformin_order_count AS COUNT(metformin.medication_order_id) COMMENT = 'Metformin orders (incl. combinations)',
+    metformin.metformin_patient_count AS COUNT(DISTINCT metformin.person_id) COMMENT = 'Patients with metformin orders (incl. combinations)',
     ace_inhibitors.ace_inhibitor_order_count AS COUNT(ace_inhibitors.medication_order_id) COMMENT = 'ACE inhibitor orders',
     arbs.arb_order_count AS COUNT(arbs.medication_order_id) COMMENT = 'ARB orders',
     beta_blockers.beta_blocker_order_count AS COUNT(beta_blockers.medication_order_id) COMMENT = 'Beta-blocker orders',
@@ -311,5 +359,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS Prescribing Semantic View - All medication orders with BNF classification, prescription type, practice attribution, demographics, conditions, and pre-defined drug category flags. Source: OLIDS (One London Integrated Data Set). Grain: one row per medication order. BNF chapter is the primary therapeutic filter — the chatbot has a BNF lookup tool to resolve drug class names.'
-AI_SQL_GENERATION 'BNF CODE FORMAT: bnf_chapter is a 2-digit compact code (e.g. 02 = Cardiovascular), bnf_section is 4-digit (e.g. 0205 = Hypertension and heart failure), bnf_paragraph is 6-digit, bnf_code is the full 15-character product code (e.g. 0212000B0AAAAAA). These are compact codes NOT dotted codes — use the BNF lookup tool to resolve drug class names to the correct prefix. For top-level breakdowns, GROUP BY bnf_chapter. For specific drug classes, WHERE bnf_section = tool_result or WHERE bnf_code LIKE tool_result || ''%''. Pre-defined category tables (statins, antibacterials, etc.) are joined — their metrics count only orders in that category; use these for known drug classes rather than BNF filtering. For statin intensity, use statin_intensity. For anticoagulant DOAC/VKA split, use anticoagulant_type. For valproate safety, use valproate_product_type and valproate_indication. Cost: SUM(estimated_cost) for total prescribing cost (~96% populated). issue_type: Repeat, Acute, Repeat Dispensing, Automatic. Use fiscal_year_start for annual trends. Patient demographics are current snapshot — use age_at_event for historical age cohorting.'
+AI_SQL_GENERATION 'BNF CODE FORMAT: bnf_chapter is a 2-digit compact code (e.g. 02 = Cardiovascular), bnf_section is 4-digit (e.g. 0205 = Hypertension and heart failure), bnf_paragraph is 6-digit, bnf_code is the full 15-character product code (e.g. 0212000B0AAAAAA). These are compact codes NOT dotted codes — use the BNF lookup tool to resolve drug class names to the correct prefix. For top-level breakdowns, GROUP BY bnf_chapter. For specific drug classes, WHERE bnf_section = tool_result or WHERE bnf_code LIKE tool_result || ''%''. Pre-defined category tables (statins, antibacterials, etc.) are joined — their metrics count only orders in that category; use these for known drug classes rather than BNF filtering. For statin intensity, use statin_intensity. For anticoagulant DOAC/VKA split, use anticoagulant_type. For valproate safety, use valproate_product_type and clinical_indication. For GLP-1 receptor agonists use the glp1 category (glp1_drug for the specific agent e.g. SEMAGLUTIDE, TIRZEPATIDE; is_diabetes_indication to split diabetes vs obesity prescribing). For SGLT2 inhibitors use the sglt2 category (sglt2_drug for the specific agent e.g. DAPAGLIFLOZIN, EMPAGLIFLOZIN). For DPP-4 inhibitors use the dpp4 category (dpp4_drug for the specific agent e.g. SITAGLIPTIN, LINAGLIPTIN). For metformin use the metformin category (combo-inclusive; is_combination splits plain metformin from fixed-dose combinations) rather than BNF filtering. Cost: SUM(estimated_cost) for total prescribing cost (~96% populated). issue_type: Repeat, Acute, Repeat Dispensing, Automatic. Use fiscal_year_start for annual trends. Patient demographics are current snapshot — use age_at_event for historical age cohorting.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: prescribing volume and cost by BNF chapter/practice/PCN, statin prescribing rates and intensity, antibiotic stewardship, antipsychotic/antidepressant prescribing, valproate safety monitoring, repeat vs acute prescribing, cost per patient by therapeutic area, prescribing equity by deprivation/ethnicity, and any medication-related questions. For current population health (conditions, demographics) without prescribing use sem_olids_population. For clinical biomarkers use sem_olids_observations.'

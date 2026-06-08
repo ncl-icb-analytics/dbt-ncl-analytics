@@ -19,8 +19,8 @@ models:
         description: Dose number in schedule
       - name: diseases_protected_against
         description: Diseases this vaccine protects against
-      - name: minimum_age_days
-        description: Minimum age in days for this vaccine
+      # - name: minimum_age_days
+      #   description: Minimum age in days for this vaccine
       - name: maximum_age_days
         description: Maximum age in days for this vaccine
       - name: eligible_age_from_days

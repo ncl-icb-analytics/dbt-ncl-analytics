@@ -443,6 +443,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- cltcs_emis_extract: EMIS extract for c-ltcs pipeline from PID environment via MESH
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'CLTCS' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'CLTCS'
+  
+  UNION ALL
+  
     -- fact_patient: Patient fact tables
   SELECT 
     'DATA_LAKE' as database_name,
@@ -470,6 +485,21 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'FACT_PRACTICE'
+  
+  UNION ALL
+  
+    -- sdl: ServicesDataLocal canonical-named feeds (mental health, community, 111, etc.)
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'SDL' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SDL'
   
   UNION ALL
   

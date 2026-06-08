@@ -1,0 +1,17 @@
+version: 2
+
+macros:
+  - name: get_ltc_lcs_htn_bp_control
+    description: >
+      Generates the LTC LCS hypertension good blood-pressure-control outcome for a supplied
+      date window. Returns one row per person on the hypertension register with their last
+      known paired BP reading in the window and a strict good-control flag
+      (age <= 80: <= 140/90; age > 80: <= 150/90). No clinic/home/ABPM split and no
+      ACR/CKD/diabetes target tightening. Shared by the rolling and financial-year variant models.
+    arguments:
+      - name: window_start
+        type: string
+        description: SQL date expression for the inclusive start of the BP lookup window (e.g. "dateadd(month, -12, current_date())").
+      - name: window_end
+        type: string
+        description: SQL date expression for the inclusive end of the BP lookup window (e.g. "current_date()").

@@ -8,24 +8,21 @@ Make sure you have these prerequisites installed and configured on your Windows 
 
 ### 1. Install Required Software
 
-- **uv** - Fast Python package manager (recommended)
+- **dbt Fusion engine** - runs all dbt commands. `start_dbt.ps1` installs and keeps
+  it up to date automatically (to `%USERPROFILE%\.local\bin`), so you normally don't
+  install it by hand. To install manually:
   ```powershell
-  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex
   ```
-  uv handles Python installation automatically - no separate Python install needed.
+  dbt is **not** a Python package in this project - it is the Fusion binary.
 - **Git for Windows** - [Download from git-scm.com](https://git-scm.com/download/win)
   - Minimum version 2.34 required for SSH commit signing
 - **A text editor** - We recommend [VS Code](https://code.visualstudio.com/)
 - **Access to Snowflake** with the ANALYST role
-
-<details>
-<summary>Alternative: Using pip (legacy method)</summary>
-
-If you prefer pip over uv, install Python 3.8+ from [python.org](https://www.python.org/downloads/).
-- **Important**: During installation, check "Add Python to PATH"
-- If you forget, see troubleshooting below for how to add it manually
-
-</details>
+- **uv** *(optional)* - only needed to run the Python helper scripts in `scripts/`:
+  ```powershell
+  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
 
 ### 2. Enable PowerShell Script Execution
 
@@ -62,59 +59,48 @@ git clone https://github.com/wnl-icb-analytics/dbt-analytics
 cd dbt-analytics
 ```
 
-### Step 2: Set Up Python Environment
+### Step 2: Install dbt + Python tooling
 
-```bash
+Just run the setup script (Step 4) - it installs the dbt Fusion engine and syncs
+the Python tooling for you. To do it by hand:
+
+```powershell
+# dbt Fusion engine (runs all dbt commands)
+irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex
+
+# Python tooling for scripts/ (optional)
 uv sync
 .venv\Scripts\activate
 ```
 
-This creates the virtual environment and installs all dependencies automatically.
-
-<details>
-<summary>Alternative: Using pip and venv (legacy method)</summary>
-
-Create and activate a virtual environment:
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-If the `python` command doesn't work, try `py -m venv venv` instead.
-
-Install project dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-</details>
-
-**Important**: This project targets dbt-core 1.10.15 for Snowflake compatibility. Use `arguments:` for generic test arguments and run dbt autofix for deprecation cleanups when needed.
+dbt runs on the Fusion engine, not from the Python venv. The `.venv` exists only
+for the helper scripts in `scripts/`.
 
 ### Step 3: Configure Snowflake Connection
+
+The first time you open a terminal with no `.env`, `start_dbt.ps1` walks you through
+setup interactively: it asks for your account, user, role and warehouse, then your
+auth method (browser SSO by default, or PAT / password+MFA), and writes `.env` for you.
+
+To configure it by hand instead:
 
 ```bash
 cp env.example .env
 ```
 
-Open `.env` in VS Code and fill in your Snowflake details:
+Then fill in `.env`:
 
 ```bash
 SNOWFLAKE_ACCOUNT=your-account-identifier
 SNOWFLAKE_USER=your.username
-SNOWFLAKE_WAREHOUSE=ANALYST_WH
-SNOWFLAKE_ROLE=ANALYST
+SNOWFLAKE_WAREHOUSE=your-warehouse
+SNOWFLAKE_ROLE=your-role
 ```
 
-Optional for PAT-based auth:
-
-```bash
-SNOWFLAKE_PAT=your-programmatic-access-token
-```
-
-The `profiles.yml` is already configured to read from your `.env` file. If `SNOWFLAKE_PAT` is present, dbt uses it as the password and skips browser-based authentication.
+Auth: leave it there for **browser SSO** (the default). For a **PAT**, set `SNOWFLAKE_PAT`
+(Fusion authenticates via `programmatic_access_token`). For an **account password**, set
+`SNOWFLAKE_PASSWORD` (used with MFA). `profiles.yml` picks the authenticator from whichever
+you set.
 
 ### Step 4: Initialise Your Development Environment
 
@@ -124,7 +110,10 @@ Run the setup script:
 .\start_dbt.ps1
 ```
 
-**Important**: Run this script each time you open a new terminal. It loads your `.env` credentials into the session - dbt commands won't work without it.
+The VS Code workspace runs this automatically when you open a terminal, so you
+rarely need to run it by hand. It installs/updates the dbt Fusion engine, configures
+git hooks, and syncs the Python tooling. (Fusion loads `.env` itself, so dbt works
+even if the script hasn't run.)
 
 ### Step 5: Verify Installation
 
@@ -137,49 +126,18 @@ If you are using `externalbrowser`, your browser will open for Snowflake authent
 
 ## GitHub Codespaces
 
-Codespaces should use GitHub Codespaces secrets for Snowflake credentials. Do not commit credentials into the repository.
+Codespaces installs everything on creation (Fusion, Python tooling, packages) and
+authenticates with your Codespaces secrets - no local install, no `.env`. See
+**[Developing in GitHub Codespaces](docs/codespaces.md)** for the walkthrough:
+which secrets to add, scoping them to the repo, and how auth works.
 
-### Recommended Codespaces secrets
-
-- `SNOWFLAKE_ACCOUNT`
-- `SNOWFLAKE_USER`
-- `SNOWFLAKE_ROLE`
-- `SNOWFLAKE_WAREHOUSE`
-- `SNOWFLAKE_PAT`
-
-`SNOWFLAKE_PAT` is the preferred Codespaces auth method because it is non-interactive and each developer can create their own token in Snowflake.
-
-### Create Codespaces secrets from an existing local `.env`
-
-If you already have a working local `.env`, you can upload the supported Snowflake values to your personal Codespaces secrets for this repository:
-
-```powershell
-.\scripts\setup_codespaces_secrets.ps1
-```
-
-This uses GitHub CLI to create user-level Codespaces secrets scoped to this repository.
-
-### Create a codespace
-
-1. In GitHub, open the repository and choose **Code** -> **Codespaces** -> **New with options**.
-2. Confirm the recommended secrets if prompted.
-3. Create the codespace on this branch.
-4. Wait for the dev container to finish setup.
-5. Run `dbt debug` to confirm the Snowflake connection.
-
-### How credentials work inside Codespaces
-
-- Codespaces secrets are exposed as environment variables in the running codespace.
-- You do not need a `.env` file inside the codespace if the required secrets are already set.
-- The setup scripts will use existing environment variables before creating a `.env` template.
-
-### Helper Scripts
+## Helper Scripts
 
 Two scripts in the project root make development easier:
 
 | Script | Description |
 |--------|-------------|
-| `.\start_dbt.ps1` | Loads `.env` credentials - **run first in each terminal** |
+| `.\start_dbt.ps1` | Installs/updates dbt Fusion, configures git hooks, loads `.env`, syncs Python tooling (auto-runs on terminal open) |
 | `.\build_changed` | Builds only models changed on your branch |
 
 **build_changed flags:**

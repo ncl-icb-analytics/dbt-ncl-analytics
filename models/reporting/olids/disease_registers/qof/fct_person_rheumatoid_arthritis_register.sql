@@ -14,9 +14,9 @@ Clinical Purpose:
 - Disease activity monitoring and treatment pathway identification
 - Inflammatory arthritis care pathway
 
-QOF Register Criteria:
+QOF v50 RA_REG (CQRS 001):
 - Any RA diagnosis code (RARTH_COD)
-- Age ≥16 years at diagnosis (applied in this fact table)
+- Age ≥16 at the reference date (PAT_AGE at ACHV_DAT, not age at diagnosis)
 - No resolution codes (simple diagnosis-based register)
 - Lifelong condition register for ongoing disease management
 
@@ -46,7 +46,7 @@ WITH ra_diagnoses AS (
             AS ra_diagnosis_displays,
 
         -- Latest observation details
-        ARRAY_AGG(DISTINCT ID) AS all_IDs
+        ARRAY_AGG(DISTINCT ID::VARCHAR) AS all_IDs
 
     FROM {{ ref('int_rheumatoid_arthritis_diagnoses_all') }}
     GROUP BY person_id
@@ -56,7 +56,10 @@ register_inclusion AS (
     SELECT
         rd.*,
 
-        -- Age at first diagnosis calculation using current age (approximation)
+        -- Age at the reference date (current), per QOF PAT_AGE at ACHV_DAT
+        age.age AS age_at_reference,
+
+        -- Age at first diagnosis (approximation, for analytics/traceability only)
         CASE
             WHEN earliest_diagnosis_date IS NOT NULL
                 THEN
@@ -64,37 +67,20 @@ register_inclusion AS (
                     - DATEDIFF(YEAR, earliest_diagnosis_date, CURRENT_DATE())
         END AS age_at_first_ra_diagnosis,
 
-        -- QOF register logic: Include if has diagnosis and estimated age ≥16 at first diagnosis
+        -- QOF register logic: RARTH_COD diagnosis AND age ≥16 at reference date
         COALESCE(
             earliest_diagnosis_date IS NOT NULL
-            AND (
-                age.age
-                - DATEDIFF(YEAR, earliest_diagnosis_date, CURRENT_DATE())
-            )
-            >= 16, FALSE
+            AND age.age >= 16, FALSE
         ) AS is_on_register,
 
         -- Clinical interpretation
         CASE
-            WHEN
-                earliest_diagnosis_date IS NOT NULL
-                AND (
-                    age.age
-                    - DATEDIFF(YEAR, earliest_diagnosis_date, CURRENT_DATE())
-                )
-                >= 16
+            WHEN earliest_diagnosis_date IS NOT NULL AND age.age >= 16
                 THEN 'Active RA diagnosis (age ≥16)'
-            WHEN
-                earliest_diagnosis_date IS NOT NULL
-                AND (
-                    age.age
-                    - DATEDIFF(YEAR, earliest_diagnosis_date, CURRENT_DATE())
-                )
-                < 16
+            WHEN earliest_diagnosis_date IS NOT NULL AND age.age < 16
                 THEN 'RA diagnosis (age <16 - excluded from QOF)'
             ELSE 'No RA diagnosis'
-        END AS ra_status,
-
+        END AS ra_status
 
     FROM ra_diagnoses AS rd
     INNER JOIN {{ ref('dim_person_age') }} AS age
