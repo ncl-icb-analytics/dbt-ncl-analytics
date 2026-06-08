@@ -12,15 +12,19 @@ dbt project for WNL ICB Analytics healthcare data transformations.
 ## Quick Start
 
 ```bash
-# Install uv if you don't have it
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# Clone and setup
+# Clone
 git clone https://github.com/wnl-icb-analytics/dbt-analytics && cd dbt-analytics
-uv sync
+
+# Configure credentials
 cp env.example .env    # Edit with your Snowflake credentials
-.\start_dbt.ps1 && dbt deps && dbt debug
+
+# Bootstrap: installs the dbt Fusion engine, configures git hooks, loads .env
+.\start_dbt.ps1
+dbt deps && dbt debug
 ```
+
+dbt runs on the [Fusion engine](docs/dbt-fusion-guide.md) (installed by `start_dbt.ps1`),
+not a Python package. `uv` is only needed for the Python helper scripts in `scripts/`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signing.
 
@@ -48,7 +52,7 @@ Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, 
 
 | Script | Description |
 |--------|-------------|
-| `.\start_dbt.ps1` | **Run first** - Loads `.env` credentials into your session |
+| `.\start_dbt.ps1` | Installs/updates dbt Fusion, configures hooks, loads `.env` (auto-runs on terminal open) |
 | `.\build_changed` | Build only changed models (auto-detects from git diff) |
 
 **Flags for `build_changed`:**
@@ -59,7 +63,7 @@ Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, 
 
 ## Common Commands
 
-Always run `.\start_dbt.ps1` first in each terminal session.
+The VS Code workspace runs `.\start_dbt.ps1` automatically when you open a terminal.
 
 | Command | Description |
 |---------|-------------|
@@ -139,9 +143,9 @@ The naming logic is in `macros/overrides/generate_database_name.sql` and `genera
 
 ### Technology Stack
 
-- **dbt-core 1.10.15** - Snowflake-supported runtime target
+- **dbt Fusion engine** - Rust-based dbt runtime (local dev + Snowflake native execution)
 - **Snowflake** - Cloud data warehouse
-- **Python 3.11** - Scripting and automation
+- **Python 3.11** - Helper scripts in `scripts/` only (not dbt)
 
 ## License
 

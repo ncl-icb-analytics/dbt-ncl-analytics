@@ -1,12 +1,12 @@
 [project]
 name = "dbt-ncl-analytics"
 version = "0.1.0"
-description = "Add your description here"
+description = "Python tooling for the WNL ICB analytics project. dbt runs on the Fusion engine (installed separately), not from this environment."
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
+# dbt itself is NOT a dependency here - it runs on the dbt Fusion engine, installed
+# by start_dbt.ps1 / start_dbt.sh. These deps are only for the helper scripts in scripts/.
 dependencies = [
-    "dbt-core==1.10.15",
-    "dbt-snowflake==1.10.7",
     "dotenv==0.9.9",
     "keyring==25.6.0",
     "pandas==2.3.3",

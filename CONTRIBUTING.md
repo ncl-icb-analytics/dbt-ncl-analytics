@@ -8,24 +8,21 @@ Make sure you have these prerequisites installed and configured on your Windows 
 
 ### 1. Install Required Software
 
-- **uv** - Fast Python package manager (recommended)
+- **dbt Fusion engine** - runs all dbt commands. `start_dbt.ps1` installs and keeps
+  it up to date automatically (to `%USERPROFILE%\.local\bin`), so you normally don't
+  install it by hand. To install manually:
   ```powershell
-  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex
   ```
-  uv handles Python installation automatically - no separate Python install needed.
+  dbt is **not** a Python package in this project - it is the Fusion binary.
 - **Git for Windows** - [Download from git-scm.com](https://git-scm.com/download/win)
   - Minimum version 2.34 required for SSH commit signing
 - **A text editor** - We recommend [VS Code](https://code.visualstudio.com/)
 - **Access to Snowflake** with the ANALYST role
-
-<details>
-<summary>Alternative: Using pip (legacy method)</summary>
-
-If you prefer pip over uv, install Python 3.8+ from [python.org](https://www.python.org/downloads/).
-- **Important**: During installation, check "Add Python to PATH"
-- If you forget, see troubleshooting below for how to add it manually
-
-</details>
+- **uv** *(optional)* - only needed to run the Python helper scripts in `scripts/`:
+  ```powershell
+  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
 
 ### 2. Enable PowerShell Script Execution
 
@@ -62,36 +59,22 @@ git clone https://github.com/wnl-icb-analytics/dbt-analytics
 cd dbt-analytics
 ```
 
-### Step 2: Set Up Python Environment
+### Step 2: Install dbt + Python tooling
 
-```bash
+Just run the setup script (Step 4) - it installs the dbt Fusion engine and syncs
+the Python tooling for you. To do it by hand:
+
+```powershell
+# dbt Fusion engine (runs all dbt commands)
+irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex
+
+# Python tooling for scripts/ (optional)
 uv sync
 .venv\Scripts\activate
 ```
 
-This creates the virtual environment and installs all dependencies automatically.
-
-<details>
-<summary>Alternative: Using pip and venv (legacy method)</summary>
-
-Create and activate a virtual environment:
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-If the `python` command doesn't work, try `py -m venv venv` instead.
-
-Install project dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-</details>
-
-**Important**: This project targets dbt-core 1.10.15 for Snowflake compatibility. Use `arguments:` for generic test arguments and run dbt autofix for deprecation cleanups when needed.
+dbt runs on the Fusion engine, not from the Python venv. The `.venv` exists only
+for the helper scripts in `scripts/`.
 
 ### Step 3: Configure Snowflake Connection
 
@@ -124,7 +107,10 @@ Run the setup script:
 .\start_dbt.ps1
 ```
 
-**Important**: Run this script each time you open a new terminal. It loads your `.env` credentials into the session - dbt commands won't work without it.
+The VS Code workspace runs this automatically when you open a terminal, so you
+rarely need to run it by hand. It installs/updates the dbt Fusion engine, configures
+git hooks, and syncs the Python tooling. (Fusion loads `.env` itself, so dbt works
+even if the script hasn't run.)
 
 ### Step 5: Verify Installation
 
@@ -179,7 +165,7 @@ Two scripts in the project root make development easier:
 
 | Script | Description |
 |--------|-------------|
-| `.\start_dbt.ps1` | Loads `.env` credentials - **run first in each terminal** |
+| `.\start_dbt.ps1` | Installs/updates dbt Fusion, configures git hooks, loads `.env`, syncs Python tooling (auto-runs on terminal open) |
 | `.\build_changed` | Builds only models changed on your branch |
 
 **build_changed flags:**

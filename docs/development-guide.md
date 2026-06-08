@@ -383,7 +383,7 @@ This project uses several dbt packages (committed to `dbt_packages/` for Snowfla
 - **dbt_date** - Date manipulation helpers
 - **codegen** - Code generation utilities
 
-This project targets dbt-core 1.10.15 for Snowflake compatibility. Generic test arguments should use the `arguments:` property.
+This project runs on the dbt Fusion engine. Generic test arguments should use the `arguments:` property.
 
 ## Working with Profiles
 

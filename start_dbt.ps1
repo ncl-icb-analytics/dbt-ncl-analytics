@@ -1,12 +1,35 @@
 # start_dbt.ps1
+#
+# Bootstraps the dev environment for this project. Auto-runs when you open a
+# terminal in the VS Code workspace (see dbt-ncl-analytics.code-workspace).
+#
+# What it does:
+#   1. Configures git hooks + checks commit signing
+#   2. Installs / updates the dbt Fusion engine (dbt runs on Fusion, not Python)
+#   3. Clears stale dbt-core artifacts if a legacy setup is detected
+#   4. Syncs the Python venv used only by the helper scripts in scripts/
+#   5. Loads .env and installs dbt packages
+#
+# dbt itself is the Fusion binary (installed to %USERPROFILE%\.local\bin), NOT a
+# Python package. The .venv exists only for the Python tooling in scripts/.
+
+# Pin a Fusion version to override "track latest stable" (e.g. '2.0.0-preview.175').
+# Leave empty to always track the latest stable release.
+$FusionVersionPin = ''
 
 $actions = @()
+$installDir = Join-Path $env:USERPROFILE '.local\bin'
 
-# Configure Git hooks for additional safety
+# Ensure the Fusion install dir is on PATH for this session.
+if ($env:PATH -notlike "*$installDir*") {
+    $env:PATH = "$installDir;$env:PATH"
+}
+
+# ---------------------------------------------------------------------------
+# 1. Git hooks
+# ---------------------------------------------------------------------------
 Write-Host "Configuring Git hooks..." -ForegroundColor Cyan
-$currentHooksPath = git config core.hooksPath
-
-if ($currentHooksPath -ne ".githooks") {
+if ((git config core.hooksPath) -ne ".githooks") {
     git config core.hooksPath .githooks
     Write-Host "[OK] Git hooks configured to use .githooks directory" -ForegroundColor Green
 } else {
@@ -14,7 +37,9 @@ if ($currentHooksPath -ne ".githooks") {
 }
 Write-Host ""
 
-# Check commit signing
+# ---------------------------------------------------------------------------
+# 2. Commit signing check
+# ---------------------------------------------------------------------------
 Write-Host "Checking commit signing..." -ForegroundColor Cyan
 $gpgFormat = git config gpg.format
 $signingKey = git config user.signingkey
@@ -24,65 +49,101 @@ if ($gpgFormat -eq "ssh" -and $signingKey -and $autoSign -eq "true") {
 } else {
     Write-Host "[WARNING] Commit signing is not configured" -ForegroundColor Yellow
     Write-Host "  This repository requires signed commits for branch protection." -ForegroundColor Gray
-    Write-Host "  You can run dbt commands, but commits will be rejected without signing." -ForegroundColor Gray
     Write-Host "  See CONTRIBUTING.md 'Setting Up Commit Signing' for setup instructions." -ForegroundColor Gray
     $actions += "Set up commit signing (see CONTRIBUTING.md)"
 }
 Write-Host ""
 
-# Activate or create virtual environment
-Write-Host "Activating Python virtual environment..." -ForegroundColor Cyan
-if (Test-Path ".venv\Scripts\Activate.ps1") {
-    $venvPath = ".venv\Scripts\Activate.ps1"
-} elseif (Test-Path "venv\Scripts\Activate.ps1") {
-    $venvPath = "venv\Scripts\Activate.ps1"
-} else {
-    Write-Host "[INFO] No virtual environment found" -ForegroundColor Cyan
-    if (Get-Command uv -ErrorAction SilentlyContinue) {
-        Write-Host "[INFO] Running uv sync..." -ForegroundColor Cyan
-        uv sync
-        if (Test-Path ".venv\Scripts\Activate.ps1") {
-            $venvPath = ".venv\Scripts\Activate.ps1"
-        } else {
-            Write-Host "[ERROR] uv sync did not create a virtual environment" -ForegroundColor Red
-            exit 1
-        }
-    } else {
-        Write-Host "[ERROR] uv is not installed. Install it with:" -ForegroundColor Red
-        Write-Host '  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"' -ForegroundColor Yellow
-        Write-Host ""
-        Write-Host "  After installing, close and reopen VS Code so uv is on your PATH." -ForegroundColor Gray
-        exit 1
+# ---------------------------------------------------------------------------
+# 3. dbt Fusion engine
+# ---------------------------------------------------------------------------
+Write-Host "Checking dbt Fusion engine..." -ForegroundColor Cyan
+
+function Install-Fusion {
+    param([string]$Version)
+    $installer = [scriptblock]::Create((Invoke-RestMethod 'https://public.cdn.getdbt.com/fs/install/install.ps1'))
+    if ($Version) { & $installer -Update -Version $Version } else { & $installer -Update }
+}
+
+try {
+    $dbtCmd = Get-Command dbt -ErrorAction SilentlyContinue
+    if (-not $dbtCmd) {
+        Write-Host "[INFO] dbt not found - installing dbt Fusion..." -ForegroundColor Cyan
+        Install-Fusion -Version $FusionVersionPin
+        if ($env:PATH -notlike "*$installDir*") { $env:PATH = "$installDir;$env:PATH" }
+        Write-Host "[OK] dbt Fusion installed" -ForegroundColor Green
     }
+    elseif ($FusionVersionPin) {
+        $current = (dbt --version 2>&1) -join "`n"
+        if ($current -notmatch [regex]::Escape($FusionVersionPin)) {
+            Write-Host "[INFO] Pinning dbt Fusion to $FusionVersionPin..." -ForegroundColor Cyan
+            Install-Fusion -Version $FusionVersionPin
+            Write-Host "[OK] dbt Fusion pinned at $FusionVersionPin" -ForegroundColor Green
+        } else {
+            Write-Host "[OK] dbt Fusion pinned at $FusionVersionPin" -ForegroundColor Green
+        }
+    }
+    else {
+        # Track latest stable, throttled to one check per day to keep terminals snappy.
+        $marker = Join-Path $env:TEMP 'wnl_fusion_update_check'
+        $today = (Get-Date).ToString('yyyy-MM-dd')
+        $last = if (Test-Path $marker) { (Get-Content $marker -Raw).Trim() } else { '' }
+        if ($last -ne $today) {
+            Write-Host "[INFO] Checking for dbt Fusion updates..." -ForegroundColor Cyan
+            try { dbt system update } catch { Write-Host "[WARNING] Update check failed: $_" -ForegroundColor Yellow }
+            Set-Content -Path $marker -Value $today
+        } else {
+            Write-Host "[OK] dbt Fusion checked for updates today" -ForegroundColor Green
+        }
+    }
+    Write-Host "  $((dbt --version 2>&1) | Select-Object -First 1)" -ForegroundColor Gray
+} catch {
+    Write-Host "[WARNING] Could not install/update dbt Fusion: $_" -ForegroundColor Yellow
+    Write-Host "  Install manually: irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex" -ForegroundColor Gray
+    $actions += "Install dbt Fusion (see CONTRIBUTING.md)"
 }
-& $venvPath
+Write-Host ""
 
-if ($env:VIRTUAL_ENV) {
-    Write-Host "[OK] Virtual environment activated" -ForegroundColor Green
-    $pythonVersion = python --version 2>&1
-    Write-Host "  Python: $pythonVersion" -ForegroundColor Gray
-} else {
-    Write-Host "[ERROR] Failed to activate virtual environment" -ForegroundColor Red
-    Write-Host "  Run 'uv sync' or 'python -m venv venv' to create one" -ForegroundColor Yellow
-    exit 1
+# ---------------------------------------------------------------------------
+# 4. Legacy dbt-core cleanup
+# ---------------------------------------------------------------------------
+# A dbt-core install puts a dbt entrypoint in .venv\Scripts. Fusion does not
+# (it lives in %USERPROFILE%\.local\bin), so this marks a pre-Fusion machine.
+if (Test-Path ".venv\Scripts\dbt.exe") {
+    Write-Host "Clearing legacy dbt-core artifacts..." -ForegroundColor Cyan
+    foreach ($d in @("target", "logs")) {
+        if (Test-Path $d) { Remove-Item -Recurse -Force $d; Write-Host "  Removed $d/" -ForegroundColor Gray }
+    }
+    Write-Host "  dbt-core will be pruned from .venv by uv sync below" -ForegroundColor Gray
+    Write-Host ""
 }
 
-# Keep dependencies in sync with lockfile
+# ---------------------------------------------------------------------------
+# 5. Python venv for the helper scripts in scripts/ (optional - not needed for dbt)
+# ---------------------------------------------------------------------------
+Write-Host "Syncing Python tooling for scripts/..." -ForegroundColor Cyan
 if (Get-Command uv -ErrorAction SilentlyContinue) {
     uv sync
-    Write-Host "[OK] Dependencies up to date" -ForegroundColor Green
+    if (Test-Path ".venv\Scripts\Activate.ps1") { & ".venv\Scripts\Activate.ps1" }
+    Write-Host "[OK] Python tooling ready" -ForegroundColor Green
+} else {
+    Write-Host "[INFO] uv not installed - the scripts/ Python tools are unavailable until you install it:" -ForegroundColor Cyan
+    Write-Host '  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"' -ForegroundColor Gray
+    $actions += "Install uv to run the Python helper scripts (optional)"
 }
 Write-Host ""
 
 # Disable AWS metadata service checks (prevents connection pool warnings on Azure)
 [System.Environment]::SetEnvironmentVariable('AWS_EC2_METADATA_DISABLED', 'true', 'Process')
 
-# Detect whether Snowflake credentials are already present in the environment
+# ---------------------------------------------------------------------------
+# 6. Load environment variables from .env
+# ---------------------------------------------------------------------------
+# Fusion auto-loads .env, but we also load it here for the Python scripts and to
+# surface the active connection details.
 $hasSnowflakeEnv = [bool]($env:SNOWFLAKE_ACCOUNT -and $env:SNOWFLAKE_USER -and ($env:SNOWFLAKE_PAT -or $env:SNOWFLAKE_PASSWORD -or $env:SNOWFLAKE_AUTHENTICATOR -eq "externalbrowser"))
 
-# Load project-specific environment variables
 Write-Host "Loading environment variables from .env..." -ForegroundColor Cyan
-
 $envPath = ".env"
 if (Test-Path $envPath) {
     $envCount = 0
@@ -94,97 +155,57 @@ if (Test-Path $envPath) {
     }
     Write-Host "[OK] Loaded $envCount environment variables" -ForegroundColor Green
 
-    # Detect placeholder credentials - check uncommented KEY=value lines for template values
     $hasPlaceholders = (Get-Content $envPath | Where-Object { $_ -match '^[^#].*=.*your-.*-here' } | Measure-Object).Count -gt 0
     if ($hasPlaceholders) {
         Write-Host "[WARNING] .env still contains placeholder values" -ForegroundColor Yellow
         $actions += 'Update credentials in .env, then open a new terminal'
     } else {
-        # Show key variables (without exposing sensitive values)
         if ($env:SNOWFLAKE_ACCOUNT) {
             $accountPrefix = $env:SNOWFLAKE_ACCOUNT.Substring(0, [Math]::Min(10, $env:SNOWFLAKE_ACCOUNT.Length))
             Write-Host "  SNOWFLAKE_ACCOUNT: $accountPrefix..." -ForegroundColor Gray
         }
-        if ($env:SNOWFLAKE_USER) {
-            Write-Host "  SNOWFLAKE_USER: $env:SNOWFLAKE_USER" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_ROLE) {
-            Write-Host "  SNOWFLAKE_ROLE: $env:SNOWFLAKE_ROLE" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_WAREHOUSE) {
-            Write-Host "  SNOWFLAKE_WAREHOUSE: $env:SNOWFLAKE_WAREHOUSE" -ForegroundColor Gray
-        }
+        if ($env:SNOWFLAKE_USER) { Write-Host "  SNOWFLAKE_USER: $env:SNOWFLAKE_USER" -ForegroundColor Gray }
+        if ($env:SNOWFLAKE_ROLE) { Write-Host "  SNOWFLAKE_ROLE: $env:SNOWFLAKE_ROLE" -ForegroundColor Gray }
+        if ($env:SNOWFLAKE_WAREHOUSE) { Write-Host "  SNOWFLAKE_WAREHOUSE: $env:SNOWFLAKE_WAREHOUSE" -ForegroundColor Gray }
         if ($env:SNOWFLAKE_PAT) {
             $patPrefix = $env:SNOWFLAKE_PAT.Substring(0, [Math]::Min(8, $env:SNOWFLAKE_PAT.Length))
             Write-Host "  SNOWFLAKE_PAT: $patPrefix..." -ForegroundColor Gray
         }
-        if ($env:SNOWFLAKE_PASSWORD) {
-            Write-Host "  SNOWFLAKE_PASSWORD: [set]" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_AUTHENTICATOR) {
-            Write-Host "  SNOWFLAKE_AUTHENTICATOR: $env:SNOWFLAKE_AUTHENTICATOR" -ForegroundColor Gray
-        }
+        if ($env:SNOWFLAKE_PASSWORD) { Write-Host "  SNOWFLAKE_PASSWORD: [set]" -ForegroundColor Gray }
+        if ($env:SNOWFLAKE_AUTHENTICATOR) { Write-Host "  SNOWFLAKE_AUTHENTICATOR: $env:SNOWFLAKE_AUTHENTICATOR" -ForegroundColor Gray }
     }
 } else {
     if ($hasSnowflakeEnv) {
         Write-Host "[OK] No .env file found - using existing environment variables" -ForegroundColor Green
-        if ($env:SNOWFLAKE_ACCOUNT) {
-            $accountPrefix = $env:SNOWFLAKE_ACCOUNT.Substring(0, [Math]::Min(10, $env:SNOWFLAKE_ACCOUNT.Length))
-            Write-Host "  SNOWFLAKE_ACCOUNT: $accountPrefix..." -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_USER) {
-            Write-Host "  SNOWFLAKE_USER: $env:SNOWFLAKE_USER" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_ROLE) {
-            Write-Host "  SNOWFLAKE_ROLE: $env:SNOWFLAKE_ROLE" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_WAREHOUSE) {
-            Write-Host "  SNOWFLAKE_WAREHOUSE: $env:SNOWFLAKE_WAREHOUSE" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_PAT) {
-            $patPrefix = $env:SNOWFLAKE_PAT.Substring(0, [Math]::Min(8, $env:SNOWFLAKE_PAT.Length))
-            Write-Host "  SNOWFLAKE_PAT: $patPrefix..." -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_PASSWORD) {
-            Write-Host "  SNOWFLAKE_PASSWORD: [set]" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_AUTHENTICATOR) {
-            Write-Host "  SNOWFLAKE_AUTHENTICATOR: $env:SNOWFLAKE_AUTHENTICATOR" -ForegroundColor Gray
-        }
-        if ($env:SNOWFLAKE_PAT) {
-            Write-Host "  Auth method: SNOWFLAKE_PAT" -ForegroundColor Gray
-        } elseif ($env:SNOWFLAKE_PASSWORD) {
-            Write-Host "  Auth method: SNOWFLAKE_PASSWORD" -ForegroundColor Gray
-        } else {
-            Write-Host "  Auth method: externalbrowser" -ForegroundColor Gray
-        }
     } elseif (Test-Path "env.example") {
         Copy-Item "env.example" ".env"
         Write-Host "[WARNING] No .env file found - created from template" -ForegroundColor Yellow
+        $actions += 'Update credentials in .env, then open a new terminal'
     } else {
         Write-Host "[WARNING] No .env file found and no env.example template" -ForegroundColor Yellow
-    }
-    if (-not $hasSnowflakeEnv) {
         $actions += 'Update credentials in .env, then open a new terminal'
     }
 }
 Write-Host ""
 
-# Check for dbt packages
+# ---------------------------------------------------------------------------
+# 7. dbt packages
+# ---------------------------------------------------------------------------
 if (-not (Test-Path "dbt_packages")) {
-    Write-Host "[WARNING] No dbt_packages directory found" -ForegroundColor Yellow
-    $actions += "Run 'dbt deps' to install dbt packages"
+    Write-Host "Installing dbt packages (dbt deps)..." -ForegroundColor Cyan
+    try { dbt deps } catch { $actions += "Run 'dbt deps' to install dbt packages" }
     Write-Host ""
 }
 
+# ---------------------------------------------------------------------------
 # Summary
+# ---------------------------------------------------------------------------
 if ($actions.Count -gt 0) {
     Write-Host "To finish setup:" -ForegroundColor Yellow
     foreach ($action in $actions) {
         Write-Host "  - $action" -ForegroundColor Gray
     }
 } else {
-    Write-Host "Ready! You can now run dbt commands." -ForegroundColor Green
+    Write-Host "Ready! dbt runs on the Fusion engine." -ForegroundColor Green
     Write-Host "Try: dbt debug" -ForegroundColor Gray
 }
-
