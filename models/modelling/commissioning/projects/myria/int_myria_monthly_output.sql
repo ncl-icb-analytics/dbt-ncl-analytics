@@ -7,27 +7,27 @@
 --All patients output - includes patients that did not match OLIDS data (is_match_olids = 0). This is because of the IS_CONFIDENTIAL flag in EMIS.
 select
 --add HEX
- --{{ hxflake_pseudo_generation('s.patient_id') }} AS hex_id, --THE BELOW SCRIPT IS Safer and production-friendly but the result is the same.
-CASE
-  WHEN TRY_TO_NUMBER(s.PATIENT_ID) IS NULL THEN NULL
-  ELSE
-    CONCAT(
-      SUBSTR(
-        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
-        1, 2
-      ),
-      '-',
-      SUBSTR(
-        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
-        3, 3
-      ),
-      '-',
-      SUBSTR(
-        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
-        6, 3
-      )
-    )
-END AS HEX_ID,
+ {{ hxflake_pseudo_generation('s.patient_id') }} AS hex_id, --THE BELOW SCRIPT IS Safer and production-friendly but the result is the same.
+-- CASE
+--   WHEN TRY_TO_NUMBER(s.PATIENT_ID) IS NULL THEN NULL
+--   ELSE
+--     CONCAT(
+--       SUBSTR(
+--         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+--         1, 2
+--       ),
+--       '-',
+--       SUBSTR(
+--         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+--         3, 3
+--       ),
+--       '-',
+--       SUBSTR(
+--         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(s.PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+--         6, 3
+--       )
+--     )
+-- END AS HEX_ID,
 --PATIENT_ID,
 HOSPITAL_NUMBER,
 TO_VARCHAR(
