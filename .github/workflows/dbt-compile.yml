@@ -34,7 +34,7 @@ jobs:
     permissions:
       contents: read
     env:
-      DBT_TARGET: ${{ github.event_name == 'merge_group' && 'ci-prod' || 'ci-dev' }}
+      DBT_TARGET: ci-prod  # TEMP: proving prod-catalog compile on the PR; revert to the merge_group ternary before merge
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
       SNOWFLAKE_ROLE: DBT_ADMIN
