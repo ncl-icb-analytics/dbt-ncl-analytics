@@ -1,12 +1,42 @@
 #!/usr/bin/env bash
 # start_dbt.sh - macOS/Linux equivalent of start_dbt.ps1
+#
+# Bootstraps the dev environment. Auto-runs when you open a terminal in the
+# VS Code workspace (see dbt-ncl-analytics.code-workspace).
+#
+# dbt runs on the Fusion engine (installed to ~/.local/bin), NOT a Python
+# package. The .venv exists only for the Python tooling in scripts/.
+
+# Pin a Fusion version to override the default (e.g. 2.0.0-preview.188).
+# Leave empty to track the latest version from versions.json.
+FUSION_VERSION_PIN=""
+# Used only if versions.json can't be reached and no pin is set.
+FUSION_FALLBACK_VERSION="2.0.0-preview.188"
 
 actions=()
+install_dir="$HOME/.local/bin"
+# Installer platform target (its auto-detection is currently unreliable, so we pass it).
+case "$(uname -s)" in
+    Darwin) os_part="apple-darwin" ;;
+    *)      os_part="unknown-linux-gnu" ;;
+esac
+case "$(uname -m)" in
+    arm64|aarch64) arch_part="aarch64" ;;
+    *)             arch_part="x86_64" ;;
+esac
+fusion_target="${arch_part}-${os_part}"
 
-# Configure Git hooks
+# Ensure the Fusion install dir is on PATH for this session.
+case ":$PATH:" in
+    *":$install_dir:"*) ;;
+    *) export PATH="$install_dir:$PATH" ;;
+esac
+
+# ---------------------------------------------------------------------------
+# 1. Git hooks
+# ---------------------------------------------------------------------------
 echo "Configuring Git hooks..."
-current_hooks_path=$(git config core.hooksPath)
-if [ "$current_hooks_path" != ".githooks" ]; then
+if [ "$(git config core.hooksPath)" != ".githooks" ]; then
     git config core.hooksPath .githooks
     echo "[OK] Git hooks configured to use .githooks directory"
 else
@@ -14,7 +44,9 @@ else
 fi
 echo ""
 
-# Check commit signing
+# ---------------------------------------------------------------------------
+# 2. Commit signing check
+# ---------------------------------------------------------------------------
 echo "Checking commit signing..."
 gpg_format=$(git config gpg.format)
 signing_key=$(git config user.signingkey)
@@ -24,65 +56,161 @@ if [ "$gpg_format" = "ssh" ] && [ -n "$signing_key" ] && [ "$auto_sign" = "true"
 else
     echo "[WARNING] Commit signing is not configured"
     echo "  This repository requires signed commits for branch protection."
-    echo "  You can run dbt commands, but commits will be rejected without signing."
     echo "  See CONTRIBUTING.md 'Setting Up Commit Signing' for setup instructions."
     actions+=("Set up commit signing (see CONTRIBUTING.md)")
 fi
 echo ""
 
-# Activate or create virtual environment
-echo "Activating Python virtual environment..."
-if [ -f ".venv/bin/activate" ]; then
-    source .venv/bin/activate
-elif [ -f "venv/bin/activate" ]; then
-    source venv/bin/activate
-else
-    echo "[INFO] No virtual environment found"
-    if command -v uv &> /dev/null; then
-        echo "[INFO] Running uv sync..."
-        uv sync
-        if [ -f ".venv/bin/activate" ]; then
-            source .venv/bin/activate
-        else
-            echo "[ERROR] uv sync did not create a virtual environment"
-            return 1 2>/dev/null || exit 1
-        fi
-    else
-        echo "[ERROR] uv is not installed. Install it with one of:"
-        echo "  brew install uv"
-        echo "  curl -LsSf https://astral.sh/uv/install.sh | sh"
-        echo ""
-        echo "  After installing, close and reopen VS Code so uv is on your PATH."
-        return 1 2>/dev/null || exit 1
-    fi
-fi
-echo "[OK] Virtual environment activated"
-echo "  Python: $(python --version 2>&1)"
+# ---------------------------------------------------------------------------
+# 3. dbt Fusion engine
+# ---------------------------------------------------------------------------
+echo "Checking dbt Fusion engine..."
+resolve_fusion_version() {
+    if [ -n "$FUSION_VERSION_PIN" ]; then echo "$FUSION_VERSION_PIN"; return; fi
+    local tag
+    tag=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/dev/null \
+        | python3 -c "import sys,json;print(json.load(sys.stdin).get('stable',{}).get('tag','').lstrip('v'))" 2>/dev/null)
+    if [ -n "$tag" ]; then echo "$tag"; else echo "$FUSION_FALLBACK_VERSION"; fi
+}
 
-# Keep dependencies in sync with lockfile
+install_fusion() {
+    local version="$1" mode="$2"
+    if [ "$mode" = "update" ]; then
+        curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$version" --target "$fusion_target" --update
+    else
+        curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$version" --target "$fusion_target"
+    fi
+}
+
+dbt_present=false
+command -v dbt &> /dev/null && dbt_present=true
+# Throttle the latest-version lookup to once per day (skipped when pinned or missing).
+marker="${TMPDIR:-/tmp}/wnl_fusion_update_check"
+today=$(date +%Y-%m-%d)
+checked_today=false
+[ -f "$marker" ] && [ "$(cat "$marker")" = "$today" ] && checked_today=true
+
+if [ "$dbt_present" = false ] || [ -n "$FUSION_VERSION_PIN" ] || [ "$checked_today" = false ]; then
+    desired=$(resolve_fusion_version)
+    current=""
+    [ "$dbt_present" = true ] && current=$(dbt --version 2>&1 | head -1)
+    if ! echo "$current" | grep -q "$desired"; then
+        echo "[INFO] Installing dbt Fusion $desired..."
+        if [ "$dbt_present" = true ]; then install_fusion "$desired" update; else install_fusion "$desired" install; fi
+        export PATH="$install_dir:$PATH"
+    else
+        echo "[OK] dbt Fusion $desired"
+    fi
+    [ -z "$FUSION_VERSION_PIN" ] && echo "$today" > "$marker"
+else
+    echo "[OK] dbt Fusion checked for updates today"
+fi
+
+if ! command -v dbt &> /dev/null; then
+    echo "[WARNING] dbt Fusion not available - install manually:"
+    echo "  curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version $FUSION_FALLBACK_VERSION --target $fusion_target"
+    actions+=("Install dbt Fusion (see CONTRIBUTING.md)")
+else
+    echo "  $(dbt --version 2>&1 | head -1)"
+fi
+echo ""
+
+# ---------------------------------------------------------------------------
+# 4. Legacy dbt-core cleanup
+# ---------------------------------------------------------------------------
+# A dbt-core install puts a dbt entrypoint in .venv/bin. Fusion does not
+# (it lives in ~/.local/bin), so this marks a pre-Fusion machine.
+if [ -f ".venv/bin/dbt" ]; then
+    echo "Clearing legacy dbt-core artifacts..."
+    for d in target logs; do
+        if [ -d "$d" ]; then rm -rf "$d"; echo "  Removed $d/"; fi
+    done
+    echo "  dbt-core will be pruned from .venv by uv sync below"
+    echo ""
+fi
+
+# ---------------------------------------------------------------------------
+# 5. Python venv for the helper scripts in scripts/ (optional - not needed for dbt)
+# ---------------------------------------------------------------------------
+echo "Syncing Python tooling for scripts/..."
+if ! command -v uv &> /dev/null; then
+    echo "[INFO] uv not found - installing..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh || echo "[WARNING] uv install failed"
+    export PATH="$HOME/.local/bin:$PATH"
+fi
 if command -v uv &> /dev/null; then
-    uv sync
-    echo "[OK] Dependencies up to date"
+    if uv sync; then
+        [ -f ".venv/bin/activate" ] && source .venv/bin/activate
+        echo "[OK] Python tooling ready"
+    else
+        echo "[WARNING] uv sync failed - scripts/ Python tools may be incomplete"
+        actions+=("Re-run 'uv sync' for the Python helper scripts")
+    fi
+else
+    echo "[WARNING] uv unavailable - scripts/ Python tools skipped (install: curl -LsSf https://astral.sh/uv/install.sh | sh)"
+    actions+=("Install uv to run the Python helper scripts (optional)")
 fi
 echo ""
 
 # Disable AWS metadata service checks (prevents connection pool warnings on Azure)
 export AWS_EC2_METADATA_DISABLED=true
 
-# Detect whether Snowflake credentials are already present in the environment
+# Interactive first-run setup: prompt for connection details and write .env.
+new_dbt_env_file() {
+    local path="${1:-.env}"
+    echo ""
+    echo "No .env found - let's set up your Snowflake connection."
+    local account user role warehouse choice secret
+    read -r -p "Snowflake account identifier: " account
+    read -r -p "Snowflake username: " user
+    read -r -p "Snowflake role: " role
+    read -r -p "Snowflake warehouse: " warehouse
+    echo ""
+    echo "Authentication method:"
+    echo "  1) Browser SSO (externalbrowser)   [default, recommended]"
+    echo "  2) Programmatic Access Token (PAT)"
+    echo "  3) Account password + MFA"
+    echo "     (PAT -> SNOWFLAKE_PAT/token; password -> SNOWFLAKE_PASSWORD)"
+    read -r -p "Selection [1]: " choice
+    [ -z "$choice" ] && choice=1
+
+    # Only write keys the user actually provided - no assumed defaults.
+    {
+        echo "# Generated by start_dbt.sh onboarding. Never commit this file."
+        [ -n "$account" ]   && echo "SNOWFLAKE_ACCOUNT=$account"
+        [ -n "$user" ]      && echo "SNOWFLAKE_USER=$user"
+        [ -n "$role" ]      && echo "SNOWFLAKE_ROLE=$role"
+        [ -n "$warehouse" ] && echo "SNOWFLAKE_WAREHOUSE=$warehouse"
+    } > "$path"
+    case "$choice" in
+        2) read -r -s -p "Paste your PAT: " secret; echo ""; echo "SNOWFLAKE_PAT=$secret" >> "$path" ;;
+        3) read -r -s -p "Account password: " secret; echo ""; echo "SNOWFLAKE_PASSWORD=$secret" >> "$path"; echo "SNOWFLAKE_AUTHENTICATOR=username_password_mfa" >> "$path" ;;
+        *) echo "SNOWFLAKE_AUTHENTICATOR=externalbrowser" >> "$path" ;;
+    esac
+
+    # Load into the current shell so dbt works immediately (no shell interpretation of values).
+    while IFS= read -r line || [ -n "$line" ]; do
+        [[ "$line" =~ ^#.*$ || -z "$line" ]] && continue
+        [[ "$line" == *"="* ]] && export "${line%%=*}=${line#*=}"
+    done < "$path"
+    echo "[OK] Created $path"
+}
+
+# ---------------------------------------------------------------------------
+# 6. Load environment variables from .env
+# ---------------------------------------------------------------------------
+# Fusion auto-loads .env, but we also load it here for the Python scripts and to
+# surface the active connection details.
 has_snowflake_env=false
 if [ -n "$SNOWFLAKE_ACCOUNT" ] && [ -n "$SNOWFLAKE_USER" ] && { [ -n "$SNOWFLAKE_PAT" ] || [ -n "$SNOWFLAKE_PASSWORD" ] || [ "$SNOWFLAKE_AUTHENTICATOR" = "externalbrowser" ]; }; then
     has_snowflake_env=true
 fi
 
-# Load project-specific environment variables
 echo "Loading environment variables from .env..."
 if [ -f ".env" ]; then
     env_count=0
     while IFS= read -r line || [ -n "$line" ]; do
-        # Skip comments and empty lines
         [[ "$line" =~ ^#.*$ || -z "$line" ]] && continue
-        # Extract key=value (compatible with both bash and zsh)
         if [[ "$line" == *"="* ]]; then
             key="${line%%=*}"
             value="${line#*=}"
@@ -92,12 +220,10 @@ if [ -f ".env" ]; then
     done < ".env"
     echo "[OK] Loaded $env_count environment variables"
 
-    # Detect placeholder credentials — check uncommented KEY=value lines for template values
     if grep -v '^#' ".env" | grep -q '^[^=]*=.*your-.*-here'; then
         echo "[WARNING] .env still contains placeholder values"
         actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
     else
-        # Show key variables (without exposing sensitive values)
         [ -n "$SNOWFLAKE_ACCOUNT" ] && echo "  SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT:0:10}..."
         [ -n "$SNOWFLAKE_USER" ] && echo "  SNOWFLAKE_USER: $SNOWFLAKE_USER"
         [ -n "$SNOWFLAKE_ROLE" ] && echo "  SNOWFLAKE_ROLE: $SNOWFLAKE_ROLE"
@@ -106,49 +232,46 @@ if [ -f ".env" ]; then
         [ -n "$SNOWFLAKE_PASSWORD" ] && echo "  SNOWFLAKE_PASSWORD: [set]"
         [ -n "$SNOWFLAKE_AUTHENTICATOR" ] && echo "  SNOWFLAKE_AUTHENTICATOR: $SNOWFLAKE_AUTHENTICATOR"
     fi
+elif [ "$has_snowflake_env" = true ]; then
+    echo "[OK] No .env file found - using existing environment variables"
+elif [ -t 0 ]; then
+    # Interactive terminal with no .env - walk the user through setup.
+    new_dbt_env_file
+elif [ -f "env.example" ]; then
+    # Non-interactive (e.g. automation) - fall back to the template.
+    cp env.example .env
+    echo "[WARNING] No .env file found - created from template"
+    actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
 else
-    if [ "$has_snowflake_env" = true ]; then
-        echo "[OK] No .env file found - using existing environment variables"
-        [ -n "$SNOWFLAKE_ACCOUNT" ] && echo "  SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT:0:10}..."
-        [ -n "$SNOWFLAKE_USER" ] && echo "  SNOWFLAKE_USER: $SNOWFLAKE_USER"
-        [ -n "$SNOWFLAKE_ROLE" ] && echo "  SNOWFLAKE_ROLE: $SNOWFLAKE_ROLE"
-        [ -n "$SNOWFLAKE_WAREHOUSE" ] && echo "  SNOWFLAKE_WAREHOUSE: $SNOWFLAKE_WAREHOUSE"
-        [ -n "$SNOWFLAKE_PAT" ] && echo "  SNOWFLAKE_PAT: ${SNOWFLAKE_PAT:0:8}..."
-        [ -n "$SNOWFLAKE_PASSWORD" ] && echo "  SNOWFLAKE_PASSWORD: [set]"
-        [ -n "$SNOWFLAKE_AUTHENTICATOR" ] && echo "  SNOWFLAKE_AUTHENTICATOR: $SNOWFLAKE_AUTHENTICATOR"
-        if [ -n "$SNOWFLAKE_PAT" ]; then
-            echo "  Auth method: SNOWFLAKE_PAT"
-        elif [ -n "$SNOWFLAKE_PASSWORD" ]; then
-            echo "  Auth method: SNOWFLAKE_PASSWORD"
-        else
-            echo "  Auth method: externalbrowser"
-        fi
-    elif [ -f "env.example" ]; then
-        cp env.example .env
-        echo "[WARNING] No .env file found — created from template"
-    else
-        echo "[WARNING] No .env file found and no env.example template"
-    fi
-    if [ "$has_snowflake_env" != true ]; then
-        actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
-    fi
+    echo "[WARNING] No .env file found and no env.example template"
+    actions+=("Update credentials in .env, then open a new terminal (Ctrl+\`)")
 fi
 echo ""
 
-# Check for dbt packages
+# ---------------------------------------------------------------------------
+# 7. dbt packages - install if missing, or if packages.yml changed since last install
+# ---------------------------------------------------------------------------
+need_deps=false
 if [ ! -d "dbt_packages" ]; then
-    echo "[WARNING] No dbt_packages directory found"
-    actions+=("Run 'dbt deps' to install dbt packages")
+    need_deps=true
+elif [ -f "packages.yml" ] && [ "packages.yml" -nt "dbt_packages" ]; then
+    need_deps=true
+fi
+if [ "$need_deps" = true ]; then
+    echo "Installing dbt packages (dbt deps)..."
+    dbt deps || actions+=("Run 'dbt deps' to install dbt packages")
     echo ""
 fi
 
+# ---------------------------------------------------------------------------
 # Summary
+# ---------------------------------------------------------------------------
 if [ ${#actions[@]} -gt 0 ]; then
     echo "To finish setup:"
     for action in "${actions[@]}"; do
         echo "  -> $action"
     done
 else
-    echo "Ready! You can now run dbt commands."
-    echo "Try: dbt debug (to test your connection)"
+    echo "Ready! dbt runs on the Fusion engine."
+    echo "Try: dbt debug"
 fi

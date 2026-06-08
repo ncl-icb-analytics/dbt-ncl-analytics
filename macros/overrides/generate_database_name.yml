@@ -25,5 +25,5 @@ macros:
         description: Custom database name from config
 
       - name: node
-        type: object
+        type: any
         description: dbt node object (provided by dbt)

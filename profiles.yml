@@ -17,8 +17,11 @@ wnl_analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
-      password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
-      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'snowflake' if env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) else 'externalbrowser') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', '') }}"
+      token: "{{ env_var('SNOWFLAKE_PAT', '') }}"
+      # Authenticator: externalbrowser (SSO) | username_password_mfa (uses password) |
+      # programmatic_access_token (uses token = PAT). Auto-picked from whichever secret is set.
+      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'programmatic_access_token' if env_var('SNOWFLAKE_PAT', '') else ('username_password_mfa' if env_var('SNOWFLAKE_PASSWORD', '') else 'externalbrowser')) }}"
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_DEV
@@ -31,8 +34,11 @@ wnl_analytics:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
       user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
-      password: "{{ env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) }}"
-      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'snowflake' if env_var('SNOWFLAKE_PAT', env_var('SNOWFLAKE_PASSWORD', '')) else 'externalbrowser') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', '') }}"
+      token: "{{ env_var('SNOWFLAKE_PAT', '') }}"
+      # Authenticator: externalbrowser (SSO) | username_password_mfa (uses password) |
+      # programmatic_access_token (uses token = PAT). Auto-picked from whichever secret is set.
+      authenticator: "{{ env_var('SNOWFLAKE_AUTHENTICATOR', 'programmatic_access_token' if env_var('SNOWFLAKE_PAT', '') else ('username_password_mfa' if env_var('SNOWFLAKE_PASSWORD', '') else 'externalbrowser')) }}"
       role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
       database: MODELLING
       schema: DBT_PROD
@@ -65,3 +71,34 @@ wnl_analytics:
       threads: 16
       client_session_keep_alive: false
       query_tag: dbt_analytics_prod
+
+    # CI compile gate (key-pair auth, read-only metadata introspection).
+    # ci-dev introspects the DEV__ catalog (PR validation); ci-prod the prod
+    # catalog (merge queue, pre-deploy). Prefixing is handled by generate_database_name.
+    ci-dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
+      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH', '') }}"
+      private_key_passphrase: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', '') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
+      database: MODELLING
+      schema: DBT_DEV
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'WH_NCL_ENGINEERING_XS') }}"
+      threads: 16
+      client_session_keep_alive: false
+      query_tag: dbt_analytics_ci
+
+    ci-prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'placeholder') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'placeholder') }}"
+      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH', '') }}"
+      private_key_passphrase: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PASSPHRASE', '') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'DBT_ADMIN') }}"
+      database: MODELLING
+      schema: DBT_PROD
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'WH_NCL_ENGINEERING_XS') }}"
+      threads: 16
+      client_session_keep_alive: false
+      query_tag: dbt_analytics_ci

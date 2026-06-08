@@ -28,8 +28,8 @@ models:
         description: "Action recorded in the status log"
 
       - name: action_date
-        data_type: date
-        description: "Date of the action"
+        data_type: timestamp_ntz
+        description: "Timestamp of the action"
 
       - name: detail
         data_type: varchar
