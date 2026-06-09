@@ -1,52 +1,76 @@
--- LTC LCS DBT extract
+-- LTC LCS: NAFLD Register - Priority Group 3 (Medium Risk)
+-- Parent population: NAFLD register
+-- EMIS source: 'On NAFLD Register- LTC LCS Priority Group 3 (MR)'
+-- (docs/emis_specs/ltc_lcs_rs/on_nafld_register_ltc_lcs_priority_group_3_mr.md)
 --
---  NAFLD - MR - Overarching
+-- Rule chain (latest = latest reading within the last 3 years):
+-- - Rule 1: latest NAFLD fibrosis score (vs1) > 3.25 -> include
+-- - Rule 2: latest NAFLD fibrosis score > 1.3 and <= 3.25 and latest
+--   ELF score (vs2) >= 9.8 -> include, else exclude
 --
--- Version          Date        Author          Comments
--- 1.0              3/3/26      Colin Styles    Initial version
--- 1.1              18/3/26     CS              Updated following QA
+-- Parent register note: EMIS parent is 'LTC LCS: NAFLD Register v2*' (fatty liver
+-- + MASLD codes); fct_person_nafld_register implements this via the
+-- terminology-managed MASLD diagnosis cluster.
 
-
--- note no partition by required as all values within last 3 years to be tested
-with on_nafld_reg_pg3_mr_vs1 as (
-        {{ get_ltc_lcs_observations_latest("'on_nafld_reg_pg3_mr_vs1'") }}
+with
+-- Parent population: Patients currently on NAFLD register
+nafld_register as (
+    select distinct person_id
+    from {{ ref('fct_person_nafld_register') }}
+    where is_on_register = true
 ),
-on_nafld_reg_pg3_mr_vs3 as (
-        {{ get_ltc_lcs_observations_latest("'on_nafld_reg_pg3_mr_vs3'") }}
+
+-- Latest NAFLD fibrosis score within the last 3 years
+latest_fibrosis_score as (
+    select person_id, result_value
+    from ({{ get_ltc_lcs_observations("on_nafld_reg_pg3_mr_vs1") }})
+    where clinical_effective_date >= dateadd(year, -3, current_date())
+    qualify row_number() over (
+        partition by person_id
+        order by clinical_effective_date desc, observation_id desc
+    ) = 1
+),
+
+-- Latest ELF score within the last 3 years
+latest_elf_score as (
+    select person_id, result_value
+    from ({{ get_ltc_lcs_observations("on_nafld_reg_pg3_mr_vs2") }})
+    where clinical_effective_date >= dateadd(year, -3, current_date())
+    qualify row_number() over (
+        partition by person_id
+        order by clinical_effective_date desc, observation_id desc
+    ) = 1
+),
+
+-- Combine rule results for all NAFLD register patients
+patient_rules as (
+    select
+        nr.person_id,
+        (fib.result_value > 3.25) as rule_1_fibrosis_high,
+        (
+            fib.result_value > 1.3 and fib.result_value <= 3.25
+            and elf.result_value >= 9.8
+        ) as rule_2_fibrosis_indeterminate_elf_high,
+        case
+            when fib.result_value > 3.25
+                or (
+                    fib.result_value > 1.3 and fib.result_value <= 3.25
+                    and elf.result_value >= 9.8
+                )
+                then 'Included'
+            else 'Excluded'
+        end as final_status
+    from nafld_register nr
+    left join latest_fibrosis_score fib on nr.person_id = fib.person_id
+    left join latest_elf_score elf on nr.person_id = elf.person_id
 )
 
-select distinct NR.person_id from DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_nafld_reg NR
-
-left outer join on_nafld_reg_pg3_mr_vs1 VS1
-on NR.PERSON_ID = VS1.PERSON_ID
-
-left outer join on_nafld_reg_pg3_mr_vs3 VS3
-on NR.PERSON_ID = VS3.PERSON_ID
-where
-    (VS1.PERSON_ID is not null
-    and
-    DATEDIFF(day, VS1.clinical_effective_date, CURRENT_DATE())<=365.25 * 3   -- within past 3 years
-    and
-    -- Rule 1: Latest NAFLD fibrosis score >3.25 in last 3 years
-    VS1.result_value  >3.25 
-    )
-or
--- Rule 2: Latest NAFLD fibrosis score 1.3-3.25 in last 3 years AND ELF score ≥9.8
-    (VS1.PERSON_ID is not null
-    and
-    DATEDIFF(day, VS1.clinical_effective_date, CURRENT_DATE())<=365.25 * 3   -- within past 3 years
-    and
-    VS1.result_value  >1.3   --  rule says between
-    and
-    VS1.result_value  <=3.25 
-    and
-    VS3.PERSON_ID is not null
-    and
-    DATEDIFF(day, VS3.clinical_effective_date, CURRENT_DATE())<=365.25 * 3   -- within past 3 years
-    and
-    VS3.result_value >=9.8
-    )
-
-
-
-
+-- Final result: included patients only
+select
+    person_id,
+    final_status,
+    'NAFLD' as condition,
+    '3' as priority_group,
+    'MR' as risk_group
+from patient_rules
+where final_status = 'Included'
