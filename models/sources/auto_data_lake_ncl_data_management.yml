@@ -220,3 +220,19 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: Status
       data_type: TEXT
+    - name: Q1_QUARTER_DATE
+      data_type: DATE
+    - name: Q1_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: Q1_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: Q1_PRACTICE_NAME_FROM_Q1
+      data_type: TEXT
+    - name: Q1_WEIGHTED_LIST_SIZE
+      data_type: FLOAT
+    - name: Q1_NORMALISED_LIST_SIZE
+      data_type: FLOAT
+    - name: Q1_PRACTICE_LIST_SIZE
+      data_type: NUMBER(38,0)
+    - name: Q1_LAST_UPDATED
+      data_type: TIMESTAMP_NTZ
