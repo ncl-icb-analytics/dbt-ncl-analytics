@@ -5,7 +5,7 @@ dbt 1.8+ renamed the schema property `tests:` -> `data_tests:`. This script
 flags files still using the legacy key and can rewrite them in place.
 
 Usage:
-    check_tests_key.py [files...]          # check mode (CI): FAILED + exit 1 if found
+    check_tests_key.py [files...]          # check mode: FAILED + exit 1 if found
     check_tests_key.py --fix [files...]    # rewrite tests: -> data_tests:
 
 With no file arguments, scans models/, seeds/ and snapshots/.
@@ -93,7 +93,7 @@ def main() -> int:
               "(dbt 1.8+ uses `data_tests:`):\n")
         for f in sorted(flagged):
             print(f"  - {f} ({flagged[f]})")
-        print("\nFix with: python scripts/ci/check_tests_key.py --fix <files>")
+        print("\nFix with: python scripts/utils/check_tests_key.py --fix <files>")
         return 1
 
     total = 0
