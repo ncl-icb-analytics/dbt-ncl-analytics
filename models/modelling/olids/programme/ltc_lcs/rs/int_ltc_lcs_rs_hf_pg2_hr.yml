@@ -6,20 +6,22 @@ models:
       NB: There is no PG1 for HF.
 
       Patients on Heart Failure register meeting:
-      - Rule 1: New York Heart Association Classification I - IV (include on pass)
-      - Rule 2: Oedema (event) or metolazone (medication isue) (include on pass)
-      - Rule 3: Latest hba1c > 48 and <= 75 (exclude on fail)
-      - Rule 4: left ventricular ejection fraction < 50 (exclude on fail)
-      - Rule 5: SGLT2 inhibitors within 6/12 months (or adverse reaction) (include on fail)
-      - Rule 6: MRAs within 6/12 months (or adverse reaction) (include on fail)
-      - Rule 7: beta blockers within 6/12 months (or adverse reaction) (include on fail)
-      - Rule 8: ACE inhibitors within 6/12 months (or adverse reaction) (include on fail)
+      - Rule 1: latest NYHA classification is Class III or IV (include on pass)
+      - Rule 2: latest oedema code is significant oedema, or metolazone in
+        last year (include on pass)
+      - Rule 3 (gate): latest HbA1c > 48 and <= 75 (exclude on fail)
+      - Rule 4 (gate): latest LVEF < 50 or HFLVSD/REDEJCFRAC code (exclude on fail)
+      - Rules 5-7: SGLT2/MRA/beta-blocker arms do not change membership in the
+        EMIS search and are not implemented
+      - Rule 8: on the ACE inhibitor pathway (exclude on pass)
 
+      Known gap: rule 8 references an EMIS library item absent from the XML
+      export; that exclusion arm cannot be implemented.
     config:
       meta:
         owner:
           name: Peter Shakeshaft
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           arguments:
             column_name: person_id
@@ -35,14 +37,6 @@ models:
               - on_hf_reg_pg2_hr_vs7
               - on_hf_reg_pg2_hr_vs8
               - on_hf_reg_pg2_hr_vs9
-              - on_hf_reg_pg2_hr_vs10
-              - on_hf_reg_pg2_hr_vs11
-              - on_hf_reg_pg2_hr_vs12
-              - on_hf_reg_pg2_hr_vs13
-              - on_hf_reg_pg2_hr_vs14
-              - on_hf_reg_pg2_hr_vs15
-              - on_hf_reg_pg2_hr_vs16
-              - on_hf_reg_pg2_hr_vs17
               - on_hf_reg_pg2_hr_vs18
               - on_hf_reg_pg2_hr_vs19
               - on_hf_reg_pg2_hr_vs20

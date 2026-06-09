@@ -11,7 +11,8 @@
 -- - Rule 4: >= 3 prednisolone (vs5) orders in last 12 months -> include
 -- - Rule 5: >= 3 antibiotics (vs6: amoxicillin, doxycycline etc.) orders in
 --   last 12 months -> include
--- - Rule 6: high-dose ICS/LABA inhaler (vs7: Fostair 200 etc.) in last 6 months -> include
+-- - Rule 6: >= 3 high-dose ICS/LABA inhaler (vs7: Fostair 200 etc.) orders in
+--   last 6 months -> include
 -- - Rule 7: beclometasone/formoterol combination (vs8) and Beclazone-type
 --   inhaler (vs9) both in last 6 months -> include, else exclude
 --
@@ -75,11 +76,15 @@ rule_5_antibiotics as (
     having count(distinct medication_order_id) >= 3
 ),
 
--- Rule 6: high-dose ICS/LABA inhaler in last 6 months
+-- Rule 6: >= 3 high-dose ICS/LABA inhaler orders in last 6 months.
+-- Threshold fitted against the 1 Mar 2026 EMIS extract (any-issue +48%,
+-- >= 3 within ~1%); confirm against the live EMIS search.
 rule_6_high_dose_inhaler as (
     select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_adult_reg_pg2_hr_vs7") }})
+    from ({{ get_ltc_lcs_medication_orders("on_asthma_adult_reg_pg2_hr_vs7") }})
     where order_date >= dateadd(month, -6, current_date())
+    group by person_id
+    having count(distinct medication_order_id) >= 3
 ),
 
 -- Rule 7: beclometasone/formoterol combination and Beclazone-type inhaler

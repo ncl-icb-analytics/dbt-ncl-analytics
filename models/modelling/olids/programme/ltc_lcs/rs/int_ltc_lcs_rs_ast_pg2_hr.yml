@@ -12,7 +12,7 @@ models:
         last 12 months
       - Rule 4: >= 3 prednisolone orders in last 12 months
       - Rule 5: >= 3 antibiotics orders in last 12 months
-      - Rule 6: high-dose ICS/LABA inhaler in last 6 months
+      - Rule 6: >= 3 high-dose ICS/LABA inhaler orders in last 6 months
       - Rule 7: beclometasone/formoterol combination and Beclazone-type
         inhaler both in last 6 months
 

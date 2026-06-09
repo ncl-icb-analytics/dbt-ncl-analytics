@@ -3,24 +3,25 @@ models:
   - name: int_ltc_lcs_rs_hf_pg3_mr
     description: |
       Heart Failure Register Priority Group 3 - Medium Risk.
-      NB: There is no PG1 for HF.
+      Excludes PG2 (HR) patients.
 
       Patients on Heart Failure register meeting:
-      - Rule 1: Not in PG2 high-risk cohort
-      - Rule 2: Heart failure coded in last 6 months (include on pass)
-      - Rule 3: New York Heart Association Classification I - IV (include on pass)
-      - Rule 4: Oedema (not present or of feet) (include on pass)
-      - Rule 5: Latest left ventricular ejection fraction < 50 (exclude on fail)
-      - Rule 6: Rule 6: Dapagliflozin, Empagliflozin, Canagliflozin, Ertugliflozin L-pyroglutamic acid within 6 months (or adverse reaction) (include on fail)
-      - Rule 7: MRAs within 6 months (or adverse reaction) (include on fail)
-      - Rule 8: beta blockers within last 6 months (include on fail)
-      - Rule 9: ace inhibitors within last 6 months (or adverse reaction) (include on fail)
+      - Rule 2: earliest HF code in last 6 months - first diagnosis within
+        6 months (include on pass)
+      - Rule 3: latest NYHA classification is Class II (include on pass)
+      - Rule 4: latest oedema code is ankle/feet oedema (include on pass)
+      - Rule 5 (gate): latest LVEF < 50 (exclude on fail)
+      - Rules 6-8: SGLT2/MRA/beta-blocker arms do not change membership in the
+        EMIS search and are not implemented
+      - Rule 9: on the ACE inhibitor pathway (exclude on pass)
 
+      Known gap: rule 9 references an EMIS library item absent from the XML
+      export; that exclusion arm cannot be implemented.
     config:
       meta:
         owner:
           name: Peter Shakeshaft
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           arguments:
             column_name: person_id
@@ -33,14 +34,6 @@ models:
               - on_hf_reg_pg3_mr_vs4
               - on_hf_reg_pg3_mr_vs5
               - on_hf_reg_pg3_mr_vs6
-              - on_hf_reg_pg3_mr_vs7
-              - on_hf_reg_pg3_mr_vs8
-              - on_hf_reg_pg3_mr_vs9
-              - on_hf_reg_pg3_mr_vs10
-              - on_hf_reg_pg3_mr_vs11
-              - on_hf_reg_pg3_mr_vs12
-              - on_hf_reg_pg3_mr_vs13
-              - on_hf_reg_pg3_mr_vs14
               - on_hf_reg_pg3_mr_vs15
               - on_hf_reg_pg3_mr_vs16
               - on_hf_reg_pg3_mr_vs17
