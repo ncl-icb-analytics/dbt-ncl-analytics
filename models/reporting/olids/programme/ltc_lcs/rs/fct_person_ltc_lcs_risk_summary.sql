@@ -52,12 +52,18 @@ moc_declined as (
 joined as (
     select
         p.person_id,
+        rs.af_risk_group,
+        rs.asthma_adult_risk_group,
+        rs.asthma_cyp_risk_group,
         rs.chd_risk_group,
         rs.ckd_risk_group,
         rs.copd_risk_group,
         rs.diabetes_risk_group,
         rs.hf_risk_group,
         rs.hypertension_risk_group,
+        rs.nafld_risk_group,
+        rs.pad_risk_group,
+        rs.stroke_tia_risk_group,
         -- overall_risk_group: falls back to LR for MOC base members not stratified higher
         -- (mirrors EMIS [GROUP4- LR] = MOC base ∖ (HRC ∪ HR ∪ MR))
         coalesce(rs.overall_risk_group, 'LR') as overall_risk_group,
@@ -160,12 +166,18 @@ select
     person_id,
 
     -- Condition risk groups
+    af_risk_group,
+    asthma_adult_risk_group,
+    asthma_cyp_risk_group,
     chd_risk_group,
     ckd_risk_group,
     copd_risk_group,
     diabetes_risk_group,
     hf_risk_group,
     hypertension_risk_group,
+    nafld_risk_group,
+    pad_risk_group,
+    stroke_tia_risk_group,
     overall_risk_group,
     overall_risk_rank,
     in_any_risk_group,
