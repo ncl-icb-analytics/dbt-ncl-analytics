@@ -63,6 +63,12 @@ wnl_analytics:
       threads: 16
       client_session_keep_alive: false
       query_tag: dbt_analytics_dev
+      # Retry transient connection failures. A single Fusion bridge login stall
+      # ("context deadline exceeded" on localhost) failed 36 models in one 90ms
+      # window; retry_all covers timeouts (not just DatabaseErrors).
+      connect_retries: 3
+      connect_timeout: 10
+      retry_all: true
 
     snowflake-prod:
       type: snowflake
@@ -75,6 +81,10 @@ wnl_analytics:
       threads: 16
       client_session_keep_alive: false
       query_tag: dbt_analytics_prod
+      # Retry transient connection failures (see snowflake-dev note).
+      connect_retries: 3
+      connect_timeout: 10
+      retry_all: true
 
     # CI compile gate (key-pair auth, read-only metadata introspection).
     # ci-dev introspects the DEV__ catalog (PR validation); ci-prod the prod
