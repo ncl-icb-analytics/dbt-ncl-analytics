@@ -5,7 +5,7 @@
 }}
 --TESTING JESS'S EVALUATION MODEL CREATE FILE FOR PROPENSITY MATCHING Py Script.
 --FIND ALL PATIENTS ELIGIBLE FOR EVALUATION USING LATEST ENROLLED FILE
-
+--ELIGIBLE FILES ARE ONLY FROM THE HIGH RISK COHORT - NOT THE WHOLE POPULATION.
 with eligibility_files AS ( 
 --collect eligible patients who were in all files that have been submitted to RFL so far
 --no results for January
@@ -43,26 +43,27 @@ with eligibility_files AS (
 , eligibility_information as (
     select 
         patient_id, 
-              CASE
-  WHEN TRY_TO_NUMBER(PATIENT_ID) IS NULL THEN NULL
-  ELSE
-    CONCAT(
-      SUBSTR(
-        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
-        1, 2
-      ),
-      '-',
-      SUBSTR(
-        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
-        3, 3
-      ),
-      '-',
-      SUBSTR(
-        RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
-        6, 3
-      )
-    )
-END AS hex_id,
+        {{ hxflake_pseudo_generation('s.patient_id') }} AS hex_id, --THE BELOW SCRIPT IS Safer and production-friendly but the result is the same.
+--               CASE
+--   WHEN TRY_TO_NUMBER(PATIENT_ID) IS NULL THEN NULL
+--   ELSE
+--     CONCAT(
+--       SUBSTR(
+--         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+--         1, 2
+--       ),
+--       '-',
+--       SUBSTR(
+--         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+--         3, 3
+--       ),
+--       '-',
+--       SUBSTR(
+--         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
+--         6, 3
+--       )
+--     )
+-- END AS hex_id,
         file_date as first_file_date,
         local_authority,
         date(most_recent_nel_admission_date) as most_recent_nel_admission_date,

@@ -286,8 +286,8 @@ sources:
       data_type: TEXT
     - name: PRACTICENEIGHBOURHOOD
       data_type: TEXT
-  - name: MYRIA_ENROLLED_PATIENTS_20250507
-    identifier: '"MYRIA_ENROLLED_PATIENTS_20250507"'
+  - name: MYRIA_ENROLLED_PATIENTS_20260507
+    identifier: '"MYRIA_ENROLLED_PATIENTS_20260507"'
     columns:
     - name: HX_ID
       data_type: TEXT
