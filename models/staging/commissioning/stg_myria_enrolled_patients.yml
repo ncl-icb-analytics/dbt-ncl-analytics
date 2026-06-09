@@ -5,6 +5,10 @@ models:
       meta:
         owner:
           name: KateHomer55
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [hx_id, file_date]
     columns:
       - name: hx_id
         description: Doccla patient identifier (hex), join key to the eligible cohort. Not unique across the table - one row per patient per file_date.
