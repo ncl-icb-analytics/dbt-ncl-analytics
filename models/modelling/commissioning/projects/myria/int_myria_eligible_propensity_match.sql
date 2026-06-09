@@ -187,10 +187,11 @@ select
     d.rheumatoid_arthritis,
     d.severe_interstitial_lung_disease
 from demographic_information d
--- Enrolled status from the canonical Myria table, pinned to the 2026-06-03 Doccla file
--- (was raw_reference_myria_enrolled_patients_20260603). One file_date per join to avoid
--- fan-out; switch to the latest file_date once confirmed with Kate.
+-- Enrolled status from the canonical Myria table, using the latest enrolled snapshot.
+-- Filtering to a single file_date keeps one row per patient (the append table holds one
+-- row per patient per file) and auto-advances as new Doccla files are loaded.
 LEFT JOIN (
-    select * from {{ ref('stg_myria_enrolled_patients') }} where file_date = '2026-06-03'
+    select * from {{ ref('stg_myria_enrolled_patients') }}
+    where file_date = (select max(file_date) from {{ ref('stg_myria_enrolled_patients') }})
 ) m ON d.hex_id = m.hx_id
 
