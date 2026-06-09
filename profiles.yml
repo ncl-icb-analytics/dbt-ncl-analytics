@@ -47,11 +47,15 @@ wnl_analytics:
       client_session_keep_alive: true
       query_tag: dbt_analytics_prod
 
-    # Snowflake native execution targets (empty credentials - runs in Snowflake context)
+    # Snowflake native execution targets (runs in the Snowflake session context).
+    # account/user are placeholders, NOT real credentials: native execution uses
+    # the in-session connection and ignores their values, but Fusion's compile-time
+    # metadata introspection rejects an empty account ("260000: account is empty"),
+    # so they must be non-empty.
     snowflake-dev:
       type: snowflake
-      account: ''
-      user: ''
+      account: placeholder
+      user: placeholder
       role: DBT_ADMIN
       database: MODELLING
       schema: DBT_DEV
@@ -62,8 +66,8 @@ wnl_analytics:
 
     snowflake-prod:
       type: snowflake
-      account: ''
-      user: ''
+      account: placeholder
+      user: placeholder
       role: DBT_ADMIN
       database: MODELLING
       schema: DBT_PROD
