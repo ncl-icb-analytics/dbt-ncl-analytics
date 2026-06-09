@@ -63,6 +63,7 @@ SELECT
   has_osteoporosis,
   has_osteoarthritis,
   has_chronic_liver_disease,
+  has_sickle_cell_or_thalassaemia,
   has_palliative_care,
   has_rheumatoid_arthritis,
   COUNT(*) AS patient_count

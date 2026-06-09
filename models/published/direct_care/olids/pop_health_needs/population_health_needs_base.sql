@@ -158,9 +158,10 @@ SELECT
     c.has_osteoporosis,
     c.has_osteoarthritis,
     c.has_chronic_liver_disease,
+    c.has_sickle_cell_or_thalassaemia,
     c.has_palliative_care,
     c.has_rheumatoid_arthritis,
-    
+
     -- Conditions: Summary counts
     c.total_conditions,
     c.total_qof_conditions,

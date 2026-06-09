@@ -26,3 +26,7 @@ models:
         description: Boolean flag indicating whether person is on chronic liver disease register
         tests:
           - not_null
+      - name: has_sickle_cell_or_thalassaemia
+        description: Boolean flag indicating whether person is on sickle cell or thalassaemia register
+        tests:
+          - not_null

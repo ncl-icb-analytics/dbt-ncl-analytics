@@ -451,6 +451,18 @@ WITH condition_union AS (
         latest_diagnosis_date
     FROM {{ ref('fct_person_chronic_liver_disease_register') }}
     WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Sickle Cell or Thalassaemia
+    SELECT
+        person_id,
+        'SICKLE_THAL' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_sickle_cell_or_thalassaemia_register') }}
+    WHERE is_on_register = TRUE
 ),
 
 condition_metadata AS (
