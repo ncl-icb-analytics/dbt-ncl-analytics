@@ -13,11 +13,12 @@
 # dbt itself is the Fusion binary (installed to %USERPROFILE%\.local\bin), NOT a
 # Python package. The .venv exists only for the Python tooling in scripts/.
 
-# Pin a Fusion version to override the default (e.g. '2.0.0-preview.188').
-# Leave empty to track the latest version from versions.json.
+# Fusion engine version. Pinned (via .fusion-version at repo root) to the version
+# Snowflake hosts, so local, CI, and the 5am native build run the same engine.
+# Bump .fusion-version when Snowflake's hosted 2.0.0-preview moves.
+# Set $FusionVersionPin to override locally; fallback is used only if the file is missing.
 $FusionVersionPin = ''
-# Used only if versions.json can't be reached and no pin is set.
-$FusionFallbackVersion = '2.0.0-preview.188'
+$FusionFallbackVersion = '2.0.0-preview.175'
 
 $actions = @()
 $installDir = Join-Path $env:USERPROFILE '.local\bin'
@@ -67,10 +68,11 @@ Write-Host "Checking dbt Fusion engine..." -ForegroundColor Cyan
 
 function Resolve-FusionVersion {
     if ($FusionVersionPin) { return $FusionVersionPin }
-    try {
-        $v = Invoke-RestMethod 'https://public.cdn.getdbt.com/fs/versions.json'
-        if ($v.stable.tag) { return ($v.stable.tag -replace '^v', '') }
-    } catch {}
+    $pinFile = Join-Path $PSScriptRoot '.fusion-version'
+    if (Test-Path $pinFile) {
+        $v = (Get-Content $pinFile -Raw).Trim()
+        if ($v) { return $v }
+    }
     return $FusionFallbackVersion
 }
 
@@ -83,24 +85,15 @@ function Install-Fusion {
 
 try {
     $dbtPresent = [bool](Get-Command dbt -ErrorAction SilentlyContinue)
-    # Throttle the latest-version lookup to once per day (skipped when pinned or missing).
-    $marker = Join-Path $env:TEMP 'wnl_fusion_update_check'
-    $today = (Get-Date).ToString('yyyy-MM-dd')
-    $checkedToday = (Test-Path $marker) -and ((Get-Content $marker -Raw).Trim() -eq $today)
-
-    if (-not $dbtPresent -or $FusionVersionPin -or -not $checkedToday) {
-        $desired = Resolve-FusionVersion
-        $current = if ($dbtPresent) { (dbt --version 2>&1) -join ' ' } else { '' }
-        if ($current -notmatch [regex]::Escape($desired)) {
-            Write-Host "[INFO] Installing dbt Fusion $desired..." -ForegroundColor Cyan
-            Install-Fusion -Version $desired -Update:$dbtPresent
-            if ($env:PATH -notlike "*$installDir*") { $env:PATH = "$installDir;$env:PATH" }
-        } else {
-            Write-Host "[OK] dbt Fusion $desired" -ForegroundColor Green
-        }
-        if (-not $FusionVersionPin) { Set-Content -Path $marker -Value $today }
+    # Resolution is a local file read, so check every launch and (re)install only on mismatch.
+    $desired = Resolve-FusionVersion
+    $current = if ($dbtPresent) { (dbt --version 2>&1) -join ' ' } else { '' }
+    if ($current -notmatch [regex]::Escape($desired)) {
+        Write-Host "[INFO] Installing dbt Fusion $desired..." -ForegroundColor Cyan
+        Install-Fusion -Version $desired -Update:$dbtPresent
+        if ($env:PATH -notlike "*$installDir*") { $env:PATH = "$installDir;$env:PATH" }
     } else {
-        Write-Host "[OK] dbt Fusion checked for updates today" -ForegroundColor Green
+        Write-Host "[OK] dbt Fusion $desired" -ForegroundColor Green
     }
     Write-Host "  $((dbt --version 2>&1) | Select-Object -First 1)" -ForegroundColor Gray
 } catch {
