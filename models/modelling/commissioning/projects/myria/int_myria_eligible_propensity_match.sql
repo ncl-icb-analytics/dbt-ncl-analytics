@@ -43,7 +43,7 @@ with eligibility_files AS (
 , eligibility_information as (
     select 
         patient_id, 
-        {{ hxflake_pseudo_generation('s.patient_id') }} AS hex_id, --THE BELOW SCRIPT IS Safer and production-friendly but the result is the same.
+        {{ hxflake_pseudo_generation('patient_id') }} AS hex_id, --THE BELOW SCRIPT IS Safer and production-friendly but the result is the same.
 --               CASE
 --   WHEN TRY_TO_NUMBER(PATIENT_ID) IS NULL THEN NULL
 --   ELSE
@@ -187,6 +187,10 @@ select
     d.rheumatoid_arthritis,
     d.severe_interstitial_lung_disease
 from demographic_information d
-LEFT JOIN {{ ref('raw_reference_myria_enrolled_patients_20260603') }} m ON d.hex_id = m.hx_id
---left join MODELLING.DBT_RAW.RAW_REFERENCE_MYRIA_ENROLLED_PATIENTS_20260603 m ON d.hex_id = m.hx_id
+-- Enrolled status from the canonical Myria table, pinned to the 2026-06-03 Doccla file
+-- (was raw_reference_myria_enrolled_patients_20260603). One file_date per join to avoid
+-- fan-out; switch to the latest file_date once confirmed with Kate.
+LEFT JOIN (
+    select * from {{ ref('raw_myria_enrolled_patients') }} where file_date = '2026-06-03'
+) m ON d.hex_id = m.hx_id
 
