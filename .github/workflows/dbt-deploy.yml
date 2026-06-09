@@ -194,13 +194,13 @@ jobs:
 
               if file_count == 0 or file_count > 50:
                   print(f"Running full build ({file_count} files changed or manual trigger)")
-                  args = "build --target snowflake-prod"
+                  args = "--log-level-file info build --target snowflake-prod"
               else:
                   # Changed models + downstream (append +)
                   models = [get_model_name(f) + '+' for f in changed_files.split() if f]
                   select = ' '.join(models)
                   print(f"Deploying {file_count} changed models + downstream: {select}")
-                  args = f"build --target snowflake-prod --select {select}"
+                  args = f"--log-level-file info build --target snowflake-prod --select {select}"
 
               # Lift the 1h cap on EXECUTE DBT PROJECT. Both are required:
               #   - ALTER SESSION overrides the account-level STATEMENT_TIMEOUT_IN_SECONDS
