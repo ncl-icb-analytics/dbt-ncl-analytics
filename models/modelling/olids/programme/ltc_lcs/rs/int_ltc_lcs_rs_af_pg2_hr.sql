@@ -15,10 +15,10 @@
 --
 -- Net logic: rule_1 and (rule_2 or rule_3 or (rule_4 and rule_5))
 --
--- Known data gap: vs1 is a dm+d drug group (29711000033114, SCT_DRGGRP) whose children
--- are not yet expanded in the reference tables, so warfarin-type anticoagulants only
--- match via vs2/vs3 (DOACs). Warfarin-only patients are under-captured until drug
--- group expansion lands.
+-- vs1 note: the 'Oral Anticoagulants' dm+d drug group (29711000033114, SCT_DRGGRP)
+-- is unexpanded in the reference tables (expansion gap), so the vs1 arm is
+-- supplemented with BNF section 020802 (oral anticoagulants) via
+-- get_medication_orders, which covers warfarin-type VKAs the valueset misses.
 
 with
 -- Parent population: Patients currently on AF register
@@ -32,6 +32,12 @@ af_register as (
 rule_1_anticoagulants as (
     select person_id
     from ({{ get_ltc_lcs_medication_orders_latest("on_af_reg_pg2_hr_vs1, on_af_reg_pg2_hr_vs2, on_af_reg_pg2_hr_vs3") }})
+    where order_date >= dateadd(month, -6, current_date())
+    union
+    -- vs1 supplement: oral anticoagulants via BNF 2.8.2 (warfarin-type VKAs;
+    -- the dm+d drug group behind vs1 is unexpanded)
+    select distinct person_id
+    from ({{ get_medication_orders(bnf_code='020802') }})
     where order_date >= dateadd(month, -6, current_date())
     union
     select person_id

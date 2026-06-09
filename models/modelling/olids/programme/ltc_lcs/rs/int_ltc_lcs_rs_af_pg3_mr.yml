@@ -21,8 +21,8 @@ models:
         >= 2 (female), score over 2 years old and age > 65, or no score
         and age > 65 (include on pass)
 
-      Known data gap: vs1 (oral anticoagulants) is an unexpanded dm+d drug group;
-      warfarin-only patients are under-captured until drug group expansion lands.
+      vs1 (oral anticoagulants) is an unexpanded dm+d drug group; vs1 arms are
+      supplemented with BNF section 020802 via get_medication_orders.
     config:
       meta:
         owner:

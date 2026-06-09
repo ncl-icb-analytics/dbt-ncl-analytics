@@ -13,8 +13,8 @@ models:
       - Rule 5: latest Cockcroft-Gault < 40, latest body weight < 50,
         Rockwood level 7-9 code or latest Rockwood score >= 7 (include on pass)
 
-      Known data gap: vs1 (oral anticoagulants) is an unexpanded dm+d drug group;
-      warfarin-only patients are under-captured until drug group expansion lands.
+      vs1 (oral anticoagulants) is an unexpanded dm+d drug group; the arm is
+      supplemented with BNF section 020802 via get_medication_orders.
     config:
       meta:
         owner:

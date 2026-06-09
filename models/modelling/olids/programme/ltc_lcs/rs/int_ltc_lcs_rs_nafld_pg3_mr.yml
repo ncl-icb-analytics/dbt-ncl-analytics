@@ -5,7 +5,10 @@ models:
       NAFLD Register Priority Group 3 - Medium Risk.
       NB: NAFLD has no PG1/PG2; PG3 is its only priority group.
 
-      Patients on NAFLD register meeting (latest = latest reading in last 3 years):
+      Patients on the EMIS NAFLD Register v2 (implemented from valuesets
+      nafld_reg_v2_vs1/vs2 over active patients; fct_person_nafld_register's
+      MASLD cluster is roughly half the EMIS register and is not used as the
+      parent until widened) meeting (latest = latest reading in last 3 years):
       - Rule 1: latest NAFLD fibrosis score > 3.25 (include on pass)
       - Rule 2: latest NAFLD fibrosis score > 1.3 and <= 3.25 with latest
         ELF score >= 9.8 (include on pass)
@@ -20,6 +23,8 @@ models:
       - valuesets_have_codes:
           arguments:
             valuesets:
+              - nafld_reg_v2_vs1
+              - nafld_reg_v2_vs2
               - on_nafld_reg_pg3_mr_vs1
               - on_nafld_reg_pg3_mr_vs2
     columns:
