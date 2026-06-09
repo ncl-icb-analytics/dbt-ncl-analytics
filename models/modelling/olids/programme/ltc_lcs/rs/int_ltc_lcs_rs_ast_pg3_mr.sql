@@ -69,7 +69,7 @@ rule_5_saba as (
 
 -- LABA order in last 6 months (rule 6)
 laba_6m as (
-    select person_id
+    select distinct person_id
     from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_adult_reg_pg3_mr_vs5, on_asthma_adult_reg_pg3_mr_vs6") }})
     where order_date >= dateadd(month, -6, current_date())
 ),
