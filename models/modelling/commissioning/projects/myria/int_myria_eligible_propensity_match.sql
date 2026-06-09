@@ -191,6 +191,6 @@ from demographic_information d
 -- (was raw_reference_myria_enrolled_patients_20260603). One file_date per join to avoid
 -- fan-out; switch to the latest file_date once confirmed with Kate.
 LEFT JOIN (
-    select * from {{ ref('raw_myria_enrolled_patients') }} where file_date = '2026-06-03'
+    select * from {{ ref('stg_myria_enrolled_patients') }} where file_date = '2026-06-03'
 ) m ON d.hex_id = m.hx_id
 
