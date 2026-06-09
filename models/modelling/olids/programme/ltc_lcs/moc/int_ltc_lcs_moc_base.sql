@@ -21,7 +21,7 @@ with register_population as (
     union
     select person_id from {{ ref('fct_person_cyp_asthma_register') }}
     union
-    select person_id from {{ ref('fct_person_copd_register') }}
+    select person_id from {{ ref('int_ltc_lcs_copd_register') }}
     union
     select person_id from {{ ref('fct_person_heart_failure_register') }}
     union
