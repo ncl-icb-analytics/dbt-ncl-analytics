@@ -6,17 +6,17 @@ models:
       Excludes PG2 (HR) patients.
 
       Patients on Heart Failure register meeting:
-      - Rule 2: earliest HF code in last 6 months - first diagnosis within
-        6 months (include on pass)
+      - Rule 2: earliest HF code (episode excluding Review/End) in last
+        6 months - first diagnosis within 6 months (include on pass)
       - Rule 3: latest NYHA classification is Class II (include on pass)
       - Rule 4: latest oedema code is ankle/feet oedema (include on pass)
       - Rule 5 (gate): latest LVEF < 50 (exclude on fail)
-      - Rules 6-8: SGLT2/MRA/beta-blocker arms do not change membership in the
-        EMIS search and are not implemented
-      - Rule 9: on the ACE inhibitor pathway (exclude on pass)
+      - Rules 6-8: on SGLT2 / MRA / beta-blocker (include on fail - therapy gap)
+      - Rule 9: on the ACE inhibitor pathway, including persistent ACEi
+        contraindications (XACE_COD cluster, resolved from the EMIS library
+        item via the issue #400 screenshots) - exclude on pass, include on fail
 
-      Known gap: rule 9 references an EMIS library item absent from the XML
-      export; that exclusion arm cannot be implemented.
+      Rule actions verified against the EMIS search screenshots in issue #400.
     config:
       meta:
         owner:
@@ -34,6 +34,14 @@ models:
               - on_hf_reg_pg3_mr_vs4
               - on_hf_reg_pg3_mr_vs5
               - on_hf_reg_pg3_mr_vs6
+              - on_hf_reg_pg3_mr_vs7
+              - on_hf_reg_pg3_mr_vs8
+              - on_hf_reg_pg3_mr_vs9
+              - on_hf_reg_pg3_mr_vs10
+              - on_hf_reg_pg3_mr_vs11
+              - on_hf_reg_pg3_mr_vs12
+              - on_hf_reg_pg3_mr_vs13
+              - on_hf_reg_pg3_mr_vs14
               - on_hf_reg_pg3_mr_vs15
               - on_hf_reg_pg3_mr_vs16
               - on_hf_reg_pg3_mr_vs17
