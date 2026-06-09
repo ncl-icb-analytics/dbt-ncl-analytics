@@ -6,38 +6,15 @@
 --TESTING JESS'S EVALUATION MODEL CREATE FILE FOR PROPENSITY MATCHING Py Script.
 --FIND ALL PATIENTS ELIGIBLE FOR EVALUATION USING LATEST ENROLLED FILE
 --ELIGIBLE FILES ARE ONLY FROM THE HIGH RISK COHORT - NOT THE WHOLE POPULATION.
-with eligibility_files AS ( 
---collect eligible patients who were in all files that have been submitted to RFL so far
---no results for January
-    select *, DATE('22-Jan-2026') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-01-22') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-    --feb extract n=5015
-    select *, date('2026-02-16') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-02-16') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-    --mar extract n=5257
-    select *, date('2026-03-17') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-03-17') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-      --apr extract n=5638
-    select *, date('2026-04-15') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-04-15') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-    --may extract n=5710
-    select *, date('2026-05-15') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-05-15') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    -- TO DO: Add future files pulls as needed
+with eligibility_files AS (
+-- Eligible patients from each high-risk cohort file submitted to RFL. Send dates live in
+-- the myria_eligibility_file_dates seed; for each, take the published cohort as it stood
+-- on that day (the snapshot version valid then), tagged with file_date. Add a future
+-- monthly send by appending a row to the seed - no change to this model.
+    select s.*, f.file_date
+    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} s
+    join {{ ref('myria_eligibility_file_dates') }} f
+      on f.file_date between s.dbt_valid_from and coalesce(s.dbt_valid_to, current_date())
 )
 --n=6061 - add HEX manually (don't use OLIDS in case patients are missing from there). Use macro in DBT for JEX_ID
 , eligibility_information as (
