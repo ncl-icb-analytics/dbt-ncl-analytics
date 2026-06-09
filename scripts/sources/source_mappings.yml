@@ -326,6 +326,17 @@ sources:
     domain: shared
     manual: true
 
+  # MYRIA - Project Myria (BEVC) canonical inputs. Two tables (ENROLLED_PATIENTS,
+  # MATCHED_PATIENTS) loaded by DATA_LAKE__NCL.MYRIA.LOAD_NEW_FILES(). Manual so the
+  # column list is controlled; FILE_DATE versions each upload.
+  - source_name: myria
+    database: DATA_LAKE__NCL
+    schema: MYRIA
+    description: Project Myria (BEVC) canonical inputs - enrolled and propensity-matched patients
+    raw_prefix: raw_myria
+    domain: shared
+    manual: true
+
   # Reference Lookup NCL - Analyst-managed reference datasets
   - source_name: reference_lookup_ncl
     database: MODELLING
