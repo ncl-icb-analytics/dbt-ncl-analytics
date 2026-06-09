@@ -5,153 +5,115 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: LTC LCS: COPD Register*
+# LTC LCS: COPD Register*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: LTC LCS: COPD Register*
-Parent population: Currently registered patients
+## What this search does
 
-## Parent Chain
-- No parent reports.
+Start with currently registered patients. A patient is included when they match any one of Rules 1-6.
 
-## Library Items
-- LTC LCS: COPD Register*: Unknown library item (ee5b135f-b9b2-4ef7-8b51-939a754cf935)
+## Who we start with
 
-## Target Report Logic
-Start with currently registered patients. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD.
+Currently registered patients.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: library item ee5b135f-b9b2-4ef7-8b51-939a754cf935
-- Library item: Unknown library item (ee5b135f-b9b2-4ef7-8b51-939a754cf935)
+### Rule 1 of 6
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date before 1 year ago then Earliest 1 where SNOMED code IN: COPD_COD
-- Clinical Codes [EVENTS]
-  - ValueSets: `copd_reg_vs1`, `copd_reg_vs2`
-  - Filter: Date IN before 1 year ago
-    - To: before 1 year ago
-  - Restriction: Earliest 1 where SNOMED code IN: COPD_COD
-    - Condition: READCODE IN | COPD_COD
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: OR
-- Summary: Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year OR Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year
-- Clinical Codes [EVENTS]
-  - ValueSets: `copd_reg_vs1`, `copd_reg_vs2`
-  - Filter: Date IN within the last 1 year
-    - From: within the last 1 year
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `copd_reg_vs3`
-      - Relationship: DATE at least 93 days before and at most 186 days after parent record's DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `copd_reg_vs3`
-      - Filter: Value IN < 0.7
-        - To: < 0.7
-      - Filter: Date
-        - To: <=
-      - Restriction: Earliest 1 where numeric value < 0.7
-        - Condition: NUMERIC_VALUE IN | < 0.7
-- Clinical Codes [EVENTS]
-  - ValueSets: `copd_reg_vs1`, `copd_reg_vs2`
-  - Filter: Date IN within the last 1 year
-    - From: within the last 1 year
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `copd_reg_vs4`, `copd_reg_vs5`
-      - Relationship: DATE at least 93 days before and at most 186 days after parent record's DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `copd_reg_vs4`
-      - Filter: Date
-        - To: <=
-      - Restriction: Earliest 1
-        - Condition: READCODE IN
+A patient matches this rule when:
+- They match the EMIS library item `ee5b135f-b9b2-4ef7-8b51-939a754cf935` (see Caveats)
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD AND Patient Details [PATIENTS] where Registration Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `copd_reg_vs1`, `copd_reg_vs2`
-  - Filter: Date IN within the last 1 year
-    - From: within the last 1 year
-  - Restriction: Earliest 1 where SNOMED code IN: COPD_COD
-    - Condition: READCODE IN | COPD_COD
-- Patient Details [PATIENTS]
-  - Filter: Registration Date IN within the last 12 months
-    - From: within the last 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `copd_reg_vs3`
-      - Relationship: DATE at least 93 days before and at most 186 days after parent record's GMS_DATE_OF_REGISTRATION
-      - Filter: Clinical Code
-        - Filter ValueSets: `copd_reg_vs3`
-      - Filter: Value IN < 0.7
-        - To: < 0.7
-      - Filter: Date
-        - To: <=
-      - Restriction: Earliest 1
+### Rule 2 of 6
 
-### Rule 5 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD AND Patient Details [PATIENTS] where Registration Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `copd_reg_vs1`, `copd_reg_vs2`
-  - Filter: Date IN within the last 1 year
-    - From: within the last 1 year
-  - Restriction: Earliest 1 where SNOMED code IN: COPD_COD
-    - Condition: READCODE IN | COPD_COD
-- Patient Details [PATIENTS]
-  - Filter: Registration Date IN within the last 12 months
-    - From: within the last 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `copd_reg_vs4`
-      - Relationship: DATE at least 93 days before and at most 186 days after parent record's GMS_DATE_OF_REGISTRATION
-      - Filter: Clinical Code
-        - Filter ValueSets: `copd_reg_vs4`
-      - Filter: Date
-        - To: <=
-      - Restriction: Earliest 1
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
-### Rule 6 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD
-- Clinical Codes [EVENTS]
-  - ValueSets: `copd_reg_vs1`, `copd_reg_vs2`
-  - Filter: Date IN within the last 1 year
-    - From: within the last 1 year
-  - Restriction: Earliest 1 where SNOMED code IN: COPD_COD
-    - Condition: READCODE IN | COPD_COD
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `copd_reg_vs1` (1 code — cluster COPD_COD), or `copd_reg_vs2` (1 code — cluster COPDRES_COD)
+  - Where date before 1 year ago
+  - Keep only the earliest matching record, and require its code to be in: COPD_COD
 
+### Rule 3 of 6
 
-## ValueSet Friendly Names
-### LTC LCS: COPD Register*
-- `copd_reg_vs1` (SNOMED, 1 codes): Refset: 999011571000230107 | Cluster: COPD_COD
-- `copd_reg_vs3` (SNOMED, 1 codes): Refset: 999020251000230104 | Cluster: FEV1FVC_COD
-- `copd_reg_vs4` (SNOMED, 1 codes): Refset: 999020291000230109 | Cluster: FEV1FVCL70_COD
-- `copd_reg_vs5` (SNOMED, 1 codes): UK NHS primary care data extraction - General practice data extraction - FEV1 FVC ratio below 70 per cent simple reference set
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
+
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `copd_reg_vs1` (1 code — cluster COPD_COD), or `copd_reg_vs2` (1 code — cluster COPDRES_COD)
+  - Where date within the last 1 year
+  - Must also have a linked record (its date at least 93 days before and at most 186 days after the date of the record above):
+    - **Clinical Codes** (clinical events)
+      - Code in: `copd_reg_vs3` (1 code — cluster FEV1FVC_COD)
+      - Where numeric value < 0.7
+      - Keep only the earliest matching record, and require its numeric value < 0.7
+- **Clinical Codes** (clinical events)
+  - Code in: `copd_reg_vs1` (1 code — cluster COPD_COD), or `copd_reg_vs2` (1 code — cluster COPDRES_COD)
+  - Where date within the last 1 year
+  - Must also have a linked record (its date at least 93 days before and at most 186 days after the date of the record above):
+    - **Clinical Codes** (clinical events)
+      - Code in: `copd_reg_vs4` (1 code — cluster FEV1FVCL70_COD), or `copd_reg_vs5` (1 code)
+      - Keep only the earliest matching record
+
+### Rule 4 of 6
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `copd_reg_vs1` (1 code — cluster COPD_COD), or `copd_reg_vs2` (1 code — cluster COPDRES_COD)
+  - Where date within the last 1 year
+  - Keep only the earliest matching record, and require its code to be in: COPD_COD
+- **Patient Details**
+  - Where registration date within the last 12 months
+  - Must also have a linked record (its date at least 93 days before and at most 186 days after the registration date of the record above):
+    - **Clinical Codes** (clinical events)
+      - Code in: `copd_reg_vs3` (1 code — cluster FEV1FVC_COD)
+      - Where numeric value < 0.7
+      - Keep only the earliest matching record
+
+### Rule 5 of 6
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 6.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `copd_reg_vs1` (1 code — cluster COPD_COD), or `copd_reg_vs2` (1 code — cluster COPDRES_COD)
+  - Where date within the last 1 year
+  - Keep only the earliest matching record, and require its code to be in: COPD_COD
+- **Patient Details**
+  - Where registration date within the last 12 months
+  - Must also have a linked record (its date at least 93 days before and at most 186 days after the registration date of the record above):
+    - **Clinical Codes** (clinical events)
+      - Code in: `copd_reg_vs4` (1 code — cluster FEV1FVCL70_COD)
+      - Keep only the earliest matching record
+
+### Rule 6 of 6
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `copd_reg_vs1` (1 code — cluster COPD_COD), or `copd_reg_vs2` (1 code — cluster COPDRES_COD)
+  - Where date within the last 1 year
+  - Keep only the earliest matching record, and require its code to be in: COPD_COD
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: COPD Register* | `copd_reg_vs1` | COPD_COD | SNOMED | 1 | Refset: 999011571000230107 | 95fd66a2 |
+| LTC LCS: COPD Register* | `copd_reg_vs2` | COPDRES_COD | SNOMED | 1 | Refset: 999009131000230100 | c378d825 |
+| LTC LCS: COPD Register* | `copd_reg_vs3` | FEV1FVC_COD | SNOMED | 1 | Refset: 999020251000230104 | 858d7625 |
+| LTC LCS: COPD Register* | `copd_reg_vs4` | FEV1FVCL70_COD | SNOMED | 1 | Refset: 999020291000230109 | faf72240 |
+| LTC LCS: COPD Register* | `copd_reg_vs5` |  | SNOMED | 1 | UK NHS primary care data extraction - General practice data extraction - FEV1... | 0a5a44d1 |
+
+## Caveats
+
+- This search references the EMIS library item `ee5b135f-b9b2-4ef7-8b51-939a754cf935`, whose logic is not included in this XML export. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

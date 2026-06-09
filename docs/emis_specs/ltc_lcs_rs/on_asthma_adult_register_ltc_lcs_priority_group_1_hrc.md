@@ -5,44 +5,43 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*
+# On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*
-Parent population: Based on "LTC LCS: Asthma Adult Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Asthma Adult Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 18 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues [MEDICATION_ISSUES] with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+Start with the patients found by "LTC LCS: Asthma Adult Register*" (see below). A patient is included when they match Rule 1.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: asthma adult register*" search results. Finally include patients who match Medication Issues [MEDICATION_ISSUES] with Omalizumab, Mepolizumab, Reslizumab +1 more where Date of Issue within the last 12 months.
+1. **LTC LCS: Asthma Adult Register*** — Start with currently registered patients. Require Patient Details where Age at least 18 years old. Include patients who match Clinical Codes with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Medication Issues [MEDICATION_ISSUES] with Omalizumab, Mepolizumab, Reslizumab +1 more where Date of Issue within the last 12 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Medication Issues [MEDICATION_ISSUES] with Omalizumab, Mepolizumab, Reslizumab +1 more where Date of Issue within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg1_hrc_vs1`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg1_hrc_vs1`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS: Asthma Adult Register*
-- `asthma_adult_reg_vs1` (SNOMED, 1 codes): Refset: 999010051000230100 | Cluster: ASTRES_COD
-- `asthma_adult_reg_vs2` (SNOMED, 1 codes): Refset: 999012891000230104 | Cluster: AST_COD
-- `asthma_adult_reg_vs3` (SNOMED, 521 codes): Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more | Cluster: ASTTRT_COD
-### On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*
-- `on_asthma_adult_reg_pg1_hrc_vs1` (SCT Const, 4 codes): Omalizumab, Mepolizumab, Reslizumab +1 more
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg1_hrc_vs1` (4 codes)
+  - Where drug code in `on_asthma_adult_reg_pg1_hrc_vs1` (4 codes)
+  - Where issue date within the last 12 months
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs1` | ASTRES_COD | SNOMED | 1 | Refset: 999010051000230100 | 0cecb4fb |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs2` | AST_COD | SNOMED | 1 | Refset: 999012891000230104 | b6f202b4 |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs3` | ASTTRT_COD | SNOMED | 521 | Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals L... | d78c07e6 |
+| On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)* | `on_asthma_adult_reg_pg1_hrc_vs1` |  | SCT Const | 4 | Omalizumab, Mepolizumab, Reslizumab +1 more | b42586ad |
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

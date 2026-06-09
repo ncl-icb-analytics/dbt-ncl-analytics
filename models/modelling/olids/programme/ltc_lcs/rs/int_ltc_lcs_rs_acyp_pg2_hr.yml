@@ -11,13 +11,15 @@ models:
       - Rule 1: latest child protection status is 'on protection register',
         or latest child-in-need status is 'in need'
       - Rule 2: emergency asthma admission code in last 12 months
-      - Rule 3: acute exacerbation code in last 12 months
-      - Rule 4: prednisolone order in last 12 months
+      - Rule 3: more than 2 acute exacerbation codes in last 12 months
+      - Rule 4: >= 2 prednisolone orders in last 12 months
       - Rule 5: theophylline order in last 12 months
-      - Rule 6: SABA order in last 3 months
+      - Rule 6: >= 3 SABA orders in last 3 months
       - Rule 7: LABA order in last 12 months
       - Rule 8: no ICS in last 12 months with SABA in last 3 months
-        (subsumed by rule 6, kept for fidelity)
+
+      Issue counts follow the live EMIS search definitions; the agent-API
+      parse of the R5 XML drops count restrictions.
     config:
       meta:
         owner:

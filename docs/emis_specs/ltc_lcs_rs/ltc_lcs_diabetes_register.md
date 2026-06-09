@@ -5,61 +5,51 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: LTC LCS: Diabetes Register*
+# LTC LCS: Diabetes Register*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: LTC LCS: Diabetes Register*
-Parent population: Currently registered patients
+## What this search does
 
-## Parent Chain
-- No parent reports.
+Start with currently registered patients. Patients must match Rule 1 to stay in. A patient is included when they match Rule 2.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 17 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999004691000230108 then Latest 1.
+Currently registered patients.
 
-Boolean logic:
-(Patient Details [PATIENTS] where Age at least 17 years old) AND (Clinical Codes [EVENTS] with Refset: 999004691000230108 then Latest 1)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: AND
-- Summary: Must match: Patient Details [PATIENTS] where Age at least 17 years old
-- Patient Details [PATIENTS]
-  - Filter: Age IN at least 17 years old
-    - From: at least 17 years old
+### Rule 1 of 2
 
-### Rule 2 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Clinical Codes [EVENTS] with Refset: 999004691000230108 then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `dm_reg_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `dm_reg_vs1`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1
-  - Linked criterion:
-    - Clinical Codes [EVENTS] (NOT)
-      - ValueSets: `dm_reg_vs2`
-      - Relationship: DATE after parent record's DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `dm_reg_vs2`
-      - Filter: Date
-        - To: <=
-      - Restriction: Latest 1
+Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
+A patient matches this rule when:
+- **Patient Details**
+  - Where age at least 17 years old
 
-## ValueSet Friendly Names
-### LTC LCS: Diabetes Register*
-- `dm_reg_vs1` (SNOMED, 1 codes): Refset: 999004691000230108 | Cluster: DM_COD
-- `dm_reg_vs2` (SNOMED, 1 codes): Refset: 999003371000230102 | Cluster: DMRES_COD
+### Rule 2 of 2
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `dm_reg_vs1` (1 code — cluster DM_COD)
+  - Keep only the latest matching record
+  - Must also have a linked record (its date after the date of the record above):
+    - **Clinical Codes** (clinical events) — patient must NOT have a matching record
+      - Code in: `dm_reg_vs2` (1 code — cluster DMRES_COD)
+      - Keep only the latest matching record
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Diabetes Register* | `dm_reg_vs1` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| LTC LCS: Diabetes Register* | `dm_reg_vs2` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

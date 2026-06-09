@@ -5,121 +5,93 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)*
+# On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)*
-Parent population: Based on "LTC LCS: Stroke/TIA Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Stroke/TIA Register*: Start with currently registered patients. Finally include patients who match Stroke/TIA Register (library item d4e6f787-dbce-4f0b-9f3f-498808ebad42).
-  Library refs: Stroke/TIA Register (d4e6f787-dbce-4f0b-9f3f-498808ebad42)
+Start with the patients found by "LTC LCS: Stroke/TIA Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rules 1 and 4 are excluded. A patient is included when they match Rule 3. Rule 5 includes only patients who do NOT match it.
 
-## Library Items
-- LTC LCS: Stroke/TIA Register*: Stroke/TIA Register (d4e6f787-dbce-4f0b-9f3f-498808ebad42); wrapper reports: LTC LCS: Stroke/TIA Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: stroke/tia register*" search results. Require Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 where Date before 1 year ago. Exclude patients who match Patients included in search On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* OR patients included in search On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)*; Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months OR Medication Courses [MEDICATION_COURSES] with Atorvastatin, Simvastatin, Fluvastatin +1 more. Finally include patients who do not match Medication Issues [MEDICATION_ISSUES] with Refset: 12464001000001103 then Latest 1 where issue date > today - 12 months OR Clinical Codes [EVENTS] with Refset: 12464001000001103 then Latest 1 where date > today - 12 months OR Clinical Codes [EVENTS] with Statin declined then Latest 1 where date > today - 1 year.
+1. **LTC LCS: Stroke/TIA Register*** — Start with currently registered patients. Include patients who match Stroke/TIA Register (library item d4e6f787-dbce-4f0b-9f3f-498808ebad42).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 where Date before 1 year ago) AND NOT (patients included in search On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* OR patients included in search On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)*) AND NOT (Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months OR Medication Courses [MEDICATION_COURSES] with Atorvastatin, Simvastatin, Fluvastatin +1 more) AND NOT (Medication Issues [MEDICATION_ISSUES] with Refset: 12464001000001103 then Latest 1 where issue date > today - 12 months OR Clinical Codes [EVENTS] with Refset: 12464001000001103 then Latest 1 where date > today - 12 months OR Clinical Codes [EVENTS] with Statin declined then Latest 1 where date > today - 1 year)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: patients included in search On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* OR patients included in search On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)*
-- Population ref: On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* (f352f100-8bef-45f7-a6f5-95616b326015)
-- Population ref: On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)* (cea8e923-831d-4e42-89e2-9f409b510f6d)
+### Rule 1 of 5
 
-### Rule 2 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: AND
-- Summary: Must match: Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 where Date before 1 year ago
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_stroketia_reg_pg3_mr_vs1`, `on_stroketia_reg_pg3_mr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_stroketia_reg_pg3_mr_vs1`, `on_stroketia_reg_pg3_mr_vs2`
-  - Filter: Date IN before 1 year ago
-    - To: before 1 year ago
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more then Latest 1 where numeric value > 2.5
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_stroketia_reg_pg3_mr_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_stroketia_reg_pg3_mr_vs3`
-  - Restriction: Latest 1 where numeric value > 2.5
-    - Condition: NUMERIC_VALUE IN | > 2.5
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)***
+- They appear in the results of the search **On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)***
 
-### Rule 4 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months OR Medication Courses [MEDICATION_COURSES] with Atorvastatin, Simvastatin, Fluvastatin +1 more
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_stroketia_reg_pg3_mr_vs4`
-  - Filter: Drug
-    - Filter ValueSets: `on_stroketia_reg_pg3_mr_vs4`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Courses [MEDICATION_COURSES]
-  - ValueSets: `on_stroketia_reg_pg3_mr_vs5`
-  - Filter: Course Status (Current, Past etc)
-  - Filter: Prescription Type
-  - Filter: Drug
-    - Filter ValueSets: `on_stroketia_reg_pg3_mr_vs5`
+### Rule 2 of 5
 
-### Rule 5 (Additional)
-- Clause type: include-if-not-match
-- Pass: Exclude
-- Fail: Include
-- Operator: OR
-- Summary: Included if it does not match: Medication Issues [MEDICATION_ISSUES] with Refset: 12464001000001103 then Latest 1 where issue date > today - 12 months OR Clinical Codes [EVENTS] with Refset: 12464001000001103 then Latest 1 where date > today - 12 months OR Clinical Codes [EVENTS] with Statin declined then Latest 1 where date > today - 1 year
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_stroketia_reg_pg3_mr_vs6`
-  - Filter: Drug
-    - Filter ValueSets: `on_stroketia_reg_pg3_mr_vs6`
-  - Filter: Date of Issue
-    - To: <=
-  - Restriction: Latest 1 where issue date > today - 12 months
-    - Condition: ISSUE_DATE IN | > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_stroketia_reg_pg3_mr_vs6`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_stroketia_reg_pg3_mr_vs6`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_stroketia_reg_pg3_mr_vs7`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_stroketia_reg_pg3_mr_vs7`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where date > today - 1 year
-    - Condition: DATE IN | > today - 1 year
+Patients **must match** this rule to stay in. Those who match continue to Rule 3; those who do not are excluded.
 
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_stroketia_reg_pg3_mr_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg3_mr_vs2` (1 code — cluster TIA_COD)
+  - Where date before 1 year ago
 
-## ValueSet Friendly Names
-### LTC LCS: Stroke/TIA Register*
-- None
-### On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)*
-- `on_stroketia_reg_pg3_mr_vs1` (SNOMED, 1 codes): Refset: 999005531000230105 | Cluster: STRK_COD
-- `on_stroketia_reg_pg3_mr_vs2` (SNOMED, 1 codes): Refset: 999005291000230109 | Cluster: TIA_COD
-- `on_stroketia_reg_pg3_mr_vs3` (SNOMED, 4 codes): Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more
-- `on_stroketia_reg_pg3_mr_vs4` (SCT_PREP, 6 codes): Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more
-- `on_stroketia_reg_pg3_mr_vs5` (SCT Const, 4 codes): Atorvastatin, Simvastatin, Fluvastatin +1 more
-- `on_stroketia_reg_pg3_mr_vs6` (SNOMED, 1 codes): Refset: 12464001000001103 | Cluster: STAT_COD
-- `on_stroketia_reg_pg3_mr_vs7` (SNOMED, 1 codes): Statin declined | Cluster: STATINDEC_COD
+### Rule 3 of 5
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_stroketia_reg_pg3_mr_vs3` (4 codes)
+  - Keep only the latest matching record, and require its numeric value > 2.5
+
+### Rule 4 of 5
+
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 5.
+
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_stroketia_reg_pg3_mr_vs4` (6 codes)
+  - Where drug code in `on_stroketia_reg_pg3_mr_vs4` (6 codes)
+  - Where issue date within the last 6 months
+- **Medication Courses**
+  - Code in: `on_stroketia_reg_pg3_mr_vs5` (4 codes)
+  - Where drug code in `on_stroketia_reg_pg3_mr_vs5` (4 codes)
+
+### Rule 5 of 5
+
+Final rule: patients who match are **excluded**; everyone else is included.
+
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_stroketia_reg_pg3_mr_vs6` (1 code — cluster STAT_COD)
+  - Where drug code in `on_stroketia_reg_pg3_mr_vs6` (1 code — cluster STAT_COD)
+  - Keep only the latest matching record, and require its issue date > today - 12 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_stroketia_reg_pg3_mr_vs6` (1 code — cluster STAT_COD)
+  - Keep only the latest matching record, and require its date > today - 12 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_stroketia_reg_pg3_mr_vs7` (1 code — cluster STATINDEC_COD)
+  - Keep only the latest matching record, and require its date > today - 1 year
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | `on_stroketia_reg_pg3_mr_vs1` | STRK_COD | SNOMED | 1 | Refset: 999005531000230105 | c8a23b04 |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | `on_stroketia_reg_pg3_mr_vs2` | TIA_COD | SNOMED | 1 | Refset: 999005291000230109 | babfa5e0 |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | `on_stroketia_reg_pg3_mr_vs3` |  | SNOMED | 4 | Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Se... | 561cf433 |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | `on_stroketia_reg_pg3_mr_vs4` |  | SCT_PREP | 6 | Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), ... | dd8f85b7 |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | `on_stroketia_reg_pg3_mr_vs5` |  | SCT Const | 4 | Atorvastatin, Simvastatin, Fluvastatin +1 more | 61715e8d |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | `on_stroketia_reg_pg3_mr_vs6` | STAT_COD | SNOMED | 1 | Refset: 12464001000001103 | 2ab5ff0c |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | `on_stroketia_reg_pg3_mr_vs7` | STATINDEC_COD | SNOMED | 1 | Statin declined | ac08be53 |
+
+## Caveats
+
+- LTC LCS: Stroke/TIA Register* references the EMIS library item `d4e6f787-dbce-4f0b-9f3f-498808ebad42`, whose logic is not included in this XML export. It is likely **Stroke/TIA Register** (inferred from wrapper report "LTC LCS: Stroke/TIA Register*"), but this is not certain. Verify it in EMIS before implementing.
+- Some code lists exclude specific codes. See `exceptions.csv` in the extraction for the excluded codes and whether each was applied.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

@@ -5,45 +5,41 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: LTC LCS: CKD Register*
+# LTC LCS: CKD Register*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: LTC LCS: CKD Register*
-Parent population: Currently registered patients
+## What this search does
 
-## Parent Chain
-- No parent reports.
+Start with currently registered patients. Patients must match Rule 1 to stay in. A patient is included when they match Rule 2.
 
-## Library Items
-- LTC LCS: CKD Register*: Unknown library item (c913f5a7-1256-4de6-871e-23650e72765e)
+## Who we start with
 
-## Target Report Logic
-Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 18 years old. Finally include patients who match Library item c913f5a7-1256-4de6-871e-23650e72765e.
+Currently registered patients.
 
-Boolean logic:
-(Patient Details [PATIENTS] where Age at least 18 years old) AND (library item c913f5a7-1256-4de6-871e-23650e72765e)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: AND
-- Summary: Must match: Patient Details [PATIENTS] where Age at least 18 years old
-- Patient Details [PATIENTS]
-  - Filter: Age IN at least 18 years old
-    - From: at least 18 years old
+### Rule 1 of 2
 
-### Rule 2 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: library item c913f5a7-1256-4de6-871e-23650e72765e
-- Library item: Unknown library item (c913f5a7-1256-4de6-871e-23650e72765e)
+Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
+A patient matches this rule when:
+- **Patient Details**
+  - Where age at least 18 years old
 
-## ValueSet Friendly Names
-### LTC LCS: CKD Register*
-- None
+### Rule 2 of 2
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when:
+- They match the EMIS library item `c913f5a7-1256-4de6-871e-23650e72765e` (see Caveats)
+
+## Code lists used
+
+None.
+
+## Caveats
+
+- This search references the EMIS library item `c913f5a7-1256-4de6-871e-23650e72765e`, whose logic is not included in this XML export. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

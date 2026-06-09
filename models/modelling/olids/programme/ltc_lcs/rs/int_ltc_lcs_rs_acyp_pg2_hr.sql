@@ -9,13 +9,17 @@
 --   register' (vs2), or latest child-in-need status (vs3) is 'Child in need'
 --   (vs4) -> include
 -- - Rule 2: emergency asthma admission code (vs5) in last 12 months -> include
--- - Rule 3: acute exacerbation code (vs6) in last 12 months -> include
--- - Rule 4: prednisolone (vs7) order in last 12 months -> include
+-- - Rule 3: > 2 acute exacerbation codes (vs6) in last 12 months -> include
+-- - Rule 4: >= 2 prednisolone (vs7) orders in last 12 months -> include
 -- - Rule 5: theophylline/aminophylline (vs8) order in last 12 months -> include
--- - Rule 6: SABA (vs9) order in last 3 months -> include
+-- - Rule 6: >= 3 SABA (vs9) orders in last 3 months -> include
 -- - Rule 7: LABA (vs10 bambuterol, vs11 formoterol products) in last 12 months -> include
 -- - Rule 8: no ICS (vs12) in last 12 months and SABA (vs9) in last 3 months
---   -> include, else exclude (subsumed by rule 6, kept for fidelity)
+--   -> include, else exclude
+--
+-- Issue-count note: the agent-API parse of the R5 XML drops issue-count
+-- restrictions; counts implemented per the live EMIS search definitions
+-- (issue #396), consistent with the adult asthma models.
 
 with
 -- Parent population: CYP asthma register, excluding patients on any other
@@ -74,18 +78,22 @@ rule_2_emergency_admission as (
     where clinical_effective_date >= dateadd(month, -12, current_date())
 ),
 
--- Rule 3: acute exacerbation code in last 12 months
+-- Rule 3: more than 2 acute exacerbation codes in last 12 months
 rule_3_exacerbation as (
-    select distinct person_id
+    select person_id
     from ({{ get_ltc_lcs_observations("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs6") }})
     where clinical_effective_date >= dateadd(month, -12, current_date())
+    group by person_id
+    having count(distinct observation_id) > 2
 ),
 
--- Rule 4: prednisolone order in last 12 months
+-- Rule 4: >= 2 prednisolone orders in last 12 months
 rule_4_prednisolone as (
-    select distinct person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs7") }})
+    select person_id
+    from ({{ get_ltc_lcs_medication_orders("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs7") }})
     where order_date >= dateadd(month, -12, current_date())
+    group by person_id
+    having count(distinct medication_order_id) >= 2
 ),
 
 -- Rule 5: theophylline order in last 12 months
@@ -95,17 +103,32 @@ rule_5_theophylline as (
     where order_date >= dateadd(month, -12, current_date())
 ),
 
--- Rule 6: SABA order in last 3 months
+-- Rule 6: >= 3 SABA orders in last 3 months
 rule_6_saba as (
-    select distinct person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs9") }})
+    select person_id
+    from ({{ get_ltc_lcs_medication_orders("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs9") }})
     where order_date >= dateadd(month, -3, current_date())
+    group by person_id
+    having count(distinct medication_order_id) >= 3
 ),
 
 -- Rule 7: LABA order in last 12 months
 rule_7_laba as (
     select distinct person_id
     from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs10, on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs11") }})
+    where order_date >= dateadd(month, -12, current_date())
+),
+
+-- Rule 8 arms: any SABA order in last 3 months, no ICS order in last 12 months
+saba_any_3m as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs9") }})
+    where order_date >= dateadd(month, -3, current_date())
+),
+
+ics_12m as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_cyp_reg_pg2_hr_v2_oct_2025_vs12") }})
     where order_date >= dateadd(month, -12, current_date())
 ),
 
@@ -120,6 +143,7 @@ patient_rules as (
         (r5.person_id is not null) as rule_5_theophylline,
         (r6.person_id is not null) as rule_6_saba,
         (r7.person_id is not null) as rule_7_laba,
+        (s3.person_id is not null and i12.person_id is null) as rule_8_saba_no_ics,
         case
             when r1.person_id is not null
                 or r2.person_id is not null
@@ -128,6 +152,7 @@ patient_rules as (
                 or r5.person_id is not null
                 or r6.person_id is not null
                 or r7.person_id is not null
+                or (s3.person_id is not null and i12.person_id is null)
                 then 'Included'
             else 'Excluded'
         end as final_status
@@ -139,6 +164,8 @@ patient_rules as (
     left join rule_5_theophylline r5 on cr.person_id = r5.person_id
     left join rule_6_saba r6 on cr.person_id = r6.person_id
     left join rule_7_laba r7 on cr.person_id = r7.person_id
+    left join saba_any_3m s3 on cr.person_id = s3.person_id
+    left join ics_12m i12 on cr.person_id = i12.person_id
 )
 
 -- Final result: included patients only

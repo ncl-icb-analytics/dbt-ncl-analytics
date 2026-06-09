@@ -9,14 +9,13 @@ models:
       Patients meeting any of:
       - Rule 2: acute exacerbation of asthma code in last 12 months
       - Rule 3: prednisolone order in last 12 months
-      - Rule 4: antibiotics order in last 12 months
-      - Rule 5: SABA order in last 12 months
+      - Rule 4: >= 2 antibiotics orders in last 12 months
+      - Rule 5: >= 6 SABA orders in last 12 months
       - Rule 6: LABA in last 6 months without ICS in last 6 months
-      - Rule 7: SABA in last 12 months without ICS in last 6 months
-        (subsumed by rule 5 in the R5 XML, kept for fidelity)
+      - Rule 7: >= 3 SABA orders in last 12 months without ICS in last 6 months
 
-      The R5 EMIS XML has no issue-count restrictions (the GitHub issue text
-      mentions >= 2 antibiotics / >= 6 SABA / >= 3 SABA).
+      Issue counts follow the live EMIS search definitions; the agent-API
+      parse of the R5 XML drops count restrictions.
     config:
       meta:
         owner:

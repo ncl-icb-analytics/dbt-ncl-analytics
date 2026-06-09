@@ -5,197 +5,133 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: Priority Group 2a (ICB)
+# Priority Group 2a (ICB)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
+Description: BP: 160/100 or 150/95 Excluded
 
-Target report: Priority Group 2a (ICB)
-Parent population: Based on "LTC LCS: Hypertension Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Hypertension Register*: Start with currently registered patients. Finally include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
-  Library refs: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877)
+Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rule 1 to stay in. Patients matching Rules 2-3 are excluded. Rule 4 includes only patients who do NOT match it.
 
-## Library Items
-- LTC LCS: Hypertension Register*: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877); wrapper reports: LTC LCS: Hypertension Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: hypertension register*" search results. Require Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months. Exclude patients who match Patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC); Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months. Finally include patients who do not match Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months.
+1. **LTC LCS: Hypertension Register*** — Start with currently registered patients. Include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months) AND NOT (patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC)) AND NOT (Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months) AND NOT (Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2a_icb_vs1`, `priority_group_2a_icb_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2a_icb_vs1`, `priority_group_2a_icb_vs2`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
+### Rule 1 of 4
 
-### Rule 2 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC)
-- Population ref: On Hypertension Register- LTC LCS Priority Group 1 (HRC) (4968805e-6847-40bf-90f9-385f19192d9d)
+Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
-### Rule 3 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2a_icb_vs1`, `priority_group_2a_icb_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2a_icb_vs1`, `priority_group_2a_icb_vs2`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
-  - Restriction: Latest 100
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2a_icb_vs3`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2a_icb_vs3`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2a_icb_vs4`, `priority_group_2a_icb_vs1`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2a_icb_vs4`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where SNOMED code IN: CLINBP_COD
-            - Condition: READCODE IN | CLINBP_COD
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2a_icb_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2a_icb_vs1`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2a_icb_vs5`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2a_icb_vs5`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2a_icb_vs6`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2a_icb_vs6`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value >= 1 and <= 100
-            - Condition: NUMERIC_VALUE IN | >= 1 and <= 100
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `priority_group_2a_icb_vs5`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `priority_group_2a_icb_vs5`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value >= 1 and <= 160
-                - Condition: NUMERIC_VALUE IN | >= 1 and <= 160
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2a_icb_vs1` (1 code — cluster CLINBP_COD), or `priority_group_2a_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months
 
-### Rule 4 (Additional)
-- Clause type: include-if-not-match
-- Pass: Exclude
-- Fail: Include
-- Operator: AND
-- Summary: Included if it does not match: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2a_icb_vs1`, `priority_group_2a_icb_vs2`
-  - Restriction: Latest 1
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2a_icb_vs2`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2a_icb_vs2`
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2a_icb_vs5`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2a_icb_vs5`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `priority_group_2a_icb_vs7`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `priority_group_2a_icb_vs7`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value > 0
-                - Condition: NUMERIC_VALUE IN | > 0
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2a_icb_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2a_icb_vs2`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2a_icb_vs5`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2a_icb_vs5`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2a_icb_vs7`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2a_icb_vs7`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value >= 1 and <= 95
-            - Condition: NUMERIC_VALUE IN | >= 1 and <= 95
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `priority_group_2a_icb_vs5`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `priority_group_2a_icb_vs5`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value >= 1 and <= 150
-                - Condition: NUMERIC_VALUE IN | >= 1 and <= 150
+### Rule 2 of 4
 
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 3.
 
-## ValueSet Friendly Names
-### LTC LCS: Hypertension Register*
-- None
-### Priority Group 2a (ICB)
-- `priority_group_2a_icb_vs1` (SNOMED, 1 codes): Refset: 999036281000230108 | Cluster: CLINBP_COD
-- `priority_group_2a_icb_vs2` (SNOMED, 5 codes): 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more | Cluster: HOMEAMBBP_COD
-- `priority_group_2a_icb_vs3` (SNOMED, 49 codes): Minimum systolic blood pressure, Systemic blood pressure, SBP - Systemic blood pressure +46 more | Cluster: Systolic Blood Pressure
-- `priority_group_2a_icb_vs4` (SNOMED, 45 codes): Minimum diastolic blood pressure, Minimum day interval diastolic blood pressure, Minimum 24 hour diastolic blood pressure +42 more | Cluster: Diastolic Blood Pressure
-- `priority_group_2a_icb_vs5` (SNOMED, 36 codes): Systemic blood pressure, SBP - Systemic blood pressure, Lying systolic blood pressure +33 more | Cluster: Systolic Blood Pressure
-- `priority_group_2a_icb_vs6` (SNOMED, 32 codes): Increased diastolic arterial pressure, High diastolic arterial pressure, Increased diastolic blood pressure +29 more | Cluster: Diastolic Blood Pressure
-- `priority_group_2a_icb_vs5` (SNOMED, 13 codes): Minimum systolic blood pressure, Average home systolic blood pressure, Average day interval systolic blood pressure +10 more | Cluster: Systolic Blood Pressure
-- `priority_group_2a_icb_vs7` (SNOMED, 13 codes): Minimum diastolic blood pressure, Average 24 hour diastolic blood pressure, Ambulatory diastolic blood pressure +10 more | Cluster: Diastolic Blood Pressure
+A patient matches this rule when:
+- They appear in the results of the search **On Hypertension Register- LTC LCS Priority Group 1 (HRC)**
+
+### Rule 3 of 4
+
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 4.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2a_icb_vs1` (1 code — cluster CLINBP_COD), or `priority_group_2a_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months
+  - Keep only the latest 100 matching records
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2a_icb_vs3` (49 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2a_icb_vs4` (45 codes — cluster Diastolic Blood Pressure), or `priority_group_2a_icb_vs1` (1 code — cluster CLINBP_COD)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its code to be in: CLINBP_COD
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2a_icb_vs1` (1 code — cluster CLINBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2a_icb_vs5` (36 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2a_icb_vs6` (32 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value >= 1 and <= 100
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `priority_group_2a_icb_vs5` (36 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value >= 1 and <= 160
+
+### Rule 4 of 4
+
+Final rule: patients who match are **excluded**; everyone else is included.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2a_icb_vs1` (1 code — cluster CLINBP_COD), or `priority_group_2a_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest matching record
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2a_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2a_icb_vs5` (13 codes — cluster Systolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `priority_group_2a_icb_vs7` (13 codes — cluster Diastolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value > 0
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2a_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2a_icb_vs5` (13 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2a_icb_vs7` (13 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value >= 1 and <= 95
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `priority_group_2a_icb_vs5` (13 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value >= 1 and <= 150
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| Priority Group 2a (ICB) | `priority_group_2a_icb_vs1` | CLINBP_COD | SNOMED | 1 | Refset: 999036281000230108 | f806e309 |
+| Priority Group 2a (ICB) | `priority_group_2a_icb_vs2` | HOMEAMBBP_COD | SNOMED | 5 | 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitori... | 0daae157 |
+| Priority Group 2a (ICB) | `priority_group_2a_icb_vs3` | Systolic Blood Pressure | SNOMED | 49 | Minimum systolic blood pressure, Systemic blood pressure, SBP - Systemic bloo... | dbe8bf65 |
+| Priority Group 2a (ICB) | `priority_group_2a_icb_vs4` | Diastolic Blood Pressure | SNOMED | 45 | Minimum diastolic blood pressure, Minimum day interval diastolic blood pressu... | 94656e9b |
+| Priority Group 2a (ICB) | `priority_group_2a_icb_vs5` | Systolic Blood Pressure | SNOMED | 36 | Systemic blood pressure, SBP - Systemic blood pressure, Lying systolic blood ... | 5b356e22 |
+| Priority Group 2a (ICB) | `priority_group_2a_icb_vs6` | Diastolic Blood Pressure | SNOMED | 32 | Increased diastolic arterial pressure, High diastolic arterial pressure, Incr... | 2c57ad8d |
+| Priority Group 2a (ICB) | `priority_group_2a_icb_vs7` | Diastolic Blood Pressure | SNOMED | 13 | Minimum diastolic blood pressure, Average 24 hour diastolic blood pressure, A... | 5f525c4f |
+
+## Caveats
+
+- LTC LCS: Hypertension Register* references the EMIS library item `a5ff1b4e-f130-4fea-b11c-5b40dc9b0877`, whose logic is not included in this XML export. It is likely **Hypertension Register** (inferred from wrapper report "LTC LCS: Hypertension Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

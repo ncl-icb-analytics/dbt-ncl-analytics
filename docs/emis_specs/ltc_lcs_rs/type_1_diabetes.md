@@ -5,45 +5,44 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: Type 1 Diabetes*
+# Type 1 Diabetes*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: Type 1 Diabetes*
-Parent population: Based on "LTC LCS: Diabetes Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Diabetes Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 17 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999004691000230108 then Latest 1.
+Start with the patients found by "LTC LCS: Diabetes Register*" (see below). A patient is included when they match Rule 1.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: diabetes register*" search results. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999003371000230102 OR Refset: 999004691000230108 OR Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabetes mellitus with ulcer +102 more then Latest 1.
+1. **LTC LCS: Diabetes Register*** — Start with currently registered patients. Require Patient Details where Age at least 17 years old. Include patients who match Clinical Codes with Refset: 999004691000230108 then Latest 1.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999003371000230102 OR Refset: 999004691000230108 OR Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabetes mellitus with ulcer +102 more then Latest 1)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Clinical Codes [EVENTS] with Refset: 999003371000230102 OR Refset: 999004691000230108 OR Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabetes mellitus with ulcer +102 more then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `type_1_dm_vs1`, `type_1_dm_vs2`, `type_1_dm_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `type_1_dm_vs1`, `type_1_dm_vs2`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS: Diabetes Register*
-- `dm_reg_vs1` (SNOMED, 1 codes): Refset: 999004691000230108 | Cluster: DM_COD
-- `dm_reg_vs2` (SNOMED, 1 codes): Refset: 999003371000230102 | Cluster: DMRES_COD
-### Type 1 Diabetes*
-- `type_1_dm_vs1` (SNOMED, 1 codes): Refset: 999003371000230102 | Cluster: DMRES_COD
-- `type_1_dm_vs2` (SNOMED, 1 codes): Refset: 999004691000230108 | Cluster: DM_COD
-- `type_1_dm_vs3` (SNOMED, 105 codes): Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabetes mellitus with ulcer +102 more
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `type_1_dm_vs1` (1 code — cluster DMRES_COD), or `type_1_dm_vs2` (1 code — cluster DM_COD), or `type_1_dm_vs3` (105 codes)
+  - Keep only the latest matching record
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Diabetes Register* | `dm_reg_vs1` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| LTC LCS: Diabetes Register* | `dm_reg_vs2` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+| Type 1 Diabetes* | `type_1_dm_vs1` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+| Type 1 Diabetes* | `type_1_dm_vs2` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| Type 1 Diabetes* | `type_1_dm_vs3` |  | SNOMED | 105 | Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabete... | 10923643 |
+
+## Caveats
+
+- Some code lists exclude specific codes. See `exceptions.csv` in the extraction for the excluded codes and whether each was applied.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

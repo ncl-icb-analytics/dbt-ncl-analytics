@@ -5,118 +5,90 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On CKD Register- LTC LCS Priority Group 3 (MR)
+# On CKD Register- LTC LCS Priority Group 3 (MR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On CKD Register- LTC LCS Priority Group 3 (MR)
-Parent population: Based on "LTC LCS: CKD Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: CKD Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 18 years old. Finally include patients who match Library item c913f5a7-1256-4de6-871e-23650e72765e.
-  Library refs: c913f5a7-1256-4de6-871e-23650e72765e
+Start with the patients found by "LTC LCS: CKD Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-5.
 
-## Library Items
-- LTC LCS: CKD Register*: Unknown library item (c913f5a7-1256-4de6-871e-23650e72765e)
-- On CKD Register- LTC LCS Priority Group 3 (MR): Unknown library item (3de35e4f-7964-4f24-a0b4-fd42930a1dd1)
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: ckd register*" search results. Exclude patients who match Patients included in search On CKD Register- LTC LCS Priority Group 1(HRC) OR patients included in search On CKD Register- LTC LCS Priority Group 2 (HR). Finally include patients who match Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value >= 30 and <= 44 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value < 3.
+1. **LTC LCS: CKD Register*** — Start with currently registered patients. Require Patient Details where Age at least 18 years old. Include patients who match Library item c913f5a7-1256-4de6-871e-23650e72765e.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search On CKD Register- LTC LCS Priority Group 1(HRC) OR patients included in search On CKD Register- LTC LCS Priority Group 2 (HR)) AND (Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value >= 30 and <= 44 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value < 3)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: patients included in search On CKD Register- LTC LCS Priority Group 1(HRC) OR patients included in search On CKD Register- LTC LCS Priority Group 2 (HR)
-- Population ref: On CKD Register- LTC LCS Priority Group 1(HRC) (a94b76df-d4bf-4587-956a-bd10f551dc0b)
-- Population ref: On CKD Register- LTC LCS Priority Group 2 (HR) (e98e7e2b-5be2-485b-9fd9-7d20d8d128de)
+### Rule 1 of 5
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value > 60 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value >= 30
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Restriction: Latest 1 where numeric value > 60
-    - Condition: NUMERIC_VALUE IN | > 60
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Restriction: Latest 1 where numeric value >= 30
-    - Condition: NUMERIC_VALUE IN | >= 30
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value > 60 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value >= 3 AND library item 3de35e4f-7964-4f24-a0b4-fd42930a1dd1
-- Library item: Unknown library item (3de35e4f-7964-4f24-a0b4-fd42930a1dd1)
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Restriction: Latest 1 where numeric value > 60
-    - Condition: NUMERIC_VALUE IN | > 60
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Restriction: Latest 1 where numeric value >= 3
-    - Condition: NUMERIC_VALUE IN | >= 3
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **On CKD Register- LTC LCS Priority Group 1(HRC)**
+- They appear in the results of the search **On CKD Register- LTC LCS Priority Group 2 (HR)**
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value >= 45 and <= 59 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value >= 3 and <= 30
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Restriction: Latest 1 where numeric value >= 45 and <= 59
-    - Condition: NUMERIC_VALUE IN | >= 45 and <= 59
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Restriction: Latest 1 where numeric value >= 3 and <= 30
-    - Condition: NUMERIC_VALUE IN | >= 3 and <= 30
+### Rule 2 of 5
 
-### Rule 5 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value >= 30 and <= 44 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value < 3
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs1`
-  - Restriction: Latest 1 where numeric value >= 30 and <= 44
-    - Condition: NUMERIC_VALUE IN | >= 30 and <= 44
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg3_mr_vs2`
-  - Restriction: Latest 1 where numeric value < 3
-    - Condition: NUMERIC_VALUE IN | < 3
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs1` (2 codes)
+  - Keep only the latest matching record, and require its numeric value > 60
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value >= 30
 
-## ValueSet Friendly Names
-### LTC LCS: CKD Register*
-- None
-### On CKD Register- LTC LCS Priority Group 3 (MR)
-- `on_ckd_reg_pg3_mr_vs1` (SNOMED, 2 codes): GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres
-- `on_ckd_reg_pg3_mr_vs2` (SNOMED, 4 codes): Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more
+### Rule 3 of 5
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
+
+A patient matches this rule when ALL of the following are true:
+- They match the EMIS library item `3de35e4f-7964-4f24-a0b4-fd42930a1dd1` (see Caveats)
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs1` (2 codes)
+  - Keep only the latest matching record, and require its numeric value > 60
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value >= 3
+
+### Rule 4 of 5
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs1` (2 codes)
+  - Keep only the latest matching record, and require its numeric value >= 45 and <= 59
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value >= 3 and <= 30
+
+### Rule 5 of 5
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs1` (2 codes)
+  - Keep only the latest matching record, and require its numeric value >= 30 and <= 44
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg3_mr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value < 3
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On CKD Register- LTC LCS Priority Group 3 (MR) | `on_ckd_reg_pg3_mr_vs1` |  | SNOMED | 2 | GFR (glomerular filtration rate) calculated by abbreviated Modification of Di... | 45ee7150 |
+| On CKD Register- LTC LCS Priority Group 3 (MR) | `on_ckd_reg_pg3_mr_vs2` |  | SNOMED | 4 | Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine micr... | d501652f |
+
+## Caveats
+
+- LTC LCS: CKD Register* references the EMIS library item `c913f5a7-1256-4de6-871e-23650e72765e`, whose logic is not included in this XML export. Verify it in EMIS before implementing.
+- This search references the EMIS library item `3de35e4f-7964-4f24-a0b4-fd42930a1dd1`, whose logic is not included in this XML export. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

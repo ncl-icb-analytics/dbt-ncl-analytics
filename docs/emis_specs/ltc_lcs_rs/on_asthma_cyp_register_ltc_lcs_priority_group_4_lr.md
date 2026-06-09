@@ -5,42 +5,40 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*
+# On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*
-Parent population: Based on "LTC LCS: Asthma CYP Register ONLY" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Asthma CYP Register ONLY: Start with based on "ltc lcs: asthma cyp register*" search results. Finally include patients who do not match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
-- LTC LCS: Asthma CYP Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age under 18 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues [MEDICATION_ISSUES] with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+Start with the patients found by "LTC LCS: Asthma CYP Register ONLY" (see below). Rule 1 includes only patients who do NOT match it.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: asthma cyp register only" search results. Finally include patients who do not match Patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2.
+1. **LTC LCS: Asthma CYP Register*** — Start with currently registered patients. Require Patient Details where Age under 18 years old. Include patients who match Clinical Codes with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+2. **LTC LCS: Asthma CYP Register ONLY** — Start with the patients found by "LTC LCS: Asthma CYP Register*". Finally include patients who do not match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+3. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-not-match
-- Pass: Exclude
-- Fail: Include
-- Operator: OR
-- Summary: Included if it does not match: patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2
-- Population ref: On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 (cbe1df41-0a17-498a-aa99-43116bc6d9b7)
+### Rule 1 of 1
 
+Final rule: patients who match are **excluded**; everyone else is included.
 
-## ValueSet Friendly Names
-### LTC LCS: Asthma CYP Register*
-- `asthma_cyp_reg_vs1` (SNOMED, 1 codes): Refset: 999010051000230100 | Cluster: ASTRES_COD
-- `asthma_cyp_reg_vs2` (SNOMED, 1 codes): Refset: 999012891000230104 | Cluster: AST_COD
-- `asthma_cyp_reg_vs3` (SNOMED, 521 codes): Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more | Cluster: ASTTRT_COD
-### LTC LCS: Asthma CYP Register ONLY
-- None
-### On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*
-- None
+A patient matches this rule when:
+- They appear in the results of the search **On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2**
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Asthma CYP Register* | `asthma_cyp_reg_vs1` | ASTRES_COD | SNOMED | 1 | Refset: 999010051000230100 | 0cecb4fb |
+| LTC LCS: Asthma CYP Register* | `asthma_cyp_reg_vs2` | AST_COD | SNOMED | 1 | Refset: 999012891000230104 | b6f202b4 |
+| LTC LCS: Asthma CYP Register* | `asthma_cyp_reg_vs3` | ASTTRT_COD | SNOMED | 521 | Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals L... | d78c07e6 |
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

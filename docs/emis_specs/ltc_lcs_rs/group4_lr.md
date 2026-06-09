@@ -5,44 +5,36 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: GROUP4- LR
+# GROUP4- LR
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Report title: [GROUP4- LR] LTC LCS LOW RISK - V2*- MOB
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: [GROUP4- LR] LTC LCS LOW RISK - V2*- MOB
-Parent population: Based on "GROUP4- LR" search results
+## What this search does
 
-## Parent Chain
-- GROUP4- LR: Start with based on "ltc lcs moc base excluding cyp only, lr htn only, lr adult asthma only" search results. Finally include patients who do not match Patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR.
-- LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only: Start with based on "ltc lcs base*" search results. Finally include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
-- LTC LCS Base*: Start with currently registered patients. Finally include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+Start with the patients found by "GROUP4- LR" (see below). A patient is included when they match Rule 1.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "group4- lr" search results. Finally include patients who match Patient Details [PATIENTS].
+1. **LTC LCS Base*** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+2. **LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only** — Start with the patients found by "LTC LCS Base*". Finally include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
+3. **GROUP4- LR** — Start with the patients found by "LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only". Finally include patients who do not match Patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR.
+4. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Patient Details [PATIENTS])
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Patient Details [PATIENTS]
-- Patient Details [PATIENTS]
-  - Filter: Date of Birth
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS Base*
-- None
-### LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only
-- None
-### GROUP4- LR
-- None
-### GROUP4- LR
-- None
+A patient matches this rule when:
+- **Patient Details**
+
+## Code lists used
+
+None.
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

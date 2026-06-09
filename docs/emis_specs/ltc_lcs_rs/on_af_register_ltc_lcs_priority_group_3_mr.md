@@ -5,351 +5,244 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On AF Register- LTC LCS Priority Group 3 (MR)*
+# On AF Register- LTC LCS Priority Group 3 (MR)*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On AF Register- LTC LCS Priority Group 3 (MR)*
-Parent population: Based on "LTC LCS: AF Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: AF Register*: Start with currently registered patients. Finally include patients who match AF Register (library item e6742de9-2073-4a23-8c94-e05f668eaabf).
-  Library refs: AF Register (e6742de9-2073-4a23-8c94-e05f668eaabf)
+Start with the patients found by "LTC LCS: AF Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rules 1 and 10 are excluded. A patient is included when they match any one of Rules 3-9 and 11-14.
 
-## Library Items
-- LTC LCS: AF Register*: AF Register (e6742de9-2073-4a23-8c94-e05f668eaabf); wrapper reports: LTC LCS: AF Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: af register*" search results. Require Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months OR Patient Details [PATIENTS] where Age more than 65 years old OR Clinical Codes [EVENTS] with Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more then Latest 1 where numeric value >= 40 and < 60 OR Clinical Codes [EVENTS] with Body weight, O/E - weight, O/E - weight then Latest 1 where numeric value >= 50 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale level 1 - very fit, Rockwood Clinical Frailty Scale level 2 - well, Rockwood Clinical Frailty Scale level 3 - managing well +3 more OR Rockwood Clinical Frailty Scale level 6 - moderately frail then Latest 1 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale then Latest 1 where numeric value >= 6 and < 7 and date > today - 6 months OR Clinical codes [EVENTS] with Refset: 999011331000230100 then Latest 1 where numeric value >= 1. Exclude patients who match Patients included in search On AF Register- LTC LCS Priority Group 2 (HR)*; Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months. Finally include patients who match Clinical codes [EVENTS] NOT with Refset: 999011331000230100 AND Patient Details [PATIENTS] where Age more than 65 years old.
+1. **LTC LCS: AF Register*** — Start with currently registered patients. Include patients who match AF Register (library item e6742de9-2073-4a23-8c94-e05f668eaabf).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months OR Patient Details [PATIENTS] where Age more than 65 years old OR Clinical Codes [EVENTS] with Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more then Latest 1 where numeric value >= 40 and < 60 OR Clinical Codes [EVENTS] with Body weight, O/E - weight, O/E - weight then Latest 1 where numeric value >= 50 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale level 1 - very fit, Rockwood Clinical Frailty Scale level 2 - well, Rockwood Clinical Frailty Scale level 3 - managing well +3 more OR Rockwood Clinical Frailty Scale level 6 - moderately frail then Latest 1 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale then Latest 1 where numeric value >= 6 and < 7 and date > today - 6 months OR Clinical codes [EVENTS] with Refset: 999011331000230100 then Latest 1 where numeric value >= 1) AND NOT (patients included in search On AF Register- LTC LCS Priority Group 2 (HR)*) AND NOT (Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months) AND (Clinical codes [EVENTS] NOT with Refset: 999011331000230100 AND Patient Details [PATIENTS] where Age more than 65 years old)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: patients included in search On AF Register- LTC LCS Priority Group 2 (HR)*
-- Population ref: On AF Register- LTC LCS Priority Group 2 (HR)* (d4e73a7f-7e8c-4a19-9673-18abd33cfc15)
+### Rule 1 of 14
 
-### Rule 2 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months OR Patient Details [PATIENTS] where Age more than 65 years old OR Clinical Codes [EVENTS] with Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more then Latest 1 where numeric value >= 40 and < 60 OR Clinical Codes [EVENTS] with Body weight, O/E - weight, O/E - weight then Latest 1 where numeric value >= 50 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale level 1 - very fit, Rockwood Clinical Frailty Scale level 2 - well, Rockwood Clinical Frailty Scale level 3 - managing well +3 more OR Rockwood Clinical Frailty Scale level 6 - moderately frail then Latest 1 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale then Latest 1 where numeric value >= 6 and < 7 and date > today - 6 months OR Clinical codes [EVENTS] with Refset: 999011331000230100 then Latest 1 where numeric value >= 1
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs1`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs1`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs2`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs2`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs4`
-  - Filter: Date IN within the last 6 months
-    - From: within the last 6 months
-- Patient Details [PATIENTS]
-  - Filter: Age IN more than 65 years old
-    - From: more than 65 years old
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs5`
-  - Restriction: Latest 1 where numeric value >= 40 and < 60
-    - Condition: NUMERIC_VALUE IN | >= 40 and < 60
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs6`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs6`
-  - Restriction: Latest 1 where numeric value >= 50
-    - Condition: NUMERIC_VALUE IN | >= 50
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs7`, `on_af_reg_pg3_mr_vs8`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs7`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs9`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs9`
-  - Restriction: Latest 1 where numeric value >= 6 and < 7 and date > today - 6 months
-    - Condition: NUMERIC_VALUE IN | >= 6 and < 7
-    - Condition: DATE IN | > today - 6 months
-- Clinical codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where numeric value >= 1
-    - Condition: NUMERIC_VALUE IN | >= 1
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Serum creatinine level then Latest 1 where date < today - 15 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs1`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs1`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs11`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs11`
-  - Restriction: Latest 1 where date < today - 15 months
-    - Condition: DATE IN | < today - 15 months
+A patient matches this rule when:
+- They appear in the results of the search **On AF Register- LTC LCS Priority Group 2 (HR)***
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Serum creatinine level then Latest 1 where date < today - 15 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs11`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs11`
-  - Restriction: Latest 1 where date < today - 15 months
-    - Condition: DATE IN | < today - 15 months
+### Rule 2 of 14
 
-### Rule 5 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more then Latest 1 where numeric value >= 40 and < 60
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs5`
-  - Restriction: Latest 1 where numeric value >= 40 and < 60
-    - Condition: NUMERIC_VALUE IN | >= 40 and < 60
+Patients **must match** this rule to stay in. Those who match continue to Rule 3; those who do not are excluded.
 
-### Rule 6 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Body weight, O/E - weight, O/E - weight then Latest 1 where numeric value > 50 and <= 60
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs6`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs6`
-  - Restriction: Latest 1 where numeric value > 50 and <= 60
-    - Condition: NUMERIC_VALUE IN | > 50 and <= 60
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
+  - Where drug code in `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
+  - Where issue date within the last 6 months
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs2` (6 codes)
+  - Where drug code in `on_af_reg_pg3_mr_vs2` (6 codes)
+  - Where issue date within the last 6 months
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs4` (1 code)
+  - Where date within the last 6 months
+- **Patient Details**
+  - Where age more than 65 years old
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs5` (8 codes)
+  - Keep only the latest matching record, and require its numeric value >= 40 and < 60
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs6` (3 codes)
+  - Keep only the latest matching record, and require its numeric value >= 50
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs7` (6 codes), or `on_af_reg_pg3_mr_vs8` (1 code)
+  - Keep only the latest matching record
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs9` (3 codes)
+  - Keep only the latest matching record, and require its numeric value >= 6 and < 7 and date > today - 6 months
+- **Clinical codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs10` (1 code — cluster CHADVASC_COD)
+  - Keep only the latest matching record, and require its numeric value >= 1
 
-### Rule 7 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months AND Patient Details [PATIENTS] where Age at least 75 years old
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Patient Details [PATIENTS]
-  - Filter: Age IN at least 75 years old
-    - From: at least 75 years old
+### Rule 3 of 14
 
-### Rule 8 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale level 1 - very fit, Rockwood Clinical Frailty Scale level 2 - well, Rockwood Clinical Frailty Scale level 3 - managing well +3 more OR Rockwood Clinical Frailty Scale level 6 - moderately frail then Latest 1
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs7`, `on_af_reg_pg3_mr_vs8`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs7`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
 
-### Rule 9 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale then Latest 1 where numeric value >= 6 and < 7 and date > today - 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs9`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs9`
-  - Restriction: Latest 1 where numeric value >= 6 and < 7 and date > today - 6 months
-    - Condition: NUMERIC_VALUE IN | >= 6 and < 7
-    - Condition: DATE IN | > today - 6 months
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
+  - Where drug code in `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs11` (1 code)
+  - Keep only the latest matching record, and require its date < today - 15 months
 
-### Rule 10 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs1`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs1`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs2`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs2`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs4`
-  - Filter: Date IN within the last 6 months
-    - From: within the last 6 months
+### Rule 4 of 14
 
-### Rule 11 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical codes [EVENTS] with Refset: 999011331000230100 then Latest 1 where numeric value >= 1 AND Patient Details [PATIENTS] with Male where Gender = Male
-- Clinical codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where numeric value >= 1
-    - Condition: NUMERIC_VALUE IN | >= 1
-- Patient Details [PATIENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs12`
-  - Filter: Gender
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs12`
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
 
-### Rule 12 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical codes [EVENTS] with Refset: 999011331000230100 then Latest 1 where numeric value >= 2 AND Patient Details [PATIENTS] with Female where Gender = Female
-- Clinical codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where numeric value >= 2
-    - Condition: NUMERIC_VALUE IN | >= 2
-- Patient Details [PATIENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs13`
-  - Filter: Gender
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs13`
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs11` (1 code)
+  - Keep only the latest matching record, and require its date < today - 15 months
 
-### Rule 13 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical codes [EVENTS] with Refset: 999011331000230100 then Latest 1 where date < today - 2 years AND Patient Details [PATIENTS] where Age more than 65 years old
-- Clinical codes [EVENTS]
-  - ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where date < today - 2 years
-    - Condition: DATE IN | < today - 2 years
-- Patient Details [PATIENTS]
-  - Filter: Age IN more than 65 years old
-    - From: more than 65 years old
+### Rule 5 of 14
 
-### Rule 14 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Clinical codes [EVENTS] NOT with Refset: 999011331000230100 AND Patient Details [PATIENTS] where Age more than 65 years old
-- Clinical codes [EVENTS] (NOT)
-  - ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg3_mr_vs10`
-  - Filter: Date
-    - To: <=
-- Patient Details [PATIENTS]
-  - Filter: Age IN more than 65 years old
-    - From: more than 65 years old
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 6.
 
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs5` (8 codes)
+  - Keep only the latest matching record, and require its numeric value >= 40 and < 60
 
-## ValueSet Friendly Names
-### LTC LCS: AF Register*
-- None
-### On AF Register- LTC LCS Priority Group 3 (MR)*
-- `on_af_reg_pg3_mr_vs1` (Drug Group, 1 codes): Oral Anticoagulants | Cluster: Warfarin
-- `on_af_reg_pg3_mr_vs2` (SCT Const, 6 codes): Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more
-- `on_af_reg_pg3_mr_vs3` (SNOMED, 40 codes): Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more | Cluster: DIRECTORANTICOAGDRUG_COD
-- `on_af_reg_pg3_mr_vs4` (SNOMED, 1 codes): Anticoagulant prescribed by third party
-- `on_af_reg_pg3_mr_vs5` (SNOMED, 8 codes): Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more
-- `on_af_reg_pg3_mr_vs6` (SNOMED, 3 codes): Body weight, O/E - weight, O/E - weight
-- `on_af_reg_pg3_mr_vs7` (SNOMED, 6 codes): Rockwood Clinical Frailty Scale level 1 - very fit, Rockwood Clinical Frailty Scale level 2 - well, Rockwood Clinical Frailty Scale level 3 - managing well +3 more
-- `on_af_reg_pg3_mr_vs8` (SNOMED, 1 codes): Rockwood Clinical Frailty Scale level 6 - moderately frail
-- `on_af_reg_pg3_mr_vs9` (SNOMED, 3 codes): Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale
-- `on_af_reg_pg3_mr_vs10` (SNOMED, 1 codes): Refset: 999011331000230100 | Cluster: CHADVASC_COD
-- `on_af_reg_pg3_mr_vs11` (SNOMED, 1 codes): Serum creatinine level
-- `on_af_reg_pg3_mr_vs12` (Internal, 1 codes): Male
-- `on_af_reg_pg3_mr_vs13` (Internal, 1 codes): Female
+### Rule 6 of 14
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 7.
+
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs6` (3 codes)
+  - Keep only the latest matching record, and require its numeric value > 50 and <= 60
+
+### Rule 7 of 14
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 8.
+
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Patient Details**
+  - Where age at least 75 years old
+
+### Rule 8 of 14
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 9.
+
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs7` (6 codes), or `on_af_reg_pg3_mr_vs8` (1 code)
+  - Keep only the latest matching record
+
+### Rule 9 of 14
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 10.
+
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs9` (3 codes)
+  - Keep only the latest matching record, and require its numeric value >= 6 and < 7 and date > today - 6 months
+
+### Rule 10 of 14
+
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 11.
+
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
+  - Where drug code in `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
+  - Where issue date within the last 6 months
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs2` (6 codes)
+  - Where drug code in `on_af_reg_pg3_mr_vs2` (6 codes)
+  - Where issue date within the last 6 months
+- **Medication Issues**
+  - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs4` (1 code)
+  - Where date within the last 6 months
+
+### Rule 11 of 14
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 12.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs10` (1 code — cluster CHADVASC_COD)
+  - Keep only the latest matching record, and require its numeric value >= 1
+- **Patient Details**
+  - Code in: `on_af_reg_pg3_mr_vs12` (1 code)
+  - Where sex in `on_af_reg_pg3_mr_vs12` (1 code)
+
+### Rule 12 of 14
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 13.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs10` (1 code — cluster CHADVASC_COD)
+  - Keep only the latest matching record, and require its numeric value >= 2
+- **Patient Details**
+  - Code in: `on_af_reg_pg3_mr_vs13` (1 code)
+  - Where sex in `on_af_reg_pg3_mr_vs13` (1 code)
+
+### Rule 13 of 14
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 14.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical codes** (clinical events)
+  - Code in: `on_af_reg_pg3_mr_vs10` (1 code — cluster CHADVASC_COD)
+  - Keep only the latest matching record, and require its date < today - 2 years
+- **Patient Details**
+  - Where age more than 65 years old
+
+### Rule 14 of 14
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical codes** (clinical events) — patient must NOT have a matching record
+  - Code in: `on_af_reg_pg3_mr_vs10` (1 code — cluster CHADVASC_COD)
+- **Patient Details**
+  - Where age more than 65 years old
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs1` | Warfarin | Drug Group | 1 | Oral Anticoagulants | 3627615a |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs10` | CHADVASC_COD | SNOMED | 1 | Refset: 999011331000230100 | 6dd017b8 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs11` |  | SNOMED | 1 | Serum creatinine level | 67b00c07 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs12` |  | Internal | 1 | Male | 08f27188 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs13` |  | Internal | 1 | Female | f67ab10a |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs2` |  | SCT Const | 6 | Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more | 05e37db6 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs3` | DIRECTORANTICOAGDRUG_COD | SNOMED | 40 | Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsu... | a8a26d95 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs4` |  | SNOMED | 1 | Anticoagulant prescribed by third party | b532dd16 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs5` |  | SNOMED | 8 | Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated crea... | 610c0721 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs6` |  | SNOMED | 3 | Body weight, O/E - weight | 7f3acf99 |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs7` |  | SNOMED | 6 | Rockwood Clinical Frailty Scale level 1 - very fit, Rockwood Clinical Frailty... | ffc1706e |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs8` |  | SNOMED | 1 | Rockwood Clinical Frailty Scale level 6 - moderately frail | 59e5803d |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | `on_af_reg_pg3_mr_vs9` |  | SNOMED | 3 | Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Asses... | 734a600b |
+
+## Caveats
+
+- LTC LCS: AF Register* references the EMIS library item `e6742de9-2073-4a23-8c94-e05f668eaabf`, whose logic is not included in this XML export. It is likely **AF Register** (inferred from wrapper report "LTC LCS: AF Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

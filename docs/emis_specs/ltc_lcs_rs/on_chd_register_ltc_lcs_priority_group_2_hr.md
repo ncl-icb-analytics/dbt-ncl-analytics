@@ -5,65 +5,56 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On CHD Register- LTC LCS Priority Group 2 (HR)
+# On CHD Register- LTC LCS Priority Group 2 (HR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On CHD Register- LTC LCS Priority Group 2 (HR)
-Parent population: Based on "LTC LCS: CHD Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: CHD Register*: Start with currently registered patients. Finally include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
-  Library refs: CHD Register (d730ee6f-1b38-4553-8f8e-7dc8b3042f4c)
+Start with the patients found by "LTC LCS: CHD Register*" (see below). Patients matching Rules 1-2 are excluded. A patient is included when they match Rule 3.
 
-## Library Items
-- LTC LCS: CHD Register*: CHD Register (d730ee6f-1b38-4553-8f8e-7dc8b3042f4c); wrapper reports: LTC LCS: CHD Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: chd register*" search results. Exclude patients who match Patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC); Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date before 1 year ago. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date within the last 1 year to before 1 month ago.
+1. **LTC LCS: CHD Register*** — Start with currently registered patients. Include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC)) AND NOT (Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date before 1 year ago) AND (Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date within the last 1 year to before 1 month ago)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC)
-- Population ref: On CHD Register- LTC LCS Priority Group 1 (HRC) (6c2418f3-b92c-4d74-8df7-de41376923e3)
+### Rule 1 of 3
 
-### Rule 2 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date before 1 year ago
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_chd_reg_pg2_hr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_chd_reg_pg2_hr_vs1`
-  - Filter: Date IN before 1 year ago
-    - To: before 1 year ago
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date within the last 1 year to before 1 month ago
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_chd_reg_pg2_hr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_chd_reg_pg2_hr_vs1`
-  - Filter: Date IN within the last 1 year to before 1 month ago
-    - From: within the last 1 year
-    - To: before 1 month ago
+A patient matches this rule when:
+- They appear in the results of the search **On CHD Register- LTC LCS Priority Group 1 (HRC)**
 
+### Rule 2 of 3
 
-## ValueSet Friendly Names
-### LTC LCS: CHD Register*
-- None
-### On CHD Register- LTC LCS Priority Group 2 (HR)
-- `on_chd_reg_pg2_hr_vs1` (SNOMED, 1 codes): Refset: 999000771000230107 | Cluster: CHD_COD
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 3.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_chd_reg_pg2_hr_vs1` (1 code — cluster CHD_COD)
+  - Where date before 1 year ago
+
+### Rule 3 of 3
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_chd_reg_pg2_hr_vs1` (1 code — cluster CHD_COD)
+  - Where date within the last 1 year to before 1 month ago
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On CHD Register- LTC LCS Priority Group 2 (HR) | `on_chd_reg_pg2_hr_vs1` | CHD_COD | SNOMED | 1 | Refset: 999000771000230107 | d908caa0 |
+
+## Caveats
+
+- LTC LCS: CHD Register* references the EMIS library item `d730ee6f-1b38-4553-8f8e-7dc8b3042f4c`, whose logic is not included in this XML export. It is likely **CHD Register** (inferred from wrapper report "LTC LCS: CHD Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

@@ -5,69 +5,57 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On NAFLD Register- LTC LCS Priority Group 3 (MR)
+# On NAFLD Register- LTC LCS Priority Group 3 (MR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On NAFLD Register- LTC LCS Priority Group 3 (MR)
-Parent population: Based on "LTC LCS: NAFLD Register v2*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: NAFLD Register v2*: Start with currently registered patients. Finally include patients who match Clinical Codes [EVENTS] with Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfunction-associated steatohepatitis, Metabolic dysfunction-associated steatotic liver.
+Start with the patients found by "LTC LCS: NAFLD Register v2*" (see below). A patient is included when they match any one of Rules 1-2.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: nafld register v2*" search results. Finally include patients who match Clinical Codes [EVENTS] with NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score +8 more where Date within the last 3 years then Latest 1 where numeric value > 1.3 and <= 3.25 AND Clinical Codes [EVENTS] with ELF (Enhanced Liver Fibrosis) score, ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score +1 more where Date within the last 3 years then Latest 1 where numeric value >= 9.8.
+1. **LTC LCS: NAFLD Register v2*** — Start with currently registered patients. Include patients who match any of: Clinical Codes with Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alcoholic fatty liver disease +8 more; OR Clinical Codes with Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfunction-associated steatohepatitis, Metabolic dysfunction-associated steatotic liver.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score +8 more where Date within the last 3 years then Latest 1 where numeric value > 1.3 and <= 3.25 AND Clinical Codes [EVENTS] with ELF (Enhanced Liver Fibrosis) score, ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score +1 more where Date within the last 3 years then Latest 1 where numeric value >= 9.8)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score +8 more where Date within the last 3 years then Latest 1 where numeric value > 3.25
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_nafld_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_nafld_reg_pg3_mr_vs1`
-  - Filter: Date IN within the last 3 years
-    - From: within the last 3 years
-  - Restriction: Latest 1 where numeric value > 3.25
-    - Condition: NUMERIC_VALUE IN | > 3.25
+### Rule 1 of 2
 
-### Rule 2 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Clinical Codes [EVENTS] with NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score +8 more where Date within the last 3 years then Latest 1 where numeric value > 1.3 and <= 3.25 AND Clinical Codes [EVENTS] with ELF (Enhanced Liver Fibrosis) score, ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score +1 more where Date within the last 3 years then Latest 1 where numeric value >= 9.8
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_nafld_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_nafld_reg_pg3_mr_vs1`
-  - Filter: Date IN within the last 3 years
-    - From: within the last 3 years
-  - Restriction: Latest 1 where numeric value > 1.3 and <= 3.25
-    - Condition: NUMERIC_VALUE IN | > 1.3 and <= 3.25
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_nafld_reg_pg3_mr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_nafld_reg_pg3_mr_vs2`
-  - Filter: Date IN within the last 3 years
-    - From: within the last 3 years
-  - Restriction: Latest 1 where numeric value >= 9.8
-    - Condition: NUMERIC_VALUE IN | >= 9.8
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 2.
 
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_nafld_reg_pg3_mr_vs1` (11 codes)
+  - Where date within the last 3 years
+  - Keep only the latest matching record, and require its numeric value > 3.25
 
-## ValueSet Friendly Names
-### LTC LCS: NAFLD Register v2*
-- `nafld_reg_v2_vs1` (SNOMED, 12 codes): Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alcoholic fatty liver disease +9 more
-- `nafld_reg_v2_vs2` (SNOMED, 3 codes): Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfunction-associated steatohepatitis, Metabolic dysfunction-associated steatotic liver
-### On NAFLD Register- LTC LCS Priority Group 3 (MR)
-- `on_nafld_reg_pg3_mr_vs1` (SNOMED, 11 codes): NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score +8 more
-- `on_nafld_reg_pg3_mr_vs2` (SNOMED, 4 codes): ELF (Enhanced Liver Fibrosis) score, ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score +1 more
+### Rule 2 of 2
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_nafld_reg_pg3_mr_vs1` (11 codes)
+  - Where date within the last 3 years
+  - Keep only the latest matching record, and require its numeric value > 1.3 and <= 3.25
+- **Clinical Codes** (clinical events)
+  - Code in: `on_nafld_reg_pg3_mr_vs2` (4 codes)
+  - Where date within the last 3 years
+  - Keep only the latest matching record, and require its numeric value >= 9.8
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs1` |  | SNOMED | 12 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | 63fd8d6e |
+| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs2` |  | SNOMED | 3 | Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfuncti... | 43d07f8b |
+| On NAFLD Register- LTC LCS Priority Group 3 (MR) | `on_nafld_reg_pg3_mr_vs1` |  | SNOMED | 11 | NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, Non-alcoholic fatty... | ca67a54a |
+| On NAFLD Register- LTC LCS Priority Group 3 (MR) | `on_nafld_reg_pg3_mr_vs2` |  | SNOMED | 4 | ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score, Ass... | e1c7ed45 |
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

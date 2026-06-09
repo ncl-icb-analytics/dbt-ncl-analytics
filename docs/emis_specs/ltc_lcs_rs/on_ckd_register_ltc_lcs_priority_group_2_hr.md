@@ -5,404 +5,257 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On CKD Register- LTC LCS Priority Group 2 (HR)
+# On CKD Register- LTC LCS Priority Group 2 (HR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On CKD Register- LTC LCS Priority Group 2 (HR)
-Parent population: Based on "LTC LCS: CKD Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: CKD Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 18 years old. Finally include patients who match Library item c913f5a7-1256-4de6-871e-23650e72765e.
-  Library refs: c913f5a7-1256-4de6-871e-23650e72765e
+Start with the patients found by "LTC LCS: CKD Register*" (see below). Patients must match Rule 6 to stay in. Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-5 and 7-10.
 
-## Library Items
-- LTC LCS: CKD Register*: Unknown library item (c913f5a7-1256-4de6-871e-23650e72765e)
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: ckd register*" search results. Require Medication Issues [MEDICATION_ISSUES] with Antihypertensive Drugs where Date of Issue within the last 3 months. Exclude patients who match Patients included in search On CKD Register- LTC LCS Priority Group 1(HRC). Finally include patients who match Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months.
+1. **LTC LCS: CKD Register*** — Start with currently registered patients. Require Patient Details where Age at least 18 years old. Include patients who match Library item c913f5a7-1256-4de6-871e-23650e72765e.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Medication Issues [MEDICATION_ISSUES] with Antihypertensive Drugs where Date of Issue within the last 3 months) AND NOT (patients included in search On CKD Register- LTC LCS Priority Group 1(HRC)) AND (Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search On CKD Register- LTC LCS Priority Group 1(HRC)
-- Population ref: On CKD Register- LTC LCS Priority Group 1(HRC) (a94b76df-d4bf-4587-956a-bd10f551dc0b)
+### Rule 1 of 10
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value >= 45 and <= 59 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value > 30
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs1`
-  - Restriction: Latest 1 where numeric value >= 45 and <= 59
-    - Condition: NUMERIC_VALUE IN | >= 45 and <= 59
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs2`
-  - Restriction: Latest 1 where numeric value > 30
-    - Condition: NUMERIC_VALUE IN | > 30
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value >= 30 and <= 44 AND Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value > 3
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs1`
-  - Restriction: Latest 1 where numeric value >= 30 and <= 44
-    - Condition: NUMERIC_VALUE IN | >= 30 and <= 44
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs2`
-  - Restriction: Latest 1 where numeric value > 3
-    - Condition: NUMERIC_VALUE IN | > 3
+A patient matches this rule when:
+- They appear in the results of the search **On CKD Register- LTC LCS Priority Group 1(HRC)**
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value >= 15 and <= 29
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs1`
-  - Restriction: Latest 1 where numeric value >= 15 and <= 29
-    - Condition: NUMERIC_VALUE IN | >= 15 and <= 29
+### Rule 2 of 10
 
-### Rule 5 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more then Latest 1 where numeric value >= 70 and < 250
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs2`
-  - Restriction: Latest 1 where numeric value >= 70 and < 250
-    - Condition: NUMERIC_VALUE IN | >= 70 and < 250
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
-### Rule 6 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Medication Issues [MEDICATION_ISSUES] with Antihypertensive Drugs where Date of Issue within the last 3 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs3`
-  - Filter: Date of Issue IN within the last 3 months
-    - From: within the last 3 months
-  - Filter: Prescription Type
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs1` (2 codes)
+  - Keep only the latest matching record, and require its numeric value >= 45 and <= 59
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value > 30
 
-### Rule 7 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs4`, `on_ckd_reg_pg2_hr_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs4`, `on_ckd_reg_pg2_hr_vs5`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
-  - Restriction: Latest 100
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs6`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs6`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs7`, `on_ckd_reg_pg2_hr_vs4`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs7`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where SNOMED code IN: CLINBP_COD
-            - Condition: READCODE IN | CLINBP_COD
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs4`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs9`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs9`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value > 90
-            - Condition: NUMERIC_VALUE IN | > 90
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value >= 1
-                - Condition: NUMERIC_VALUE IN | >= 1
+### Rule 3 of 10
 
-### Rule 8 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs4`, `on_ckd_reg_pg2_hr_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs4`, `on_ckd_reg_pg2_hr_vs5`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
-  - Restriction: Latest 100
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs6`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs6`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs7`, `on_ckd_reg_pg2_hr_vs4`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs7`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where SNOMED code IN: CLINBP_COD
-            - Condition: READCODE IN | CLINBP_COD
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs4`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs9`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs9`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value >= 1
-            - Condition: NUMERIC_VALUE IN | >= 1
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value > 150
-                - Condition: NUMERIC_VALUE IN | > 150
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
 
-### Rule 9 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs4`, `on_ckd_reg_pg2_hr_vs5`
-  - Restriction: Latest 1
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs5`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs5`
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `on_ckd_reg_pg2_hr_vs10`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `on_ckd_reg_pg2_hr_vs10`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value > 0
-                - Condition: NUMERIC_VALUE IN | > 0
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs5`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs10`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs10`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value > 90
-            - Condition: NUMERIC_VALUE IN | > 90
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value >= 1
-                - Condition: NUMERIC_VALUE IN | >= 1
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs1` (2 codes)
+  - Keep only the latest matching record, and require its numeric value >= 30 and <= 44
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value > 3
 
-### Rule 10 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs4`, `on_ckd_reg_pg2_hr_vs5`
-  - Restriction: Latest 1
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs5`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs5`
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `on_ckd_reg_pg2_hr_vs10`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `on_ckd_reg_pg2_hr_vs10`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value > 0
-                - Condition: NUMERIC_VALUE IN | > 0
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_ckd_reg_pg2_hr_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_ckd_reg_pg2_hr_vs5`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `on_ckd_reg_pg2_hr_vs10`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `on_ckd_reg_pg2_hr_vs10`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value >= 1
-            - Condition: NUMERIC_VALUE IN | >= 1
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `on_ckd_reg_pg2_hr_vs8`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value > 150
-                - Condition: NUMERIC_VALUE IN | > 150
+### Rule 4 of 10
 
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
 
-## ValueSet Friendly Names
-### LTC LCS: CKD Register*
-- None
-### On CKD Register- LTC LCS Priority Group 2 (HR)
-- `on_ckd_reg_pg2_hr_vs1` (SNOMED, 2 codes): GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres
-- `on_ckd_reg_pg2_hr_vs2` (SNOMED, 4 codes): Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine microalbumin/creatinine ratio +1 more
-- `on_ckd_reg_pg2_hr_vs3` (Drug Group, 1 codes): Antihypertensive Drugs
-- `on_ckd_reg_pg2_hr_vs4` (SNOMED, 1 codes): Refset: 999036281000230108 | Cluster: CLINBP_COD
-- `on_ckd_reg_pg2_hr_vs5` (SNOMED, 5 codes): 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more | Cluster: HOMEAMBBP_COD
-- `on_ckd_reg_pg2_hr_vs6` (SNOMED, 49 codes): Minimum systolic blood pressure, Systemic blood pressure, SBP - Systemic blood pressure +46 more | Cluster: Systolic Blood Pressure
-- `on_ckd_reg_pg2_hr_vs7` (SNOMED, 45 codes): Minimum diastolic blood pressure, Minimum day interval diastolic blood pressure, Minimum 24 hour diastolic blood pressure +42 more | Cluster: Diastolic Blood Pressure
-- `on_ckd_reg_pg2_hr_vs8` (SNOMED, 36 codes): Systemic blood pressure, SBP - Systemic blood pressure, Lying systolic blood pressure +33 more | Cluster: Systolic Blood Pressure
-- `on_ckd_reg_pg2_hr_vs9` (SNOMED, 32 codes): Increased diastolic arterial pressure, High diastolic arterial pressure, Increased diastolic blood pressure +29 more | Cluster: Diastolic Blood Pressure
-- `on_ckd_reg_pg2_hr_vs8` (SNOMED, 13 codes): Minimum systolic blood pressure, Average home systolic blood pressure, Average day interval systolic blood pressure +10 more | Cluster: Systolic Blood Pressure
-- `on_ckd_reg_pg2_hr_vs10` (SNOMED, 13 codes): Minimum diastolic blood pressure, Average 24 hour diastolic blood pressure, Ambulatory diastolic blood pressure +10 more | Cluster: Diastolic Blood Pressure
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs1` (2 codes)
+  - Keep only the latest matching record, and require its numeric value >= 15 and <= 29
+
+### Rule 5 of 10
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 6.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value >= 70 and < 250
+
+### Rule 6 of 10
+
+Patients **must match** this rule to stay in. Those who match continue to Rule 7; those who do not are excluded.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_ckd_reg_pg2_hr_vs3` (1 code)
+  - Where drug code in `on_ckd_reg_pg2_hr_vs3` (1 code)
+  - Where issue date within the last 3 months
+
+### Rule 7 of 10
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 8.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD), or `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months
+  - Keep only the latest 100 matching records
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs6` (49 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs7` (45 codes — cluster Diastolic Blood Pressure), or `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its code to be in: CLINBP_COD
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs8` (36 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs9` (32 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value > 90
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `on_ckd_reg_pg2_hr_vs8` (36 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value >= 1
+
+### Rule 8 of 10
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 9.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD), or `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months
+  - Keep only the latest 100 matching records
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs6` (49 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs7` (45 codes — cluster Diastolic Blood Pressure), or `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its code to be in: CLINBP_COD
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs8` (36 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs9` (32 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value >= 1
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `on_ckd_reg_pg2_hr_vs8` (36 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value > 150
+
+### Rule 9 of 10
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 10.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD), or `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest matching record
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs8` (13 codes — cluster Systolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `on_ckd_reg_pg2_hr_vs10` (13 codes — cluster Diastolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value > 0
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs8` (13 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs10` (13 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value > 90
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `on_ckd_reg_pg2_hr_vs8` (13 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value >= 1
+
+### Rule 10 of 10
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs4` (1 code — cluster CLINBP_COD), or `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest matching record
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs8` (13 codes — cluster Systolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `on_ckd_reg_pg2_hr_vs10` (13 codes — cluster Diastolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value > 0
+- **Clinical Codes** (clinical events)
+  - Code in: `on_ckd_reg_pg2_hr_vs5` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `on_ckd_reg_pg2_hr_vs8` (13 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `on_ckd_reg_pg2_hr_vs10` (13 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value >= 1
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `on_ckd_reg_pg2_hr_vs8` (13 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value > 150
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs1` |  | SNOMED | 2 | GFR (glomerular filtration rate) calculated by abbreviated Modification of Di... | 45ee7150 |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs10` | Diastolic Blood Pressure | SNOMED | 13 | Minimum diastolic blood pressure, Average 24 hour diastolic blood pressure, A... | 5f525c4f |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs2` |  | SNOMED | 4 | Urine albumin:creatinine ratio, Albumin/creatinine ratio in urine, Urine micr... | d501652f |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs3` |  | Drug Group | 1 | Antihypertensive Drugs | 68b47862 |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs4` | CLINBP_COD | SNOMED | 1 | Refset: 999036281000230108 | f806e309 |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs5` | HOMEAMBBP_COD | SNOMED | 5 | 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitori... | 0daae157 |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs6` | Systolic Blood Pressure | SNOMED | 49 | Minimum systolic blood pressure, Systemic blood pressure, SBP - Systemic bloo... | dbe8bf65 |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs7` | Diastolic Blood Pressure | SNOMED | 45 | Minimum diastolic blood pressure, Minimum day interval diastolic blood pressu... | 94656e9b |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs8` | Systolic Blood Pressure | SNOMED | 36 | Systemic blood pressure, SBP - Systemic blood pressure, Lying systolic blood ... | 5b356e22 |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | `on_ckd_reg_pg2_hr_vs9` | Diastolic Blood Pressure | SNOMED | 32 | Increased diastolic arterial pressure, High diastolic arterial pressure, Incr... | 2c57ad8d |
+
+## Caveats
+
+- LTC LCS: CKD Register* references the EMIS library item `c913f5a7-1256-4de6-871e-23650e72765e`, whose logic is not included in this XML export. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

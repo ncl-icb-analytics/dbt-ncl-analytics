@@ -5,95 +5,80 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On COPD Register- LTC LCS Priority Group 2 (HR)
+# On COPD Register- LTC LCS Priority Group 2 (HR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On COPD Register- LTC LCS Priority Group 2 (HR)
-Parent population: Based on "LTC LCS: COPD Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: COPD Register*: Start with currently registered patients. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD.
-  Library refs: ee5b135f-b9b2-4ef7-8b51-939a754cf935
+Start with the patients found by "LTC LCS: COPD Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-5.
 
-## Library Items
-- LTC LCS: COPD Register*: Unknown library item (ee5b135f-b9b2-4ef7-8b51-939a754cf935)
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: copd register*" search results. Exclude patients who match Patients included in search On COPD Register- LTC LCS Priority Group 1 (HRC). Finally include patients who match Clinical Codes [EVENTS] with 2 COPD exacerbations in past year, 3+ COPD exacerbations in past year, Acute exacerbation of COPD where Date within the last 12 months.
+1. **LTC LCS: COPD Register*** — Start with currently registered patients. Include patients who match any of: Library item ee5b135f-b9b2-4ef7-8b51-939a754cf935; OR Clinical Codes with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date before 1 year ago then Earliest 1 where SNOMED code IN: COPD_COD; OR Clinical Codes with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year OR Clinical Codes with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year; OR Clinical Codes with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD AND Patient Details where Registration Date within the last 12 months; OR Clinical Codes with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD AND Patient Details where Registration Date within the last 12 months; OR Clinical Codes with Refset: 999011571000230107 OR Refset: 999009131000230100 where Date within the last 1 year then Earliest 1 where SNOMED code IN: COPD_COD.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search On COPD Register- LTC LCS Priority Group 1 (HRC)) AND (Clinical Codes [EVENTS] with 2 COPD exacerbations in past year, 3+ COPD exacerbations in past year, Acute exacerbation of COPD where Date within the last 12 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search On COPD Register- LTC LCS Priority Group 1 (HRC)
-- Population ref: On COPD Register- LTC LCS Priority Group 1 (HRC) (e07489c2-3c39-42da-961f-f905d81e607d)
+### Rule 1 of 5
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Percent predicted FEV1 then Latest 1 where numeric value < 50
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_copd_reg_pg2_hr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_copd_reg_pg2_hr_vs1`
-  - Restriction: Latest 1 where numeric value < 50
-    - Condition: READCODE IN
-    - Condition: NUMERIC_VALUE IN | < 50
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Chronic cor pulmonale where Date within the last 5 years
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_copd_reg_pg2_hr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_copd_reg_pg2_hr_vs2`
-  - Filter: Date IN within the last 5 years
-    - From: within the last 5 years
+A patient matches this rule when:
+- They appear in the results of the search **On COPD Register- LTC LCS Priority Group 1 (HRC)**
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Medical Research Council (MRC) Breathlessness Scale: grade 4, Medical Research Council Breathlessness Scale grade 4, MRC Breathlessness Scale: grade 4
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_copd_reg_pg2_hr_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_copd_reg_pg2_hr_vs3`
+### Rule 2 of 5
 
-### Rule 5 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: Clinical Codes [EVENTS] with 2 COPD exacerbations in past year, 3+ COPD exacerbations in past year, Acute exacerbation of COPD where Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_copd_reg_pg2_hr_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_copd_reg_pg2_hr_vs4`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_copd_reg_pg2_hr_vs1` (1 code)
+  - Keep only the latest matching record, and require its numeric value < 50
 
-## ValueSet Friendly Names
-### LTC LCS: COPD Register*
-- `copd_reg_vs1` (SNOMED, 1 codes): Refset: 999011571000230107 | Cluster: COPD_COD
-- `copd_reg_vs3` (SNOMED, 1 codes): Refset: 999020251000230104 | Cluster: FEV1FVC_COD
-- `copd_reg_vs4` (SNOMED, 1 codes): Refset: 999020291000230109 | Cluster: FEV1FVCL70_COD
-- `copd_reg_vs5` (SNOMED, 1 codes): UK NHS primary care data extraction - General practice data extraction - FEV1 FVC ratio below 70 per cent simple reference set
-### On COPD Register- LTC LCS Priority Group 2 (HR)
-- `on_copd_reg_pg2_hr_vs1` (SNOMED, 1 codes): Percent predicted FEV1
-- `on_copd_reg_pg2_hr_vs2` (SNOMED, 1 codes): Chronic cor pulmonale
-- `on_copd_reg_pg2_hr_vs3` (SNOMED, 3 codes): Medical Research Council (MRC) Breathlessness Scale: grade 4, Medical Research Council Breathlessness Scale grade 4, MRC Breathlessness Scale: grade 4
-- `on_copd_reg_pg2_hr_vs4` (SNOMED, 3 codes): 2 COPD exacerbations in past year, 3+ COPD exacerbations in past year, Acute exacerbation of COPD
+### Rule 3 of 5
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_copd_reg_pg2_hr_vs2` (1 code)
+  - Where date within the last 5 years
+
+### Rule 4 of 5
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_copd_reg_pg2_hr_vs3` (3 codes)
+
+### Rule 5 of 5
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_copd_reg_pg2_hr_vs4` (3 codes)
+  - Where date within the last 12 months
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: COPD Register* | `copd_reg_vs1` | COPD_COD | SNOMED | 1 | Refset: 999011571000230107 | 95fd66a2 |
+| LTC LCS: COPD Register* | `copd_reg_vs3` | FEV1FVC_COD | SNOMED | 1 | Refset: 999020251000230104 | 858d7625 |
+| LTC LCS: COPD Register* | `copd_reg_vs4` | FEV1FVCL70_COD | SNOMED | 1 | Refset: 999020291000230109 | faf72240 |
+| LTC LCS: COPD Register* | `copd_reg_vs5` |  | SNOMED | 1 | UK NHS primary care data extraction - General practice data extraction - FEV1... | 0a5a44d1 |
+| On COPD Register- LTC LCS Priority Group 2 (HR) | `on_copd_reg_pg2_hr_vs1` |  | SNOMED | 1 | Percent predicted FEV1 | 626f71bc |
+| On COPD Register- LTC LCS Priority Group 2 (HR) | `on_copd_reg_pg2_hr_vs2` |  | SNOMED | 1 | Chronic cor pulmonale | 4e35cb88 |
+| On COPD Register- LTC LCS Priority Group 2 (HR) | `on_copd_reg_pg2_hr_vs3` |  | SNOMED | 3 | Medical Research Council (MRC) Breathlessness Scale: grade 4, Medical Researc... | ea13ad7c |
+| On COPD Register- LTC LCS Priority Group 2 (HR) | `on_copd_reg_pg2_hr_vs4` |  | SNOMED | 3 | 2 COPD exacerbations in past year, 3+ COPD exacerbations in past year, Acute ... | d533f11c |
+
+## Caveats
+
+- LTC LCS: COPD Register* references the EMIS library item `ee5b135f-b9b2-4ef7-8b51-939a754cf935`, whose logic is not included in this XML export. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

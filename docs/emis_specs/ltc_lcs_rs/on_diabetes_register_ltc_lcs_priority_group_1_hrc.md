@@ -5,119 +5,95 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: on Diabetes Register- LTC LCS Priority Group 1 (HRC)
+# on Diabetes Register- LTC LCS Priority Group 1 (HRC)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: on Diabetes Register- LTC LCS Priority Group 1 (HRC)
-Parent population: Based on "LTC LCS: Diabetes Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Diabetes Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 17 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999004691000230108 then Latest 1.
+Start with the patients found by "LTC LCS: Diabetes Register*" (see below). Patients must match Rule 5 to stay in. A patient is included when they match any one of Rules 1-4 and 6.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: diabetes register*" search results. Require Clinical Codes [EVENTS] with Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference range) - IFCC standardised, HbA1c level (monitoring ranges) - IFCC standardised then Latest 1 where numeric value > 75. Finally include patients who match Clinical Codes [EVENTS] with Biventricular failure, Cardiac insufficiency, CCF - Congestive cardiac failure +40 more OR Medication Issues [MEDICATION_ISSUES] with Insulins OR Exenatide, Liraglutide, Lixisenatide +2 more where Date of Issue within the last 6 months.
+1. **LTC LCS: Diabetes Register*** — Start with currently registered patients. Require Patient Details where Age at least 17 years old. Include patients who match Clinical Codes with Refset: 999004691000230108 then Latest 1.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference range) - IFCC standardised, HbA1c level (monitoring ranges) - IFCC standardised then Latest 1 where numeric value > 75) AND (Clinical Codes [EVENTS] with Biventricular failure, Cardiac insufficiency, CCF - Congestive cardiac failure +40 more OR Medication Issues [MEDICATION_ISSUES] with Insulins OR Exenatide, Liraglutide, Lixisenatide +2 more where Date of Issue within the last 6 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: OR
-- Summary: Clinical Codes [EVENTS] with Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference range) - IFCC standardised, HbA1c level (monitoring ranges) - IFCC standardised then Latest 1 where numeric value > 90
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_dm_reg_pg1_hrc_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_dm_reg_pg1_hrc_vs1`
-  - Restriction: Latest 1 where numeric value > 90
-    - Condition: NUMERIC_VALUE IN | > 90
+### Rule 1 of 6
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres then Latest 1 where numeric value < 15
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_dm_reg_pg1_hrc_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_dm_reg_pg1_hrc_vs2`
-  - Restriction: Latest 1 where numeric value < 15
-    - Condition: NUMERIC_VALUE IN | < 15
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Urine albumin:creatinine ratio then Latest 1 where numeric value > 250
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_dm_reg_pg1_hrc_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_dm_reg_pg1_hrc_vs3`
-  - Restriction: Latest 1 where numeric value > 250
-    - Condition: NUMERIC_VALUE IN | > 250
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_dm_reg_pg1_hrc_vs1` (3 codes — cluster IFCCHBAM_COD)
+  - Keep only the latest matching record, and require its numeric value > 90
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with ELF (Enhanced Liver Fibrosis) score, ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score +1 more then Latest 1 where numeric value > 9.8
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_dm_reg_pg1_hrc_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_dm_reg_pg1_hrc_vs4`
-  - Restriction: Latest 1 where numeric value > 9.8
-    - Condition: NUMERIC_VALUE IN | > 9.8
+### Rule 2 of 6
 
-### Rule 5 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Clinical Codes [EVENTS] with Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference range) - IFCC standardised, HbA1c level (monitoring ranges) - IFCC standardised then Latest 1 where numeric value > 75
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_dm_reg_pg1_hrc_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_dm_reg_pg1_hrc_vs1`
-  - Restriction: Latest 1 where numeric value > 75
-    - Condition: NUMERIC_VALUE IN | > 75
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
-### Rule 6 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: Clinical Codes [EVENTS] with Biventricular failure, Cardiac insufficiency, CCF - Congestive cardiac failure +40 more OR Medication Issues [MEDICATION_ISSUES] with Insulins OR Exenatide, Liraglutide, Lixisenatide +2 more where Date of Issue within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_dm_reg_pg1_hrc_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_dm_reg_pg1_hrc_vs5`
-  - Filter: Episode (First, New...)
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_dm_reg_pg1_hrc_vs6`, `on_dm_reg_pg1_hrc_vs7`
-  - Filter: Drug
-    - Filter ValueSets: `on_dm_reg_pg1_hrc_vs6`, `on_dm_reg_pg1_hrc_vs7`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_dm_reg_pg1_hrc_vs2` (2 codes)
+  - Keep only the latest matching record, and require its numeric value < 15
 
+### Rule 3 of 6
 
-## ValueSet Friendly Names
-### LTC LCS: Diabetes Register*
-- `dm_reg_vs1` (SNOMED, 1 codes): Refset: 999004691000230108 | Cluster: DM_COD
-- `dm_reg_vs2` (SNOMED, 1 codes): Refset: 999003371000230102 | Cluster: DMRES_COD
-### on Diabetes Register- LTC LCS Priority Group 1 (HRC)
-- `on_dm_reg_pg1_hrc_vs1` (SNOMED, 3 codes): Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference range) - IFCC standardised, HbA1c level (monitoring ranges) - IFCC standardised | Cluster: IFCCHBAM_COD
-- `on_dm_reg_pg1_hrc_vs2` (SNOMED, 2 codes): GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation, eGFR (estimated glomerular filtration rate) using creatinine Chronic Kidney Disease Epidemiology Collaboration equation per 1.73 square metres
-- `on_dm_reg_pg1_hrc_vs3` (SNOMED, 1 codes): Urine albumin:creatinine ratio
-- `on_dm_reg_pg1_hrc_vs4` (SNOMED, 4 codes): ELF (Enhanced Liver Fibrosis) score, ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score +1 more
-- `on_dm_reg_pg1_hrc_vs5` (SNOMED, 43 codes): Biventricular failure, Cardiac insufficiency, CCF - Congestive cardiac failure +40 more | Cluster: HF_COD
-- `on_dm_reg_pg1_hrc_vs6` (Drug Group, 1 codes): Insulins
-- `on_dm_reg_pg1_hrc_vs7` (SCT Const, 5 codes): Exenatide, Liraglutide, Lixisenatide +2 more
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_dm_reg_pg1_hrc_vs3` (1 code)
+  - Keep only the latest matching record, and require its numeric value > 250
+
+### Rule 4 of 6
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_dm_reg_pg1_hrc_vs4` (4 codes)
+  - Keep only the latest matching record, and require its numeric value > 9.8
+
+### Rule 5 of 6
+
+Patients **must match** this rule to stay in. Those who match continue to Rule 6; those who do not are excluded.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_dm_reg_pg1_hrc_vs1` (3 codes — cluster IFCCHBAM_COD)
+  - Keep only the latest matching record, and require its numeric value > 75
+
+### Rule 6 of 6
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_dm_reg_pg1_hrc_vs5` (43 codes — cluster HF_COD)
+- **Medication Issues**
+  - Code in: `on_dm_reg_pg1_hrc_vs6` (1 code), or `on_dm_reg_pg1_hrc_vs7` (5 codes)
+  - Where drug code in `on_dm_reg_pg1_hrc_vs6` (1 code), `on_dm_reg_pg1_hrc_vs7` (5 codes)
+  - Where issue date within the last 6 months
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Diabetes Register* | `dm_reg_vs1` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| LTC LCS: Diabetes Register* | `dm_reg_vs2` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | `on_dm_reg_pg1_hrc_vs1` | IFCCHBAM_COD | SNOMED | 3 | Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference ... | 95d9e41a |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | `on_dm_reg_pg1_hrc_vs2` |  | SNOMED | 2 | GFR (glomerular filtration rate) calculated by abbreviated Modification of Di... | 45ee7150 |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | `on_dm_reg_pg1_hrc_vs3` |  | SNOMED | 1 | Urine albumin:creatinine ratio | 71e284a5 |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | `on_dm_reg_pg1_hrc_vs4` |  | SNOMED | 4 | ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score, Ass... | e1c7ed45 |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | `on_dm_reg_pg1_hrc_vs5` | HF_COD | SNOMED | 43 | Biventricular failure, Cardiac insufficiency, CCF - Congestive cardiac failur... | 0c87993d |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | `on_dm_reg_pg1_hrc_vs6` |  | Drug Group | 1 | Insulins | 0bd7c4bb |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | `on_dm_reg_pg1_hrc_vs7` |  | SCT Const | 5 | Exenatide, Liraglutide, Lixisenatide +2 more | 6cbac172 |
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

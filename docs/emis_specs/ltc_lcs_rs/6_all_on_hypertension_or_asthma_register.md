@@ -5,37 +5,34 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: 6. All on Hypertension or Asthma register
+# 6. All on Hypertension or Asthma register
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: 6. All on Hypertension or Asthma register
-Parent population: Currently registered patients
+## What this search does
 
-## Parent Chain
-- No parent reports.
+Start with currently registered patients. A patient is included when they match Rule 1.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with currently registered patients. Finally include patients who match Patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*.
+Currently registered patients.
 
-Boolean logic:
-(patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*
-- Population ref: LTC LCS: Asthma Adult Register* (179ff797-756f-476b-939c-43e0f14b1a1b)
-- Population ref: LTC LCS: Asthma CYP Register* (06df4bbf-18e5-453c-9d8c-07712946d38b)
-- Population ref: LTC LCS: Hypertension Register* (5b0680ae-1dc6-4536-a136-7ac7f925490a)
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### 6. All on Hypertension or Asthma register
-- None
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **LTC LCS: Asthma Adult Register***
+- They appear in the results of the search **LTC LCS: Asthma CYP Register***
+- They appear in the results of the search **LTC LCS: Hypertension Register***
+
+## Code lists used
+
+None.
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

@@ -5,37 +5,34 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: GROUP:CYPAST_LR_ONLY
+# GROUP:CYPAST_LR_ONLY
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Report title: [GROUP:CYPAST_LR_ONLY] On Asthma(CYP) Register- LOW RISK
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: [GROUP:CYPAST_LR_ONLY] On Asthma(CYP) Register- LOW RISK
-Parent population: Based on "5. LTC LCS: Asthma CYP register ONLY" search results
+## What this search does
 
-## Parent Chain
-- 5. LTC LCS: Asthma CYP register ONLY: Start with currently registered patients. Finally include patients who match Patients included in search LTC LCS: Asthma CYP Register ONLY.
+Start with the patients found by "5. LTC LCS: Asthma CYP register ONLY" (see below). A patient is included when they match Rule 1.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "5. ltc lcs: asthma cyp register only" search results. Finally include patients who match Patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*.
+1. **5. LTC LCS: Asthma CYP register ONLY** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: Asthma CYP Register ONLY.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*
-- Population ref: On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)* (0fe2f41b-d4ae-4328-b6f0-05baa80989f5)
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### 5. LTC LCS: Asthma CYP register ONLY
-- None
-### GROUP:CYPAST_LR_ONLY
-- None
+A patient matches this rule when:
+- They appear in the results of the search **On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)***
+
+## Code lists used
+
+None.
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

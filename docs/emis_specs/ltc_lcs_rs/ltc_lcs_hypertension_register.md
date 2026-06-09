@@ -5,35 +5,33 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: LTC LCS: Hypertension Register*
+# LTC LCS: Hypertension Register*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: LTC LCS: Hypertension Register*
-Parent population: Currently registered patients
+## What this search does
 
-## Parent Chain
-- No parent reports.
+Start with currently registered patients. A patient is included when they match Rule 1.
 
-## Library Items
-- LTC LCS: Hypertension Register*: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877); wrapper reports: LTC LCS: Hypertension Register*
+## Who we start with
 
-## Target Report Logic
-Start with currently registered patients. Finally include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
+Currently registered patients.
 
-Boolean logic:
-(Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877))
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877)
-- Library item: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877)
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS: Hypertension Register*
-- None
+A patient matches this rule when:
+- They match the EMIS library item **Hypertension Register** (see Caveats)
+
+## Code lists used
+
+None.
+
+## Caveats
+
+- This search references the EMIS library item `a5ff1b4e-f130-4fea-b11c-5b40dc9b0877`, whose logic is not included in this XML export. It is likely **Hypertension Register** (inferred from wrapper report "LTC LCS: Hypertension Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

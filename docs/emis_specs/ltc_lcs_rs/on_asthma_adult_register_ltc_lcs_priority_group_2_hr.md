@@ -5,143 +5,120 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)*
+# On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)*
-Parent population: Based on "LTC LCS: Asthma Adult Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Asthma Adult Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 18 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues [MEDICATION_ISSUES] with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+Start with the patients found by "LTC LCS: Asthma Adult Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-7.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: asthma adult register*" search results. Exclude patients who match Patients included in search On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*. Finally include patients who match Medication Issues [MEDICATION_ISSUES] with Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose dry powder inhaler, Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose inhaler CFC free, Fostair 100micrograms/dose / 6micrograms/dose inhaler (Chiesi Ltd) +31 more where Date of Issue within the last 6 months AND Medication Issues [MEDICATION_ISSUES] with Beclazone 200 inhaler (Teva UK Ltd), Beclazone 250 Easi-Breathe inhaler (Teva UK Ltd), Beclazone 250 inhaler (Teva UK Ltd) +31 more where Date of Issue within the last 6 months.
+1. **LTC LCS: Asthma Adult Register*** — Start with currently registered patients. Require Patient Details where Age at least 18 years old. Include patients who match Clinical Codes with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*) AND (Medication Issues [MEDICATION_ISSUES] with Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose dry powder inhaler, Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose inhaler CFC free, Fostair 100micrograms/dose / 6micrograms/dose inhaler (Chiesi Ltd) +31 more where Date of Issue within the last 6 months AND Medication Issues [MEDICATION_ISSUES] with Beclazone 200 inhaler (Teva UK Ltd), Beclazone 250 Easi-Breathe inhaler (Teva UK Ltd), Beclazone 250 inhaler (Teva UK Ltd) +31 more where Date of Issue within the last 6 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*
-- Population ref: On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)* (79cb583c-22e3-45b0-a5f5-89e813ade686)
+### Rule 1 of 7
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Emergency hospital admission for asthma, Emergency asthma admission since last encounter where Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs1`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: OR
-- Summary: Medication Issues [MEDICATION_ISSUES] with Tiotropium bromide monohydrate where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Montelukast Sodium where Date of Issue within the last 12 months OR Medication Issues [MEDICATION_ISSUES] with Theophylline, Theophylline Hydrate, Theophylline S/R +2 more where Date of Issue within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs2`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs2`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs3`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs4`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs4`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
+A patient matches this rule when:
+- They appear in the results of the search **On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)***
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: OR
-- Summary: Medication Issues [MEDICATION_ISSUES] with Prednisolone, Prednisolone Sodium Phosphate, Prednisolone Steaglate where Date of Issue within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs5`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs5`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
+### Rule 2 of 7
 
-### Rule 5 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Amoxicillin, Amoxicillin Trihydrate, Doxycycline +6 more where Date of Issue within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs6`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs6`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
-### Rule 6 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Fostair 200micrograms/dose / 6micrograms/dose inhaler (Chiesi Ltd), Fostair NEXThaler 200micrograms/dose / 6micrograms/dose dry powder inhaler (Chiesi Ltd), Budesonide 200micrograms/dose / Formoterol 6micrograms/dose dry powder inhaler +25 more where Date of Issue within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs7`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs7`
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs1` (2 codes)
+  - Where date within the last 12 months
 
-### Rule 7 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Medication Issues [MEDICATION_ISSUES] with Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose dry powder inhaler, Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose inhaler CFC free, Fostair 100micrograms/dose / 6micrograms/dose inhaler (Chiesi Ltd) +31 more where Date of Issue within the last 6 months AND Medication Issues [MEDICATION_ISSUES] with Beclazone 200 inhaler (Teva UK Ltd), Beclazone 250 Easi-Breathe inhaler (Teva UK Ltd), Beclazone 250 inhaler (Teva UK Ltd) +31 more where Date of Issue within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs8`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs8`
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_adult_reg_pg2_hr_vs9`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_adult_reg_pg2_hr_vs9`
+### Rule 3 of 7
 
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
 
-## ValueSet Friendly Names
-### LTC LCS: Asthma Adult Register*
-- `asthma_adult_reg_vs1` (SNOMED, 1 codes): Refset: 999010051000230100 | Cluster: ASTRES_COD
-- `asthma_adult_reg_vs2` (SNOMED, 1 codes): Refset: 999012891000230104 | Cluster: AST_COD
-- `asthma_adult_reg_vs3` (SNOMED, 521 codes): Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more | Cluster: ASTTRT_COD
-### On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)*
-- `on_asthma_adult_reg_pg2_hr_vs1` (SNOMED, 2 codes): Emergency hospital admission for asthma, Emergency asthma admission since last encounter
-- `on_asthma_adult_reg_pg2_hr_vs2` (SCT Const, 1 codes): Tiotropium bromide monohydrate
-- `on_asthma_adult_reg_pg2_hr_vs3` (SCT Const, 1 codes): Montelukast Sodium
-- `on_asthma_adult_reg_pg2_hr_vs4` (SCT Const, 5 codes): Theophylline, Theophylline Hydrate, Theophylline S/R +2 more
-- `on_asthma_adult_reg_pg2_hr_vs5` (SCT Const, 3 codes): Prednisolone, Prednisolone Sodium Phosphate, Prednisolone Steaglate
-- `on_asthma_adult_reg_pg2_hr_vs6` (SCT Const, 9 codes): Amoxicillin, Amoxicillin Trihydrate, Doxycycline +6 more
-- `on_asthma_adult_reg_pg2_hr_vs7` (SCT_PREP, 28 codes): Fostair 200micrograms/dose / 6micrograms/dose inhaler (Chiesi Ltd), Fostair NEXThaler 200micrograms/dose / 6micrograms/dose dry powder inhaler (Chiesi Ltd), Budesonide 200micrograms/dose / Formoterol 6micrograms/dose dry powder inhaler +25 more
-- `on_asthma_adult_reg_pg2_hr_vs8` (SCT_PREP, 34 codes): Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose dry powder inhaler, Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose inhaler CFC free, Fostair 100micrograms/dose / 6micrograms/dose inhaler (Chiesi Ltd) +31 more
-- `on_asthma_adult_reg_pg2_hr_vs9` (SCT_PREP, 34 codes): Beclazone 200 inhaler (Teva UK Ltd), Beclazone 250 Easi-Breathe inhaler (Teva UK Ltd), Beclazone 250 inhaler (Teva UK Ltd) +31 more
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs2` (1 code)
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs2` (1 code)
+  - Where issue date within the last 6 months
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs3` (1 code)
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs3` (1 code)
+  - Where issue date within the last 12 months
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs4` (5 codes)
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs4` (5 codes)
+  - Where issue date within the last 12 months
+
+### Rule 4 of 7
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs5` (3 codes)
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs5` (3 codes)
+  - Where issue date within the last 12 months
+
+### Rule 5 of 7
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 6.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs6` (9 codes)
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs6` (9 codes)
+  - Where issue date within the last 12 months
+
+### Rule 6 of 7
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 7.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs7` (28 codes)
+  - Where issue date within the last 6 months
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs7` (28 codes)
+
+### Rule 7 of 7
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs8` (34 codes)
+  - Where issue date within the last 6 months
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs8` (34 codes)
+- **Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg2_hr_vs9` (34 codes)
+  - Where issue date within the last 6 months
+  - Where drug code in `on_asthma_adult_reg_pg2_hr_vs9` (34 codes)
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs1` | ASTRES_COD | SNOMED | 1 | Refset: 999010051000230100 | 0cecb4fb |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs2` | AST_COD | SNOMED | 1 | Refset: 999012891000230104 | b6f202b4 |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs3` | ASTTRT_COD | SNOMED | 521 | Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals L... | d78c07e6 |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs1` |  | SNOMED | 2 | Emergency hospital admission for asthma, Emergency asthma admission since las... | 382fff0c |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs2` |  | SCT Const | 1 | Tiotropium bromide monohydrate | 5bb6c357 |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs3` |  | SCT Const | 1 | Montelukast Sodium | 919ed7f2 |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs4` |  | SCT Const | 5 | Theophylline, Theophylline Hydrate, Theophylline S/R +2 more | 08d2e32b |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs5` |  | SCT Const | 3 | Prednisolone, Prednisolone Sodium Phosphate, Prednisolone Steaglate | 153a3cb0 |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs6` |  | SCT Const | 9 | Amoxicillin, Amoxicillin Trihydrate, Doxycycline +6 more | b191f1eb |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs7` |  | SCT_PREP | 28 | Fostair 200micrograms/dose / 6micrograms/dose inhaler (Chiesi Ltd), Fostair N... | 30bb913d |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs8` |  | SCT_PREP | 34 | Beclometasone 100micrograms/dose / Formoterol 6micrograms/dose dry powder inh... | 04c8d461 |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | `on_asthma_adult_reg_pg2_hr_vs9` |  | SCT_PREP | 34 | Beclazone 200 inhaler (Teva UK Ltd), Beclazone 250 Easi-Breathe inhaler (Teva... | 6f0a9b98 |
+
+## Caveats
+
+- Some code lists exclude specific codes. See `exceptions.csv` in the extraction for the excluded codes and whether each was applied.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

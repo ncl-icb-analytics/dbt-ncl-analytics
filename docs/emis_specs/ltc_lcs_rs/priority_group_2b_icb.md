@@ -5,271 +5,179 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: Priority Group 2b (ICB)
+# Priority Group 2b (ICB)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
+Description: All Hypertensives that meet the criteria to be placed in Group 2b (BAME & LTCs & BP >=140/90 or 135/85 excl).
 
-Target report: Priority Group 2b (ICB)
-Parent population: Based on "LTC LCS: Hypertension Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Hypertension Register*: Start with currently registered patients. Finally include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
-  Library refs: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877)
+Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rules 1 and 4-5 to stay in. Patients matching Rules 2-3 and 6 are excluded. Rule 7 includes only patients who do NOT match it.
 
-## Library Items
-- LTC LCS: Hypertension Register*: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877); wrapper reports: LTC LCS: Hypertension Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: hypertension register*" search results. Require Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months; Clinical Codes [EVENTS] with Black African, Black Caribbean, Black Caribbean +75 more; Clinical Codes [EVENTS] with Mural thrombus of right ventricle following acute myocardial infarction, Postoperative nontransmural myocardial infarction, Postoperative transmural myocardial infarction +441 more OR Clinical Codes [EVENTS] with Thrombosis of left middle cerebral artery, Left middle cerebral artery thrombosis, Thrombosis of right middle cerebral artery +268 more OR Transient cerebral ischemia, Anterior circulation transient ischaemic attack, Anterior circulation transient ischemic attack +35 more OR Clinical Codes [EVENTS] with Claudication, Charcot  s syndrome, IC - Intermittent claudication +29 more OR Clinical Codes [EVENTS] with Anaemia co-occurrent and due to chronic kidney disease stage 3, Anemia co-occurrent and due to chronic kidney disease stage 3, Chronic kidney disease stage 5 on dialysis +103 more OR Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation then Latest 1 where numeric value < 60 OR Clinical Codes [EVENTS] with Hyperosmolar hyperglycaemic coma due to diabetes mellitus without ketoacidosis, Hyperosmolar hyperglycemic coma due to diabetes mellitus without ketoacidosis, Lactic acidosis with diabetes mellitus +524 more OR Clinical Codes [EVENTS] with Body mass index, BMI - Body mass index, Body mass index +2 more then Latest 1 where numeric value > 35. Exclude patients who match Patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC); Patients included in search Priority Group 2a (ICB); Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months. Finally include patients who do not match Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months.
+1. **LTC LCS: Hypertension Register*** — Start with currently registered patients. Include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months) AND (Clinical Codes [EVENTS] with Black African, Black Caribbean, Black Caribbean +75 more) AND (Clinical Codes [EVENTS] with Mural thrombus of right ventricle following acute myocardial infarction, Postoperative nontransmural myocardial infarction, Postoperative transmural myocardial infarction +441 more OR Clinical Codes [EVENTS] with Thrombosis of left middle cerebral artery, Left middle cerebral artery thrombosis, Thrombosis of right middle cerebral artery +268 more OR Transient cerebral ischemia, Anterior circulation transient ischaemic attack, Anterior circulation transient ischemic attack +35 more OR Clinical Codes [EVENTS] with Claudication, Charcot  s syndrome, IC - Intermittent claudication +29 more OR Clinical Codes [EVENTS] with Anaemia co-occurrent and due to chronic kidney disease stage 3, Anemia co-occurrent and due to chronic kidney disease stage 3, Chronic kidney disease stage 5 on dialysis +103 more OR Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation then Latest 1 where numeric value < 60 OR Clinical Codes [EVENTS] with Hyperosmolar hyperglycaemic coma due to diabetes mellitus without ketoacidosis, Hyperosmolar hyperglycemic coma due to diabetes mellitus without ketoacidosis, Lactic acidosis with diabetes mellitus +524 more OR Clinical Codes [EVENTS] with Body mass index, BMI - Body mass index, Body mass index +2 more then Latest 1 where numeric value > 35) AND NOT (patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC)) AND NOT (patients included in search Priority Group 2a (ICB)) AND NOT (Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months) AND NOT (Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs1`, `priority_group_2b_icb_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs1`, `priority_group_2b_icb_vs2`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
+### Rule 1 of 7
 
-### Rule 2 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC)
-- Population ref: On Hypertension Register- LTC LCS Priority Group 1 (HRC) (4968805e-6847-40bf-90f9-385f19192d9d)
+Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
-### Rule 3 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: patients included in search Priority Group 2a (ICB)
-- Population ref: Priority Group 2a (ICB) (f8a10ce9-983d-43a4-a8da-0d829d81ce33)
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs1` (1 code — cluster CLINBP_COD), or `priority_group_2b_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months
 
-### Rule 4 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: AND
-- Summary: Must match: Clinical Codes [EVENTS] with Black African, Black Caribbean, Black Caribbean +75 more
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs3`
+### Rule 2 of 7
 
-### Rule 5 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Clinical Codes [EVENTS] with Mural thrombus of right ventricle following acute myocardial infarction, Postoperative nontransmural myocardial infarction, Postoperative transmural myocardial infarction +441 more OR Clinical Codes [EVENTS] with Thrombosis of left middle cerebral artery, Left middle cerebral artery thrombosis, Thrombosis of right middle cerebral artery +268 more OR Transient cerebral ischemia, Anterior circulation transient ischaemic attack, Anterior circulation transient ischemic attack +35 more OR Clinical Codes [EVENTS] with Claudication, Charcot  s syndrome, IC - Intermittent claudication +29 more OR Clinical Codes [EVENTS] with Anaemia co-occurrent and due to chronic kidney disease stage 3, Anemia co-occurrent and due to chronic kidney disease stage 3, Chronic kidney disease stage 5 on dialysis +103 more OR Clinical Codes [EVENTS] with GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation then Latest 1 where numeric value < 60 OR Clinical Codes [EVENTS] with Hyperosmolar hyperglycaemic coma due to diabetes mellitus without ketoacidosis, Hyperosmolar hyperglycemic coma due to diabetes mellitus without ketoacidosis, Lactic acidosis with diabetes mellitus +524 more OR Clinical Codes [EVENTS] with Body mass index, BMI - Body mass index, Body mass index +2 more then Latest 1 where numeric value > 35
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs4`
-  - Filter: Episode (First, New...)
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs5`, `priority_group_2b_icb_vs6`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs5`, `priority_group_2b_icb_vs6`
-  - Filter: Episode (First, New...)
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs7`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs7`
-  - Filter: Episode (First, New...)
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs8`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs8`
-  - Filter: Date
-    - To: <=
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs9`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs9`
-  - Restriction: Latest 1 where numeric value < 60
-    - Condition: NUMERIC_VALUE IN | < 60
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs10`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs10`
-  - Filter: Date
-    - To: <=
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs11`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs11`
-  - Restriction: Latest 1 where numeric value > 35
-    - Condition: NUMERIC_VALUE IN | > 35
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 3.
 
-### Rule 6 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months then Latest 100 AND Clinical Codes [EVENTS] with Refset: 999036281000230108 then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs1`, `priority_group_2b_icb_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs1`, `priority_group_2b_icb_vs2`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
-  - Restriction: Latest 100
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2b_icb_vs12`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2b_icb_vs12`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2b_icb_vs13`, `priority_group_2b_icb_vs1`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2b_icb_vs13`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where SNOMED code IN: CLINBP_COD
-            - Condition: READCODE IN | CLINBP_COD
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs1`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2b_icb_vs14`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2b_icb_vs14`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2b_icb_vs15`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2b_icb_vs15`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value >= 1 and <= 90
-            - Condition: NUMERIC_VALUE IN | >= 1 and <= 90
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `priority_group_2b_icb_vs14`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `priority_group_2b_icb_vs14`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value >= 1 and <= 140
-                - Condition: NUMERIC_VALUE IN | >= 1 and <= 140
+A patient matches this rule when:
+- They appear in the results of the search **On Hypertension Register- LTC LCS Priority Group 1 (HRC)**
 
-### Rule 7 (Additional)
-- Clause type: include-if-not-match
-- Pass: Exclude
-- Fail: Include
-- Operator: AND
-- Summary: Included if it does not match: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 1 AND Clinical Codes [EVENTS] with 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more then Latest 100 where date > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs1`, `priority_group_2b_icb_vs2`
-  - Restriction: Latest 1
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2b_icb_vs2`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2b_icb_vs2`
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2b_icb_vs14`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2b_icb_vs14`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `priority_group_2b_icb_vs16`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `priority_group_2b_icb_vs16`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value > 0
-                - Condition: NUMERIC_VALUE IN | > 0
-- Clinical Codes [EVENTS]
-  - ValueSets: `priority_group_2b_icb_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `priority_group_2b_icb_vs2`
-  - Restriction: Latest 100 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-  - Linked criterion:
-    - Clinical Codes [EVENTS]
-      - ValueSets: `priority_group_2b_icb_vs14`
-      - Relationship: Linked on DATE
-      - Filter: Clinical Code
-        - Filter ValueSets: `priority_group_2b_icb_vs14`
-      - Filter: Value IN > 0
-        - From: > 0
-      - Restriction: Latest 100
-      - Linked criterion:
-        - Clinical Codes [EVENTS]
-          - ValueSets: `priority_group_2b_icb_vs16`
-          - Relationship: Linked on DATE
-          - Filter: Clinical Code
-            - Filter ValueSets: `priority_group_2b_icb_vs16`
-          - Filter: Value IN > 0
-            - From: > 0
-          - Restriction: Latest 1 where numeric value >= 1 and <= 85
-            - Condition: NUMERIC_VALUE IN | >= 1 and <= 85
-          - Linked criterion:
-            - Clinical Codes [EVENTS]
-              - ValueSets: `priority_group_2b_icb_vs14`
-              - Relationship: Linked on DATE
-              - Filter: Clinical Code
-                - Filter ValueSets: `priority_group_2b_icb_vs14`
-              - Filter: Value IN > 0
-                - From: > 0
-              - Restriction: Latest 1 where numeric value >= 1 and <= 135
-                - Condition: NUMERIC_VALUE IN | >= 1 and <= 135
+### Rule 3 of 7
 
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 4.
 
-## ValueSet Friendly Names
-### LTC LCS: Hypertension Register*
-- None
-### Priority Group 2b (ICB)
-- `priority_group_2b_icb_vs1` (SNOMED, 1 codes): Refset: 999036281000230108 | Cluster: CLINBP_COD
-- `priority_group_2b_icb_vs2` (SNOMED, 5 codes): 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more | Cluster: HOMEAMBBP_COD
-- `priority_group_2b_icb_vs3` (SNOMED, 78 codes): Black African, Black Caribbean, Black Caribbean +75 more
-- `priority_group_2b_icb_vs4` (SNOMED, 444 codes): Mural thrombus of right ventricle following acute myocardial infarction, Postoperative nontransmural myocardial infarction, Postoperative transmural myocardial infarction +441 more | Cluster: CHD_COD
-- `priority_group_2b_icb_vs5` (SNOMED, 271 codes): Thrombosis of left middle cerebral artery, Left middle cerebral artery thrombosis, Thrombosis of right middle cerebral artery +268 more | Cluster: STRK_COD
-- `priority_group_2b_icb_vs6` (SNOMED, 38 codes): Transient cerebral ischemia, Anterior circulation transient ischaemic attack, Anterior circulation transient ischemic attack +35 more | Cluster: TIA_COD
-- `priority_group_2b_icb_vs7` (SNOMED, 32 codes): Claudication, Charcot  s syndrome, IC - Intermittent claudication +29 more | Cluster: PAD_COD
-- `priority_group_2b_icb_vs8` (SNOMED, 106 codes): Anaemia co-occurrent and due to chronic kidney disease stage 3, Anemia co-occurrent and due to chronic kidney disease stage 3, Chronic kidney disease stage 5 on dialysis +103 more | Cluster: CKD_COD
-- `priority_group_2b_icb_vs9` (SNOMED, 1 codes): GFR (glomerular filtration rate) calculated by abbreviated Modification of Diet in Renal Disease Study Group calculation
-- `priority_group_2b_icb_vs10` (SNOMED, 527 codes): Hyperosmolar hyperglycaemic coma due to diabetes mellitus without ketoacidosis, Hyperosmolar hyperglycemic coma due to diabetes mellitus without ketoacidosis, Lactic acidosis with diabetes mellitus +524 more | Cluster: DM_COD
-- `priority_group_2b_icb_vs11` (SNOMED, 5 codes): Body mass index, BMI - Body mass index, Body mass index +2 more
-- `priority_group_2b_icb_vs12` (SNOMED, 49 codes): Minimum systolic blood pressure, Systemic blood pressure, SBP - Systemic blood pressure +46 more | Cluster: Systolic Blood Pressure
-- `priority_group_2b_icb_vs13` (SNOMED, 45 codes): Minimum diastolic blood pressure, Minimum day interval diastolic blood pressure, Minimum 24 hour diastolic blood pressure +42 more | Cluster: Diastolic Blood Pressure
-- `priority_group_2b_icb_vs14` (SNOMED, 36 codes): Systemic blood pressure, SBP - Systemic blood pressure, Lying systolic blood pressure +33 more | Cluster: Systolic Blood Pressure
-- `priority_group_2b_icb_vs15` (SNOMED, 32 codes): Increased diastolic arterial pressure, High diastolic arterial pressure, Increased diastolic blood pressure +29 more | Cluster: Diastolic Blood Pressure
-- `priority_group_2b_icb_vs14` (SNOMED, 13 codes): Minimum systolic blood pressure, Average home systolic blood pressure, Average day interval systolic blood pressure +10 more | Cluster: Systolic Blood Pressure
-- `priority_group_2b_icb_vs16` (SNOMED, 13 codes): Minimum diastolic blood pressure, Average 24 hour diastolic blood pressure, Ambulatory diastolic blood pressure +10 more | Cluster: Diastolic Blood Pressure
+A patient matches this rule when:
+- They appear in the results of the search **Priority Group 2a (ICB)**
+
+### Rule 4 of 7
+
+Patients **must match** this rule to stay in. Those who match continue to Rule 5; those who do not are excluded.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs3` (78 codes)
+
+### Rule 5 of 7
+
+Patients **must match** this rule to stay in. Those who match continue to Rule 6; those who do not are excluded.
+
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs4` (444 codes — cluster CHD_COD)
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs5` (271 codes — cluster STRK_COD), or `priority_group_2b_icb_vs6` (38 codes — cluster TIA_COD)
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs7` (32 codes — cluster PAD_COD)
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs8` (106 codes — cluster CKD_COD)
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs9` (1 code)
+  - Keep only the latest matching record, and require its numeric value < 60
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs10` (527 codes — cluster DM_COD)
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs11` (5 codes)
+  - Keep only the latest matching record, and require its numeric value > 35
+
+### Rule 6 of 7
+
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 7.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs1` (1 code — cluster CLINBP_COD), or `priority_group_2b_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months
+  - Keep only the latest 100 matching records
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2b_icb_vs12` (49 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2b_icb_vs13` (45 codes — cluster Diastolic Blood Pressure), or `priority_group_2b_icb_vs1` (1 code — cluster CLINBP_COD)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its code to be in: CLINBP_COD
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs1` (1 code — cluster CLINBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2b_icb_vs14` (36 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2b_icb_vs15` (32 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value >= 1 and <= 90
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `priority_group_2b_icb_vs14` (36 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value >= 1 and <= 140
+
+### Rule 7 of 7
+
+Final rule: patients who match are **excluded**; everyone else is included.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs1` (1 code — cluster CLINBP_COD), or `priority_group_2b_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest matching record
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2b_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2b_icb_vs14` (13 codes — cluster Systolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `priority_group_2b_icb_vs16` (13 codes — cluster Diastolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value > 0
+- **Clinical Codes** (clinical events)
+  - Code in: `priority_group_2b_icb_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Keep only the latest 100 matching records, and require its date > today - 12 months
+  - Must also have a linked record (Linked on DATE):
+    - **Clinical Codes** (clinical events)
+      - Code in: `priority_group_2b_icb_vs14` (13 codes — cluster Systolic Blood Pressure)
+      - Where numeric value > 0
+      - Keep only the latest 100 matching records
+      - Must also have a linked record (Linked on DATE):
+        - **Clinical Codes** (clinical events)
+          - Code in: `priority_group_2b_icb_vs16` (13 codes — cluster Diastolic Blood Pressure)
+          - Where numeric value > 0
+          - Keep only the latest matching record, and require its numeric value >= 1 and <= 85
+          - Must also have a linked record (Linked on DATE):
+            - **Clinical Codes** (clinical events)
+              - Code in: `priority_group_2b_icb_vs14` (13 codes — cluster Systolic Blood Pressure)
+              - Where numeric value > 0
+              - Keep only the latest matching record, and require its numeric value >= 1 and <= 135
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs1` | CLINBP_COD | SNOMED | 1 | Refset: 999036281000230108 | f806e309 |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs10` | DM_COD | SNOMED | 527 | Hyperosmolar hyperglycaemic coma due to diabetes mellitus without ketoacidosi... | ea63b842 |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs11` |  | SNOMED | 5 | Body mass index, BMI - Body mass index, Weight: body mass +1 more | 435b40ad |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs12` | Systolic Blood Pressure | SNOMED | 49 | Minimum systolic blood pressure, Systemic blood pressure, SBP - Systemic bloo... | dbe8bf65 |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs13` | Diastolic Blood Pressure | SNOMED | 45 | Minimum diastolic blood pressure, Minimum day interval diastolic blood pressu... | 94656e9b |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs14` | Systolic Blood Pressure | SNOMED | 36 | Systemic blood pressure, SBP - Systemic blood pressure, Lying systolic blood ... | 5b356e22 |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs15` | Diastolic Blood Pressure | SNOMED | 32 | Increased diastolic arterial pressure, High diastolic arterial pressure, Incr... | 2c57ad8d |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs16` | Diastolic Blood Pressure | SNOMED | 13 | Minimum diastolic blood pressure, Average 24 hour diastolic blood pressure, A... | 5f525c4f |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs2` | HOMEAMBBP_COD | SNOMED | 5 | 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitori... | 0daae157 |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs3` |  | SNOMED | 78 | Black African, Black Caribbean, Black Black - other +73 more | 88a4167f |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs4` | CHD_COD | SNOMED | 444 | Mural thrombus of right ventricle following acute myocardial infarction, Post... | e4c73e0d |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs5` | STRK_COD | SNOMED | 271 | Thrombosis of left middle cerebral artery, Left middle cerebral artery thromb... | bb3a48ed |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs6` | TIA_COD | SNOMED | 38 | Transient cerebral ischemia, Anterior circulation transient ischaemic attack,... | 8b1f1274 |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs7` | PAD_COD | SNOMED | 32 | Claudication, Charcot  s syndrome, IC - Intermittent claudication +27 more | e5d7772c |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs8` | CKD_COD | SNOMED | 106 | Anaemia co-occurrent and due to chronic kidney disease stage 3, Anemia co-occ... | 68fffd80 |
+| Priority Group 2b (ICB) | `priority_group_2b_icb_vs9` |  | SNOMED | 1 | GFR (glomerular filtration rate) calculated by abbreviated Modification of Di... | 20855d05 |
+
+## Caveats
+
+- LTC LCS: Hypertension Register* references the EMIS library item `a5ff1b4e-f130-4fea-b11c-5b40dc9b0877`, whose logic is not included in this XML export. It is likely **Hypertension Register** (inferred from wrapper report "LTC LCS: Hypertension Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

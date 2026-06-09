@@ -5,152 +5,115 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On AF Register- LTC LCS Priority Group 2 (HR)*
+# On AF Register- LTC LCS Priority Group 2 (HR)*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On AF Register- LTC LCS Priority Group 2 (HR)*
-Parent population: Based on "LTC LCS: AF Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: AF Register*: Start with currently registered patients. Finally include patients who match AF Register (library item e6742de9-2073-4a23-8c94-e05f668eaabf).
-  Library refs: AF Register (e6742de9-2073-4a23-8c94-e05f668eaabf)
+Start with the patients found by "LTC LCS: AF Register*" (see below). Patients must match Rules 1 and 4 to stay in. A patient is included when they match any one of Rules 2-3 and 5.
 
-## Library Items
-- LTC LCS: AF Register*: AF Register (e6742de9-2073-4a23-8c94-e05f668eaabf); wrapper reports: LTC LCS: AF Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: af register*" search results. Require Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months; Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months. Finally include patients who match Clinical Codes [EVENTS] with Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more then Latest 1 where numeric value < 40 OR Clinical Codes [EVENTS] with Body weight, O/E - weight, O/E - weight then Latest 1 where numeric value < 50 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale level 7 - severely frail, Rockwood Clinical Frailty Scale level 8 - very severely frail, Rockwood Clinical Frailty Scale level 9 - terminally ill OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale then Latest 1 where numeric value >= 7.
+1. **LTC LCS: AF Register*** — Start with currently registered patients. Include patients who match AF Register (library item e6742de9-2073-4a23-8c94-e05f668eaabf).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months) AND (Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months) AND (Clinical Codes [EVENTS] with Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more then Latest 1 where numeric value < 40 OR Clinical Codes [EVENTS] with Body weight, O/E - weight, O/E - weight then Latest 1 where numeric value < 50 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale level 7 - severely frail, Rockwood Clinical Frailty Scale level 8 - very severely frail, Rockwood Clinical Frailty Scale level 9 - terminally ill OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale then Latest 1 where numeric value >= 7)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Medication Issues [MEDICATION_ISSUES] with Oral Anticoagulants where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months OR Medication Issues [MEDICATION_ISSUES] with Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Anticoagulant prescribed by third party where Date within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg2_hr_vs1`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs1`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg2_hr_vs2`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs2`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg2_hr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs4`
-  - Filter: Date IN within the last 6 months
-    - From: within the last 6 months
+### Rule 1 of 5
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: OR
-- Summary: Medication Issues [MEDICATION_ISSUES] with Aspirin, Clopidogrel, Clopidogrel Hydrogen Sulfate +4 more where Date of Issue within the last 6 months OR Clinical Codes [EVENTS] with Aspirin prophylaxis - IHD, Aspirin prophylaxis for ischaemic heart disease, Aspirin prophylaxis for ischemic heart disease +9 more where Date within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg2_hr_vs5`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs5`
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs6`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs6`
-  - Filter: Date IN within the last 6 months
-    - From: within the last 6 months
+Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: OR
-- Summary: Clinical Codes [EVENTS] with HAS-BLED (hypertension, abnormal renal and/or liver function, stroke, bleeding history or predisposition, labile INR (international normalised ratio), elderly over 65, and drugs and/or alcohol concomitantly) score, HAS-BLED (hypertension, abnormal renal and/or liver function, stroke, bleeding history or predisposition, labile international normalised ratio, elderly over 65, and drugs and/or alcohol concomitantly) bleeding risk score, Assessment using HAS-BLED (hypertension, abnormal renal and/or liver function, stroke, bleeding history or predisposition, labile INR (international normalised ratio), elderly over 65, and drugs and/or alcohol concomitantly) score then Latest 1 where numeric value >= 3 OR Clinical Codes [EVENTS] with ORBIT-AF (Outcomes Registry for Better Informed Treatment of Atrial Fibrillation) bleeding risk score, ORBIT-AF (Outcomes Registry for Better Informed Treatment of Atrial Fibrillation) bleeding risk score, Assessment using ORBIT-AF (Outcomes Registry for Better Informed Treatment of Atrial Fibrillation) bleeding risk score then Latest 1 where numeric value >= 4
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs7`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs7`
-  - Restriction: Latest 1 where numeric value >= 3
-    - Condition: NUMERIC_VALUE IN | >= 3
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs8`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs8`
-  - Restriction: Latest 1 where numeric value >= 4
-    - Condition: NUMERIC_VALUE IN | >= 4
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg2_hr_vs1` (1 code — cluster Warfarin)
+  - Where drug code in `on_af_reg_pg2_hr_vs1` (1 code — cluster Warfarin)
+  - Where issue date within the last 6 months
+- **Medication Issues**
+  - Code in: `on_af_reg_pg2_hr_vs2` (6 codes)
+  - Where drug code in `on_af_reg_pg2_hr_vs2` (6 codes)
+  - Where issue date within the last 6 months
+- **Medication Issues**
+  - Code in: `on_af_reg_pg2_hr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where drug code in `on_af_reg_pg2_hr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs4` (1 code)
+  - Where date within the last 6 months
 
-### Rule 4 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Medication Issues [MEDICATION_ISSUES] with Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more where Date of Issue within the last 6 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_af_reg_pg2_hr_vs2`
-  - Filter: Drug
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs2`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
+### Rule 2 of 5
 
-### Rule 5 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: Clinical Codes [EVENTS] with Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more then Latest 1 where numeric value < 40 OR Clinical Codes [EVENTS] with Body weight, O/E - weight, O/E - weight then Latest 1 where numeric value < 50 OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale level 7 - severely frail, Rockwood Clinical Frailty Scale level 8 - very severely frail, Rockwood Clinical Frailty Scale level 9 - terminally ill OR Clinical Codes [EVENTS] with Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale then Latest 1 where numeric value >= 7
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs9`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs9`
-  - Restriction: Latest 1 where numeric value < 40
-    - Condition: NUMERIC_VALUE IN | < 40
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs10`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs10`
-  - Restriction: Latest 1 where numeric value < 50
-    - Condition: NUMERIC_VALUE IN | < 50
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs11`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs11`
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_af_reg_pg2_hr_vs12`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_af_reg_pg2_hr_vs12`
-  - Restriction: Latest 1 where numeric value >= 7
-    - Condition: NUMERIC_VALUE IN | >= 7
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg2_hr_vs5` (7 codes)
+  - Where issue date within the last 6 months
+  - Where drug code in `on_af_reg_pg2_hr_vs5` (7 codes)
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs6` (12 codes)
+  - Where date within the last 6 months
 
-## ValueSet Friendly Names
-### LTC LCS: AF Register*
-- None
-### On AF Register- LTC LCS Priority Group 2 (HR)*
-- `on_af_reg_pg2_hr_vs1` (Drug Group, 1 codes): Oral Anticoagulants | Cluster: Warfarin
-- `on_af_reg_pg2_hr_vs2` (SCT Const, 6 codes): Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more
-- `on_af_reg_pg2_hr_vs3` (SNOMED, 40 codes): Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsules +37 more | Cluster: DIRECTORANTICOAGDRUG_COD
-- `on_af_reg_pg2_hr_vs4` (SNOMED, 1 codes): Anticoagulant prescribed by third party
-- `on_af_reg_pg2_hr_vs5` (SCT Const, 7 codes): Aspirin, Clopidogrel, Clopidogrel Hydrogen Sulfate +4 more
-- `on_af_reg_pg2_hr_vs6` (SNOMED, 12 codes): Aspirin prophylaxis - IHD, Aspirin prophylaxis for ischaemic heart disease, Aspirin prophylaxis for ischemic heart disease +9 more
-- `on_af_reg_pg2_hr_vs7` (SNOMED, 3 codes): HAS-BLED (hypertension, abnormal renal and/or liver function, stroke, bleeding history or predisposition, labile INR (international normalised ratio), elderly over 65, and drugs and/or alcohol concomitantly) score, HAS-BLED (hypertension, abnormal renal and/or liver function, stroke, bleeding history or predisposition, labile international normalised ratio, elderly over 65, and drugs and/or alcohol concomitantly) bleeding risk score, Assessment using HAS-BLED (hypertension, abnormal renal and/or liver function, stroke, bleeding history or predisposition, labile INR (international normalised ratio), elderly over 65, and drugs and/or alcohol concomitantly) score
-- `on_af_reg_pg2_hr_vs8` (SNOMED, 3 codes): ORBIT-AF (Outcomes Registry for Better Informed Treatment of Atrial Fibrillation) bleeding risk score, ORBIT-AF (Outcomes Registry for Better Informed Treatment of Atrial Fibrillation) bleeding risk score, Assessment using ORBIT-AF (Outcomes Registry for Better Informed Treatment of Atrial Fibrillation) bleeding risk score
-- `on_af_reg_pg2_hr_vs9` (SNOMED, 8 codes): Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated creatinine clearance (Cockcroft-Gault formula) +5 more
-- `on_af_reg_pg2_hr_vs10` (SNOMED, 3 codes): Body weight, O/E - weight, O/E - weight
-- `on_af_reg_pg2_hr_vs11` (SNOMED, 3 codes): Rockwood Clinical Frailty Scale level 7 - severely frail, Rockwood Clinical Frailty Scale level 8 - very severely frail, Rockwood Clinical Frailty Scale level 9 - terminally ill
-- `on_af_reg_pg2_hr_vs12` (SNOMED, 3 codes): Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Assessment using Rockwood Clinical Frailty Scale
+### Rule 3 of 5
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
+
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs7` (3 codes)
+  - Keep only the latest matching record, and require its numeric value >= 3
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs8` (3 codes)
+  - Keep only the latest matching record, and require its numeric value >= 4
+
+### Rule 4 of 5
+
+Patients **must match** this rule to stay in. Those who match continue to Rule 5; those who do not are excluded.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_af_reg_pg2_hr_vs2` (6 codes)
+  - Where drug code in `on_af_reg_pg2_hr_vs2` (6 codes)
+  - Where issue date within the last 6 months
+
+### Rule 5 of 5
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs9` (8 codes)
+  - Keep only the latest matching record, and require its numeric value < 40
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs10` (3 codes)
+  - Keep only the latest matching record, and require its numeric value < 50
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs11` (3 codes)
+- **Clinical Codes** (clinical events)
+  - Code in: `on_af_reg_pg2_hr_vs12` (3 codes)
+  - Keep only the latest matching record, and require its numeric value >= 7
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs1` | Warfarin | Drug Group | 1 | Oral Anticoagulants | 3627615a |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs10` |  | SNOMED | 3 | Body weight, O/E - weight | 7f3acf99 |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs11` |  | SNOMED | 3 | Rockwood Clinical Frailty Scale level 7 - severely frail, Rockwood Clinical F... | df624195 |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs12` |  | SNOMED | 3 | Rockwood Clinical Frailty Scale score, Rockwood Clinical Frailty Scale, Asses... | 734a600b |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs2` |  | SCT Const | 6 | Dabigatran Etexilate, Rivaroxaban, Apixaban +3 more | 05e37db6 |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs3` | DIRECTORANTICOAGDRUG_COD | SNOMED | 40 | Apixaban 2.5mg tablets, Apixaban 5mg tablets, Dabigatran etexilate 75mg capsu... | a8a26d95 |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs4` |  | SNOMED | 1 | Anticoagulant prescribed by third party | b532dd16 |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs5` |  | SCT Const | 7 | Aspirin, Clopidogrel, Clopidogrel Hydrogen Sulfate +4 more | 5dc10500 |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs6` |  | SNOMED | 12 | Aspirin prophylaxis - IHD, Aspirin prophylaxis for ischaemic heart disease, A... | 5161429e |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs7` |  | SNOMED | 3 | HAS-BLED (hypertension, abnormal renal and/or liver function, stroke, bleedin... | 60b9f18e |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs8` |  | SNOMED | 3 | ORBIT-AF (Outcomes Registry for Better Informed Treatment of Atrial Fibrillat... | 53c83a20 |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | `on_af_reg_pg2_hr_vs9` |  | SNOMED | 8 | Cockcroft-Gault formula, Predicted by Cockcroft-Gault formula, Estimated crea... | 610c0721 |
+
+## Caveats
+
+- LTC LCS: AF Register* references the EMIS library item `e6742de9-2073-4a23-8c94-e05f668eaabf`, whose logic is not included in this XML export. It is likely **AF Register** (inferred from wrapper report "LTC LCS: AF Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

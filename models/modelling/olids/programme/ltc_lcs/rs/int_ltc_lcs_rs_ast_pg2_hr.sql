@@ -8,15 +8,16 @@
 -- - Rule 2: emergency asthma admission code (vs1) in last 12 months -> include
 -- - Rule 3: tiotropium (vs2) in last 6 months, montelukast (vs3) or
 --   theophylline/aminophylline (vs4) in last 12 months -> include
--- - Rule 4: prednisolone (vs5) order in last 12 months -> include
--- - Rule 5: antibiotics (vs6: amoxicillin, doxycycline etc.) in last 12 months -> include
+-- - Rule 4: >= 3 prednisolone (vs5) orders in last 12 months -> include
+-- - Rule 5: >= 3 antibiotics (vs6: amoxicillin, doxycycline etc.) orders in
+--   last 12 months -> include
 -- - Rule 6: high-dose ICS/LABA inhaler (vs7: Fostair 200 etc.) in last 6 months -> include
 -- - Rule 7: beclometasone/formoterol combination (vs8) and Beclazone-type
 --   inhaler (vs9) both in last 6 months -> include, else exclude
 --
--- Note: the source GitHub issue describes issue-count thresholds (>= 3 issues)
--- for rules 4-5; the R5 EMIS XML has no count restrictions, so any issue in
--- window qualifies.
+-- Issue-count note: the agent-API parse of the R5 XML drops issue-count
+-- restrictions; the live EMIS searches apply them (issue #395 definitions,
+-- confirmed empirically - without counts PG2 over-matches EMIS by ~107%).
 --
 -- Parent register note: the EMIS parent 'LTC LCS: Asthma Adult Register*' is
 -- the asthma register restricted to age >= 18; fct_person_asthma_register is
@@ -56,18 +57,22 @@ rule_3_add_on_therapy as (
     where order_date >= dateadd(month, -12, current_date())
 ),
 
--- Rule 4: prednisolone order in last 12 months
+-- Rule 4: >= 3 prednisolone orders in last 12 months
 rule_4_prednisolone as (
     select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_adult_reg_pg2_hr_vs5") }})
+    from ({{ get_ltc_lcs_medication_orders("on_asthma_adult_reg_pg2_hr_vs5") }})
     where order_date >= dateadd(month, -12, current_date())
+    group by person_id
+    having count(distinct medication_order_id) >= 3
 ),
 
--- Rule 5: antibiotics order in last 12 months
+-- Rule 5: >= 3 antibiotics orders in last 12 months
 rule_5_antibiotics as (
     select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_adult_reg_pg2_hr_vs6") }})
+    from ({{ get_ltc_lcs_medication_orders("on_asthma_adult_reg_pg2_hr_vs6") }})
     where order_date >= dateadd(month, -12, current_date())
+    group by person_id
+    having count(distinct medication_order_id) >= 3
 ),
 
 -- Rule 6: high-dose ICS/LABA inhaler in last 6 months

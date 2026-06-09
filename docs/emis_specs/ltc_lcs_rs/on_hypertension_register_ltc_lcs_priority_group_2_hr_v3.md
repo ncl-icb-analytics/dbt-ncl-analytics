@@ -5,61 +5,56 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On Hypertension Register- LTC LCS Priority Group 2 (HR) v3
+# On Hypertension Register- LTC LCS Priority Group 2 (HR) v3
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On Hypertension Register- LTC LCS Priority Group 2 (HR) v3
-Parent population: Based on "LTC LCS: Hypertension Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Hypertension Register*: Start with currently registered patients. Finally include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
-  Library refs: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877)
+Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rule 1 to stay in. Patients matching Rule 2 are excluded. A patient is included when they match Rule 3.
 
-## Library Items
-- LTC LCS: Hypertension Register*: Hypertension Register (a5ff1b4e-f130-4fea-b11c-5b40dc9b0877); wrapper reports: LTC LCS: Hypertension Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: hypertension register*" search results. Require Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months. Exclude patients who match Patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3. Finally include patients who match Patients included in search Priority Group 2a (ICB) v3 OR patients included in search Priority Group 2b (ICB) v3.
+1. **LTC LCS: Hypertension Register*** — Start with currently registered patients. Include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months) AND NOT (patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3) AND (patients included in search Priority Group 2a (ICB) v3 OR patients included in search Priority Group 2b (ICB) v3)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: OR
-- Summary: Must match: Clinical Codes [EVENTS] with Refset: 999036281000230108 OR 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more where Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_htn_reg_pg2_hr_v3_vs1`, `on_htn_reg_pg2_hr_v3_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_htn_reg_pg2_hr_v3_vs1`, `on_htn_reg_pg2_hr_v3_vs2`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
+### Rule 1 of 3
 
-### Rule 2 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3
-- Population ref: On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3 (bf30380c-6e3e-4a4a-ba3d-8529d45ce74f)
+Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
-### Rule 3 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: patients included in search Priority Group 2a (ICB) v3 OR patients included in search Priority Group 2b (ICB) v3
-- Population ref: Priority Group 2a (ICB) v3 (e9561b9a-be72-4b08-aa86-45560369c08b)
-- Population ref: Priority Group 2b (ICB) v3 (0bec63f6-e2ea-4fba-a01e-741e549d2a56)
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_htn_reg_pg2_hr_v3_vs1` (1 code — cluster CLINBP_COD), or `on_htn_reg_pg2_hr_v3_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months
 
+### Rule 2 of 3
 
-## ValueSet Friendly Names
-### LTC LCS: Hypertension Register*
-- None
-### On Hypertension Register- LTC LCS Priority Group 2 (HR) v3
-- `on_htn_reg_pg2_hr_v3_vs1` (SNOMED, 1 codes): Refset: 999036281000230108 | Cluster: CLINBP_COD
-- `on_htn_reg_pg2_hr_v3_vs2` (SNOMED, 5 codes): 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitoring +1 more | Cluster: HOMEAMBBP_COD
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 3.
+
+A patient matches this rule when:
+- They appear in the results of the search **On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3**
+
+### Rule 3 of 3
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **Priority Group 2a (ICB) v3**
+- They appear in the results of the search **Priority Group 2b (ICB) v3**
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | `on_htn_reg_pg2_hr_v3_vs1` | CLINBP_COD | SNOMED | 1 | Refset: 999036281000230108 | f806e309 |
+| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | `on_htn_reg_pg2_hr_v3_vs2` | HOMEAMBBP_COD | SNOMED | 5 | 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitori... | 0daae157 |
+
+## Caveats
+
+- LTC LCS: Hypertension Register* references the EMIS library item `a5ff1b4e-f130-4fea-b11c-5b40dc9b0877`, whose logic is not included in this XML export. It is likely **Hypertension Register** (inferred from wrapper report "LTC LCS: Hypertension Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

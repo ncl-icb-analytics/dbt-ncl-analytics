@@ -5,158 +5,129 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2
+# On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2
-Parent population: Based on "LTC LCS: Asthma CYP Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Asthma CYP Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age under 18 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues [MEDICATION_ISSUES] with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+Start with the patients found by "LTC LCS: Asthma CYP Register*" (see below). A patient is included when they match any one of Rules 1-8.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: asthma cyp register*" search results. Finally include patients who match Medication Issues [MEDICATION_ISSUES] NOT with Beclometasone Dipropionate, Budesonide, Ciclesonide +3 more where Date of Issue within the last 12 months AND Medication Issues [MEDICATION_ISSUES] with Salbutamol, Salbutamol Cr, Terbutaline Sulfate where Date of Issue within the last 3 months.
+1. **LTC LCS: Asthma CYP Register*** — Start with currently registered patients. Require Patient Details where Age under 18 years old. Include patients who match Clinical Codes with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Medication Issues [MEDICATION_ISSUES] NOT with Beclometasone Dipropionate, Budesonide, Ciclesonide +3 more where Date of Issue within the last 12 months AND Medication Issues [MEDICATION_ISSUES] with Salbutamol, Salbutamol Cr, Terbutaline Sulfate where Date of Issue within the last 3 months)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: OR
-- Summary: Clinical Codes [EVENTS] with Child on protection register, Child removed from protection register, Child no longer the subject of child protection plan +1 more OR Child on protection register then Latest 1 OR Clinical Codes [EVENTS] with Child in need, Child no longer in need OR Child in need then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs1`, `on_asthma_cyp_reg_pg2_hr_v2_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs1`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs3`, `on_asthma_cyp_reg_pg2_hr_v2_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs3`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+### Rule 1 of 8
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Emergency hospital admission for asthma, Emergency asthma admission since last encounter, Emergency asthma patient visit since last encounter where Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs5`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Acute exacerbation of asthma, Acute severe exacerbation of asthma, Exacerbation of allergic asthma +36 more where Date within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs6`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs6`
-  - Filter: Date IN within the last 12 months
-    - From: within the last 12 months
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs1` (4 codes), or `on_asthma_cyp_reg_pg2_hr_v2_vs2` (1 code)
+  - Keep only the latest matching record
+- **Clinical Codes** (clinical events)
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs3` (2 codes), or `on_asthma_cyp_reg_pg2_hr_v2_vs4` (1 code)
+  - Keep only the latest matching record
 
-### Rule 4 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Prednisolone, Prednisolone Sodium Phosphate, Prednisolone Steaglate where Date of Issue within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs7`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs7`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
+### Rule 2 of 8
 
-### Rule 5 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Theophylline, Theophylline Hydrate, Theophylline S/R +2 more where Date of Issue within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs8`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs8`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
-### Rule 6 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Salbutamol, Salbutamol Cr, Terbutaline Sulfate where Date of Issue within the last 3 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs9`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs9`
-  - Filter: Date of Issue IN within the last 3 months
-    - From: within the last 3 months
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs5` (3 codes)
+  - Where date within the last 12 months
 
-### Rule 7 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Medication Issues [MEDICATION_ISSUES] with Bambuterol Hydrochloride OR Atimos Modulite 12micrograms/dose inhaler (Chiesi Ltd), Foradil 12microgram inhalation powder capsules with device (Novartis Pharmaceuticals UK Ltd), Formoterol 12microgram inhalation powder capsules with device +25 more where Date of Issue within the last 12 months
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs10`, `on_asthma_cyp_reg_pg2_hr_v2_vs11`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs10`, `on_asthma_cyp_reg_pg2_hr_v2_vs11`
+### Rule 3 of 8
 
-### Rule 8 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Medication Issues [MEDICATION_ISSUES] NOT with Beclometasone Dipropionate, Budesonide, Ciclesonide +3 more where Date of Issue within the last 12 months AND Medication Issues [MEDICATION_ISSUES] with Salbutamol, Salbutamol Cr, Terbutaline Sulfate where Date of Issue within the last 3 months
-- Medication Issues [MEDICATION_ISSUES] (NOT)
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs12`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs12`
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs9`
-  - Filter: Drug
-    - Filter ValueSets: `on_asthma_cyp_reg_pg2_hr_v2_vs9`
-  - Filter: Date of Issue IN within the last 3 months
-    - From: within the last 3 months
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
 
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs6` (39 codes)
+  - Where date within the last 12 months
 
-## ValueSet Friendly Names
-### LTC LCS: Asthma CYP Register*
-- `asthma_cyp_reg_vs1` (SNOMED, 1 codes): Refset: 999010051000230100 | Cluster: ASTRES_COD
-- `asthma_cyp_reg_vs2` (SNOMED, 1 codes): Refset: 999012891000230104 | Cluster: AST_COD
-- `asthma_cyp_reg_vs3` (SNOMED, 521 codes): Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more | Cluster: ASTTRT_COD
-### On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2
-- `on_asthma_cyp_reg_pg2_hr_v2_vs1` (SNOMED, 4 codes): Child on protection register, Child removed from protection register, Child no longer the subject of child protection plan +1 more
-- `on_asthma_cyp_reg_pg2_hr_v2_vs2` (SNOMED, 1 codes): Child on protection register
-- `on_asthma_cyp_reg_pg2_hr_v2_vs3` (SNOMED, 2 codes): Child in need, Child no longer in need
-- `on_asthma_cyp_reg_pg2_hr_v2_vs4` (SNOMED, 1 codes): Child in need
-- `on_asthma_cyp_reg_pg2_hr_v2_vs5` (SNOMED, 3 codes): Emergency hospital admission for asthma, Emergency asthma admission since last encounter, Emergency asthma patient visit since last encounter
-- `on_asthma_cyp_reg_pg2_hr_v2_vs6` (SNOMED, 39 codes): Acute exacerbation of asthma, Acute severe exacerbation of asthma, Exacerbation of allergic asthma +36 more
-- `on_asthma_cyp_reg_pg2_hr_v2_vs7` (SCT Const, 3 codes): Prednisolone, Prednisolone Sodium Phosphate, Prednisolone Steaglate
-- `on_asthma_cyp_reg_pg2_hr_v2_vs8` (SCT Const, 5 codes): Theophylline, Theophylline Hydrate, Theophylline S/R +2 more
-- `on_asthma_cyp_reg_pg2_hr_v2_vs9` (SCT Const, 3 codes): Salbutamol, Salbutamol Cr, Terbutaline Sulfate
-- `on_asthma_cyp_reg_pg2_hr_v2_vs10` (SCT Const, 1 codes): Bambuterol Hydrochloride
-- `on_asthma_cyp_reg_pg2_hr_v2_vs11` (SCT_PREP, 28 codes): Atimos Modulite 12micrograms/dose inhaler (Chiesi Ltd), Foradil 12microgram inhalation powder capsules with device (Novartis Pharmaceuticals UK Ltd), Formoterol 12microgram inhalation powder capsules with device +25 more
-- `on_asthma_cyp_reg_pg2_hr_v2_vs12` (SCT Const, 6 codes): Beclometasone Dipropionate, Budesonide, Ciclesonide +3 more
+### Rule 4 of 8
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 5.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs7` (3 codes)
+  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs7` (3 codes)
+  - Where issue date within the last 12 months
+
+### Rule 5 of 8
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 6.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs8` (5 codes)
+  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs8` (5 codes)
+  - Where issue date within the last 12 months
+
+### Rule 6 of 8
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 7.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
+  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
+  - Where issue date within the last 3 months
+
+### Rule 7 of 8
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 8.
+
+A patient matches this rule when:
+- **Medication Issues**
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs10` (1 code), or `on_asthma_cyp_reg_pg2_hr_v2_vs11` (28 codes)
+  - Where issue date within the last 12 months
+  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs10` (1 code), `on_asthma_cyp_reg_pg2_hr_v2_vs11` (28 codes)
+
+### Rule 8 of 8
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues** — patient must NOT have a matching record
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs12` (6 codes)
+  - Where issue date within the last 12 months
+  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs12` (6 codes)
+- **Medication Issues**
+  - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
+  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
+  - Where issue date within the last 3 months
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Asthma CYP Register* | `asthma_cyp_reg_vs1` | ASTRES_COD | SNOMED | 1 | Refset: 999010051000230100 | 0cecb4fb |
+| LTC LCS: Asthma CYP Register* | `asthma_cyp_reg_vs2` | AST_COD | SNOMED | 1 | Refset: 999012891000230104 | b6f202b4 |
+| LTC LCS: Asthma CYP Register* | `asthma_cyp_reg_vs3` | ASTTRT_COD | SNOMED | 521 | Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals L... | d78c07e6 |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs1` |  | SNOMED | 4 | Child on protection register, Child removed from protection register, Child n... | 6528bece |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs10` |  | SCT Const | 1 | Bambuterol Hydrochloride | 42efbe32 |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs11` |  | SCT_PREP | 28 | Atimos Modulite 12micrograms/dose inhaler (Chiesi Ltd), Foradil 12microgram i... | f9bf039c |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs12` |  | SCT Const | 6 | Beclometasone Dipropionate, Budesonide, Ciclesonide +3 more | a2d6b25c |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs2` |  | SNOMED | 1 | Child on protection register | d9a584fb |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs3` |  | SNOMED | 2 | Child in need, Child no longer in need | 8332ea34 |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs4` |  | SNOMED | 1 | Child in need | 17e62b70 |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs5` |  | SNOMED | 3 | Emergency hospital admission for asthma, Emergency asthma admission since las... | 7a5550bd |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs6` |  | SNOMED | 39 | Acute exacerbation of asthma, Acute severe exacerbation of asthma, Exacerbati... | ff2958ce |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs7` |  | SCT Const | 3 | Prednisolone, Prednisolone Sodium Phosphate, Prednisolone Steaglate | 153a3cb0 |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs8` |  | SCT Const | 5 | Theophylline, Theophylline Hydrate, Theophylline S/R +2 more | 08d2e32b |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | `on_asthma_cyp_reg_pg2_hr_v2_vs9` |  | SCT Const | 3 | Salbutamol, Salbutamol Cr, Terbutaline Sulfate | 5c851fb5 |
+
+## Caveats
+
+- Some code lists exclude specific codes. See `exceptions.csv` in the extraction for the excluded codes and whether each was applied.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

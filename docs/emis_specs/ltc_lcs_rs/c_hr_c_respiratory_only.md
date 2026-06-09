@@ -5,79 +5,65 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: C) HR+C- Respiratory only
+# C) HR+C- Respiratory only
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: C) HR+C- Respiratory only
-Parent population: Based on "GROUP1- HRC" search results
+## What this search does
 
-## Parent Chain
-- GROUP1- HRC: Start with based on "ltc lcs moc base excluding cyp only, lr htn only, lr adult asthma only" search results. Finally include patients who match Patients included in search On CKD Register- LTC LCS Priority Group 1(HRC) OR patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search on Diabetes Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3 OR patients included in search On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)* OR patients included in search On COPD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On PAD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)*.
-- LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only: Start with based on "ltc lcs base*" search results. Finally include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
-- LTC LCS Base*: Start with currently registered patients. Finally include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+Start with the patients found by "GROUP1- HRC" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-3.
 
-## Library Items
-- C) HR+C- Respiratory only: Unknown library item (ee5b135f-b9b2-4ef7-8b51-939a754cf935)
+## Who we start with
 
-## Target Report Logic
-Start with based on "group1- hrc" search results. Exclude patients who match Patients included in search A) HR+C- Metabolic & Respiratory. Finally include patients who match Library item ee5b135f-b9b2-4ef7-8b51-939a754cf935.
+1. **LTC LCS Base*** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+2. **LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only** — Start with the patients found by "LTC LCS Base*". Finally include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
+3. **GROUP1- HRC** — Start with the patients found by "LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only". Include patients who match any of: Clinical Codes with Refset: 999003371000230102 OR Refset: 999004691000230108 OR Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabetes mellitus with ulcer +79 more then Latest 1; OR Patients included in search On CKD Register- LTC LCS Priority Group 1(HRC) OR patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search on Diabetes Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3 OR patients included in search On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)* OR patients included in search On COPD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On PAD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)*.
+4. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search A) HR+C- Metabolic & Respiratory) AND (library item ee5b135f-b9b2-4ef7-8b51-939a754cf935)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: AND
-- Summary: Must not match: patients included in search A) HR+C- Metabolic & Respiratory
-- Population ref: A) HR+C- Metabolic & Respiratory (08834f27-d026-48c5-8943-d10ffddef90d)
+### Rule 1 of 3
 
-### Rule 2 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Asthma resolved, Asthma resolved OR Moderate acute exacerbation of asthma, Acute severe exacerbation of asthma co-occurrent and due to allergic asthma, Allergic asthma with status asthmaticus +230 more then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues [MEDICATION_ISSUES] with Accolate 20mg tablets (AstraZeneca UK Ltd), Aerolin 100micrograms/dose Autohaler (3M Health Care Ltd), AeroBec 50 Autohaler (Meda Pharmaceuticals Ltd) +474 more where Date of Issue within the last 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `c_hrc_respiratory_only_vs1`, `c_hrc_respiratory_only_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `c_hrc_respiratory_only_vs1`, `c_hrc_respiratory_only_vs2`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where SNOMED code IN: AST_COD
-    - Condition: READCODE IN | AST_COD
-    - Condition: DATE IN
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `c_hrc_respiratory_only_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `c_hrc_respiratory_only_vs3`
-  - Filter: Date of Issue IN within the last 12 months
-    - From: within the last 12 months
-  - Filter: Date of Issue
-    - To: <=
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: library item ee5b135f-b9b2-4ef7-8b51-939a754cf935
-- Library item: Unknown library item (ee5b135f-b9b2-4ef7-8b51-939a754cf935)
+A patient matches this rule when:
+- They appear in the results of the search **A) HR+C- Metabolic & Respiratory**
 
+### Rule 2 of 3
 
-## ValueSet Friendly Names
-### LTC LCS Base*
-- None
-### LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only
-- None
-### GROUP1- HRC
-- `high_risk_complexity_vs1` (SNOMED, 1 codes): Refset: 999003371000230102 | Cluster: DMRES_COD
-- `high_risk_complexity_vs2` (SNOMED, 1 codes): Refset: 999004691000230108 | Cluster: DM_COD
-- `high_risk_complexity_vs3` (SNOMED, 105 codes): Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabetes mellitus with ulcer +102 more
-### C) HR+C- Respiratory only
-- `c_hrc_respiratory_only_vs1` (SNOMED, 2 codes): Asthma resolved, Asthma resolved | Cluster: ASTRES_COD
-- `c_hrc_respiratory_only_vs2` (SNOMED, 233 codes): Moderate acute exacerbation of asthma, Acute severe exacerbation of asthma co-occurrent and due to allergic asthma, Allergic asthma with status asthmaticus +230 more | Cluster: AST_COD
-- `c_hrc_respiratory_only_vs3` (SNOMED, 477 codes): Accolate 20mg tablets (AstraZeneca UK Ltd), Aerolin 100micrograms/dose Autohaler (3M Health Care Ltd), AeroBec 50 Autohaler (Meda Pharmaceuticals Ltd) +474 more | Cluster: ASTTRT_COD
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
+
+A patient matches this rule when ALL of the following are true:
+- **Clinical Codes** (clinical events)
+  - Code in: `c_hrc_respiratory_only_vs1` (2 codes — cluster ASTRES_COD), or `c_hrc_respiratory_only_vs2` (233 codes — cluster AST_COD)
+  - Keep only the latest matching record, and require its code to be in: AST_COD
+- **Medication Issues**
+  - Code in: `c_hrc_respiratory_only_vs3` (477 codes — cluster ASTTRT_COD)
+  - Where drug code in `c_hrc_respiratory_only_vs3` (477 codes — cluster ASTTRT_COD)
+  - Where issue date within the last 12 months
+
+### Rule 3 of 3
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when:
+- They match the EMIS library item `ee5b135f-b9b2-4ef7-8b51-939a754cf935` (see Caveats)
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| GROUP1- HRC | `high_risk_complexity_vs1` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+| GROUP1- HRC | `high_risk_complexity_vs2` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| GROUP1- HRC | `high_risk_complexity_vs3` |  | SNOMED | 105 | Type 1 diabetes mellitus, Type I diabetes mellitus with ulcer, Type 1 diabete... | 10923643 |
+| C) HR+C- Respiratory only | `c_hrc_respiratory_only_vs1` | ASTRES_COD | SNOMED | 2 | Asthma resolved | 7cf102c3 |
+| C) HR+C- Respiratory only | `c_hrc_respiratory_only_vs2` | AST_COD | SNOMED | 233 | Moderate acute exacerbation of asthma, Acute severe exacerbation of asthma co... | 612ae5b1 |
+| C) HR+C- Respiratory only | `c_hrc_respiratory_only_vs3` | ASTTRT_COD | SNOMED | 477 | Accolate 20mg tablets (AstraZeneca UK Ltd), Aerolin 100micrograms/dose Autoha... | 0e7af9f6 |
+
+## Caveats
+
+- This search references the EMIS library item `ee5b135f-b9b2-4ef7-8b51-939a754cf935`, whose logic is not included in this XML export. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

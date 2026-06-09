@@ -5,55 +5,47 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On CHD Register- LTC LCS Priority Group 1 (HRC)
+# On CHD Register- LTC LCS Priority Group 1 (HRC)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On CHD Register- LTC LCS Priority Group 1 (HRC)
-Parent population: Based on "LTC LCS: CHD Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: CHD Register*: Start with currently registered patients. Finally include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
-  Library refs: CHD Register (d730ee6f-1b38-4553-8f8e-7dc8b3042f4c)
+Start with the patients found by "LTC LCS: CHD Register*" (see below). A patient is included when they match Rule 1.
 
-## Library Items
-- LTC LCS: CHD Register*: CHD Register (d730ee6f-1b38-4553-8f8e-7dc8b3042f4c); wrapper reports: LTC LCS: CHD Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: chd register*" search results. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999000771000230107 OR First, New, Flare Up where Date within the last 1 month AND Episode = First, New, Flare Up OR Clinical Codes [EVENTS] with Refset: 999000771000230107 OR Significant where Date within the last 1 month AND Problem Significance = Significant.
+1. **LTC LCS: CHD Register*** — Start with currently registered patients. Include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999000771000230107 OR First, New, Flare Up where Date within the last 1 month AND Episode = First, New, Flare Up OR Clinical Codes [EVENTS] with Refset: 999000771000230107 OR Significant where Date within the last 1 month AND Problem Significance = Significant)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: Clinical Codes [EVENTS] with Refset: 999000771000230107 OR First, New, Flare Up where Date within the last 1 month AND Episode = First, New, Flare Up OR Clinical Codes [EVENTS] with Refset: 999000771000230107 OR Significant where Date within the last 1 month AND Problem Significance = Significant
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_chd_reg_pg1_hrc_vs1`, `on_chd_reg_pg1_hrc_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_chd_reg_pg1_hrc_vs1`
-  - Filter: Date IN within the last 1 month
-    - From: within the last 1 month
-  - Filter: Episode (First, New...)
-    - Filter ValueSets: `on_chd_reg_pg1_hrc_vs2`
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_chd_reg_pg1_hrc_vs1`, `on_chd_reg_pg1_hrc_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_chd_reg_pg1_hrc_vs1`
-  - Filter: Date IN within the last 1 month
-    - From: within the last 1 month
-  - Filter: Problem Significance
-    - Filter ValueSets: `on_chd_reg_pg1_hrc_vs3`
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS: CHD Register*
-- None
-### On CHD Register- LTC LCS Priority Group 1 (HRC)
-- `on_chd_reg_pg1_hrc_vs1` (SNOMED, 1 codes): Refset: 999000771000230107 | Cluster: CHD_COD
-- `on_chd_reg_pg1_hrc_vs2` (Internal, 3 codes): First, New, Flare Up
-- `on_chd_reg_pg1_hrc_vs3` (Internal, 1 codes): Significant
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_chd_reg_pg1_hrc_vs1` (1 code — cluster CHD_COD), or `on_chd_reg_pg1_hrc_vs2` (3 codes)
+  - Where date within the last 1 month
+  - Where episode type in `on_chd_reg_pg1_hrc_vs2` (3 codes)
+- **Clinical Codes** (clinical events)
+  - Code in: `on_chd_reg_pg1_hrc_vs1` (1 code — cluster CHD_COD), or `on_chd_reg_pg1_hrc_vs3` (1 code)
+  - Where date within the last 1 month
+  - Where problemsignificance in `on_chd_reg_pg1_hrc_vs3` (1 code)
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On CHD Register- LTC LCS Priority Group 1 (HRC) | `on_chd_reg_pg1_hrc_vs1` | CHD_COD | SNOMED | 1 | Refset: 999000771000230107 | d908caa0 |
+| On CHD Register- LTC LCS Priority Group 1 (HRC) | `on_chd_reg_pg1_hrc_vs2` |  | Internal | 3 | First, New, Flare Up | bd7fde07 |
+| On CHD Register- LTC LCS Priority Group 1 (HRC) | `on_chd_reg_pg1_hrc_vs3` |  | Internal | 1 | Significant | 8de0b3c4 |
+
+## Caveats
+
+- LTC LCS: CHD Register* references the EMIS library item `d730ee6f-1b38-4553-8f8e-7dc8b3042f4c`, whose logic is not included in this XML export. It is likely **CHD Register** (inferred from wrapper report "LTC LCS: CHD Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

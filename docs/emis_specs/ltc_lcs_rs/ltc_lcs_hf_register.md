@@ -5,35 +5,33 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: LTC LCS: HF Register*
+# LTC LCS: HF Register*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: LTC LCS: HF Register*
-Parent population: Currently registered patients
+## What this search does
 
-## Parent Chain
-- No parent reports.
+Start with currently registered patients. A patient is included when they match Rule 1.
 
-## Library Items
-- LTC LCS: HF Register*: HF Register (79888a16-aa09-4ef4-ba5e-a3be8e1daf23); wrapper reports: LTC LCS: HF Register*
+## Who we start with
 
-## Target Report Logic
-Start with currently registered patients. Finally include patients who match HF Register (library item 79888a16-aa09-4ef4-ba5e-a3be8e1daf23).
+Currently registered patients.
 
-Boolean logic:
-(HF Register (library item 79888a16-aa09-4ef4-ba5e-a3be8e1daf23))
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: HF Register (library item 79888a16-aa09-4ef4-ba5e-a3be8e1daf23)
-- Library item: HF Register (79888a16-aa09-4ef4-ba5e-a3be8e1daf23)
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS: HF Register*
-- None
+A patient matches this rule when:
+- They match the EMIS library item **HF Register** (see Caveats)
+
+## Code lists used
+
+None.
+
+## Caveats
+
+- This search references the EMIS library item `79888a16-aa09-4ef4-ba5e-a3be8e1daf23`, whose logic is not included in this XML export. It is likely **HF Register** (inferred from wrapper report "LTC LCS: HF Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

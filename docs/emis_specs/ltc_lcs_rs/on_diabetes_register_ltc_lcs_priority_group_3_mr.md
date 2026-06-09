@@ -5,48 +5,47 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: on Diabetes Register- LTC LCS Priority Group 3 (MR)
+# on Diabetes Register- LTC LCS Priority Group 3 (MR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: on Diabetes Register- LTC LCS Priority Group 3 (MR)
-Parent population: Based on "LTC LCS: Diabetes Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Diabetes Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 17 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999004691000230108 then Latest 1.
+Start with the patients found by "LTC LCS: Diabetes Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match Rule 2.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: diabetes register*" search results. Exclude patients who match Patients included in search on Diabetes Register- LTC LCS Priority Group 1 (HRC) OR patients included in search on Diabetes Register- LTC LCS Priority Group 2 (HR). Finally include patients who match Patients included in search on Diabetes Register- LTC LCS Priority Group 3B (MRb) OR patients included in search on Diabetes Register- LTC LCS Priority Group 3A (MRa).
+1. **LTC LCS: Diabetes Register*** — Start with currently registered patients. Require Patient Details where Age at least 17 years old. Include patients who match Clinical Codes with Refset: 999004691000230108 then Latest 1.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search on Diabetes Register- LTC LCS Priority Group 1 (HRC) OR patients included in search on Diabetes Register- LTC LCS Priority Group 2 (HR)) AND (patients included in search on Diabetes Register- LTC LCS Priority Group 3B (MRb) OR patients included in search on Diabetes Register- LTC LCS Priority Group 3A (MRa))
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: patients included in search on Diabetes Register- LTC LCS Priority Group 1 (HRC) OR patients included in search on Diabetes Register- LTC LCS Priority Group 2 (HR)
-- Population ref: on Diabetes Register- LTC LCS Priority Group 1 (HRC) (d132f6b5-fefd-4d7e-a16d-d33e5387cd81)
-- Population ref: on Diabetes Register- LTC LCS Priority Group 2 (HR) (684e6c7a-077e-4f61-99b0-3324aee1d76f)
+### Rule 1 of 2
 
-### Rule 2 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: patients included in search on Diabetes Register- LTC LCS Priority Group 3B (MRb) OR patients included in search on Diabetes Register- LTC LCS Priority Group 3A (MRa)
-- Population ref: on Diabetes Register- LTC LCS Priority Group 3B (MRb) (bcbd0990-42cd-468b-ab66-df76e1a614a4)
-- Population ref: on Diabetes Register- LTC LCS Priority Group 3A (MRa) (ad2cbe36-3a96-4446-950c-1edffd856e3d)
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **on Diabetes Register- LTC LCS Priority Group 1 (HRC)**
+- They appear in the results of the search **on Diabetes Register- LTC LCS Priority Group 2 (HR)**
 
-## ValueSet Friendly Names
-### LTC LCS: Diabetes Register*
-- `dm_reg_vs1` (SNOMED, 1 codes): Refset: 999004691000230108 | Cluster: DM_COD
-- `dm_reg_vs2` (SNOMED, 1 codes): Refset: 999003371000230102 | Cluster: DMRES_COD
-### on Diabetes Register- LTC LCS Priority Group 3 (MR)
-- None
+### Rule 2 of 2
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **on Diabetes Register- LTC LCS Priority Group 3B (MRb)**
+- They appear in the results of the search **on Diabetes Register- LTC LCS Priority Group 3A (MRa)**
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Diabetes Register* | `dm_reg_vs1` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| LTC LCS: Diabetes Register* | `dm_reg_vs2` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

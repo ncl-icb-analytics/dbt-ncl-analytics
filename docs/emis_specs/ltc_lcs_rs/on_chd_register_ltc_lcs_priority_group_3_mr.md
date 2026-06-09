@@ -5,73 +5,63 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On CHD Register- LTC LCS Priority Group 3 (MR)
+# On CHD Register- LTC LCS Priority Group 3 (MR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On CHD Register- LTC LCS Priority Group 3 (MR)
-Parent population: Based on "LTC LCS: CHD Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: CHD Register*: Start with currently registered patients. Finally include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
-  Library refs: CHD Register (d730ee6f-1b38-4553-8f8e-7dc8b3042f4c)
+Start with the patients found by "LTC LCS: CHD Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rule 1 are excluded. A patient is included when they match Rule 3.
 
-## Library Items
-- LTC LCS: CHD Register*: CHD Register (d730ee6f-1b38-4553-8f8e-7dc8b3042f4c); wrapper reports: LTC LCS: CHD Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: chd register*" search results. Require Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date before 1 year ago. Exclude patients who match Patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On CHD Register- LTC LCS Priority Group 2 (HR). Finally include patients who match Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Upjohn UK Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more then Latest 1 where numeric value > 2.5.
+1. **LTC LCS: CHD Register*** — Start with currently registered patients. Include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date before 1 year ago) AND NOT (patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On CHD Register- LTC LCS Priority Group 2 (HR)) AND (Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Upjohn UK Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more then Latest 1 where numeric value > 2.5)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: patients included in search On CHD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On CHD Register- LTC LCS Priority Group 2 (HR)
-- Population ref: On CHD Register- LTC LCS Priority Group 1 (HRC) (6c2418f3-b92c-4d74-8df7-de41376923e3)
-- Population ref: On CHD Register- LTC LCS Priority Group 2 (HR) (126ded20-7d2a-47b4-810b-db26e3ece6c9)
+### Rule 1 of 3
 
-### Rule 2 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: AND
-- Summary: Must match: Clinical Codes [EVENTS] with Refset: 999000771000230107 where Date before 1 year ago
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_chd_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_chd_reg_pg3_mr_vs1`
-  - Filter: Date IN before 1 year ago
-    - To: before 1 year ago
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Upjohn UK Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months AND Clinical Codes [EVENTS] with Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more then Latest 1 where numeric value > 2.5
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_chd_reg_pg3_mr_vs2`
-  - Filter: Drug
-    - Filter ValueSets: `on_chd_reg_pg3_mr_vs2`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_chd_reg_pg3_mr_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_chd_reg_pg3_mr_vs3`
-  - Restriction: Latest 1 where numeric value > 2.5
-    - Condition: NUMERIC_VALUE IN | > 2.5
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **On CHD Register- LTC LCS Priority Group 1 (HRC)**
+- They appear in the results of the search **On CHD Register- LTC LCS Priority Group 2 (HR)**
 
+### Rule 2 of 3
 
-## ValueSet Friendly Names
-### LTC LCS: CHD Register*
-- None
-### On CHD Register- LTC LCS Priority Group 3 (MR)
-- `on_chd_reg_pg3_mr_vs1` (SNOMED, 1 codes): Refset: 999000771000230107 | Cluster: CHD_COD
-- `on_chd_reg_pg3_mr_vs2` (SCT_PREP, 6 codes): Atorvastatin 80mg tablets, Lipitor 80mg tablets (Upjohn UK Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more
-- `on_chd_reg_pg3_mr_vs3` (SNOMED, 4 codes): Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more
+Patients **must match** this rule to stay in. Those who match continue to Rule 3; those who do not are excluded.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_chd_reg_pg3_mr_vs1` (1 code — cluster CHD_COD)
+  - Where date before 1 year ago
+
+### Rule 3 of 3
+
+Final rule: patients who match are **included**; everyone else is excluded.
+
+A patient matches this rule when ALL of the following are true:
+- **Medication Issues**
+  - Code in: `on_chd_reg_pg3_mr_vs2` (6 codes)
+  - Where drug code in `on_chd_reg_pg3_mr_vs2` (6 codes)
+  - Where issue date within the last 6 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_chd_reg_pg3_mr_vs3` (4 codes)
+  - Keep only the latest matching record, and require its numeric value > 2.5
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On CHD Register- LTC LCS Priority Group 3 (MR) | `on_chd_reg_pg3_mr_vs1` | CHD_COD | SNOMED | 1 | Refset: 999000771000230107 | d908caa0 |
+| On CHD Register- LTC LCS Priority Group 3 (MR) | `on_chd_reg_pg3_mr_vs2` |  | SCT_PREP | 6 | Atorvastatin 80mg tablets, Lipitor 80mg tablets (Upjohn UK Ltd), Crestor 20mg... | dd8f85b7 |
+| On CHD Register- LTC LCS Priority Group 3 (MR) | `on_chd_reg_pg3_mr_vs3` |  | SNOMED | 4 | Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Se... | 561cf433 |
+
+## Caveats
+
+- LTC LCS: CHD Register* references the EMIS library item `d730ee6f-1b38-4553-8f8e-7dc8b3042f4c`, whose logic is not included in this XML export. It is likely **CHD Register** (inferred from wrapper report "LTC LCS: CHD Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

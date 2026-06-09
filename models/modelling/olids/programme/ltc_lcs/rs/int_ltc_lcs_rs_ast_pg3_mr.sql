@@ -7,16 +7,16 @@
 -- - Rule 1 (gate): excludes PG1 (HRC) and PG2 (HR) patients
 -- - Rule 2: acute exacerbation of asthma code (vs1) in last 12 months -> include
 -- - Rule 3: prednisolone (vs2) order in last 12 months -> include
--- - Rule 4: antibiotics (vs3) order in last 12 months -> include
--- - Rule 5: SABA (vs4: salbutamol, terbutaline) order in last 12 months -> include
+-- - Rule 4: >= 2 antibiotics (vs3) orders in last 12 months -> include
+-- - Rule 5: >= 6 SABA (vs4: salbutamol, terbutaline) orders in last 12 months -> include
 -- - Rule 6: LABA (vs5 bambuterol, vs6 formoterol products) in last 6 months
 --   and NOT on ICS (vs7) in last 6 months -> include
--- - Rule 7: SABA in last 12 months and NOT on ICS in last 6 months -> include,
---   else exclude (subsumed by rule 5 in the R5 XML, kept for fidelity)
+-- - Rule 7: >= 3 SABA orders in last 12 months and NOT on ICS in last
+--   6 months -> include, else exclude
 --
--- Note: the source GitHub issue describes issue-count thresholds (>= 2
--- antibiotics, >= 6 SABA, >= 3 SABA); the R5 EMIS XML has no count
--- restrictions, so any issue in window qualifies.
+-- Issue-count note: the agent-API parse of the R5 XML drops issue-count
+-- restrictions; the live EMIS searches apply them (issue #395 definitions,
+-- confirmed empirically - without counts PG3 over-matches EMIS by ~73%).
 --
 -- Parent register note: the EMIS parent 'LTC LCS: Asthma Adult Register*' is
 -- the asthma register restricted to age >= 18; fct_person_asthma_register is
@@ -53,18 +53,35 @@ rule_3_prednisolone as (
     where order_date >= dateadd(month, -12, current_date())
 ),
 
--- Rule 4: antibiotics order in last 12 months
+-- Rule 4: >= 2 antibiotics orders in last 12 months
 rule_4_antibiotics as (
     select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_adult_reg_pg3_mr_vs3") }})
+    from ({{ get_ltc_lcs_medication_orders("on_asthma_adult_reg_pg3_mr_vs3") }})
     where order_date >= dateadd(month, -12, current_date())
+    group by person_id
+    having count(distinct medication_order_id) >= 2
 ),
 
--- Rule 5 / rule 7 SABA arm: SABA order in last 12 months
+-- SABA order counts in last 12 months (rule 5 >= 6; rule 7 >= 3)
+saba_counts as (
+    select person_id, count(distinct medication_order_id) as saba_orders
+    from ({{ get_ltc_lcs_medication_orders("on_asthma_adult_reg_pg3_mr_vs4") }})
+    where order_date >= dateadd(month, -12, current_date())
+    group by person_id
+),
+
+-- Rule 5: >= 6 SABA orders in last 12 months
 rule_5_saba as (
     select person_id
-    from ({{ get_ltc_lcs_medication_orders_latest("on_asthma_adult_reg_pg3_mr_vs4") }})
-    where order_date >= dateadd(month, -12, current_date())
+    from saba_counts
+    where saba_orders >= 6
+),
+
+-- Rule 7 SABA arm: >= 3 SABA orders in last 12 months
+rule_7_saba as (
+    select person_id
+    from saba_counts
+    where saba_orders >= 3
 ),
 
 -- LABA order in last 6 months (rule 6)
@@ -91,7 +108,7 @@ patient_rules as (
         (r4.person_id is not null) as rule_4_antibiotics,
         (r5.person_id is not null) as rule_5_saba,
         (laba.person_id is not null and ics.person_id is null) as rule_6_laba_no_ics,
-        (r5.person_id is not null and ics.person_id is null) as rule_7_saba_no_ics,
+        (r7.person_id is not null and ics.person_id is null) as rule_7_saba_no_ics,
         case
             when excl.person_id is not null then 'Excluded'
             when r2.person_id is not null
@@ -99,6 +116,7 @@ patient_rules as (
                 or r4.person_id is not null
                 or r5.person_id is not null
                 or (laba.person_id is not null and ics.person_id is null)
+                or (r7.person_id is not null and ics.person_id is null)
                 then 'Included'
             else 'Excluded'
         end as final_status
@@ -108,6 +126,7 @@ patient_rules as (
     left join rule_3_prednisolone r3 on ar.person_id = r3.person_id
     left join rule_4_antibiotics r4 on ar.person_id = r4.person_id
     left join rule_5_saba r5 on ar.person_id = r5.person_id
+    left join rule_7_saba r7 on ar.person_id = r7.person_id
     left join laba_6m laba on ar.person_id = laba.person_id
     left join ics_6m ics on ar.person_id = ics.person_id
 )

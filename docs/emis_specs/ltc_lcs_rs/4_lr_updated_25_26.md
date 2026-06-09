@@ -5,230 +5,124 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: 4_LR updated 25-26
+# 4_LR updated 25-26
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: 4_LR updated 25-26
-Parent population: Based on "GROUP4- LR" search results
+## What this search does
 
-## Parent Chain
-- GROUP4- LR: Start with based on "ltc lcs moc base excluding cyp only, lr htn only, lr adult asthma only" search results. Finally include patients who do not match Patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR.
-- LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only: Start with based on "ltc lcs base*" search results. Finally include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
-- LTC LCS Base*: Start with currently registered patients. Finally include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+Start with the patients found by "GROUP4- LR" (see below). This report has no filtering rules of its own — it reports on its starting population.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "group4- lr" search results.
+1. **LTC LCS Base*** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+2. **LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only** — Start with the patients found by "LTC LCS Base*". Finally include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
+3. **GROUP4- LR** — Start with the patients found by "LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only". Finally include patients who do not match Patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR.
+4. **This search** then applies the rules below to that population.
 
-## Detailed Rule Logic
+## Inclusion logic, step by step
+
+No rules — all patients from the starting population are included.
+
+## Report output
+
+These define what the report shows for each patient, not who is included.
+
 ### Patient Details
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Patient Details [PATIENTS]
 
 ### Record of Interpreter Information
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Interpreter needed, Interpreter present, Presence of interpreter +13 more then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs1`
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs1` (16 codes)
+  - Keep only the latest matching record
 
 ### Homeless
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Homeless, Homeless enhanced services administration, No longer homeless OR Homeless, Homeless enhanced services administration then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs2`, `4lr_updated_25_26_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs2`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs2` (3 codes), or `4lr_updated_25_26_vs3` (2 codes)
+  - Keep only the latest matching record
 
 ### Housebound
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Housebound, No longer housebound OR Housebound then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs4`, `4lr_updated_25_26_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs4`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs4` (2 codes), or `4lr_updated_25_26_vs5` (1 code)
+  - Keep only the latest matching record
 
 ### Care Home resident
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Lives in care home, Provision of general practitioner intermediate care, Previously lived in care home OR Lives in care home, Provision of general practitioner intermediate care then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs6`, `4lr_updated_25_26_vs7`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs6`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs6` (3 codes), or `4lr_updated_25_26_vs7` (2 codes)
+  - Keep only the latest matching record
 
 ### Cardiovascular disease
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### Atrial Fibrillation
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### Hypertension
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### Hyperlipidaemia
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Hyperlipidaemia then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs8`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs8`
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs8` (1 code)
+  - Keep only the latest matching record
 
 ### Diabetes
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### Chronic Kidney Disease
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### NA Fatty Liver Disease
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with NAFLD - nonalcoholic fatty liver disease, NAFLD - Nonalcoholic fatty liver disease, Fatty liver +9 more then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs9`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs9`
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs9` (12 codes)
+  - Keep only the latest matching record
 
 ### COPD
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### Asthma
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### Serious MI
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with On severe mental illness register, Removed from severe mental illness register OR On severe mental illness register then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs10`, `4lr_updated_25_26_vs11`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs10`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs10` (2 codes), or `4lr_updated_25_26_vs11` (1 code)
+  - Keep only the latest matching record
 
 ### Learning Disability
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] then Latest 1
-- Clinical Codes [EVENTS]
-  - Filter: Clinical Code
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Keep only the latest matching record
 
 ### Frailty
-- Clause type: informational
-- Pass: Informational
-- Fail: Informational
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Frailty, On frailty register, Rockwood Clinical Frailty Scale level 6 - moderately frail +3 more then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `4lr_updated_25_26_vs12`
-  - Filter: Clinical Code
-    - Filter ValueSets: `4lr_updated_25_26_vs12`
-  - Restriction: Latest 1
+- **Clinical Codes** (clinical events)
+  - Code in: `4lr_updated_25_26_vs12` (6 codes)
+  - Keep only the latest matching record
 
+## Code lists used
 
-## ValueSet Friendly Names
-### LTC LCS Base*
-- None
-### LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only
-- None
-### GROUP4- LR
-- None
-### 4_LR updated 25-26
-- `4lr_updated_25_26_vs1` (SNOMED, 16 codes): Interpreter needed, Interpreter present, Presence of interpreter +13 more
-- `4lr_updated_25_26_vs2` (SNOMED, 3 codes): Homeless, Homeless enhanced services administration, No longer homeless
-- `4lr_updated_25_26_vs3` (SNOMED, 2 codes): Homeless, Homeless enhanced services administration
-- `4lr_updated_25_26_vs4` (SNOMED, 2 codes): Housebound, No longer housebound
-- `4lr_updated_25_26_vs5` (SNOMED, 1 codes): Housebound
-- `4lr_updated_25_26_vs6` (SNOMED, 3 codes): Lives in care home, Provision of general practitioner intermediate care, Previously lived in care home
-- `4lr_updated_25_26_vs7` (SNOMED, 2 codes): Lives in care home, Provision of general practitioner intermediate care
-- `4lr_updated_25_26_vs8` (SNOMED, 1 codes): Hyperlipidaemia
-- `4lr_updated_25_26_vs9` (SNOMED, 12 codes): NAFLD - nonalcoholic fatty liver disease, NAFLD - Nonalcoholic fatty liver disease, Fatty liver +9 more
-- `4lr_updated_25_26_vs10` (SNOMED, 2 codes): On severe mental illness register, Removed from severe mental illness register
-- `4lr_updated_25_26_vs11` (SNOMED, 1 codes): On severe mental illness register
-- `4lr_updated_25_26_vs12` (SNOMED, 6 codes): Frailty, On frailty register, Rockwood Clinical Frailty Scale level 6 - moderately frail +3 more
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs1` |  | SNOMED | 16 | Interpreter needed, Interpreter present, Presence of interpreter +13 more | d9a780b0 |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs10` |  | SNOMED | 2 | On severe mental illness register, Removed from severe mental illness register | d864ef35 |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs11` |  | SNOMED | 1 | On severe mental illness register | d2e1bc0b |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs12` |  | SNOMED | 6 | Frailty, On frailty register, Rockwood Clinical Frailty Scale level 6 - moder... | fa6dc79f |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs2` |  | SNOMED | 3 | Homeless, Homeless enhanced services administration, No longer homeless | bd017638 |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs3` |  | SNOMED | 2 | Homeless, Homeless enhanced services administration | c853fe7f |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs4` |  | SNOMED | 2 | Housebound, No longer housebound | 7bcc1e58 |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs5` |  | SNOMED | 1 | Housebound | fb66502d |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs6` |  | SNOMED | 3 | Lives in care home, Provision of general practitioner intermediate care, Prev... | 23643eb1 |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs7` |  | SNOMED | 2 | Lives in care home, Provision of general practitioner intermediate care | 8aafdf14 |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs8` |  | SNOMED | 1 | Hyperlipidaemia | b03bd7c6 |
+| 4_LR updated 25-26 | `4lr_updated_25_26_vs9` |  | SNOMED | 12 | NAFLD - nonalcoholic fatty liver disease, NAFLD - Nonalcoholic fatty liver di... | 63fd8d6e |
+
+## Caveats
+
+- Some code lists exclude specific codes. See `exceptions.csv` in the extraction for the excluded codes and whether each was applied.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

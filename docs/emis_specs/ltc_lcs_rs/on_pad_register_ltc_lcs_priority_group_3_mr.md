@@ -5,120 +5,92 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On PAD Register- LTC LCS Priority Group 3 (MR)
+# On PAD Register- LTC LCS Priority Group 3 (MR)
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On PAD Register- LTC LCS Priority Group 3 (MR)
-Parent population: Based on "LTC LCS: PAD Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: PAD Register*: Start with currently registered patients. Finally include patients who match PAD Register (library item ffccdb77-bd5e-47fc-add3-d700835ace65).
-  Library refs: PAD Register (ffccdb77-bd5e-47fc-add3-d700835ace65)
+Start with the patients found by "LTC LCS: PAD Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rules 1 and 4 are excluded. A patient is included when they match Rule 3. Rule 5 includes only patients who do NOT match it.
 
-## Library Items
-- LTC LCS: PAD Register*: PAD Register (ffccdb77-bd5e-47fc-add3-d700835ace65); wrapper reports: LTC LCS: PAD Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: pad register*" search results. Require Clinical Codes [EVENTS] with Peripheral ischaemia, Peripheral ischaemic vascular disease, Ischaemic foot +50 more where Date before 12 months ago. Exclude patients who match Patients included in search On PAD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On PAD Register- LTC LCS Priority Group 2 (HR); Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months OR Medication Courses [MEDICATION_COURSES] with Atorvastatin, Simvastatin, Fluvastatin +1 more. Finally include patients who do not match Medication Issues [MEDICATION_ISSUES] with Refset: 12464001000001103 then Latest 1 where issue date > today - 12 months OR Clinical Codes [EVENTS] with Refset: 12464001000001103 then Latest 1 where date > today - 12 months OR Clinical Codes [EVENTS] with Statin declined then Latest 1 where date > today - 1 year.
+1. **LTC LCS: PAD Register*** — Start with currently registered patients. Include patients who match PAD Register (library item ffccdb77-bd5e-47fc-add3-d700835ace65).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Peripheral ischaemia, Peripheral ischaemic vascular disease, Ischaemic foot +50 more where Date before 12 months ago) AND NOT (patients included in search On PAD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On PAD Register- LTC LCS Priority Group 2 (HR)) AND NOT (Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months OR Medication Courses [MEDICATION_COURSES] with Atorvastatin, Simvastatin, Fluvastatin +1 more) AND NOT (Medication Issues [MEDICATION_ISSUES] with Refset: 12464001000001103 then Latest 1 where issue date > today - 12 months OR Clinical Codes [EVENTS] with Refset: 12464001000001103 then Latest 1 where date > today - 12 months OR Clinical Codes [EVENTS] with Statin declined then Latest 1 where date > today - 1 year)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1 (Primary)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: patients included in search On PAD Register- LTC LCS Priority Group 1 (HRC) OR patients included in search On PAD Register- LTC LCS Priority Group 2 (HR)
-- Population ref: On PAD Register- LTC LCS Priority Group 1 (HRC) (224df436-6871-45cc-b733-f063a59ba527)
-- Population ref: On PAD Register- LTC LCS Priority Group 2 (HR) (1d652d9b-8185-4e19-8240-fe78ddbad843)
+### Rule 1 of 5
 
-### Rule 2 (Additional)
-- Clause type: must-match
-- Pass: Next rule
-- Fail: Exclude
-- Operator: AND
-- Summary: Must match: Clinical Codes [EVENTS] with Peripheral ischaemia, Peripheral ischaemic vascular disease, Ischaemic foot +50 more where Date before 12 months ago
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_pad_reg_pg3_mr_vs1`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_pad_reg_pg3_mr_vs1`
-  - Filter: Date IN before 12 months ago
-    - To: before 12 months ago
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-### Rule 3 (Additional)
-- Clause type: informational
-- Pass: Include
-- Fail: Next rule
-- Operator: AND
-- Summary: Clinical Codes [EVENTS] with Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more then Latest 1 where numeric value > 2.5
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_pad_reg_pg3_mr_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_pad_reg_pg3_mr_vs2`
-  - Restriction: Latest 1 where numeric value > 2.5
-    - Condition: NUMERIC_VALUE IN | > 2.5
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **On PAD Register- LTC LCS Priority Group 1 (HRC)**
+- They appear in the results of the search **On PAD Register- LTC LCS Priority Group 2 (HR)**
 
-### Rule 4 (Additional)
-- Clause type: must-not-match
-- Pass: Exclude
-- Fail: Next rule
-- Operator: OR
-- Summary: Must not match: Medication Issues [MEDICATION_ISSUES] with Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more where Date of Issue within the last 6 months OR Medication Courses [MEDICATION_COURSES] with Atorvastatin, Simvastatin, Fluvastatin +1 more
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_pad_reg_pg3_mr_vs3`
-  - Filter: Drug
-    - Filter ValueSets: `on_pad_reg_pg3_mr_vs3`
-  - Filter: Date of Issue IN within the last 6 months
-    - From: within the last 6 months
-- Medication Courses [MEDICATION_COURSES]
-  - ValueSets: `on_pad_reg_pg3_mr_vs4`
-  - Filter: Course Status (Current, Past etc)
-  - Filter: Prescription Type
-  - Filter: Drug
-    - Filter ValueSets: `on_pad_reg_pg3_mr_vs4`
+### Rule 2 of 5
 
-### Rule 5 (Additional)
-- Clause type: include-if-not-match
-- Pass: Exclude
-- Fail: Include
-- Operator: OR
-- Summary: Included if it does not match: Medication Issues [MEDICATION_ISSUES] with Refset: 12464001000001103 then Latest 1 where issue date > today - 12 months OR Clinical Codes [EVENTS] with Refset: 12464001000001103 then Latest 1 where date > today - 12 months OR Clinical Codes [EVENTS] with Statin declined then Latest 1 where date > today - 1 year
-- Medication Issues [MEDICATION_ISSUES]
-  - ValueSets: `on_pad_reg_pg3_mr_vs5`
-  - Filter: Drug
-    - Filter ValueSets: `on_pad_reg_pg3_mr_vs5`
-  - Filter: Date of Issue
-    - To: <=
-  - Restriction: Latest 1 where issue date > today - 12 months
-    - Condition: ISSUE_DATE IN | > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_pad_reg_pg3_mr_vs5`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_pad_reg_pg3_mr_vs5`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where date > today - 12 months
-    - Condition: DATE IN | > today - 12 months
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_pad_reg_pg3_mr_vs6`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_pad_reg_pg3_mr_vs6`
-  - Filter: Date
-    - To: <=
-  - Restriction: Latest 1 where date > today - 1 year
-    - Condition: DATE IN | > today - 1 year
+Patients **must match** this rule to stay in. Those who match continue to Rule 3; those who do not are excluded.
 
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_pad_reg_pg3_mr_vs1` (53 codes)
+  - Where date before 12 months ago
 
-## ValueSet Friendly Names
-### LTC LCS: PAD Register*
-- None
-### On PAD Register- LTC LCS Priority Group 3 (MR)
-- `on_pad_reg_pg3_mr_vs1` (SNOMED, 53 codes): Peripheral ischaemia, Peripheral ischaemic vascular disease, Ischaemic foot +50 more
-- `on_pad_reg_pg3_mr_vs2` (SNOMED, 4 codes): Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Serum non HDL (high density lipoprotein) cholesterol level +1 more
-- `on_pad_reg_pg3_mr_vs3` (SCT_PREP, 6 codes): Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), Crestor 20mg tablets (AstraZeneca UK Ltd) +3 more
-- `on_pad_reg_pg3_mr_vs4` (SCT Const, 4 codes): Atorvastatin, Simvastatin, Fluvastatin +1 more
-- `on_pad_reg_pg3_mr_vs5` (SNOMED, 1 codes): Refset: 12464001000001103 | Cluster: STAT_COD
-- `on_pad_reg_pg3_mr_vs6` (SNOMED, 1 codes): Statin declined | Cluster: STATINDEC_COD
+### Rule 3 of 5
+
+If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 4.
+
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_pad_reg_pg3_mr_vs2` (4 codes)
+  - Keep only the latest matching record, and require its numeric value > 2.5
+
+### Rule 4 of 5
+
+Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 5.
+
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_pad_reg_pg3_mr_vs3` (6 codes)
+  - Where drug code in `on_pad_reg_pg3_mr_vs3` (6 codes)
+  - Where issue date within the last 6 months
+- **Medication Courses**
+  - Code in: `on_pad_reg_pg3_mr_vs4` (4 codes)
+  - Where drug code in `on_pad_reg_pg3_mr_vs4` (4 codes)
+
+### Rule 5 of 5
+
+Final rule: patients who match are **excluded**; everyone else is included.
+
+A patient matches this rule when ANY of the following is true:
+- **Medication Issues**
+  - Code in: `on_pad_reg_pg3_mr_vs5` (1 code — cluster STAT_COD)
+  - Where drug code in `on_pad_reg_pg3_mr_vs5` (1 code — cluster STAT_COD)
+  - Keep only the latest matching record, and require its issue date > today - 12 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_pad_reg_pg3_mr_vs5` (1 code — cluster STAT_COD)
+  - Keep only the latest matching record, and require its date > today - 12 months
+- **Clinical Codes** (clinical events)
+  - Code in: `on_pad_reg_pg3_mr_vs6` (1 code — cluster STATINDEC_COD)
+  - Keep only the latest matching record, and require its date > today - 1 year
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs1` |  | SNOMED | 53 | Peripheral ischaemia, Peripheral ischaemic vascular disease, Ischaemic foot +... | 36d83560 |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs2` |  | SNOMED | 4 | Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Se... | 561cf433 |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs3` |  | SCT_PREP | 6 | Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), ... | dd8f85b7 |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs4` |  | SCT Const | 4 | Atorvastatin, Simvastatin, Fluvastatin +1 more | 61715e8d |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs5` | STAT_COD | SNOMED | 1 | Refset: 12464001000001103 | 2ab5ff0c |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs6` | STATINDEC_COD | SNOMED | 1 | Statin declined | ac08be53 |
+
+## Caveats
+
+- LTC LCS: PAD Register* references the EMIS library item `ffccdb77-bd5e-47fc-add3-d700835ace65`, whose logic is not included in this XML export. It is likely **PAD Register** (inferred from wrapper report "LTC LCS: PAD Register*"), but this is not certain. Verify it in EMIS before implementing.
+- Some code lists exclude specific codes. See `exceptions.csv` in the extraction for the excluded codes and whether each was applied.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

@@ -5,40 +5,36 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: Hypertension or Asthma Master
+# Hypertension or Asthma Master
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: Hypertension or Asthma Master
-Parent population: Based on "6. All on Hypertension or Asthma register" search results
+## What this search does
 
-## Parent Chain
-- 6. All on Hypertension or Asthma register: Start with currently registered patients. Finally include patients who match Patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*.
+Start with the patients found by "6. All on Hypertension or Asthma register" (see below). Rule 1 includes only patients who do NOT match it.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "6. all on hypertension or asthma register" search results. Finally include patients who do not match Patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR OR patients included in search GROUP4- LR.
+1. **6. All on Hypertension or Asthma register** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-NOT (patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR OR patients included in search GROUP4- LR)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-not-match
-- Pass: Exclude
-- Fail: Include
-- Operator: OR
-- Summary: Included if it does not match: patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR OR patients included in search GROUP4- LR
-- Population ref: GROUP1- HRC (43aa0a5c-01eb-48b8-8e7b-a7afd007648e)
-- Population ref: GROUP2- HR (092b82f6-facc-4a38-b5a8-72e356f9a5f1)
-- Population ref: GROUP3- MR (fe774472-bb86-4e41-9a15-36f940fe154a)
-- Population ref: GROUP4- LR (f91a7389-ea30-4ae7-9699-fbd48b8422d5)
+### Rule 1 of 1
 
+Final rule: patients who match are **excluded**; everyone else is included.
 
-## ValueSet Friendly Names
-### 6. All on Hypertension or Asthma register
-- None
-### Hypertension or Asthma Master
-- None
+A patient matches this rule when ANY of the following is true:
+- They appear in the results of the search **GROUP1- HRC**
+- They appear in the results of the search **GROUP2- HR**
+- They appear in the results of the search **GROUP3- MR**
+- They appear in the results of the search **GROUP4- LR**
+
+## Code lists used
+
+None.
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

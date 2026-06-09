@@ -10,14 +10,14 @@ models:
       - Rule 2: emergency asthma admission code in last 12 months
       - Rule 3: tiotropium in last 6 months, montelukast or theophylline in
         last 12 months
-      - Rule 4: prednisolone order in last 12 months
-      - Rule 5: antibiotics order in last 12 months
+      - Rule 4: >= 3 prednisolone orders in last 12 months
+      - Rule 5: >= 3 antibiotics orders in last 12 months
       - Rule 6: high-dose ICS/LABA inhaler in last 6 months
       - Rule 7: beclometasone/formoterol combination and Beclazone-type
         inhaler both in last 6 months
 
-      The R5 EMIS XML has no issue-count restrictions on rules 4-5 (the
-      GitHub issue text mentions >= 3 issues).
+      Issue counts follow the live EMIS search definitions; the agent-API
+      parse of the R5 XML drops count restrictions.
     config:
       meta:
         owner:

@@ -5,44 +5,42 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: 2- Not Registered with Dentist
+# 2- Not Registered with Dentist
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: 2- Not Registered with Dentist
-Parent population: Based on "LTC LCS: Diabetes Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Diabetes Register*: Start with currently registered patients. Require Patient Details [PATIENTS] where Age at least 17 years old. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999004691000230108 then Latest 1.
+Start with the patients found by "LTC LCS: Diabetes Register*" (see below). A patient is included when they match Rule 1.
 
-## Library Items
-- None
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: diabetes register*" search results. Finally include patients who match Clinical Codes [EVENTS] with Registered with dentist, Patient not registered with dentist, Advised to see dentist OR Patient not registered with dentist then Latest 1.
+1. **LTC LCS: Diabetes Register*** — Start with currently registered patients. Require Patient Details where Age at least 17 years old. Include patients who match Clinical Codes with Refset: 999004691000230108 then Latest 1.
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Registered with dentist, Patient not registered with dentist, Advised to see dentist OR Patient not registered with dentist then Latest 1)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: AND
-- Summary: Included if matches: Clinical Codes [EVENTS] with Registered with dentist, Patient not registered with dentist, Advised to see dentist OR Patient not registered with dentist then Latest 1
-- Clinical Codes [EVENTS]
-  - ValueSets: `2_not_registered_with_dentist_vs1`, `2_not_registered_with_dentist_vs2`
-  - Filter: Clinical Code
-    - Filter ValueSets: `2_not_registered_with_dentist_vs1`
-  - Restriction: Latest 1
-    - Condition: READCODE IN
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS: Diabetes Register*
-- `dm_reg_vs1` (SNOMED, 1 codes): Refset: 999004691000230108 | Cluster: DM_COD
-- `dm_reg_vs2` (SNOMED, 1 codes): Refset: 999003371000230102 | Cluster: DMRES_COD
-### 2- Not Registered with Dentist
-- `2_not_registered_with_dentist_vs1` (SNOMED, 3 codes): Registered with dentist, Patient not registered with dentist, Advised to see dentist
-- `2_not_registered_with_dentist_vs2` (SNOMED, 1 codes): Patient not registered with dentist
+A patient matches this rule when:
+- **Clinical Codes** (clinical events)
+  - Code in: `2_not_registered_with_dentist_vs1` (3 codes), or `2_not_registered_with_dentist_vs2` (1 code)
+  - Keep only the latest matching record
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Diabetes Register* | `dm_reg_vs1` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| LTC LCS: Diabetes Register* | `dm_reg_vs2` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+| 2- Not Registered with Dentist | `2_not_registered_with_dentist_vs1` |  | SNOMED | 3 | Registered with dentist, Patient not registered with dentist, Advised to see ... | 6860b227 |
+| 2- Not Registered with Dentist | `2_not_registered_with_dentist_vs2` |  | SNOMED | 1 | Patient not registered with dentist | 293e3158 |
+
+## Caveats
+
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.

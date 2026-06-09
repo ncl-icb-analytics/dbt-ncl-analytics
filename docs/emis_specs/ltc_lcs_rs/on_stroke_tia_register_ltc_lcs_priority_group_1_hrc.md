@@ -5,56 +5,48 @@
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
-# Implementation Guide: On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)*
+# On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)*
 
-Important: This markdown is a readable guide. For exact operators, ranges, thresholds, restrictions, and linked-criterion logic, inspect `report.agentInterpretation.decisionFlow[].criteriaDetails` in the JSON response.
+Folder: 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
+Source: NCL LTC LCS R5.0 updated: 27112025
 
-Target report: On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)*
-Parent population: Based on "LTC LCS: Stroke/TIA Register*" search results
+## What this search does
 
-## Parent Chain
-- LTC LCS: Stroke/TIA Register*: Start with currently registered patients. Finally include patients who match Stroke/TIA Register (library item d4e6f787-dbce-4f0b-9f3f-498808ebad42).
-  Library refs: Stroke/TIA Register (d4e6f787-dbce-4f0b-9f3f-498808ebad42)
+Start with the patients found by "LTC LCS: Stroke/TIA Register*" (see below). A patient is included when they match Rule 1.
 
-## Library Items
-- LTC LCS: Stroke/TIA Register*: Stroke/TIA Register (d4e6f787-dbce-4f0b-9f3f-498808ebad42); wrapper reports: LTC LCS: Stroke/TIA Register*
+## Who we start with
 
-## Target Report Logic
-Start with based on "ltc lcs: stroke/tia register*" search results. Finally include patients who match Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 OR First, New, Flare Up where Date within the last 30 days AND Episode = First, New, Flare Up OR Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 OR Significant where Date within the last 30 days AND Problem Significance = Significant.
+1. **LTC LCS: Stroke/TIA Register*** — Start with currently registered patients. Include patients who match Stroke/TIA Register (library item d4e6f787-dbce-4f0b-9f3f-498808ebad42).
+2. **This search** then applies the rules below to that population.
 
-Boolean logic:
-(Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 OR First, New, Flare Up where Date within the last 30 days AND Episode = First, New, Flare Up OR Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 OR Significant where Date within the last 30 days AND Problem Significance = Significant)
+## Inclusion logic, step by step
 
-## Detailed Rule Logic
-### Rule 1
-- Clause type: include-if-match
-- Pass: Include
-- Fail: Exclude
-- Operator: OR
-- Summary: Included if matches: Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 OR First, New, Flare Up where Date within the last 30 days AND Episode = First, New, Flare Up OR Clinical Codes [EVENTS] with Refset: 999005531000230105 OR Refset: 999005291000230109 OR Significant where Date within the last 30 days AND Problem Significance = Significant
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_stroketia_reg_pg1_hrc_vs1`, `on_stroketia_reg_pg1_hrc_vs2`, `on_stroketia_reg_pg1_hrc_vs3`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_stroketia_reg_pg1_hrc_vs1`, `on_stroketia_reg_pg1_hrc_vs2`
-  - Filter: Date IN within the last 30 days
-    - From: within the last 30 days
-  - Filter: Episode (First, New...)
-    - Filter ValueSets: `on_stroketia_reg_pg1_hrc_vs3`
-- Clinical Codes [EVENTS]
-  - ValueSets: `on_stroketia_reg_pg1_hrc_vs1`, `on_stroketia_reg_pg1_hrc_vs2`, `on_stroketia_reg_pg1_hrc_vs4`
-  - Filter: Clinical Code
-    - Filter ValueSets: `on_stroketia_reg_pg1_hrc_vs1`, `on_stroketia_reg_pg1_hrc_vs2`
-  - Filter: Date IN within the last 30 days
-    - From: within the last 30 days
-  - Filter: Problem Significance
-    - Filter ValueSets: `on_stroketia_reg_pg1_hrc_vs4`
+### Rule 1 of 1
 
+Final rule: patients who match are **included**; everyone else is excluded.
 
-## ValueSet Friendly Names
-### LTC LCS: Stroke/TIA Register*
-- None
-### On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)*
-- `on_stroketia_reg_pg1_hrc_vs1` (SNOMED, 1 codes): Refset: 999005531000230105 | Cluster: STRK_COD
-- `on_stroketia_reg_pg1_hrc_vs2` (SNOMED, 1 codes): Refset: 999005291000230109 | Cluster: TIA_COD
-- `on_stroketia_reg_pg1_hrc_vs3` (Internal, 3 codes): First, New, Flare Up
-- `on_stroketia_reg_pg1_hrc_vs4` (Internal, 1 codes): Significant
+A patient matches this rule when ANY of the following is true:
+- **Clinical Codes** (clinical events)
+  - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD), or `on_stroketia_reg_pg1_hrc_vs3` (3 codes)
+  - Where date within the last 30 days
+  - Where episode type in `on_stroketia_reg_pg1_hrc_vs3` (3 codes)
+- **Clinical Codes** (clinical events)
+  - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD), or `on_stroketia_reg_pg1_hrc_vs4` (1 code)
+  - Where date within the last 30 days
+  - Where problemsignificance in `on_stroketia_reg_pg1_hrc_vs4` (1 code)
+
+## Code lists used
+
+Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
+
+| Search | Code list | Cluster | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs1` | STRK_COD | SNOMED | 1 | Refset: 999005531000230105 | c8a23b04 |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs2` | TIA_COD | SNOMED | 1 | Refset: 999005291000230109 | babfa5e0 |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs3` |  | Internal | 3 | First, New, Flare Up | bd7fde07 |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs4` |  | Internal | 1 | Significant | 8de0b3c4 |
+
+## Caveats
+
+- LTC LCS: Stroke/TIA Register* references the EMIS library item `d4e6f787-dbce-4f0b-9f3f-498808ebad42`, whose logic is not included in this XML export. It is likely **Stroke/TIA Register** (inferred from wrapper report "LTC LCS: Stroke/TIA Register*"), but this is not certain. Verify it in EMIS before implementing.
+- This guide is generated from the EMIS XML export. Validate it against the source search in EMIS before implementing.
