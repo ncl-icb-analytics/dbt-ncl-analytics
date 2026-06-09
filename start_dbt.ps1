@@ -78,6 +78,10 @@ function Resolve-FusionVersion {
 
 function Install-Fusion {
     param([string]$Version, [switch]$Update)
+    # Clear partial downloads left by a previous failed/locked install, else the
+    # installer can trip over them.
+    Get-ChildItem -Path $installDir -Filter 'tmp-dbt-download-*' -Directory -ErrorAction SilentlyContinue |
+        Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
     $installer = [scriptblock]::Create((Invoke-RestMethod 'https://public.cdn.getdbt.com/fs/install/install.ps1'))
     if ($Update) { & $installer -Version $Version -Target $fusionTarget -Update }
     else { & $installer -Version $Version -Target $fusionTarget }
@@ -98,7 +102,14 @@ try {
     Write-Host "  $((dbt --version 2>&1) | Select-Object -First 1)" -ForegroundColor Gray
 } catch {
     Write-Host "[WARNING] Could not install/update dbt Fusion: $_" -ForegroundColor Yellow
-    Write-Host "  Install manually: irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex" -ForegroundColor Gray
+    if ("$_" -match 'EPERM|rename|being used|denied|Access') {
+        # dbt.exe is locked - usually a running dbt LSP (the VS Code dbt extension).
+        Write-Host "  dbt.exe looks locked by a running process (often the VS Code dbt extension's LSP)." -ForegroundColor Gray
+        Write-Host "  Close VS Code, then run: Get-Process dbt -ErrorAction SilentlyContinue | Stop-Process -Force" -ForegroundColor Gray
+        Write-Host "  and re-open the terminal. Existing dbt keeps working in the meantime." -ForegroundColor Gray
+    } else {
+        Write-Host "  Install manually: irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex" -ForegroundColor Gray
+    }
     $actions += "Install dbt Fusion (see CONTRIBUTING.md)"
 }
 Write-Host ""
@@ -256,7 +267,17 @@ Write-Host ""
 # ---------------------------------------------------------------------------
 # 7. dbt packages - install if missing, or if packages.yml changed since last install
 # ---------------------------------------------------------------------------
-$needDeps = -not (Test-Path "dbt_packages")
+# Drop a stale dbt-core-format package-lock.yml. Fusion flags it (dbt1041 "Old
+# format package-lock.yml") and its pins can clash with packages.yml (dbt1005).
+# The old format lacks the per-package `name:` field Fusion writes, so detect by
+# its absence; `dbt deps` then regenerates a current, in-sync lock.
+$lockRemoved = $false
+if ((Test-Path "package-lock.yml") -and -not (Select-String -Path "package-lock.yml" -Pattern '^\s*name:' -Quiet)) {
+    Remove-Item "package-lock.yml" -Force
+    Write-Host "[INFO] Removed old-format package-lock.yml - dbt deps will regenerate it" -ForegroundColor Cyan
+    $lockRemoved = $true
+}
+$needDeps = $lockRemoved -or -not (Test-Path "dbt_packages")
 if (-not $needDeps -and (Test-Path "packages.yml")) {
     if ((Get-Item "packages.yml").LastWriteTimeUtc -gt (Get-Item "dbt_packages").LastWriteTimeUtc) {
         $needDeps = $true
