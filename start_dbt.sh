@@ -245,7 +245,16 @@ echo ""
 # ---------------------------------------------------------------------------
 # 7. dbt packages - install if missing, or if packages.yml changed since last install
 # ---------------------------------------------------------------------------
+# Drop a stale dbt-core-format package-lock.yml. Fusion flags it (dbt1041 "Old
+# format package-lock.yml") and its pins can clash with packages.yml (dbt1005).
+# The old format lacks the per-package `name:` field Fusion writes, so detect by
+# its absence; `dbt deps` then regenerates a current, in-sync lock.
 need_deps=false
+if [ -f "package-lock.yml" ] && ! grep -q '^[[:space:]]*name:' package-lock.yml; then
+    rm -f package-lock.yml
+    echo "[INFO] Removed old-format package-lock.yml - dbt deps will regenerate it"
+    need_deps=true
+fi
 if [ ! -d "dbt_packages" ]; then
     need_deps=true
 elif [ -f "packages.yml" ] && [ "packages.yml" -nt "dbt_packages" ]; then
