@@ -14,7 +14,7 @@ models:
       meta:
         owner:
           name: Peter Shakeshaft
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - valuesets_have_codes:
@@ -26,6 +26,6 @@ models:
               - on_copd_reg_pg2_hr_vs4
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
           - unique

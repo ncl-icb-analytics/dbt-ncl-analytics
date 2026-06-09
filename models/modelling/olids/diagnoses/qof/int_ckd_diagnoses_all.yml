@@ -12,7 +12,7 @@ models:
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -43,7 +43,7 @@ models:
       - name: ckd_observation_type
         description: 'Categorised CKD observation type (CKD Stage 3-5, CKD Stage 1-2, or CKD Resolved)'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:

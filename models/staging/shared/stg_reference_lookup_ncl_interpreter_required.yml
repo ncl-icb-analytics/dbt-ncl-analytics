@@ -9,12 +9,12 @@ models:
       - name: id
       - name: interpreter_required
         description: Interpreter required code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: interpreter_required_flag
         description: Boolean flag for interpreter required
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

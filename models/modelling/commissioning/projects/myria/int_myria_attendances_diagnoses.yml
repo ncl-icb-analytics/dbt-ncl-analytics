@@ -12,7 +12,7 @@ models:
       - name: primary_id
         description: "Unique identifier for each visit occurrence. Maps to PRIMARYKEY_ID
           in SUS."
-        tests:
+        data_tests:
           - not_null
       - name: pod_group
         description: "Point of delivery group (IP, OP, AE)."

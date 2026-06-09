@@ -8,26 +8,26 @@ models:
     columns:
       - name: lsoa21_cd
         description: Primary key - LSOA 2021 code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lsoa21_nm
         description: LSOA 2021 name
       - name: wd25_cd
         description: Ward 2025 code
-        tests:
+        data_tests:
           - not_null
       - name: wd25_nm
         description: Ward 2025 name
       - name: lad25_cd
         description: Local Authority District 2025 code
-        tests:
+        data_tests:
           - not_null
       - name: lad25_nm
         description: Local Authority District 2025 name
       - name: resident_flag
         description: Flag indicating if this is a residential LSOA
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

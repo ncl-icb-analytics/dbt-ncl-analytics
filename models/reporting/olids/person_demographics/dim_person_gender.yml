@@ -18,13 +18,13 @@ models:
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: gender
         description: 'Persons gender derived from gender concept mappings'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

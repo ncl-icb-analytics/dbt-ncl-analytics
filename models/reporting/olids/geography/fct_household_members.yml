@@ -18,29 +18,29 @@ models:
     columns:
       - name: person_id
         description: 'Unique identifier for patient'
-        tests:
+        data_tests:
           - not_null
 
       - name: household_id
         description: 'Unique identifier for household (links to dim_households)'
-        tests:
+        data_tests:
           - not_null
 
       - name: uprn_hash
         description: 'Hashed unique property reference number identifying dwelling'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_active
         description: 'Flag indicating if patient has active registration'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: [true, false]
       - name: is_deceased
         description: 'Flag indicating if patient is deceased'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -59,7 +59,7 @@ models:
         description: 'Primary language spoken by patient'
       - name: interpreter_needed
         description: 'Flag indicating if interpreter services are required'
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: [true, false]
@@ -79,10 +79,10 @@ models:
         description: 'Neighbourhood where GP practice is located'
       - name: snapshot_date
         description: 'Date when data was extracted'
-        tests:
+        data_tests:
           - not_null
 
       - name: created_at
         description: 'Timestamp when record was created'
-        tests:
+        data_tests:
           - not_null

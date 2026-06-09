@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -18,13 +18,13 @@ models:
     columns:
       - name: cluster_id
         description: Cluster identifier grouping related codes
-        tests:
+        data_tests:
           - not_null
       - name: cluster_description
         description: Description of the code cluster
       - name: code
         description: Individual code within the cluster
-        tests:
+        data_tests:
           - not_null
       - name: code_description
         description: Description of the individual code

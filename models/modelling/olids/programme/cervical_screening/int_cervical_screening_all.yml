@@ -7,7 +7,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: SMEAR_COD,CSPU_COD,CSDEC_COD,CSPCAINVITE_COD

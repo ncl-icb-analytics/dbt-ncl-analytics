@@ -5,19 +5,19 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
     columns:
       - name: original_code_id
         description: Unique identifier for this original code entry
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: valueset_id
         description: Foreign key to associated valueset
-        tests:
+        data_tests:
           - not_null
       - name: original_code
         description: Original code from source system

@@ -8,7 +8,7 @@ models:
     columns:
       - name: lsoa_2021_code
         description: Primary key - LSOA 2021 code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lsoa_2021_name
@@ -19,7 +19,7 @@ models:
         description: NCL neighbourhood name
       - name: start_date
         description: Date the neighbourhood definition became effective from
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

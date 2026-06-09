@@ -11,7 +11,7 @@ models:
     columns:
       - name: patient_id
         description: Patient identifier
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: sk_patient_id

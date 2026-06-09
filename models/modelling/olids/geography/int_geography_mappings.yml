@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -15,15 +15,15 @@ models:
     columns:
       - name: mapping_category
         description: 'ORGANISATION, GEOGRAPHY, or GEOGRAPHY_MAPPING'
-        tests:
+        data_tests:
           - not_null
       - name: mapping_type
         description: 'Type within category (e.g., PRIMARY_CARE, LSOA_2021)'
-        tests:
+        data_tests:
           - not_null
       - name: code
         description: 'Geographic or organisation code'
-        tests:
+        data_tests:
           - not_null
       - name: name
         description: 'Name or mapped value for the code'

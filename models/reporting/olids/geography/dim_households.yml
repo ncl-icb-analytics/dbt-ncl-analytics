@@ -18,19 +18,19 @@ models:
     columns:
       - name: household_id
         description: 'Unique identifier for household (surrogate key from UPRN hash)'
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: uprn_hash
         description: 'Hashed unique property reference number identifying dwelling'
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: dwelling_activity_status
         description: 'Classification of dwelling occupancy: Recently active, Previously active, or Historically active only'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -49,5 +49,5 @@ models:
         description: 'Index of Multiple Deprivation quintile (2019) where 1 is most deprived'
       - name: created_at
         description: 'Timestamp when record was created'
-        tests:
+        data_tests:
           - not_null

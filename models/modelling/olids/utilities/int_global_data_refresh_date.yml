@@ -19,5 +19,5 @@ models:
       - name: global_data_refresh_date
         description: Most recent date where ≥150 practices have uploaded data 
           (excludes future dates)
-        tests:
+        data_tests:
           - not_null

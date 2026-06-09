@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Emily Baldwin
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -19,7 +19,7 @@ models:
         description: activity identifier (PK)
       - name: unique_care_contact_identifier
         description: Care contact identifier (FK to care contact)
-        tests:
+        data_tests:
           - not_null
       - name: community_care_activity_type
         description: Type of community care activity

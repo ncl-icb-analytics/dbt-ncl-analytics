@@ -11,19 +11,19 @@ models:
     columns:
       - name: ccms_score_id
         description: Surrogate key from int_ccms_score.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id
         description: Person identifier (joins to dim_person).
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: cambridge_comorbidity_score
         description: Weighted Cambridge Comorbidity Score. Can be negative.
-        tests:
+        data_tests:
           - not_null
       - name: last_updated
         description: Timestamp the underlying int_ccms_score row was generated.
-        tests:
+        data_tests:
           - not_null

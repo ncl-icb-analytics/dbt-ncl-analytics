@@ -8,7 +8,7 @@ models:
     columns:
       - name: practicecode
         description: Primary key - GP practice code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: practicename
@@ -19,7 +19,7 @@ models:
         description: Local authority
       - name: practiceneighbourhood
         description: NCL practice neighbourhood
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Thomas Shallcross
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -17,12 +17,12 @@ models:
     columns:
       - name: uniq_care_cont_id
         description: MHSDS care contact identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: uniq_serv_req_id
         description: unique service request identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: person_id

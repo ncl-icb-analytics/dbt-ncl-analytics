@@ -18,7 +18,7 @@ models:
         data_tests:
           - not_null
 
-tests:
+data_tests:
   - name: referential_integrity_encounter
     description: "All encounters must reference valid persons"
     sql: |

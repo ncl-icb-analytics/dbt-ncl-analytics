@@ -12,7 +12,7 @@ models:
     columns:
       - name: primarykey_id
         description: Unique identifier for the spell (PRIMARYKEY_ID)
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: sk_patient_id
@@ -34,7 +34,7 @@ models:
       - name: spell_commissioning_tariff_calculation_final_price
 
 
-    tests:
+    data_tests:
       - elementary.volume_anomalies:
           description: "Detects anomalous daily row counts for APC spells."
 

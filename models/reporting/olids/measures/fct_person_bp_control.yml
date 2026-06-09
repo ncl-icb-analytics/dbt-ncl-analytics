@@ -138,7 +138,7 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - not_null
           - unique
         
@@ -177,7 +177,7 @@ models:
 
       - name: applied_measurement_context
         description: "'CLINIC' or 'HBPM_ABPM' — which variant of the bp_thresholds rule was applied, matching the latest reading's source."
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

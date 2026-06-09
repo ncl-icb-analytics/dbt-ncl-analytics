@@ -8,12 +8,12 @@ models:
     columns:
       - name: vaccine_id
         description: Primary key - unique vaccine identifier
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: vaccine_name
         description: Vaccine name
-        tests:
+        data_tests:
           - not_null
       - name: dose_number
         description: Dose number in schedule
@@ -27,7 +27,7 @@ models:
         description: FK to combined_codesets cluster for administered codes
       - name: drug_cluster_id
         description: FK to combined_codesets cluster for drug codes
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

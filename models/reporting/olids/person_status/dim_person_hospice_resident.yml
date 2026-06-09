@@ -18,14 +18,14 @@ models:
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sk_patient_id
         description: Surrogate key for patient
       - name: latest_hospice_resident_date
         description: Date of most recent hospice resident observation
-        tests:
+        data_tests:
           - not_null
       - name: latest_other_residence_date
         description: Date of most recent non-hospice RESIDE_COD residence code (NULL if none)
@@ -39,11 +39,11 @@ models:
         description: Source cluster ID of the latest resident observation
       - name: is_hospice_resident
         description: Currently living in a hospice (hospice event not superseded by a later residence code or discharge)
-        tests:
+        data_tests:
           - not_null
       - name: hospice_resident_status
         description: Text description of resident status
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

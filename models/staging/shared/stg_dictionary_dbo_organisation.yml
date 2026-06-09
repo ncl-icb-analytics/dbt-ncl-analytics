@@ -8,12 +8,12 @@ models:
     columns:
       - name: sk_organisation_id
         description: Primary key - surrogate key for organisation
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: organisation_code
         description: Organisation code
-        tests:
+        data_tests:
           - not_null
       - name: organisation_name
         description: Organisation name
@@ -25,7 +25,7 @@ models:
         description: Organisation end date (null if active)
       - name: status
         description: Organisation status
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

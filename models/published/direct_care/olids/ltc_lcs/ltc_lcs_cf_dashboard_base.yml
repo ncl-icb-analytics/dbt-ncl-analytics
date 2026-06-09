@@ -43,7 +43,7 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: sk_patient_id
@@ -136,7 +136,7 @@ models:
       # Indicator details (long format)
       - name: indicator_id
         description: Short indicator ID for dashboard display (e.g. AF_61, CVD_65)
-        tests:
+        data_tests:
           - not_null
 
       - name: indicator_category
@@ -159,7 +159,7 @@ models:
 
       - name: indicator_flag
         description: Always TRUE (only triggered indicators included in long format)
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -175,5 +175,5 @@ models:
 
       - name: created_at
         description: Timestamp when the row was created
-        tests:
+        data_tests:
           - not_null

@@ -63,7 +63,7 @@ models:
       - name: bmi_category_with_issues
         description: BMI category including issue classifications
 
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: BMIVAL_COD

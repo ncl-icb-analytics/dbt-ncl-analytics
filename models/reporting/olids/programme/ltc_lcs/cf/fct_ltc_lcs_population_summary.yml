@@ -9,7 +9,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: age_band_10y
       - dbt_utils.unique_combination_of_columns:
@@ -22,5 +22,5 @@ models:
               - neighbourhood_registered
     columns:
       - name: age_band_10y
-        tests:
+        data_tests:
           - not_null

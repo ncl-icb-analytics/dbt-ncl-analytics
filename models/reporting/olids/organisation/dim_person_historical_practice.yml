@@ -25,7 +25,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier'
-        tests:
+        data_tests:
           - not_null
 
       - name: sk_patient_id
@@ -33,17 +33,17 @@ models:
 
       - name: practice_id
         description: 'OLIDS internal practice ID'
-        tests:
+        data_tests:
           - not_null
       - name: practice_code
         description: 'Practice ODS code'
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
       - name: practice_name
         description: 'Practice name'
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
@@ -70,7 +70,7 @@ models:
 
       - name: registration_start_date
         description: 'Start date of this registration period'
-        tests:
+        data_tests:
           - not_null
 
       - name: registration_end_date
@@ -87,7 +87,7 @@ models:
 
       - name: registration_type
         description: 'Type classification (Open Registration, Closed Registration)'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -95,24 +95,24 @@ models:
 
       - name: is_current_registration
         description: 'Flag indicating if this is the current active registration'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_latest_registration
         description: 'Flag indicating if this is the most recent registration (current or last)'
-        tests:
+        data_tests:
           - not_null
 
       - name: registration_sequence
         description: 'Sequential number of this registration for the person'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 1
       - name: total_registrations_count
         description: 'Total number of registrations this person has had'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
@@ -122,7 +122,7 @@ models:
 
       - name: has_changed_practice
         description: 'Flag indicating if person has ever changed practice'
-        tests:
+        data_tests:
           - not_null
 
       - name: age_at_registration_start
@@ -151,12 +151,12 @@ models:
 
       - name: is_first_registration
         description: 'Flag indicating if this is the first registration for this person'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_last_registration
         description: 'Flag indicating if this is the last registration for this person'
-        tests:
+        data_tests:
           - not_null
 
     # Note: No uniqueness test on (person_id, registration_start_date, practice_id) 

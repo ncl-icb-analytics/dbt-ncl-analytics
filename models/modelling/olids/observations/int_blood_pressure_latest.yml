@@ -11,22 +11,22 @@ models:
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: effective_date
         description: Date of most recent blood pressure measurement
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
         description: Backward-compatibility alias for effective_date
       - name: systolic_value
         description: Systolic blood pressure value in mmHg (representative reading)
-        tests:
+        data_tests:
           - not_null
       - name: diastolic_value
         description: Diastolic blood pressure value in mmHg (representative reading)
-        tests:
+        data_tests:
           - not_null
       - name: is_home_bp_event
         description: 'Boolean flag indicating the representative reading was recorded as home blood pressure'

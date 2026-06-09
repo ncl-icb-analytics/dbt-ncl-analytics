@@ -8,7 +8,7 @@ models:
     columns:
       - name: id
         description: Primary key - numeric person_id (generate_person_id hash), matches person_id on other OLIDS tables
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_uuid
@@ -57,7 +57,7 @@ models:
         description: "LDS datetime stamp when the linked person record was first acquired. New in the 2026 OLIDS schema realignment (issue #747)."
       - name: lds_datetime_update_acquired_person
         description: "LDS datetime stamp when an update for the linked person record was acquired. New in the 2026 OLIDS schema realignment (issue #747)."
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

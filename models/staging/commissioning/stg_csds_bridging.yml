@@ -8,12 +8,12 @@ models:
     columns:
       - name: person_id
         description: CSDS person identifier
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sk_patient_id
         description: Pseudonymised NHS number (surrogate key for patient)
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

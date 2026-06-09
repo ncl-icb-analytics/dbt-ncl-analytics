@@ -1,13 +1,13 @@
 models:
 - name: int_person_pds_latest_record
   description: Personal Demographics Service latest record for each patient in a combined table.
-  tests:
+  data_tests:
   - dbt_utils.at_least_one:
       column_name: sk_patient_id
   columns:
   - name: sk_patient_id
     description: Surrogate key patient identifier (pseudonymised NHS number)
-    tests:
+    data_tests:
     - not_null
     - unique
   - name: record_person_start_date

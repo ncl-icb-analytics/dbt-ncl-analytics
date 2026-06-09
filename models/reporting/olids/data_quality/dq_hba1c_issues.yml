@@ -55,7 +55,7 @@ models:
       - name: is_extreme_outlier
         description: Whether HbA1c is an extreme outlier requiring validation
 
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: IFCCHBAM_COD, DCCTHBA1C_COD

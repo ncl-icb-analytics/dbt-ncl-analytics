@@ -10,25 +10,25 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
           - unique
 
       # Demographics section (from dim_person_demographics - should never be null)
       - name: is_active
         description: Flag indicating if person has active GP registration
-        tests:
+        data_tests:
           - not_null  # Verifies demographics join worked
           - accepted_values:
               arguments:
                 values: [true, false]
       - name: age
         description: Current age in years
-        tests:
+        data_tests:
           - not_null  # Demographics always has age for persons with birth dates
       - name: gender
         description: Person's gender
-        tests:
+        data_tests:
           - not_null  # Demographics always has gender (even if 'Unknown')
       - name: ethnicity_category
         description: Main ethnicity category classification
@@ -45,7 +45,7 @@ models:
       # Behavioural Risk Factors section
       - name: bmi_category
         description: BMI classification (may be null if no BMI data)
-        tests:
+        data_tests:
           - accepted_values:
               config:
                 where: "bmi_category is not null"
@@ -53,7 +53,7 @@ models:
                 values: ['Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
       - name: smoking_status
         description: Current smoking status (may be null if no smoking data)
-        tests:
+        data_tests:
           - accepted_values:
               config:
                 where: "smoking_status is not null"
@@ -61,7 +61,7 @@ models:
                 values: ['Never Smoked', 'Ex-Smoker', 'Current Smoker', 'Unknown']
       - name: risk_factor_count
         description: Count of active behavioural risk factors (0-3, null if no risk factor data)
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               config:
                 where: "risk_factor_count is not null"
@@ -72,21 +72,21 @@ models:
                 max_value: 3
       - name: has_bmi_data
         description: Flag indicating if BMI data is available for this person
-        tests:
+        data_tests:
           - not_null  # Verifies behavioural risk factors join worked
           - accepted_values:
               arguments:
                 values: [true, false]
       - name: has_smoking_data
         description: Flag indicating if smoking data is available for this person
-        tests:
+        data_tests:
           - not_null  # Always TRUE/FALSE from behavioural risk factors
           - accepted_values:
               arguments:
                 values: [true, false]
       - name: has_alcohol_data
         description: Flag indicating if alcohol data is available for this person
-        tests:
+        data_tests:
           - not_null  # Always TRUE/FALSE from behavioural risk factors
           - accepted_values:
               arguments:
@@ -94,14 +94,14 @@ models:
       # Conditions section (from dim_person_conditions - should never be null)
       - name: has_diabetes
         description: Flag indicating diabetes diagnosis
-        tests:
+        data_tests:
           - not_null  # Verifies conditions join worked - always TRUE/FALSE
           - accepted_values:
               arguments:
                 values: [true, false]
       - name: total_conditions
         description: Total number of recorded conditions
-        tests:
+        data_tests:
           - not_null  # Always has a value (0 or more) from dim_person_conditions
           - dbt_utils.accepted_range:
               arguments:

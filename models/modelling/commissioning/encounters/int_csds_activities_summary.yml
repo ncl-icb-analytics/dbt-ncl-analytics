@@ -7,7 +7,7 @@ models:
       meta:
         owner:
           name: Emily Baldwin
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -21,9 +21,9 @@ models:
 ##          - not_null (14/10/2025: commented out for now. csds_bridging table has null pseudo_nhs_numbers)
       - name: referral_id
         description: "Unique identifier for the referral (UNIQUE_SERVICE_REQUEST_IDENTIFIER)"
-        tests:
+        data_tests:
           - not_null
       - name: contact_id
         description: "Unique identifier for the contact (UNIQUE_CARE_CONTACT_IDENTIFIER)"
-        tests:
+        data_tests:
           - not_null

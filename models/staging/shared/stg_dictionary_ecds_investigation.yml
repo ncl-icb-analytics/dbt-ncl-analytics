@@ -8,14 +8,14 @@ models:
     columns:
       - name: ecds_unique_id
         description: Primary key - ECDS unique identifier
-        tests:
+        data_tests:
           - not_null
       - name: snomed_code
         description: SNOMED CT code
-        tests:
+        data_tests:
           - unique
           - not_null
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

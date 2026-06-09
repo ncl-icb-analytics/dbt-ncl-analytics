@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -19,15 +19,15 @@ models:
     columns:
       - name: vaccine
         description: Vaccine type (DTaP, MMR, etc.)
-        tests:
+        data_tests:
           - not_null
       - name: dose
         description: Dose number/sequence
-        tests:
+        data_tests:
           - not_null
       - name: snomedconceptid
         description: SNOMED concept ID for the immunisation code
-        tests:
+        data_tests:
           - not_null
       - name: codedescription
         description: Description of the SNOMED code

@@ -8,14 +8,14 @@ models:
       - NOT downstaged to Stage 1-2 (no CKD1AND2_COD after latest CKD_COD)
       - NOT resolved (no CKDRES_COD after latest CKD_COD)
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null
 

@@ -6,7 +6,7 @@ models:
       meta:
         owner:
           name: KateHomer55
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
@@ -19,11 +19,11 @@ models:
 
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
       - name: concept_code
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
-        tests:
+        data_tests:
           - not_null

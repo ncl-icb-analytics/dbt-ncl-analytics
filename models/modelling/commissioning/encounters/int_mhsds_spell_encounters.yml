@@ -9,7 +9,7 @@ models:
     columns:
       - name: encounter_id
         description: "Surrogate key - unique identifier for the encounter"
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sk_patient_id

@@ -53,7 +53,7 @@ models:
         description: Version of the concept map
       - name: lds_start_datetime
         description: LDS datetime stamp from which the record version was correct
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

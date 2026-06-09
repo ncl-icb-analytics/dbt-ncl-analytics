@@ -16,7 +16,7 @@ models:
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: latest_efi_date

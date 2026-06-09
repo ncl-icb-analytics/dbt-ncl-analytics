@@ -7,7 +7,7 @@ models:
       Identifies people: • Diagnosed with asthma and recent inhaled medication (12 months) • 2+ oral steroid prescriptions within any 2-year window • OR recent asthma hospital admission (2 years) • Minimum age 5 years
 
       Used by: Mart models for eligibility determination'
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: AST_COD,ASTRXM1_COD,ASTRXM2_COD,ASTADM_COD
@@ -81,7 +81,7 @@ models:
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'
-        tests:
+        data_tests:
           - not_null
       - name: campaign_category
         description: 'Category of eligibility criteria (always "CLINICAL_CONDITION")'
@@ -89,7 +89,7 @@ models:
         description: 'Risk group classification (always "Asthma")'
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
       - name: qualifying_event_date
         description: 'Date of qualifying asthma event (admission, steroid prescription, or diagnosis)'

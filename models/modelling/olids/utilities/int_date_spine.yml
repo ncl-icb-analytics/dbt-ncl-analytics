@@ -26,30 +26,30 @@ models:
     columns:
       - name: month_start_date
         description: First day of the month
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: month_end_date
         description: Last day of the month
-        tests:
+        data_tests:
           - not_null
 
       - name: year_number
         description: Year as integer (e.g., 2024)
-        tests:
+        data_tests:
           - not_null
 
       - name: quarter_number
         description: Calendar quarter (1-4)
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: [1, 2, 3, 4]
       - name: month_number
         description: Month number (1-12)
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -95,7 +95,7 @@ models:
 
       - name: financial_quarter_number
         description: UK financial quarter number (1-4, where 1 is Apr-Jun)
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: [1, 2, 3, 4]

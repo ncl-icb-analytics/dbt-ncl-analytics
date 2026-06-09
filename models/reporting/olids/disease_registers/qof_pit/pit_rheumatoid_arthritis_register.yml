@@ -8,14 +8,14 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: register_name

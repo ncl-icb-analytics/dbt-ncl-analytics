@@ -26,18 +26,18 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: birth_date_approx
         description: Approximate date of birth (mid-month)
-        tests:
+        data_tests:
           - not_null
 
       - name: age
         description: Current age or age at death in years
-        tests:
+        data_tests:
           - not_null
 
       - name: birth_date_approx_end_of_month
@@ -87,15 +87,15 @@ models:
       - name: is_early_years_age
         description: 'Flag indicating early years age (ages 2-3, eligible for GP-based
           flu vaccination)'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_primary_school_age
         description: 'Flag indicating primary school age (Reception to Year 6)'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_secondary_school_age
         description: 'Flag indicating secondary school age (Year 7 to Year 13)'
-        tests:
+        data_tests:
           - not_null

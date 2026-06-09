@@ -19,7 +19,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
@@ -28,7 +28,7 @@ models:
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id

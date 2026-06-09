@@ -13,7 +13,7 @@ models:
     columns:
       - name: sk_patient_id
         description: Unique identifier for each patient.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: wl_current_total_count
@@ -33,7 +33,7 @@ models:
       - name: current_waiting_list_arrays
         description: Array of waiting list objects for the patient, sorted by days on waiting list.
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

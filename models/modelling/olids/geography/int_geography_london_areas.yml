@@ -9,7 +9,7 @@ models:
     columns:
       - name: lad25_cd
         description: 'Local Authority District 2025 code - primary key'
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lad25_nm

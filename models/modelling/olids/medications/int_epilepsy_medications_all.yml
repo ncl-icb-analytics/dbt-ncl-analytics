@@ -21,7 +21,7 @@ models:
 
       - name: medication_order_id
         description: 'Unique identifier for the medication order - primary key'
-        tests:
+        data_tests:
           - unique
           - not_null
 

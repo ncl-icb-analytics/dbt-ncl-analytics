@@ -8,21 +8,21 @@ models:
     columns:
       - name: id
         description: Row identifier
-        tests:
+        data_tests:
           - not_null
       - name: sk_patient_id
         description: Surrogate patient key
       - name: nhs_number_hash
         description: Hashed NHS number - join key to stg_olids_person.matched_nhs_no_hash
-        tests:
+        data_tests:
           - not_null
       - name: preference_type
         description: Opt-out preference type, normalised (e.g. NATIONAL_DATA_OPT_OUT)
-        tests:
+        data_tests:
           - not_null
       - name: preference_status
         description: Preference status, normalised (e.g. OPT_IN, OPT_OUT)
-        tests:
+        data_tests:
           - not_null
       - name: effective_from
         description: Validity start
@@ -34,7 +34,7 @@ models:
         description: Soft-delete flag
       - name: lds_start_date_time
         description: Incremental high-water column
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

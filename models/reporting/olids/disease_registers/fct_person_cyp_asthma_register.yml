@@ -6,7 +6,7 @@ models:
       One row per person under 18 years with latest AST_COD > latest ASTRES_COD and
       asthma medication prescribed within last 12 months.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -44,6 +44,6 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null

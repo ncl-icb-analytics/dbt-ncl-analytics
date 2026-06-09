@@ -23,7 +23,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -32,19 +32,19 @@ models:
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - not_null
       - name: effective_date
         description: |
           Date of blood pressure measurement. Uses clinical_effective_date unless
           it was in the future, in which case date_recorded is used as fallback.
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
         description: Backward-compatibility alias for effective_date
       - name: systolic_value
         description: Systolic blood pressure value in mmHg
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
@@ -53,7 +53,7 @@ models:
                 inclusive: true
       - name: diastolic_value
         description: Diastolic blood pressure value in mmHg
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:

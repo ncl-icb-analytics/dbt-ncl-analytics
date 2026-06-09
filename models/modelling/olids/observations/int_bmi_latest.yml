@@ -160,12 +160,12 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: age
         description: 'Age in years at time of analysis (adults 18+ only)'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
@@ -174,19 +174,19 @@ models:
                 inclusive: true
       - name: id
         description: Latest BMI observation identifier
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
         description: Date of latest BMI observation
-        tests:
+        data_tests:
           - not_null
       - name: bmi_value
         description: BMI value in kg/m²
-        tests:
+        data_tests:
           - not_null
       - name: bmi_source
         description: 'Source of BMI value (recorded or calculated)'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -197,21 +197,21 @@ models:
         description: 'Ethnicity group classification for cardiometabolic risk assessment'
       - name: is_valid_bmi
         description: 'Flag indicating BMI value is within valid range (10-150)'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: [true]
       - name: bmi_category
         description: 'BMI categorisation using ethnicity-adjusted thresholds per NICE NG246'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II', 'Obese Class III']
       - name: bmi_risk_sort_key
         description: 'BMI risk sort key using ethnicity-adjusted thresholds (higher = higher risk)'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:

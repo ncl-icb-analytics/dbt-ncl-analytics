@@ -12,5 +12,5 @@ models:
 
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null

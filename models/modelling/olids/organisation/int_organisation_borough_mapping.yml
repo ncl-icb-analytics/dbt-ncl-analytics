@@ -34,7 +34,7 @@ models:
     columns:
       - name: practice_code
         description: 'GP practice identifier. Unique after the practice-grain dedup.'
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: borough_registered
@@ -49,11 +49,11 @@ models:
         description: 'Legacy ICB ODS code. For WNL (merged Apr 2026): QMJ (NCL) or QRV
           (NWL) depending on the commissioner''s pre-merger parent. For ICBs that have
           not merged: the ICB code itself (QMF, QKK, QWE).'
-        tests:
+        data_tests:
           - not_null
       - name: sub_icb_name
         description: 'Legacy ICB display name sourced from Dictionary.Organisation.'
-        tests:
+        data_tests:
           - not_null
       - name: network_code
         description: 'Primary Care Network (PCN) identifier that the practice belongs to.'

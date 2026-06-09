@@ -10,7 +10,7 @@ models:
     columns:
       - name: sk_ethnicity_id
         description: Surrogate key for the ethnicity
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: bk_ethnicity_code

@@ -5,7 +5,7 @@ models:
       One row per person with CLDATRISK1_COD or CIRRHOSIS_COD present (non-QOF).
       Includes has_cirrhosis flag for end-stage progression.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -39,6 +39,6 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null

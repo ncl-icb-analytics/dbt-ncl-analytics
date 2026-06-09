@@ -19,22 +19,22 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: EFI_SCORE, EFI2_SCORE
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - not_null
       - name: id
         description: Source observation identifier (LDS)
-        tests:
+        data_tests:
           - not_null
       - name: clinical_effective_date
         description: Observation date
-        tests:
+        data_tests:
           - not_null
       - name: efi_value
         description: Numeric eFI value as recorded

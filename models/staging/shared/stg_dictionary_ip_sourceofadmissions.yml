@@ -8,10 +8,10 @@ models:
     columns:
       - name: sk_source_of_admission_id
         description: Primary key - surrogate key for source of admission
-        tests:
+        data_tests:
           - unique
           - not_null
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

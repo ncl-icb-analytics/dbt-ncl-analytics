@@ -23,18 +23,18 @@ models:
     columns:
       - name: pcn_code
         description: 'Primary Care Network code'
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: pcn_name
         description: 'PCN name as recorded in Dictionary'
-        tests:
+        data_tests:
           - not_null
 
       - name: pcn_name_with_borough
         description: 'PCN name prefixed with borough (e.g., "Camden: Example PCN") for geographic identification'
-        tests:
+        data_tests:
           - not_null
 
       - name: sk_pcn_id
@@ -45,12 +45,12 @@ models:
 
       - name: member_practice_count
         description: 'Number of practices in this PCN for network size analysis'
-        tests:
+        data_tests:
           - not_null
 
       - name: member_practice_codes
         description: 'Array of practice codes in this PCN for member analysis'
-        tests:
+        data_tests:
           - not_null
 
       - name: pcn_start_date
@@ -91,7 +91,7 @@ models:
 
       - name: icb_code
         description: 'ICB code — Z9B2Z (West and North London ICB, merged NCL + NWL from Apr 2026). Sourced from Dictionary STPCode.'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -99,7 +99,7 @@ models:
 
       - name: icb_name
         description: 'ICB display name (NHS West and North London Integrated Care Board)'
-        tests:
+        data_tests:
           - not_null
 
       - name: sk_icb_id
@@ -107,7 +107,7 @@ models:
 
       - name: sub_icb_code
         description: 'Legacy ICB ODS code (QMJ NCL, QRV NWL) derived from the PCN''s commissioner via ODS hierarchy. All PCNs in dim_pcn are Z9B2Z so this always resolves to QMJ or QRV.'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -115,7 +115,7 @@ models:
 
       - name: sub_icb_name
         description: 'Legacy ICB display name (NHS North Central London / NHS North West London).'
-        tests:
+        data_tests:
           - not_null
 
       - name: sk_pcn_dict_id

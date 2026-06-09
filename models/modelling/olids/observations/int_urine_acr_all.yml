@@ -7,13 +7,13 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: UACR_TESTING
     columns:
       - name: id
         description: Unique identifier for each ACR observation
-        tests:
+        data_tests:
           - unique
           - not_null

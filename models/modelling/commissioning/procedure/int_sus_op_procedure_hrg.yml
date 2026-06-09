@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Emily Baldwin
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           config:
             severity: error
@@ -43,7 +43,7 @@ models:
       - name: sk_patient_id
         data_type: varchar
         description: "Unique patient identifer linkage across commissioning datasets"
-        tests:
+        data_tests:
           - not_null
 
       - name: organisation_id
@@ -65,7 +65,7 @@ models:
       - name: source_concept_code
         data_type: varchar
         description: "HRG code. Either: Unbundled HRG code or the core HRG derived by SUS as a result of HRG grouping and used for tariff application"
-        tests:
+        data_tests:
           - not_null
 
       - name: concept_name

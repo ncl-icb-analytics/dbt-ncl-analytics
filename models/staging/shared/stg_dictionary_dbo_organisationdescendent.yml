@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Emily Baldwin
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -18,15 +18,15 @@ models:
     columns:
       - name: sk_organisation_id_root
         description: Root organisation in hierarchy
-        tests:
+        data_tests:
           - not_null
       - name: sk_organisation_id_parent
         description: Parent organisation
-        tests:
+        data_tests:
           - not_null
       - name: sk_organisation_id_child
         description: Child organisation
-        tests:
+        data_tests:
           - not_null
       - name: relationship_type
         description: Type of relationship between organisations
@@ -34,5 +34,5 @@ models:
         description: Depth in the hierarchy
       - name: path
         description: Full path in hierarchy
-        tests:
+        data_tests:
           - not_null

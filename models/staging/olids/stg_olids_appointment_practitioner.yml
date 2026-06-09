@@ -8,7 +8,7 @@ models:
     columns:
       - name: id
         description: Primary key - unique identifier for this appointment-practitioner link
-        tests:
+        data_tests:
           - not_null
       - name: appointment_id
         description: Foreign key to appointment.id
@@ -26,7 +26,7 @@ models:
         description: Deletion flag - records with TRUE are filtered out in this staging layer
       - name: lds_record_id
         description: LDS assigned unique identifier for the source record version
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

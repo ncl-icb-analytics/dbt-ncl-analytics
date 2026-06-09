@@ -6,7 +6,7 @@ models:
       One row per active patient with a qualifying diagnosis from the MASLD_DX_CODES
       terminology cluster.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -39,6 +39,6 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null

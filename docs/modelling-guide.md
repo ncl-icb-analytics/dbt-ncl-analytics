@@ -123,7 +123,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - row_id
@@ -131,11 +131,11 @@ models:
     columns:
       - name: row_id
         description: Row identifier
-        tests:
+        data_tests:
           - not_null
       - name: sk_patient_id
         description: Surrogate key patient identifier (pseudonymised NHS number)
-        tests:
+        data_tests:
           - not_null
       - name: year_month_of_birth
         description: Year and month of birth
@@ -393,12 +393,12 @@ models:
     columns:
       - name: primary_key_column
         description: What this column represents
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: another_column
         description: What this column represents
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
 ```
@@ -449,10 +449,10 @@ models:
     columns:
       - name: key_column
         description: Primary key
-        tests:
+        data_tests:
           - unique
           - not_null
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
 ```

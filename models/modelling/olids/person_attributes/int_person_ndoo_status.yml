@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
@@ -17,19 +17,19 @@ models:
     columns:
       - name: person_id
         description: Resolved person_id from PERSON.id
-        tests:
+        data_tests:
           - not_null
       - name: preference_type
         description: Normalised preference type (e.g. NATIONAL_DATA_OPT_OUT)
-        tests:
+        data_tests:
           - not_null
       - name: preference_status
         description: Normalised preference status (e.g. OPT_IN, OPT_OUT)
-        tests:
+        data_tests:
           - not_null
       - name: is_opted_in
         description: TRUE when preference_status = 'OPT_IN'
-        tests:
+        data_tests:
           - not_null
       - name: effective_from
         description: Validity start of the latest preference record

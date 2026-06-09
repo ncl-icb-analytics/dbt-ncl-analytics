@@ -10,7 +10,7 @@ models:
     columns:
       - name: indicator_id
         description: Foreign key linking to def_indicator table
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -18,37 +18,37 @@ models:
                 field: indicator_id
       - name: population_group
         description: Target population (e.g., AGE_LT_80, T2DM, CKD_ACR_GE_70)
-        tests:
+        data_tests:
           - not_null
 
       - name: threshold_type
         description: Type of threshold (TARGET_UPPER, DIAGNOSIS_S1_CLINIC, etc.)
-        tests:
+        data_tests:
           - not_null
 
       - name: threshold_value
         description: Threshold value (e.g., 140/90, 130/80, ≥30)
-        tests:
+        data_tests:
           - not_null
 
       - name: threshold_operator
         description: Comparison operator (BELOW, AT_OR_ABOVE, BETWEEN)
-        tests:
+        data_tests:
           - not_null
 
       - name: threshold_unit
         description: Unit of measurement (mmHg, kg/m², score, percentage)
-        tests:
+        data_tests:
           - not_null
 
       - name: description
         description: Human-readable description of the threshold
-        tests:
+        data_tests:
           - not_null
 
       - name: sort_order
         description: Sorting key for consistent ordering
-        tests:
+        data_tests:
           - not_null
 
       - name: metadata_extracted_at

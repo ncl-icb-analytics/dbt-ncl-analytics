@@ -5,14 +5,14 @@ models:
       remission-only does not qualify); or MH2_REG — LIT_COD lithium in the last 6 months,
       not subsequently stopped (LITSTP_COD). Aligned with the calculate_smi_register macro.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null
 

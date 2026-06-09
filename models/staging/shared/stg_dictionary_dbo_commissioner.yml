@@ -29,7 +29,7 @@ models:
         description: Whether commissioner is a customer
       - name: is_test_organisation
         description: Whether commissioner is a test organisation
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

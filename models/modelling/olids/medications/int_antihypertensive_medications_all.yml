@@ -8,7 +8,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: ANTIHYPERTENSIVE_MEDICATIONS
@@ -21,7 +21,7 @@ models:
         description: 'Unique identifier for the medication statement'
       - name: order_date
         description: 'Date when antihypertensive medication was ordered'
-        tests:
+        data_tests:
           - not_null
       - name: order_medication_name
         description: 'Name of the antihypertensive medication as ordered'

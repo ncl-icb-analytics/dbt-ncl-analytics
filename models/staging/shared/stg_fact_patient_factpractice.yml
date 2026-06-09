@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -15,12 +15,12 @@ models:
     columns:
       - name: sk_patient_id
         description: Surrogate key patient identifier (pseudonymised NHS number)
-        tests:
+        data_tests:
           - not_null
 
       - name: sk_organisation_id
         description: Surrogate key organisation identifier
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -28,7 +28,7 @@ models:
                 field: sk_organisation_id
       - name: practice_ods_code
         description: GP practice ODS code from organisation table
-        tests:
+        data_tests:
           - not_null
 
       - name: practice_name
@@ -36,7 +36,7 @@ models:
 
       - name: period_start
         description: Registration period start date
-        tests:
+        data_tests:
           - not_null
 
       - name: period_end
@@ -53,7 +53,7 @@ models:
 
       - name: is_current_registration
         description: Flag indicating if this is a current active registration
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

@@ -10,7 +10,7 @@ models:
       - name: sk_patient_id
         data_type: varchar
         description: "Unique identifier for the patient (pseudonymised NHS number)"  
-        tests:
+        data_tests:
           - not_null
           - unique
 

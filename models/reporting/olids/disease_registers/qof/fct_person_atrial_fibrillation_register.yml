@@ -5,7 +5,7 @@ models:
       One row per person with latest AFIB_COD > latest AFIBRES_COD or no resolution
       recorded.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -41,7 +41,7 @@ models:
     columns:
       - name: person_id
         description: 'Patient identifier'
-        tests:
+        data_tests:
           - unique
           - not_null
 

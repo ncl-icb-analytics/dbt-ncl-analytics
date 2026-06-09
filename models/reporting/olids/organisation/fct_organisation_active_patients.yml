@@ -21,18 +21,18 @@ models:
     columns:
       - name: organisation_id
         description: 'OLIDS internal organisation ID'
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: ods_code
         description: 'Organisation ODS code (NHS organisational code)'
-        tests:
+        data_tests:
           - not_null
 
       - name: measure_id
         description: 'Standardised measure identifier (ORGANISATION_ACTIVE_LIST_SIZE)'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -40,7 +40,7 @@ models:
 
       - name: active_patient_count
         description: 'Current number of active patients registered with this organisation'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:

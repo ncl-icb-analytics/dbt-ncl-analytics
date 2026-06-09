@@ -10,10 +10,10 @@ models:
     columns:
       - name: sk_procedure_code
         description: Surrogate key for the procedure
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: code
         description: OPCS procedure code
-        tests:
+        data_tests:
           - not_null

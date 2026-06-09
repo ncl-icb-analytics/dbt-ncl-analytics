@@ -8,12 +8,12 @@ models:
     columns:
       - name: sk_date
         description: Number representing the date in YYYYMMDD format
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: full_date
         description: Date object representing the full date
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

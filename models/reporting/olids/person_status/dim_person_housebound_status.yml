@@ -10,22 +10,22 @@ models:
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sk_patient_id
         description: Surrogate key for patient
       - name: latest_housebound_status_date
         description: Date of most recent housebound status observation
-        tests:
+        data_tests:
           - not_null
       - name: is_housebound
         description: Boolean flag indicating if person is currently housebound
-        tests:
+        data_tests:
           - not_null
       - name: housebound_status
         description: Text description of housebound status
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

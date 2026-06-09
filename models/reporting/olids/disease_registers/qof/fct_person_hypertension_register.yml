@@ -6,7 +6,7 @@ models:
       One row per person with latest HTN_COD > latest HTNRES_COD, including clinical
       staging based on NICE-aligned BP thresholds.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -42,7 +42,7 @@ models:
     columns:
       - name: person_id
         description: 'Patient identifier'
-        tests:
+        data_tests:
           - unique
           - not_null
 

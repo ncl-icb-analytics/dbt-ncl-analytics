@@ -10,7 +10,7 @@ models:
     columns:
       - name: id
         description: 'Observation identifier (not unique - same observation may appear for multiple cluster matches)'
-        tests:
+        data_tests:
           - not_null
 
       - name: person_id
@@ -37,7 +37,7 @@ models:
       - name: smi_observation_type
         description: 'Categorised SMI observation type (SMI Diagnosis or SMI Resolved)'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:

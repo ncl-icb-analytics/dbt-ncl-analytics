@@ -12,10 +12,10 @@ models:
     columns:
       - name: diagnosis_id
         description: Unique identifier for the recorded diagnosis (surrogate key from primarykey_id, episodes_id, icd_id)
-        tests:
+        data_tests:
           - not_null
           - unique
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

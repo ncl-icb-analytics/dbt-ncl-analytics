@@ -57,12 +57,12 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: campaign_id
         description: COVID campaign identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: campaign_category

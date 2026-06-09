@@ -8,7 +8,7 @@ models:
     columns:
       - name: id
         description: Primary key - unique identifier for this appointment
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: provider_organisation_id
@@ -103,7 +103,7 @@ models:
         description: LDS assigned unique identifier for the source record version
       - name: publisher_organisation_id
         description: "Foreign key to organisation.id — the publisher (data-producer) organisation for this appointment record. New in the 2026 OLIDS schema realignment (issue #747)."
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

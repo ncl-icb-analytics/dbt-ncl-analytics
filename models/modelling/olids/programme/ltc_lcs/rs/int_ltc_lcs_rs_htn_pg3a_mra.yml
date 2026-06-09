@@ -22,7 +22,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - valuesets_have_codes:
@@ -38,6 +38,6 @@ models:
               - on_htn_reg_priority_group_3a_mra_v3_vs10
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
           - unique

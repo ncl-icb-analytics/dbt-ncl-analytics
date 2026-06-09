@@ -126,7 +126,7 @@ models:
 # DATA QUALITY TESTS
 # ============================================================================
 
-tests:
+data_tests:
   # CONCEPT MAPPING VALIDATION
   # Verify allergen codes map to valid concept entries with code system + display
   - name: allergen_concept_mapping_valid
