@@ -63,28 +63,6 @@ jobs:
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
 
-  legacy-tests-key:
-    name: No Legacy tests Key
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Install Python deps
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install pyyaml
-      - name: Get changed files
-        id: changed
-        run: |
-          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.ya?ml$' | grep -E '^(models|seeds|snapshots)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
-      - name: Run check
-        if: steps.changed.outputs.files != ''
-        run: |
-          python3 scripts/ci/check_tests_key.py ${{ steps.changed.outputs.files }} | tee result.txt
-          cat result.txt >> $GITHUB_STEP_SUMMARY
-          grep -q "^FAILED" result.txt && exit 1 || exit 0
-
   model-tests:
     name: Model Test Coverage
     runs-on: ubuntu-latest
@@ -100,9 +78,16 @@ jobs:
         id: changed
         run: |
           echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          echo "yamls=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.ya?ml$' | grep -E '^(models|seeds|snapshots)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
           bash scripts/ci/check_model_tests.sh ${{ steps.changed.outputs.files }} | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
+      - name: Check legacy tests key
+        if: steps.changed.outputs.yamls != ''
+        run: |
+          python3 scripts/ci/check_tests_key.py ${{ steps.changed.outputs.yamls }} | tee key_result.txt
+          cat key_result.txt >> $GITHUB_STEP_SUMMARY
+          grep -q "^FAILED" key_result.txt && exit 1 || exit 0

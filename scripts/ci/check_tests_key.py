@@ -19,8 +19,6 @@ import re
 import sys
 from pathlib import Path
 
-import yaml
-
 # Key at start of line (any indent), colon followed by whitespace or EOL.
 # Matches `tests:`, `tests: []`, `tests: &anchor`, `tests: *alias`.
 KEY_RE = re.compile(r'^([ \t]*)tests:(?=\s|$)', re.MULTILINE)
@@ -44,6 +42,8 @@ def rename_keys(obj):
 
 def fix_file(path: Path) -> tuple[int, str | None]:
     """Rewrite legacy keys in path. Returns (replacements, error)."""
+    import yaml  # only --fix needs pyyaml; check mode stays stdlib-only
+
     with open(path, encoding='utf-8', newline='') as f:
         original = f.read()
 

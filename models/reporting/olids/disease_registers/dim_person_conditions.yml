@@ -28,9 +28,9 @@ models:
           - not_null
       - name: has_sickle_cell
         description: Boolean flag indicating whether person is on the sickle cell disease register
-        tests:
+        data_tests:
           - not_null
       - name: has_thalassaemia
         description: Boolean flag indicating whether person is on the thalassaemia register
-        tests:
+        data_tests:
           - not_null
