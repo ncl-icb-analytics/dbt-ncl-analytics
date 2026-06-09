@@ -36,6 +36,13 @@ tests:
   +store_failures: false
   +schema: "test_audit"
 
+# Analyses are ad-hoc QA SQL: compiled for manual execution, never built.
+# They reference relations by constructed name across environments, so skip
+# static analysis (Fusion otherwise errors on relations absent from the catalog).
+analyses:
+  wnl_analytics:
+    +static_analysis: "off"
+
 models:
   wnl_analytics:
     +materialized: table

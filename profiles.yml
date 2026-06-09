@@ -47,11 +47,15 @@ wnl_analytics:
       client_session_keep_alive: true
       query_tag: dbt_analytics_prod
 
-    # Snowflake native execution targets (empty credentials - runs in Snowflake context)
+    # Snowflake native execution targets (runs in the Snowflake session context).
+    # account/user are placeholders, NOT real credentials: native execution uses
+    # the in-session connection and ignores their values, but Fusion's compile-time
+    # metadata introspection rejects an empty account ("260000: account is empty"),
+    # so they must be non-empty.
     snowflake-dev:
       type: snowflake
-      account: ''
-      user: ''
+      account: placeholder
+      user: placeholder
       role: DBT_ADMIN
       database: MODELLING
       schema: DBT_DEV
@@ -59,11 +63,17 @@ wnl_analytics:
       threads: 16
       client_session_keep_alive: false
       query_tag: dbt_analytics_dev
+      # Retry transient connection failures. A single Fusion bridge login stall
+      # ("context deadline exceeded" on localhost) failed 36 models in one 90ms
+      # window; retry_all covers timeouts (not just DatabaseErrors).
+      connect_retries: 3
+      connect_timeout: 10
+      retry_all: true
 
     snowflake-prod:
       type: snowflake
-      account: ''
-      user: ''
+      account: placeholder
+      user: placeholder
       role: DBT_ADMIN
       database: MODELLING
       schema: DBT_PROD
@@ -71,6 +81,10 @@ wnl_analytics:
       threads: 16
       client_session_keep_alive: false
       query_tag: dbt_analytics_prod
+      # Retry transient connection failures (see snowflake-dev note).
+      connect_retries: 3
+      connect_timeout: 10
+      retry_all: true
 
     # CI compile gate (key-pair auth, read-only metadata introspection).
     # ci-dev introspects the DEV__ catalog (PR validation); ci-prod the prod
