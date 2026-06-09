@@ -1,53 +1,124 @@
-
-
--- LTC LCS DBT extract
+-- LTC LCS: AF Register - Priority Group 2 (High Risk)
+-- Parent population: AF register
+-- EMIS source: 'On AF Register- LTC LCS Priority Group 2 (HR)*'
+-- (docs/emis_specs/ltc_lcs_rs/on_af_register_ltc_lcs_priority_group_2_hr.md)
 --
---  AF - HR - Overarching
+-- Rule chain:
+-- - Rule 1 (gate): anticoagulant therapy in last 6 months - oral anticoagulants (vs1),
+--   DOAC substances (vs2), DOAC products (vs3) or 'anticoagulant prescribed by third
+--   party' code (vs4). Fail -> exclude.
+-- - Rule 2: antiplatelet order (vs5) or aspirin prophylaxis code (vs6) in last 6 months -> include
+-- - Rule 3: latest HAS-BLED score (vs7) >= 3 or latest ORBIT-AF score (vs8) >= 4 -> include
+-- - Rule 4 (gate): DOAC order (vs2) in last 6 months. Fail -> exclude.
+-- - Rule 5: latest Cockcroft-Gault (vs9) < 40, latest body weight (vs10) < 50,
+--   any Rockwood level 7-9 code (vs11) or latest Rockwood score (vs12) >= 7 -> include
 --
--- Version          Date        Author          Comments
--- 1.0              3/3/26      Colin Styles    Initial version
+-- Net logic: rule_1 and (rule_2 or rule_3 or (rule_4 and rule_5))
 --
+-- Known data gap: vs1 is a dm+d drug group (29711000033114, SCT_DRGGRP) whose children
+-- are not yet expanded in the reference tables, so warfarin-type anticoagulants only
+-- match via vs2/vs3 (DOACs). Warfarin-only patients are under-captured until drug
+-- group expansion lands.
 
---Rule 1: On oral anticoagulants OR DOACs (Dabigatran, Rivaroxaban, Apixaban, Edoxaban, Acenocoumarol, Phenindione) in last 6 months OR Anticoagulant prescribed by third party code
---Rule 2: On antiplatelet therapy (Aspirin, Clopidogrel, Prasugrel, Ticagrelor, Dipyridamole) OR aspirin prophylaxis codes in last 6 months
---Rule 3: HAS-BLED score ≥3 OR ORBIT-AF bleeding risk score ≥4
---Rule 4: On DOACs in last 6 months
---Rule 5: Cockcroft-Gault creatinine clearance <40 OR body weight <50kg OR Rockwood Frailty level 7-9 (severely frail to terminally ill) OR Frailty score ≥7
-
-with AF_reg as (
+with
+-- Parent population: Patients currently on AF register
+af_register as (
     select distinct person_id
-    from DEV__REPORTING.OLIDS_DISEASE_REGISTERS.FCT_PERSON_ATRIAL_FIBRILLATION_REGISTER
-    )  
+    from {{ ref('fct_person_atrial_fibrillation_register') }}
+    where is_on_register = true
+),
 
-select distinct DR.person_id from AF_reg DR
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_af_pg2_hr_r1 R1
-on DR.person_id = R1.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_af_pg2_hr_r2 R2
-on DR.person_id = R2.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_af_pg2_hr_r3 R3
-on DR.person_id = R3.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_af_pg2_hr_r4 R4
-on DR.person_id = R4.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_af_pg2_hr_r5 R5
-on DR.person_id = R5.person_id
+-- Rule 1: anticoagulant therapy in last 6 months
+rule_1_anticoagulants as (
+    select person_id
+    from ({{ get_ltc_lcs_medication_orders_latest("on_af_reg_pg2_hr_vs1, on_af_reg_pg2_hr_vs2, on_af_reg_pg2_hr_vs3") }})
+    where order_date >= dateadd(month, -6, current_date())
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations("on_af_reg_pg2_hr_vs4") }})
+    where clinical_effective_date >= dateadd(month, -6, current_date())
+),
 
---Rule 1: On oral anticoagulants OR DOACs (Dabigatran, Rivaroxaban, Apixaban, Edoxaban, Acenocoumarol, Phenindione) in last 6 months OR Anticoagulant prescribed by third party code
-where 
-R1.person_id is not null
-and
-    (
---Rule 2: On antiplatelet therapy (Aspirin, Clopidogrel, Prasugrel, Ticagrelor, Dipyridamole) OR aspirin prophylaxis codes in last 6 months
-    R2.person_id is not null
+-- Rule 2: antiplatelet therapy or aspirin prophylaxis in last 6 months
+rule_2_antiplatelets as (
+    select person_id
+    from ({{ get_ltc_lcs_medication_orders_latest("on_af_reg_pg2_hr_vs5") }})
+    where order_date >= dateadd(month, -6, current_date())
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations("on_af_reg_pg2_hr_vs6") }})
+    where clinical_effective_date >= dateadd(month, -6, current_date())
+),
 
---Rule 3: HAS-BLED score ≥3 OR ORBIT-AF bleeding risk score ≥4
-    or
-    R3.person_id is not null
+-- Rule 3: latest HAS-BLED >= 3 or latest ORBIT-AF >= 4
+rule_3_bleeding_risk as (
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_af_reg_pg2_hr_vs7") }})
+    where result_value >= 3
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_af_reg_pg2_hr_vs8") }})
+    where result_value >= 4
+),
 
---Rule 4: On DOACs in last 6 months
-    or
-        (R4.person_id is not null
-        and
-        R5.person_id is not null)
-    )
+-- Rule 4: DOAC order in last 6 months
+rule_4_doacs as (
+    select person_id
+    from ({{ get_ltc_lcs_medication_orders_latest("on_af_reg_pg2_hr_vs2") }})
+    where order_date >= dateadd(month, -6, current_date())
+),
 
---Rule 5: EXCLUDE IF Cockcroft-Gault creatinine clearance <40 OR body weight <50kg OR Rockwood Frailty level 7-9 (severely frail to terminally ill) OR Frailty score ≥7
+-- Rule 5: renal impairment, low body weight or severe frailty
+rule_5_renal_frailty as (
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_af_reg_pg2_hr_vs9") }})
+    where result_value < 40
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_af_reg_pg2_hr_vs10") }})
+    where result_value < 50
+    union
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_af_reg_pg2_hr_vs11") }})
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_af_reg_pg2_hr_vs12") }})
+    where result_value >= 7
+),
+
+-- Combine rule results for all AF register patients
+patient_rules as (
+    select
+        afr.person_id,
+        (r1.person_id is not null) as rule_1_anticoagulants,
+        (r2.person_id is not null) as rule_2_antiplatelets,
+        (r3.person_id is not null) as rule_3_bleeding_risk,
+        (r4.person_id is not null) as rule_4_doacs,
+        (r5.person_id is not null) as rule_5_renal_frailty,
+        case
+            when r1.person_id is not null
+                and (
+                    r2.person_id is not null
+                    or r3.person_id is not null
+                    or (r4.person_id is not null and r5.person_id is not null)
+                )
+                then 'Included'
+            else 'Excluded'
+        end as final_status
+    from af_register afr
+    left join rule_1_anticoagulants r1 on afr.person_id = r1.person_id
+    left join rule_2_antiplatelets r2 on afr.person_id = r2.person_id
+    left join rule_3_bleeding_risk r3 on afr.person_id = r3.person_id
+    left join rule_4_doacs r4 on afr.person_id = r4.person_id
+    left join rule_5_renal_frailty r5 on afr.person_id = r5.person_id
+)
+
+-- Final result: included patients only
+select
+    person_id,
+    final_status,
+    'AF' as condition,
+    '2' as priority_group,
+    'HR' as risk_group
+from patient_rules
+where final_status = 'Included'
