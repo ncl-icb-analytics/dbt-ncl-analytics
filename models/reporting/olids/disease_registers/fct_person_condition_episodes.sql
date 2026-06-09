@@ -556,6 +556,36 @@ WITH all_condition_events AS (
     FROM {{ ref('int_chronic_liver_disease_diagnoses_all') }}
     WHERE is_diagnosis_code
 
+    UNION ALL
+
+    -- Sickle Cell Disease events (diagnosis only)
+    SELECT
+        person_id,
+        clinical_effective_date as event_date,
+        'Sickle Cell Disease' as condition_name,
+        'SCD' as condition_code,
+        'Haematology' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_sickle_cell_diagnoses_all') }}
+    WHERE is_diagnosis_code
+
+    UNION ALL
+
+    -- Thalassaemia events (diagnosis only)
+    SELECT
+        person_id,
+        clinical_effective_date as event_date,
+        'Thalassaemia' as condition_name,
+        'THAL' as condition_code,
+        'Haematology' as clinical_domain,
+        'diagnosis' as event_type,
+        concept_code,
+        concept_display
+    FROM {{ ref('int_thalassaemia_diagnoses_all') }}
+    WHERE is_diagnosis_code
+
     -- Note: Obesity register is BMI-based, not diagnosis code based
     -- CYP Asthma uses same diagnosis codes as regular asthma - age filtering happens in QOF layer
     -- Learning Disability All Ages uses same diagnosis codes as regular LD - age filtering happens in QOF layer

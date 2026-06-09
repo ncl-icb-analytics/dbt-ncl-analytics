@@ -792,6 +792,8 @@ models:
                   - 'AUTISM'
                   - 'ADHD'
                   - 'CLD'
+                  - 'SCD'
+                  - 'THAL'
 
       - name: clinical_domain
         description: 'Clinical specialty domain for the condition'
