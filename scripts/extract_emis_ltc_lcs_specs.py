@@ -14,6 +14,7 @@ import json
 import re
 import sys
 import time
+import urllib.error
 import urllib.request
 from datetime import date
 from pathlib import Path
@@ -84,7 +85,7 @@ def main():
                     "reportId": r["id"],
                 })
                 break
-            except Exception as exc:
+            except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
                 if attempt == 2:
                     raise
                 print(f"  retry after error: {exc}")

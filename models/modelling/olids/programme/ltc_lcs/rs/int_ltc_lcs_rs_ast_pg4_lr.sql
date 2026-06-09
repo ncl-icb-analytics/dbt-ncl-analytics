@@ -23,7 +23,7 @@ asthma_adult_register as (
 ),
 
 -- Rule 1: Exclude PG1 (HRC), PG2 (HR) and PG3 (MR)
-pg1_pg3_exclusions as (
+pg1_to_pg3_exclusions as (
     select distinct person_id from {{ ref('int_ltc_lcs_rs_ast_pg1_hrc') }}
     union
     select distinct person_id from {{ ref('int_ltc_lcs_rs_ast_pg2_hr') }}
@@ -49,7 +49,7 @@ rule_3_saba as (
 patient_rules as (
     select
         ar.person_id,
-        (excl.person_id is not null) as rule_1_in_pg1_pg3,
+        (excl.person_id is not null) as rule_1_in_pg1_to_pg3,
         (r2.person_id is not null) as rule_2_ics,
         (r3.person_id is not null) as rule_3_saba,
         case
@@ -58,7 +58,7 @@ patient_rules as (
             else 'Excluded'
         end as final_status
     from asthma_adult_register ar
-    left join pg1_pg3_exclusions excl on ar.person_id = excl.person_id
+    left join pg1_to_pg3_exclusions excl on ar.person_id = excl.person_id
     left join rule_2_ics r2 on ar.person_id = r2.person_id
     left join rule_3_saba r3 on ar.person_id = r3.person_id
 )
