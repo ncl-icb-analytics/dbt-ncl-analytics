@@ -10,15 +10,14 @@ set -uo pipefail  # no -e: log step failures but always finish (never fail conta
 git config core.hooksPath .githooks
 
 # Install the dbt Fusion engine (dbt runs on Fusion, not a Python package).
-# The installer's auto-detection of latest version + platform is currently
-# unreliable, so resolve both explicitly from versions.json.
-FUSION_FALLBACK_VERSION="2.0.0-preview.188"
+# Version is pinned in .fusion-version (repo root) to match Snowflake's hosted
+# engine; the installer's target auto-detection is unreliable so pass it explicitly.
+FUSION_FALLBACK_VERSION="2.0.0-preview.175"
 case "$(uname -m)" in arm64|aarch64) arch_part="aarch64" ;; *) arch_part="x86_64" ;; esac
 case "$(uname -s)" in Darwin) os_part="apple-darwin" ;; *) os_part="unknown-linux-gnu" ;; esac
 fusion_target="${arch_part}-${os_part}"
-fusion_version=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/dev/null \
-    | python3 -c "import sys,json;print(json.load(sys.stdin).get('stable',{}).get('tag','').lstrip('v'))" 2>/dev/null) || true
-[ -z "$fusion_version" ] && fusion_version="$FUSION_FALLBACK_VERSION"
+fusion_version="$FUSION_FALLBACK_VERSION"
+[ -f .fusion-version ] && read -r fusion_version < .fusion-version
 curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$fusion_version" --target "$fusion_target" --update \
     || echo "[warn] dbt Fusion installer returned non-zero (continuing)"
 export PATH="$HOME/.local/bin:$PATH"

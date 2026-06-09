@@ -47,10 +47,10 @@ jobs:
 
       - name: Install dbt Fusion
         run: |
-          FALLBACK=2.0.0-preview.188
-          ver=$(curl -fsSL https://public.cdn.getdbt.com/fs/versions.json 2>/dev/null \
-            | python3 -c "import sys,json;print(json.load(sys.stdin).get('stable',{}).get('tag','').lstrip('v'))" 2>/dev/null) || true
-          [ -z "$ver" ] && ver=$FALLBACK
+          # Pinned in .fusion-version to match Snowflake's hosted engine, so this
+          # gate runs the same engine as the 5am native build.
+          ver=2.0.0-preview.175
+          [ -f .fusion-version ] && read -r ver < .fusion-version
           curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$ver" --target x86_64-unknown-linux-gnu --update
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
