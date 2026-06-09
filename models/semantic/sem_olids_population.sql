@@ -32,7 +32,7 @@
     - Oncology (QOF): Cancer
     - Endocrine (non-QOF): Hypothyroidism
     - Hepatology (non-QOF): NAFLD, Chronic Liver Disease
-    - Haematology (non-QOF): Sickle Cell or Thalassaemia
+    - Haematology (non-QOF): Sickle Cell Disease, Thalassaemia
     - Genetics (non-QOF): Familial Hypercholesterolaemia
     - Geriatric (non-QOF): Frailty
     - Palliative Care (QOF): Palliative Care
@@ -185,7 +185,8 @@ DIMENSIONS(
     conditions.has_chronic_liver_disease AS has_chronic_liver_disease WITH SYNONYMS = ('CLD') COMMENT = 'Chronic liver disease (non-QOF)',
 
     -- Haematology
-    conditions.has_sickle_cell_or_thalassaemia AS has_sickle_cell_or_thalassaemia WITH SYNONYMS = ('sickle cell', 'SCD', 'thalassaemia', 'haemoglobinopathy') COMMENT = 'Sickle cell disease or thalassaemia (non-QOF)',
+    conditions.has_sickle_cell AS has_sickle_cell WITH SYNONYMS = ('sickle cell', 'sickle cell disease', 'SCD') COMMENT = 'On sickle cell disease register - an inherited blood disorder causing painful crises and anaemia (non-QOF)',
+    conditions.has_thalassaemia AS has_thalassaemia WITH SYNONYMS = ('thalassaemia', 'thalassemia', 'thal') COMMENT = 'On thalassaemia register - an inherited blood disorder causing anaemia, severe forms transfusion-dependent (non-QOF)',
 
     -- Genetics
     conditions.has_familial_hypercholesterolaemia AS has_familial_hypercholesterolaemia WITH SYNONYMS = ('FH') COMMENT = 'Familial hypercholesterolaemia (non-QOF, age >=20)',
@@ -284,7 +285,8 @@ METRICS(
     conditions.palliative_care_count AS COUNT(DISTINCT CASE WHEN conditions.has_palliative_care THEN conditions.person_id END) COMMENT = 'Patients on palliative care',
     conditions.nafld_count AS COUNT(DISTINCT CASE WHEN conditions.has_nafld THEN conditions.person_id END) COMMENT = 'Patients with NAFLD',
     conditions.cld_count AS COUNT(DISTINCT CASE WHEN conditions.has_chronic_liver_disease THEN conditions.person_id END) COMMENT = 'Patients with chronic liver disease',
-    conditions.sickle_cell_or_thalassaemia_count AS COUNT(DISTINCT CASE WHEN conditions.has_sickle_cell_or_thalassaemia THEN conditions.person_id END) COMMENT = 'Patients with sickle cell disease or thalassaemia',
+    conditions.sickle_cell_count AS COUNT(DISTINCT CASE WHEN conditions.has_sickle_cell THEN conditions.person_id END) COMMENT = 'Patients with sickle cell disease',
+    conditions.thalassaemia_count AS COUNT(DISTINCT CASE WHEN conditions.has_thalassaemia THEN conditions.person_id END) COMMENT = 'Patients with thalassaemia',
     conditions.fh_count AS COUNT(DISTINCT CASE WHEN conditions.has_familial_hypercholesterolaemia THEN conditions.person_id END) COMMENT = 'Patients with FH',
     conditions.gestational_diabetes_count AS COUNT(DISTINCT CASE WHEN conditions.has_gestational_diabetes THEN conditions.person_id END) COMMENT = 'Patients with gestational diabetes',
 
@@ -316,4 +318,4 @@ METRICS(
 
 COMMENT = 'OLIDS Population Health Semantic View - NCL registered population with demographics, all condition registers (QOF v50), diabetes type, vulnerability factors, and risk behaviours. Source: OLIDS (One London Integrated Data Set — primary care data from system suppliers, unified by the One London team). Grain: one row per person (current state). ESP 2013 weights available via age_band_esp for age-standardised rate calculation.'
 AI_SQL_GENERATION 'Always filter to is_active = TRUE unless the user explicitly asks about deceased or inactive patients. Use borough_registered for practice-based geography and borough_resident for residence-based geography. IMD 2025 (imd_decile_25, imd_quintile_25) is preferred over IMD 2019. Condition registers are built to QOF Business Rules v50. AGE-STANDARDISED RATES: To calculate an age-standardised rate (ASR) using ESP 2013 (the standard used by ONS/OHID/Fingertips), use this pattern: WITH strata AS (SELECT <area_column>, age_band_esp, COUNT(DISTINCT CASE WHEN <condition> THEN person_id END) AS cases, COUNT(DISTINCT person_id) AS pop, ANY_VALUE(esp_proportion) AS esp_prop FROM <this_view> WHERE is_active = TRUE GROUP BY <area_column>, age_band_esp) SELECT <area_column>, SUM(cases) AS crude_cases, SUM(pop) AS crude_pop, ROUND(SUM((cases / NULLIF(pop, 0)) * esp_prop) * 100000, 1) AS asr_per_100k FROM strata GROUP BY <area_column>. For age-AND-sex standardisation, add gender to the GROUP BY in both the strata CTE and the outer query dimensions, or group strata by age_band_esp+gender and collapse in the outer sum. For internal NCL comparison instead of ESP, replace esp_prop with (pop / SUM(pop) OVER ()) to use the NCL population structure as the standard.'
-AI_QUESTION_CATEGORIZATION 'Use this view for questions about: condition prevalence (all 39 conditions), diabetes type (T1/T2), demographics, multimorbidity, Cambridge Comorbidity Score (CCMS), vulnerability, smoking, polypharmacy, and population counts. CCMS (cambridge_comorbidity_score) is a continuous weighted score (higher = greater comorbidity burden, can be negative) with NO published risk bands and is NULL for under-16s — report it as a number or average, do not invent thresholds. For clinical biomarkers (BP, HbA1c, BMI, cholesterol) use sem_olids_observations. For serial/over-time biomarker readings use sem_olids_observations_history. For trends over time use sem_olids_trends.'
+AI_QUESTION_CATEGORIZATION 'Use this view for questions about: condition prevalence (all 40 conditions), diabetes type (T1/T2), demographics, multimorbidity, Cambridge Comorbidity Score (CCMS), vulnerability, smoking, polypharmacy, and population counts. CCMS (cambridge_comorbidity_score) is a continuous weighted score (higher = greater comorbidity burden, can be negative) with NO published risk bands and is NULL for under-16s — report it as a number or average, do not invent thresholds. For clinical biomarkers (BP, HbA1c, BMI, cholesterol) use sem_olids_observations. For serial/over-time biomarker readings use sem_olids_observations_history. For trends over time use sem_olids_trends.'

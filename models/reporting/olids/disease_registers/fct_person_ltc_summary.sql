@@ -454,14 +454,26 @@ WITH condition_union AS (
 
     UNION ALL
 
-    -- Sickle Cell or Thalassaemia
+    -- Sickle Cell Disease
     SELECT
         person_id,
-        'SICKLE_THAL' AS condition_code,
+        'SCD' AS condition_code,
         is_on_register,
         earliest_diagnosis_date,
         latest_diagnosis_date
-    FROM {{ ref('fct_person_sickle_cell_or_thalassaemia_register') }}
+    FROM {{ ref('fct_person_sickle_cell_register') }}
+    WHERE is_on_register = TRUE
+
+    UNION ALL
+
+    -- Thalassaemia
+    SELECT
+        person_id,
+        'THAL' AS condition_code,
+        is_on_register,
+        earliest_diagnosis_date,
+        latest_diagnosis_date
+    FROM {{ ref('fct_person_thalassaemia_register') }}
     WHERE is_on_register = TRUE
 ),
 

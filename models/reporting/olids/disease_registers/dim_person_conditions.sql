@@ -64,7 +64,8 @@ person_conditions AS (
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'AUTISM' THEN TRUE END), FALSE) AS has_autism,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'ADHD' THEN TRUE END), FALSE) AS has_adhd,
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'CLD' THEN TRUE END), FALSE) AS has_chronic_liver_disease,
-        COALESCE(MAX(CASE WHEN ltc.condition_code = 'SICKLE_THAL' THEN TRUE END), FALSE) AS has_sickle_cell_or_thalassaemia,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'SCD' THEN TRUE END), FALSE) AS has_sickle_cell,
+        COALESCE(MAX(CASE WHEN ltc.condition_code = 'THAL' THEN TRUE END), FALSE) AS has_thalassaemia,
 
         -- Summary counts (0 for persons with no conditions)
         COALESCE(COUNT(DISTINCT ltc.condition_code), 0) AS total_conditions,
