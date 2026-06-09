@@ -1,54 +1,107 @@
-
-
--- LTC LCS DBT extract
+-- LTC LCS: PAD Register - Priority Group 3 (Medium Risk)
+-- Parent population: PAD register, excluding PG1 (HRC) and PG2 (HR)
+-- EMIS source: 'On PAD Register- LTC LCS Priority Group 3 (MR)'
+-- (docs/emis_specs/ltc_lcs_rs/on_pad_register_ltc_lcs_priority_group_3_mr.md)
 --
---  PAD - MR - Overarching
---
--- Version          Date        Author          Comments
--- 1.0              3/3/26      Colin Styles    Initial version
---
---Rule 1: Excludes Priority Groups 1 (HRC) and 2 (HR)
---Rule 2: Peripheral ischaemia codes before 12 months
---Rule 3: Non-HDL cholesterol >2.5
---Rule 4: Repeat High-intensity statins (Atorvastatin 80mg, Lipitor 80mg, Crestor 20-40mg, Rosuvastatin 20-40mg) in last 6 months (excludes if passed - on optimal therapy)
---Rule 5: Any statin medication in last 12 months OR statin clinical code in last 12 months OR statin declined in last 1 year
+-- Rule chain:
+-- - Rule 1 (gate): excludes PG1 (HRC) and PG2 (HR) patients
+-- - Rule 2 (gate): peripheral ischaemia code (vs1) before 12 months ago. Fail -> exclude.
+-- - Rule 3: latest non-HDL cholesterol (vs2) > 2.5 -> include
+-- - Rule 4 (gate): high-intensity statin order (vs3) in last 6 months, or current
+--   repeat course of any statin (vs4) -> exclude (on optimal therapy)
+-- - Rule 5: include if NOT on statins - no statin order (vs5) in last 12 months,
+--   no statin clinical code (vs5) in last 12 months and no 'statin declined'
+--   code (vs6) in last year. Otherwise exclude.
 
-with pad_reg as (
-    select distinct DR.person_id
-     from DEV__REPORTING.OLIDS_DISEASE_REGISTERS.FCT_PERSON_PAD_REGISTER DR
-     -- Rule 1: Excludes Priority Groups 1 (HRC) and 2 (HR)
-       left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg1_hrc HRC
-    on DR.person_id = HRC.person_id
-        left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr HR
-    on DR.person_id = HR.person_id
-    where 
-        HRC.person_id is null
-        and
-        HR.person_id is null
-    )  
+with
+-- Parent population: Patients currently on PAD register
+pad_register as (
+    select distinct person_id
+    from {{ ref('fct_person_pad_register') }}
+    where is_on_register = true
+),
 
+-- Rule 1: Exclude PG1 (HRC) and PG2 (HR)
+pg1_pg2_exclusions as (
+    select distinct person_id from {{ ref('int_ltc_lcs_rs_pad_pg1_hrc') }}
+    union
+    select distinct person_id from {{ ref('int_ltc_lcs_rs_pad_pg2_hr') }}
+),
 
---OUTPUT
+-- Rule 2: peripheral ischaemia code before 12 months ago
+rule_2_stale_ischaemia as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_pad_reg_pg3_mr_vs1") }})
+    where clinical_effective_date < dateadd(month, -12, current_date())
+),
 
-select distinct DR.person_id from pad_reg DR
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r2 R2
-on DR.person_id = R2.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r3 R3
-on DR.person_id = R3.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r4 R4
-on DR.person_id = R4.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg3_mr_r5 R5
-on DR.person_id = R5.person_id
-where
-R2.PERSON_ID is not null
-and
-    (
-    R3.PERSON_ID is not null
-    or
-        (   
-          R4.PERSON_ID is null
-          or
-          R5.PERSON_ID is null
-        )
+-- Rule 3: latest non-HDL cholesterol > 2.5
+rule_3_non_hdl_high as (
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_pad_reg_pg3_mr_vs2") }})
+    where result_value > 2.5
+),
 
-    )
+-- Rule 4: on optimal statin therapy - high-intensity statin order in last
+-- 6 months, or a current repeat-type course of any statin
+rule_4_high_intensity_statins as (
+    select person_id
+    from ({{ get_ltc_lcs_medication_orders_latest("on_pad_reg_pg3_mr_vs3") }})
+    where order_date >= dateadd(month, -6, current_date())
+    union
+    select person_id
+    from ({{ get_ltc_lcs_medication_statements("on_pad_reg_pg3_mr_vs4") }})
+    where is_active = true
+        and authorisation_type_display = 'Repeated prescription'
+),
+
+-- Rule 5: any statin therapy - statin order or clinical code (vs5, STAT_COD
+-- refset) in last 12 months, or statin declined (vs6) in last year
+rule_5_any_statins as (
+    select person_id
+    from ({{ get_ltc_lcs_medication_orders_latest("on_pad_reg_pg3_mr_vs5") }})
+    where order_date > dateadd(month, -12, current_date())
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_pad_reg_pg3_mr_vs5") }})
+    where clinical_effective_date > dateadd(month, -12, current_date())
+    union
+    select person_id
+    from ({{ get_ltc_lcs_observations_latest("on_pad_reg_pg3_mr_vs6") }})
+    where clinical_effective_date > dateadd(year, -1, current_date())
+),
+
+-- Combine rule results for all PAD register patients
+patient_rules as (
+    select
+        pr.person_id,
+        (excl.person_id is not null) as rule_1_in_pg1_pg2,
+        (r2.person_id is not null) as rule_2_stale_ischaemia,
+        (r3.person_id is not null) as rule_3_non_hdl_high,
+        (r4.person_id is not null) as rule_4_high_intensity_statins,
+        (r5.person_id is not null) as rule_5_any_statins,
+        case
+            when excl.person_id is not null then 'Excluded'
+            when r2.person_id is null then 'Excluded'
+            when r3.person_id is not null then 'Included'
+            when r4.person_id is not null then 'Excluded'
+            when r5.person_id is null then 'Included'
+            else 'Excluded'
+        end as final_status
+    from pad_register pr
+    left join pg1_pg2_exclusions excl on pr.person_id = excl.person_id
+    left join rule_2_stale_ischaemia r2 on pr.person_id = r2.person_id
+    left join rule_3_non_hdl_high r3 on pr.person_id = r3.person_id
+    left join rule_4_high_intensity_statins r4 on pr.person_id = r4.person_id
+    left join rule_5_any_statins r5 on pr.person_id = r5.person_id
+)
+
+-- Final result: included patients only
+select
+    person_id,
+    final_status,
+    'PAD' as condition,
+    '3' as priority_group,
+    'MR' as risk_group
+from patient_rules
+where final_status = 'Included'

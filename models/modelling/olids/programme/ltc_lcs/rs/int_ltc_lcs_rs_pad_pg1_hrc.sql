@@ -1,29 +1,45 @@
--- LTC LCS DBT extract
+-- LTC LCS: PAD Register - Priority Group 1 (High Risk & Complex)
+-- Parent population: PAD register
+-- EMIS source: 'On PAD Register- LTC LCS Priority Group 1 (HRC)'
+-- (docs/emis_specs/ltc_lcs_rs/on_pad_register_ltc_lcs_priority_group_1_hrc.md)
 --
---  PAD - HRC - Overaching
---
--- Version          Date        Author          Comments
--- 1.0              3/3/26      Colin Styles    Initial version
---
+-- Rule chain:
+-- - Rule 1: peripheral ischaemia code (vs1) in last 90 days -> include
 
-
-
-with pad_reg as (
+with
+-- Parent population: Patients currently on PAD register
+pad_register as (
     select distinct person_id
-     from DEV__REPORTING.OLIDS_DISEASE_REGISTERS.FCT_PERSON_PAD_REGISTER
-    )  
-,
-    
---Rule 1: Peripheral ischaemia codes (Peripheral ischaemia, Peripheral ischaemic vascular disease, 
---Ischaemic foot/toe/leg, Ischaemic foot pain at rest, Lower limb ischaemia) with date in last 90 days
+    from {{ ref('fct_person_pad_register') }}
+    where is_on_register = true
+),
 
-  on_pad_reg_pg1_hrc_vs1 as (
-       {{ get_ltc_lcs_observations("'on_pad_reg_pg1_hrc_vs1'") }}
-    )
-  
-select distinct DR.PERSON_ID
-from pad_reg DR
-inner join  on_pad_reg_pg1_hrc_vs1 VS1
-on DR.PERSON_ID = VS1.PERSON_ID
+-- Rule 1: peripheral ischaemia code in last 90 days
+rule_1_recent_ischaemia as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_pad_reg_pg1_hrc_vs1") }})
+    where clinical_effective_date >= dateadd(day, -90, current_date())
+),
 
- where DATEDIFF(day, VS1.clinical_effective_date, CURRENT_DATE())<=90 
+-- Combine rule results for all PAD register patients
+patient_rules as (
+    select
+        pr.person_id,
+        (r1.person_id is not null) as rule_1_recent_ischaemia,
+        case
+            when r1.person_id is not null then 'Included'
+            else 'Excluded'
+        end as final_status
+    from pad_register pr
+    left join rule_1_recent_ischaemia r1 on pr.person_id = r1.person_id
+)
+
+-- Final result: included patients only
+select
+    person_id,
+    final_status,
+    'PAD' as condition,
+    '1' as priority_group,
+    'HRC' as risk_group
+from patient_rules
+where final_status = 'Included'

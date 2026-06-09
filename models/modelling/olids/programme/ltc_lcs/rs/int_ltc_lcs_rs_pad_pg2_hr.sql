@@ -1,69 +1,126 @@
-
-
--- LTC LCS DBT extract
+-- LTC LCS: PAD Register - Priority Group 2 (High Risk)
+-- Parent population: PAD register, excluding PG1 (HRC)
+-- EMIS source: 'On PAD Register- LTC LCS Priority Group 2 (HR)'
+-- (docs/emis_specs/ltc_lcs_rs/on_pad_register_ltc_lcs_priority_group_2_hr.md)
 --
---  PAD - HR - Overarching
+-- Rule chain:
+-- - Rule 1 (gate): excludes PG1 (HRC) patients
+-- - Rule 2: peripheral ischaemia code (vs1) dated 90-365 days ago -> include
+-- - Rule 3 (gate): peripheral ischaemia code before 12 months ago. Fail -> exclude.
+-- - Rules 4-8: exclude if latest BP in last 12 months is controlled, using
+--   age-banded thresholds:
+--   - age <= 80: clinic <= 140/90, home/ABPM <= 135/85
+--   - age > 80: clinic <= 150/90, home/ABPM <= 145/85
+--   Patients with no BP reading in 12 months, or an uncontrolled latest
+--   reading, are included.
 --
--- Version          Date        Author          Comments
--- 1.0              3/3/26      Colin Styles    Initial version
---
---Rule 1: Excludes Priority Group 1 (HRC)
---Rule 2: Peripheral ischaemia codes dated 90-365 days before search date
---Rule 3: Peripheral ischaemia codes before 12 months (go to next rule if passed)
---Rule 4: BP monitoring codes (Refset) in last 12 months, then for same date:
---Rule 5: 24hr BP monitoring codes (Refset) in last 12 months, then for same date:
---Rule 6: Age >80 years (go to next rule if passed, include if failed)
---Rule 7: BP monitoring codes (Refset) in last 12 months, then for same date:
---Rule 8: 24hr BP monitoring codes (Refset) in last 12 months, then for same date:
+-- BP note: EMIS tests latest clinic and latest home/ABPM readings as separate
+-- same-date linked-criteria chains; this port follows the established HTN rs
+-- convention of testing the single latest BP event (int_blood_pressure_latest)
+-- with thresholds chosen by reading type.
 
- 
-with pad_reg as (
-    select distinct DR.person_id
-     from DEV__REPORTING.OLIDS_DISEASE_REGISTERS.FCT_PERSON_PAD_REGISTER DR
-     --Rule 1: Excludes Priority Group 1 (HRC)
-       left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg1_hrc HRC
-    on DR.person_id = HRC.person_id
-    where HRC.person_id is null
-    )  
+with
+-- Parent population: Patients currently on PAD register
+pad_register as (
+    select distinct person_id
+    from {{ ref('fct_person_pad_register') }}
+    where is_on_register = true
+),
 
+-- Rule 1: Exclude PG1 (HRC)
+pg1_exclusions as (
+    select distinct person_id
+    from {{ ref('int_ltc_lcs_rs_pad_pg1_hrc') }}
+),
 
---OUTPUT
+-- Rule 2: peripheral ischaemia code dated 90-365 days before run date
+rule_2_recent_ischaemia as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_pad_reg_pg2_hr_vs1") }})
+    where clinical_effective_date >= dateadd(day, -365, current_date())
+        and clinical_effective_date < dateadd(day, -90, current_date())
+),
 
-select distinct DR.person_id from pad_reg DR
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr_r2 R2
-on DR.person_id = R2.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr_r3 R3
-on DR.person_id = R3.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr_r4 R4
-on DR.person_id = R4.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr_r5 R5
-on DR.person_id = R5.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr_r6 R6
-on DR.person_id = R6.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr_r7 R7
-on DR.person_id = R7.person_id
-left join DEV__MODELLING.OLIDS_PROGRAMME.int_ltc_lcs_rs_pad_pg2_hr_r8 R8
-on DR.person_id = R8.person_id
+-- Rule 3: peripheral ischaemia code before 12 months ago
+rule_3_stale_ischaemia as (
+    select distinct person_id
+    from ({{ get_ltc_lcs_observations("on_pad_reg_pg2_hr_vs1") }})
+    where clinical_effective_date < dateadd(month, -12, current_date())
+),
 
-where
-(
-R2.PERSON_ID is not null
-    or 
-    (
-        R3.PERSON_ID is not null  -- exclude if failed 
-        and
-        R4.PERSON_ID is null   ---  exclude if PASSED
-        and
-        R5.PERSON_ID is null   ---  exclude if PASSED
-        and
+-- Rules 4-8: latest BP within 12 months, controlled per age-banded thresholds
+latest_bp as (
+    select
+        person_id,
+        systolic_value,
+        diastolic_value,
+        coalesce(is_home_bp_event or is_abpm_bp_event, false) as is_home_or_abpm
+    from {{ ref('int_blood_pressure_latest') }}
+    where clinical_effective_date >= dateadd(month, -12, current_date())
+),
+
+ages as (
+    select person_id, age
+    from {{ ref('dim_person_age') }}
+),
+
+bp_controlled as (
+    select bp.person_id
+    from latest_bp bp
+    left join ages a on bp.person_id = a.person_id
+    where
         (
-            R6.PERSON_ID is null
-            or
-            (
-                R7.PERSON_ID is null   ---  exclude if PASSED
-                and 
-                R8.PERSON_ID is null   ---  exclude if PASSED
+            coalesce(a.age, 0) <= 80
+            and (
+                (not bp.is_home_or_abpm
+                    and bp.systolic_value between 1 and 140
+                    and bp.diastolic_value between 1 and 90)
+                or (bp.is_home_or_abpm
+                    and bp.systolic_value between 1 and 135
+                    and bp.diastolic_value between 1 and 85)
             )
         )
-    )
+        or (
+            coalesce(a.age, 0) > 80
+            and (
+                (not bp.is_home_or_abpm
+                    and bp.systolic_value between 1 and 150
+                    and bp.diastolic_value between 1 and 90)
+                or (bp.is_home_or_abpm
+                    and bp.systolic_value between 1 and 145
+                    and bp.diastolic_value between 1 and 85)
+            )
+        )
+),
+
+-- Combine rule results for all PAD register patients
+patient_rules as (
+    select
+        pr.person_id,
+        (pg1.person_id is not null) as rule_1_in_pg1,
+        (r2.person_id is not null) as rule_2_recent_ischaemia,
+        (r3.person_id is not null) as rule_3_stale_ischaemia,
+        (bpc.person_id is not null) as rules_4_8_bp_controlled,
+        case
+            when pg1.person_id is not null then 'Excluded'
+            when r2.person_id is not null then 'Included'
+            when r3.person_id is null then 'Excluded'
+            when bpc.person_id is not null then 'Excluded'
+            else 'Included'
+        end as final_status
+    from pad_register pr
+    left join pg1_exclusions pg1 on pr.person_id = pg1.person_id
+    left join rule_2_recent_ischaemia r2 on pr.person_id = r2.person_id
+    left join rule_3_stale_ischaemia r3 on pr.person_id = r3.person_id
+    left join bp_controlled bpc on pr.person_id = bpc.person_id
 )
+
+-- Final result: included patients only
+select
+    person_id,
+    final_status,
+    'PAD' as condition,
+    '2' as priority_group,
+    'HR' as risk_group
+from patient_rules
+where final_status = 'Included'
