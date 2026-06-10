@@ -35,7 +35,7 @@
 #}
 
 TABLES(
-    appt AS {{ ref('int_appointment_gp_clean_recent') }}
+    appt AS {{ ref('int_appointment_gp_clinical_recent') }}
         PRIMARY KEY (appointment_id)
         COMMENT = 'Cleaned GP appointments — Care Related Encounters only, restricted to last 60 months matching OLIDS retention',
     demographics AS {{ ref('dim_person_demographics') }}

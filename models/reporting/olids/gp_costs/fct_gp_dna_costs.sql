@@ -88,7 +88,7 @@ select
         1
     ) as dna_cost_pct_of_total
 
-from {{ ref('int_appointment_gp_clean_recent') }}
+from {{ ref('int_appointment_gp_clinical_recent') }}
 where is_attended = TRUE or is_dna = TRUE
 group by
     publisher_organisation_code,

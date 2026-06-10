@@ -83,7 +83,7 @@ select
         2
     ) as cost_per_minute_gbp_nominal
 
-from {{ ref('int_appointment_gp_clean_recent') }}
+from {{ ref('int_appointment_gp_clinical_recent') }}
 group by
     publisher_organisation_code,
     DATE_TRUNC('month', start_date),

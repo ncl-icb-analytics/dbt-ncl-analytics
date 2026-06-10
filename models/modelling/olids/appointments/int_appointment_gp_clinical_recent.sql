@@ -36,12 +36,12 @@ retention caveat in mind).
 with recent_window as (
     select
         DATEADD('month', -59, DATE_TRUNC('month', MAX(start_date))) as min_start_month
-    from {{ ref('int_appointment_gp_clean') }}
+    from {{ ref('int_appointment_gp_clinical') }}
     where start_date is not null
 )
 
 select
     a.*
-from {{ ref('int_appointment_gp_clean') }} as a
+from {{ ref('int_appointment_gp_clinical') }} as a
 cross join recent_window as w
 where DATE_TRUNC('month', a.start_date) >= w.min_start_month

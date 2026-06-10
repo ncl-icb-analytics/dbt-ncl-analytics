@@ -1,6 +1,6 @@
 version: 2
 models:
-  - name: int_appointment_gp_clean
+  - name: int_appointment_gp_clinical
     description: |
       Cleaned OLIDS GP appointments. Grain: one row per appointment.
 
