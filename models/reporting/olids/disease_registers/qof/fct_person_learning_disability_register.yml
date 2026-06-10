@@ -10,14 +10,14 @@ models:
       
       Use is_age_14_or_over column to filter for annual health check eligibility.
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null
 

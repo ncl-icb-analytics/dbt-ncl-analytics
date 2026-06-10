@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Jake Kealey
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -14,11 +14,11 @@ models:
     columns:
       - name: row_id
         description: Row identifier
-        tests:
+        data_tests:
           - not_null
       - name: sk_patient_id
         description: Surrogate key patient identifier (pseudonymised NHS number)
-        tests:
+        data_tests:
           - not_null
       - name: postcode_sector
         description: Postcode sector of residence

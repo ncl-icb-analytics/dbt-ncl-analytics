@@ -196,10 +196,10 @@ snapshots:
     description: Historical record of patient practice registrations
     columns:
       - name: patient_id
-        tests:
+        data_tests:
           - not_null
       - name: dbt_valid_from
-        tests:
+        data_tests:
           - not_null
 ```
 

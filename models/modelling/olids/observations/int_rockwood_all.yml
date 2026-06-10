@@ -8,7 +8,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: ROCKWOOD_SCORES
@@ -29,17 +29,17 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
 
       - name: id
         description: Identifier for the observation
-        tests:
+        data_tests:
           - not_null
 
       - name: clinical_effective_date
         description: Date when the Rockwood assessment was performed
-        tests:
+        data_tests:
           - not_null
 
       - name: concept_code

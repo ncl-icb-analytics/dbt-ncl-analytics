@@ -75,13 +75,13 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: campaign_id
         description: COVID campaign identifier (covid_2024_autumn, 
           covid_2025_spring, covid_2025_autumn)
-        tests:
+        data_tests:
           - not_null
 
       - name: campaign_category

@@ -7,7 +7,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
@@ -15,5 +15,5 @@ models:
             cluster_ids: EGFR_TESTING,EGFR_COD,UACR_TESTING,CKD_ACUTE_KIDNEY_INJURY,CKD_BPH_GOUT,HAEMATURIA,LITHIUM_MEDICATIONS,SULFASALAZINE_MEDICATIONS,TACROLIMUS_MEDICATIONS,URINE_BLOOD_NEGATIVE,PROTEINURIA_FINDINGS
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null

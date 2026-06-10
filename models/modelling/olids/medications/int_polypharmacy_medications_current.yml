@@ -57,6 +57,6 @@ models:
 
       - name: latest_duration
         description: Duration in days for most recent order
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id

@@ -8,12 +8,12 @@ models:
     columns:
       - name: sk_service_provider_id
         description: Primary key - surrogate key for service provider
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: service_provider_code
         description: Service provider code
-        tests:
+        data_tests:
           - not_null
       - name: service_provider_name
         description: Service provider name
@@ -25,7 +25,7 @@ models:
         description: Service provider end date (null if active)
       - name: is_active
         description: Whether service provider is currently active
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

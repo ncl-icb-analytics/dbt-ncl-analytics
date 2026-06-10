@@ -10,7 +10,7 @@ models:
     columns:
       - name: mhs903_uniq_id
         description: Primary key.
-        tests:
+        data_tests:
           - not_null
 
       - name: ward_code

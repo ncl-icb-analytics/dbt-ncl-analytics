@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -14,15 +14,15 @@ models:
     columns:
       - name: row_id
         description: Row identifier
-        tests:
+        data_tests:
           - not_null
       - name: sk_patient_id
         description: Surrogate key patient identifier (pseudonymised NHS number - old/superseded number)
-        tests:
+        data_tests:
           - not_null
       - name: sk_patient_id_superseded
         description: New NHS number that supersedes the old one (canonical identifier)
-        tests:
+        data_tests:
           - not_null
       - name: person_merger_business_effective_from_date
         description: Date from which the merger is effective

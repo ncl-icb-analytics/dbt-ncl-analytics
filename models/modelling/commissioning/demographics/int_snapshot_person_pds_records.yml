@@ -1,7 +1,7 @@
 models:
   - name: int_snapshot_person_pds_records
     description: Personal Demographics Service snapshot records for each patient in a combined table.
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: sk_patient_id
       - dbt_utils.unique_combination_of_columns:
@@ -12,15 +12,15 @@ models:
     columns:
       - name: snapshot_year
         description: Financial year that the record corresponds to
-        tests:
+        data_tests:
           - not_null
       - name: snapshot_date
         description: Date of the snapshot the record corresponds to
-        tests:
+        data_tests:
           - not_null
       - name: sk_patient_id
         description: Surrogate key patient identifier (pseudonymised NHS number)
-        tests:
+        data_tests:
           - not_null
       - name: record_person_start_date
         data_type: date

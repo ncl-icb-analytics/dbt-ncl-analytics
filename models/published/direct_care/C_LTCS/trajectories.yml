@@ -10,7 +10,7 @@ models:
       - name: patient_id
         data_type: number
         description: "Unique patient identifier"
-        tests:
+        data_tests:
           - not_null
           - unique
 

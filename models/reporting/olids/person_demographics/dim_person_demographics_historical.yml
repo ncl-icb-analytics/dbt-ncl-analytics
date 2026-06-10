@@ -43,7 +43,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier'
-        tests:
+        data_tests:
           - not_null
 
       - name: sk_patient_id
@@ -51,7 +51,7 @@ models:
 
       - name: effective_start_date
         description: 'Start date of this demographic period (SCD-2)'
-        tests:
+        data_tests:
           - not_null
 
       - name: effective_end_date
@@ -59,27 +59,27 @@ models:
 
       - name: is_current
         description: 'Flag for the latest retained period per person. Computed after the registration filter, so deceased patients (whose open-ended period is dropped) keep a current row (SCD-2).'
-        tests:
+        data_tests:
           - not_null
 
       - name: period_sequence
         description: 'Sequential number of periods for each person (1, 2, 3, ...)'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_active
         description: 'Active registration status during this period'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_deceased
         description: 'Death status flag'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_test_patient
         description: 'Test patient record flag (post-2026 OLIDS rename — was is_dummy_patient)'
-        tests:
+        data_tests:
           - not_null
 
       - name: inactive_reason
@@ -247,7 +247,7 @@ models:
       - name: neighbourhood_resident
         description: 'NCL neighbourhood classification'
 
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           name: dim_person_demographics_historical_unique_person_period
           arguments:

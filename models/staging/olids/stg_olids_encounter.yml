@@ -8,7 +8,7 @@ models:
     columns:
       - name: id
         description: Primary key - unique identifier for this encounter
-        tests:
+        data_tests:
           - not_null
       - name: person_id
         description: Foreign key to person.id - person-level identifier
@@ -62,7 +62,7 @@ models:
         description: "Foreign key to organisation.id — the provider organisation for this encounter. Replaces service_provider_organisation_id in the 2026 OLIDS schema realignment (issue #747)."
       - name: author_organisation_id
         description: "Foreign key to organisation.id — the organisation that authored this encounter record. New in the 2026 OLIDS schema realignment (issue #747)."
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

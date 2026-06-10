@@ -24,7 +24,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier - primary key'
-        tests:
+        data_tests:
           - unique
           - not_null
 

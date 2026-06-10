@@ -10,10 +10,10 @@ models:
     columns:
       - name: sk_organisation_id
         description: Surrogate key for the organisation
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: provider_code
         description: Provider ODS code
-        tests:
+        data_tests:
           - not_null

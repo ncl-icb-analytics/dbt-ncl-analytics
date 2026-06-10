@@ -6,7 +6,7 @@ models:
       - name: visit_occurrence_id
         data_type: number
         description: "Primary key for the encounter within SUS"
-        tests:
+        data_tests:
           - unique
           - not_null
 

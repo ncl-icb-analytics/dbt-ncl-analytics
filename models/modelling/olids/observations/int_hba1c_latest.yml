@@ -30,13 +30,13 @@ models:
 
       • Diabetes diagnostic indicators for clinical decision support'
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - unique
           - not_null
 

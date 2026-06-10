@@ -12,7 +12,7 @@ models:
       On register if any SICKLE_COD diagnosis is recorded. No resolution codes, no age
       limit. Counts cover all persons (active, inactive, deceased).
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -43,7 +43,7 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: is_on_register

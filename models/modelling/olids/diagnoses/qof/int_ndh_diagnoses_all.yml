@@ -10,7 +10,7 @@ models:
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -44,7 +44,7 @@ models:
       - name: is_diagnosis_code
         description: 'Flag indicating any NDH/IGT/pre-diabetes diagnosis code'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:

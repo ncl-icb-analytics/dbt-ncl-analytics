@@ -13,7 +13,7 @@ models:
 
       - name: observation_id
         description: 'Unique identifier for the clinical observation'
-        tests:
+        data_tests:
           - not_null
 
       - name: clinical_effective_date
@@ -40,7 +40,7 @@ models:
       - name: is_resolved_code
         description: 'Flag indicating palliative care resolution code'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: observation_id
       - cluster_ids_exist:

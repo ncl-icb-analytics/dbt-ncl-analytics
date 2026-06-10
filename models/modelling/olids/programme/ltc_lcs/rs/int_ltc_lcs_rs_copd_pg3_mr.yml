@@ -30,7 +30,7 @@ models:
       meta:
         owner:
           name: Peter Shakeshaft
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           arguments:
             column_name: person_id
@@ -56,6 +56,6 @@ models:
               - on_copd_reg_pg3_mr_vs15
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
           - unique

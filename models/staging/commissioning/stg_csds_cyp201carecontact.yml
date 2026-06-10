@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Emily Baldwin
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -17,13 +17,13 @@ models:
     columns:
       - name: unique_service_request_identifier
         description: Service request identifier (FK to referral)
-        tests:
+        data_tests:
           - not_null
       - name: person_id
         description: CSDS person identifier
       - name: unique_care_contact_identifier
         description: unique identifier within a given service request
-        tests:
+        data_tests:
           - not_null
       - name: care_contact_date
         description: Date of care contact

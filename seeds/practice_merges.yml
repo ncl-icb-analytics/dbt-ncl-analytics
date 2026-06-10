@@ -10,12 +10,12 @@ seeds:
     columns:
       - name: predecessor_code
         description: ODS code of the merged/closed practice still reported in the EMIS extract.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: successor_code
         description: ODS code of the practice the patients moved to (where OLIDS attributes them).
-        tests:
+        data_tests:
           - not_null
       - name: predecessor_name
         description: Name of the predecessor practice.

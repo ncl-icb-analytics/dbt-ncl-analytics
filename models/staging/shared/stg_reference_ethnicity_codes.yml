@@ -8,7 +8,7 @@ models:
     columns:
       - name: code
         description: Primary key - ethnicity code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: term
@@ -23,7 +23,7 @@ models:
         description: Whether to deprioritise this code in selection logic
       - name: preference_rank
         description: Preference ranking for code selection
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

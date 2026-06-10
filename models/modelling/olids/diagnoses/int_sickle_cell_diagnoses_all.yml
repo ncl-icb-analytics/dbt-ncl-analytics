@@ -17,7 +17,7 @@ models:
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id
@@ -36,7 +36,7 @@ models:
         description: 'Always TRUE - every row is a sickle cell disease diagnosis'
       - name: sickle_cell_observation_type
         description: 'Observation type label (always "Sickle Cell Disease Diagnosis")'
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:

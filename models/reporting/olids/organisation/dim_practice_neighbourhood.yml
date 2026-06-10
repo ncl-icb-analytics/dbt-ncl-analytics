@@ -23,13 +23,13 @@ models:
     columns:
       - name: practice_code
         description: 'Practice ODS code'
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: practice_name
         description: 'Practice name'
-        tests:
+        data_tests:
           - not_null
 
       - name: local_authority

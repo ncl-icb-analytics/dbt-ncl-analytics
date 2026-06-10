@@ -11,7 +11,7 @@ models:
       - name: lsoa_2021_code
         data_type: varchar
         description: "Official Lower Layer Super Output Area 2021 code."
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lsoa_2021_name

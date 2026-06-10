@@ -8,14 +8,14 @@ models:
     columns:
       - name: code
         description: Primary key - language code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: preferred_language
         description: Preferred language name
       - name: iso_origin
         description: ISO origin code
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

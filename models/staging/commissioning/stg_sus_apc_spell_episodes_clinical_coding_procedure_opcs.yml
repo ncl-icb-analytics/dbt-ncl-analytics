@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           config:
             severity: error
@@ -22,19 +22,19 @@ models:
     columns:
       - name: primarykey_id
         description: Primary key from main APC spell (FK)
-        tests:
+        data_tests:
           - not_null
       - name: episodes_id
         description: Episode identifier within the spell
-        tests:
+        data_tests:
           - not_null
       - name: opcs_id
         description: OPCS procedure identifier within the episode
-        tests:
+        data_tests:
           - not_null
       - name: rownumber_id
         description: Row number for ordering procedures
-        tests:
+        data_tests:
           - not_null
       - name: code
         description: OPCS-4 procedure code

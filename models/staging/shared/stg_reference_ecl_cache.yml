@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -17,11 +17,11 @@ models:
     columns:
       - name: cluster_id
         description: Cluster identifier for the ECL query
-        tests:
+        data_tests:
           - not_null
       - name: code
         description: SNOMED code expanded from ECL query
-        tests:
+        data_tests:
           - not_null
       - name: display
         description: Display term for the code

@@ -63,12 +63,12 @@ models:
     columns:
       - name: campaign_id
         description: COVID campaign identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - not_null
 
       - name: is_eligible

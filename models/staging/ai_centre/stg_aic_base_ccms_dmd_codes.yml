@@ -11,13 +11,13 @@ models:
     columns:
       - name: conditionid
         description: CCMS condition identifier.
-        tests:
+        data_tests:
           - not_null
       - name: conditionname
         description: CCMS condition name.
       - name: productid
         description: dm+d product code mapped to the condition.
-        tests:
+        data_tests:
           - not_null
       - name: primaryterm
         description: dm+d preferred term for the product.

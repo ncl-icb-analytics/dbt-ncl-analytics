@@ -52,7 +52,7 @@ models:
       - name: is_extreme_outlier
         description: Whether cholesterol is an extreme outlier (>15 mmol/L)
 
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: CHOL2_COD

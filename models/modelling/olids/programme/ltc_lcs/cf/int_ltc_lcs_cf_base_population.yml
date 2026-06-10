@@ -8,12 +8,12 @@ models:
       Diabetes (all types), Hyperlipidaemia) and those with NHS health checks in last
       24 months. Does NOT exclude respiratory conditions (COPD, Asthma) — those use
       ICS_RESP_LTC separately for the CYP Asthma pathway.
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
     config:
       meta:

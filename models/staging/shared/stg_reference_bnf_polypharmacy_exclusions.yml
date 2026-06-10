@@ -14,7 +14,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 40
@@ -24,13 +24,13 @@ models:
         description: |
           BNF chapter or subchapter code (2-4 characters).
           Examples: "01" (chapter), "05.03.01" (subchapter)
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: chapter_name
         description: Human-readable name of the BNF chapter or subchapter
-        tests:
+        data_tests:
           - not_null
 
       - name: is_excluded
@@ -38,7 +38,7 @@ models:
           TRUE to exclude from polypharmacy, FALSE to explicitly include.
           FALSE values are used to override chapter-level exclusions
           (e.g., include 5.3.1 HIV even though chapter 5 is mostly excluded)
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

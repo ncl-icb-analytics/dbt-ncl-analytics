@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -17,11 +17,11 @@ models:
     columns:
       - name: code
         description: SNOMED or other code for valproate product/event
-        tests:
+        data_tests:
           - not_null
       - name: code_category
         description: Category of code (medication, pregnancy, etc.)
-        tests:
+        data_tests:
           - not_null
       - name: lookback_years_offset
         description: Years to look back for this code category

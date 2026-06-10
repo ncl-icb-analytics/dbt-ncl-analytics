@@ -83,7 +83,7 @@ models:
 
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -95,45 +95,45 @@ models:
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
-        tests:
+        data_tests:
           - not_null
       - name: campaign_category
         description: 'Campaign category for this person (always "Age-Based")'
-        tests:
+        data_tests:
           - not_null
       - name: risk_group
         description: 'Risk group classification (always "Under 65 At Risk")'
-        tests:
+        data_tests:
           - not_null
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
       - name: qualifying_event_date
         description: 'Date of earliest qualifying clinical condition'
-        tests:
+        data_tests:
           - not_null
       - name: reference_date
         description: 'Campaign reference date used for age calculation'
-        tests:
+        data_tests:
           - not_null
       - name: description
         description: 'Standard description of eligibility criteria'
-        tests:
+        data_tests:
           - not_null
       - name: birth_date_approx
         description: 'Person birth date for age calculation'
-        tests:
+        data_tests:
           - not_null
       - name: age_months_at_ref_date
         description: 'Age in months at campaign reference date'
-        tests:
+        data_tests:
           - not_null
       - name: age_years_at_ref_date
         description: 'Age in years at campaign reference date'
-        tests:
+        data_tests:
           - not_null
       - name: created_at
         description: 'Most recent processing timestamp from aggregated conditions'
-        tests:
+        data_tests:
           - not_null

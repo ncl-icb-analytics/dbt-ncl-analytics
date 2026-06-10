@@ -9,10 +9,10 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier - primary key'
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: is_allowed_secondary_use
         description: Always TRUE for rows in this dim (presence implies allowed)
-        tests:
+        data_tests:
           - not_null

@@ -14,7 +14,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           config:
             severity: warn
@@ -35,7 +35,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
@@ -55,7 +55,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

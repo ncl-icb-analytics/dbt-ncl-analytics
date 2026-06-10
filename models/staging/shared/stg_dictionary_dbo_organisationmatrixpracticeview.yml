@@ -8,12 +8,12 @@ models:
     columns:
       - name: sk_organisation_id_practice
         description: Primary key - practice organisation ID
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: practice_code
         description: Practice code
-        tests:
+        data_tests:
           - not_null
       - name: practice_name
         description: Practice name
@@ -29,7 +29,7 @@ models:
         description: FK to STP/ICS organisation
       - name: stp_code
         description: STP/ICS code
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

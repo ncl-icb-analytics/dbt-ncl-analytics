@@ -13,7 +13,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: current_age

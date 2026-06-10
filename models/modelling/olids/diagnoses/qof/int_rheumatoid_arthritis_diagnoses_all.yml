@@ -10,7 +10,7 @@ models:
     columns:
       - name: id
         description: 'Unique identifier for the clinical observation'
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -35,7 +35,7 @@ models:
       - name: ra_observation_type
         description: 'Categorised RA observation type (Rheumatoid Arthritis Diagnosis)'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:

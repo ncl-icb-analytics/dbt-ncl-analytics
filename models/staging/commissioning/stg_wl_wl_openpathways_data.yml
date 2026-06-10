@@ -131,12 +131,12 @@ models:
         description: Submission identifier
       - name: row_id
         description: Unique row identifier
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: open_pathways
         description: Flag indicating open pathway (always 1)
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

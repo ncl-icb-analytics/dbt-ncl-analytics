@@ -11,13 +11,13 @@ models:
     columns:
       - name: conditionid
         description: CCMS condition identifier.
-        tests:
+        data_tests:
           - not_null
       - name: conditionname
         description: CCMS condition name.
       - name: conceptid
         description: SNOMED concept code mapped to the condition.
-        tests:
+        data_tests:
           - not_null
       - name: primaryterm
         description: SNOMED preferred term for the concept.

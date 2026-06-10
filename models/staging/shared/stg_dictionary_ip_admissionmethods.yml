@@ -8,15 +8,15 @@ models:
     columns:
       - name: sk_admission_method_id
         description: Primary key - surrogate key for admission method
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: bk_admission_method_code
         description: Business key - admission method code
-        tests:
+        data_tests:
           - unique
           - not_null
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

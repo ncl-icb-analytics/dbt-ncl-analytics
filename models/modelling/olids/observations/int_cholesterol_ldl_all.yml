@@ -7,13 +7,13 @@ models:
       meta:
         owner:
           name: KateHomer55
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: LDLCCHOL_COD
     columns:
       - name: id
         description: Unique identifier for each cholesterol observation
-        tests:
+        data_tests:
           - unique
           - not_null

@@ -1,13 +1,13 @@
 models:
 - name: int_person_pds_demographics
   description: Demographic lookup table for the current population based on the PDS dataset. Includes ethnicity data from dev__modelling.lookup_ncl.ethnicity_national_data_sets.
-  tests:
+  data_tests:
   - dbt_utils.at_least_one:
       column_name: sk_patient_id
   columns:
   - name: sk_patient_id
     description: Surrogate key patient identifier (pseudonymised NHS number)
-    tests:
+    data_tests:
     - not_null
     - unique
   - name: current_ncl_person_flag

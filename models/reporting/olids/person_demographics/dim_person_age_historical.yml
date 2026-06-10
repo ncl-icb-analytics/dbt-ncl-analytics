@@ -33,12 +33,12 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier'
-        tests:
+        data_tests:
           - not_null
 
       - name: effective_start_date
         description: 'SCD2: Period start date for temporal tracking'
-        tests:
+        data_tests:
           - not_null
 
       - name: effective_end_date
@@ -46,7 +46,7 @@ models:
 
       - name: period_sequence
         description: 'SCD2: Sequential number for each temporal period per person'
-        tests:
+        data_tests:
           - not_null
 
       - name: age
@@ -69,13 +69,13 @@ models:
 
       - name: is_current_period
         description: 'SCD2: Flag indicating if this is the current active period'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: [true, false]
 
-    tests:
+    data_tests:
       # SCD2 integrity tests
       - dbt_utils.unique_combination_of_columns:
           name: dim_person_age_historical_unique_person_period

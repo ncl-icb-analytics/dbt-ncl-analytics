@@ -8,20 +8,20 @@ models:
     columns:
       - name: lsoa_2021_code
         description: Primary key - LSOA 2021 code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lsoa_2021_name
         description: LSOA 2021 name
       - name: neighbourhood_code
         description: NCL neighbourhood code
-        tests:
+        data_tests:
           - not_null
       - name: neighbourhood_name
         description: NCL neighbourhood name
       - name: start_date
         description: Mapping effective start date
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

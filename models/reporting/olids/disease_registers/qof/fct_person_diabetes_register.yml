@@ -16,7 +16,7 @@ models:
       Purpose: Supports QOF reporting and diabetes care management with accurate type
       classification for treatment planning.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -57,7 +57,7 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - unique
           - not_null
 

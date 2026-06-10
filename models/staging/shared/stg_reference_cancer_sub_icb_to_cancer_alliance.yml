@@ -14,7 +14,7 @@ models:
       - name: sub_icb_code
         data_type: varchar
         description: "Sub-ICB code"
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sub_icb_name
@@ -26,7 +26,7 @@ models:
       - name: icb_code
         data_type: varchar
         description: "ICB code"
-        tests:
+        data_tests:
           - not_null
       - name: icb_name
         data_type: varchar
@@ -34,7 +34,7 @@ models:
       - name: cancer_alliance_code
         data_type: varchar
         description: "Cancer Alliance code"
-        tests:
+        data_tests:
           - not_null
       - name: cancer_alliance_name
         data_type: varchar

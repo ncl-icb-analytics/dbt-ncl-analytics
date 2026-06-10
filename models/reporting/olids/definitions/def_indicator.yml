@@ -14,7 +14,7 @@ models:
       - name: indicator_id
         description: Unique identifier for the indicator (e.g., COND_DM, 
           BRF_BMI)
-        tests:
+        data_tests:
           - not_null
           - unique
 

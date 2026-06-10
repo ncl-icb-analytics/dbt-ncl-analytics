@@ -8,7 +8,7 @@ models:
     columns:
       - name: postcode_hash
         description: Primary key - hashed postcode value
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: primary_care_organisation
@@ -33,7 +33,7 @@ models:
         description: LDS datetime stamp from which the record version was correct - used for deduplication to get the latest record
       - name: lakehouse_date_processed
         description: Date when record was processed by lakehouse
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

@@ -33,7 +33,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier'
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -42,17 +42,17 @@ models:
 
       - name: is_active
         description: 'Current registration status'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_deceased
         description: 'Death status flag'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_test_patient
         description: 'Test patient record flag (post-2026 OLIDS rename — was is_dummy_patient)'
-        tests:
+        data_tests:
           - not_null
 
       - name: inactive_reason
@@ -63,7 +63,7 @@ models:
 
       - name: birth_date_approx
         description: 'Approximate birth date (mid-month)'
-        tests:
+        data_tests:
           - not_null
 
       - name: birth_date_approx_end_of_month
@@ -98,17 +98,17 @@ models:
 
       - name: is_primary_school_age
         description: 'Flag indicating primary school age (Reception to Year 6)'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_secondary_school_age
         description: 'Flag indicating secondary school age (Year 7 to Year 13)'
-        tests:
+        data_tests:
           - not_null
 
       - name: gender
         description: 'Gender'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -116,17 +116,17 @@ models:
 
       - name: ethnicity_category
         description: 'Ethnicity category from latest recording'
-        tests:
+        data_tests:
           - not_null
 
       - name: ethnicity_subcategory
         description: 'Ethnicity subcategory from latest recording'
-        tests:
+        data_tests:
           - not_null
 
       - name: ethnicity_granular
         description: 'Detailed ethnicity from latest recording'
-        tests:
+        data_tests:
           - not_null
 
       - name: ethnicity_category_sort
@@ -146,12 +146,12 @@ models:
 
       - name: interpreter_needed
         description: 'Interpreter needed flag'
-        tests:
+        data_tests:
           - not_null
 
       - name: practice_code
         description: 'Current or latest practice code'
-        tests:
+        data_tests:
           - not_null
 
       - name: practice_name

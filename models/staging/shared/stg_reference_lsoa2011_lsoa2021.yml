@@ -8,14 +8,14 @@ models:
     columns:
       - name: lsoa11_cd
         description: Primary key - LSOA 2011 code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lsoa11_nm
         description: LSOA 2011 name
       - name: lsoa21_cd
         description: LSOA 2021 code
-        tests:
+        data_tests:
           - not_null
       - name: lsoa21_nm
         description: LSOA 2021 name
@@ -25,7 +25,7 @@ models:
         description: Local Authority District 2022 code
       - name: lad22_nm
         description: Local Authority District 2022 name
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

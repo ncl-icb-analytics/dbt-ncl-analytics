@@ -8,25 +8,25 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: ALCOHOL_MISUSE_DISORDERS
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
 
       - name: id
         description: Unique identifier for each alcohol disorder observation
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: clinical_effective_date
         description: Date when the diagnosis was recorded
-        tests:
+        data_tests:
           - not_null
 
       - name: concept_code

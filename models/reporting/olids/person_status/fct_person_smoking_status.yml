@@ -60,7 +60,7 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -69,13 +69,13 @@ models:
 
       - name: smoking_status
         description: Current smoking status (Never Smoked, Ex-Smoker, Current Smoker, Unknown)
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['Never Smoked', 'Ex-Smoker', 'Current Smoker', 'Unknown']
       - name: smoking_risk_sort_key
         description: Smoking risk level (1=Never, 2=Ex-smoker, 3=Current smoker, 0=Unknown)
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0

@@ -12,6 +12,6 @@ models:
     columns:
       - name: person_id
         description: 'Patient identifier - primary key (one row per person)'
-        tests:
+        data_tests:
           - unique
           - not_null

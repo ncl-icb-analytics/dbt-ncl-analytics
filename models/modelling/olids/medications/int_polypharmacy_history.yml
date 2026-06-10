@@ -88,6 +88,6 @@ models:
           - dbt_utils.expression_is_true:
               arguments:
                 expression: ">= 0"
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id

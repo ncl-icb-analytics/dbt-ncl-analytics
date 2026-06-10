@@ -15,19 +15,19 @@ models:
           Surrogate key over (person_id, cambridge_comorbidity_score,
           last_updated). Changes whenever the score for a person changes or
           when the table is rebuilt.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id
         description: Person identifier.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: cambridge_comorbidity_score
         description: Weighted Cambridge Comorbidity Score. Can be negative.
-        tests:
+        data_tests:
           - not_null
       - name: last_updated
         description: Timestamp the row was generated.
-        tests:
+        data_tests:
           - not_null

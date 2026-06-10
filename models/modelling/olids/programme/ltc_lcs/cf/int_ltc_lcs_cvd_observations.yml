@@ -7,7 +7,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
@@ -15,5 +15,5 @@ models:
             cluster_ids: QRISK2_10YEAR, NON_HDL_CHOLESTEROL, STATIN_ALLERGY_ADVERSE_REACTION, STATIN_NOT_INDICATED, STATINDEC_COD
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null

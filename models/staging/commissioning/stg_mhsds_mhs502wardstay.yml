@@ -8,7 +8,7 @@ models:
     columns:
       - name: uniq_serv_req_id
         description: Primary key - unique service request identifier. One request may have more than one ward stay.
-        tests:
+        data_tests:
          - not_null
 
       - name: person_id
@@ -33,7 +33,7 @@ models:
         description: The ICB (Integrated Care Board) that commissioned the spell.
 
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

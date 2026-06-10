@@ -23,18 +23,18 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier'
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: sk_patient_id
         description: 'Surrogate key for patient record used in pseudonym generation'
-        tests:
+        data_tests:
           - not_null
 
       - name: hx_flake
         description: 'Pseudonymized hex key in format XX-XXX-XXX for patient re-identification. Note: Multiple person_ids may share the same hx_flake when they share the same sk_patient_id (patient fragmentation).'
-        tests:
+        data_tests:
           - not_null
           - unique:
               config:

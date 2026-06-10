@@ -11,7 +11,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - valuesets_have_codes:
@@ -26,5 +26,5 @@ models:
               - hf_case_finding_eligible_patients_vs13
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null

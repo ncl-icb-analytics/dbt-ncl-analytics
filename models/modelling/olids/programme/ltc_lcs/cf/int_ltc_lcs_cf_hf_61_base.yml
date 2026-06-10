@@ -3,7 +3,7 @@ models:
     description: 'Base population for HF_61 case finding.
 
       One row per currently registered person eligible for HF case finding after excluding metabolic LTC programme patients, AF register patients, HF register patients, and patients with recorded heart failure or ventricular dysfunction evidence.'
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - valuesets_have_codes:
@@ -12,7 +12,7 @@ models:
               - eligible_for_hf_casefinding_vs1
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
           - unique
     config:

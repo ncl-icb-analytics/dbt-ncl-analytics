@@ -76,7 +76,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -90,28 +90,28 @@ models:
 
       - name: snomed_code
         description: 'SNOMED code for ethnicity ("Not Recorded" if none available)'
-        tests:
+        data_tests:
           - not_null
 
       - name: term
         description: 'SNOMED term description for ethnicity ("Not Recorded" if none
           available)'
-        tests:
+        data_tests:
           - not_null
 
       - name: ethnicity_category
         description: 'Main ethnicity category (e.g., White, Asian, Black, Mixed, Other)'
-        tests:
+        data_tests:
           - not_null
 
       - name: ethnicity_subcategory
         description: 'Ethnicity subcategory within main category'
-        tests:
+        data_tests:
           - not_null
 
       - name: ethnicity_granular
         description: 'Most detailed ethnicity classification available'
-        tests:
+        data_tests:
           - not_null
 
       - name: deprioritise_flag

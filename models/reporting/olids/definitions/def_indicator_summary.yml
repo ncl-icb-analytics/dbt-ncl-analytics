@@ -13,18 +13,18 @@ models:
     columns:
       - name: indicator_id
         description: Unique identifier for the indicator
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: indicator_type
         description: High-level indicator classification
-        tests:
+        data_tests:
           - not_null
 
       - name: category
         description: Indicator category for grouping
-        tests:
+        data_tests:
           - not_null
 
       - name: clinical_domain
@@ -32,27 +32,27 @@ models:
 
       - name: name_short
         description: Brief display name
-        tests:
+        data_tests:
           - not_null
 
       - name: description_short
         description: One-line description for tooltips
-        tests:
+        data_tests:
           - not_null
 
       - name: source_model
         description: dbt model containing this indicator's data
-        tests:
+        data_tests:
           - not_null
 
       - name: source_column
         description: Column name in the source model
-        tests:
+        data_tests:
           - not_null
 
       - name: is_qof
         description: Whether this is a QOF indicator
-        tests:
+        data_tests:
           - not_null
 
       - name: qof_indicator
@@ -63,30 +63,30 @@ models:
 
       - name: in_pop_health_dashboard
         description: Flag indicating usage in Population Health Needs Dashboard
-        tests:
+        data_tests:
           - not_null
 
       - name: in_qof
         description: Flag indicating usage in QOF reporting
-        tests:
+        data_tests:
           - not_null
 
       - name: inclusion_code_count
         description: Number of SNOMED inclusion codes for this indicator
-        tests:
+        data_tests:
           - not_null
 
       - name: resolution_code_count
         description: Number of SNOMED resolution codes for this indicator
-        tests:
+        data_tests:
           - not_null
 
       - name: cluster_count
         description: Number of distinct clusters defining this indicator
-        tests:
+        data_tests:
           - not_null
 
       - name: metadata_extracted_at
         description: Timestamp when metadata was extracted from YAML
-        tests:
+        data_tests:
           - not_null

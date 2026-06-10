@@ -55,7 +55,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -70,22 +70,22 @@ models:
 
       - name: concept_code
         description: 'SNOMED concept code for language preference ("Not Recorded" if none available)'
-        tests:
+        data_tests:
           - not_null
 
       - name: term
         description: 'SNOMED term description for language preference ("Not Recorded" if none available)'
-        tests:
+        data_tests:
           - not_null
 
       - name: language
         description: 'Clean language name extracted from clinical terms ("Not Recorded" if none available)'
-        tests:
+        data_tests:
           - not_null
 
       - name: language_type
         description: 'Type classification: Spoken, Sign, Other Communication Method ("Not Recorded" if none available)'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -106,7 +106,7 @@ models:
       - name: communication_support_type
         description: 'Type of communication support needed (e.g., Lipspeaker, Note Taker, Speech to Text)'
 
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: PREFLANG_COD, REQINTERPRETER_COD

@@ -5,7 +5,7 @@ models:
 
       One row per person with BMI ≥30 (all ethnicities) or BMI ≥27.5 (BAME populations).'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
 
@@ -40,6 +40,6 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
           - unique

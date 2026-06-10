@@ -4,13 +4,13 @@ models:
 
       One row per person with their latest creatinine including clinical creatinine categorisation and elevated creatinine flags.'
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - unique
           - not_null
 

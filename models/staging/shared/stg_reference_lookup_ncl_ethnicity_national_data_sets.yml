@@ -4,7 +4,7 @@ models:
     columns:
       - name: sk_patientid
         description: Foreign key - patient surrogate key
-        tests:
+        data_tests:
           - not_null
       - name: ethnicity_code
         description: Ethnicity code
@@ -16,7 +16,7 @@ models:
         description: More granular ethnicity detail
       - name: record_date
         description: Date of the ethnicity record
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

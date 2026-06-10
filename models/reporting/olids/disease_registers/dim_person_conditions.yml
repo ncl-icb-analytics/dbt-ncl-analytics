@@ -11,26 +11,26 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: has_osteoarthritis
         description: Boolean flag indicating whether person is on osteoarthritis register
-        tests:
+        data_tests:
           - not_null
       - name: has_adhd
         description: Boolean flag indicating whether person is on ADHD register
-        tests:
+        data_tests:
           - not_null
       - name: has_chronic_liver_disease
         description: Boolean flag indicating whether person is on chronic liver disease register
-        tests:
+        data_tests:
           - not_null
       - name: has_sickle_cell
         description: Boolean flag indicating whether person is on the sickle cell disease register
-        tests:
+        data_tests:
           - not_null
       - name: has_thalassaemia
         description: Boolean flag indicating whether person is on the thalassaemia register
-        tests:
+        data_tests:
           - not_null

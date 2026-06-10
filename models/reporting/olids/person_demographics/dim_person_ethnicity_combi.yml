@@ -10,6 +10,6 @@ models:
     columns:
       - name: sk_patient_id
         description: 'Surrogate key for patient - primary key'
-        tests:
+        data_tests:
           - unique
           - not_null

@@ -3,7 +3,7 @@ models:
     description: |
       Summary of the contacts and activities per referral.
       One row per referral per patient (SERVICE_REQUEST_IDENTIFIER + NHS_NUMBER).
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns: [referral_id, sk_patient_id]
@@ -14,5 +14,5 @@ models:
 ##          - not_null
       - name: referral_id
         description: "Identifier for the referral (SERVICE_REQUEST_IDENTIFIER)"
-        tests:
+        data_tests:
           - not_null

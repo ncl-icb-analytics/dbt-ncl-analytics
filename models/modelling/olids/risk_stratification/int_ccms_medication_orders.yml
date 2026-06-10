@@ -12,19 +12,19 @@ models:
     columns:
       - name: person_id
         description: Person identifier.
-        tests:
+        data_tests:
           - not_null
       - name: medication_order_id
         description: stg_olids_medication_order.id.
       - name: order_date
         description: Clinical effective date of the order.
-        tests:
+        data_tests:
           - not_null
       - name: mapped_concept_code
         description: dm+d code on the order, joined to BASE_CCMS_DMD_CODES.productid.
       - name: conditionid
         description: CCMS condition identifier from BASE_CCMS_DMD_CODES.
-        tests:
+        data_tests:
           - not_null
       - name: conditionname
         description: CCMS condition name from BASE_CCMS_DMD_CODES.

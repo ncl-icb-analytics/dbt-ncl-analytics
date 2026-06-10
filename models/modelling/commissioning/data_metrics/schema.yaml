@@ -12,7 +12,7 @@ models:
     columns:
       - name: provider
         description: "Provider name from lookup"
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -26,12 +26,12 @@ models:
                 quote: true
       - name: activity_date
         description: "Date of activity"
-        tests:
+        data_tests:
           - not_null
 
       - name: records
         description: "Count of records"
-        tests:
+        data_tests:
           - not_null
 
   - name: provider_daily_op_activity_DBT
@@ -43,7 +43,7 @@ models:
     columns:
       - name: provider
         description: "Provider name from lookup"
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -57,12 +57,12 @@ models:
                 quote: true
       - name: activity_date
         description: "Date of activity"
-        tests:
+        data_tests:
           - not_null
 
       - name: records
         description: "Count of records"
-        tests:
+        data_tests:
           - not_null
 
   - name: provider_daily_ecds_activity_DBT
@@ -70,7 +70,7 @@ models:
     columns:
       - name: provider
         description: "Provider name from lookup"
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -84,12 +84,12 @@ models:
                 quote: true
       - name: activity_date
         description: "Date of activity"
-        tests:
+        data_tests:
           - not_null
 
       - name: records
         description: "Count of records"
-        tests:
+        data_tests:
           - not_null
 
   - name: provider_missing_summary
@@ -97,5 +97,5 @@ models:
     columns:
       - name: provider
         description: "The name of the NHS Provider"
-        tests:
+        data_tests:
           - not_null

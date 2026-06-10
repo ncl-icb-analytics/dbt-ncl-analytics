@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: ASTTRT_COD
@@ -16,7 +16,7 @@ models:
         description: 'Unique medication order identifier'
       - name: order_date
         description: 'Date medication was ordered'
-        tests:
+        data_tests:
           - not_null
       - name: order_medication_name
         description: 'Name of medication as ordered'

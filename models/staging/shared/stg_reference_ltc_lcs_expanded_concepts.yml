@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: Eddie Davison
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -17,15 +17,15 @@ models:
     columns:
       - name: concept_id
         description: Unique identifier for this concept
-        tests:
+        data_tests:
           - not_null
       - name: valueset_id
         description: Foreign key to associated valueset
-        tests:
+        data_tests:
           - not_null
       - name: snomed_code
         description: SNOMED CT code (joins to observations/medications)
-        tests:
+        data_tests:
           - not_null
       - name: display
         description: Display term for the SNOMED code

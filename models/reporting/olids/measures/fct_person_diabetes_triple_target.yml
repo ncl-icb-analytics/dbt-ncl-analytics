@@ -14,7 +14,7 @@ models:
 
       Purpose: Supports diabetes care quality assessment and identification of patients requiring intensified management to achieve clinical targets.'
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
@@ -89,7 +89,7 @@ models:
     columns:
       - name: person_id
         description: Unique person identifier
-        tests:
+        data_tests:
           - unique
           - not_null
 

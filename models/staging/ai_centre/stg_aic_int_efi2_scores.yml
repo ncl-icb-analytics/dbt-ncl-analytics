@@ -8,7 +8,7 @@ models:
     columns:
       - name: person_id
         description: Person identifier.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: end_date
@@ -23,7 +23,7 @@ models:
         description: Person gender.
       - name: date_of_death
         description: Person date of death where present.
-    tests:
+    data_tests:
       - dbt_utils.recency:
           config:
             severity: warn

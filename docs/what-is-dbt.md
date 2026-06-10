@@ -87,7 +87,7 @@ dbt tests are assertions about your data. They're defined in YAML alongside mode
 ```yaml
 columns:
   - name: sk_patient_id
-    tests:
+    data_tests:
       - unique
       - not_null
 ```

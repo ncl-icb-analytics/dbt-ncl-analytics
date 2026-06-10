@@ -8,7 +8,7 @@ models:
     columns:
       - name: id
         description: Primary key - unique identifier for this UPRN match
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lds_registrar_event_id
@@ -47,7 +47,7 @@ models:
         description: LDS assigned unique identifier for the source record version
       - name: patient_address_id
         description: "Foreign key to patient_address.id — links this UPRN match to the patient_address record it was matched against. New in the 2026 OLIDS schema realignment (issue #747)."
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           config:
             severity: warn

@@ -18,14 +18,14 @@ models:
     columns:
       - name: person_id
         description: Person identifier
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sk_patient_id
         description: Surrogate key for patient
       - name: latest_hospice_care_date
         description: Date of most recent hospice care observation (either service)
-        tests:
+        data_tests:
           - not_null
       - name: latest_full_care_date
         description: Date of most recent full clinical care observation (NULL if none)
@@ -41,19 +41,19 @@ models:
         description: Source cluster ID of the latest care observation
       - name: is_hospice_full_care
         description: Currently under full clinical care by a hospice
-        tests:
+        data_tests:
           - not_null
       - name: is_hospice_at_home
         description: Currently under a hospice-at-home / community hospice service
-        tests:
+        data_tests:
           - not_null
       - name: is_under_hospice_care
         description: Currently under any hospice service (full care or at-home)
-        tests:
+        data_tests:
           - not_null
       - name: hospice_care_status
         description: Text description of hospice care status
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

@@ -8,12 +8,12 @@ models:
     columns:
       - name: sk_specialty_id
         description: Primary key - surrogate key for specialty
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: bk_specialty_code
         description: Business key - specialty code
-        tests:
+        data_tests:
           - not_null
       - name: specialty_name
         description: Specialty name
@@ -23,7 +23,7 @@ models:
         description: Whether this is a treatment function code
       - name: is_main_specialty
         description: Whether this is a main specialty code
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

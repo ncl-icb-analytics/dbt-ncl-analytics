@@ -23,7 +23,7 @@ models:
     columns:
       - name: person_id
         description: 'Unique person identifier'
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -32,17 +32,17 @@ models:
 
       - name: practice_id
         description: 'OLIDS internal practice ID'
-        tests:
+        data_tests:
           - not_null
 
       - name: practice_code
         description: 'Practice ODS code'
-        tests:
+        data_tests:
           - not_null
 
       - name: practice_name
         description: 'Practice name'
-        tests:
+        data_tests:
           - not_null
 
       - name: practice_type_code
@@ -65,13 +65,13 @@ models:
 
       - name: practice_is_obsolete
         description: 'Flag indicating if practice record is obsolete'
-        tests:
+        data_tests:
           - not_null:
               config:
                 severity: warn
       - name: registration_start_date
         description: 'Start date of current registration'
-        tests:
+        data_tests:
           - not_null
 
       - name: registration_end_date
@@ -82,21 +82,21 @@ models:
 
       - name: registration_sequence
         description: 'Sequential number of this registration for the person (1st, 2nd, 3rd, etc.)'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 1
       - name: total_registrations_count
         description: 'Total number of registrations this person has had'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 1
       - name: has_changed_practice
         description: 'Flag indicating if person has ever changed practice (based on total registrations)'
-        tests:
+        data_tests:
           - not_null
 
       - name: age_at_registration_start

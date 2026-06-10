@@ -21,13 +21,13 @@ models:
     columns:
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: age
         description: 'Current age (or age at death) in years'
-        tests:
+        data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
@@ -35,7 +35,7 @@ models:
                 max_value: 55
       - name: gender
         description: 'Gender (Female or Unknown - excludes Male by definition)'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -43,7 +43,7 @@ models:
 
       - name: is_child_bearing_age_12_55
         description: 'Flag for standard demographic child-bearing age (12-55 years inclusive)'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -51,7 +51,7 @@ models:
 
       - name: is_child_bearing_age_0_55
         description: 'Flag for clinical safety child-bearing age (0-55 years inclusive) - always TRUE for records in this table'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

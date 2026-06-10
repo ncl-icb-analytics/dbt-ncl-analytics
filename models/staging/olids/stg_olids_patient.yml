@@ -8,7 +8,7 @@ models:
     columns:
       - name: id
         description: Primary key - unique identifier for this patient
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: nhs_number_hash
@@ -59,7 +59,7 @@ models:
         description: "Foreign key to person.id — now exposed directly on the patient record. New in the 2026 OLIDS schema realignment (issue #747); previously only available via patient_person."
       - name: local_patient_id
         description: "Local (practice-system) patient identifier. New in the 2026 OLIDS schema realignment (issue #747)."
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

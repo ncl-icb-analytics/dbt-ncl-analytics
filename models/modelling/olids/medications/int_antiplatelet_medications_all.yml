@@ -6,7 +6,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests: []
+    data_tests: []
     columns:
       - name: person_id
         description: 'Person identifier'
@@ -16,7 +16,7 @@ models:
         description: 'Related medication statement identifier'
       - name: order_date
         description: 'Date medication was ordered'
-        tests:
+        data_tests:
           - not_null
       - name: order_medication_name
         description: 'Name of medication as ordered'

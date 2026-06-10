@@ -11,23 +11,23 @@ models:
     columns:
       - name: organisation_id
         description: 'OLIDS internal organisation ID for practice'
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: practice_code
         description: 'Practice ODS code'
-        tests:
+        data_tests:
           - not_null
 
       - name: practice_name
         description: 'Cleaned practice name'
-        tests:
+        data_tests:
           - not_null
 
       - name: is_active_practice
         description: 'Always TRUE in this model'
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:

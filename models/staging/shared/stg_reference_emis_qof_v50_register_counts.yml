@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -17,27 +17,27 @@ models:
     columns:
       - name: reference_date
         description: Reference date for the QOF extract (2025-11-04)
-        tests:
+        data_tests:
           - not_null
       - name: indicator_code
         description: Original EMIS QOF indicator code
-        tests:
+        data_tests:
           - not_null
       - name: indicator_description
         description: Original EMIS indicator description
       - name: practice_code
         description: GP practice code (from cdb column)
-        tests:
+        data_tests:
           - not_null
       - name: practice_name
         description: GP practice name
       - name: register_name
         description: Standardized register name mapped to match OLIDS pit_ register definitions
-        tests:
+        data_tests:
           - not_null
       - name: population_count
         description: Count of patients on this register
-        tests:
+        data_tests:
           - not_null
       - name: parent_population
         description: Parent population for this indicator

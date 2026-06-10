@@ -36,7 +36,7 @@ def find_staging_models(project_root: Path) -> List[Tuple[Path, Path]]:
 
 def has_row_count_test(model_config: Dict) -> bool:
     """Check if model already has row count test."""
-    tests = model_config.get('tests', [])
+    tests = model_config.get('data_tests', []) + model_config.get('tests', [])
 
     # Check model-level tests
     for test in tests:
@@ -65,12 +65,12 @@ def add_row_count_test(yml_path: Path) -> bool:
         modified = False
         for model in data['models']:
             if not has_row_count_test(model):
-                # Add tests key if it doesn't exist
-                if 'tests' not in model:
-                    model['tests'] = []
+                # Add data_tests key if it doesn't exist
+                if 'data_tests' not in model:
+                    model['data_tests'] = []
 
                 # Add row count test
-                model['tests'].append({
+                model['data_tests'].append({
                     'dbt_expectations.expect_table_row_count_to_be_between': {
                         'min_value': 1
                     }

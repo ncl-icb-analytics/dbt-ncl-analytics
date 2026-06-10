@@ -7,7 +7,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
       - cluster_ids_exist:
@@ -15,5 +15,5 @@ models:
             cluster_ids: DEEP_VEIN_THROMBOSIS,ATRIAL_FLUTTER,ATRIAL_FIBRILLATION_61_EXCLUSIONS,LCS_PULSE_RATE,LCS_PULSE_RHYTHM
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null

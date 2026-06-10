@@ -11,10 +11,10 @@ models:
     columns:
       - name: sk_patient_id
         description: Unique identifier for each patient.
-        tests:
+        data_tests:
           - not_null
           - unique
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

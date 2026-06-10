@@ -11,7 +11,7 @@ models:
       meta:
         owner:
           name: Peter Shakeshaft
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
           config:
@@ -26,6 +26,6 @@ models:
               - on_chd_reg_pg1_hrc_vs1
     columns:
       - name: person_id
-        tests:
+        data_tests:
           - not_null
           - unique

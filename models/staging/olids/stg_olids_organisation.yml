@@ -8,7 +8,7 @@ models:
     columns:
       - name: id
         description: Primary key - unique identifier for this organisation
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: organisation_code
@@ -43,7 +43,7 @@ models:
         description: "Free-text description of the organisation. New in the 2026 OLIDS schema realignment (issue #747); partially replaces the removed type_code and type_desc columns."
       - name: location_type_source_concept_id
         description: "Foreign key to concept.concept_id — source concept describing the organisation's location type. New in the 2026 OLIDS schema realignment (issue #747)."
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

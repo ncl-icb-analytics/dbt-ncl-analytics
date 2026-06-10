@@ -18,7 +18,7 @@ models:
         data_tests:
           - not_null
 
-tests:
+data_tests:
   - name: concept_mapping_result
     description: "Result observation codes must have code system and display"
     sql: |

@@ -10,7 +10,7 @@ models:
       meta:
         owner:
           name: Kate Welsby
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           config:
             severity: warn
@@ -27,7 +27,7 @@ models:
       meta:
         owner:
           name: Kate Welsby
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           config:
             severity: warn

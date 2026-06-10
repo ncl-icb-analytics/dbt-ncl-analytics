@@ -5,7 +5,7 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -17,15 +17,15 @@ models:
     columns:
       - name: primarykey_id
         description: Primary key from main outpatient appointment (FK)
-        tests:
+        data_tests:
           - not_null
       - name: opcs_id
         description: OPCS procedure identifier within the appointment
-        tests:
+        data_tests:
           - not_null
       - name: rownumber_id
         description: Row number for ordering procedures
-        tests:
+        data_tests:
           - not_null
       - name: code
         description: OPCS-4 procedure code
