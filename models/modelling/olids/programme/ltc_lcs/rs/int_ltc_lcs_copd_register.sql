@@ -2,21 +2,23 @@
 -- EMIS source: 'LTC LCS: COPD Register*'
 -- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/conditions/copd/ltc_lcs_copd_register.md)
 --
--- The LTC LCS COPD register is broader than the QOF register: it keeps
--- patients whose COPD has since been coded resolved and patients coded in
--- the last year ahead of spirometry confirmation.
+-- The LTC LCS COPD register differs from QOF by also keeping patients coded
+-- in the last year ahead of spirometry confirmation (rules 3-6). Every rule
+-- carries the same active-COPD group requirement: no COPD resolved code at
+-- all, OR a diagnosis code dated after the latest resolved code.
 --
 -- Rule chain (include on pass, all rules):
 -- - Rule 1: EMIS library item ee5b135f-b9b2-4ef7-8b51-939a754cf935 (not in the
 --   XML export; assumed to be the QOF COPD register - empirically adds < 10
 --   people over rules 2-6)
 -- - Rule 2: earliest COPD-family code (COPD_COD + COPDRES_COD) dated before
---   1 year ago is a diagnosis (COPD_COD)
+--   1 year ago is a diagnosis (COPD_COD), and COPD is active
 -- - Rule 3: COPD-family code in last year with linked spirometry
---   (FEV1/FVC < 0.7 or FEV1FVCL70 code) within -93/+186 days
+--   (FEV1/FVC < 0.7 or FEV1FVCL70 code) within -93/+186 days, and COPD is active
 -- - Rules 4-5: newly registered variants; subsumed by rule 6 (their first
 --   criterion alone passes rule 6) and not implemented
--- - Rule 6: earliest COPD-family code within the last year is a diagnosis
+-- - Rule 6: earliest COPD-family code within the last year is a diagnosis,
+--   and COPD is active
 --
 -- Implemented with the PCD COPD_COD / COPDRES_COD / FEV1FVC_COD /
 -- FEV1FVCL70_COD clusters (same refsets the EMIS search references).
@@ -29,6 +31,26 @@ copd_family as (
 
 active as (
     select person_id from {{ ref('dim_person_active_patients') }}
+),
+
+-- Active COPD: no resolved code, or a diagnosis dated after the latest
+-- resolved code (the group requirement on every register rule)
+latest_resolved as (
+    select person_id, max(clinical_effective_date) as latest_resolved_date
+    from copd_family
+    where cluster_id = 'COPDRES_COD'
+    group by person_id
+),
+
+copd_active as (
+    select distinct f.person_id
+    from copd_family f
+    left join latest_resolved r on f.person_id = r.person_id
+    where f.cluster_id = 'COPD_COD'
+      and (
+          r.latest_resolved_date is null
+          or f.clinical_effective_date > r.latest_resolved_date
+      )
 ),
 
 -- Rule 2: earliest family code dated before 1 year ago is a diagnosis
@@ -87,10 +109,14 @@ select distinct u.person_id
 from (
     select person_id from rule_1_qof_register
     union
-    select person_id from rule_2_established_diagnosis
-    union
-    select person_id from rule_3_confirmed_recent
-    union
-    select person_id from rule_6_recent_diagnosis
+    select person_id
+    from (
+        select person_id from rule_2_established_diagnosis
+        union
+        select person_id from rule_3_confirmed_recent
+        union
+        select person_id from rule_6_recent_diagnosis
+    )
+    where person_id in (select person_id from copd_active)
 ) u
 inner join active a on u.person_id = a.person_id
