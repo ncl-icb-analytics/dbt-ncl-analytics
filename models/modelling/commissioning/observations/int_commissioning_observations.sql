@@ -12,7 +12,8 @@ with
             ,organisation_name
             ,date
             ,null as clinical_end_date
-            ,icd_id as problem_order
+            ,null as problem_order
+            ,'diagnosis' as observation_type
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -29,6 +30,7 @@ with
             ,date
             ,null as clinical_end_date
             ,problem_order
+            ,'procedure' as observation_type
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -44,6 +46,7 @@ with
             ,date
             ,null as clinical_end_date
             ,problem_order
+            ,'procedure' as observation_type
             ,source_concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -59,6 +62,7 @@ with
             ,date
             ,null as clinical_end_date
             ,icd_id as problem_order
+            ,'diagnosis' as observation_type
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -74,6 +78,7 @@ with
         ,date
         ,null as clinical_end_date
         ,problem_order
+        ,'procedure' as observation_type
         ,concept_code::varchar  as observation_concept_code
         ,concept_name as observation_concept_name
         ,concept_vocabulary as observation_vocabulary
@@ -89,6 +94,7 @@ with
         ,date
         ,null as clinical_end_date
         ,problem_order
+        ,'procedure' as observation_type
         ,source_concept_code::varchar  as observation_concept_code
         ,concept_name as observation_concept_name
         ,concept_vocabulary as observation_vocabulary
@@ -105,6 +111,7 @@ with
             ,date
             ,null as clinical_end_date
             ,snomed_id as problem_order
+            ,'diagnosis' as observation_type
             ,source_concept_code::varchar  as observation_concept_code
             ,source_concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -123,6 +130,7 @@ with
         ,date
         , null as clinical_end_date
         , null as problem_order
+        , observation_type
         , snomed_code::varchar  as concept_code
         , snomed_decription as concept_name
         , 'SNOMED' as observation_vocabulary
@@ -166,6 +174,7 @@ select
     date,
     clinical_end_date,
     problem_order,
+    observation_type,
     observation_concept_code,
     observation_concept_name,
     observation_vocabulary
