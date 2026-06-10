@@ -8,23 +8,13 @@
 -- - Rule 2: latest NAFLD fibrosis score > 1.3 and <= 3.25 and latest
 --   ELF score (vs2) >= 9.8 -> include, else exclude
 --
--- Parent register note: EMIS parent is 'LTC LCS: NAFLD Register v2*' (fatty
--- liver + MASLD codes), implemented here directly from the EMIS valuesets
--- (nafld_reg_v2_vs1/vs2). fct_person_nafld_register (MASLD diagnosis cluster)
--- captures roughly half the EMIS register (-48.5% vs the 1 Mar 2026 extract),
--- so it is not used as the parent until the register cluster is widened.
-
 with
--- Parent population: active patients matching the EMIS NAFLD Register v2
--- valuesets (fatty liver conditions + MASLD/MASH codes)
+-- Parent population: Patients currently on the LTC LCS NAFLD register
+-- (the EMIS NAFLD Register v2 definition; broader than the MASLD-cluster
+-- fct_person_nafld_register)
 nafld_register as (
-    select distinct p.person_id
-    from (
-        select person_id from ({{ get_ltc_lcs_observations("nafld_reg_v2_vs1") }})
-        union
-        select person_id from ({{ get_ltc_lcs_observations("nafld_reg_v2_vs2") }})
-    ) p
-    inner join {{ ref('dim_person_active_patients') }} ap on p.person_id = ap.person_id
+    select distinct person_id
+    from {{ ref('int_ltc_lcs_nafld_register') }}
 ),
 
 -- Latest NAFLD fibrosis score within the last 3 years
