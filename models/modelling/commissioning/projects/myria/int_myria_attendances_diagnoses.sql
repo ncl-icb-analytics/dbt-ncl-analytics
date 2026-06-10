@@ -29,7 +29,7 @@ SELECT
         ip.reg_practice_at_event,
         DATEDIFF(MM,ip.END_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago -- use this in int_myria_conditions to flag 6 mth/1 year/2 year periods
     FROM
-       {{ ref("obt_encounter_apc") }} ip
+       {{ ref("int_sus_apc_encounter") }} ip
     LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx
         ON ip.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE 

@@ -31,7 +31,7 @@ admitted_spells_summary as (
         , main_specialty_code as main_specialty
         , treatment_function_code as treatment_function
         , source
-    from {{ ref('obt_encounter_apc') }}),
+    from {{ ref('int_sus_apc_encounter') }}),
 
 -- Outpatient
 outpatient_appts_summary as (

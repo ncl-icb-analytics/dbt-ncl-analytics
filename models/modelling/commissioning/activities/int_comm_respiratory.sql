@@ -62,7 +62,7 @@ ae_diagnosis as ( -- likely to be too permissive as all diagnosis codes are reco
 -- Admitted
 admitted_spells_summary as (
     select visit_occurrence_id
-    from {{ ref('obt_encounter_apc') }}
+    from {{ ref('int_sus_apc_encounter') }}
     where (
             {% for prefix in icd10_prefix_list %}
                 startswith(primary_diagnosis_code, '{{ prefix }}')

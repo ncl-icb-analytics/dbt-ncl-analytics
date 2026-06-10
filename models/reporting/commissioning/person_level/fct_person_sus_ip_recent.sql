@@ -1,7 +1,7 @@
 with 
 base_encounters as (
     select *
-    from {{ ref('obt_encounter_apc') }}
+    from {{ ref('int_sus_apc_encounter') }}
     where start_date between dateadd(month, -12, current_date()) and current_date()
 ),  
 apc_encounter_summary as(
