@@ -67,7 +67,7 @@ gp_events as (
     from {{ ref('int_appointment_gp_clinical') }} gpa
     inner join inclusion_list il on il.olids_id = gpa.person_id
     where gpa.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
-    and gpa.is attended = TRUE
+    and gpa.is_attended = TRUE
 ), 
 
 complete_events as (
