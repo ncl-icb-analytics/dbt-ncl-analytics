@@ -24,7 +24,7 @@
 
 with ae_attendance_summary as (
     select visit_occurrence_id
-    from {{ ref('obt_encounter_uec') }}
+    from {{ ref('int_sus_uec_encounter') }}
     where 
         -- respiratory chief complaint
         chief_complaint_ecds_group1 = 'Airway / breathing' 

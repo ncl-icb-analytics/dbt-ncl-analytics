@@ -92,7 +92,7 @@ SELECT
         ae.reg_practice_at_event,
         DATEDIFF(MM,ae.START_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago
     FROM 
-       {{ ref("obt_encounter_uec") }} ae
+       {{ ref("int_sus_uec_encounter") }} ae
     LEFT JOIN {{ ref("int_sus_ae_diagnosis") }} dx
         ON ae.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE

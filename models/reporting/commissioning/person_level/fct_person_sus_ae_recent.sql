@@ -1,6 +1,6 @@
 with base_encounters as (
     select *
-    from {{ ref('obt_encounter_uec') }}
+    from {{ ref('int_sus_uec_encounter') }}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     and sk_patient_id is not null and sk_patient_id != '1'
 ),  
