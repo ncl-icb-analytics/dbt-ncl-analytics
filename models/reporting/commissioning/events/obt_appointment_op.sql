@@ -14,29 +14,32 @@ select
     , site_id
     , site_name
     , start_date
-    , end_date
-    , duration
-    , duration_to_date
-    , spell_admission_method
-    , admission_method_name
-    , admission_method_group
-    , admission_patient_classification
+    , expected_duration
+    , appointment_outcome
+    , outcome_desc
+    , appointment_attended_or_dna
+    , appointment_attendance_outcome_desc
+    , appointment_first_attendance
+    , first_attendance_desc
     , pod
     , primary_diagnosis_code
-    , secondary_diagnosis_code
-    , primary_treatment
+    , primary_diagnosis_name
+    , primary_procedure_code
+    , primary_procedure_category
+    , primary_procedure_name
     , main_specialty_code
     , main_specialty_name
     , main_specialty_category
     , treatment_function_code
     , treatment_function_code_desc
-    , hrg_code
+    , referral_acuity
+    , referral_acuity_desc
+    , spec_comm_flag
+    , spec_comm
+    , core_hrg_code
     , core_hrg_desc
     , core_hrg_chapter
     , core_hrg_chapter_desc
-    , spec_comm_flag
-    , spec_comm
-    , type
     , cost
     , age_at_event
     , gender_at_event
@@ -49,4 +52,4 @@ select
     , imd_at_event
     , reg_practice_at_event
     , visit_occurrence_type
-from {{ ref('int_sus_apc_encounter') }}
+from {{ ref('int_sus_op_appointment') }}

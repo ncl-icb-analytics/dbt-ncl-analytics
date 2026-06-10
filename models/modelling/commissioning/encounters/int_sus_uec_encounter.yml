@@ -1,7 +1,7 @@
 
 models:
-  - name: obt_encounter_uec
-    description: "Reporting layer for urgent and emergency care encounters from SUS data."
+  - name: int_sus_uec_encounter
+    description: "Event history for emergency encounters from SUS data. More information: https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/emergency-care-data-set-ecds/ecds-guidance"
     config:
       meta:
         owner:

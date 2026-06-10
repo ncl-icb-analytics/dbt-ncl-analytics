@@ -1,7 +1,7 @@
 
 models:
-  - name: obt_encounter_apc
-    description: "Reporting layer for admitted patient care encounters from SUS data."
+  - name: int_sus_apc_encounter
+    description: "Event history for admitted patient care encounters from SUS data"
     config:
       meta:
         owner:

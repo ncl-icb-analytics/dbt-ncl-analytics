@@ -24,7 +24,7 @@
 
 with ae_attendance_summary as (
     select visit_occurrence_id
-    from {{ ref('obt_encounter_uec') }}
+    from {{ ref('int_sus_uec_encounter') }}
     where 
         -- respiratory chief complaint
         chief_complaint_ecds_group1 = 'Airway / breathing' 
@@ -62,7 +62,7 @@ ae_diagnosis as ( -- likely to be too permissive as all diagnosis codes are reco
 -- Admitted
 admitted_spells_summary as (
     select visit_occurrence_id
-    from {{ ref('obt_encounter_apc') }}
+    from {{ ref('int_sus_apc_encounter') }}
     where (
             {% for prefix in icd10_prefix_list %}
                 startswith(primary_diagnosis_code, '{{ prefix }}')
@@ -93,7 +93,7 @@ admitted_procedure_hrg as (
 -- Notable exclusion: respiratory infections (J1*, J2*, B97.4)
 outpatient_appts_summary as (
     select visit_occurrence_id
-    from {{ ref('obt_appointment_outpatient') }}
+    from {{ ref('int_sus_op_appointment') }}
     where main_specialty_code IN {{ to_sql_list(specialty_list) }}
       or treatment_function_code IN {{ to_sql_list(specialty_list) }}
       or (

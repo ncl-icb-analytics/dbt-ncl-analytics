@@ -14,7 +14,7 @@ with ae_attendance_summary as (
         , main_specialty_code as main_specialty
         , null as treatment_function
         , source
-    from {{ ref('obt_encounter_uec') }}),
+    from {{ ref('int_sus_uec_encounter') }}),
 
 -- Admitted
 admitted_spells_summary as (
@@ -31,7 +31,7 @@ admitted_spells_summary as (
         , main_specialty_code as main_specialty
         , treatment_function_code as treatment_function
         , source
-    from {{ ref('obt_encounter_apc') }}),
+    from {{ ref('int_sus_apc_encounter') }}),
 
 -- Outpatient
 outpatient_appts_summary as (
@@ -48,7 +48,7 @@ outpatient_appts_summary as (
         , main_specialty_code as main_specialty
         , treatment_function_code as treatment_function
         , source
-    from {{ ref('obt_appointment_outpatient') }}),
+    from {{ ref('int_sus_op_appointment') }}),
 
 primary_encounters_summary as (
     select *

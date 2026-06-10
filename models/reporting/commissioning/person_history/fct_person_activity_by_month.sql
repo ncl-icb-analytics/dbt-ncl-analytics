@@ -28,7 +28,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , sum(cost) as cost
         , sum(duration) as duration
     from 
-        {{ ref('obt_encounter_uec') }}
+        {{ ref('int_sus_uec_encounter') }}
     where 
         sk_patient_id is not null and sk_patient_id != '1'
     group by 
@@ -55,7 +55,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
             )
         ) as duration
     from 
-        {{ ref('obt_encounter_apc') }} as e
+        {{ ref('int_sus_apc_encounter') }} as e
     left join -- join all months during the spell
         date_range as d
         on d.month_start_date <= coalesce(e.end_date, current_date)
@@ -75,7 +75,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , sum(cost) as cost
         , sum(expected_duration) as duration
     from 
-        {{ ref('obt_encounter_outpatient') }}
+        {{ ref('int_sus_op_encounter') }}
     where 
         sk_patient_id is not null and sk_patient_id != '1'
     group by 
@@ -88,12 +88,12 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , 'PrimaryCare' as activity_type
         , null::varchar as activity_subtype
         , count(*) as encounters
-        , null::number as cost -- TO DO: replace with pricing from reference book according to app type?
-        , sum(actual_duration_mins) as duration
+        , sum(zeroifnull(appointment_cost_gbp_nominal)) as cost -- TO DO: replace with pricing from reference book according to app type?
+        , sum(zeroifnull(duration_minutes)) as duration
     from 
-        {{ ref('obt_appointment_gp') }} gpa
+        {{ ref('int_appointment_gp_clinical') }} gpa
     left join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
-    where gpa.code not in ('3', '0') -- Attended
+    where gpa.is_attended = TRUE -- Attended
     group by 
         pp.sk_patient_id, date_trunc('month', start_date)
 )
