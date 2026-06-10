@@ -1,7 +1,7 @@
 -- LTC LCS: Asthma Adult Register - Priority Group 1 (High Risk & Complex)
 -- Parent population: Asthma register, age >= 18
 -- EMIS source: 'On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)*'
--- (docs/emis_specs/ltc_lcs_rs/on_asthma_adult_register_ltc_lcs_priority_group_1_hrc.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_asthma_adult_register_ltc_lcs_priority_group_1_hrc.md)
 --
 -- Rule chain:
 -- - Rule 1: biologic order (vs1: omalizumab, mepolizumab, reslizumab,

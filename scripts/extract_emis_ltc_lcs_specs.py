@@ -22,7 +22,7 @@ from pathlib import Path
 BASE_URL = "https://emis-xml-to-snomed.vercel.app"
 DEFAULT_PATHNAME = "xml-files/NCL LTC LCS R5 updated 27112025.xml"
 DEFAULT_FOLDER_FILTER = "Risk Stratification R2"
-DEFAULT_OUT_DIR = "docs/emis_specs/ltc_lcs_rs"
+DEFAULT_OUT_DIR = "docs/emis_specs/ltc_lcs_r5/risk_stratification/specs"
 
 
 def api(path, body=None, timeout=120):

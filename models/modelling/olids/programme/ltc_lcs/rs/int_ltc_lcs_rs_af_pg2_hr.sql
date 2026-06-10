@@ -1,7 +1,7 @@
 -- LTC LCS: AF Register - Priority Group 2 (High Risk)
 -- Parent population: AF register
 -- EMIS source: 'On AF Register- LTC LCS Priority Group 2 (HR)*'
--- (docs/emis_specs/ltc_lcs_rs/on_af_register_ltc_lcs_priority_group_2_hr.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_af_register_ltc_lcs_priority_group_2_hr.md)
 --
 -- Rule chain:
 -- - Rule 1 (gate): anticoagulant therapy in last 6 months - oral anticoagulants (vs1),

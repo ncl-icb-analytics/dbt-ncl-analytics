@@ -2,7 +2,7 @@
 -- Parent population: HF register
 -- NB: there is no PG1 for HF.
 -- EMIS source: 'On HF Register- LTC LCS Priority Group 2 (HR)*'
--- (docs/emis_specs/ltc_lcs_rs/on_hf_register_ltc_lcs_priority_group_2_hr.md;
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_hf_register_ltc_lcs_priority_group_2_hr.md;
 -- rule actions verified against the EMIS search screenshots in issue #400,
 -- which are canonical where the XML parse disagrees)
 --

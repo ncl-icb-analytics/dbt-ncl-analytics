@@ -1,7 +1,7 @@
 -- LTC LCS: PAD Register - Priority Group 1 (High Risk & Complex)
 -- Parent population: PAD register
 -- EMIS source: 'On PAD Register- LTC LCS Priority Group 1 (HRC)'
--- (docs/emis_specs/ltc_lcs_rs/on_pad_register_ltc_lcs_priority_group_1_hrc.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_pad_register_ltc_lcs_priority_group_1_hrc.md)
 --
 -- Rule chain:
 -- - Rule 1: peripheral ischaemia code (vs1) in last 90 days -> include

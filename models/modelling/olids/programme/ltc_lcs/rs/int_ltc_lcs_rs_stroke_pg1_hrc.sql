@@ -1,7 +1,7 @@
 -- LTC LCS: Stroke/TIA Register - Priority Group 1 (High Risk & Complex)
 -- Parent population: Stroke/TIA register
 -- EMIS source: 'On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)*'
--- (docs/emis_specs/ltc_lcs_rs/on_stroke_tia_register_ltc_lcs_priority_group_1_hrc.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_stroke_tia_register_ltc_lcs_priority_group_1_hrc.md)
 --
 -- Rule chain:
 -- - Rule 1a: stroke (vs1, STRK_COD) or TIA (vs2, TIA_COD) code in last 30 days

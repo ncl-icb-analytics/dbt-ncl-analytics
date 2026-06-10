@@ -1,7 +1,7 @@
 -- LTC LCS: Asthma Adult Register - Priority Group 4 (Low Risk)
 -- Parent population: Asthma register, age >= 18, excluding PG1-PG3
 -- EMIS source: 'On Asthma(Adult) Register- LTC LCS Priority Group 4 (LR)*'
--- (docs/emis_specs/ltc_lcs_rs/on_asthma_adult_register_ltc_lcs_priority_group_4_lr.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_asthma_adult_register_ltc_lcs_priority_group_4_lr.md)
 --
 -- Rule chain:
 -- - Rule 1 (gate): excludes PG1 (HRC), PG2 (HR) and PG3 (MR) patients

@@ -1,7 +1,7 @@
 -- LTC LCS: NAFLD Register - Priority Group 3 (Medium Risk)
 -- Parent population: NAFLD register
 -- EMIS source: 'On NAFLD Register- LTC LCS Priority Group 3 (MR)'
--- (docs/emis_specs/ltc_lcs_rs/on_nafld_register_ltc_lcs_priority_group_3_mr.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_nafld_register_ltc_lcs_priority_group_3_mr.md)
 --
 -- Rule chain (latest = latest reading within the last 3 years):
 -- - Rule 1: latest NAFLD fibrosis score (vs1) > 3.25 -> include

@@ -1,0 +1,738 @@
+[
+  {
+    "issue": 393,
+    "title": "LTC LCS Risk Stratification: Base Population",
+    "section": "EMIS Search Definition",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/393",
+    "attachment_url": "https://github.com/user-attachments/assets/6e0be299-e124-4997-b85c-40f051d304e2",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-393-ltc-lcs-risk-stratification-base-population/01-emis-search-definition-01-6e0be299.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/9cd246d7-ec7e-4c06-a603-8898c3e2da2b",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/01-priority-group-2-hr-01-9cd246d7.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/fa943b8e-907d-4c88-9788-39d6c5389312",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/02-priority-group-2-hr-02-fa943b8e.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/0a4b55b4-1856-414a-90cf-2f9219c293a6",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/03-priority-group-2-hr-03-0a4b55b4.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/e1f787f9-a2e7-4e5a-8d74-acbcb9d29502",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/04-priority-group-2-hr-04-e1f787f9.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/811f3080-d2b6-4786-b2d9-a34c2703e315",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/05-priority-group-3-mr-01-811f3080.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/7ebb1850-0702-4a02-bce0-05ea7322eeab",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/06-priority-group-3-mr-02-7ebb1850.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/a8abb0ae-4c39-440f-9ece-3cc1b5ac45ab",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/07-priority-group-3-mr-03-a8abb0ae.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/3a1038d4-d77c-4047-b01e-9b568429195a",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/08-priority-group-3-mr-04-3a1038d4.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/c3010407-7ff6-4a97-b041-868b5a175387",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/09-priority-group-3-mr-05-c3010407.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/b839a0ca-ae2a-49c3-93c3-3bd79e75912f",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/10-priority-group-3-mr-06-b839a0ca.png"
+  },
+  {
+    "issue": 394,
+    "title": "LTC LCS Risk Stratification: AF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/394",
+    "attachment_url": "https://github.com/user-attachments/assets/a0181a33-a730-443f-9aad-a9ebbebe88b5",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-394-ltc-lcs-risk-stratification-af-register/11-priority-group-3-mr-07-a0181a33.png"
+  },
+  {
+    "issue": 395,
+    "title": "LTC LCS Risk Stratification: Asthma Adult Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/395",
+    "attachment_url": "https://github.com/user-attachments/assets/5d259b5f-64e6-43f5-a437-8333908bd5be",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/01-priority-group-1-hrc-01-5d259b5f.png"
+  },
+  {
+    "issue": 395,
+    "title": "LTC LCS Risk Stratification: Asthma Adult Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/395",
+    "attachment_url": "https://github.com/user-attachments/assets/e84cc77a-dd48-4080-8b0a-7d159eb423d6",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/02-priority-group-2-hr-01-e84cc77a.png"
+  },
+  {
+    "issue": 395,
+    "title": "LTC LCS Risk Stratification: Asthma Adult Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/395",
+    "attachment_url": "https://github.com/user-attachments/assets/e71a976f-1657-4282-a8d5-3372dcfe46a0",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/03-priority-group-2-hr-02-e71a976f.png"
+  },
+  {
+    "issue": 395,
+    "title": "LTC LCS Risk Stratification: Asthma Adult Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/395",
+    "attachment_url": "https://github.com/user-attachments/assets/9bf62237-5ae2-458b-8587-309ec29f46a2",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/04-priority-group-3-mr-01-9bf62237.png"
+  },
+  {
+    "issue": 395,
+    "title": "LTC LCS Risk Stratification: Asthma Adult Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/395",
+    "attachment_url": "https://github.com/user-attachments/assets/12b300e3-9cdb-48d8-88ad-9e8bc6204971",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/05-priority-group-3-mr-02-12b300e3.png"
+  },
+  {
+    "issue": 395,
+    "title": "LTC LCS Risk Stratification: Asthma Adult Register",
+    "section": "Priority Group 4 (LR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/395",
+    "attachment_url": "https://github.com/user-attachments/assets/1900ac2d-5f4b-42f3-bf76-99a5615c78e4",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/06-priority-group-4-lr-01-1900ac2d.png"
+  },
+  {
+    "issue": 396,
+    "title": "LTC LCS Risk Stratification: Asthma CYP Register",
+    "section": "Register Definition",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/396",
+    "attachment_url": "https://github.com/user-attachments/assets/8760d311-30d2-4832-9fcb-3b77ba632ed2",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/01-register-definition-01-8760d311.png"
+  },
+  {
+    "issue": 396,
+    "title": "LTC LCS Risk Stratification: Asthma CYP Register",
+    "section": "Priority Group 2 (HR) V2",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/396",
+    "attachment_url": "https://github.com/user-attachments/assets/21031cf7-9377-4dc5-8dc5-199bdc395978",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/02-priority-group-2-hr-v2-01-21031cf7.png"
+  },
+  {
+    "issue": 396,
+    "title": "LTC LCS Risk Stratification: Asthma CYP Register",
+    "section": "Priority Group 2 (HR) V2",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/396",
+    "attachment_url": "https://github.com/user-attachments/assets/4de7ac21-e91e-4197-9476-86305a3fe027",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/03-priority-group-2-hr-v2-02-4de7ac21.png"
+  },
+  {
+    "issue": 396,
+    "title": "LTC LCS Risk Stratification: Asthma CYP Register",
+    "section": "Priority Group 4 (LR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/396",
+    "attachment_url": "https://github.com/user-attachments/assets/b2b20aa9-21ad-4f5c-ac4f-9c16488d70f5",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/04-priority-group-4-lr-01-b2b20aa9.png"
+  },
+  {
+    "issue": 397,
+    "title": "LTC LCS Risk Stratification: CHD Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/397",
+    "attachment_url": "https://github.com/user-attachments/assets/a892bd3e-d385-436d-a495-b52939705859",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-397-ltc-lcs-risk-stratification-chd-register/01-priority-group-1-hrc-01-a892bd3e.png"
+  },
+  {
+    "issue": 397,
+    "title": "LTC LCS Risk Stratification: CHD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/397",
+    "attachment_url": "https://github.com/user-attachments/assets/30d7b12a-2451-4456-bfcf-c292d3609581",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-397-ltc-lcs-risk-stratification-chd-register/02-priority-group-2-hr-01-30d7b12a.png"
+  },
+  {
+    "issue": 397,
+    "title": "LTC LCS Risk Stratification: CHD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/397",
+    "attachment_url": "https://github.com/user-attachments/assets/520dda6f-cdc8-4ee9-8706-1459c4f76645",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-397-ltc-lcs-risk-stratification-chd-register/03-priority-group-3-mr-01-520dda6f.png"
+  },
+  {
+    "issue": 398,
+    "title": "LTC LCS Risk Stratification: CKD Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/398",
+    "attachment_url": "https://github.com/user-attachments/assets/a352589b-0e3a-45bf-a007-01d2b7be097b",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-398-ltc-lcs-risk-stratification-ckd-register/01-priority-group-1-hrc-01-a352589b.png"
+  },
+  {
+    "issue": 398,
+    "title": "LTC LCS Risk Stratification: CKD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/398",
+    "attachment_url": "https://github.com/user-attachments/assets/14f9fc84-9d75-4e76-8aa9-0d68b7d6a7ab",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-398-ltc-lcs-risk-stratification-ckd-register/02-priority-group-2-hr-01-14f9fc84.png"
+  },
+  {
+    "issue": 398,
+    "title": "LTC LCS Risk Stratification: CKD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/398",
+    "attachment_url": "https://github.com/user-attachments/assets/81dfeeea-bd51-425b-8332-66c7339bbaad",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-398-ltc-lcs-risk-stratification-ckd-register/03-priority-group-2-hr-02-81dfeeea.png"
+  },
+  {
+    "issue": 398,
+    "title": "LTC LCS Risk Stratification: CKD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/398",
+    "attachment_url": "https://github.com/user-attachments/assets/5826ae0f-70cd-4041-9e5a-0864fc2f40a4",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-398-ltc-lcs-risk-stratification-ckd-register/04-priority-group-2-hr-03-5826ae0f.png"
+  },
+  {
+    "issue": 398,
+    "title": "LTC LCS Risk Stratification: CKD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/398",
+    "attachment_url": "https://github.com/user-attachments/assets/86576789-c328-4e4e-81c6-566d91b63e8f",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-398-ltc-lcs-risk-stratification-ckd-register/05-priority-group-2-hr-04-86576789.png"
+  },
+  {
+    "issue": 398,
+    "title": "LTC LCS Risk Stratification: CKD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/398",
+    "attachment_url": "https://github.com/user-attachments/assets/67bad4e8-b8e3-414e-a276-1a550b8716e8",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-398-ltc-lcs-risk-stratification-ckd-register/06-priority-group-3-mr-01-67bad4e8.png"
+  },
+  {
+    "issue": 398,
+    "title": "LTC LCS Risk Stratification: CKD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/398",
+    "attachment_url": "https://github.com/user-attachments/assets/f008d6d4-8a98-4640-a412-cb6f25089dde",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-398-ltc-lcs-risk-stratification-ckd-register/07-priority-group-3-mr-02-f008d6d4.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/999c42e5-943e-426c-aecb-6b04cbb8cb29",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/01-priority-group-1-hrc-01-999c42e5.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/a9f849b7-294d-497e-b54c-a41a8fc7c47b",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/02-priority-group-1-hrc-02-a9f849b7.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/02140f16-af0f-4111-9fef-1540b97d2a5d",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/03-priority-group-2-hr-01-02140f16.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/5249064f-d2fb-4d7f-b7ea-d1cfc15834a3",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/04-priority-group-2-hr-02-5249064f.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/aca04115-9986-4b40-ab3a-7e3278bb7b88",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/05-priority-group-3-mr-01-aca04115.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3A (MRa)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/614c52df-b8a0-4179-bdeb-57fd09d86c0a",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/06-priority-group-3a-mra-01-614c52df.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3A (MRa)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/e082e6c9-ee67-452c-8b65-c85696e09cfd",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/07-priority-group-3a-mra-02-e082e6c9.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3A (MRa)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/d7944d2e-0f0a-4b36-b4d6-67bd3b0e076d",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/08-priority-group-3a-mra-03-d7944d2e.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3B (MRb)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/49109062-9793-4a21-b388-f8688d7fc60c",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/09-priority-group-3b-mrb-01-49109062.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3B (MRb)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/908b5a75-2c5a-4cbc-9005-884e41d4f8f6",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/10-priority-group-3b-mrb-02-908b5a75.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3B (MRb)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/11b40316-8d03-4958-bfba-d2f3bc033f4a",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/11-priority-group-3b-mrb-03-11b40316.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 3B (MRb)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/413aaa12-d1a3-4e44-a813-e715c1d0631d",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/12-priority-group-3b-mrb-04-413aaa12.png"
+  },
+  {
+    "issue": 399,
+    "title": "LTC LCS Risk Stratification: Diabetes Register",
+    "section": "Priority Group 4 (LR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/399",
+    "attachment_url": "https://github.com/user-attachments/assets/465c2fa6-576d-4dc4-a31e-8fffa7aa31a8",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/13-priority-group-4-lr-01-465c2fa6.png"
+  },
+  {
+    "issue": 400,
+    "title": "LTC LCS Risk Stratification: HF Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/400",
+    "attachment_url": "https://github.com/user-attachments/assets/77c4ac4e-ab53-4d8d-9136-19f3c1d21ce7",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-400-ltc-lcs-risk-stratification-hf-register/01-priority-group-2-hr-01-77c4ac4e.png"
+  },
+  {
+    "issue": 400,
+    "title": "LTC LCS Risk Stratification: HF Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/400",
+    "attachment_url": "https://github.com/user-attachments/assets/b5497d0c-a194-4151-8136-d759fbd7013c",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-400-ltc-lcs-risk-stratification-hf-register/02-priority-group-2-hr-02-b5497d0c.png"
+  },
+  {
+    "issue": 400,
+    "title": "LTC LCS Risk Stratification: HF Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/400",
+    "attachment_url": "https://github.com/user-attachments/assets/6d47b8a9-727f-4628-8a49-4d6271a51f27",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-400-ltc-lcs-risk-stratification-hf-register/03-priority-group-2-hr-03-6d47b8a9.png"
+  },
+  {
+    "issue": 400,
+    "title": "LTC LCS Risk Stratification: HF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/400",
+    "attachment_url": "https://github.com/user-attachments/assets/32bb8b5c-d787-42e3-b5c0-cfc60612ec83",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-400-ltc-lcs-risk-stratification-hf-register/04-priority-group-3-mr-01-32bb8b5c.png"
+  },
+  {
+    "issue": 400,
+    "title": "LTC LCS Risk Stratification: HF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/400",
+    "attachment_url": "https://github.com/user-attachments/assets/0d20a2fd-d980-4c70-bcd2-f53b40ed604d",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-400-ltc-lcs-risk-stratification-hf-register/05-priority-group-3-mr-02-0d20a2fd.png"
+  },
+  {
+    "issue": 400,
+    "title": "LTC LCS Risk Stratification: HF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/400",
+    "attachment_url": "https://github.com/user-attachments/assets/a49edf10-cf18-494a-86ff-78b91c99d158",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-400-ltc-lcs-risk-stratification-hf-register/06-priority-group-3-mr-03-a49edf10.png"
+  },
+  {
+    "issue": 400,
+    "title": "LTC LCS Risk Stratification: HF Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/400",
+    "attachment_url": "https://github.com/user-attachments/assets/1029343a-9873-47a4-be23-e41635bd9d7d",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-400-ltc-lcs-risk-stratification-hf-register/07-priority-group-3-mr-04-1029343a.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 1 (HRC) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/763d7aa9-3989-4255-8fc4-c1044b6e2425",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/01-priority-group-1-hrc-v3-01-763d7aa9.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 1 (HRC) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/d952623a-6c59-4160-9aea-14b038164ae6",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/02-priority-group-1-hrc-v3-02-d952623a.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 1 (HRC) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/2fa57438-8f8e-41e9-8f99-c880d924981d",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/03-priority-group-1-hrc-v3-03-2fa57438.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 2 (HR) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/4a30c3ee-1842-4b49-879c-fb20087d715b",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/04-priority-group-2-hr-v3-01-4a30c3ee.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3A (MRa) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/5771b972-3d29-461b-8147-8308bbffcd94",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/05-priority-group-3a-mra-v3-01-5771b972.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3A (MRa) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/f5a54368-66fb-46e1-90e7-731b5019042c",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/06-priority-group-3a-mra-v3-02-f5a54368.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3A (MRa) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/8027d961-b070-46ec-9b66-f40ce2798e1b",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/07-priority-group-3a-mra-v3-03-8027d961.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3A (MRa) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/44a4def9-7091-4a99-8aec-c431f7fae01a",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/08-priority-group-3a-mra-v3-04-44a4def9.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3B (MRb) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/c17e878c-8409-49dc-9949-c6afafbb722b",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/09-priority-group-3b-mrb-v3-01-c17e878c.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3B (MRb) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/ea3e5348-474e-4b83-b9fd-609e0f4a6284",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/10-priority-group-3b-mrb-v3-02-ea3e5348.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3B (MRb) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/326e0833-b0c2-4eee-b134-67b20576bfb6",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/11-priority-group-3b-mrb-v3-03-326e0833.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3B (MRb) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/0f965b51-ad21-48fd-bc84-d50d344f1841",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/12-priority-group-3b-mrb-v3-04-0f965b51.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3B (MRb) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/2b2d91df-abc4-4312-b3e8-798a57871032",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/13-priority-group-3b-mrb-v3-05-2b2d91df.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 3B (MRb) v3",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/db273be6-bdea-4295-bab0-4080feef8fd0",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/14-priority-group-3b-mrb-v3-06-db273be6.png"
+  },
+  {
+    "issue": 401,
+    "title": "LTC LCS Risk Stratification: Hypertension Register",
+    "section": "Priority Group 4 (LR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/401",
+    "attachment_url": "https://github.com/user-attachments/assets/6fe82087-853f-4411-8122-a000c99d98af",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/15-priority-group-4-lr-01-6fe82087.png"
+  },
+  {
+    "issue": 402,
+    "title": "LTC LCS Risk Stratification: NAFLD Register",
+    "section": "Register Definition",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/402",
+    "attachment_url": "https://github.com/user-attachments/assets/679e6200-3385-457e-af55-ba71a25cc8b9",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-402-ltc-lcs-risk-stratification-nafld-register/01-register-definition-01-679e6200.png"
+  },
+  {
+    "issue": 402,
+    "title": "LTC LCS Risk Stratification: NAFLD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/402",
+    "attachment_url": "https://github.com/user-attachments/assets/7d8bbed1-6710-4558-a111-70875b034c0f",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-402-ltc-lcs-risk-stratification-nafld-register/02-priority-group-3-mr-01-7d8bbed1.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/181762c4-e865-4406-8341-c024c3a35aee",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/01-priority-group-1-hrc-01-181762c4.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/524cdb45-6186-40a6-8fc8-cde879de8a27",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/02-priority-group-2-hr-01-524cdb45.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/049b244e-5c70-4701-a1ae-b0525fae7d21",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/03-priority-group-2-hr-02-049b244e.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/c2f180ff-a3c3-4a3b-b41a-8865545c8a64",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/04-priority-group-2-hr-03-c2f180ff.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/525935a0-60f3-4935-88de-ee90a37cf580",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/05-priority-group-2-hr-04-525935a0.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/f86a61c0-be09-438c-924f-a021eb5551f8",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/06-priority-group-2-hr-05-f86a61c0.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/ee3392de-b2d0-4ad9-993e-02df3e32083c",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/07-priority-group-2-hr-06-ee3392de.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/55d048b5-bd6d-41f1-ae65-468fbd354394",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/08-priority-group-2-hr-07-55d048b5.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/b07c5ff2-a84e-4915-a700-cdccbdbeb4a7",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/09-priority-group-3-mr-01-b07c5ff2.png"
+  },
+  {
+    "issue": 403,
+    "title": "LTC LCS Risk Stratification: PAD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/403",
+    "attachment_url": "https://github.com/user-attachments/assets/ee47bc19-5899-45cb-a967-19f8cfc4e135",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-403-ltc-lcs-risk-stratification-pad-register/10-priority-group-3-mr-02-ee47bc19.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/d3597c65-c5be-4c00-a782-d51c52f58422",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/01-priority-group-1-hrc-01-d3597c65.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/30c72546-b86d-44d2-aa33-202651500b63",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/02-priority-group-2-hr-01-30c72546.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/c78e4856-2f85-4291-974a-06ee3d869fe1",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/03-priority-group-2-hr-02-c78e4856.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/ec289595-3e1d-4414-9af7-0269dfb65979",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/04-priority-group-2-hr-03-ec289595.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/d7797a09-29f3-47a1-a664-5bf97a0aca55",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/05-priority-group-2-hr-04-d7797a09.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/820bface-857e-4078-81f7-3afb5cefb771",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/06-priority-group-2-hr-05-820bface.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/8c8b94f9-f41d-4475-9cf1-5e0af52833ce",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/07-priority-group-2-hr-06-8c8b94f9.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/a78561d0-cb32-4baa-9409-b84f2de1e2d8",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/08-priority-group-3-mr-01-a78561d0.png"
+  },
+  {
+    "issue": 404,
+    "title": "LTC LCS Risk Stratification: Stroke/TIA Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/404",
+    "attachment_url": "https://github.com/user-attachments/assets/3b34d72b-8a42-4235-a9bd-f2b0644056e4",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/09-priority-group-3-mr-02-3b34d72b.png"
+  },
+  {
+    "issue": 406,
+    "title": "LTC LCS Risk Stratification: COPD Register",
+    "section": "Priority Group 1 (HRC)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/406",
+    "attachment_url": "https://github.com/user-attachments/assets/817ce6a3-698f-4d1f-90b3-53b4838cebbe",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-406-ltc-lcs-risk-stratification-copd-register/01-priority-group-1-hrc-01-817ce6a3.png"
+  },
+  {
+    "issue": 406,
+    "title": "LTC LCS Risk Stratification: COPD Register",
+    "section": "Priority Group 2 (HR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/406",
+    "attachment_url": "https://github.com/user-attachments/assets/d4a35536-acc5-489d-a7ab-a1a2be24011a",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-406-ltc-lcs-risk-stratification-copd-register/02-priority-group-2-hr-01-d4a35536.png"
+  },
+  {
+    "issue": 406,
+    "title": "LTC LCS Risk Stratification: COPD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/406",
+    "attachment_url": "https://github.com/user-attachments/assets/291a54aa-aaf0-4c2b-8d42-9c46a9359cdf",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-406-ltc-lcs-risk-stratification-copd-register/03-priority-group-3-mr-01-291a54aa.png"
+  },
+  {
+    "issue": 406,
+    "title": "LTC LCS Risk Stratification: COPD Register",
+    "section": "Priority Group 3 (MR)",
+    "source_url": "https://github.com/wnl-icb-analytics/dbt-analytics/issues/406",
+    "attachment_url": "https://github.com/user-attachments/assets/4c46ed99-4bb2-4ac8-bde5-7662ff09da5b",
+    "path": "docs/emis_specs/ltc_lcs_r5/risk_stratification/screenshots/issues/issue-406-ltc-lcs-risk-stratification-copd-register/04-priority-group-3-mr-02-4c46ed99.png"
+  }
+]

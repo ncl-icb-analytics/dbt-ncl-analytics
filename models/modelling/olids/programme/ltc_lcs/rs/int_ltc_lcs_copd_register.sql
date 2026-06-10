@@ -1,6 +1,6 @@
 -- LTC LCS: COPD register
 -- EMIS source: 'LTC LCS: COPD Register*'
--- (docs/emis_specs/ltc_lcs_rs/ltc_lcs_copd_register.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/ltc_lcs_copd_register.md)
 --
 -- The LTC LCS COPD register is broader than the QOF register: it keeps
 -- patients whose COPD has since been coded resolved and patients coded in

@@ -1,7 +1,7 @@
 -- LTC LCS: PAD Register - Priority Group 2 (High Risk)
 -- Parent population: PAD register, excluding PG1 (HRC)
 -- EMIS source: 'On PAD Register- LTC LCS Priority Group 2 (HR)'
--- (docs/emis_specs/ltc_lcs_rs/on_pad_register_ltc_lcs_priority_group_2_hr.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_pad_register_ltc_lcs_priority_group_2_hr.md)
 --
 -- Rule chain:
 -- - Rule 1 (gate): excludes PG1 (HRC) patients
