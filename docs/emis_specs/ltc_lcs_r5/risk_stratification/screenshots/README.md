@@ -1,98 +1,160 @@
 # LTC LCS R5 risk stratification screenshots
 
-Canonical EMIS search-definition screenshots collected from the GitHub issue family for LTC LCS R5 risk stratification.
+Canonical EMIS search-definition screenshots organised by condition. Source issue and attachment URLs are preserved in `manifest.json`.
 
-| Issue | Section | Screenshot | Source |
-| --- | --- | --- | --- |
-| #393 | EMIS Search Definition | [issues/issue-393-ltc-lcs-risk-stratification-base-population/01-emis-search-definition-01-6e0be299.png](issues/issue-393-ltc-lcs-risk-stratification-base-population/01-emis-search-definition-01-6e0be299.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/393) |
-| #394 | Priority Group 2 (HR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/01-priority-group-2-hr-01-9cd246d7.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/01-priority-group-2-hr-01-9cd246d7.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 2 (HR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/02-priority-group-2-hr-02-fa943b8e.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/02-priority-group-2-hr-02-fa943b8e.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 2 (HR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/03-priority-group-2-hr-03-0a4b55b4.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/03-priority-group-2-hr-03-0a4b55b4.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 2 (HR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/04-priority-group-2-hr-04-e1f787f9.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/04-priority-group-2-hr-04-e1f787f9.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 3 (MR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/05-priority-group-3-mr-01-811f3080.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/05-priority-group-3-mr-01-811f3080.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 3 (MR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/06-priority-group-3-mr-02-7ebb1850.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/06-priority-group-3-mr-02-7ebb1850.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 3 (MR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/07-priority-group-3-mr-03-a8abb0ae.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/07-priority-group-3-mr-03-a8abb0ae.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 3 (MR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/08-priority-group-3-mr-04-3a1038d4.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/08-priority-group-3-mr-04-3a1038d4.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 3 (MR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/09-priority-group-3-mr-05-c3010407.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/09-priority-group-3-mr-05-c3010407.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 3 (MR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/10-priority-group-3-mr-06-b839a0ca.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/10-priority-group-3-mr-06-b839a0ca.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #394 | Priority Group 3 (MR) | [issues/issue-394-ltc-lcs-risk-stratification-af-register/11-priority-group-3-mr-07-a0181a33.png](issues/issue-394-ltc-lcs-risk-stratification-af-register/11-priority-group-3-mr-07-a0181a33.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
-| #395 | Priority Group 1 (HRC) | [issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/01-priority-group-1-hrc-01-5d259b5f.png](issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/01-priority-group-1-hrc-01-5d259b5f.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
-| #395 | Priority Group 2 (HR) | [issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/02-priority-group-2-hr-01-e84cc77a.png](issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/02-priority-group-2-hr-01-e84cc77a.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
-| #395 | Priority Group 2 (HR) | [issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/03-priority-group-2-hr-02-e71a976f.png](issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/03-priority-group-2-hr-02-e71a976f.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
-| #395 | Priority Group 3 (MR) | [issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/04-priority-group-3-mr-01-9bf62237.png](issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/04-priority-group-3-mr-01-9bf62237.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
-| #395 | Priority Group 3 (MR) | [issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/05-priority-group-3-mr-02-12b300e3.png](issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/05-priority-group-3-mr-02-12b300e3.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
-| #395 | Priority Group 4 (LR) | [issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/06-priority-group-4-lr-01-1900ac2d.png](issues/issue-395-ltc-lcs-risk-stratification-asthma-adult-register/06-priority-group-4-lr-01-1900ac2d.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
-| #396 | Register Definition | [issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/01-register-definition-01-8760d311.png](issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/01-register-definition-01-8760d311.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
-| #396 | Priority Group 2 (HR) V2 | [issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/02-priority-group-2-hr-v2-01-21031cf7.png](issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/02-priority-group-2-hr-v2-01-21031cf7.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
-| #396 | Priority Group 2 (HR) V2 | [issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/03-priority-group-2-hr-v2-02-4de7ac21.png](issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/03-priority-group-2-hr-v2-02-4de7ac21.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
-| #396 | Priority Group 4 (LR) | [issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/04-priority-group-4-lr-01-b2b20aa9.png](issues/issue-396-ltc-lcs-risk-stratification-asthma-cyp-register/04-priority-group-4-lr-01-b2b20aa9.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
-| #397 | Priority Group 1 (HRC) | [issues/issue-397-ltc-lcs-risk-stratification-chd-register/01-priority-group-1-hrc-01-a892bd3e.png](issues/issue-397-ltc-lcs-risk-stratification-chd-register/01-priority-group-1-hrc-01-a892bd3e.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/397) |
-| #397 | Priority Group 2 (HR) | [issues/issue-397-ltc-lcs-risk-stratification-chd-register/02-priority-group-2-hr-01-30d7b12a.png](issues/issue-397-ltc-lcs-risk-stratification-chd-register/02-priority-group-2-hr-01-30d7b12a.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/397) |
-| #397 | Priority Group 3 (MR) | [issues/issue-397-ltc-lcs-risk-stratification-chd-register/03-priority-group-3-mr-01-520dda6f.png](issues/issue-397-ltc-lcs-risk-stratification-chd-register/03-priority-group-3-mr-01-520dda6f.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/397) |
-| #398 | Priority Group 1 (HRC) | [issues/issue-398-ltc-lcs-risk-stratification-ckd-register/01-priority-group-1-hrc-01-a352589b.png](issues/issue-398-ltc-lcs-risk-stratification-ckd-register/01-priority-group-1-hrc-01-a352589b.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
-| #398 | Priority Group 2 (HR) | [issues/issue-398-ltc-lcs-risk-stratification-ckd-register/02-priority-group-2-hr-01-14f9fc84.png](issues/issue-398-ltc-lcs-risk-stratification-ckd-register/02-priority-group-2-hr-01-14f9fc84.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
-| #398 | Priority Group 2 (HR) | [issues/issue-398-ltc-lcs-risk-stratification-ckd-register/03-priority-group-2-hr-02-81dfeeea.png](issues/issue-398-ltc-lcs-risk-stratification-ckd-register/03-priority-group-2-hr-02-81dfeeea.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
-| #398 | Priority Group 2 (HR) | [issues/issue-398-ltc-lcs-risk-stratification-ckd-register/04-priority-group-2-hr-03-5826ae0f.png](issues/issue-398-ltc-lcs-risk-stratification-ckd-register/04-priority-group-2-hr-03-5826ae0f.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
-| #398 | Priority Group 2 (HR) | [issues/issue-398-ltc-lcs-risk-stratification-ckd-register/05-priority-group-2-hr-04-86576789.png](issues/issue-398-ltc-lcs-risk-stratification-ckd-register/05-priority-group-2-hr-04-86576789.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
-| #398 | Priority Group 3 (MR) | [issues/issue-398-ltc-lcs-risk-stratification-ckd-register/06-priority-group-3-mr-01-67bad4e8.png](issues/issue-398-ltc-lcs-risk-stratification-ckd-register/06-priority-group-3-mr-01-67bad4e8.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
-| #398 | Priority Group 3 (MR) | [issues/issue-398-ltc-lcs-risk-stratification-ckd-register/07-priority-group-3-mr-02-f008d6d4.png](issues/issue-398-ltc-lcs-risk-stratification-ckd-register/07-priority-group-3-mr-02-f008d6d4.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
-| #399 | Priority Group 1 (HRC) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/01-priority-group-1-hrc-01-999c42e5.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/01-priority-group-1-hrc-01-999c42e5.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 1 (HRC) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/02-priority-group-1-hrc-02-a9f849b7.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/02-priority-group-1-hrc-02-a9f849b7.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 2 (HR) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/03-priority-group-2-hr-01-02140f16.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/03-priority-group-2-hr-01-02140f16.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 2 (HR) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/04-priority-group-2-hr-02-5249064f.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/04-priority-group-2-hr-02-5249064f.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3 (MR) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/05-priority-group-3-mr-01-aca04115.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/05-priority-group-3-mr-01-aca04115.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3A (MRa) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/06-priority-group-3a-mra-01-614c52df.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/06-priority-group-3a-mra-01-614c52df.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3A (MRa) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/07-priority-group-3a-mra-02-e082e6c9.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/07-priority-group-3a-mra-02-e082e6c9.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3A (MRa) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/08-priority-group-3a-mra-03-d7944d2e.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/08-priority-group-3a-mra-03-d7944d2e.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3B (MRb) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/09-priority-group-3b-mrb-01-49109062.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/09-priority-group-3b-mrb-01-49109062.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3B (MRb) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/10-priority-group-3b-mrb-02-908b5a75.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/10-priority-group-3b-mrb-02-908b5a75.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3B (MRb) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/11-priority-group-3b-mrb-03-11b40316.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/11-priority-group-3b-mrb-03-11b40316.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 3B (MRb) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/12-priority-group-3b-mrb-04-413aaa12.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/12-priority-group-3b-mrb-04-413aaa12.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #399 | Priority Group 4 (LR) | [issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/13-priority-group-4-lr-01-465c2fa6.png](issues/issue-399-ltc-lcs-risk-stratification-diabetes-register/13-priority-group-4-lr-01-465c2fa6.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
-| #400 | Priority Group 2 (HR) | [issues/issue-400-ltc-lcs-risk-stratification-hf-register/01-priority-group-2-hr-01-77c4ac4e.png](issues/issue-400-ltc-lcs-risk-stratification-hf-register/01-priority-group-2-hr-01-77c4ac4e.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
-| #400 | Priority Group 2 (HR) | [issues/issue-400-ltc-lcs-risk-stratification-hf-register/02-priority-group-2-hr-02-b5497d0c.png](issues/issue-400-ltc-lcs-risk-stratification-hf-register/02-priority-group-2-hr-02-b5497d0c.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
-| #400 | Priority Group 2 (HR) | [issues/issue-400-ltc-lcs-risk-stratification-hf-register/03-priority-group-2-hr-03-6d47b8a9.png](issues/issue-400-ltc-lcs-risk-stratification-hf-register/03-priority-group-2-hr-03-6d47b8a9.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
-| #400 | Priority Group 3 (MR) | [issues/issue-400-ltc-lcs-risk-stratification-hf-register/04-priority-group-3-mr-01-32bb8b5c.png](issues/issue-400-ltc-lcs-risk-stratification-hf-register/04-priority-group-3-mr-01-32bb8b5c.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
-| #400 | Priority Group 3 (MR) | [issues/issue-400-ltc-lcs-risk-stratification-hf-register/05-priority-group-3-mr-02-0d20a2fd.png](issues/issue-400-ltc-lcs-risk-stratification-hf-register/05-priority-group-3-mr-02-0d20a2fd.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
-| #400 | Priority Group 3 (MR) | [issues/issue-400-ltc-lcs-risk-stratification-hf-register/06-priority-group-3-mr-03-a49edf10.png](issues/issue-400-ltc-lcs-risk-stratification-hf-register/06-priority-group-3-mr-03-a49edf10.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
-| #400 | Priority Group 3 (MR) | [issues/issue-400-ltc-lcs-risk-stratification-hf-register/07-priority-group-3-mr-04-1029343a.png](issues/issue-400-ltc-lcs-risk-stratification-hf-register/07-priority-group-3-mr-04-1029343a.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
-| #401 | Priority Group 1 (HRC) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/01-priority-group-1-hrc-v3-01-763d7aa9.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/01-priority-group-1-hrc-v3-01-763d7aa9.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 1 (HRC) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/02-priority-group-1-hrc-v3-02-d952623a.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/02-priority-group-1-hrc-v3-02-d952623a.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 1 (HRC) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/03-priority-group-1-hrc-v3-03-2fa57438.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/03-priority-group-1-hrc-v3-03-2fa57438.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 2 (HR) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/04-priority-group-2-hr-v3-01-4a30c3ee.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/04-priority-group-2-hr-v3-01-4a30c3ee.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3A (MRa) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/05-priority-group-3a-mra-v3-01-5771b972.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/05-priority-group-3a-mra-v3-01-5771b972.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3A (MRa) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/06-priority-group-3a-mra-v3-02-f5a54368.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/06-priority-group-3a-mra-v3-02-f5a54368.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3A (MRa) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/07-priority-group-3a-mra-v3-03-8027d961.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/07-priority-group-3a-mra-v3-03-8027d961.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3A (MRa) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/08-priority-group-3a-mra-v3-04-44a4def9.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/08-priority-group-3a-mra-v3-04-44a4def9.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3B (MRb) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/09-priority-group-3b-mrb-v3-01-c17e878c.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/09-priority-group-3b-mrb-v3-01-c17e878c.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3B (MRb) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/10-priority-group-3b-mrb-v3-02-ea3e5348.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/10-priority-group-3b-mrb-v3-02-ea3e5348.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3B (MRb) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/11-priority-group-3b-mrb-v3-03-326e0833.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/11-priority-group-3b-mrb-v3-03-326e0833.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3B (MRb) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/12-priority-group-3b-mrb-v3-04-0f965b51.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/12-priority-group-3b-mrb-v3-04-0f965b51.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3B (MRb) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/13-priority-group-3b-mrb-v3-05-2b2d91df.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/13-priority-group-3b-mrb-v3-05-2b2d91df.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 3B (MRb) v3 | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/14-priority-group-3b-mrb-v3-06-db273be6.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/14-priority-group-3b-mrb-v3-06-db273be6.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #401 | Priority Group 4 (LR) | [issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/15-priority-group-4-lr-01-6fe82087.png](issues/issue-401-ltc-lcs-risk-stratification-hypertension-register/15-priority-group-4-lr-01-6fe82087.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
-| #402 | Register Definition | [issues/issue-402-ltc-lcs-risk-stratification-nafld-register/01-register-definition-01-679e6200.png](issues/issue-402-ltc-lcs-risk-stratification-nafld-register/01-register-definition-01-679e6200.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/402) |
-| #402 | Priority Group 3 (MR) | [issues/issue-402-ltc-lcs-risk-stratification-nafld-register/02-priority-group-3-mr-01-7d8bbed1.png](issues/issue-402-ltc-lcs-risk-stratification-nafld-register/02-priority-group-3-mr-01-7d8bbed1.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/402) |
-| #403 | Priority Group 1 (HRC) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/01-priority-group-1-hrc-01-181762c4.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/01-priority-group-1-hrc-01-181762c4.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 2 (HR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/02-priority-group-2-hr-01-524cdb45.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/02-priority-group-2-hr-01-524cdb45.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 2 (HR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/03-priority-group-2-hr-02-049b244e.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/03-priority-group-2-hr-02-049b244e.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 2 (HR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/04-priority-group-2-hr-03-c2f180ff.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/04-priority-group-2-hr-03-c2f180ff.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 2 (HR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/05-priority-group-2-hr-04-525935a0.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/05-priority-group-2-hr-04-525935a0.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 2 (HR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/06-priority-group-2-hr-05-f86a61c0.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/06-priority-group-2-hr-05-f86a61c0.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 2 (HR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/07-priority-group-2-hr-06-ee3392de.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/07-priority-group-2-hr-06-ee3392de.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 2 (HR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/08-priority-group-2-hr-07-55d048b5.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/08-priority-group-2-hr-07-55d048b5.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 3 (MR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/09-priority-group-3-mr-01-b07c5ff2.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/09-priority-group-3-mr-01-b07c5ff2.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #403 | Priority Group 3 (MR) | [issues/issue-403-ltc-lcs-risk-stratification-pad-register/10-priority-group-3-mr-02-ee47bc19.png](issues/issue-403-ltc-lcs-risk-stratification-pad-register/10-priority-group-3-mr-02-ee47bc19.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
-| #404 | Priority Group 1 (HRC) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/01-priority-group-1-hrc-01-d3597c65.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/01-priority-group-1-hrc-01-d3597c65.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 2 (HR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/02-priority-group-2-hr-01-30c72546.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/02-priority-group-2-hr-01-30c72546.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 2 (HR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/03-priority-group-2-hr-02-c78e4856.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/03-priority-group-2-hr-02-c78e4856.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 2 (HR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/04-priority-group-2-hr-03-ec289595.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/04-priority-group-2-hr-03-ec289595.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 2 (HR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/05-priority-group-2-hr-04-d7797a09.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/05-priority-group-2-hr-04-d7797a09.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 2 (HR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/06-priority-group-2-hr-05-820bface.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/06-priority-group-2-hr-05-820bface.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 2 (HR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/07-priority-group-2-hr-06-8c8b94f9.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/07-priority-group-2-hr-06-8c8b94f9.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 3 (MR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/08-priority-group-3-mr-01-a78561d0.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/08-priority-group-3-mr-01-a78561d0.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #404 | Priority Group 3 (MR) | [issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/09-priority-group-3-mr-02-3b34d72b.png](issues/issue-404-ltc-lcs-risk-stratification-stroke-tia-register/09-priority-group-3-mr-02-3b34d72b.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
-| #406 | Priority Group 1 (HRC) | [issues/issue-406-ltc-lcs-risk-stratification-copd-register/01-priority-group-1-hrc-01-817ce6a3.png](issues/issue-406-ltc-lcs-risk-stratification-copd-register/01-priority-group-1-hrc-01-817ce6a3.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
-| #406 | Priority Group 2 (HR) | [issues/issue-406-ltc-lcs-risk-stratification-copd-register/02-priority-group-2-hr-01-d4a35536.png](issues/issue-406-ltc-lcs-risk-stratification-copd-register/02-priority-group-2-hr-01-d4a35536.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
-| #406 | Priority Group 3 (MR) | [issues/issue-406-ltc-lcs-risk-stratification-copd-register/03-priority-group-3-mr-01-291a54aa.png](issues/issue-406-ltc-lcs-risk-stratification-copd-register/03-priority-group-3-mr-01-291a54aa.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
-| #406 | Priority Group 3 (MR) | [issues/issue-406-ltc-lcs-risk-stratification-copd-register/04-priority-group-3-mr-02-4c46ed99.png](issues/issue-406-ltc-lcs-risk-stratification-copd-register/04-priority-group-3-mr-02-4c46ed99.png) | [GitHub](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
+## Asthma Adult
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) | [conditions/asthma_adult/01-priority-group-1-hrc-01-5d259b5f.png](conditions/asthma_adult/01-priority-group-1-hrc-01-5d259b5f.png) | [#395](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
+| Priority Group 2 (HR) | [conditions/asthma_adult/02-priority-group-2-hr-01-e84cc77a.png](conditions/asthma_adult/02-priority-group-2-hr-01-e84cc77a.png) | [#395](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
+| Priority Group 2 (HR) | [conditions/asthma_adult/03-priority-group-2-hr-02-e71a976f.png](conditions/asthma_adult/03-priority-group-2-hr-02-e71a976f.png) | [#395](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
+| Priority Group 3 (MR) | [conditions/asthma_adult/04-priority-group-3-mr-01-9bf62237.png](conditions/asthma_adult/04-priority-group-3-mr-01-9bf62237.png) | [#395](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
+| Priority Group 3 (MR) | [conditions/asthma_adult/05-priority-group-3-mr-02-12b300e3.png](conditions/asthma_adult/05-priority-group-3-mr-02-12b300e3.png) | [#395](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
+| Priority Group 4 (LR) | [conditions/asthma_adult/06-priority-group-4-lr-01-1900ac2d.png](conditions/asthma_adult/06-priority-group-4-lr-01-1900ac2d.png) | [#395](https://github.com/wnl-icb-analytics/dbt-analytics/issues/395) |
+
+## Asthma CYP
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Register Definition | [conditions/asthma_cyp/01-register-definition-01-8760d311.png](conditions/asthma_cyp/01-register-definition-01-8760d311.png) | [#396](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
+| Priority Group 2 (HR) V2 | [conditions/asthma_cyp/02-priority-group-2-hr-v2-01-21031cf7.png](conditions/asthma_cyp/02-priority-group-2-hr-v2-01-21031cf7.png) | [#396](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
+| Priority Group 2 (HR) V2 | [conditions/asthma_cyp/03-priority-group-2-hr-v2-02-4de7ac21.png](conditions/asthma_cyp/03-priority-group-2-hr-v2-02-4de7ac21.png) | [#396](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
+| Priority Group 4 (LR) | [conditions/asthma_cyp/04-priority-group-4-lr-01-b2b20aa9.png](conditions/asthma_cyp/04-priority-group-4-lr-01-b2b20aa9.png) | [#396](https://github.com/wnl-icb-analytics/dbt-analytics/issues/396) |
+
+## Atrial Fibrillation
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 2 (HR) | [conditions/af/01-priority-group-2-hr-01-9cd246d7.png](conditions/af/01-priority-group-2-hr-01-9cd246d7.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 2 (HR) | [conditions/af/02-priority-group-2-hr-02-fa943b8e.png](conditions/af/02-priority-group-2-hr-02-fa943b8e.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 2 (HR) | [conditions/af/03-priority-group-2-hr-03-0a4b55b4.png](conditions/af/03-priority-group-2-hr-03-0a4b55b4.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 2 (HR) | [conditions/af/04-priority-group-2-hr-04-e1f787f9.png](conditions/af/04-priority-group-2-hr-04-e1f787f9.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 3 (MR) | [conditions/af/05-priority-group-3-mr-01-811f3080.png](conditions/af/05-priority-group-3-mr-01-811f3080.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 3 (MR) | [conditions/af/06-priority-group-3-mr-02-7ebb1850.png](conditions/af/06-priority-group-3-mr-02-7ebb1850.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 3 (MR) | [conditions/af/07-priority-group-3-mr-03-a8abb0ae.png](conditions/af/07-priority-group-3-mr-03-a8abb0ae.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 3 (MR) | [conditions/af/08-priority-group-3-mr-04-3a1038d4.png](conditions/af/08-priority-group-3-mr-04-3a1038d4.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 3 (MR) | [conditions/af/09-priority-group-3-mr-05-c3010407.png](conditions/af/09-priority-group-3-mr-05-c3010407.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 3 (MR) | [conditions/af/10-priority-group-3-mr-06-b839a0ca.png](conditions/af/10-priority-group-3-mr-06-b839a0ca.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+| Priority Group 3 (MR) | [conditions/af/11-priority-group-3-mr-07-a0181a33.png](conditions/af/11-priority-group-3-mr-07-a0181a33.png) | [#394](https://github.com/wnl-icb-analytics/dbt-analytics/issues/394) |
+
+## Base population
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| EMIS Search Definition | [conditions/base_population/01-emis-search-definition-01-6e0be299.png](conditions/base_population/01-emis-search-definition-01-6e0be299.png) | [#393](https://github.com/wnl-icb-analytics/dbt-analytics/issues/393) |
+
+## CHD
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) | [conditions/chd/01-priority-group-1-hrc-01-a892bd3e.png](conditions/chd/01-priority-group-1-hrc-01-a892bd3e.png) | [#397](https://github.com/wnl-icb-analytics/dbt-analytics/issues/397) |
+| Priority Group 2 (HR) | [conditions/chd/02-priority-group-2-hr-01-30d7b12a.png](conditions/chd/02-priority-group-2-hr-01-30d7b12a.png) | [#397](https://github.com/wnl-icb-analytics/dbt-analytics/issues/397) |
+| Priority Group 3 (MR) | [conditions/chd/03-priority-group-3-mr-01-520dda6f.png](conditions/chd/03-priority-group-3-mr-01-520dda6f.png) | [#397](https://github.com/wnl-icb-analytics/dbt-analytics/issues/397) |
+
+## CKD
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) | [conditions/ckd/01-priority-group-1-hrc-01-a352589b.png](conditions/ckd/01-priority-group-1-hrc-01-a352589b.png) | [#398](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
+| Priority Group 2 (HR) | [conditions/ckd/02-priority-group-2-hr-01-14f9fc84.png](conditions/ckd/02-priority-group-2-hr-01-14f9fc84.png) | [#398](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
+| Priority Group 2 (HR) | [conditions/ckd/03-priority-group-2-hr-02-81dfeeea.png](conditions/ckd/03-priority-group-2-hr-02-81dfeeea.png) | [#398](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
+| Priority Group 2 (HR) | [conditions/ckd/04-priority-group-2-hr-03-5826ae0f.png](conditions/ckd/04-priority-group-2-hr-03-5826ae0f.png) | [#398](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
+| Priority Group 2 (HR) | [conditions/ckd/05-priority-group-2-hr-04-86576789.png](conditions/ckd/05-priority-group-2-hr-04-86576789.png) | [#398](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
+| Priority Group 3 (MR) | [conditions/ckd/06-priority-group-3-mr-01-67bad4e8.png](conditions/ckd/06-priority-group-3-mr-01-67bad4e8.png) | [#398](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
+| Priority Group 3 (MR) | [conditions/ckd/07-priority-group-3-mr-02-f008d6d4.png](conditions/ckd/07-priority-group-3-mr-02-f008d6d4.png) | [#398](https://github.com/wnl-icb-analytics/dbt-analytics/issues/398) |
+
+## COPD
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) | [conditions/copd/01-priority-group-1-hrc-01-817ce6a3.png](conditions/copd/01-priority-group-1-hrc-01-817ce6a3.png) | [#406](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
+| Priority Group 2 (HR) | [conditions/copd/02-priority-group-2-hr-01-d4a35536.png](conditions/copd/02-priority-group-2-hr-01-d4a35536.png) | [#406](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
+| Priority Group 3 (MR) | [conditions/copd/03-priority-group-3-mr-01-291a54aa.png](conditions/copd/03-priority-group-3-mr-01-291a54aa.png) | [#406](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
+| Priority Group 3 (MR) | [conditions/copd/04-priority-group-3-mr-02-4c46ed99.png](conditions/copd/04-priority-group-3-mr-02-4c46ed99.png) | [#406](https://github.com/wnl-icb-analytics/dbt-analytics/issues/406) |
+
+## Diabetes
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) | [conditions/diabetes/01-priority-group-1-hrc-01-999c42e5.png](conditions/diabetes/01-priority-group-1-hrc-01-999c42e5.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 1 (HRC) | [conditions/diabetes/02-priority-group-1-hrc-02-a9f849b7.png](conditions/diabetes/02-priority-group-1-hrc-02-a9f849b7.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 2 (HR) | [conditions/diabetes/03-priority-group-2-hr-01-02140f16.png](conditions/diabetes/03-priority-group-2-hr-01-02140f16.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 2 (HR) | [conditions/diabetes/04-priority-group-2-hr-02-5249064f.png](conditions/diabetes/04-priority-group-2-hr-02-5249064f.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3 (MR) | [conditions/diabetes/05-priority-group-3-mr-01-aca04115.png](conditions/diabetes/05-priority-group-3-mr-01-aca04115.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3A (MRa) | [conditions/diabetes/06-priority-group-3a-mra-01-614c52df.png](conditions/diabetes/06-priority-group-3a-mra-01-614c52df.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3A (MRa) | [conditions/diabetes/07-priority-group-3a-mra-02-e082e6c9.png](conditions/diabetes/07-priority-group-3a-mra-02-e082e6c9.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3A (MRa) | [conditions/diabetes/08-priority-group-3a-mra-03-d7944d2e.png](conditions/diabetes/08-priority-group-3a-mra-03-d7944d2e.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3B (MRb) | [conditions/diabetes/09-priority-group-3b-mrb-01-49109062.png](conditions/diabetes/09-priority-group-3b-mrb-01-49109062.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3B (MRb) | [conditions/diabetes/10-priority-group-3b-mrb-02-908b5a75.png](conditions/diabetes/10-priority-group-3b-mrb-02-908b5a75.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3B (MRb) | [conditions/diabetes/11-priority-group-3b-mrb-03-11b40316.png](conditions/diabetes/11-priority-group-3b-mrb-03-11b40316.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 3B (MRb) | [conditions/diabetes/12-priority-group-3b-mrb-04-413aaa12.png](conditions/diabetes/12-priority-group-3b-mrb-04-413aaa12.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+| Priority Group 4 (LR) | [conditions/diabetes/13-priority-group-4-lr-01-465c2fa6.png](conditions/diabetes/13-priority-group-4-lr-01-465c2fa6.png) | [#399](https://github.com/wnl-icb-analytics/dbt-analytics/issues/399) |
+
+## Heart Failure
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 2 (HR) | [conditions/hf/01-priority-group-2-hr-01-77c4ac4e.png](conditions/hf/01-priority-group-2-hr-01-77c4ac4e.png) | [#400](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
+| Priority Group 2 (HR) | [conditions/hf/02-priority-group-2-hr-02-b5497d0c.png](conditions/hf/02-priority-group-2-hr-02-b5497d0c.png) | [#400](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
+| Priority Group 2 (HR) | [conditions/hf/03-priority-group-2-hr-03-6d47b8a9.png](conditions/hf/03-priority-group-2-hr-03-6d47b8a9.png) | [#400](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
+| Priority Group 3 (MR) | [conditions/hf/04-priority-group-3-mr-01-32bb8b5c.png](conditions/hf/04-priority-group-3-mr-01-32bb8b5c.png) | [#400](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
+| Priority Group 3 (MR) | [conditions/hf/05-priority-group-3-mr-02-0d20a2fd.png](conditions/hf/05-priority-group-3-mr-02-0d20a2fd.png) | [#400](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
+| Priority Group 3 (MR) | [conditions/hf/06-priority-group-3-mr-03-a49edf10.png](conditions/hf/06-priority-group-3-mr-03-a49edf10.png) | [#400](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
+| Priority Group 3 (MR) | [conditions/hf/07-priority-group-3-mr-04-1029343a.png](conditions/hf/07-priority-group-3-mr-04-1029343a.png) | [#400](https://github.com/wnl-icb-analytics/dbt-analytics/issues/400) |
+
+## Hypertension
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) v3 | [conditions/hypertension/01-priority-group-1-hrc-v3-01-763d7aa9.png](conditions/hypertension/01-priority-group-1-hrc-v3-01-763d7aa9.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 1 (HRC) v3 | [conditions/hypertension/02-priority-group-1-hrc-v3-02-d952623a.png](conditions/hypertension/02-priority-group-1-hrc-v3-02-d952623a.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 1 (HRC) v3 | [conditions/hypertension/03-priority-group-1-hrc-v3-03-2fa57438.png](conditions/hypertension/03-priority-group-1-hrc-v3-03-2fa57438.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 2 (HR) v3 | [conditions/hypertension/04-priority-group-2-hr-v3-01-4a30c3ee.png](conditions/hypertension/04-priority-group-2-hr-v3-01-4a30c3ee.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3A (MRa) v3 | [conditions/hypertension/05-priority-group-3a-mra-v3-01-5771b972.png](conditions/hypertension/05-priority-group-3a-mra-v3-01-5771b972.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3A (MRa) v3 | [conditions/hypertension/06-priority-group-3a-mra-v3-02-f5a54368.png](conditions/hypertension/06-priority-group-3a-mra-v3-02-f5a54368.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3A (MRa) v3 | [conditions/hypertension/07-priority-group-3a-mra-v3-03-8027d961.png](conditions/hypertension/07-priority-group-3a-mra-v3-03-8027d961.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3A (MRa) v3 | [conditions/hypertension/08-priority-group-3a-mra-v3-04-44a4def9.png](conditions/hypertension/08-priority-group-3a-mra-v3-04-44a4def9.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3B (MRb) v3 | [conditions/hypertension/09-priority-group-3b-mrb-v3-01-c17e878c.png](conditions/hypertension/09-priority-group-3b-mrb-v3-01-c17e878c.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3B (MRb) v3 | [conditions/hypertension/10-priority-group-3b-mrb-v3-02-ea3e5348.png](conditions/hypertension/10-priority-group-3b-mrb-v3-02-ea3e5348.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3B (MRb) v3 | [conditions/hypertension/11-priority-group-3b-mrb-v3-03-326e0833.png](conditions/hypertension/11-priority-group-3b-mrb-v3-03-326e0833.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3B (MRb) v3 | [conditions/hypertension/12-priority-group-3b-mrb-v3-04-0f965b51.png](conditions/hypertension/12-priority-group-3b-mrb-v3-04-0f965b51.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3B (MRb) v3 | [conditions/hypertension/13-priority-group-3b-mrb-v3-05-2b2d91df.png](conditions/hypertension/13-priority-group-3b-mrb-v3-05-2b2d91df.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 3B (MRb) v3 | [conditions/hypertension/14-priority-group-3b-mrb-v3-06-db273be6.png](conditions/hypertension/14-priority-group-3b-mrb-v3-06-db273be6.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+| Priority Group 4 (LR) | [conditions/hypertension/15-priority-group-4-lr-01-6fe82087.png](conditions/hypertension/15-priority-group-4-lr-01-6fe82087.png) | [#401](https://github.com/wnl-icb-analytics/dbt-analytics/issues/401) |
+
+## NAFLD
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Register Definition | [conditions/nafld/01-register-definition-01-679e6200.png](conditions/nafld/01-register-definition-01-679e6200.png) | [#402](https://github.com/wnl-icb-analytics/dbt-analytics/issues/402) |
+| Priority Group 3 (MR) | [conditions/nafld/02-priority-group-3-mr-01-7d8bbed1.png](conditions/nafld/02-priority-group-3-mr-01-7d8bbed1.png) | [#402](https://github.com/wnl-icb-analytics/dbt-analytics/issues/402) |
+
+## PAD
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) | [conditions/pad/01-priority-group-1-hrc-01-181762c4.png](conditions/pad/01-priority-group-1-hrc-01-181762c4.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 2 (HR) | [conditions/pad/02-priority-group-2-hr-01-524cdb45.png](conditions/pad/02-priority-group-2-hr-01-524cdb45.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 2 (HR) | [conditions/pad/03-priority-group-2-hr-02-049b244e.png](conditions/pad/03-priority-group-2-hr-02-049b244e.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 2 (HR) | [conditions/pad/04-priority-group-2-hr-03-c2f180ff.png](conditions/pad/04-priority-group-2-hr-03-c2f180ff.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 2 (HR) | [conditions/pad/05-priority-group-2-hr-04-525935a0.png](conditions/pad/05-priority-group-2-hr-04-525935a0.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 2 (HR) | [conditions/pad/06-priority-group-2-hr-05-f86a61c0.png](conditions/pad/06-priority-group-2-hr-05-f86a61c0.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 2 (HR) | [conditions/pad/07-priority-group-2-hr-06-ee3392de.png](conditions/pad/07-priority-group-2-hr-06-ee3392de.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 2 (HR) | [conditions/pad/08-priority-group-2-hr-07-55d048b5.png](conditions/pad/08-priority-group-2-hr-07-55d048b5.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 3 (MR) | [conditions/pad/09-priority-group-3-mr-01-b07c5ff2.png](conditions/pad/09-priority-group-3-mr-01-b07c5ff2.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+| Priority Group 3 (MR) | [conditions/pad/10-priority-group-3-mr-02-ee47bc19.png](conditions/pad/10-priority-group-3-mr-02-ee47bc19.png) | [#403](https://github.com/wnl-icb-analytics/dbt-analytics/issues/403) |
+
+## Stroke/TIA
+
+| Section | Screenshot | Source issue |
+| --- | --- | --- |
+| Priority Group 1 (HRC) | [conditions/stroke_tia/01-priority-group-1-hrc-01-d3597c65.png](conditions/stroke_tia/01-priority-group-1-hrc-01-d3597c65.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 2 (HR) | [conditions/stroke_tia/02-priority-group-2-hr-01-30c72546.png](conditions/stroke_tia/02-priority-group-2-hr-01-30c72546.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 2 (HR) | [conditions/stroke_tia/03-priority-group-2-hr-02-c78e4856.png](conditions/stroke_tia/03-priority-group-2-hr-02-c78e4856.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 2 (HR) | [conditions/stroke_tia/04-priority-group-2-hr-03-ec289595.png](conditions/stroke_tia/04-priority-group-2-hr-03-ec289595.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 2 (HR) | [conditions/stroke_tia/05-priority-group-2-hr-04-d7797a09.png](conditions/stroke_tia/05-priority-group-2-hr-04-d7797a09.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 2 (HR) | [conditions/stroke_tia/06-priority-group-2-hr-05-820bface.png](conditions/stroke_tia/06-priority-group-2-hr-05-820bface.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 2 (HR) | [conditions/stroke_tia/07-priority-group-2-hr-06-8c8b94f9.png](conditions/stroke_tia/07-priority-group-2-hr-06-8c8b94f9.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 3 (MR) | [conditions/stroke_tia/08-priority-group-3-mr-01-a78561d0.png](conditions/stroke_tia/08-priority-group-3-mr-01-a78561d0.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
+| Priority Group 3 (MR) | [conditions/stroke_tia/09-priority-group-3-mr-02-3b34d72b.png](conditions/stroke_tia/09-priority-group-3-mr-02-3b34d72b.png) | [#404](https://github.com/wnl-icb-analytics/dbt-analytics/issues/404) |
