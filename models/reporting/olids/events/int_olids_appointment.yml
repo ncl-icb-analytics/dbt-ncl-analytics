@@ -1,6 +1,6 @@
 
 models:
-  - name: obt_appointment_gp
+  - name: int_olids_appointment
     description: "GP appointments from OLIDS appointments filtered to include only relevant
       'Care Related Encounter' appointment context types"
     config:

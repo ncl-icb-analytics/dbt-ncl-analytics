@@ -10,7 +10,7 @@ base_encounters as (
         , service_setting
         , code
         , display
-    from {{ ref('obt_appointment_gp') }} gpa
+    from {{ ref('int_olids_appointment') }} gpa
     inner join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
     where start_date between dateadd(month, -12, current_date()) and current_date()
 ), 
