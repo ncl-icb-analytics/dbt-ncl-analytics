@@ -89,7 +89,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , practitioner_role_group as activity_subtype
         , count(*) as encounters
         , sum(zeroifnull(appointment_cost_gbp_nominal)) as cost -- TO DO: replace with pricing from reference book according to app type?
-        , sum(zeroifnull(duration_mins)) as duration
+        , sum(zeroifnull(duration_minutes)) as duration
     from 
         {{ ref('int_appointment_gp_clinical') }} gpa
     left join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id

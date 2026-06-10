@@ -5,7 +5,7 @@ base_encounters as (
         pp.sk_patient_id
         , appointment_id
         , start_date
-        , duration_mins
+        , duration_minutes
         , slot_category
         , practitioner_role_group
         , appointment_status_code as code
