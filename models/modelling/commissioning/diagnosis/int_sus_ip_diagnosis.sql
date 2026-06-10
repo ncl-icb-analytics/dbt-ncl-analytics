@@ -15,6 +15,7 @@ with
 )
 
 select 
+    {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.code"]) }} as diagnosis_id,
     se.sk_patient_id,
     se.start_date as date,
     f.primarykey_id as visit_occurrence_id,

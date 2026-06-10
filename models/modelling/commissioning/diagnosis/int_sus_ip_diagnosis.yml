@@ -7,17 +7,20 @@ models:
       meta:
         owner:
           name: Emily Baldwin
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - visit_occurrence_id
+              - source_concept_code
     columns:
-      - name: diagnosis_id
-        data_type: number
-        description: "Unique ID for each admitted patient diagnosis record"
-        data_tests:
-          - unique
-          - not_null
-
       - name: sk_patient_id
         data_type: varchar
         description: "Common commissioning patient identifier"
+      
+      - name: diagnosis_id
+        data_type: number
+        description: "Unique ID for each diagnosis code that spell. unlinkable to source table due to deduplication"
 
       - name: date
         data_type: timestamp_ntz
@@ -31,17 +34,13 @@ models:
         data_type: varchar
         description: ""
 
-      - name: episodes_id
+      - name: episodes_ids
         data_type: number
-        description: ""
+        description: "array of episodes ids"
 
-      - name: icd_id
+      - name: diagnosis_count
         data_type: number
-        description: ""
-
-      - name: rownumber_id
-        data_type: number
-        description: ""
+        description: "Count of the number of occurances of that diagnosis code across all episodes"
 
       - name: organisation_id
         data_type: varchar
