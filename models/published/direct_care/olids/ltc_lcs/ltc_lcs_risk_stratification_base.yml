@@ -172,6 +172,12 @@ models:
       # ============================================================
       # Risk stratification: per-condition
       # ============================================================
+      - name: af_risk_group
+        description: Highest AF risk group (HR/MR)
+      - name: asthma_adult_risk_group
+        description: Highest Asthma Adult risk group (HRC/HR/MR/LR)
+      - name: asthma_cyp_risk_group
+        description: Highest Asthma CYP risk group (HR/LR)
       - name: chd_risk_group
         description: Highest CHD risk group (HRC/HR/MR)
       - name: ckd_risk_group
@@ -184,6 +190,12 @@ models:
         description: Highest Heart Failure risk group (HR/MR)
       - name: hypertension_risk_group
         description: Highest Hypertension risk group (HRC/HR/MRa/MRb/LR)
+      - name: nafld_risk_group
+        description: Highest NAFLD risk group (MR only)
+      - name: pad_risk_group
+        description: Highest PAD risk group (HRC/HR/MR)
+      - name: stroke_tia_risk_group
+        description: Highest Stroke/TIA risk group (HRC/HR/MR)
 
       # ============================================================
       # Risk stratification: overall

@@ -95,12 +95,18 @@ select
     -- ============================================================
     -- Risk stratification: per-condition
     -- ============================================================
+    rs.af_risk_group,
+    rs.asthma_adult_risk_group,
+    rs.asthma_cyp_risk_group,
     rs.chd_risk_group,
     rs.ckd_risk_group,
     rs.copd_risk_group,
     rs.diabetes_risk_group,
     rs.hf_risk_group,
     rs.hypertension_risk_group,
+    rs.nafld_risk_group,
+    rs.pad_risk_group,
+    rs.stroke_tia_risk_group,
 
     -- ============================================================
     -- Risk stratification: overall
