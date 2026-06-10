@@ -14,37 +14,47 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS: Stroke/TIA Register*" (see below). A patient is included when they match Rule 1.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: Stroke/TIA Register*** — Start with currently registered patients. Include patients who match Stroke/TIA Register (library item d4e6f787-dbce-4f0b-9f3f-498808ebad42).
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: Stroke/TIA Register*** — Include patients who match Stroke/TIA Register (library item d4e6f787-dbce-4f0b-9f3f-498808ebad42).
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 1
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 1 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
-A patient matches this rule when ANY of the following is true:
-- **Clinical Codes** (clinical events)
+A patient matches this rule when **ANY (OR)** of the following are true:
+
+- **Criterion A — Clinical Codes** (clinical events)
+  *"Stroke / TIA Register"*
   - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD)
-  - Where date within the last 30 days
+  - Where date within the last 30 days — `date > today - 30 days`
   - Where episode type is First or New or Flare Up
-- **Clinical Codes** (clinical events)
+- **Criterion B — Clinical Codes** (clinical events)
+  *"Stroke / TIA Register"*
   - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD)
-  - Where date within the last 30 days
+  - Where date within the last 30 days — `date > today - 30 days`
   - Where problem significance is Significant
 
 ## Code lists used
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs1` | STRK_COD | SNOMED | 1 | Refset: 999005531000230105 | c8a23b04 |
-| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs2` | TIA_COD | SNOMED | 1 | Refset: 999005291000230109 | babfa5e0 |
-| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs3` |  | Internal | 3 | First, New, Flare Up | bd7fde07 |
-| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs4` |  | Internal | 1 | Significant | 8de0b3c4 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs1` | STRK_COD | 1 | SNOMED | 1 | Refset: 999005531000230105 | c8a23b04 |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs2` | TIA_COD | 1 | SNOMED | 1 | Refset: 999005291000230109 | babfa5e0 |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs3` |  | 1 | Internal | 3 | First, New, Flare Up | bd7fde07 |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | `on_stroketia_reg_pg1_hrc_vs4` |  | 1 | Internal | 1 | Significant | 8de0b3c4 |
 
 ## Caveats
 

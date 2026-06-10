@@ -14,30 +14,39 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS: NAFLD Register*- EXTRA" (see below). A patient is included when they match Rule 1.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: NAFLD Register*- EXTRA** — Start with currently registered patients. Require Clinical Codes with Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alcoholic fatty liver disease +12 more. Exclude patients who match Patients included in search LTC LCS: NAFLD Register v2*. Include patients who do not match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: NAFLD Register*- EXTRA** — Require Clinical Codes with Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alcoholic fatty liver disease +12 more. Exclude patients who match Patients included in search LTC LCS: NAFLD Register v2*. Include patients who do not match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+   - Combines: **LTC LCS: NAFLD Register v2***; **LTC LCS: AF Register***; **LTC LCS: CKD Register***; **LTC LCS: CHD Register***; **LTC LCS: Diabetes Register***; **LTC LCS: Hypertension Register***; **LTC LCS: Asthma Adult Register***; **LTC LCS: Asthma CYP Register***; **LTC LCS: COPD Register***; **LTC LCS: HF Register***; **LTC LCS: PAD Register***; **LTC LCS: Stroke/TIA Register***
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 1
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 1 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `ct_completed_fy_vs1` (1 code)
-  - Where date at least 01/04/2024
+  - Where date at least 01/04/2024 — `date >= 01/04/2024`
 
 ## Code lists used
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| LTC LCS: NAFLD Register*- EXTRA | `nafld_reg_extra_vs1` |  | SNOMED | 16 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | f5b3dad9 |
-| C&T completed FY | `ct_completed_fy_vs1` |  | SNOMED | 1 | Chronic disease initial assessment | 2c55e088 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: NAFLD Register*- EXTRA | `nafld_reg_extra_vs1` |  |  | SNOMED | 16 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | f5b3dad9 |
+| C&T completed FY | `ct_completed_fy_vs1` |  | 1 | SNOMED | 1 | Chronic disease initial assessment | 2c55e088 |
 
 ## Caveats
 

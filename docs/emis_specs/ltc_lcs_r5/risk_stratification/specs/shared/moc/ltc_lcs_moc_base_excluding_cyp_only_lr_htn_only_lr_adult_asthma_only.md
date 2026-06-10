@@ -14,18 +14,27 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS Base*" (see below). A patient is included when they do NOT match Rule 1.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS Base*** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS Base*** — Include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+   - Combines: **LTC LCS: AF Register***; **LTC LCS: CKD Register***; **LTC LCS: CHD Register***; **LTC LCS: Diabetes Register***; **LTC LCS: Hypertension Register***; **LTC LCS: NAFLD Register v2***; **LTC LCS: Asthma Adult Register***; **LTC LCS: Asthma CYP Register***; **LTC LCS: COPD Register***; **LTC LCS: HF Register***; **LTC LCS: PAD Register***; **LTC LCS: Stroke/TIA Register***
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 1
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | Excluded | **Included** | Final — exclude if matched |
+
+## Rule details
+
+### Rule 1 of 1 — Final — exclude if matched
 
 Final rule: patients who match are **excluded**; everyone else is included.
 
-A patient matches this rule when ANY of the following is true:
+A patient matches this rule when **ANY (OR)** of the following are true:
+
 - They appear in the results of the search **LTC LCS: Asthma CYP Register ONLY**
 - They appear in the results of the search **On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only)**
 - They appear in the results of the search **On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only)**

@@ -14,25 +14,34 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with currently registered patients. Patients must match Rule 1 to stay in. A patient is included when they match Rule 2. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
 Currently registered patients.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 2
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | Continue to Rule 2 | Excluded | Filter — must match |
+| 2 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 2 — Filter — must match
 
 Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
 A patient matches this rule when:
-- **Patient Details**
-  - Where age at least 18 years old
 
-### Rule 2 of 2
+- **Criterion A — Patient Details**
+  - Where age at least 18 years old — `age >= 18 years`
+
+### Rule 2 of 2 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
+
 - They match the EMIS library item `c913f5a7-1256-4de6-871e-23650e72765e` (see Caveats)
 
 ## Code lists used

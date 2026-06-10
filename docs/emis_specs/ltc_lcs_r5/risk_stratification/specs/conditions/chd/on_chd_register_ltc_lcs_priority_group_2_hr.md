@@ -14,45 +14,59 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS: CHD Register*" (see below). Patients matching Rules 1-2 are excluded. A patient is included when they match Rule 3. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: CHD Register*** — Start with currently registered patients. Include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: CHD Register*** — Include patients who match CHD Register (library item d730ee6f-1b38-4553-8f8e-7dc8b3042f4c).
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 3
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | Excluded | Continue to Rule 2 | Exclusion |
+| 2 | Excluded | Continue to Rule 3 | Exclusion |
+| 3 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 3 — Exclusion
 
 Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
 A patient matches this rule when:
+
 - They appear in the results of the search **On CHD Register- LTC LCS Priority Group 1 (HRC)**
 
-### Rule 2 of 3
+### Rule 2 of 3 — Exclusion
 
 Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 3.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
-  - Code in: `on_chd_reg_pg2_hr_vs1` (1 code — cluster CHD_COD)
-  - Where date before 1 year ago
 
-### Rule 3 of 3
+- **Criterion A — Clinical Codes** (clinical events)
+  *"CHD Register"*
+  - Code in: `on_chd_reg_pg2_hr_vs1` (1 code — cluster CHD_COD)
+  - Where date before 1 year ago — `date < today - 1 year`
+
+### Rule 3 of 3 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
+  *"CHD Register"*
   - Code in: `on_chd_reg_pg2_hr_vs1` (1 code — cluster CHD_COD)
-  - Where date within the last 1 year to before 1 month ago
+  - Where date within the last 1 year to before 1 month ago — `date > today - 1 year AND date < today - 1 month`
 
 ## Code lists used
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| On CHD Register- LTC LCS Priority Group 2 (HR) | `on_chd_reg_pg2_hr_vs1` | CHD_COD | SNOMED | 1 | Refset: 999000771000230107 | d908caa0 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| On CHD Register- LTC LCS Priority Group 2 (HR) | `on_chd_reg_pg2_hr_vs1` | CHD_COD | 2, 3 | SNOMED | 1 | Refset: 999000771000230107 | d908caa0 |
 
 ## Caveats
 

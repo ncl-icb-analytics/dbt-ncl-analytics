@@ -14,121 +14,155 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS: HF Register*" (see below). Patients must match Rules 3-4 to stay in. A patient is included when they match any one of Rules 1-2. A patient is included unless they match every one of Rules 5-8 — failing any one of them includes the patient. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: HF Register*** — Start with currently registered patients. Include patients who match HF Register (library item 79888a16-aa09-4ef4-ba5e-a3be8e1daf23).
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: HF Register*** — Include patients who match HF Register (library item 79888a16-aa09-4ef4-ba5e-a3be8e1daf23).
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 8
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Continue to Rule 2 | Inclusion route |
+| 2 | **Included** | Continue to Rule 3 | Inclusion route |
+| 3 | Continue to Rule 4 | Excluded | Filter — must match |
+| 4 | Continue to Rule 5 | Excluded | Filter — must match |
+| 5 | Continue to Rule 6 | **Included** | Inclusion route (on no match) |
+| 6 | Continue to Rule 7 | **Included** | Inclusion route (on no match) |
+| 7 | Continue to Rule 8 | **Included** | Inclusion route (on no match) |
+| 8 | Excluded | **Included** | Final — exclude if matched |
+
+## Rule details
+
+### Rule 1 of 8 — Inclusion route
 
 If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 2.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs1` (4 codes), or `on_hf_reg_pg2_hr_vs2` (2 codes)
   - Keep only the latest matching record
 
-### Rule 2 of 8
+### Rule 2 of 8 — Inclusion route
 
 If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
-A patient matches this rule when ANY of the following is true:
-- **Clinical Codes** (clinical events)
+A patient matches this rule when **ANY (OR)** of the following are true:
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs3` (40 codes), or `on_hf_reg_pg2_hr_vs4` (16 codes)
   - Keep only the latest matching record
-- **Medication Issues**
+- **Criterion B — Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs5` (1 code)
-  - Where issue date within the last 1 year
+  - Where issue date within the last 1 year — `issue date > today - 1 year`
 
-### Rule 3 of 8
+### Rule 3 of 8 — Filter — must match
 
 Patients **must match** this rule to stay in. Those who match continue to Rule 4; those who do not are excluded.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
+  *"Latest IFCC HbA1c equals or under 75"*
   - Code in: `on_hf_reg_pg2_hr_vs6` (3 codes — cluster IFCCHBAM_COD)
   - Keep only the latest matching record, and require its numeric value > 48 and <= 75
 
-### Rule 4 of 8
+### Rule 4 of 8 — Filter — must match
 
 Patients **must match** this rule to stay in. Those who match continue to Rule 5; those who do not are excluded.
 
-A patient matches this rule when ANY of the following is true:
-- **Clinical Codes** (clinical events)
+A patient matches this rule when **ANY (OR)** of the following are true:
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs7` (1 code)
   - Keep only the latest matching record, and require its numeric value < 50
-- **Clinical Codes** (clinical events)
+- **Criterion B — Clinical Codes** (clinical events)
+  *"Heart Failure Patients"*
   - Code in: `on_hf_reg_pg2_hr_vs8` (1 code — cluster HFLVSD_COD), or `on_hf_reg_pg2_hr_vs9` (1 code — cluster REDEJCFRAC_COD)
   - Where episode type is not Review or Ended
 
-### Rule 5 of 8
+### Rule 5 of 8 — Inclusion route (on no match)
 
 If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 6.
 
-A patient matches this rule when ANY of the following is true:
-- **Medication Courses**
+A patient matches this rule when **ANY (OR)** of the following are true:
+
+- **Criterion A — Medication Courses**
   - Code in: `on_hf_reg_pg2_hr_vs10` (4 codes)
-  - Where date drug added within the last 6 months
-- **Medication Issues**
+  - Where date drug added within the last 6 months — `commence date > today - 6 months`
+- **Criterion B — Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs10` (4 codes)
-  - Where issue date within the last 6 months
-- **Clinical Codes** (clinical events)
+  - Where issue date within the last 6 months — `issue date > today - 6 months`
+- **Criterion C — Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs11` (7 codes)
 
-### Rule 6 of 8
+### Rule 6 of 8 — Inclusion route (on no match)
 
 If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 7.
 
-A patient matches this rule when ANY of the following is true:
-- **Medication Courses**
+A patient matches this rule when **ANY (OR)** of the following are true:
+
+- **Criterion A — Medication Courses**
   - Code in: `on_hf_reg_pg2_hr_vs12` (3 codes)
-  - Where date drug added within the last 6 months
-- **Medication Issues**
+  - Where date drug added within the last 6 months — `commence date > today - 6 months`
+- **Criterion B — Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs12` (3 codes)
-  - Where issue date within the last 6 months
-- **Clinical Codes** (clinical events)
+  - Where issue date within the last 6 months — `issue date > today - 6 months`
+- **Criterion C — Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs13` (5 codes)
 
-### Rule 7 of 8
+### Rule 7 of 8 — Inclusion route (on no match)
 
 If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 8.
 
-A patient matches this rule when ANY of the following is true:
-- **Medication Issues**
-  - Code in: `on_hf_reg_pg2_hr_vs14` (54 codes — cluster LBB_COD)
-  - Where issue date within the last 6 months
-- **Clinical Codes** (clinical events)
-  - Code in: `on_hf_reg_pg2_hr_vs15` (3 codes — cluster XLBB_COD)
-- **Clinical Codes** (clinical events)
-  - Code in: `on_hf_reg_pg2_hr_vs16` (1 code — cluster TXLBB_COD)
-  - Where date on or before 1 year ago
-- **Clinical Codes** (clinical events)
-  - Code in: `on_hf_reg_pg2_hr_vs17` (1 code — cluster LBBDEC_COD)
-  - Where date on or before 1 year ago
+A patient matches this rule when **ANY (OR)** of the following are true:
 
-### Rule 8 of 8
+- **Criterion A — Medication Issues**
+  *"Medication Issues of Heart Failure Licensed Betablockers in last 6 months"*
+  - Code in: `on_hf_reg_pg2_hr_vs14` (54 codes — cluster LBB_COD)
+  - Where issue date within the last 6 months — `issue date > today - 6 months`
+- **Criterion B — Clinical Codes** (clinical events)
+  *"persisting beta-blocker contraindication are recorded in the 12 months"*
+  - Code in: `on_hf_reg_pg2_hr_vs15` (3 codes — cluster XLBB_COD)
+- **Criterion C — Clinical Codes** (clinical events)
+  *"expiring contraindication to licensed beta-blockers recorded in the 12 months"*
+  - Code in: `on_hf_reg_pg2_hr_vs16` (1 code — cluster TXLBB_COD)
+  - Where date on or before 1 year ago — `date <= today - 1 year`
+- **Criterion D — Clinical Codes** (clinical events)
+  *"patient has chosen not to receive beta blocker recorded in the 12 months"*
+  - Code in: `on_hf_reg_pg2_hr_vs17` (1 code — cluster LBBDEC_COD)
+  - Where date on or before 1 year ago — `date <= today - 1 year`
+
+### Rule 8 of 8 — Final — exclude if matched
 
 Final rule: patients who match are **excluded**; everyone else is included.
 
-A patient matches this rule when ANY of the following is true:
+A patient matches this rule when **ANY (OR)** of the following are true:
+
 - They match the EMIS library item `80709f0e-d62c-4851-b8b5-22ce2fb29319` (see Caveats)
-- **Medication Issues**
+- **Criterion A — Medication Issues**
+  *"Medication issues of ACE inhibitors or AII in last 6 months"*
   - Code in: `on_hf_reg_pg2_hr_vs18` (352 codes)
   - Keep only the latest matching record, and require its issue date > today - 6 months
-- **Clinical Codes** (clinical events)
+- **Criterion B — Clinical Codes** (clinical events)
+  *"Chose not to receive an ACE inhibitor are recorded in the 12 months"*
   - Code in: `on_hf_reg_pg2_hr_vs19` (1 code — cluster ACEDEC_COD)
   - Keep only the latest matching record, and require its date > today - 12 months
-- **Clinical Codes** (clinical events)
+- **Criterion C — Clinical Codes** (clinical events)
+  *"Chose not to receive an ARB inhibitor are recorded in the 12 months"*
   - Code in: `on_hf_reg_pg2_hr_vs20` (1 code — cluster AIIDEC_COD)
   - Keep only the latest matching record, and require its date > today - 12 months
-- **Clinical Codes** (clinical events)
+- **Criterion D — Clinical Codes** (clinical events)
+  *"ACE inhibitor contraindication up to and including the achievement date"*
   - Code in: `on_hf_reg_pg2_hr_vs21` (171 codes)
   - Keep only the latest matching record, and require its date > today - 1 year
-- **Clinical Codes** (clinical events)
+- **Criterion E — Clinical Codes** (clinical events)
+  *"Persistent AII Contra-indications"*
   - Code in: `on_hf_reg_pg2_hr_vs22` (1 code — cluster XAII_COD)
-- **Clinical Codes** (clinical events)
+- **Criterion F — Clinical Codes** (clinical events)
+  *"Recent expiring ARB contraindication in last 12 months"*
   - Code in: `on_hf_reg_pg2_hr_vs23` (1 code — cluster TXAII_COD)
   - Keep only the latest matching record, and require its date > today - 12 months
 
@@ -136,31 +170,31 @@ A patient matches this rule when ANY of the following is true:
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs1` |  | SNOMED | 4 | New York Heart Association Classification - Class I, New York Heart Associati... | 4ec0ed9b |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs10` |  | SCT Const | 4 | Dapagliflozin, Empagliflozin, Canagliflozin +1 more | 4ca4d3a3 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs11` |  | SNOMED | 7 | Adverse reaction to Dapagliflozin, Adverse reaction to Empagliflozin, Adverse... | a5be9bf6 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs12` |  | SCT Const | 3 | Spironolactone, Eplerenone, Finerenone | a4b2da82 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs13` |  | SNOMED | 5 | Adverse reaction to Spironolactone, Adverse reaction to Eplerenone, Adverse r... | 3338e94b |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs14` | LBB_COD | SNOMED | 54 | Bisoprolol 5mg / Aspirin 75mg capsules, Bisoprolol 5mg / Aspirin 100mg capsul... | 45878485 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs15` | XLBB_COD | SNOMED | 3 | Hypersensitivity to atenolol, Atenolol hypersensitivity | af676e6c |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs16` | TXLBB_COD | SNOMED | 1 | Refset: 999008251000230108 | 46d0d2c0 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs17` | LBBDEC_COD | SNOMED | 1 | Refset: 999013291000230105 | f6f51ae7 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs18` |  | SCT_PREP | 352 | Acepril 12.5mg tablets (Bristol-Myers Squibb Pharmaceuticals Ltd), Acepril 25... | 5c072804 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs19` | ACEDEC_COD | SNOMED | 1 | Refset: 999009011000230109 | 8a36ae84 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs2` |  | SNOMED | 2 | New York Heart Association Classification - Class III, New York Heart Associa... | a191256b |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs20` | AIIDEC_COD | SNOMED | 1 | Refset: 999008011000230100 | f2d0e917 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs21` |  | SNOMED | 171 | Lisinopril adverse reaction, H/O: angiotensin converting enzyme inhibitor pse... | 277499b3 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs22` | XAII_COD | SNOMED | 1 | Refset: 999004331000230101 | d4aea85d |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs23` | TXAII_COD | SNOMED | 1 | Refset: 999004491000230106 | 24284ef4 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs3` |  | SNOMED | 40 | O/E - oedema not present, O/E - oedema of ankles, O/E - oedema of legs +37 more | 6cd34574 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs4` |  | SNOMED | 16 | Oedema of thigh, O/E - oedema of thighs, O/E - sacral oedema +13 more | aae2d273 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs5` |  | SCT Const | 1 | Metolazone | 86043711 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs6` | IFCCHBAM_COD | SNOMED | 3 | Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference ... | 95d9e41a |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs7` |  | SNOMED | 1 | Left ventricular ejection fraction | 4c79b106 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs8` | HFLVSD_COD | SNOMED | 1 | Refset: 999007771000230106 | 2c54e779 |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs9` | REDEJCFRAC_COD | SNOMED | 1 | Refset: 999020531000230105 | d9fd1aa5 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs1` |  | 1 | SNOMED | 4 | New York Heart Association Classification - Class I, New York Heart Associati... | 4ec0ed9b |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs10` |  | 5 | SCT Const | 4 | Dapagliflozin, Empagliflozin, Canagliflozin +1 more | 4ca4d3a3 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs11` |  | 5 | SNOMED | 7 | Adverse reaction to Dapagliflozin, Adverse reaction to Empagliflozin, Adverse... | a5be9bf6 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs12` |  | 6 | SCT Const | 3 | Spironolactone, Eplerenone, Finerenone | a4b2da82 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs13` |  | 6 | SNOMED | 5 | Adverse reaction to Spironolactone, Adverse reaction to Eplerenone, Adverse r... | 3338e94b |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs14` | LBB_COD | 7 | SNOMED | 54 | Bisoprolol 5mg / Aspirin 75mg capsules, Bisoprolol 5mg / Aspirin 100mg capsul... | 45878485 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs15` | XLBB_COD | 7 | SNOMED | 3 | Hypersensitivity to atenolol, Atenolol hypersensitivity | af676e6c |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs16` | TXLBB_COD | 7 | SNOMED | 1 | Refset: 999008251000230108 | 46d0d2c0 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs17` | LBBDEC_COD | 7 | SNOMED | 1 | Refset: 999013291000230105 | f6f51ae7 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs18` |  | 8 | SCT_PREP | 352 | Acepril 12.5mg tablets (Bristol-Myers Squibb Pharmaceuticals Ltd), Acepril 25... | 5c072804 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs19` | ACEDEC_COD | 8 | SNOMED | 1 | Refset: 999009011000230109 | 8a36ae84 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs2` |  | 1 | SNOMED | 2 | New York Heart Association Classification - Class III, New York Heart Associa... | a191256b |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs20` | AIIDEC_COD | 8 | SNOMED | 1 | Refset: 999008011000230100 | f2d0e917 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs21` |  | 8 | SNOMED | 171 | Lisinopril adverse reaction, H/O: angiotensin converting enzyme inhibitor pse... | 277499b3 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs22` | XAII_COD | 8 | SNOMED | 1 | Refset: 999004331000230101 | d4aea85d |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs23` | TXAII_COD | 8 | SNOMED | 1 | Refset: 999004491000230106 | 24284ef4 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs3` |  | 2 | SNOMED | 40 | O/E - oedema not present, O/E - oedema of ankles, O/E - oedema of legs +37 more | 6cd34574 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs4` |  | 2 | SNOMED | 16 | Oedema of thigh, O/E - oedema of thighs, O/E - sacral oedema +13 more | aae2d273 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs5` |  | 2 | SCT Const | 1 | Metolazone | 86043711 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs6` | IFCCHBAM_COD | 3 | SNOMED | 3 | Haemoglobin A1c level - IFCC standardised, HbA1c level (diagnostic reference ... | 95d9e41a |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs7` |  | 4 | SNOMED | 1 | Left ventricular ejection fraction | 4c79b106 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs8` | HFLVSD_COD | 4 | SNOMED | 1 | Refset: 999007771000230106 | 2c54e779 |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | `on_hf_reg_pg2_hr_vs9` | REDEJCFRAC_COD | 4 | SNOMED | 1 | Refset: 999020531000230105 | d9fd1aa5 |
 
 ## Caveats
 

@@ -14,36 +14,45 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with currently registered patients. A patient is included when they match any one of Rules 1-2. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
 Currently registered patients.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 2
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Continue to Rule 2 | Inclusion route |
+| 2 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 2 — Inclusion route
 
 If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 2.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `nafld_reg_v2_vs1` (12 codes)
 
-### Rule 2 of 2
+### Rule 2 of 2 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `nafld_reg_v2_vs2` (3 codes)
 
 ## Code lists used
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs1` |  | SNOMED | 12 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | 63fd8d6e |
-| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs2` |  | SNOMED | 3 | Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfuncti... | 43d07f8b |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs1` |  | 1 | SNOMED | 12 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | 63fd8d6e |
+| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs2` |  | 2 | SNOMED | 3 | Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfuncti... | 43d07f8b |
 
 ## Caveats
 

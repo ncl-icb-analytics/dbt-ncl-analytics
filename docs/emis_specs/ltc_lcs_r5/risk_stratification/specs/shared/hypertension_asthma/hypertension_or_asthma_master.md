@@ -14,18 +14,27 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "6. All on Hypertension or Asthma register" (see below). A patient is included when they do NOT match Rule 1.
 
-## Who we start with
+## Start population
 
-1. **6. All on Hypertension or Asthma register** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*.
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **6. All on Hypertension or Asthma register** — Include patients who match Patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*.
+   - Combines: **LTC LCS: Asthma Adult Register***; **LTC LCS: Asthma CYP Register***; **LTC LCS: Hypertension Register***
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 1
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | Excluded | **Included** | Final — exclude if matched |
+
+## Rule details
+
+### Rule 1 of 1 — Final — exclude if matched
 
 Final rule: patients who match are **excluded**; everyone else is included.
 
-A patient matches this rule when ANY of the following is true:
+A patient matches this rule when **ANY (OR)** of the following are true:
+
 - They appear in the results of the search **GROUP1- HRC**
 - They appear in the results of the search **GROUP2- HR**
 - They appear in the results of the search **GROUP3- MR**

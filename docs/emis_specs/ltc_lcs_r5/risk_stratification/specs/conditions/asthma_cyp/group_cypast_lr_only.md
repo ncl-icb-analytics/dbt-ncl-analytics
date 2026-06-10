@@ -15,18 +15,27 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "5. LTC LCS: Asthma CYP register ONLY" (see below). A patient is included when they match Rule 1.
 
-## Who we start with
+## Start population
 
-1. **5. LTC LCS: Asthma CYP register ONLY** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: Asthma CYP Register ONLY.
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **5. LTC LCS: Asthma CYP register ONLY** — Include patients who match Patients included in search LTC LCS: Asthma CYP Register ONLY.
+   - Combines: **LTC LCS: Asthma CYP Register ONLY**
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 1
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 1 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
+
 - They appear in the results of the search **On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)***
 
 ## Code lists used

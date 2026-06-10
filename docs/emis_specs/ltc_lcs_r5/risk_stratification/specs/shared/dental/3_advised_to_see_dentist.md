@@ -14,20 +14,29 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "on Diabetes Register- LTC LCS Priority Group 3 (MR)" (see below). A patient is included when they match Rule 1.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: Diabetes Register*** — Start with currently registered patients. Require Patient Details where Age at least 17 years old. Include patients who match Clinical Codes with Refset: 999004691000230108 then Latest 1.
-2. **on Diabetes Register- LTC LCS Priority Group 3 (MR)** — Start with the patients found by "LTC LCS: Diabetes Register*". Exclude patients who match Patients included in search on Diabetes Register- LTC LCS Priority Group 1 (HRC) OR patients included in search on Diabetes Register- LTC LCS Priority Group 2 (HR). Include patients who match Patients included in search on Diabetes Register- LTC LCS Priority Group 3B (MRb) OR patients included in search on Diabetes Register- LTC LCS Priority Group 3A (MRa).
-3. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: Diabetes Register*** — Require Patient Details where Age at least 17 years old. Include patients who match Clinical Codes with Refset: 999004691000230108 then Latest 1.
+3. **on Diabetes Register- LTC LCS Priority Group 3 (MR)** — Exclude patients who match Patients included in search on Diabetes Register- LTC LCS Priority Group 1 (HRC) OR patients included in search on Diabetes Register- LTC LCS Priority Group 2 (HR). Include patients who match Patients included in search on Diabetes Register- LTC LCS Priority Group 3B (MRb) OR patients included in search on Diabetes Register- LTC LCS Priority Group 3A (MRa).
+   - Combines: **on Diabetes Register- LTC LCS Priority Group 1 (HRC)**; **on Diabetes Register- LTC LCS Priority Group 2 (HR)**; **on Diabetes Register- LTC LCS Priority Group 3B (MRb)**; **on Diabetes Register- LTC LCS Priority Group 3A (MRa)**
+4. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 1
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 1 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `3_advised_to_see_dentist_vs1` (3 codes), or `3_advised_to_see_dentist_vs2` (1 code)
   - Keep only the latest matching record
 
@@ -35,12 +44,12 @@ A patient matches this rule when:
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| LTC LCS: Diabetes Register* | `dm_reg_vs1` | DM_COD | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
-| LTC LCS: Diabetes Register* | `dm_reg_vs2` | DMRES_COD | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
-| 3- Advised to see dentist | `3_advised_to_see_dentist_vs1` |  | SNOMED | 3 | Registered with dentist, Patient not registered with dentist, Advised to see ... | 6860b227 |
-| 3- Advised to see dentist | `3_advised_to_see_dentist_vs2` |  | SNOMED | 1 | Advised to see dentist | b16dccb6 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Diabetes Register* | `dm_reg_vs1` | DM_COD |  | SNOMED | 1 | Refset: 999004691000230108 | 2b147092 |
+| LTC LCS: Diabetes Register* | `dm_reg_vs2` | DMRES_COD |  | SNOMED | 1 | Refset: 999003371000230102 | ce2851bb |
+| 3- Advised to see dentist | `3_advised_to_see_dentist_vs1` |  | 1 | SNOMED | 3 | Registered with dentist, Patient not registered with dentist, Advised to see ... | 6860b227 |
+| 3- Advised to see dentist | `3_advised_to_see_dentist_vs2` |  | 1 | SNOMED | 1 | Advised to see dentist | b16dccb6 |
 
 ## Caveats
 

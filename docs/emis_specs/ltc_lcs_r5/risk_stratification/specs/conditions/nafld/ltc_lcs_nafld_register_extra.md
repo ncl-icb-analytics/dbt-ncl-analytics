@@ -14,32 +14,43 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with currently registered patients. Patients must match Rule 1 to stay in. Patients matching Rule 2 are excluded. A patient is included when they do NOT match Rule 3. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
 Currently registered patients.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 3
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | Continue to Rule 2 | Excluded | Filter — must match |
+| 2 | Excluded | Continue to Rule 3 | Exclusion |
+| 3 | Excluded | **Included** | Final — exclude if matched |
+
+## Rule details
+
+### Rule 1 of 3 — Filter — must match
 
 Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `nafld_reg_extra_vs1` (16 codes)
 
-### Rule 2 of 3
+### Rule 2 of 3 — Exclusion
 
 Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 3.
 
 A patient matches this rule when:
+
 - They appear in the results of the search **LTC LCS: NAFLD Register v2***
 
-### Rule 3 of 3
+### Rule 3 of 3 — Final — exclude if matched
 
 Final rule: patients who match are **excluded**; everyone else is included.
 
-A patient matches this rule when ANY of the following is true:
+A patient matches this rule when **ANY (OR)** of the following are true:
+
 - They appear in the results of the search **LTC LCS: AF Register***
 - They appear in the results of the search **LTC LCS: CKD Register***
 - They appear in the results of the search **LTC LCS: CHD Register***
@@ -56,9 +67,9 @@ A patient matches this rule when ANY of the following is true:
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| LTC LCS: NAFLD Register*- EXTRA | `nafld_reg_extra_vs1` |  | SNOMED | 16 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | f5b3dad9 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: NAFLD Register*- EXTRA | `nafld_reg_extra_vs1` |  | 1 | SNOMED | 16 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | f5b3dad9 |
 
 ## Caveats
 

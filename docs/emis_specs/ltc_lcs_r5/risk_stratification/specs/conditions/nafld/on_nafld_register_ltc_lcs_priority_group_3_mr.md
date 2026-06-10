@@ -14,47 +14,57 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS: NAFLD Register v2*" (see below). A patient is included when they match any one of Rules 1-2. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: NAFLD Register v2*** — Start with currently registered patients. Include patients who match any of: Clinical Codes with Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alcoholic fatty liver disease +8 more; OR Clinical Codes with Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfunction-associated steatohepatitis, Metabolic dysfunction-associated steatotic liver.
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: NAFLD Register v2*** — Include patients who match any of: Clinical Codes with Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alcoholic fatty liver disease +8 more; OR Clinical Codes with Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfunction-associated steatohepatitis, Metabolic dysfunction-associated steatotic liver.
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 2
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Continue to Rule 2 | Inclusion route |
+| 2 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 2 — Inclusion route
 
 If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 2.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `on_nafld_reg_pg3_mr_vs1` (11 codes)
-  - Where date within the last 3 years
+  - Where date within the last 3 years — `date > today - 3 years`
   - Keep only the latest matching record, and require its numeric value > 3.25
 
-### Rule 2 of 2
+### Rule 2 of 2 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
-A patient matches this rule when ALL of the following are true:
-- **Clinical Codes** (clinical events)
+A patient matches this rule when **ALL (AND)** of the following are true:
+
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `on_nafld_reg_pg3_mr_vs1` (11 codes)
-  - Where date within the last 3 years
+  - Where date within the last 3 years — `date > today - 3 years`
   - Keep only the latest matching record, and require its numeric value > 1.3 and <= 3.25
-- **Clinical Codes** (clinical events)
+- **Criterion B — Clinical Codes** (clinical events)
   - Code in: `on_nafld_reg_pg3_mr_vs2` (4 codes)
-  - Where date within the last 3 years
+  - Where date within the last 3 years — `date > today - 3 years`
   - Keep only the latest matching record, and require its numeric value >= 9.8
 
 ## Code lists used
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs1` |  | SNOMED | 12 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | 63fd8d6e |
-| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs2` |  | SNOMED | 3 | Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfuncti... | 43d07f8b |
-| On NAFLD Register- LTC LCS Priority Group 3 (MR) | `on_nafld_reg_pg3_mr_vs1` |  | SNOMED | 11 | NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, Non-alcoholic fatty... | ca67a54a |
-| On NAFLD Register- LTC LCS Priority Group 3 (MR) | `on_nafld_reg_pg3_mr_vs2` |  | SNOMED | 4 | ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score, Ass... | e1c7ed45 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs1` |  |  | SNOMED | 12 | Fatty liver, Acute fatty liver of pregnancy, Hepatic fibrosis due to non-alco... | 63fd8d6e |
+| LTC LCS: NAFLD Register v2* | `nafld_reg_v2_vs2` |  |  | SNOMED | 3 | Metabolic dysfunction-associated steatotic liver disease, Metabolic dysfuncti... | 43d07f8b |
+| On NAFLD Register- LTC LCS Priority Group 3 (MR) | `on_nafld_reg_pg3_mr_vs1` |  | 1, 2 | SNOMED | 11 | NAFLD (Non-Alcoholic Fatty Liver Disease) fibrosis score, Non-alcoholic fatty... | ca67a54a |
+| On NAFLD Register- LTC LCS Priority Group 3 (MR) | `on_nafld_reg_pg3_mr_vs2` |  | 2 | SNOMED | 4 | ELF (Enhanced Liver Fibrosis) score, Enhanced Liver Fibrosis (ELF) score, Ass... | e1c7ed45 |
 
 ## Caveats
 

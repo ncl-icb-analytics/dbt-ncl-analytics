@@ -14,14 +14,18 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "GROUP2- HR" (see below). This report has no filtering rules of its own — it reports on its starting population.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS Base*** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
-2. **LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only** — Start with the patients found by "LTC LCS Base*". Include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
-3. **GROUP2- HR** — Start with the patients found by "LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only". Exclude patients who match Patients included in search GROUP1- HRC. Include patients who match Patients included in search On AF Register- LTC LCS Priority Group 2 (HR)* OR patients included in search On CKD Register- LTC LCS Priority Group 2 (HR) OR patients included in search On CHD Register- LTC LCS Priority Group 2 (HR) OR patients included in search on Diabetes Register- LTC LCS Priority Group 2 (HR) OR patients included in search On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 OR patients included in search On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* OR patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 OR patients included in search On COPD Register- LTC LCS Priority Group 2 (HR) OR patients included in search On HF Register- LTC LCS Priority Group 2 (HR)* OR patients included in search On PAD Register- LTC LCS Priority Group 2 (HR) OR patients included in search On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)*.
-4. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS Base*** — Include patients who match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+   - Combines: **LTC LCS: AF Register***; **LTC LCS: CKD Register***; **LTC LCS: CHD Register***; **LTC LCS: Diabetes Register***; **LTC LCS: Hypertension Register***; **LTC LCS: NAFLD Register v2***; **LTC LCS: Asthma Adult Register***; **LTC LCS: Asthma CYP Register***; **LTC LCS: COPD Register***; **LTC LCS: HF Register***; **LTC LCS: PAD Register***; **LTC LCS: Stroke/TIA Register***
+3. **LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only** — Include patients who do not match Patients included in search LTC LCS: Asthma CYP Register ONLY OR patients included in search On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) OR patients included in search On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only).
+   - Combines: **LTC LCS: Asthma CYP Register ONLY**; **On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only)**; **On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only)**
+4. **GROUP2- HR** — Exclude patients who match Patients included in search GROUP1- HRC. Include patients who match Patients included in search On AF Register- LTC LCS Priority Group 2 (HR)* OR patients included in search On CKD Register- LTC LCS Priority Group 2 (HR) OR patients included in search On CHD Register- LTC LCS Priority Group 2 (HR) OR patients included in search on Diabetes Register- LTC LCS Priority Group 2 (HR) OR patients included in search On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 OR patients included in search On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* OR patients included in search On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 OR patients included in search On COPD Register- LTC LCS Priority Group 2 (HR) OR patients included in search On HF Register- LTC LCS Priority Group 2 (HR)* OR patients included in search On PAD Register- LTC LCS Priority Group 2 (HR) OR patients included in search On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)*.
+   - Combines: **GROUP1- HRC**; **On AF Register- LTC LCS Priority Group 2 (HR)***; **On CKD Register- LTC LCS Priority Group 2 (HR)**; **On CHD Register- LTC LCS Priority Group 2 (HR)**; **on Diabetes Register- LTC LCS Priority Group 2 (HR)**; **On Hypertension Register- LTC LCS Priority Group 2 (HR) v3**; **On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)***; **On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2**; **On COPD Register- LTC LCS Priority Group 2 (HR)**; **On HF Register- LTC LCS Priority Group 2 (HR)***; **On PAD Register- LTC LCS Priority Group 2 (HR)**; **On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)***
+5. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule details
 
 No rules — all patients from the starting population are included.
 
@@ -31,75 +35,110 @@ These define what the report shows for each patient, not who is included.
 
 ### Patient Details
 
+Shows: NHS Number, Usual GP's Organisation Code, Ethnic Origin
+No filtering criteria; outputs standard columns.
+
 ### Record of Interpreter Information
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs1` (16 codes)
   - Keep only the latest matching record
 
 ### Homeless
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs2` (3 codes), or `2hr_updated_25_26_vs3` (2 codes)
   - Keep only the latest matching record
 
 ### Housebound
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs4` (2 codes), or `2hr_updated_25_26_vs5` (1 code)
   - Keep only the latest matching record
 
 ### Care Home resident
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs6` (3 codes), or `2hr_updated_25_26_vs7` (2 codes)
   - Keep only the latest matching record
 
 ### Cardiovascular disease
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### Atrial Fibrillation
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### Hypertension
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### Hyperlipidaemia
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs8` (1 code)
   - Keep only the latest matching record
 
 ### Diabetes
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### Chronic Kidney Disease
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### NA Fatty Liver Disease
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs9` (12 codes)
   - Keep only the latest matching record
 
 ### COPD
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### Asthma
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### Serious MI
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs10` (2 codes), or `2hr_updated_25_26_vs11` (1 code)
   - Keep only the latest matching record
 
 ### Learning Disability
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Keep only the latest matching record
 
 ### Frailty
-- **Clinical Codes** (clinical events)
+
+Shows: Code Term
+- **Criterion A — Clinical Codes** (clinical events)
   - Code in: `2hr_updated_25_26_vs12` (6 codes)
   - Keep only the latest matching record
 
@@ -107,20 +146,20 @@ These define what the report shows for each patient, not who is included.
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs1` |  | SNOMED | 16 | Interpreter needed, Interpreter present, Presence of interpreter +13 more | d9a780b0 |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs10` |  | SNOMED | 2 | On severe mental illness register, Removed from severe mental illness register | d864ef35 |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs11` |  | SNOMED | 1 | On severe mental illness register | d2e1bc0b |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs12` |  | SNOMED | 6 | Frailty, On frailty register, Rockwood Clinical Frailty Scale level 6 - moder... | fa6dc79f |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs2` |  | SNOMED | 3 | Homeless, Homeless enhanced services administration, No longer homeless | bd017638 |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs3` |  | SNOMED | 2 | Homeless, Homeless enhanced services administration | c853fe7f |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs4` |  | SNOMED | 2 | Housebound, No longer housebound | 7bcc1e58 |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs5` |  | SNOMED | 1 | Housebound | fb66502d |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs6` |  | SNOMED | 3 | Lives in care home, Provision of general practitioner intermediate care, Prev... | 23643eb1 |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs7` |  | SNOMED | 2 | Lives in care home, Provision of general practitioner intermediate care | 8aafdf14 |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs8` |  | SNOMED | 1 | Hyperlipidaemia | b03bd7c6 |
-| 2_HR updated 25-26 | `2hr_updated_25_26_vs9` |  | SNOMED | 12 | NAFLD - nonalcoholic fatty liver disease, NAFLD - Nonalcoholic fatty liver di... | 63fd8d6e |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs1` |  | Record of Interpreter Information | SNOMED | 16 | Interpreter needed, Interpreter present, Presence of interpreter +13 more | d9a780b0 |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs10` |  | Serious MI | SNOMED | 2 | On severe mental illness register, Removed from severe mental illness register | d864ef35 |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs11` |  | Serious MI | SNOMED | 1 | On severe mental illness register | d2e1bc0b |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs12` |  | Frailty | SNOMED | 6 | Frailty, On frailty register, Rockwood Clinical Frailty Scale level 6 - moder... | fa6dc79f |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs2` |  | Homeless | SNOMED | 3 | Homeless, Homeless enhanced services administration, No longer homeless | bd017638 |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs3` |  | Homeless | SNOMED | 2 | Homeless, Homeless enhanced services administration | c853fe7f |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs4` |  | Housebound | SNOMED | 2 | Housebound, No longer housebound | 7bcc1e58 |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs5` |  | Housebound | SNOMED | 1 | Housebound | fb66502d |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs6` |  | Care Home resident | SNOMED | 3 | Lives in care home, Provision of general practitioner intermediate care, Prev... | 23643eb1 |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs7` |  | Care Home resident | SNOMED | 2 | Lives in care home, Provision of general practitioner intermediate care | 8aafdf14 |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs8` |  | Hyperlipidaemia | SNOMED | 1 | Hyperlipidaemia | b03bd7c6 |
+| 2_HR updated 25-26 | `2hr_updated_25_26_vs9` |  | NA Fatty Liver Disease | SNOMED | 12 | NAFLD - nonalcoholic fatty liver disease, NAFLD - Nonalcoholic fatty liver di... | 63fd8d6e |
 
 ## Caveats
 

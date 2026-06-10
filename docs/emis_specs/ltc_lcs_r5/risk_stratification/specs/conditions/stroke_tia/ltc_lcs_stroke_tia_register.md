@@ -14,17 +14,24 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with currently registered patients. A patient is included when they match Rule 1.
 
-## Who we start with
+## Start population
 
 Currently registered patients.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 1
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 1 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
+
 - They match the EMIS library item **Stroke/TIA Register** (see Caveats)
 
 ## Code lists used

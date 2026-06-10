@@ -14,34 +14,47 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rule 1 to stay in. Patients matching Rule 2 are excluded. A patient is included when they match Rule 3. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: Hypertension Register*** — Start with currently registered patients. Include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: Hypertension Register*** — Include patients who match Hypertension Register (library item a5ff1b4e-f130-4fea-b11c-5b40dc9b0877).
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 3
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | Continue to Rule 2 | Excluded | Filter — must match |
+| 2 | Excluded | Continue to Rule 3 | Exclusion |
+| 3 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 3 — Filter — must match
 
 Patients **must match** this rule to stay in. Those who match continue to Rule 2; those who do not are excluded.
 
 A patient matches this rule when:
-- **Clinical Codes** (clinical events)
-  - Code in: `on_htn_reg_pg2_hr_v3_vs1` (1 code — cluster CLINBP_COD), or `on_htn_reg_pg2_hr_v3_vs2` (5 codes — cluster HOMEAMBBP_COD)
-  - Where date within the last 12 months
 
-### Rule 2 of 3
+- **Criterion A — Clinical Codes** (clinical events)
+  *"Blood Pressure reading excluding home done in last 12 months"*
+  - Code in: `on_htn_reg_pg2_hr_v3_vs1` (1 code — cluster CLINBP_COD), or `on_htn_reg_pg2_hr_v3_vs2` (5 codes — cluster HOMEAMBBP_COD)
+  - Where date within the last 12 months — `date > today - 12 months`
+
+### Rule 2 of 3 — Exclusion
 
 Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 3.
 
 A patient matches this rule when:
+
 - They appear in the results of the search **On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3**
 
-### Rule 3 of 3
+### Rule 3 of 3 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
-A patient matches this rule when ANY of the following is true:
+A patient matches this rule when **ANY (OR)** of the following are true:
+
 - They appear in the results of the search **Priority Group 2a (ICB) v3**
 - They appear in the results of the search **Priority Group 2b (ICB) v3**
 
@@ -49,10 +62,10 @@ A patient matches this rule when ANY of the following is true:
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | `on_htn_reg_pg2_hr_v3_vs1` | CLINBP_COD | SNOMED | 1 | Refset: 999036281000230108 | f806e309 |
-| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | `on_htn_reg_pg2_hr_v3_vs2` | HOMEAMBBP_COD | SNOMED | 5 | 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitori... | 0daae157 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | `on_htn_reg_pg2_hr_v3_vs1` | CLINBP_COD | 1 | SNOMED | 1 | Refset: 999036281000230108 | f806e309 |
+| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | `on_htn_reg_pg2_hr_v3_vs2` | HOMEAMBBP_COD | 1 | SNOMED | 5 | 24 hour blood pressure, Average blood pressure, 24 hr blood pressure monitori... | 0daae157 |
 
 ## Caveats
 

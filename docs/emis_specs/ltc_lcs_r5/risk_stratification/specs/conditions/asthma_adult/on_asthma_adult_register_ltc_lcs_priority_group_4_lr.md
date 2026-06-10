@@ -14,51 +14,63 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 Start with the patients found by "LTC LCS: Asthma Adult Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-3. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
-## Who we start with
+## Start population
 
-1. **LTC LCS: Asthma Adult Register*** — Start with currently registered patients. Require Patient Details where Age at least 18 years old. Include patients who match Clinical Codes with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
-2. **This search** then applies the rules below to that population.
+1. Currently registered patients
+2. **LTC LCS: Asthma Adult Register*** — Require Patient Details where Age at least 18 years old. Include patients who match Clinical Codes with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
+3. **This search** — applies the rules below.
 
-## Inclusion logic, step by step
+## Rule flow
 
-### Rule 1 of 3
+| Rule | If patient matches | If patient does not match | Role |
+| --- | --- | --- | --- |
+| 1 | Excluded | Continue to Rule 2 | Exclusion |
+| 2 | **Included** | Continue to Rule 3 | Inclusion route |
+| 3 | **Included** | Excluded | Final — include if matched |
+
+## Rule details
+
+### Rule 1 of 3 — Exclusion
 
 Patients matching this rule are **excluded** and no further rules are checked. Everyone else continues to Rule 2.
 
-A patient matches this rule when ANY of the following is true:
+A patient matches this rule when **ANY (OR)** of the following are true:
+
 - They appear in the results of the search **On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)***
 - They appear in the results of the search **On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)***
 - They appear in the results of the search **On Asthma(Adult) Register- LTC LCS Priority Group 3 (MR)***
 
-### Rule 2 of 3
+### Rule 2 of 3 — Inclusion route
 
 If a patient matches this rule they are **included** and no further rules are checked. If not, continue to Rule 3.
 
 A patient matches this rule when:
-- **Medication Issues**
-  - Code in: `on_asthma_adult_reg_pg4_lr_vs1` (6 codes)
-  - Where issue date within the last 6 months
 
-### Rule 3 of 3
+- **Criterion A — Medication Issues**
+  - Code in: `on_asthma_adult_reg_pg4_lr_vs1` (6 codes)
+  - Where issue date within the last 6 months — `issue date >= today - 6 months`
+
+### Rule 3 of 3 — Final — include if matched
 
 Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when:
-- **Medication Issues**
+
+- **Criterion A — Medication Issues**
   - Code in: `on_asthma_adult_reg_pg4_lr_vs2` (3 codes)
-  - Where issue date within the last 12 months
+  - Where issue date within the last 12 months — `issue date >= today - 12 months`
 
 ## Code lists used
 
 Names below match `valueset_friendly_name` in the extraction CSVs. The hash identifies the exact code list content, so a changed hash means the codes changed.
 
-| Search | Code list | Cluster | System | Codes | Content | Hash |
-| --- | --- | --- | --- | --- | --- | --- |
-| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs1` | ASTRES_COD | SNOMED | 1 | Refset: 999010051000230100 | 0cecb4fb |
-| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs2` | AST_COD | SNOMED | 1 | Refset: 999012891000230104 | b6f202b4 |
-| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs3` | ASTTRT_COD | SNOMED | 521 | Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals L... | d78c07e6 |
-| On Asthma(Adult) Register- LTC LCS Priority Group 4 (LR)* | `on_asthma_adult_reg_pg4_lr_vs1` |  | SCT Const | 6 | Beclometasone Dipropionate, Budesonide, Ciclesonide +3 more | a2d6b25c |
-| On Asthma(Adult) Register- LTC LCS Priority Group 4 (LR)* | `on_asthma_adult_reg_pg4_lr_vs2` |  | SCT Const | 3 | Salbutamol, Salbutamol Cr, Terbutaline Sulfate | 5c851fb5 |
+| Search | Code list | Cluster | Used in rules | System | Codes | Content | Hash |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs1` | ASTRES_COD |  | SNOMED | 1 | Refset: 999010051000230100 | 0cecb4fb |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs2` | AST_COD |  | SNOMED | 1 | Refset: 999012891000230104 | b6f202b4 |
+| LTC LCS: Asthma Adult Register* | `asthma_adult_reg_vs3` | ASTTRT_COD |  | SNOMED | 521 | Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals L... | d78c07e6 |
+| On Asthma(Adult) Register- LTC LCS Priority Group 4 (LR)* | `on_asthma_adult_reg_pg4_lr_vs1` |  | 2 | SCT Const | 6 | Beclometasone Dipropionate, Budesonide, Ciclesonide +3 more | a2d6b25c |
+| On Asthma(Adult) Register- LTC LCS Priority Group 4 (LR)* | `on_asthma_adult_reg_pg4_lr_vs2` |  | 3 | SCT Const | 3 | Salbutamol, Salbutamol Cr, Terbutaline Sulfate | 5c851fb5 |
 
 ## Caveats
 
