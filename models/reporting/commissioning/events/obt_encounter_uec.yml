@@ -2,6 +2,10 @@
 models:
   - name: obt_encounter_uec
     description: "Reporting layer for urgent and emergency care encounters from SUS data."
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: visit_occurrence_id
         data_type: number

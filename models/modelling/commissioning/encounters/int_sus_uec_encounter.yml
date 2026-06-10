@@ -2,33 +2,33 @@
 models:
   - name: int_sus_uec_encounter
     description: "Event history for emergency encounters from SUS data. More information: https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/emergency-care-data-set-ecds/ecds-guidance"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: visit_occurrence_id
         data_type: number
         description: "Primary key for the encounter within SUS"
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: sk_patient_id
         data_type: varchar
         description: "Common commissioning patient identifier"
-      
-      - name: local_patient_identifier
-        data_type: varchar
-        description: "Trust-provided patient id."
 
       - name: source
         data_type: varchar
         description: "Commissioning data source"
 
-      - name: organisation_id
+      - name: local_patient_identifier
         data_type: varchar
-        description: "Organisation ID (type 41) of the provider, if invalid code trimmed to 3 characters"
+        description: "Trust-provided patient id."
 
       - name: organisation_id
         data_type: varchar
-        description: "Organisation name of the provider"
+        description: "Organisation ID (type 41) of the provider, if invalid code trimmed to 3 characters"
 
       - name: organisation_name
         data_type: varchar
@@ -58,17 +58,21 @@ models:
         data_type: number
         description: "Time to urgent care department discharge from arrival, in minutes"
 
+      - name: end_date
+        data_type: timestamp_ntz
+        description: "Date of departure from urgent care department"
+
       - name: chief_complaint_code
         data_type: varchar
         description: "Chief complaint code of patient for the encounter"
 
       - name: chief_complaint_desc
         data_type: varchar
-        description: "Chief complain snomed description of patient for the encounter"
+        description: "Chief complaint SNOMED description of patient for the encounter"
 
       - name: chief_complaint_ecds_group1
         data_type: varchar
-        description: "Chief complain description of patient for the encounter"
+        description: "Chief complaint ECDS group 1 description of patient for the encounter"
 
       - name: is_injury_related
         data_type: boolean
@@ -80,87 +84,87 @@ models:
 
       - name: primary_diagnosis_code_snomed
         data_type: varchar
-        description: "The first listed diagnosis: considered to be the most important / significant."
+        description: "The first listed diagnosis SNOMED code, considered to be the most important / significant."
 
       - name: primary_diagnosis_desc_snomed
         data_type: varchar
-        description: "The first listed diagnosis: considered to be the most important / significant."
+        description: "The first listed diagnosis SNOMED description, considered to be the most important / significant."
 
       - name: primary_diagnosis_code_icd10
         data_type: varchar
-        description: "The first listed diagnosis: considered to be the most important / significant."
+        description: "The first listed diagnosis ICD-10 code, considered to be the most important / significant."
 
       - name: primary_diagnosis_desc_icd10
         data_type: varchar
-        description: "The first listed diagnosis: considered to be the most important / significant."
+        description: "The first listed diagnosis ICD-10 description, considered to be the most important / significant."
 
       - name: primary_diagnosis_desc_ecds_group1
         data_type: varchar
-        description: "The first listed diagnosis: considered to be the most important / significant."
+        description: "The first listed diagnosis ECDS group 1 description, considered to be the most important / significant."
 
       - name: primary_treatment
         data_type: varchar
-        description: "First treatment function code (SNOMED) recorded in encounter"
+        description: "First treatment SNOMED code recorded in encounter"
 
       - name: primary_treatment_desc_snomed
         data_type: varchar
-        description: "First treatment function code (SNOMED) recorded in encounter"
+        description: "First treatment SNOMED description recorded in encounter"
 
-      - name: primary_treatment_desc_snomed
+      - name: primary_treatment_desc_ecds_group1
         data_type: varchar
-        description: "First treatment function code (SNOMED) recorded in encounter"
+        description: "First treatment ECDS group 1 description recorded in encounter"
 
       - name: primary_investigation
         data_type: varchar
-        description: "First investigation function code (SNOMED) recorded in encounter"
+        description: "First investigation SNOMED code recorded in encounter"
 
       - name: primary_investigation_desc_snomed
         data_type: varchar
-        description: "First investigation function code (SNOMED) recorded in encounter"
+        description: "First investigation SNOMED description recorded in encounter"
 
       - name: primary_investigation_desc_ecds_group1
         data_type: varchar
-        description: "First investigation function code (SNOMED) recorded in encounter"
-    
+        description: "First investigation ECDS group 1 description recorded in encounter"
+
       - name: arrival_mode_code
         data_type: varchar
-        description: ""
+        description: "Arrival mode SNOMED code"
 
       - name: arrival_mode_desc
         data_type: varchar
-        description: ""
+        description: "Arrival mode SNOMED description"
 
       - name: discharge_destination_code
         data_type: varchar
-        description: ""
+        description: "Discharge destination SNOMED code"
 
       - name: discharge_destination_desc
         data_type: varchar
-        description: ""
+        description: "Discharge destination SNOMED description"
 
       - name: main_specialty_code
         data_type: varchar
-        description: "Allocated specialty code in which the consultant is contracted or recognised for the attendance: 180, emergency medicine"
+        description: "Allocated specialty code for the attendance: 180, emergency medicine"
 
       - name: main_specialty_name
         data_type: varchar
-        description: "Allocated specialty code in which the consultant is contracted or recognised for the attendance: 180, emergency medicine"
+        description: "Allocated specialty name for the attendance: Emergency Medicine"
 
       - name: hrg_code
         data_type: varchar
-        description: ""
+        description: "Health resource group code associated with the encounter"
 
       - name: core_hrg_desc
         data_type: varchar
-        description: ""
+        description: "HRG description associated with the encounter"
 
       - name: core_hrg_chapter
         data_type: varchar
-        description: ""
+        description: "HRG chapter key associated with the encounter"
 
       - name: core_hrg_chapter_desc
         data_type: varchar
-        description: ""
+        description: "HRG chapter description associated with the encounter"
 
       - name: cost
         data_type: number
@@ -168,44 +172,44 @@ models:
 
       - name: age_at_event
         data_type: number
-        description: ""
+        description: "Patient age at arrival"
 
       - name: gender_at_event
         data_type: varchar
-        description: "The gender of a person. Person Stated Gender Code is self -declared or inferred by observation for those unable to declare their person stated gender. This information will be auto populated from NHS Spine / PAS where available otherwise entered by clerical staff."
+        description: "The gender of a person as specified by the person or inferred by observation."
 
       - name: gender_desc_at_event
         data_type: varchar
-        description: ""
+        description: "Patient gender description at time of event"
 
       - name: ethnicity_at_event
         data_type: varchar
-        description: "The ethnicity of a person, as specified by the person. This information will be auto populated from NHS Spine/ PAS where available, otherwise  it will be entered by clerical staff. Ethnic category is the classification used for the 2001 census and is the national mandatory standard for the collection and analysis of ethnicity"
+        description: "The ethnicity of a person, as specified by the person."
 
       - name: ethnicity_desc_at_event
         data_type: varchar
-        description: ""
+        description: "Patient ethnicity description at time of event"
 
       - name: postcode_district_at_event
         data_type: varchar
-        description: ""
+        description: "Patient postcode district at time of event"
 
       - name: lsoa_11_at_event
         data_type: varchar
-        description: ""
+        description: "Patient LSOA 2011 at time of event"
 
       - name: lad_at_event
         data_type: varchar
-        description: ""
+        description: "Patient local authority district at time of event"
 
       - name: imd_at_event
         data_type: varchar
-        description: ""
+        description: "Patient index of multiple deprivation decile at time of event"
 
       - name: reg_practice_at_event
         data_type: varchar
-        description: ""
+        description: "Patient registered GP practice at time of event"
 
       - name: visit_occurrence_type
         data_type: varchar
-        description: ""
+        description: "Type of visit occurrence"

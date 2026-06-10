@@ -2,12 +2,16 @@
 models:
   - name: int_sus_apc_encounter
     description: "Event history for admitted patient care encounters from SUS data"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
     columns:
       - name: visit_occurrence_id
         data_type: number
         description: "Primary key for the encounter within SUS"
         data_tests:
-          - unique       
+          - unique
           - not_null
 
       - name: sk_patient_id
@@ -37,7 +41,7 @@ models:
       - name: site_name
         data_type: varchar
         description: "Site name"
-      
+
       - name: start_date
         data_type: timestamp_ntz
         description: "Spell start date"
@@ -53,12 +57,12 @@ models:
       - name: duration_to_date
         data_type: number
         description: "Length of stay in days, including ongoing stays calculated to current date"
-     
-      - name: admission_method
+
+      - name: spell_admission_method
         data_type: varchar
         description: "Method of admission of the spell (code)"
-      
-      - name: admission_method
+
+      - name: admission_method_name
         data_type: varchar
         description: "Method of admission of the spell (name)"
 
@@ -69,42 +73,58 @@ models:
       - name: admission_patient_classification
         data_type: varchar
         description: "Patient classification at admission"
-      
+
       - name: pod
         data_type: varchar
         description: "Point of delivery, based on admission method, patient classification and length of stay"
 
-      - name: flat_diagnosis_codes
+      - name: primary_diagnosis_code
         data_type: varchar
-        description: "Primary and secondary diagnosis codes for the spell (as derived by the HRG grouper) flattened into a single field"
+        description: "Primary diagnosis code for the spell as derived by the HRG grouper"
+
+      - name: secondary_diagnosis_code
+        data_type: varchar
+        description: "Secondary diagnosis code for the spell as derived by the HRG grouper"
 
       - name: primary_treatment
         data_type: varchar
-        description: ""
+        description: "Dominant procedure code for the spell as derived by the HRG grouper"
 
       - name: main_specialty_code
         data_type: varchar
-        description: "The specialty (code) in which the consultant is contracted or recognised and the code identifies a specialty as designated by Royal Colleges derived from the dominant episode of the spell."
+        description: "The specialty (code) in which the consultant is contracted or recognised, derived from the dominant episode of the spell."
 
       - name: main_specialty_name
         data_type: varchar
-        description: "The specialty (name) in which the consultant is contracted or recognised and the code identifies a specialty as designated by Royal Colleges derived from the dominant episode of the spell."
+        description: "The specialty (name) in which the consultant is contracted or recognised, derived from the dominant episode of the spell."
 
       - name: main_specialty_category
         data_type: varchar
-        description: "The specialty (category) in which the consultant is contracted or recognised and the code identifies a specialty as designated by Royal Colleges derived from the dominant episode of the spell."
-     
+        description: "The specialty (category) in which the consultant is contracted or recognised, derived from the dominant episode of the spell."
+
       - name: treatment_function_code
         data_type: varchar
-        description: "TREATMENT FUNCTION CODE is recorded to report the specialised service within which the PATIENT is treated. It is based on MAIN SPECIALTY but also includes approved sub-specialties and treatment specialties used by lead CARE PROFESSIONALS including CONSULTANTS. TREATMENT FUNCTION, rather than the Royal College or Faculty specialty, is required on most activity returns and in the Commissioning Data Sets."
+        description: "Treatment function code for the specialised service within which the patient is treated."
 
       - name: treatment_function_code_desc
         data_type: varchar
-        description: "TREATMENT FUNCTION CODE is recorded to report the specialised service within which the PATIENT is treated. It is based on MAIN SPECIALTY but also includes approved sub-specialties and treatment specialties used by lead CARE PROFESSIONALS including CONSULTANTS. TREATMENT FUNCTION, rather than the Royal College or Faculty specialty, is required on most activity returns and in the Commissioning Data Sets."
+        description: "Treatment function description for the specialised service within which the patient is treated."
 
       - name: hrg_code
         data_type: varchar
         description: "The spell level HRG returned by the grouper as a result of grouping non-excluded episodes."
+
+      - name: core_hrg_desc
+        data_type: varchar
+        description: "HRG description associated with the spell"
+
+      - name: core_hrg_chapter
+        data_type: varchar
+        description: "HRG chapter key associated with the spell"
+
+      - name: core_hrg_chapter_desc
+        data_type: varchar
+        description: "HRG chapter description associated with the spell"
 
       - name: spec_comm_flag
         data_type: varchar
@@ -116,7 +136,7 @@ models:
 
       - name: type
         data_type: varchar
-        description: "An amalgamation of admission_type and sub_type where type = 'NON'. Type is derived from 2 sources (TBC). Subtype is derived from the method of admission to a provider spell."
+        description: "An amalgamation of admission_type and sub_type where type = 'NON'."
 
       - name: cost
         data_type: number
@@ -128,41 +148,40 @@ models:
 
       - name: gender_at_event
         data_type: varchar
-        description: "Ambiguous: 'current gender of the patient.'"
+        description: "Patient gender code at time of event"
 
       - name: gender_desc_at_event
         data_type: varchar
-        description: ""
+        description: "Patient gender description at time of event"
 
       - name: ethnicity_at_event
         data_type: varchar
-        description: "Ambiguous: ode that indicates the ethnicity of the patient, this is a value that the patients themselves specify. This field will be populated with an alphabetic value from A to Z; consult the NHS data dictionary."
+        description: "Patient ethnicity code at time of event"
 
       - name: ethnicity_desc_at_event
         data_type: varchar
-        description: ""
+        description: "Patient ethnicity description at time of event"
 
       - name: postcode_district_at_event
         data_type: varchar
-        description: "Ambiguoius: The first part of the patient's postcode (outward code) at the time of the event."
+        description: "The first part of the patient's postcode (outward code) at the time of the event."
 
       - name: lsoa_11_at_event
         data_type: varchar
-        description: ""
+        description: "Patient LSOA 2011 at time of event"
 
       - name: lad_at_event
         data_type: varchar
-        description: ""
+        description: "Patient local authority district at time of event"
 
       - name: imd_at_event
         data_type: varchar
-        description: ""
+        description: "Patient index of multiple deprivation decile at time of event"
 
       - name: reg_practice_at_event
         data_type: varchar
-        description: ""
+        description: "Patient registered GP practice at time of event"
 
       - name: visit_occurrence_type
         data_type: varchar
-        description: ""
-
+        description: "Type of visit occurrence"

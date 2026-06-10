@@ -87,6 +87,26 @@ models:
         data_type: varchar
         description: "Point of delivery, based on HRG code"
 
+      - name: primary_diagnosis_code
+        data_type: varchar
+        description: "Primary ICD diagnosis code for the appointment"
+
+      - name: primary_diagnosis_name
+        data_type: varchar
+        description: "Primary ICD diagnosis description for the appointment"
+
+      - name: primary_procedure_code
+        data_type: varchar
+        description: "Primary OPCS procedure code for the appointment"
+
+      - name: primary_procedure_category
+        data_type: varchar
+        description: "Primary OPCS procedure category for the appointment"
+
+      - name: primary_procedure_name
+        data_type: varchar
+        description: "Primary OPCS procedure description for the appointment"
+
       - name: main_specialty_code
         data_type: varchar
         description: "Code: The specialty in which the consultant is contracted or
