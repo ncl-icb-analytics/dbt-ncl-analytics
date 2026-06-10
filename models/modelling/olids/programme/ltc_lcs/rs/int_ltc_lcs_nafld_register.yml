@@ -9,9 +9,8 @@ models:
       cluster. Parent for the NAFLD risk stratification model and the LTC LCS
       base population.
 
-      Implemented from the EMIS valuesets; to be switched to the ECL-managed
-      steatotic liver disease cluster when it lands in combined_codesets.
-      Active patients only.
+      Implemented from the ECL-managed SLD_DX_CODES cluster (verified
+      equivalent to the EMIS valueset expansion). Active patients only.
     config:
       meta:
         owner:
@@ -20,11 +19,6 @@ models:
       - dbt_utils.at_least_one:
           arguments:
             column_name: person_id
-      - valuesets_have_codes:
-          arguments:
-            valuesets:
-              - nafld_reg_v2_vs1
-              - nafld_reg_v2_vs2
     columns:
       - name: person_id
         data_tests:

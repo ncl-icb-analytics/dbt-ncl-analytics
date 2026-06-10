@@ -7,16 +7,14 @@
 -- broader than fct_person_nafld_register, which stays on the clinically
 -- clean MASLD_DX_CODES cluster.
 --
--- Implemented from the EMIS valuesets (nafld_reg_v2_vs1/vs2). Switch to the
--- ECL-managed steatotic liver disease cluster (SLD_DX_CODES:
--- << 197321007 OR << 79720007 OR << 29185008, verified equivalent to the
--- EMIS expansion) via get_observations once it lands in combined_codesets.
+-- Implemented from the ECL-managed SLD_DX_CODES cluster
+-- (<< 197321007 OR << 79720007 OR << 29185008, with historic expansion;
+-- verified equivalent to the EMIS NAFLD v2 valueset expansion).
 
 with
 nafld_codes as (
-    select person_id from ({{ get_ltc_lcs_observations("nafld_reg_v2_vs1") }})
-    union
-    select person_id from ({{ get_ltc_lcs_observations("nafld_reg_v2_vs2") }})
+    select distinct person_id
+    from ({{ get_observations("'SLD_DX_CODES'") }})
 ),
 
 active as (
