@@ -5,119 +5,210 @@ Implementation guides extracted from `NCL LTC LCS R5 updated 27112025.xml`
 
 Regenerate with `python scripts/extract_emis_ltc_lcs_specs.py`.
 
+Guides are organised under `conditions/<condition>/` where a search belongs
+to a single register condition. Shared cross-condition searches live under
+`shared/<area>/`.
+
+## Base population
+
 | Search | File |
 |---|---|
-| 0- NO record of Dentist info | [0_no_record_of_dentist_info.md](0_no_record_of_dentist_info.md) |
-| 1- Registered with Dentist | [1_registered_with_dentist.md](1_registered_with_dentist.md) |
-| 1_HRandCOMPLEX | [1_hrandcomplex.md](1_hrandcomplex.md) |
-| 1_HRandCOMPLEX - updated 25-26 | [1_hrandcomplex_updated_25_26.md](1_hrandcomplex_updated_25_26.md) |
-| 1_HRandCOMPLEX - updated : Complex LTCs- Aug 2025 | [1_hrandcomplex_updated_complex_ltcs_aug_2025.md](1_hrandcomplex_updated_complex_ltcs_aug_2025.md) |
-| 2- Not Registered with Dentist | [2_not_registered_with_dentist.md](2_not_registered_with_dentist.md) |
-| 2_HR | [2_hr.md](2_hr.md) |
-| 2_HR updated 25-26 | [2_hr_updated_25_26.md](2_hr_updated_25_26.md) |
-| 3- Advised to see dentist | [3_advised_to_see_dentist.md](3_advised_to_see_dentist.md) |
-| 3_MR | [3_mr.md](3_mr.md) |
-| 3_MR updated 25-26 | [3_mr_updated_25_26.md](3_mr_updated_25_26.md) |
-| 4_LR | [4_lr.md](4_lr.md) |
-| 4_LR updated 25-26 | [4_lr_updated_25_26.md](4_lr_updated_25_26.md) |
-| 5. LTC LCS: Asthma CYP register ONLY | [5_ltc_lcs_asthma_cyp_register_only.md](5_ltc_lcs_asthma_cyp_register_only.md) |
-| 6. All on Hypertension or Asthma register | [6_all_on_hypertension_or_asthma_register.md](6_all_on_hypertension_or_asthma_register.md) |
-| 6_ Hypertension or Asthma Master updated 25-26 | [6_hypertension_or_asthma_master_updated_25_26.md](6_hypertension_or_asthma_master_updated_25_26.md) |
-| A) HR+C- Metabolic & Respiratory | [a_hr_c_metabolic_respiratory.md](a_hr_c_metabolic_respiratory.md) |
-| Attends MOC since Apr 2024 | [attends_moc_since_apr_2024.md](attends_moc_since_apr_2024.md) |
-| B) HR+C- Metabolic only | [b_hr_c_metabolic_only.md](b_hr_c_metabolic_only.md) |
-| C&T completed | [c_t_completed.md](c_t_completed.md) |
-| C&T completed + Letter sent fy | [c_t_completed_letter_sent_fy.md](c_t_completed_letter_sent_fy.md) |
-| C&T completed FY | [c_t_completed_fy.md](c_t_completed_fy.md) |
-| C) HR+C- Respiratory only | [c_hr_c_respiratory_only.md](c_hr_c_respiratory_only.md) |
-| GROUP1- HRC | [group1_hrc.md](group1_hrc.md) |
-| GROUP2- HR | [group2_hr.md](group2_hr.md) |
-| GROUP3- MR | [group3_mr.md](group3_mr.md) |
-| GROUP4- LR | [group4_lr.md](group4_lr.md) |
-| GROUP:CYPAST HR ONLY | [group_cypast_hr_only.md](group_cypast_hr_only.md) |
-| GROUP:CYPAST_LR_ONLY | [group_cypast_lr_only.md](group_cypast_lr_only.md) |
-| Hypertension or Asthma Master | [hypertension_or_asthma_master.md](hypertension_or_asthma_master.md) |
-| Interpreter Required | [interpreter_required.md](interpreter_required.md) |
-| LTC LCS Base* | [ltc_lcs_base.md](ltc_lcs_base.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M10 JAN | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m10_jan.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m10_jan.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M11: FEB | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m11_feb.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m11_feb.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M12: MAR | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m12_mar.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m12_mar.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M1:APR | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m1_apr.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m1_apr.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M2:MAY | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m2_may.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m2_may.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M3: JUN | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m3_jun.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m3_jun.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M4: JUL | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m4_jul.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m4_jul.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M5: AUG | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m5_aug.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m5_aug.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M6: SEP | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m6_sep.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m6_sep.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M7: OCT | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m7_oct.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m7_oct.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M8: NOV | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m8_nov.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m8_nov.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M9: DEC | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m9_dec.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m9_dec.md) |
-| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- MOB | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_mob.md](ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_mob.md) |
-| LTC LCS: AF Register* | [ltc_lcs_af_register.md](ltc_lcs_af_register.md) |
-| LTC LCS: Asthma Adult Register* | [ltc_lcs_asthma_adult_register.md](ltc_lcs_asthma_adult_register.md) |
-| LTC LCS: Asthma CYP Register ONLY | [ltc_lcs_asthma_cyp_register_only.md](ltc_lcs_asthma_cyp_register_only.md) |
-| LTC LCS: Asthma CYP Register* | [ltc_lcs_asthma_cyp_register.md](ltc_lcs_asthma_cyp_register.md) |
-| LTC LCS: CHD Register* | [ltc_lcs_chd_register.md](ltc_lcs_chd_register.md) |
-| LTC LCS: CKD Register* | [ltc_lcs_ckd_register.md](ltc_lcs_ckd_register.md) |
-| LTC LCS: COPD Register* | [ltc_lcs_copd_register.md](ltc_lcs_copd_register.md) |
-| LTC LCS: Diabetes Register* | [ltc_lcs_diabetes_register.md](ltc_lcs_diabetes_register.md) |
-| LTC LCS: HF Register* | [ltc_lcs_hf_register.md](ltc_lcs_hf_register.md) |
-| LTC LCS: Hypertension Register* | [ltc_lcs_hypertension_register.md](ltc_lcs_hypertension_register.md) |
-| LTC LCS: NAFLD Register v2* | [ltc_lcs_nafld_register_v2.md](ltc_lcs_nafld_register_v2.md) |
-| LTC LCS: NAFLD Register* | [ltc_lcs_nafld_register.md](ltc_lcs_nafld_register.md) |
-| LTC LCS: NAFLD Register*- EXTRA | [ltc_lcs_nafld_register_extra.md](ltc_lcs_nafld_register_extra.md) |
-| LTC LCS: PAD Register* | [ltc_lcs_pad_register.md](ltc_lcs_pad_register.md) |
-| LTC LCS: Stroke/TIA Register* | [ltc_lcs_stroke_tia_register.md](ltc_lcs_stroke_tia_register.md) |
-| On AF Register- LTC LCS Priority Group 2 (HR)* | [on_af_register_ltc_lcs_priority_group_2_hr.md](on_af_register_ltc_lcs_priority_group_2_hr.md) |
-| On AF Register- LTC LCS Priority Group 3 (MR)* | [on_af_register_ltc_lcs_priority_group_3_mr.md](on_af_register_ltc_lcs_priority_group_3_mr.md) |
-| On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) | [on_asthma_adult_register_only_ltc_lcs_priority_group_4_lr_asthma_adult_only.md](on_asthma_adult_register_only_ltc_lcs_priority_group_4_lr_asthma_adult_only.md) |
-| On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)* | [on_asthma_adult_register_ltc_lcs_priority_group_1_hrc.md](on_asthma_adult_register_ltc_lcs_priority_group_1_hrc.md) |
-| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | [on_asthma_adult_register_ltc_lcs_priority_group_2_hr.md](on_asthma_adult_register_ltc_lcs_priority_group_2_hr.md) |
-| On Asthma(Adult) Register- LTC LCS Priority Group 3 (MR)* | [on_asthma_adult_register_ltc_lcs_priority_group_3_mr.md](on_asthma_adult_register_ltc_lcs_priority_group_3_mr.md) |
-| On Asthma(Adult) Register- LTC LCS Priority Group 4 (LR)* | [on_asthma_adult_register_ltc_lcs_priority_group_4_lr.md](on_asthma_adult_register_ltc_lcs_priority_group_4_lr.md) |
-| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* | [on_asthma_cyp_register_ltc_lcs_priority_group_2_hr.md](on_asthma_cyp_register_ltc_lcs_priority_group_2_hr.md) |
-| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | [on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2.md](on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2.md) |
-| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 Oct 2025 | [on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2_oct_2025.md](on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2_oct_2025.md) |
-| On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)* | [on_asthma_cyp_register_ltc_lcs_priority_group_4_lr.md](on_asthma_cyp_register_ltc_lcs_priority_group_4_lr.md) |
-| On CHD Register- LTC LCS Priority Group 1 (HRC) | [on_chd_register_ltc_lcs_priority_group_1_hrc.md](on_chd_register_ltc_lcs_priority_group_1_hrc.md) |
-| On CHD Register- LTC LCS Priority Group 2 (HR) | [on_chd_register_ltc_lcs_priority_group_2_hr.md](on_chd_register_ltc_lcs_priority_group_2_hr.md) |
-| On CHD Register- LTC LCS Priority Group 3 (MR) | [on_chd_register_ltc_lcs_priority_group_3_mr.md](on_chd_register_ltc_lcs_priority_group_3_mr.md) |
-| On CKD Register- LTC LCS Priority Group 1(HRC) | [on_ckd_register_ltc_lcs_priority_group_1_hrc.md](on_ckd_register_ltc_lcs_priority_group_1_hrc.md) |
-| On CKD Register- LTC LCS Priority Group 2 (HR) | [on_ckd_register_ltc_lcs_priority_group_2_hr.md](on_ckd_register_ltc_lcs_priority_group_2_hr.md) |
-| On CKD Register- LTC LCS Priority Group 3 (MR) | [on_ckd_register_ltc_lcs_priority_group_3_mr.md](on_ckd_register_ltc_lcs_priority_group_3_mr.md) |
-| On COPD Register- LTC LCS Priority Group 1 (HRC) | [on_copd_register_ltc_lcs_priority_group_1_hrc.md](on_copd_register_ltc_lcs_priority_group_1_hrc.md) |
-| On COPD Register- LTC LCS Priority Group 2 (HR) | [on_copd_register_ltc_lcs_priority_group_2_hr.md](on_copd_register_ltc_lcs_priority_group_2_hr.md) |
-| On COPD Register- LTC LCS Priority Group 3 (MR) | [on_copd_register_ltc_lcs_priority_group_3_mr.md](on_copd_register_ltc_lcs_priority_group_3_mr.md) |
-| On HF Register- LTC LCS Priority Group 2 (HR)* | [on_hf_register_ltc_lcs_priority_group_2_hr.md](on_hf_register_ltc_lcs_priority_group_2_hr.md) |
-| On HF Register- LTC LCS Priority Group 3 (MR)* | [on_hf_register_ltc_lcs_priority_group_3_mr.md](on_hf_register_ltc_lcs_priority_group_3_mr.md) |
-| On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only) | [on_hypertension_register_only_ltc_lcs_priority_group_4_lr_htn_only.md](on_hypertension_register_only_ltc_lcs_priority_group_4_lr_htn_only.md) |
-| On Hypertension Register- LTC LCS Priority Group 1 (HRC) | [on_hypertension_register_ltc_lcs_priority_group_1_hrc.md](on_hypertension_register_ltc_lcs_priority_group_1_hrc.md) |
-| On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3 | [on_hypertension_register_ltc_lcs_priority_group_1_hrc_v3.md](on_hypertension_register_ltc_lcs_priority_group_1_hrc_v3.md) |
-| On Hypertension Register- LTC LCS Priority Group 2 (HR) | [on_hypertension_register_ltc_lcs_priority_group_2_hr.md](on_hypertension_register_ltc_lcs_priority_group_2_hr.md) |
-| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | [on_hypertension_register_ltc_lcs_priority_group_2_hr_v3.md](on_hypertension_register_ltc_lcs_priority_group_2_hr_v3.md) |
-| On Hypertension Register- LTC LCS Priority Group 3A (MRa) | [on_hypertension_register_ltc_lcs_priority_group_3a_mra.md](on_hypertension_register_ltc_lcs_priority_group_3a_mra.md) |
-| On Hypertension Register- LTC LCS Priority Group 3A (MRa) v3 | [on_hypertension_register_ltc_lcs_priority_group_3a_mra_v3.md](on_hypertension_register_ltc_lcs_priority_group_3a_mra_v3.md) |
-| On Hypertension Register- LTC LCS Priority Group 3B (MRb) | [on_hypertension_register_ltc_lcs_priority_group_3b_mrb.md](on_hypertension_register_ltc_lcs_priority_group_3b_mrb.md) |
-| On Hypertension Register- LTC LCS Priority Group 3B (MRb) v3 | [on_hypertension_register_ltc_lcs_priority_group_3b_mrb_v3.md](on_hypertension_register_ltc_lcs_priority_group_3b_mrb_v3.md) |
-| On Hypertension Register- LTC LCS Priority Group 4 (LR) | [on_hypertension_register_ltc_lcs_priority_group_4_lr.md](on_hypertension_register_ltc_lcs_priority_group_4_lr.md) |
-| On NAFLD Register- LTC LCS Priority Group 3 (MR) | [on_nafld_register_ltc_lcs_priority_group_3_mr.md](on_nafld_register_ltc_lcs_priority_group_3_mr.md) |
-| On PAD Register- LTC LCS Priority Group 1 (HRC) | [on_pad_register_ltc_lcs_priority_group_1_hrc.md](on_pad_register_ltc_lcs_priority_group_1_hrc.md) |
-| On PAD Register- LTC LCS Priority Group 2 (HR) | [on_pad_register_ltc_lcs_priority_group_2_hr.md](on_pad_register_ltc_lcs_priority_group_2_hr.md) |
-| On PAD Register- LTC LCS Priority Group 3 (MR) | [on_pad_register_ltc_lcs_priority_group_3_mr.md](on_pad_register_ltc_lcs_priority_group_3_mr.md) |
-| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | [on_stroke_tia_register_ltc_lcs_priority_group_1_hrc.md](on_stroke_tia_register_ltc_lcs_priority_group_1_hrc.md) |
-| On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)* | [on_stroke_tia_register_ltc_lcs_priority_group_2_hr.md](on_stroke_tia_register_ltc_lcs_priority_group_2_hr.md) |
-| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | [on_stroke_tia_register_ltc_lcs_priority_group_3_mr.md](on_stroke_tia_register_ltc_lcs_priority_group_3_mr.md) |
-| Priority Group 2a (ICB) | [priority_group_2a_icb.md](priority_group_2a_icb.md) |
-| Priority Group 2a (ICB) v3 | [priority_group_2a_icb_v3.md](priority_group_2a_icb_v3.md) |
-| Priority Group 2b (ICB) | [priority_group_2b_icb.md](priority_group_2b_icb.md) |
-| Priority Group 2b (ICB) v3 | [priority_group_2b_icb_v3.md](priority_group_2b_icb_v3.md) |
-| Type 1 Diabetes* | [type_1_diabetes.md](type_1_diabetes.md) |
-| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | [on_diabetes_register_ltc_lcs_priority_group_1_hrc.md](on_diabetes_register_ltc_lcs_priority_group_1_hrc.md) |
-| on Diabetes Register- LTC LCS Priority Group 2 (HR) | [on_diabetes_register_ltc_lcs_priority_group_2_hr.md](on_diabetes_register_ltc_lcs_priority_group_2_hr.md) |
-| on Diabetes Register- LTC LCS Priority Group 3 (MR) | [on_diabetes_register_ltc_lcs_priority_group_3_mr.md](on_diabetes_register_ltc_lcs_priority_group_3_mr.md) |
-| on Diabetes Register- LTC LCS Priority Group 3A (MRa) | [on_diabetes_register_ltc_lcs_priority_group_3a_mra.md](on_diabetes_register_ltc_lcs_priority_group_3a_mra.md) |
-| on Diabetes Register- LTC LCS Priority Group 3B (MRb) | [on_diabetes_register_ltc_lcs_priority_group_3b_mrb.md](on_diabetes_register_ltc_lcs_priority_group_3b_mrb.md) |
-| on Diabetes Register- LTC LCS Priority Group 4 (LR) | [on_diabetes_register_ltc_lcs_priority_group_4_lr.md](on_diabetes_register_ltc_lcs_priority_group_4_lr.md) |
+| LTC LCS Base* | [ltc_lcs_base.md](conditions/base_population/ltc_lcs_base.md) |
+
+## Atrial fibrillation
+
+| Search | File |
+|---|---|
+| LTC LCS: AF Register* | [ltc_lcs_af_register.md](conditions/af/ltc_lcs_af_register.md) |
+| On AF Register- LTC LCS Priority Group 2 (HR)* | [on_af_register_ltc_lcs_priority_group_2_hr.md](conditions/af/on_af_register_ltc_lcs_priority_group_2_hr.md) |
+| On AF Register- LTC LCS Priority Group 3 (MR)* | [on_af_register_ltc_lcs_priority_group_3_mr.md](conditions/af/on_af_register_ltc_lcs_priority_group_3_mr.md) |
+
+## Asthma Adult
+
+| Search | File |
+|---|---|
+| LTC LCS: Asthma Adult Register* | [ltc_lcs_asthma_adult_register.md](conditions/asthma_adult/ltc_lcs_asthma_adult_register.md) |
+| On Asthma Adult Register ONLY- LTC LCS Priority Group 4 (LR Asthma Adult only) | [on_asthma_adult_register_only_ltc_lcs_priority_group_4_lr_asthma_adult_only.md](conditions/asthma_adult/on_asthma_adult_register_only_ltc_lcs_priority_group_4_lr_asthma_adult_only.md) |
+| On Asthma(Adult) Register- LTC LCS Priority Group 1 (HRC)* | [on_asthma_adult_register_ltc_lcs_priority_group_1_hrc.md](conditions/asthma_adult/on_asthma_adult_register_ltc_lcs_priority_group_1_hrc.md) |
+| On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)* | [on_asthma_adult_register_ltc_lcs_priority_group_2_hr.md](conditions/asthma_adult/on_asthma_adult_register_ltc_lcs_priority_group_2_hr.md) |
+| On Asthma(Adult) Register- LTC LCS Priority Group 3 (MR)* | [on_asthma_adult_register_ltc_lcs_priority_group_3_mr.md](conditions/asthma_adult/on_asthma_adult_register_ltc_lcs_priority_group_3_mr.md) |
+| On Asthma(Adult) Register- LTC LCS Priority Group 4 (LR)* | [on_asthma_adult_register_ltc_lcs_priority_group_4_lr.md](conditions/asthma_adult/on_asthma_adult_register_ltc_lcs_priority_group_4_lr.md) |
+
+## Asthma CYP
+
+| Search | File |
+|---|---|
+| 5. LTC LCS: Asthma CYP register ONLY | [5_ltc_lcs_asthma_cyp_register_only.md](conditions/asthma_cyp/5_ltc_lcs_asthma_cyp_register_only.md) |
+| GROUP:CYPAST HR ONLY | [group_cypast_hr_only.md](conditions/asthma_cyp/group_cypast_hr_only.md) |
+| GROUP:CYPAST_LR_ONLY | [group_cypast_lr_only.md](conditions/asthma_cyp/group_cypast_lr_only.md) |
+| LTC LCS: Asthma CYP Register ONLY | [ltc_lcs_asthma_cyp_register_only.md](conditions/asthma_cyp/ltc_lcs_asthma_cyp_register_only.md) |
+| LTC LCS: Asthma CYP Register* | [ltc_lcs_asthma_cyp_register.md](conditions/asthma_cyp/ltc_lcs_asthma_cyp_register.md) |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* | [on_asthma_cyp_register_ltc_lcs_priority_group_2_hr.md](conditions/asthma_cyp/on_asthma_cyp_register_ltc_lcs_priority_group_2_hr.md) |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 | [on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2.md](conditions/asthma_cyp/on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2.md) |
+| On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 Oct 2025 | [on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2_oct_2025.md](conditions/asthma_cyp/on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2_oct_2025.md) |
+| On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)* | [on_asthma_cyp_register_ltc_lcs_priority_group_4_lr.md](conditions/asthma_cyp/on_asthma_cyp_register_ltc_lcs_priority_group_4_lr.md) |
+
+## CHD
+
+| Search | File |
+|---|---|
+| LTC LCS: CHD Register* | [ltc_lcs_chd_register.md](conditions/chd/ltc_lcs_chd_register.md) |
+| On CHD Register- LTC LCS Priority Group 1 (HRC) | [on_chd_register_ltc_lcs_priority_group_1_hrc.md](conditions/chd/on_chd_register_ltc_lcs_priority_group_1_hrc.md) |
+| On CHD Register- LTC LCS Priority Group 2 (HR) | [on_chd_register_ltc_lcs_priority_group_2_hr.md](conditions/chd/on_chd_register_ltc_lcs_priority_group_2_hr.md) |
+| On CHD Register- LTC LCS Priority Group 3 (MR) | [on_chd_register_ltc_lcs_priority_group_3_mr.md](conditions/chd/on_chd_register_ltc_lcs_priority_group_3_mr.md) |
+
+## CKD
+
+| Search | File |
+|---|---|
+| LTC LCS: CKD Register* | [ltc_lcs_ckd_register.md](conditions/ckd/ltc_lcs_ckd_register.md) |
+| On CKD Register- LTC LCS Priority Group 1(HRC) | [on_ckd_register_ltc_lcs_priority_group_1_hrc.md](conditions/ckd/on_ckd_register_ltc_lcs_priority_group_1_hrc.md) |
+| On CKD Register- LTC LCS Priority Group 2 (HR) | [on_ckd_register_ltc_lcs_priority_group_2_hr.md](conditions/ckd/on_ckd_register_ltc_lcs_priority_group_2_hr.md) |
+| On CKD Register- LTC LCS Priority Group 3 (MR) | [on_ckd_register_ltc_lcs_priority_group_3_mr.md](conditions/ckd/on_ckd_register_ltc_lcs_priority_group_3_mr.md) |
+
+## COPD
+
+| Search | File |
+|---|---|
+| LTC LCS: COPD Register* | [ltc_lcs_copd_register.md](conditions/copd/ltc_lcs_copd_register.md) |
+| On COPD Register- LTC LCS Priority Group 1 (HRC) | [on_copd_register_ltc_lcs_priority_group_1_hrc.md](conditions/copd/on_copd_register_ltc_lcs_priority_group_1_hrc.md) |
+| On COPD Register- LTC LCS Priority Group 2 (HR) | [on_copd_register_ltc_lcs_priority_group_2_hr.md](conditions/copd/on_copd_register_ltc_lcs_priority_group_2_hr.md) |
+| On COPD Register- LTC LCS Priority Group 3 (MR) | [on_copd_register_ltc_lcs_priority_group_3_mr.md](conditions/copd/on_copd_register_ltc_lcs_priority_group_3_mr.md) |
+
+## Diabetes
+
+| Search | File |
+|---|---|
+| LTC LCS: Diabetes Register* | [ltc_lcs_diabetes_register.md](conditions/diabetes/ltc_lcs_diabetes_register.md) |
+| Type 1 Diabetes* | [type_1_diabetes.md](conditions/diabetes/type_1_diabetes.md) |
+| on Diabetes Register- LTC LCS Priority Group 1 (HRC) | [on_diabetes_register_ltc_lcs_priority_group_1_hrc.md](conditions/diabetes/on_diabetes_register_ltc_lcs_priority_group_1_hrc.md) |
+| on Diabetes Register- LTC LCS Priority Group 2 (HR) | [on_diabetes_register_ltc_lcs_priority_group_2_hr.md](conditions/diabetes/on_diabetes_register_ltc_lcs_priority_group_2_hr.md) |
+| on Diabetes Register- LTC LCS Priority Group 3 (MR) | [on_diabetes_register_ltc_lcs_priority_group_3_mr.md](conditions/diabetes/on_diabetes_register_ltc_lcs_priority_group_3_mr.md) |
+| on Diabetes Register- LTC LCS Priority Group 3A (MRa) | [on_diabetes_register_ltc_lcs_priority_group_3a_mra.md](conditions/diabetes/on_diabetes_register_ltc_lcs_priority_group_3a_mra.md) |
+| on Diabetes Register- LTC LCS Priority Group 3B (MRb) | [on_diabetes_register_ltc_lcs_priority_group_3b_mrb.md](conditions/diabetes/on_diabetes_register_ltc_lcs_priority_group_3b_mrb.md) |
+| on Diabetes Register- LTC LCS Priority Group 4 (LR) | [on_diabetes_register_ltc_lcs_priority_group_4_lr.md](conditions/diabetes/on_diabetes_register_ltc_lcs_priority_group_4_lr.md) |
+
+## Heart failure
+
+| Search | File |
+|---|---|
+| LTC LCS: HF Register* | [ltc_lcs_hf_register.md](conditions/hf/ltc_lcs_hf_register.md) |
+| On HF Register- LTC LCS Priority Group 2 (HR)* | [on_hf_register_ltc_lcs_priority_group_2_hr.md](conditions/hf/on_hf_register_ltc_lcs_priority_group_2_hr.md) |
+| On HF Register- LTC LCS Priority Group 3 (MR)* | [on_hf_register_ltc_lcs_priority_group_3_mr.md](conditions/hf/on_hf_register_ltc_lcs_priority_group_3_mr.md) |
+
+## Hypertension
+
+| Search | File |
+|---|---|
+| LTC LCS: Hypertension Register* | [ltc_lcs_hypertension_register.md](conditions/hypertension/ltc_lcs_hypertension_register.md) |
+| On Hypertension Register ONLY- LTC LCS Priority Group 4 (LR HTN only) | [on_hypertension_register_only_ltc_lcs_priority_group_4_lr_htn_only.md](conditions/hypertension/on_hypertension_register_only_ltc_lcs_priority_group_4_lr_htn_only.md) |
+| On Hypertension Register- LTC LCS Priority Group 1 (HRC) | [on_hypertension_register_ltc_lcs_priority_group_1_hrc.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_1_hrc.md) |
+| On Hypertension Register- LTC LCS Priority Group 1 (HRC) v3 | [on_hypertension_register_ltc_lcs_priority_group_1_hrc_v3.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_1_hrc_v3.md) |
+| On Hypertension Register- LTC LCS Priority Group 2 (HR) | [on_hypertension_register_ltc_lcs_priority_group_2_hr.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_2_hr.md) |
+| On Hypertension Register- LTC LCS Priority Group 2 (HR) v3 | [on_hypertension_register_ltc_lcs_priority_group_2_hr_v3.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_2_hr_v3.md) |
+| On Hypertension Register- LTC LCS Priority Group 3A (MRa) | [on_hypertension_register_ltc_lcs_priority_group_3a_mra.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_3a_mra.md) |
+| On Hypertension Register- LTC LCS Priority Group 3A (MRa) v3 | [on_hypertension_register_ltc_lcs_priority_group_3a_mra_v3.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_3a_mra_v3.md) |
+| On Hypertension Register- LTC LCS Priority Group 3B (MRb) | [on_hypertension_register_ltc_lcs_priority_group_3b_mrb.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_3b_mrb.md) |
+| On Hypertension Register- LTC LCS Priority Group 3B (MRb) v3 | [on_hypertension_register_ltc_lcs_priority_group_3b_mrb_v3.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_3b_mrb_v3.md) |
+| On Hypertension Register- LTC LCS Priority Group 4 (LR) | [on_hypertension_register_ltc_lcs_priority_group_4_lr.md](conditions/hypertension/on_hypertension_register_ltc_lcs_priority_group_4_lr.md) |
+
+## NAFLD
+
+| Search | File |
+|---|---|
+| LTC LCS: NAFLD Register v2* | [ltc_lcs_nafld_register_v2.md](conditions/nafld/ltc_lcs_nafld_register_v2.md) |
+| LTC LCS: NAFLD Register* | [ltc_lcs_nafld_register.md](conditions/nafld/ltc_lcs_nafld_register.md) |
+| LTC LCS: NAFLD Register*- EXTRA | [ltc_lcs_nafld_register_extra.md](conditions/nafld/ltc_lcs_nafld_register_extra.md) |
+| On NAFLD Register- LTC LCS Priority Group 3 (MR) | [on_nafld_register_ltc_lcs_priority_group_3_mr.md](conditions/nafld/on_nafld_register_ltc_lcs_priority_group_3_mr.md) |
+
+## PAD
+
+| Search | File |
+|---|---|
+| LTC LCS: PAD Register* | [ltc_lcs_pad_register.md](conditions/pad/ltc_lcs_pad_register.md) |
+| On PAD Register- LTC LCS Priority Group 1 (HRC) | [on_pad_register_ltc_lcs_priority_group_1_hrc.md](conditions/pad/on_pad_register_ltc_lcs_priority_group_1_hrc.md) |
+| On PAD Register- LTC LCS Priority Group 2 (HR) | [on_pad_register_ltc_lcs_priority_group_2_hr.md](conditions/pad/on_pad_register_ltc_lcs_priority_group_2_hr.md) |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | [on_pad_register_ltc_lcs_priority_group_3_mr.md](conditions/pad/on_pad_register_ltc_lcs_priority_group_3_mr.md) |
+
+## Stroke/TIA
+
+| Search | File |
+|---|---|
+| LTC LCS: Stroke/TIA Register* | [ltc_lcs_stroke_tia_register.md](conditions/stroke_tia/ltc_lcs_stroke_tia_register.md) |
+| On Stroke/TIA Register- LTC LCS Priority Group 1 (HRC)* | [on_stroke_tia_register_ltc_lcs_priority_group_1_hrc.md](conditions/stroke_tia/on_stroke_tia_register_ltc_lcs_priority_group_1_hrc.md) |
+| On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)* | [on_stroke_tia_register_ltc_lcs_priority_group_2_hr.md](conditions/stroke_tia/on_stroke_tia_register_ltc_lcs_priority_group_2_hr.md) |
+| On Stroke/TIA Register- LTC LCS Priority Group 3 (MR)* | [on_stroke_tia_register_ltc_lcs_priority_group_3_mr.md](conditions/stroke_tia/on_stroke_tia_register_ltc_lcs_priority_group_3_mr.md) |
+
+## Shared - dental
+
+| Search | File |
+|---|---|
+| 0- NO record of Dentist info | [0_no_record_of_dentist_info.md](shared/dental/0_no_record_of_dentist_info.md) |
+| 1- Registered with Dentist | [1_registered_with_dentist.md](shared/dental/1_registered_with_dentist.md) |
+| 2- Not Registered with Dentist | [2_not_registered_with_dentist.md](shared/dental/2_not_registered_with_dentist.md) |
+| 3- Advised to see dentist | [3_advised_to_see_dentist.md](shared/dental/3_advised_to_see_dentist.md) |
+
+## Shared - hypertension or asthma
+
+| Search | File |
+|---|---|
+| 6. All on Hypertension or Asthma register | [6_all_on_hypertension_or_asthma_register.md](shared/hypertension_asthma/6_all_on_hypertension_or_asthma_register.md) |
+| 6_ Hypertension or Asthma Master updated 25-26 | [6_hypertension_or_asthma_master_updated_25_26.md](shared/hypertension_asthma/6_hypertension_or_asthma_master_updated_25_26.md) |
+| Hypertension or Asthma Master | [hypertension_or_asthma_master.md](shared/hypertension_asthma/hypertension_or_asthma_master.md) |
+
+## Shared - MOC and call/recall
+
+| Search | File |
+|---|---|
+| Attends MOC since Apr 2024 | [attends_moc_since_apr_2024.md](shared/moc/attends_moc_since_apr_2024.md) |
+| C&T completed | [c_t_completed.md](shared/moc/c_t_completed.md) |
+| C&T completed + Letter sent fy | [c_t_completed_letter_sent_fy.md](shared/moc/c_t_completed_letter_sent_fy.md) |
+| C&T completed FY | [c_t_completed_fy.md](shared/moc/c_t_completed_fy.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M10 JAN | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m10_jan.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m10_jan.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M11: FEB | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m11_feb.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m11_feb.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M12: MAR | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m12_mar.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m12_mar.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M1:APR | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m1_apr.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m1_apr.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M2:MAY | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m2_may.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m2_may.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M3: JUN | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m3_jun.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m3_jun.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M4: JUL | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m4_jul.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m4_jul.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M5: AUG | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m5_aug.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m5_aug.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M6: SEP | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m6_sep.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m6_sep.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M7: OCT | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m7_oct.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m7_oct.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M8: NOV | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m8_nov.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m8_nov.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- M9: DEC | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m9_dec.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_m9_dec.md) |
+| LTC LCS MOC Base excluding CYP only, LR HTN only, LR Adult Asthma only- MOB | [ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_mob.md](shared/moc/ltc_lcs_moc_base_excluding_cyp_only_lr_htn_only_lr_adult_asthma_only_mob.md) |
+
+## Shared - risk groups
+
+| Search | File |
+|---|---|
+| 1_HRandCOMPLEX | [1_hrandcomplex.md](shared/risk_groups/1_hrandcomplex.md) |
+| 1_HRandCOMPLEX - updated 25-26 | [1_hrandcomplex_updated_25_26.md](shared/risk_groups/1_hrandcomplex_updated_25_26.md) |
+| 1_HRandCOMPLEX - updated : Complex LTCs- Aug 2025 | [1_hrandcomplex_updated_complex_ltcs_aug_2025.md](shared/risk_groups/1_hrandcomplex_updated_complex_ltcs_aug_2025.md) |
+| 2_HR | [2_hr.md](shared/risk_groups/2_hr.md) |
+| 2_HR updated 25-26 | [2_hr_updated_25_26.md](shared/risk_groups/2_hr_updated_25_26.md) |
+| 3_MR | [3_mr.md](shared/risk_groups/3_mr.md) |
+| 3_MR updated 25-26 | [3_mr_updated_25_26.md](shared/risk_groups/3_mr_updated_25_26.md) |
+| 4_LR | [4_lr.md](shared/risk_groups/4_lr.md) |
+| 4_LR updated 25-26 | [4_lr_updated_25_26.md](shared/risk_groups/4_lr_updated_25_26.md) |
+| A) HR+C- Metabolic & Respiratory | [a_hr_c_metabolic_respiratory.md](shared/risk_groups/a_hr_c_metabolic_respiratory.md) |
+| B) HR+C- Metabolic only | [b_hr_c_metabolic_only.md](shared/risk_groups/b_hr_c_metabolic_only.md) |
+| C) HR+C- Respiratory only | [c_hr_c_respiratory_only.md](shared/risk_groups/c_hr_c_respiratory_only.md) |
+| GROUP1- HRC | [group1_hrc.md](shared/risk_groups/group1_hrc.md) |
+| GROUP2- HR | [group2_hr.md](shared/risk_groups/group2_hr.md) |
+| GROUP3- MR | [group3_mr.md](shared/risk_groups/group3_mr.md) |
+| GROUP4- LR | [group4_lr.md](shared/risk_groups/group4_lr.md) |
+| Priority Group 2a (ICB) | [priority_group_2a_icb.md](shared/risk_groups/priority_group_2a_icb.md) |
+| Priority Group 2a (ICB) v3 | [priority_group_2a_icb_v3.md](shared/risk_groups/priority_group_2a_icb_v3.md) |
+| Priority Group 2b (ICB) | [priority_group_2b_icb.md](shared/risk_groups/priority_group_2b_icb.md) |
+| Priority Group 2b (ICB) v3 | [priority_group_2b_icb_v3.md](shared/risk_groups/priority_group_2b_icb_v3.md) |
+
+## Shared - workflow
+
+| Search | File |
+|---|---|
+| Interpreter Required | [interpreter_required.md](shared/workflow/interpreter_required.md) |
 
 ## Skipped duplicates
 

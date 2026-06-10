@@ -1,7 +1,7 @@
 -- LTC LCS: HF Register - Priority Group 3 (Medium Risk)
 -- Parent population: HF register, excluding PG2 (HR)
 -- EMIS source: 'On HF Register- LTC LCS Priority Group 3 (MR)*'
--- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_hf_register_ltc_lcs_priority_group_3_mr.md;
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/conditions/hf/on_hf_register_ltc_lcs_priority_group_3_mr.md;
 -- rule actions verified against the EMIS search screenshots in issue #400,
 -- which are canonical where the XML parse disagrees)
 --

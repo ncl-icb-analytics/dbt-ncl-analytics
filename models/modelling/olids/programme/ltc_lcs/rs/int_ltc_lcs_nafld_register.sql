@@ -1,6 +1,6 @@
 -- LTC LCS: NAFLD register
 -- EMIS source: 'LTC LCS: NAFLD Register v2*'
--- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/ltc_lcs_nafld_register_v2.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/conditions/nafld/ltc_lcs_nafld_register_v2.md)
 --
 -- The EMIS register spans the whole steatotic liver disease family (fatty
 -- liver conditions including the alcoholic branch, plus MASLD/MASH codes) -

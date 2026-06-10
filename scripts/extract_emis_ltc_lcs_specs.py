@@ -2,7 +2,7 @@
 
 Loads the shared R5 export from blob storage, filters reports to the
 Risk Stratification R2 folder, and writes one markdown implementation
-guide per report plus an INDEX.md.
+guide per report plus an INDEX.md, organised by condition.
 
 Usage:
     python scripts/extract_emis_ltc_lcs_specs.py
@@ -24,6 +24,30 @@ DEFAULT_PATHNAME = "xml-files/NCL LTC LCS R5 updated 27112025.xml"
 DEFAULT_FOLDER_FILTER = "Risk Stratification R2"
 DEFAULT_OUT_DIR = "docs/emis_specs/ltc_lcs_r5/risk_stratification/specs"
 
+SPEC_GROUP_LABELS = {
+    "conditions/base_population": "Base population",
+    "conditions/af": "Atrial fibrillation",
+    "conditions/asthma_adult": "Asthma Adult",
+    "conditions/asthma_cyp": "Asthma CYP",
+    "conditions/chd": "CHD",
+    "conditions/ckd": "CKD",
+    "conditions/copd": "COPD",
+    "conditions/diabetes": "Diabetes",
+    "conditions/hf": "Heart failure",
+    "conditions/hypertension": "Hypertension",
+    "conditions/nafld": "NAFLD",
+    "conditions/pad": "PAD",
+    "conditions/stroke_tia": "Stroke/TIA",
+    "shared/dental": "Shared - dental",
+    "shared/hypertension_asthma": "Shared - hypertension or asthma",
+    "shared/moc": "Shared - MOC and call/recall",
+    "shared/risk_groups": "Shared - risk groups",
+    "shared/workflow": "Shared - workflow",
+    "shared/other": "Shared - other",
+}
+
+SPEC_GROUP_ORDER = list(SPEC_GROUP_LABELS)
+
 
 def api(path, body=None, timeout=120):
     url = f"{BASE_URL}{path}"
@@ -42,6 +66,52 @@ def slugify(name):
     return re.sub(r"_+", "_", slug)
 
 
+def spec_group(search_name):
+    name = search_name.lower()
+
+    if "dentist" in name:
+        return "shared/dental"
+    if "interpreter" in name:
+        return "shared/workflow"
+    if "moc" in name or "c&t" in name:
+        return "shared/moc"
+    if "hypertension or asthma" in name:
+        return "shared/hypertension_asthma"
+
+    condition_patterns = [
+        ("conditions/base_population", ["ltc lcs base"]),
+        ("conditions/asthma_cyp", ["asthma cyp", "asthma(cyp)", "cypast"]),
+        ("conditions/asthma_adult", ["asthma adult", "asthma(adult)", "adult asthma"]),
+        ("conditions/stroke_tia", ["stroke/tia", "stroke tia"]),
+        ("conditions/hypertension", ["hypertension register", "htn only"]),
+        ("conditions/diabetes", ["diabetes"]),
+        ("conditions/nafld", ["nafld"]),
+        ("conditions/copd", ["copd"]),
+        ("conditions/ckd", ["ckd"]),
+        ("conditions/chd", ["chd"]),
+        ("conditions/pad", ["pad"]),
+        ("conditions/hf", ["hf register"]),
+        ("conditions/af", ["af register"]),
+    ]
+    for group, patterns in condition_patterns:
+        if any(pattern in name for pattern in patterns):
+            return group
+
+    if (
+        "hrandcomplex" in name
+        or re.match(r"^\d+_(hr|mr|lr)", name)
+        or name.startswith(("a) hr", "b) hr", "c) hr", "group", "priority group"))
+    ):
+        return "shared/risk_groups"
+
+    return "shared/other"
+
+
+def clean_markdown_tree(out_dir):
+    for path in out_dir.rglob("*.md"):
+        path.unlink()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pathname", default=DEFAULT_PATHNAME, help="Blob pathname of the EMIS XML export")
@@ -51,6 +121,7 @@ def main():
 
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
+    clean_markdown_tree(out_dir)
 
     print(f"Loading document from blob: {args.pathname}")
     doc = api("/api/agent/load-xml-from-blob", {"pathname": args.pathname})["document"]
@@ -75,8 +146,12 @@ def main():
     index_rows = []
     for i, r in enumerate(deduped, 1):
         slug = slugify(r["searchName"])
+        group = spec_group(r["searchName"])
+        target_dir = out_dir / group
+        target_dir.mkdir(parents=True, exist_ok=True)
         fname = f"{slug}.md"
-        print(f"[{i}/{len(deduped)}] {r['searchName']} -> {fname}")
+        relpath = f"{group}/{fname}"
+        print(f"[{i}/{len(deduped)}] {r['searchName']} -> {relpath}")
         for attempt in range(3):
             try:
                 resp = api("/api/agent/query", {
@@ -99,8 +174,8 @@ def main():
             f"     Readable guide only: for exact operators/ranges query the agent API\n"
             f"     (agentInterpretation.decisionFlow[].criteriaDetails). -->\n\n"
         )
-        (out_dir / fname).write_text(header + guide, encoding="utf-8")
-        index_rows.append((r["searchName"], fname, r["id"]))
+        (target_dir / fname).write_text(header + guide, encoding="utf-8")
+        index_rows.append((r["searchName"], relpath, group, r["id"]))
 
     index = [
         "# LTC LCS Risk Stratification - EMIS R5 specs",
@@ -110,10 +185,26 @@ def main():
         "",
         "Regenerate with `python scripts/extract_emis_ltc_lcs_specs.py`.",
         "",
-        "| Search | File |",
-        "|---|---|",
+        "Guides are organised under `conditions/<condition>/` where a search belongs",
+        "to a single register condition. Shared cross-condition searches live under",
+        "`shared/<area>/`.",
     ]
-    index += [f"| {name} | [{fname}]({fname}) |" for name, fname, _ in index_rows]
+
+    rows_by_group = {}
+    for name, relpath, group, _ in index_rows:
+        rows_by_group.setdefault(group, []).append((name, relpath))
+
+    for group in SPEC_GROUP_ORDER:
+        rows = rows_by_group.pop(group, [])
+        if not rows:
+            continue
+        index += ["", f"## {SPEC_GROUP_LABELS[group]}", "", "| Search | File |", "|---|---|"]
+        index += [f"| {name} | [{Path(relpath).name}]({relpath}) |" for name, relpath in rows]
+
+    for group, rows in sorted(rows_by_group.items()):
+        index += ["", f"## {SPEC_GROUP_LABELS.get(group, group)}", "", "| Search | File |", "|---|---|"]
+        index += [f"| {name} | [{Path(relpath).name}]({relpath}) |" for name, relpath in rows]
+
     if duplicates:
         index += ["", "## Skipped duplicates", "",
                   "Identical search names appearing more than once in the export:", ""]

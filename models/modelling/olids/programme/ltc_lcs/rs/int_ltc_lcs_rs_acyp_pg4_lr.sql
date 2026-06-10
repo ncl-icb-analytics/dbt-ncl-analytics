@@ -2,7 +2,7 @@
 -- Parent population: CYP asthma register ONLY (not on any other LTC LCS
 -- register), excluding PG2 (HR)
 -- EMIS source: 'On Asthma(CYP) Register- LTC LCS Priority Group 4 (LR)*'
--- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_asthma_cyp_register_ltc_lcs_priority_group_4_lr.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/conditions/asthma_cyp/on_asthma_cyp_register_ltc_lcs_priority_group_4_lr.md)
 --
 -- Rule chain:
 -- - Rule 1: include if not in PG2 (HR), else exclude

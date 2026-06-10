@@ -1,7 +1,7 @@
 -- LTC LCS: Stroke/TIA Register - Priority Group 2 (High Risk)
 -- Parent population: Stroke/TIA register, excluding PG1 (HRC)
 -- EMIS source: 'On Stroke/TIA Register- LTC LCS Priority Group 2 (HR)*'
--- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_stroke_tia_register_ltc_lcs_priority_group_2_hr.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/conditions/stroke_tia/on_stroke_tia_register_ltc_lcs_priority_group_2_hr.md)
 --
 -- Rule chain:
 -- - Rule 1 (gate): excludes PG1 (HRC) patients

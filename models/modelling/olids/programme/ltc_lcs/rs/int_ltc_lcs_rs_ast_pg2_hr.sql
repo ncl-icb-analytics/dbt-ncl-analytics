@@ -1,7 +1,7 @@
 -- LTC LCS: Asthma Adult Register - Priority Group 2 (High Risk)
 -- Parent population: Asthma register, age >= 18, excluding PG1 (HRC)
 -- EMIS source: 'On Asthma(Adult) Register- LTC LCS Priority Group 2 (HR)*'
--- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_asthma_adult_register_ltc_lcs_priority_group_2_hr.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/conditions/asthma_adult/on_asthma_adult_register_ltc_lcs_priority_group_2_hr.md)
 --
 -- Rule chain:
 -- - Rule 1 (gate): excludes PG1 (HRC) patients

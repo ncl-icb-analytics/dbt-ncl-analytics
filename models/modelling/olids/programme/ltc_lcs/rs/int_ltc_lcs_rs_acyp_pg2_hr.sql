@@ -1,7 +1,7 @@
 -- LTC LCS: Asthma CYP Register - Priority Group 2 (High Risk)
 -- Parent population: CYP asthma register ONLY (not on any other LTC LCS register)
 -- EMIS source: 'On Asthma(CYP) Register- LTC LCS Priority Group 2 (HR)* V2 Oct 2025'
--- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2_oct_2025.md)
+-- (docs/emis_specs/ltc_lcs_r5/risk_stratification/specs/conditions/asthma_cyp/on_asthma_cyp_register_ltc_lcs_priority_group_2_hr_v2_oct_2025.md)
 -- Latest spec variant implemented (supersedes V1 and V2).
 --
 -- Rule chain:
