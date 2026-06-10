@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 17wu99q0-hff3-3m-06aa-0ljbicw0ming
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Asthma Adult Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-7.
+Start with the patients found by "LTC LCS: Asthma Adult Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-7. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -45,7 +45,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_adult_reg_pg3_mr_vs2` (3 codes)
-  - Where drug code in `on_asthma_adult_reg_pg3_mr_vs2` (3 codes)
   - Where issue date within the last 12 months
 
 ### Rule 4 of 7
@@ -55,7 +54,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_adult_reg_pg3_mr_vs3` (9 codes)
-  - Where drug code in `on_asthma_adult_reg_pg3_mr_vs3` (9 codes)
   - Where issue date within the last 12 months
 
 ### Rule 5 of 7
@@ -65,7 +63,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_adult_reg_pg3_mr_vs4` (3 codes)
-  - Where drug code in `on_asthma_adult_reg_pg3_mr_vs4` (3 codes)
   - Where issue date within the last 12 months
 
 ### Rule 6 of 7
@@ -76,11 +73,9 @@ A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_asthma_adult_reg_pg3_mr_vs5` (1 code), or `on_asthma_adult_reg_pg3_mr_vs6` (28 codes)
   - Where issue date within the last 6 months
-  - Where drug code in `on_asthma_adult_reg_pg3_mr_vs5` (1 code), `on_asthma_adult_reg_pg3_mr_vs6` (28 codes)
 - **Medication Issues** — patient must NOT have a matching record
   - Code in: `on_asthma_adult_reg_pg3_mr_vs7` (6 codes)
   - Where issue date within the last 6 months
-  - Where drug code in `on_asthma_adult_reg_pg3_mr_vs7` (6 codes)
 
 ### Rule 7 of 7
 
@@ -89,12 +84,10 @@ Final rule: patients who match are **included**; everyone else is excluded.
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_asthma_adult_reg_pg3_mr_vs4` (3 codes)
-  - Where drug code in `on_asthma_adult_reg_pg3_mr_vs4` (3 codes)
   - Where issue date within the last 12 months
 - **Medication Issues** — patient must NOT have a matching record
   - Code in: `on_asthma_adult_reg_pg3_mr_vs7` (6 codes)
   - Where issue date within the last 6 months
-  - Where drug code in `on_asthma_adult_reg_pg3_mr_vs7` (6 codes)
 
 ## Code lists used
 

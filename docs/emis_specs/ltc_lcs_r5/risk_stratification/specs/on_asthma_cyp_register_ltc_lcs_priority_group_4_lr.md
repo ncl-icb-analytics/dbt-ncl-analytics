@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 0r0npvo0-tjyk-kp-0hip-15n7nxd0guto
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,12 +12,12 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Asthma CYP Register ONLY" (see below). Rule 1 includes only patients who do NOT match it.
+Start with the patients found by "LTC LCS: Asthma CYP Register ONLY" (see below). A patient is included when they do NOT match Rule 1.
 
 ## Who we start with
 
 1. **LTC LCS: Asthma CYP Register*** — Start with currently registered patients. Require Patient Details where Age under 18 years old. Include patients who match Clinical Codes with Refset: 999010051000230100 OR Refset: 999012891000230104 then Latest 1 where SNOMED code IN: AST_COD AND Medication Issues with Proxor 100micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Proxor 200micrograms/dose / 6micrograms/dose inhaler (Genus Pharmaceuticals Ltd), Budesonide 1mg/2ml nebuliser suspension unit dose ampoules +518 more where Date of Issue within the last 12 months.
-2. **LTC LCS: Asthma CYP Register ONLY** — Start with the patients found by "LTC LCS: Asthma CYP Register*". Finally include patients who do not match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
+2. **LTC LCS: Asthma CYP Register ONLY** — Start with the patients found by "LTC LCS: Asthma CYP Register*". Include patients who do not match Patients included in search LTC LCS: AF Register* OR patients included in search LTC LCS: CKD Register* OR patients included in search LTC LCS: CHD Register* OR patients included in search LTC LCS: Diabetes Register* OR patients included in search LTC LCS: Hypertension Register* OR patients included in search LTC LCS: NAFLD Register v2* OR patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: COPD Register* OR patients included in search LTC LCS: HF Register* OR patients included in search LTC LCS: PAD Register* OR patients included in search LTC LCS: Stroke/TIA Register*.
 3. **This search** then applies the rules below to that population.
 
 ## Inclusion logic, step by step

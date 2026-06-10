@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 13raf1e0-3v8e-3i-1x5m-04yx0md1ngbh
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -13,7 +13,7 @@ Description: All Hypertensives that meet the criteria to be placed in Group 2b (
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rules 1 and 4-5 to stay in. Patients matching Rules 2-3 and 6 are excluded. Rule 7 includes only patients who do NOT match it.
+Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rules 1 and 4-5 to stay in. Patients matching Rules 2-3 and 6 are excluded. A patient is included when they do NOT match Rule 7. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -60,10 +60,13 @@ Patients **must match** this rule to stay in. Those who match continue to Rule 6
 A patient matches this rule when ANY of the following is true:
 - **Clinical Codes** (clinical events)
   - Code in: `priority_group_2b_icb_vs4` (444 codes — cluster CHD_COD)
+  - Where episode type is not Review or Ended
 - **Clinical Codes** (clinical events)
   - Code in: `priority_group_2b_icb_vs5` (271 codes — cluster STRK_COD), or `priority_group_2b_icb_vs6` (38 codes — cluster TIA_COD)
+  - Where episode type is not Review or Ended
 - **Clinical Codes** (clinical events)
   - Code in: `priority_group_2b_icb_vs7` (32 codes — cluster PAD_COD)
+  - Where episode type is not Review or Ended
 - **Clinical Codes** (clinical events)
   - Code in: `priority_group_2b_icb_vs8` (106 codes — cluster CKD_COD)
 - **Clinical Codes** (clinical events)

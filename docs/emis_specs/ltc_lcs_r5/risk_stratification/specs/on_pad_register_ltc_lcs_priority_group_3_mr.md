@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
-     report id: 1gvxokl1-vpyw-0a-1k5j-1ljfp7f1ihqg
+     report id: 0d69ytz1-sp6o-cg-0vdy-13qqhpt1nm84
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: PAD Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rules 1 and 4 are excluded. A patient is included when they match Rule 3. Rule 5 includes only patients who do NOT match it.
+Start with the patients found by "LTC LCS: PAD Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rules 1 and 4 are excluded. A patient is included when they match Rule 3. A patient is included when they do NOT match Rule 5. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -54,11 +54,11 @@ Patients matching this rule are **excluded** and no further rules are checked. E
 A patient matches this rule when ANY of the following is true:
 - **Medication Issues**
   - Code in: `on_pad_reg_pg3_mr_vs3` (6 codes)
-  - Where drug code in `on_pad_reg_pg3_mr_vs3` (6 codes)
   - Where issue date within the last 6 months
 - **Medication Courses**
-  - Code in: `on_pad_reg_pg3_mr_vs4` (4 codes)
-  - Where drug code in `on_pad_reg_pg3_mr_vs4` (4 codes)
+  - Code in: `on_pad_reg_pg3_mr_vs6` (4 codes)
+  - Where course status is Current
+  - Where prescription type is Automatic or Repeat or Repeat Dispensed
 
 ### Rule 5 of 5
 
@@ -66,14 +66,13 @@ Final rule: patients who match are **excluded**; everyone else is included.
 
 A patient matches this rule when ANY of the following is true:
 - **Medication Issues**
-  - Code in: `on_pad_reg_pg3_mr_vs5` (1 code — cluster STAT_COD)
-  - Where drug code in `on_pad_reg_pg3_mr_vs5` (1 code — cluster STAT_COD)
+  - Code in: `on_pad_reg_pg3_mr_vs7` (1 code — cluster STAT_COD)
   - Keep only the latest matching record, and require its issue date > today - 12 months
 - **Clinical Codes** (clinical events)
-  - Code in: `on_pad_reg_pg3_mr_vs5` (1 code — cluster STAT_COD)
+  - Code in: `on_pad_reg_pg3_mr_vs7` (1 code — cluster STAT_COD)
   - Keep only the latest matching record, and require its date > today - 12 months
 - **Clinical Codes** (clinical events)
-  - Code in: `on_pad_reg_pg3_mr_vs6` (1 code — cluster STATINDEC_COD)
+  - Code in: `on_pad_reg_pg3_mr_vs8` (1 code — cluster STATINDEC_COD)
   - Keep only the latest matching record, and require its date > today - 1 year
 
 ## Code lists used
@@ -85,9 +84,11 @@ Names below match `valueset_friendly_name` in the extraction CSVs. The hash iden
 | On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs1` |  | SNOMED | 53 | Peripheral ischaemia, Peripheral ischaemic vascular disease, Ischaemic foot +... | 36d83560 |
 | On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs2` |  | SNOMED | 4 | Non high density lipoprotein cholesterol level, Non HDL cholesterol level, Se... | 561cf433 |
 | On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs3` |  | SCT_PREP | 6 | Atorvastatin 80mg tablets, Lipitor 80mg tablets (Viatris UK Healthcare Ltd), ... | dd8f85b7 |
-| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs4` |  | SCT Const | 4 | Atorvastatin, Simvastatin, Fluvastatin +1 more | 61715e8d |
-| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs5` | STAT_COD | SNOMED | 1 | Refset: 12464001000001103 | 2ab5ff0c |
-| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs6` | STATINDEC_COD | SNOMED | 1 | Statin declined | ac08be53 |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs4` |  | Internal | 1 | Current | 6b23c0d5 |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs5` |  | Internal | 3 | Automatic, Repeat, Repeat Dispensed | 23417f0f |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs6` |  | SCT Const | 4 | Atorvastatin, Simvastatin, Fluvastatin +1 more | 61715e8d |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs7` | STAT_COD | SNOMED | 1 | Refset: 12464001000001103 | 2ab5ff0c |
+| On PAD Register- LTC LCS Priority Group 3 (MR) | `on_pad_reg_pg3_mr_vs8` | STATINDEC_COD | SNOMED | 1 | Statin declined | ac08be53 |
 
 ## Caveats
 

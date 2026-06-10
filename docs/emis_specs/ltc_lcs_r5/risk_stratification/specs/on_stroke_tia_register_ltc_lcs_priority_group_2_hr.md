@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 0qghi8r0-lwhd-96-033h-070tzqb11cj5
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Stroke/TIA Register*" (see below). Patients must match Rule 3 to stay in. Patients matching Rules 1, 4-5 and 7 are excluded. A patient is included when they match Rule 2. Rule 8 includes only patients who do NOT match it.
+Start with the patients found by "LTC LCS: Stroke/TIA Register*" (see below). Patients must match Rule 3 to stay in. Patients matching Rules 1, 4-5 and 7 are excluded. A patient is included when they match Rule 2. A patient is included unless they match every one of Rules 6 and 8 — failing any one of them includes the patient. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -34,13 +34,13 @@ If a patient matches this rule they are **included** and no further rules are ch
 
 A patient matches this rule when ANY of the following is true:
 - **Clinical Codes** (clinical events)
-  - Code in: `on_stroketia_reg_pg2_hr_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg2_hr_vs2` (1 code — cluster TIA_COD), or `on_stroketia_reg_pg2_hr_vs3` (3 codes)
+  - Code in: `on_stroketia_reg_pg2_hr_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg2_hr_vs2` (1 code — cluster TIA_COD)
   - Where date within the last 365 days to before 30 days ago
-  - Where episode type in `on_stroketia_reg_pg2_hr_vs3` (3 codes)
+  - Where episode type is First or New or Flare Up
 - **Clinical Codes** (clinical events)
-  - Code in: `on_stroketia_reg_pg2_hr_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg2_hr_vs2` (1 code — cluster TIA_COD), or `on_stroketia_reg_pg2_hr_vs4` (1 code)
+  - Code in: `on_stroketia_reg_pg2_hr_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg2_hr_vs2` (1 code — cluster TIA_COD)
   - Where date within the last 365 days to before 30 days ago
-  - Where problemsignificance in `on_stroketia_reg_pg2_hr_vs4` (1 code)
+  - Where problem significance is Significant
 
 ### Rule 3 of 8
 
@@ -132,7 +132,7 @@ A patient matches this rule when ALL of the following are true:
 
 ### Rule 6 of 8
 
-This rule does not change who is included.
+If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 7.
 
 A patient matches this rule when:
 - **Patient Details**

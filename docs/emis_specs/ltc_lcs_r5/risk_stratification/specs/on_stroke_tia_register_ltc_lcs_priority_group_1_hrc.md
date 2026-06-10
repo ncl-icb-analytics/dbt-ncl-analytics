@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 18mja1v1-10zn-dd-0cdc-0a5u24d1qyue
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -27,13 +27,13 @@ Final rule: patients who match are **included**; everyone else is excluded.
 
 A patient matches this rule when ANY of the following is true:
 - **Clinical Codes** (clinical events)
-  - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD), or `on_stroketia_reg_pg1_hrc_vs3` (3 codes)
+  - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD)
   - Where date within the last 30 days
-  - Where episode type in `on_stroketia_reg_pg1_hrc_vs3` (3 codes)
+  - Where episode type is First or New or Flare Up
 - **Clinical Codes** (clinical events)
-  - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD), or `on_stroketia_reg_pg1_hrc_vs4` (1 code)
+  - Code in: `on_stroketia_reg_pg1_hrc_vs1` (1 code — cluster STRK_COD), or `on_stroketia_reg_pg1_hrc_vs2` (1 code — cluster TIA_COD)
   - Where date within the last 30 days
-  - Where problemsignificance in `on_stroketia_reg_pg1_hrc_vs4` (1 code)
+  - Where problem significance is Significant
 
 ## Code lists used
 

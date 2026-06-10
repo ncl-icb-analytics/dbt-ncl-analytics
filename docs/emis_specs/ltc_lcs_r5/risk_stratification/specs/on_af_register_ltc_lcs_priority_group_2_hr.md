@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 0ya2yux0-jt2t-pc-06f3-0ybvpy61sush
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: AF Register*" (see below). Patients must match Rules 1 and 4 to stay in. A patient is included when they match any one of Rules 2-3 and 5.
+Start with the patients found by "LTC LCS: AF Register*" (see below). Patients must match Rules 1 and 4 to stay in. A patient is included when they match any one of Rules 2-3 and 5. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -28,15 +28,12 @@ Patients **must match** this rule to stay in. Those who match continue to Rule 2
 A patient matches this rule when ANY of the following is true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg2_hr_vs1` (1 code — cluster Warfarin)
-  - Where drug code in `on_af_reg_pg2_hr_vs1` (1 code — cluster Warfarin)
   - Where issue date within the last 6 months
 - **Medication Issues**
   - Code in: `on_af_reg_pg2_hr_vs2` (6 codes)
-  - Where drug code in `on_af_reg_pg2_hr_vs2` (6 codes)
   - Where issue date within the last 6 months
 - **Medication Issues**
   - Code in: `on_af_reg_pg2_hr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg2_hr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg2_hr_vs4` (1 code)
@@ -50,7 +47,6 @@ A patient matches this rule when ANY of the following is true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg2_hr_vs5` (7 codes)
   - Where issue date within the last 6 months
-  - Where drug code in `on_af_reg_pg2_hr_vs5` (7 codes)
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg2_hr_vs6` (12 codes)
   - Where date within the last 6 months
@@ -74,7 +70,6 @@ Patients **must match** this rule to stay in. Those who match continue to Rule 5
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_af_reg_pg2_hr_vs2` (6 codes)
-  - Where drug code in `on_af_reg_pg2_hr_vs2` (6 codes)
   - Where issue date within the last 6 months
 
 ### Rule 5 of 5

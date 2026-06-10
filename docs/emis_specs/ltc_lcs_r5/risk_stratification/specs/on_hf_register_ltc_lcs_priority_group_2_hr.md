@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 0l70flp1-dneu-su-07um-09ixd0l0dv00
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: HF Register*" (see below). Patients must match Rules 3-4 to stay in. A patient is included when they match any one of Rules 1-2. Rule 8 includes only patients who do NOT match it.
+Start with the patients found by "LTC LCS: HF Register*" (see below). Patients must match Rules 3-4 to stay in. A patient is included when they match any one of Rules 1-2. A patient is included unless they match every one of Rules 5-8 — failing any one of them includes the patient. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -40,7 +40,6 @@ A patient matches this rule when ANY of the following is true:
   - Keep only the latest matching record
 - **Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs5` (1 code)
-  - Where drug code in `on_hf_reg_pg2_hr_vs5` (1 code)
   - Where issue date within the last 1 year
 
 ### Rule 3 of 8
@@ -62,47 +61,43 @@ A patient matches this rule when ANY of the following is true:
   - Keep only the latest matching record, and require its numeric value < 50
 - **Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs8` (1 code — cluster HFLVSD_COD), or `on_hf_reg_pg2_hr_vs9` (1 code — cluster REDEJCFRAC_COD)
+  - Where episode type is not Review or Ended
 
 ### Rule 5 of 8
 
-This rule does not change who is included.
+If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 6.
 
 A patient matches this rule when ANY of the following is true:
 - **Medication Courses**
   - Code in: `on_hf_reg_pg2_hr_vs10` (4 codes)
-  - Where drug code in `on_hf_reg_pg2_hr_vs10` (4 codes)
-  - Where commence date within the last 6 months
+  - Where date drug added within the last 6 months
 - **Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs10` (4 codes)
-  - Where drug code in `on_hf_reg_pg2_hr_vs10` (4 codes)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs11` (7 codes)
 
 ### Rule 6 of 8
 
-This rule does not change who is included.
+If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 7.
 
 A patient matches this rule when ANY of the following is true:
 - **Medication Courses**
   - Code in: `on_hf_reg_pg2_hr_vs12` (3 codes)
-  - Where drug code in `on_hf_reg_pg2_hr_vs12` (3 codes)
-  - Where commence date within the last 6 months
+  - Where date drug added within the last 6 months
 - **Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs12` (3 codes)
-  - Where drug code in `on_hf_reg_pg2_hr_vs12` (3 codes)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs13` (5 codes)
 
 ### Rule 7 of 8
 
-This rule does not change who is included.
+If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 8.
 
 A patient matches this rule when ANY of the following is true:
 - **Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs14` (54 codes — cluster LBB_COD)
-  - Where drug code in `on_hf_reg_pg2_hr_vs14` (54 codes — cluster LBB_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs15` (3 codes — cluster XLBB_COD)
@@ -121,7 +116,6 @@ A patient matches this rule when ANY of the following is true:
 - They match the EMIS library item `80709f0e-d62c-4851-b8b5-22ce2fb29319` (see Caveats)
 - **Medication Issues**
   - Code in: `on_hf_reg_pg2_hr_vs18` (352 codes)
-  - Where drug code in `on_hf_reg_pg2_hr_vs18` (352 codes)
   - Keep only the latest matching record, and require its issue date > today - 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_hf_reg_pg2_hr_vs19` (1 code — cluster ACEDEC_COD)

@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 054wuhu1-dkj7-zf-0565-1laymow1fnl8
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Asthma CYP Register*" (see below). A patient is included when they match any one of Rules 1-8.
+Start with the patients found by "LTC LCS: Asthma CYP Register*" (see below). A patient is included when they match any one of Rules 1-8. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -58,7 +58,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs7` (3 codes)
-  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs7` (3 codes)
   - Where issue date within the last 12 months
 
 ### Rule 5 of 8
@@ -68,7 +67,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs8` (5 codes)
-  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs8` (5 codes)
   - Where issue date within the last 12 months
 
 ### Rule 6 of 8
@@ -78,7 +76,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
-  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
   - Where issue date within the last 3 months
 
 ### Rule 7 of 8
@@ -89,7 +86,6 @@ A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs10` (1 code), or `on_asthma_cyp_reg_pg2_hr_v2_vs11` (28 codes)
   - Where issue date within the last 12 months
-  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs10` (1 code), `on_asthma_cyp_reg_pg2_hr_v2_vs11` (28 codes)
 
 ### Rule 8 of 8
 
@@ -99,10 +95,8 @@ A patient matches this rule when ALL of the following are true:
 - **Medication Issues** — patient must NOT have a matching record
   - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs12` (6 codes)
   - Where issue date within the last 12 months
-  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs12` (6 codes)
 - **Medication Issues**
   - Code in: `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
-  - Where drug code in `on_asthma_cyp_reg_pg2_hr_v2_vs9` (3 codes)
   - Where issue date within the last 3 months
 
 ## Code lists used

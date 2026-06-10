@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 0nwd4ju0-2il8-2f-0xd9-1de46p216pf0
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Diabetes Register*" (see below). Patients must match Rule 5 to stay in. A patient is included when they match any one of Rules 1-4 and 6.
+Start with the patients found by "LTC LCS: Diabetes Register*" (see below). Patients must match Rule 5 to stay in. A patient is included when they match any one of Rules 1-4 and 6. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -73,9 +73,9 @@ Final rule: patients who match are **included**; everyone else is excluded.
 A patient matches this rule when ANY of the following is true:
 - **Clinical Codes** (clinical events)
   - Code in: `on_dm_reg_pg1_hrc_vs5` (43 codes — cluster HF_COD)
+  - Where episode type is not Review or Ended
 - **Medication Issues**
   - Code in: `on_dm_reg_pg1_hrc_vs6` (1 code), or `on_dm_reg_pg1_hrc_vs7` (5 codes)
-  - Where drug code in `on_dm_reg_pg1_hrc_vs6` (1 code), `on_dm_reg_pg1_hrc_vs7` (5 codes)
   - Where issue date within the last 6 months
 
 ## Code lists used

@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 1m0bjxd0-dsp8-w3-02o0-1fuvsr51rwjo
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -28,7 +28,6 @@ Final rule: patients who match are **included**; everyone else is excluded.
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_asthma_adult_reg_pg1_hrc_vs1` (4 codes)
-  - Where drug code in `on_asthma_adult_reg_pg1_hrc_vs1` (4 codes)
   - Where issue date within the last 12 months
 
 ## Code lists used

@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 1do7ky90-4m9j-iy-1t9x-1yerb8219g64
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rules 1 and 3 to stay in. Patients matching Rules 2 and 4 are excluded. Rule 5 includes only patients who do NOT match it.
+Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rules 1 and 3 to stay in. Patients matching Rules 2 and 4 are excluded. A patient is included when they do NOT match Rule 5. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -45,10 +45,13 @@ Patients **must match** this rule to stay in. Those who match continue to Rule 4
 A patient matches this rule when ANY of the following is true:
 - **Clinical Codes** (clinical events)
   - Code in: `on_htn_reg_priority_group_3a_mra_v3_vs3` (444 codes — cluster CHD_COD)
+  - Where episode type is not Review or Ended
 - **Clinical Codes** (clinical events)
   - Code in: `on_htn_reg_priority_group_3a_mra_v3_vs4` (271 codes — cluster STRK_COD), or `on_htn_reg_priority_group_3a_mra_v3_vs5` (38 codes — cluster TIA_COD)
+  - Where episode type is not Review or Ended
 - **Clinical Codes** (clinical events)
   - Code in: `on_htn_reg_priority_group_3a_mra_v3_vs6` (32 codes — cluster PAD_COD)
+  - Where episode type is not Review or Ended
 - **Clinical Codes** (clinical events)
   - Code in: `on_htn_reg_priority_group_3a_mra_v3_vs7` (106 codes — cluster CKD_COD)
 - **Clinical Codes** (clinical events)

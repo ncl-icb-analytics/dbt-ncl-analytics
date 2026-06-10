@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 0n0fqrz1-ku4w-y7-1j09-0jh5ui70x0ja
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: AF Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rules 1 and 10 are excluded. A patient is included when they match any one of Rules 3-9 and 11-14.
+Start with the patients found by "LTC LCS: AF Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rules 1 and 10 are excluded. A patient is included when they match any one of Rules 3-9 and 11-14. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -35,15 +35,12 @@ Patients **must match** this rule to stay in. Those who match continue to Rule 3
 A patient matches this rule when ANY of the following is true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
-  - Where drug code in `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
   - Where issue date within the last 6 months
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs2` (6 codes)
-  - Where drug code in `on_af_reg_pg3_mr_vs2` (6 codes)
   - Where issue date within the last 6 months
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs4` (1 code)
@@ -73,7 +70,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
-  - Where drug code in `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs11` (1 code)
@@ -86,7 +82,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs11` (1 code)
@@ -99,7 +94,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs5` (8 codes)
@@ -112,7 +106,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs6` (3 codes)
@@ -125,7 +118,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Patient Details**
   - Where age at least 75 years old
@@ -137,7 +129,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs7` (6 codes), or `on_af_reg_pg3_mr_vs8` (1 code)
@@ -150,7 +141,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs9` (3 codes)
@@ -163,15 +153,12 @@ Patients matching this rule are **excluded** and no further rules are checked. E
 A patient matches this rule when ANY of the following is true:
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
-  - Where drug code in `on_af_reg_pg3_mr_vs1` (1 code — cluster Warfarin)
   - Where issue date within the last 6 months
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs2` (6 codes)
-  - Where drug code in `on_af_reg_pg3_mr_vs2` (6 codes)
   - Where issue date within the last 6 months
 - **Medication Issues**
   - Code in: `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
-  - Where drug code in `on_af_reg_pg3_mr_vs3` (40 codes — cluster DIRECTORANTICOAGDRUG_COD)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_af_reg_pg3_mr_vs4` (1 code)
@@ -186,8 +173,7 @@ A patient matches this rule when ALL of the following are true:
   - Code in: `on_af_reg_pg3_mr_vs10` (1 code — cluster CHADVASC_COD)
   - Keep only the latest matching record, and require its numeric value >= 1
 - **Patient Details**
-  - Code in: `on_af_reg_pg3_mr_vs12` (1 code)
-  - Where sex in `on_af_reg_pg3_mr_vs12` (1 code)
+  - Where gender is Male
 
 ### Rule 12 of 14
 
@@ -198,8 +184,7 @@ A patient matches this rule when ALL of the following are true:
   - Code in: `on_af_reg_pg3_mr_vs10` (1 code — cluster CHADVASC_COD)
   - Keep only the latest matching record, and require its numeric value >= 2
 - **Patient Details**
-  - Code in: `on_af_reg_pg3_mr_vs13` (1 code)
-  - Where sex in `on_af_reg_pg3_mr_vs13` (1 code)
+  - Where gender is Female
 
 ### Rule 13 of 14
 

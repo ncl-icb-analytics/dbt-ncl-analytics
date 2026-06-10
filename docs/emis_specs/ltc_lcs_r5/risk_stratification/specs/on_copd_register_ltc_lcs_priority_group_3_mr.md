@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 058ijs21-6wve-bw-020g-0q44mtw0wq6x
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: COPD Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-6.
+Start with the patients found by "LTC LCS: COPD Register*" (see below). Patients matching Rule 1 are excluded. A patient is included when they match any one of Rules 2-6. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -56,15 +56,12 @@ A patient matches this rule when ANY of the following is true:
   - Where date within the last 12 months
 - **Medication Issues**
   - Code in: `on_copd_reg_pg3_mr_vs4` (9 codes)
-  - Where drug code in `on_copd_reg_pg3_mr_vs4` (9 codes)
   - Where issue date within the last 12 months
 - **Medication Issues**
   - Code in: `on_copd_reg_pg3_mr_vs5` (3 codes)
-  - Where drug code in `on_copd_reg_pg3_mr_vs5` (3 codes)
   - Where issue date within the last 12 months
 - **Medication Issues**
   - Code in: `on_copd_reg_pg3_mr_vs6` (2 codes)
-  - Where drug code in `on_copd_reg_pg3_mr_vs6` (2 codes)
   - Where issue date within the last 12 months
 
 ### Rule 5 of 6
@@ -74,7 +71,6 @@ If a patient matches this rule they are **included** and no further rules are ch
 A patient matches this rule when:
 - **Medication Issues**
   - Code in: `on_copd_reg_pg3_mr_vs7` (2 codes)
-  - Where drug code in `on_copd_reg_pg3_mr_vs7` (2 codes)
   - Where issue date within the last 6 months
 
 ### Rule 6 of 6
@@ -85,15 +81,12 @@ A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_copd_reg_pg3_mr_vs8` (6 codes)
   - Where issue date within the last 6 months
-  - Where drug code in `on_copd_reg_pg3_mr_vs8` (6 codes)
 - **Medication Issues**
   - Code in: `on_copd_reg_pg3_mr_vs9` (1 code), or `on_copd_reg_pg3_mr_vs10` (4 codes), or `on_copd_reg_pg3_mr_vs11` (3 codes)
   - Where issue date within the last 6 months
-  - Where drug code in `on_copd_reg_pg3_mr_vs9` (1 code), `on_copd_reg_pg3_mr_vs10` (4 codes), `on_copd_reg_pg3_mr_vs11` (3 codes)
 - **Medication Issues**
   - Code in: `on_copd_reg_pg3_mr_vs12` (6 codes), or `on_copd_reg_pg3_mr_vs13` (21 codes), or `on_copd_reg_pg3_mr_vs14` (1 code), or `on_copd_reg_pg3_mr_vs15` (25 codes)
   - Where issue date within the last 6 months
-  - Where drug code in `on_copd_reg_pg3_mr_vs12` (6 codes), `on_copd_reg_pg3_mr_vs13` (21 codes), `on_copd_reg_pg3_mr_vs14` (1 code), `on_copd_reg_pg3_mr_vs15` (25 codes)
 
 ## Code lists used
 

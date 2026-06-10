@@ -1,7 +1,7 @@
 # LTC LCS Risk Stratification - EMIS R5 specs
 
 Implementation guides extracted from `NCL LTC LCS R5 updated 27112025.xml`
-(sha256 `e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8`) on 2026-06-09.
+(sha256 `e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8`) on 2026-06-10.
 
 Regenerate with `python scripts/extract_emis_ltc_lcs_specs.py`.
 

@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 19f4w5z0-pzul-74-04u4-1a54mdr0uwi8
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -17,7 +17,7 @@ Start with the patients found by "Hypertension or Asthma Master" (see below). Th
 ## Who we start with
 
 1. **6. All on Hypertension or Asthma register** — Start with currently registered patients. Include patients who match Patients included in search LTC LCS: Asthma Adult Register* OR patients included in search LTC LCS: Asthma CYP Register* OR patients included in search LTC LCS: Hypertension Register*.
-2. **Hypertension or Asthma Master** — Start with the patients found by "6. All on Hypertension or Asthma register". Finally include patients who do not match Patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR OR patients included in search GROUP4- LR.
+2. **Hypertension or Asthma Master** — Start with the patients found by "6. All on Hypertension or Asthma register". Include patients who do not match Patients included in search GROUP1- HRC OR patients included in search GROUP2- HR OR patients included in search GROUP3- MR OR patients included in search GROUP4- LR.
 3. **This search** then applies the rules below to that population.
 
 ## Inclusion logic, step by step

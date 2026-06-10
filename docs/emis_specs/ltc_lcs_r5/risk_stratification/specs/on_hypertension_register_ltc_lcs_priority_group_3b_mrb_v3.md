@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 112gfn70-el4q-8q-0u2i-072rgvl0n7bi
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rule 1 to stay in. Patients matching Rules 2-4 and 6 are excluded. Rule 7 includes only patients who do NOT match it.
+Start with the patients found by "LTC LCS: Hypertension Register*" (see below). Patients must match Rule 1 to stay in. Patients matching Rules 2-4 and 6 are excluded. A patient is included unless they match every one of Rules 5 and 7 — failing any one of them includes the patient. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -120,7 +120,7 @@ A patient matches this rule when ALL of the following are true:
 
 ### Rule 5 of 7
 
-This rule does not change who is included.
+If a patient does **not** match this rule they are **included** and no further rules are checked. If they do match, continue to Rule 6.
 
 A patient matches this rule when:
 - **Patient Details**

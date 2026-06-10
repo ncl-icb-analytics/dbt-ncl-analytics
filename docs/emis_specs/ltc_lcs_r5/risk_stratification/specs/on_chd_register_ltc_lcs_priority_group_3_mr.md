@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 140bhp90-fwpk-8g-1a5y-120mjq80ukog
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with the patients found by "LTC LCS: CHD Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rule 1 are excluded. A patient is included when they match Rule 3.
+Start with the patients found by "LTC LCS: CHD Register*" (see below). Patients must match Rule 2 to stay in. Patients matching Rule 1 are excluded. A patient is included when they match Rule 3. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
@@ -45,7 +45,6 @@ Final rule: patients who match are **included**; everyone else is excluded.
 A patient matches this rule when ALL of the following are true:
 - **Medication Issues**
   - Code in: `on_chd_reg_pg3_mr_vs2` (6 codes)
-  - Where drug code in `on_chd_reg_pg3_mr_vs2` (6 codes)
   - Where issue date within the last 6 months
 - **Clinical Codes** (clinical events)
   - Code in: `on_chd_reg_pg3_mr_vs3` (4 codes)

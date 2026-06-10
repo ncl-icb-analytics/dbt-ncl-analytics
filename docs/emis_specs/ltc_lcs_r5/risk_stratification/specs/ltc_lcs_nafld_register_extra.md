@@ -1,7 +1,7 @@
 <!-- Extracted from 'NCL LTC LCS R5 updated 27112025.xml' (sha256 e4984ab973047c074d5cecc3264b29e424751894cf342b1ff371b39c39f5e8f8)
      report id: 1vtx3uz1-4dxy-i6-1c8x-1783r120qy7v
      folder: NCL LTC LCS R5.0 updated: 27112025 > 6) Data Quality > zHouse keeping > zSupporting Searches > Risk Stratification R2 > Disease
-     extracted: 2026-06-09 by scripts/extract_emis_ltc_lcs_specs.py
+     extracted: 2026-06-10 by scripts/extract_emis_ltc_lcs_specs.py
      Readable guide only: for exact operators/ranges query the agent API
      (agentInterpretation.decisionFlow[].criteriaDetails). -->
 
@@ -12,7 +12,7 @@ Source: NCL LTC LCS R5.0 updated: 27112025
 
 ## What this search does
 
-Start with currently registered patients. Patients must match Rule 1 to stay in. Patients matching Rule 2 are excluded. Rule 3 includes only patients who do NOT match it.
+Start with currently registered patients. Patients must match Rule 1 to stay in. Patients matching Rule 2 are excluded. A patient is included when they do NOT match Rule 3. Rules run in order; each patient stops at the first rule that includes or excludes them.
 
 ## Who we start with
 
