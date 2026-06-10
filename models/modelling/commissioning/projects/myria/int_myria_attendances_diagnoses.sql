@@ -60,7 +60,7 @@ SELECT
         op.reg_practice_at_event,
         DATEDIFF(MM,op.START_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago
     FROM 
-       {{ ref("obt_encounter_outpatient") }} op
+       {{ ref("int_sus_op_encounter") }} op
     LEFT JOIN {{ ref("int_sus_op_diagnosis") }} dx
         ON op.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE

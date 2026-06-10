@@ -51,7 +51,7 @@ sus_op_events as(
         sus_events.visit_occurrence_type as event_type,
         sus_events.pod as event_detail,
         sus_events.visit_occurrence_id::varchar as event_id
-    from {{ ref('obt_encounter_outpatient')}} sus_events 
+    from {{ ref('int_sus_op_encounter')}} sus_events 
     inner join inclusion_list il on il.patient_id = sus_events.sk_patient_id
     where sus_events.start_date between dateadd(year, {{ measurement_cutoff }}, current_date()) and current_date()
 ),

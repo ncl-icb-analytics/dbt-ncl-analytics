@@ -75,7 +75,7 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         , sum(cost) as cost
         , sum(expected_duration) as duration
     from 
-        {{ ref('obt_encounter_outpatient') }}
+        {{ ref('int_sus_op_encounter') }}
     where 
         sk_patient_id is not null and sk_patient_id != '1'
     group by 
