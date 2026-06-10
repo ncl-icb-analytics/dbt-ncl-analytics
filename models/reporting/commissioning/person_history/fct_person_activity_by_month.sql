@@ -86,14 +86,14 @@ with date_range AS (-- Generate month start dates for 10 years (120 months)
         pp.sk_patient_id
         , date_trunc('month', start_date) as activity_month
         , 'PrimaryCare' as activity_type
-        , null::varchar as activity_subtype
+        , practitioner_role_group as activity_subtype
         , count(*) as encounters
-        , null::number as cost -- TO DO: replace with pricing from reference book according to app type?
-        , sum(actual_duration_mins) as duration
+        , sum(zeroifnull(appointment_cost_gbp_nominal)) as cost -- TO DO: replace with pricing from reference book according to app type?
+        , sum(zeroifnull(duration_mins)) as duration
     from 
-        {{ ref('int_olids_appointment') }} gpa
+        {{ ref('int_appointment_gp_clinical') }} gpa
     left join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
-    where gpa.code not in ('3', '0') -- Attended
+    where gpa.appointment_status_code not in ('3', '0') -- Attended
     group by 
         pp.sk_patient_id, date_trunc('month', start_date)
 )

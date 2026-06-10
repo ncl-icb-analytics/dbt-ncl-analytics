@@ -3,14 +3,13 @@ with
 base_encounters as (
     select
         pp.sk_patient_id
-        , encounter_id
+        , appointment_id
         , start_date
-        , actual_duration_mins
-        , national_slot_category_name
-        , service_setting
-        , code
-        , display
-    from {{ ref('int_olids_appointment') }} gpa
+        , duration_mins
+        , slot_category
+        , practitioner_role_group
+        , appointment_status_code as code
+    from {{ ref('int_appointment_gp_clinical') }} gpa
     inner join {{ref('dim_person_pseudo')}} pp on pp.person_id = gpa.person_id
     where start_date between dateadd(month, -12, current_date()) and current_date()
 ), 
@@ -18,16 +17,16 @@ gp_encounter_summary as(
     select
         sk_patient_id
         , count(distinct case when code not in ('3', '0') -- Attended (assumed - consider selecting for)
-                then encounter_id end) as gp_att_tot_12mo
+                then appointment_id end) as gp_att_tot_12mo
         , count(distinct case when code not in ('3', '0') -- Attended
                 and start_date between dateadd(month, -3, current_date()) and current_date() 
-                then encounter_id end) as gp_att_tot_3mo
+                then appointment_id end) as gp_att_tot_3mo
         , count(distinct case when code not in ('3', '0') -- Attended
                 and start_date between dateadd(month, -1, current_date()) and current_date() 
-                then encounter_id end) as gp_att_tot_1mo
-        , count(distinct encounter_id) as gp_app_tot_12mo
+                then appointment_id end) as gp_att_tot_1mo
+        , count(distinct appointment_id) as gp_app_tot_12mo
         , count(distinct case when code in ('3') -- Attended (assumed - consider selecting for)
-                then encounter_id end) as gp_dna_tot_12mo
+                then appointment_id end) as gp_dna_tot_12mo
     from base_encounters
     group by 
         sk_patient_id
