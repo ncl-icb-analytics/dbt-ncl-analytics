@@ -11,6 +11,7 @@ with
             , count(*) as observation_count
             , array_agg(distinct episodes_id)  WITHIN GROUP (ORDER BY episodes_id ASC) as episodes_ids
         from {{ ref("stg_sus_apc_spell_episodes_clinical_coding_diagnosis_icd") }}
+        where code is not null 
         group by primarykey_id, code
 )
 

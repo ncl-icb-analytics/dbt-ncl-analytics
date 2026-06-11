@@ -11,6 +11,7 @@ with
             , count(*) as observation_count
             , array_agg(distinct icd_id)  WITHIN GROUP (ORDER BY icd_id ASC) as icd_ids
         from {{ ref("stg_sus_op_appointment_clinical_coding_diagnosis_icd") }}
+        where code is not null 
         group by primarykey_id, code
 )    
 select

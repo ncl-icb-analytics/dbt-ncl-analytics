@@ -30,11 +30,12 @@ hrg_list as(
 
 flattened as(
     select primarykey_id
-        , min(episodes_id) as episodes_id
+        , min(episodes_id) as lowest_episodes_id
         , code
         , count(*) as observation_count
         , array_agg(distinct episodes_id)  WITHIN GROUP (ORDER BY episodes_id ASC) as ordered_id_array
-    from unbundled
+    from hrg_list
+    where code is not null 
     group by primarykey_id, code)
 
 select {{ dbt_utils.generate_surrogate_key(["hgl.primarykey_id","hgl.code"]) }} as procedure_id,
@@ -55,7 +56,7 @@ select {{ dbt_utils.generate_surrogate_key(["hgl.primarykey_id","hgl.code"]) }} 
     hg.hrg_chapter,
     hg.hrg_subchapter
 from flattened hgl
-left join {{ ref("stg_sus_apc_spell_episodes") }} see on hgl.primarykey_id = see.primarykey_id and hgl.episodes_id = see.episodes_id
+left join {{ ref("stg_sus_apc_spell_episodes") }} see on hgl.primarykey_id = see.primarykey_id and hgl.lowest_episodes_id = see.episodes_id
 left join {{ ref("int_sus_apc_encounter") }} se on hgl.primarykey_id = se.visit_occurrence_id
 left join {{ ref("stg_dictionary_dbo_hrg") }} hg on hgl.code = hg.hrg_code
 where se.sk_patient_id is not null and se.sk_patient_id != 1 

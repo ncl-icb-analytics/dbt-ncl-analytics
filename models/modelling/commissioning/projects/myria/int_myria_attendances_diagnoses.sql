@@ -84,7 +84,7 @@ SELECT
         ae.SITE_NAME AS provider_site_name,
         ae.START_DATE AS activity_start_date,   
         ae.START_DATE AS activity_date,           
-        dx.SNOMED_ID AS diag_n,
+        NULL AS diag_n,
         dx.MAPPED_ICD10_CODE AS diag_code,
         ae.gender_at_event,
         ae.ethnicity_at_event,

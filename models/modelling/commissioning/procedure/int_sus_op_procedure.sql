@@ -8,6 +8,7 @@ with
             , count(*) as observation_count
             , array_agg(distinct opcs_id) WITHIN GROUP (ORDER BY opcs_id ASC) as ordered_id_array
         from {{ ref("stg_sus_op_appointment_clinical_coding_procedure_opcs") }}
+        where code is not null 
         group by primarykey_id, code
 )
 select

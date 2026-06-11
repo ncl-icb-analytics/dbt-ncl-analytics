@@ -28,7 +28,8 @@ flattened as(
         , code
         , count(*) as observation_count
         , array_agg(distinct problem_order)  WITHIN GROUP (ORDER BY problem_order ASC) as ordered_id_array
-    from unbundled
+    from hrg_list
+    where code is not null 
     group by primarykey_id, code)
 
 select

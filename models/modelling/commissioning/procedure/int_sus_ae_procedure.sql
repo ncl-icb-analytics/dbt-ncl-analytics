@@ -91,7 +91,7 @@ all_obs as(
 )
 
 select 
- {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.code"]) }} as event_id,
+ {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.observation_type", "f.code"]) }} as event_id,
     sa.sk_patient_id,
     f.primarykey_id as visit_occurrence_id,
     f.observation_type,

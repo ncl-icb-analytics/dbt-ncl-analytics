@@ -3,7 +3,7 @@ models:
   - name: int_commissioning_observations
     description: "Observations derived from SUS AE, SUS OP, SUS APC, CSDS (to be added),
       and MHDS (to be added). Diagnosis and procedure codes in ICD10 or snomed codes
-      as indicated. No measurement data. One row per code with counts and ordering shown"
+      as indicated. No measurement data. One row per code with counts and ordering within the clinical event shown"
     config:
       meta:
         owner:
@@ -34,9 +34,6 @@ models:
         data_type: varchar
         description: "End date of the clinical event containing the observation."
 
-      - name: observation_count
-        data_type: number
-        description: "Count of the observation."
 
       - name: ordered_id_array
         data_type: array
