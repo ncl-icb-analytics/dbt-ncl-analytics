@@ -8,8 +8,9 @@ models:
       ServicesDataLocal. Grain 1:1 with DATA_LAKE.SDL.LSACM. Aggregate feed:
       no patient-level fields.
 
-      Use dv_is_latest_submission = true to get the current provider statement
-      of each (provider, FY, month). Cleaning conventions as stg_lsplcm.
+      Full submission history - incremental, pure append of new files. Report
+      from stg_lsacm_latest for the current provider statement of each
+      (provider, FY, month). Cleaning conventions as stg_lsplcm.
     config:
       meta:
         owner:
@@ -44,7 +45,3 @@ models:
         description: CONTRACT_MONITORING_PLANNED_PRICE as NUMBER(38,6).
       - name: dv_actual_price
         description: CONTRACT_MONITORING_ACTUAL_PRICE as NUMBER(38,6). Sum-safe.
-      - name: dv_is_latest_submission
-        description: True for the most recent statement of each (provider, FY, month) slice.
-        data_tests:
-          - not_null

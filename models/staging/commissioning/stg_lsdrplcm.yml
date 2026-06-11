@@ -7,8 +7,9 @@ models:
       drug contract-monitoring submissions from ServicesDataLocal. Grain 1:1
       with DATA_LAKE.SDL.LSDRPLCM.
 
-      Use dv_is_latest_submission = true to get the current provider statement
-      of each (provider, FY, month). Cleaning conventions as stg_lsplcm.
+      Full submission history - incremental, pure append of new files. Report
+      from stg_lsdrplcm_latest for the current provider statement of each
+      (provider, FY, month). Cleaning conventions as stg_lsplcm.
     config:
       meta:
         owner:
@@ -43,7 +44,3 @@ models:
         description: TOTAL_COST as NUMBER(38,6). £/commas/'TBC' handled; sum-safe.
       - name: dv_unit_price_commissioner
         description: UNIT_PRICE_COMMISSIONER as NUMBER(38,6).
-      - name: dv_is_latest_submission
-        description: True for the most recent statement of each (provider, FY, month) slice.
-        data_tests:
-          - not_null
