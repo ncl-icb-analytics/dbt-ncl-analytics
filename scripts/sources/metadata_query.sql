@@ -503,6 +503,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- sdl_wnl: ServicesDataLocal canonical-named feeds, WNL footprint (SLAM contract monitoring)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'SDL' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SDL'
+  
+  UNION ALL
+  
     -- reference_analyst_managed: Analyst-managed reference datasets and business rules
   SELECT 
     'DATA_LAKE__NCL' as database_name,
@@ -515,6 +530,21 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'ANALYST_MANAGED'
+  
+  UNION ALL
+  
+    -- myria: Project Myria (BEVC) canonical inputs - enrolled and propensity-matched patients
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'MYRIA' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'MYRIA'
   
   UNION ALL
   

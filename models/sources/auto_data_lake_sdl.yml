@@ -1,0 +1,2159 @@
+version: 2
+sources:
+- name: sdl_wnl
+  database: '"DATA_LAKE"'
+  schema: '"SDL"'
+  description: ServicesDataLocal canonical-named feeds, WNL footprint (SLAM contract
+    monitoring)
+  tables:
+  - name: LSACM
+    identifier: '"LSACM"'
+    columns:
+    - name: META_SK_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_FILE_ID
+      data_type: NUMBER(38,0)
+    - name: META_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: META_PARTITION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: META_PROVIDER_CODE
+      data_type: TEXT
+    - name: META_RECIPIENT_CODE
+      data_type: TEXT
+    - name: META_VERSION_ID
+      data_type: TEXT
+    - name: FINANCIAL_MONTH
+      data_type: NUMBER(38,0)
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: REPORTING_TYPE_INDICATOR
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_GP_PRACTICE_RESPONSIBILITY
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_RESIDENCE_RESPONSIBILITY
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: WARD_CODE_END
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_MENTAL_HEALTH_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FIRST
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FIRST
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_SECOND
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_SECOND
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_THIRD
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_THIRD
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FOURTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FOURTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FIFTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FIFTH
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: TARIFF_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_PLANNED_ACTIVITY
+      data_type: NUMBER(18,6)
+    - name: CONTRACT_MONITORING_PLANNED_PRICE
+      data_type: NUMBER(18,6)
+    - name: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR
+      data_type: NUMBER(18,6)
+    - name: CONTRACT_MONITORING_ACTUAL_ACTIVITY
+      data_type: NUMBER(18,6)
+    - name: CONTRACT_MONITORING_ACTUAL_PRICE
+      data_type: NUMBER(18,6)
+    - name: CONTRACT_MONITORING_ACTUAL_MARKET_FORCES_FACTOR
+      data_type: NUMBER(18,6)
+    - name: RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: HEALTHCARE_RESOURCE_GROUP_CODE
+      data_type: TEXT
+    - name: CAM_ASSIGNMENT
+      data_type: TEXT
+    - name: FLOW_CHART_PATH
+      data_type: TEXT
+    - name: OUTPUT
+      data_type: TEXT
+    - name: CAM_SERVICECATEGORY_CODE
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+    - name: ROW_ID
+      data_type: TEXT
+    - name: DV_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DV_FINANCIALMONTH
+      data_type: TEXT
+    - name: DV_FINANCIALYEAR
+      data_type: TEXT
+    - name: ACTIVITY_ACTUAL
+      data_type: TEXT
+    - name: ACTIVITY_ACTUAL_THIS_MONTH
+      data_type: TEXT
+    - name: ACTIVITY_ACTUAL_YTD
+      data_type: TEXT
+    - name: ACTIVITY_DIFF_ACTUAL_PLAN
+      data_type: TEXT
+    - name: ACTIVITY_DIFF_ACTUAL_PLAN_THIS_MONTH
+      data_type: TEXT
+    - name: ACTIVITY_DIFF_ACTUAL_PLAN_YTD
+      data_type: TEXT
+    - name: ACTIVITY_PLAN
+      data_type: TEXT
+    - name: ACTIVITY_PLAN_ANNUAL
+      data_type: TEXT
+    - name: ACTIVITY_PLAN_THIS_MONTH
+      data_type: TEXT
+    - name: ACTIVITY_PLAN_YTD
+      data_type: TEXT
+    - name: ACTIVITY_VARIANCE
+      data_type: TEXT
+    - name: ADHOC1
+      data_type: TEXT
+    - name: ADHOC2
+      data_type: TEXT
+    - name: ADHOCITEM_CODE
+      data_type: TEXT
+    - name: ANNUAL_PLAN_ACTIVITY
+      data_type: TEXT
+    - name: ANNUAL_PLAN_ACTIVITY_NO
+      data_type: TEXT
+    - name: ANNUAL_PLAN_COST
+      data_type: TEXT
+    - name: ANNUAL_PLAN_PRICE
+      data_type: TEXT
+    - name: ANNUAL_PLAN_VALUE_INCL_MFF
+      data_type: TEXT
+    - name: CLUS_GRP3_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_CLUSTER_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_DESC
+      data_type: TEXT
+    - name: DATASET_CODE
+      data_type: TEXT
+    - name: DLP_BASELINE_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_BASELINEFINANCIALMONTH
+      data_type: TEXT
+    - name: DLP_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DLP_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DLP_FLEXOR_FREEZE
+      data_type: TEXT
+    - name: DLP_FLEXORFREEZE
+      data_type: TEXT
+    - name: DV_RECIPIENT_CODE
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: TEXT
+    - name: FILE_DATE
+      data_type: TEXT
+    - name: FINANCIAL_MONTH_ACTIVITY
+      data_type: TEXT
+    - name: FINANCIAL_YEAR_ACTIVITY
+      data_type: TEXT
+    - name: FLEX_FROZEN_FOT
+      data_type: TEXT
+    - name: GENERATION_DATE
+      data_type: TEXT
+    - name: HEALTHCARE_RESOURCE_GROUP_DESCRIPTION
+      data_type: TEXT
+    - name: HRG_DESC
+      data_type: TEXT
+    - name: HRG_DESCRIPTION
+      data_type: TEXT
+    - name: IN_MONTH_ACTIVITY_DIFF
+      data_type: TEXT
+    - name: IN_MONTH_ACTUAL_ACTIVITY
+      data_type: TEXT
+    - name: IN_MONTH_ACTUAL_PRICE
+      data_type: TEXT
+    - name: IN_MONTH_PLAN_ACTIVITY
+      data_type: TEXT
+    - name: IN_MONTH_PLAN_PRICE
+      data_type: TEXT
+    - name: IN_MONTH_PRICE_DIFF
+      data_type: TEXT
+    - name: INCLUDEDIN_NTARIFF
+      data_type: TEXT
+    - name: LOCAL_POD_DESCRIPTION
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: MONTH_ACTIVITY_VARIANCE
+      data_type: TEXT
+    - name: MONTH_ACTUAL_ACTIVITY
+      data_type: TEXT
+    - name: MONTH_ACTUAL_COST
+      data_type: TEXT
+    - name: MONTH_COST_VARIANCE
+      data_type: TEXT
+    - name: MONTH_PLAN_ACTIVITY
+      data_type: TEXT
+    - name: MONTH_PLAN_COST
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_PB_R_FLAG
+      data_type: TEXT
+    - name: NHSE_COMMISSIONER_YN
+      data_type: TEXT
+    - name: NHSE_SERVICE_CATEGORY
+      data_type: TEXT
+    - name: NON_CCG
+      data_type: TEXT
+    - name: NWLPOD4
+      data_type: TEXT
+    - name: NWLPOD4_DESC
+      data_type: TEXT
+    - name: ORGANISATION_CODE_NAME_CODE_OF_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PB_R
+      data_type: TEXT
+    - name: PB_RSTATUS
+      data_type: TEXT
+    - name: PCT_CLUS_GROUP_CODE
+      data_type: TEXT
+    - name: PCT_CLUSTER_CODE
+      data_type: TEXT
+    - name: PCT_CLUSTER_DESC
+      data_type: TEXT
+    - name: PCT_DESC
+      data_type: TEXT
+    - name: PLAN_ACTIVITY_ANNUAL
+      data_type: TEXT
+    - name: PLAN_PRICE_ANNUAL
+      data_type: TEXT
+    - name: POD_DESC
+      data_type: TEXT
+    - name: POD_GRP_CODE2
+      data_type: TEXT
+    - name: POD_GRP_DESC2
+      data_type: TEXT
+    - name: PRICE_ACTUAL
+      data_type: TEXT
+    - name: PRICE_ACTUAL_THIS_MONTH
+      data_type: TEXT
+    - name: PRICE_ACTUAL_YTD
+      data_type: TEXT
+    - name: PRICE_DIFF_ACTUAL_PLAN
+      data_type: TEXT
+    - name: PRICE_DIFF_ACTUAL_PLAN_THIS_MONTH
+      data_type: TEXT
+    - name: PRICE_DIFF_ACTUAL_PLAN_YTD
+      data_type: TEXT
+    - name: PRICE_PLAN
+      data_type: TEXT
+    - name: PRICE_PLAN_ANNUAL
+      data_type: TEXT
+    - name: PRICE_PLAN_THIS_MONTH
+      data_type: TEXT
+    - name: PRICE_PLAN_YTD
+      data_type: TEXT
+    - name: PRICE_VARIANCE
+      data_type: TEXT
+    - name: PROVIDER_SERVICE_DESC
+      data_type: TEXT
+    - name: REPORTING_MONTH
+      data_type: TEXT
+    - name: REPORTING_POSITION
+      data_type: TEXT
+    - name: REPORTING_YEAR
+      data_type: TEXT
+    - name: SITE_DESC
+      data_type: TEXT
+    - name: SLAM_RECIPIENT_CODE
+      data_type: TEXT
+    - name: SPEC_GROUP_CODE
+      data_type: TEXT
+    - name: SPEC_GRP_DESC
+      data_type: TEXT
+    - name: SUM_OF_ACTIV_ACTUAL
+      data_type: TEXT
+    - name: SUM_OF_ACTIV_DIFF_AP
+      data_type: TEXT
+    - name: SUM_OF_ACTIV_PLAN
+      data_type: TEXT
+    - name: SUM_OF_ACTIV_PLAN_CM12
+      data_type: TEXT
+    - name: SUM_OF_PRICE_ACTUAL
+      data_type: TEXT
+    - name: SUM_OF_PRICE_DIFF_AP
+      data_type: TEXT
+    - name: SUM_OF_PRICE_PLAN
+      data_type: TEXT
+    - name: SUM_OF_PRICE_PLAN_CM12
+      data_type: TEXT
+    - name: TREATMENT_FUNCTION_DESCRIPTION
+      data_type: TEXT
+    - name: TRUST_POD_DESC
+      data_type: TEXT
+    - name: UD1_ACTUAL_ACT_CODE
+      data_type: TEXT
+    - name: USER_FIELD1
+      data_type: TEXT
+    - name: USER_FIELD5
+      data_type: TEXT
+    - name: VARIANCE_TO_YTD_PLAN_ACTIVITY_NO
+      data_type: TEXT
+    - name: VARIANCE_TO_YTD_PLAN_VALUE_INCL_MFF
+      data_type: TEXT
+    - name: VGP2
+      data_type: TEXT
+    - name: VGP2_DESCRIPTION
+      data_type: TEXT
+    - name: VGP4
+      data_type: TEXT
+    - name: VGP4_DESCRIPTION
+      data_type: TEXT
+    - name: VGP5
+      data_type: TEXT
+    - name: VGP5_DESCRIPTION
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+    - name: YTD_ACTIVITY_DIFF
+      data_type: TEXT
+    - name: YTD_ACTIVITY_VARIANCE
+      data_type: TEXT
+    - name: YTD_ACTUAL_ACTIVITY
+      data_type: TEXT
+    - name: YTD_ACTUAL_COST
+      data_type: TEXT
+    - name: YTD_ACTUAL_MFF
+      data_type: TEXT
+    - name: YTD_ACTUAL_NON_PB_R_ACTIVITY_NO
+      data_type: TEXT
+    - name: YTD_ACTUAL_NON_PB_R_VALUE
+      data_type: TEXT
+    - name: YTD_ACTUAL_PB_R_ACTIVITY_NO
+      data_type: TEXT
+    - name: YTD_ACTUAL_PB_R_VALUE
+      data_type: TEXT
+    - name: YTD_ACTUAL_PRICE
+      data_type: TEXT
+    - name: YTD_ACTUAL_SUB_TOTAL_NON_PB_R
+      data_type: TEXT
+    - name: YTD_ACTUAL_SUB_TOTAL_NON_PB_R_NO
+      data_type: TEXT
+    - name: YTD_ACTUAL_TOTAL_ACTIVITY_NO
+      data_type: TEXT
+    - name: YTD_ACTUAL_TOTAL_VALUE_EXCL_MFF
+      data_type: TEXT
+    - name: YTD_ACTUAL_TOTAL_VALUE_INC_MFF
+      data_type: TEXT
+    - name: YTD_ACTUAL_WH50_NOT_CHARGEABLE
+      data_type: TEXT
+    - name: YTD_ACTUAL_WH50_NOT_CHARGEABLE_NO
+      data_type: TEXT
+    - name: YTD_COST_VARIANCE
+      data_type: TEXT
+    - name: YTD_PLAN_ACTIVITY
+      data_type: TEXT
+    - name: YTD_PLAN_ACTIVITY_NO
+      data_type: TEXT
+    - name: YTD_PLAN_COST
+      data_type: TEXT
+    - name: YTD_PLAN_PRICE
+      data_type: TEXT
+    - name: YTD_PLAN_VALUE_INCL_MFF
+      data_type: TEXT
+    - name: YTD_PRICE_DIFF
+      data_type: TEXT
+  - name: LSDEPLCM
+    identifier: '"LSDEPLCM"'
+    columns:
+    - name: META_SK_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_FILE_ID
+      data_type: NUMBER(38,0)
+    - name: META_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: META_PARTITION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: META_PROVIDER_CODE
+      data_type: TEXT
+    - name: META_RECIPIENT_CODE
+      data_type: TEXT
+    - name: META_VERSION_ID
+      data_type: TEXT
+    - name: TOTAL_COST
+      data_type: TEXT
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: FINANCIAL_MONTH
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_GP_PRACTICE_RESPONSIBILITY
+      data_type: TEXT
+    - name: CLINICAL_INTERVENTION_DATE_MEDICAL_DEVICE_IMPLEMENTATION
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: VALUE_ADDED_TAX_CHARGED_INDICATOR_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER_EXTENDED
+      data_type: TEXT
+    - name: UNIT_PRICE_COMMISSIONER
+      data_type: TEXT
+    - name: DV_LSOA
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_QUANTITY_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_RESIDENCE_RESPONSIBILITY
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_NAME_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: LOCAL_CODE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: UNIT_PRICE_SUPPLIER
+      data_type: TEXT
+    - name: AGE_AT_ACTIVITY_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: REPORTING_TYPE_INDICATOR
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_PROCUREMENT_ROUTE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: HIGH_LEVEL_CODE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: SUBSIDIARY_LEVEL_CODE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_MANUFACTURER_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: PROVIDER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: CAM_ASSIGNMENT
+      data_type: TEXT
+    - name: OUTPUT
+      data_type: TEXT
+    - name: HOSPITAL_PROVIDER_SPELL_IDENTIFIER
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_SIZE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_SERIAL_NUMBER_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: OUT_PATIENT_ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: NON_CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: PROVIDER_REFERENCE_IDENTIFIER
+      data_type: TEXT
+    - name: RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: HIGH_COST_TARIFF_EXCLUDED_DEVICE_CODE_SNOMED_CT_DM_PLUS_D
+      data_type: TEXT
+    - name: HIGH_COST_TARIFF_EXCLUDED_DEVICE_CODE_DM_PLUS_D
+      data_type: TEXT
+    - name: WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+    - name: SOURCE_SYSTEM_FEEDER_CODE
+      data_type: TEXT
+    - name: CONTRACT_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FIRST
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FIRST
+      data_type: TEXT
+    - name: CAM_SERVICECATEGORY_CODE
+      data_type: TEXT
+    - name: FLOW_CHART_PATH
+      data_type: TEXT
+    - name: DV_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DV_FINANCIALMONTH
+      data_type: TEXT
+    - name: DV_FINANCIALYEAR
+      data_type: TEXT
+    - name: ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: COMMISSIONER_UNIT_PRICE
+      data_type: TEXT
+    - name: CONTRACT_CODE
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FIFTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FOURTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_SECOND
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_THIRD
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FIFTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FOURTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_SECOND
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_THIRD
+      data_type: TEXT
+    - name: DEVICE_CODE
+      data_type: TEXT
+    - name: DEVICE_INSERTION_DATE
+      data_type: TEXT
+    - name: DEVICE_SERIAL_NUMBER
+      data_type: TEXT
+    - name: DLP_BASELINE_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_BASELINEFINANCIALMONTH
+      data_type: TEXT
+    - name: DLP_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DLP_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DLP_FLEXOR_FREEZE
+      data_type: TEXT
+    - name: DLP_FLEXORFREEZE
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE
+      data_type: TEXT
+    - name: DV_RECIPIENT_CODE
+      data_type: TEXT
+    - name: DV_YEAROF_BIRTH
+      data_type: TEXT
+    - name: FILE_DATE
+      data_type: TEXT
+    - name: HOSPITAL_PROVIDER_SPELL_NUMBER
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: MANUFACTURER_DEVICE_NAME
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: ORGANISATION_CODE_NAME_CODE_OF_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PROVIDER_UNIQUE_ID
+      data_type: TEXT
+    - name: PURCHASED_DEVICE_CONTRACT
+      data_type: TEXT
+    - name: QUANTITY
+      data_type: TEXT
+    - name: SIZE
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NUMBER
+      data_type: TEXT
+    - name: SPECIALISED_SERVICE_CODE
+      data_type: TEXT
+    - name: SUBSIDIARY_DEVICE_TYPE
+      data_type: TEXT
+    - name: SUPPLIER_UNIT_PRICE
+      data_type: TEXT
+    - name: VAT_CHARGED
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+  - name: LSDRPLCM
+    identifier: '"LSDRPLCM"'
+    columns:
+    - name: META_SK_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_FILE_ID
+      data_type: NUMBER(38,0)
+    - name: META_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: META_PARTITION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: META_PROVIDER_CODE
+      data_type: TEXT
+    - name: META_RECIPIENT_CODE
+      data_type: TEXT
+    - name: META_VERSION_ID
+      data_type: TEXT
+    - name: TOTAL_COST
+      data_type: TEXT
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: FINANCIAL_MONTH
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_GP_PRACTICE_RESPONSIBILITY
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: DRUG_NAME_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: VALUE_ADDED_TAX_CHARGED_INDICATOR_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: UNIT_PRICE_SUPPLIER
+      data_type: TEXT
+    - name: UNIT_PRICE_COMMISSIONER
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER_EXTENDED
+      data_type: TEXT
+    - name: DISPENSING_ROUTE_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: DRUG_QUANTITY_OR_WEIGHT_PROPORTION_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: DV_LSOA
+      data_type: TEXT
+    - name: THERAPEUTIC_INDICATION_CODE_SNOMED_CT
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: CLINICAL_INTERVENTION_DATE_DRUG_DISPENSED
+      data_type: TEXT
+    - name: DRUG_PACK_SIZE_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: COMMISSIONER_SUPPORT_CHARGE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: AGE_AT_ACTIVITY_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: DRUG_STRENGTH_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: REPORTING_TYPE_INDICATOR
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: DM_PLUS_D_TAXONOMY_CODE_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: ROUTE_OF_ADMINISTRATION_SNOMED_CT_DM_PLUS_D
+      data_type: TEXT
+    - name: HIGH_COST_TARIFF_EXCLUDED_DRUG_CODE_SNOMED_CT_DM_PLUS_D
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_RESIDENCE_RESPONSIBILITY
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: HOSPITAL_PROVIDER_SPELL_IDENTIFIER
+      data_type: TEXT
+    - name: OUTPUT
+      data_type: TEXT
+    - name: CAM_ASSIGNMENT
+      data_type: TEXT
+    - name: PROVIDER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: DRUG_VOLUME_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: UNIT_OF_MEASUREMENT_SNOMED_CT_DM_PLUS_D
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: OUT_PATIENT_ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: HIGH_COST_TARIFF_EXCLUDED_DRUG_CODE_DM_PLUS_D
+      data_type: TEXT
+    - name: ROUTE_OF_ADMINISTRATION_SNOMED_CT
+      data_type: TEXT
+    - name: NON_CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: DISPENSING_DATE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: PROVIDER_REFERENCE_IDENTIFIER
+      data_type: TEXT
+    - name: UNIT_OF_MEASUREMENT_DM_PLUS_D
+      data_type: TEXT
+    - name: WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: DRUG_NAME_GENERIC
+      data_type: TEXT
+    - name: DRUG_NAME_BRAND
+      data_type: TEXT
+    - name: GAINSHARE
+      data_type: TEXT
+    - name: CONSULTANT_CODE
+      data_type: TEXT
+    - name: APPROVAL_CODE
+      data_type: TEXT
+    - name: DRUG_DELIVERY_DATE
+      data_type: TEXT
+    - name: SOURCE_SYSTEM_FEEDER_CODE
+      data_type: TEXT
+    - name: NATIONAL_CANCER_DRUGS_FUND_FORM_CODE
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FIRST
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FIRST
+      data_type: TEXT
+    - name: CONTRACT_DESCRIPTION
+      data_type: TEXT
+    - name: DRUG_CATEGORY
+      data_type: TEXT
+    - name: CAM_SERVICECATEGORY_CODE
+      data_type: TEXT
+    - name: FLOW_CHART_PATH
+      data_type: TEXT
+    - name: DATE_STARTED_ON_DRUG
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL
+      data_type: TEXT
+    - name: ACTIVITY_COUNT
+      data_type: TEXT
+    - name: ACTIVITY_COUNT_POINT_OF_DELIVERY
+      data_type: TEXT
+    - name: ACTIVITY_DATE
+      data_type: TEXT
+    - name: ACTIVITY_END_DATE
+      data_type: TEXT
+    - name: ACTIVITY_END_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: ACTIVITY_START_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: ACTIVITY_TYPE
+      data_type: TEXT
+    - name: ACTIVITY_UNIT_PRICE
+      data_type: TEXT
+    - name: ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: CCG_NAME
+      data_type: TEXT
+    - name: CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: CLINICAL_INTERVENTION_DATE_MEDICAL_DEVICE_IMPLEMENTATION
+      data_type: TEXT
+    - name: COMMISSIONER_UNIT_PRICE
+      data_type: TEXT
+    - name: CONTRACT_CODE
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FOURTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_THIRD
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FOURTH
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_THIRD
+      data_type: TEXT
+    - name: CORRECTED_VALUE
+      data_type: TEXT
+    - name: DLP_BASELINE_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DLP_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DLP_FLEXOR_FREEZE
+      data_type: TEXT
+    - name: DRUG_CODE
+      data_type: TEXT
+    - name: DRUG_MODE_OF_DELIVERY
+      data_type: TEXT
+    - name: DRUG_NAME
+      data_type: TEXT
+    - name: DRUG_PACKSIZE
+      data_type: TEXT
+    - name: DRUG_REF
+      data_type: TEXT
+    - name: DRUG_SHORT_NAME
+      data_type: TEXT
+    - name: DRUG_STRENGTH
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE
+      data_type: TEXT
+    - name: DV_RECIPIENT_CODE
+      data_type: TEXT
+    - name: DV_YEAROF_BIRTH
+      data_type: TEXT
+    - name: EXTENDED_DRUGNAME
+      data_type: TEXT
+    - name: FILE_DATE
+      data_type: TEXT
+    - name: HCDR_FEED
+      data_type: TEXT
+    - name: HEALTHCARE_RESOURCE_GROUP_CORE_SPELL
+      data_type: TEXT
+    - name: HEALTHCARE_RESOURCE_GROUP_UNBUNDLED_EPISODE
+      data_type: TEXT
+    - name: HIGH_COST_TARIFF_EXCLUDED_DEVICE_CODE_SNOMED_CT_DM_PLUS_D
+      data_type: TEXT
+    - name: HOME_DELIVERY_CHARGE
+      data_type: TEXT
+    - name: HOME_DELIVERY_CHARGE_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: HOSPITAL_PROVIDER_SPELL_NUMBER
+      data_type: TEXT
+    - name: INDICATION
+      data_type: TEXT
+    - name: ISSUE_DATE
+      data_type: TEXT
+    - name: ISSUE_TYPE
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_PROCUREMENT_ROUTE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: NATIONAL_TARIFF
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: TEXT
+    - name: NHS_SERVICE_AGREEMENT_LINE_NUMBER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_NAME_CODE_OF_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: ORGANISATION_IDENTI_FI_ER_RESIDENCE_RESPONSIBILITY
+      data_type: TEXT
+    - name: PACK_SIZE
+      data_type: TEXT
+    - name: PACKAGE_OF_CARE_OR_YEAR_OF_CARE_START_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: PATIENT_HOSPITALNO
+      data_type: TEXT
+    - name: PERSON_BIRTH_DATE
+      data_type: TEXT
+    - name: PROVIDER_UNIQUE_ID
+      data_type: TEXT
+    - name: QUANTITY
+      data_type: TEXT
+    - name: RECORD_IDENTI_FI_ER
+      data_type: TEXT
+    - name: SITE_CODE_OF_TREATMENT
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NUMBER
+      data_type: TEXT
+    - name: SK_PATIENT_ID_PATIENT_NATNO
+      data_type: TEXT
+    - name: SPECIALISED_SERVICE_CODE
+      data_type: TEXT
+    - name: STRENGTH
+      data_type: TEXT
+    - name: SUBSIDIARY_LEVEL_CODE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: SUPPLIER_UNIT_PRICE
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: THERAPEUTIC_INDICATION
+      data_type: TEXT
+    - name: TRU_ISSUE
+      data_type: TEXT
+    - name: TRUST_CODE
+      data_type: TEXT
+    - name: UNBUNDLED_EPISODE_INDICATOR
+      data_type: TEXT
+    - name: VAT_CHARGED
+      data_type: TEXT
+    - name: VOLUME
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+  - name: LSPLCM
+    identifier: '"LSPLCM"'
+    columns:
+    - name: META_SK_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_FILE_ID
+      data_type: NUMBER(38,0)
+    - name: META_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: META_PARTITION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: META_PROVIDER_CODE
+      data_type: TEXT
+    - name: META_RECIPIENT_CODE
+      data_type: TEXT
+    - name: META_VERSION_ID
+      data_type: TEXT
+    - name: TOTAL_COST
+      data_type: TEXT
+    - name: FINANCIAL_MONTH
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ACTIVITY_COUNT_POINT_OF_DELIVERY
+      data_type: TEXT
+    - name: NATIONAL_TARIFF_INDICATOR
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: DATE_AND_TIME_DATA_SET_CREATED
+      data_type: TEXT
+    - name: ACTIVITY_UNIT_PRICE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_GP_PRACTICE_RESPONSIBILITY
+      data_type: TEXT
+    - name: COMMISSIONED_SERVICE_CATEGORY_CODE
+      data_type: TEXT
+    - name: ACTIVITY_START_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_OF_TREATMENT
+      data_type: TEXT
+    - name: TARIFF_CODE
+      data_type: TEXT
+    - name: ACTIVITY_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: AGE_AT_ACTIVITY_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER_EXTENDED
+      data_type: TEXT
+    - name: DV_LSOA
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: UNBUNDLED_EPISODE_INDICATOR
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_RESIDENCE_RESPONSIBILITY
+      data_type: TEXT
+    - name: REPORTING_TYPE_INDICATOR
+      data_type: TEXT
+    - name: CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: NON_CDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: ACTIVITY_END_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_POINT_OF_DELIVERY_CODE
+      data_type: TEXT
+    - name: OUT_PATIENT_ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: SERVICE_CODE
+      data_type: TEXT
+    - name: ADJUSTED_LENGTH_OF_STAY
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_CODE
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_FURTHER_DETAIL_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_TREATMENT_CATEGORY_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_DESCRIPTION
+      data_type: TEXT
+    - name: OUTPUT
+      data_type: TEXT
+    - name: CAM_ASSIGNMENT
+      data_type: TEXT
+    - name: CAM_SERVICECATEGORY_CODE
+      data_type: TEXT
+    - name: FLOW_CHART_PATH
+      data_type: TEXT
+    - name: LOCAL_TREATMENT_CODE
+      data_type: TEXT
+    - name: HOSPITAL_PROVIDER_SPELL_IDENTIFIER
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: NHS_SERVICE_AGREEMENT_LINE_NUMBER
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_MONITORING_CODE
+      data_type: TEXT
+    - name: PROVIDER_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: EMERGENCY_CARE_ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: LOCAL_CONTRACT_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: PACKAGE_OF_CARE_OR_YEAR_OF_CARE_START_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: CLINIC_CODE
+      data_type: TEXT
+    - name: LOCATION_OF_ACTIVITY_END
+      data_type: TEXT
+    - name: LOCATION_OF_ACTIVITY_START
+      data_type: TEXT
+    - name: PROVIDER_REFERENCE_IDENTIFIER
+      data_type: TEXT
+    - name: BEST_PRACTICE_TARIFF_VALUE
+      data_type: TEXT
+    - name: URGENT_AND_EMERGENCY_CARE_ACTIVITY_IDENTIFIER
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: TARIFF_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: SOURCE_SYSTEM_FEEDER_CODE
+      data_type: TEXT
+    - name: HEALTHCARE_RESOURCE_GROUP_CODE
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+    - name: RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: NHS_SERVICE_AGREEMENT_LINE_DESCRIPTION
+      data_type: TEXT
+    - name: PRIMARY_DIAGNOSIS_ICD
+      data_type: TEXT
+    - name: WARD_CODE_END
+      data_type: TEXT
+    - name: WARD_CODE_START
+      data_type: TEXT
+    - name: TREATMENT_TYPE
+      data_type: TEXT
+    - name: CONTRACT_DESCRIPTION
+      data_type: TEXT
+    - name: TRANSPORT_FUNDING_REFERENCE
+      data_type: TEXT
+    - name: ACTIVITY_DROP_OFF
+      data_type: TEXT
+    - name: ACTIVITY_PICK_UP
+      data_type: TEXT
+    - name: UNBUNDLED_HRG_CODE
+      data_type: TEXT
+    - name: EXAM_CODE
+      data_type: TEXT
+    - name: LINKED_RECORD_IDENTIFIER
+      data_type: TEXT
+    - name: OUTPATIENT_APPOINTMENT_SLOT_TYPE
+      data_type: TEXT
+    - name: PRIOR_APPROVAL_CODE
+      data_type: TEXT
+    - name: AMBULATORY_CONDITION_DESCRIPTION
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DESCRIPTION_FIRST
+      data_type: TEXT
+    - name: CONTRACT_MONITORING_ADDITIONAL_DETAIL_FIRST
+      data_type: TEXT
+    - name: DV_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: DV_FINANCIALMONTH
+      data_type: TEXT
+    - name: DV_FINANCIALYEAR
+      data_type: TEXT
+    - name: AAND_ESTREAM
+      data_type: TEXT
+    - name: ACC_HRG
+      data_type: TEXT
+    - name: ACTIVITY
+      data_type: TEXT
+    - name: ACTIVITY_ACTUAL
+      data_type: TEXT
+    - name: ACTIVITY_CODE
+      data_type: TEXT
+    - name: ACTIVITY_COST_INC_MFF
+      data_type: TEXT
+    - name: ACTIVITY_COUNT
+      data_type: TEXT
+    - name: ACTIVITY_DATE
+      data_type: TEXT
+    - name: ACTIVITY_END_DATE
+      data_type: TEXT
+    - name: ACTIVITY_GROUP_CODE
+      data_type: TEXT
+    - name: ACTIVITY_IDENTIFIER
+      data_type: TEXT
+    - name: ACTIVITY_SEQUENCE
+      data_type: TEXT
+    - name: ACTIVITY_START_DATE
+      data_type: TEXT
+    - name: ACTIVITY_TYPE
+      data_type: TEXT
+    - name: ACTIVITY_UID
+      data_type: TEXT
+    - name: ACTUAL_ACTIVITY
+      data_type: TEXT
+    - name: ACTUAL_CHARGE
+      data_type: TEXT
+    - name: ADM_METHOD
+      data_type: TEXT
+    - name: ADMINISTRATIVE_CATEGORY
+      data_type: TEXT
+    - name: ADMISSION_DATE
+      data_type: TEXT
+    - name: ADMISSION_HOSPITAL
+      data_type: TEXT
+    - name: ADMISSION_METHOD
+      data_type: TEXT
+    - name: ADMISSION_WARD
+      data_type: TEXT
+    - name: AE_ATTENDANCE_NUMBER
+      data_type: TEXT
+    - name: AE_INVESTIGATION_FIRST
+      data_type: TEXT
+    - name: AE_INVESTIGATION_SECOND
+      data_type: TEXT
+    - name: AE_TREATMENT_FIRST
+      data_type: TEXT
+    - name: AE_TREATMENT_SECOND
+      data_type: TEXT
+    - name: AGE
+      data_type: TEXT
+    - name: AGE_AT_FIRST_REQUEST
+      data_type: TEXT
+    - name: AGE_BAND
+      data_type: TEXT
+    - name: ALTEPLASE_FLAG
+      data_type: TEXT
+    - name: AMBULANCE_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_DATE
+      data_type: TEXT
+    - name: APPOINTMENT_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_TYPE_CODE
+      data_type: TEXT
+    - name: APPOINTMENT_TYPE_DESCRIPTION
+      data_type: TEXT
+    - name: APPT_ORDER
+      data_type: TEXT
+    - name: AREA_TEAM
+      data_type: TEXT
+    - name: ARRIVAL_DATE_TIME
+      data_type: TEXT
+    - name: ATT_TARIFF_FLAG
+      data_type: TEXT
+    - name: ATTENDANCE_DATE
+      data_type: TEXT
+    - name: ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: ATTENDANCE_STATUS_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_STATUS_DESCRIPTION
+      data_type: TEXT
+    - name: ATTENDANCE_TARIFF
+      data_type: TEXT
+    - name: ATTENDANCE_TIME
+      data_type: TEXT
+    - name: ATTENDANCE_TYPE
+      data_type: TEXT
+    - name: BED_DAY_END_DATE
+      data_type: TEXT
+    - name: BED_DAY_START_DATE
+      data_type: TEXT
+    - name: BILLING_FLAG
+      data_type: TEXT
+    - name: BILLING_ORIGIN
+      data_type: TEXT
+    - name: BOOKED_TIME
+      data_type: TEXT
+    - name: BOWEL_SCREENING_FLAG
+      data_type: TEXT
+    - name: BPT_CODE
+      data_type: TEXT
+    - name: BPT_TARIFF
+      data_type: TEXT
+    - name: CALCULATED_HRG_CODE
+      data_type: TEXT
+    - name: CASE_NOTE_NO
+      data_type: TEXT
+    - name: CC_DAYS
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CCG_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: CCG_CONTRACT_SERIAL_NUMBER
+      data_type: TEXT
+    - name: CCG_OF_RESIDENCE
+      data_type: TEXT
+    - name: CCG_PCT_CLUSTER_DESC
+      data_type: TEXT
+    - name: CCG_PCT_CODE
+      data_type: TEXT
+    - name: CCG_PCT_DESC
+      data_type: TEXT
+    - name: CDS_UNIQUE_ID
+      data_type: TEXT
+    - name: CHARGE_APPLIED
+      data_type: TEXT
+    - name: CHARGEABLE
+      data_type: TEXT
+    - name: CLINIC_DATE
+      data_type: TEXT
+    - name: CLINIC_DESC
+      data_type: TEXT
+    - name: CLINICAL_INTERVENTION_DATE_DRUG_ADMINISTERED
+      data_type: TEXT
+    - name: CLINICAL_INTERVENTION_DATE_MEDICAL_DEVICE_IMPLEMENTATION
+      data_type: TEXT
+    - name: CLINICIAN_KEY
+      data_type: TEXT
+    - name: CM_ACTIVITY_PLAN
+      data_type: TEXT
+    - name: CM_PRICE_PLAN
+      data_type: TEXT
+    - name: CODE_TYPE
+      data_type: TEXT
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: COMMISSIONER_UNIT_PRICE
+      data_type: TEXT
+    - name: COMMUNITY_DISCIPLINE
+      data_type: TEXT
+    - name: CONSULTANT
+      data_type: TEXT
+    - name: CONSULTANT_CODE
+      data_type: TEXT
+    - name: CONTRACT_CODE
+      data_type: TEXT
+    - name: CONTRACT_FLAG
+      data_type: TEXT
+    - name: COST
+      data_type: TEXT
+    - name: COUNT
+      data_type: TEXT
+    - name: CRIS
+      data_type: TEXT
+    - name: CRIS_NUMBER
+      data_type: TEXT
+    - name: CRITICAL_CARE_DAYS
+      data_type: TEXT
+    - name: CRITICAL_CARE_DISCHARGE_DATE
+      data_type: TEXT
+    - name: CRITICAL_CARE_START_DATE
+      data_type: TEXT
+    - name: CRITICAL_CARE_UNIT
+      data_type: TEXT
+    - name: CRITICAL_CARE_UNIT_FUNCTION
+      data_type: TEXT
+    - name: DAILY_TARIFF_TO_APPLY
+      data_type: TEXT
+    - name: DATA_SET
+      data_type: TEXT
+    - name: DATA_SOURCE
+      data_type: TEXT
+    - name: DATA_TYPE
+      data_type: TEXT
+    - name: DATASET
+      data_type: TEXT
+    - name: DATE_BOOKED_IN
+      data_type: TEXT
+    - name: DATE_FIRST_REGISTERED_OR_FIRST_SEEN
+      data_type: TEXT
+    - name: DATE_OF_ACTIVITY
+      data_type: TEXT
+    - name: DATE_REPORTED
+      data_type: TEXT
+    - name: DEPARTURE_DATE
+      data_type: TEXT
+    - name: DEVICE_SERIAL_NUMBER
+      data_type: TEXT
+    - name: DEVICE_TYPE
+      data_type: TEXT
+    - name: DIAG_01
+      data_type: TEXT
+    - name: DIAG_02
+      data_type: TEXT
+    - name: DIAGNOSTIC_BODY_PART
+      data_type: TEXT
+    - name: DIFF
+      data_type: TEXT
+    - name: DISCHARGE_DATE
+      data_type: TEXT
+    - name: DISCHARGE_STATUS
+      data_type: TEXT
+    - name: DISCHARGE_WARD
+      data_type: TEXT
+    - name: DISPENSING_ROUTE_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: DIVISION
+      data_type: TEXT
+    - name: DIVISION_ID
+      data_type: TEXT
+    - name: DLP_BASELINE_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_BASELINEFINANCIALMONTH
+      data_type: TEXT
+    - name: DLP_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DLP_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DLP_FLEXOR_FREEZE
+      data_type: TEXT
+    - name: DLP_FLEXORFREEZE
+      data_type: TEXT
+    - name: DOA
+      data_type: TEXT
+    - name: DOA_FLAG
+      data_type: TEXT
+    - name: DRUG_DELIVERY_DATE
+      data_type: TEXT
+    - name: DRUG_DOSAGE_PRESCRIBED
+      data_type: TEXT
+    - name: DRUG_HOME_DELIVERY_CHARGE
+      data_type: TEXT
+    - name: DRUG_MODE_OF_DELIVERY
+      data_type: TEXT
+    - name: DRUG_NAME
+      data_type: TEXT
+    - name: DRUG_NAME_GENERIC
+      data_type: TEXT
+    - name: DRUG_NAME_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: DRUG_QUANTITY
+      data_type: TEXT
+    - name: DRUG_QUANTITY_OR_WEIGHT_PROPORTION_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: DRUG_STRENGTH
+      data_type: TEXT
+    - name: DRUG_STRENGTH_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: DRUG_THERAPEUTIC_INDICATION
+      data_type: TEXT
+    - name: DRUG_VOLUME
+      data_type: TEXT
+    - name: DV_LSOA_ACTIVITY_DATE_POSTCODE
+      data_type: TEXT
+    - name: DV_LSOA_ACTIVITY_POST_CODE_DROP_OFF
+      data_type: TEXT
+    - name: DV_LSOA_ACTIVITY_POST_CODE_PICK_UP
+      data_type: TEXT
+    - name: DV_LSOA_LOCATION_OF_ACTIVITY_END
+      data_type: TEXT
+    - name: DV_LSOA_LOCATION_OF_ACTIVITY_START
+      data_type: TEXT
+    - name: DV_LSOA_SYS_ACTIVITY_DATE_FORMATTED_POST_CODE
+      data_type: TEXT
+    - name: DV_LSOA_SYS_ACTIVITY_DATE_FORMATTED_POSTCODE
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_ACTIVITY_DATE_POSTCODE
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_ACTIVITY_POST_CODE_DROP_OFF
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_ACTIVITY_POST_CODE_PICK_UP
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_LOCATION_OF_ACTIVITY_END
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_LOCATION_OF_ACTIVITY_START
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_SYS_ACTIVITY_DATE_FORMATTED_POST_CODE
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_SYS_ACTIVITY_DATE_FORMATTED_POSTCODE
+      data_type: TEXT
+    - name: DV_RECIPIENT_CODE
+      data_type: TEXT
+    - name: DV_YEAROF_BIRTH
+      data_type: TEXT
+    - name: DV_YEAROF_BIRTH_SYS_DATE_OF_BIRTH
+      data_type: TEXT
+    - name: EPISODE_NUMBER
+      data_type: TEXT
+    - name: ETHNIC_GROUP
+      data_type: TEXT
+    - name: EVENT_DATE
+      data_type: TEXT
+    - name: EVENT_KEY
+      data_type: TEXT
+    - name: EXAM_COST
+      data_type: TEXT
+    - name: EXAM_DESCRIPTION
+      data_type: TEXT
+    - name: EXAM_END
+      data_type: TEXT
+    - name: EXAM_KEY
+      data_type: TEXT
+    - name: EXAM_NAME
+      data_type: TEXT
+    - name: EXAM_START
+      data_type: TEXT
+    - name: EXCESS_BED_DAYS
+      data_type: TEXT
+    - name: EXCLUDED_FROM_SUS
+      data_type: TEXT
+    - name: EXPANDED_SOURCE_NAME
+      data_type: TEXT
+    - name: EXPANDEDSAMPLE_TYPE
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: TEXT
+    - name: FCE_HRG
+      data_type: TEXT
+    - name: FILE_DATE
+      data_type: TEXT
+    - name: FINAL_TARIFF
+      data_type: TEXT
+    - name: FINANCIAL_MONTH_ACTIVITY
+      data_type: TEXT
+    - name: FINANCIAL_MONTH_ID
+      data_type: TEXT
+    - name: FINANCIAL_YEAR_ACTIVITY
+      data_type: TEXT
+    - name: FINANCIAL_YEAR_ID
+      data_type: TEXT
+    - name: FIRST_ATTENDANCE
+      data_type: TEXT
+    - name: FIRST_REQUEST_DATE_TIME
+      data_type: TEXT
+    - name: FIRST_RESPONSE_DATE_TIME
+      data_type: TEXT
+    - name: FITTING_DATE
+      data_type: TEXT
+    - name: FLEX_FROZEN
+      data_type: TEXT
+    - name: FUNDING_FOR_EXCESS_BED_DAYS
+      data_type: TEXT
+    - name: FUNDING_REFERENCE
+      data_type: TEXT
+    - name: GENDER
+      data_type: TEXT
+    - name: GESTATION_AT_APPOINTMENT
+      data_type: TEXT
+    - name: GP_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE
+      data_type: TEXT
+    - name: GP_PRACTICE_ADDR1
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_NO
+      data_type: TEXT
+    - name: GP_PRACTIONER_CODE
+      data_type: TEXT
+    - name: GP_REQUEST
+      data_type: TEXT
+    - name: GP_STREAMING
+      data_type: TEXT
+    - name: GROSS_LOS
+      data_type: TEXT
+    - name: GROSS_LOS_MINUTES
+      data_type: TEXT
+    - name: GROUPER_MAIN_EPISODE_FLAG
+      data_type: TEXT
+    - name: HEALTH_AUTHORITY
+      data_type: TEXT
+    - name: HEALTHCARE_RESOURCE_GROUP_DESCRIPTION
+      data_type: TEXT
+    - name: HEALTHCARE_RESOURCE_GROUP_UNBUNDLED_EPISODE
+      data_type: TEXT
+    - name: HIGH_COST_TARIFF_EXCLUDED_DEVICE_CODE_SNOMED_CT_DM_PLUS_D
+      data_type: TEXT
+    - name: HIGH_LEVEL_DEVICE_TYPE
+      data_type: TEXT
+    - name: HOME_DELIVERY_CHARGE
+      data_type: TEXT
+    - name: HOME_DELIVERY_CHARGE_HIGH_COST_TARIFF_EXCLUDED_DRUG
+      data_type: TEXT
+    - name: HOSP_NO
+      data_type: TEXT
+    - name: HOSPITAL
+      data_type: TEXT
+    - name: HOSPITAL_NO
+      data_type: TEXT
+    - name: HOSPITAL_NUMBER
+      data_type: TEXT
+    - name: HOSPITAL_PROVIDER_SPELL_NUMBER
+      data_type: TEXT
+    - name: HOURS
+      data_type: TEXT
+    - name: HRG
+      data_type: TEXT
+    - name: HRG4_CODE
+      data_type: TEXT
+    - name: HRG_DESC
+      data_type: TEXT
+    - name: HRG_DESCRIPTION
+      data_type: TEXT
+    - name: HRG_TARIFF
+      data_type: TEXT
+    - name: HRG_TOTAL
+      data_type: TEXT
+    - name: I_REPORTER_KEY
+      data_type: TEXT
+    - name: ICD10_CODE
+      data_type: TEXT
+    - name: ICD10_DESC
+      data_type: TEXT
+    - name: INCLUDED_IN_N_TARIFF_Y_N
+      data_type: TEXT
+    - name: INTERNAL_NO
+      data_type: TEXT
+    - name: INV_01
+      data_type: TEXT
+    - name: INV_02
+      data_type: TEXT
+    - name: INV_03
+      data_type: TEXT
+    - name: INV_04
+      data_type: TEXT
+    - name: IS_AMBULATORY_CARE
+      data_type: TEXT
+    - name: IS_FREEZE
+      data_type: TEXT
+    - name: IS_PAEDIATRIC_CDU
+      data_type: TEXT
+    - name: IS_SPECIALIST
+      data_type: TEXT
+    - name: ISSUE_TYPE
+      data_type: TEXT
+    - name: KORNER_CAT
+      data_type: TEXT
+    - name: KORNERWGT
+      data_type: TEXT
+    - name: LAB_NO
+      data_type: TEXT
+    - name: LATEST_REQUEST_DATE_TIME
+      data_type: TEXT
+    - name: LATEST_RESPONSE_DATE_TIME
+      data_type: TEXT
+    - name: LENGTH_OF_STAY
+      data_type: TEXT
+    - name: LOCAL_ID
+      data_type: TEXT
+    - name: LOCAL_MAIN_EPISODE_FLAG
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: LOCAL_POD
+      data_type: TEXT
+    - name: LOCAL_POD_DESCRIPTION
+      data_type: TEXT
+    - name: LOCATION_CODE
+      data_type: TEXT
+    - name: LOS
+      data_type: TEXT
+    - name: LOS_BEDDAYS
+      data_type: TEXT
+    - name: MAIN_SPEC_CODE
+      data_type: TEXT
+    - name: MAIN_SPEC_DESC
+      data_type: TEXT
+    - name: MAX_ORGANS_SUPPORTED
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_PROCUREMENT_ROUTE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: MEDICAL_DEVICE_SERIAL_NUMBER_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: MFF
+      data_type: TEXT
+    - name: MIU
+      data_type: TEXT
+    - name: MIU_FLAG
+      data_type: TEXT
+    - name: MODALITY
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: NAC_HRG
+      data_type: TEXT
+    - name: NATIONAL_CONSULTANT_CODE
+      data_type: TEXT
+    - name: NATIONAL_POD
+      data_type: TEXT
+    - name: NATIONAL_SPELL_TARIFF_INC_MFF
+      data_type: TEXT
+    - name: NATIONAL_SPELL_TARIFF_PRE_MFF
+      data_type: TEXT
+    - name: NCA_CCG
+      data_type: TEXT
+    - name: NET_LOS
+      data_type: TEXT
+    - name: NHS_NO_STATUS_INDICATOR
+      data_type: TEXT
+    - name: NHS_NUMBER_STATUS_INDICATOR
+      data_type: TEXT
+    - name: NHS_NUMBER_STATUS_INDICATOR_CODE
+      data_type: TEXT
+    - name: NHSE_COMMISSIONER_YN
+      data_type: TEXT
+    - name: NHSE_SERVICE_CATEGORY
+      data_type: TEXT
+    - name: NO_EXAMS
+      data_type: TEXT
+    - name: NON_WHHT_LOCATION_CODE
+      data_type: TEXT
+    - name: NON_WHHT_LOCATION_DESCRIPTION
+      data_type: TEXT
+    - name: OP_DUMMY_CDS_UID_ACTUAL
+      data_type: TEXT
+    - name: OP_HRG_CODE
+      data_type: TEXT
+    - name: OP_PBR
+      data_type: TEXT
+    - name: OPCS_CODE
+      data_type: TEXT
+    - name: OPCS_DESC
+      data_type: TEXT
+    - name: ORGANISATION
+      data_type: TEXT
+    - name: ORGANISATION_CODE_NAME_CODE_OF_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: ORGANISATION_SITE_IDENTIFIER_GP_PRACTICE_RESPONSIBILITY
+      data_type: TEXT
+    - name: ORIGINAL_REF_REASON_CODE
+      data_type: TEXT
+    - name: ORIGINAL_REPORT_DATE
+      data_type: TEXT
+    - name: ORIGINATING_PCT_CODE
+      data_type: TEXT
+    - name: ORIGINATING_PCT_DESC
+      data_type: TEXT
+    - name: OUTCOME
+      data_type: TEXT
+    - name: OVER65_FLAG
+      data_type: TEXT
+    - name: PAS_CASENOTE_NUMBER
+      data_type: TEXT
+    - name: PAS_DISTRICT_NUMBER
+      data_type: TEXT
+    - name: PAS_NUMBER
+      data_type: TEXT
+    - name: PAT_CLASS
+      data_type: TEXT
+    - name: PAT_ID
+      data_type: TEXT
+    - name: PATHOLOGY_DEPARTMENT
+      data_type: TEXT
+    - name: PATHWAY_TARIFF_FLAG
+      data_type: TEXT
+    - name: PATIENT_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_CLASSIFICATION
+      data_type: TEXT
+    - name: PATIENT_CODE
+      data_type: TEXT
+    - name: PATIENT_SETTING
+      data_type: TEXT
+    - name: PATIENT_TYPE
+      data_type: TEXT
+    - name: PATIENT_TYPE_DESC
+      data_type: TEXT
+    - name: PB_R
+      data_type: TEXT
+    - name: PB_RLOS
+      data_type: TEXT
+    - name: PBR_FLAG
+      data_type: TEXT
+    - name: PCG
+      data_type: TEXT
+    - name: PCT
+      data_type: TEXT
+    - name: PERIOD
+      data_type: TEXT
+    - name: PERSON_SOURCE_TYPE
+      data_type: TEXT
+    - name: PHLEBOTOMIST_CODE
+      data_type: TEXT
+    - name: PLCM_ACTIVITY_TYPE
+      data_type: TEXT
+    - name: PLD_RECIPIENT
+      data_type: TEXT
+    - name: POD1
+      data_type: TEXT
+    - name: POD2
+      data_type: TEXT
+    - name: POD3
+      data_type: TEXT
+    - name: POD4
+      data_type: TEXT
+    - name: POD_DESC
+      data_type: TEXT
+    - name: POD_LEVEL1
+      data_type: TEXT
+    - name: POD_LEVEL2
+      data_type: TEXT
+    - name: POD_LEVEL3
+      data_type: TEXT
+    - name: POD_LEVEL4
+      data_type: TEXT
+    - name: POD_LEVEL5
+      data_type: TEXT
+    - name: POINT_OF_DELIVERY_C_ODE
+      data_type: TEXT
+    - name: PRACTICE
+      data_type: TEXT
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: PREVIOUSLY_FROZEN
+      data_type: TEXT
+    - name: PRICE_ACTUAL
+      data_type: TEXT
+    - name: PRIMARY_DIAGNOSIS
+      data_type: TEXT
+    - name: PRIMARY_DIAGNOSIS_CODE
+      data_type: TEXT
+    - name: PRIMARY_PROCEDURE
+      data_type: TEXT
+    - name: PRIMARY_PROCEDURE_CODE
+      data_type: TEXT
+    - name: PRIORITY
+      data_type: TEXT
+    - name: PROC1
+      data_type: TEXT
+    - name: PROC2
+      data_type: TEXT
+    - name: PROCEDURE_CODE
+      data_type: TEXT
+    - name: PROCEDURE_TARIFF
+      data_type: TEXT
+    - name: PRODUCT_CODE
+      data_type: TEXT
+    - name: PROFESSIONAL_TYPE
+      data_type: TEXT
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: PROVIDER_UNIQUE_ID
+      data_type: TEXT
+    - name: PURCHASED_DEVICE_CONTRACT
+      data_type: TEXT
+    - name: QUANTITY
+      data_type: TEXT
+    - name: RADIOLOGY_TEST_SCAN_DATE
+      data_type: TEXT
+    - name: READMISSION_Y_N
+      data_type: TEXT
+    - name: REASON
+      data_type: TEXT
+    - name: RECORD_TYPE
+      data_type: TEXT
+    - name: REF_COMMENT
+      data_type: TEXT
+    - name: REF_REASON_CODE
+      data_type: TEXT
+    - name: REFERENCE
+      data_type: TEXT
+    - name: REFERRAL_DATE
+      data_type: TEXT
+    - name: REFERRAL_REASON
+      data_type: TEXT
+    - name: REFERRAL_SEQUENCE
+      data_type: TEXT
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: REFERRER_GP_CODE
+      data_type: TEXT
+    - name: REFERRING_CLINICIAN
+      data_type: TEXT
+    - name: REFERRING_CODE
+      data_type: TEXT
+    - name: REFERRING_PRACTICE
+      data_type: TEXT
+    - name: REPORT_MASTER_ID
+      data_type: TEXT
+    - name: REPORTING_MONTH
+      data_type: TEXT
+    - name: REPORTING_SPECIALTY
+      data_type: TEXT
+    - name: REQUEST_DATE
+      data_type: TEXT
+    - name: RESPONSIBLE_COMMISSIONER
+      data_type: TEXT
+    - name: ROUTE_OF_ADMINISTRATION_SNOMED_CT_DM_PLUS_D
+      data_type: TEXT
+    - name: RTT_WAIT_WEEK
+      data_type: TEXT
+    - name: SAMPLEDATE
+      data_type: TEXT
+    - name: SERVICE_CATEGORY
+      data_type: TEXT
+    - name: SERVICE_LINE_CODE
+      data_type: TEXT
+    - name: SERVICE_LINE_DESC
+      data_type: TEXT
+    - name: SEX
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: SITE_CODE_OF_TREATMENT
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NO
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NUMBER
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHSNUMBER
+      data_type: TEXT
+    - name: SLAM_SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: SLAM_UNIQUE_ID
+      data_type: TEXT
+    - name: SLAMHRG_DESCRIPTION
+      data_type: TEXT
+    - name: SLAMLOS
+      data_type: TEXT
+    - name: SLR_FCE_TARIFF_INC_MFF
+      data_type: TEXT
+    - name: SLR_FCE_TARIFF_PRE_MFF
+      data_type: TEXT
+    - name: SLR_SPELL_DENOMINATOR_INC_MFF
+      data_type: TEXT
+    - name: SLR_SPELL_DENOMINATOR_PRE_MFF
+      data_type: TEXT
+    - name: SLR_TOTAL_SPELL_TARIFF_INC_MFF
+      data_type: TEXT
+    - name: SLR_WEIGHTED_TARIFF_INC_MFF
+      data_type: TEXT
+    - name: SLR_WEIGHTED_TARIFF_PRE_MFF
+      data_type: TEXT
+    - name: SNAPSHOT_ID
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
+    - name: SOURCE_CLASSIFICATION
+      data_type: TEXT
+    - name: SOURCE_CODE1
+      data_type: TEXT
+    - name: SOURCE_CODE2
+      data_type: TEXT
+    - name: SOURCE_KEY
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_CODE
+      data_type: TEXT
+    - name: SPEC_DESC
+      data_type: TEXT
+    - name: SPEC_GROUP_CODE
+      data_type: TEXT
+    - name: SPEC_GRP_DESC
+      data_type: TEXT
+    - name: SPECIALISED_SERVICE_CODE
+      data_type: TEXT
+    - name: SPECIALISED_SERVICE_LINE
+      data_type: TEXT
+    - name: SPECIALTY
+      data_type: TEXT
+    - name: SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: SPECIALTY_ID
+      data_type: TEXT
+    - name: SPECIALTY_NAME
+      data_type: TEXT
+    - name: SPELL_BP_USED
+      data_type: TEXT
+    - name: SPELL_CC_DAYS
+      data_type: TEXT
+    - name: SPELL_HRG
+      data_type: TEXT
+    - name: SPELL_NUMBER
+      data_type: TEXT
+    - name: STRENGTH
+      data_type: TEXT
+    - name: SUBSIDIARY_DEVICE_TYPE
+      data_type: TEXT
+    - name: SUBSIDIARY_LEVEL_CODE_HIGH_COST_TARIFF_EXCLUDED_DEVICE
+      data_type: TEXT
+    - name: SUPPLIER_UNIT_PRICE
+      data_type: TEXT
+    - name: SUS_ACTIVITY_TYPE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_COUNT
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_AGE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_CCG_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_CCG_COMMISSIONER_CODE_RULE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_CCG_CONTRACT_SERIAL_NUMBER
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_CCG_OF_REGISTRATION
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_CCG_OF_RESIDENCE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_GP_PRACTICE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_GPGMC_CODE
+      data_type: TEXT
+    - name: SYS_ACTIVITY_DATE_PASGP_CODE
+      data_type: TEXT
+    - name: SYS_ADMISSION_DATE_TIME
+      data_type: TEXT
+    - name: SYS_AE_EPISODE_KEY
+      data_type: TEXT
+    - name: SYS_AE_VISIT_NO
+      data_type: TEXT
+    - name: SYS_AMBULATORY_CARE_FLAG
+      data_type: TEXT
+    - name: SYS_ATTENDANCE_DATE_TIME
+      data_type: TEXT
+    - name: SYS_CALCULATED_PAS_INTERNAL_NO
+      data_type: TEXT
+    - name: SYS_DECISION_TO_REFER_DATE
+      data_type: TEXT
+    - name: SYS_DISCHARGE_DATE_TIME
+      data_type: TEXT
+    - name: SYS_FINANCIAL_MONTH_ID
+      data_type: TEXT
+    - name: SYS_FINANCIAL_YEAR_ID
+      data_type: TEXT
+    - name: SYS_MATCH_TYPE
+      data_type: TEXT
+    - name: SYS_MATCHED_CALCULATED_DAYS
+      data_type: TEXT
+    - name: SYS_MATCHED_OPOR_WA_ATTEND_DATE
+      data_type: TEXT
+    - name: SYS_MATCHED_OPOR_WA_FLAG
+      data_type: TEXT
+    - name: SYS_MATCHED_OPOR_WA_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: SYS_PAS_ADMISSION_DATE
+      data_type: TEXT
+    - name: SYS_PAS_DISCHARGE_DATE
+      data_type: TEXT
+    - name: SYS_PATIENT_CLASSIFICATION
+      data_type: TEXT
+    - name: SYS_PROC1
+      data_type: TEXT
+    - name: SYS_PROC2
+      data_type: TEXT
+    - name: SYS_PROC3
+      data_type: TEXT
+    - name: SYS_PROC4
+      data_type: TEXT
+    - name: SYS_REFERRAL_RECEIVED_DATE
+      data_type: TEXT
+    - name: SYS_TREATMENT_DATE
+      data_type: TEXT
+    - name: SYS_WATFORD_GP_REDUCED_PRICE_FLAG
+      data_type: TEXT
+    - name: SYSTEM_NUMBER
+      data_type: TEXT
+    - name: TARIFF
+      data_type: TEXT
+    - name: TARIFF_DERIVED
+      data_type: TEXT
+    - name: TARIFF_HRG
+      data_type: TEXT
+    - name: TARIFF_INC_MFF
+      data_type: TEXT
+    - name: TARIFF_INCLUDING_MFF
+      data_type: TEXT
+    - name: TARIFF_PRE_MFF
+      data_type: TEXT
+    - name: TARIFF_SPECIALTY
+      data_type: TEXT
+    - name: TEAM
+      data_type: TEXT
+    - name: TEST1
+      data_type: TEXT
+    - name: TEST2
+      data_type: TEXT
+    - name: TEST3
+      data_type: TEXT
+    - name: TEST_DESCRIPTION
+      data_type: TEXT
+    - name: TESTS
+      data_type: TEXT
+    - name: THERAPEUTIC_INDICATION
+      data_type: TEXT
+    - name: THERAPEUTIC_INDICATION_CODE_SNOMED_CT
+      data_type: TEXT
+    - name: TIME_BOOKED_IN
+      data_type: TEXT
+    - name: TOTAL_PRE_MFF
+      data_type: TEXT
+    - name: TOTAL_SPELL_TARIFF_INC_MFF
+      data_type: TEXT
+    - name: TOTAL_SPELL_TARIFF_PRE_MFF
+      data_type: TEXT
+    - name: TREAT_01
+      data_type: TEXT
+    - name: TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: TRUST_CODE
+      data_type: TEXT
+    - name: TRUST_POD
+      data_type: TEXT
+    - name: TRUST_POD_DESCRIPTION
+      data_type: TEXT
+    - name: UBRN
+      data_type: TEXT
+    - name: UNBUNDLED_HR_GS
+      data_type: TEXT
+    - name: UNIT_PRICE_COMMISSIONER
+      data_type: TEXT
+    - name: UNIT_PRICE_SUPPLIER
+      data_type: TEXT
+    - name: USER_DEFINED_ACTIVITY_FIELD_1
+      data_type: TEXT
+    - name: USER_DEFINED_ACTIVITY_FIELD_2
+      data_type: TEXT
+    - name: USER_DEFINED_ACTIVITY_FIELD_4
+      data_type: TEXT
+    - name: VALUE_ADDED_TAX_CHARGED_INDICATOR_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: VAT_CHARGED
+      data_type: TEXT
+    - name: VISIT
+      data_type: TEXT
+    - name: WARD
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: WARD_DESC
+      data_type: TEXT
+    - name: WEEK_NUMBER
+      data_type: TEXT
+    - name: WEIGHT_ACTUAL
+      data_type: TEXT
+    - name: WITHHELD_IDENTITY_REASON
+      data_type: TEXT
+    - name: X_CN
+      data_type: TEXT
+    - name: XBD
+      data_type: TEXT
+    - name: XBD_VALUE
+      data_type: TEXT
+    - name: XBD_VALUE_INC_MFF
+      data_type: TEXT
+    - name: YEAR
+      data_type: TEXT
+  - name: META_FILE_REGISTRY
+    identifier: '"META_FILE_REGISTRY"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: FILE_ID
+      data_type: NUMBER(38,0)
+    - name: BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: FILE_NAME
+      data_type: TEXT
+    - name: ORIGINAL_FILE_NAME
+      data_type: TEXT
+    - name: CREATED_DATETIME
+      data_type: TIMESTAMP_NTZ
+    - name: ROW_COUNT
+      data_type: NUMBER(38,0)
+    - name: LOADER_JOB_NAME
+      data_type: TEXT
+    - name: LAST_REFRESHED_AT
+      data_type: TIMESTAMP_NTZ
