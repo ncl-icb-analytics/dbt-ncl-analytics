@@ -1,4 +1,3 @@
-{{ config(schema='cancer__ref') }}
 
 select
     ods_code                                as provider_code,

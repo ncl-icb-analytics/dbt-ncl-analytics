@@ -39,7 +39,7 @@ Each layer references the one above it using `{{ ref() }}`. Raw models reference
 
 **Location:** `models/raw/`
 **Materialisation:** View
-**Schema:** `MODELLING.DBT_RAW`
+**Schema:** `STAGING.DBT_RAW`
 
 Raw models are **auto-generated** by the Python scripts in `scripts/sources/`. Their only job is to create a 1:1 view of each source table with column names converted from PascalCase to snake_case.
 
@@ -63,9 +63,9 @@ from {{ source('dictionary_dbo', 'ConsultantProvider') }}
 
 ## Staging Layer
 
-**Location:** `models/staging/`
+**Location:** `models/staging/{domain}/{source}/`
 **Materialisation:** View
-**Schema:** `MODELLING.DBT_STAGING`
+**Schema:** `STAGING.{SOURCE}` — one schema per source system, named after the folder containing the model (e.g. `models/staging/commissioning/csds/` → `STAGING.CSDS`)
 
 The staging layer is where you clean and standardise source data. Every staging model takes a single raw model and applies lightweight transformations to make the data usable.
 
@@ -88,12 +88,12 @@ stg_{source}_{table}.sql
 stg_{source}_{table}.yml
 ```
 
-For example: `stg_pds_pds_person.sql` stages the `raw_pds_pds_person` raw model.
+For example: `stg_pds_person.sql` stages the `raw_pds_pds_person` raw model.
 
 ### Example SQL
 
 ```sql
--- stg_pds_pds_person.sql
+-- stg_pds_person.sql
 select
     row_id,
     pseudo_nhs_number as sk_patient_id,
@@ -117,7 +117,7 @@ Notice: type conversions with `to_date()`, meaningful column renames, explicit c
 version: 2
 
 models:
-  - name: stg_pds_pds_person
+  - name: stg_pds_person
     description: Personal Demographics Service person demographics
     config:
       meta:
@@ -421,7 +421,7 @@ If a raw model doesn't exist, follow [Working with Sources](working-with-sources
 
 ### 2. Create the staging SQL
 
-Create `models/staging/{domain}/stg_{source}_{table}.sql`:
+Create `models/staging/{domain}/{source}/stg_{source}_{table}.sql`. The source folder name becomes the schema in `STAGING`, so add the model to the existing source folder or create a new one named after the source system:
 
 ```sql
 select
@@ -434,7 +434,7 @@ where key_column is not null
 
 ### 3. Create the YAML
 
-Create `models/staging/{domain}/stg_{source}_{table}.yml`:
+Create `models/staging/{domain}/{source}/stg_{source}_{table}.yml`:
 
 ```yaml
 version: 2

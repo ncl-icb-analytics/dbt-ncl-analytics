@@ -60,7 +60,7 @@ select
     -- diagnosis information
     , diagnosis.code as primary_diagnosis_code_snomed
     , diag_dict.snomed_uk_preferred_term as primary_diagnosis_desc_snomed
-    , {{clean_icd10_code("diag_dict.icd10_mapping")}} as primary_diagnosis_code_icd10
+    , diag_dict.icd10_mapping as primary_diagnosis_code_icd10
     , diag_dict.icd10_description as primary_diagnosis_desc_icd10
     , diag_dict.ecds_group1 as primary_diagnosis_desc_ecds_group1
     
@@ -155,12 +155,12 @@ left join ethnicity_codes as eth
 left join gender_codes as gen
     on core.patient_stated_gender = gen.gender_code
 
--- provider name
+-- site name
 LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_site ON 
     core.attendance_location_site = dict_site.organisation_code
 
--- site name
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org ON
+-- provider name
+LEFT JOIN {{ ref('dict_organisation_nhs_provider') }} as dict_org ON
     core.attendance_location_hes_provider_3 = dict_org.organisation_code
 
 left join

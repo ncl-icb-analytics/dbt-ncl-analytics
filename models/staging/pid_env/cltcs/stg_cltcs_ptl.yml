@@ -1,5 +1,5 @@
 models:
-  - name: stg_cltcs_emis_ptl
+  - name: stg_cltcs_ptl
     description: CLTCS EMIS PTL extract (patient tracking list / MDT outcomes). Source raw_cltcs_emis_ptl.
     config:
       meta:

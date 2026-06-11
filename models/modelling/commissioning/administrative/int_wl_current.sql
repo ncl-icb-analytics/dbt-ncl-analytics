@@ -16,7 +16,7 @@ Includes ALL persons (active, inactive, deceased) following intermediate layer p
 
 WITH most_recent_week AS (
     SELECT MAX(week_ending_date) AS max_date
-    FROM {{ ref('stg_wl_wl_openpathways_data') }}
+    FROM {{ ref('stg_wl_openpathways_data') }}
 )
 
 SELECT
@@ -82,7 +82,7 @@ SELECT
     1 as open_pathways,
     DATEDIFF(day,  referral_request_received_date::DATE, week_ending_date::DATE)  as days_on_waiting_list,
     DATEDIFF(day,  current_date::DATE, outpatient_future_appointment_date::DATE)  as days_until_future_appointment
-FROM {{ ref('stg_wl_wl_openpathways_data') }} wl
+FROM {{ ref('stg_wl_openpathways_data') }} wl
 INNER JOIN most_recent_week mrw ON wl.week_ending_date = mrw.max_date
 left join 
     {{ref('stg_dictionary_dbo_specialties')}} as dict_treat 

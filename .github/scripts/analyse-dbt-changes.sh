@@ -25,8 +25,8 @@ get_layer() {
 # Function to determine database from file path
 get_database() {
     local file=$1
-    if [[ $file == models/raw/* ]]; then echo "MODELLING"
-    elif [[ $file == models/staging/* ]]; then echo "MODELLING"
+    if [[ $file == models/raw/* ]]; then echo "STAGING"
+    elif [[ $file == models/staging/* ]]; then echo "STAGING"
     elif [[ $file == models/modelling/* ]]; then echo "MODELLING"
     elif [[ $file == models/reporting/* ]]; then echo "REPORTING"
     elif [[ $file == models/published/direct_care/* ]]; then echo "PUBLISHED_REPORTING__DIRECT_CARE"
@@ -40,8 +40,14 @@ get_schema() {
     local file=$1
     local layer=$(get_layer "$file")
 
+    if [[ $file == models/raw/* ]]; then
+        echo "DBT_RAW"
+    elif [[ $file == models/staging/* ]]; then
+        # Schema = source-system folder containing the model
+        local source_dir=$(basename "$(dirname "$file")")
+        echo "${source_dir^^}"
     # Extract subdomain for auto-schema domains (olids)
-    if [[ $file == models/*/olids/* ]]; then
+    elif [[ $file == models/*/olids/* ]]; then
         # Extract the subdomain folder after olids/
         local subdomain=$(echo "$file" | sed -n 's|models/.*/olids/\([^/]*\)/.*|\1|p')
         if [[ -n "$subdomain" ]]; then
@@ -49,8 +55,6 @@ get_schema() {
         else
             echo "OLIDS"
         fi
-    elif [[ $file == models/staging/* ]]; then
-        echo "DBT_STAGING"
     elif [[ $file == models/modelling/commissioning/* ]]; then
         echo "COMMISSIONING_MODELLING"
     elif [[ $file == models/reporting/commissioning/* ]]; then
@@ -117,7 +121,8 @@ for layer in "Raw" "Staging" "Modelling" "Reporting" "Published"; do
     if [ $added -gt 0 ] || [ $modified -gt 0 ] || [ $deleted -gt 0 ]; then
         # Determine typical database for layer
         case $layer in
-            Raw|Staging|Modelling) db="MODELLING" ;;
+            Raw|Staging) db="STAGING" ;;
+            Modelling) db="MODELLING" ;;
             Reporting) db="REPORTING" ;;
             Published) db="PUBLISHED_REPORTING" ;;
         esac

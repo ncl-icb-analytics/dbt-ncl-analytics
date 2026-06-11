@@ -206,15 +206,15 @@ The project follows a medallion architecture with clear separation between layer
 ```
 models/
 ├── raw/                     # Source data with minimal transformation
-│   ├── commissioning/       # Commissioning source data (views in MODELLING.DBT_RAW)
-│   ├── olids/               # OLIDS source data (views in MODELLING.DBT_RAW)
-│   ├── phenolab/            # Phenotype lab data (views in MODELLING.DBT_RAW)
-│   └── shared/              # Shared reference data (views in MODELLING.DBT_RAW)
+│   ├── commissioning/       # Commissioning source data (views in STAGING.DBT_RAW)
+│   ├── olids/               # OLIDS source data (views in STAGING.DBT_RAW)
+│   ├── pid_env/             # PID environment source data (views in STAGING.DBT_RAW)
+│   └── shared/              # Shared reference data (views in STAGING.DBT_RAW)
 │
-├── staging/                 # Cleaned and standardised source data
-│   ├── commissioning/       # 1:1 source mappings (views in MODELLING.DBT_STAGING)
-│   ├── olids/               # 1:1 OLIDS mappings (views in MODELLING.DBT_STAGING)
-│   └── shared/              # Reference data staging (views in MODELLING.DBT_STAGING)
+├── staging/                 # Cleaned and standardised source data (views in STAGING, schema per source)
+│   ├── commissioning/       # Commissioning feeds (csds/ → STAGING.CSDS, sus/ → STAGING.SUS, ...)
+│   ├── olids/               # OLIDS mappings (STAGING.OLIDS)
+│   └── shared/              # Reference data (dictionary/ → STAGING.DICTIONARY, ...)
 │
 ├── modelling/               # Business logic and transformations
 │   ├── commissioning/       # Commissioning intermediate models (subdomain schemas)
@@ -297,6 +297,11 @@ Configured via `generate_schema_name` macro with two approaches:
 - Configure via `vars.auto_schema_domains` in `dbt_project.yml`
 - Currently enabled for: `olids`
 
+3. Staging layer (always automatic):
+- Schema = the source-system folder containing the model, upper-cased
+- Example: `models/staging/commissioning/csds/` → `STAGING.CSDS`
+- Example: `models/staging/olids/` → `STAGING.OLIDS`
+
 ### Adding New Folders
 
 For domains using automatic schemas:
@@ -316,7 +321,6 @@ models:
           +schema: YOUR_DOMAIN_YOUR_SUBDOMAIN
 ```
 
-Unconfigured models default to `MODELLING.DBT_STAGING`.
 
 ### Full Object Naming Examples
 
