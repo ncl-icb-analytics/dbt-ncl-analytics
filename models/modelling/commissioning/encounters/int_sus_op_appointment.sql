@@ -135,7 +135,7 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_procedure')}} As dict_proc ON proc.code = d
 
 -- organisations
 left join 
-    {{ ref('stg_dictionary_dbo_organisation') }} as dict_org 
+    {{ ref('dict_organisation_nhs_provider') }} as dict_org 
     on core.appointment_care_location_site_code_of_treatment = dict_org.organisation_code 
 
 left join 
