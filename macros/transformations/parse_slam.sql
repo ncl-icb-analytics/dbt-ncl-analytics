@@ -73,11 +73,13 @@
 {% endmacro %}
 
 {# Financial month -> INT 1-12, else NULL (junk like '110', '400' on
-   misaligned rows). #}
+   misaligned rows). Whole numbers only: TRY_TO_NUMBER at scale 0 would
+   silently round fractional values (e.g. '5.5' -> 6). #}
 {% macro parse_slam_financial_month(col) %}
     case
-        when try_to_number(cast({{ col }} as varchar)) between 1 and 12
-            then cast(try_to_number(cast({{ col }} as varchar)) as int)
+        when trim(cast({{ col }} as varchar)) rlike '^[0-9]{1,2}$'
+             and try_to_number(trim(cast({{ col }} as varchar))) between 1 and 12
+            then cast(try_to_number(trim(cast({{ col }} as varchar))) as int)
     end
 {% endmacro %}
 

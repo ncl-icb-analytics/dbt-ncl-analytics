@@ -20,6 +20,10 @@ models:
         data_tests:
           - not_null
           - unique
+      - name: meta_file_id
+        description: SDL source file id. Joins to META_FILE_REGISTRY with meta_batch_id.
+        data_tests:
+          - not_null
       - name: submission_loaded_at
         description: When ISL/OneLondon processed the file — the reliable submission ordering.
       - name: dv_financial_year
