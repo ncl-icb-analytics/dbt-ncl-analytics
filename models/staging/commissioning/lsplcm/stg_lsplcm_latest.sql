@@ -1,7 +1,6 @@
 {{
     config(
         materialized = 'view',
-        schema = 'LSPLCM',
         tags = ['sdl', 'slam', 'lsplcm']
     )
 }}

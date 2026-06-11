@@ -3,7 +3,6 @@
         materialized = 'incremental',
         incremental_strategy = 'append',
         on_schema_change = 'append_new_columns',
-        schema = 'LSPLCM',
         tags = ['sdl', 'slam', 'lsplcm']
     )
 }}
