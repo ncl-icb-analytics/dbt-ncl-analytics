@@ -14,9 +14,7 @@ with latest_submission_periods as (
 
 borough_names as(
     select organisation_code, organisation_name 
-    from {{ ref("stg_dictionary_dbo_organisation") }} 
-    where organisation_primary_role = 'RO141'
-    and organisation_code is not null
+    from {{ ref("dict_organisations_local_authority") }} 
 ),
 
 latest_period_cld as (

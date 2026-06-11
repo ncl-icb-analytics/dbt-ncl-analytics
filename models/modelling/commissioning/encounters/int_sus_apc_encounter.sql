@@ -132,7 +132,7 @@ left join gender_codes as gen
 LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
     ON core.SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER = dict_provider.service_provider_full_code
 
-LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_org 
+LEFT JOIN {{ ref('dict_organisation_nhs_provider') }} as dict_org 
     ON core.spell_care_location_site_code_of_treatment = dict_org.organisation_code 
 
 left join dominant_episode_information as dom_ep_info
