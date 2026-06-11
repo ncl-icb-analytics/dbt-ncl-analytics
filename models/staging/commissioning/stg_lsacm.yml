@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_lsacm
+    description: |
+      Cleaned SLAM ACM (LSACM) — provider aggregate contract-monitoring
+      submissions (plan/actual activity and price by POD) from
+      ServicesDataLocal. Grain 1:1 with DATA_LAKE.SDL.LSACM. Aggregate feed:
+      no patient-level fields.
+
+      Use dv_is_latest_submission = true to get the current provider statement
+      of each (provider, FY, month). Cleaning conventions as stg_lsplcm.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: meta_sk_row_id
+        description: Surrogate row key from the SDL pipeline.
+        data_tests:
+          - not_null
+          - unique
+      - name: submission_loaded_at
+        description: When ISL/OneLondon processed the file — the reliable submission ordering.
+      - name: dv_financial_year
+        description: Validated financial year as 'YYYYYY' (e.g. '202627'); see stg_lsplcm.
+      - name: dv_financial_month
+        description: Financial month 1 (April) - 12 (March). Junk values -> NULL.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 12
+                inclusive: true
+      - name: dv_provider_code
+        description: Provider ODS code cleaned via dictionary lookup.
+        data_tests:
+          - not_null
+      - name: dv_planned_activity
+        description: CONTRACT_MONITORING_PLANNED_ACTIVITY as NUMBER(38,6).
+      - name: dv_actual_activity
+        description: CONTRACT_MONITORING_ACTUAL_ACTIVITY as NUMBER(38,6).
+      - name: dv_planned_price
+        description: CONTRACT_MONITORING_PLANNED_PRICE as NUMBER(38,6).
+      - name: dv_actual_price
+        description: CONTRACT_MONITORING_ACTUAL_PRICE as NUMBER(38,6). Sum-safe.
+      - name: dv_is_latest_submission
+        description: True for the most recent statement of each (provider, FY, month) slice.
+        data_tests:
+          - not_null
