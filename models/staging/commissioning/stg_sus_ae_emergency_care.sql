@@ -22,7 +22,6 @@ select primarykey_id
     , clinical_chief_complaint_code 
     , clinical_chief_complaint_is_injury_related
     , clinical_acuity_code 
-    , attendance_location_department_type 
     -- cost
     , commissioning_grouping_health_resource_group
     , commissioning_national_pricing_final_price 

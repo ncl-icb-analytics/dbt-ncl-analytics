@@ -12,7 +12,7 @@ models:
           arguments:
             combination_of_columns:
               - visit_occurrence_id
-              - concept_code
+              - source_concept_code
     
     columns:
       - name: diagnosis_id
