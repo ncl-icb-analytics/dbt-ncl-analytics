@@ -317,6 +317,22 @@ sources:
     domain: commissioning
     manual: true
 
+  # ServicesDataLocal WNL-footprint feeds (permanent home; DATA_LAKE__NCL.SDL
+  # and WNL_SDL copies will be retired). Only the SLAM contract-monitoring
+  # feeds + file registry are pulled; the schema holds 20+ other feeds.
+  - source_name: sdl_wnl
+    database: DATA_LAKE
+    schema: SDL
+    description: ServicesDataLocal canonical-named feeds, WNL footprint (SLAM contract monitoring)
+    raw_prefix: raw_sdl_wnl
+    domain: commissioning
+    tables:
+      - LSACM
+      - LSPLCM
+      - LSDRPLCM
+      - LSDEPLCM
+      - META_FILE_REGISTRY
+
   # ANALYST_MANAGED - volatile schema; only explicitly listed tables are used
   - source_name: reference_analyst_managed
     database: DATA_LAKE__NCL

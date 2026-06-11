@@ -233,6 +233,8 @@ sources:
       data_type: TEXT
     - name: ORIGINAL_EXCLUDED_CODE
       data_type: TEXT
+    - name: ORIGINAL_EXCLUDED_DISPLAY
+      data_type: TEXT
     - name: TRANSLATED_TO_SNOMED_CODE
       data_type: TEXT
     - name: INCLUDED_IN_ECL
