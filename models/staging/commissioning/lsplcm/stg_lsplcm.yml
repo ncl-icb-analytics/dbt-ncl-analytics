@@ -194,3 +194,21 @@ models:
         description: ACTIVITY_UNIT_PRICE as NUMBER(38,6).
       - name: dv_total_cost
         description: TOTAL_COST as NUMBER(38,6). £/commas/'TBC' handled; sum-safe.
+
+  - name: stg_lsplcm_latest
+    description: |
+      SLAM PLD, current provider statement only - stg_lsplcm restricted to the
+      winning file per (provider, FY, month) via stg_slam_latest_submission.
+      Sum-safe; superseded cumulative restatements excluded. Report from this
+      view; cleaning and column conventions as stg_lsplcm.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: meta_sk_row_id
+        description: Surrogate row key; unique guards against lookup-join fan-out.
+        data_tests:
+          - not_null
+          - unique
+

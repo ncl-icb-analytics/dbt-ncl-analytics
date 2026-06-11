@@ -191,3 +191,21 @@ models:
         description: COMMISSIONER_SUPPORT_CHARGE as NUMBER(38,6).
       - name: dv_total_cost
         description: TOTAL_COST as NUMBER(38,6). £/commas/'TBC' handled; sum-safe.
+
+  - name: stg_lsdrplcm_latest
+    description: |
+      SLAM high-cost drugs PLD, current provider statement only - stg_lsdrplcm restricted to the
+      winning file per (provider, FY, month) via stg_slam_latest_submission.
+      Sum-safe; superseded cumulative restatements excluded. Report from this
+      view; cleaning and column conventions as stg_lsdrplcm.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: meta_sk_row_id
+        description: Surrogate row key; unique guards against lookup-join fan-out.
+        data_tests:
+          - not_null
+          - unique
+

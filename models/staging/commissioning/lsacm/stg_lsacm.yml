@@ -147,3 +147,21 @@ models:
         description: CONTRACT_MONITORING_PLANNED_MARKET_FORCES_FACTOR as NUMBER(38,6).
       - name: dv_actual_market_forces_factor
         description: CONTRACT_MONITORING_ACTUAL_MARKET_FORCES_FACTOR as NUMBER(38,6).
+
+  - name: stg_lsacm_latest
+    description: |
+      SLAM ACM, current provider statement only - stg_lsacm restricted to the
+      winning file per (provider, FY, month) via stg_slam_latest_submission.
+      Sum-safe; superseded cumulative restatements excluded. Report from this
+      view; cleaning and column conventions as stg_lsacm.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: meta_sk_row_id
+        description: Surrogate row key; unique guards against lookup-join fan-out.
+        data_tests:
+          - not_null
+          - unique
+
