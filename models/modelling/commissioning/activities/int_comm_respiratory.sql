@@ -74,7 +74,7 @@ admitted_spells_summary as (
 
 admitted_procedure as (
     select visit_occurrence_id
-    from {{ ref('int_sus_ip_procedure') }}
+    from {{ ref('int_sus_apc_procedure') }}
     where (
             {% for prefix in OPCS4_prefix_list %}
                 startswith(source_concept_code, '{{ prefix }}')

@@ -1,6 +1,6 @@
 
 models:
-  - name: int_sus_ip_procedure
+  - name: int_sus_apc_procedure
     description: "All admitted patient procedures from SUS data"
     config:
       meta:

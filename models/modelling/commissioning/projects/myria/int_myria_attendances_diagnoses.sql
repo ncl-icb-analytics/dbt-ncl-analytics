@@ -21,7 +21,7 @@ SELECT
         ip.SITE_NAME AS provider_site_name,
         ip.START_DATE AS activity_start_date,
         ip.END_DATE AS activity_date,            
-        dx.ICD_ID AS diag_n,
+        NULL AS diag_n,
         dx.SOURCE_CONCEPT_CODE AS diag_code,
         ip.gender_at_event,
         ip.ethnicity_at_event,
@@ -30,7 +30,7 @@ SELECT
         DATEDIFF(MM,ip.END_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago -- use this in int_myria_conditions to flag 6 mth/1 year/2 year periods
     FROM
        {{ ref("int_sus_apc_encounter") }} ip
-    LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx
+    LEFT JOIN {{ ref("int_sus_apc_diagnosis") }} dx
         ON ip.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE 
         ip.END_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month
@@ -52,7 +52,7 @@ SELECT
         op.SITE_NAME AS provider_site_name,
         op.START_DATE AS activity_start_date,    
         op.START_DATE AS activity_date,         
-        dx.ICD_ID AS diag_n,
+        NULL AS diag_n,
         dx.SOURCE_CONCEPT_CODE AS diag_code,
         op.gender_at_event,
         op.ethnicity_at_event,
@@ -84,7 +84,7 @@ SELECT
         ae.SITE_NAME AS provider_site_name,
         ae.START_DATE AS activity_start_date,   
         ae.START_DATE AS activity_date,           
-        dx.SNOMED_ID AS diag_n,
+        NULL AS diag_n,
         dx.MAPPED_ICD10_CODE AS diag_code,
         ae.gender_at_event,
         ae.ethnicity_at_event,

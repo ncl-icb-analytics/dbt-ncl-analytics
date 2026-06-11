@@ -1,49 +1,50 @@
-{{ config(materialized="view") }}
+{{ config(materialized="table") }}
 
 
 -- note: using sk_patient_id as person_id
 with investigations as (
     select primarykey_id
         ,code
-        -- ,snomed_id  as problem_order
-        -- ,rownumber_id
+        , count(*) as observation_count
+        , array_agg(distinct snomed_id)  WITHIN GROUP (ORDER BY snomed_id ASC) as ordered_id_array
         ,'investigation' as observation_type
-        -- ,date 
     from {{ref('stg_sus_ae_clinical_investigations_snomed')}}
+    where code is not null 
+    group by primarykey_id, code
 ),
 inv_dict as(
     select snomed_code, 
         snomed_uk_preferred_term, 
         ecds_description, 
         ecds_group1,
-        -- cds_investigation_mapping_that_is_used_for_hrg_grouping,
         from {{ref('stg_dictionary_ecds_investigation')}}
 ),
 treatments as (
     select primarykey_id
         ,code
-        -- ,snomed_id  as problem_order
-        -- ,rownumber_id
+        , count(*) as observation_count
+        , array_agg(distinct snomed_id)  WITHIN GROUP (ORDER BY snomed_id ASC) as ordered_id_array
         ,'treatment' as observation_type
-        -- ,date 
     from {{ref('stg_sus_ae_clinical_treatments_snomed')}}
+    where code is not null 
+    group by primarykey_id, code
 ),
 treat_dict as(
     select snomed_code, 
         snomed_uk_preferred_term, 
         ecds_description, 
         ecds_group1,
-        -- cds_investigation_mapping_that_is_used_for_hrg_grouping,
         from {{ref('stg_dictionary_ecds_treatment')}}
 ),
 comorbs as (
     select primarykey_id
         ,code
-        -- ,comorbidities_id as problem_order
-        -- ,rownumber_id
+        , count(*) as observation_count
+        , array_agg(distinct comorbidities_id)  WITHIN GROUP (ORDER BY comorbidities_id ASC) as ordered_id_array
         ,'comorbs' as observation_type
-        -- ,null::timestamp as date
     from {{ref('stg_sus_ae_clinical_comorbidities')}}
+    where code is not null 
+    group by primarykey_id, code
 ),
 comorb_dict as(
     select snomed_code, 
@@ -56,11 +57,12 @@ comorb_dict as(
 findings as (
     select distinct primarykey_id
         ,code
-        -- ,coded_findings_id as problem_order
-        -- ,rownumber_id
-        -- ,"TIMESTAMP" as date 
+        , count(*) as observation_count
+        , array_agg(distinct coded_findings_id)  WITHIN GROUP (ORDER BY coded_findings_id ASC) as ordered_id_array
         ,'findings' as observation_type
     from {{ref('stg_sus_ae_clinical_coded_findings')}}
+    where code is not null 
+    group by primarykey_id, code
 ), 
 find_dict as(
     select snomed_code, 
@@ -89,19 +91,19 @@ all_obs as(
 )
 
 select 
- {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.code", "sa.start_date"]) }} as event_id,
+ {{ dbt_utils.generate_surrogate_key(["f.primarykey_id", "f.observation_type", "f.code"]) }} as event_id,
     sa.sk_patient_id,
     f.primarykey_id as visit_occurrence_id,
     f.observation_type,
     sa.start_date as date,
     sa.visit_occurrence_type,
-    -- f.problem_order,
-    -- f.rownumber_id,
     sa.organisation_id,
     sa.organisation_name,  
     sa.site_id,
     sa.site_name,
     sa.department_type,
+    f.observation_count,
+    f.ordered_id_array,
     f.code as snomed_code,
     f.ecds_description,
     f.ecds_group1,
