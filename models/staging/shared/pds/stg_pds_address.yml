@@ -1,5 +1,5 @@
 models:
-  - name: stg_pds_pds_address
+  - name: stg_pds_address
     description: Personal Demographics Service patient address
     config:
       meta:

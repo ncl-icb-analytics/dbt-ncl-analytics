@@ -39,8 +39,8 @@ pds_patient_check as
     gp.practice_code,
     gp.practice_name,
     gp.local_authority
-    FROM {{ ref("stg_pds_pds_person") }} pp
-    LEFT JOIN {{ ref("stg_pds_pds_patient_care_practice") }} pc
+    FROM {{ ref("stg_pds_person") }} pp
+    LEFT JOIN {{ ref("stg_pds_patient_care_practice") }} pc
         ON pp.sk_patient_id = pc.sk_patient_id
         AND pc.event_to_date IS NULL
     LEFT JOIN {{ ref("dim_practice_neighbourhood") }} gp ON pc.practice_code = gp.practice_code -- find most recent practice information

@@ -88,12 +88,12 @@ stg_{source}_{table}.sql
 stg_{source}_{table}.yml
 ```
 
-For example: `stg_pds_pds_person.sql` stages the `raw_pds_pds_person` raw model.
+For example: `stg_pds_person.sql` stages the `raw_pds_pds_person` raw model.
 
 ### Example SQL
 
 ```sql
--- stg_pds_pds_person.sql
+-- stg_pds_person.sql
 select
     row_id,
     pseudo_nhs_number as sk_patient_id,
@@ -117,7 +117,7 @@ Notice: type conversions with `to_date()`, meaningful column renames, explicit c
 version: 2
 
 models:
-  - name: stg_pds_pds_person
+  - name: stg_pds_person
     description: Personal Demographics Service person demographics
     config:
       meta:
