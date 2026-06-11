@@ -1,5 +1,5 @@
 models:
-  - name: stg_cltcs_emis_emis
+  - name: stg_cltcs_emis
     description: >
       CLTCS EMIS extract (clinical and demographic patient attributes). Source raw_cltcs_emis_emis.
       One row per sk_patient_id and usual GP organisation code (practice_code), keeping the

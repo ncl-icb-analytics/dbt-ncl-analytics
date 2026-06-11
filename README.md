@@ -114,6 +114,7 @@ For general dbt learning: [dbt Fundamentals](https://learn.getdbt.com/courses/db
 | Layer | Purpose |
 |-------|---------|
 | DATA_LAKE | Raw data with 1:1 views of external sources |
+| STAGING | Raw passthrough views (DBT_RAW) and cleaned source data (schema per source) |
 | MODELLING | Transformations: filter, reshape, categorise, link |
 | REPORTING | Analytics-ready datasets with business metrics |
 | PUBLISHED_REPORTING__SECONDARY_USE | Population health and operational analytics |
@@ -125,7 +126,9 @@ Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
 
 | Model Folder | Dev | Prod |
 |--------------|-----|------|
-| `models/staging/` | `DEV__MODELLING.DBT_STAGING` | `MODELLING.DBT_STAGING` |
+| `models/raw/` | `DEV__STAGING.DBT_RAW` | `STAGING.DBT_RAW` |
+| `models/staging/commissioning/csds/` | `DEV__STAGING.CSDS` | `STAGING.CSDS` |
+| `models/staging/olids/` | `DEV__STAGING.OLIDS` | `STAGING.OLIDS` |
 | `models/modelling/olids/diagnoses/` | `DEV__MODELLING.OLIDS_DIAGNOSES` | `MODELLING.OLIDS_DIAGNOSES` |
 | `models/modelling/commissioning/` | `DEV__MODELLING.COMMISSIONING_MODELLING` | `MODELLING.COMMISSIONING_MODELLING` |
 | `models/reporting/olids/indicators/` | `DEV__REPORTING.OLIDS_INDICATORS` | `REPORTING.OLIDS_INDICATORS` |
@@ -133,7 +136,7 @@ Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
 
 **How it works:**
 - **Database**: Set by `+database` in `dbt_project.yml`, prefixed with `DEV__` in dev
-- **Schema**: Either explicit (`+schema`) or auto-derived from folder path for `olids` domain
+- **Schema**: Either explicit (`+schema`), the source-system folder for staging models, or auto-derived from folder path for the `olids` domain
 
 The naming logic is in `macros/overrides/generate_database_name.sql` and `generate_schema_name.sql`.
 

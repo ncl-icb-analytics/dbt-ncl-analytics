@@ -66,7 +66,7 @@ wl_demo as (
     , null::varchar as imd_at_event
     , practice_code as reg_practice_at_event
     , 'WL_START' as visit_occurrence_type
-    from {{ ref('stg_wl_wl_openpathways_data') }} 
+    from {{ ref('stg_wl_openpathways_data') }} 
     where week_ending_date is not null 
     qualify row_number() over (partition by referral_identifier order by week_ending_date) = 1 -- take the first record per referral_identifier
 ),

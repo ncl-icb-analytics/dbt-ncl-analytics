@@ -1,5 +1,5 @@
 models:
-  - name: stg_pds_pds_reason_for_removal
+  - name: stg_pds_reason_for_removal
     description: PDS reason for removal from GP practice registration
     config:
       meta:

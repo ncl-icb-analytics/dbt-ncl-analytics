@@ -43,7 +43,7 @@ You write SQL `SELECT` statements. dbt handles everything else: creating tables,
 A dbt **model** is a SQL `SELECT` statement saved as a `.sql` file. When you run dbt, it wraps your `SELECT` in a `CREATE TABLE` or `CREATE VIEW` statement and executes it against the database.
 
 ```sql
--- models/staging/shared/stg_dictionary_dbo_dates.sql
+-- models/staging/shared/dictionary/stg_dictionary_dbo_dates.sql
 select
     sk_date_id,
     cast(full_date as date) as full_date,
@@ -60,7 +60,7 @@ The `{{ ref() }}` function is how models reference each other. Instead of hardco
 
 ```sql
 -- Bad: hardcoded reference
-select * from MODELLING.DBT_STAGING.stg_dictionary_dbo_dates
+select * from STAGING.DICTIONARY.stg_dictionary_dbo_dates
 
 -- Good: dbt reference
 select * from {{ ref('stg_dictionary_dbo_dates') }}
@@ -149,8 +149,8 @@ The same code runs in development and production. dbt handles the differences:
 
 | Environment | Database prefix | Example |
 |-------------|----------------|---------|
-| Development | `DEV__` | `DEV__MODELLING.DBT_STAGING.stg_pds_person` |
-| Production | *(none)* | `MODELLING.DBT_STAGING.stg_pds_person` |
+| Development | `DEV__` | `DEV__STAGING.PDS.stg_pds_person` |
+| Production | *(none)* | `STAGING.PDS.stg_pds_person` |
 
 You develop and test against `DEV__` databases. When your PR is merged, the deployment pipeline runs the same code against production.
 

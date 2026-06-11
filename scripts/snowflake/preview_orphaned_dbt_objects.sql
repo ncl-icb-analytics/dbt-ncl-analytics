@@ -19,10 +19,12 @@ WITH snowflake_objects AS (
       AND (comment LIKE '%github.com/ncl-icb-analytics/dbt-ncl-analytics%'
         OR comment LIKE '%github.com/wnl-icb-analytics/dbt-analytics%')
       AND table_catalog IN (
+        'STAGING',
         'MODELLING',
         'REPORTING',
         'PUBLISHED_REPORTING__DIRECT_CARE',
         'PUBLISHED_REPORTING__SECONDARY_USE',
+        'DEV__STAGING',
         'DEV__MODELLING',
         'DEV__REPORTING',
         'DEV__PUBLISHED_REPORTING__DIRECT_CARE',

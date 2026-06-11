@@ -1,5 +1,5 @@
 models:
-  - name: stg_pds_pds_person_merger
+  - name: stg_pds_person_merger
     description: NHS number merger tracking from PDS. Maps old NHS numbers to new ones when patients have had their NHS number changed.
     config:
       meta:

@@ -9,7 +9,7 @@ with pds_person as (
         date_of_death,
         preferred_language_code,
         interpreter_required
-    from {{ref('stg_pds_pds_person')}}
+    from {{ref('stg_pds_person')}}
     
     --Get the latest record
     qualify row_number() over (
@@ -29,7 +29,7 @@ pds_address as (
         postcode_sector,
         lsoa_21
         
-    from {{ref('stg_pds_pds_address')}}
+    from {{ref('stg_pds_address')}}
 
     --Get the latest record
     qualify row_number() over (
@@ -49,10 +49,10 @@ pds_registered as (
         practice_code,
         rfr.reason_for_removal as registered_reason_for_removal
         
-    from {{ref('stg_pds_pds_patient_care_practice')}} pds
+    from {{ref('stg_pds_patient_care_practice')}} pds
 
     --Join to remove records
-    left join {{ref('stg_pds_pds_reason_for_removal')}} rfr
+    left join {{ref('stg_pds_reason_for_removal')}} rfr
     on rfr.sk_patient_id = pds.sk_patient_id
     --Snapshot date
     and coalesce(pds.event_to_date, '9999-12-31') between

@@ -1,5 +1,5 @@
 models:
-  - name: stg_pds_pds_person
+  - name: stg_pds_person
     description: Personal Demographics Service person demographics
     config:
       meta:
