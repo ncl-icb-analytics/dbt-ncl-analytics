@@ -4,7 +4,7 @@ models:
       Adult Social Care Client Level Dataset (CLD) services from the most recent
       submission period per local authority. One row per patient with primary
       support reason categories and boolean flags aggregated from deduplicated
-      service records.
+      service records. AWAITING REVIEW BY LOCAL AUTHORITY COLLEAGUES.
     config:
       meta:
         owner:
