@@ -54,16 +54,16 @@ models:
     # Raw layer - source data with minimal transformation
     raw:
       +materialized: view
-      +database: "MODELLING"
+      +database: "STAGING"
       +schema: "DBT_RAW"
       +tags: ["raw", "daily"]
       +post-hook: ["{{ add_model_comment() }}"]
 
     # Staging layer - cleaned and standardised source data
+    # Schema derived per source-system folder via generate_schema_name macro
     staging:
       +materialized: view
-      +database: "MODELLING"
-      +schema: "DBT_STAGING"
+      +database: "STAGING"
       +tags: ["staging", "daily"]
       +post-hook: ["{{ add_model_comment() }}"]
       olids:

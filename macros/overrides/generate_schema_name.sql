@@ -14,6 +14,13 @@
     - Configure which domains use automatic schema naming via the 'auto_schema_domains' variable in dbt_project.yml
     - Other domains use explicit schema configuration from dbt_project.yml
 
+    Staging layer:
+    - Schema = the model's immediate parent folder (the source system), upper-cased
+    - Examples:
+      - models/staging/commissioning/csds/ → CSDS schema
+      - models/staging/shared/dictionary/ → DICTIONARY schema
+      - models/staging/olids/ → OLIDS schema
+
     Custom schemas:
     - When a custom schema is explicitly set in dbt_project.yml, that value is used instead
 #}
@@ -27,8 +34,11 @@
         {%- set path_parts = node.fqn -%}
         {%- set auto_schema_domains = var('auto_schema_domains', []) -%}
 
+        {# Staging models: schema named after the source-system folder containing the model #}
+        {%- if path_parts | length >= 4 and path_parts[1] == 'staging' -%}
+            {{ path_parts[-2] | upper }}
         {# Check if model is in modelling or reporting with subdomain folders and domain uses auto schema #}
-        {%- if path_parts | length >= 4 and path_parts[1] in ['modelling', 'reporting'] and path_parts[2] in auto_schema_domains -%}
+        {%- elif path_parts | length >= 4 and path_parts[1] in ['modelling', 'reporting'] and path_parts[2] in auto_schema_domains -%}
             {# Extract domain and subdomain from folder structure #}
             {%- set domain = path_parts[2] | upper -%}
             {%- set subdomain = path_parts[3] | upper -%}

@@ -1,4 +1,3 @@
-{{ config(schema='cancer__ref') }}
 
 select
     lsoa21cd as lsoa_2021_code,

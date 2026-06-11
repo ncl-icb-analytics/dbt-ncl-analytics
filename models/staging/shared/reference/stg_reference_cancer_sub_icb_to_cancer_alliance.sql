@@ -1,4 +1,3 @@
-{{ config(schema='cancer__ref') }}
 
 select 
     ccg21cd as ons_sub_icb_code,
