@@ -28,7 +28,8 @@ latest_period_cld as (
         and asc_cld.reporting_period_end_date = latest.reporting_period_end_date
     left join borough_names as borough
         on asc_cld.la_code = borough.organisation_code
-    where asc_cld.sk_patient_id is not null
+    where asc_cld.sk_patient_id is not null 
+    and latest.reporting_period_end_date between dateadd(month, -24, current_date()) and current_date() -- reporting period is relatively up to date at time of review [this is more for records with errors in LA code so they aren't too old] TO DO: consider requirement for valid borough id
 ),
 
 -- use_within_scope as ( -- not adding a date filter as reporting period is up to date at time of review
