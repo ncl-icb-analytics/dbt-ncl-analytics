@@ -30,7 +30,7 @@ SELECT
         DATEDIFF(MM,ip.END_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago -- use this in int_myria_conditions to flag 6 mth/1 year/2 year periods
     FROM
        {{ ref("int_sus_apc_encounter") }} ip
-    LEFT JOIN {{ ref("int_sus_ip_diagnosis") }} dx
+    LEFT JOIN {{ ref("int_sus_apc_diagnosis") }} dx
         ON ip.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE 
         ip.END_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month

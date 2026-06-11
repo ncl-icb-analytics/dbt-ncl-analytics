@@ -8,8 +8,8 @@ with
     final_icd_codes as (
         select primarykey_id
             , code 
-            , count(*) as diagnosis_count
-            , array_agg(distinct episodes_id) as episodes_ids
+            , count(*) as observation_count
+            , array_agg(distinct episodes_id)  WITHIN GROUP (ORDER BY episodes_id ASC) as episodes_ids
         from {{ ref("stg_sus_apc_spell_episodes_clinical_coding_diagnosis_icd") }}
         group by primarykey_id, code
 )
@@ -25,8 +25,8 @@ select
     se.site_id,
     se.site_name,  -- join to reference
     f.code as source_concept_code,
-    f.diagnosis_count,
-    f.episodes_ids,
+    f.observation_count,
+    f.episodes_ids as ordered_id_array,
     c.concept_code,
     c.concept_name,  -- mapped concept name from the vocabulary
     'ICD10' as concept_vocabulary

@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 -- note: using sk_patient_id as person_id
 
@@ -12,12 +12,13 @@ with
             ,organisation_name
             ,date
             ,null as clinical_end_date
-            ,null as problem_order
             ,'diagnosis' as observation_type
+            ,observation_count
+            ,ordered_id_array
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
-        from {{ ref("int_sus_ip_diagnosis") }} apc
+        from {{ ref("int_sus_apc_diagnosis") }} apc
     ),
 
     apc_procedure as (
@@ -29,12 +30,13 @@ with
             ,organisation_name
             ,date
             ,null as clinical_end_date
-            ,problem_order
             ,'procedure' as observation_type
+            ,observation_count
+            ,ordered_id_array
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
-        from {{ ref("int_sus_ip_procedure") }} apc
+        from {{ ref("int_sus_apc_procedure") }} apc
     ),
     apc_procedure_hrg as (
         select procedure_id as event_id
@@ -45,8 +47,9 @@ with
             ,organisation_name
             ,date
             ,null as clinical_end_date
-            ,problem_order
             ,'procedure' as observation_type
+            ,observation_count
+            ,ordered_id_array
             ,source_concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -61,8 +64,9 @@ with
             ,organisation_name
             ,date
             ,null as clinical_end_date
-            ,icd_id as problem_order
             ,'diagnosis' as observation_type
+            ,observation_count
+            ,ordered_id_array
             ,concept_code::varchar  as observation_concept_code
             ,concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -77,8 +81,9 @@ with
         ,organisation_name
         ,date
         ,null as clinical_end_date
-        ,problem_order
         ,'procedure' as observation_type
+        ,observation_count
+        ,ordered_id_array
         ,concept_code::varchar  as observation_concept_code
         ,concept_name as observation_concept_name
         ,concept_vocabulary as observation_vocabulary
@@ -93,8 +98,9 @@ with
         ,organisation_name
         ,date
         ,null as clinical_end_date
-        ,problem_order
         ,'procedure' as observation_type
+        ,observation_count
+        ,ordered_id_array
         ,source_concept_code::varchar  as observation_concept_code
         ,concept_name as observation_concept_name
         ,concept_vocabulary as observation_vocabulary
@@ -110,8 +116,9 @@ with
             ,organisation_name
             ,date
             ,null as clinical_end_date
-            ,snomed_id as problem_order
             ,'diagnosis' as observation_type
+            ,observation_count
+            ,ordered_id_array
             ,source_concept_code::varchar  as observation_concept_code
             ,source_concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
@@ -129,8 +136,9 @@ with
         ,organisation_name
         ,date
         , null as clinical_end_date
-        , null as problem_order
         , observation_type
+        , observation_count
+        , ordered_id_array
         , snomed_code::varchar  as concept_code
         , snomed_decription as concept_name
         , 'SNOMED' as observation_vocabulary
@@ -173,8 +181,9 @@ select
     ao.visit_occurrence_type,
     date,
     clinical_end_date,
-    problem_order,
     observation_type,
+    observation_count,
+    ordered_id_array,
     observation_concept_code,
     observation_concept_name,
     observation_vocabulary
