@@ -31,6 +31,11 @@ latest_period_cld as (
     where asc_cld.sk_patient_id is not null
 ),
 
+-- use_within_scope as ( -- not adding a date filter as reporting period is up to date at time of review
+--     select * from latest_period_cld
+--     where event_start_date between dateadd(month, -24, current_date()) and current_date()
+-- )
+
 recommended_dedupe as ( -- https://www.ardengemcsu.nhs.uk/media/3748/cld-dashboard-methodology-document-for-users.pdf
     select
         sk_patient_id,
@@ -46,6 +51,7 @@ recommended_dedupe as ( -- https://www.ardengemcsu.nhs.uk/media/3748/cld-dashboa
         service_component,
         delivery_mechanism
     from latest_period_cld
+    where event_type = 'Service'
     qualify row_number() over (
         partition by
             la_code,
@@ -63,6 +69,7 @@ cleaned_support_reasons as (
         sk_patient_id,
         la_code,
         borough_name,
+        service_type,
         {{ clean_asc_cld_primary_support_reason('primary_support_reason') }}
             as primary_support_reason_cleaned
         , primary_support_reason
@@ -74,6 +81,7 @@ categorised_support_reasons as (
         sk_patient_id,
         la_code,
         borough_name,
+        service_type,
         primary_support_reason_cleaned,
         {{ asc_cld_primary_support_reason_category('primary_support_reason_cleaned') }}
             as primary_support_reason_category
@@ -84,6 +92,7 @@ categorised_support_reasons as (
 select
     sk_patient_id,
     array_agg(distinct borough_name) as borough_name,
+    array_agg(distinct service_type) as service_type,
     array_agg(distinct primary_support_reason_category) as primary_support_reason_category,
     boolor_agg(
         primary_support_reason_cleaned = 'Physical support: Personal care support'
