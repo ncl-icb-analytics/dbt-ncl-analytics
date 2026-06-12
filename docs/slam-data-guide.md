@@ -36,22 +36,25 @@ Stages 1–6 are the platform pipeline (Snowflake-Deployment repo, `services_dat
 
 ## 2–3. Positional storage and layout resolution
 
-**Problem.** Provider files do not share a column layout. The ISL loader stores every file's values positionally (`Col1..ColN`) in `Master_<feed>_Data`; the table carries no column meanings. What each position meant is recorded per file in `Log_ProcessingEvent.SourceColumnHeaders`, as the T-SQL select fragment the loader used:
+**Problem.** Provider files do not share a column layout — it varies by provider, by month, and by revision within a month. The ISL loader handles this by storing every file's values positionally (`Col1..ColN`) in `Master_<feed>_Data`; the table itself carries no column meanings at all. What each position meant is recorded per file in a different table, `Log_ProcessingEvent.SourceColumnHeaders`, as the literal T-SQL select fragment the loader used:
 
 ```
 [Col1] AS [FinancialMonth], [Col2] AS [CCG], [Col3] AS [Provider Code], ...
 ```
 
-That string is the only record of each file's schema.
+That string is the only record of each file's schema. The data is unreadable without it: there is no header row, no metadata table, no convention — the schema of a 600M-row table exists as SQL text inside a log column. Reconstructing usable tables from this is a four-step recovery.
 
-**Method.**
+**Step 1 — parse the T-SQL.** Each `SourceColumnHeaders` string is parsed (`[Col(\d+)] AS [([^\]]+)]`) into (position → header) pairs. The headers are whatever the provider typed into row 1 of their spreadsheet, so the extracted names then go through identifier sanitisation. The sanitiser's special cases are an inventory of what actually arrived in provider headers: columns named just `%`, `#` or `&`; embedded `+`, `<`, `>`, `=`, `*`, `?`, `!`, `@`, `$` and `|`; `...` run-ons; brackets, colons, slashes and repeated whitespace; names that collide with SQL reserved words; names starting with a digit. Each gets a deterministic rewrite (`%` → `percent`, `<` → `_lt_`, camelCase split at acronym boundaries) so every header becomes a stable unquoted snake_case identifier.
 
-1. Parse each `SourceColumnHeaders` string into (position → column name) pairs.
-2. Fingerprint the full mapping with an md5 hash — every distinct layout becomes one `version_id` in `META_SCHEMA_VERSIONS`. LSPLCM has 101; the four SLAM feeds together have 236.
-3. Match every file to a version in `META_FILE_VERSIONS`:
-   - Primary: the file's header string equals a known layout, byte for byte.
-   - Fallbacks, for files whose log row has no headers: same `HeaderID` as a matched sibling file, then same `ProfileCode` (same layout family). `MATCH_METHOD` records which path resolved each file. Cascade-matched files can be loaded long after newer ones, which is why file ids are not in load order.
-   - No match: the file is excluded and listed in `DATA_LAKE.SDL.META_UNMAPPED_FILES` with a reason.
+**Step 2 — fingerprint layouts.** The full mapping string is md5-hashed; every distinct layout becomes one `version_id` in `META_SCHEMA_VERSIONS`. The same layout always produces the same id, however many files use it. LSPLCM has 101 distinct layouts across 18,583 files; the four SLAM feeds together have 236.
+
+**Step 3 — match every file to a layout** in `META_FILE_VERSIONS`:
+
+- Primary: the file's header string equals a known layout, byte for byte. The matching is fragile by nature — provider headers contain `£` and `&`, which deployment tooling mangles between codepages, so the layout strings are round-tripped base64-encoded to keep the comparison exact. One altered character and the file never matches.
+- Fallbacks, for files whose log row has no headers at all (a common loader behaviour for re-sent files): same `HeaderID` as a matched sibling file, then same `ProfileCode` (same layout family). `MATCH_METHOD` records which path resolved each file. These cascade-matched files can be loaded long after newer ones, which is why file ids are not in load order.
+- No match: the file is excluded and listed in `DATA_LAKE.SDL.META_UNMAPPED_FILES` with a reason.
+
+**Step 4 — generate the resolution views** (next section). All four steps are code-generated from the metadata, not hand-maintained: when a provider invents a new layout, the pipeline re-derives everything.
 
 **Coverage.** At the time of writing, 3 SLAM files (of ~50,000 loaded) are unmapped — all `data_not_logged`, where the log row exists but the data rows never arrived upstream. New files appear briefly as `not_yet_refreshed` until the nightly refresh. `DATA_LAKE.SDL.META_ROW_COUNT_COMPARE` shows source-vs-loaded row coverage per feed (>99.999%).
 
