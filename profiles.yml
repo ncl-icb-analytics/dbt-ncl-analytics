@@ -29,6 +29,12 @@ wnl_analytics:
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_analytics_dev
+      # Retry transient connection failures (e.g. Snowflake 503 / Fusion bridge
+      # stalls that can fail a wave of in-flight models). retry_all covers
+      # timeouts, not just DatabaseErrors.
+      connect_retries: 3
+      connect_timeout: 10
+      retry_all: true
 
     prod:
       type: snowflake
@@ -46,6 +52,12 @@ wnl_analytics:
       threads: 16
       client_session_keep_alive: true
       query_tag: dbt_analytics_prod
+      # Retry transient connection failures (e.g. Snowflake 503 / Fusion bridge
+      # stalls that can fail a wave of in-flight models). retry_all covers
+      # timeouts, not just DatabaseErrors.
+      connect_retries: 3
+      connect_timeout: 10
+      retry_all: true
 
     # Snowflake native execution targets (runs in the Snowflake session context).
     # account/user are placeholders, NOT real credentials: native execution uses
