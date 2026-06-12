@@ -259,5 +259,5 @@ left join {{ref('int_rockwood_latest')}} rockwood
     on il.olids_id = rockwood.person_id
 left join hr_hrc_ltc_lcs_conditions lcs
     on il.olids_id = lcs.person_id
-left join {{ref('int_asc_cld_service_most_recent')}} asc_cld
+left join {{ref('fct_person_asc_service_recent')}} asc_cld
     on il.patient_id = asc_cld.sk_patient_id
