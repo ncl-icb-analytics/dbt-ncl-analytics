@@ -9,7 +9,7 @@ How the four SLAM contract-monitoring feeds (ACM, PLCM, DrPLCM, DePLCM) are tran
         │
         ▼
 2. WNL_ServicesDataLocal    values stored positionally as Col1..ColN;
-   (CSU loader)             column meanings stored separately as a T-SQL string
+   (ISL loader)             column meanings stored separately as a T-SQL string
         │                   per file in Log_ProcessingEvent.SourceColumnHeaders
         ▼
 3. Layout resolution        every distinct layout fingerprinted (md5) into
