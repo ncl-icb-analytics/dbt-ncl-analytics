@@ -75,6 +75,15 @@ models:
                 min_value: 1
                 max_value: 12
                 inclusive: true
+      - name: dv_financial_period_source
+        description: >-
+          Where the period came from - 'stated' (provider value) or 'file_name'
+          (FY token from the platform file name). NULL when unrecoverable; ACM
+          is an aggregate feed with no activity dates to fall back on.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['stated', 'file_name']
       - name: dataset_created_raw
         description: Provider-typed DATE_AND_TIME_DATA_SET_CREATED as submitted. Parsed in dv_dataset_created_at.
       - name: dv_dataset_created_at

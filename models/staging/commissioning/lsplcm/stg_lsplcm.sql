@@ -38,7 +38,7 @@ with
 
 select
 {{ slam_meta_columns() }},
-{{ slam_submission_columns() }},
+{{ slam_submission_columns(period_date_feed='LSPLCM') }},
 {{ slam_org_columns() }},
 {{ slam_patient_columns() }},
 {{ slam_service_columns() }},
@@ -49,11 +49,18 @@ select
         s.local_sub_specialty_code              as local_sub_specialty_code,
         s.unbundled_episode_indicator           as unbundled_episode_indicator,
 
-        -- Activity
-        {{ parse_uk_date('s.activity_start_date_contract_monitoring') }}
-                                                as activity_start_date,
-        {{ parse_uk_date('s.activity_end_date_contract_monitoring') }}
-                                                as activity_end_date,
+        -- Activity. Early layouts (pre-Sep 2021) used the plain column names,
+        -- the standard uses *_CONTRACT_MONITORING - coalesce so the dates
+        -- survive both eras.
+        coalesce(
+            {{ parse_uk_date('s.activity_start_date_contract_monitoring') }},
+            {{ parse_uk_date('s.activity_start_date') }}
+        )                                       as activity_start_date,
+        coalesce(
+            {{ parse_uk_date('s.activity_end_date_contract_monitoring') }},
+            {{ parse_uk_date('s.activity_end_date') }}
+        )                                       as activity_end_date,
+        {{ parse_uk_date('s.activity_date') }}  as activity_date,
         try_to_number(s.adjusted_length_of_stay)
                                                 as adjusted_length_of_stay,
 

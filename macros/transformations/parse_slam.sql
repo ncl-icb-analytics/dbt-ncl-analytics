@@ -83,6 +83,46 @@
     end
 {% endmacro %}
 
+{# Financial month 1 (April) - 12 (March) from a DATE expression. #}
+{% macro slam_fm_from_date(d) %}
+    mod(month({{ d }}) + 8, 12) + 1
+{% endmacro %}
+
+{# Financial year 'YYYYYY' from a DATE expression (e.g. 2024-12-10 -> '202425'). #}
+{% macro slam_fy_from_date(d) %}
+    case when {{ d }} is not null then
+        to_varchar(iff(month({{ d }}) >= 4, year({{ d }}), year({{ d }}) - 1))
+        || lpad(to_varchar(mod(iff(month({{ d }}) >= 4, year({{ d }}), year({{ d }}) - 1) + 1, 100)), 2, '0')
+    end
+{% endmacro %}
+
+{# Per-feed activity date used as the period-of-last-resort: providers bill by
+   activity date, so it recovers the financial period when the stated value
+   and the file-name token both fail (validated at 99.85-99.86% month
+   agreement vs stated periods on PLD/Drugs; Devices 98.8%). Date columns are
+   tried in billing-meaning order, gated to plausible values (2015-04-01 to
+   current date) so junk dates cannot create phantom periods. LSACM is an
+   aggregate feed with no activity dates -> none. `alias` is the source table
+   alias. #}
+{% macro slam_period_date(feed, alias='s') %}
+    {%- set chains = {
+        'LSPLCM': ['activity_end_date_contract_monitoring', 'activity_end_date',
+                   'activity_date', 'activity_start_date_contract_monitoring',
+                   'activity_start_date'],
+        'LSDRPLCM': ['clinical_intervention_date_drug_dispensed', 'drug_delivery_date',
+                     'activity_end_date_contract_monitoring', 'activity_end_date',
+                     'activity_date'],
+        'LSDEPLCM': ['clinical_intervention_date_medical_device_implementation',
+                     'device_insertion_date'],
+    } -%}
+    {%- set cols = chains[feed] -%}
+    case
+        when coalesce({% for c in cols %}{{ parse_uk_date(alias ~ '.' ~ c) }}{% if not loop.last %}, {% endif %}{% endfor %})
+             between '2015-04-01'::date and current_date()
+        then coalesce({% for c in cols %}{{ parse_uk_date(alias ~ '.' ~ c) }}{% if not loop.last %}, {% endif %}{% endfor %})
+    end
+{% endmacro %}
+
 {# Emits the submission-slice CTEs shared by the 4 SLAM staging models:
      registry                    - META_FILE_REGISTRY for the feed, with the
                                    file-name FY token
@@ -133,6 +173,8 @@ submission_slices_enriched as (
         s.*,
         r.submission_loaded_at,
         r.submission_file_name,
+        {{ parse_slam_financial_year('s.financial_year') }}
+                                                as dv_financial_year_stated,
         coalesce(
             {{ parse_slam_financial_year('s.financial_year') }},
             r.financial_year_from_file_name
@@ -219,14 +261,54 @@ join {{ ref('stg_slam_latest_submission') }} as l
 {% endmacro %}
 
 {# Submission identity + cleaned reporting period. Latest-submission
-   resolution lives in stg_slam_latest_submission / the *_latest views. #}
-{% macro slam_submission_columns() %}
+   resolution lives in stg_slam_latest_submission / the *_latest views.
+   `period_date_feed`: feed key for slam_period_date - enables the row-level
+   activity-date fallback for the period fields (PLD feeds; omit for LSACM).
+   Precedence: stated value -> file-name FY token -> activity date, recorded
+   per row in dv_financial_period_source. Must stay identical to the logic in
+   stg_slam_latest_submission or backfilled rows drop out of the *_latest
+   views. #}
+{% macro slam_submission_columns(period_date_feed=none) %}
         sl.submission_loaded_at                 as submission_loaded_at,
         sl.submission_file_name                 as submission_file_name,
         s.financial_year                        as financial_year_raw,
         s.financial_month                       as financial_month_raw,
+{% if period_date_feed %}
+        {#- Evaluated once, referenced by lateral alias below. Gated to rows
+            whose period is incomplete - the only rows the fallback can affect. -#}
+        case
+            when sl.dv_financial_year is null or sl.dv_financial_month is null
+                then {{ slam_period_date(period_date_feed) }}
+        end                                     as dv_period_date,
+        coalesce(sl.dv_financial_year,
+                 {{ slam_fy_from_date('dv_period_date') }})
+                                                as dv_financial_year,
+        coalesce(sl.dv_financial_month,
+                 iff(dv_period_date is not null,
+                     {{ slam_fm_from_date('dv_period_date') }}, null))
+                                                as dv_financial_month,
+        case
+            when sl.dv_financial_year_stated is not null and sl.dv_financial_month is not null
+                then 'stated'
+            when sl.dv_financial_year is not null and sl.dv_financial_month is not null
+                then 'file_name'
+            when dv_period_date is not null
+                then 'activity_date'
+            when sl.dv_financial_year_stated is not null then 'stated'
+            when sl.dv_financial_year is not null then 'file_name'
+        end                                     as dv_financial_period_source,
+{% else %}
         sl.dv_financial_year                    as dv_financial_year,
         sl.dv_financial_month                   as dv_financial_month,
+        case
+            when sl.dv_financial_year_stated is not null and sl.dv_financial_month is not null
+                then 'stated'
+            when sl.dv_financial_year is not null and sl.dv_financial_month is not null
+                then 'file_name'
+            when sl.dv_financial_year_stated is not null then 'stated'
+            when sl.dv_financial_year is not null then 'file_name'
+        end                                     as dv_financial_period_source,
+{% endif %}
         s.date_and_time_data_set_created        as dataset_created_raw,
         {{ parse_slam_timestamp('s.date_and_time_data_set_created') }}
                                                 as dv_dataset_created_at

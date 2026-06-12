@@ -50,17 +50,45 @@ with registry as (
     where feed in ('LSACM', 'LSPLCM', 'LSDrPLCM', 'LSDePLCM')
 ),
 
+-- For rows whose stated period is incomplete, the slice key includes the
+-- activity-date-derived period (same slam_period_date chain as the staging
+-- models), so backfilled rows resolve to real month slices instead of one
+-- NULL slice per provider. Must stay identical to the staging models' logic
+-- or backfilled rows drop out of the *_latest views.
 slices as (
     {% for feed, table_name in feeds %}
     select
-        '{{ feed }}'                                as feed,
+        feed,
         meta_file_id,
         meta_batch_id,
         meta_provider_code,
-        cast(financial_year as varchar)             as financial_year,
-        cast(financial_month as varchar)            as financial_month,
-        organisation_identifier_code_of_provider    as provider_code_raw
-    from {{ source('sdl_wnl', table_name) }}
+        financial_year,
+        financial_month,
+        provider_code_raw,
+        {{ slam_fy_from_date('period_date') }}      as fy_from_date,
+        iff(period_date is not null,
+            {{ slam_fm_from_date('period_date') }}, null)
+                                                    as fm_from_date
+    from (
+        select
+            '{{ feed }}'                                as feed,
+            s.meta_file_id,
+            s.meta_batch_id,
+            s.meta_provider_code,
+            cast(s.financial_year as varchar)           as financial_year,
+            cast(s.financial_month as varchar)          as financial_month,
+            s.organisation_identifier_code_of_provider  as provider_code_raw,
+            {% if table_name != 'LSACM' %}
+            -- evaluated once per row; gated to incomplete-period rows
+            case when {{ parse_slam_financial_year('s.financial_year') }} is null
+                   or {{ parse_slam_financial_month('s.financial_month') }} is null
+                 then {{ slam_period_date(table_name) }}
+            end                                         as period_date
+            {% else %}
+            null::date                                  as period_date
+            {% endif %}
+        from {{ source('sdl_wnl', table_name) }} as s
+    )
     group by all
     {% if not loop.last %}union all{% endif %}
     {% endfor %}
@@ -73,10 +101,13 @@ enriched as (
         s.meta_batch_id,
         coalesce(
             {{ parse_slam_financial_year('s.financial_year') }},
-            r.financial_year_from_file_name
+            r.financial_year_from_file_name,
+            s.fy_from_date
         )                                       as dv_financial_year,
-        {{ parse_slam_financial_month('s.financial_month') }}
-                                                as dv_financial_month,
+        coalesce(
+            {{ parse_slam_financial_month('s.financial_month') }},
+            s.fm_from_date
+        )                                       as dv_financial_month,
         {{ clean_organisation_id('upper(trim(coalesce(s.provider_code_raw, s.meta_provider_code)))') }}
                                                 as dv_provider_code,
         r.submission_loaded_at,

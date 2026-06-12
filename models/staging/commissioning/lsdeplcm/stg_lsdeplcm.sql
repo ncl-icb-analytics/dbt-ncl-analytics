@@ -23,7 +23,7 @@ with
 
 select
 {{ slam_meta_columns() }},
-{{ slam_submission_columns() }},
+{{ slam_submission_columns(period_date_feed='LSDEPLCM') }},
 {{ slam_org_columns() }},
 {{ slam_patient_columns() }},
 {{ slam_service_columns() }},
@@ -55,6 +55,8 @@ select
                                                 as subsidiary_device_code,
         {{ parse_uk_date('s.clinical_intervention_date_medical_device_implementation') }}
                                                 as device_implantation_date,
+        {{ parse_uk_date('s.device_insertion_date') }}
+                                                as device_insertion_date,
 
         -- Linkage identifiers
         s.non_cds_unique_identifier             as non_cds_unique_identifier,
