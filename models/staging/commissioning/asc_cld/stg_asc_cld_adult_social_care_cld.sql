@@ -62,8 +62,4 @@ select
     dm_specification,
     dm_received_date
 from {{ ref('raw_asc_cld_adult_social_care_cld') }}
-qualify row_number() over ( -- TO DO: consider removing this as will only keep most recent submission per flow id and unclear if that is desirable if you want to understand someone's historic social care usage
-    partition by dm_flow_id
-    order by dm_received_date desc
-) = 1
 

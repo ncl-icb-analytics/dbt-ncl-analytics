@@ -9,6 +9,8 @@
 select
     sk_patient_id,
     array_agg(distinct borough_name) as borough_name,
+    array_agg(distinct reporting_period_start_date) as reporting_period_start_date,
+    array_agg(distinct reporting_period_end_date) as reporting_period_end_date,
     array_agg(distinct service_type) as service_type,
     array_agg(distinct primary_support_reason_category) as primary_support_reason_category,
     boolor_agg(

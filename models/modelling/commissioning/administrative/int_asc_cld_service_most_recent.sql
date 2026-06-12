@@ -68,6 +68,8 @@ cleaned_support_reasons as (
         sk_patient_id,
         la_code,
         borough_name,
+        reporting_period_start_date,
+        reporting_period_end_date,
         service_type,
         {{ clean_asc_cld_primary_support_reason('primary_support_reason') }}
             as primary_support_reason_cleaned
@@ -80,6 +82,8 @@ categorised_support_reasons as (
         sk_patient_id,
         la_code,
         borough_name,
+        reporting_period_start_date,
+        reporting_period_end_date,
         service_type,
         primary_support_reason_cleaned,
         {{ asc_cld_primary_support_reason_category('primary_support_reason_cleaned') }}
