@@ -2136,6 +2136,36 @@ sources:
       data_type: TEXT
     - name: YEAR
       data_type: TEXT
+  - name: META_BUILD_STATE
+    identifier: '"META_BUILD_STATE"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: MAX_FILE_ID_LOADED
+      data_type: NUMBER(38,0)
+    - name: LAST_BUILT_AT
+      data_type: TIMESTAMP_NTZ
+    - name: LAST_BULK_AT
+      data_type: TIMESTAMP_NTZ
+    - name: NEEDS_REBUILD
+      data_type: BOOLEAN
+    - name: LAST_ERROR
+      data_type: TEXT
+  - name: META_EXCEPTIONS
+    identifier: '"META_EXCEPTIONS"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: FILE_ID
+      data_type: NUMBER(38,0)
+    - name: BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: SOURCE_COLUMN_HEADERS
+      data_type: TEXT
+    - name: DETECTED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: RESOLVED
+      data_type: BOOLEAN
   - name: META_FILE_REGISTRY
     identifier: '"META_FILE_REGISTRY"'
     columns:
@@ -2157,3 +2187,119 @@ sources:
       data_type: TEXT
     - name: LAST_REFRESHED_AT
       data_type: TIMESTAMP_NTZ
+  - name: META_FILE_VERSIONS
+    identifier: '"META_FILE_VERSIONS"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: FILE_ID
+      data_type: NUMBER(38,0)
+    - name: BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: VERSION_ID
+      data_type: TEXT
+    - name: MATCH_METHOD
+      data_type: TEXT
+  - name: META_NULL_RATE_PROFILE
+    identifier: '"META_NULL_RATE_PROFILE"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: TABLE_NAME
+      data_type: TEXT
+    - name: COLUMN_NAME
+      data_type: TEXT
+    - name: ORDINAL_POSITION
+      data_type: NUMBER(38,0)
+    - name: TOTAL_ROWS
+      data_type: NUMBER(38,0)
+    - name: NON_NULL_ROWS
+      data_type: NUMBER(38,0)
+    - name: NULL_ROWS
+      data_type: NUMBER(38,0)
+    - name: NULL_RATE
+      data_type: NUMBER(10,6)
+    - name: IS_ALL_NULL
+      data_type: BOOLEAN
+    - name: COMPUTED_AT
+      data_type: TIMESTAMP_NTZ
+  - name: META_REFRESH_LOG
+    identifier: '"META_REFRESH_LOG"'
+    columns:
+    - name: RUN_ID
+      data_type: NUMBER(38,0)
+    - name: FEED
+      data_type: TEXT
+    - name: STARTED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: COMPLETED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: NEW_FILES_MATCHED
+      data_type: NUMBER(38,0)
+    - name: NEW_EXCEPTIONS
+      data_type: NUMBER(38,0)
+    - name: TOTAL_MAPPED_FILES
+      data_type: NUMBER(38,0)
+    - name: TOTAL_EXCEPTIONS
+      data_type: NUMBER(38,0)
+    - name: STATUS
+      data_type: TEXT
+    - name: ERROR_MESSAGE
+      data_type: TEXT
+  - name: META_ROW_COUNT_COMPARE
+    identifier: '"META_ROW_COUNT_COMPARE"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: SOURCE_ROWS
+      data_type: NUMBER(18,0)
+    - name: FINAL_ROWS
+      data_type: NUMBER(18,0)
+    - name: GAP
+      data_type: NUMBER(19,0)
+    - name: COVERAGE_PCT
+      data_type: FLOAT
+  - name: META_SCHEMA_VERSIONS
+    identifier: '"META_SCHEMA_VERSIONS"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: VERSION_ID
+      data_type: TEXT
+    - name: FILE_COUNT
+      data_type: NUMBER(38,0)
+    - name: FIRST_SEEN
+      data_type: TIMESTAMP_NTZ
+    - name: LAST_SEEN
+      data_type: TIMESTAMP_NTZ
+    - name: RAW_MAPPING
+      data_type: TEXT
+    - name: COLUMN_MAPPING
+      data_type: VARIANT
+  - name: META_UNMAPPED_FILES
+    identifier: '"META_UNMAPPED_FILES"'
+    columns:
+    - name: FEED
+      data_type: TEXT
+    - name: FILE_ID
+      data_type: NUMBER(38,0)
+    - name: BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: HEADER_ID
+      data_type: NUMBER(38,0)
+    - name: PROFILE_CODE
+      data_type: NUMBER(38,0)
+    - name: ORIGINAL_FILE_NAME
+      data_type: TEXT
+    - name: ROW_COUNT
+      data_type: NUMBER(38,0)
+    - name: LOGGED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: LOADER_JOB_NAME
+      data_type: TEXT
+    - name: HAS_HEADERS
+      data_type: BOOLEAN
+    - name: EXCEPTION_DETECTED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: REASON
+      data_type: TEXT

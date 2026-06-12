@@ -319,7 +319,8 @@ sources:
 
   # ServicesDataLocal WNL-footprint feeds (permanent home; DATA_LAKE__NCL.SDL
   # and WNL_SDL copies will be retired). Only the SLAM contract-monitoring
-  # feeds + file registry are pulled; the schema holds 20+ other feeds.
+  # feeds + the pipeline META observability objects are pulled; the schema
+  # holds 20+ other feeds (CONTROL_* tables stay in DATA_LAKE only).
   - source_name: sdl_wnl
     database: DATA_LAKE
     schema: SDL
@@ -332,6 +333,14 @@ sources:
       - LSDRPLCM
       - LSDEPLCM
       - META_FILE_REGISTRY
+      - META_SCHEMA_VERSIONS
+      - META_FILE_VERSIONS
+      - META_EXCEPTIONS
+      - META_BUILD_STATE
+      - META_REFRESH_LOG
+      - META_NULL_RATE_PROFILE
+      - META_UNMAPPED_FILES
+      - META_ROW_COUNT_COMPARE
 
   # ANALYST_MANAGED - volatile schema; only explicitly listed tables are used
   - source_name: reference_analyst_managed
