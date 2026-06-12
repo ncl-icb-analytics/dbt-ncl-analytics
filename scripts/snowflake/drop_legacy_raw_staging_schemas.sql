@@ -31,6 +31,11 @@ DROP VIEW IF EXISTS DEV__MODELLING.CANCER__REF.STG_REFERENCE_CANCER_LSOA_TO_CANC
 DROP VIEW IF EXISTS DEV__MODELLING.CANCER__REF.STG_REFERENCE_CANCER_PROVIDER_TO_CANCER_ALLIANCE;
 DROP VIEW IF EXISTS DEV__MODELLING.CANCER__REF.STG_REFERENCE_CANCER_SUB_ICB_TO_CANCER_ALLIANCE;
 
+-- The cLTCS EMIS-extract models briefly built to a CLTCS schema before being
+-- folded into C_LTCS with the rest of the programme's staging models.
+DROP SCHEMA IF EXISTS STAGING.CLTCS;
+DROP SCHEMA IF EXISTS DEV__STAGING.CLTCS;
+
 -- SLAM staging models (PR #798) were dev-tested into per-feed schemas in
 -- DEV__MODELLING before the STAGING database existed. MODELLING.LSACM/
 -- LSDEPLCM/LSDRPLCM hold analyst-managed views reading DATA_LAKE directly,
