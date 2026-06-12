@@ -53,7 +53,7 @@ That string is the only record of the file's schema. The platform pipeline recov
    - Fallbacks, for files whose log row has no headers: same `HeaderID` as a matched sibling file, then same `ProfileCode` (same layout family). `MATCH_METHOD` records which path resolved each file. These cascade-matched files are also why file ids are not in load order — old files can be matched and loaded long after newer ones.
    - No match: the file is excluded and listed in `DATA_LAKE.SDL.META_UNMAPPED_FILES` with a reason.
 
-**Where to look for holes:** files in `META_UNMAPPED_FILES` are invisible downstream. `DATA_LAKE.SDL.META_ROW_COUNT_COMPARE` shows source-vs-loaded coverage per feed (>99.999% at the time of writing). If a provider-month you expect is missing entirely, check these two views first.
+**Where to look for holes:** files in `META_UNMAPPED_FILES` are invisible downstream. The residue is small: at the time of writing, 3 SLAM files (of ~50,000 loaded) are unmapped — all `data_not_logged`, where the log row exists but the data rows never arrived upstream. New files cycle through briefly as `not_yet_refreshed` until the nightly refresh. `DATA_LAKE.SDL.META_ROW_COUNT_COMPARE` shows source-vs-loaded coverage per feed (>99.999%). If a provider-month you expect is missing entirely, check these two views first.
 
 **Why this matters to your old queries:** any query written directly against the positional data, or through a view that assumed one fixed layout, silently misread files from other layouts. Values like specialty names appearing in the financial-year column are the downstream signature of this — column misalignment, not provider typos.
 
@@ -122,7 +122,7 @@ Stated here so they are findable, not discovered:
 2. **74 cost values (of 51.6m populated, Drugs) do not parse** — true junk, NULL in `dv_total_cost`.
 3. **Backloaded history ordering**: for ~340 provider-months (none in 26/27, concentrated 20/21–23/24), load order and the provider-stated creation date disagree about which file is latest. The views follow load order. If you analyse restatement history in those years, be aware.
 4. **Upstream rebuilds rewrite history**: if the platform pipeline rebuilds a feed (schema drift), the staging tables are rebuilt from it; figures can change. The nightly build's tests flag grain breaks if this goes wrong.
-5. **Unmapped files**: anything in `META_UNMAPPED_FILES` is absent from all downstream layers until mapped.
+5. **Unmapped files**: anything in `META_UNMAPPED_FILES` is absent from all downstream layers until mapped. Currently 3 SLAM files, all missing their data upstream rather than awaiting mapping.
 
 ## Verifying it yourself
 
