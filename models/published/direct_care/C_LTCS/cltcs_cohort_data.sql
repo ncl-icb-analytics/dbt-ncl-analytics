@@ -121,6 +121,23 @@ select il.patient_id
     , br.bmi_risk_sort_key
     , br.alcohol_status
     , br.alcohol_risk_sort_key
+    -- social care usage
+    , asc_cld.borough_name
+    , asc_cld.service_type
+    , asc_cld.primary_support_reason_category
+    , asc_cld.has_physical_support_personal_care
+    , asc_cld.has_physical_support_access_mobility
+    , asc_cld.has_learning_disability_support
+    , asc_cld.has_mental_health_support
+    , asc_cld.has_unknown_primary_support_reason
+    , asc_cld.has_memory_cognition_support
+    , asc_cld.has_social_support_unpaid_carer
+    , asc_cld.has_social_support_social_isolation
+    , asc_cld.has_sensory_support_visual_impairment
+    , asc_cld.has_sensory_support_hearing_impairment
+    , asc_cld.has_social_support_substance_misuse
+    , asc_cld.has_sensory_support_dual_impairment
+    , asc_cld.has_social_support_asylum_seeker
     -- current status to consider 
     , ps.is_currently_pregnant 
     -- dim_person_is_carer?
@@ -242,3 +259,5 @@ left join {{ref('int_rockwood_latest')}} rockwood
     on il.olids_id = rockwood.person_id
 left join hr_hrc_ltc_lcs_conditions lcs
     on il.olids_id = lcs.person_id
+left join {{ref('int_asc_cld_service_most_recent')}} asc_cld
+    on il.patient_id = asc_cld.sk_patient_id
