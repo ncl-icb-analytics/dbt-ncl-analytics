@@ -102,15 +102,18 @@ Grain stays 1:1 with `DATA_LAKE.SDL` — same rows, no joins to other data, no b
 
 | Field | Method | Failure behaviour |
 |---|---|---|
-| `dv_financial_year` | Validated to `'YYYYYY'`; accepts `202526`, `2025/26`, `2025-26`, `2025-2026`; second year must follow the first | Junk (`215551`) and ambiguous bare years (`2020`) → NULL, then the FY token in the platform file name (`PLCM_2627_InformationStandard...`) is used as fallback |
-| `dv_financial_month` | Whole number 1 (April) – 12 (March) | Junk and fractional values → NULL |
+| `dv_financial_year` | Validated to `'YYYYYY'`; accepts `202526`, `2025/26`, `2025-26`, `2025-2026`; second year must follow the first | Junk (`215551`) and ambiguous bare years (`2020`) → NULL, then the FY token in the platform file name (`PLCM_2627_InformationStandard...`), then derived from the activity date (PLD feeds — see below) |
+| `dv_financial_month` | Whole number 1 (April) – 12 (March) | Junk and fractional values → NULL, then derived from the activity date (PLD feeds) |
+| `dv_financial_period_source` | Records per row which of the three sources supplied the period: `stated`, `file_name` or `activity_date` | NULL when the period is unrecoverable |
 | `dv_total_cost` and all price/activity/quantity fields | Parsed to `NUMBER(38,6)`: strips currency symbols and thousands commas; accounting-style `(1,234.56)` → negative | Non-numeric text (`TBC`) → NULL |
 | `dv_dataset_created_at` | Provider's `DATE_AND_TIME_DATA_SET_CREATED` parsed across every format found in profiling (ISO, UK, US AM/PM, Excel serial numbers, several broken variants) | Unparseable values → NULL |
 | `dv_provider_code` | ODS code cleaned via the Dictionary: site-suffixed codes that are not valid org codes resolve to the parent (`RAS00` → `RAS`) | — |
 | Activity/clinical dates | Parsed from UK date formats | Unparseable → NULL |
 | Column pruning | Columns <5% populated dropped (LSPLCM: 580 → ~60) | Originals remain in DATA_LAKE.SDL |
 
-The governing rule: invalid values become NULL, never guesses, and originals are retained — in a `*_raw` column alongside the `dv_` field, or in DATA_LAKE.SDL.
+**Activity-date period derivation (PLD, Drugs, Devices).** Providers bill by activity date, so when the stated period and the file-name token both fail, the period is derived from the feed's activity date: PLD uses the activity end/start dates (including the plain-named columns used by pre-Sep-2021 layouts), Drugs the dispensed then delivery date, Devices the implantation then insertion date. The rule was validated before adoption: where both a stated period and an activity date exist, they agree at 99.86% (PLD, 531m rows), 99.85% (Drugs) and 98.8% (Devices); the drug delivery date agrees 100%. Dates are gated to plausible values (April 2015 – today) so junk cannot create phantom periods. ACM is excluded — it is an aggregate feed with no activity dates. `dv_financial_period_source` makes every row's provenance visible.
+
+The governing rule: invalid values become NULL, never guesses — and derivations are validated, gated and labelled. Originals are retained in a `*_raw` column alongside the `dv_` field, or in DATA_LAKE.SDL.
 
 Staging does not validate code columns (POD, service, TFC pass through as submitted), join names onto codes, or apply reporting logic.
 
@@ -133,7 +136,7 @@ The winning file per slice is published in `STAGING.SLAM.STG_SLAM_LATEST_SUBMISS
 
 ## Known limitations
 
-1. **~0.4% of rows have NULL `dv_financial_year`/`month`** (Drugs feed figure) — genuinely unrecoverable values. These rows fall out of month-level reporting; raw values remain in `financial_year_raw` / `financial_month_raw`.
+1. **Rows with NULL `dv_financial_year`/`month`** — no stated period, no file-name token and no usable activity date. These rows fall out of month-level reporting; raw values remain in `financial_year_raw` / `financial_month_raw`, and `dv_financial_period_source` is NULL. (Before the activity-date fallback this was ~2% of PLD — 753 pre-Sep-2021 files whose layouts had no period columns at all — and ~0.4% of Drugs; the fallback recovers roughly two-thirds of the PLD gap.)
 2. **74 cost values (of 51.6m populated, Drugs) do not parse** — true junk, NULL in `dv_total_cost`.
 3. **Backloaded history ordering**: for ~340 provider-months (none in 26/27, concentrated 20/21–23/24), load order and the provider-stated creation date disagree about which file is latest. The views follow load order.
 4. **Upstream rebuilds rewrite history**: if the platform pipeline rebuilds a feed (schema drift), the staging tables are rebuilt from it and figures can change. Nightly tests flag grain breaks.

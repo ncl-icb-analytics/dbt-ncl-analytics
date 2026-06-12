@@ -23,7 +23,7 @@ with
 
 select
 {{ slam_meta_columns() }},
-{{ slam_submission_columns() }},
+{{ slam_submission_columns(period_date_feed='LSDRPLCM') }},
 {{ slam_org_columns() }},
 {{ slam_patient_columns() }},
 {{ slam_service_columns() }},
@@ -60,6 +60,8 @@ select
         )                                       as unit_of_measurement_code,
         {{ parse_uk_date('s.clinical_intervention_date_drug_dispensed') }}
                                                 as drug_dispensed_date,
+        {{ parse_uk_date('s.drug_delivery_date') }}
+                                                as drug_delivery_date,
 
         -- Linkage identifiers
         s.non_cds_unique_identifier             as non_cds_unique_identifier,
