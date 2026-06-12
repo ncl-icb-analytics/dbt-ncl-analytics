@@ -65,6 +65,11 @@ models:
         description: Provider-typed financial year as submitted. Cleaned in dv_financial_year.
       - name: financial_month_raw
         description: Provider-typed financial month as submitted. Cleaned in dv_financial_month.
+      - name: dv_period_date
+        description: >-
+          The implantation/insertion date used for period derivation. Populated only when
+          the stated period was incomplete; plausibility-gated (2015-04-01 to
+          today).
       - name: dv_financial_year
         description: >-
           Validated financial year as 'YYYYYY' (e.g. '202627'): provider value,

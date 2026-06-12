@@ -58,28 +58,37 @@ with registry as (
 slices as (
     {% for feed, table_name in feeds %}
     select
-        '{{ feed }}'                                as feed,
-        s.meta_file_id,
-        s.meta_batch_id,
-        s.meta_provider_code,
-        cast(s.financial_year as varchar)           as financial_year,
-        cast(s.financial_month as varchar)          as financial_month,
-        s.organisation_identifier_code_of_provider  as provider_code_raw,
-        {% if table_name != 'LSACM' %}
-        case when {{ parse_slam_financial_year('s.financial_year') }} is null
-               or {{ parse_slam_financial_month('s.financial_month') }} is null
-             then {{ slam_fy_from_date(slam_period_date(table_name)) }}
-        end                                         as fy_from_date,
-        case when ({{ parse_slam_financial_year('s.financial_year') }} is null
-                or {{ parse_slam_financial_month('s.financial_month') }} is null)
-              and {{ slam_period_date(table_name) }} is not null
-             then {{ slam_fm_from_date(slam_period_date(table_name)) }}
-        end                                         as fm_from_date
-        {% else %}
-        null                                        as fy_from_date,
-        null                                        as fm_from_date
-        {% endif %}
-    from {{ source('sdl_wnl', table_name) }} as s
+        feed,
+        meta_file_id,
+        meta_batch_id,
+        meta_provider_code,
+        financial_year,
+        financial_month,
+        provider_code_raw,
+        {{ slam_fy_from_date('period_date') }}      as fy_from_date,
+        iff(period_date is not null,
+            {{ slam_fm_from_date('period_date') }}, null)
+                                                    as fm_from_date
+    from (
+        select
+            '{{ feed }}'                                as feed,
+            s.meta_file_id,
+            s.meta_batch_id,
+            s.meta_provider_code,
+            cast(s.financial_year as varchar)           as financial_year,
+            cast(s.financial_month as varchar)          as financial_month,
+            s.organisation_identifier_code_of_provider  as provider_code_raw,
+            {% if table_name != 'LSACM' %}
+            -- evaluated once per row; gated to incomplete-period rows
+            case when {{ parse_slam_financial_year('s.financial_year') }} is null
+                   or {{ parse_slam_financial_month('s.financial_month') }} is null
+                 then {{ slam_period_date(table_name) }}
+            end                                         as period_date
+            {% else %}
+            null::date                                  as period_date
+            {% endif %}
+        from {{ source('sdl_wnl', table_name) }} as s
+    )
     group by all
     {% if not loop.last %}union all{% endif %}
     {% endfor %}

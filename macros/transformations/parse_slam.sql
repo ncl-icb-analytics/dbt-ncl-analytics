@@ -274,19 +274,25 @@ join {{ ref('stg_slam_latest_submission') }} as l
         s.financial_year                        as financial_year_raw,
         s.financial_month                       as financial_month_raw,
 {% if period_date_feed %}
+        {#- Evaluated once, referenced by lateral alias below. Gated to rows
+            whose period is incomplete - the only rows the fallback can affect. -#}
+        case
+            when sl.dv_financial_year is null or sl.dv_financial_month is null
+                then {{ slam_period_date(period_date_feed) }}
+        end                                     as dv_period_date,
         coalesce(sl.dv_financial_year,
-                 {{ slam_fy_from_date(slam_period_date(period_date_feed)) }})
+                 {{ slam_fy_from_date('dv_period_date') }})
                                                 as dv_financial_year,
         coalesce(sl.dv_financial_month,
-                 iff({{ slam_period_date(period_date_feed) }} is not null,
-                     {{ slam_fm_from_date(slam_period_date(period_date_feed)) }}, null))
+                 iff(dv_period_date is not null,
+                     {{ slam_fm_from_date('dv_period_date') }}, null))
                                                 as dv_financial_month,
         case
             when sl.dv_financial_year_stated is not null and sl.dv_financial_month is not null
                 then 'stated'
             when sl.dv_financial_year is not null and sl.dv_financial_month is not null
                 then 'file_name'
-            when {{ slam_period_date(period_date_feed) }} is not null
+            when dv_period_date is not null
                 then 'activity_date'
             when sl.dv_financial_year_stated is not null then 'stated'
             when sl.dv_financial_year is not null then 'file_name'
