@@ -72,7 +72,25 @@ END AS activity_actual
 
 The same column arrived in position 49, 32 or 46 depending on the layout. Rows from layouts that never contained the column are NULL. The full LSPLCM view is ~580 columns and 944 CASE expressions, generated from the metadata and regenerated whenever a new layout appears.
 
-The `<feed>_mapped` views reconcile naming drift: where providers spelled the same concept differently across layouts (`ADHOC_ITEM_CODE` vs `ADHOCITEM_CODE`), a curated mapping CSV declares the canonical name and the view COALESCEs the variants into it, applying TRY_CAST data types where declared.
+The `<feed>_mapped` views reconcile naming drift: where providers spelled the same concept differently across layouts (`ADHOC_ITEM_CODE` vs `ADHOCITEM_CODE`), a curated mapping declares the canonical name and the view COALESCEs the variants into it, applying TRY_CAST data types where declared.
+
+### The control tables, and where to intervene
+
+The whole resolution is driven by inspectable tables in `DATA_LAKE.SDL` — when a value looks wrong, these are the levers:
+
+| Object | What it holds | When to look at it |
+|---|---|---|
+| `CONTROL_COLUMN_MAPPING` | Source alias → canonical name (+ optional data type). The deployed copy of the curated mapping CSV (`mappings/name_mapping.csv` in Snowflake-Deployment) | A column is misnamed, two variants aren't being COALESCEd, or a type cast is wrong — the fix is a CSV row, not SQL |
+| `META_SCHEMA_VERSIONS` | Every distinct layout per feed, with its raw header mapping | Check what a specific layout said a position meant |
+| `META_FILE_VERSIONS` | File → layout, with `MATCH_METHOD` (`headers` / `header_id` / `profile_code`) | A file's values look shifted — confirm it matched the right layout, and how |
+| `META_FILE_REGISTRY` | Per-file metadata: original file name, row count, load timestamp | Trace a row back to the file it came from (`meta_file_id` + `meta_batch_id`) |
+| `META_EXCEPTIONS` | Files whose headers matched no known layout | A provider invented a new layout — it sits here until mapped |
+| `META_BUILD_STATE` | Per-feed incremental high-water mark + `NEEDS_REBUILD` flag | The final table lags the views, or a mapping change needs a rebuild |
+| `META_NULL_RATE_PROFILE` | Null rate per (feed, column) | Judge whether a sparse column is worth requesting in staging |
+
+The repair loop when something is wrong: diagnose with `META_FILE_VERSIONS`/`META_SCHEMA_VERSIONS` (did the file match the right layout?), fix the mapping in the CSV if it's a naming/typing problem, regenerate and redeploy the views (`generate.py` in Snowflake-Deployment), and let the nightly task rebuild the affected feed — `NEEDS_REBUILD` flips automatically when the view schema drifts from the table, or `SP_BULK_BACKFILL('<FEED>')` forces it immediately. New layouts follow the same loop: `audit.py <FEED>` lists the unmapped source columns, the CSV gains rows, and the pending files in `META_EXCEPTIONS` resolve on the next refresh.
+
+Because every file carries `meta_file_id` and `meta_batch_id` all the way into STAGING, any individual staged row can be traced to its source file, layout and match method.
 
 ## 6. DATA_LAKE.SDL tables
 
