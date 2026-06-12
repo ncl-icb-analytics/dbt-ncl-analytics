@@ -38,19 +38,40 @@ Stages 1–6 are the platform pipeline (Snowflake-Deployment repo, `services_dat
 
 ### 2–3. Positional storage and layout resolution
 
-Provider files do not share a column layout. The loader stores every file's values positionally (`Col1..ColN`) and records what each position meant in a per-file metadata string. The platform pipeline fingerprints each distinct layout and matches every file to one:
+Provider files do not share a column layout. The ISL loader stores every file's values positionally (`Col1..ColN`) in `Master_<feed>_Data` — the table itself carries no column meanings. What each position meant is recorded per file in `Log_ProcessingEvent.SourceColumnHeaders`, as the T-SQL select fragment the loader used:
 
-- Primary match: the file's header string equals a known layout.
-- Fallbacks (for files loaded without headers): same `HeaderID` as a matched sibling file, then same `ProfileCode`. `META_FILE_VERSIONS.MATCH_METHOD` records which path resolved each file.
-- No match: the file is excluded and listed in `DATA_LAKE.SDL.META_UNMAPPED_FILES` with a reason.
+```
+[Col1] AS [FinancialMonth], [Col2] AS [CCG], [Col3] AS [Provider Code], ...
+```
+
+That string is the only record of the file's schema. The platform pipeline recovers it like this:
+
+1. **Parse** each `SourceColumnHeaders` string into (position → column name) pairs.
+2. **Fingerprint** the full mapping with an md5 hash — every distinct layout becomes one `version_id` in `META_SCHEMA_VERSIONS`. LSPLCM has 101 of them across 18,583 files; the four SLAM feeds together have 236.
+3. **Match every file to a version** in `META_FILE_VERSIONS`:
+   - Primary: the file's header string equals a known layout, byte for byte (which is why the deploy machinery has to round-trip `£` and `&` exactly — one mangled character and the layout never matches).
+   - Fallbacks, for files whose log row has no headers: same `HeaderID` as a matched sibling file, then same `ProfileCode` (same layout family). `MATCH_METHOD` records which path resolved each file. These cascade-matched files are also why file ids are not in load order — old files can be matched and loaded long after newer ones.
+   - No match: the file is excluded and listed in `DATA_LAKE.SDL.META_UNMAPPED_FILES` with a reason.
 
 **Where to look for holes:** files in `META_UNMAPPED_FILES` are invisible downstream. `DATA_LAKE.SDL.META_ROW_COUNT_COMPARE` shows source-vs-loaded coverage per feed (>99.999% at the time of writing). If a provider-month you expect is missing entirely, check these two views first.
 
-**Why this matters to your old queries:** any query written directly against the old positional data, or against a view that assumed one fixed layout, silently misread files from other layouts. Values like specialty names appearing in the financial-year column are the downstream signature of this — column misalignment, not provider typos.
+**Why this matters to your old queries:** any query written directly against the positional data, or through a view that assumed one fixed layout, silently misread files from other layouts. Values like specialty names appearing in the financial-year column are the downstream signature of this — column misalignment, not provider typos.
 
 ### 4–5. Position-to-name resolution and canonical mapping
 
-The `_raw` views turn positions back into named columns with one CASE branch per layout (the LSPLCM view is ~266 KB of generated SQL — not hand-maintained, regenerated from the metadata). The `_mapped` views then reconcile provider spelling variants into one canonical column (e.g. `ADHOC_ITEM_CODE` and `ADHOCITEM_CODE` arrive as different columns and are COALESCEd) and apply TRY_CAST types.
+The `<feed>_raw` views make the recovery executable. Each row joins to its file's `version_id`, and every output column is a CASE over versions saying where that column lives in each layout. From the real LSPLCM view:
+
+```sql
+CASE
+    WHEN fv."VERSION_ID" IN ('72a5f19843d37d2d') THEN d."Col49"
+    WHEN fv."VERSION_ID" IN ('5dca51a88420d9a7') THEN d."Col32"
+    WHEN fv."VERSION_ID" IN ('150ecfb64c560215') THEN d."Col46"
+END AS activity_actual
+```
+
+The same column arrived in position 49, 32 or 46 depending on which layout the provider used that month. Rows from layouts that never contained the column get NULL. The full LSPLCM view is ~580 such columns, 944 CASE expressions, ~266 KB of SQL — generated from the metadata, never hand-edited, regenerated whenever a new layout appears.
+
+The `<feed>_mapped` views then reconcile naming drift: providers spelled the same concept differently across layouts (`ADHOC_ITEM_CODE` vs `ADHOCITEM_CODE` arrive as separate columns), so a curated mapping CSV declares the canonical name and the view COALESCEs the variants into it, applying TRY_CAST data types where declared.
 
 ### 6. DATA_LAKE.SDL tables
 
