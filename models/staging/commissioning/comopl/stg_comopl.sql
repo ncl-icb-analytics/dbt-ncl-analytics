@@ -46,7 +46,13 @@
 -- Financial year here is a bare 4-digit year (e.g. 2019 = FY2019/20), unlike
 -- the SLAM feeds' YYYYYY — so dv_financial_year is the validated 4-digit year.
 
-with prep as (
+with registry as (
+    select file_id, batch_id, original_file_name
+    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
+    where feed = 'COMOPL'
+),
+
+prep as (
     select
         -- META keys (from SDL pipeline, fully reliable)
         meta_sk_row_id::number(38,0)            as meta_sk_row_id,
@@ -58,12 +64,12 @@ with prep as (
         meta_recipient_code                     as meta_recipient_code,
         meta_version_id                         as meta_version_id,
 
-        -- 1-5: DLP standard fields (only ~56% of rows carry them)
+        -- DLP standard submission fields (spec 1, 2, 5; only ~56% of rows carry
+        -- them). The DLP financial month/year (spec 3-4) are surfaced cleaned as
+        -- dv_financial_* and as financial_*_raw, so not repeated here.
         {{ clean_flex_or_freeze('dlp_flexor_freeze') }}
                                                 as dlp_flex_or_freeze,
         dlp_commissioner_code                   as dlp_commissioner_code,
-        dlp_financial_month                     as dlp_financial_month,
-        dlp_financial_year                      as dlp_financial_year,
         dlp_baseline_financial_month            as dlp_baseline_financial_month,
 
         -- Provider-stated reporting period (coalesce DLP with plain financial
@@ -155,17 +161,25 @@ with prep as (
         -- 28: Service request identifier
         service_request_identifier              as service_request_id,
 
+        -- Reporting month parsed from the submission file name (last-resort
+        -- period source when neither stated nor contact date is available)
+        {{ period_from_file_name('registry.original_file_name') }}
+                                                as file_name_period,
+
         -- Raw period values retained for traceability
         coalesce(dlp_financial_year, financial_year)    as financial_year_raw,
         coalesce(dlp_financial_month, financial_month)  as financial_month_raw
 
     from {{ source('sdl_wnl', 'COMOPL') }}
+    left join registry
+        on registry.file_id = meta_file_id
+       and registry.batch_id = meta_batch_id
 )
 
 -- Final projection. Derived reporting period sits up front (after the meta
--- keys); financial period is the stated value, else derived from the contact
--- date (gated to a plausible range so junk dates cannot create phantom
--- periods), with dv_financial_period_source recording which was used.
+-- keys). Period precedence: provider-stated value -> contact date -> file-name
+-- period (each gated to a plausible range so junk cannot create phantom
+-- periods). dv_financial_period_source records which was used.
 select
     -- META keys
     meta_sk_row_id, meta_file_id, meta_row_id, meta_batch_id,
@@ -175,23 +189,28 @@ select
     coalesce(
         dv_financial_year_stated,
         case when contact_date between '2015-04-01' and current_date()
-             then {{ fin_year_from_date('contact_date') }} end
+             then {{ fin_year_from_date('contact_date') }} end,
+        case when file_name_period between '2015-04-01' and current_date()
+             then {{ fin_year_from_date('file_name_period') }} end
     )                                           as dv_financial_year,
     coalesce(
         dv_financial_month_stated,
         case when contact_date between '2015-04-01' and current_date()
-             then {{ fin_month_from_date('contact_date') }} end
+             then {{ fin_month_from_date('contact_date') }} end,
+        case when file_name_period between '2015-04-01' and current_date()
+             then {{ fin_month_from_date('file_name_period') }} end
     )                                           as dv_financial_month,
     case
         when dv_financial_month_stated is not null and dv_financial_year_stated is not null
             then 'stated'
         when contact_date between '2015-04-01' and current_date()
             then 'derived_from_contact_date'
+        when file_name_period between '2015-04-01' and current_date()
+            then 'derived_from_file_name'
     end                                         as dv_financial_period_source,
 
-    -- DLP standard fields (1-5)
-    dlp_flex_or_freeze, dlp_commissioner_code, dlp_financial_month,
-    dlp_financial_year, dlp_baseline_financial_month,
+    -- DLP standard fields (flag, commissioner, baseline month)
+    dlp_flex_or_freeze, dlp_commissioner_code, dlp_baseline_financial_month,
 
     -- Spec body (fields 6-28, in spec order)
     local_patient_id, sk_patient_id, dv_year_of_birth, partial_postcode,

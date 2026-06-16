@@ -35,11 +35,11 @@ models:
                 max_value: 12
                 inclusive: true
       - name: dv_financial_period_source
-        description: Provenance of the financial period - 'stated' (provider value) or 'derived_from_referral_date'.
+        description: Provenance of the financial period - 'stated' (provider value), 'derived_from_referral_date', or 'derived_from_file_name'.
         data_tests:
           - accepted_values:
               arguments:
-                values: ['stated', 'derived_from_referral_date']
+                values: ['stated', 'derived_from_referral_date', 'derived_from_file_name']
       - name: dlp_flex_or_freeze
         description: DLP submission flag standardised to 'Flex' or 'Freeze' (other values -> NULL).
         data_tests:
