@@ -234,6 +234,8 @@ SELECT
         ,p.fiscal_year_label
         ,p.PRACTICE_NAME
         ,p.PRACTICE_CODE
+        ,p.practice_borough
+        ,p.primary_care_network
         ,CASE WHEN b.person_id IS NULL THEN 'Not Met' ELSE b.BMI_LAST_12M END AS BMI_CHECK_12M
         ,CASE WHEN g.person_id IS NULL THEN 'Not Met' ELSE g.HBA1C_LAST_12M END AS HBA1C_CHECK_12M
         ,CASE WHEN c.person_id IS NULL THEN 'Not Met' ELSE c.CHOL_LAST_12M END AS CHOL_CHECK_12M
