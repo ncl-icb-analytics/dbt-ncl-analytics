@@ -39,7 +39,7 @@ select
     , core.appointment_commissioning_service_agreement_provider as organisation_id
     , dict_provider.service_provider_name as organisation_name
     , core.appointment_care_location_site_code_of_treatment as site_id
-    , dict_org.organisation_name as site_name
+    , dict_site.organisation_name as site_name
 
      /* Time and date */
     , core.appointment_date as start_date
@@ -134,9 +134,12 @@ LEFT JOIN {{ ref('stg_dictionary_dbo_procedure')}} As dict_proc ON proc.code = d
 -- need to stage procedure dictionary to get description and category
 
 -- organisations
-left join 
-    {{ ref('dict_organisation_nhs_provider') }} as dict_org 
-    on core.appointment_care_location_site_code_of_treatment = dict_org.organisation_code 
+-- site name: site-level treatment code resolves against the full organisation
+-- dictionary (hospital sites are type 42; dict_organisation_nhs_provider is trusts
+-- only, type 41, so it left site_name null). Mirrors int_sus_uec_encounter.
+left join
+    {{ ref('stg_dictionary_dbo_organisation') }} as dict_site
+    on core.appointment_care_location_site_code_of_treatment = dict_site.organisation_code
 
 left join 
     {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
