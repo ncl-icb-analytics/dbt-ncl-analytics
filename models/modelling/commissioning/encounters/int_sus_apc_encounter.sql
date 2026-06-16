@@ -42,7 +42,7 @@ select
     , core.spell_commissioning_service_agreement_provider as organisation_id
     , dict_provider.service_provider_name  as organisation_name
     , core.spell_care_location_site_code_of_treatment as site_id
-    , dict_org.organisation_name as site_name  
+    , dict_site.organisation_name as site_name
     
     /* Time and date */
     , core.spell_admission_date as start_date
@@ -132,8 +132,11 @@ left join gender_codes as gen
 LEFT JOIN {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
     ON core.SPELL_COMMISSIONING_SERVICE_AGREEMENT_PROVIDER = dict_provider.service_provider_full_code
 
-LEFT JOIN {{ ref('dict_organisation_nhs_provider') }} as dict_org 
-    ON core.spell_care_location_site_code_of_treatment = dict_org.organisation_code 
+-- site name: site-level treatment code resolves against the full organisation
+-- dictionary (hospital sites are type 42; dict_organisation_nhs_provider is trusts
+-- only, type 41, so it left site_name null). Mirrors int_sus_uec_encounter.
+LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} as dict_site
+    ON core.spell_care_location_site_code_of_treatment = dict_site.organisation_code
 
 left join dominant_episode_information as dom_ep_info
     ON core.primarykey_id = dom_ep_info.primarykey_id

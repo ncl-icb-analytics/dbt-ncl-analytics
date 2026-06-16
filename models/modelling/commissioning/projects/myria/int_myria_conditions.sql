@@ -65,7 +65,7 @@ pds_patient_check as
     CASE -- counts distinct attendance IDs and then flags as 1 if there is at least 1 non-elective attendance at Barnet Hospital in the period
         WHEN COUNT(DISTINCT 
                     CASE 
-                        WHEN provider_site_name = 'Barnet Hospital' 
+                        WHEN provider_site_code = 'RAL26' -- Barnet Hospital
                             AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE) -- activity between 1 Jan 2025 and start of current month
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
@@ -75,7 +75,7 @@ pds_patient_check as
 
     COUNT(DISTINCT -- counts distinct attendance IDs for non-elective attendances at Barnet Hospital in the period
                     CASE 
-                        WHEN provider_site_name = 'Barnet Hospital' 
+                        WHEN provider_site_code = 'RAL26' -- Barnet Hospital
                             AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
@@ -85,7 +85,7 @@ pds_patient_check as
         WHEN COUNT(DISTINCT 
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
-                            AND provider_site_name <> 'Barnet Hospital'
+                            AND provider_site_code <> 'RAL26' -- exclude Barnet Hospital
                             AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
@@ -96,7 +96,7 @@ pds_patient_check as
     COUNT(DISTINCT -- counts distinct attendance IDs for non-elective attendances at non-Barnet Hospital sites in the period
                     CASE 
                         WHEN provider_code IN ('RAL','RAP')
-                            AND provider_site_name <> 'Barnet Hospital' 
+                            AND provider_site_code <> 'RAL26' -- exclude Barnet Hospital 
                             AND att_dx.activity_date >= '01-Jan-2025' AND att_dx.activity_date < DATE_TRUNC('month',CURRENT_DATE)
                             AND pod IN ('NEL-ZLOS','NEL-LOS+1') 
                         THEN primary_id 
