@@ -108,11 +108,14 @@ prep as (
         -- 13: Source of referral (sparse here; zero-pad national, local pass through)
         {{ nc_pad('coalesce(source_of_referral_for_community, referral_source)', 2) }}
                                                 as source_of_referral_code,
-        -- 14: Referral request received date
-        {{ parse_uk_date('coalesce(referral_date, dateof_referral, referral_received_date)') }}
+        -- 14: Referral request received date. The time column is parsed last so
+        -- a date misfiled there (e.g. '09/11/2017') is recovered; real times
+        -- yield no date and are ignored.
+        {{ parse_uk_date('coalesce(referral_date, dateof_referral, referral_received_date, referral_request_received_time)') }}
                                                 as referral_received_date,
-        -- 15: Referral request received time
-        nullif(trim(referral_request_received_time), '')
+        -- 15: Referral request received time (clock times only; misfiled dates
+        -- excluded here and recovered into the date above)
+        {{ clean_time('referral_request_received_time') }}
                                                 as referral_received_time,
         -- 16: Service or team type referred to (zero-pad national 01-56)
         {{ nc_pad('coalesce(service_or_team_type_referred_to_community_care, team_type)', 2) }}
@@ -120,11 +123,11 @@ prep as (
         -- 17: Priority type -> national code (1 Routine, 2 Urgent, 3 TWW)
         {{ nc_priority('coalesce(priority_type, priority_code)') }}
                                                 as priority_type_code,
-        -- 18: Care contact date
-        {{ parse_uk_date('coalesce(care_contact_date, contact_date)') }}
+        -- 18: Care contact date (time column parsed last to recover a misfiled date)
+        {{ parse_uk_date('coalesce(care_contact_date, contact_date, care_contact_time)') }}
                                                 as contact_date,
-        -- 19: Care contact time
-        nullif(trim(care_contact_time), '')     as contact_time,
+        -- 19: Care contact time (clock times only)
+        {{ clean_time('care_contact_time') }}   as contact_time,
         -- 20: Care contact cancellation reason (01 patient, 02 provider; map words)
         case
             when upper(trim(care_contact_cancellation_reason)) like '%PATIENT%' then '01'
@@ -212,11 +215,18 @@ select
     -- DLP standard fields (flag, commissioner, baseline month)
     dlp_flex_or_freeze, dlp_commissioner_code, dlp_baseline_financial_month,
 
-    -- Spec body (fields 6-28, in spec order)
+    -- Spec body (fields 6-28, in spec order). dv_referral_received_at /
+    -- dv_contact_at combine the spec date + time into a single timestamp.
     local_patient_id, sk_patient_id, dv_year_of_birth, partial_postcode,
     gender_code, ethnic_category_code, gp_practice_code, source_of_referral_code,
-    referral_received_date, referral_received_time, team_type_code,
-    priority_type_code, contact_date, contact_time, contact_cancellation_reason,
+    referral_received_date, referral_received_time,
+    {{ combine_date_time('referral_received_date', 'referral_received_time') }}
+                                                as dv_referral_received_at,
+    team_type_code, priority_type_code,
+    contact_date, contact_time,
+    {{ combine_date_time('contact_date', 'contact_time') }}
+                                                as dv_contact_at,
+    contact_cancellation_reason,
     consultation_type_code, consultation_mechanism_code, attendance_status_code,
     discharge_date, provider_code, service_reporting_line, service_pod,
     service_request_id,

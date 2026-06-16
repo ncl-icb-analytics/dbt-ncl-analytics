@@ -60,3 +60,11 @@ models:
           - not_null
       - name: service_request_id
         description: Service request identifier (links activity to its referral).
+      - name: referral_received_time
+        description: Referral request received time (clock time only; dates misfiled here are excluded and recovered into referral_received_date).
+      - name: dv_referral_received_at
+        description: Referral request received datetime, combining referral_received_date + referral_received_time (date at midnight where time absent).
+      - name: contact_time
+        description: Care contact time (clock time only; misfiled dates excluded and recovered into contact_date).
+      - name: dv_contact_at
+        description: Care contact datetime, combining contact_date + contact_time (date at midnight where time absent).
