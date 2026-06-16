@@ -17,12 +17,17 @@
 --
 -- Coded fields are normalised to their national code set where recognisable
 -- (gender/priority word maps, zero-padding of leading-zero-stripped numerics,
--- common consultation/cancellation phrasings); genuine provider-local codes
--- and non-national free text pass through unchanged. Validated 2026-06 against
--- the Appendix 5a NationalCodes_* sets: gender 100%, priority/team/consultation
--- ~98%, attendance 99%, ethnic 97%. Source-of-referral (~67%) and cancellation
--- reason (~58%) retain local-code / free-text residue that is not nationally
--- mappable by string rules.
+-- common consultation/cancellation phrasings, free-text ethnicity via the
+-- shared nhs_ethnicity_category_code macro proven on stg_mhcorl); genuine
+-- provider-local codes pass through unchanged. Validated 2026-06 against the
+-- Appendix 5a NationalCodes_* sets: gender/ethnic 100%, priority/team/
+-- consultation ~98%, attendance 99%. Source-of-referral (~67%) and cancellation
+-- reason (~58%) retain local-code / free-text residue not nationally mappable.
+--
+-- Financial period (dv_financial_year/month) uses the provider-stated value,
+-- falling back to the contact date when absent (the SLAM #806 lesson): lifts
+-- coverage ~56% -> ~93%. dv_financial_period_source records which was used.
+-- GP practice is cleaned to a valid 6-char ODS code (1 letter + 5 digits).
 --
 -- Column choice is fill-driven: the spec-named columns are frequently sparse
 -- in this superset, so each field coalesces the spec column with the
@@ -60,13 +65,15 @@ with src as (
         dlp_financial_year                      as dlp_financial_year,
         dlp_baseline_financial_month            as dlp_baseline_financial_month,
 
-        -- Cleaned reporting period (coalesce DLP with plain financial cols)
+        -- Provider-stated reporting period (coalesce DLP with plain financial
+        -- cols). Only ~56% of rows carry one; the activity-date fallback below
+        -- recovers the rest.
         {{ parse_slam_financial_month('coalesce(dlp_financial_month, financial_month)') }}
-                                                as dv_financial_month,
+                                                as dv_financial_month_stated,
         case
             when trim(coalesce(dlp_financial_year, financial_year)) rlike '^20[0-9]{2}$'
                 then cast(coalesce(dlp_financial_year, financial_year) as int)
-        end                                     as dv_financial_year,
+        end                                     as dv_financial_year_stated,
 
         -- 6: Local patient identifier (spec col is empty; siblings carry it)
         coalesce(
@@ -83,13 +90,16 @@ with src as (
         -- 10: Gender -> national code (GENDER carries it; maps M/F/words)
         {{ nc_gender('coalesce(person_stated_gender_code, gender)') }}
                                                 as gender_code,
-        -- 11: Ethnic category (national letter/99 codes; passthrough trimmed)
-        nullif(trim(ethnic_category), '')       as ethnic_category_code,
-        -- 12: Registered GP practice
-        coalesce(
-            general_medical_practice_code_patient_registration,
-            gp_practice_code
-        )                                       as gp_practice_code,
+        -- 11: Ethnic category -> NHS national code (maps free-text variants)
+        {{ nhs_ethnicity_category_code('coalesce(ethnic_category, patient_ethnicity_code, ethnicity)') }}
+                                                as ethnic_category_code,
+        -- 12: Registered GP practice (ODS 6-char: 1 letter + 5 digits; strip
+        -- branch suffix, drop garbage / '999')
+        case
+            when coalesce(general_medical_practice_code_patient_registration, gp_practice_code)
+                rlike '^[A-Za-z][0-9]{5}'
+            then upper(left(coalesce(general_medical_practice_code_patient_registration, gp_practice_code), 6))
+        end                                     as gp_practice_code,
 
         -- 13: Source of referral (sparse here; zero-pad national, local pass through)
         {{ nc_pad('coalesce(source_of_referral_for_community, referral_source)', 2) }}
@@ -154,4 +164,25 @@ with src as (
     from {{ source('sdl_wnl', 'COMOPL') }}
 )
 
-select * from src
+-- Financial period: stated value, else derived from the contact date (gated to
+-- a plausible range so junk dates cannot create phantom periods). Lifts
+-- coverage from ~56% to the contact-date fill (~92%); the source is recorded.
+select
+    * exclude (dv_financial_month_stated, dv_financial_year_stated),
+    coalesce(
+        dv_financial_month_stated,
+        case when contact_date between '2015-04-01' and current_date()
+             then {{ fin_month_from_date('contact_date') }} end
+    )                                           as dv_financial_month,
+    coalesce(
+        dv_financial_year_stated,
+        case when contact_date between '2015-04-01' and current_date()
+             then {{ fin_year_start_from_date('contact_date') }} end
+    )                                           as dv_financial_year,
+    case
+        when dv_financial_month_stated is not null and dv_financial_year_stated is not null
+            then 'stated'
+        when contact_date between '2015-04-01' and current_date()
+            then 'derived_from_contact_date'
+    end                                         as dv_financial_period_source
+from src
