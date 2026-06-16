@@ -62,6 +62,12 @@ models:
         description: Gender code (coalesced; GENDER carries the data on this feed).
       - name: gp_practice_code
         description: Registered GP practice ODS code (coalesced siblings; GP_PRACTICE_CODE is the best-populated, lifting fill ~7% -> 66%).
+      - name: source_of_referral_description
+        description: Source-of-referral text label (full Current spec field 17; ~68% populated, aids the code).
+      - name: team_type_description
+        description: Team referred-to text label (full Current spec; makes the mostly-local team_type_code usable; ~27% populated).
+      - name: primary_referral_reason_description
+        description: Referral reason text label (full Current spec; aids the code; ~33% populated).
       - name: referral_received_date
         description: Referral request received date (parsed). ~98% populated.
       - name: provider_code

@@ -169,6 +169,17 @@ prep as (
         coalesce(service_request_identifier, service_request_id)
                                                 as service_request_id,
 
+        -- Additional well-populated fields from the full (Current) SLAM spec,
+        -- trimmed from the proposed 28 but useful and reasonably filled.
+        coalesce(site_code_of_treatment, site_code)
+                                                as site_of_treatment_code,
+        community_care_contact_identifier       as community_care_contact_identifier,
+        try_to_number(coalesce(
+            clinical_contact_duration_of_care_contact,
+            clinical_contact_duration_of_care_activity,
+            duration_of_contact
+        ))                                      as contact_duration_minutes,
+
         -- Reporting month parsed from the submission file name (last-resort
         -- period source when neither stated nor contact date is available)
         {{ period_from_file_name('registry.original_file_name') }}
@@ -235,6 +246,10 @@ select
     consultation_type_code, consultation_mechanism_code, attendance_status_code,
     discharge_date, provider_code, service_reporting_line, service_pod,
     service_request_id,
+
+    -- Additional useful fields (full Current spec)
+    site_of_treatment_code, community_care_contact_identifier,
+    contact_duration_minutes,
 
     -- Raw period (traceability)
     financial_year_raw, financial_month_raw

@@ -117,6 +117,9 @@ prep as (
         -- 14: Source of referral (coalesce siblings; zero-pad national, local pass through)
         {{ nc_pad('coalesce(referral_source_code, source_of_referral, source_of_referral_code, referral_source)', 2) }}
                                                 as source_of_referral_code,
+        -- Source-of-referral description (text label; ~68% filled, aids the codes)
+        nullif(trim(referral_source_description), '')
+                                                as source_of_referral_description,
         -- 15: Referral request received date
         {{ parse_uk_date('referral_request_received_date') }}
                                                 as referral_received_date,
@@ -124,12 +127,18 @@ prep as (
         -- this feed; zero-pad the national-coded minority, local pass through)
         {{ nc_pad('coalesce(service_type_requested_code, team_referred_to_code)', 2) }}
                                                 as team_type_code,
+        -- Team description (text label; makes the mostly-local team codes usable)
+        nullif(trim(coalesce(team_referred_to_desc, team_referred_to_description)), '')
+                                                as team_type_description,
         -- 17: Priority type -> national code (1 Routine, 2 Urgent, 3 TWW)
         {{ nc_priority('coalesce(priority_type_code, referral_priority)') }}
                                                 as priority_type_code,
         -- 18: Primary reason for referral (zero-pad national 001-090; local pass through)
         {{ nc_pad('coalesce(reason_for_referral_code, referral_reason_code, primary_referral_reason)', 3) }}
                                                 as primary_referral_reason_code,
+        -- Referral reason description (text label; aids the codes)
+        nullif(trim(coalesce(referral_reason_description, referralreasondescription)), '')
+                                                as primary_referral_reason_description,
         -- 19: Service reporting line
         service_reporting_line                  as service_reporting_line,
         -- 20: Provider (cleaned ODS code)
@@ -191,9 +200,10 @@ select
     -- Spec body (fields 6-20, in spec order)
     service_request_id, local_patient_id, sk_patient_id, dv_year_of_birth,
     partial_postcode, lsoa, gender_code, ethnic_category_code, gp_practice_code,
-    site_of_treatment_code, source_of_referral_code, referral_received_date,
-    team_type_code, priority_type_code, primary_referral_reason_code,
-    service_reporting_line, provider_code,
+    site_of_treatment_code, source_of_referral_code, source_of_referral_description,
+    referral_received_date, team_type_code, team_type_description,
+    priority_type_code, primary_referral_reason_code,
+    primary_referral_reason_description, service_reporting_line, provider_code,
 
     -- Raw period (traceability)
     financial_year_raw, financial_month_raw

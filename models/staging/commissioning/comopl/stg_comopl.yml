@@ -62,6 +62,12 @@ models:
           - not_null
       - name: service_request_id
         description: Service request identifier (links activity to its referral).
+      - name: site_of_treatment_code
+        description: Site code of treatment (full Current spec field 42; ~42% populated).
+      - name: community_care_contact_identifier
+        description: Community care contact identifier (full Current spec field 33; ~35% populated).
+      - name: contact_duration_minutes
+        description: Clinical contact duration in minutes (full Current spec; numeric, ~30% populated).
       - name: referral_received_time
         description: Referral request received time (clock time only; dates misfiled here are excluded and recovered into referral_received_date).
       - name: dv_referral_received_at
