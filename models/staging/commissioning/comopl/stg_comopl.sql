@@ -70,10 +70,8 @@ with prep as (
         -- cols). Activity-date fallback applied in the final select.
         {{ parse_slam_financial_month('coalesce(dlp_financial_month, financial_month)') }}
                                                 as dv_financial_month_stated,
-        case
-            when trim(coalesce(dlp_financial_year, financial_year)) rlike '^20[0-9]{2}$'
-                then cast(coalesce(dlp_financial_year, financial_year) as int)
-        end                                     as dv_financial_year_stated,
+        {{ fin_year_from_start_year('coalesce(dlp_financial_year, financial_year)') }}
+                                                as dv_financial_year_stated,
 
         -- 6: Local patient identifier (spec col is empty; siblings carry it)
         coalesce(
@@ -177,7 +175,7 @@ select
     coalesce(
         dv_financial_year_stated,
         case when contact_date between '2015-04-01' and current_date()
-             then {{ fin_year_start_from_date('contact_date') }} end
+             then {{ fin_year_from_date('contact_date') }} end
     )                                           as dv_financial_year,
     coalesce(
         dv_financial_month_stated,

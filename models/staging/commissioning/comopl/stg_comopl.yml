@@ -25,7 +25,7 @@ models:
       - name: meta_partition_date
         description: DSCRO monthly partition the file was loaded under.
       - name: dv_financial_year
-        description: Financial year as a 4-digit start year (e.g. 2019 = FY2019/20); stated value or derived from contact date.
+        description: Financial year as 'YYYYYY' (e.g. 202526 = FY2025/26), matching the SLAM feeds; stated value or derived from contact date.
       - name: dv_financial_month
         description: Financial month 1 (April) - 12 (March); stated value or derived from contact date.
         data_tests:
