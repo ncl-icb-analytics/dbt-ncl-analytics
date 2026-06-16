@@ -42,7 +42,7 @@
 --
 -- Financial year here is a bare 4-digit year (e.g. 2019 = FY2019/20).
 
-with src as (
+with prep as (
     select
         -- META keys (from SDL pipeline, fully reliable)
         meta_sk_row_id::number(38,0)            as meta_sk_row_id,
@@ -54,8 +54,9 @@ with src as (
         meta_recipient_code                     as meta_recipient_code,
         meta_version_id                         as meta_version_id,
 
-        -- 1-5: DLP standard fields (raw passthrough; ~44% of rows carry them)
-        dlp_flexor_freeze                       as dlp_flex_or_freeze,
+        -- 1-5: DLP standard fields (~44% of rows carry them)
+        {{ clean_flex_or_freeze('dlp_flexor_freeze') }}
+                                                as dlp_flex_or_freeze,
         dlp_commissioner_code                   as dlp_commissioner_code,
         dlp_financial_month                     as dlp_financial_month,
         dlp_financial_year                      as dlp_financial_year,
@@ -133,25 +134,44 @@ with src as (
     from {{ source('sdl_wnl', 'REF') }}
 )
 
--- Financial period: stated value, else derived from the referral received date
--- (gated to a plausible range). Lifts coverage from ~44% to the referral-date
--- fill (~95%); the source is recorded.
+-- Final projection. Derived reporting period sits up front (after the meta
+-- keys); financial period is the stated value, else derived from the referral
+-- received date (gated to a plausible range), with dv_financial_period_source
+-- recording which was used.
 select
-    * exclude (dv_financial_month_stated, dv_financial_year_stated),
-    coalesce(
-        dv_financial_month_stated,
-        case when referral_received_date between '2015-04-01' and current_date()
-             then {{ fin_month_from_date('referral_received_date') }} end
-    )                                           as dv_financial_month,
+    -- META keys
+    meta_sk_row_id, meta_file_id, meta_row_id, meta_batch_id,
+    meta_partition_date, meta_provider_code, meta_recipient_code, meta_version_id,
+
+    -- Reporting period (derived)
     coalesce(
         dv_financial_year_stated,
         case when referral_received_date between '2015-04-01' and current_date()
              then {{ fin_year_start_from_date('referral_received_date') }} end
     )                                           as dv_financial_year,
+    coalesce(
+        dv_financial_month_stated,
+        case when referral_received_date between '2015-04-01' and current_date()
+             then {{ fin_month_from_date('referral_received_date') }} end
+    )                                           as dv_financial_month,
     case
         when dv_financial_month_stated is not null and dv_financial_year_stated is not null
             then 'stated'
         when referral_received_date between '2015-04-01' and current_date()
             then 'derived_from_referral_date'
-    end                                         as dv_financial_period_source
-from src
+    end                                         as dv_financial_period_source,
+
+    -- DLP standard fields (1-5)
+    dlp_flex_or_freeze, dlp_commissioner_code, dlp_financial_month,
+    dlp_financial_year, dlp_baseline_financial_month,
+
+    -- Spec body (fields 6-20, in spec order)
+    service_request_id, local_patient_id, sk_patient_id, dv_year_of_birth,
+    partial_postcode, gender_code, ethnic_category_code, gp_practice_code,
+    source_of_referral_code, referral_received_date, team_type_code,
+    priority_type_code, primary_referral_reason_code, service_reporting_line,
+    provider_code,
+
+    -- Raw period (traceability)
+    financial_year_raw, financial_month_raw
+from prep

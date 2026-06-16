@@ -46,7 +46,7 @@
 -- Financial year here is a bare 4-digit year (e.g. 2019 = FY2019/20), unlike
 -- the SLAM feeds' YYYYYY — so dv_financial_year is the validated 4-digit year.
 
-with src as (
+with prep as (
     select
         -- META keys (from SDL pipeline, fully reliable)
         meta_sk_row_id::number(38,0)            as meta_sk_row_id,
@@ -58,16 +58,16 @@ with src as (
         meta_recipient_code                     as meta_recipient_code,
         meta_version_id                         as meta_version_id,
 
-        -- 1-5: DLP standard fields (raw passthrough; only ~56% of rows carry them)
-        dlp_flexor_freeze                       as dlp_flex_or_freeze,
+        -- 1-5: DLP standard fields (only ~56% of rows carry them)
+        {{ clean_flex_or_freeze('dlp_flexor_freeze') }}
+                                                as dlp_flex_or_freeze,
         dlp_commissioner_code                   as dlp_commissioner_code,
         dlp_financial_month                     as dlp_financial_month,
         dlp_financial_year                      as dlp_financial_year,
         dlp_baseline_financial_month            as dlp_baseline_financial_month,
 
         -- Provider-stated reporting period (coalesce DLP with plain financial
-        -- cols). Only ~56% of rows carry one; the activity-date fallback below
-        -- recovers the rest.
+        -- cols). Activity-date fallback applied in the final select.
         {{ parse_slam_financial_month('coalesce(dlp_financial_month, financial_month)') }}
                                                 as dv_financial_month_stated,
         case
@@ -164,25 +164,46 @@ with src as (
     from {{ source('sdl_wnl', 'COMOPL') }}
 )
 
--- Financial period: stated value, else derived from the contact date (gated to
--- a plausible range so junk dates cannot create phantom periods). Lifts
--- coverage from ~56% to the contact-date fill (~92%); the source is recorded.
+-- Final projection. Derived reporting period sits up front (after the meta
+-- keys); financial period is the stated value, else derived from the contact
+-- date (gated to a plausible range so junk dates cannot create phantom
+-- periods), with dv_financial_period_source recording which was used.
 select
-    * exclude (dv_financial_month_stated, dv_financial_year_stated),
-    coalesce(
-        dv_financial_month_stated,
-        case when contact_date between '2015-04-01' and current_date()
-             then {{ fin_month_from_date('contact_date') }} end
-    )                                           as dv_financial_month,
+    -- META keys
+    meta_sk_row_id, meta_file_id, meta_row_id, meta_batch_id,
+    meta_partition_date, meta_provider_code, meta_recipient_code, meta_version_id,
+
+    -- Reporting period (derived)
     coalesce(
         dv_financial_year_stated,
         case when contact_date between '2015-04-01' and current_date()
              then {{ fin_year_start_from_date('contact_date') }} end
     )                                           as dv_financial_year,
+    coalesce(
+        dv_financial_month_stated,
+        case when contact_date between '2015-04-01' and current_date()
+             then {{ fin_month_from_date('contact_date') }} end
+    )                                           as dv_financial_month,
     case
         when dv_financial_month_stated is not null and dv_financial_year_stated is not null
             then 'stated'
         when contact_date between '2015-04-01' and current_date()
             then 'derived_from_contact_date'
-    end                                         as dv_financial_period_source
-from src
+    end                                         as dv_financial_period_source,
+
+    -- DLP standard fields (1-5)
+    dlp_flex_or_freeze, dlp_commissioner_code, dlp_financial_month,
+    dlp_financial_year, dlp_baseline_financial_month,
+
+    -- Spec body (fields 6-28, in spec order)
+    local_patient_id, sk_patient_id, dv_year_of_birth, partial_postcode,
+    gender_code, ethnic_category_code, gp_practice_code, source_of_referral_code,
+    referral_received_date, referral_received_time, team_type_code,
+    priority_type_code, contact_date, contact_time, contact_cancellation_reason,
+    consultation_type_code, consultation_mechanism_code, attendance_status_code,
+    discharge_date, provider_code, service_reporting_line, service_pod,
+    service_request_id,
+
+    -- Raw period (traceability)
+    financial_year_raw, financial_month_raw
+from prep

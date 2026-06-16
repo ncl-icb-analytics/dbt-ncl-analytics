@@ -161,7 +161,14 @@ models:
         description: Coalesced from team_code / lps_team_code.
 
       - name: flex_or_freeze
-        description: Coalesced from flex_or_freeze / dlp_flexor_freeze.
+        description: |
+          DLP submission flag, coalesced from flex_or_freeze / dlp_flexor_freeze
+          and standardised to 'Flex' or 'Freeze' (case variants, 'Frozen' and the
+          DLP PRIMARY/REFRESH terms folded in; '1'/'0' and other values -> NULL).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Flex', 'Freeze']
       - name: finance_category
       - name: costing_code_description
 

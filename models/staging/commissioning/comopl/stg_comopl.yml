@@ -40,6 +40,12 @@ models:
           - accepted_values:
               arguments:
                 values: ['stated', 'derived_from_contact_date']
+      - name: dlp_flex_or_freeze
+        description: DLP submission flag standardised to 'Flex' or 'Freeze' (other values -> NULL).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Flex', 'Freeze']
       - name: local_patient_id
         description: Local patient identifier, coalesced across provider sibling columns.
       - name: sk_patient_id
