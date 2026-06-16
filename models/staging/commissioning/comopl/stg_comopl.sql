@@ -91,8 +91,8 @@ prep as (
         try_to_number(dv_yearof_birth)          as dv_year_of_birth,
         dv_partial_post_code                    as partial_postcode,
 
-        -- 10: Gender -> national code (GENDER carries it; maps M/F/words)
-        {{ nc_gender('coalesce(person_stated_gender_code, gender)') }}
+        -- 10: Gender -> national code (coalesce provider-variant siblings)
+        {{ nc_gender('coalesce(person_stated_gender_code, gender, person_gender_code_current)') }}
                                                 as gender_code,
         -- 11: Ethnic category -> NHS national code (maps free-text variants)
         {{ nhs_ethnicity_category_code('coalesce(ethnic_category, patient_ethnicity_code, ethnicity)') }}
@@ -100,13 +100,15 @@ prep as (
         -- 12: Registered GP practice (ODS 6-char: 1 letter + 5 digits; strip
         -- branch suffix, drop garbage / '999')
         case
-            when coalesce(general_medical_practice_code_patient_registration, gp_practice_code)
+            when coalesce(general_medical_practice_code_patient_registration, gp_practice_code, org_id_gp)
                 rlike '^[A-Za-z][0-9]{5}'
-            then upper(left(coalesce(general_medical_practice_code_patient_registration, gp_practice_code), 6))
+            then upper(left(coalesce(general_medical_practice_code_patient_registration, gp_practice_code, org_id_gp), 6))
         end                                     as gp_practice_code,
+        -- LSOA (derived geography; not a PLD spec field but high-value, ~89% filled)
+        nullif(trim(dv_lsoa), '')               as lsoa,
 
-        -- 13: Source of referral (sparse here; zero-pad national, local pass through)
-        {{ nc_pad('coalesce(source_of_referral_for_community, referral_source)', 2) }}
+        -- 13: Source of referral (coalesce siblings; zero-pad national, local pass through)
+        {{ nc_pad('coalesce(source_of_referral_for_community, sourceof_referral, referral_source)', 2) }}
                                                 as source_of_referral_code,
         -- 14: Referral request received date. The time column is parsed last so
         -- a date misfiled there (e.g. '09/11/2017') is recovered; real times
@@ -118,7 +120,7 @@ prep as (
         {{ clean_time('referral_request_received_time') }}
                                                 as referral_received_time,
         -- 16: Service or team type referred to (zero-pad national 01-56)
-        {{ nc_pad('coalesce(service_or_team_type_referred_to_community_care, team_type)', 2) }}
+        {{ nc_pad('coalesce(service_or_team_type_referred_to_community_care, team_type, service_type_referred_to)', 2) }}
                                                 as team_type_code,
         -- 17: Priority type -> national code (1 Routine, 2 Urgent, 3 TWW)
         {{ nc_priority('coalesce(priority_type, priority_code)') }}
@@ -126,8 +128,9 @@ prep as (
         -- 18: Care contact date (time column parsed last to recover a misfiled date)
         {{ parse_uk_date('coalesce(care_contact_date, contact_date, care_contact_time)') }}
                                                 as contact_date,
-        -- 19: Care contact time (clock times only)
-        {{ clean_time('care_contact_time') }}   as contact_time,
+        -- 19: Care contact time (clock times only; coalesce siblings)
+        {{ clean_time('coalesce(care_contact_time, contact_time)') }}
+                                                as contact_time,
         -- 20: Care contact cancellation reason (01 patient, 02 provider; map words)
         case
             when upper(trim(care_contact_cancellation_reason)) like '%PATIENT%' then '01'
@@ -142,11 +145,11 @@ prep as (
             when upper(trim(consultation_type)) like 'FOLLOW%'                   then '02'
             else {{ nc_pad('consultation_type', 2) }}
         end                                     as consultation_type_code,
-        -- 22: Consultation mechanism (zero-pad national 01-98; map common words)
+        -- 22: Consultation mechanism (coalesce siblings; zero-pad national, map words)
         case
-            when upper(trim(consultation_medium_used)) like 'FACE TO FACE%'      then '01'
-            when upper(trim(consultation_medium_used)) like 'TELEPHONE%'         then '02'
-            else {{ nc_pad('consultation_medium_used', 2) }}
+            when upper(trim(coalesce(consultation_medium_used, cons_mechanism))) like 'FACE TO FACE%' then '01'
+            when upper(trim(coalesce(consultation_medium_used, cons_mechanism))) like 'TELEPHONE%'    then '02'
+            else {{ nc_pad('coalesce(consultation_medium_used, cons_mechanism)', 2) }}
         end                                     as consultation_mechanism_code,
         -- 23: Attendance status (national single-digit 2-7; passthrough trimmed)
         nullif(trim(attendance_status), '')     as attendance_status_code,
@@ -157,12 +160,14 @@ prep as (
         -- 25: Provider (cleaned ODS code; provider col sparse, fall back to meta)
         {{ clean_organisation_id('upper(trim(coalesce(organisation_identifier_code_of_provider, provider_code, meta_provider_code)))') }}
                                                 as provider_code,
-        -- 26: Service reporting line
-        service_reporting_line                  as service_reporting_line,
+        -- 26: Service reporting line (coalesce siblings)
+        nullif(trim(coalesce(service_reporting_line, service_report_line)), '')
+                                                as service_reporting_line,
         -- 27: Service POD
         service_pod                             as service_pod,
-        -- 28: Service request identifier
-        service_request_identifier              as service_request_id,
+        -- 28: Service request identifier (coalesce siblings)
+        coalesce(service_request_identifier, service_request_id)
+                                                as service_request_id,
 
         -- Reporting month parsed from the submission file name (last-resort
         -- period source when neither stated nor contact date is available)
@@ -217,7 +222,7 @@ select
 
     -- Spec body (fields 6-28, in spec order). dv_referral_received_at /
     -- dv_contact_at combine the spec date + time into a single timestamp.
-    local_patient_id, sk_patient_id, dv_year_of_birth, partial_postcode,
+    local_patient_id, sk_patient_id, dv_year_of_birth, partial_postcode, lsoa,
     gender_code, ethnic_category_code, gp_practice_code, source_of_referral_code,
     referral_received_date, referral_received_time,
     {{ combine_date_time('referral_received_date', 'referral_received_time') }}

@@ -52,8 +52,10 @@ models:
         description: Pseudonymised NHS-number-derived key (SK_PATIENT_ID_NHS_NUMBER). ~98% populated.
       - name: dv_year_of_birth
         description: Year of birth (pseudonymised in lieu of full DOB).
+      - name: lsoa
+        description: LSOA of residence (derived; not a PLD spec field but high-value geography, ~89% populated).
       - name: gender_code
-        description: Gender code (coalesced; GENDER carries the data on this feed).
+        description: Gender code (coalesced across provider-variant siblings; ~98% populated, 100% national-code conformant).
       - name: provider_code
         description: Provider ODS code, dictionary-cleaned, falling back to META_PROVIDER_CODE.
         data_tests:

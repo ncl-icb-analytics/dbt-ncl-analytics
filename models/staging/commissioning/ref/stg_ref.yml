@@ -54,8 +54,14 @@ models:
         description: Pseudonymised NHS-number-derived key (best-populated SK variant). ~82% populated.
       - name: dv_year_of_birth
         description: Year of birth (pseudonymised in lieu of full DOB).
+      - name: lsoa
+        description: LSOA of residence (derived; not a PLD spec field but high-value geography, ~74% populated).
+      - name: site_of_treatment_code
+        description: Site code of treatment (not a PLD spec field but useful location, ~67% populated).
       - name: gender_code
         description: Gender code (coalesced; GENDER carries the data on this feed).
+      - name: gp_practice_code
+        description: Registered GP practice ODS code (coalesced siblings; GP_PRACTICE_CODE is the best-populated, lifting fill ~7% -> 66%).
       - name: referral_received_date
         description: Referral request received date (parsed). ~98% populated.
       - name: provider_code

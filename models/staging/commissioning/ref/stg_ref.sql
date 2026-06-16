@@ -96,6 +96,8 @@ prep as (
         )                                       as sk_patient_id,
         try_to_number(dv_yearof_birth)          as dv_year_of_birth,
         dv_partial_post_code                    as partial_postcode,
+        -- LSOA (derived geography; not a PLD spec field but high-value, ~74% filled)
+        nullif(trim(dv_lsoa), '')               as lsoa,
 
         -- 11: Gender -> national code (GENDER carries it; maps M/F/words)
         {{ nc_gender('coalesce(person_stated_gender_code, gender)') }}
@@ -103,14 +105,17 @@ prep as (
         -- 12: Ethnic category -> NHS national code (maps free-text variants)
         {{ nhs_ethnicity_category_code('coalesce(ethnic_category, ethnicity)') }}
                                                 as ethnic_category_code,
-        -- 13: Registered GP practice (ODS 6-char: 1 letter + 5 digits)
+        -- 13: Registered GP practice (ODS 6-char; coalesce siblings - GP_PRACTICE_CODE
+        -- is the best-populated here)
         case
-            when coalesce(general_medical_practice_code_patient_registration, general_practice_patient_registration)
+            when coalesce(general_medical_practice_code_patient_registration, general_practice_patient_registration, gp_practice_code)
                 rlike '^[A-Za-z][0-9]{5}'
-            then upper(left(coalesce(general_medical_practice_code_patient_registration, general_practice_patient_registration), 6))
+            then upper(left(coalesce(general_medical_practice_code_patient_registration, general_practice_patient_registration, gp_practice_code), 6))
         end                                     as gp_practice_code,
-        -- 14: Source of referral (zero-pad national 01-99; local codes pass through)
-        {{ nc_pad('coalesce(referral_source_code, source_of_referral, source_of_referral_code)', 2) }}
+        -- Site of treatment (not a PLD spec field but useful location, ~67% filled)
+        nullif(trim(site_code), '')             as site_of_treatment_code,
+        -- 14: Source of referral (coalesce siblings; zero-pad national, local pass through)
+        {{ nc_pad('coalesce(referral_source_code, source_of_referral, source_of_referral_code, referral_source)', 2) }}
                                                 as source_of_referral_code,
         -- 15: Referral request received date
         {{ parse_uk_date('referral_request_received_date') }}
@@ -185,10 +190,10 @@ select
 
     -- Spec body (fields 6-20, in spec order)
     service_request_id, local_patient_id, sk_patient_id, dv_year_of_birth,
-    partial_postcode, gender_code, ethnic_category_code, gp_practice_code,
-    source_of_referral_code, referral_received_date, team_type_code,
-    priority_type_code, primary_referral_reason_code, service_reporting_line,
-    provider_code,
+    partial_postcode, lsoa, gender_code, ethnic_category_code, gp_practice_code,
+    site_of_treatment_code, source_of_referral_code, referral_received_date,
+    team_type_code, priority_type_code, primary_referral_reason_code,
+    service_reporting_line, provider_code,
 
     -- Raw period (traceability)
     financial_year_raw, financial_month_raw
