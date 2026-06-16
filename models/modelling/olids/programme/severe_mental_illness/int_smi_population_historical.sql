@@ -93,6 +93,7 @@ SELECT
     -- Practice
     ,pmab.borough_registered as practice_borough
     ,COALESCE(pmab.neighbourhood_resident,'Unknown') as residential_neighbourhood
+    ,pmab.pcn_name as primary_care_network
     ,pmab.practice_name
     ,pmab.practice_code
     ,CASE
