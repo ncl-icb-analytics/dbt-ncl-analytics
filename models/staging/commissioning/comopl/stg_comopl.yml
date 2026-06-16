@@ -12,6 +12,10 @@ models:
       Patient identifiers are pseudonymised (NHS Number = SK key, DOB = year,
       Postcode = partial) — an accepted deviation. A downstream view can rename
       to the exact spec field names and restrict columns.
+
+      Full submission history — these DLP feeds restate cumulatively, so summing
+      this table double-counts (~4.7x). Report from stg_comopl_latest for the
+      current provider statement per (provider, FY, month).
     config:
       meta:
         owner:
