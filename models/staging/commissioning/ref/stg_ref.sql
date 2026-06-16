@@ -14,6 +14,15 @@
 -- source. Output columns follow the spec order; a downstream view can rename
 -- to the exact spec field names and restrict as needed.
 --
+-- Coded fields are normalised to their national code set where recognisable
+-- (gender/priority word maps, zero-padding of leading-zero-stripped numerics);
+-- genuine provider-local codes and free text pass through unchanged. Validated
+-- 2026-06 against the Appendix 5b NationalCodes_* sets: gender 100%, priority
+-- 99.6%, source-of-referral / reason ~67-69%. team_type is ~8% conformant
+-- because most providers submit local team codes here (e.g. HOUCID12, 239496),
+-- not the national set; ethnic ~68% (some providers send free text e.g.
+-- 'British'). These residues need a provider-local lookup, not string rules.
+--
 -- Column choice is fill-driven (rates profiled 2026-06). Notable cases:
 --   * NHS Number (pseudo): SK_PATIENT_ID_NHS_NUMBER (82%), not the spec-aligned
 --     SK_PATIENT_ID_NHSNUMBER (7%)
@@ -77,30 +86,32 @@ with src as (
         try_to_number(dv_yearof_birth)          as dv_year_of_birth,
         dv_partial_post_code                    as partial_postcode,
 
-        -- 11: Gender (GENDER carries it)
-        coalesce(person_stated_gender_code, gender)
+        -- 11: Gender -> national code (GENDER carries it; maps M/F/words)
+        {{ nc_gender('coalesce(person_stated_gender_code, gender)') }}
                                                 as gender_code,
-        -- 12: Ethnic category
-        coalesce(ethnic_category, ethnicity)    as ethnic_category_code,
+        -- 12: Ethnic category (national letter/99 codes; passthrough trimmed)
+        nullif(trim(coalesce(ethnic_category, ethnicity)), '')
+                                                as ethnic_category_code,
         -- 13: Registered GP practice
         coalesce(
             general_medical_practice_code_patient_registration,
             general_practice_patient_registration
         )                                       as gp_practice_code,
-        -- 14: Source of referral
-        coalesce(referral_source_code, source_of_referral, source_of_referral_code)
+        -- 14: Source of referral (zero-pad national 01-99; local codes pass through)
+        {{ nc_pad('coalesce(referral_source_code, source_of_referral, source_of_referral_code)', 2) }}
                                                 as source_of_referral_code,
         -- 15: Referral request received date
         {{ parse_uk_date('referral_request_received_date') }}
                                                 as referral_received_date,
-        -- 16: Service or team type referred to
-        coalesce(service_type_requested_code, team_referred_to_code)
+        -- 16: Service or team type referred to (mostly provider-local codes on
+        -- this feed; zero-pad the national-coded minority, local pass through)
+        {{ nc_pad('coalesce(service_type_requested_code, team_referred_to_code)', 2) }}
                                                 as team_type_code,
-        -- 17: Priority type
-        coalesce(priority_type_code, referral_priority)
+        -- 17: Priority type -> national code (1 Routine, 2 Urgent, 3 TWW)
+        {{ nc_priority('coalesce(priority_type_code, referral_priority)') }}
                                                 as priority_type_code,
-        -- 18: Primary reason for referral
-        coalesce(reason_for_referral_code, referral_reason_code, primary_referral_reason)
+        -- 18: Primary reason for referral (zero-pad national 001-090; local pass through)
+        {{ nc_pad('coalesce(reason_for_referral_code, referral_reason_code, primary_referral_reason)', 3) }}
                                                 as primary_referral_reason_code,
         -- 19: Service reporting line
         service_reporting_line                  as service_reporting_line,

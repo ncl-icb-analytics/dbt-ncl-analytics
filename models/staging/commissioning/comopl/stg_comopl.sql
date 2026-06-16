@@ -15,6 +15,15 @@
 -- source. Output columns follow the spec order; a downstream view can rename
 -- to the exact spec field names and restrict as needed.
 --
+-- Coded fields are normalised to their national code set where recognisable
+-- (gender/priority word maps, zero-padding of leading-zero-stripped numerics,
+-- common consultation/cancellation phrasings); genuine provider-local codes
+-- and non-national free text pass through unchanged. Validated 2026-06 against
+-- the Appendix 5a NationalCodes_* sets: gender 100%, priority/team/consultation
+-- ~98%, attendance 99%, ethnic 97%. Source-of-referral (~67%) and cancellation
+-- reason (~58%) retain local-code / free-text residue that is not nationally
+-- mappable by string rules.
+--
 -- Column choice is fill-driven: the spec-named columns are frequently sparse
 -- in this superset, so each field coalesces the spec column with the
 -- best-populated provider sibling (fill rates profiled 2026-06). Notable cases:
@@ -71,19 +80,19 @@ with src as (
         try_to_number(dv_yearof_birth)          as dv_year_of_birth,
         dv_partial_post_code                    as partial_postcode,
 
-        -- 10: Gender (GENDER carries it, not PERSON_STATED_GENDER_CODE)
-        coalesce(person_stated_gender_code, gender)
+        -- 10: Gender -> national code (GENDER carries it; maps M/F/words)
+        {{ nc_gender('coalesce(person_stated_gender_code, gender)') }}
                                                 as gender_code,
-        -- 11: Ethnic category
-        ethnic_category                         as ethnic_category_code,
+        -- 11: Ethnic category (national letter/99 codes; passthrough trimmed)
+        nullif(trim(ethnic_category), '')       as ethnic_category_code,
         -- 12: Registered GP practice
         coalesce(
             general_medical_practice_code_patient_registration,
             gp_practice_code
         )                                       as gp_practice_code,
 
-        -- 13: Source of referral (genuinely sparse on this contact-level feed)
-        coalesce(source_of_referral_for_community, referral_source)
+        -- 13: Source of referral (sparse here; zero-pad national, local pass through)
+        {{ nc_pad('coalesce(source_of_referral_for_community, referral_source)', 2) }}
                                                 as source_of_referral_code,
         -- 14: Referral request received date
         {{ parse_uk_date('coalesce(referral_date, dateof_referral, referral_received_date)') }}
@@ -91,24 +100,39 @@ with src as (
         -- 15: Referral request received time
         nullif(trim(referral_request_received_time), '')
                                                 as referral_received_time,
-        -- 16: Service or team type referred to
-        coalesce(service_or_team_type_referred_to_community_care, team_type)
+        -- 16: Service or team type referred to (zero-pad national 01-56)
+        {{ nc_pad('coalesce(service_or_team_type_referred_to_community_care, team_type)', 2) }}
                                                 as team_type_code,
-        -- 17: Priority type
-        coalesce(priority_type, priority_code)  as priority_type_code,
+        -- 17: Priority type -> national code (1 Routine, 2 Urgent, 3 TWW)
+        {{ nc_priority('coalesce(priority_type, priority_code)') }}
+                                                as priority_type_code,
         -- 18: Care contact date
         {{ parse_uk_date('coalesce(care_contact_date, contact_date)') }}
                                                 as contact_date,
         -- 19: Care contact time
         nullif(trim(care_contact_time), '')     as contact_time,
-        -- 20: Care contact cancellation reason
-        care_contact_cancellation_reason        as contact_cancellation_reason,
-        -- 21: Consultation type
-        consultation_type                       as consultation_type_code,
-        -- 22: Consultation mechanism
-        consultation_medium_used                as consultation_mechanism_code,
-        -- 23: Attendance status
-        attendance_status                       as attendance_status_code,
+        -- 20: Care contact cancellation reason (01 patient, 02 provider; map words)
+        case
+            when upper(trim(care_contact_cancellation_reason)) like '%PATIENT%' then '01'
+            when upper(trim(care_contact_cancellation_reason)) like 'CANCELLED BY UNIT%'
+              or upper(trim(care_contact_cancellation_reason)) like 'CANCELLED BY SERVICE%'
+              or upper(trim(care_contact_cancellation_reason)) like '%NON-CLINICAL%'    then '02'
+            else {{ nc_pad('care_contact_cancellation_reason', 2) }}
+        end                                     as contact_cancellation_reason,
+        -- 21: Consultation type (01 first, 02 follow-up; map words, zero-pad)
+        case
+            when upper(trim(consultation_type)) like 'FIRST%'                    then '01'
+            when upper(trim(consultation_type)) like 'FOLLOW%'                   then '02'
+            else {{ nc_pad('consultation_type', 2) }}
+        end                                     as consultation_type_code,
+        -- 22: Consultation mechanism (zero-pad national 01-98; map common words)
+        case
+            when upper(trim(consultation_medium_used)) like 'FACE TO FACE%'      then '01'
+            when upper(trim(consultation_medium_used)) like 'TELEPHONE%'         then '02'
+            else {{ nc_pad('consultation_medium_used', 2) }}
+        end                                     as consultation_mechanism_code,
+        -- 23: Attendance status (national single-digit 2-7; passthrough trimmed)
+        nullif(trim(attendance_status), '')     as attendance_status_code,
         -- 24: Service discharge date
         {{ parse_uk_date('coalesce(service_discharge_date, discharge_date, date_dischargedfrom_caseload, referral_closure_date)') }}
                                                 as discharge_date,
