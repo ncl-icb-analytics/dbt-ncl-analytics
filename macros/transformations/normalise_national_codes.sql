@@ -22,8 +22,8 @@
     case
         when upper(trim({{ col }})) in ('1', 'M', 'MALE')                        then '1'
         when upper(trim({{ col }})) in ('2', 'F', 'FEMALE')                      then '2'
-        when upper(trim({{ col }})) in ('9', 'INDETERMINATE', 'NOT SPECIFIED')   then '9'
-        when upper(trim({{ col }})) in ('X', '0', 'UNKNOWN', 'NOT KNOWN', 'NOT STATED')
+        when upper(trim({{ col }})) in ('9', 'INDETERMINATE')                    then '9'
+        when upper(trim({{ col }})) in ('X', '0', 'UNKNOWN', 'NOT KNOWN', 'NOT STATED', 'NOT SPECIFIED')
                                                                                  then 'X'
         else nullif(trim({{ col }}), '')
     end

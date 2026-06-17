@@ -116,12 +116,15 @@ prep as (
         -- 19: Care contact time (clock times only; coalesce siblings)
         {{ clean_time('coalesce(care_contact_time, contact_time)') }}
                                                 as contact_time,
-        -- 20: Care contact cancellation reason (01 patient, 02 provider; map words)
+        -- 20: Care contact cancellation reason (national: 01 clinical, 02
+        -- non-clinical). Map only defensible signals: explicit (non-)clinical
+        -- text (separators collapsed so 'non-clinical' / 'non clinical' both
+        -- match, checked before plain 'clinical'), and patient-related reasons
+        -- (non-clinical). Other free text is left to pass through, not guessed.
         case
-            when upper(trim(care_contact_cancellation_reason)) like '%PATIENT%' then '01'
-            when upper(trim(care_contact_cancellation_reason)) like 'CANCELLED BY UNIT%'
-              or upper(trim(care_contact_cancellation_reason)) like 'CANCELLED BY SERVICE%'
-              or upper(trim(care_contact_cancellation_reason)) like '%NON-CLINICAL%'    then '02'
+            when replace(replace(upper(trim(care_contact_cancellation_reason)), '-', ''), ' ', '') like '%NONCLINICAL%' then '02'
+            when replace(replace(upper(trim(care_contact_cancellation_reason)), '-', ''), ' ', '') like '%CLINICAL%'    then '01'
+            when upper(trim(care_contact_cancellation_reason)) like '%PATIENT%'                                          then '02'
             else {{ nc_pad('care_contact_cancellation_reason', 2) }}
         end                                     as contact_cancellation_reason,
         -- 21: Consultation type (01 first, 02 follow-up; map words, zero-pad)
