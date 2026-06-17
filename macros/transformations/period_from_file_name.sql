@@ -31,7 +31,7 @@
             when regexp_substr({{ fn }}, '[ _]M([0-1]?[0-9])[ _].*[ _](2[0-9])(2[0-9])([ _])', 1, 1, 'e', 3) is not null
                  and regexp_substr({{ fn }}, '[ _]M([0-1]?[0-9])[ _]', 1, 1, 'e', 1)::int between 1 and 12
             then dateadd('month',
-                mod(regexp_substr({{ fn }}, '[ _]M([0-1]?[0-9])[ _]', 1, 1, 'e', 1)::int + 2, 12),
+                regexp_substr({{ fn }}, '[ _]M([0-1]?[0-9])[ _]', 1, 1, 'e', 1)::int - 1,
                 ('20' || regexp_substr({{ fn }}, '[ _]M[0-1]?[0-9][ _].*[ _](2[0-9])2[0-9][ _]', 1, 1, 'e', 1) || '-04-01')::date)
         end
     )

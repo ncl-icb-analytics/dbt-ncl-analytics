@@ -11,7 +11,7 @@
     case
         when regexp_replace(trim({{ col }}), '^[?]+', '') rlike '^[0-9]{1,{{ width }}}$'
             then lpad(regexp_replace(trim({{ col }}), '^[?]+', ''), {{ width }}, '0')
-        else nullif(trim({{ col }}), '')
+        else nullif(regexp_replace(trim({{ col }}), '^[?]+', ''), '')
     end
 {% endmacro %}
 

@@ -281,8 +281,10 @@ normalised as (
         -- Service / financial categorisation
         -- Standardised to exactly 'Flex' / 'Freeze' (case variants, 'Frozen' and
         -- the DLP PRIMARY/REFRESH terms folded in; '1'/'0' and other values -> NULL).
-        {{ clean_flex_or_freeze('coalesce(flex_or_freeze, dlp_flexor_freeze)') }}
-                                                as flex_or_freeze,
+        coalesce(
+            {{ clean_flex_or_freeze('flex_or_freeze') }},
+            {{ clean_flex_or_freeze('dlp_flexor_freeze') }}
+        )                                       as flex_or_freeze,
         finance_category                        as finance_category,
         costing_code_description                as costing_code_description,
 

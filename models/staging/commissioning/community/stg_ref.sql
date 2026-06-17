@@ -87,14 +87,18 @@ prep as (
         -- 11: Gender -> national code (GENDER carries it; maps M/F/words)
         {{ nc_gender('coalesce(person_stated_gender_code, gender)') }}
                                                 as gender_code,
-        -- 12: Ethnic category -> NHS national code (maps free-text variants)
-        {{ nhs_ethnicity_category_code('coalesce(ethnic_category, ethnicity)') }}
-                                                as ethnic_category_code,
-        -- 13: Registered GP practice (ODS 6-char; coalesce siblings - GP_PRACTICE_CODE
-        -- is the best-populated here)
+        -- 12: Ethnic category -> NHS national code. Each candidate is mapped
+        -- before coalescing so a junk first value can't mask a mappable sibling.
+        coalesce(
+            {{ nhs_ethnicity_category_code('ethnic_category') }},
+            {{ nhs_ethnicity_category_code('ethnicity') }}
+        )                                       as ethnic_category_code,
+        -- 13: Registered GP practice. Accept only a 6-char ODS code (1 letter +
+        -- 5 digits) or that plus a 3-digit branch suffix, then take the 6-char
+        -- code; reject other lengths rather than truncating garbage.
         case
             when coalesce(general_medical_practice_code_patient_registration, general_practice_patient_registration, gp_practice_code)
-                rlike '^[A-Za-z][0-9]{5}'
+                rlike '^[A-Za-z][0-9]{5}([0-9]{3})?$'
             then upper(left(coalesce(general_medical_practice_code_patient_registration, general_practice_patient_registration, gp_practice_code), 6))
         end                                     as gp_practice_code,
         -- Site of treatment (not a PLD spec field but useful location, ~67% filled)

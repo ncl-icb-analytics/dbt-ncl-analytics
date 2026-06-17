@@ -43,20 +43,25 @@ registry as (
    column (in scope from prep); `activity_source` names it in the provenance
    label, e.g. 'contact_date' -> 'derived_from_contact_date'. #}
 {% macro community_pld_financial_period(activity_date, activity_source) %}
-    coalesce(
-        dv_financial_year_stated,
-        case when {{ activity_date }} between '2015-04-01' and current_date()
-             then {{ fin_year_from_date(activity_date) }} end,
-        case when file_name_period between '2015-04-01' and current_date()
-             then {{ fin_year_from_date('file_name_period') }} end
-    )                                           as dv_financial_year,
-    coalesce(
-        dv_financial_month_stated,
-        case when {{ activity_date }} between '2015-04-01' and current_date()
-             then {{ fin_month_from_date(activity_date) }} end,
-        case when file_name_period between '2015-04-01' and current_date()
-             then {{ fin_month_from_date('file_name_period') }} end
-    )                                           as dv_financial_month,
+    -- Year and month resolve from the SAME source (paired precedence) so a row
+    -- can't take its year from one source and month from another; the source is
+    -- recorded in dv_financial_period_source.
+    case
+        when dv_financial_month_stated is not null and dv_financial_year_stated is not null
+            then dv_financial_year_stated
+        when {{ activity_date }} between '2015-04-01' and current_date()
+            then {{ fin_year_from_date(activity_date) }}
+        when file_name_period between '2015-04-01' and current_date()
+            then {{ fin_year_from_date('file_name_period') }}
+    end                                         as dv_financial_year,
+    case
+        when dv_financial_month_stated is not null and dv_financial_year_stated is not null
+            then dv_financial_month_stated
+        when {{ activity_date }} between '2015-04-01' and current_date()
+            then {{ fin_month_from_date(activity_date) }}
+        when file_name_period between '2015-04-01' and current_date()
+            then {{ fin_month_from_date('file_name_period') }}
+    end                                         as dv_financial_month,
     case
         when dv_financial_month_stated is not null and dv_financial_year_stated is not null
             then 'stated'

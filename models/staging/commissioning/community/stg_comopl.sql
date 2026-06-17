@@ -79,14 +79,19 @@ prep as (
         -- 10: Gender -> national code (coalesce provider-variant siblings)
         {{ nc_gender('coalesce(person_stated_gender_code, gender, person_gender_code_current)') }}
                                                 as gender_code,
-        -- 11: Ethnic category -> NHS national code (maps free-text variants)
-        {{ nhs_ethnicity_category_code('coalesce(ethnic_category, patient_ethnicity_code, ethnicity)') }}
-                                                as ethnic_category_code,
-        -- 12: Registered GP practice (ODS 6-char: 1 letter + 5 digits; strip
-        -- branch suffix, drop garbage / '999')
+        -- 11: Ethnic category -> NHS national code. Each candidate is mapped
+        -- before coalescing so a junk first value can't mask a mappable sibling.
+        coalesce(
+            {{ nhs_ethnicity_category_code('ethnic_category') }},
+            {{ nhs_ethnicity_category_code('patient_ethnicity_code') }},
+            {{ nhs_ethnicity_category_code('ethnicity') }}
+        )                                       as ethnic_category_code,
+        -- 12: Registered GP practice. Accept only a 6-char ODS code (1 letter +
+        -- 5 digits) or that plus a 3-digit branch suffix, then take the 6-char
+        -- code; reject other lengths / '999' rather than truncating garbage.
         case
             when coalesce(general_medical_practice_code_patient_registration, gp_practice_code, org_id_gp)
-                rlike '^[A-Za-z][0-9]{5}'
+                rlike '^[A-Za-z][0-9]{5}([0-9]{3})?$'
             then upper(left(coalesce(general_medical_practice_code_patient_registration, gp_practice_code, org_id_gp), 6))
         end                                     as gp_practice_code,
         -- LSOA (derived geography; not a PLD spec field but high-value, ~89% filled)
