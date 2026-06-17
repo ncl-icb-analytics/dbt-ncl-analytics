@@ -1,7 +1,6 @@
 {{
     config(
         materialized = 'table',
-        schema = 'COMMUNITY_REFERRALS',
         tags = ['sdl', 'community_pld', 'ref']
     )
 }}

@@ -1,7 +1,6 @@
 {{
     config(
         materialized = 'view',
-        schema = 'COMOPL',
         tags = ['sdl', 'community_pld', 'comopl']
     )
 }}
