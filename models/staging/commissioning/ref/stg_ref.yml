@@ -41,6 +41,11 @@ models:
           - accepted_values:
               arguments:
                 values: ['stated', 'derived_from_referral_date', 'derived_from_file_name']
+          # Nulls are expected (rows with no resolvable period); warn so the
+          # unresolved count is surfaced and tracked, not failed.
+          - not_null:
+              config:
+                severity: warn
       - name: dlp_flex_or_freeze
         description: DLP submission flag standardised to 'Flex' or 'Freeze' (other values -> NULL).
         data_tests:
@@ -61,6 +66,20 @@ models:
         description: Site code of treatment (not a PLD spec field but useful location, ~67% populated).
       - name: gender_code
         description: Gender code (coalesced; GENDER carries the data on this feed).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['1', '2', '9', 'X']
+              config:
+                severity: warn
+      - name: ethnic_category_code
+        description: NHS ethnic category national code (free-text variants mapped via nhs_ethnicity_category_code; unmappable -> NULL).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['A','B','C','D','E','F','G','H','J','K','L','M','N','P','R','S','Z','99','0']
+              config:
+                severity: warn
       - name: gp_practice_code
         description: Registered GP practice ODS code (coalesced siblings; GP_PRACTICE_CODE is the best-populated, lifting fill ~7% -> 66%).
       - name: source_of_referral_description

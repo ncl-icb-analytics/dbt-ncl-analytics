@@ -9,9 +9,11 @@
    Returns the first day of the resolved calendar month, or NULL. #}
 {% macro period_from_file_name(fn) %}
     coalesce(
-        -- 1. Calendar year-month
+        -- 1. Calendar year-month. Year and month are taken from the SAME
+        --    anchored match (group 1 of each) so a stray '20xx' elsewhere in
+        --    the name cannot be spliced onto a different month.
         try_to_date(
-            regexp_substr({{ fn }}, '20[0-9]{2}', 1, 1, 'e') || '-'
+            regexp_substr({{ fn }}, '(20[0-9]{2})[-_ ][01][0-9]', 1, 1, 'e', 1) || '-'
             || regexp_substr({{ fn }}, '20[0-9]{2}[-_ ]([01][0-9])', 1, 1, 'e', 1) || '-01',
             'YYYY-MM-DD'),
         -- 2. Mon-YY (RR infers century: 00-49 -> 20xx)

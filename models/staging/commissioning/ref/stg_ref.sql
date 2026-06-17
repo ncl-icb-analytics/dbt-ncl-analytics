@@ -42,23 +42,12 @@
 --
 -- Financial year here is a bare 4-digit year (e.g. 2019 = FY2019/20).
 
-with registry as (
-    select file_id, batch_id, original_file_name
-    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
-    where feed = 'REF'
-),
+with {{ community_pld_registry('REF') }},
 
 prep as (
     select
         -- META keys (from SDL pipeline, fully reliable)
-        meta_sk_row_id::number(38,0)            as meta_sk_row_id,
-        meta_file_id::number(38,0)              as meta_file_id,
-        meta_row_id::number(38,0)               as meta_row_id,
-        meta_batch_id::number(38,0)             as meta_batch_id,
-        meta_partition_date::date               as meta_partition_date,
-        meta_provider_code                      as meta_provider_code,
-        meta_recipient_code                     as meta_recipient_code,
-        meta_version_id                         as meta_version_id,
+        {{ community_pld_meta_columns() }},
 
         -- DLP standard submission fields (spec 1, 2, 5; ~44% of rows carry them).
         -- The DLP financial month/year (spec 3-4) are surfaced cleaned as
@@ -68,12 +57,9 @@ prep as (
         dlp_commissioner_code                   as dlp_commissioner_code,
         dlp_baseline_financial_month            as dlp_baseline_financial_month,
 
-        -- Provider-stated reporting period (~44% of rows); the activity-date
-        -- fallback below recovers the rest.
-        {{ parse_slam_financial_month('coalesce(dlp_financial_month, financial_month)') }}
-                                                as dv_financial_month_stated,
-        {{ fin_year_from_start_year('coalesce(dlp_financial_year, financial_year)') }}
-                                                as dv_financial_year_stated,
+        -- Provider-stated reporting period; activity-date / file-name fallback
+        -- applied in the final select via community_pld_financial_period.
+        {{ community_pld_stated_period() }},
 
         -- 6: Service request identifier (coalesce referral id siblings)
         coalesce(
@@ -169,30 +155,8 @@ select
     meta_sk_row_id, meta_file_id, meta_row_id, meta_batch_id,
     meta_partition_date, meta_provider_code, meta_recipient_code, meta_version_id,
 
-    -- Reporting period (derived). Precedence: stated -> referral date ->
-    -- file-name period (each gated to a plausible range).
-    coalesce(
-        dv_financial_year_stated,
-        case when referral_received_date between '2015-04-01' and current_date()
-             then {{ fin_year_from_date('referral_received_date') }} end,
-        case when file_name_period between '2015-04-01' and current_date()
-             then {{ fin_year_from_date('file_name_period') }} end
-    )                                           as dv_financial_year,
-    coalesce(
-        dv_financial_month_stated,
-        case when referral_received_date between '2015-04-01' and current_date()
-             then {{ fin_month_from_date('referral_received_date') }} end,
-        case when file_name_period between '2015-04-01' and current_date()
-             then {{ fin_month_from_date('file_name_period') }} end
-    )                                           as dv_financial_month,
-    case
-        when dv_financial_month_stated is not null and dv_financial_year_stated is not null
-            then 'stated'
-        when referral_received_date between '2015-04-01' and current_date()
-            then 'derived_from_referral_date'
-        when file_name_period between '2015-04-01' and current_date()
-            then 'derived_from_file_name'
-    end                                         as dv_financial_period_source,
+    -- Reporting period (derived: stated -> referral date -> file name)
+    {{ community_pld_financial_period('referral_received_date', 'referral_date') }},
 
     -- DLP standard fields (flag, commissioner, baseline month)
     dlp_flex_or_freeze, dlp_commissioner_code, dlp_baseline_financial_month,

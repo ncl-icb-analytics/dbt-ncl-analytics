@@ -17,6 +17,15 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      # Guard the "no dates misfiled as times" invariant: the time columns must
+      # hold clock times (HH:MM[:SS]) or be NULL.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "contact_time is null or contact_time rlike '^[0-9]{1,2}:[0-9]{2}.*'"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "referral_received_time is null or referral_received_time rlike '^[0-9]{1,2}:[0-9]{2}.*'"
     columns:
       - name: meta_sk_row_id
         description: Surrogate row key from the SDL pipeline.
@@ -41,6 +50,11 @@ models:
           - accepted_values:
               arguments:
                 values: ['stated', 'derived_from_contact_date', 'derived_from_file_name']
+          # Nulls are expected (rows with no resolvable period); warn so the
+          # unresolved count is surfaced and tracked, not failed.
+          - not_null:
+              config:
+                severity: warn
       - name: dlp_flex_or_freeze
         description: DLP submission flag standardised to 'Flex' or 'Freeze' (other values -> NULL).
         data_tests:
@@ -57,6 +71,22 @@ models:
         description: LSOA of residence (derived; not a PLD spec field but high-value geography, ~89% populated).
       - name: gender_code
         description: Gender code (coalesced across provider-variant siblings; ~98% populated, 100% national-code conformant).
+        data_tests:
+          # Provider feeds are volatile - warn (not fail) if a new variant the
+          # gender map doesn't normalise appears.
+          - accepted_values:
+              arguments:
+                values: ['1', '2', '9', 'X']
+              config:
+                severity: warn
+      - name: ethnic_category_code
+        description: NHS ethnic category national code (free-text variants mapped via nhs_ethnicity_category_code; unmappable -> NULL).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['A','B','C','D','E','F','G','H','J','K','L','M','N','P','R','S','Z','99','0']
+              config:
+                severity: warn
       - name: provider_code
         description: Provider ODS code, dictionary-cleaned, falling back to META_PROVIDER_CODE.
         data_tests:
