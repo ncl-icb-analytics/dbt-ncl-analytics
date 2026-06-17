@@ -30,10 +30,17 @@ registry as (
    validated. The final select coalesces these with the activity-date and
    file-name fallbacks via community_pld_financial_period. #}
 {% macro community_pld_stated_period() %}
-        {{ parse_slam_financial_month('coalesce(dlp_financial_month, financial_month)') }}
-                                                as dv_financial_month_stated,
-        {{ fin_year_from_start_year('coalesce(dlp_financial_year, financial_year)') }}
-                                                as dv_financial_year_stated
+        -- Validate each candidate before coalescing so an invalid non-null DLP
+        -- value can't mask a valid plain financial_* sibling (both parsers
+        -- return NULL for invalid input).
+        coalesce(
+            {{ parse_slam_financial_month('dlp_financial_month') }},
+            {{ parse_slam_financial_month('financial_month') }}
+        )                                       as dv_financial_month_stated,
+        coalesce(
+            {{ fin_year_from_start_year('dlp_financial_year') }},
+            {{ fin_year_from_start_year('financial_year') }}
+        )                                       as dv_financial_year_stated
 {% endmacro %}
 
 {# Resolved financial period for the final select: stated value, else derived
