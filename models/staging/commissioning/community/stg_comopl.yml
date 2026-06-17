@@ -26,18 +26,37 @@ models:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "referral_received_time is null or referral_received_time rlike '^[0-9]{1,2}:[0-9]{2}.*'"
+    # Provenance convention: "Pipeline" = added by the SDL ingest (reliable);
+    # "Derived" = computed/parsed/mapped here; "As supplied" = provider value
+    # passed through unchanged (sometimes coalesced across sibling columns, but
+    # the value itself is not altered).
     columns:
+      # -- SDL pipeline keys --------------------------------------------------
       - name: meta_sk_row_id
-        description: Surrogate row key from the SDL pipeline.
+        description: Pipeline. Surrogate row key (1:1 with source).
         data_tests:
           - not_null
           - unique
+      - name: meta_file_id
+        description: Pipeline. Source file id; joins to META_FILE_REGISTRY with meta_batch_id.
+      - name: meta_row_id
+        description: Pipeline. Row id within the source file.
+      - name: meta_batch_id
+        description: Pipeline. Load batch id.
       - name: meta_partition_date
-        description: DSCRO monthly partition the file was loaded under.
+        description: Pipeline. DSCRO monthly partition the file was loaded under (ingest timing, not the activity month).
+      - name: meta_provider_code
+        description: Pipeline. Provider ODS code assigned by the SDL ingest.
+      - name: meta_recipient_code
+        description: Pipeline. Recipient (commissioner / DSCRO) code.
+      - name: meta_version_id
+        description: Pipeline. Source layout version hash.
+
+      # -- Reporting period (derived) ----------------------------------------
       - name: dv_financial_year
-        description: Financial year as 'YYYYYY' (e.g. 202526 = FY2025/26), matching the SLAM feeds; stated value or derived from contact date.
+        description: Derived. Financial year as 'YYYYYY' (e.g. 202526 = FY2025/26), matching the SLAM feeds. Stated value, else derived from the contact date, else the file name.
       - name: dv_financial_month
-        description: Financial month 1 (April) - 12 (March); stated value or derived from contact date.
+        description: Derived. Financial month 1 (April) - 12 (March). Stated value, else derived from the contact date, else the file name.
         data_tests:
           - dbt_utils.accepted_range:
               arguments:
@@ -45,7 +64,7 @@ models:
                 max_value: 12
                 inclusive: true
       - name: dv_financial_period_source
-        description: Provenance of the financial period - 'stated' (provider value), 'derived_from_contact_date', or 'derived_from_file_name'.
+        description: Derived. Which source resolved the period - 'stated', 'derived_from_contact_date', or 'derived_from_file_name'. NULL where none could.
         data_tests:
           - accepted_values:
               arguments:
@@ -55,22 +74,34 @@ models:
           - not_null:
               config:
                 severity: warn
+
+      # -- DLP standard submission fields ------------------------------------
       - name: dlp_flex_or_freeze
-        description: DLP submission flag standardised to 'Flex' or 'Freeze' (other values -> NULL).
+        description: Derived. DLP submission flag standardised to 'Flex' or 'Freeze' (case variants / 'Frozen' / PRIMARY / REFRESH folded in; other values -> NULL).
         data_tests:
           - accepted_values:
               arguments:
                 values: ['Flex', 'Freeze']
+      - name: dlp_commissioner_code
+        description: As supplied. DLP commissioner code (Sub-ICB; spec field 2).
+      - name: dlp_baseline_financial_month
+        description: As supplied. DLP baseline financial month (spec field 5).
+
+      # -- Patient ------------------------------------------------------------
       - name: local_patient_id
-        description: Local patient identifier, coalesced across provider sibling columns.
+        description: As supplied. Local patient identifier (coalesced across provider sibling columns; value unchanged).
       - name: sk_patient_id
-        description: Pseudonymised NHS-number-derived key (SK_PATIENT_ID_NHS_NUMBER). ~98% populated.
+        description: Pipeline. Pseudonymised NHS-number-derived key (SK_PATIENT_ID_NHS_NUMBER); in lieu of the raw NHS number. ~98% populated.
       - name: dv_year_of_birth
-        description: Year of birth (pseudonymised in lieu of full DOB).
+        description: Derived. Year of birth (pipeline-pseudonymised DV_YEAROF_BIRTH, cast to number) in lieu of full date of birth.
+      - name: partial_postcode
+        description: Pipeline. Partial/truncated postcode (pseudonymised) in lieu of full postcode.
       - name: lsoa
-        description: LSOA of residence (derived; not a PLD spec field but high-value geography, ~89% populated).
+        description: Pipeline. LSOA of residence (pipeline-derived). Not a PLD spec field but high-value geography; ~89% populated.
+
+      # -- Demographics / registration ---------------------------------------
       - name: gender_code
-        description: Gender code (coalesced across provider-variant siblings; ~98% populated, 100% national-code conformant).
+        description: Derived. Gender mapped to the national code (1 Male, 2 Female, 9 Indeterminate, X Not Known); coalesced across siblings, unmapped values pass through.
         data_tests:
           # Provider feeds are volatile - warn (not fail) if a new variant the
           # gender map doesn't normalise appears.
@@ -80,30 +111,68 @@ models:
               config:
                 severity: warn
       - name: ethnic_category_code
-        description: NHS ethnic category national code (free-text variants mapped via nhs_ethnicity_category_code; unmappable -> NULL).
+        description: Derived. NHS ethnic category national code (free-text variants mapped via nhs_ethnicity_category_code; unmappable -> NULL).
         data_tests:
           - accepted_values:
               arguments:
                 values: ['A','B','C','D','E','F','G','H','J','K','L','M','N','P','R','S','Z','99','0']
               config:
                 severity: warn
+      - name: gp_practice_code
+        description: Derived. Registered GP practice ODS code (6-char validated, branch suffix stripped; coalesced across siblings).
+
+      # -- Referral into the service -----------------------------------------
+      - name: source_of_referral_code
+        description: Derived. Source of referral; recognised national codes zero-padded, genuine local codes pass through.
+      - name: referral_received_date
+        description: Derived. Referral request received date, parsed (also recovers a date misfiled in the time column).
+      - name: referral_received_time
+        description: Derived. Referral request received time, kept only if a clock time (HH:MM[:SS]); misfiled dates excluded and recovered into referral_received_date.
+      - name: dv_referral_received_at
+        description: Derived. Referral received datetime combining the date + time (date at midnight where the time is absent).
+      - name: team_type_code
+        description: Derived. Service/team type referred to; recognised national codes zero-padded, local codes pass through.
+      - name: priority_type_code
+        description: Derived. Priority mapped to the national code (1 Routine, 2 Urgent, 3 Two Week Wait); local descriptions pass through.
+
+      # -- Care contact -------------------------------------------------------
+      - name: contact_date
+        description: Derived. Care contact date, parsed (also recovers a date misfiled in the time column).
+      - name: contact_time
+        description: Derived. Care contact time, kept only if a clock time; misfiled dates excluded and recovered into contact_date.
+      - name: dv_contact_at
+        description: Derived. Care contact datetime combining contact_date + contact_time (date at midnight where the time is absent).
+      - name: contact_cancellation_reason
+        description: Derived. Cancellation reason mapped to the national code (01 Clinical, 02 Non-clinical; patient-related -> non-clinical); ambiguous free text passes through.
+      - name: consultation_type_code
+        description: Derived. Consultation type mapped to the national code (01 Initial, 02 Follow-up); zero-padded.
+      - name: consultation_mechanism_code
+        description: Derived. Consultation mechanism mapped to the national code (01 Face-to-face, 02 Telephone, ...); zero-padded, coalesced across siblings.
+      - name: attendance_status_code
+        description: As supplied. Attendance status national code (2-7), trimmed; values pass through.
+      - name: discharge_date
+        description: Derived. Service discharge date, parsed (coalesced across discharge/closure sibling columns).
+
+      # -- Provider / service -------------------------------------------------
       - name: provider_code
-        description: Provider ODS code, dictionary-cleaned, falling back to META_PROVIDER_CODE.
+        description: Derived. Provider ODS code, dictionary-cleaned, falling back to META_PROVIDER_CODE.
         data_tests:
           - not_null
+      - name: service_reporting_line
+        description: As supplied. Local service reporting line (coalesced across siblings).
+      - name: service_pod
+        description: As supplied. Local service point-of-delivery.
       - name: service_request_id
-        description: Service request identifier (links activity to its referral).
+        description: As supplied. Service request identifier linking activity to its referral (coalesced across siblings).
       - name: site_of_treatment_code
-        description: Site code of treatment (full Current spec field 42; ~42% populated).
+        description: As supplied. Site code of treatment (full Current spec field 42); ~42% populated.
       - name: community_care_contact_identifier
-        description: Community care contact identifier (full Current spec field 33; ~35% populated).
+        description: As supplied. Community care contact identifier (full Current spec field 33); ~35% populated.
       - name: contact_duration_minutes
-        description: Clinical contact duration in minutes (full Current spec; numeric, ~30% populated).
-      - name: referral_received_time
-        description: Referral request received time (clock time only; dates misfiled here are excluded and recovered into referral_received_date).
-      - name: dv_referral_received_at
-        description: Referral request received datetime, combining referral_received_date + referral_received_time (date at midnight where time absent).
-      - name: contact_time
-        description: Care contact time (clock time only; misfiled dates excluded and recovered into contact_date).
-      - name: dv_contact_at
-        description: Care contact datetime, combining contact_date + contact_time (date at midnight where time absent).
+        description: Derived. Clinical contact duration in minutes (numeric cast; full Current spec); ~30% populated.
+
+      # -- Raw period (audit, retained as supplied) --------------------------
+      - name: financial_year_raw
+        description: As supplied. Raw provider financial year before parsing (audit trail for dv_financial_year).
+      - name: financial_month_raw
+        description: As supplied. Raw provider financial month before parsing (audit trail for dv_financial_month).
