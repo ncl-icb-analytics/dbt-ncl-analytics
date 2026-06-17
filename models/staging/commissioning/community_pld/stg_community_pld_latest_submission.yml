@@ -3,12 +3,11 @@ version: 2
 models:
   - name: stg_community_pld_latest_submission
     description: |
-      Latest-submission lookup for the community PLD feeds (COMOPL, REF): one
-      row per (feed, provider, FY, month) slice identifying the file holding the
-      current provider statement. Built from the staging outputs joined to
-      META_FILE_REGISTRY load time. These DLP feeds restate cumulatively
-      (Flex -> Freeze), so summing the raw staging tables double-counts ~4.7x;
-      the stg_*_latest views use this to filter to the current statement.
+      Latest-submission lookup for the community PLD feeds (COMOPL, REF). Grain:
+      one row per (feed, provider, FY, month), identifying the file with the
+      current provider statement (ranked by load time). These feeds restate
+      cumulatively (Flex -> Freeze); the stg_*_latest views use this to drop
+      superseded restatements.
     config:
       meta:
         owner:

@@ -3,19 +3,16 @@ version: 2
 models:
   - name: stg_comopl
     description: |
-      Cleaned Community Outpatient (COMOPL) — SDL contact-level community
-      activity, projected to the Community SLAM PLD spec (Appendix 5a, 28
-      fields). Grain 1:1 with DATA_LAKE.SDL.COMOPL (~94M rows).
+      Community Outpatient (COMOPL) SDL feed, cleaned to the Community SLAM PLD
+      layout. Grain: one row per source care contact.
 
-      Fields resolve to the best-populated source column per fill-rate
-      profiling (the spec-named columns are often sparse in this superset).
-      Patient identifiers are pseudonymised (NHS Number = SK key, DOB = year,
-      Postcode = partial) — an accepted deviation. A downstream view can rename
-      to the exact spec field names and restrict columns.
+      Cleaning: best-populated provider-variant column picked per field; coded
+      fields mapped to national code sets (local codes pass through); dates and
+      times parsed and combined into datetimes; financial period from the stated
+      value else the contact date else the file name; identifiers pseudonymised.
 
-      Full submission history — these DLP feeds restate cumulatively, so summing
-      this table double-counts (~4.7x). Report from stg_comopl_latest for the
-      current provider statement per (provider, FY, month).
+      Cumulative-restatement feed — summing double-counts; report from
+      stg_comopl_latest for the current statement per (provider, FY, month).
     config:
       meta:
         owner:

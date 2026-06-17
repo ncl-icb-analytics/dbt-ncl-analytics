@@ -3,19 +3,16 @@ version: 2
 models:
   - name: stg_ref
     description: |
-      Cleaned Community Referrals (REF) — SDL referral-level community data,
-      projected to the Community Referrals PLD spec (Appendix 5b, 20 fields).
-      Grain 1:1 with DATA_LAKE.SDL.REF (~50M rows).
+      Community Referrals (REF) SDL feed, cleaned to the Community Referrals PLD
+      layout. Grain: one row per source referral.
 
-      Fields resolve to the best-populated source column per fill-rate
-      profiling (the spec-named columns are often sparse in this superset).
-      Patient identifiers are pseudonymised (NHS Number = SK key, DOB = year,
-      Postcode = partial) — an accepted deviation. A downstream view can rename
-      to the exact spec field names and restrict columns.
+      Cleaning: best-populated provider-variant column picked per field; coded
+      fields mapped to national code sets (local codes pass through, with text
+      descriptions alongside); dates parsed; financial period from the stated
+      value else the referral date else the file name; identifiers pseudonymised.
 
-      Full submission history — these DLP feeds restate cumulatively, so summing
-      this table double-counts (~5x). Report from stg_ref_latest for the current
-      provider statement per (provider, FY, month).
+      Cumulative-restatement feed — summing double-counts; report from
+      stg_ref_latest for the current statement per (provider, FY, month).
     config:
       meta:
         owner:
