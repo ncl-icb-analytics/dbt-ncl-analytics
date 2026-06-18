@@ -46,7 +46,7 @@ select
         {{ parse_slam_number('s.contract_monitoring_actual_market_forces_factor') }}
                                                 as dv_actual_market_forces_factor
 
-from {{ source('sdl_wnl', 'LSACM') }} as s
+from {{ ref('raw_sdl_wnl_lsacm') }} as s
 left join submission_slices_enriched as sl
 {{ slam_slice_join() }}
 {{ slam_incremental_where() }}

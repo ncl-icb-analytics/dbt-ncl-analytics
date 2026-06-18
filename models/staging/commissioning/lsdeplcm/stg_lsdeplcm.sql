@@ -70,7 +70,7 @@ select
                                                 as dv_unit_price_supplier,
         {{ parse_slam_number('s.total_cost') }} as dv_total_cost
 
-from {{ source('sdl_wnl', 'LSDEPLCM') }} as s
+from {{ ref('raw_sdl_wnl_lsdeplcm') }} as s
 left join submission_slices_enriched as sl
 {{ slam_slice_join() }}
 {{ slam_incremental_where() }}

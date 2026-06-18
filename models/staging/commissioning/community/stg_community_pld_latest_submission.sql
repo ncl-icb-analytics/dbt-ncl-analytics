@@ -57,7 +57,7 @@ registry as (
         batch_id,
         created_datetime    as submission_loaded_at,
         original_file_name  as submission_file_name
-    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
+    from {{ ref('raw_sdl_wnl_meta_file_registry') }}
     where feed in ('COMOPL', 'REF')
 ),
 

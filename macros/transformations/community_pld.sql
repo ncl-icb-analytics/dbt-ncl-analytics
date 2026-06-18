@@ -21,7 +21,7 @@
 {% macro community_pld_registry(feed) %}
 registry as (
     select file_id, batch_id, original_file_name
-    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
+    from {{ ref('raw_sdl_wnl_meta_file_registry') }}
     where feed = '{{ feed }}'
 )
 {% endmacro %}

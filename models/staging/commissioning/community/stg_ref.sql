@@ -143,7 +143,7 @@ prep as (
         coalesce(dlp_financial_year, financial_year)    as financial_year_raw,
         coalesce(dlp_financial_month, financial_month)  as financial_month_raw
 
-    from {{ source('sdl_wnl', 'REF') }}
+    from {{ ref('raw_sdl_wnl_ref') }}
     left join registry
         on registry.file_id = meta_file_id
        and registry.batch_id = meta_batch_id

@@ -5,6 +5,19 @@
    models. Models supply only feed-specific columns; aliases are fixed:
    `s` = source table, `sl` = submission_slices_ranked. #}
 
+{# Maps SDL WNL source table names to their raw-layer passthrough models. #}
+{% macro sdl_wnl_raw_model(table_name) -%}
+{%- set models = {
+    'LSACM': 'raw_sdl_wnl_lsacm',
+    'LSPLCM': 'raw_sdl_wnl_lsplcm',
+    'LSDRPLCM': 'raw_sdl_wnl_lsdrplcm',
+    'LSDEPLCM': 'raw_sdl_wnl_lsdeplcm',
+    'COMOPL': 'raw_sdl_wnl_comopl',
+    'REF': 'raw_sdl_wnl_ref',
+} -%}
+{{- models[table_name] -}}
+{%- endmacro %}
+
 {# Money/activity string -> NUMBER(38,6).
    Handles thousands commas, currency symbols (incl. mojibake bytes), spaces,
    and accounting-style "(1,234.56)" negatives. 'TBC' and other non-numeric
@@ -152,7 +165,7 @@ registry as (
                  = mod(try_to_number(substr(regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1), 1, 2)) + 1, 100)
                 then '20' || regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1)
         end                                     as financial_year_from_file_name
-    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
+    from {{ ref('raw_sdl_wnl_meta_file_registry') }}
     where feed = '{{ feed }}'
 ),
 
@@ -164,7 +177,7 @@ submission_slices as (
         financial_year,
         financial_month,
         organisation_identifier_code_of_provider as provider_code_raw
-    from {{ source('sdl_wnl', table_name) }}
+    from {{ ref(sdl_wnl_raw_model(table_name)) }}
     group by all
 ),
 
@@ -201,7 +214,7 @@ submission_slices_enriched as (
 ,
 new_files as (
     select meta_file_id, meta_batch_id
-    from {{ source('sdl_wnl', table_name) }}
+    from {{ ref(sdl_wnl_raw_model(table_name)) }}
     group by all
     minus
     select distinct meta_file_id, meta_batch_id
