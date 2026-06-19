@@ -86,9 +86,14 @@ final as (
         loaded_at
     from classified
     where data_type <> 'Out of range'
-    -- restatement: keep only the latest submission for each trust + nominal period
-    -- (Freeze periods stay put; resubmitted Flex months supersede the earlier file)
-    qualify submission_date = max(submission_date) over (partition by trust_code, data_period)
+    -- restatement: keep only the latest submission FILE per trust + nominal period.
+    -- dense_rank (not max(submission_date)) so that if two files share a submission_date,
+    -- the loaded_at / file_name tiebreakers pick exactly one file; all its rows share the
+    -- same sort key and survive together. (Freeze periods stay put; later Flex files win.)
+    qualify dense_rank() over (
+        partition by trust_code, data_period
+        order by submission_date desc, loaded_at desc, file_name desc
+    ) = 1
 
 )
 
