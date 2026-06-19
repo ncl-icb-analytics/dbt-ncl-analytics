@@ -1,0 +1,72 @@
+models:
+  - name: int_tat_turnaround_times
+    description: |
+      Modelled imaging diagnostic Turnaround Times — analyst-facing table replacing
+      DATA_LAKE__NCL.ANALYST_MANAGED.TURNAROUND_TIMES_RAW. Built from
+      stg_tat_turnaround_times with the original pipeline's business logic applied:
+      TAT hours (scan/report/overall), Flex/Freeze classification (out-of-range rows
+      dropped), cancer pathway flag standardised, and restatement to the latest
+      submission per trust + data period. Grain: one row per diagnostic test event
+      (tat_event_id) within the surviving submissions.
+    config:
+      meta:
+        owner:
+          name: Jonathan Linney
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: tat_event_id
+        description: Surrogate key for a diagnostic test event (carried from staging). Grain of the model.
+        data_tests:
+          - unique
+          - not_null
+      - name: data_type
+        description: Submission window classification.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Freeze', 'Flex']
+      - name: trust_code
+        description: Provider trust code.
+      - name: submission_date
+        description: Date the surviving file was submitted.
+      - name: data_period
+        description: First day of the nominal data month.
+      - name: month
+        description: 3-letter month abbreviation of the data period.
+      - name: year
+        description: 4-digit year of the data period.
+      - name: diagnostic_test_request_date_time
+        description: Datetime the diagnostic test was requested.
+      - name: diagnostic_test_date_time
+        description: Datetime the diagnostic test (scan) was performed.
+      - name: service_report_issue_date_time
+        description: Datetime the service report was issued.
+      - name: combined_imaging_code
+        description: NICIP preferred, falling back to SNOMED.
+      - name: provider_site_code
+        description: Provider site code.
+      - name: priority_type_code
+        description: Priority type code (integer).
+      - name: priority_type_code_routine_default
+        description: Priority type code with null defaulted to 1 (routine).
+      - name: cancer_pathway_flag
+        description: Raw cancer pathway flag as submitted.
+      - name: cancer_pathway_flag_string
+        description: Standardised cancer pathway flag (Y / N / Unclassified).
+      - name: tat_scan
+        description: Hours from test request to test performed (rounded).
+      - name: tat_report
+        description: Hours from test performed to report issued (rounded).
+      - name: tat_overall
+        description: Hours from test request to report issued (rounded).
+      - name: datedifftest
+        description: Whole months between the data period and the test month (drives Freeze/Flex).
+      - name: file_name
+        description: Source filename of the surviving submission.
+      - name: source_file
+        description: Full stage path (provenance).
+      - name: loaded_at
+        description: Timestamp the row was loaded into raw (provenance).

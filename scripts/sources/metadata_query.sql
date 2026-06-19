@@ -605,6 +605,21 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'PMCT'
+  
+  UNION ALL
+  
+    -- tat: Imaging diagnostic turnaround-time provider submissions (raw landing)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'TAT' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'TAT'
 )
 
 SELECT 

@@ -396,3 +396,15 @@ sources:
     description: Central Performance Analytics Team (PMCT)
     raw_prefix: raw_pmct
     domain: commissioning
+
+  # Imaging diagnostic Turnaround Times (TAT) provider submissions
+  # Loaded by the tat_provider_ingest pipeline (Snowflake-Deployment repo).
+  # Only the raw landing table is a source; TAT_INGEST_LOG is operational, not consumed.
+  - source_name: tat
+    database: DATA_LAKE
+    schema: TAT
+    description: Imaging diagnostic turnaround-time provider submissions (raw landing)
+    raw_prefix: raw_tat
+    domain: commissioning
+    tables:
+      - TURNAROUND_TIMES_RAW
