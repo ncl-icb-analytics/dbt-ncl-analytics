@@ -1,4 +1,4 @@
-{{ config(materialized="table", tags=["tat"]) }}
+{{ config(materialized="table", tags=["tat", "daily"]) }}
 
 -- Modelled imaging Turnaround Times: applies the business logic from the original
 -- R/Python pipeline on top of the typed staging model.
