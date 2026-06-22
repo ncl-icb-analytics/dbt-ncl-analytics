@@ -16,7 +16,7 @@ Created by `sql/01_setup.sql` + `sql/03_procs.sql` in the `tat_provider_ingest` 
 |---|---|---|---|
 | Raw landing table | `DATA_LAKE.TAT.TURNAROUND_TIMES_RAW` | TABLE | All-STRING 1:1 landing of provider submissions (148 files, ~9.43M rows) |
 | Ingest log | `DATA_LAKE.TAT.TAT_INGEST_LOG` | TABLE | Per-file load audit (status, rows, errors, who) |
-| Stage | `DATA_LAKE.TAT.TAT_SUBMISSIONS` | STAGE | Upload target; `incoming/` → `archive/` |
+| Stage | `DATA_LAKE.TAT.TAT_SUBMISSIONS` | STAGE | Transient upload pipe (`incoming/`, cleared after load) |
 | File format | `DATA_LAKE.TAT.TAT_CSV` | FILE FORMAT | CSV parse (header, BOM, NA sentinels) |
 | xlsx converter | `DATA_LAKE.TAT.SP_TAT_CONVERT_XLSX()` | PROCEDURE (Python) | Converts staged `.xlsx` → `.csv` |
 | Raw loader | `DATA_LAKE.TAT.SP_TAT_LOAD_RAW()` | PROCEDURE (SQL) | `COPY INTO` the raw table + write ingest log |
