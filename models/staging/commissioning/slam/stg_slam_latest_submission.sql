@@ -46,7 +46,7 @@ with registry as (
                  = mod(try_to_number(substr(regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1), 1, 2)) + 1, 100)
                 then '20' || regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1)
         end                                     as financial_year_from_file_name
-    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
+    from {{ ref('raw_sdl_wnl_meta_file_registry') }}
     where feed in ('LSACM', 'LSPLCM', 'LSDrPLCM', 'LSDePLCM')
 ),
 
@@ -87,7 +87,7 @@ slices as (
             {% else %}
             null::date                                  as period_date
             {% endif %}
-        from {{ source('sdl_wnl', table_name) }} as s
+        from {{ ref(sdl_wnl_raw_model(table_name)) }} as s
     )
     group by all
     {% if not loop.last %}union all{% endif %}

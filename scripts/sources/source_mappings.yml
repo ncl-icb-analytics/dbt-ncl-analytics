@@ -332,6 +332,8 @@ sources:
       - LSPLCM
       - LSDRPLCM
       - LSDEPLCM
+      - COMOPL
+      - REF
       - META_FILE_REGISTRY
       - META_SCHEMA_VERSIONS
       - META_FILE_VERSIONS

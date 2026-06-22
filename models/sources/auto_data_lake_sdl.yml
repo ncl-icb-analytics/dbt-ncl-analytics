@@ -6,6 +6,1249 @@ sources:
   description: ServicesDataLocal canonical-named feeds, WNL footprint (SLAM contract
     monitoring)
   tables:
+  - name: COMOPL
+    identifier: '"COMOPL"'
+    columns:
+    - name: META_SK_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_FILE_ID
+      data_type: NUMBER(38,0)
+    - name: META_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: META_PARTITION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: META_PROVIDER_CODE
+      data_type: TEXT
+    - name: META_RECIPIENT_CODE
+      data_type: TEXT
+    - name: META_VERSION_ID
+      data_type: TEXT
+    - name: GENDER
+      data_type: TEXT
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DV_LSOA
+      data_type: TEXT
+    - name: SOURCEOF_REFERRAL
+      data_type: TEXT
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: ETHNICITY_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: FLEX_OR_FREEZE
+      data_type: TEXT
+    - name: DATEOF_REFERRAL
+      data_type: TEXT
+    - name: SERVICE_REQUEST_IDENTIFIER
+      data_type: TEXT
+    - name: GP_CODE
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_RECEIVED_TIME
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: CONSULTATION_MEDIUM_USED
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: OUTCOMEOF_CONTACT
+      data_type: TEXT
+    - name: DATE_ADDEDTO_CASELOAD
+      data_type: TEXT
+    - name: DATEOF_CONTACT
+      data_type: TEXT
+    - name: TYPEOF_CONTACT
+      data_type: TEXT
+    - name: DURATION_OF_CONTACT
+      data_type: TEXT
+    - name: FINANCIAL_MONTH
+      data_type: TEXT
+    - name: COMMUNITY_CARE_CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: REFERRING_CARE_PROFESSIONAL_STAFF_GROUP
+      data_type: TEXT
+    - name: PRIORITY_CODE
+      data_type: TEXT
+    - name: REASONFOR_REFERRAL
+      data_type: TEXT
+    - name: TIMEOF_CONTACT
+      data_type: TEXT
+    - name: ACTIVITY_LOCATION_CODE
+      data_type: TEXT
+    - name: ACTIVITY_TYPE
+      data_type: TEXT
+    - name: REASONFOR_DISCHARGE
+      data_type: TEXT
+    - name: GROUP_SESSION
+      data_type: TEXT
+    - name: DATE_DISCHARGEDFROM_CASELOAD
+      data_type: TEXT
+    - name: SERVICE_TEAM
+      data_type: TEXT
+    - name: LOCATION_CODE_OF_TREATMENT
+      data_type: TEXT
+    - name: DATEOF_FIRST_CONTACT
+      data_type: TEXT
+    - name: GROUP_SESSION_TYPE
+      data_type: TEXT
+    - name: AGEOF_PATIENT
+      data_type: TEXT
+    - name: LOCAL_SERVICE_TEAM_CODE
+      data_type: TEXT
+    - name: LOCAL_SERVICE_TEAM_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_TYPE_REFERRED_TO
+      data_type: TEXT
+    - name: RTT_PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: ADMINISTRATIVE_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_ETHNICITY_CODE
+      data_type: TEXT
+    - name: NHS_NUMBER_STATUS_INDICATOR_CODE
+      data_type: TEXT
+    - name: PERSON_GENDER_CODE_CURRENT
+      data_type: TEXT
+    - name: CARE_CONTACT_SUBJECT
+      data_type: TEXT
+    - name: CLINICAL_CONTACT_DURATION_OF_CARE_ACTIVITY
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_START_DATE
+      data_type: TEXT
+    - name: REFERRAL_CLOSURE_DATE
+      data_type: TEXT
+    - name: CARE_CONTACT_CANCELLATION_DATE
+      data_type: TEXT
+    - name: CARE_CONTACT_CANCELLATION_REASON
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_STATUS
+      data_type: TEXT
+    - name: CLINICAL_CONTACT_DURATION_OF_GROUP_SESSION
+      data_type: TEXT
+    - name: NHS_SERVICE_AGREEMENT_LINE_NUMBER
+      data_type: TEXT
+    - name: WAITING_TIME_MEASUREMENT_TYPE
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: REFERRAL_TO_TREATMENT_PERIOD_END_DATE
+      data_type: TEXT
+    - name: ABLE_TO_GET_OFF_OF_THE_FLOOR
+      data_type: TEXT
+    - name: ACCOMMODATION_STATUS_CODE
+      data_type: TEXT
+    - name: ACTION_DATE
+      data_type: TEXT
+    - name: ACTIVITY
+      data_type: TEXT
+    - name: ACTIVITY_ACTUAL
+      data_type: TEXT
+    - name: ACTIVITY_LENGTH
+      data_type: TEXT
+    - name: ACTIVITY_LOCATION_CODE_CNWLDESC
+      data_type: TEXT
+    - name: ACTIVITY_LOCATION_TYPE
+      data_type: TEXT
+    - name: ACTIVITY_LOCATION_TYPE_CODE_LOCAL
+      data_type: TEXT
+    - name: ACTIVITY_METHOD
+      data_type: TEXT
+    - name: ACTIVITY_MONTH
+      data_type: TEXT
+    - name: ACTIVITY_PERIOD
+      data_type: TEXT
+    - name: ACTIVITY_TYPE_IDENTIFIER
+      data_type: TEXT
+    - name: ACTIVITY_WITH
+      data_type: TEXT
+    - name: ACTUAL_START_TIME
+      data_type: TEXT
+    - name: ADMIN_CATEGORY_IDENTIFIER
+      data_type: TEXT
+    - name: ADMINISTRATIVE_CATEGORY_CODE_LOCAL
+      data_type: TEXT
+    - name: ADMISSION_DATE
+      data_type: TEXT
+    - name: ADMISSION_ID
+      data_type: TEXT
+    - name: ADMISSION_METHOD
+      data_type: TEXT
+    - name: ADMISSION_SOURCE
+      data_type: TEXT
+    - name: ADMISSION_YEAR
+      data_type: TEXT
+    - name: ADMIT_BED_LOCATION
+      data_type: TEXT
+    - name: ADMIT_BED_NUMBER
+      data_type: TEXT
+    - name: ADMIT_DATE
+      data_type: TEXT
+    - name: ADMIT_MTH_YR
+      data_type: TEXT
+    - name: ADMIT_TIME
+      data_type: TEXT
+    - name: ADMIT_WARD
+      data_type: TEXT
+    - name: AGE
+      data_type: TEXT
+    - name: AGE_AT_CARE_CONTACT_DATE
+      data_type: TEXT
+    - name: AGE_ON_ADMISSION
+      data_type: TEXT
+    - name: AGE_ON_APPT
+      data_type: TEXT
+    - name: APPOINTMENT_BOOKED_BY
+      data_type: TEXT
+    - name: APPOINTMENT_BRANCH
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_1
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_1_LOCAL
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_2
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_2_LOCAL
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_3
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_3_LOCAL
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_4
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_4_LOCAL
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_5
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_5_LOCAL
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_6
+      data_type: TEXT
+    - name: APPOINTMENT_CONTACT_ACTIVITY_CODE_6_LOCAL
+      data_type: TEXT
+    - name: APPOINTMENT_DATE
+      data_type: TEXT
+    - name: APPOINTMENT_DATE_TIME
+      data_type: TEXT
+    - name: APPOINTMENT_FLAGS
+      data_type: TEXT
+    - name: APPOINTMENT_NUMBER
+      data_type: TEXT
+    - name: APPOINTMENT_SEQUENCE_ID
+      data_type: TEXT
+    - name: APPOINTMENT_STATUS
+      data_type: TEXT
+    - name: APPOINTMENT_TIME
+      data_type: TEXT
+    - name: APPOINTMENT_TYPE
+      data_type: TEXT
+    - name: APPOINTMENT_TYPE_DESC
+      data_type: TEXT
+    - name: APPT_DURATION
+      data_type: TEXT
+    - name: APPT_TYPE
+      data_type: TEXT
+    - name: AQP_FLAG
+      data_type: TEXT
+    - name: AQP_NON_AQP
+      data_type: TEXT
+    - name: AREA_RESIDENCE
+      data_type: TEXT
+    - name: ASSESSMENT_OUTCOME
+      data_type: TEXT
+    - name: ASSIGNED_ORGANISATION_ID
+      data_type: TEXT
+    - name: ATTEND_OR_DID_NOT_ATTEND
+      data_type: TEXT
+    - name: ATTEND_OR_DID_NOT_ATTEND_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_CODE
+      data_type: TEXT
+    - name: ATTENDANCE_STATUS
+      data_type: TEXT
+    - name: ATTENDED_OR_DID_NOT_ATTEND_CODE
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: CALENDAR_MONTH
+      data_type: TEXT
+    - name: CARE_CONTACT_DATE
+      data_type: TEXT
+    - name: CARE_CONTACT_DATE_TIME
+      data_type: TEXT
+    - name: CARE_CONTACT_ID
+      data_type: TEXT
+    - name: CARE_CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: CARE_CONTACT_TIME
+      data_type: TEXT
+    - name: CARE_CONTACT_TYPE
+      data_type: TEXT
+    - name: CARE_CONTACT_TYPE_CODE
+      data_type: TEXT
+    - name: CARE_CONTACT_TYPE_COMMUNITY_CARE
+      data_type: TEXT
+    - name: CARE_EPISODE_ID
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_CODE
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_STAFF_GROUP
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_STAFF_GROUP_CODE
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_STAFF_GROUP_COMMUNITY_CARE
+      data_type: TEXT
+    - name: CARE_PROFESSIONAL_TEAM_LOCAL_IDENTIFIER
+      data_type: TEXT
+    - name: CARE_SPELL_ID
+      data_type: TEXT
+    - name: CASELOAD_NAME
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CCG_ASSIGNMENT_METHOD
+      data_type: TEXT
+    - name: CCG_CONSENT_SIGNED_Y_EQ_N
+      data_type: TEXT
+    - name: CCG_NAME
+      data_type: TEXT
+    - name: CCG_OF_GP_NAME
+      data_type: TEXT
+    - name: CCG_OF_RES
+      data_type: TEXT
+    - name: CCG_PCT_CODE
+      data_type: TEXT
+    - name: CCG_PCT_DESC
+      data_type: TEXT
+    - name: CCGOFRESIDENCE
+      data_type: TEXT
+    - name: CIDS_UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: CLIENT_ID
+      data_type: TEXT
+    - name: CLIENTID
+      data_type: TEXT
+    - name: CLINIC_CODE
+      data_type: TEXT
+    - name: CLINICAL_CONTACT_DURATION_OF_CARE_CONTACT
+      data_type: TEXT
+    - name: CLINICALLY_RELEVANT
+      data_type: TEXT
+    - name: CLINICALLY_RELEVANT_DERIVED
+      data_type: TEXT
+    - name: CLINICIAN
+      data_type: TEXT
+    - name: CLINICIAN_ROLE
+      data_type: TEXT
+    - name: CLUSTER
+      data_type: TEXT
+    - name: COL_180_TURN
+      data_type: TEXT
+    - name: COMBINED_CCG_CODE
+      data_type: TEXT
+    - name: COMBINED_CCG_NAME
+      data_type: TEXT
+    - name: COMMENTS
+      data_type: TEXT
+    - name: COMMISSIONER_DESC
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: COMMISSIONER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: COMMUNITY_CARE_ACTIVITY_TYPE_CODE
+      data_type: TEXT
+    - name: CONS_MECHANISM
+      data_type: TEXT
+    - name: CONSENT_FORM_Y_N
+      data_type: TEXT
+    - name: CONSULTANT_CODE
+      data_type: TEXT
+    - name: CONSULTATION_MEDIUM_USED_CNWLDESC
+      data_type: TEXT
+    - name: CONSULTATION_MEDIUN_USED
+      data_type: TEXT
+    - name: CONSULTATION_METHOD
+      data_type: TEXT
+    - name: CONSULTATION_METHOD_CODE
+      data_type: TEXT
+    - name: CONSULTATION_SOURCE_ORIGINAL_TERM
+      data_type: TEXT
+    - name: CONSULTATION_TYPE
+      data_type: TEXT
+    - name: CONSULTATION_TYPE_CODE
+      data_type: TEXT
+    - name: CONSULTATION_TYPE_IDENTIFIER
+      data_type: TEXT
+    - name: CONTACT
+      data_type: TEXT
+    - name: CONTACT_CANCEL_DATE
+      data_type: TEXT
+    - name: CONTACT_CANCEL_IND
+      data_type: TEXT
+    - name: CONTACT_CANCEL_PATIENT_IND
+      data_type: TEXT
+    - name: CONTACT_CANCEL_SERVICE_IND
+      data_type: TEXT
+    - name: CONTACT_CANCELLATION_REASON
+      data_type: TEXT
+    - name: CONTACT_DATE
+      data_type: TEXT
+    - name: CONTACT_DATE_TIME
+      data_type: TEXT
+    - name: CONTACT_DATE_YEAR_MTH
+      data_type: TEXT
+    - name: CONTACT_DIRECT_IND
+      data_type: TEXT
+    - name: CONTACT_DURATION
+      data_type: TEXT
+    - name: CONTACT_DURATION_MINUTES
+      data_type: TEXT
+    - name: CONTACT_ID
+      data_type: TEXT
+    - name: CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: CONTACT_LOCATION
+      data_type: TEXT
+    - name: CONTACT_LOCATION1
+      data_type: TEXT
+    - name: CONTACT_METHOD_DESC
+      data_type: TEXT
+    - name: CONTACT_TIME
+      data_type: TEXT
+    - name: CONTACTSETTING
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+    - name: COST
+      data_type: TEXT
+    - name: COSTING_CODE_DESCRIPTION
+      data_type: TEXT
+    - name: COUNT_OF_ACTIVITIES
+      data_type: TEXT
+    - name: COUNTER_CONTACT
+      data_type: TEXT
+    - name: COUNTER_REFERRAL
+      data_type: TEXT
+    - name: CURRENT_GP_CODE
+      data_type: TEXT
+    - name: CURRENT_GP_NAME
+      data_type: TEXT
+    - name: CURRENT_PRACTICE_CODE
+      data_type: TEXT
+    - name: CURRENT_PRACTICE_NAME
+      data_type: TEXT
+    - name: D_C_DATE_WHEN_OUTCOMES_COMPLETE_D
+      data_type: TEXT
+    - name: D_C_DATE_WHEN_OUTCOMES_COMPLETED
+      data_type: TEXT
+    - name: DATA_SET
+      data_type: TEXT
+    - name: DATASET
+      data_type: TEXT
+    - name: DATASET_TYPE
+      data_type: TEXT
+    - name: DATE_DISCHARGED
+      data_type: TEXT
+    - name: DATE_EVENT_ENTERED
+      data_type: TEXT
+    - name: DATE_OF_ACTION
+      data_type: TEXT
+    - name: DATE_OF_APPT
+      data_type: TEXT
+    - name: DATE_OF_ASSESSMENT
+      data_type: TEXT
+    - name: DATE_OF_CLASS
+      data_type: TEXT
+    - name: DATE_PATIENT_REGISTERED
+      data_type: TEXT
+    - name: DATE_VALUE
+      data_type: TEXT
+    - name: DATEOF_FIRST_CONTACT_2
+      data_type: TEXT
+    - name: DAY_ADMITTED
+      data_type: TEXT
+    - name: DAY_DISCHARGED
+      data_type: TEXT
+    - name: DEATH_LOCATION_TYPE_ACTUAL
+      data_type: TEXT
+    - name: DEATH_LOCATION_TYPE_PREFERRED
+      data_type: TEXT
+    - name: DESCRIPTION_POD
+      data_type: TEXT
+    - name: DEVICE
+      data_type: TEXT
+    - name: DIAGNOSIS
+      data_type: TEXT
+    - name: DIAGNOSTIC
+      data_type: TEXT
+    - name: DID_THE_CLIENT_COMPLETE_INTERVENTION_REASON
+      data_type: TEXT
+    - name: DID_THE_CLIENT_DECLINE_FALLS_GROUP
+      data_type: TEXT
+    - name: DID_THE_CLIENT_DECLINE_MAINTENCE_GROUP
+      data_type: TEXT
+    - name: DID_THE_CLIENT_DECLINE_SERVICE
+      data_type: TEXT
+    - name: DIRECT_CONTACT_INDICATOR
+      data_type: TEXT
+    - name: DIRECTORATE
+      data_type: TEXT
+    - name: DISCH_MTH_YR
+      data_type: TEXT
+    - name: DISCHARGE_BED_LOCATION
+      data_type: TEXT
+    - name: DISCHARGE_BED_NUMBER
+      data_type: TEXT
+    - name: DISCHARGE_DATE
+      data_type: TEXT
+    - name: DISCHARGE_DATE_COMMUNITY_HEALTH_SERVICE
+      data_type: TEXT
+    - name: DISCHARGE_DATE_TIME
+      data_type: TEXT
+    - name: DISCHARGE_DESTINATION
+      data_type: TEXT
+    - name: DISCHARGE_LETTER_ISSUED_DATE_COMMUNITY_CARE
+      data_type: TEXT
+    - name: DISCHARGE_LOCATION
+      data_type: TEXT
+    - name: DISCHARGE_METHOD
+      data_type: TEXT
+    - name: DISCHARGE_REASON
+      data_type: TEXT
+    - name: DISCHARGE_REASON_CODE
+      data_type: TEXT
+    - name: DISCHARGE_TIME
+      data_type: TEXT
+    - name: DISCHARGE_WARD
+      data_type: TEXT
+    - name: DISCHARGE_YEAR
+      data_type: TEXT
+    - name: DLP_BASELINE_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DLP_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DLP_FLEXOR_FREEZE
+      data_type: TEXT
+    - name: DNA
+      data_type: TEXT
+    - name: DNA_CODE
+      data_type: TEXT
+    - name: DURATION
+      data_type: TEXT
+    - name: DURATION_OF_CARE_CONTACT
+      data_type: TEXT
+    - name: DURATION_OF_CONTACT_MINUTES
+      data_type: TEXT
+    - name: DV_LSOA_TRUNCATED_POSTCODE
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE_TRUNCATED_POSTCODE
+      data_type: TEXT
+    - name: DV_RECIPIENT_CODE
+      data_type: TEXT
+    - name: DV_YEAROF_BIRTH
+      data_type: TEXT
+    - name: DV_YEAROF_DEATH
+      data_type: TEXT
+    - name: DW_APPT_VISIT_TYPE_STATUS
+      data_type: TEXT
+    - name: EARLIEST_CLINICALLY_APPROPRIATE_DATE
+      data_type: TEXT
+    - name: EARLIEST_REASONABLE_OFFER_DATE
+      data_type: TEXT
+    - name: ECS_OUTCOME_GROUP
+      data_type: TEXT
+    - name: EMIS
+      data_type: TEXT
+    - name: EMIS_REF
+      data_type: TEXT
+    - name: EMPLOYMENT_STATUS_CODE
+      data_type: TEXT
+    - name: ENCOUNTER_TYPE
+      data_type: TEXT
+    - name: END_DATE
+      data_type: TEXT
+    - name: END_DATE_GMP_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: END_DATE_GP_PRACTICE
+      data_type: TEXT
+    - name: EPISODE_UNIQUE_ID
+      data_type: TEXT
+    - name: EQ_5_D_5_L_VAS
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY_LOCAL
+      data_type: TEXT
+    - name: ETHNICITY
+      data_type: TEXT
+    - name: ETHNICITY_CATEGORY
+      data_type: TEXT
+    - name: ETHNICITY_CNWLDESC
+      data_type: TEXT
+    - name: ETHNICITY_NATIONAL_CODE
+      data_type: TEXT
+    - name: EVENT_ENTERED_BY
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: TEXT
+    - name: FACE_TO_FACE_CONTACT
+      data_type: TEXT
+    - name: FACE_TO_FACE_IND
+      data_type: TEXT
+    - name: FES_1
+      data_type: TEXT
+    - name: FINAL_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: FINANCE_ADULT_OR_OLDER_ETC
+      data_type: TEXT
+    - name: FINANCE_CATEGORY
+      data_type: TEXT
+    - name: FIRST_CLINICAL_EVENT
+      data_type: TEXT
+    - name: FIRST_CONTACT
+      data_type: TEXT
+    - name: FIRST_CONTACT_DATE
+      data_type: TEXT
+    - name: FIRST_CONTACT_DATE_TIME
+      data_type: TEXT
+    - name: FIRST_F2_F
+      data_type: TEXT
+    - name: FIRST_FOLLOW_UP
+      data_type: TEXT
+    - name: FIRST_FOLLOW_UP_FLAG
+      data_type: TEXT
+    - name: FIRST_OF_ADMIT_MTH
+      data_type: TEXT
+    - name: FISCAL_YEAR
+      data_type: TEXT
+    - name: FLAG
+      data_type: TEXT
+    - name: FLEX_FROZEN
+      data_type: TEXT
+    - name: FLEXOR_FREEZE
+      data_type: TEXT
+    - name: FN_QTR
+      data_type: TEXT
+    - name: FN_YR
+      data_type: TEXT
+    - name: FRACTURE
+      data_type: TEXT
+    - name: GENDER_CODE
+      data_type: TEXT
+    - name: GENDER_NATIONAL_CODE
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION_AT_TIME_OF_ACTIVITY
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION_AT_TIME_OF_REFERRAL
+      data_type: TEXT
+    - name: GENERAL_PRACTICE_CODE
+      data_type: TEXT
+    - name: GMP_PATIENT_REGISTRATION_END_DATE
+      data_type: TEXT
+    - name: GMP_PATIENT_REGISTRATION_START_DATE
+      data_type: TEXT
+    - name: GP_NATIONAL_PRACTICE_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_CCG
+      data_type: TEXT
+    - name: GP_PRATICE_CODE
+      data_type: TEXT
+    - name: GROUP_SESSION_DATE
+      data_type: TEXT
+    - name: GROUP_SESSION_FLAG
+      data_type: TEXT
+    - name: GROUP_SESSION_IDENTIFIER
+      data_type: TEXT
+    - name: GROUP_SESSION_IDENTIFIER_COMMUNITY_CARE
+      data_type: TEXT
+    - name: GROUP_SESSION_TYPE_CODE_COMMUNITY_CARE
+      data_type: TEXT
+    - name: GROUP_THERAPY_INDICATOR
+      data_type: TEXT
+    - name: GROUP_THERAPY_INDICATOR_COMMUNITY_CARE
+      data_type: TEXT
+    - name: HA_BATTERY
+      data_type: TEXT
+    - name: HA_EAR_MOULD
+      data_type: TEXT
+    - name: HA_NOT_PERFORMED
+      data_type: TEXT
+    - name: HA_OUTCOME
+      data_type: TEXT
+    - name: HA_PROCEDURE
+      data_type: TEXT
+    - name: HA_REPAIR
+      data_type: TEXT
+    - name: HA_SEEN_BY_AUDIOLOGY
+      data_type: TEXT
+    - name: HA_WAX_IN_EAR
+      data_type: TEXT
+    - name: HOME_FAST
+      data_type: TEXT
+    - name: HOSPITAL_ADMISSION
+      data_type: TEXT
+    - name: HOSPITAL_NUMBER
+      data_type: TEXT
+    - name: HRG
+      data_type: TEXT
+    - name: HRG_CODE
+      data_type: TEXT
+    - name: HRG_CODE_CODE_DESC
+      data_type: TEXT
+    - name: HRG_DESCRIPTION
+      data_type: TEXT
+    - name: HRG_NAME
+      data_type: TEXT
+    - name: ID
+      data_type: TEXT
+    - name: ID_PATIENT
+      data_type: TEXT
+    - name: ID_PRACTICE
+      data_type: TEXT
+    - name: IN_SCOPE_OF_MH_TARIFF
+      data_type: TEXT
+    - name: INDIRECT_CONTACT_INDICATOR
+      data_type: TEXT
+    - name: INITIAL_CONTACT
+      data_type: TEXT
+    - name: INTENDED_MANAGEMENT
+      data_type: TEXT
+    - name: INVOICE_PERIOD
+      data_type: TEXT
+    - name: IS_FIRST_DIRECT_PATIENT_CONTACT
+      data_type: TEXT
+    - name: IS_FREEZE
+      data_type: TEXT
+    - name: IS_GROUP_SESSION
+      data_type: TEXT
+    - name: IS_PB_R_NOT_PB_R
+      data_type: TEXT
+    - name: IS_PBR
+      data_type: TEXT
+    - name: JOB_ID
+      data_type: TEXT
+    - name: KPI_DESC
+      data_type: TEXT
+    - name: LANGUAGE_CODE
+      data_type: TEXT
+    - name: LANGUAGE_CODE_PREFERRED
+      data_type: TEXT
+    - name: LAST_MODIFIED_DATE_TIME
+      data_type: TEXT
+    - name: LENGTH_OF_ADMISSION
+      data_type: TEXT
+    - name: LOCAL_CANCELLED_BY_CLIENT_OR_PROVIDER
+      data_type: TEXT
+    - name: LOCAL_PATIENT_ID
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER_EXTENDED
+      data_type: TEXT
+    - name: LOCAL_REFERRAL_ID
+      data_type: TEXT
+    - name: LOCATION
+      data_type: TEXT
+    - name: LOCATION_AFTER_DISCHARGE
+      data_type: TEXT
+    - name: LOOKED_AFTER_CHILD_INDICATOR
+      data_type: TEXT
+    - name: LOS
+      data_type: TEXT
+    - name: MONTH
+      data_type: TEXT
+    - name: MONTH_NO
+      data_type: TEXT
+    - name: MONTH_OF_12_MONTH_REVIEW
+      data_type: TEXT
+    - name: MONTH_OF_6_MONTH_REVIEW
+      data_type: TEXT
+    - name: MONTH_OF_COMPLETION
+      data_type: TEXT
+    - name: MONTH_OF_DISCHARGE
+      data_type: TEXT
+    - name: MONTH_OF_REFERRAL
+      data_type: TEXT
+    - name: NAME
+      data_type: TEXT
+    - name: NATIONAL_SERVICE_CODE
+      data_type: TEXT
+    - name: NATIONAL_SERVICE_DESC
+      data_type: TEXT
+    - name: NEW_CAF_INCLUDED_FLAG
+      data_type: TEXT
+    - name: NEW_CURRENCY
+      data_type: TEXT
+    - name: NHS_NO_STATUS
+      data_type: TEXT
+    - name: NUMBER_FALLS_DURING_INTERVENTION
+      data_type: TEXT
+    - name: NUMBER_OF_FALLS_LAST_YEAR
+      data_type: TEXT
+    - name: NUMBER_OF_GROUP_SESSION_PARTICIPANTS
+      data_type: TEXT
+    - name: NUMBER_OF_GROUP_SESSION_PARTICIPANTS_COMMUNITY_CARE
+      data_type: TEXT
+    - name: NUMBER_OF_RA_SESSIONS
+      data_type: TEXT
+    - name: NUMBER_OF_SESSIONS_COMPLETED
+      data_type: TEXT
+    - name: ONWARD_REFERRAL
+      data_type: TEXT
+    - name: ONWARD_REFERRAL_TO_OT
+      data_type: TEXT
+    - name: ONWARD_REFERRAL_TO_PT
+      data_type: TEXT
+    - name: ORG_CODE_COMMISSIONER
+      data_type: TEXT
+    - name: ORG_CODE_PROVIDER
+      data_type: TEXT
+    - name: ORG_ID_COMMISSIONER
+      data_type: TEXT
+    - name: ORG_ID_GP
+      data_type: TEXT
+    - name: ORG_ID_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ORGANISATION_CODE_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_CODE_OF_COMMISSIONER_AT_TIME_OF_ACTIVITY
+      data_type: TEXT
+    - name: ORGANISATION_CODE_CODE_OF_COMMISSIONER_AT_TIME_OF_REFERRAL
+      data_type: TEXT
+    - name: ORGANISATION_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ORGANISATION_CODE_OF_CURRENT_COMMISSIONER_AT_SOURCE_EXTRACT_DATE_TIME
+      data_type: TEXT
+    - name: ORGANISATION_CODE_OF_CURRENT_GENERAL_MEDICAL_PRACTICE_AT_SOURCE_EXTRACT_DATE_TIME
+      data_type: TEXT
+    - name: ORGANISATION_CODE_OF_INITIAL_COMMISSIONER_AT_SOURCE_EXTRACT_DATE_TIME
+      data_type: TEXT
+    - name: ORGANISATION_CODE_OF_INITIAL_GENERAL_MEDICAL_PRACTICE_AT_SOURCE_EXTRACT_DATE_TIME
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_REFERRING
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: OUTCOME
+      data_type: TEXT
+    - name: OUTCOME_1
+      data_type: TEXT
+    - name: OUTCOME_2
+      data_type: TEXT
+    - name: OUTCOME_NATIONAL_CODE
+      data_type: TEXT
+    - name: OUTCOME_NATIONAL_CODE_DESC
+      data_type: TEXT
+    - name: OUTCOME_OF_CONTACT_CNWLDESC
+      data_type: TEXT
+    - name: OUTCOME_OF_REFERRAL
+      data_type: TEXT
+    - name: PATIENT_AGE
+      data_type: TEXT
+    - name: PATIENT_CODE
+      data_type: TEXT
+    - name: PATIENT_GENDER_CODE
+      data_type: TEXT
+    - name: PATIENT_UNIQUE_ID
+      data_type: TEXT
+    - name: PERIOD
+      data_type: TEXT
+    - name: PERIOD_REF
+      data_type: TEXT
+    - name: PERSON_ETHNICITY
+      data_type: TEXT
+    - name: PERSON_GENDER
+      data_type: TEXT
+    - name: PERSON_GENDER_STATED
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: PK
+      data_type: TEXT
+    - name: POD
+      data_type: TEXT
+    - name: POD_CODE
+      data_type: TEXT
+    - name: POD_NAME
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: PRE_180_TURN
+      data_type: TEXT
+    - name: PRE_ABLE_TO_GET_OFF_OF_THE_FLOOR
+      data_type: TEXT
+    - name: PRE_EQ5_D5_VAS
+      data_type: TEXT
+    - name: PRE_FES_I
+      data_type: TEXT
+    - name: PRE_FRACTURE
+      data_type: TEXT
+    - name: PRE_HOME_FAST
+      data_type: TEXT
+    - name: PRE_HOMEFAST_FAST
+      data_type: TEXT
+    - name: PRE_HOSPITAL_ADMISSION
+      data_type: TEXT
+    - name: PRE_LENGTH_OF_ADMISSION
+      data_type: TEXT
+    - name: PRE_REASON
+      data_type: TEXT
+    - name: PRE_TINETTI
+      data_type: TEXT
+    - name: PRE_TUAG
+      data_type: TEXT
+    - name: PREFERRED_COMMUNICATION_LANGUAGE
+      data_type: TEXT
+    - name: PRICE_ACTUAL
+      data_type: TEXT
+    - name: PRICE_NEW
+      data_type: TEXT
+    - name: PRIMARY_REASON_FOR_REFERRAL
+      data_type: TEXT
+    - name: PRIMARY_REASON_FOR_REFERRAL_COMMUNITY_CARE
+      data_type: TEXT
+    - name: PRIMARY_REASON_FOR_REFERRAL_COMMUNITY_CARE_LOCAL
+      data_type: TEXT
+    - name: PRIMARYREASON_FOR_REFERRAL
+      data_type: TEXT
+    - name: PRIMARYREASON_FOR_REFERRAL_COMMUNITY_CARE
+      data_type: TEXT
+    - name: PRIORITY_CODE_CNWLDESC
+      data_type: TEXT
+    - name: PRIORITY_IDENTIFIER
+      data_type: TEXT
+    - name: PRIORITY_TYPE
+      data_type: TEXT
+    - name: PRIORITY_TYPE_CODE_LOCAL
+      data_type: TEXT
+    - name: PRIORITY_TYPE_NC
+      data_type: TEXT
+    - name: PROCEDURE_1
+      data_type: TEXT
+    - name: PROCEDURE_2
+      data_type: TEXT
+    - name: PROGRAMME_BUDGETING_CODE
+      data_type: TEXT
+    - name: QUESTIONAIRE_COMPLETED
+      data_type: TEXT
+    - name: REASON
+      data_type: TEXT
+    - name: REASON_FOR_DISCHARGE_CNWLDESC
+      data_type: TEXT
+    - name: REASON_FOR_REFERRAL1
+      data_type: TEXT
+    - name: REASON_FOR_REFERRAL_CNWLDESC
+      data_type: TEXT
+    - name: REASON_FOR_REFERRAL_TO_COMMUNITY_CARE
+      data_type: TEXT
+    - name: REFERRAL_CLOSURE_DATE_COMMUNITY_CARE
+      data_type: TEXT
+    - name: REFERRAL_CLOSURE_DATE_COMMUNITY_CARE1
+      data_type: TEXT
+    - name: REFERRAL_CLOSURE_REASON
+      data_type: TEXT
+    - name: REFERRAL_CLOSURE_REASON_COMMUNITY_CARE
+      data_type: TEXT
+    - name: REFERRAL_DATE
+      data_type: TEXT
+    - name: REFERRAL_DATE_TIME
+      data_type: TEXT
+    - name: REFERRAL_DISCHARGE_DATE
+      data_type: TEXT
+    - name: REFERRAL_DISCHARGE_LETTER_ISSUE_DATE
+      data_type: TEXT
+    - name: REFERRAL_ID
+      data_type: TEXT
+    - name: REFERRAL_NUMBER
+      data_type: TEXT
+    - name: REFERRAL_OUTCOME
+      data_type: TEXT
+    - name: REFERRAL_REASON
+      data_type: TEXT
+    - name: REFERRAL_REASON_CODE
+      data_type: TEXT
+    - name: REFERRAL_REASON_DESCRIPTION
+      data_type: TEXT
+    - name: REFERRAL_RECEIVED
+      data_type: TEXT
+    - name: REFERRAL_RECEIVED_DATE
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_DESC
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_DESCRIPTION
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_WHO_THE_REFERRAL_CAME_FROM
+      data_type: TEXT
+    - name: REFERRAL_TYPE
+      data_type: TEXT
+    - name: REFERRAL_UNIQUE_ID
+      data_type: TEXT
+    - name: REFERRAL_URGENCY
+      data_type: TEXT
+    - name: REFERRAL_URGENCY_DESC
+      data_type: TEXT
+    - name: REFERRING_CARE_PROFESSIONAL_STAFF_GROUP_MENTAL_HEALTH_AND_COMMUNITY_CARE
+      data_type: TEXT
+    - name: REFERRING_CARE_PROFESSIONAL_STAFF_GROUP_MENTAL_HEALTH_AND_COMMUNITY_CARE_LOCAL
+      data_type: TEXT
+    - name: REFERRING_CARE_STAFF_PROFESSIONAL_GROUP
+      data_type: TEXT
+    - name: REFERRING_ORGANISATION_CODE
+      data_type: TEXT
+    - name: REGISTERED_CCG
+      data_type: TEXT
+    - name: REGISTERED_GP_GMS
+      data_type: TEXT
+    - name: REGISTERED_PRACTICE
+      data_type: TEXT
+    - name: REGISTERED_PRACTICE_ID
+      data_type: TEXT
+    - name: REGISTRATION_DATE
+      data_type: TEXT
+    - name: REPORT_MASTER_ID
+      data_type: TEXT
+    - name: REPORTING_MONTH
+      data_type: TEXT
+    - name: REPORTING_PERIOD
+      data_type: TEXT
+    - name: REPORTING_TYPE
+      data_type: TEXT
+    - name: REQUEST_CONT
+      data_type: TEXT
+    - name: RESIDENCE_CCG
+      data_type: TEXT
+    - name: RESPONSIBLE_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: RIO_VERSION
+      data_type: TEXT
+    - name: ROCKWOOD
+      data_type: TEXT
+    - name: SAFEGUARDING_VULNERABILITY_FACTORS_INDICATOR
+      data_type: TEXT
+    - name: SEEN_BY
+      data_type: TEXT
+    - name: SEQUENCE_NUMBER
+      data_type: TEXT
+    - name: SERVICE
+      data_type: TEXT
+    - name: SERVICE_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_DISCHARGE_DATE
+      data_type: TEXT
+    - name: SERVICE_GROUP
+      data_type: TEXT
+    - name: SERVICE_LINE
+      data_type: TEXT
+    - name: SERVICE_LINE_CODE
+      data_type: TEXT
+    - name: SERVICE_LINE_DESC
+      data_type: TEXT
+    - name: SERVICE_LINE_REPORTING
+      data_type: TEXT
+    - name: SERVICE_NAME
+      data_type: TEXT
+    - name: SERVICE_NATIONAL_CODE
+      data_type: TEXT
+    - name: SERVICE_OFFERED
+      data_type: TEXT
+    - name: SERVICE_OFFERED_CODE
+      data_type: TEXT
+    - name: SERVICE_OFFERED_DESC
+      data_type: TEXT
+    - name: SERVICE_OR_TEAM_TYPE_REFERRED_TO_COMMUNITY_CARE
+      data_type: TEXT
+    - name: SERVICE_POD
+      data_type: TEXT
+    - name: SERVICE_PROVIDER
+      data_type: TEXT
+    - name: SERVICE_REFERENCE_COST_CODE
+      data_type: TEXT
+    - name: SERVICE_REFERENCE_COST_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_REFERRAL_IDENTIFIER
+      data_type: TEXT
+    - name: SERVICE_REFERRED_TO_CNWLDESC
+      data_type: TEXT
+    - name: SERVICE_REFERRED_TO_COMMUNITY_CARE
+      data_type: TEXT
+    - name: SERVICE_REPORT_IDENTIFIER
+      data_type: TEXT
+    - name: SERVICE_REPORT_LINE
+      data_type: TEXT
+    - name: SERVICE_REPORTING_LINE
+      data_type: TEXT
+    - name: SERVICE_REQUEST_ID
+      data_type: TEXT
+    - name: SERVICE_TYPE
+      data_type: TEXT
+    - name: SERVICE_TYPE_REFERRED_TO_COMMUNITY_CARE
+      data_type: TEXT
+    - name: SERVICE_TYPE_REFERRED_TO_IDENTIFIER
+      data_type: TEXT
+    - name: SERVICE_UNIT_COST
+      data_type: TEXT
+    - name: SESSION_CATEGORY_ID
+      data_type: TEXT
+    - name: SESSION_DESCRIPTION
+      data_type: TEXT
+    - name: SESSION_ID
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: SITE_CODE_OF_TREATMENT
+      data_type: TEXT
+    - name: SITE_CODEOF_TREATMENT
+      data_type: TEXT
+    - name: SITE_NAME
+      data_type: TEXT
+    - name: SITECODE
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NUMBER
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NNN
+      data_type: TEXT
+    - name: SLOT_TYPE_ID
+      data_type: TEXT
+    - name: SOURCE
+      data_type: TEXT
+    - name: SOURCE_CODE_OF_REFERRAL
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_CNWLDESC
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_FOR_COMMUNITY
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_FOR_COMMUNITY_LOCAL
+      data_type: TEXT
+    - name: SOURCE_SYSTEM_KEY
+      data_type: TEXT
+    - name: SOURCEOF_REFERRAL_2
+      data_type: TEXT
+    - name: SPEC_CODE
+      data_type: TEXT
+    - name: SPECIALITY_REFERRED_TO
+      data_type: TEXT
+    - name: SPECIALTY_NAME
+      data_type: TEXT
+    - name: SPECIALTY_REFERRED_TO_DESC
+      data_type: TEXT
+    - name: START_DATE
+      data_type: TEXT
+    - name: START_DATE_GMP_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: START_DATE_GP_PRACTICE
+      data_type: TEXT
+    - name: START_TIME
+      data_type: TEXT
+    - name: START_TIME_OF_CONTACT
+      data_type: TEXT
+    - name: SUBMISSION_MONTH
+      data_type: TEXT
+    - name: SUBMISSION_YEAR
+      data_type: TEXT
+    - name: TEAM
+      data_type: TEXT
+    - name: TEAM_CODE
+      data_type: TEXT
+    - name: TEAM_NAME
+      data_type: TEXT
+    - name: TEAM_REFERRED_TO_CODE
+      data_type: TEXT
+    - name: TEAM_REFERRED_TO_DESC
+      data_type: TEXT
+    - name: TEAM_TYPE
+      data_type: TEXT
+    - name: TEAM_TYPE_REFERRED_TO_COMMUNITY_CARE
+      data_type: TEXT
+    - name: TFC_CODE
+      data_type: TEXT
+    - name: TFC_NAME
+      data_type: TEXT
+    - name: TIME_BETWEEN_REFERRAL_AND_CARE_CONTACT
+      data_type: TEXT
+    - name: TINETTI
+      data_type: TEXT
+    - name: TOTAL_ACTIVITY
+      data_type: TEXT
+    - name: TOTAL_BED_DAYS
+      data_type: TEXT
+    - name: TREATMENT_LOCATION_CODE
+      data_type: TEXT
+    - name: TREATMENT_PERIOD_END_DATE
+      data_type: TEXT
+    - name: TREATMENT_PERIOD_END_TIME
+      data_type: TEXT
+    - name: TREATMENT_PERIOD_START_DATE
+      data_type: TEXT
+    - name: TREATMENT_PERIOD_START_TIME
+      data_type: TEXT
+    - name: TRUST_CODE
+      data_type: TEXT
+    - name: TUAG
+      data_type: TEXT
+    - name: TYPE_DESCRIPTION
+      data_type: TEXT
+    - name: TYPE_OF_APPOINTMENT
+      data_type: TEXT
+    - name: TYPE_OF_CONTACT_CNWLDESC
+      data_type: TEXT
+    - name: TYPE_VALUE
+      data_type: TEXT
+    - name: UNIQUE_ID
+      data_type: TEXT
+    - name: UNIQUE_IDENTIFIER
+      data_type: TEXT
+    - name: UNIQUE_IDENTIFIER_PROVIDER
+      data_type: TEXT
+    - name: UNIQUE_KEY
+      data_type: TEXT
+    - name: UNIQUE_RECORD_IDENTIFIER_REF_SEQ_OLD_CAF
+      data_type: TEXT
+    - name: UNIT
+      data_type: TEXT
+    - name: UNIT_CODE
+      data_type: TEXT
+    - name: UNIT_NAME
+      data_type: TEXT
+    - name: UNIT_OF_ACTIVITY
+      data_type: TEXT
+    - name: UNIT_TYPE
+      data_type: TEXT
+    - name: UNIT_VALUE
+      data_type: TEXT
+    - name: VAR
+      data_type: TEXT
+    - name: WALKING_AID_PROVIDED
+      data_type: TEXT
+    - name: WT
+      data_type: TEXT
+    - name: WT_WD
+      data_type: TEXT
+    - name: YYYYMM
+      data_type: TEXT
   - name: LSACM
     identifier: '"LSACM"'
     columns:
@@ -2302,4 +3545,761 @@ sources:
     - name: EXCEPTION_DETECTED_AT
       data_type: TIMESTAMP_NTZ
     - name: REASON
+      data_type: TEXT
+  - name: REF
+    identifier: '"REF"'
+    columns:
+    - name: META_SK_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_FILE_ID
+      data_type: NUMBER(38,0)
+    - name: META_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: META_PARTITION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: META_PROVIDER_CODE
+      data_type: TEXT
+    - name: META_RECIPIENT_CODE
+      data_type: TEXT
+    - name: META_VERSION_ID
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_RECEIVED_DATE
+      data_type: TEXT
+    - name: TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: SITE_CODE
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: REFERRING_ORGANISATION_CODE
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_CODE
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_DESCRIPTION
+      data_type: TEXT
+    - name: REFERRER_CODE
+      data_type: TEXT
+    - name: DV_LSOA
+      data_type: TEXT
+    - name: PROVIDER_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_TYPE
+      data_type: TEXT
+    - name: GP_CODE
+      data_type: TEXT
+    - name: REFERRAL_CLOSURE_DATE
+      data_type: TEXT
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: FINANCIAL_YEAR
+      data_type: TEXT
+    - name: FINANCIAL_MONTH
+      data_type: TEXT
+    - name: GENDER
+      data_type: TEXT
+    - name: APPOINTMENT_TYPE_CODE
+      data_type: TEXT
+    - name: PRIORITY_TYPE_CODE
+      data_type: TEXT
+    - name: MAIN_SPECIALTY_CODE
+      data_type: TEXT
+    - name: ETHNICITY
+      data_type: TEXT
+    - name: CONSULTANTCODE
+      data_type: TEXT
+    - name: FLEXOR_FREEZE
+      data_type: TEXT
+    - name: REFERRED_TO_DESCRIPTION
+      data_type: TEXT
+    - name: RESPONSIBLE_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: REFERRED_TO_CODE
+      data_type: TEXT
+    - name: SK_PATIENT_ID
+      data_type: TEXT
+    - name: ACCOUNT_NUMBER
+      data_type: TEXT
+    - name: ACTIVITY_MONTH
+      data_type: TEXT
+    - name: ACUTE_PROVIDER_CODE
+      data_type: TEXT
+    - name: ADMINSTRATIVE_CATEGORY_CODE
+      data_type: TEXT
+    - name: AGE
+      data_type: TEXT
+    - name: AGE_AT_ACTIVITY_DATE_CONTRACT_MONITORING
+      data_type: TEXT
+    - name: AGE_AT_REF
+      data_type: TEXT
+    - name: AGE_AT_REFERRAL
+      data_type: TEXT
+    - name: AGE_BAND
+      data_type: TEXT
+    - name: AGEOF_PATIENT
+      data_type: TEXT
+    - name: APPOINTMENT_DATE
+      data_type: TEXT
+    - name: APPOINTMENT_TYPE_CODE_2
+      data_type: TEXT
+    - name: ASSESSMENT_SCORECARD_TEAM
+      data_type: TEXT
+    - name: ASSESSMENTSCORECARDTEAM
+      data_type: TEXT
+    - name: ATTENDANCE_DATE
+      data_type: TEXT
+    - name: ATTENDANCE_IDENTIFIER
+      data_type: TEXT
+    - name: ATTENDED_OR_DID_NOT_ATTEND_DESCRIPTION
+      data_type: TEXT
+    - name: BOOKED_VIA_ERS
+      data_type: TEXT
+    - name: BREACH_DATE
+      data_type: TEXT
+    - name: CARE_SPELL_ID
+      data_type: TEXT
+    - name: CARESPELL_ID
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CCG_ASSIGNMENT_METHOD
+      data_type: TEXT
+    - name: CCG_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: CCG_ODS_CODE
+      data_type: TEXT
+    - name: CCG_SLA_Y_N
+      data_type: TEXT
+    - name: CCG_SOURCE
+      data_type: TEXT
+    - name: CHOOSE_BOOK_FLAG
+      data_type: TEXT
+    - name: CLINIC_CODE
+      data_type: TEXT
+    - name: CLINIC_DESCRIPTION
+      data_type: TEXT
+    - name: CLINIC_LOCATION
+      data_type: TEXT
+    - name: CLINIC_NAME
+      data_type: TEXT
+    - name: CLINIC_TYPE
+      data_type: TEXT
+    - name: CLOCK_END_DATE
+      data_type: TEXT
+    - name: CLOCK_START_DATE
+      data_type: TEXT
+    - name: CLOCKENDDATE
+      data_type: TEXT
+    - name: CLOCKSTARTDATE
+      data_type: TEXT
+    - name: CLUSTERCODE
+      data_type: TEXT
+    - name: CODE_OF_GP_PRACTICE
+      data_type: TEXT
+    - name: CODE_OF_REGISTERED_OR_REFERRING_GP
+      data_type: TEXT
+    - name: COL_1ST_F2_FCONTACT_DATE_TIME
+      data_type: TEXT
+    - name: COL_1ST_F2_FCONTACT_SETTING
+      data_type: TEXT
+    - name: COMMISIONERID
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: COMMISSIONER_REF_NO
+      data_type: TEXT
+    - name: CONSULTANT_COMMENTS
+      data_type: TEXT
+    - name: CONSULTANT_LOCAL_DESC
+      data_type: TEXT
+    - name: CONTRACT
+      data_type: TEXT
+    - name: CONTRACT_CPID
+      data_type: TEXT
+    - name: CONTRACT_REFERENCE
+      data_type: TEXT
+    - name: CONTRACT_TYPE
+      data_type: TEXT
+    - name: CY
+      data_type: TEXT
+    - name: DATA_SET
+      data_type: TEXT
+    - name: DATA_SOURCE
+      data_type: TEXT
+    - name: DATASET
+      data_type: TEXT
+    - name: DATE_OF_FIRST_RESPONSE
+      data_type: TEXT
+    - name: DATE_OF_REFERRAL
+      data_type: TEXT
+    - name: DATE_OF_SECOND_FACE_TO_FACE
+      data_type: TEXT
+    - name: DATE_VALUE
+      data_type: TEXT
+    - name: DAY
+      data_type: TEXT
+    - name: DAY_WEEK
+      data_type: TEXT
+    - name: DESCRIPTION
+      data_type: TEXT
+    - name: DISCHARGE_DATE_FROM_TEAM
+      data_type: TEXT
+    - name: DISCHARGE_DESTINATION
+      data_type: TEXT
+    - name: DISCHARGE_SPEC_CODE
+      data_type: TEXT
+    - name: DISCHARGEDATETIME
+      data_type: TEXT
+    - name: DISPOSAL
+      data_type: TEXT
+    - name: DLP_BASELINE_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DLP_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DLP_FLEXOR_FREEZE
+      data_type: TEXT
+    - name: DOW
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE
+      data_type: TEXT
+    - name: DV_RECIPIENT_CODE
+      data_type: TEXT
+    - name: DV_YEAROF_BIRTH
+      data_type: TEXT
+    - name: E_RS_REFERRAL_Y_N
+      data_type: TEXT
+    - name: EPISODE_UNIQUE_ID
+      data_type: TEXT
+    - name: ETHNIC_CAT_CODE
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: EXTERNAL_REF_ID
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: TEXT
+    - name: FIN_YEAR
+      data_type: TEXT
+    - name: FINAL_CCG
+      data_type: TEXT
+    - name: FINAL_CCG_NAME
+      data_type: TEXT
+    - name: FIRST_ATTENDANCE_CODE
+      data_type: TEXT
+    - name: FIRST_ATTENDANCE_DESCRIPTION
+      data_type: TEXT
+    - name: FIRST_RESPONSE_DATE
+      data_type: TEXT
+    - name: FLAG_APPT_DATE
+      data_type: TEXT
+    - name: FLAG_PRE_OP_AX
+      data_type: TEXT
+    - name: FLAG_REFERRAL_STAGE
+      data_type: TEXT
+    - name: FLAG_SPEC_REF_APP
+      data_type: TEXT
+    - name: FLEXOR_FREEZE_2
+      data_type: TEXT
+    - name: FM
+      data_type: TEXT
+    - name: FQ
+      data_type: TEXT
+    - name: FY
+      data_type: TEXT
+    - name: FY_Q
+      data_type: TEXT
+    - name: G_A_SPECIALTY_FLAG_MAR
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTITIONER_CODE
+      data_type: TEXT
+    - name: GENERAL_PRACTICE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: GOVERMENT_NEW_REPORT_FLAG
+      data_type: TEXT
+    - name: GP
+      data_type: TEXT
+    - name: GP_NAME
+      data_type: TEXT
+    - name: GP_PRACTICE
+      data_type: TEXT
+    - name: GP_PRATICE_CODE
+      data_type: TEXT
+    - name: GP_REFERRAL_ALL
+      data_type: TEXT
+    - name: GP_TRIAGE_COMMENTS
+      data_type: TEXT
+    - name: HOLIDAY
+      data_type: TEXT
+    - name: HOLIDAY_SAT_SUN
+      data_type: TEXT
+    - name: HOSPITAL_NUMBER
+      data_type: TEXT
+    - name: HOSPITAL_TREATMENT_SITE
+      data_type: TEXT
+    - name: HRG_CODE
+      data_type: TEXT
+    - name: ICB
+      data_type: TEXT
+    - name: INPUT_DATE
+      data_type: TEXT
+    - name: IS_EREFERRAL
+      data_type: TEXT
+    - name: IS_IN_ACTIVITY_RETURNS
+      data_type: TEXT
+    - name: IS_REFERRAL_ACCEPTED
+      data_type: TEXT
+    - name: ITEM_OF_SERVICE_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_PATIENT_ID
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER_EXTENDED
+      data_type: TEXT
+    - name: LOCAL_REFERRAL_ID
+      data_type: TEXT
+    - name: LOCAL_REFERRAL_IDENTIFIER
+      data_type: TEXT
+    - name: LOCAL_REFERRRAL_NUMBER
+      data_type: TEXT
+    - name: LOCAL_SPECIALTY_CODE
+      data_type: TEXT
+    - name: LOCAL_SPECIALTY_DESCRIPTION
+      data_type: TEXT
+    - name: LOCAL_SUB_SPECIALTY_CODE
+      data_type: TEXT
+    - name: LOCALPATIENTID
+      data_type: TEXT
+    - name: LOCALREFERRALID
+      data_type: TEXT
+    - name: LPS_REFERRAL_DATE_TIME
+      data_type: TEXT
+    - name: LPS_TEAM_NAME
+      data_type: TEXT
+    - name: MAR_CATEGORY
+      data_type: TEXT
+    - name: MAR_FLAG
+      data_type: TEXT
+    - name: MH_PROVIDER_CODE
+      data_type: TEXT
+    - name: MH_SERVICE_USER_AT_REFERRAL_DATE
+      data_type: TEXT
+    - name: MH_SERVICE_USERAT_REFERRAL_DATE
+      data_type: TEXT
+    - name: MH_WAS_PRIMARY_DIAGNOSIS
+      data_type: TEXT
+    - name: MH_WAS_SECONDARY_DIAGNOSIS
+      data_type: TEXT
+    - name: MHICD10_CODE
+      data_type: TEXT
+    - name: MONTH_OF_REFERRAL
+      data_type: TEXT
+    - name: MONTH_REFERRAL
+      data_type: TEXT
+    - name: MONTH_START_DATE
+      data_type: TEXT
+    - name: MONTH_YEAR
+      data_type: TEXT
+    - name: MTH
+      data_type: TEXT
+    - name: MTH_YR
+      data_type: TEXT
+    - name: NATIONAL_CODE
+      data_type: TEXT
+    - name: NATIONAL_DESCRIPTION
+      data_type: TEXT
+    - name: NR_REFERRALS
+      data_type: TEXT
+    - name: NUMBER1ST_CONTACTS
+      data_type: TEXT
+    - name: NUMBER_FU_CONTACTS_ED
+      data_type: TEXT
+    - name: NUMBER_FU_CONTACTS_OTHER
+      data_type: TEXT
+    - name: NUMBER_FU_CONTACTS_WARD
+      data_type: TEXT
+    - name: OASIS_PATIENT_ID
+      data_type: TEXT
+    - name: ODS_CODE
+      data_type: TEXT
+    - name: OPCS_CODE
+      data_type: TEXT
+    - name: ORG_CODE_CCG_OF_RESIDENCE
+      data_type: TEXT
+    - name: ORG_ID_GP
+      data_type: TEXT
+    - name: ORG_ID_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_REFERRING
+      data_type: TEXT
+    - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: OTHER_REFERRAL_G_A
+      data_type: TEXT
+    - name: OUTCOME_OF_REFERRAL
+      data_type: TEXT
+    - name: OUTCOMEOFREFERRAL
+      data_type: TEXT
+    - name: PATHWAY_ID
+      data_type: TEXT
+    - name: PATHWAY_SCOPE_CODE
+      data_type: TEXT
+    - name: PATIENT_AGE_AT_REFERRAL
+      data_type: TEXT
+    - name: PATIENT_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_MEDICAL_RECORD_NUMBER
+      data_type: TEXT
+    - name: PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: PATIENT_SEEN
+      data_type: TEXT
+    - name: PCT_CODE
+      data_type: TEXT
+    - name: PERIOD_OF_REFERRAL
+      data_type: TEXT
+    - name: PERSON_STATED_GENDER_CODE
+      data_type: TEXT
+    - name: PK
+      data_type: TEXT
+    - name: PMI
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: PREFERRED_DESTINATION
+      data_type: TEXT
+    - name: PRESENT_OUTCOME
+      data_type: TEXT
+    - name: PRIMARY_REFERRAL_REASON
+      data_type: TEXT
+    - name: PRIORITY
+      data_type: TEXT
+    - name: PRIORITY_TYPE_CODE_2
+      data_type: TEXT
+    - name: PROV_CCG_CODE
+      data_type: TEXT
+    - name: PROVIDER
+      data_type: TEXT
+    - name: PROVIDER_NAME
+      data_type: TEXT
+    - name: PROVIDER_SITE
+      data_type: TEXT
+    - name: REASON_FOR_REFERRAL_CODE
+      data_type: TEXT
+    - name: REF_MONTH
+      data_type: TEXT
+    - name: REF_REASON
+      data_type: TEXT
+    - name: REF_REC_DATE
+      data_type: TEXT
+    - name: REF_SOURCE
+      data_type: TEXT
+    - name: REF_SOURCE_LOCAL
+      data_type: TEXT
+    - name: REF_SOURCE_LOCAL_DESC
+      data_type: TEXT
+    - name: REF_TO
+      data_type: TEXT
+    - name: REF_TO_CODE
+      data_type: TEXT
+    - name: REF_TYPE
+      data_type: TEXT
+    - name: REFERRAL_ACCEPTANCE_STATUS
+      data_type: TEXT
+    - name: REFERRAL_BOOKING_TYPE
+      data_type: TEXT
+    - name: REFERRAL_CARE_PROFESSIONAL_CODE
+      data_type: TEXT
+    - name: REFERRAL_CLOSURE_REASON_CODE
+      data_type: TEXT
+    - name: REFERRAL_DATE
+      data_type: TEXT
+    - name: REFERRAL_ID
+      data_type: TEXT
+    - name: REFERRAL_IDENTIFIER
+      data_type: TEXT
+    - name: REFERRAL_IDENTIFIER_PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: REFERRAL_KEY
+      data_type: TEXT
+    - name: REFERRAL_LOADING_DATE
+      data_type: TEXT
+    - name: REFERRAL_MONTH
+      data_type: TEXT
+    - name: REFERRAL_PRIORITY
+      data_type: TEXT
+    - name: REFERRAL_PRIORITY_MET
+      data_type: TEXT
+    - name: REFERRAL_PRIORITY_MET_DATE_TIME
+      data_type: TEXT
+    - name: REFERRAL_REASON
+      data_type: TEXT
+    - name: REFERRAL_REASON_CODE
+      data_type: TEXT
+    - name: REFERRAL_REASON_DESCRIPTION
+      data_type: TEXT
+    - name: REFERRAL_RECEIPT_DATE
+      data_type: TEXT
+    - name: REFERRAL_RECEIVED
+      data_type: TEXT
+    - name: REFERRAL_RECEIVED_MONTH
+      data_type: TEXT
+    - name: REFERRAL_RECEIVED_YEAR
+      data_type: TEXT
+    - name: REFERRAL_RECEIVEDDATE
+      data_type: TEXT
+    - name: REFERRAL_REJECTED_REASONDESCRIPTION
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_RECEIVED_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_RECEIVED_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: REFERRAL_SOURCE
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_LOCAL
+      data_type: TEXT
+    - name: REFERRAL_SPECIALITY
+      data_type: TEXT
+    - name: REFERRAL_SPECIALITY_CODE
+      data_type: TEXT
+    - name: REFERRAL_STATUS
+      data_type: TEXT
+    - name: REFERRAL_TIME
+      data_type: TEXT
+    - name: REFERRAL_TYPE
+      data_type: TEXT
+    - name: REFERRAL_TYPE2
+      data_type: TEXT
+    - name: REFERRAL_TYPE3_GROUPED
+      data_type: TEXT
+    - name: REFERRAL_TYPE_SSDESC
+      data_type: TEXT
+    - name: REFERRALPRIORITY
+      data_type: TEXT
+    - name: REFERRALREASONCODE
+      data_type: TEXT
+    - name: REFERRALREASONDESCRIPTION
+      data_type: TEXT
+    - name: REFERRALSERVICE
+      data_type: TEXT
+    - name: REFERRED_TO_DESCRIPTION_2
+      data_type: TEXT
+    - name: REFERRED_TO_SPECIALITY
+      data_type: TEXT
+    - name: REFERRER
+      data_type: TEXT
+    - name: REFERRER_NAME
+      data_type: TEXT
+    - name: REFERRER_ORG
+      data_type: TEXT
+    - name: REFERRER_ORGANISATION
+      data_type: TEXT
+    - name: REFERRER_SOURCE
+      data_type: TEXT
+    - name: REFERRER_TYPE
+      data_type: TEXT
+    - name: REFERRING_GP
+      data_type: TEXT
+    - name: REFERRING_GP_CODE
+      data_type: TEXT
+    - name: REFERRING_GP_CONSULTANT_GMC
+      data_type: TEXT
+    - name: REFERRING_GP_NAME
+      data_type: TEXT
+    - name: REFERRING_GP_PRACTICE
+      data_type: TEXT
+    - name: REFERRING_GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: REFERRING_GP_PRACTICE_NAME
+      data_type: TEXT
+    - name: REFERRING_GPCCG_CODE
+      data_type: TEXT
+    - name: REFERRING_ORG_CODE
+      data_type: TEXT
+    - name: REFERRING_PRACTICE_CODE
+      data_type: TEXT
+    - name: REFERRING_SOURCE_LOCAL
+      data_type: TEXT
+    - name: REFERRING_SPECIALTY
+      data_type: TEXT
+    - name: REFERRING_TREATMENT_FUNCTION_CODE
+      data_type: TEXT
+    - name: REG_GP_CODE
+      data_type: TEXT
+    - name: REG_PRAC_CODE
+      data_type: TEXT
+    - name: REGD_GP_PRACTICE_NAME
+      data_type: TEXT
+    - name: REGION
+      data_type: TEXT
+    - name: REGISTERED_GP
+      data_type: TEXT
+    - name: REGISTERED_GP_CODE
+      data_type: TEXT
+    - name: REGISTERED_GP_PRAC
+      data_type: TEXT
+    - name: REGISTERED_GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: REGISTERED_GP_PRACTICE_ODS_CODE
+      data_type: TEXT
+    - name: REGISTERED_GPCCG_CODE
+      data_type: TEXT
+    - name: REGISTERED_GPCCG_NAME
+      data_type: TEXT
+    - name: REJECTED_Y_N
+      data_type: TEXT
+    - name: REJECTION_REASON
+      data_type: TEXT
+    - name: RESPONSIBLE_COMMISSIONER_CODE_2
+      data_type: TEXT
+    - name: RESPONSIBLE_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: ROW_ID
+      data_type: TEXT
+    - name: RS_LAST_EDITTED_AT
+      data_type: TEXT
+    - name: RTT_START_DATE
+      data_type: TEXT
+    - name: RTT_STATUS
+      data_type: TEXT
+    - name: RUN_DATE
+      data_type: TEXT
+    - name: SAT_SUN
+      data_type: TEXT
+    - name: SECTOR_CODE
+      data_type: TEXT
+    - name: SEEN_AT_HOME
+      data_type: TEXT
+    - name: SEEN_DATE
+      data_type: TEXT
+    - name: SEENATHOME
+      data_type: TEXT
+    - name: SER_REPORT_LINE
+      data_type: TEXT
+    - name: SERVICE
+      data_type: TEXT
+    - name: SERVICE_AREA
+      data_type: TEXT
+    - name: SERVICE_CATEGORY
+      data_type: TEXT
+    - name: SERVICE_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_GROUP
+      data_type: TEXT
+    - name: SERVICE_POD
+      data_type: TEXT
+    - name: SERVICE_PROVIDER
+      data_type: TEXT
+    - name: SERVICE_REFERENCE_COST_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_REPORTING_LINE
+      data_type: TEXT
+    - name: SERVICE_REQUEST_ID
+      data_type: TEXT
+    - name: SERVICE_REQUEST_IDENTIFIER
+      data_type: TEXT
+    - name: SERVICE_TYPE
+      data_type: TEXT
+    - name: SERVICE_TYPE_REQUESTED_CODE
+      data_type: TEXT
+    - name: SEX
+      data_type: TEXT
+    - name: SITE_CODE_OF_TREATMENT
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NO
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NUMBER
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHSNUMBER
+      data_type: TEXT
+    - name: SK_PATIENT_ID_PATIENT_ID
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_CODE
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_DESCRIPTION
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_FOR_OUT_PATIENTS
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_TEXT
+      data_type: TEXT
+    - name: SPECIALITY_CODE
+      data_type: TEXT
+    - name: SPECIALITY_CODE_LOCAL
+      data_type: TEXT
+    - name: SPECIALITY_TFC
+      data_type: TEXT
+    - name: SPECIALTY
+      data_type: TEXT
+    - name: SPECIALTY_AT_REFERRAL
+      data_type: TEXT
+    - name: SPECIALTY_CODE
+      data_type: TEXT
+    - name: SPECIALTY_DESC
+      data_type: TEXT
+    - name: SPECIALTY_DESCRIPTOR
+      data_type: TEXT
+    - name: SPECIALTY_NAME
+      data_type: TEXT
+    - name: SPIRE_HOSPITAL_NAME
+      data_type: TEXT
+    - name: SPIRE_ODS_CODE
+      data_type: TEXT
+    - name: SUB_SPECIALTY
+      data_type: TEXT
+    - name: SUBMITTED_DATE
+      data_type: TEXT
+    - name: SYMPTOMS
+      data_type: TEXT
+    - name: TEAM_REFERRED_TO_CODE
+      data_type: TEXT
+    - name: TEAM_REFERRED_TO_DESC
+      data_type: TEXT
+    - name: TEAM_REFERRED_TO_DESCRIPTION
+      data_type: TEXT
+    - name: TEAM_TYPE
+      data_type: TEXT
+    - name: TEXTBOX84
+      data_type: TEXT
+    - name: TFC_DESCRIPTION
+      data_type: TEXT
+    - name: TFC_NATIONAL
+      data_type: TEXT
+    - name: TOTAL_REFERRAL
+      data_type: TEXT
+    - name: TRUST_CODE
+      data_type: TEXT
+    - name: TYPE_NAME
+      data_type: TEXT
+    - name: UBRN
+      data_type: TEXT
+    - name: UBRN_STATUS
+      data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER
+      data_type: TEXT
+    - name: UNIQUE_BOOKING_REFERENCE_NUMBER_CONVERTED_PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: URGENCY_CODE
+      data_type: TEXT
+    - name: WEEK_ENDING
+      data_type: TEXT
+    - name: WHO_CREATED
+      data_type: TEXT
+    - name: WK_END
+      data_type: TEXT
+    - name: WORKING_DAYS
       data_type: TEXT

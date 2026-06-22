@@ -77,7 +77,7 @@ select
                                                 as dv_commissioner_support_charge,
         {{ parse_slam_number('s.total_cost') }} as dv_total_cost
 
-from {{ source('sdl_wnl', 'LSDRPLCM') }} as s
+from {{ ref('raw_sdl_wnl_lsdrplcm') }} as s
 left join submission_slices_enriched as sl
 {{ slam_slice_join() }}
 {{ slam_incremental_where() }}

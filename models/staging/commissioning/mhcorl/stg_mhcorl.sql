@@ -279,8 +279,12 @@ normalised as (
         coalesce(team_code, lps_team_code)      as team_code,
 
         -- Service / financial categorisation
-        coalesce(flex_or_freeze, dlp_flexor_freeze)
-                                                as flex_or_freeze,
+        -- Standardised to exactly 'Flex' / 'Freeze' (case variants, 'Frozen' and
+        -- the DLP PRIMARY/REFRESH terms folded in; '1'/'0' and other values -> NULL).
+        coalesce(
+            {{ clean_flex_or_freeze('flex_or_freeze') }},
+            {{ clean_flex_or_freeze('dlp_flexor_freeze') }}
+        )                                       as flex_or_freeze,
         finance_category                        as finance_category,
         costing_code_description                as costing_code_description,
 
