@@ -22,6 +22,7 @@ models:
             combination_of_columns:
               - feed
               - dv_provider_code
+              - dv_commissioner
               - dv_financial_year
               - dv_financial_month
     columns:
@@ -31,6 +32,11 @@ models:
           - not_null
       - name: dv_provider_code
         description: Dictionary-cleaned provider ODS code (slice key).
+      - name: dv_commissioner
+        description: |
+          Commissioner ODS code — part of the slice key for LSACM only (DLP/Local
+          providers submit per-commissioner files). NULL for the other SLAM feeds,
+          which stay provider-grain.
       - name: dv_financial_year
         description: Validated financial year 'YYYYYY' (slice key).
       - name: dv_financial_month

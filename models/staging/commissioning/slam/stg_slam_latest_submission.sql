@@ -46,7 +46,7 @@ with registry as (
                  = mod(try_to_number(substr(regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1), 1, 2)) + 1, 100)
                 then '20' || regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1)
         end                                     as financial_year_from_file_name
-    from {{ ref('raw_sdl_wnl_meta_file_registry') }}
+    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
     where feed in ('LSACM', 'LSPLCM', 'LSDrPLCM', 'LSDePLCM')
 ),
 
@@ -65,6 +65,7 @@ slices as (
         financial_year,
         financial_month,
         provider_code_raw,
+        dv_commissioner,
         {{ slam_fy_from_date('period_date') }}      as fy_from_date,
         iff(period_date is not null,
             {{ slam_fm_from_date('period_date') }}, null)
@@ -78,6 +79,15 @@ slices as (
             cast(s.financial_year as varchar)           as financial_year,
             cast(s.financial_month as varchar)          as financial_month,
             s.organisation_identifier_code_of_provider  as provider_code_raw,
+            {% if table_name == 'LSACM' %}
+            -- LSACM DLP/Local layouts submit per-commissioner files, so the
+            -- current statement is per (provider, commissioner, FY, month).
+            -- Other feeds submit one comprehensive file per provider (grain
+            -- stays provider-only): dv_commissioner is NULL and drops out.
+            s.organisation_identifier_code_of_commissioner as dv_commissioner,
+            {% else %}
+            cast(null as varchar)                       as dv_commissioner,
+            {% endif %}
             {% if table_name != 'LSACM' %}
             -- evaluated once per row; gated to incomplete-period rows
             case when {{ parse_slam_financial_year('s.financial_year') }} is null
@@ -87,7 +97,7 @@ slices as (
             {% else %}
             null::date                                  as period_date
             {% endif %}
-        from {{ ref(sdl_wnl_raw_model(table_name)) }} as s
+        from {{ source('sdl_wnl', table_name) }} as s
     )
     group by all
     {% if not loop.last %}union all{% endif %}
@@ -99,8 +109,14 @@ enriched as (
         s.feed,
         s.meta_file_id,
         s.meta_batch_id,
+        s.dv_commissioner,
         coalesce(
-            {{ parse_slam_financial_year('s.financial_year') }},
+            -- LSACM DLP/Local layouts carry the FY as a bare start year; other
+            -- feeds keep the strict parse so their activity-date fallback wins.
+            case when s.feed = 'LSACM'
+                then {{ parse_slam_financial_year('s.financial_year', allow_bare_year=true) }}
+                else {{ parse_slam_financial_year('s.financial_year') }}
+            end,
             r.financial_year_from_file_name,
             s.fy_from_date
         )                                       as dv_financial_year,
@@ -123,7 +139,7 @@ ranked as (
     select
         *,
         rank() over (
-            partition by feed, dv_provider_code, dv_financial_year, dv_financial_month
+            partition by feed, dv_provider_code, dv_commissioner, dv_financial_year, dv_financial_month
             order by submission_loaded_at desc nulls last, meta_file_id desc, meta_batch_id desc
         )                                       as submission_rank
     from enriched
@@ -132,6 +148,7 @@ ranked as (
 select distinct
     feed,
     dv_provider_code,
+    dv_commissioner,
     dv_financial_year,
     dv_financial_month,
     meta_file_id,
