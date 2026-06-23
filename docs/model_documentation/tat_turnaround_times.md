@@ -14,12 +14,12 @@ Created by `sql/01_setup.sql` + `sql/03_procs.sql` in the `tat_provider_ingest` 
 
 | Object | FQN | Type | Purpose |
 |---|---|---|---|
-| Raw landing table | `DATA_LAKE.TAT.TURNAROUND_TIMES_RAW` | TABLE | All-STRING 1:1 landing of provider submissions (148 files, ~9.43M rows) |
+| Raw landing table | `DATA_LAKE.TAT.TURNAROUND_TIMES_RAW` | TABLE | All-STRING 1:1 landing of provider submissions (145 files, ~9.30M rows; 3 blank-header files skipped — see §4) |
 | Ingest log | `DATA_LAKE.TAT.TAT_INGEST_LOG` | TABLE | Per-file load audit (status, rows, errors, who) |
 | Stage | `DATA_LAKE.TAT.TAT_SUBMISSIONS` | STAGE | Transient upload pipe (`incoming/`, cleared after load) |
 | File format | `DATA_LAKE.TAT.TAT_CSV` | FILE FORMAT | CSV parse (header, BOM, NA sentinels) |
 | xlsx converter | `DATA_LAKE.TAT.SP_TAT_CONVERT_XLSX()` | PROCEDURE (Python) | Converts staged `.xlsx` → `.csv` |
-| Raw loader | `DATA_LAKE.TAT.SP_TAT_LOAD_RAW()` | PROCEDURE (SQL) | `COPY INTO` the raw table + write ingest log |
+| Raw loader | `DATA_LAKE.TAT.SP_TAT_LOAD_RAW()` | PROCEDURE (SQL) | Idempotent upsert by `SOURCE_FILE` (delete-then-reload), `SKIP_FILE` on bad files, write ingest log |
 | Datetime parser | `DATA_LAKE.TAT.PARSE_TAT_TS(VARCHAR)` | FUNCTION | UK `DD/MM/YYYY HH:MI` (+ ISO) → `TIMESTAMP_NTZ` |
 
 ## 2. dbt models
@@ -50,8 +50,8 @@ the dev objects are built now (from validation runs).
 
 ## 4. What to sense-check
 
-- **Counts** (dev, latest run): raw ~9.43M → stg 9,415,704 → int 9,235,786 (Flex 6.13M / Freeze 3.11M), all 7 trusts.
+- **Counts** (dev, latest run): raw ~9.30M (145 files) → stg/int re-derive on the next run; prior 148-file run gave stg 9,415,704 → int 9,235,786 (Flex 6.13M / Freeze 3.11M), all 7 trusts.
 - **Datetime parsing** — providers send UK `DD/MM/YYYY HH:MI`; xlsx-converted files arrive ISO. ~99.8% of test datetimes parse; the rest are genuinely missing/blank.
 - **Flex/Freeze** — `datedifftest` = whole months between the file's data period and the test month: `-3` (or one hardcoded file) → Freeze, `-2/-1` → Flex, else dropped.
 - **Restatement** — only the latest submission per (trust, data period) survives in the modelling layer.
-- **Known**: 3 historical NMUH files had blank header columns (cleaned on load); 4 xlsx months also had a same-named `.csv` (de-duplicated as same trust+period).
+- **Known**: 3 historical NMUH files have blank header columns (`PARSE_HEADER` rejects them) — skipped by `ON_ERROR=SKIP_FILE` and logged, not loaded (hence 145 of 148 files); clean them in the folder or add a CSV-sanitise step to `SP_TAT_CONVERT_XLSX` to recover. 4 xlsx months also had a same-named `.csv` (de-duplicated as same trust+period).
