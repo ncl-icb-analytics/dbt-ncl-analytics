@@ -58,11 +58,22 @@ select *
 FROM (
 select 
 b.person_id
-,'HbA1C' as TEST_TYPE
-,DATE(b.clinical_effective_date) as hba1c_date
-,b.hba1c_category
-,b.hba1c_display
+,'HbA1c' as TEST_TYPE
+,DATE(b.clinical_effective_date) as glucose_date
+,b.HBA1C_CATEGORY AS GLUCOSE_CATEGORY
+,b.HBA1C_DISPLAY AS GLUCOSE_DISPLAY
 FROM {{ ref('int_hba1c_latest') }} b
+INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
+where clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
+
+UNION
+select 
+b.person_id
+,'Blood Glucose' as TEST_TYPE
+,DATE(b.clinical_effective_date) as glucose_date
+,NULL AS GLUCOSE_CATEGORY
+,b.BLOOD_GLUCOSE_DISPLAY AS GLUCOSE_DISPLAY
+FROM {{ ref('int_blood_glucose_latest') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 
@@ -71,15 +82,15 @@ UNION
 select 
 b.person_id
 ,'Blood glucose' as TEST_TYPE
-,DATE(b.clinical_effective_date) as hba1c_date
-,'Glucose Declined' as hba1c_category
-,NULL AS hba1c_display
+,DATE(b.clinical_effective_date) as glucose_date
+,'Glucose Declined' as glucose_category
+,NULL AS glucose_display
 FROM {{ ref('int_smi_glucose_declined') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where b.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY b.person_id ORDER BY b.clinical_effective_date DESC) = 1
 ) a
-QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.hba1c_date DESC, CASE WHEN a.hba1c_category <> 'Glucose Declined' THEN 1 ELSE 0 END DESC) = 1
+QUALIFY ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.glucose_date DESC, CASE WHEN a.glucose_category <> 'Glucose Declined' THEN 1 ELSE 0 END DESC) = 1
 )
 -- # TEST 3 CHOLESTEROL OR QRISK
 ,CHOL as (
@@ -128,14 +139,14 @@ SELECT *
 FROM (
 select 
 bp.person_id
-,'Blood Pressure' as TEST_TYPE
-,DATE(bp.LATEST_BP_DATE) as BP_date
-,bp.LATEST_SYSTOLIC_VALUE
-,bp.LATEST_DIASTOLIC_VALUE
-,CASE 
-WHEN bp.IS_OVERALL_BP_CONTROLLED = 'Yes' THEN 'Controlled' 
-WHEN bp.IS_OVERALL_BP_CONTROLLED = 'No' THEN 'Not Controlled' 
-ELSE Null END AS BP_CATEGORY,
+     ,'Blood Pressure' as TEST_TYPE
+     ,DATE(bp.LATEST_BP_DATE) as BP_date
+     ,bp.LATEST_SYSTOLIC_VALUE
+     ,bp.LATEST_DIASTOLIC_VALUE
+     ,CASE 
+          WHEN bp.IS_OVERALL_BP_CONTROLLED = 'Yes' THEN 'Controlled' 
+          WHEN bp.IS_OVERALL_BP_CONTROLLED = 'No' THEN 'Not Controlled' 
+          ELSE NULL END AS BP_CATEGORY
 FROM {{ ref('fct_person_bp_control') }} bp
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where LATEST_BP_DATE  >= DATEADD('month', -12, CURRENT_DATE)
@@ -144,12 +155,12 @@ And bp.LATEST_BP_DATE <= CURRENT_DATE()
 UNION
 
 select 
-bp.person_id
-,DATE(bp.clinical_effective_date) as BP_date
-,'Blood Pressure' as TEST_TYPE
-,NULL AS LATEST_SYSTOLIC_VALUE
-,NULL AS LATEST_DIASTOLIC_VALUE
-,'BP Declined' AS BP_CATEGORY
+     bp.person_id
+     ,'Blood Pressure' as TEST_TYPE
+     ,DATE(bp.clinical_effective_date) as BP_date
+     ,NULL AS LATEST_SYSTOLIC_VALUE
+     ,NULL AS LATEST_DIASTOLIC_VALUE
+     ,'BP Declined' AS BP_CATEGORY
 FROM {{ ref('int_smi_bp_declined') }} bp
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where bp.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
@@ -237,7 +248,7 @@ WHEN ALCOHOL_RISK_CATEGORY = 'Alcohol Declined' THEN 1 ELSE 0 END DESC) = 1
              WHEN b.person_id IS NOT NULL AND b.BMI_CATEGORY = 'BMI Declined' THEN 'Declined'
              ELSE 'Met' END AS BMI_CHECK_12M,
         CASE WHEN h.person_id IS NULL THEN 'Not Met'
-             WHEN h.person_id IS NOT NULL AND h.hba1c_category = 'Glucose Declined' THEN 'Declined'
+             WHEN h.person_id IS NOT NULL AND h.GLUCOSE_CATEGORY = 'Glucose Declined' THEN 'Declined'
              ELSE 'Met' END AS HBA1C_CHECK_12M,
         CASE WHEN c.person_id IS NULL THEN 'Not Met'
              WHEN c.person_id IS NOT NULL AND c.CHOLESTEROL_CATEGORY = 'Cholesterol Declined' THEN 'Declined'
@@ -268,7 +279,7 @@ LEFT JOIN BMI b USING (person_id)
 UNION ALL
 
 SELECT person_id, 'HBA1C' AS Check_Type, h.test_type, HBA1C_CHECK_12M AS Check_Status,
-       h.hba1c_date AS Check_Date, h.hba1c_category AS Result_Category, h.hba1c_display AS Value
+       h.glucose_date AS Check_Date, h.glucose_category AS Result_Category, h.glucose_display AS Value
 FROM HC_CHECKS hc
 LEFT JOIN Glucose h USING (person_id)
 
@@ -331,13 +342,13 @@ p.PERSON_ID
 ,p.MAIN_LANGUAGE
 ,e.EXCEPTION_DATE
 ,e.EXCEPTION_CATEGORY
+,hc.TEST_TYPE
 ,hc.CHECK_DATE
 ,hc.CHECK_TYPE
 ,hc.CHECK_STATUS
 ,hc.RESULT_CATEGORY
 ,hc.VALUE
 FROM {{ ref('int_smi_population_base')  }} p
---FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 LEFT JOIN EXCEPTIONS e USING (PERSON_ID)
 LEFT JOIN COMBINED hc USING (PERSON_ID)
 --include only people with active SMI diagnosis as eligible for a health check- they might also be on lithium

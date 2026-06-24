@@ -4,7 +4,7 @@
         cluster_by=['person_id', 'clinical_effective_date'],
         tags=['smi_registry'])
 }}
- --This model captures Blood Glucose measurement including fasting glucose. PCD Refset. Values not categorised as they require diabetes status. Used in SMI phydical health checks
+ --This model captures Blood Glucose measurement including fasting glucose using PCD Refset codes. Values are not categorised as they require diabetes status. Used in SMI phydical health checks
 with blood_gluc as (
 SELECT
     obs.id,
@@ -21,7 +21,8 @@ WHERE obs.clinical_effective_date IS NOT NULL
 AND obs.clinical_effective_date <= CURRENT_DATE() -- No future dates
 )
 --select all to then deduplicate by person, code and date
-select person_id
+select 
+person_id
 ,clinical_effective_date
 ,concept_code
 ,concept_display
