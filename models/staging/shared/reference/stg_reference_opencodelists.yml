@@ -1,6 +1,8 @@
 models:
   - name: stg_reference_opencodelists
-    description: OpenCodelists reference terminology mapping codelists to individual codes across coding systems (SNOMED, BNF, ICD-10, etc.)
+    description: >
+      OpenCodelists reference terminology mapping codelists to individual codes across coding systems (SNOMED, BNF, ICD-10, etc.).
+      Deduplicated to one row per codelist/code key. Non-null terms are preferred over null terms; where multiple non-null terms exist, one is selected arbitrarily so the user may prefer to remove the terms and join from a canonical reference table at point of use.
     config:
       meta:
         owner:
