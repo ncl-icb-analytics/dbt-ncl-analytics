@@ -1,16 +1,24 @@
-with base_encounters as (
+with base_encounters as ( -- emergency attendances
     select *
     from {{ ref('int_sus_uec_encounter') }}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     and sk_patient_id is not null and sk_patient_id != '1'
 ),  
-lower_respiratory_encounters as (
+
+base_population as ( -- all GP registered patients
+    select distinct sk_patient_id
+    from {{ref('dim_person_demographics_basic')}}
+    where sk_patient_id is not null and sk_patient_id != '1'
+),  
+
+lower_respiratory_encounters as ( -- lower respiratory encounters
     select *
     from {{ref('int_comm_chronic_lower_respiratory') }}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     and sk_patient_id is not null and sk_patient_id != '1'
 ),  
-emergency_admissions as (
+
+emergency_admissions as ( -- emergency admissions for respiratory conditions
     select ip.sk_patient_id 
         , count(distinct ip.visit_occurrence_id) as ae_respiratory_admission_12mo
     from {{ ref('int_sus_apc_encounter') }} as ip
@@ -21,6 +29,15 @@ emergency_admissions as (
     group by 
         ip.sk_patient_id
 ),
+
+population_spine as (
+    select sk_patient_id from base_population
+    union 
+    select sk_patient_id from base_encounters
+    union 
+    select sk_patient_id from emergency_admissions
+),
+
 ae_encounter_summary as(
     select
         be.sk_patient_id
@@ -47,7 +64,7 @@ ae_encounter_summary as(
 )
 
 SELECT
-    a.sk_patient_id
+    ps.sk_patient_id
     , zeroifnull(a.ae_ill_12mo) as ae_ill_12mo
     , zeroifnull(a.ae_ill_3mo) as ae_ill_3mo
     , zeroifnull(a.ae_ill_1mo) as ae_ill_1mo
@@ -56,6 +73,8 @@ SELECT
     , zeroifnull(a.ae_t1_12mo) as ae_t1_12mo
     , zeroifnull(a.ae_respiratory_attendance_12mo) as ae_lower_respiratory_attendance_12mo -- 500k million attendance >= admission
     , zeroifnull(ea.ae_respiratory_admission_12mo) as ae_lower_respiratory_admission_12mo --  15k admission > attendance
-from ae_encounter_summary as a
+from population_spine ps
+left join ae_encounter_summary as a
+    on ps.sk_patient_id = a.sk_patient_id
 left join emergency_admissions ea
-    on a.sk_patient_id = ea.sk_patient_id
+    on ps.sk_patient_id = ea.sk_patient_id
