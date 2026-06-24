@@ -1384,12 +1384,6 @@ sources:
       data_type: TEXT
     - name: DV_COMMISSIONER_CODE
       data_type: TEXT
-    - name: DV_FINANCIALMONTH
-      data_type: TEXT
-    - name: DV_FINANCIALYEAR
-      data_type: TEXT
-    - name: ACTIVITY_ACTUAL
-      data_type: TEXT
     - name: ACTIVITY_ACTUAL_THIS_MONTH
       data_type: TEXT
     - name: ACTIVITY_ACTUAL_YTD
@@ -1399,8 +1393,6 @@ sources:
     - name: ACTIVITY_DIFF_ACTUAL_PLAN_THIS_MONTH
       data_type: TEXT
     - name: ACTIVITY_DIFF_ACTUAL_PLAN_YTD
-      data_type: TEXT
-    - name: ACTIVITY_PLAN
       data_type: TEXT
     - name: ACTIVITY_PLAN_ANNUAL
       data_type: TEXT
@@ -1440,10 +1432,6 @@ sources:
       data_type: TEXT
     - name: DLP_COMMISSIONER_CODE
       data_type: TEXT
-    - name: DLP_FINANCIAL_MONTH
-      data_type: TEXT
-    - name: DLP_FINANCIAL_YEAR
-      data_type: TEXT
     - name: DLP_FLEXOR_FREEZE
       data_type: TEXT
     - name: DLP_FLEXORFREEZE
@@ -1469,14 +1457,6 @@ sources:
     - name: HRG_DESCRIPTION
       data_type: TEXT
     - name: IN_MONTH_ACTIVITY_DIFF
-      data_type: TEXT
-    - name: IN_MONTH_ACTUAL_ACTIVITY
-      data_type: TEXT
-    - name: IN_MONTH_ACTUAL_PRICE
-      data_type: TEXT
-    - name: IN_MONTH_PLAN_ACTIVITY
-      data_type: TEXT
-    - name: IN_MONTH_PLAN_PRICE
       data_type: TEXT
     - name: IN_MONTH_PRICE_DIFF
       data_type: TEXT
@@ -1534,8 +1514,6 @@ sources:
       data_type: TEXT
     - name: POD_GRP_DESC2
       data_type: TEXT
-    - name: PRICE_ACTUAL
-      data_type: TEXT
     - name: PRICE_ACTUAL_THIS_MONTH
       data_type: TEXT
     - name: PRICE_ACTUAL_YTD
@@ -1545,8 +1523,6 @@ sources:
     - name: PRICE_DIFF_ACTUAL_PLAN_THIS_MONTH
       data_type: TEXT
     - name: PRICE_DIFF_ACTUAL_PLAN_YTD
-      data_type: TEXT
-    - name: PRICE_PLAN
       data_type: TEXT
     - name: PRICE_PLAN_ANNUAL
       data_type: TEXT
@@ -1572,19 +1548,11 @@ sources:
       data_type: TEXT
     - name: SPEC_GRP_DESC
       data_type: TEXT
-    - name: SUM_OF_ACTIV_ACTUAL
-      data_type: TEXT
     - name: SUM_OF_ACTIV_DIFF_AP
-      data_type: TEXT
-    - name: SUM_OF_ACTIV_PLAN
       data_type: TEXT
     - name: SUM_OF_ACTIV_PLAN_CM12
       data_type: TEXT
-    - name: SUM_OF_PRICE_ACTUAL
-      data_type: TEXT
     - name: SUM_OF_PRICE_DIFF_AP
-      data_type: TEXT
-    - name: SUM_OF_PRICE_PLAN
       data_type: TEXT
     - name: SUM_OF_PRICE_PLAN_CM12
       data_type: TEXT
