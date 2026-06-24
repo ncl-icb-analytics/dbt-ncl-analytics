@@ -74,6 +74,8 @@ left join {{ ref('dim_person_conditions')}} pc
     on erl.olids_id = pc.person_id
 left join {{ref('fct_person_sus_ae_recent')}} aea
     on erl.patient_id  = aea.sk_patient_id
+left join {{ref('fct_person_sus_ip_recent')}} apca
+    on erl.patient_id  = apca.sk_patient_id
 left join {{ref('fct_person_medications_recent')}} rm
     on erl.olids_id = rm.person_id
 left join {{ref('stg_aic_int_efi2_scores')}} fr
@@ -96,6 +98,6 @@ where
         or (frr.moderate_frailty_count > 0 or frr.severe_frailty_count > 0)
         -- emergency use
         or aea.ae_tot_12mo > 3 -- 4+ AE visits within 12 months
-        or aea.asc_nel_12mo > 1 -- 2+ NEL for ASC conditions within 12 months
+        or apca.acs_nel_12mo > 1 -- 2+ NEL for ASC conditions within 12 months
         )
         )
