@@ -71,15 +71,17 @@ where b.person_id not in (select person_id from htn_61_woex)
     and b.person_id not in (select person_id from htn_62_woex)
     and b.person_id not in (select person_id from htn_63_woex)
     and b.person_id not in (select person_id from htn_65_woex)
-    -- 80+ elderly-band exclusion: clinic (both sys<150 AND dia<90)
+    -- 80+ elderly-band exclusion: clinic (both sys<150 AND dia<90).
+    -- coalesce missing readings above the band so an incomplete BP pair does NOT match the
+    -- exclusion (canon "then Latest 1 where value <" requires BOTH readings present and below).
     and not (
         b.age_at_least >= 80
-        and cs.result_value < 150
-        and cd.result_value < 90
+        and coalesce(cs.result_value, 9999) < 150
+        and coalesce(cd.result_value, 9999) < 90
     )
     -- 80+ elderly-band exclusion: home (both sys<145 AND dia<85)
     and not (
         b.age_at_least >= 80
-        and hs.result_value < 145
-        and hd.result_value < 85
+        and coalesce(hs.result_value, 9999) < 145
+        and coalesce(hd.result_value, 9999) < 85
     )

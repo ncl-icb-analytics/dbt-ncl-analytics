@@ -33,31 +33,36 @@ with base as (
         and age_at_least < 18
 ),
 
--- _BASE carve: latest AST_COD event must NOT be an asthma-resolved code.
--- vs2 (AST_COD, 226 codes) is the full asthma-coded superset; ASTRES_COD (vs1, 2 codes,
--- 'Asthma resolved') is the resolved subset. Take the patient's latest AST_COD event and
--- exclude if it is a resolved code (latest-event gate).
-latest_ast as (
-    select person_id, concept_code
-    from ({{ get_ltc_lcs_observations_latest("be433490-3609-4849-20b6-045ddfbdc032") }})
+-- _BASE carve (canon: "Exclude patients who match [ASTRES_COD UNION AST_COD] then Latest 1
+-- where SNOMED code IN AST_COD"). AST_COD (be433490, active asthma codes) and ASTRES_COD
+-- (e49a6f96, 'Asthma resolved') are DISJOINT. Take each patient's latest asthma event across
+-- the UNION of both sets; REJECT when that latest event is an active AST_COD code (current
+-- asthma activity). Keep patients whose latest asthma event is 'resolved', or who have none.
+ast_union_events as (
+    select person_id, observation_id, clinical_effective_date, valueset_id
+    from ({{ get_ltc_lcs_observations("e49a6f96-d7a8-ad43-7448-2166a2858204, be433490-3609-4849-20b6-045ddfbdc032") }})
 ),
 
-ast_resolved_codes as (
-    select distinct concept_code
-    from ({{ get_ltc_lcs_observations("e49a6f96-d7a8-ad43-7448-2166a2858204") }})
+latest_ast_event as (
+    select person_id, valueset_id
+    from ast_union_events
+    qualify row_number() over (
+        partition by person_id
+        order by clinical_effective_date desc, observation_id desc
+    ) = 1
 ),
 
-resolved_latest as (
-    -- patients whose latest AST_COD event is an asthma-resolved code -> excluded from base
-    select la.person_id
-    from latest_ast as la
-    where la.concept_code in (select concept_code from ast_resolved_codes)
+active_asthma_latest as (
+    -- latest asthma event is an active AST_COD code -> reject from the eligible base
+    select person_id
+    from latest_ast_event
+    where valueset_id = 'be433490-3609-4849-20b6-045ddfbdc032'
 ),
 
 base_carved as (
     select b.person_id
     from base as b
-    where b.person_id not in (select person_id from resolved_latest)
+    where b.person_id not in (select person_id from active_asthma_latest)
 ),
 
 -- woEX eligible arms (any match in the relevant window)

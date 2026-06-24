@@ -4,9 +4,10 @@
 -- Canon: docs/emis_specs/ltc_lcs_r5/casefinding/specs/conditions/ckd/icb-cf-ckd-64-1d.md
 --
 -- ICB_CF_CKD_64_BASE = currently registered, age at least 17, NOT in ICS_METABOLIC_LTC,
---   AND REQUIRE an eGFR test recorded in the last 1 year (ckd_case_finding_vs1, 7 codes;
---   value > 0 OR any record, within last 1 year). This is a positive inclusion gate -
---   the opposite polarity to the old model which excluded recent-eGFR patients.
+--   AND with NO eGFR test recorded in the last 1 year. Canon: "Include patients who do NOT
+--   match Clinical Codes with [eGFR codes] where Value > 0 AND Date within the last 1 year
+--   OR [eGFR codes] where Date within the last 1 year" (icb-cf-ckd-64-1d.md) -- i.e. case
+--   find at-risk patients who have NOT been recently eGFR-tested (anti-join, not inner join).
 -- CKD_64 BASE does NOT exclude CF_NHSHC2Y (per review).
 --
 -- Caveat: two unresolvable EMIS library items (3de35e4f-..., c913f5a7-...) omitted as above.
@@ -27,5 +28,4 @@ recent_egfr as (
 
 select distinct b.person_id
 from base as b
-inner join recent_egfr as r
-    on b.person_id = r.person_id
+where b.person_id not in (select person_id from recent_egfr)

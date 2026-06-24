@@ -31,8 +31,10 @@ latest_bmi as (
 ),
 
 bame as (
+    -- canon BAME determinant = vs2 OR vs3 (generic EMIS ethnic-category sets, include_children
+    -- -> all recorded ethnicities; see DM_64 header note -- flagged for clinical review)
     select distinct person_id
-    from ({{ get_ltc_lcs_observations("obesity_with_latest_bmi_30_35_275_325_bame_population_vs3") }})
+    from ({{ get_ltc_lcs_observations("2e9a5dbb-a1f2-19ff-d657-bf70de2d2c43, obesity_with_latest_bmi_30_35_275_325_bame_population_vs3") }})
 ),
 
 base_65 as (

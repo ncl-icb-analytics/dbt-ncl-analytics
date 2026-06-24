@@ -9,8 +9,11 @@
 -- ICB_CF_DM_64_BASE: base (age >= 17, NOT ICS_METABOLIC_LTC, NOT CF_NHSHC2Y), then latest
 --   BMI (vs1, 1-code Body mass index) Latest 1 where:
 --     numeric value >= 35; OR
---     numeric value >= 32.5 AND patient is BAME (member of vs3 17-code BAME ethnic-category
---       list, "Latest 999" = any-time membership; re-derived from vs3 per review).
+--     numeric value >= 32.5 AND patient matches the ethnic-category determinant = vs2 OR vs3.
+-- NB: canon's "bame_population" vs2/vs3 are generic EMIS ethnic-category parent concepts
+-- (include_children -> all recorded ethnicities, incl. White), so this branch is effectively
+-- "BMI>=32.5 AND any recorded ethnicity", not BAME-specific. Implemented per canon; flagged
+-- for EMIS/clinical review.
 
 with base as (
     select person_id
@@ -27,8 +30,9 @@ latest_bmi as (
 ),
 
 bame as (
+    -- canon BAME determinant = vs2 OR vs3 (vs2 pinned by id; see header note on breadth)
     select distinct person_id
-    from ({{ get_ltc_lcs_observations("obesity_with_latest_bmi_35_325_bame_population_vs3") }})
+    from ({{ get_ltc_lcs_observations("55c83e52-63f7-477c-82c8-9b172815352c, obesity_with_latest_bmi_35_325_bame_population_vs3") }})
 )
 
 select distinct b.person_id
