@@ -93,7 +93,7 @@ where
         or lcs.overall_risk_group in ('HRC', 'HR')
         -- frailty
         or fr.category in ('MODERATE FRAILTY', 'SEVERE FRAILTY')
-        or frr.latest_frailty_severity in ('MODERATE', 'SEVERE')
+        or (frr.moderate_frailty_count > 0 or frr.severe_frailty_count > 0)
         -- emergency use
         or aea.ae_tot_12mo > 3 -- 4+ AE visits within 12 months
         or aea.asc_nel_12mo > 1 -- 2+ NEL for ASC conditions within 12 months
