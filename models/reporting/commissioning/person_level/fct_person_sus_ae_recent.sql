@@ -10,6 +10,14 @@ lower_respiratory_encounters as (
     where start_date between dateadd(month, -12, current_date()) and current_date()
     and sk_patient_id is not null and sk_patient_id != '1'
 ),  
+ambulatory_sensitive_nel_encounters as (
+    select sk_patient_id 
+        , count(distinct visit_occurrence_id) as asc_nel_12mo
+    from {{ref('int_comm_ambulatory_sensitive_nel') }} 
+    where start_date between dateadd(month, -12, current_date()) and current_date()
+    and sk_patient_id is not null and sk_patient_id != '1'
+    group by sk_patient_id
+),
 emergency_admissions as (
     select ip.sk_patient_id 
         , count(distinct ip.visit_occurrence_id) as ae_respiratory_admission_12mo
@@ -56,6 +64,9 @@ SELECT
     , zeroifnull(a.ae_t1_12mo) as ae_t1_12mo
     , zeroifnull(a.ae_respiratory_attendance_12mo) as ae_lower_respiratory_attendance_12mo -- 500k million attendance >= admission
     , zeroifnull(ea.ae_respiratory_admission_12mo) as ae_lower_respiratory_admission_12mo --  15k admission > attendance
+    , zeroifnull(asc.asc_nel_12mo) as asc_nel_12mo
 from ae_encounter_summary as a
 left join emergency_admissions ea
     on a.sk_patient_id = ea.sk_patient_id
+left join ambulatory_sensitive_nel_encounters asc
+    on a.sk_patient_id = asc.sk_patient_id

@@ -68,6 +68,7 @@ select erl.patient_id
     , zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo
     , lcs.overall_risk_group
     , rm.unique_active_ingredient_count_12mo
+    , frr.latest_frailty_severity
 from expanded_registrant_list erl
 left join {{ ref('dim_person_conditions')}} pc
     on erl.olids_id = pc.person_id
@@ -77,6 +78,8 @@ left join {{ref('fct_person_medications_recent')}} rm
     on erl.olids_id = rm.person_id
 left join {{ref('stg_aic_int_efi2_scores')}} fr
     on erl.olids_id = fr.person_id
+left join {{ref('fct_person_frailty_register')}} frr
+    on erl.olids_id = frr.person_id
 left join {{ref('dim_person_ccms')}} ccms
     on erl.olids_id = ccms.person_id
 left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
@@ -84,6 +87,15 @@ left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
 where
     erl.source in ('shortlist', 'emis') or
     (pc.total_conditions > 2 
-    and (ccms.cambridge_comorbidity_score > 1.5
+    and (
+        -- clinical complexity
+        ccms.cambridge_comorbidity_score > 1.5
+        or lcs.overall_risk_group in ('HRC', 'HR')
+        -- frailty
         or fr.category in ('MODERATE FRAILTY', 'SEVERE FRAILTY')
-        or lcs.overall_risk_group in ('HRC', 'HR')))
+        or frr.latest_frailty_severity in ('MODERATE', 'SEVERE')
+        -- emergency use
+        or aea.ae_tot_12mo > 3 -- 4+ AE visits within 12 months
+        or aea.asc_nel_12mo > 1 -- 2+ NEL for ASC conditions within 12 months
+        )
+        )
