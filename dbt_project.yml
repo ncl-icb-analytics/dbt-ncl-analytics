@@ -56,7 +56,11 @@ models:
       +materialized: view
       +database: "STAGING"
       +schema: "DBT_RAW"
-      +tags: ["raw", "daily"]
+      # No 'daily' tag: raw views build as ancestors of the staging/daily models
+      # that ref them (+tag:daily pulls them in). Tagging all ~660 raw views
+      # 'daily' fired every view at once, exhausting the connection pool inside
+      # EXECUTE DBT PROJECT (Fusion ignores threads).
+      +tags: ["raw"]
       +post-hook: ["{{ add_model_comment() }}"]
 
     # Staging layer - cleaned and standardised source data

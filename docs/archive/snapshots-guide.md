@@ -211,8 +211,8 @@ Snapshots run as part of the production build schedule:
 |------|-----------|
 | **Daily** | `dbt snapshot` — all snapshots capture changes |
 | **Daily** | `dbt build -s +tag:daily` — daily-tagged models and their upstream dependencies build |
-| **Monday** | Full project build — all models rebuild |
-| **1st of month** | Full project build with `--full-refresh` — all tables rebuilt from scratch |
+| **Monday** | `dbt build -s +staging+` — staging, its raw ancestors, and all downstream rebuild |
+| **1st of month** | `dbt build -s +staging+ --full-refresh` — same scope, all tables rebuilt from scratch |
 
 Snapshots always run before the main model build so that downstream models can reference the latest snapshot data.
 
