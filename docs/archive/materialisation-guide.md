@@ -393,9 +393,11 @@ The production build schedule affects how materialisations behave:
 | When | What runs | Effect on materialisations |
 |------|-----------|---------------------------|
 | **Daily** | `dbt snapshot` | All snapshots capture changes |
-| **Daily** | `dbt build -s +tag:daily` | Daily-tagged models and their upstream dependencies build; incremental models process only new data |
-| **Monday** | Full project build | All models rebuild; incremental models process only new data |
-| **1st of month** | Full project build with `--full-refresh` | All tables rebuilt from scratch, including incremental models |
+| **Daily** | `dbt build -s +tag:daily` | Daily-tagged models (staging + daily-tagged downstream tables) and their upstream dependencies build; incremental models process only new data |
+| **Monday** | `dbt build -s +staging+` | Staging, its raw ancestors, and everything downstream rebuild; incremental models process only new data |
+| **1st of month** | `dbt build -s +staging+ --full-refresh` | Same scope, but all tables rebuilt from scratch, including incremental models |
+
+Raw is not tagged `daily`; each schedule rebuilds only the raw views consumed by the staging models in scope (~166 of ~660), not every raw view. Raw views reflect live source on query and otherwise rebuild on deploy when their DDL changes. Models outside the staging lineage (`int_date_spine`, `def_indicator*`) build daily or on deploy, not on the Monday/monthly schedules.
 
 ### What This Means for You
 
