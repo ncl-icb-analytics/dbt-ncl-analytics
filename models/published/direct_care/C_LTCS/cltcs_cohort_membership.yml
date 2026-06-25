@@ -8,7 +8,7 @@ models:
       patient's current area_code and a VARIANT (`attributes_json`) holding
       the wide cohort attributes via OBJECT_CONSTRUCT_KEEP_NULL. The snapshot
       uses a check strategy on `area_code` only and invalidates hard deletes;
-      see docs/snapshots-guide.md.
+      see docs/archive/snapshots-guide.md.
     config:
       meta:
         owner:
