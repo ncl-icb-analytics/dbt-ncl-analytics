@@ -2,7 +2,7 @@ snapshots:
   - name: cltcs_cohort_membership_snapshot
     relation: ref('cltcs_cohort_membership')
     description: >
-      SCD2 history of C-LTCS cohort membership (see docs/snapshots-guide.md).
+      SCD2 history of C-LTCS cohort membership (see docs/archive/snapshots-guide.md).
       One row per stint per patient: `unique_key` is `patient_id`. A new stint
       opens when `area_code` changes (`check_cols` is selective — only
       `area_code`, not metadata that changes every run). Rows removed from

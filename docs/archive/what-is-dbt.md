@@ -133,7 +133,7 @@ dbt test                     # Run all tests
 dbt test -s model_name       # Test a specific model
 ```
 
-Tests run automatically in CI on every pull request (see [GitHub Actions](github-actions.md)). A failing test blocks the PR from merging.
+Tests run automatically in CI on every pull request (see [GitHub Actions](../github-actions.md)). A failing test blocks the PR from merging.
 
 ### 4. Documentation
 

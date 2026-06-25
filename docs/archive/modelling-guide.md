@@ -57,7 +57,7 @@ from {{ source('dictionary_dbo', 'ConsultantProvider') }}
 
 **Key rules:**
 - Never edit raw model SQL files manually — they will be overwritten on the next generation run
-- To add new raw models, follow the source generation workflow in [Working with Sources](working-with-sources.md)
+- To add new raw models, follow the source generation workflow in [Working with Sources](../working-with-sources.md)
 - Raw models have no YAML documentation files (the config block documents column mappings)
 - They exist so that every other layer can work with clean, consistent snake_case column names
 
@@ -374,7 +374,7 @@ Pull requests are automatically checked for:
 | **Staging references** | Raw/source references must only appear in staging models |
 | **Hardcoded references** | No hardcoded table or database names in SQL |
 
-See [GitHub Actions](github-actions.md) for full details.
+See [GitHub Actions](../github-actions.md) for full details.
 
 ### YAML File Structure
 
@@ -417,7 +417,7 @@ Alternatively, you can use the CLI:
 dbt ls -s raw --output name | grep your_source
 ```
 
-If a raw model doesn't exist, follow [Working with Sources](working-with-sources.md) to generate it.
+If a raw model doesn't exist, follow [Working with Sources](../working-with-sources.md) to generate it.
 
 ### 2. Create the staging SQL
 
@@ -477,6 +477,6 @@ This shows the first 5 rows without creating a database object — useful for ch
 
 - [Materialisation Guide](materialisation-guide.md) — choosing between views, tables, incremental models, and ephemeral CTEs
 - [Snapshots Guide](snapshots-guide.md) — tracking historical changes with slowly changing dimensions
-- [Working with Sources](working-with-sources.md) — the source generation workflow
+- [Working with Sources](../working-with-sources.md) — the source generation workflow
 - [Development Guide](development-guide.md) — daily workflows and advanced patterns
-- [GitHub Actions](github-actions.md) — CI/CD pipelines and deployment
+- [GitHub Actions](../github-actions.md) — CI/CD pipelines and deployment

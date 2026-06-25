@@ -21,7 +21,7 @@ Shape:
 - `OBJECT_CONSTRUCT_KEEP_NULL` is used so null-valued fields are retained
   in the JSON (distinguishing "null at entry" from "field absent").
 
-Snapshot (see docs/snapshots-guide.md):
+Snapshot (see docs/archive/snapshots-guide.md):
 - `strategy: check` with selective `check_cols` on `area_code` only; the
   patient is identified by `unique_key: patient_id`. Inclusion and removal
   are tracked when the row appears or disappears from this view
