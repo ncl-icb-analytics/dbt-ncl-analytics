@@ -7,7 +7,7 @@ select
     -- Flag for current WNL registered population
     (
         --Practice is in the WNL list and active
-        gp_lu.gp_practice_code is not null and
+        gp_lu.practice_code is not null and
 
         --No record of death
         pds.date_of_death is null and
@@ -35,8 +35,12 @@ select
 
 from {{ ref('int_person_pds_latest_record') }} pds
 
-left join {{ ref('stg_reference_gp_practice') }} gp_lu
-on pds.practice_code = gp_lu.gp_practice_code
+-- WNL practice list from the ODS-derived practice dimension (stable codes),
+-- replacing the fragile GP_PRACTICE_WNL surrogate-key view.
+left join {{ ref('dim_practice') }} gp_lu
+on pds.practice_code = gp_lu.practice_code
+and gp_lu.is_wnl_practice
+and gp_lu.is_active_practice
 
 left join {{ ref('stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025') }} geo
 on pds.lsoa_21 = geo.lsoa_2021_code

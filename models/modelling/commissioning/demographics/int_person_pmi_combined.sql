@@ -156,8 +156,11 @@ practice_code_field as (
     from combined
 
     --Join to get current WNL Practices and Current WNL Registered Population
-    left join {{ref('stg_reference_gp_practice')}} gp_lu
-    on combined.practice_code = gp_lu.gp_practice_code
+    --(ODS-derived dim_practice, stable codes; replaces fragile GP_PRACTICE_WNL view)
+    left join {{ref('dim_practice')}} gp_lu
+    on combined.practice_code = gp_lu.practice_code
+    and gp_lu.is_wnl_practice
+    and gp_lu.is_active_practice
 
     left join {{ref('int_person_pds_population_flags')}} pop_flags
     on combined.sk_patient_id = pop_flags.sk_patient_id
@@ -174,7 +177,7 @@ practice_code_field as (
     --Extra restriction to prevent additional WNL registered from a non-pds source
     --Working on the assumption that pds contains all WNL registered
     and (
-        pop_flags.flag_current_registered = TRUE or gp_lu.gp_practice_code is null
+        pop_flags.flag_current_registered = TRUE or gp_lu.practice_code is null
     )
 )
 

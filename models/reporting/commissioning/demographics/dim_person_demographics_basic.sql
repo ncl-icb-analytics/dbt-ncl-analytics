@@ -55,10 +55,10 @@ select
         ) as registered_borough,
         org_bor.sub_icb_code as registered_sub_icb_code,
         org_bor.sub_icb_name as registered_sub_icb_name,
-        coalesce(nb_reg.neighbourhood_code, gp_lu.neighbourhood_code) as registered_neighbourhood_code,
+        nb_reg.neighbourhood_code as registered_neighbourhood_code,
         case
-            when (icb_code not in {{in_area_icbs}} and coalesce(nb_reg.neighbourhood_code, gp_lu.neighbourhood_code) is null) then 'Out of area Neighbourhood'
-            else coalesce(nb_reg.neighbourhood_name, gp_lu.neighbourhood_name, 'Unknown')
+            when (icb_code not in {{in_area_icbs}} and nb_reg.neighbourhood_code is null) then 'Out of area Neighbourhood'
+            else coalesce(nb_reg.neighbourhood_name, 'Unknown')
         end as registered_neighbourhood_name,
         --------------------------------------
 
@@ -96,9 +96,6 @@ and dict_gp.end_date is null
 
 left join {{ref('stg_dictionary_dbo_organisationmatrixpracticeview')}} as dict_pcn
 on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
-
-left join {{ref('stg_reference_gp_practice')}} gp_lu
-on pmi.practice_code = gp_lu.gp_practice_code
 
 left join (
         -- ODS-derived borough/sub-ICB, one deterministic row per practice
