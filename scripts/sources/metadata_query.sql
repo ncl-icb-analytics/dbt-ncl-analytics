@@ -443,7 +443,7 @@ WITH schema_metadata AS (
   
   UNION ALL
   
-    -- cltcs_emis_extract: EMIS extract for c-ltcs pipeline from PID environment via MESH
+    -- cltcs_emis_extract: EMIS extract for c-ltcs pipeline from PID environment via MESH and other local lookups
   SELECT 
     'DATA_LAKE__NCL' as database_name,
     'CLTCS' as schema_name,

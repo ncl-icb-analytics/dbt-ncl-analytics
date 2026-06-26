@@ -3,7 +3,7 @@
 
 with in_scope_practice_list as (
     select  local_authority, practice_code, neighbourhood_code, neighbourhood_registered
-    from {{ ref('stg_c_ltcs_cltcs_local_mapping_nh_gp')}}
+    from {{ ref('stg_cltcs_emis_cltcs_local_mapping_nh_gp')}}
     where 
     local_authority in (
         {% for b in in_scope_borough_list %}

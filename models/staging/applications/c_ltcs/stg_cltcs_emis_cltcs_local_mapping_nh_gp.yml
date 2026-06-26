@@ -1,5 +1,5 @@
 models:
-  - name: stg_c_ltcs_cltcs_local_mapping_nh_gp
+  - name: stg_cltcs_emis_cltcs_local_mapping_nh_gp
     description: "Operational local mapping of neighbourhoods to GP practices for C-LTCS and Haringery test bed."
     config:
       meta:
