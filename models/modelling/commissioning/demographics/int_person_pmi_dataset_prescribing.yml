@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: int_person_pmi_dataset_prescribing
+    description: >
+      PMI feeder from EPD prescribing (WNL). One row per sk_patient_id with
+      gender / dob (from age) / residence LSOA / registered practice, in the
+      shared PMI feeder schema for union by name in int_person_pmi_combined.
+      No ethnicity in EPD (NULL).
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: sk_patient_id
+        description: DMIC pseudonymised NHS number.
+        data_tests:
+          - not_null
+          - unique
+      - name: dataset_source
+        description: Constant 'epd'.
