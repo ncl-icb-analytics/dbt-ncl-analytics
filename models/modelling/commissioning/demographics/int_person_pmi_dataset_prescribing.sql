@@ -54,21 +54,21 @@ age_event as (
                 event_date desc
         ) as age_field_rank
     from base
-    where patient_age is null or patient_age <= 120
+    where patient_age is null or patient_age between 0 and 120
     qualify age_field_rank = 1
 ),
 
 lsoa_event as (
     select
         b.sk_patient_id,
-        -- EPD residence LSOA is 2011-vintage; map to 2021, fall back to the raw
-        -- code (most 2011 codes are unchanged and valid as 2021).
-        coalesce(map_lsoa.lsoa21_cd, b.patient_lsoa) as lsoa_21,
+        -- EPD residence LSOA is 2011-vintage; map to 2021. Only emit a confirmed
+        -- 2021 code (null when unmapped) so lsoa21_code never carries a 2011 code.
+        map_lsoa.lsoa21_cd as lsoa_21,
         b.event_date as lsoa_event_date,
         row_number() over (
             partition by b.sk_patient_id
             order by
-                case when coalesce(map_lsoa.lsoa21_cd, b.patient_lsoa) is not null then 1 else 2 end,
+                case when map_lsoa.lsoa21_cd is not null then 1 else 2 end,
                 b.event_date desc
         ) as lsoa_field_rank
     from base b

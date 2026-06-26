@@ -19,7 +19,9 @@ EPD reports cost in pence; conversion to £ is deferred to the modelling layer
 where prescribing cost is combined with the other PODs.
 */
 
-{{ config(materialized = 'view') }}
+-- Materialised as a table: the is_latest_submission window over the full WNL EPD
+-- feed is expensive to recompute on every downstream read.
+{{ config(materialized = 'table') }}
 
 select
     -- patient key (renamed from dmic_pseudo_nhs_number)

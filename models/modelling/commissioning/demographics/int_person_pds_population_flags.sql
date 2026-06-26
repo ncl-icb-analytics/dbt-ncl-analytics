@@ -22,8 +22,8 @@ select
 
     -- Flag for current WNL resident population
     (
-        --LSOA 21 is in NCL or NWL
-        geo.resident_flag in ('NCL', 'NWL') and
+        --LSOA 21 is in NCL or NWL (coalesce so an unmatched LSOA is false, not null)
+        coalesce(geo.resident_flag in ('NCL', 'NWL'), false) and
 
         --No record of death
         pds.date_of_death is null and

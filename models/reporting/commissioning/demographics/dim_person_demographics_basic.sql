@@ -32,7 +32,7 @@ select
         geo.icb_code as residence_icb_code,
         geo.icb_name as residence_icb_name,
         geo.resident_flag as residence_icb_group,
-        nb_res.neighbourhood_code as residence_neighbourhood_code,
+        nb_res_code.neighbourhood_code as residence_neighbourhood_code,
         nb_res.neighbourhood_name as residence_neighbourhood_name,
         imd.imd25_decile as residence_imd_decile,
 
@@ -83,6 +83,10 @@ on pmi.lsoa21_code = geo.lsoa_2021_code
 left join {{ref('stg_reference_wnl_neighbourhood_lsoa')}} nb_res
 on pmi.lsoa21_code = nb_res.lsoa_2021_code
 
+-- NCL residence neighbourhood code (WNL source is name-only; NWL has no code)
+left join {{ref('stg_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021')}} nb_res_code
+on pmi.lsoa21_code = nb_res_code.lsoa_2021_code
+
 left join {{ref('stg_reference_lookup_ncl_imd_2025')}} imd
 on pmi.lsoa21_code = imd.lsoa_code_2021
 
@@ -97,13 +101,13 @@ left join {{ref('stg_reference_gp_practice')}} gp_lu
 on pmi.practice_code = gp_lu.gp_practice_code
 
 left join (
-        -- ODS-derived borough/sub-ICB, one row per practice
-        select practice_code,
-            any_value(borough_registered) as borough_registered,
-            any_value(sub_icb_code)        as sub_icb_code,
-            any_value(sub_icb_name)        as sub_icb_name
+        -- ODS-derived borough/sub-ICB, one deterministic row per practice
+        select practice_code, borough_registered, sub_icb_code, sub_icb_name
         from {{ref('int_organisation_borough_mapping')}}
-        group by practice_code
+        qualify row_number() over (
+            partition by practice_code
+            order by borough_registered, sub_icb_code, sub_icb_name
+        ) = 1
 ) org_bor
 on pmi.practice_code = org_bor.practice_code
 
