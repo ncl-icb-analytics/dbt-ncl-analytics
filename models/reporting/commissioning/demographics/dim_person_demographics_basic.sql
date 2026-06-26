@@ -80,7 +80,7 @@ on pmi.interpreter_required = dict_ir.interpreter_required
 left join {{ref('stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025')}} geo
 on pmi.lsoa21_code = geo.lsoa_2021_code
 
-left join {{ref('stg_reference_lookup_ncl_ncl_neighbourhood_lsoa_2021')}} nb_res
+left join {{ref('stg_reference_wnl_neighbourhood_lsoa')}} nb_res
 on pmi.lsoa21_code = nb_res.lsoa_2021_code
 
 left join {{ref('stg_reference_lookup_ncl_imd_2025')}} imd
@@ -107,7 +107,7 @@ left join (
 ) org_bor
 on pmi.practice_code = org_bor.practice_code
 
-left join {{ref('stg_reference_lookup_ncl_ncl_gp_practice_neighbourhood')}} nb_reg
+left join {{ref('stg_reference_wnl_gp_practice_neighbourhood')}} nb_reg
 on pmi.practice_code = nb_reg.practice_code
 
 left join (
