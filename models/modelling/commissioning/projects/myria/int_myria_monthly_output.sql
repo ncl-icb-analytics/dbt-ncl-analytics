@@ -41,7 +41,7 @@ NVL(p.borough_resident,'Unknown') as borough_resident,
 CASE WHEN p.is_deceased THEN 1 ELSE 0 END AS is_deceased,
 p.DEATH_DATE_APPROX as death_date_approx,
 --cross check with PDS demographics
-case when pds.flag_current_ncl_registered THEN 1 else 0 end as is_on_pds,
+case when pds.flag_current_registered THEN 1 else 0 end as is_on_pds,
 case when pds.sk_patient_id is not null and p.sk_patient_id is not null then 1 else 0 end as is_match_olids,
 case when pds.sk_patient_id is not null and p.sk_patient_id is null then 'Not in OLIDS' else p.inactive_reason end as inactive_reason,
 --palliative care register check

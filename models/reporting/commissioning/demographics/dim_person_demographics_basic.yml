@@ -43,7 +43,7 @@ models:
       - name: ethnicity_detail
         description: Ethnicity group description
 
-      - name: flag_current_ncl_residence
+      - name: flag_current_resident
         description: Flag indicating if patient is part of current NCL resident 
           population
 
@@ -83,7 +83,7 @@ models:
       - name: residence_imd_decile
         description: Index of Multiple Deprivation decile for residence location
 
-      - name: flag_current_ncl_registered
+      - name: flag_current_registered
         description: Flag indicating if patient is part of current NCL 
           registered population
 

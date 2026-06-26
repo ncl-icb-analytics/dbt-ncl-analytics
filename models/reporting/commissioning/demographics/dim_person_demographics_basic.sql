@@ -5,7 +5,7 @@
 }}
 
 {%
-    set self_icb_code = 'QMJ'
+    set in_area_icbs = "('QMJ', 'QRV')"
 %}
 
 select
@@ -22,7 +22,7 @@ select
         eth.*,
 
         --Residence information
-        pmi.flag_current_ncl_residence,
+        pmi.flag_current_resident,
         pmi.record_residence_start_date,
         geo.lsoa_2021_code as residence_lsoa_2021_code,
         geo.lsoa_2021_name as residence_lsoa_2021_name,
@@ -37,7 +37,7 @@ select
         imd.imd25_decile as residence_imd_decile,
 
         --Registered information
-        pmi.flag_current_ncl_registered,
+        pmi.flag_current_registered,
         pmi.record_registered_start_date,
         dict_gp.organisation_code as practice_code,
         dict_gp.organisation_name as practice_name,
@@ -45,16 +45,20 @@ select
         dict_pcn.network_name as pcn_name,
         dict_pcn.stp_code as icb_code,
         dict_pcn.stp_name as icb_name,
-        ----Note NCL only for fields below----
-        case 
-            when (icb_code != '{{self_icb_code}}' and gp_lu.borough is null) then 'Non-NCL Borough'
-            when (icb_code = '{{self_icb_code}}' and dict_gp.end_date is not null) then 'Unknown due to closed practice'
-            else coalesce(gp_lu.borough, reg_bor_backup.borough, 'Unknown')
-        end as registered_borough,
-        nb_reg.neighbourhood_code as registered_neighbourhood_code,
+        -- Registered borough / sub-ICB via ODS organisation relationships
+        -- (int_organisation_borough_mapping): one borough per practice, contractual
+        -- (how the practice is commissioned), WNL-wide. Not geographic.
+        coalesce(
+            org_bor.borough_registered,
+            case when icb_code not in {{in_area_icbs}} then 'Out of area' end,
+            'Unknown'
+        ) as registered_borough,
+        org_bor.sub_icb_code as registered_sub_icb_code,
+        org_bor.sub_icb_name as registered_sub_icb_name,
+        coalesce(nb_reg.neighbourhood_code, gp_lu.neighbourhood_code) as registered_neighbourhood_code,
         case
-            when (icb_code != '{{self_icb_code}}' and nb_reg.neighbourhood_code is null) then 'Non-NCL Neighbourhood'
-            else coalesce(nb_reg.neighbourhood_name, 'Unknown')
+            when (icb_code not in {{in_area_icbs}} and coalesce(nb_reg.neighbourhood_code, gp_lu.neighbourhood_code) is null) then 'Out of area Neighbourhood'
+            else coalesce(nb_reg.neighbourhood_name, gp_lu.neighbourhood_name, 'Unknown')
         end as registered_neighbourhood_name,
         --------------------------------------
 
@@ -89,14 +93,19 @@ and dict_gp.end_date is null
 left join {{ref('stg_dictionary_dbo_organisationmatrixpracticeview')}} as dict_pcn
 on dict_gp.sk_organisation_id = dict_pcn.sk_organisation_id_practice
 
-left join {{ref('stg_reference_lookup_ncl_gp_practice')}} gp_lu
+left join {{ref('stg_reference_gp_practice')}} gp_lu
 on pmi.practice_code = gp_lu.gp_practice_code
 
 left join (
-        select distinct pcn_code, borough
-        from {{ref('stg_reference_lookup_ncl_gp_practice')}} 
-) reg_bor_backup
-on gp_lu.pcn_code = reg_bor_backup.pcn_code
+        -- ODS-derived borough/sub-ICB, one row per practice
+        select practice_code,
+            any_value(borough_registered) as borough_registered,
+            any_value(sub_icb_code)        as sub_icb_code,
+            any_value(sub_icb_name)        as sub_icb_name
+        from {{ref('int_organisation_borough_mapping')}}
+        group by practice_code
+) org_bor
+on pmi.practice_code = org_bor.practice_code
 
 left join {{ref('stg_reference_lookup_ncl_ncl_gp_practice_neighbourhood')}} nb_reg
 on pmi.practice_code = nb_reg.practice_code
