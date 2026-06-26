@@ -1,0 +1,29 @@
+version: 2
+models:
+  - name: int_resource_need_age_sex_curve
+    description: >
+      Empirical WNL age-sex cost curve - average patient-attributable cost per
+      head by NHS age band and gender over the registered WNL population
+      (including non-users). The need weights for indirect standardisation in
+      fct_person_resource_need. One row per age band x gender.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: age_band
+        description: NHS age band (0-4, 5-14, ... 85+, Unknown).
+      - name: gender
+        description: Gender.
+      - name: population
+        description: Registered WNL persons in the band.
+      - name: expected_cost_per_head
+        description: Average 12-month patient-attributable cost per head (GBP).
+        data_tests:
+          - not_null
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - age_band
+              - gender

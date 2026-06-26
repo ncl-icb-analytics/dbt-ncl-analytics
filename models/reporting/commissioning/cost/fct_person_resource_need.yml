@@ -1,0 +1,33 @@
+version: 2
+models:
+  - name: fct_person_resource_need
+    description: >
+      Resource vs need at person level for the registered WNL population
+      (indirect age-sex standardisation). One row per registered patient with
+      actual 12-month patient-attributable spend and the expected cost (WNL
+      average for their age-sex band, derived empirically from the same
+      population). resource_to_need = sum(actual) / sum(expected) for any cut.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: sk_patient_id
+        description: DMIC pseudonymised NHS number (primary key).
+        data_tests:
+          - not_null
+          - unique
+      - name: gender
+        description: Gender (used with age_band for the cost curve).
+      - name: age
+        description: Age in completed years.
+      - name: age_band
+        description: NHS age band (0-4, 5-14, ... 85+), used for the cost curve.
+      - name: registered_sub_icb_code
+        description: Registered sub-ICB (QMJ = NCL, QRV = NWL).
+      - name: actual_cost_12m
+        description: Patient-attributable spend over the latest 12 months (GBP).
+        data_tests:
+          - not_null
+      - name: expected_cost_12m
+        description: WNL average cost per head for the patient's age-sex band (GBP).
