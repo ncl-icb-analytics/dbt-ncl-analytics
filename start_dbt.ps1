@@ -18,7 +18,7 @@
 # Bump .fusion-version when Snowflake's hosted 2.0.0-preview moves.
 # Set $FusionVersionPin to override locally; fallback is used only if the file is missing.
 $FusionVersionPin = ''
-$FusionFallbackVersion = '2.0.0-preview.175'
+$FusionFallbackVersion = '2.0.0-preview.186'
 
 $actions = @()
 $installDir = Join-Path $env:USERPROFILE '.local\bin'
