@@ -1,0 +1,140 @@
+pod_code,activity_type,service,service_grouping,is_patient_attributable,review_note
+AE,A&E,A&E,Crisis,true,
+AANDE,A&E,A&E,Crisis,true,free-text variant of AE
+AANDETYPE3,A&E,A&E,Crisis,true,free-text variant of AE
+AE TYPE1,A&E,A&E,Crisis,true,free-text variant of AE
+AE TYPE3,A&E,A&E,Crisis,true,free-text variant of AE
+NEL,Non-Elective,Emergency Admissions,Crisis,true,
+NELST,Non-Elective,Emergency Admissions,Crisis,true,non-elective short stay
+NELXBD,Non-Elective Excess Bed Days,Emergency Admissions,Crisis,true,
+NELOBD,Non-Elective Bed Days,Emergency Admissions,Crisis,true,
+IPSPECIAL,Non-Elective,Emergency Admissions,Crisis,true,
+NCBPS01T,Non-Elective,Emergency Admissions,Crisis,true,
+AMBSTR,Ambulatory Emergency Care,Emergency Admissions,Crisis,true,
+AMBUE,Ambulatory Emergency Care,Emergency Admissions,Crisis,true,
+AMBOTHER,Ambulatory Emergency Care,Emergency Admissions,Crisis,true,desc unreliable - review
+UNBACC,Critical Care,Critical Care,Crisis,true,critical care follows admission - default Crisis; Ru to confirm
+UNBNCC,Critical Care,Critical Care,Crisis,true,critical care - default Crisis; Ru to confirm
+UNBPCC,Critical Care,Critical Care,Crisis,true,critical care - default Crisis; Ru to confirm
+NCBPSNIC,Critical Care,Critical Care,Crisis,true,neonatal critical care
+CCTRANS,Critical Care,Critical Care,Crisis,true,critical care transfer
+NIC,Critical Care,Critical Care,Crisis,true,
+PIC,Critical Care,Critical Care,Crisis,true,
+ACC,Critical Care,Critical Care,Crisis,true,
+NELNE,Maternity,Maternity,Planned,true,maternity deliveries - Ru to confirm grouping (Crisis vs Planned)
+NELNEXBD,Maternity,Maternity,Planned,true,maternity excess bed days - Ru to confirm grouping
+NELNEXB,Maternity,Maternity,Planned,true,maternity excess bed days - Ru to confirm grouping
+NELNEOBD,Maternity,Maternity,Planned,true,maternity bed days - Ru to confirm grouping
+NCBPS04G,Maternity,Maternity,Planned,true,maternity deliveries - Ru to confirm grouping
+MATPATHAN,Maternity,Maternity,Planned,true,antenatal pathway - Ru to confirm grouping
+MATPATHPN,Maternity,Maternity,Planned,true,postnatal pathway - Ru to confirm grouping
+MATPATH,Maternity,Maternity,Planned,true,maternity pathway - Ru to confirm grouping
+EL,Elective,Acute Elective,Planned,true,
+DC,Day Case,Acute Elective,Planned,true,
+ELXBD,Elective Excess Bed Days,Acute Elective,Planned,true,
+ELOBD,Elective Bed Days,Acute Elective,Planned,true,
+RADAY,Regular Attender,Acute Elective,Planned,true,
+RANIGHT,Regular Attender,Acute Elective,Planned,true,
+DCRE,Regular Attender,Acute Elective,Planned,true,
+IPOBD,Elective Bed Days,Acute Elective,Planned,true,
+IPUNB,Unbundled,Acute Elective,Planned,true,
+WAFA,Ward Attender,Acute Elective,Planned,true,
+WAFUP,Ward Attender,Acute Elective,Planned,true,
+WA,Ward Attender,Acute Elective,Planned,true,
+REHAB,Rehabilitation,Acute Elective,Planned,true,
+UNBREHAB,Rehabilitation,Acute Elective,Planned,true,
+UNBREHA,Rehabilitation,Acute Elective,Planned,true,
+NCBPS38S,Day Case,Acute Elective,Planned,true,
+NCBPS38T,Day Case,Acute Elective,Planned,true,
+NCBPS34A,Day Case,Acute Elective,Planned,true,
+NCBPS37Z,Day Case,Acute Elective,Planned,true,
+NCBPSXXX,Day Case,Acute Elective,Planned,true,
+NCBPS23F,Day Case,Acute Elective,Planned,true,
+OPFASPCL,Outpatient First,Outpatients,Planned,true,
+OPFAMPCL,Outpatient First,Outpatients,Planned,true,
+OPFASPNCL,Outpatient First,Outpatients,Planned,true,
+OPFAMPNCL,Outpatient First,Outpatients,Planned,true,
+OPFASPC,Outpatient First,Outpatients,Planned,true,
+OPFAMPC,Outpatient First,Outpatients,Planned,true,
+OPFA,Outpatient First,Outpatients,Planned,true,
+OPFAHOME,Outpatient First,Outpatients,Planned,true,
+OPFAPREOP,Outpatient First,Outpatients,Planned,true,
+OPFUPSPCL,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPMPCL,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPSPNCL,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPMPNCL,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPSP,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPMP,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPSPNC,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUP,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPHOME,Outpatient Follow-up,Outpatients,Planned,true,
+OPFUPPREOP,Outpatient Follow-up,Outpatients,Planned,true,
+NCBPS01Y,Outpatient Follow-up,Outpatients,Planned,true,
+NCBPS16Y,Outpatient Follow-up,Outpatients,Planned,true,
+OPPROC,Outpatient Procedure,Outpatients,Planned,true,
+OPPROCFA,Outpatient Procedure,Outpatients,Planned,true,
+OPPROCFUP,Outpatient Procedure,Outpatients,Planned,true,
+OPPROCF,Outpatient Procedure,Outpatients,Planned,true,
+NF2FFA,Outpatient Non-Face-to-Face,Outpatients,Planned,true,
+NF2FFUP,Outpatient Non-Face-to-Face,Outpatients,Planned,true,
+NF2FFUPNCL,Outpatient Non-Face-to-Face,Outpatients,Planned,true,
+NF2FPREOP,Outpatient Non-Face-to-Face,Outpatients,Planned,true,
+NCBPS23A,Outpatient Non-Face-to-Face,Outpatients,Planned,true,
+TELOPFA,Outpatient Non-Face-to-Face,Outpatients,Planned,true,
+TELOPFUP,Outpatient Non-Face-to-Face,Outpatients,Planned,true,
+PREOP,Outpatient,Outpatients,Planned,true,
+OP,Outpatient,Outpatients,Planned,true,
+AUDIO,Outpatient,Outpatients,Planned,true,
+EYECAS,Outpatient,Outpatients,Planned,true,
+PHYSIO,Outpatient,Outpatients,Planned,true,
+THERAPIES,Outpatient,Outpatients,Planned,true,
+MDT,Outpatient (MDT),Outpatients,Planned,true,
+AANDG,Advice & Guidance,Outpatients,Planned,true,
+ADVICEGUID,Advice & Guidance,Outpatients,Planned,true,
+UNBRAD,Diagnostics,Diagnostics,Planned,true,
+DALAB,Diagnostics,Diagnostics,Planned,true,
+DAIMG,Diagnostics,Diagnostics,Planned,true,
+DAOTHER,Diagnostics,Diagnostics,Planned,true,
+DA,Diagnostics,Diagnostics,Planned,true,
+DIRACC,Diagnostics,Diagnostics,Planned,true,
+OPUNBRAD,Diagnostics,Diagnostics,Planned,true,
+OPDIAG,Diagnostics,Diagnostics,Planned,true,
+TEST,Diagnostics,Diagnostics,Planned,true,
+SCREEN,Screening,Diagnostics,Planned,true,screening - Community/Diagnostics? Ru to confirm
+BLOCK,High Cost Drugs,High-Cost Drugs & Devices,Planned,false,block contract - not patient-attributable
+DRUG,High Cost Drugs,High-Cost Drugs & Devices,Planned,true,
+DRUGS,High Cost Drugs,High-Cost Drugs & Devices,Planned,true,
+POC,High Cost Drugs,High-Cost Drugs & Devices,Planned,true,
+YOC,High Cost Drugs,High-Cost Drugs & Devices,Planned,true,programme drugs
+DEVICE,Devices,High-Cost Drugs & Devices,Planned,true,
+UNBCHEMO,Chemotherapy,High-Cost Drugs & Devices,Planned,true,
+CHEMOOP,Chemotherapy,High-Cost Drugs & Devices,Planned,true,
+CHEMOIP,Chemotherapy,High-Cost Drugs & Devices,Planned,true,
+UNBCHEM,Chemotherapy,High-Cost Drugs & Devices,Planned,true,
+NCBPS01C,Chemotherapy,High-Cost Drugs & Devices,Planned,true,
+UNBRTHPY,Radiotherapy,High-Cost Drugs & Devices,Planned,true,
+UNBRTHP,Radiotherapy,High-Cost Drugs & Devices,Planned,true,
+UNBPALL,Palliative Care,High-Cost Drugs & Devices,Planned,true,palliative - Community? Ru to confirm grouping
+UNBOTHER,Unbundled Other,High-Cost Drugs & Devices,Planned,true,
+ARD,Renal Dialysis,Renal Dialysis,Planned,true,
+IVF,Specialist,Other Planned,Planned,true,assisted conception
+MAINT,Other,Other Planned,Planned,true,AQP maintenance - review
+COMM,Community,Community Services,Community,true,
+COMMSUB,Community,Community Services,Community,true,
+COMMINIT,Community,Community Services,Community,true,
+OTHER,Patient Transport,Patient Transport,Excluded,false,desc unreliable - likely transport/other; review
+PTSTRANS,Patient Transport,Patient Transport,Excluded,false,
+PTSTRAN,Patient Transport,Patient Transport,Excluded,false,
+HTCS,Patient Transport,Patient Transport,Excluded,false,travel cost scheme
+ADJUSTMENT,Adjustment,Contract Adjustment,Excluded,false,below-the-line contract adjustment
+ADJUSTMEN,Adjustment,Contract Adjustment,Excluded,false,contract adjustment
+ADJUSTM,Adjustment,Contract Adjustment,Excluded,false,contract adjustment
+NAOTHER,Adjustment,Contract Adjustment,Excluded,false,bottom-line adjustment
+CQUIN,CQUIN,Contract Adjustment,Excluded,false,
+AAG,Non-Chargeable,Contract Adjustment,Excluded,false,
+VV,Adjustment,Contract Adjustment,Excluded,false,value variable
+PATIENT,Other,Unmapped,Unmapped,false,unclear code - review
+LAC,Other,Unmapped,Unmapped,false,unclear code - review
+CDC,Other,Unmapped,Unmapped,false,unclear code - review
+CPC,Other,Unmapped,Unmapped,false,unclear code - review
+DIVERTPATH,Other,Unmapped,Unmapped,false,unclear code - review

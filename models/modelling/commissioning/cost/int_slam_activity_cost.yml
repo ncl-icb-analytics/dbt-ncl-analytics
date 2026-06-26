@@ -1,0 +1,46 @@
+version: 2
+models:
+  - name: int_slam_activity_cost
+    description: |
+      Patient-level SLAM activity & actual cost — spine of the Aligning
+      Resource to Need model. Rolling most-recent 12 months from
+      stg_lsplcm_latest (actual provider cost, WNL = NCL+NWL). Grain:
+      patient x month x commissioner x provider x service hierarchy x POD x
+      HRG. Service hierarchy and is_patient_attributable from the
+      slam_pod_service_grouping seed. Cost in £ (dv_total_cost).
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: sk_patient_id
+        description: DMIC pseudonymised NHS number (NULL for unidentified activity).
+      - name: activity_month
+        description: First of the calendar month derived from financial year/month.
+        data_tests:
+          - not_null
+      - name: commissioner_code
+        description: Commissioner ODS code (ICB attribution — NCL 93C, NWL W2U3Z, others out-of-sector).
+      - name: provider_code
+        description: Cleaned provider ODS code.
+      - name: service_grouping
+        description: Top-level grouping (Crisis/Community/Planned/Excluded/Unmapped).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [Crisis, Community, Planned, Excluded, Unmapped]
+      - name: service
+        description: Mid-level service (Ru's labels).
+      - name: activity_type
+        description: Detail activity type.
+      - name: pod_code
+        description: SLAM point-of-delivery code (upper-cased).
+      - name: hrg_code
+        description: HRG / national tariff currency code (from tariff_code).
+      - name: is_patient_attributable
+        description: FALSE for block/adjustment/transport lines — exclude for per-patient/need cuts.
+      - name: total_cost
+        description: Actual SLAM cost for the grain, £.
+      - name: total_activity
+        description: Sum of dv_activity_count for the grain.

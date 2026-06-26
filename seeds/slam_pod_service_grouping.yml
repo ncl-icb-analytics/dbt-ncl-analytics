@@ -1,0 +1,77 @@
+version: 2
+seeds:
+  - name: slam_pod_service_grouping
+    description: |
+      Maps SLAM point-of-delivery (POD) codes to a 3-level activity
+      hierarchy: service_grouping (Crisis / Community / Planned) >
+      service (Ru's named services, e.g. A&E, Emergency Admissions,
+      Outpatients, Diagnostics) > activity_type (detail). HRG, surfaced
+      separately from the feed, is the finest subcategory below this.
+      One row per POD code.
+
+      Note: the top level is labelled Community (not Ru's original
+      "Neighbourhood") to avoid colliding with the geographic
+      Borough/Neighbourhood dimension in the same analysis. Relabel for Ru
+      sign-off if he prefers "Neighbourhood".
+
+      Keyed on the upper-cased POD code: consumers join on
+      UPPER(TRIM(point_of_delivery_code)). Codes not present here default to
+      activity_type='Other', service_grouping='Unmapped' downstream.
+
+      First-cut mapping from the last-12-months LSPLCM POD profile (top ~30
+      codes carry ~95% of cost; the rest is a long free-text tail). POD
+      descriptions in the feed are unreliable (one random example per code),
+      so mapping is by POD code, not description.
+
+      is_patient_attributable = FALSE flags lines that are real provider
+      spend but not genuine patient-level activity (block contracts,
+      below-the-line adjustments, CQUIN, transport). Filter
+      is_patient_attributable for per-patient / need analysis; keep all rows
+      for provider-total reconciliation.
+
+      review_note flags the judgment calls for sign-off — notably maternity
+      (Crisis vs own line), critical care (follows admission), and the
+      block/adjustment handling.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+      column_types:
+        pod_code: varchar
+        activity_type: varchar
+        service: varchar
+        service_grouping: varchar
+        is_patient_attributable: boolean
+        review_note: varchar
+    columns:
+      - name: pod_code
+        description: Upper-cased SLAM POD code. Primary key.
+        data_tests:
+          - not_null
+          - unique
+      - name: activity_type
+        description: Detail level — canonical activity type (A&E, Non-Elective, Elective, Day Case, Outpatient First/Follow-up/Procedure, Diagnostics, Critical Care, High Cost Drugs, etc.).
+        data_tests:
+          - not_null
+      - name: service
+        description: Mid level — Ru's named service (A&E, Emergency Admissions, Critical Care, Maternity, Acute Elective, Outpatients, Diagnostics, High-Cost Drugs & Devices, Renal Dialysis, Community Services, etc.). Nests within service_grouping.
+        data_tests:
+          - not_null
+      - name: service_grouping
+        description: Top level — Aligning-Resource-to-Need category.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - Crisis
+                  - Community
+                  - Planned
+                  - Excluded
+                  - Unmapped
+      - name: is_patient_attributable
+        description: FALSE for block/adjustment/transport lines that are real spend but not patient-level activity.
+        data_tests:
+          - not_null
+      - name: review_note
+        description: Free-text flag for judgment calls needing sign-off. Blank when the mapping is unambiguous.

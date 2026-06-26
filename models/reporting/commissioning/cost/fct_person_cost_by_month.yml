@@ -1,0 +1,56 @@
+version: 2
+models:
+  - name: fct_person_cost_by_month
+    description: |
+      Patient-level spend by month and service grouping — headline fact for
+      the Aligning Resource to Need analysis. Unions the SLAM actual-cost
+      spine (int_slam_activity_cost, WNL = NCL+NWL) with EPD prescribing
+      (int_person_prescribing_cost_monthly, NCL), over the SLAM rolling
+      12-month window. Grain: patient x month x service_grouping x service x
+      activity_type x cost_source.
+
+      Pending unions (sources identified): GP appointments (OLIDS), MH
+      inpatient + contacts (MHSDS, post discharge-forward fix), community
+      contacts (CSDS), high-cost drugs/devices PLD.
+
+      Compare against need via stg_reference_gp_weighted_list_size
+      (practice-level NHS weighted population). Filter is_patient_attributable
+      for per-patient cuts.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: sk_patient_id
+        description: DMIC pseudonymised NHS number (NULL for unidentified SLAM activity).
+      - name: activity_month
+        description: First of the calendar month.
+        data_tests:
+          - not_null
+      - name: service_grouping
+        description: Crisis / Community / Planned / Excluded / Unmapped.
+        data_tests:
+          - not_null
+      - name: service
+        description: Mid-level service (A&E, Emergency Admissions, GP Prescriptions, etc.).
+      - name: activity_type
+        description: Detail activity type.
+      - name: is_patient_attributable
+        description: FALSE for SLAM block/adjustment/transport lines.
+      - name: cost_source
+        description: SLAM or EPD — provenance of the cost.
+      - name: total_cost
+        description: Spend for the grain, £.
+      - name: total_activity
+        description: Activity count / prescription items for the grain.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - sk_patient_id
+              - activity_month
+              - service_grouping
+              - service
+              - activity_type
+              - is_patient_attributable
+              - cost_source
