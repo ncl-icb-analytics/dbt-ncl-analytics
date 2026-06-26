@@ -128,6 +128,19 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: SOURCE_ROW_ID
       data_type: TEXT
+  - name: CLTCS_LOCAL_MAPPING_NH_GP
+    identifier: CLTCS_LOCAL_MAPPING_NH_GP
+    columns:
+    - name: PRACTICE_CODE
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: NEIGHBOURHOOD_REGISTERED
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY
+      data_type: TEXT
   - name: OP_OE_RATIO
     identifier: OP_OE_RATIO
     columns:
