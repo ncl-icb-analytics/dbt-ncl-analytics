@@ -1,0 +1,45 @@
+models:
+  - name: int_dyslipidaemia_diagnoses_all
+    description: 'Dyslipidaemia diagnosis observations for cardiovascular risk and
+      comorbidity identification.
+
+      Key Features:
+
+      • Uses the terminology-managed DYSLIPIDAEMIA_COD cluster (<< 48286001
+      |Disorder of lipoprotein and/or lipid metabolism|)
+
+      • Broad definition captures hyperlipidaemia and hypercholesterolaemia
+
+      • Includes retired SNOMED predecessors via SCT history expansion
+
+      Purpose: Provide observation-level dyslipidaemia diagnosis data for
+      downstream cohort and register models.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: id
+    columns:
+      - name: id
+        description: 'Unique identifier for the clinical observation'
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: 'Unique identifier for the person'
+      - name: clinical_effective_date
+        description: 'Date when the dyslipidaemia observation was recorded'
+      - name: concept_code
+        description: 'SNOMED concept code for the dyslipidaemia diagnosis'
+      - name: concept_display
+        description: 'Human-readable description of the dyslipidaemia diagnosis'
+      - name: source_cluster_id
+        description: 'Source cluster identifier, expected to be DYSLIPIDAEMIA_COD'
+      - name: patient_id
+        description: 'Patient identifier from source system'
+      - name: is_diagnosis_code
+        description: 'Boolean flag indicating diagnosis code (always TRUE for these observations)'
+      - name: dyslipidaemia_observation_type
+        description: 'Type of diagnosis observation'

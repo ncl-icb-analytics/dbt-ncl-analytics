@@ -1,0 +1,68 @@
+models:
+  - name: int_tirzepatide_eligible_population
+    description: 'Tirzepatide (GLP-1 for obesity) eligibility population.
+
+      Composes the rollout criteria from existing registers, the two new
+      comorbidity clusters (DYSLIPIDAEMIA_COD, OBSTRUCTIVE_SLEEP_APNOEA_COD) and
+      ethnicity-adjusted BMI.
+
+      Eligibility (both cohorts): >= 4 of 5 qualifying comorbidities
+      (hypertension, dyslipidaemia, obstructive sleep apnoea, cardiovascular
+      disease, type 2 diabetes). CVD excludes hypertension to avoid
+      double-counting. BMI band sets the cohort: Cohort 1 = Obese Class III
+      (>= 40), Cohort 2 = Obese Class II (35-39.9), both ethnicity-adjusted.
+
+      Grain: one row per currently-registered, living adult whose latest valid
+      BMI is in an eligible band (Class II or III). Filter is_eligible_any
+      downstream for the actionable cohort.'
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        description: 'Unique identifier for the person'
+        tests:
+          - unique
+          - not_null
+      - name: age
+        description: 'Current age in years (>= 18)'
+      - name: latest_bmi_value
+        description: 'Latest valid BMI measurement'
+      - name: latest_bmi_date
+        description: 'Date of the latest valid BMI measurement'
+      - name: bmi_category
+        description: 'Ethnicity-adjusted BMI category (Obese Class II or Obese Class III)'
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Obese Class II', 'Obese Class III']
+      - name: requires_lower_bmi_thresholds
+        description: 'TRUE where the -2.5 ethnicity BMI adjustment applies'
+      - name: cardiometabolic_risk_ethnicity_group
+        description: 'Ethnicity group used for the BMI threshold adjustment'
+      - name: has_hypertension
+        description: 'On hypertension register'
+      - name: has_dyslipidaemia
+        description: 'Has a dyslipidaemia diagnosis (DYSLIPIDAEMIA_COD)'
+      - name: has_obstructive_sleep_apnoea
+        description: 'Has an OSA diagnosis (OBSTRUCTIVE_SLEEP_APNOEA_COD)'
+      - name: has_cardiovascular_disease
+        description: 'On any of AF / CHD / heart failure / PAD / stroke-TIA registers (hypertension excluded)'
+      - name: has_type2_diabetes
+        description: 'On diabetes register with type 2 classification'
+      - name: qualifying_comorbidity_count
+        description: 'Count of qualifying comorbidities present (0-5)'
+      - name: bmi_meets_cohort_1
+        description: 'BMI in Cohort 1 band (Obese Class III, >= 40 ethnicity-adjusted)'
+      - name: bmi_meets_cohort_2
+        description: 'BMI in Cohort 2 band (Obese Class II, 35-39.9 ethnicity-adjusted)'
+      - name: is_eligible_cohort_1
+        description: '>= 4 qualifying comorbidities and Cohort 1 BMI band'
+      - name: is_eligible_cohort_2
+        description: '>= 4 qualifying comorbidities and Cohort 2 BMI band'
+      - name: is_eligible_any
+        description: 'Eligible for either cohort'
