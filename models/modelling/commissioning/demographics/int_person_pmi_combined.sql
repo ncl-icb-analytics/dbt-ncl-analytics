@@ -1,5 +1,7 @@
---When expanding this change int tables to use the same names and then union by name
---In-area = WNL (NCL + NWL), driven off geo.resident_flag rather than a single ICB code.
+-- Person master index (PMI): unions the per-dataset feeders (pds / sus / ethnicity)
+-- by name, then resolves each attribute to its best source per patient.
+-- In-area = WNL (NCL + NWL), driven off geo.resident_flag, not a single ICB code.
+-- To add a feeder: emit the shared column names and union it in below.
 
 with combined as (
     select * from {{ref('int_person_pmi_dataset_pds')}}
@@ -120,13 +122,13 @@ lsoa_field as (
         
     from combined
 
-    --Join to get current NCL LSOAs and Current NCL Residence Population
+    --Join to get current WNL LSOAs and current WNL residence population
     left join {{ref('stg_reference_lookup_ncl_lsoa_2021_ward_2025_local_authority_2025')}} geo
     on combined.lsoa21_code = geo.lsoa_2021_code
     and geo.resident_flag in ('NCL', 'NWL')
 
-    left join {{ref('int_person_pds_population_flags')}} ncl_flags
-    on combined.sk_patient_id = ncl_flags.sk_patient_id
+    left join {{ref('int_person_pds_population_flags')}} pop_flags
+    on combined.sk_patient_id = pop_flags.sk_patient_id
 
     where dataset_source in ('pds', 'sus')
 
@@ -137,10 +139,10 @@ lsoa_field as (
             combined.lsoa_event_date desc,
             combined.dataset_source = 'pds' desc
     ) = 1
-    --Extra additional restriction to prevent additional NCL residents from a non-pds source
-    --Working on the assumption that pds contains all NCL residents
+    --Extra restriction to prevent additional WNL residents from a non-pds source
+    --Working on the assumption that pds contains all WNL residents
     and (
-        ncl_flags.flag_current_resident = TRUE or geo.lsoa_2021_code is null
+        pop_flags.flag_current_resident = TRUE or geo.lsoa_2021_code is null
     )
 ),
 practice_code_field as (
@@ -157,8 +159,8 @@ practice_code_field as (
     left join {{ref('stg_reference_gp_practice')}} gp_lu
     on combined.practice_code = gp_lu.gp_practice_code
 
-    left join {{ref('int_person_pds_population_flags')}} ncl_flags
-    on combined.sk_patient_id = ncl_flags.sk_patient_id
+    left join {{ref('int_person_pds_population_flags')}} pop_flags
+    on combined.sk_patient_id = pop_flags.sk_patient_id
 
     where dataset_source in ('pds', 'sus')
 
@@ -169,10 +171,10 @@ practice_code_field as (
             combined.registered_event_date desc,
             combined.dataset_source = 'pds' desc
     ) = 1
-    --Extra additional restriction to prevent additional NCL registered from a non-pds source
-    --Working on the assumption that pds contains all NCL registered
+    --Extra restriction to prevent additional WNL registered from a non-pds source
+    --Working on the assumption that pds contains all WNL registered
     and (
-        ncl_flags.flag_current_registered = TRUE or gp_lu.gp_practice_code is null
+        pop_flags.flag_current_registered = TRUE or gp_lu.gp_practice_code is null
     )
 )
 
@@ -202,10 +204,10 @@ select
     practice_code_field.practice_source,
     practice_code_field.practice_code,
     practice_code_field.registered_event_date,
-    ncl_flags.flag_current_registered,
-    ncl_flags.record_registered_start_date,
-    ncl_flags.flag_current_resident,
-    ncl_flags.record_residence_start_date
+    pop_flags.flag_current_registered,
+    pop_flags.record_registered_start_date,
+    pop_flags.flag_current_resident,
+    pop_flags.record_residence_start_date
 
 from ids
 
@@ -233,5 +235,5 @@ on ids.sk_patient_id = lsoa_field.sk_patient_id
 left join practice_code_field
 on ids.sk_patient_id = practice_code_field.sk_patient_id
 
-left join {{ref('int_person_pds_population_flags')}} ncl_flags
-on ids.sk_patient_id = ncl_flags.sk_patient_id
+left join {{ref('int_person_pds_population_flags')}} pop_flags
+on ids.sk_patient_id = pop_flags.sk_patient_id

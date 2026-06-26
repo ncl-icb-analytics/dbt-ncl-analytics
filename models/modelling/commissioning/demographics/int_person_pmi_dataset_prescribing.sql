@@ -4,6 +4,10 @@
 -- can `union by name` it alongside the pds / sus / ethnicity feeders.
 -- EPD carries gender, age (-> dob estimate), residence LSOA and registered
 -- practice; it has no ethnicity (emitted as NULL).
+-- NOTE: built and ready but intentionally NOT yet unioned into
+-- int_person_pmi_combined. PDS is ~100% complete on LSOA/practice for WNL, so
+-- prescribing adds negligible spine coverage; its value is the cost models
+-- (prescribing spend) and as a future recency fallback.
 with base as (
     select
         sk_patient_id,
