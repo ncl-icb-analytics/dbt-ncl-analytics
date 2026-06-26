@@ -31,6 +31,6 @@ SELECT
     TRUE AS is_diagnosis_code,
     'Dyslipidaemia Diagnosis' AS dyslipidaemia_observation_type
 
-FROM ({{ get_observations("'DYSLIPIDAEMIA_COD'", source='ECL_CACHE', include_history=true) }}) obs
+FROM ({{ get_observations("'DYSLIPIDAEMIA_COD'", source='ECL_CACHE') }}) obs
 
 ORDER BY person_id, clinical_effective_date, id

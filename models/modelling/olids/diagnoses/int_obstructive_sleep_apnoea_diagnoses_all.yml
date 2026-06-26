@@ -8,8 +8,6 @@ models:
       • Uses the terminology-managed OBSTRUCTIVE_SLEEP_APNOEA_COD cluster
       (<< 78275009 |Obstructive sleep apnoea syndrome|)
 
-      • Includes retired SNOMED predecessors via SCT history expansion
-
       Purpose: Provide observation-level OSA diagnosis data for downstream cohort
       and register models.'
     config:

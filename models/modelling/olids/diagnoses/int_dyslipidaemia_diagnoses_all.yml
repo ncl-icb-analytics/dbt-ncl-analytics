@@ -10,8 +10,6 @@ models:
 
       • Broad definition captures hyperlipidaemia and hypercholesterolaemia
 
-      • Includes retired SNOMED predecessors via SCT history expansion
-
       Purpose: Provide observation-level dyslipidaemia diagnosis data for
       downstream cohort and register models.'
     config:
