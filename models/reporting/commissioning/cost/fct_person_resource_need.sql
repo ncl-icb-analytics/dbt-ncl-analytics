@@ -26,6 +26,9 @@ with population as (
         p.registered_sub_icb_code,
         p.registered_sub_icb_name,
         p.residence_imd_decile,
+        p.residence_borough,
+        p.residence_ward_2025_name,
+        p.residence_lsoa_2021_code,
         {{ calculate_age_attributes('p.date_of_birth', 'current_date()') }}
     from {{ ref('dim_person_demographics_basic') }} as p
     where p.flag_current_registered
@@ -43,6 +46,9 @@ select
     pop.registered_sub_icb_code,
     pop.registered_sub_icb_name,
     pop.residence_imd_decile,
+    pop.residence_borough,
+    pop.residence_ward_2025_name,
+    pop.residence_lsoa_2021_code,
     coalesce(cost.actual_cost_12m, 0) as actual_cost_12m,
     curve.expected_cost_per_head      as expected_cost_12m
 from population as pop

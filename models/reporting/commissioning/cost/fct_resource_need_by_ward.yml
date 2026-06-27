@@ -1,0 +1,29 @@
+version: 2
+models:
+  - name: fct_resource_need_by_ward
+    description: >
+      Resource vs need by residence ward (2025) for the registered WNL
+      population. Drives the ward choropleths in the Aligning Resource to Need
+      pack: cost per head, age-weighted population, spend per weighted head, and
+      the resource-to-need index (actual / expected).
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: ward
+        description: Residence ward 2025 name.
+        data_tests:
+          - not_null
+      - name: residence_borough
+        description: Residence local authority / borough.
+      - name: population
+        description: Registered WNL persons resident in the ward.
+      - name: weighted_population
+        description: Age-sex-weighted population (expected cost / WNL mean per head).
+      - name: cost_per_head
+        description: Actual 12-month attributable spend per head (GBP).
+      - name: spend_per_weighted_head
+        description: Spend per age-weighted head (GBP) = index x WNL mean per head.
+      - name: resource_to_need_index
+        description: actual / expected. >1 = above age-sex-expected spend.
