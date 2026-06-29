@@ -8,7 +8,20 @@ encoding_features as (
         il.patient_id,
         il.area_code,
         pd.age,
-        zeroifnull(pc.total_conditions) as total_conditions,
+        
+        -- multimorbidity and biopsychosocial complexity
+        , pc.total_qof_conditions
+        , pc.mental_health_conditions
+        , zeroifnull(ccms.cambridge_comorbidity_score) as cambridge_comorbidity_score
+        , {{ encode_ltc_lcs_risk_group('lcs.chd_risk_group') }} as chd_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.ckd_risk_group') }} as ckd_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.copd_risk_group') }} as copd_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.diabetes_risk_group') }} as diabetes_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.hf_risk_group') }} as hf_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.hypertension_risk_group') }} as hypertension_risk_group_sort_key
+        , {{ encode_ltc_lcs_risk_group('lcs.overall_risk_group') }} as overall_risk_group_sort_key
+        
+        -- frailty
         zeroifnull(pc.geriatric_conditions) as geriatric_conditions,
         zeroifnull(pc.neurology_conditions) as neurology_conditions,
         zeroifnull(pc.musculoskeletal_conditions) as musculoskeletal_conditions,
@@ -17,21 +30,6 @@ encoding_features as (
         case when pc.has_osteoporosis = true then 1 else 0 end as has_osteoporosis_flag,
         case when pc.has_parkinsons = true then 1 else 0 end as has_parkinsons_flag,
         case when pc.has_stroke_tia = true then 1 else 0 end as has_stroke_tia_flag,
-        zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo,
-        zeroifnull(aea.ae_inj_12mo) as ae_inj_12mo,
-        zeroifnull(apca.apc_nel_12mo) as apc_nel_12mo,
-        zeroifnull(apca.apc_los_12mo) as apc_los_12mo,
-        case
-            when bp.latest_bp_date between dateadd(month, -6, current_date()) and current_date()
-                then bp.is_overall_bp_controlled
-            else null
-        end as is_recent_bp_controlled,
-        case
-            when bp.latest_bp_date between dateadd(month, -6, current_date()) and current_date()
-                and bp.is_overall_bp_controlled = false then 1
-            else 0
-        end as poor_recent_bp_control_flag,
-        zeroifnull(ccms.cambridge_comorbidity_score) as cambridge_comorbidity_score,
         zeroifnull(efi.efi_score) as efi2_score,
         case
             when efi.category in ('Severe frailty', 'Very severe frailty') then 3
@@ -52,11 +50,32 @@ encoding_features as (
             when fr.latest_frailty_severity = 'Mild' then 1
             else 0
         end as frailty_severity_weight
+        -- medicines management
+        , case when polyp.is_polypharmacy_5plus then 1 else 0 end as polypharmacy_5plus_flag
+        , case when polyp.is_polypharmacy_10plus then 1 else 0 end as polypharmacy_10plus_flag
+        , zeroifnull(polyp.medication_count) as medication_count
+        
+        -- emergency use
+        zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo,
+        zeroifnull(aea.ae_inj_12mo) as ae_inj_12mo,
+        zeroifnull(apca.apc_nel_12mo) as apc_nel_12mo,
+        zeroifnull(apca.apc_los_12mo) as apc_los_12mo,
+        zeroifnull(apca.acs_nel_12mo) as acs_nel_12mo,
+
+        -- residential / social factors
+        case when pc.is_housebound = true then 1 else 0 end as is_housebound_flag,
+        case when pc.has_learning_disability = true then 1 else 0 end as has_learning_disability_flag,
+        case when pc.has_severe_mental_illness = true then 1 else 0 end as has_severe_mental_illness_flag,
+        case when id.illicit_drug_pattern is not null
+                  and id.illicit_drug_pattern <> 'Does not misuse drugs' then 1 else 0 end as substance_misuse_flag,
+
     from inclusion_list il
     left join {{ ref('dim_person_demographics') }} pd
         on il.olids_id = pd.person_id
     left join {{ ref('dim_person_conditions') }} pc
         on il.olids_id = pc.person_id
+    left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
+        on il.olids_id = lcs.person_id
     left join {{ ref('fct_person_sus_ae_recent') }} aea
         on il.patient_id = aea.sk_patient_id
     left join {{ ref('fct_person_sus_ip_recent') }} apca
@@ -71,31 +90,69 @@ encoding_features as (
         on il.olids_id = fr.person_id
     left join {{ ref('int_rockwood_latest') }} rockwood
         on il.olids_id = rockwood.person_id
-)
+    left join {{ ref('fct_person_polypharmacy_current') }} polyp
+        on il.olids_id = polyp.person_id
+    left join {{ ref('int_smi_illicit_drug_latest') }} id
+        on il.olids_id = id.person_id
+    left join {{ ref('dim_person_care_home') }} ch
+        on il.olids_id = ch.person_id
+),
 
-select
-    patient_id,
-    area_code,
-    (
-        greatest(age - 65, 0) / 5
-        + has_frailty_flag * 8
-        + has_dementia_flag * 6
-        + has_osteoporosis_flag * 4
-        + has_parkinsons_flag * 5
-        + has_stroke_tia_flag * 4
-        + total_conditions / 2
-        + geriatric_conditions * 2
-        + neurology_conditions * 2
-        + musculoskeletal_conditions
-        + ae_tot_12mo
-        + ae_inj_12mo * 2
-        + apc_nel_12mo * 3
-        + apc_los_12mo / 4
-        + poor_recent_bp_control_flag * 2
-        + cambridge_comorbidity_score / 2
-        + efi2_score * 10
-        + efi2_category_weight * 3
-        + rockwood_score * 2
-        + frailty_severity_weight * 3
-    ) as score_frailty
+domain_sub_scores as (
+    select
+        patient_id,
+        area_code,
+        age,
+        
+        -- clinical complexity / multimorbidity
+        ( ) as score_clinical_complexity,
+        -- clinical frailty
+        ( ) as score_clinical_frailty,
+        -- medicines management
+        ( ) as score_medicines_management,
+        -- emergency use
+        ( ) as score_emergency_use,
+        -- residential / social factors
+        ( ) as score_residential_social_factors,
+        -- wider care engagement
+        ( ) as score_wider_care_engagement,
+        -- ASC indicators
+        ( ) as score_asc_indicators
 from encoding_features
+),
+
+composite_scores as (
+    select
+        patient_id,
+        area_code,
+        age,
+        (score_clinical_complexity - avg(score_clinical_complexity) over (partition by area_code)) / nullif(stddev(score_clinical_complexity) over (partition by area_code), 0) as scaled_score_clinical_complexity,
+        (score_clinical_frailty - avg(score_clinical_frailty) over (partition by area_code)) / nullif(stddev(score_clinical_frailty) over (partition by area_code), 0) as scaled_score_clinical_frailty,
+        (score_medicines_management - avg(score_medicines_management) over (partition by area_code)) / nullif(stddev(score_medicines_management) over (partition by area_code), 0) as scaled_score_medicines_management,
+        (score_emergency_use - avg(score_emergency_use) over (partition by area_code)) / nullif(stddev(score_emergency_use) over (partition by area_code), 0) as scaled_score_emergency_use,
+        (score_residential_social_factors - avg(score_residential_social_factors) over (partition by area_code)) / nullif(stddev(score_residential_social_factors) over (partition by area_code), 0) as scaled_score_residential_social_factors,
+        (score_wider_care_engagement - avg(score_wider_care_engagement) over (partition by area_code)) / nullif(stddev(score_wider_care_engagement) over (partition by area_code), 0) as scaled_score_wider_care_engagement,
+        (score_asc_indicators - avg(score_asc_indicators) over (partition by area_code)) / nullif(stddev(score_asc_indicators) over (partition by area_code), 0) as scaled_score_asc_indicators
+    from domain_sub_scores )
+
+clipped_scores as (
+    select
+        *,
+        least(greatest(zeroifnull(scaled_score_clinical_complexity), -3), 3) as clipped_score_clinical_complexity,
+        least(greatest(zeroifnull(scaled_score_clinical_frailty), -3), 3) as clipped_score_clinical_frailty,
+        least(greatest(zeroifnull(scaled_score_medicines_management), -3), 3) as clipped_score_medicines_management,
+        least(greatest(zeroifnull(scaled_score_emergency_use), -3), 3) as clipped_score_emergency_use,
+        least(greatest(zeroifnull(scaled_score_residential_social_factors), -3), 3) as clipped_score_residential_social_factors,
+        least(greatest(zeroifnull(scaled_score_wider_care_engagement), -3), 3) as clipped_score_wider_care_engagement,
+        least(greatest(zeroifnull(scaled_score_asc_indicators), -3), 3) as clipped_score_asc_indicators
+    from composite_scores
+),
+
+reweighted_scores as (
+    select *,
+     ( 1 * clipped_score_clinical_complexity + 1 * clipped_score_clinical_frailty + 1 * clipped_score_medicines_management + 1 * clipped_score_emergency_use + 1 * clipped_score_residential_social_factors + 1 * clipped_score_wider_care_engagement + 1 * clipped_score_asc_indicators) / 7 as raw_score_frailty
+    from clipped_scores
+)
+select *,
+    round((raw_score_frailty + 3) / 6.0 * 100, 1) as score_frailty_0_100
+from reweighted_scores 
