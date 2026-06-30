@@ -70,6 +70,7 @@ SELECT
     is_extreme_outlier,
     CASE
         WHEN inferred_value IS NULL THEN 'Abnormal'
+        WHEN inferred_value < 0 THEN 'Abnormal'
         WHEN inferred_value <= 5 THEN 'Normal'
         WHEN inferred_value <= 20 THEN 'Elevated'
         WHEN inferred_value <= 100 THEN 'Very Elevated'
