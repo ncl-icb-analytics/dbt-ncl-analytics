@@ -1,0 +1,148 @@
+version: 2
+sources:
+- name: acorn
+  database: '"DATA_LAKE"'
+  schema: '"ACORN"'
+  description: Residential information (ACORN)
+  tables:
+  - name: dscro_mpi
+    identifier: '"dscro_mpi"'
+    columns:
+    - name: der_gbg_matching_dataset_ABP_or_PAF
+      data_type: TEXT
+    - name: der_Address_Residency_From
+      data_type: TEXT
+    - name: der_gbg_Address_Matching_Score
+      data_type: TEXT
+    - name: der_Address_Matching_Source
+      data_type: TEXT
+    - name: der_Birth_Month
+      data_type: NUMBER(38,0)
+    - name: caci_Acorn_Household_Type
+      data_type: NUMBER(38,0)
+    - name: CACI_Household_Acorn_Type_Description
+      data_type: TEXT
+    - name: caci_Acorn_Postcode_Type
+      data_type: NUMBER(38,0)
+    - name: caci_WellBeing_Postcode_Type
+      data_type: NUMBER(38,0)
+    - name: care_home_month
+      data_type: TEXT
+    - name: der_Care_Home_Service_Type
+      data_type: TEXT
+    - name: CareHome_Is_Active
+      data_type: TEXT
+    - name: Carehome_CQC_Loc_ID
+      data_type: TEXT
+    - name: der_Care_Home_Longterm_Temporary_Patient
+      data_type: TEXT
+    - name: Carehome_ODS_Code
+      data_type: TEXT
+    - name: der_CQC_Care_Home_Specialises_in_Over65s
+      data_type: NUMBER(38,0)
+    - name: der_Care_Home_Residence_Flag
+      data_type: TEXT
+    - name: Pseudo_NHS_Number
+      data_type: TEXT
+    - name: Pseudo_Parent_UPRN
+      data_type: TEXT
+    - name: Pseudo_Postcode
+      data_type: TEXT
+    - name: Pseudo_UPRN
+      data_type: TEXT
+    - name: der_Detained_Estates_Flag
+      data_type: TEXT
+    - name: der_Death_Month
+      data_type: NUMBER(38,0)
+    - name: der_Age
+      data_type: TEXT
+    - name: der_Care_Home_FlagMatch_Strength
+      data_type: TEXT
+    - name: der_SICB_Code_Of_Registration
+      data_type: TEXT
+    - name: der_SICB_Code_Of_Residence
+      data_type: TEXT
+    - name: EPC_BuiltForm
+      data_type: TEXT
+    - name: EPC_Current_Energy_Efficiency
+      data_type: NUMBER(38,0)
+    - name: EPC_Current_Energy_Rating
+      data_type: TEXT
+    - name: EPC_Extension_Count
+      data_type: NUMBER(38,0)
+    - name: EPC_Inspection_Date
+      data_type: TIMESTAMP_NTZ
+    - name: EPC_Mechanical_Ventilation
+      data_type: TEXT
+    - name: EPC_Number_Of_Habitable_Rooms
+      data_type: NUMBER(38,0)
+    - name: EPC_Number_Of_Heated_Rooms
+      data_type: NUMBER(38,0)
+    - name: EPC_Potential_Energy_Efficiency
+      data_type: NUMBER(38,0)
+    - name: EPC_Potential_Energy_Rating
+      data_type: TEXT
+    - name: EPC_Property_Type
+      data_type: TEXT
+    - name: EPC_Roof_Description
+      data_type: TEXT
+    - name: EPC_Tenure
+      data_type: TEXT
+    - name: EPC_Wall_Description
+      data_type: TEXT
+    - name: EPC_Window_Description
+      data_type: TEXT
+    - name: der_gbg_Address_Matching_Status
+      data_type: TEXT
+    - name: Gender
+      data_type: TEXT
+    - name: GP_Practice_Code
+      data_type: TEXT
+    - name: der_HMRC_Property_Taxed_As_Holiday_Accommadation_Flag
+      data_type: TEXT
+    - name: der_Living_Alone_Flag
+      data_type: TEXT
+    - name: der_Living_with_People_Over64_Flag
+      data_type: TEXT
+    - name: der_Living_with_People_Under18_Flag
+      data_type: TEXT
+    - name: der_ONS_LSOA2011
+      data_type: TEXT
+    - name: der_ONS_LSOA2021
+      data_type: TEXT
+    - name: der_gbg_match_step
+      data_type: NUMBER(38,0)
+    - name: Number_Of_EPC_Certificates
+      data_type: NUMBER(38,0)
+    - name: OS_Build_Status
+      data_type: TEXT
+    - name: os_UPRN_Property_Classification
+      data_type: TEXT
+    - name: os_UPRN_Property_Classification_Description
+      data_type: TEXT
+    - name: OS_Private_Outdoor_Space_Flag
+      data_type: TEXT
+    - name: OS_Rural_Urban_Classification
+      data_type: TEXT
+    - name: OS_Rural_Urban_Code
+      data_type: TEXT
+    - name: der_gbg_Postcode_Change_Type
+      data_type: TEXT
+    - name: der_Potential_Homeless_Flag
+      data_type: TEXT
+    - name: der_Potential_Student_Flag
+      data_type: TEXT
+    - name: ri_flag
+      data_type: TEXT
+    - name: der_Total_Household_Population
+      data_type: NUMBER(38,0)
+    - name: dmic_RowCreatedDateTime
+      data_type: TIMESTAMP_NTZ
+    - name: dmic_RowIdentifier
+      data_type: NUMBER(38,0)
+    - name: dmic_RowIsLatest
+      data_type: BOOLEAN
+    - name: dmic_RowSupersededDateTime
+      data_type: TIMESTAMP_NTZ
+    - name: dmic_RowVersion
+      data_type: NUMBER(38,0)

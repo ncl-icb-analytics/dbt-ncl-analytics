@@ -188,6 +188,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- acorn: Residential information (ACORN)
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'ACORN' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'ACORN'
+  
+  UNION ALL
+  
     -- dictionary_dbo: Reference data including PDS and lookup tables
   SELECT 
     'Dictionary' as database_name,

@@ -111,6 +111,14 @@ sources:
     raw_prefix: raw_asc_cld
     domain: shared
 
+    # Residential information
+  - source_name: acorn
+    database: DATA_LAKE
+    schema: ACORN
+    description: Residential information (ACORN)
+    raw_prefix: raw_acorn
+    domain: shared
+
 
   # ========================================
   # COMMISSIONING DICTIONARIES [DSCRO, national]
