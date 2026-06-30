@@ -74,11 +74,8 @@ prep as (
             localpatientid
         )                                       as local_patient_id,
         -- 8-10: Patient identifiers (pseudonymised)
-        coalesce(
-            sk_patient_id_nhs_number,
-            sk_patient_id_nhsnumber,
-            sk_patient_id_nhs_no
-        )                                       as sk_patient_id,
+        {{ consistent_sk_patient_id_format('coalesce(sk_patient_id_nhs_number, sk_patient_id_nhsnumber, sk_patient_id_nhs_no)') }}
+                                                as sk_patient_id,
         try_to_number(dv_yearof_birth)          as dv_year_of_birth,
         dv_partial_post_code                    as partial_postcode,
         -- LSOA (derived geography; not a PLD spec field but high-value, ~74% filled)

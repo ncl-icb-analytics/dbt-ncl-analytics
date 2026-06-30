@@ -3,7 +3,7 @@
 }}
 
 select primarykey_id
-    , patient_nhs_number_value_pseudo as sk_patient_id
+    , {{ consistent_sk_patient_id_format('patient_nhs_number_value_pseudo') }} as sk_patient_id
     , patient_local_patient_identifier_value as local_patient_identifier
     ,  {{ clean_organisation_id('attendance_location_hes_provider_3') }} as attendance_location_hes_provider_3
     , attendance_location_site 
