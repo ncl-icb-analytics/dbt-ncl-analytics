@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: stg_acorn_dscro_mpi
+    description: |
+      Staged ACORN residential-information MPI for the DSCRO. One row per patient
+      (sk_patient_id) from the latest DMIC version of each record (No history by design, expand in future). Subset of
+      raw_acorn_dscro_mpi: rows with a pseudonymised NHS number only, and
+      dmic_row_is_latest = true.
+
+      ACORN (A Classification Of Residential Neighbourhoods) household and
+      property attributes, plus derived care-home and household-composition
+      flags. Join to other commissioning feeds on sk_patient_id.
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: sk_patient_id
+        description: |
+          Pseudonymised NHS-number-derived patient hash (pseudo_nhs_number)
+        data_tests:
+          - not_null
+          - unique
+
+      - name: pseudo_uprn
+        description: Pseudonymised Unique Property Reference Number (UPRN).
+
+      - name: caci_acorn_household_type
+        description: CACI ACORN household type code.
+
+      - name: caci_household_acorn_type_description
+        description: Text description of the CACI ACORN household type.
+
+      - name: der_care_home_residence_flag
+        description: Derived flag indicating whether the patient resides in a care home.
+
+      - name: der_care_home_service_type
+        description: Derived care home service type.
+
+      - name: carehome_cqc_loc_id
+        description: CQC location identifier for the associated care home.
+
+      - name: carehome_ods_code
+        description: ODS organisation code for the associated care home.
+
+      - name: der_living_alone_flag
+        description: Derived flag indicating whether the patient lives alone.
+
+      - name: der_total_household_population
+        description: Derived count of people in the household.
+
+      - name: os_uprn_property_classification
+        description: Ordnance Survey UPRN property classification code.
+
+      - name: os_uprn_property_classification_description
+        description: Text description of the OS UPRN property classification.
+
+      - name: dmic_row_identifier
+        description: DMIC source row identifier.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: dmic_row_is_latest
+        description: DMIC flag indicating this row is the current version. Always true in this model.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [true]

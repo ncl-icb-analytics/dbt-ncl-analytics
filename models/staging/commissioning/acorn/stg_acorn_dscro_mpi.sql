@@ -1,4 +1,4 @@
-select pseudo_nhs_number as sk_patient_id
+select {{ consistent_sk_patient_id_format('pseudo_nhs_number') }} as sk_patient_id
     , pseudo_uprn
     , caci_acorn_household_type
     , caci_household_acorn_type_description
@@ -14,5 +14,5 @@ select pseudo_nhs_number as sk_patient_id
     , dmic_row_is_latest
 
 from {{ ref('raw_acorn_dscro_mpi') }}
-where pseudo_nhs_number is not null
+where pseudo_nhs_number is not null and pseudo_nhs_number <> '1'
 and dmic_row_is_latest = true
