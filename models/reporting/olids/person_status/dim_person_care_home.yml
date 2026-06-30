@@ -9,3 +9,9 @@ models:
       - cluster_ids_exist:
           arguments:
             cluster_ids: CAREHOME_COD, TEMPCARHOME_COD
+    columns:
+      - name: person_id
+        description: Person identifier - one row per person (grain)
+        tests:
+          - unique
+          - not_null
