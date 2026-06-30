@@ -92,7 +92,7 @@ value_bounds AS (
 classified AS (
     SELECT
         base.*,
-        TRY_CAST(base.{{ value_column }} AS FLOAT) AS numeric_value,
+        CAST(base.{{ value_column }} AS FLOAT) AS numeric_value,
         base.result_unit_code AS original_result_unit_code,
         base.result_unit_display AS original_result_unit_display,
         base.{{ value_column }} AS original_result_value,
