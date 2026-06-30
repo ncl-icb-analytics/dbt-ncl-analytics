@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: fct_person_current_carehome
+    description: |
+      Current care home residence status combining OLIDS clinical observations and
+      ACORN administrative residence data.
+
+      **Grain:** One row per person with a recorded care home status in OLIDS and/or ACORN.
+
+      **Sources:**
+      - OLIDS: latest residence observation from care-home-related SNOMED terms
+        (e.g. "Lives in", "Seen in", "Admission to") via `latest_residence_status_per_person`.
+      - ACORN: derived care home service type from `int_acorn_care_home` where
+        `der_care_home_residence_flag = 'Y'`.
+
+      **Resolution logic:**
+      - `care_home_type` prefers the OLIDS residence type; falls back to ACORN
+        `der_care_home_service_type` when OLIDS is absent.
+      - `care_home_source` indicates whether the record is supported by OLIDS only,
+        ACORN only, or both systems.
+
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+
+    columns:
+      - name: person_id
+        description: Unique OLIDS person identifier.
+        tests:
+          - not_null
+          - unique
+
+      - name: sk_patient_id
+        description: Pseudonymised patient surrogate key linking OLIDS and commissioning feeds.
+        tests:
+          - not_null
+          - unique
+
+      - name: care_home_type
+        description: |
+          Type of care home residence. OLIDS values include Care Home, Nursing Home,
+          and Temporary Care Home; ACORN values come from `der_care_home_service_type`.
+        tests:
+          - not_null
+
+      - name: care_home_source
+        description: |
+          System(s) that contributed the care home record: OLIDS (clinical observation
+          only), ACORN (administrative data only), or BOTH.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['OLIDS', 'ACORN', 'BOTH']
