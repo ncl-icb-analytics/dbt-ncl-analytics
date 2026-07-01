@@ -7,7 +7,9 @@ service hierarchy (service_grouping > service > activity_type) x POD x HRG.
 
 Source: stg_lsplcm_latest (latest-submission LSPLCM PLD — actual provider
 cost dv_total_cost, NOT national tariff). Covers the WNL footprint
-(NCL + NWL merged). Rolling most-recent 12 months by financial period.
+(NCL + NWL merged). Rolling most-recent 12 complete months by financial
+period — the latest submitted month is excluded while it is still in SLAM
+flex (see bounds).
 
 Cost basis: SLAM actual cost is the agreed spine over SUS tariff — it is
 real commissioned spend (local prices, CQUIN, top-ups), includes high-cost
@@ -54,8 +56,11 @@ with base as (
 -- max(activity_month): a handful of mis-stated rows carry future financial
 -- periods (e.g. 2027-03) that would otherwise shrink the window. Months with
 -- a real submission have ~1.7M rows; junk/partial months have <1k.
+-- Then lag one month: the latest submitted month is still in SLAM flex and
+-- comes in ~15% light, so anchor on the last fully-submitted month to give a
+-- clean window of *complete* months (re-matures forward each refresh).
 , bounds as (
-    select max(activity_month) as end_month
+    select dateadd('month', -1, max(activity_month)) as end_month
     from (
         select activity_month
         from base
