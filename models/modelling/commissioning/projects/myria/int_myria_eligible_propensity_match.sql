@@ -3,104 +3,69 @@
         materialized='table',
         tags=['myria_eval'])
 }}
---TESTING JESS'S EVALUATION MODEL CREATE FILE FOR PROPENSITY MATCHING Py Script.
---FIND ALL PATIENTS ELIGIBLE FOR EVALUATION USING LATEST ENROLLED FILE
---ELIGIBLE FILES ARE ONLY FROM THE HIGH RISK COHORT - NOT THE WHOLE POPULATION.
-with eligibility_files AS ( 
---collect eligible patients who were in all files that have been submitted to RFL so far
---no results for January
-    select *, DATE('22-Jan-2026') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-01-22') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-    --feb extract n=5015
-    select *, date('2026-02-16') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-02-16') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-    --mar extract n=5257
-    select *, date('2026-03-17') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-03-17') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-      --apr extract n=5638
-    select *, date('2026-04-15') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-04-15') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    union 
-    --may extract n=5710
-    select *, date('2026-05-15') as file_date
-    --from modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot
-    FROM {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }}
-    where date('2026-05-15') between dbt_valid_from and coalesce(dbt_valid_to,current_date())
-    -- TO DO: Add future files pulls as needed
+/*JUNE 30th UPDATE FIND ALL PATIENTS ELIGIBLE FOR EVALUATION USING USING THE DATES THAT MATCH THE RFL SUBMISSIONS. THIS FILE WILL AUTOMATICALLY UPDATE WHEN NEW SUBMISSIONS 
+TO RFL ARE ADDED AND THE LATEST ENROLLMENT FILE IS ADDED FROM DOCCLA
+*/
+with submission_dates as (
+select distinct file_date
+from {{ ref('stg_myria_rfl_submission_patients') }}
+--from STAGING.MYRIA.STG_MYRIA_RFL_SUBMISSION_PATIENTS
 )
---n=6061 - add HEX manually (don't use OLIDS in case patients are missing from there). Use macro in DBT for JEX_ID
-, eligibility_information as (
-    select 
-        patient_id, 
-        {{ hxflake_pseudo_generation('patient_id') }} AS hex_id, --THE BELOW SCRIPT IS Safer and production-friendly but the result is the same.
---               CASE
---   WHEN TRY_TO_NUMBER(PATIENT_ID) IS NULL THEN NULL
---   ELSE
---     CONCAT(
---       SUBSTR(
---         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
---         1, 2
---       ),
---       '-',
---       SUBSTR(
---         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
---         3, 3
---       ),
---       '-',
---       SUBSTR(
---         RPAD(REVERSE(TRIM(TO_CHAR(TRY_TO_NUMBER(PATIENT_ID), 'XXXXXXXXXXXXXXXX'))), 8, '0'),
---         6, 3
---       )
---     )
--- END AS hex_id,
-        file_date as first_file_date,
-        local_authority,
-        date(most_recent_nel_admission_date) as most_recent_nel_admission_date,
-        datediff('day', most_recent_nel_admission_date, file_date) days_since_nel_admission,
-        nel_ip_admissions_last_24_months,
-        nel_ip_admissions_last_12_months,
-        barnet_hospital_flag,
-        barnet_hospital_count,
-        rfl_flag,
-        rfl_count,
-        total_high_risk_conditions,
-        alcohol_dependence,
-        atrial_fibrillation,
-        bronchiectasis,
-        cerebrovascular_disease,
-        chronic_kidney_disease,
-        chronic_liver_disease,
-        copd,
-        coronary_heart_disease,
-        dementia,
-        end_stage_renal_failure,
-        frailty_falls,
-        heart_failure,
-        hypertension,
-        liver_failure,
-        osteoporosis,
-        parkinsons_disease,
-        peripheral_vascular_disease,
-        pulmonary_heart_disease,
-        rheumatoid_arthritis,
-        severe_interstitial_lung_disease
-    from 
-        eligibility_files 
-       --select earliest appearance of person in the snapshots
+--Collect the HEX_ID from the submissions rather than regenerate
+,rfl_pop as (
+select distinct hospital_number, hex_id
+from {{ ref('stg_myria_rfl_submission_patients') }}
+--from STAGING.MYRIA.STG_MYRIA_RFL_SUBMISSION_PATIENTS
+)
+--JOIN BY FILE_DATE TO RFL_SUBMISSION_PATIENTS and GET HEX_ID from THIS FILE Distinct patients (n=6395 inc June)
+,eligible_patients AS ( 
+select
+    d.file_date as first_file_date,
+    s.patient_id,
+    r.HEX_ID,
+    s.local_authority,
+        date(s.most_recent_nel_admission_date) as most_recent_nel_admission_date,
+        datediff('day', s.most_recent_nel_admission_date, d.file_date) days_since_nel_admission,
+        s.nel_ip_admissions_last_24_months,
+        s.nel_ip_admissions_last_12_months,
+        s.barnet_hospital_flag,
+        s.barnet_hospital_count,
+        s.rfl_flag,
+        s.rfl_count,
+        s.total_high_risk_conditions,
+        s.alcohol_dependence,
+        s.atrial_fibrillation,
+        s.bronchiectasis,
+        s.cerebrovascular_disease,
+        s.chronic_kidney_disease,
+        s.chronic_liver_disease,
+        s.copd,
+        s.coronary_heart_disease,
+        s.dementia,
+        s.end_stage_renal_failure,
+        s.frailty_falls,
+        s.heart_failure,
+        s.hypertension,
+        s.liver_failure,
+        s.osteoporosis,
+        s.parkinsons_disease,
+        s.peripheral_vascular_disease,
+        s.pulmonary_heart_disease,
+        s.rheumatoid_arthritis,
+        s.severe_interstitial_lung_disease
+from submission_dates d
+join {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} s
+--join modelling.dbt_snapshots.fct_person_myria_high_risk_patients_published_snapshot s
+--Return rows that were active immediately before the start of the day after each FILE_DATE
+    on s.dbt_valid_from < dateadd(day, 1, d.file_date)
+   and (
+        s.dbt_valid_to >= dateadd(day, 1, d.file_date)
+        or s.dbt_valid_to is null
+       )
+LEFT JOIN rfl_pop r using (hospital_number)
+--select earliest appearance of person in the snapshots
     qualify row_number() over(partition by patient_id order by file_date) = 1
 )
---There are 6061 patients in this group 
 --USING OLIDS match HISTORICAL DEMOGRAPHICS RATHER THAN CURRENT 
 , demographic_information as (
         select
@@ -121,7 +86,7 @@ with eligibility_files AS (
         p.IMD_DECILE_25 as imd_decile,
         case when dc.person_id is not null then 1 else 0 end as is_care_home,
         p.ethnicity_category as ethnicity_group 
-    FROM eligibility_information e
+    FROM eligible_patients e
     LEFT JOIN {{ ref('dim_person_demographics_basic') }} pds on e.patient_id = pds.sk_patient_id
     --LEFT JOIN REPORTING.COMMISSIONING_REPORTING.DIM_PERSON_DEMOGRAPHICS_BASIC pds on e.patient_id = pds.sk_patient_id
     LEFT JOIN {{ ref('dim_person_demographics_historical') }} p on e.patient_id = p.sk_patient_id
@@ -134,7 +99,7 @@ with eligibility_files AS (
 --All patients output - includes patients that did not match OLIDS data (is_match_olids = 0). This is because of the IS_CONFIDENTIAL flag in EMIS.
 select 
     -- Eligibility fields
-    --need patient id for matching to UEC and APC Encounter tables
+    --need patient id for matching to UEC and APC Encounter tables 
     d.patient_id,
     d.hex_id,
     d.on_pds_demog,
@@ -192,6 +157,8 @@ from demographic_information d
 -- row per patient per file) and auto-advances as new Doccla files are loaded.
 LEFT JOIN (
     select * from {{ ref('stg_myria_enrolled_patients') }}
+    --SELECT * FROM STAGING.MYRIA.STG_MYRIA_ENROLLED_PATIENTS
     where file_date = (select max(file_date) from {{ ref('stg_myria_enrolled_patients') }})
+    --WHERE FILE_DATE = (SELECT MAX(FILE_DATE) FROM STAGING.MYRIA.STG_MYRIA_ENROLLED_PATIENTS)
 ) m ON d.hex_id = m.hx_id
 
