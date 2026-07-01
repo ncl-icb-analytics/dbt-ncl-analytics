@@ -30,6 +30,101 @@ sources:
       data_type: FLOAT
     - name: REPORT_EXECUTION_DATETIME
       data_type: TIMESTAMP_NTZ
+  - name: LSOA21_SICBL26_ICB26_NHSER26_LAD26
+    identifier: '"LSOA21_SICBL26_ICB26_NHSER26_LAD26"'
+    columns:
+    - name: LSOA21CD
+      data_type: TEXT
+    - name: LSOA21NM
+      data_type: TEXT
+    - name: SICBL26CD
+      data_type: TEXT
+    - name: SICBL26CDH
+      data_type: TEXT
+    - name: SICBL26NM
+      data_type: TEXT
+    - name: ICB26CD
+      data_type: TEXT
+    - name: ICB26CDH
+      data_type: TEXT
+    - name: ICB26NM
+      data_type: TEXT
+    - name: NHSER26CD
+      data_type: TEXT
+    - name: NHSER26CDH
+      data_type: TEXT
+    - name: NHSER26NM
+      data_type: TEXT
+    - name: LAD26CD
+      data_type: TEXT
+    - name: LAD26NM
+      data_type: TEXT
+    - name: OBJECTID
+      data_type: NUMBER(38,0)
+  - name: NATIONAL_GP_PRACTICE_LATEST_LIST_SIZES
+    identifier: '"NATIONAL_GP_PRACTICE_LATEST_LIST_SIZES"'
+    columns:
+    - name: LIST_SIZE_VALUE
+      data_type: NUMBER(38,1)
+    - name: LIST_SIZE_DATE
+      data_type: DATE
+    - name: SOURCE_ID
+      data_type: NUMBER(38,0)
+    - name: SOURCE_SHORT_NAME
+      data_type: TEXT
+    - name: SOURCE_NAME
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_NAME
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: NUMBER(38,0)
+    - name: SUB_ICB_CODE
+      data_type: TEXT
+    - name: LAST_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: ICB
+      data_type: TEXT
+    - name: REGION
+      data_type: TEXT
+  - name: NATIONAL_GP_PRACTICE_LATEST_LIST_SIZES_BAK
+    identifier: '"NATIONAL_GP_PRACTICE_LATEST_LIST_SIZES_BAK"'
+    columns:
+    - name: LIST_SIZE_VALUE
+      data_type: NUMBER(38,1)
+    - name: LIST_SIZE_DATE
+      data_type: DATE
+    - name: SOURCE_ID
+      data_type: NUMBER(38,0)
+    - name: SOURCE_SHORT_NAME
+      data_type: TEXT
+    - name: SOURCE_NAME
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_NAME
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: NUMBER(38,0)
+    - name: SUB_ICB_CODE
+      data_type: TEXT
+    - name: QUARTER_DATE
+      data_type: DATE
+    - name: COMMISSIONER_CODE
+      data_type: TEXT
+    - name: COMMISSIONER_NAME
+      data_type: TEXT
+    - name: PRACTICE_NAME
+      data_type: TEXT
+    - name: WEIGHTED_LIST_SIZE
+      data_type: FLOAT
+    - name: NORMALISED_LIST_SIZE
+      data_type: FLOAT
+    - name: PRACTICE_LIST_SIZE
+      data_type: NUMBER(38,0)
+    - name: LAST_UPDATED
+      data_type: TIMESTAMP_NTZ
   - name: NCL_GP_PRACTICE_LATEST_LIST_SIZES
     identifier: '"NCL_GP_PRACTICE_LATEST_LIST_SIZES"'
     columns:
@@ -50,6 +145,40 @@ sources:
     - name: ORGANISATION_CODE
       data_type: NUMBER(38,0)
     - name: SUB_ICB_CODE
+      data_type: TEXT
+  - name: NCL_GP_PRACTICE_LATEST_LIST_SIZES_BACKUP
+    identifier: '"NCL_GP_PRACTICE_LATEST_LIST_SIZES_BACKUP"'
+    columns:
+    - name: LIST_SIZE_VALUE
+      data_type: NUMBER(38,1)
+    - name: LIST_SIZE_DATE
+      data_type: DATE
+    - name: SOURCE_ID
+      data_type: NUMBER(38,0)
+    - name: SOURCE_SHORT_NAME
+      data_type: TEXT
+    - name: SOURCE_NAME
+      data_type: TEXT
+    - name: GP_PRACTICE_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_NAME
+      data_type: TEXT
+    - name: ORGANISATION_CODE
+      data_type: NUMBER(38,0)
+    - name: SUB_ICB_CODE
+      data_type: TEXT
+  - name: NEIGHBOURHOODS_LSOAS_LOOKUP_20260505
+    identifier: '"NEIGHBOURHOODS_LSOAS_LOOKUP_20260505"'
+    columns:
+    - name: LSOA
+      data_type: TEXT
+    - name: WARD
+      data_type: TEXT
+    - name: NEIGHBOURHOOD
+      data_type: TEXT
+    - name: BOROUGH
+      data_type: TEXT
+    - name: ICB
       data_type: TEXT
   - name: PRACTICE_SHORT_NAME
     identifier: '"PRACTICE_SHORT_NAME"'
@@ -172,6 +301,107 @@ sources:
       data_type: TIMESTAMP_NTZ
   - name: WNL_ORGANISATION
     identifier: '"WNL_ORGANISATION"'
+    columns:
+    - name: SUB_ICB_CODE
+      data_type: TEXT
+    - name: SK_OrganisationID
+      data_type: NUMBER(38,0)
+    - name: Organisation_Code
+      data_type: TEXT
+    - name: Organisation_Name
+      data_type: TEXT
+    - name: SK_OrganisationTypeID
+      data_type: NUMBER(38,0)
+    - name: SK_OrganisationID_NationalGrouping
+      data_type: NUMBER(38,0)
+    - name: SK_OrganisationID_HealthAuthority
+      data_type: NUMBER(38,0)
+    - name: SK_OrganisationID_CurrentCareOrg
+      data_type: NUMBER(38,0)
+    - name: SK_PostcodeID
+      data_type: NUMBER(38,0)
+    - name: StartDate
+      data_type: TIMESTAMP_NTZ
+    - name: EndDate
+      data_type: TIMESTAMP_NTZ
+    - name: SK_OrganisationID_ParentOrg
+      data_type: NUMBER(38,0)
+    - name: Join_Parent_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Left_Parent_Date
+      data_type: TIMESTAMP_NTZ
+    - name: FirstCreated
+      data_type: TIMESTAMP_NTZ
+    - name: LastUpdated
+      data_type: TIMESTAMP_NTZ
+    - name: SK_PrescribingSettingID
+      data_type: NUMBER(38,0)
+    - name: SK_OrganisationStatusID
+      data_type: NUMBER(38,0)
+    - name: Address_Line_1
+      data_type: TEXT
+    - name: Address_Line_2
+      data_type: TEXT
+    - name: Address_Line_3
+      data_type: TEXT
+    - name: Address_Line_4
+      data_type: TEXT
+    - name: Address_Line_5
+      data_type: TEXT
+    - name: SK_Organisation_ID
+      data_type: NUMBER(38,0)
+    - name: SK_OrganisationType_ID
+      data_type: NUMBER(38,0)
+    - name: SK_NationalGrouping_ID
+      data_type: NUMBER(38,0)
+    - name: SK_HealthAuthority_ID
+      data_type: NUMBER(38,0)
+    - name: SK_CurrentCareOrg_ID
+      data_type: NUMBER(38,0)
+    - name: SK_Postcode_ID
+      data_type: NUMBER(38,0)
+    - name: SK_ParentOrg_ID
+      data_type: NUMBER(38,0)
+    - name: SK_PrescribingSetting_ID
+      data_type: NUMBER(38,0)
+    - name: Country
+      data_type: TEXT
+    - name: CodeAssignedBy
+      data_type: TEXT
+    - name: UPRN
+      data_type: TEXT
+    - name: LastChangeDate
+      data_type: TIMESTAMP_NTZ
+    - name: OrganisationPrimaryRole
+      data_type: TEXT
+    - name: StartDate_Legal
+      data_type: TIMESTAMP_NTZ
+    - name: EndDate_Legal
+      data_type: TIMESTAMP_NTZ
+    - name: StartDate_Operational
+      data_type: TIMESTAMP_NTZ
+    - name: EndDate_Operational
+      data_type: TIMESTAMP_NTZ
+    - name: Status
+      data_type: TEXT
+    - name: Q1_QUARTER_DATE
+      data_type: DATE
+    - name: Q1_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: Q1_COMMISSIONER_NAME
+      data_type: TEXT
+    - name: Q1_PRACTICE_NAME_FROM_Q1
+      data_type: TEXT
+    - name: Q1_WEIGHTED_LIST_SIZE
+      data_type: FLOAT
+    - name: Q1_NORMALISED_LIST_SIZE
+      data_type: FLOAT
+    - name: Q1_PRACTICE_LIST_SIZE
+      data_type: NUMBER(38,0)
+    - name: Q1_LAST_UPDATED
+      data_type: TIMESTAMP_NTZ
+  - name: WNL_ORGANISATION_BAK
+    identifier: '"WNL_ORGANISATION_BAK"'
     columns:
     - name: SUB_ICB_CODE
       data_type: TEXT
