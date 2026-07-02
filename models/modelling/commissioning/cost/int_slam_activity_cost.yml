@@ -6,8 +6,10 @@ models:
       Resource to Need model. Rolling most-recent 12 months from
       stg_lsplcm_latest (actual provider cost, WNL = NCL+NWL). Grain:
       patient x month x commissioner x provider x service hierarchy x POD x
-      HRG. Service hierarchy and is_patient_attributable from the
-      slam_pod_service_grouping seed. Cost in £ (dv_total_cost).
+      HRG. Service = governed POD group (POD Group Manager app via
+      stg_reference_pod_group_mapping, joined on the POD/local POD/description
+      key); service_grouping + is_patient_attributable from the
+      pod_group_service_lens seed. Cost in £ (dv_total_cost).
     config:
       meta:
         owner:
@@ -24,22 +26,22 @@ models:
       - name: provider_code
         description: Cleaned provider ODS code.
       - name: service_grouping
-        description: Top-level grouping (Crisis/Community/Planned/Excluded/Unmapped).
+        description: Top-level lens (Crisis/Community/Planned/Excluded/Unmapped) from pod_group_service_lens.
         data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: [Crisis, Community, Planned, Excluded, Unmapped]
       - name: service
-        description: Mid-level service (Ru's labels).
-      - name: activity_type
-        description: Detail activity type.
+        description: Governed POD group (18 curated categories; 'Unmapped' for uncurated combinations).
+        data_tests:
+          - not_null
       - name: pod_code
         description: SLAM point-of-delivery code (upper-cased).
       - name: hrg_code
         description: HRG / national tariff currency code (from tariff_code).
       - name: is_patient_attributable
-        description: FALSE for block/adjustment/transport lines — exclude for per-patient/need cuts.
+        description: FALSE for CQUIN / transport / block-and-adjustment groups — exclude for per-patient/need cuts.
       - name: total_cost
         description: Actual SLAM cost for the grain, £.
       - name: total_activity

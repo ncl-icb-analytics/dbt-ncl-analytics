@@ -533,6 +533,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- pod_group_manager: POD Group Manager app - governed POD group mappings
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'POD_GROUP_MANAGER' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'POD_GROUP_MANAGER'
+  
+  UNION ALL
+  
     -- myria: Project Myria (BEVC) canonical inputs - enrolled and propensity-matched patients
   SELECT 
     'DATA_LAKE__NCL' as database_name,

@@ -3,7 +3,7 @@ Patient-level SLAM activity & actual cost — the spine of the Aligning
 Resource to Need model.
 
 Grain: sk_patient_id x activity_month x commissioner x provider x
-service hierarchy (service_grouping > service > activity_type) x POD x HRG.
+service hierarchy (service_grouping > service) x POD x HRG.
 
 Source: stg_lsplcm_latest (latest-submission LSPLCM PLD — actual provider
 cost dv_total_cost, NOT national tariff). Covers the WNL footprint
@@ -15,10 +15,19 @@ Cost basis: SLAM actual cost is the agreed spine over SUS tariff — it is
 real commissioned spend (local prices, CQUIN, top-ups), includes high-cost
 drugs/devices that tariff excludes, and is commissioner-attributed.
 
-POD -> service hierarchy via the slam_pod_service_grouping seed (joined on
-upper-cased POD). is_patient_attributable carries through so per-patient /
-need cuts can exclude block/adjustment/transport lines while provider
-totals keep them.
+Service hierarchy:
+  service          = governed POD group (stg_reference_pod_group_mapping,
+                     maintained in the POD Group Manager app; joined on the
+                     (POD, local POD, local POD description) key with
+                     equal_null semantics — the same taxonomy as WNL
+                     contracting reporting). Combinations the app has not
+                     curated yet -> 'Unmapped' (~4% of window cost).
+  service_grouping = Crisis / Community / Planned / Excluded / Unmapped lens
+                     over the POD groups (pod_group_service_lens seed), which
+                     also carries is_patient_attributable: filter it for
+                     per-patient / need cuts (drops CQUIN / transport /
+                     block-and-adjustment-dominated groups) while provider
+                     totals keep all rows.
 
 Period: dv_financial_year 'YYYYYY' + dv_financial_month (1=April..12=March)
 converted to the first of the calendar month. Rows with no parsed financial
@@ -39,7 +48,9 @@ with base as (
         -- field in current SLAM: gp_practice_code_registration is ~0%,
         -- gp_practice_responsibility_code ~98%.
         , s.gp_practice_responsibility_code             as registered_practice_code
-        , upper(trim(s.point_of_delivery_code))         as pod_code
+        , nullif(upper(trim(s.point_of_delivery_code)), '')              as pod_code
+        , nullif(upper(trim(s.local_point_of_delivery_code)), '')        as local_pod_code
+        , nullif(upper(trim(s.local_point_of_delivery_description)), '') as local_pod_description
         , s.tariff_code                                 as hrg_code
         , s.age_at_activity_date
         , s.gender_code
@@ -77,19 +88,28 @@ with base as (
       and b.activity_month <= bounds.end_month
 )
 
+, mapped as (
+    select
+        r.*
+        , coalesce(m.pod_group, 'Unmapped') as pod_group
+    from recent as r
+    left join {{ ref('stg_reference_pod_group_mapping') }} as m
+        on  equal_null(r.pod_code, m.pod_code)
+        and equal_null(r.local_pod_code, m.local_pod_code)
+        and equal_null(r.local_pod_description, m.local_pod_description)
+)
+
 select
     r.sk_patient_id
     , r.activity_month
     , r.commissioner_code
     , r.provider_code
     , r.registered_practice_code
-    -- service hierarchy (POD seed); unmatched -> Other / Unmapped
-    , coalesce(m.service_grouping, 'Unmapped')          as service_grouping
-    , coalesce(m.service, 'Unmapped')                   as service
-    , coalesce(m.activity_type, 'Other')                as activity_type
+    , coalesce(l.service_grouping, 'Unmapped')          as service_grouping
+    , r.pod_group                                       as service
     , r.pod_code
     , r.hrg_code
-    , coalesce(m.is_patient_attributable, false)        as is_patient_attributable
+    , coalesce(l.is_patient_attributable, true)         as is_patient_attributable
     -- demographics at event (constant within patient-month; any_value safe)
     , any_value(r.age_at_activity_date)                 as age_at_activity_date
     , any_value(r.gender_code)                          as gender_code
@@ -99,9 +119,9 @@ select
     , sum(r.dv_total_cost)                              as total_cost
     , sum(r.dv_activity_count)                          as total_activity
     , count(*)                                          as line_count
-from recent as r
-left join {{ ref('slam_pod_service_grouping') }} as m
-    on m.pod_code = r.pod_code
+from mapped as r
+left join {{ ref('pod_group_service_lens') }} as l
+    on l.pod_group = r.pod_group
 group by
     r.sk_patient_id
     , r.activity_month
@@ -109,8 +129,7 @@ group by
     , r.provider_code
     , r.registered_practice_code
     , service_grouping
-    , service
-    , activity_type
+    , r.pod_group
     , r.pod_code
     , r.hrg_code
     , is_patient_attributable

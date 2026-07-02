@@ -5,17 +5,15 @@ models:
       Patient-level spend by month and service grouping — headline fact for
       the Aligning Resource to Need analysis. Unions the SLAM actual-cost
       spine (int_slam_activity_cost, WNL = NCL+NWL) with EPD prescribing
-      (int_person_prescribing_cost_monthly, NCL), over the SLAM rolling
+      (int_person_prescribing_cost_monthly), over the SLAM rolling
       12-month window. Grain: patient x month x service_grouping x service x
-      activity_type x cost_source.
+      cost_source.
 
       Pending unions (sources identified): GP appointments (OLIDS), MH
       inpatient + contacts (MHSDS, post discharge-forward fix), community
       contacts (CSDS), high-cost drugs/devices PLD.
 
-      Compare against need via stg_reference_gp_weighted_list_size
-      (practice-level NHS weighted population). Filter is_patient_attributable
-      for per-patient cuts.
+      Filter is_patient_attributable for per-patient cuts.
     config:
       meta:
         owner:
@@ -32,11 +30,9 @@ models:
         data_tests:
           - not_null
       - name: service
-        description: Mid-level service (A&E, Emergency Admissions, GP Prescriptions, etc.).
-      - name: activity_type
-        description: Detail activity type.
+        description: Governed POD group (18 curated categories) or GP Prescriptions for EPD.
       - name: is_patient_attributable
-        description: FALSE for SLAM block/adjustment/transport lines.
+        description: FALSE for SLAM CQUIN / transport / block-and-adjustment groups.
       - name: cost_source
         description: SLAM or EPD — provenance of the cost.
       - name: total_cost
@@ -51,6 +47,5 @@ models:
               - activity_month
               - service_grouping
               - service
-              - activity_type
               - is_patient_attributable
               - cost_source

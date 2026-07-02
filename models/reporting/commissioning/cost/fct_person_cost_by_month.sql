@@ -3,7 +3,7 @@ Patient-level spend by month and service grouping — headline fact for the
 Aligning Resource to Need analysis.
 
 Grain: sk_patient_id x activity_month x service_grouping x service x
-activity_type x cost_source.
+cost_source.
 
 Unions the two cost spines built so far:
   * SLAM (int_slam_activity_cost) — acute / community actual cost, WNL
@@ -29,7 +29,6 @@ with slam as (
         , activity_month
         , service_grouping
         , service
-        , activity_type
         , is_patient_attributable
         , 'SLAM' as cost_source
         , total_cost
@@ -48,7 +47,6 @@ with slam as (
         , p.activity_month
         , 'Community'        as service_grouping
         , 'GP Prescriptions' as service
-        , 'Prescribing'      as activity_type
         , true               as is_patient_attributable
         , 'EPD'              as cost_source
         , p.prescribing_cost as total_cost
@@ -69,7 +67,6 @@ select
     , activity_month
     , service_grouping
     , service
-    , activity_type
     , is_patient_attributable
     , cost_source
     , sum(total_cost)       as total_cost
@@ -80,6 +77,5 @@ group by
     , activity_month
     , service_grouping
     , service
-    , activity_type
     , is_patient_attributable
     , cost_source
