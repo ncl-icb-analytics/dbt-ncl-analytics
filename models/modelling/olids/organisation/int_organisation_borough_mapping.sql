@@ -16,10 +16,17 @@ from Dictionary.Organisation (RO98 records with London-ICB descendent paths); th
 name is parsed to borough with three hand-mapped exceptions (City and Hackney,
 West London, Central London (Westminster)).
 
-Sub-ICB (legacy place-based partnership): derived from the RO98 commissioner's RO261
-parent in ODS, excluding the merged WNL ICB (Z9B2Z). Recovers the pre-2026-04-01 NCL
-(QMJ) / NWL (QRV) identities that NHSE retained as ended-but-extant parent edges.
-For non-merged ICBs the sub-ICB equals the ICB itself.
+Sub-ICB: the RO98/RO319 sub-ICB location the practice is commissioned through —
+the commissioner code itself (93C = North Central London, W2U3Z = North West
+London). These are the live codes national datasets (SLAM/SUS/EPD) carry; 93C
+and W2U3Z survived the 2026-04 ICB merger and were re-parented to Z9B2Z. Names
+are curated for the WNL pair (the post-merger ODS names are unreadable, e.g.
+"NHS WEST AND NORTH LONDON ICB - 93C").
+
+Legacy ICB: the RO98 commissioner's RO261 parent in ODS, excluding the merged
+WNL ICB (Z9B2Z). Recovers the pre-2026-04-01 NCL (QMJ) / NWL (QRV) system
+identities (legally dissolved 2026-03-31 but operationally extant in ODS).
+For non-merged ICBs the legacy ICB equals the ICB itself.
 
 Special handling:
 - Medicus Select Care (Y03103) manually assigned to Enfield borough.
@@ -58,7 +65,12 @@ practice_pcn AS (
         network_code,
         network_name,
         commissioner_code,
-        commissioner_name
+        commissioner_name,
+        -- live sub-ICB location: the commissioner itself, except 3 stale
+        -- MatrixView rows that still carry the dissolved Brent CCG (07P) as
+        -- commissioner - remapped to its successor sub-ICB location W2U3Z
+        CASE WHEN commissioner_code = '07P' THEN 'W2U3Z'
+             ELSE commissioner_code END AS sub_icb_location_code
     FROM {{ ref('stg_dictionary_dbo_organisationmatrixpracticeview') }}
     WHERE practice_code IS NOT NULL
         AND network_code IS NOT NULL
@@ -69,11 +81,11 @@ practice_pcn AS (
 -- Exclude Z9B2Z as parent so we keep the pre-merger NCL (QMJ) / NWL (QRV)
 -- edges that NHSE marked ended but did not delete. For non-merged ICBs
 -- (QMF, QKK, QWE, A3A8R, 72Q, 36L) this resolves to the ICB itself.
-commissioner_to_sub_icb AS (
+commissioner_to_legacy_icb AS (
     SELECT
         od.organisation_code_child  AS commissioner_code,
-        od.organisation_code_parent AS sub_icb_code,
-        org.organisation_name       AS sub_icb_name
+        od.organisation_code_parent AS legacy_icb_code,
+        org.organisation_name       AS legacy_icb_name
     FROM {{ ref('stg_dictionary_dbo_organisationdescendent') }} od
     LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} org
         ON od.organisation_code_parent = org.organisation_code
@@ -84,6 +96,19 @@ commissioner_to_sub_icb AS (
         PARTITION BY od.organisation_code_child
         ORDER BY od.relationship_end_date DESC NULLS LAST
     ) = 1
+),
+
+-- Sub-ICB display names: curated for the WNL pair (post-merger ODS names are
+-- unreadable); the dictionary commissioner name passes through for the rest.
+sub_icb_display AS (
+    SELECT sub_icb_location_code,
+        CASE sub_icb_location_code
+            WHEN '93C'   THEN 'NHS North Central London'
+            WHEN 'W2U3Z' THEN 'NHS North West London'
+            ELSE MIN(commissioner_name)
+        END AS sub_icb_name
+    FROM practice_pcn
+    GROUP BY sub_icb_location_code
 ),
 
 -- Historic CCG paths from OrganisationDescendent (for borough)
@@ -162,7 +187,7 @@ pcn_borough_final AS (
 
 -- One commissioner per PCN (verified: every PCN has a single commissioner in MatrixView)
 pcn_commissioner AS (
-    SELECT DISTINCT network_code, commissioner_code
+    SELECT DISTINCT network_code, commissioner_code, sub_icb_location_code
     FROM practice_pcn
     WHERE network_code IS NOT NULL
 )
@@ -173,23 +198,32 @@ SELECT
     pbf.borough AS borough_registered,
     pbf.historic_ccg AS practice_historic_ccg,
     pp.commissioner_code,
-    cs.sub_icb_code,
-    cs.sub_icb_name,
+    -- live RO98/RO319 sub-ICB location: the commissioner itself (93C / W2U3Z)
+    pp.sub_icb_location_code AS sub_icb_code,
+    sd.sub_icb_name,
+    cs.legacy_icb_code,
+    cs.legacy_icb_name,
 
     pp.network_code,
     pcnbf.borough AS pcn_borough,
     pcnbf.borough_practice_count AS pcn_borough_practice_count,
-    pcs.sub_icb_code AS pcn_sub_icb_code,
-    pcs.sub_icb_name AS pcn_sub_icb_name
+    pcm.sub_icb_location_code AS pcn_sub_icb_code,
+    psd.sub_icb_name AS pcn_sub_icb_name,
+    pcs.legacy_icb_code AS pcn_legacy_icb_code,
+    pcs.legacy_icb_name AS pcn_legacy_icb_name
 
 FROM practice_pcn pp
 LEFT JOIN borough_registered_final pbf
     ON pp.practice_code = pbf.practice_code
-LEFT JOIN commissioner_to_sub_icb cs
+LEFT JOIN commissioner_to_legacy_icb cs
     ON pp.commissioner_code = cs.commissioner_code
+LEFT JOIN sub_icb_display sd
+    ON pp.sub_icb_location_code = sd.sub_icb_location_code
 LEFT JOIN pcn_borough_final pcnbf
     ON pp.network_code = pcnbf.network_code
 LEFT JOIN pcn_commissioner pcm
     ON pp.network_code = pcm.network_code
-LEFT JOIN commissioner_to_sub_icb pcs
+LEFT JOIN commissioner_to_legacy_icb pcs
     ON pcm.commissioner_code = pcs.commissioner_code
+LEFT JOIN sub_icb_display psd
+    ON pcm.sub_icb_location_code = psd.sub_icb_location_code
