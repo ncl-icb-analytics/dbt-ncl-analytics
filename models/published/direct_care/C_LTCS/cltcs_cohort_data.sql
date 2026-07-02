@@ -138,6 +138,7 @@ select il.patient_id
     , asc_cld.has_social_support_substance_misuse
     , asc_cld.has_sensory_support_dual_impairment
     , asc_cld.has_social_support_asylum_seeker
+    , if asc_cld.service_type is not null then 1 else 0 as has_asc_service
     -- current status to consider 
     , ps.is_currently_pregnant 
     -- dim_person_is_carer?
@@ -200,7 +201,7 @@ select il.patient_id
         ELSE polyp.medication_name_list
       END as medication_name_list
     ,polyp.is_polypharmacy_5plus
-    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
+    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(has_asc_service) as attendance_difficulty_score
     -- Recent medications (last 30 days and last year)
     ,rm.medications_recent_12mo as medications_recent_12mo
     ,zeroifnull(rm.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo

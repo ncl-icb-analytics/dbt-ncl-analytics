@@ -1,12 +1,19 @@
-with 
+-- Emit a rolling 2-year window of spells (for consumers like the C-LTCS event
+-- timeline). Downstream 1-year consumers (fct_person_sus_ip_recent,
+-- int_sus_apc_merged_spells) re-apply their own 12-month filter, so their row
+-- coverage is unaffected. Median durations are computed over the full 2-year
+-- emit set. in_year_duration remains a fixed 12-month "in year" measure.
+{% set emit_lookback_months = -24 %}
+{% set in_year_lookback_months = -12 %}
+with
 base_encounters_raw as (
     select *,
     start_date is null as dq_start_date,
     end_date is null as dq_end_date,
     duration is null as dq_duration,
     from {{ ref('int_sus_apc_encounter') }}
-    where (start_date between dateadd(month, -12, current_date()) and current_date()
-        or end_date between dateadd(month, -12, current_date()) and current_date())
+    where (start_date between dateadd(month, {{ emit_lookback_months }}, current_date()) and current_date()
+        or end_date between dateadd(month, {{ emit_lookback_months }}, current_date()) and current_date())
     and sk_patient_id is not null and sk_patient_id != '1'
     and spell_admission_method not in ('2C', '82', '31') -- birth of a baby
 ),
@@ -137,9 +144,9 @@ base_encounters as (
     select
         *,
         case
-            when start_date >= dateadd(month, -12, current_date())
+            when start_date >= dateadd(month, {{ in_year_lookback_months }}, current_date())
                 then duration
-            else greatest(0, datediff(day, dateadd(month, -12, current_date()), end_date))
+            else greatest(0, datediff(day, dateadd(month, {{ in_year_lookback_months }}, current_date()), end_date))
         end as in_year_duration
     from base_encounters_with_duration
 )
