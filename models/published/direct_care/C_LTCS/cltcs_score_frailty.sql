@@ -64,8 +64,9 @@ encoding_features as (
         zeroifnull(apca.acs_nel_12mo) as acs_nel_12mo,
 
         -- residential / social factors
-        case when ch.is_care_home_resident = TRUE and not array_contains('NURSEHOME_COD'::variant, ch.source_cluster_ids) then 1 else 0 end as is_care_home_flag,
-        case when pc.is_housebound = true then 1 else 0 end as is_housebound_flag,
+        case when ch.is_care_home_resident = TRUE then 1 else 0 end as is_care_home_flag,
+        case when pc.has_palliative_care = true then 1 else 0 end as is_palliative_care_flag,
+        case when ps.is_housebound = true then 1 else 0 end as is_housebound_flag,
         case when pc.has_learning_disability = true then 1 else 0 end as has_learning_disability_flag,
         case when pc.has_severe_mental_illness = true then 1 else 0 end as has_severe_mental_illness_flag,
         case when id.illicit_drug_pattern is not null
@@ -86,6 +87,8 @@ encoding_features as (
         on il.olids_id = pd.person_id
     left join {{ ref('dim_person_conditions') }} pc
         on il.olids_id = pc.person_id
+    left join {{ref('dim_person_status_summary')}} ps
+        on il.olids_id = ps.person_id
     left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
         on il.olids_id = lcs.person_id
     left join {{ ref('fct_person_sus_ae_recent') }} aea
@@ -151,11 +154,10 @@ domain_sub_scores as (
             -- TO DO: add specific discharge reason flags (should be in ASC?)
         ) as score_emergency_use,
         -- residential / social factors
-        ( is_care_home_flag
+        ( is_palliative_care_flag
         + is_housebound_flag
         + has_learning_disability_flag
         + has_severe_mental_illness_flag
-        + substance_misuse_flag
         ) as score_residential_social_factors,
         -- wider care engagement
         ( ln(1+apc_los_12mo)
@@ -171,7 +173,9 @@ domain_sub_scores as (
             -- TO DO: add community, referrals and carer support flags
         -- ASC indicators
         ( ln(1+acs_nel_12mo)
-        ) as score_asc_indicators
+        ) as score_asc_indicators,
+        -- care home and other exclusions
+        ( is_care_home_flag ) as score_exclusions
 from encoding_features
 ),
 
@@ -186,7 +190,8 @@ composite_scores as (
         (score_emergency_use - avg(score_emergency_use) over (partition by area_code)) / nullif(stddev(score_emergency_use) over (partition by area_code), 0) as scaled_score_emergency_use,
         (score_residential_social_factors - avg(score_residential_social_factors) over (partition by area_code)) / nullif(stddev(score_residential_social_factors) over (partition by area_code), 0) as scaled_score_residential_social_factors,
         (score_wider_care_engagement - avg(score_wider_care_engagement) over (partition by area_code)) / nullif(stddev(score_wider_care_engagement) over (partition by area_code), 0) as scaled_score_wider_care_engagement,
-        (score_asc_indicators - avg(score_asc_indicators) over (partition by area_code)) / nullif(stddev(score_asc_indicators) over (partition by area_code), 0) as scaled_score_asc_indicators
+        (score_asc_indicators - avg(score_asc_indicators) over (partition by area_code)) / nullif(stddev(score_asc_indicators) over (partition by area_code), 0) as scaled_score_asc_indicators,
+        score_exclusions
     from domain_sub_scores ),
 
 clipped_scores as (
@@ -208,5 +213,5 @@ reweighted_scores as (
     from clipped_scores
 )
 select *,
-    round((raw_score_frailty + 3) / 6.0 * 100, 1) as score_frailty
+    round((raw_score_frailty + 3) / 6.0 * 100, 1) - (50 * score_exclusions) as score_frailty
 from reweighted_scores
