@@ -3,11 +3,12 @@ models:
   - name: fct_person_cost_by_month
     description: |
       Patient-level spend by month and service grouping — headline fact for
-      the Aligning Resource to Need analysis. Unions the SLAM actual-cost
-      spine (int_slam_activity_cost, WNL = NCL+NWL) with EPD prescribing
-      (int_person_prescribing_cost_monthly), over the SLAM rolling
-      12-month window. Grain: patient x month x service_grouping x service x
-      is_patient_attributable x cost_source.
+      the Aligning Resource to Need analysis. Full-history union of the SLAM
+      actual-cost spine (int_slam_activity_cost, WNL = NCL+NWL, from 2021-04)
+      with EPD prescribing (int_person_prescribing_cost_monthly, from 2018-04
+      and about 12 months behind SLAM). The rolling 12-month window lives in
+      int_person_cost_12m. Grain: patient x month x service_grouping x service x
+      is_patient_attributable x cost_basis x cost_source.
 
       Pending unions (sources identified): GP appointments (OLIDS), MH
       inpatient + contacts (MHSDS, post discharge-forward fix), community
@@ -33,6 +34,10 @@ models:
         description: Governed POD group (18 curated categories) or GP Prescriptions for EPD.
       - name: is_patient_attributable
         description: FALSE for SLAM CQUIN / transport / block-and-adjustment groups.
+      - name: cost_basis
+        description: "Cost basis: actual, proxy, nominal, or tariff."
+        data_tests:
+          - not_null
       - name: cost_source
         description: SLAM or EPD — provenance of the cost.
       - name: total_cost
@@ -48,4 +53,5 @@ models:
               - service_grouping
               - service
               - is_patient_attributable
+              - cost_basis
               - cost_source

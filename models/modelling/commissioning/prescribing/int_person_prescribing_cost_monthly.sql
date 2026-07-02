@@ -9,6 +9,7 @@ counted.
 Cost: item_actual_cost is the actual reimbursed spend in pence; divided by 100
 to £ to align with the SUS tariff (£) and MH proxy-cost (£) PODs that feed the
 person cost model.
+Cost basis: 'actual' = EPD item_actual_cost reimbursed spend.
 
 Covers the WNL footprint (the EPD feed was repointed to NCL + NWL 2026-06).
 Patients with no pseudo key (sk_patient_id NULL — out-of-area / unmatched) are
@@ -20,6 +21,7 @@ before relying on recent months.
 select
     sk_patient_id
     , date_trunc('month', processing_period_date)   as activity_month
+    , 'actual'                                      as cost_basis
     , round(sum(item_actual_cost) / 100, 2)         as prescribing_cost
     , sum(item_count)                               as prescribing_items
 from {{ ref('stg_epd_pc_meds') }}

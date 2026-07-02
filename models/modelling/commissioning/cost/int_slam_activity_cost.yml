@@ -3,13 +3,14 @@ models:
   - name: int_slam_activity_cost
     description: |
       Patient-level SLAM activity & actual cost — spine of the Aligning
-      Resource to Need model. Rolling most-recent 12 months from
-      stg_lsplcm_latest (actual provider cost, WNL = NCL+NWL). Grain:
+      Resource to Need model. Full history from 2021-04 to the last complete
+      month from stg_lsplcm_latest (actual provider cost, WNL = NCL+NWL).
+      The rolling 12-month window lives in int_person_cost_12m. Grain:
       patient x month x commissioner x provider x service hierarchy x POD x
-      HRG. Service = governed POD group (POD Group Manager app via
-      stg_reference_pod_group_mapping; tiered join - exact POD/local
+      HRG x cost_basis. Service = governed POD group (POD Group Manager app
+      via stg_reference_pod_group_mapping; tiered join - exact POD/local
       POD/description, then unambiguous POD/local POD, then unambiguous
-      POD-only - ~98.5% of window cost mapped); service_grouping +
+      POD-only - ~98.5% of cost mapped); service_grouping +
       is_patient_attributable from the pod_group_service_lens seed. Cost in £
       (dv_total_cost).
     config:
@@ -44,6 +45,10 @@ models:
         description: HRG / national tariff currency code (from tariff_code).
       - name: is_patient_attributable
         description: FALSE for CQUIN / transport / block-and-adjustment groups — exclude for per-patient/need cuts.
+      - name: cost_basis
+        description: "Cost basis: 'actual' (SLAM agreed actual cost)."
+        data_tests:
+          - not_null
       - name: total_cost
         description: Actual SLAM cost for the grain, £.
       - name: total_activity

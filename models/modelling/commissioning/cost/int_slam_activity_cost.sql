@@ -4,17 +4,17 @@ Resource to Need model.
 
 Grain: sk_patient_id x activity_month x commissioner x provider x
 registered practice x service hierarchy (service_grouping > service) x POD x
-HRG x is_patient_attributable.
+HRG x is_patient_attributable x cost_basis.
 
 Source: stg_lsplcm_latest (latest-submission LSPLCM PLD — actual provider
 cost dv_total_cost, NOT national tariff). Covers the WNL footprint
-(NCL + NWL merged). Rolling most-recent 12 complete months by financial
-period — the latest submitted month is excluded while it is still in SLAM
-flex (see bounds).
+(NCL + NWL merged). Carries history from 2021-04-01 to the last complete
+month. The latest submitted month is excluded while it is still in SLAM flex
+(see bounds). The rolling 12-month analysis window lives in
+int_person_cost_12m.
 
-Cost basis: SLAM actual cost is the agreed spine over SUS tariff — it is
-real commissioned spend (local prices, CQUIN, top-ups), includes high-cost
-drugs/devices that tariff excludes, and is commissioner-attributed.
+Cost basis: 'actual' = SLAM agreed actual cost. Future sources will carry
+'proxy', 'nominal', or 'tariff'.
 
 Service hierarchy:
   service          = governed POD group (stg_reference_pod_group_mapping,
@@ -81,11 +81,11 @@ with base as (
     )
 )
 
-, recent as (
+, windowed as (
     select b.*
     from base as b
     cross join bounds
-    where b.activity_month > dateadd('month', -12, bounds.end_month)
+    where b.activity_month >= '2021-04-01'
       and b.activity_month <= bounds.end_month
 )
 
@@ -108,7 +108,7 @@ with base as (
     select
         r.*
         , coalesce(m3.pod_group, m2.pod_group, m1.pod_group, 'Unmapped') as pod_group
-    from recent as r
+    from windowed as r
     left join {{ ref('stg_reference_pod_group_mapping') }} as m3
         on  equal_null(r.pod_code, m3.pod_code)
         and equal_null(r.local_pod_code, m3.local_pod_code)
@@ -137,6 +137,7 @@ select
     -- Demographics deliberately not carried: cut dimensions come from the
     -- person spine (dim_person_demographics_basic), not SLAM's event fields.
     , coalesce(l.is_patient_attributable, true)         as is_patient_attributable
+    , 'actual'                                          as cost_basis
     -- measures
     , sum(r.dv_total_cost)                              as total_cost
     , sum(r.dv_activity_count)                          as total_activity
