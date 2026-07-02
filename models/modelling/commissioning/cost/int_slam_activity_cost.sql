@@ -18,11 +18,15 @@ drugs/devices that tariff excludes, and is commissioner-attributed.
 
 Service hierarchy:
   service          = governed POD group (stg_reference_pod_group_mapping,
-                     maintained in the POD Group Manager app; joined on the
-                     (POD, local POD, local POD description) key with
-                     equal_null semantics — the same taxonomy as WNL
-                     contracting reporting). Combinations the app has not
-                     curated yet -> 'Unmapped' (~4% of window cost).
+                     maintained in the POD Group Manager app — the same
+                     taxonomy as WNL contracting reporting). Tiered join:
+                     exact (POD, local POD, description) with equal_null
+                     semantics (~96% of window cost), then unambiguous
+                     (POD, local POD), then unambiguous POD-only — LSPLCM
+                     local descriptions are free-text variants of the
+                     LSACM-curated keys. Residual 'Unmapped' ~1.5% of window
+                     cost: PODs whose group genuinely depends on a local code
+                     the app has not seen (BLOCK / DRUG / OTHER variants).
   service_grouping = Crisis / Community / Planned / Excluded / Unmapped lens
                      over the POD groups (pod_group_service_lens seed), which
                      also carries is_patient_attributable: filter it for
@@ -85,15 +89,35 @@ with base as (
       and b.activity_month <= bounds.end_month
 )
 
+-- fallback tiers: only usable where the coarser key is unambiguous
+, map_pod_local as (
+    select pod_code, local_pod_code, min(pod_group) as pod_group
+    from {{ ref('stg_reference_pod_group_mapping') }}
+    group by pod_code, local_pod_code
+    having count(distinct pod_group) = 1
+)
+
+, map_pod as (
+    select pod_code, min(pod_group) as pod_group
+    from {{ ref('stg_reference_pod_group_mapping') }}
+    group by pod_code
+    having count(distinct pod_group) = 1
+)
+
 , mapped as (
     select
         r.*
-        , coalesce(m.pod_group, 'Unmapped') as pod_group
+        , coalesce(m3.pod_group, m2.pod_group, m1.pod_group, 'Unmapped') as pod_group
     from recent as r
-    left join {{ ref('stg_reference_pod_group_mapping') }} as m
-        on  equal_null(r.pod_code, m.pod_code)
-        and equal_null(r.local_pod_code, m.local_pod_code)
-        and equal_null(r.local_pod_description, m.local_pod_description)
+    left join {{ ref('stg_reference_pod_group_mapping') }} as m3
+        on  equal_null(r.pod_code, m3.pod_code)
+        and equal_null(r.local_pod_code, m3.local_pod_code)
+        and equal_null(r.local_pod_description, m3.local_pod_description)
+    left join map_pod_local as m2
+        on  equal_null(r.pod_code, m2.pod_code)
+        and equal_null(r.local_pod_code, m2.local_pod_code)
+    left join map_pod as m1
+        on r.pod_code = m1.pod_code
 )
 
 select

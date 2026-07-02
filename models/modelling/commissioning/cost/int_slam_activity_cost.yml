@@ -7,9 +7,11 @@ models:
       stg_lsplcm_latest (actual provider cost, WNL = NCL+NWL). Grain:
       patient x month x commissioner x provider x service hierarchy x POD x
       HRG. Service = governed POD group (POD Group Manager app via
-      stg_reference_pod_group_mapping, joined on the POD/local POD/description
-      key); service_grouping + is_patient_attributable from the
-      pod_group_service_lens seed. Cost in £ (dv_total_cost).
+      stg_reference_pod_group_mapping; tiered join - exact POD/local
+      POD/description, then unambiguous POD/local POD, then unambiguous
+      POD-only - ~98.5% of window cost mapped); service_grouping +
+      is_patient_attributable from the pod_group_service_lens seed. Cost in £
+      (dv_total_cost).
     config:
       meta:
         owner:
