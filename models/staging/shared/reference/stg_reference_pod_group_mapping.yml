@@ -24,6 +24,13 @@ models:
         description: One of the 18 governed POD group categories (POD_GROUP_OPTION).
         data_tests:
           - not_null
+          # Full lens coverage gate: a new category added in the app fails the
+          # build until pod_group_service_lens decides its service_grouping and
+          # attributability (one seed row).
+          - relationships:
+              arguments:
+                to: ref('pod_group_service_lens')
+                field: pod_group
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:

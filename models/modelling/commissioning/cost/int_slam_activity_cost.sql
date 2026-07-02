@@ -3,7 +3,8 @@ Patient-level SLAM activity & actual cost — the spine of the Aligning
 Resource to Need model.
 
 Grain: sk_patient_id x activity_month x commissioner x provider x
-service hierarchy (service_grouping > service) x POD x HRG.
+registered practice x service hierarchy (service_grouping > service) x POD x
+HRG x is_patient_attributable.
 
 Source: stg_lsplcm_latest (latest-submission LSPLCM PLD — actual provider
 cost dv_total_cost, NOT national tariff). Covers the WNL footprint
@@ -52,10 +53,6 @@ with base as (
         , nullif(upper(trim(s.local_point_of_delivery_code)), '')        as local_pod_code
         , nullif(upper(trim(s.local_point_of_delivery_description)), '') as local_pod_description
         , s.tariff_code                                 as hrg_code
-        , s.age_at_activity_date
-        , s.gender_code
-        , s.ethnic_category
-        , s.lsoa
         , s.dv_total_cost
         , s.dv_activity_count
     from {{ ref('stg_lsplcm_latest') }} as s
@@ -109,12 +106,13 @@ select
     , r.pod_group                                       as service
     , r.pod_code
     , r.hrg_code
+    -- Lens coverage is enforced by the relationships test on
+    -- stg_reference_pod_group_mapping.pod_group (a new app category fails the
+    -- build until the lens seed decides it), so this fallback never fires in
+    -- practice; true mirrors the seed's Unmapped row (real patient activity).
+    -- Demographics deliberately not carried: cut dimensions come from the
+    -- person spine (dim_person_demographics_basic), not SLAM's event fields.
     , coalesce(l.is_patient_attributable, true)         as is_patient_attributable
-    -- demographics at event (constant within patient-month; any_value safe)
-    , any_value(r.age_at_activity_date)                 as age_at_activity_date
-    , any_value(r.gender_code)                          as gender_code
-    , any_value(r.ethnic_category)                      as ethnic_category
-    , any_value(r.lsoa)                                 as lsoa
     -- measures
     , sum(r.dv_total_cost)                              as total_cost
     , sum(r.dv_activity_count)                          as total_activity

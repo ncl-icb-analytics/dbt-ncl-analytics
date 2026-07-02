@@ -3,7 +3,7 @@ Patient-level spend by month and service grouping — headline fact for the
 Aligning Resource to Need analysis.
 
 Grain: sk_patient_id x activity_month x service_grouping x service x
-cost_source.
+is_patient_attributable x cost_source.
 
 Unions the two cost spines built so far:
   * SLAM (int_slam_activity_cost) — acute / community actual cost, WNL

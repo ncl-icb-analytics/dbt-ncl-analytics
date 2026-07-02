@@ -7,7 +7,7 @@ models:
       spine (int_slam_activity_cost, WNL = NCL+NWL) with EPD prescribing
       (int_person_prescribing_cost_monthly), over the SLAM rolling
       12-month window. Grain: patient x month x service_grouping x service x
-      cost_source.
+      is_patient_attributable x cost_source.
 
       Pending unions (sources identified): GP appointments (OLIDS), MH
       inpatient + contacts (MHSDS, post discharge-forward fix), community
