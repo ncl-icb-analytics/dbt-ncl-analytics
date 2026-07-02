@@ -213,5 +213,5 @@ reweighted_scores as (
     from clipped_scores
 )
 select *,
-    greatest(0, ground((raw_score_frailty + 3) / 6.0 * 100, 1) - (50 * score_exclusions)) as score_frailty
+    greatest(0, round((raw_score_frailty + 3) / 6.0 * 100, 1) - (50 * score_exclusions)) as score_frailty
 from reweighted_scores
