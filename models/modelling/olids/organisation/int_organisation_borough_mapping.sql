@@ -215,8 +215,11 @@ SELECT
 FROM practice_pcn pp
 LEFT JOIN borough_registered_final pbf
     ON pp.practice_code = pbf.practice_code
+-- legacy lineage keyed on the remapped sub-ICB location, so stale CCG
+-- commissioners (07P) inherit their successor's RO261 parent rather than
+-- depending on their own edges
 LEFT JOIN commissioner_to_legacy_icb cs
-    ON pp.commissioner_code = cs.commissioner_code
+    ON pp.sub_icb_location_code = cs.commissioner_code
 LEFT JOIN sub_icb_display sd
     ON pp.sub_icb_location_code = sd.sub_icb_location_code
 LEFT JOIN pcn_borough_final pcnbf
@@ -224,6 +227,6 @@ LEFT JOIN pcn_borough_final pcnbf
 LEFT JOIN pcn_commissioner pcm
     ON pp.network_code = pcm.network_code
 LEFT JOIN commissioner_to_legacy_icb pcs
-    ON pcm.commissioner_code = pcs.commissioner_code
+    ON pcm.sub_icb_location_code = pcs.commissioner_code
 LEFT JOIN sub_icb_display psd
     ON pcm.sub_icb_location_code = psd.sub_icb_location_code
