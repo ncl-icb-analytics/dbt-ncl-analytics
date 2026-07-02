@@ -1,0 +1,45 @@
+version: 2
+models:
+  - name: int_person_registration_exposure
+    description: |
+      WNL registration exposure over the rolling 12-month cost window
+      (aligned to fct_person_cost_by_month). One row per patient with >= 1
+      registered month; includes the deceased and deducted so
+      resource-to-need keeps their in-window spend (the current-registration
+      flag drops ~17% of in-patch patient-keyed spend). Built from PDS
+      registration episodes x WNL practices; exposure truncated at the death
+      month (PDS does not close episodes at death); deaths before the window
+      start are excluded. practice_code is the practice at the last
+      registered month in the window.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: sk_patient_id
+        description: DMIC pseudonymised NHS number.
+        data_tests:
+          - not_null
+          - unique
+      - name: months_registered
+        description: Months of WNL registration in the window (1-12), truncated at death.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 12
+      - name: first_month_registered
+        description: First registered month in the window.
+      - name: last_month_registered
+        description: Last registered month in the window (death month or deduction month for leavers).
+      - name: practice_code
+        description: WNL practice at the last registered month in the window.
+        data_tests:
+          - not_null
+      - name: date_of_death
+        description: PDS date of death (NULL if alive; may be after the window end).
+      - name: died_in_window
+        description: TRUE when the death falls inside the 12-month window.
+      - name: window_end_month
+        description: The window's final month (first-of-month) — reference date for age calculations.

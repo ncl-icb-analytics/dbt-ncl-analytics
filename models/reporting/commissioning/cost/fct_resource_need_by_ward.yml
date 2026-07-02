@@ -2,10 +2,13 @@ version: 2
 models:
   - name: fct_resource_need_by_ward
     description: >
-      Resource vs need by residence ward (2025) for the registered WNL
-      population. Drives the ward choropleths in the Aligning Resource to Need
-      pack: cost per head, age-weighted population, spend per weighted head, and
-      the resource-to-need index (actual / expected).
+      Resource vs need by residence ward (2025) for the WNL exposure
+      population (includes deceased and deducted). Drives the ward
+      choropleths in the Aligning Resource to Need pack: cost per
+      person-year, age-sex-weighted exposure, spend per weighted year, and
+      the resource-to-need index (actual / expected). Denominators are
+      WNL-registered person-time by residence ward, NOT ONS ward populations
+      - boundary wards with many non-WNL-registered residents are partial.
     config:
       meta:
         owner:
@@ -18,12 +21,14 @@ models:
       - name: residence_borough
         description: Residence local authority / borough.
       - name: population
-        description: Registered WNL persons resident in the ward.
-      - name: weighted_population
-        description: Age-sex-weighted population (expected cost / WNL mean per head).
-      - name: cost_per_head
-        description: Actual 12-month attributable spend per head (GBP).
-      - name: spend_per_weighted_head
-        description: Spend per age-weighted head (GBP) = index x WNL mean per head.
+        description: Persons with WNL registration exposure resident in the ward.
+      - name: person_years
+        description: Registered person-years in the window.
+      - name: weighted_person_years
+        description: Age-sex-weighted exposure (expected cost / WNL mean rate per person-year).
+      - name: cost_per_person_year
+        description: Actual window spend per registered person-year (GBP).
+      - name: spend_per_weighted_year
+        description: Spend per age-weighted person-year (GBP) = index x WNL mean rate.
       - name: resource_to_need_index
         description: actual / expected. >1 = above age-sex-expected spend.

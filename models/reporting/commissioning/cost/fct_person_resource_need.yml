@@ -2,11 +2,13 @@ version: 2
 models:
   - name: fct_person_resource_need
     description: >
-      Resource vs need at person level for the registered WNL population
-      (indirect age-sex standardisation). One row per registered patient with
-      actual 12-month patient-attributable spend and the expected cost (WNL
-      average for their age-sex band, derived empirically from the same
-      population). resource_to_need = sum(actual) / sum(expected) for any cut.
+      Resource vs need at person level (indirect age-sex standardisation on a
+      person-time basis). One row per patient with WNL registration exposure
+      in the rolling 12-month cost window - including the deceased and the
+      deducted, attributed to their window practice. actual = 12-month
+      patient-attributable spend; expected = empirical WNL age-sex
+      cost-per-month rate x months registered. resource_to_need =
+      sum(actual) / sum(expected) for any cut (never average the ratio).
     config:
       meta:
         owner:
@@ -18,16 +20,28 @@ models:
           - not_null
           - unique
       - name: gender
-        description: Gender (used with age_band for the cost curve).
+        description: Gender ('Unknown' when missing; matches the curve band).
       - name: age
-        description: Age in completed years.
+        description: Age in completed years at the window end (at death for decedents).
       - name: age_band
-        description: NHS age band (0-4, 5-14, ... 85+), used for the cost curve.
+        description: NHS age band (0-4, 5-14, ... 85+, Unknown), used for the cost curve.
+      - name: months_registered
+        description: Months of WNL registration in the window (1-12) — the exposure behind expected_cost_12m.
+        data_tests:
+          - not_null
+      - name: died_in_window
+        description: TRUE when the patient died inside the window. Decedent spend is a distinct, policy-relevant cut.
+      - name: practice_code
+        description: WNL practice at the last registered month in the window.
+      - name: registered_borough
+        description: Borough of the window practice (contractual, via ODS).
       - name: registered_sub_icb_code
-        description: Registered sub-ICB (QMJ = NCL, QRV = NWL).
+        description: Registered sub-ICB of the window practice (QMJ = NCL, QRV = NWL).
       - name: actual_cost_12m
-        description: Patient-attributable spend over the latest 12 months (GBP).
+        description: Patient-attributable spend over the window (GBP).
         data_tests:
           - not_null
       - name: expected_cost_12m
-        description: WNL average cost per head for the patient's age-sex band (GBP).
+        description: Age-sex band cost-per-month rate x months registered (GBP).
+        data_tests:
+          - not_null
