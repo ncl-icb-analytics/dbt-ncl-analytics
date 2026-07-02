@@ -138,7 +138,12 @@ select il.patient_id
     , asc_cld.has_social_support_substance_misuse
     , asc_cld.has_sensory_support_dual_impairment
     , asc_cld.has_social_support_asylum_seeker
-    , case when asc_cld.service_type is not null then 1 else 0 end
+    , asc_cld.has_asc_service
+    , ch.is_care_home_resident
+    , ch.is_nursing_home_resident
+    , ch.is_temporary_resident
+    , ch.residence_type
+    , ch.residence_status
     -- current status to consider 
     , ps.is_currently_pregnant 
     -- dim_person_is_carer?
@@ -262,3 +267,5 @@ left join hr_hrc_ltc_lcs_conditions lcs
     on il.olids_id = lcs.person_id
 left join {{ref('fct_person_asc_service_recent')}} asc_cld
     on il.patient_id = asc_cld.sk_patient_id
+LEFT JOIN {{ref('dim_person_care_home')}} ch
+    on il.olids_id = ch.person_id

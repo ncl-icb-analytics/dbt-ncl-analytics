@@ -8,6 +8,7 @@
 
 select
     sk_patient_id,
+    1 as has_asc_service,
     array_agg(distinct borough_name) as borough_name,
     array_agg(distinct reporting_period_start_date) as reporting_period_start_date,
     array_agg(distinct reporting_period_end_date) as reporting_period_end_date,
