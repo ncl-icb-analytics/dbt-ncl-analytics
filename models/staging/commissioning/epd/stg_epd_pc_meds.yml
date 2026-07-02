@@ -1,0 +1,48 @@
+version: 2
+models:
+  - name: stg_epd_pc_meds
+    description: |
+      English Prescribing Dataset (EPD) primary care dispensed medications.
+      One row per dispensed prescription item per patient per processing
+      period. Faithful passthrough of raw_epd_pc_meds with the patient key
+      renamed to sk_patient_id and cost/quantity/date columns typed.
+
+      All rows retained, including out-of-area patients who won't match NCL
+      person dimensions. Cost columns are in source units (NHSBSA reports
+      pence) — conversion to £ happens in the modelling layer.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: sk_patient_id
+        description: >
+          DMIC pseudonymised NHS number (renamed from dmic_pseudo_nhs_number).
+          Same domain as sk_patient_id elsewhere; NULL where the source value
+          is non-numeric. Joins dim_person_pseudo / commissioning person dims.
+      - name: processed_period
+        description: NHSBSA processing period as YYYYMM string.
+        data_tests:
+          - not_null
+      - name: processing_period_date
+        description: First day of the processing period month.
+      - name: paid_bnf_code
+        description: BNF code of the item actually dispensed and paid.
+      - name: item_actual_cost
+        description: Actual reimbursed cost of the item (source units, see model description). The "spend" measure.
+      - name: item_nic
+        description: Net Ingredient Cost (list price, source units).
+      - name: item_count
+        description: Number of prescription items.
+      - name: registered_practice_code
+        description: Patient's registered GP practice ODS code (from patient_gpods).
+      - name: is_latest_submission
+        description: >
+          TRUE for rows belonging to the latest submission of their processing
+          period. The feed restates each period as a full reload (most periods
+          carry 2 near-identical submissions), so cost/volume models must
+          filter is_latest_submission to avoid ~2x double counting.
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1

@@ -43,9 +43,9 @@ models:
       - name: ethnicity_detail
         description: Ethnicity group description
 
-      - name: flag_current_ncl_residence
-        description: Flag indicating if patient is part of current NCL resident 
-          population
+      - name: flag_current_resident
+        description: Flag indicating if patient is part of the current WNL (NCL + NWL)
+          resident population
 
       - name: record_residence_start_date
         description: Start date of current residence record
@@ -71,20 +71,21 @@ models:
       - name: residence_icb_name
         description: Integrated Care Board name for residence location
 
-      - name: residence_icb_flag
-        description: Flag indicating if residence location is within NCL ICB or London
+      - name: residence_icb_group
+        description: Residence ICB group - NCL, NWL, Other London or Outside London
 
       - name: residence_neighbourhood_code
-        description: NCL neighbourhood code for residence location
+        description: Neighbourhood code for residence location (NCL only; the WNL
+          source is name-only, so NULL for NWL)
 
       - name: residence_neighbourhood_name
-        description: NCL neighbourhood name for residence location
+        description: Neighbourhood name for residence location (NCL + NWL)
 
       - name: residence_imd_decile
         description: Index of Multiple Deprivation decile for residence location
 
-      - name: flag_current_ncl_registered
-        description: Flag indicating if patient is part of current NCL 
+      - name: flag_current_registered
+        description: Flag indicating if patient is part of the current WNL (NCL + NWL)
           registered population
 
       - name: record_registered_start_date
@@ -109,13 +110,19 @@ models:
         description: Integrated Care Board name
 
       - name: registered_borough
-        description: Borough where GP practice is located (NCL only)
+        description: Registered borough via ODS organisation relationships (NCL + NWL)
+
+      - name: registered_sub_icb_code
+        description: Registered sub-ICB code via ODS (QMJ = NCL, QRV = NWL)
+
+      - name: registered_sub_icb_name
+        description: Registered sub-ICB name via ODS
 
       - name: registered_neighbourhood_code
-        description: NCL neighbourhood code for registered GP practice
+        description: Neighbourhood code for registered GP practice (NCL + NWL)
 
       - name: registered_neighbourhood_name
-        description: NCL neighbourhood name for registered GP practice
+        description: Neighbourhood name for registered GP practice (NCL + NWL)
 
       - name: preferred_language
         description: Patient preferred language

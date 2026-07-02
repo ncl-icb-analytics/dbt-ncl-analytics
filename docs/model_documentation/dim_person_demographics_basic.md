@@ -47,3 +47,16 @@ Note that the logic for the PDS Snapshot table largely follows the same logic as
 * Modified the registered GP practice logic to only consider non-PDS sources for the population outside of NCL (in order to reduce known false positives)
 * Adjusted logic so that patients registered to a closed GP practice are now listed with no registered practice in the final output
 * Added Residence ICB fields in the final output
+
+### V2.0.0 - 26/06/2026
+* Widened scope from NCL only to the full WNL footprint (NCL + NWL):
+    * The LSOA geography lookup now derives an `NWL` `resident_flag`; in-area is `resident_flag in ('NCL','NWL')` rather than a single ICB code.
+    * Registered population uses a WNL GP practice list (`stg_reference_gp_practice`, NCL + NWL).
+    * Resident population grows from NCL ~1.88M to WNL ~4.83M; registered ~4.5M (NWL 2.77M + NCL 1.74M).
+* Renamed the resident/registered flags to drop the NCL qualifier (source model `int_person_pds_ncl_population_flags` → `int_person_pds_population_flags`):
+    * `flag_current_ncl_registered` → `flag_current_registered`
+    * `flag_current_ncl_residence` → `flag_current_resident`
+* Registered borough and sub-ICB now derived through ODS organisation relationships (`int_organisation_borough_mapping`) instead of a geographic lookup — one borough per practice (contractual, fixes the PCN-spanning-borough fan-out). Added `registered_sub_icb_code` / `registered_sub_icb_name` (QMJ = NCL, QRV = NWL) so reports can filter back to a single ICB.
+* Residence and registered neighbourhood now sourced from WNL reference tables (`WNLNEIGHBOURHOODS`, `WNL_GP_PRACTICE_NEIGHBOURHOOD`) covering all 13 NCL + NWL boroughs (previously NCL-only → null for NWL).
+* Residence scope note: the V1.1.1 "non-PDS false positive" restriction now applies across the WNL footprint. Patients with an NWL LSOA who appear only in non-PDS sources (e.g. SUS) and are not in the PDS current-resident set now have a null residence LSOA / ICB group — previously they surfaced as "Other London" with an LSOA. ~1.44M patients, all `flag_current_resident = false`; the current-resident population is unchanged.
+* Added an EPD prescribing PMI feeder (`int_person_pmi_dataset_prescribing`) — built but not yet combined into the dim (PDS is ~complete on LSOA/practice for WNL).
