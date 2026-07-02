@@ -3,13 +3,13 @@
         materialized='table',
         tags=['myria_eval'])
 }}
-/*JUNE 30th UPDATE FIND ALL PATIENTS ELIGIBLE FOR EVALUATION USING USING THE DATES THAT MATCH THE RFL SUBMISSIONS. THIS FILE WILL AUTOMATICALLY UPDATE WHEN NEW SUBMISSIONS 
-TO RFL ARE ADDED AND THE LATEST ENROLLMENT FILE IS ADDED FROM DOCCLA
+/*JUNE 30th UPDATE FIND ALL PATIENTS ELIGIBLE FOR EVALUATIon USING USING THE DATES THAT MATCH THE RFL SUBMISSIonS. THIS FILE WILL AUTOMATICALLY UPDATE WHEN NEW SUBMISSIonS 
+TO RFL ARE ADDED AND THE LATEST ENROLLMENT FILE IS ADDED from DOCCLA
 */
 with submission_dates as (
 select distinct file_date
 from {{ ref('stg_myria_rfl_submission_patients') }}
---from STAGING.MYRIA.STG_MYRIA_RFL_SUBMISSION_PATIENTS
+--from STAGING.MYRIA.STG_MYRIA_RFL_SUBMISSIon_PATIENTS
 )
 --Collect the HEX_ID from the submissions rather than regenerate
 ,rfl_pop as (
@@ -17,12 +17,12 @@ select distinct hospital_number, hex_id
 from {{ ref('stg_myria_rfl_submission_patients') }}
 --from STAGING.MYRIA.STG_MYRIA_RFL_SUBMISSION_PATIENTS
 )
---JOIN BY FILE_DATE TO RFL_SUBMISSION_PATIENTS and GET HEX_ID from THIS FILE Distinct patients (n=6395 inc June)
+--JOIN BY FILE_DATE TO RFL_SUBMISSIon_PATIENTS and GET HEX_ID from THIS FILE Distinct patients (n=6395 inc June)
 ,eligible_patients AS ( 
 select
     d.file_date as first_file_date,
     s.patient_id,
-    r.HEX_ID,
+    r.hex_id,
     s.local_authority,
         date(s.most_recent_nel_admission_date) as most_recent_nel_admission_date,
         datediff('day', s.most_recent_nel_admission_date, d.file_date) days_since_nel_admission,
@@ -62,7 +62,7 @@ join {{ ref('fct_person_myria_high_risk_patients_published_snapshot') }} s
         s.dbt_valid_to >= dateadd(day, 1, d.file_date)
         or s.dbt_valid_to is null
        )
-LEFT JOIN rfl_pop r using (hospital_number)
+left join rfl_pop r using (hospital_number)
 --select earliest appearance of person in the snapshots
     qualify row_number() over(partition by patient_id order by file_date) = 1
 )
@@ -73,9 +73,9 @@ LEFT JOIN rfl_pop r using (hospital_number)
         --check against PDS as well.
         case when pds.sk_patient_id is not null then 1 else 0 end as on_pds_demog,
         case when pds.sk_patient_id is not null and p.sk_patient_id is not null then 1 else 0 end as is_match_olids,
-        case when p.is_active THEN 1 else 0 end as is_active ,
+        case when p.is_active then 1 else 0 end as is_active ,
         p.inactive_reason,
-         case when p.is_deceased THEN 1 else 0 end as is_deceased,
+         case when p.is_deceased then 1 else 0 end as is_deceased,
         p.death_date_approx as death_date,
         p.gender, -- expected: 'male', 'female' or 'unknown'
         --Calculating age by: Taking the year difference, Subtracting 1 if the birthday hasn’t occurred yet this year- expected: 0-100 or null 
@@ -83,20 +83,20 @@ LEFT JOIN rfl_pop r using (hospital_number)
         case 
         when date_part(dayofyear, p.birth_date_approx) > date_part(dayofyear, current_date) then 1 else 0 end as age_years,
        -- p.age as age_years, --compare
-        p.IMD_DECILE_25 as imd_decile,
+        p.imd_decile_25 as imd_decile,
         case when dc.person_id is not null then 1 else 0 end as is_care_home,
         p.ethnicity_category as ethnicity_group 
-    FROM eligible_patients e
-    LEFT JOIN {{ ref('dim_person_demographics_basic') }} pds on e.patient_id = pds.sk_patient_id
-    --LEFT JOIN REPORTING.COMMISSIONING_REPORTING.DIM_PERSON_DEMOGRAPHICS_BASIC pds on e.patient_id = pds.sk_patient_id
-    LEFT JOIN {{ ref('dim_person_demographics_historical') }} p on e.patient_id = p.sk_patient_id
-    --LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS_HISTORICAL p on e.patient_id = p.sk_patient_id
-    LEFT JOIN {{ ref('dim_person_care_home') }} dc on p.person_id = dc.person_id
-    --LEFT JOIN REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_CARE_HOME dc on p.person_id = dc.person_id
+    from eligible_patients e
+    left join {{ ref('dim_person_demographics_basic') }} pds on e.patient_id = pds.sk_patient_id
+    --left join REPORTING.COMMISSIonING_REPORTING.DIM_PERSon_DEMOGRAPHICS_BASIC pds on e.patient_id = pds.sk_patient_id
+    left join {{ ref('dim_person_demographics_historical') }} p on e.patient_id = p.sk_patient_id
+    --left join REPORTING.OLIDS_PERSon_DEMOGRAPHICS.DIM_PERSon_DEMOGRAPHICS_HISTORICAL p on e.patient_id = p.sk_patient_id
+    left join {{ ref('dim_person_care_home') }} dc on p.person_id = dc.person_id
+    --left join REPORTING.OLIDS_PERSon_STATUS.DIM_PERSon_CARE_HOME dc on p.person_id = dc.person_id
     --include all historical OLIDS records as latest period_sequence - ie latest but if there is no match to OLIDS then keep in but flag
-    QUALIFY P.SK_PATIENT_ID IS NULL OR ROW_NUMBER() OVER (PARTITION BY P.SK_PATIENT_ID ORDER BY PERIOD_SEQUENCE DESC) = 1  
+    qualify p.sk_patient_id is null or row_number() over (partition by p.sk_patient_id order by period_sequence desc) = 1  
    )
---All patients output - includes patients that did not match OLIDS data (is_match_olids = 0). This is because of the IS_CONFIDENTIAL flag in EMIS.
+--All patients output - includes patients that did not match OLIDS data (is_match_olids = 0). This is because of the IS_ConFIDENTIAL flag in EMIS.
 select 
     -- Eligibility fields
     --need patient id for matching to UEC and APC Encounter tables 
@@ -155,10 +155,10 @@ from demographic_information d
 -- Enrolled status from the canonical Myria table, using the latest enrolled snapshot.
 -- Filtering to a single file_date keeps one row per patient (the append table holds one
 -- row per patient per file) and auto-advances as new Doccla files are loaded.
-LEFT JOIN (
+left join (
     select * from {{ ref('stg_myria_enrolled_patients') }}
-    --SELECT * FROM STAGING.MYRIA.STG_MYRIA_ENROLLED_PATIENTS
+    --SELECT * from STAGING.MYRIA.STG_MYRIA_ENROLLED_PATIENTS
     where file_date = (select max(file_date) from {{ ref('stg_myria_enrolled_patients') }})
-    --WHERE FILE_DATE = (SELECT MAX(FILE_DATE) FROM STAGING.MYRIA.STG_MYRIA_ENROLLED_PATIENTS)
-) m ON d.hex_id = m.hx_id
+    --WHERE FILE_DATE = (SELECT MAX(FILE_DATE) from STAGING.MYRIA.STG_MYRIA_ENROLLED_PATIENTS)
+) m on d.hex_id = m.hx_id
 
