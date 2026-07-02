@@ -138,6 +138,12 @@ select il.patient_id
     , asc_cld.has_social_support_substance_misuse
     , asc_cld.has_sensory_support_dual_impairment
     , asc_cld.has_social_support_asylum_seeker
+    , asc_cld.has_asc_service
+    , ch.is_care_home_resident
+    , ch.is_nursing_home_resident
+    , ch.is_temporary_resident
+    , ch.residence_type
+    , ch.residence_status
     -- current status to consider 
     , ps.is_currently_pregnant 
     -- dim_person_is_carer?
@@ -200,7 +206,7 @@ select il.patient_id
         ELSE polyp.medication_name_list
       END as medication_name_list
     ,polyp.is_polypharmacy_5plus
-    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(musculoskeletal_conditions) as attendance_difficulty_score
+    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(has_asc_service) as attendance_difficulty_score
     -- Recent medications (last 30 days and last year)
     ,rm.medications_recent_12mo as medications_recent_12mo
     ,zeroifnull(rm.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
@@ -261,3 +267,5 @@ left join hr_hrc_ltc_lcs_conditions lcs
     on il.olids_id = lcs.person_id
 left join {{ref('fct_person_asc_service_recent')}} asc_cld
     on il.patient_id = asc_cld.sk_patient_id
+LEFT JOIN {{ref('dim_person_care_home')}} ch
+    on il.olids_id = ch.person_id
