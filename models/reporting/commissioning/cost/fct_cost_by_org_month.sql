@@ -14,9 +14,9 @@ Measures: total_cost / total_activity, plus *_attributable variants
 (is_patient_attributable lines only) so per-patient and need cuts exclude
 block/adjustment/transport.
 
-Prescribing (EPD) is patient-level NCL only with no commissioner/provider —
-it is not included here; see fct_person_cost_by_month for the patient-level
-SLAM+EPD union.
+Prescribing (EPD) is patient-level with no commissioner/provider — it is not
+included here; see fct_person_cost_by_month for the patient-level SLAM+EPD
+union.
 */
 
 select

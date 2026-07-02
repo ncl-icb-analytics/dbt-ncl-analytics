@@ -9,10 +9,13 @@ Unions the two cost spines built so far:
   * SLAM (int_slam_activity_cost) — acute / community actual cost, WNL
     (NCL + NWL). The agreed spine over SUS tariff.
   * EPD prescribing (int_person_prescribing_cost_monthly) — GP prescriptions
-    (Community), NCL patients only.
+    (Community), WNL.
 
 Prescribing is restricted to the SLAM rolling-12-month window so both
-sources cover the same period.
+sources cover the same period. The EPD feed lags (~12 months behind as of
+2026-07), so recent window months carry SLAM cost only — the
+epd_covers_slam_cost_window test (warn) flags the gap and will surface the
+step-change when the feed catches up.
 
 Still to union (sources identified, build pending): GP appointments (OLIDS),
 MH inpatient + contacts (MHSDS — needs the discharge-forward dedup fix),

@@ -10,8 +10,11 @@ Cost: item_actual_cost is the actual reimbursed spend in pence; divided by 100
 to £ to align with the SUS tariff (£) and MH proxy-cost (£) PODs that feed the
 person cost model.
 
-Patients not matched to NCL (sk_patient_id NULL — out-of-area) are dropped, so
-this joins cleanly to the person dimensions like the other POD summaries.
+Covers the WNL footprint (the EPD feed was repointed to NCL + NWL 2026-06).
+Patients with no pseudo key (sk_patient_id NULL — out-of-area / unmatched) are
+dropped, so this joins cleanly to the person dimensions like the other POD
+summaries. NOTE: the feed lags — check the epd_covers_slam_cost_window test
+before relying on recent months.
 */
 
 select
