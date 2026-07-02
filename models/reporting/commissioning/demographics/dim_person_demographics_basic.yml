@@ -113,10 +113,10 @@ models:
         description: Registered borough via ODS organisation relationships (NCL + NWL)
 
       - name: registered_sub_icb_code
-        description: Registered sub-ICB code via ODS (QMJ = NCL, QRV = NWL)
+        description: Registered sub-ICB location code (93C = NCL, W2U3Z = NWL — the live RO98/RO319 codes national datasets carry)
 
       - name: registered_sub_icb_name
-        description: Registered sub-ICB name via ODS
+        description: Registered sub-ICB name (NHS North Central London / NHS North West London, curated)
 
       - name: registered_neighbourhood_code
         description: Neighbourhood code for registered GP practice (NCL + NWL)

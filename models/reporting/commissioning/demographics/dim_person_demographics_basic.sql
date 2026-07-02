@@ -4,8 +4,10 @@
     )
 }}
 
+{# WNL ICB codes as they appear in MatrixView stp_code: legacy QMJ/QRV plus the
+   merged Z9B2Z (defensive - NHSE may flip practices to the merged code). #}
 {%
-    set in_area_icbs = "('QMJ', 'QRV')"
+    set in_area_icbs = "('QMJ', 'QRV', 'Z9B2Z')"
 %}
 
 select
