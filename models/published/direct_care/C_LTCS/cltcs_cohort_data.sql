@@ -138,7 +138,7 @@ select il.patient_id
     , asc_cld.has_social_support_substance_misuse
     , asc_cld.has_sensory_support_dual_impairment
     , asc_cld.has_social_support_asylum_seeker
-    , if asc_cld.service_type is not null then 1 else 0 as has_asc_service
+    , case when asc_cld.service_type is not null then 1 else 0 end
     -- current status to consider 
     , ps.is_currently_pregnant 
     -- dim_person_is_carer?
