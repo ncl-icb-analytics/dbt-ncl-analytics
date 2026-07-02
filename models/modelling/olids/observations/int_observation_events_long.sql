@@ -21,8 +21,8 @@ cost of a generic VARCHAR category per type.
 
 Blood pressure emits two rows per reading (Systolic BP, Diastolic BP).
 
-Count-style markers (haemoglobin, platelets, eosinophils, ALT, GGT, bilirubin)
-are filtered to confidence != 'NONE' and non-negative, matching their _latest
+Count-style markers (haemoglobin, platelets, eosinophils, ALT, GGT, bilirubin) are filtered
+to a non-null inferred value, non-negative and not extreme outliers, matching their _latest
 models. Typed markers are included where the value is non-null.
 */
 
@@ -106,38 +106,38 @@ WITH events AS (
     SELECT person_id, id, 'ALT', 'Liver',
         clinical_effective_date, inferred_value::FLOAT, inferred_unit::VARCHAR, alt_category::VARCHAR
     FROM {{ ref('int_alt_all') }}
-    WHERE confidence != 'NONE' AND NOT is_negative AND inferred_value IS NOT NULL
+    WHERE NOT is_negative AND NOT is_extreme_outlier AND inferred_value IS NOT NULL
 
     UNION ALL
     SELECT person_id, id, 'GGT', 'Liver',
         clinical_effective_date, inferred_value::FLOAT, inferred_unit::VARCHAR, ggt_category::VARCHAR
     FROM {{ ref('int_ggt_all') }}
-    WHERE confidence != 'NONE' AND NOT is_negative AND inferred_value IS NOT NULL
+    WHERE NOT is_negative AND NOT is_extreme_outlier AND inferred_value IS NOT NULL
 
     UNION ALL
     SELECT person_id, id, 'Bilirubin', 'Liver',
         clinical_effective_date, inferred_value::FLOAT, inferred_unit::VARCHAR, bilirubin_category::VARCHAR
     FROM {{ ref('int_bilirubin_all') }}
-    WHERE confidence != 'NONE' AND NOT is_negative AND inferred_value IS NOT NULL
+    WHERE NOT is_negative AND NOT is_extreme_outlier AND inferred_value IS NOT NULL
 
     -- Haematology: Haemoglobin, Platelets, Eosinophils
     UNION ALL
     SELECT person_id, id, 'Haemoglobin', 'Haematology',
         clinical_effective_date, inferred_value::FLOAT, inferred_unit::VARCHAR, haemoglobin_category::VARCHAR
     FROM {{ ref('int_haemoglobin_all') }}
-    WHERE confidence != 'NONE' AND NOT is_negative AND inferred_value IS NOT NULL
+    WHERE NOT is_negative AND NOT is_extreme_outlier AND inferred_value IS NOT NULL
 
     UNION ALL
     SELECT person_id, id, 'Platelets', 'Haematology',
         clinical_effective_date, inferred_value::FLOAT, inferred_unit::VARCHAR, platelets_category::VARCHAR
     FROM {{ ref('int_platelets_all') }}
-    WHERE confidence != 'NONE' AND NOT is_negative AND inferred_value IS NOT NULL
+    WHERE NOT is_negative AND NOT is_extreme_outlier AND inferred_value IS NOT NULL
 
     UNION ALL
     SELECT person_id, id, 'Eosinophils', 'Haematology',
         clinical_effective_date, inferred_value::FLOAT, inferred_unit::VARCHAR, eosinophil_category::VARCHAR
     FROM {{ ref('int_eosinophil_count') }}
-    WHERE confidence != 'NONE' AND NOT is_negative AND inferred_value IS NOT NULL
+    WHERE NOT is_negative AND NOT is_extreme_outlier AND inferred_value IS NOT NULL
 )
 
 SELECT
