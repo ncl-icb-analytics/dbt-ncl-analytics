@@ -4,9 +4,12 @@ models:
     description: >
       Resource vs need by residence ward (2025) for the WNL exposure
       population (includes deceased and deducted). Drives the ward
-      choropleths in the Aligning Resource to Need pack: cost per
-      person-year, age-sex-weighted exposure, spend per weighted year, and
-      the resource-to-need index (actual / expected). Denominators are
+      choropleths in the Aligning Resource to Need pack. Two need bases -
+      "weighted" unqualified means Carr-Hill: weighted_person_years /
+      spend_per_weighted_year / resource_index_weighted use the practice
+      Carr-Hill ratio apportioned to residents; the age-sex basis keeps
+      resource_to_need_index and the age_sex_weighted_* columns (renamed
+      from the pre-Carr-Hill weighted_* names). Denominators are
       WNL-registered person-time by residence ward, NOT ONS ward populations
       - boundary wards with many non-WNL-registered residents are partial.
     config:
@@ -25,10 +28,16 @@ models:
       - name: person_years
         description: Registered person-years in the window.
       - name: weighted_person_years
-        description: Age-sex-weighted exposure (expected cost / WNL mean rate per person-year).
+        description: Carr-Hill weighted person-years (sum of weighted_months_12m / 12).
       - name: cost_per_person_year
         description: Actual window spend per registered person-year (GBP).
-      - name: spend_per_weighted_year
-        description: Spend per age-weighted person-year (GBP) = index x WNL mean rate.
+      - name: age_sex_weighted_person_years
+        description: Age-sex-weighted exposure (expected cost / WNL mean rate per person-year).
       - name: resource_to_need_index
-        description: actual / expected. >1 = above age-sex-expected spend.
+        description: Age-sex basis, actual / expected. >1 = above age-sex-expected spend.
+      - name: spend_per_age_sex_weighted_year
+        description: Spend per age-sex-weighted person-year (GBP) = index x WNL mean rate.
+      - name: spend_per_weighted_year
+        description: Spend per Carr-Hill weighted person-year (GBP).
+      - name: resource_index_weighted
+        description: Carr-Hill basis, spend per weighted person-year vs the WNL mean. >1 = above expectation.

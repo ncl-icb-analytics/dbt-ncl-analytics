@@ -9,6 +9,10 @@ models:
       patient-attributable spend; expected = empirical WNL age-sex
       cost-per-month rate x months registered. resource_to_need =
       sum(actual) / sum(expected) for any cut (never average the ratio).
+      Also carries the Carr-Hill basis - weighted_months_12m apportions the
+      practice's latest published weighted/registered ratio to its patients
+      (practice-average uplift, so valid for area/deprivation cuts, not
+      person-level comparison; published FY lags the cost window ~1 year).
     config:
       meta:
         owner:
@@ -43,5 +47,23 @@ models:
           - not_null
       - name: expected_cost_12m
         description: Age-sex band cost-per-month rate x months registered (GBP).
+        data_tests:
+          - not_null
+      - name: residence_imd_quintile
+        description: IMD 2025 quintile of the residence LSOA (1 = most deprived, from decile).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+              config:
+                where: residence_imd_quintile is not null
+      - name: practice_weighted_ratio
+        description: Practice Carr-Hill weighted/registered ratio (latest published FY; WNL exposure-weighted mean when unpublished).
+        data_tests:
+          - not_null
+      - name: weighted_ratio_imputed
+        description: TRUE when the practice has no published ratio and the WNL mean was used.
+      - name: weighted_months_12m
+        description: practice_weighted_ratio x months_registered. sum()/12 = Carr-Hill weighted person-years for any cut.
         data_tests:
           - not_null

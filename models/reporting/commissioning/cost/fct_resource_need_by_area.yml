@@ -9,6 +9,8 @@ models:
       borough or sub-ICB by summing actual + expected; the index is
       sum(actual) / sum(expected), never an average of indices. Per-head
       measures use registered person-years (exposure), not raw headcount.
+      Carries both need bases: resource_to_need_index (age-sex) and
+      resource_index_weighted (Carr-Hill weighted person-years).
     config:
       meta:
         owner:
@@ -38,6 +40,12 @@ models:
         description: Actual spend per registered person-year (GBP).
       - name: expected_per_person_year
         description: Expected spend per registered person-year (GBP).
+      - name: weighted_person_years
+        description: Carr-Hill weighted person-years (sum of weighted_months_12m / 12).
+      - name: spend_per_weighted_year
+        description: Spend per Carr-Hill weighted person-year (GBP).
+      - name: resource_index_weighted
+        description: Carr-Hill basis, spend per weighted person-year vs the WNL mean. >1 = above expectation.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
