@@ -46,7 +46,9 @@ select
     
     /* Time and date */
     , core.spell_admission_date as start_date
+    , core.spell_admission_time as start_time
     , core.spell_discharge_date as end_date
+    , core.spell_discharge_time as end_time
     , core.spell_discharge_length_of_hospital_stay as duration
     , datediff(day, core.spell_admission_date, coalesce(core.spell_discharge_date, current_date)) as duration_to_date -- inefficient? Change to calc only if no end date?
    

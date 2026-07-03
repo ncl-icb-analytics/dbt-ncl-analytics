@@ -15,7 +15,7 @@ with standardised_event_codes AS (
 base_encounters as (
     select *, left(primary_diagnosis_code, 3) as clipped_primary_diagnosis_code
     from {{ ref('int_sus_apc_encounter') }}
-    where left(spell_admission_method, 1) = '2' -- Non-elective - emergency
+    where left(spell_admission_method, 1) = '2' and spell_admission_method <> '2C' -- Non-elective - emergency and birth of a baby
 )
 
 

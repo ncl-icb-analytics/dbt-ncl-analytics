@@ -8,11 +8,13 @@
 
 select
     sk_patient_id,
+    1 as has_asc_service,
     array_agg(distinct borough_name) as borough_name,
     array_agg(distinct reporting_period_start_date) as reporting_period_start_date,
     array_agg(distinct reporting_period_end_date) as reporting_period_end_date,
     array_agg(distinct service_type) as service_type,
     array_agg(distinct primary_support_reason_category) as primary_support_reason_category,
+    array_size(array_agg(distinct primary_support_reason_category) ) as primary_support_reason_category_count,
     boolor_agg(
         primary_support_reason_cleaned = 'Physical support: Personal care support'
     ) as has_physical_support_personal_care,

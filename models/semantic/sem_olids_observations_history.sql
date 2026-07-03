@@ -97,7 +97,7 @@ DIMENSIONS(
     demographics.pcn_name AS pcn_name COMMENT = 'Primary Care Network name',
     demographics.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN name with borough prefix',
     demographics.borough_registered AS borough_registered COMMENT = 'Registration borough',
-    demographics.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the registered practice: QMJ = NHS North Central London; QRV = NHS North West London. NULL outside the WNL footprint.',
+    demographics.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the registered practice: 93C = NHS North Central London; W2U3Z = NHS North West London. NULL outside the WNL footprint.',
     demographics.sub_icb_name AS sub_icb_name COMMENT = 'Sub-ICB display name (NHS North Central London or NHS North West London). NULL outside the WNL footprint.',
     demographics.neighbourhood_registered AS neighbourhood_registered COMMENT = 'Registration neighbourhood',
 

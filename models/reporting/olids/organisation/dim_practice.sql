@@ -37,7 +37,9 @@ WITH practice_org_joined AS (
     borough_map.practice_historic_ccg,
     borough_map.sub_icb_code,
     borough_map.sub_icb_name,
-    
+    borough_map.legacy_icb_code,
+    borough_map.legacy_icb_name,
+
     -- Practice organisational details from OLIDS
     -- type_code / type_desc were removed in the 2026 OLIDS schema realignment
     -- (issue #747). The replacement free-text `description` is exposed here as
