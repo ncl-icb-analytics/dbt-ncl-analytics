@@ -15,7 +15,7 @@ models:
           name: Eddie Davison
     columns:
       - name: registered_sub_icb_code
-        description: Registered sub-ICB (QMJ = NCL, QRV = NWL).
+        description: Registered sub-ICB (93C = NCL, W2U3Z = NWL).
       - name: registered_borough
         description: Registered borough of the window practice (ODS organisation relationships).
       - name: registered_neighbourhood_name

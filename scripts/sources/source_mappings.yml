@@ -376,6 +376,18 @@ sources:
     domain: shared
     manual: true
 
+  # NHS PAYMENTS GP - annual practice-level NHS Payments to General Practice
+  # file (national): registered + Carr-Hill weighted list sizes, FY 2015/16
+  # onwards. Loaded by DATA_LAKE__NCL.NHS_PAYMENTS_GP.INGEST_NHS_PAYMENTS_GP()
+  # (Snowflake-Deployment repo). Manual so the column list is controlled.
+  - source_name: nhs_payments_gp
+    database: DATA_LAKE__NCL
+    schema: NHS_PAYMENTS_GP
+    description: NHS Payments to General Practice - annual practice-level registered and Carr-Hill weighted list sizes
+    raw_prefix: raw_nhs_payments_gp
+    domain: shared
+    manual: true
+
   # Reference Lookup NCL - Analyst-managed reference datasets
   - source_name: reference_lookup_ncl
     database: MODELLING
