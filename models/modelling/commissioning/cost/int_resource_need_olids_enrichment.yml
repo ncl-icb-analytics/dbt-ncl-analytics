@@ -1,0 +1,39 @@
+version: 2
+models:
+  - name: int_resource_need_olids_enrichment
+    description: |
+      OLIDS (NCL) enrichment for the resource-to-need deep-dive at
+      sk_patient_id grain: Cambridge comorbidity score, LTC register count,
+      frailty severity, GP appointment cost (PSSRU nominal, attended, SLAM
+      window) and the EPD prescribing breakout. All measures aggregated
+      person_id -> sk here because dim_person_pseudo is many-to-one
+      (fragmented patients); prescribing is a breakout of actual_cost_12m,
+      GP appointments are additive. prescribing_months_covered reports how
+      many window months the stalled EPD feed covers - never read a short
+      EPD tail as low spend.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: sk_patient_id
+        description: DMIC pseudonymised NHS number (primary key).
+        data_tests:
+          - not_null
+          - unique
+      - name: cambridge_comorbidity_score
+        description: Cambridge Multimorbidity Score (dim_person_ccms); null when no OLIDS score.
+      - name: ltc_count
+        description: Distinct LTC registers the person is on (fct_person_ltc_summary).
+      - name: qof_ltc_count
+        description: Of which QOF registers.
+      - name: frailty_severity
+        description: Worst frailty severity across sibling person_ids (Mild/Moderate/Severe).
+      - name: gp_appointment_cost_12m
+        description: Attended GP appointment cost over the SLAM window, PSSRU nominal GBP. Additive to actual_cost_12m.
+      - name: gp_appointments_12m
+        description: Attended GP appointments over the window.
+      - name: prescribing_cost_12m
+        description: EPD prescribing spend in the window - a component of actual_cost_12m, not an addition.
+      - name: prescribing_months_covered
+        description: Window months with any EPD data (feed coverage; EPD trails SLAM).
