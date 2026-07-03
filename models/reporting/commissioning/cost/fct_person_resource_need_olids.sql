@@ -9,9 +9,9 @@
 --   is its breakout. GP appointment cost is additive -
 --   total_cost_incl_gp_appointments_12m = actual + GP appointments.
 --   olids_prescribing_cost_12m_modelled covers the whole window from OLIDS
---   orders x EPD BNF rates; total_cost_whole_person_12m swaps the partial
---   EPD component for it and adds GP appointments:
---   actual - EPD breakout + OLIDS-modelled rx + GP appointments.
+--   estimated_cost; total_cost_whole_person_12m swaps the partial EPD
+--   component for it and adds GP appointments:
+--   actual - EPD breakout + OLIDS rx estimate + GP appointments.
 {{ config(materialized = 'table') }}
 
 select

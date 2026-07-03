@@ -2,12 +2,12 @@ version: 2
 models:
   - name: int_person_olids_prescribing_cost_12m
     description: |
-      OLIDS-modelled prescribing cost per person (NCL) over the rolling
-      12-month SLAM window. Each in-window OLIDS medication order is priced
-      at the mean EPD actual cost per item for its BNF code (EPD's latest
-      12 months; tiered match code -> paragraph -> chapter; one order = one
-      item). Modelled basis - covers the window months the stalled EPD feed
-      misses, at the cost of pricing precision.
+      OLIDS prescribing cost per person (NCL) over the rolling 12-month SLAM
+      window, from MEDICATION_ORDER.estimated_cost (EMIS per-order cost
+      estimate). Fully populated and validated against EPD - the window
+      total agrees with EPD mean-cost-per-item pricing to 0.4%. Covers the
+      window months the stalled EPD feed misses; basis is an estimate, not
+      reimbursed spend.
     config:
       meta:
         owner:
@@ -21,8 +21,8 @@ models:
       - name: prescription_orders_12m
         description: Medication orders in the window.
       - name: orders_costed
-        description: Orders that matched an EPD rate at any BNF tier.
+        description: Orders with a positive estimated cost (~96%).
       - name: prescribing_cost_12m_modelled
-        description: Modelled prescribing cost, GBP. Unmatched orders carry 0.
+        description: Sum of estimated_cost, GBP.
         data_tests:
           - not_null

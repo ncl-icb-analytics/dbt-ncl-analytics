@@ -21,8 +21,8 @@ Measures (all over the SLAM-aligned rolling 12-month window where dated):
                                    addition. EPD trails SLAM (feed stalled) -
                                    prescribing_months_covered says how many
                                    window months EPD actually covers.
-  * olids_prescribing_cost_12m_modelled - full-window prescribing from OLIDS
-                                   orders x EPD BNF rates
+  * olids_prescribing_cost_12m_modelled - full-window prescribing from
+                                   OLIDS estimated_cost
                                    (int_person_olids_prescribing_cost_12m).
                                    Use INSTEAD of the EPD breakout for
                                    whole-window primary-care cost.
