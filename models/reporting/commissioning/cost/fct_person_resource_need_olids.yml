@@ -38,3 +38,11 @@ models:
         description: actual_cost_12m + GP appointment cost (GBP).
         data_tests:
           - not_null
+      - name: olids_prescribing_cost_12m_modelled
+        description: Full-window prescribing modelled from OLIDS orders x EPD BNF rates (GBP).
+      - name: olids_prescription_orders_12m
+        description: OLIDS medication orders in the window.
+      - name: total_cost_whole_person_12m
+        description: actual - EPD breakout + OLIDS-modelled prescribing + GP appointments (GBP). The whole-person headline.
+        data_tests:
+          - not_null

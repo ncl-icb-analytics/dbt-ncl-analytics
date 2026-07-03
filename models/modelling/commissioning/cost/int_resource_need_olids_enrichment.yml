@@ -37,3 +37,7 @@ models:
         description: EPD prescribing spend in the window - a component of actual_cost_12m, not an addition.
       - name: prescribing_months_covered
         description: Window months with any EPD data (feed coverage; EPD trails SLAM).
+      - name: olids_prescribing_cost_12m_modelled
+        description: Full-window prescribing modelled from OLIDS orders x EPD BNF rates (GBP). Use instead of the EPD breakout for whole-window primary-care cost.
+      - name: olids_prescription_orders_12m
+        description: OLIDS medication orders in the window.

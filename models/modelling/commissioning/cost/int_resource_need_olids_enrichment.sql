@@ -21,6 +21,11 @@ Measures (all over the SLAM-aligned rolling 12-month window where dated):
                                    addition. EPD trails SLAM (feed stalled) -
                                    prescribing_months_covered says how many
                                    window months EPD actually covers.
+  * olids_prescribing_cost_12m_modelled - full-window prescribing from OLIDS
+                                   orders x EPD BNF rates
+                                   (int_person_olids_prescribing_cost_12m).
+                                   Use INSTEAD of the EPD breakout for
+                                   whole-window primary-care cost.
 */
 
 {{ config(materialized = 'table') }}
@@ -82,6 +87,16 @@ gp_appts as (
     group by 1
 ),
 
+olids_rx as (
+    select
+        b.sk_patient_id,
+        sum(r.prescribing_cost_12m_modelled) as olids_prescribing_cost_12m_modelled,
+        sum(r.prescription_orders_12m)       as olids_prescription_orders_12m
+    from {{ ref('int_person_olids_prescribing_cost_12m') }} as r
+    inner join bridge as b on r.person_id = b.person_id
+    group by 1
+),
+
 epd as (
     select
         f.sk_patient_id,
@@ -117,7 +132,9 @@ select
     coalesce(gp_appts.gp_appointment_cost_12m, 0) as gp_appointment_cost_12m,
     coalesce(gp_appts.gp_appointments_12m, 0)     as gp_appointments_12m,
     coalesce(epd.prescribing_cost_12m, 0)         as prescribing_cost_12m,
-    cov.prescribing_months_covered
+    cov.prescribing_months_covered,
+    coalesce(olids_rx.olids_prescribing_cost_12m_modelled, 0) as olids_prescribing_cost_12m_modelled,
+    coalesce(olids_rx.olids_prescription_orders_12m, 0)       as olids_prescription_orders_12m
 from sk_universe as u
 cross join epd_coverage as cov
 left join ccms on u.sk_patient_id = ccms.sk_patient_id
@@ -125,3 +142,4 @@ left join ltc on u.sk_patient_id = ltc.sk_patient_id
 left join frailty on u.sk_patient_id = frailty.sk_patient_id
 left join gp_appts on u.sk_patient_id = gp_appts.sk_patient_id
 left join epd on u.sk_patient_id = epd.sk_patient_id
+left join olids_rx on u.sk_patient_id = olids_rx.sk_patient_id

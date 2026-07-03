@@ -8,6 +8,10 @@
 --   actual_cost_12m already contains EPD prescribing; prescribing_cost_12m
 --   is its breakout. GP appointment cost is additive -
 --   total_cost_incl_gp_appointments_12m = actual + GP appointments.
+--   olids_prescribing_cost_12m_modelled covers the whole window from OLIDS
+--   orders x EPD BNF rates; total_cost_whole_person_12m swaps the partial
+--   EPD component for it and adds GP appointments:
+--   actual - EPD breakout + OLIDS-modelled rx + GP appointments.
 {{ config(materialized = 'table') }}
 
 select
@@ -21,8 +25,14 @@ select
     coalesce(e.gp_appointments_12m, 0)            as gp_appointments_12m,
     coalesce(e.prescribing_cost_12m, 0)           as prescribing_cost_12m,
     e.prescribing_months_covered,
+    coalesce(e.olids_prescribing_cost_12m_modelled, 0) as olids_prescribing_cost_12m_modelled,
+    coalesce(e.olids_prescription_orders_12m, 0)  as olids_prescription_orders_12m,
     f.actual_cost_12m
-        + coalesce(e.gp_appointment_cost_12m, 0)  as total_cost_incl_gp_appointments_12m
+        + coalesce(e.gp_appointment_cost_12m, 0)  as total_cost_incl_gp_appointments_12m,
+    f.actual_cost_12m
+        - coalesce(e.prescribing_cost_12m, 0)
+        + coalesce(e.olids_prescribing_cost_12m_modelled, 0)
+        + coalesce(e.gp_appointment_cost_12m, 0)  as total_cost_whole_person_12m
 from {{ ref('fct_person_resource_need') }} as f
 left join {{ ref('int_resource_need_olids_enrichment') }} as e
     on f.sk_patient_id = e.sk_patient_id
