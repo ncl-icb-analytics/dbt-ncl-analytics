@@ -1,0 +1,46 @@
+version: 2
+models:
+  - name: int_practice_weighted_population
+    description: |
+      Carr-Hill (global sum) weighted population per WNL practice per
+      financial year, from the NHS Payments to General Practice annual file.
+      Full history (FY 2015/16 onwards) for trend; filter is_latest for the
+      current ratio. is_latest is per practice, so practices absent from the
+      newest year (mergers/closures) keep their last published ratio.
+
+      The published weighted list lags the SLAM cost window by up to a year
+      (latest FY 2024/25). Ratios move slowly, so consumers accept the
+      vintage and document it.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [practice_code, financial_year]
+    columns:
+      - name: practice_code
+        description: GP practice ODS code (WNL practices only, via dim_practice).
+        data_tests:
+          - not_null
+      - name: financial_year
+        description: Financial year label, e.g. 2024/25.
+      - name: financial_year_start
+        description: 1 April of the financial year.
+      - name: registered_patients
+        description: Average registered list over the year.
+      - name: weighted_patients
+        description: Average Carr-Hill weighted list over the year.
+      - name: weighted_to_registered_ratio
+        description: weighted / registered. Above 1 = higher weighted list than raw size implies.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0.5
+                max_value: 2
+              config:
+                severity: warn
+      - name: is_latest
+        description: TRUE for the practice's most recent available year.

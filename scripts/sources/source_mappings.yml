@@ -353,6 +353,18 @@ sources:
     domain: shared
     manual: true
 
+  # POD_GROUP_MANAGER - governed POD group mappings maintained by the
+  # Streamlit-in-Snowflake POD Group Manager app (audited writes). Manual so
+  # only the mapping table is used; app-internal tables/views are excluded.
+  # raw_prefix 'raw' -> raw_pod_group_mapping (table names carry the domain).
+  - source_name: pod_group_manager
+    database: DATA_LAKE__NCL
+    schema: POD_GROUP_MANAGER
+    description: POD Group Manager app - governed POD group mappings
+    raw_prefix: raw
+    domain: shared
+    manual: true
+
   # MYRIA - Project Myria (BEVC) canonical inputs. Two tables (ENROLLED_PATIENTS,
   # MATCHED_PATIENTS) loaded by DATA_LAKE__NCL.MYRIA.LOAD_NEW_FILES(). Manual so the
   # column list is controlled; FILE_DATE versions each upload.
@@ -361,6 +373,18 @@ sources:
     schema: MYRIA
     description: Project Myria (BEVC) canonical inputs - enrolled and propensity-matched patients
     raw_prefix: raw_myria
+    domain: shared
+    manual: true
+
+  # NHS PAYMENTS GP - annual practice-level NHS Payments to General Practice
+  # file (national): registered + Carr-Hill weighted list sizes, FY 2015/16
+  # onwards. Loaded by DATA_LAKE__NCL.NHS_PAYMENTS_GP.INGEST_NHS_PAYMENTS_GP()
+  # (Snowflake-Deployment repo). Manual so the column list is controlled.
+  - source_name: nhs_payments_gp
+    database: DATA_LAKE__NCL
+    schema: NHS_PAYMENTS_GP
+    description: NHS Payments to General Practice - annual practice-level registered and Carr-Hill weighted list sizes
+    raw_prefix: raw_nhs_payments_gp
     domain: shared
     manual: true
 
