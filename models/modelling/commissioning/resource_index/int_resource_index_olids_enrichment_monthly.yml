@@ -21,8 +21,6 @@ models:
         description: Attended GP appointment cost in the month, PSSRU nominal GBP.
       - name: gp_appointments
         description: Attended GP appointment count in the month.
-      - name: prescribing_cost
-        description: EPD prescribing spend in the month, GBP.
       - name: olids_prescribing_cost_modelled
         description: OLIDS estimated medication-order cost in the month, GBP.
       - name: olids_prescription_orders

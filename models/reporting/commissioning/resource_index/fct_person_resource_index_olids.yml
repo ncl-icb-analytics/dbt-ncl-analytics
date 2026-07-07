@@ -5,11 +5,12 @@ models:
       NCL deep-dive on fct_person_resource_index (registered sub-ICB 93C
       only), enriched with OLIDS primary-care context - Cambridge
       comorbidity score, LTC register count, frailty severity, GP
-      appointment cost (PSSRU nominal, additive) and the EPD prescribing
-      breakout (a component of actual_cost_12m, not an addition). Same
-      person grain as the base fact; has_olids_record flags patients with
-      an OLIDS link. Cut resource index by morbidity (score bands, LTC
-      count, frailty) x deprivation quintile for the NCL pack.
+      appointment cost (PSSRU nominal) and OLIDS-estimated prescribing.
+      actual_cost_12m is SLAM acute only (EPD held out of the resource
+      index while stale). Same person grain as the base fact;
+      has_olids_record flags patients with an OLIDS link. Cut resource
+      index by morbidity (score bands, LTC count, frailty) x deprivation
+      quintile for the NCL pack.
     config:
       meta:
         owner:
@@ -30,10 +31,6 @@ models:
         description: Mild / Moderate / Severe; null when not on the frailty register.
       - name: gp_appointment_cost_12m
         description: Attended GP appointment cost over the window (PSSRU nominal GBP). Additive.
-      - name: prescribing_cost_12m
-        description: EPD prescribing component of actual_cost_12m (GBP).
-      - name: prescribing_months_covered
-        description: Window months the EPD feed covers (trailing feed - not a person property).
       - name: total_cost_incl_gp_appointments_12m
         description: actual_cost_12m + GP appointment cost (GBP).
         data_tests:
@@ -43,6 +40,6 @@ models:
       - name: olids_prescription_orders_12m
         description: OLIDS medication orders in the window.
       - name: total_cost_whole_person_12m
-        description: actual - EPD breakout + OLIDS-modelled prescribing + GP appointments (GBP). The whole-person headline.
+        description: actual (SLAM) + OLIDS-modelled prescribing + GP appointments (GBP). The whole-person headline.
         data_tests:
           - not_null

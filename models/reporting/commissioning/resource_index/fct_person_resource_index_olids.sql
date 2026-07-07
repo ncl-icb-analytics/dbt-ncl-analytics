@@ -3,14 +3,12 @@
 -- count, frailty, GP appointment cost and the EPD prescribing breakout.
 -- One row per patient, same grain as the base fact.
 --
--- Cost columns:
---   actual_cost_12m already contains EPD prescribing; prescribing_cost_12m
---   is its breakout. GP appointment cost is additive -
---   total_cost_incl_gp_appointments_12m = actual + GP appointments.
---   olids_prescribing_cost_12m_modelled covers the whole window from OLIDS
---   estimated_cost; total_cost_whole_person_12m swaps the partial EPD
---   component for it and adds GP appointments:
---   actual - EPD breakout + OLIDS rx estimate + GP appointments.
+-- Cost columns: actual_cost_12m is SLAM acute only (EPD is held out of the
+-- resource index while stale). Whole-person cost adds the two primary-care
+-- streams the deep-dive can price:
+--   total_cost_whole_person_12m = actual (SLAM) + OLIDS prescribing estimate
+--                                 + GP appointment cost (PSSRU).
+--   total_cost_incl_gp_appointments_12m = actual + GP appointments only.
 {{ config(materialized = 'table') }}
 
 with bounds as (
@@ -25,21 +23,12 @@ activity_12m as (
         e.sk_patient_id,
         sum(e.gp_appointment_cost)             as gp_appointment_cost_12m,
         sum(e.gp_appointments)                 as gp_appointments_12m,
-        sum(e.prescribing_cost)                as prescribing_cost_12m,
         sum(e.olids_prescribing_cost_modelled) as olids_prescribing_cost_12m_modelled,
         sum(e.olids_prescription_orders)       as olids_prescription_orders_12m
     from {{ ref('int_resource_index_olids_enrichment_monthly') }} as e
     cross join bounds as b
     where e.activity_month between b.window_start_month and b.window_end_month
     group by 1
-),
-
-epd_coverage as (
-    select count(distinct f.activity_month) as prescribing_months_covered
-    from {{ ref('fct_person_cost_index_monthly') }} as f
-    cross join bounds as b
-    where f.cost_source = 'EPD'
-      and f.activity_month between b.window_start_month and b.window_end_month
 )
 
 select
@@ -51,18 +40,14 @@ select
     p.frailty_severity,
     coalesce(a.gp_appointment_cost_12m, 0)        as gp_appointment_cost_12m,
     coalesce(a.gp_appointments_12m, 0)            as gp_appointments_12m,
-    coalesce(a.prescribing_cost_12m, 0)           as prescribing_cost_12m,
-    cov.prescribing_months_covered,
     coalesce(a.olids_prescribing_cost_12m_modelled, 0) as olids_prescribing_cost_12m_modelled,
     coalesce(a.olids_prescription_orders_12m, 0)  as olids_prescription_orders_12m,
     f.actual_cost_12m
         + coalesce(a.gp_appointment_cost_12m, 0)  as total_cost_incl_gp_appointments_12m,
     f.actual_cost_12m
-        - coalesce(a.prescribing_cost_12m, 0)
         + coalesce(a.olids_prescribing_cost_12m_modelled, 0)
         + coalesce(a.gp_appointment_cost_12m, 0)  as total_cost_whole_person_12m
 from {{ ref('fct_person_resource_index') }} as f
-cross join epd_coverage as cov
 left join {{ ref('int_resource_index_olids_profile') }} as p
     on f.sk_patient_id = p.sk_patient_id
 left join activity_12m as a

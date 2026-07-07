@@ -39,23 +39,10 @@ olids_rx as (
     group by 1, 2
 ),
 
-epd as (
-    select
-        p.sk_patient_id,
-        p.activity_month,
-        sum(p.prescribing_cost) as prescribing_cost
-    from {{ ref('int_cost_index_epd_prescribing_monthly') }} as p
-    where p.sk_patient_id is not null
-      and p.cost_basis = 'actual'
-    group by 1, 2
-),
-
 months as (
     select sk_patient_id, activity_month from gp_appts
     union
     select sk_patient_id, activity_month from olids_rx
-    union
-    select sk_patient_id, activity_month from epd
 )
 
 select
@@ -63,16 +50,12 @@ select
     m.activity_month,
     coalesce(gp_appts.gp_appointment_cost, 0)             as gp_appointment_cost,
     coalesce(gp_appts.gp_appointments, 0)                 as gp_appointments,
-    coalesce(epd.prescribing_cost, 0)                     as prescribing_cost,
     coalesce(olids_rx.olids_prescribing_cost_modelled, 0) as olids_prescribing_cost_modelled,
     coalesce(olids_rx.olids_prescription_orders, 0)       as olids_prescription_orders
 from months as m
 left join gp_appts
     on m.sk_patient_id = gp_appts.sk_patient_id
     and m.activity_month = gp_appts.activity_month
-left join epd
-    on m.sk_patient_id = epd.sk_patient_id
-    and m.activity_month = epd.activity_month
 left join olids_rx
     on m.sk_patient_id = olids_rx.sk_patient_id
     and m.activity_month = olids_rx.activity_month
