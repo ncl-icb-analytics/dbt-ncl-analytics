@@ -172,6 +172,7 @@ select il.patient_id
     ,zeroifnull(apca.apc_12mo) as apc_12mo
     ,zeroifnull(apca.apc_los_12mo) as apc_los_12mo
     ,zeroifnull(apca.apc_nel_12mo) as apc_nel_12mo
+    ,apca.acs_nel_12mo as acs_nel_12mo
     ,zeroifnull(aea.ae_t1_12mo) as ae_t1_12mo
     ,zeroifnull(aea.ae_inj_12mo) as ae_inj_12mo
     ,zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo
@@ -206,6 +207,7 @@ select il.patient_id
         ELSE polyp.medication_name_list
       END as medication_name_list
     ,polyp.is_polypharmacy_5plus
+    ,polyp.is_polypharmacy_10plus
     , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(has_asc_service) as attendance_difficulty_score
     -- Recent medications (last 30 days and last year)
     ,rm.medications_recent_12mo as medications_recent_12mo
