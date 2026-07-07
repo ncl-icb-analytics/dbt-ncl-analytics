@@ -25,11 +25,14 @@ with base as (
     group by 1, 2
 ),
 
+-- Reference means from the full exposure population (including unknown-ward
+-- residents), so index = 1.0 means the same spend level as in the area /
+-- borough / IMD facts.
 overall as (
     select
-        sum(actual_cost_12m) / sum(person_years)          as mean_cost_per_person_year,
-        sum(actual_cost_12m) / sum(weighted_person_years) as mean_cost_per_weighted_year
-    from base
+        sum(actual_cost_12m) / (sum(months_registered) / 12)   as mean_cost_per_person_year,
+        sum(actual_cost_12m) / (sum(weighted_months_12m) / 12) as mean_cost_per_weighted_year
+    from {{ ref('fct_person_resource_index') }}
 )
 
 select

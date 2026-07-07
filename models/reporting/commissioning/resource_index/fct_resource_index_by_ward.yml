@@ -16,6 +16,13 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      # ward names repeat across boroughs (e.g. Abbey), so the grain is the pair
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - residence_borough
+              - ward
     columns:
       - name: ward
         description: Residence ward 2025 name.

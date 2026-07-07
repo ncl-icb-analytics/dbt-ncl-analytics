@@ -3,8 +3,9 @@ SLAM commissioned cost by organisation and month — reporting aggregate for
 the Aligning Resource Index work.
 
 Grain: activity_month x icb_group x commissioner_code x provider_code x
-service_grouping x service. Built from int_cost_index_slam_activity_monthly (SLAM actual
-cost spine, rolling 12 months).
+service_grouping x service. Built from int_cost_index_slam_activity_monthly
+(SLAM actual cost spine) — full history from 2021-04 to the last complete
+month, no rolling window.
 
 icb_group splits WNL-commissioned (resident) spend from out-of-sector
 pass-through (other ICBs' residents treated at WNL providers). Use

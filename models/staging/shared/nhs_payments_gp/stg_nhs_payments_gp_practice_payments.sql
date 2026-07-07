@@ -13,3 +13,7 @@ select
 from {{ ref('raw_nhs_payments_gp_practice_payments') }}
 where practice_code is not null
   and average_weighted_patients is not null
+  -- zero/null registered list (closing/merging practices) would yield a
+  -- ratio of 0 downstream; dropping the row lets is_latest fall back to the
+  -- practice's last real year, or mean imputation if none exists
+  and average_registered_patients > 0

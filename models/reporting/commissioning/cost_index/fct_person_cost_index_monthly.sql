@@ -11,9 +11,9 @@ Full-history union of the two cost spines built so far:
   * EPD prescribing (int_cost_index_epd_prescribing_monthly) — GP prescriptions
     (Community), WNL. From 2018-04 and about 12 months behind SLAM.
 
-The rolling 12-month analysis window lives in int_person_cost_index_actual_monthly.
+Full history at every layer here — no rolling window. The 12-month analysis
+window is applied in reporting facts (fct_person_resource_index).
 cost_basis distinguishes actual cost from future proxy/nominal sources.
-Rolling windows are applied by downstream reporting facts.
 
 Still to union (sources identified, build pending): GP appointments (OLIDS),
 MH inpatient + contacts (MHSDS — needs the discharge-forward dedup fix),

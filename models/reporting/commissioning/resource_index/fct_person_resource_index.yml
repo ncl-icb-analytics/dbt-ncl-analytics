@@ -33,6 +33,11 @@ models:
         description: Months of WNL registration in the window (1-12) — the exposure behind expected_cost_12m.
         data_tests:
           - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 12
+                inclusive: true
       - name: died_in_window
         description: TRUE when the patient died inside the window. Decedent spend is a distinct, policy-relevant cut.
       - name: practice_code

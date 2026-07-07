@@ -17,6 +17,20 @@ models:
       meta:
         owner:
           name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - sk_patient_id
+              - activity_month
+              - commissioner_code
+              - provider_code
+              - registered_practice_code
+              - service_grouping
+              - service
+              - pod_code
+              - hrg_code
+              - is_patient_attributable
     columns:
       - name: sk_patient_id
         description: DMIC pseudonymised NHS number (NULL for unidentified activity).
@@ -28,6 +42,8 @@ models:
         description: Commissioner ODS code (ICB attribution — NCL 93C, NWL W2U3Z, others out-of-sector).
       - name: provider_code
         description: Cleaned provider ODS code.
+      - name: registered_practice_code
+        description: GP practice responsibility code (registration field is unpopulated in current SLAM).
       - name: service_grouping
         description: Top-level lens (Crisis/Community/Planned/Excluded/Unmapped) from pod_group_service_lens.
         data_tests:
@@ -53,3 +69,5 @@ models:
         description: Actual SLAM cost for the grain, £.
       - name: total_activity
         description: Sum of dv_activity_count for the grain.
+      - name: line_count
+        description: Source PLD lines aggregated into the row.
