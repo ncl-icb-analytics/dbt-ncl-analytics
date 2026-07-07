@@ -19,6 +19,31 @@ diabetes_register AS (
     FROM {{ ref('fct_person_diabetes_register') }}
 ),
 
+-- LTC rows with subset registers collapsed into their parent so condition counts
+-- are not double-counted. LD_U14 is a subset of LD, and CYP_AST overlaps AST -
+-- counting both would count the same underlying disease twice. Canonical QOF
+-- status follows the parent register (both parents are QOF); clinical_domain is
+-- shared between parent and child. Raw condition_code is retained for the flags.
+condition_registers AS (
+    SELECT
+        person_id,
+        condition_code,
+        clinical_domain,
+        is_qof,
+        earliest_diagnosis_date,
+        latest_diagnosis_date,
+        CASE
+            WHEN condition_code = 'LD_U14' THEN 'LD'
+            WHEN condition_code = 'CYP_AST' THEN 'AST'
+            ELSE condition_code
+        END AS canonical_condition_code,
+        CASE
+            WHEN condition_code IN ('LD_U14', 'CYP_AST') THEN TRUE
+            ELSE is_qof
+        END AS canonical_is_qof
+    FROM {{ ref('fct_person_ltc_summary') }}
+),
+
 person_conditions AS (
     SELECT
         p.person_id,
@@ -68,25 +93,27 @@ person_conditions AS (
         COALESCE(MAX(CASE WHEN ltc.condition_code = 'THAL' THEN TRUE END), FALSE) AS has_thalassaemia,
 
         -- Summary counts (0 for persons with no conditions)
-        COALESCE(COUNT(DISTINCT ltc.condition_code), 0) AS total_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.is_qof = TRUE THEN ltc.condition_code END), 0) AS total_qof_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.is_qof = FALSE THEN ltc.condition_code END), 0) AS total_non_qof_conditions,
-        
+        -- Counts use canonical_condition_code so subset registers (LD_U14, CYP_AST)
+        -- are not double-counted against their parent register.
+        COALESCE(COUNT(DISTINCT ltc.canonical_condition_code), 0) AS total_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.canonical_is_qof = TRUE THEN ltc.canonical_condition_code END), 0) AS total_qof_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.canonical_is_qof = FALSE THEN ltc.canonical_condition_code END), 0) AS total_non_qof_conditions,
+
         -- Clinical domain counts (0 for persons with no conditions)
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Cardiovascular' THEN ltc.condition_code END), 0) AS cardiovascular_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Respiratory' THEN ltc.condition_code END), 0) AS respiratory_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Mental Health' THEN ltc.condition_code END), 0) AS mental_health_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Metabolic' THEN ltc.condition_code END), 0) AS metabolic_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Musculoskeletal' THEN ltc.condition_code END), 0) AS musculoskeletal_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Neurology' THEN ltc.condition_code END), 0) AS neurology_conditions,
-        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Geriatric' THEN ltc.condition_code END), 0) AS geriatric_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Cardiovascular' THEN ltc.canonical_condition_code END), 0) AS cardiovascular_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Respiratory' THEN ltc.canonical_condition_code END), 0) AS respiratory_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Mental Health' THEN ltc.canonical_condition_code END), 0) AS mental_health_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Metabolic' THEN ltc.canonical_condition_code END), 0) AS metabolic_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Musculoskeletal' THEN ltc.canonical_condition_code END), 0) AS musculoskeletal_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Neurology' THEN ltc.canonical_condition_code END), 0) AS neurology_conditions,
+        COALESCE(COUNT(DISTINCT CASE WHEN ltc.clinical_domain = 'Geriatric' THEN ltc.canonical_condition_code END), 0) AS geriatric_conditions,
         
         -- Earliest and latest diagnosis dates across all conditions (NULL for no conditions)
         MIN(ltc.earliest_diagnosis_date) AS earliest_condition_diagnosis,
         MAX(ltc.latest_diagnosis_date) AS latest_condition_diagnosis
 
     FROM all_persons p
-    LEFT JOIN {{ ref('fct_person_ltc_summary') }} ltc
+    LEFT JOIN condition_registers ltc
         ON p.person_id = ltc.person_id
     LEFT JOIN diabetes_register dm_reg
         ON p.person_id = dm_reg.person_id
