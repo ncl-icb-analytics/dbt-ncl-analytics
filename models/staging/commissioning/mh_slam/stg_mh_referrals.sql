@@ -13,7 +13,12 @@
 -- profile (Liaison Psychiatry) is a separate dataset and is not included.
 --
 -- Cleaned and projected to the 27-field Appendix 2c spec. Grain 1:1 with
--- source (one row per referral per submission). Two layout eras (profiled
+-- source: one row per referral per ACTIVE MONTH per submission (a monthly
+-- caseload snapshot, ~4 rows per referral even latest-only) — an open
+-- referral is restated for every month it is active, with closure fields
+-- populating on the final rows. Count referrals via count(distinct
+-- referral_id) or the dv_is_current_referral_row flag on
+-- stg_mh_referrals_latest, never count(*). Two layout eras (profiled
 -- 2026-07): the current spec layout (~3.2M rows, all spec fields incl. CAMHS
 -- flag, clinical response priority, closure reason) and older MHRef layouts
 -- (~1.8M rows) whose values arrive under sibling aliases — each field

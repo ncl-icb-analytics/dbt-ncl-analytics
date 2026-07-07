@@ -17,13 +17,23 @@
 -- slice is the most recently loaded file by META_FILE_REGISTRY.CREATED_DATETIME
 -- (meta_file_id is not monotonic with load time), with file/batch tiebreaks.
 --
+-- The slice includes the COMMISSIONER (the LSACM lesson): providers also send
+-- narrowly-scoped resubmissions for a single other commissioner (e.g. an
+-- RV300 '72Q Activity' file), and without the commissioner in the key such a
+-- file would supersede the full-NWL submission for every month it states and
+-- silently drop the W2U3Z rows (observed: all of CNWL FY2023/24). Per
+-- commissioner, the full file keeps winning its own slices.
+--
 -- dataset values: MH_NONAPC / MH_APC (both from the MH feed) and
 -- MH_REFERRALS (from the REF feed's MHRef profile).
 --
 -- Consumers: the stg_mh_*_latest views; or join back on (dataset,
--- dv_provider_code, dv_financial_year, dv_financial_month, meta_file_id,
--- meta_batch_id). Rows with no resolvable period are absent (they cannot be
--- assigned to a slice, so latest-only filtering does not apply to them).
+-- dv_provider_code, dv_commissioner, dv_financial_year, dv_financial_month,
+-- meta_file_id, meta_batch_id) - dv_commissioner is
+-- coalesce(commissioner_code, dlp_commissioner_code) and NULL for the
+-- pre-spec referral layouts (their own slice). Rows with no resolvable
+-- period are absent (they cannot be assigned to a slice, so latest-only
+-- filtering does not apply to them).
 
 with slices as (
     {% for dataset, feed, model in [
@@ -35,6 +45,8 @@ with slices as (
         '{{ dataset }}'     as dataset,
         '{{ feed }}'        as feed,
         provider_code       as dv_provider_code,
+        coalesce(commissioner_code, dlp_commissioner_code)
+                            as dv_commissioner,
         dv_financial_year,
         dv_financial_month,
         meta_file_id,
@@ -63,7 +75,7 @@ ranked as (
         r.submission_loaded_at,
         r.submission_file_name,
         rank() over (
-            partition by s.dataset, s.dv_provider_code, s.dv_financial_year, s.dv_financial_month
+            partition by s.dataset, s.dv_provider_code, s.dv_commissioner, s.dv_financial_year, s.dv_financial_month
             order by r.submission_loaded_at desc nulls last, s.meta_file_id desc, s.meta_batch_id desc
         )                   as submission_rank
     from slices as s
@@ -76,6 +88,7 @@ ranked as (
 select
     dataset,
     dv_provider_code,
+    dv_commissioner,
     dv_financial_year,
     dv_financial_month,
     meta_file_id,
