@@ -158,3 +158,27 @@ models:
         description: As supplied. Raw provider financial year before parsing.
       - name: financial_month_raw
         description: As supplied. Raw provider financial month before parsing.
+
+  - name: stg_mh_referrals_latest
+    description: |
+      MH Referrals, current provider statement only - stg_mh_referrals
+      restricted to the winning file per (provider, commissioner, FY, month)
+      via stg_mh_slam_latest_submission. Superseded cumulative Flex/Freeze
+      restatements excluded. Grain is still referral x active month (monthly
+      caseload snapshot, ~4 rows per referral): filter on
+      dv_is_current_referral_row to count referrals or read their latest
+      state. Cleaning and column conventions as stg_mh_referrals.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: meta_sk_row_id
+        description: Surrogate row key; unique guards against lookup-join fan-out.
+        data_tests:
+          - not_null
+          - unique
+      - name: dv_is_current_referral_row
+        description: Derived. TRUE on the most recent snapshot row per (provider, referral) - the row to use for referral counts and latest state (closure fields populate on the final rows).
+        data_tests:
+          - not_null
