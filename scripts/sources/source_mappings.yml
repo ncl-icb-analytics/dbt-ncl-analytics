@@ -334,6 +334,7 @@ sources:
       - LSDEPLCM
       - COMOPL
       - REF
+      - MH
       - META_FILE_REGISTRY
       - META_SCHEMA_VERSIONS
       - META_FILE_VERSIONS
