@@ -55,7 +55,32 @@ sources:
     description: SUS admitted patient care episodes and procedures
     raw_prefix: raw_sus_apc
     domain: commissioning
+
+   # SUS Monthly - Emergency Care
+  - source_name: sus_ae_monthly
+    database: DATA_LAKE
+    schema: SUS_AE
+    description: SUS Monthly emergency care attendances and activity
+    raw_prefix: raw_sus_ae_monthly
+    domain: commissioning
+
+  #  SUS Monthly - Outpatient
+  - source_name: sus_op_monthly
+    database: DATA_LAKE
+    schema: SUS_OP
+    description: SUS Monthly outpatient appointments and activity
+    raw_prefix: raw_sus_op_monthly
+    domain: commissioning
+    
+  # # SUS Monthly - Admitted Patient Care
+  - source_name: sus_apc_monthly
+    database: DATA_LAKE
+    schema: SUS_AE
+    description: SUS Monthly admitted patient care episodes and procedures
+    raw_prefix: raw_sus_apc_monthly
+    domain: commissioning
   
+
    # SUS Unified - Emergency Care
   - source_name: sus_ae
     database: DATA_LAKE
@@ -63,6 +88,26 @@ sources:
     description: SUS emergency care attendances and activity
     raw_prefix: raw_sus_ae
     domain: commissioning
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   # eRS referrals
   - source_name: eRS_primary_care

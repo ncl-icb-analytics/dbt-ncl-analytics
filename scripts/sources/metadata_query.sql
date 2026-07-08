@@ -83,6 +83,51 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- sus_ae_monthly: SUS Monthly emergency care attendances and activity
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'SUS_AE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SUS_AE'
+  
+  UNION ALL
+  
+    -- sus_op_monthly: SUS Monthly outpatient appointments and activity
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'SUS_OP' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SUS_OP'
+  
+  UNION ALL
+  
+    -- sus_apc_monthly: SUS Monthly admitted patient care episodes and procedures
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'SUS_AE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SUS_AE'
+  
+  UNION ALL
+  
     -- sus_ae: SUS emergency care attendances and activity
   SELECT 
     'DATA_LAKE' as database_name,
