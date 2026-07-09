@@ -21,6 +21,7 @@ aggregate-to-sk_patient_id in int_resource_index_olids_profile for robust approa
 Downstream: cltcs_score_activation / _coordination / _treatment / _frailty.
 */
 
+with source_pop as (
 select
     db.sk_patient_id
     , pp.person_id
@@ -38,9 +39,53 @@ where db.date_of_death is null -- living patients only
     and db.date_of_birth < date_trunc('month', dateadd(year, -18, current_date)) -- adults only
     and db.sk_patient_id is not null 
     and pp.person_id is not null
+    and nh.neighbourhood_code is not null
 -- Latest-record tiebreak when an sk_patient_id maps to >1 person_id: keep the most
 -- recently registered person record (person_id as a stable final tiebreak).
 qualify row_number() over (
     partition by db.sk_patient_id
     order by reg.registration_start_date desc nulls last, pp.person_id
-) = 1
+) = 1 )
+
+select erl.sk_patient_id
+    , erl.neighbourhood_code
+    , erl.practice_code
+    , erl.person_id
+    , pc.total_conditions
+    , fr.category 
+    , ccms.cambridge_comorbidity_score
+    , zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo
+    , lcs.overall_risk_group
+    , rm.unique_active_ingredient_count_12mo
+    , frr.latest_frailty_severity
+from source_pop erl
+left join {{ ref('dim_person_conditions')}} pc
+    on erl.person_id = pc.person_id
+left join {{ref('fct_person_sus_ae_recent')}} aea
+    on erl.sk_patient_id  = aea.sk_patient_id
+left join {{ref('fct_person_sus_ip_recent')}} apca
+    on erl.sk_patient_id  = apca.sk_patient_id
+left join {{ref('fct_person_medications_recent')}} rm
+    on erl.person_id = rm.person_id
+left join {{ref('stg_aic_int_efi2_scores')}} fr
+    on erl.person_id = fr.person_id
+left join {{ref('fct_person_frailty_register')}} frr
+    on erl.person_id = frr.person_id
+left join {{ref('dim_person_ccms')}} ccms
+    on erl.person_id = ccms.person_id
+left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
+    on erl.person_id = lcs.person_id
+where
+    pc.total_conditions > 2 
+    and (
+        -- clinical complexity
+        ccms.cambridge_comorbidity_score > 1.5
+        or lcs.overall_risk_group in ('HRC', 'HR')
+        -- frailty
+        or fr.category in ('MODERATE FRAILTY', 'SEVERE FRAILTY')
+        or (frr.moderate_frailty_count > 0 or frr.severe_frailty_count > 0)
+        -- emergency use
+        or aea.ae_tot_12mo > 3 -- 4+ AE visits within 12 months
+        or apca.acs_nel_12mo > 1 -- 2+ NEL for ASC conditions within 12 months
+        )
+        

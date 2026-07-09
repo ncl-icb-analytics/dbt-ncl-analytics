@@ -1,5 +1,14 @@
 {{ config(materialized='table', tags=['cltcs']) }}
 
+-- Domain weights for the treatment score (each default 1 = equal weighting).
+{% set weight_biomarker_gaps = 1 %}
+{% set weight_care_gaps = 1 %}
+{% set weight_complexity = 1 %}
+{% set weight_medication = 1 %}
+{% set weight_illness_uec = 1 %}
+{% set weight_barriers = 1 %}
+{% set weight_total = weight_biomarker_gaps + weight_care_gaps + weight_complexity + weight_medication + weight_illness_uec + weight_barriers %}
+
 with inclusion_list as (
     select *
     from {{ ref('cltcs_adult_population') }}
@@ -227,6 +236,8 @@ clipped_scores as (
         least(greatest(zeroifnull(scaled_score_barriers), -3), 3) as clipped_score_barriers,
         from composite_scores
 ),
+-- rescale each clipped domain z-score to a 0-100 sub-score, then take the weighted
+-- average across domains (normalised by the sum of weights) to get raw_score_treatment.
 remapped_scores as (
     select
         *,
@@ -236,22 +247,32 @@ remapped_scores as (
         round((clipped_score_medication + 3) / 6.0 * 100, 1) as score_medication_0_100,
         round((clipped_score_illness_uec + 3) / 6.0 * 100, 1) as score_illness_uec_0_100,
         round((clipped_score_barriers + 3) / 6.0 * 100, 1) as score_barriers_0_100,
-        (score_biomarker_gaps_0_100 * 1 + score_care_gaps_0_100 * 1 + score_complexity_0_100 * 1 + score_medication_0_100 * 1 + score_illness_uec_0_100 * 1 + score_barriers_0_100 * 1) /6 as raw_score_treatment
+        (
+            score_biomarker_gaps_0_100 * {{ weight_biomarker_gaps }}
+            + score_care_gaps_0_100 * {{ weight_care_gaps }}
+            + score_complexity_0_100 * {{ weight_complexity }}
+            + score_medication_0_100 * {{ weight_medication }}
+            + score_illness_uec_0_100 * {{ weight_illness_uec }}
+            + score_barriers_0_100 * {{ weight_barriers }}
+        ) / {{ weight_total }} as raw_score_treatment
     from clipped_scores
 )
 
 select
     *,
-    raw_score_treatment * (
-        case
-            when age is null then 1.0
-            else (
-                1
-                -- max +15% boost at age 18, linear decline to 0 at age 60
-                + 0.15 * (60 - least(greatest(age, 18), 60)) / 42.0
-                -- linear penalty from age 60, capped at -15% from age 100 onward
-                - 0.15 * least(greatest(age - 60, 0), 40) / 40.0
-            )
-        end
-    ) as score_treatment
+    -- apply the age multiplier to the weighted 0-100 score, then bound to [1, 100].
+    least(greatest(
+        raw_score_treatment * (
+            case
+                when age is null then 1.0
+                else (
+                    1
+                    -- max +15% boost at age 18, linear decline to 0 at age 60
+                    + 0.15 * (60 - least(greatest(age, 18), 60)) / 42.0
+                    -- linear penalty from age 60, capped at -15% from age 100 onward
+                    - 0.15 * least(greatest(age - 60, 0), 40) / 40.0
+                )
+            end
+        )
+    , 1), 100) as score_treatment
 from remapped_scores
