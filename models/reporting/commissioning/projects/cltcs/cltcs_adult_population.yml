@@ -20,6 +20,9 @@ models:
 
       - name: person_id
         description: "OLIDS person key (via dim_person_pseudo, deduped to one per sk_patient_id). Null if unmapped."
+        data_tests:
+          - unique
+          - not_null
 
       - name: neighbourhood_code
         data_type: varchar

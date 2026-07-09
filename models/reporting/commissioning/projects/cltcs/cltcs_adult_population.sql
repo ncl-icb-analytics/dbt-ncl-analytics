@@ -36,9 +36,11 @@ left join {{ ref('stg_cltcs_emis_cltcs_local_mapping_nh_gp') }} nh
     on db.practice_code = nh.practice_code
 where db.date_of_death is null -- living patients only
     and db.date_of_birth < date_trunc('month', dateadd(year, -18, current_date)) -- adults only
+    and db.sk_patient_id is not null 
+    and pp.person_id is not null
 -- Latest-record tiebreak when an sk_patient_id maps to >1 person_id: keep the most
 -- recently registered person record (person_id as a stable final tiebreak).
 qualify row_number() over (
     partition by db.sk_patient_id
-    order by reg.record_registered_start_date desc nulls last, pp.person_id
+    order by reg.registration_start_date desc nulls last, pp.person_id
 ) = 1
