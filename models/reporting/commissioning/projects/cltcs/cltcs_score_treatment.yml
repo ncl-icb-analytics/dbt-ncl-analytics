@@ -19,4 +19,4 @@ models:
 
       - name: score_treatment
         data_type: number
-        description: "score_treatment with age multiplier: +15% max at age 18 (flat below 18), linear to neutral at 60, then up to -15% penalty from age 100+"
+        description: "Final treatment score, bounded to [1, 100]. Six z-scored, clipped subdomain scores are each rescaled to 0-100 and combined as a weighted average (domain weights default to 1/equal; set in the model header), then an age multiplier is applied: +15% max at age 18 (flat below 18), linear to neutral at 60, then up to -15% penalty from age 100+."
