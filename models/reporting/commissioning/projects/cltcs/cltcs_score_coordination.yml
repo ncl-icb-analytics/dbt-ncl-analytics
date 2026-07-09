@@ -6,17 +6,11 @@ models:
         owner:
           name: Emily Baldwin
     columns:
-      - name: patient_id
+      - name: sk_patient_id
         data_type: number
-        description: "Unique patient identifier from commissioning data"
+        description: "Unique patient identifier (sk_patient_id from PDS via dim_person_demographics_basic)"
         data_tests:
           - unique
-          - not_null
-
-      - name: area_code
-        data_type: varchar
-        description: "Area code (PCN  in this context)"
-        data_tests:
           - not_null
 
       - name: score_coordination

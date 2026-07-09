@@ -1,21 +1,23 @@
-          
+{{ config(materialized='table', tags=['cltcs']) }}
+
 with inclusion_list as (
-    select patient_id, area_code, olids_id
-    from {{ ref('cltcs_patient_list')}}
-    ), 
-    
-encoding_features as(
-    select il.patient_id
-        , il.area_code
+    select *
+    from {{ ref('cltcs_adult_population') }}
+    ),
+
+encoding_features as (
+    select il.sk_patient_id
+        , il.neighbourhood_code
+        , il.practice_code
         , pd.age
-        -- biomarker and monitoring gaps 
+        -- biomarker and monitoring gaps
         ---- blood pressure
         , case when bp.latest_bp_date between dateadd(month, -6, current_date()) and current_date() and bp.is_overall_bp_controlled = false then 1 else 0 end as poor_recent_bp_control_flag
         , case when bp.latest_bp_date < dateadd(month, -12, current_date()) or bp.latest_bp_date is null and hpr.person_id is not null then 1 else 0 end as bp_monitoring_overdue_flag
-        ---- hba1c 
+        ---- hba1c
         , case when hba1c.clinical_effective_date between dateadd(month, -6, current_date()) and current_date() and hba1c.meets_qof_target = false then 1 else 0 end as poor_recent_hba1c_control_flag
         , case when dpr.person_id is not null and dcp.hba1c_completed_in_last_12m = false then 1 else 0 end as hba1c_monitoring_overdue_flag
-        , case when hba1c.hba1c_ifcc > 90 then 1 else 0 end as hba1c_dangerous_flag        
+        , case when hba1c.hba1c_ifcc > 90 then 1 else 0 end as hba1c_dangerous_flag
         -- ckd and egfr (intervals by latest eGFR mL/min/1.73m²: 45-59 yearly, 30-44 6-monthly, <30 ~quarterly)
         , case
             when eg.clinical_effective_date is null then 0
@@ -42,7 +44,7 @@ encoding_features as(
         , case when polyp.is_polypharmacy_5plus then 1 else 0 end as polypharmacy_5plus_flag
         , case when polyp.is_polypharmacy_10plus then 1 else 0 end as polypharmacy_10plus_flag
         , zeroifnull(polyp.medication_count) as medication_count
-        
+
         -- multimorbidity and biopsychosocial complexity
         , pc.total_qof_conditions
         , pc.mental_health_conditions
@@ -54,12 +56,12 @@ encoding_features as(
         , {{ encode_ltc_lcs_risk_group('lcs.hf_risk_group') }} as hf_risk_group_sort_key
         , {{ encode_ltc_lcs_risk_group('lcs.hypertension_risk_group') }} as hypertension_risk_group_sort_key
         , {{ encode_ltc_lcs_risk_group('lcs.overall_risk_group') }} as overall_risk_group_sort_key
-        
+
         -- barriers to treatment
         , case when ps.is_housebound then 1 else 0 end as is_housebound_flag
         , ps.behavioural_risk_count
         , case when pc.has_severe_mental_illness then 1 else 0 end as has_smi_flag
-        
+
         -- acute use related features
         , zeroifnull(aea.ae_ill_12mo) as ae_ill_12mo
         , zeroifnull(aea.ae_t1_12mo) as ae_t1_12mo
@@ -82,49 +84,50 @@ encoding_features as(
         , lcs.moc_stage_completed
       from inclusion_list il
     left join {{ref('dim_person_conditions')}} pc
-        on il.olids_id = pc.person_id
+        on il.person_id =pc.person_id
     left join {{ref('fct_person_sus_ae_recent')}} aea
-        on il.patient_id  = aea.sk_patient_id
+        on il.sk_patient_id  =aea.sk_patient_id
     left join {{ref('fct_person_gp_recent')}} gpa
-        on il.patient_id  = gpa.sk_patient_id
+        on il.sk_patient_id  =gpa.sk_patient_id
     left join {{ref('fct_person_medications_recent')}} rm
-        on il.olids_id = rm.person_id
+        on il.person_id =rm.person_id
     left join {{ref('dim_person_demographics')}} pd
-        on il.olids_id = pd.person_id
+        on il.person_id =pd.person_id
     left join {{ref('fct_person_behavioural_risk_factors')}} br
-        on il.olids_id = br.person_id
+        on il.person_id =br.person_id
     left join {{ref('int_asthma_management')}} am
-        on il.olids_id = am.person_id
+        on il.person_id =am.person_id
     left join {{ref('fct_person_bp_control')}} bp
-        on il.olids_id = bp.person_id
+        on il.person_id =bp.person_id
     left join {{ref('dim_person_ccms')}} ccms
-        on il.olids_id = ccms.person_id
+        on il.person_id =ccms.person_id
     left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
-        on il.olids_id = lcs.person_id
+        on il.person_id =lcs.person_id
     left join {{ref('fct_person_polypharmacy_current')}} polyp
-        on il.olids_id = polyp.person_id
+        on il.person_id =polyp.person_id
     left join {{ref('fct_person_diabetes_register')}} dpr
-        on il.olids_id = dpr.person_id
+        on il.person_id =dpr.person_id
     left join {{ref('fct_person_hypertension_register')}} hpr
-        on il.olids_id = hpr.person_id
+        on il.person_id =hpr.person_id
     left join {{ref('fct_person_diabetes_8_care_processes')}} dcp
-        on il.olids_id = dcp.person_id
+        on il.person_id =dcp.person_id
     left join {{ref('fct_person_diabetes_triple_target')}} dt
-        on il.olids_id = dt.person_id
+        on il.person_id =dt.person_id
     left join {{ref('int_hba1c_latest')}} hba1c
-        on il.olids_id = hba1c.person_id
+        on il.person_id =hba1c.person_id
     left join {{ref('int_smi_lifestyle')}} id
-        on il.olids_id = id.person_id
+        on il.person_id =id.person_id
     left join {{ ref('int_egfr_latest') }} eg
-        on il.olids_id = eg.person_id
+        on il.person_id =eg.person_id
     left join {{ref('dim_person_status_summary')}} ps
-        on il.olids_id = ps.person_id
+        on il.person_id =ps.person_id
 ),
 
 domain_sub_scores as (
     select
-        patient_id,
-        area_code,
+        sk_patient_id,
+        neighbourhood_code,
+        practice_code,
         age,
 
         -- biomarker and monitoring gaps
@@ -155,7 +158,7 @@ domain_sub_scores as (
             + alcohol_risk_sort_key
         ) as score_care_gaps,
 
-        -- clinical complexity: multimorbidity 
+        -- clinical complexity: multimorbidity
         (
             chd_risk_group_sort_key
             + ckd_risk_group_sort_key
@@ -170,7 +173,7 @@ domain_sub_scores as (
 
         -- D4: medication burden
         ( ln( 1+ medication_count)
-            + ln( 1+ unique_active_ingredient_count_12mo) 
+            + ln( 1+ unique_active_ingredient_count_12mo)
         ) as score_medication,
 
         -- illness-related UEC (not injury totals; no ae_ill_3mo in feature set)
@@ -193,8 +196,9 @@ domain_sub_scores as (
 
 composite_scores as (
     select
-        patient_id,
-        area_code,
+        sk_patient_id,
+        neighbourhood_code,
+        practice_code,
         age,
         score_biomarker_gaps,
         score_care_gaps,
@@ -202,12 +206,12 @@ composite_scores as (
         score_medication,
         score_illness_uec,
         score_barriers,
-        (score_biomarker_gaps - avg(score_biomarker_gaps) over (partition by area_code)) / nullif(stddev(score_biomarker_gaps) over (partition by area_code), 0) as scaled_score_biomarker_gaps,
-        (score_care_gaps - avg(score_care_gaps) over (partition by area_code)) / nullif(stddev(score_care_gaps) over (partition by area_code), 0) as scaled_score_care_gaps,
-        (score_complexity - avg(score_complexity) over (partition by area_code)) / nullif(stddev(score_complexity) over (partition by area_code), 0) as scaled_score_complexity,
-        (score_medication - avg(score_medication) over (partition by area_code)) / nullif(stddev(score_medication) over (partition by area_code), 0) as scaled_score_medication,
-        (score_illness_uec - avg(score_illness_uec) over (partition by area_code)) / nullif(stddev(score_illness_uec) over (partition by area_code), 0) as scaled_score_illness_uec,
-        (score_barriers - avg(score_barriers) over (partition by area_code)) / nullif(stddev(score_barriers) over (partition by area_code), 0) as scaled_score_barriers
+        (score_biomarker_gaps - avg(score_biomarker_gaps) over (partition by neighbourhood_code)) / nullif(stddev(score_biomarker_gaps) over (partition by neighbourhood_code), 0) as scaled_score_biomarker_gaps,
+        (score_care_gaps - avg(score_care_gaps) over (partition by neighbourhood_code)) / nullif(stddev(score_care_gaps) over (partition by neighbourhood_code), 0) as scaled_score_care_gaps,
+        (score_complexity - avg(score_complexity) over (partition by neighbourhood_code)) / nullif(stddev(score_complexity) over (partition by neighbourhood_code), 0) as scaled_score_complexity,
+        (score_medication - avg(score_medication) over (partition by neighbourhood_code)) / nullif(stddev(score_medication) over (partition by neighbourhood_code), 0) as scaled_score_medication,
+        (score_illness_uec - avg(score_illness_uec) over (partition by neighbourhood_code)) / nullif(stddev(score_illness_uec) over (partition by neighbourhood_code), 0) as scaled_score_illness_uec,
+        (score_barriers - avg(score_barriers) over (partition by neighbourhood_code)) / nullif(stddev(score_barriers) over (partition by neighbourhood_code), 0) as scaled_score_barriers
     from domain_sub_scores
 ),
 

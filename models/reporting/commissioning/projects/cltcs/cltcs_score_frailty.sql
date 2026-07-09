@@ -1,14 +1,16 @@
+{{ config(materialized='table', tags=['cltcs']) }}
 with inclusion_list as (
-    select patient_id, area_code, olids_id
-    from {{ ref('cltcs_patient_list')}}
+    select *
+    from {{ ref('cltcs_adult_population') }}
 ),
 
 encoding_features as (
     select
-        il.patient_id,
-        il.area_code,
+        il.sk_patient_id,
+        il.neighbourhood_code,
+        il.practice_code,
         pd.age,
-        
+
         -- multimorbidity and biopsychosocial complexity
         pc.total_qof_conditions,
         pc.mental_health_conditions,
@@ -20,7 +22,7 @@ encoding_features as (
         {{ encode_ltc_lcs_risk_group('lcs.hf_risk_group') }} as hf_risk_group_sort_key,
         {{ encode_ltc_lcs_risk_group('lcs.hypertension_risk_group') }} as hypertension_risk_group_sort_key,
         {{ encode_ltc_lcs_risk_group('lcs.overall_risk_group') }} as overall_risk_group_sort_key,
-        
+
         -- frailty
         zeroifnull(pc.geriatric_conditions) as geriatric_conditions,
         zeroifnull(pc.neurology_conditions) as neurology_conditions,
@@ -50,12 +52,12 @@ encoding_features as (
             when fr.latest_frailty_severity = 'Mild' then 1
             else 0
         end as frailty_severity_weight,
-        
+
         -- medicines management
         case when polyp.is_polypharmacy_5plus then 1 else 0 end as polypharmacy_5plus_flag,
         case when polyp.is_polypharmacy_10plus then 1 else 0 end as polypharmacy_10plus_flag,
         zeroifnull(polyp.medication_count) as medication_count,
-        
+
         -- emergency use
         zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo,
         zeroifnull(aea.ae_inj_12mo) as ae_inj_12mo,
@@ -81,45 +83,46 @@ encoding_features as (
         case when asc_cld.has_sensory_support_visual_impairment = true then 1 else 0 end as has_sensory_support_visual_impairment_flag,
         case when asc_cld.has_sensory_support_hearing_impairment = true then 1 else 0 end as has_sensory_support_hearing_impairment_flag,
         case when asc_cld.has_sensory_support_dual_impairment = true then 1 else 0 end as has_sensory_support_dual_impairment_flag,
-       
+
     from inclusion_list il
     left join {{ ref('dim_person_demographics') }} pd
-        on il.olids_id = pd.person_id
+        on il.person_id =pd.person_id
     left join {{ ref('dim_person_conditions') }} pc
-        on il.olids_id = pc.person_id
+        on il.person_id =pc.person_id
     left join {{ref('dim_person_status_summary')}} ps
-        on il.olids_id = ps.person_id
+        on il.person_id =ps.person_id
     left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
-        on il.olids_id = lcs.person_id
+        on il.person_id =lcs.person_id
     left join {{ ref('fct_person_sus_ae_recent') }} aea
-        on il.patient_id = aea.sk_patient_id
+        on il.sk_patient_id =aea.sk_patient_id
     left join {{ ref('fct_person_sus_ip_recent') }} apca
-        on il.patient_id = apca.sk_patient_id
+        on il.sk_patient_id =apca.sk_patient_id
     left join {{ ref('fct_person_bp_control') }} bp
-        on il.olids_id = bp.person_id
+        on il.person_id =bp.person_id
     left join {{ ref('dim_person_ccms') }} ccms
-        on il.olids_id = ccms.person_id
+        on il.person_id =ccms.person_id
     left join {{ ref('stg_aic_int_efi2_scores') }} efi
-        on il.olids_id = efi.person_id
+        on il.person_id =efi.person_id
     left join {{ ref('fct_person_frailty_register') }} fr
-        on il.olids_id = fr.person_id
+        on il.person_id =fr.person_id
     left join {{ ref('int_rockwood_latest') }} rockwood
-        on il.olids_id = rockwood.person_id
+        on il.person_id =rockwood.person_id
     left join {{ ref('fct_person_polypharmacy_current') }} polyp
-        on il.olids_id = polyp.person_id
+        on il.person_id =polyp.person_id
     left join {{ ref('int_smi_illicit_drug_latest') }} id
-        on il.olids_id = id.person_id
+        on il.person_id =id.person_id
     left join {{ ref('dim_person_care_home') }} ch
-        on il.olids_id = ch.person_id
+        on il.person_id =ch.person_id
     left join {{ref('fct_person_asc_service_recent')}} asc_cld
-        on il.patient_id = asc_cld.sk_patient_id
+        on il.sk_patient_id = asc_cld.sk_patient_id
 
 ),
 
 domain_sub_scores as (
     select
-        patient_id,
-        area_code,
+        sk_patient_id,
+        neighbourhood_code,
+        practice_code,
         age,
         -- clinical complexity / multimorbidity
         ( total_qof_conditions
@@ -181,16 +184,17 @@ from encoding_features
 
 composite_scores as (
     select
-        patient_id,
-        area_code,
+        sk_patient_id,
+        neighbourhood_code,
+        practice_code,
         age,
-        (score_clinical_complexity - avg(score_clinical_complexity) over (partition by area_code)) / nullif(stddev(score_clinical_complexity) over (partition by area_code), 0) as scaled_score_clinical_complexity,
-        (score_clinical_frailty - avg(score_clinical_frailty) over (partition by area_code)) / nullif(stddev(score_clinical_frailty) over (partition by area_code), 0) as scaled_score_clinical_frailty,
-        (score_medicines_management - avg(score_medicines_management) over (partition by area_code)) / nullif(stddev(score_medicines_management) over (partition by area_code), 0) as scaled_score_medicines_management,
-        (score_emergency_use - avg(score_emergency_use) over (partition by area_code)) / nullif(stddev(score_emergency_use) over (partition by area_code), 0) as scaled_score_emergency_use,
-        (score_residential_social_factors - avg(score_residential_social_factors) over (partition by area_code)) / nullif(stddev(score_residential_social_factors) over (partition by area_code), 0) as scaled_score_residential_social_factors,
-        (score_wider_care_engagement - avg(score_wider_care_engagement) over (partition by area_code)) / nullif(stddev(score_wider_care_engagement) over (partition by area_code), 0) as scaled_score_wider_care_engagement,
-        (score_asc_indicators - avg(score_asc_indicators) over (partition by area_code)) / nullif(stddev(score_asc_indicators) over (partition by area_code), 0) as scaled_score_asc_indicators,
+        (score_clinical_complexity - avg(score_clinical_complexity) over (partition by neighbourhood_code)) / nullif(stddev(score_clinical_complexity) over (partition by neighbourhood_code), 0) as scaled_score_clinical_complexity,
+        (score_clinical_frailty - avg(score_clinical_frailty) over (partition by neighbourhood_code)) / nullif(stddev(score_clinical_frailty) over (partition by neighbourhood_code), 0) as scaled_score_clinical_frailty,
+        (score_medicines_management - avg(score_medicines_management) over (partition by neighbourhood_code)) / nullif(stddev(score_medicines_management) over (partition by neighbourhood_code), 0) as scaled_score_medicines_management,
+        (score_emergency_use - avg(score_emergency_use) over (partition by neighbourhood_code)) / nullif(stddev(score_emergency_use) over (partition by neighbourhood_code), 0) as scaled_score_emergency_use,
+        (score_residential_social_factors - avg(score_residential_social_factors) over (partition by neighbourhood_code)) / nullif(stddev(score_residential_social_factors) over (partition by neighbourhood_code), 0) as scaled_score_residential_social_factors,
+        (score_wider_care_engagement - avg(score_wider_care_engagement) over (partition by neighbourhood_code)) / nullif(stddev(score_wider_care_engagement) over (partition by neighbourhood_code), 0) as scaled_score_wider_care_engagement,
+        (score_asc_indicators - avg(score_asc_indicators) over (partition by neighbourhood_code)) / nullif(stddev(score_asc_indicators) over (partition by neighbourhood_code), 0) as scaled_score_asc_indicators,
         score_exclusions
     from domain_sub_scores ),
 
