@@ -1,3 +1,10 @@
+{{
+    config(
+        materialized='table',
+        tags=['cltcs_secure_source'])
+}}
+
+
 {% set in_scope_borough_list = ['Haringey'] %}
 {% set in_scope_neighbourhood_list = ['East Camden'] %}
 

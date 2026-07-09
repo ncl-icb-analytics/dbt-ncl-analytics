@@ -41,10 +41,10 @@ expanded_registrant_list as (
         , olids_id
         , source
     from complete_list c
-    where not exists (
-    select 1
-    from excluded_list e
-    where e.patient_id = c.patient_id)
+    -- where not exists (
+    -- select 1
+    -- from excluded_list e
+    -- where e.patient_id = c.patient_id)
     qualify row_number() over (
         partition by patient_id
         order by case
