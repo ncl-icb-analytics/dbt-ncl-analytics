@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table')
+        materialized='table',
+        tags=['cltcs_secure_source'])
 }}
 
 {% set placeholder_date = '1900-01-01'%} 

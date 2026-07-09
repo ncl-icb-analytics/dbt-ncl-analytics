@@ -14,6 +14,9 @@ on-run-start:
   - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
+on-run-end:
+  - "{{ trigger_cltcs_secure_view_rebuild() }}"
+  
 clean-targets:
   - "target"
   - "dbt_modules"
