@@ -2,7 +2,7 @@ models:
   - name: cltcs_activity_monthly_capture
     description: >
       Monthly append-only capture of rolling-12-month person activity (A&E, inpatient,
-      outpatient, GP, medications, waiting list). One row per (sk_patient_id,
+      outpatient, GP, waiting list). One row per (sk_patient_id,
       snapshot_month). Rolling counts change every build and cannot be reconstructed
       historically, so this append capture is used instead of an SCD2 snapshot. See
       docs/person-scd2-snapshots-plan.md section 6.
