@@ -73,15 +73,22 @@ SELECT
     -- ccg_of_residence_code -> sub_icb_of_residence_code.
     sub_icb_code_from_gp_practice_code,
     place_of_death_sub_icb_code,
+    place_of_death_icb_code,
     place_of_death_org_code,
     place_of_death_ula_code,
     ula_of_residence_code,
     ward_of_residence_code,
     sub_icb_of_residence_code,
+    icb_of_residence_code,
     county_district_of_res_code,
     county_of_residence_code,
     gor_of_residence_code,
-    lsoa_of_residence_code,
+    -- Upstream renamed lsoa_of_residence_code -> lsoa11_of_residence_code and
+    -- added 2021-boundary LSOA/MSOA geographies alongside the 2011 codes.
+    lsoa11_of_residence_code,
+    lsoa21_of_residence_code,
+    msoa11_of_residence_code,
+    msoa21_of_residence_code,
     pco_of_residence_code,
     gp_practice_code,
     -- dmic_filename,
