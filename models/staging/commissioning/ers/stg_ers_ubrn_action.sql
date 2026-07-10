@@ -136,5 +136,5 @@ inner join {{ ref('raw_ers_pc_activesubmission') }} as active
 
 qualify row_number() over (
     partition by ubrn_action.action_id
-    order by ubrn_action.dmic_date_added desc
+    order by ubrn_action.dmic_date_added desc, ubrn_action.seqno desc  -- deterministic tie-breaker for multiple records with the same action_id and dmic_date_added
 ) = 1
