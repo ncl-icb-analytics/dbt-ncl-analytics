@@ -9,11 +9,17 @@ models:
       meta:
         owner:
           name: em-baldwin
+    tests:
+      # Fails if the codelist builds empty (an empty codelist zeroes every score).
+      - dbt_utils.at_least_one:
+          column_name: snomedct_conceptid
     columns:
       - name: deficit
         description: Frailty deficit the code contributes to (e.g. Hypertension, BMI, Falls).
       - name: snomedct_conceptid
         description: SNOMED CT concept id for the code, joined to observation mapped_concept_code.
+        tests:
+          - not_null
       - name: ctv3
         description: CTV3 code where provided (unused downstream; retained for provenance).
       - name: provenance

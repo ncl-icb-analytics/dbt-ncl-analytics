@@ -10,9 +10,15 @@ models:
       meta:
         owner:
           name: em-baldwin
+    tests:
+      # Fails if the weights build empty (an empty table zeroes every score).
+      - dbt_utils.at_least_one:
+          column_name: deficit
     columns:
       - name: deficit
         description: Frailty deficit (joins to the rules output on lower(deficit)).
+        tests:
+          - not_null
       - name: detail_key
         description: >
           Sub-level within a deficit where the weight varies by band (e.g. '5-9' /
