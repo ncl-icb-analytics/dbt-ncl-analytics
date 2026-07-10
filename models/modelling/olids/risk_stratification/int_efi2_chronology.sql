@@ -14,8 +14,12 @@ weights to the raw eFI2 score per person.
 Port of lds-pipelines stg_efi2__chronology. Substitutions vs lds (OLIDS-native):
 - lds stg_efi2__rules                -> int_efi2_rules
 - lds base_efi2__weights             -> stg_aic_base_efi2_weights
-- lds stg_efi2__cohort_snomed_codes  -> int_efi2_cohort_snomed_codes
 - lds stg_gp__medication_order        -> stg_olids_medication_order
+
+person_unique (the population over which missing-lifestyle deficits and
+polypharmacy are evaluated) now draws from int_efi2_patient_list, the full scored
+spine, rather than int_efi2_cohort_snomed_codes. See the person_unique CTE for why
+- this is a deliberate paper-alignment deviation from lds.
 
 Polypharmacy counts distinct BNF sub-subchapters (level 3 = first 6 chars of the
 BNF code) among meds prescribed in the 90 days before end_date, per the eFI2
@@ -105,9 +109,16 @@ with
         where a.deficit = 'MAX_ALCOHOL'
     ),
 
-    -- Missing BMI
+    -- Full scored population (one row per person), sourced from the patient_list
+    -- spine, NOT int_efi2_cohort_snomed_codes. The cohort table is an inner join to
+    -- the codelist, so it only contains persons with >= 1 eFI2 code. The paper
+    -- assigns a "missing" lifestyle category (BMI, alcohol) so that patients with no
+    -- lifestyle data still receive a score, and evaluates polypharmacy across the
+    -- whole population. Drawing from the cohort table instead would deny the
+    -- missing-lifestyle weights and polypharmacy to code-sparse persons, understating
+    -- their score. Patient_list is already the correct denominator (living, age >= 65).
     person_unique as (
-        select distinct person_id, end_date from {{ ref("int_efi2_cohort_snomed_codes") }}
+        select distinct person_id, end_date from {{ ref("int_efi2_patient_list") }}
     ),
 
     missing_bmi as (

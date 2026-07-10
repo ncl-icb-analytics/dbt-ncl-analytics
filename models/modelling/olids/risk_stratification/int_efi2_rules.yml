@@ -6,7 +6,8 @@ models:
       stg_efi2__rules. The anaemia rule reuses int_haemoglobin_latest (g/L,
       thresholds 130 male / 120 female) in place of the lds phenolab haemoglobin
       measurement. Note - could be ported onto our cleaned measurements in future - not now to minimise
-      divergence.
+      divergence. One deliberate paper-alignment deviation: BMI uses the most recent
+      reading rather than the earliest.
     config:
       meta:
         owner:

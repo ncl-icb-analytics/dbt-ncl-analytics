@@ -15,6 +15,9 @@ Port of lds-pipelines stg_efi2__rules. Substitutions vs lds (OLIDS-native):
 - Anaemia haemoglobin gate: lds base_phenolab__dev_measurements
   (measurement_haemoglobin_SNOMED) -> int_haemoglobin_latest (reuse-native).
   See the anaemia CTE for the equivalence note.
+- BMI recency: lds ranked BMI readings by age ascending, which selected the
+  EARLIEST reading; we rank by clinical_effective_date descending to use the most
+  recent BMI, matching the paper's use of current BMI. See the last_bmi CTE.
 
 Every other rule is a faithful port of the lds threshold logic.
 */
@@ -214,7 +217,12 @@ with
             deficit,
             other_instructions,
             result_value,
-            row_number() over (partition by person_id order by age_at_event nulls last) as rn,
+            -- Most recent BMI reading = rn 1. lds ordered by age_at_event ascending,
+            -- which picked the EARLIEST reading; the paper uses current BMI, so we
+            -- order by clinical_effective_date descending. Paper-alignment deviation.
+            row_number() over (
+                partition by person_id order by clinical_effective_date desc nulls last
+            ) as rn,
             'BMI' as sub_deficit,
             end_date,
             clinical_effective_date
@@ -363,7 +371,7 @@ with
             deficit,
             other_instructions,
             count_if(result_value > 0) > 0 as has_deficit,
-            'COGNITIVE_IMPAIRMENT' as sub_deficit,
+            'FALLS' as sub_deficit,
             end_date,
             max(case when result_value > 0 then clinical_effective_date end) as last_date
         from rules_needed
