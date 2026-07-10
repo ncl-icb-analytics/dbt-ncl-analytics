@@ -1,4 +1,9 @@
-select
+{{
+    config(
+        materialized = 'table',
+        tags=['ers']
+        )
+    }}select
     ubrn_action.sk,
     ubrn_action.seqno,
     ubrn_action.ubrn_id,

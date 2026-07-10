@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: stg_ers_ubrn_action
     description: "Staging model for eRS UBRN action events (ebsx02UBRNAction), deduplicated (INNER JOIN on raw_ers_pc_activesubmission) to active submissions only.\nContact: Jonathan.Linney@nhs.net"

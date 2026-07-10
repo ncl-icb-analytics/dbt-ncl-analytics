@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: stg_ers_bridging
     description: Bridging table linking eRS person identifiers to pseudonymised NHS numbers

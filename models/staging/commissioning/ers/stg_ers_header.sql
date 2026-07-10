@@ -1,4 +1,10 @@
-select
+{{
+    config(
+        materialized = 'table',
+        tags=['ers']
+        )
+    }}
+    select
     version,
     org_id_referrer,
     uniq_submission_id,
