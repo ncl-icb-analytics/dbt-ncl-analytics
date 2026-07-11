@@ -4,7 +4,10 @@ models:
     description: |
       WNL registration exposure by patient-month for months covered by the
       SLAM cost index. Built from PDS registration episodes x WNL practices.
-      Exposure is truncated at the death month; the death month counts.
+      Exposure is truncated at the death month and at the deduction month
+      (stg_pds_reason_for_removal, since PDS leaves deducted episodes open);
+      both truncation months count. Reconciles to the published GP list
+      within ~1-2%.
     config:
       meta:
         owner:
