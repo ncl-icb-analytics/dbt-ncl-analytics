@@ -209,7 +209,7 @@ select il.patient_id
       END as medication_name_list
     ,polyp.is_polypharmacy_5plus
     ,polyp.is_polypharmacy_10plus
-    , TO_NUMBER(main_language_flag) + TO_NUMBER(has_severe_mental_illness) + TO_NUMBER(has_learning_disability) + TO_NUMBER(has_asc_service) as attendance_difficulty_score
+    , zeroifnull(TO_NUMBER(main_language_flag)) + zeroifnull(TO_NUMBER(has_severe_mental_illness)) + zeroifnull(TO_NUMBER(has_learning_disability)) + zeroifnull(TO_NUMBER(has_asc_service)) as attendance_difficulty_score
     -- Recent medications (last 30 days and last year)
     ,rm.medications_recent_12mo as medications_recent_12mo
     ,zeroifnull(rm.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
