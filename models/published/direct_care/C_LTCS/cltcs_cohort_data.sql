@@ -53,12 +53,12 @@ with inclusion_list as (
 
 select il.patient_id
       ,{{ hxflake_pseudo_generation('il.patient_id') }} AS re_id_key
- --   , il.fragmented_sk_patient_id_flag -- include as DQ check later, excluded for now
---  , il.fragmented_person_id_flag
+    , il.fragmented_sk_patient_id_flag -- include as DQ check 
+    , il.fragmented_person_id_flag  -- include as DQ check 
     , il.area_code
     , coalesce(pd.practice_code, 'Unknown') as practice_code
     , coalesce(pd.practice_name, 'Unknown') as practice_name
-    , pd.age -- demographic measure: left NULL when unknown (0 would read as a newborn)
+    , pd.age 
     , coalesce(pd.main_language, 'Unknown') as main_language
     , coalesce(pd.gender, 'Unknown') as gender
     , coalesce(pd.ethnicity_category, 'Unknown') as ethnicity_category
@@ -106,17 +106,13 @@ select il.patient_id
     , coalesce(pc.musculoskeletal_conditions, 0) as musculoskeletal_conditions
     , coalesce(pc.neurology_conditions, 0) as neurology_conditions
     , coalesce(pc.geriatric_conditions, 0) as geriatric_conditions
-    -- frailty flags
-    -- clinical scores/categories left NULL on purpose: NULL = not assessed, which is
-    -- clinically distinct from a genuine low/zero score. Do not COALESCE to 0.
+    -- frailty flags: NULL = not assessed, which is clinically distinct from a genuine low/zero score. Do not COALESCE to 0.
     , fr.efi_score
     , coalesce(fr.category, 'Unknown') as efi_category
     , coalesce(rockwood.frailty_level, 'Unknown') as frailty_level
     , coalesce(rockwood.frailty_category, 'Unknown') as frailty_category
 
-    -- mulimorb flags
-    -- left NULL on purpose: 0 is a valid "no comorbidity" CCMS value, so a computed 0
-    -- must not be faked for someone with no score. NULL = not computed.
+    -- mulimorb flags: NULL = not computed.
     , ccms.cambridge_comorbidity_score
     -- Lifestyle and behavioural factors
     , coalesce(br.smoking_status, 'Not Recorded') as smoking_status
@@ -147,8 +143,8 @@ select il.patient_id
     , coalesce(ch.is_care_home_resident, false) as is_care_home_resident
     , coalesce(ch.is_nursing_home_resident, false) as is_nursing_home_resident
     , coalesce(ch.is_temporary_resident, false) as is_temporary_resident
-    , ch.residence_type -- descriptor of residence: only applies to residents, left NULL otherwise
-    , ch.residence_status -- descriptor of residence: only applies to residents, left NULL otherwise
+    , ch.residence_type 
+    , ch.residence_status 
     -- current status to consider
     , coalesce(ps.is_currently_pregnant, false) as is_currently_pregnant
     -- dim_person_is_carer?
@@ -159,12 +155,10 @@ select il.patient_id
     , coalesce(am.salbutamol_only, false) as asthma_salbutamol_only
     , coalesce(am.salbutamol_repeats, false) as asthma_salbutamol_repeats
     -- measurement flags (fully summaries elsewhere or held as array?)
-    -- BP control is genuinely tri-state (controlled / uncontrolled / no reading). Left NULL
-    -- when unknown: COALESCE to FALSE would misreport "no reading" as "uncontrolled".
     , case when bp.latest_bp_date between dateadd(month, -6, current_date()) and current_date() then bp.is_overall_bp_controlled else null end as is_overall_bp_controlled -- assuming bp control only relevant if recent, replace with more nuanced logic that ascerts likely control given redings history and time
     ,bp.is_overall_bp_controlled as is_most_recent_overall_bp_controlled
-    ,bp.latest_systolic_value -- clinical measurement: left NULL when not recorded
-    ,bp.latest_diastolic_value -- clinical measurement: left NULL when not recorded
+    ,bp.latest_systolic_value 
+    ,bp.latest_diastolic_value 
     ,bp.latest_bp_date
     ,coalesce(dcp.care_processes_completed, 0) as care_processes_completed
     , case when dcp.hba1c_completed_in_last_12m = true then dcp.latest_hba1c_value else null end as latest_hba1c_value
@@ -174,8 +168,6 @@ select il.patient_id
     ,zeroifnull(opa.op_att_tot_12mo) as op_att_tot_12mo
     ,zeroifnull(opa.op_spec_12mo) as op_spec_12mo
     ,zeroifnull(opa.op_prov_12mo) as op_prov_12mo
-    ,rat.predicted as op_predicted -- modelled expected value: left NULL when not modelled (0 would be a misleading real expectation)
-    ,rat.oe_ratio as op_oe_ratio -- observed/expected ratio: left NULL when not modelled (0 would imply observed=0)
     ,zeroifnull(apca.apc_12mo) as apc_12mo
     ,zeroifnull(apca.apc_los_12mo) as apc_los_12mo
     ,zeroifnull(apca.apc_nel_12mo) as apc_nel_12mo
@@ -187,8 +179,6 @@ select il.patient_id
     ,zeroifnull(gpa.gp_app_tot_12mo) as gp_app_tot_12mo
     ,zeroifnull(gpa.gp_dna_tot_12mo) as gp_dna_tot_12mo
     -- existing LTC LCS flags
-    -- per-condition risk group codes ('HR'/'HRC'/'MR'/...): NULL = person not in that
-    -- condition's LCS risk group, which is meaningful, so left NULL rather than defaulted.
     , lcs.chd_risk_group
     , lcs.ckd_risk_group
     , lcs.copd_risk_group
@@ -197,11 +187,11 @@ select il.patient_id
     , lcs.hypertension_risk_group
     , coalesce(lcs.hr_hrc_ltc_lcs_conditions, array_construct()) as hr_hrc_ltc_lcs_conditions
     , zeroifnull(lcs.overall_risk_group_sort_key) as overall_risk_group_sort_key
-    , coalesce(lcs.overall_risk_group, 'None') as overall_risk_group -- matches source default (LR = lowest risk)
-    , coalesce(lcs.overall_risk_rank, 0) as overall_risk_rank -- matches source default (5 = lowest rank)
+    , coalesce(lcs.overall_risk_group, 'None') as overall_risk_group -- below source default for those not in MOC (LR = lowest risk)
+    , coalesce(lcs.overall_risk_rank, 6) as overall_risk_rank -- above source default for those not on MOC as is inverted scale (1 = highest rank)
     , coalesce(lcs.in_any_risk_group, false) as in_any_risk_group
-    , lcs.moc_stage_completed_label -- pathway descriptor: NULL = not on MOC pathway, left NULL
-    , lcs.moc_pathway_status -- pathway descriptor: NULL = not on MOC pathway, left NULL
+    , lcs.moc_stage_completed_label 
+    , lcs.moc_pathway_status 
     -- Current waiting list counts and flags
     ,zeroifnull(wl.wl_current_total_count) as wl_total_count
     ,zeroifnull(wl.wl_current_distinct_providers_count) as wl_provider_count
@@ -264,8 +254,6 @@ left join {{ref('fct_person_gp_recent')}} gpa
     on il.patient_id  = gpa.sk_patient_id
 left join {{ref('fct_person_medications_recent')}} rm
     on il.olids_id = rm.person_id
-left join  {{ ref('stg_c_ltcs_op_oe_ratio') }} rat
-    on il.patient_id  = rat.patient_id 
 left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
 left join {{ref('stg_aic_int_efi2_scores')}} fr
