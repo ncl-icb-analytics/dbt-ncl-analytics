@@ -57,7 +57,10 @@ IMD 2015 mapping is supplied and agreed.
 2. Run the normal source-generation pipeline (or its offline steps 2 and 3) so
    manual-source drift is checked and the raw models remain generated artifacts.
 3. Run `dbt seed --select sus_op_business_rules_sla`.
-4. Build `fct_sus_op_monthly+` so the monthly and consolidated facts are created.
+4. Build `+fct_sus_op_monthly fct_sus_op_consolidated` so the upstream Date Range
+   transformation and both facts are created. The leading `+` is required to
+   rebuild `int_sus_op_monthly`; building only the facts can reuse an older
+   intermediate relation.
 5. Compare row counts, commissioner allocation, business rules and contract types
    with the legacy output for at least one closed historical month and the latest
    complete month before publishing to downstream consumers.
