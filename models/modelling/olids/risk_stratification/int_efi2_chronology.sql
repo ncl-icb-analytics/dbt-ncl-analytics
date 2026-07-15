@@ -83,7 +83,7 @@ with
 
     -- Alcohol
     alcohol as (
-        select person_id, end_date, max(last_date) as last_date, 'MAX_ALCOHOL' as deficit
+        select person_id, end_date, max(weight) as weight, 'MAX_ALCOHOL' as deficit
         from deficit_weights
         where deficit = 'ALCOHOL' and has_deficit = true
         group by person_id, end_date
@@ -105,7 +105,7 @@ with
             deficit_weights dw
             on a.person_id = dw.person_id
             and a.end_date = dw.end_date
-            and a.last_date = dw.last_date
+            and a.weight = dw.weight
         where a.deficit = 'MAX_ALCOHOL'
     ),
 
