@@ -193,6 +193,34 @@ with
             and ma.detail_key = ew.detail_key
     ),
 
+    -- Present BMI — re-add persons who DO have a BMI reading in a deficit band
+    -- (obese / underweight), carrying the weight for that band. Counterpart to
+    -- missing_bmi_score, which only covers persons with no BMI reading at all.
+    -- BMI is excluded from the deficit_weights passthrough in all_scores because
+    -- the weights join (on deficit only) fans each BMI person across every BMI
+    -- detail_key (Obese / Underweight / MISSING); here we keep the single row
+    -- whose detail_key matches the person's band. Matched case-insensitively,
+    -- consistent with the deficit_weights join convention. Without this CTE only
+    -- the MISSING weight is ever scored and the obese / underweight weights reach
+    -- nobody.
+    present_bmi_score as (
+        select
+            person_id,
+            deficit,
+            other_instructions,
+            has_deficit,
+            sub_deficit,
+            end_date,
+            last_date,
+            detail_key,
+            weight
+        from deficit_weights
+        where
+            deficit = 'BMI'
+            and has_deficit = true
+            and lower(detail_key) = lower(sub_deficit)
+    ),
+
     -- Polypharmacy — count of distinct BNF sub-subchapters (level 3 - note not 
     -- real level so this is the agreed interpretation) among meds
     -- prescribed in the 90 days before end_date, per the eFI2 paper: "Number of
@@ -306,6 +334,7 @@ with
             "max_dementia",
             "max_alcohol",
             "missing_bmi_score",
+            "present_bmi_score",
             "missing_alcohol_score",
             "polypharmacy_score",
             "smoking_score",
