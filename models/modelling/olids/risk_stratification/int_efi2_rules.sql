@@ -430,7 +430,7 @@ with
             person_id,
             deficit,
             other_instructions,
-            count(result_value) > 0 as has_deficit,
+            count(*) > 0 as has_deficit,
             'MEMORY_CONCERNS' as sub_deficit,
             end_date,
             max(case when result_value > 0 then clinical_effective_date end) as last_date
@@ -599,6 +599,8 @@ with
             "activity_limitation",
             "anaemia",
             "atrial_fibrillation",
+            "daily_alcohol_intake",
+            "weekly_alcohol_intake"
             "bmi",
             "ckd_urine_prot",
             "ckd_urine_alb",
