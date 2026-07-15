@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: fct_sus_op_monthly
+    description: >-
+      Monthly SUS outpatient fact with commissioner attribution, legacy OP post
+      processing and the active outpatient business rules applied declaratively.
+    config:
+      meta:
+        owner:
+          name: Commissioning Analytics
+    columns:
+      - name: sk_encounter_id
+        description: Source outpatient encounter identifier.
+        data_tests:
+          - not_null
+          - unique
+      - name: source_extract_type
+        description: Extract type supplied by EncounterDenormalised_DateRange.
+      - name: zdatatype
+        description: Identifies the single Date Range source used by this model.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['DATE_RANGE']
+      - name: zccgcode
+        description: >-
+          Date-effective commissioner selected by practice, LSOA, hosted provider
+          and provider-postcode priority.
+      - name: zbusinessrule
+        description: Pipe-delimited list of matched active outpatient business rules.
+      - name: zcontracttype
+        description: Contract type produced by the migrated business-rule logic.
+
+  - name: fct_sus_op_consolidated
+    description: >-
+      Published consolidated outpatient fact, restricted to commissioning-access
+      records and excluding private-patient activity.
+    config:
+      meta:
+        owner:
+          name: Commissioning Analytics
+    columns:
+      - name: sk_encounter_id
+        description: Source outpatient encounter identifier.
+        data_tests:
+          - not_null
+          - unique
+      - name: zcommissioning_access
+        description: Legacy commissioning access status retained for publish filtering.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      - name: zorganisation_code_code_of_provider_merged
+        description: Current-care organisation code for the provider, falling back to the source provider.
+
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "coalesce(administrative_category, '00') not in ('02', '2')"

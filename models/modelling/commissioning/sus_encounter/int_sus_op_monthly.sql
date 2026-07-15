@@ -329,7 +329,12 @@ select
     , b.dw_nhs_number as znhs_number_pseudo
     , c.pod_description as zpod_level_4
     , null as zsensitive_data_category
-    , null as zccgcode
+    , {{ assign_sus_commissioner(
+        "coalesce(b.gp_practice_code_derived, b.gp_practice_code_original_data)",
+        "b.dv_lsoa",
+        "b.organisation_code_code_of_provider",
+        "b.appointment_date"
+      ) }} as zccgcode
     , null as zpctcode
     -- Original: CONCAT(RIGHT(YEAR(LEFT(dv_FinYear,4)),2), RIGHT(YEAR(RIGHT(dv_FinYear,4)),2))
     -- YEAR() applied to a string is invalid in Snowflake; preserving intent (last 2 digits of each 4-char half).
@@ -381,7 +386,8 @@ select
         else cast(left(b.dv_fin_year, 4) as varchar) || cast(b.dv_fin_month as varchar)
       end as zfinancialmonth
     , b.sk_patient_id
-    , 'CURRENT' as zdatatype
+    , b.dv_extract_type as source_extract_type
+    , 'DATE_RANGE' as zdatatype
     , b.sk_encounter_id
     , 'Current' as susversion
     , b.dv_spec_com_service_code_national

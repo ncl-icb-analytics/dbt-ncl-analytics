@@ -398,6 +398,16 @@ sources:
     domain: shared
     manual: true
 
+  # SUS commissioner handover reference tables - curated subset of the volatile
+  # analyst-managed schema. Raw models are generated from the manual source YAML.
+  - source_name: sus_commissioner_reference
+    database: DATA_LAKE__NCL
+    schema: ANALYST_MANAGED
+    description: Date-effective SUS commissioner attribution reference tables
+    raw_prefix: raw_sus_commissioner
+    domain: commissioning
+    manual: true
+
   # MYRIA - Project Myria (BEVC) canonical inputs. Two tables (ENROLLED_PATIENTS,
   # MATCHED_PATIENTS) loaded by DATA_LAKE__NCL.MYRIA.LOAD_NEW_FILES(). Manual so the
   # column list is controlled; FILE_DATE versions each upload.
