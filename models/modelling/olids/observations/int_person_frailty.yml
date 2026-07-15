@@ -1,0 +1,16 @@
+models:
+  - name: int_person_frailty
+    description: >
+      Consolidated person-level frailty (one row per person_id) combining AIC eFI2,
+      Rockwood Clinical Frailty Scale and the frailty register. Feeds
+      int_person_frailty_snapshot.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: person_id
+        description: "Person identifier; one row per person."
+        data_tests:
+          - unique
+          - not_null
