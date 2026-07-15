@@ -428,14 +428,19 @@ select
     dateadd('month', 12, moc_discussion_date) as moc_careplan_expires_date,
     -- Earliest anniversary across all 12m MOC events - the next date on which
     -- any currently-counted event drops out of the 12m window. Null if no events.
+    -- Uses the individual stage 2 substage dates (not moc_stage_2_date) so a
+    -- partial stage 2 still expires and a completed stage 2 expires on the
+    -- earlier substage anniversary.
     case
         when coalesce(
-            moc_check_test_date, moc_stage_2_date, moc_discussion_date,
+            moc_check_test_date, moc_remote_desktop_review_date,
+            moc_careplan_sharing_date, moc_discussion_date,
             moc_followup_date, moc_declined_date
         ) is null then null
         else dateadd('month', 12, least(
             coalesce(moc_check_test_date, '9999-12-31'::date),
-            coalesce(moc_stage_2_date, '9999-12-31'::date),
+            coalesce(moc_remote_desktop_review_date, '9999-12-31'::date),
+            coalesce(moc_careplan_sharing_date, '9999-12-31'::date),
             coalesce(moc_discussion_date, '9999-12-31'::date),
             coalesce(moc_followup_date, '9999-12-31'::date),
             coalesce(moc_declined_date, '9999-12-31'::date)
