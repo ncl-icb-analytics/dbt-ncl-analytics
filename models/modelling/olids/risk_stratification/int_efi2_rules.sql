@@ -520,7 +520,7 @@ with
             end_date,
             max(case when result_value > 0 then clinical_effective_date end) as last_date
         from rules_needed
-        where deficit = 'Smoker (ex)' and other_instructions = 'Cannot be current and ex smoker'
+        where deficit = 'Smoker (ex)' and other_instructions = 'Cannot be ex and current smoker'
         group by person_id, deficit, other_instructions, end_date
     ),
 
