@@ -12,8 +12,8 @@ encoding_features as (
         pd.age,
 
         -- multimorbidity and biopsychosocial complexity
-        pc.total_qof_conditions,
-        pc.mental_health_conditions,
+        zeroifnull(pc.total_qof_conditions) as total_qof_conditions,
+        zeroifnull(pc.mental_health_conditions) as mental_health_conditions,
         zeroifnull(ccms.cambridge_comorbidity_score) as cambridge_comorbidity_score,
         {{ encode_ltc_lcs_risk_group('lcs.chd_risk_group') }} as chd_risk_group_sort_key,
         {{ encode_ltc_lcs_risk_group('lcs.ckd_risk_group') }} as ckd_risk_group_sort_key,
@@ -34,6 +34,7 @@ encoding_features as (
         case when pc.has_stroke_tia = true then 1 else 0 end as has_stroke_tia_flag,
         zeroifnull(efi.efi_score) as efi2_score,
         case
+            when efi.category is null then 0
             when efi.category in ('Severe frailty', 'Very severe frailty') then 3
             when efi.category = 'Moderate frailty' then 2
             when efi.category = 'Mild frailty' then 1
@@ -41,21 +42,31 @@ encoding_features as (
         end as efi2_category_weight,
         zeroifnull(rockwood.rockwood_score) as rockwood_score,
         case
+            when rockwood.rockwood_score is null then 0
             when rockwood.rockwood_score >= 7 then 3
             when rockwood.rockwood_score >= 5 then 2
             when rockwood.rockwood_score >= 3 then 1
             else 0
         end as rockwood_category_weight,
-        fr.latest_frailty_severity as frailty_severity,
-        case when fr.latest_frailty_severity = 'Severe' then 3
+        case 
+            when fr.latest_frailty_severity is null then 0
+            when fr.latest_frailty_severity = 'Severe' then 3
             when fr.latest_frailty_severity = 'Moderate' then 2
             when fr.latest_frailty_severity = 'Mild' then 1
             else 0
         end as frailty_severity_weight,
 
         -- medicines management
-        case when polyp.is_polypharmacy_5plus then 1 else 0 end as polypharmacy_5plus_flag,
-        case when polyp.is_polypharmacy_10plus then 1 else 0 end as polypharmacy_10plus_flag,
+        case 
+            when polyp.is_polypharmacy_5plus is null then 0
+            when polyp.is_polypharmacy_5plus then 1 
+            else 0 
+            end as polypharmacy_5plus_flag,
+        case 
+            when polyp.is_polypharmacy_10plus is null then 0
+            when polyp.is_polypharmacy_10plus then 1 
+            else 0 
+            end as polypharmacy_10plus_flag,
         zeroifnull(polyp.medication_count) as medication_count,
 
         -- emergency use
@@ -66,7 +77,7 @@ encoding_features as (
         zeroifnull(apca.acs_nel_12mo) as acs_nel_12mo,
 
         -- residential / social factors
-        case when ch.is_care_home_resident = TRUE then 1 else 0 end as is_care_home_flag,
+        case when ch.is_care_home_resident = true then 1 else 0 end as is_care_home_flag,
         case when pc.has_palliative_care = true then 1 else 0 end as is_palliative_care_flag,
         case when ps.is_housebound = true then 1 else 0 end as is_housebound_flag,
         case when pc.has_learning_disability = true then 1 else 0 end as has_learning_disability_flag,
@@ -217,5 +228,5 @@ reweighted_scores as (
     from clipped_scores
 )
 select *,
-    greatest(0, round((raw_score_frailty + 3) / 6.0 * 100, 1) - (50 * score_exclusions)) as score_frailty
+    round((raw_score_frailty + 3) / 6.0 * 100, 1) as score_frailty
 from reweighted_scores
