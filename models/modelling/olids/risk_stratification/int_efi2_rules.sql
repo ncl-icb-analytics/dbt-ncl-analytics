@@ -120,6 +120,12 @@ with
                 when result_value >= 49
                 then 'Harmful drinking'
             end as other_instructions,
+            -- Per-reading risk flag: higher-risk (21-48) or harmful (49+) weekly units.
+            -- Alcohol scoring is not driven by this flag — int_efi2_chronology derives
+            -- the HARMFUL / PREVIOUS_HIGHER_HARMFUL state from the band labels and their
+            -- recency. It is retained so the alcohol rows carry the has_deficit column
+            -- the union projects, and as a meaningful risk indicator on the rules output.
+            result_value >= 21 as has_deficit,
             'WEEKLY_UNITS' as sub_deficit,
             end_date,
             clinical_effective_date as last_date
@@ -144,6 +150,10 @@ with
                 when result_value * 7 >= 49
                 then 'Harmful drinking'
             end as other_instructions,
+            -- Per-reading risk flag; daily units annualised to weekly (x 7) before
+            -- banding. See weekly_alcohol_intake — alcohol scoring is derived in
+            -- int_efi2_chronology, not from this flag.
+            result_value * 7 >= 21 as has_deficit,
             'DAILY_UNITS' as sub_deficit,
             end_date,
             clinical_effective_date as last_date
@@ -600,7 +610,7 @@ with
             "anaemia",
             "atrial_fibrillation",
             "daily_alcohol_intake",
-            "weekly_alcohol_intake"
+            "weekly_alcohol_intake",
             "bmi",
             "ckd_urine_prot",
             "ckd_urine_alb",

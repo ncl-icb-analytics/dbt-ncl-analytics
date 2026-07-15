@@ -81,32 +81,96 @@ with
             )
     ),
 
-    -- Alcohol
-    alcohol as (
-        select person_id, end_date, max(weight) as weight, 'MAX_ALCOHOL' as deficit
+    -- Alcohol — map each person's drinking history over the lookback window to one of
+    -- the weighted alcohol states. The window (5 years per spec p.3) is enforced
+    -- upstream by the alcohol codelist's time_constraint_years in
+    -- int_efi2_cohort_snomed_codes, so it is not re-applied here.
+    --
+    -- The weights table keys alcohol as HARMFUL / PREVIOUS_HIGHER_HARMFUL / MISSING,
+    -- NOT the raw reading bands ('Harmful drinking', 'Higher risk drinking', ...), so
+    -- the state cannot be string-matched from the band; it is derived from the reading
+    -- bands and their recency:
+    --   PREVIOUS_HIGHER_HARMFUL : any EARLIER-dated reading in the window was higher-risk
+    --                             or harmful. This takes precedence over HARMFUL and
+    --                             carries the larger weight (0.162 vs 0.027) regardless of
+    --                             the current reading — a documented history of heavy
+    --                             drinking is the stronger frailty signal, whether or not
+    --                             the person still drinks harmfully now.
+    --   HARMFUL                 : the most recent reading is harmful (49+ units/week) and
+    --                             there is no earlier higher/harmful reading (e.g. a lone
+    --                             current harmful reading, or an escalation from lower).
+    --   (neither)               : only ever zero / lower-risk -> no alcohol deficit
+    -- MISSING (no reading at all) is handled separately by missing_alcohol.
+    --
+    -- "Previous" is defined on earlier-dated readings only, so that a single current
+    -- harmful reading with no history still resolves to HARMFUL rather than making that
+    -- state unreachable. Confirm the precedence and the current-vs-previous split
+    -- against spec p.3 / the lds definition.
+    alcohol_readings as (
+        -- one row per person per alcohol reading (distinct collapses the weight
+        -- fan-out in deficit_weights), with the reading's band ranked by severity
+        select distinct
+            person_id,
+            end_date,
+            last_date,
+            case lower(other_instructions)
+                when 'harmful drinking' then 3
+                when 'higher risk drinking' then 2
+                when 'lower risk drinking' then 1
+                when 'zero alcohol' then 0
+            end as band_rank
         from deficit_weights
-        where deficit = 'ALCOHOL' and has_deficit = true
+        where deficit = 'ALCOHOL' and other_instructions is not null
+    ),
+
+    alcohol_ranked as (
+        select
+            person_id,
+            end_date,
+            last_date,
+            band_rank,
+            max(last_date) over (partition by person_id, end_date) as latest_date
+        from alcohol_readings
+        where band_rank is not null
+    ),
+
+    alcohol_state as (
+        select
+            person_id,
+            end_date,
+            case
+                -- a prior (earlier-dated) higher-risk/harmful reading wins, taking the
+                -- larger weight regardless of current status
+                when
+                    max(case when last_date < latest_date and band_rank >= 2 then 1 else 0 end)
+                    = 1
+                then 'PREVIOUS_HIGHER_HARMFUL'
+                -- else currently harmful (any latest-dated reading is harmful) with no
+                -- prior higher/harmful history
+                when
+                    max(case when last_date = latest_date and band_rank = 3 then 1 else 0 end)
+                    = 1
+                then 'HARMFUL'
+            end as detail_key
+        from alcohol_ranked
         group by person_id, end_date
     ),
 
     max_alcohol as (
         select
-            a.person_id,
-            a.deficit,
-            dw.other_instructions,
-            dw.has_deficit,
-            dw.sub_deficit,
-            dw.end_date,
-            dw.last_date,
-            dw.detail_key,
-            dw.weight
-        from alcohol a
-        left join
-            deficit_weights dw
-            on a.person_id = dw.person_id
-            and a.end_date = dw.end_date
-            and a.weight = dw.weight
-        where a.deficit = 'MAX_ALCOHOL'
+            s.person_id,
+            'MAX_ALCOHOL' as deficit,
+            cast(null as varchar) as other_instructions,
+            true as has_deficit,
+            'ALCOHOL' as sub_deficit,
+            s.end_date,
+            s.end_date as last_date,
+            s.detail_key,
+            ew.weight
+        from alcohol_state s
+        left join {{ ref("stg_aic_base_efi2_weights") }} ew
+            on lower(ew.deficit) = 'alcohol' and ew.detail_key = s.detail_key
+        where s.detail_key is not null
     ),
 
     -- Full scored population (one row per person), sourced from the patient_list
