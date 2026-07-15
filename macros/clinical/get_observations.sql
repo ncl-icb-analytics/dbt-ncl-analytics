@@ -62,7 +62,7 @@
         o.mapped_concept_display,
         o.episodicity_source_concept_id,
         o.age_at_event,
-        o.lds_start_datetime,
+        o.lds_transform_datetime,
         cc.cluster_id,
         cc.cluster_description,
         cc.code_description

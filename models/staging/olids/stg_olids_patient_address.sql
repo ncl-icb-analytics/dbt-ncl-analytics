@@ -5,17 +5,18 @@ select
     -- Business columns
     patient_id,
     address_type_source_concept_id,
-    postcode_hash,
+    postcode, -- REVIEW: plain postcode replaces the removed postcode_hash
+    is_home_address,
     start_date,
     end_date,
     person_id,
-    lds_id,
     publisher_organisation_code,
-    lds_datetime_first_acquired,
+    lds_transform_datetime,
 
     -- Metadata
-    lds_start_datetime,
+    lds_is_deleted,
     lds_source_record_id
 
 from {{ ref('raw_olids_patient_address') }}
-where person_id is not null
+where coalesce(lds_is_deleted, false) = false
+    and person_id is not null

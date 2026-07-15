@@ -59,10 +59,10 @@ ethnicity_changes AS (
 ),
 
 address_changes AS (
-    -- Get address changes over time (from person geography which uses SCD logic)
+    -- REVIEW: person geography now exposes plain postcode because the hash join was removed upstream.
     SELECT
         person_id,
-        postcode_hash,
+        postcode,
         address_start_date,
         address_end_date,
         primary_care_organisation as icb_code_resident,
@@ -182,7 +182,7 @@ address_for_periods AS (
     SELECT
         cp.person_id,
         cp.effective_start_date,
-        ac.postcode_hash,
+        ac.postcode,
         ac.icb_code_resident,
         ac.icb_resident,
         ac.local_authority_code,
@@ -231,7 +231,7 @@ periods_with_attributes AS (
         ec.ethnicity_display_sort_key,
 
         -- Address
-        ac.postcode_hash,
+        ac.postcode,
         ac.icb_code_resident,
         ac.icb_resident,
         ac.local_authority_code,
@@ -371,7 +371,7 @@ SELECT
     nbhd.neighbourhood_registered,
 
     -- Address Information
-    pwa.postcode_hash,
+    pwa.postcode,
     NULL AS uprn_hash,
     NULL::VARCHAR AS household_id,
 

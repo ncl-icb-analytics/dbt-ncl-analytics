@@ -10,17 +10,14 @@ select
     id,
     person_uuid,
 
-    -- Identifiers
-    matched_nhs_no_hash,
-
     -- Demographics
-    birth_year,
-    birth_month,
-    death_year,
-    death_month,
+    date_of_birth_year as birth_year,
+    date_of_birth_month as birth_month,
+    date_of_death_year as death_year,
+    date_of_death_month as death_month,
     death_notification_status,
-    postcode_hash,
-    sensitivity_flag,
+    postcode, -- REVIEW: plain postcode replaces the removed postcode_hash
+    patient_flagged_sensitive as sensitivity_flag,
 
     -- Registration
     gp_practice_code,
@@ -35,20 +32,12 @@ select
 
     -- Metadata
     lds_is_deleted,
-    lds_start_datetime,
-    -- person doesn't carry plain lds_datetime_first_acquired in the new schema —
-    -- only the *_person variants below.
-
-    -- New columns exposed by the 2026 OLIDS schema realignment (issue #747)
-    person_record_type,
-    person_version_id,
-    sk_patient_id,
-    lds_datetime_first_acquired_person,
-    lds_datetime_update_acquired_person
+    lds_source_record_id,
+    lds_transform_datetime
 from {{ ref('raw_olids_person') }}
 qualify row_number() over (
     partition by id
     order by gp_registration_date desc nulls last,
-             lds_start_datetime desc nulls last,
+             lds_transform_datetime desc nulls last,
              gp_practice_code desc nulls last
 ) = 1

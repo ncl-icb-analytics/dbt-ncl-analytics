@@ -84,7 +84,7 @@ SELECT
         WHEN practice_imd.imddecile IN (9, 10) THEN 'Least Deprived'
         ELSE NULL
     END AS practice_imd_quintile_19,
-    d.postcode_hash,
+    d.postcode, -- REVIEW: plain postcode replaces the removed postcode_hash.
     d.uprn_hash,
     d.registration_start_date,
     

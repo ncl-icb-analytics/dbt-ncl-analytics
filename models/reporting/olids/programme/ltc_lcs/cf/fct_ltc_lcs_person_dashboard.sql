@@ -41,7 +41,7 @@ SELECT
     demo.interpreter_type,
     
     -- Geographic and deprivation context
-    demo.postcode_hash,
+    demo.postcode, -- REVIEW: plain postcode replaces the removed postcode_hash.
     demo.uprn_hash,
     demo.lsoa_code_21,
     demo.lsoa_name_21,

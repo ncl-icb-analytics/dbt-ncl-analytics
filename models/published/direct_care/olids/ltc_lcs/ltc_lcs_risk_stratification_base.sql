@@ -16,7 +16,7 @@ select
     d.person_id,
     d.sk_patient_id,
     pseudo.hx_flake,
-    d.postcode_hash,
+    d.postcode, -- REVIEW: plain postcode replaces the removed postcode_hash.
     d.uprn_hash,
 
     -- ============================================================

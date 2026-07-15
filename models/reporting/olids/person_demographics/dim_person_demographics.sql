@@ -108,7 +108,7 @@ WITH base AS (
         hist.neighbourhood_registered,
 
         -- Address Information
-        hist.postcode_hash,
+        hist.postcode, -- REVIEW: plain postcode replaces the removed postcode_hash.
         hist.uprn_hash,
         hist.household_id,
 

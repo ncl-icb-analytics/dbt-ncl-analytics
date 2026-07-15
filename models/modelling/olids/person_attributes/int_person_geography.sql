@@ -6,7 +6,7 @@
 
 /*
 Person Geography
-Geographic mapping for persons including postcode hash, LSOA, borough, neighbourhood and IMD.
+Geographic mapping for persons including postcode, LSOA, borough, neighbourhood and IMD.
 Uses refactored intermediate geography tables for clean separation of concerns.
 All geographic joins are LEFT JOINs as not everyone lives in London/NCL boundaries.
 */
@@ -21,7 +21,7 @@ current_addresses AS (
     -- Get the latest address for each person using SCD2 logic
     SELECT
         pa.person_id,
-        pa.postcode_hash,
+        pa.postcode,
         pa.start_date,
         pa.end_date
     FROM {{ ref('stg_olids_patient_address') }} pa
@@ -29,29 +29,32 @@ current_addresses AS (
     INNER JOIN valid_persons vp
         ON pa.person_id = vp.person_id
     WHERE pa.person_id IS NOT NULL
-        AND pa.postcode_hash IS NOT NULL
+        AND pa.postcode IS NOT NULL
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY pa.person_id
         ORDER BY
             CASE WHEN pa.end_date IS NULL THEN 0 ELSE 1 END,  -- Active addresses first
             pa.start_date DESC NULLS LAST,
-            pa.lds_datetime_first_acquired DESC NULLS LAST
+            pa.lds_transform_datetime DESC NULLS LAST
     ) = 1
 ),
 
 postcode_geography AS (
-    -- Get the latest geography data for each postcode hash
+    -- REVIEW: Dictionary.dbo.Postcode replaces the removed address-to-hash join.
     SELECT
-        postcode_hash,
+        postcode_no_space,
         primary_care_organisation,
-        local_authority_organisation,
-        yr_2011_lsoa,
-        yr_2011_msoa,
-        yr_2021_lsoa,
-        yr_2021_msoa
-    FROM {{ ref('stg_olids_postcode_hash') }}
-    WHERE is_latest = TRUE
-        AND postcode_hash IS NOT NULL
+        local_authority_district_unitary_authority as local_authority_organisation,
+        yr2011_lsoa as yr_2011_lsoa,
+        yr2011_msoa as yr_2011_msoa,
+        lsoa as yr_2021_lsoa, -- REVIEW: generic current LSOA is treated as the 2021 code.
+        msoa as yr_2021_msoa -- REVIEW: generic current MSOA is treated as the 2021 code.
+    FROM {{ ref('stg_dictionary_dbo_postcode') }}
+    WHERE postcode_no_space IS NOT NULL
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY postcode_no_space
+        ORDER BY date_of_termination DESC NULLS FIRST, last_updated DESC NULLS LAST
+    ) = 1
 ),
 
 neighbourhood_reference AS (
@@ -80,7 +83,7 @@ london_areas AS (
 
 SELECT
     ca.person_id,
-    ca.postcode_hash,
+    ca.postcode, -- REVIEW: plain postcode replaces the removed postcode_hash output.
     ca.start_date as address_start_date,
     ca.end_date as address_end_date,
     CASE WHEN ca.end_date IS NULL THEN TRUE ELSE FALSE END as is_current_address,
@@ -135,7 +138,7 @@ SELECT
 
 FROM current_addresses ca
 LEFT JOIN postcode_geography pg
-    ON ca.postcode_hash = pg.postcode_hash
+    ON REGEXP_REPLACE(UPPER(TRIM(ca.postcode)), '\\s+', '') = pg.postcode_no_space
 
 -- Join geographic mappings for names
 LEFT JOIN {{ ref('int_geography_mappings') }} pco_map

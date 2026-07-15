@@ -164,7 +164,7 @@ sources:
   # OLIDS Core Tables
   - source_name: olids
     database: DATA_LAKE
-    schema: OLIDS
+    schema: OLIDS_EXPERIMENTAL
     description: OLIDS stable layer - cleaned and filtered patient records
     raw_prefix: raw_olids
     domain: olids
