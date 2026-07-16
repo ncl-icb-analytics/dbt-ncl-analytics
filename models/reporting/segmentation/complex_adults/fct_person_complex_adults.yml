@@ -1,9 +1,10 @@
 models:
   - name: fct_person_complex_adults
     description: 'Complex adults cohort v1.0. One row per person meeting all criteria:
-      age >= 18 with active GP registration, AND (moderate/severe frailty OR 3+ included
-      LTCs), AND (>=2 NEL admissions OR >=3 Type 1 ED attendances in last 12 months,
-      OR housebound).
+      age >= 18, AND (moderate/severe frailty OR 3+ included LTCs), AND (>=2 NEL
+      admissions OR >=3 Type 1 ED attendances in last 12 months, OR housebound).
+      Includes all persons regardless of registration status; filter is_active = TRUE
+      for the currently registered population.
 
       Included LTCs (15): AF, asthma, CHD, CKD, COPD, dementia, depression, diabetes,
       epilepsy, heart failure, hypertension, SMI, stroke/TIA, Parkinson''s, anxiety.
@@ -26,6 +27,8 @@ models:
           - not_null
       - name: sk_patient_id
         description: Pseudonymised patient key for joining to SUS activity
+      - name: is_active
+        description: Currently registered with an NCL GP practice
       - name: age
         description: Current age (>= 18 for all cohort members)
       - name: ltc_count

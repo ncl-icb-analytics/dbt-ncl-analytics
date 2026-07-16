@@ -6,9 +6,11 @@
 
 -- Complex Adults Cohort v1.0
 -- One row per person meeting all cohort criteria:
---   Age >= 18 with active GP registration
+--   Age >= 18
 --   AND (moderate/severe frailty OR 3+ included LTCs)
 --   AND (>=2 NEL admissions OR >=3 Type 1 ED attendances in last 12 months, OR housebound)
+-- Includes all persons regardless of registration status; filter is_active = TRUE
+-- for the currently registered population.
 -- Included LTCs (15): AF, Asthma, CHD, CKD, COPD, Dementia, Depression, Diabetes,
 -- Epilepsy, Heart Failure, Hypertension, SMI, Stroke/TIA, Parkinson's, Anxiety.
 -- ED attendances are Type 1 A&E only (excludes UTC, WiC, specialty A&E, SDEC).
@@ -44,6 +46,7 @@ WITH ltc AS (
 SELECT
     d.person_id,
     d.sk_patient_id,
+    d.is_active,
     d.age,
     d.gender,
     d.practice_code,
@@ -90,8 +93,7 @@ LEFT JOIN {{ ref('fct_person_sus_ip_recent') }} AS ip
     ON d.sk_patient_id = ip.sk_patient_id
 LEFT JOIN {{ ref('fct_person_sus_ae_recent') }} AS ae
     ON d.sk_patient_id = ae.sk_patient_id
-WHERE d.is_active = TRUE
-    AND d.age >= 18
+WHERE d.age >= 18
     -- Clinical complexity
     AND (
         COALESCE(f.latest_frailty_severity IN ('Moderate', 'Severe'), FALSE)
