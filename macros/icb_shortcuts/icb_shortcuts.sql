@@ -43,9 +43,9 @@ Sub-ICB level geographies without hardcoding values or performing a join.
 {% endmacro %}
 
 {% macro nwl_borough_names() %}
-    {{ to_sql_list(var('nwl_borough_names', ['Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow', 'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'West London'])) }}
+    {{ to_sql_list(var('nwl_borough_names', ['Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow', 'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster', 'West London'])) }}
 {% endmacro %}
 
 {% macro nwl_borough_codes() %}
-    {{ to_sql_list(var('nwl_borough_codes', ['E09000005', 'E09000009', 'E09000013', 'E09000015', 'E09000017', 'E09000018', 'E09000020'])) }}
+    {{ to_sql_list(var('nwl_borough_codes', ['E09000005', 'E09000009', 'E09000013', 'E09000015', 'E09000017', 'E09000018', 'E09000020', 'E09000033'])) }}
 {% endmacro %}
