@@ -114,7 +114,14 @@ select il.patient_id
 
     -- mulimorb flags: NULL = not computed.
     , ccms.cambridge_comorbidity_score
-    -- Lifestyle and behavioural factors
+
+    -- risk
+    , qrk.qrisk_score
+    , qrk.qrisk_type
+    , qrk.cvd_risk_category
+    , qrk.warrants_statin_consideration -- add actionable flag cross referencing statin prescription
+       
+      -- Lifestyle and behavioural factors
     , coalesce(br.smoking_status, 'Not Recorded') as smoking_status
     , coalesce(br.smoking_risk_sort_key, 0) as smoking_risk_sort_key
     , coalesce(br.bmi_category, 'Not Recorded') as bmi_category
@@ -256,7 +263,7 @@ left join {{ref('fct_person_medications_recent')}} rm
     on il.olids_id = rm.person_id
 left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
-left join {{ref('stg_aic_int_efi2_scores')}} fr
+left join {{ref('dim_person_efi2')}} fr
     on il.olids_id = fr.person_id
 left join {{ref('dim_person_ccms')}} ccms
     on il.olids_id = ccms.person_id
@@ -268,3 +275,5 @@ left join {{ref('fct_person_asc_service_recent')}} asc_cld
     on il.patient_id = asc_cld.sk_patient_id
 LEFT JOIN {{ref('dim_person_care_home')}} ch
     on il.olids_id = ch.person_id
+left join {{ref('int_qrisk_latest')}} qrk
+    on il.olids_id = qrk.person_id
