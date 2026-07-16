@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: stg_ers_ubrn_action
+    description: "Staging model for eRS UBRN action events (ebsx02UBRNAction), deduplicated (INNER JOIN on raw_ers_pc_activesubmission) to active submissions only.\nContact: Jonathan.Linney@nhs.net"
+    config:
+      meta:
+        owner:
+          name: Jonathan Linney
+    columns:
+      - name: action_id
+        description: "Unique identifier for a single UBRN action event, deduplicated across resubmissions via join to ActiveSubmission"
+        tests:
+          - unique
+          - not_null
+      - name: ubrn_id
+        description: "Unique Booking Reference Number (UBRN) identifier"
+        tests:
+          - not_null
+      - name: action_cd
+        description: "eRS action code (e.g. 1422 = referral, 1420/1533 = accepted, 1424 = rejected)"
+        tests:
+          - not_null:
+              config:
+                severity: warn
+      - name: action_dt_tm
+        description: "Date/time the action occurred"
+        tests:
+          - not_null
+      - name: provider_org_id
+        description: "Provider organisation ID associated with this action"
+      - name: uniq_submission_id
+        description: "Submission batch identifier this action record was ingested under"
