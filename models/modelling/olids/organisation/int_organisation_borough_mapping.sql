@@ -23,10 +23,12 @@ and W2U3Z survived the 2026-04 ICB merger and were re-parented to Z9B2Z. Names
 are curated for the WNL pair (the post-merger ODS names are unreadable, e.g.
 "NHS WEST AND NORTH LONDON ICB - 93C").
 
-Legacy ICB: the RO98 commissioner's RO261 parent in ODS, excluding the merged
-WNL ICB (Z9B2Z). Recovers the pre-2026-04-01 NCL (QMJ) / NWL (QRV) system
-identities (legally dissolved 2026-03-31 but operationally extant in ODS).
-For non-merged ICBs the legacy ICB equals the ICB itself.
+Legacy ICB: the pre-2026-04-01 ICB identity (QMJ = NCL, QRV = NWL) from the
+sub_icb_to_legacy_icb seed. ODS carried these RO261 edges after the merger
+but has since purged them from OrganisationDescendent (the sub-ICB locations
+now have no ancestor rows at all), so the dissolved hierarchy is pinned as
+static reference data. For non-merged ICBs the legacy ICB equals the ICB
+itself.
 
 Special handling:
 - Medicus Select Care (Y03103) manually assigned to Enfield borough.
@@ -77,25 +79,16 @@ practice_pcn AS (
         AND stp_code IN ('Z9B2Z', 'QMJ', 'QMF', 'QRV', 'QWE', 'QKK')  -- All London ICBs (Z9B2Z = merged WNL from Apr 2026; QMJ/QRV retained as legacy)
 ),
 
--- Commissioner (RO98) -> legacy ICB (RO261) lookup direct from ODS.
--- Exclude Z9B2Z as parent so we keep the pre-merger NCL (QMJ) / NWL (QRV)
--- edges that NHSE marked ended but did not delete. For non-merged ICBs
--- (QMF, QKK, QWE, A3A8R, 72Q, 36L) this resolves to the ICB itself.
+-- Commissioner (RO98) -> pre-merger ICB from static seed. Previously derived
+-- from OrganisationDescendent RO261 parent edges; ODS has purged those edges
+-- so the mapping is pinned as reference data. A new commissioner code missing
+-- from the seed surfaces as a null legacy_icb_code via the not_null test.
 commissioner_to_legacy_icb AS (
     SELECT
-        od.organisation_code_child  AS commissioner_code,
-        od.organisation_code_parent AS legacy_icb_code,
-        org.organisation_name       AS legacy_icb_name
-    FROM {{ ref('stg_dictionary_dbo_organisationdescendent') }} od
-    LEFT JOIN {{ ref('stg_dictionary_dbo_organisation') }} org
-        ON od.organisation_code_parent = org.organisation_code
-    WHERE od.depth = 1
-        AND od.organisation_primary_role_parent = 'RO261'
-        AND od.organisation_code_parent <> 'Z9B2Z'
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY od.organisation_code_child
-        ORDER BY od.relationship_end_date DESC NULLS LAST
-    ) = 1
+        sub_icb_code AS commissioner_code,
+        legacy_icb_code,
+        legacy_icb_name
+    FROM {{ ref('sub_icb_to_legacy_icb') }}
 ),
 
 -- Sub-ICB display names: curated for the WNL pair (post-merger ODS names are

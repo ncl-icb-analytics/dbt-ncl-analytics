@@ -1,6 +1,9 @@
 models:
   - name: stg_reference_ncl_neighbourhood_lsoa_2021
-    description: LSOA 2021 to NCL neighbourhood mapping
+    description: 'NCL LSOA 2021 to neighbourhood (INT) mapping from
+      REFERENCE.GEO.NEIGHBOURHOOD_LSOA. Codes/names use the canonical REFERENCE
+      scheme (BAR01 / "Barnet: East"). Name kept for compatibility; no longer
+      reads DATA_LAKE__NCL.ANALYST_MANAGED.'
     config:
       meta:
         owner:
@@ -8,20 +11,18 @@ models:
     columns:
       - name: lsoa_2021_code
         description: Primary key - LSOA 2021 code
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: lsoa_2021_name
         description: LSOA 2021 name
       - name: neighbourhood_code
-        description: NCL neighbourhood code
-        tests:
+        description: Neighbourhood (INT) code, canonical REFERENCE scheme (e.g. BAR01)
+        data_tests:
           - not_null
       - name: neighbourhood_name
-        description: NCL neighbourhood name
-      - name: start_date
-        description: Mapping effective start date
-    tests:
+        description: 'Neighbourhood (INT) name, canonical REFERENCE scheme (e.g. "Barnet: East")'
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
