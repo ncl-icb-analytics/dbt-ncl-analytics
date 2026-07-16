@@ -2,13 +2,14 @@ models:
   - name: fct_person_complex_adults
     description: 'Complex adults cohort v1.0. One row per person meeting all criteria:
       age >= 18, AND (moderate/severe frailty OR 3+ included LTCs), AND (>=2 NEL
-      admissions OR >=3 Type 1 ED attendances in last 12 months, OR housebound).
+      admissions OR >=3 ED attendances in last 12 months, OR housebound).
       Includes all persons regardless of registration status; filter is_active = TRUE
       for the currently registered population.
 
       Included LTCs (15): AF, asthma, CHD, CKD, COPD, dementia, depression, diabetes,
       epilepsy, heart failure, hypertension, SMI, stroke/TIA, Parkinson''s, anxiety.
-      ED attendances are Type 1 A&E only. 12-month windows are rolling from the build date.'
+      ED attendances count all urgent & emergency care settings from ECDS (Type 1/2
+      A&E, UTC, WiC, SDEC). 12-month windows are rolling from the build date.'
 
     tests:
       - dbt_utils.at_least_one:
@@ -40,6 +41,6 @@ models:
       - name: nel_admissions_12mo
         description: Non-elective admissions in last 12 months (SUS APC, admission methods 2x, births excluded)
       - name: ed_attendances_12mo
-        description: Type 1 A&E attendances in last 12 months (ECDS department type 01; excludes UTC, WiC, specialty A&E, SDEC)
+        description: Urgent & emergency care attendances in last 12 months (ECDS, all department types - Type 1/2 A&E, UTC, WiC, SDEC)
       - name: is_housebound
         description: Latest housebound status is housebound

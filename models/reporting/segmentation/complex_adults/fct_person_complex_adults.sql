@@ -8,12 +8,13 @@
 -- One row per person meeting all cohort criteria:
 --   Age >= 18
 --   AND (moderate/severe frailty OR 3+ included LTCs)
---   AND (>=2 NEL admissions OR >=3 Type 1 ED attendances in last 12 months, OR housebound)
+--   AND (>=2 NEL admissions OR >=3 ED attendances in last 12 months, OR housebound)
 -- Includes all persons regardless of registration status; filter is_active = TRUE
 -- for the currently registered population.
 -- Included LTCs (15): AF, Asthma, CHD, CKD, COPD, Dementia, Depression, Diabetes,
 -- Epilepsy, Heart Failure, Hypertension, SMI, Stroke/TIA, Parkinson's, Anxiety.
--- ED attendances are Type 1 A&E only (excludes UTC, WiC, specialty A&E, SDEC).
+-- ED attendances count all urgent & emergency care settings from ECDS
+-- (Type 1/2 A&E, UTC, WiC, SDEC).
 -- 12-month windows are rolling from the build date.
 
 WITH ltc AS (
@@ -79,7 +80,7 @@ SELECT
 
     -- Utilisation
     ZEROIFNULL(ip.apc_nel_12mo) AS nel_admissions_12mo,
-    ZEROIFNULL(ae.ae_t1_12mo) AS ed_attendances_12mo,
+    ZEROIFNULL(ae.ae_tot_12mo) AS ed_attendances_12mo,
     COALESCE(h.is_housebound, FALSE) AS is_housebound
 
 FROM {{ ref('dim_person_demographics') }} AS d
@@ -102,6 +103,6 @@ WHERE d.age >= 18
     -- Utilisation or housebound
     AND (
         ip.apc_nel_12mo >= 2
-        OR ae.ae_t1_12mo >= 3
+        OR ae.ae_tot_12mo >= 3
         OR h.is_housebound = TRUE
     )
