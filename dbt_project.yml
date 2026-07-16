@@ -105,6 +105,7 @@ models:
         +schema: "COMMISSIONING_REPORTING"
       segmentation:
         +schema: "SEGMENTATION"
+        +tags: ["daily"]
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
       olids:
