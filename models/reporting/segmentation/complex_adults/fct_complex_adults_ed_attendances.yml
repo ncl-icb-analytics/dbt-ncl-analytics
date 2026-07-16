@@ -1,0 +1,25 @@
+models:
+  - name: fct_complex_adults_ed_attendances
+    description: 'Type 1 A&E attendances in the last 12 months for complex adults
+      cohort members. One row per attendance with arrival/departure date and time,
+      provider, site, chief complaint and primary diagnosis.'
+
+    tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+
+    columns:
+      - name: visit_occurrence_id
+        description: Unique identifier for the attendance
+        tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: Person identifier (cohort member)
+        tests:
+          - not_null
