@@ -45,8 +45,8 @@ vars:
   nwl_trust_codes_acute: ['RAS', RYJ', 'RQM', 'R1K']
   nwl_trust_codes_full: ['RAS', RYJ', 'RQM', 'R1K', 'RKL', 'RV3', 'RYX']
   ##Provisional, not clear if 'West London' should be included
-  nwl_borough_names: ['Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow', 'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'West London']
-  nwl_borough_codes: ['E09000005', 'E09000009', 'E09000013', 'E09000015', 'E09000017', 'E09000018', 'E09000020']
+  nwl_borough_names: ['Brent', 'Ealing', 'Hammersmith and Fulham', 'Harrow', 'Hillingdon', 'Hounslow', 'Kensington and Chelsea', 'Westminster', 'West London']
+  nwl_borough_codes: ['E09000005', 'E09000009', 'E09000013', 'E09000015', 'E09000017', 'E09000018', 'E09000020', 'E09000033']
 
 # Configure test failure storage (only for failures)
 tests:
