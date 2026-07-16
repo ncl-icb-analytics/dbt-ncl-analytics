@@ -428,6 +428,36 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- reference_primary_care: Curated primary care organisation reference - practices, PCNs, neighbourhoods and memberships
+  SELECT 
+    'REFERENCE' as database_name,
+    'PRIMARY_CARE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "REFERENCE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'PRIMARY_CARE'
+  
+  UNION ALL
+  
+    -- reference_geo: Curated geography lookups - LSOA to neighbourhood, ward, MSOA and ICB hierarchies
+  SELECT 
+    'REFERENCE' as database_name,
+    'GEO' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "REFERENCE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'GEO'
+  
+  UNION ALL
+  
     -- local_provider_flows: Providers submissions from PID environment via MESH
   SELECT 
     'DATA_LAKE' as database_name,
@@ -560,6 +590,21 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'MYRIA'
+  
+  UNION ALL
+  
+    -- nhs_payments_gp: NHS Payments to General Practice - annual practice-level registered and Carr-Hill weighted list sizes
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'NHS_PAYMENTS_GP' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'NHS_PAYMENTS_GP'
   
   UNION ALL
   

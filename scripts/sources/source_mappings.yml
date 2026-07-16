@@ -257,6 +257,40 @@ sources:
   # Additional OLIDS sources can be added here if needed
 
   # ========================================
+  # REFERENCE [curated reference database]
+  # ========================================
+  # Curated practice/PCN/neighbourhood and geography reference data.
+  # Replaces MODELLING.LOOKUP_NCL and DATA_LAKE__NCL.ANALYST_MANAGED for
+  # these domains. Table lists are explicit: the schemas also hold geometry,
+  # export views and app-internal tables that dbt should not pull.
+
+  - source_name: reference_primary_care
+    database: REFERENCE
+    schema: PRIMARY_CARE
+    description: Curated primary care organisation reference - practices, PCNs, neighbourhoods and memberships
+    raw_prefix: raw_reference_primary_care
+    domain: shared
+    tables:
+      - PRACTICE_ACTIVE
+      - PRACTICE_ALL
+      - PCN_CURRENT
+      - PCN_MEMBERSHIP_ALL
+      - NEIGHBOURHOOD_CURRENT
+      - PRACTICE_SUCCESSION
+
+  - source_name: reference_geo
+    database: REFERENCE
+    schema: GEO
+    description: Curated geography lookups - LSOA to neighbourhood, ward, MSOA and ICB hierarchies
+    raw_prefix: raw_reference_geo
+    domain: shared
+    tables:
+      - NEIGHBOURHOOD_LSOA
+      - LSOA_WARD_EW
+      - LSOA_WIDER_LOOKUP
+      - LSOA21_SICBL26_ICB26_NHSER26_LAD26
+
+  # ========================================
   # MESH IN-FLOW Via PID Environment
   # ========================================
 
