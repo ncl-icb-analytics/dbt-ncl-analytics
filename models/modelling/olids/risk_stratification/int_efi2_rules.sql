@@ -596,7 +596,7 @@ with
             end_date,
             clinical_effective_date as last_date
         from {{ ref("int_efi2_cohort_snomed_codes") }}
-        where other_instructions is null
+        where other_instructions is null and deficit <> 'BMI' -- high BMI passthrough - 95% missing label
 
         union all
 

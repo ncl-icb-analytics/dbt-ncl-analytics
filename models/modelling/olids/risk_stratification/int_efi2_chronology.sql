@@ -218,7 +218,7 @@ with
         left join
             {{ ref("stg_aic_base_efi2_weights") }} ew
             on lower(mb.deficit) = lower(ew.deficit)
-            and mb.detail_key = ew.detail_key
+            and lower(mb.detail_key) = lower(ew.detail_key)
     ),
 
     missing_alcohol as (
