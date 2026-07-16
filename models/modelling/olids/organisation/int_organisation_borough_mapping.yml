@@ -14,10 +14,10 @@ models:
       through (93C = North Central London, W2U3Z = North West London) — the codes
       national datasets (SLAM/SUS/EPD) carry. Names curated for the WNL pair.
 
-      • Legacy ICB (pre-merger NCL / NWL system identity) derived from the RO98
-      commissioner''s RO261 parent in ODS, excluding the merged WNL ICB (Z9B2Z).
-      Preserves the QMJ/QRV identities (legally dissolved 2026-03-31, operationally
-      extant). Non-merged ICBs resolve to themselves.
+      • Legacy ICB (pre-merger NCL / NWL system identity) from the
+      sub_icb_to_legacy_icb seed. ODS purged the RO261 parent edges after the
+      2026-04 merger, so the dissolved hierarchy is pinned as static reference
+      data. Non-merged ICBs resolve to themselves.
 
       • PCN borough from majority member borough; PCN sub-ICB from the PCN''s single
       commissioner (verified one-to-one).
@@ -63,13 +63,14 @@ models:
         tests:
           - not_null
       - name: legacy_icb_code
-        description: 'Pre-merger ICB ODS code (RO261 parent): QMJ (NCL) or QRV (NWL) —
-          legally dissolved 2026-03-31 but retained in ODS. For ICBs that have not
-          merged: the ICB code itself (QMF, QKK, QWE).'
+        description: 'Pre-merger ICB ODS code from the sub_icb_to_legacy_icb seed:
+          QMJ (NCL) or QRV (NWL) — legally dissolved 2026-03-31 and since purged
+          from ODS. For ICBs that have not merged: the ICB code itself (QMF, QKK,
+          QWE).'
         tests:
           - not_null
       - name: legacy_icb_name
-        description: 'Pre-merger ICB display name from Dictionary.Organisation.'
+        description: 'Pre-merger ICB display name from the sub_icb_to_legacy_icb seed.'
       - name: network_code
         description: 'Primary Care Network (PCN) identifier that the practice belongs to.'
       - name: pcn_borough
