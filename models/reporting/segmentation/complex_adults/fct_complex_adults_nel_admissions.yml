@@ -5,9 +5,10 @@ models:
       length of stay, admission method and provider. End dates are imputed upstream
       for open/incomplete spells.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
-          column_name: person_id
+          arguments:
+            column_name: person_id
 
     config:
       meta:
@@ -17,10 +18,10 @@ models:
     columns:
       - name: visit_occurrence_id
         description: Unique identifier for the spell
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id
         description: Person identifier (cohort member)
-        tests:
+        data_tests:
           - not_null

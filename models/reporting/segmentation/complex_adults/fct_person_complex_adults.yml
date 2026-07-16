@@ -11,9 +11,10 @@ models:
       ED attendances count all urgent & emergency care settings from ECDS (Type 1/2
       A&E, UTC, WiC, SDEC). 12-month windows are rolling from the build date.'
 
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
-          column_name: person_id
+          arguments:
+            column_name: person_id
 
     config:
       meta:
@@ -23,7 +24,7 @@ models:
     columns:
       - name: person_id
         description: Unique identifier for the person
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sk_patient_id
