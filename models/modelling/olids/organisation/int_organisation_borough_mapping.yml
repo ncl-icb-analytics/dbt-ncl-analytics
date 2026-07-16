@@ -38,7 +38,7 @@ models:
     columns:
       - name: practice_code
         description: 'GP practice identifier. Unique after the practice-grain dedup.'
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: borough_registered
@@ -54,20 +54,20 @@ models:
           93C = North Central London, W2U3Z = North West London (both re-parented to
           Z9B2Z at the 2026-04 merger). Matches the commissioner codes in national
           datasets (SLAM/SUS/EPD).'
-        tests:
+        data_tests:
           - not_null
       - name: sub_icb_name
         description: 'Sub-ICB display name. Curated for the WNL pair (NHS North Central
           London / NHS North West London — the post-merger ODS names are unreadable);
           dictionary commissioner name otherwise.'
-        tests:
+        data_tests:
           - not_null
       - name: legacy_icb_code
         description: 'Pre-merger ICB ODS code from the sub_icb_to_legacy_icb seed:
           QMJ (NCL) or QRV (NWL) — legally dissolved 2026-03-31 and since purged
           from ODS. For ICBs that have not merged: the ICB code itself (QMF, QKK,
           QWE).'
-        tests:
+        data_tests:
           - not_null
       - name: legacy_icb_name
         description: 'Pre-merger ICB display name from the sub_icb_to_legacy_icb seed.'

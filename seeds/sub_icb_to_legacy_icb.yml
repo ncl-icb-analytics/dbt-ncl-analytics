@@ -10,6 +10,9 @@ seeds:
       legacy ICB is the ICB itself. Codes verified against
       Dictionary.dbo.Organisation.
     config:
+      meta:
+        owner:
+          name: EddieDavison92
       column_types:
         sub_icb_code: varchar(10)
         legacy_icb_code: varchar(10)
