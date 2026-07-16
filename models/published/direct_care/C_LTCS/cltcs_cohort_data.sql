@@ -122,6 +122,11 @@ select il.patient_id
     , br.bmi_risk_sort_key
     , br.alcohol_status
     , br.alcohol_risk_sort_key
+    -- risk
+    , qrk.qrisk_score
+    , qrk.qrisk_type
+    , qrk.cvd_risk_category
+    , qrk.warrants_statin_consideration -- add actionable flag cross referencing statin prescription
     -- social care usage
     , asc_cld.borough_name
     , asc_cld.service_type
@@ -260,7 +265,7 @@ left join  {{ ref('stg_c_ltcs_op_oe_ratio') }} rat
     on il.patient_id  = rat.patient_id 
 left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
-left join {{ref('stg_aic_int_efi2_scores')}} fr
+left join {{ref('dim_person_efi2')}} fr
     on il.olids_id = fr.person_id
 left join {{ref('dim_person_ccms')}} ccms
     on il.olids_id = ccms.person_id
@@ -272,3 +277,5 @@ left join {{ref('fct_person_asc_service_recent')}} asc_cld
     on il.patient_id = asc_cld.sk_patient_id
 LEFT JOIN {{ref('dim_person_care_home')}} ch
     on il.olids_id = ch.person_id
+left join {{ref('int_qrisk_latest')}} qrk
+    on il.olids_id = qrk.person_id

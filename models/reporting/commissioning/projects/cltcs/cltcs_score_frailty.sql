@@ -34,9 +34,9 @@ encoding_features as (
         case when pc.has_stroke_tia = true then 1 else 0 end as has_stroke_tia_flag,
         zeroifnull(efi.efi_score) as efi2_score,
         case
-            when efi.category in ('Severe frailty', 'Very severe frailty') then 3
-            when efi.category = 'Moderate frailty' then 2
-            when efi.category = 'Mild frailty' then 1
+            when lower(efi.category) = 'severe frailty' then 3
+            when lower(efi.category) = 'moderate frailty' then 2
+            when lower(efi.category) = 'mild frailty' then 1
             else 0
         end as efi2_category_weight,
         zeroifnull(rockwood.rockwood_score) as rockwood_score,
@@ -101,7 +101,7 @@ encoding_features as (
         on il.person_id =bp.person_id
     left join {{ ref('dim_person_ccms') }} ccms
         on il.person_id =ccms.person_id
-    left join {{ ref('stg_aic_int_efi2_scores') }} efi
+    left join {{ ref('dim_person_efi2') }} efi
         on il.person_id =efi.person_id
     left join {{ ref('fct_person_frailty_register') }} fr
         on il.person_id =fr.person_id
