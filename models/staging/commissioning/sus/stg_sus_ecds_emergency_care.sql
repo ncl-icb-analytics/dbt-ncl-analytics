@@ -35,4 +35,4 @@ select primarykey_id
     , patient_usual_address_index_of_multiple_deprivation_decile
     , patient_gp_registration_general_practice
  
-from {{ ref('raw_sus_ae_emergency_care') }}
+from {{ ref('raw_sus_ecds_emergency_care') }}

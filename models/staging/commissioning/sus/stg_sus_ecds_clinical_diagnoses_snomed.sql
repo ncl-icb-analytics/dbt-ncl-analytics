@@ -8,5 +8,5 @@ select {{ dbt_utils.generate_surrogate_key(["primarykey_id", "snomed_id"]) }} as
     , rownumber_id 
     , code
     , is_primary
-from {{ ref('raw_sus_ae_clinical_diagnoses_snomed') }}
+from {{ ref('raw_sus_ecds_clinical_diagnoses_snomed') }}
 qualify row_number() over (partition by primarykey_id, snomed_id, code order by rownumber_id) = 1
