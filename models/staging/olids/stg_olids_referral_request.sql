@@ -17,6 +17,8 @@ select
     referral_request_priority_source_concept_id,
     referral_request_type_source_concept_id,
     referral_request_specialty_source_concept_id,
+    mapped_concept_code,
+    mapped_concept_display,
     mode,
     is_outgoing_referral,
     is_review,
