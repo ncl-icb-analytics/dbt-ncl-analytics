@@ -13,4 +13,4 @@ select
     "ucum_unit_of_measurement" as ucum_unit_of_measurement,
     "timestamp" as timestamp,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'clinical.coded_observations') }}
+from {{ source('sus_ecds', 'clinical.coded_observations') }}

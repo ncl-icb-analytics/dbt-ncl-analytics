@@ -227,4 +227,4 @@ select
     "clinical.injury.timestamp" as clinical_injury_timestamp,
     "commissioning.commissioner_assignment.commissioner" as commissioning_commissioner_assignment_commissioner,
     "commissioning.commissioner_assignment.flowchart_reference" as commissioning_commissioner_assignment_flowchart_reference
-from {{ source('sus_ae', 'emergency_care') }}
+from {{ source('sus_ecds', 'emergency_care') }}

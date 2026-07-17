@@ -14,4 +14,4 @@ select
     "time" as time,
     "dmicImportLogId" as dmic_import_log_id,
     "timestamp" as timestamp
-from {{ source('sus_ae', 'clinical.investigations.snomed') }}
+from {{ source('sus_ecds', 'clinical.investigations.snomed') }}

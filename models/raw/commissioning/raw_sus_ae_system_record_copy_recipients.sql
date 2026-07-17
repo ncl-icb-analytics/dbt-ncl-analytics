@@ -9,4 +9,4 @@ select
     "COPY_RECIPIENTS_ID" as copy_recipients_id,
     "copy_recipients" as copy_recipients,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'system.record.copy_recipients') }}
+from {{ source('sus_ecds', 'system.record.copy_recipients') }}

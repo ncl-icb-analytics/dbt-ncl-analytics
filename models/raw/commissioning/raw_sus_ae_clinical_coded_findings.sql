@@ -11,4 +11,4 @@ select
     "is_code_approved" as is_code_approved,
     "timestamp" as timestamp,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'clinical.coded_findings') }}
+from {{ source('sus_ecds', 'clinical.coded_findings') }}

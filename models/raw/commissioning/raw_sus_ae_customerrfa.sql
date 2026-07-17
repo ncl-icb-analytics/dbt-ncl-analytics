@@ -16,4 +16,4 @@ select
     "dmicSubmittedGPPractice" as dmic_submitted_gp_practice,
     "dmicDerivedGPPractice" as dmic_derived_gp_practice,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'CustomerRFA') }}
+from {{ source('sus_ecds', 'CustomerRFA') }}

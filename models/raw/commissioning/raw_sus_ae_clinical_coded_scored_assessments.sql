@@ -12,4 +12,4 @@ select
     "person_score" as person_score,
     "validation_timestamp" as validation_timestamp,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'clinical.coded_scored_assessments') }}
+from {{ source('sus_ecds', 'clinical.coded_scored_assessments') }}

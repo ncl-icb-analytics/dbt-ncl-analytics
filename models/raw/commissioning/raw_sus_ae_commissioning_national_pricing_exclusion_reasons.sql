@@ -9,4 +9,4 @@ select
     "EXCLUSION_REASONS_ID" as exclusion_reasons_id,
     "exclusion_reasons" as exclusion_reasons,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'commissioning.national_pricing.exclusion_reasons') }}
+from {{ source('sus_ecds', 'commissioning.national_pricing.exclusion_reasons') }}

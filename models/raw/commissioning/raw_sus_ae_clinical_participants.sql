@@ -13,4 +13,4 @@ select
     "has_discharge_responsibility" as has_discharge_responsibility,
     "dmicImportLogId" as dmic_import_log_id,
     "clinical_responsibility_timestamp" as clinical_responsibility_timestamp
-from {{ source('sus_ae', 'clinical.participants') }}
+from {{ source('sus_ecds', 'clinical.participants') }}

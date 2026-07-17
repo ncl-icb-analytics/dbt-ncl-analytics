@@ -10,4 +10,4 @@ select
     "code" as code,
     "is_code_approved" as is_code_approved,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'clinical.comorbidities') }}
+from {{ source('sus_ecds', 'clinical.comorbidities') }}

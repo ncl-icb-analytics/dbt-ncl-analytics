@@ -18,4 +18,4 @@ select
     "provider_reference_number" as provider_reference_number,
     "service_code" as service_code,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'commissioning.service_agreements') }}
+from {{ source('sus_ecds', 'commissioning.service_agreements') }}

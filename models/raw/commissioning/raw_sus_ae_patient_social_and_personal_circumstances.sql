@@ -10,4 +10,4 @@ select
     "code" as code,
     "recorded_timestamp" as recorded_timestamp,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'patient.social_and_personal_circumstances') }}
+from {{ source('sus_ecds', 'patient.social_and_personal_circumstances') }}

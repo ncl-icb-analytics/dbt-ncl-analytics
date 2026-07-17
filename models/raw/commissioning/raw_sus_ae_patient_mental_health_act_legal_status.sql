@@ -15,4 +15,4 @@ select
     "dmicImportLogId" as dmic_import_log_id,
     "assignment_timestamp" as assignment_timestamp,
     "expiry_timestamp" as expiry_timestamp
-from {{ source('sus_ae', 'patient.mental_health_act_legal_status') }}
+from {{ source('sus_ecds', 'patient.mental_health_act_legal_status') }}

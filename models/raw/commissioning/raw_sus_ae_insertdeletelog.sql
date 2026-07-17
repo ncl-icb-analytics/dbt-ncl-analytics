@@ -8,4 +8,4 @@ select
     "dmicImportLogId" as dmic_import_log_id,
     "dmicIsDeleted" as dmic_is_deleted,
     "dmicDeletedImportLogId" as dmic_deleted_import_log_id
-from {{ source('sus_ae', 'InsertDeleteLog') }}
+from {{ source('sus_ecds', 'InsertDeleteLog') }}

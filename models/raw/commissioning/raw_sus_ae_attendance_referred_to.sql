@@ -16,4 +16,4 @@ select
     "dmicImportLogId" as dmic_import_log_id,
     "request_timestamp" as request_timestamp,
     "assessment_timestamp" as assessment_timestamp
-from {{ source('sus_ae', 'attendance.referred_to') }}
+from {{ source('sus_ecds', 'attendance.referred_to') }}

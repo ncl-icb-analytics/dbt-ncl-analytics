@@ -16,4 +16,4 @@ select
     "dmicImportLogId" as dmic_import_log_id,
     "dmicLSOA2021" as dmic_lsoa2021,
     "dmicElectoralWardCode" as dmic_electoral_ward_code
-from {{ source('sus_ae', 'derived') }}
+from {{ source('sus_ecds', 'derived') }}

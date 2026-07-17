@@ -10,4 +10,4 @@ select
     "timestamp" as timestamp,
     "allocated_timestamp" as allocated_timestamp,
     "dmicImportLogId" as dmic_import_log_id
-from {{ source('sus_ae', 'attendance.expected_treatment_times') }}
+from {{ source('sus_ecds', 'attendance.expected_treatment_times') }}
