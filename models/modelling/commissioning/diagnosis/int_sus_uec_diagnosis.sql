@@ -10,7 +10,7 @@ with
         , code
         , count(*) as observation_count
         , array_agg(distinct snomed_id)  WITHIN GROUP (ORDER BY snomed_id ASC) as snomed_ids
-        from {{ ref("stg_sus_ae_clinical_diagnoses_snomed") }} 
+        from {{ ref("stg_sus_ecds_clinical_diagnoses_snomed") }} 
         where code is not null 
         group by primarykey_id, code
 ),

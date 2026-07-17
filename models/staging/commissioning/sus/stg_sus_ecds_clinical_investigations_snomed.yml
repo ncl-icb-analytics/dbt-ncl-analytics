@@ -1,6 +1,6 @@
 models:
-  - name: stg_sus_ae_clinical_coded_findings
-    description: SUS A&E clinical coded findings (SNOMED CT)
+  - name: stg_sus_ecds_clinical_investigations_snomed
+    description: SUS A&E clinical investigations (SNOMED CT)
     config:
       meta:
         owner:
@@ -10,7 +10,7 @@ models:
           arguments:
             combination_of_columns:
               - primarykey_id
-              - coded_findings_id
+              - snomed_id
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1
@@ -19,13 +19,13 @@ models:
         description: Primary key from main A&E attendance (FK)
         tests:
           - not_null
-      - name: coded_findings_id
-        description: Unique identifier for this coded finding entry
+      - name: snomed_id
+        description: Unique identifier for this investigation entry
         tests:
           - not_null
       - name: rownumber_id
-        description: Sequence number for ordering findings within an attendance
+        description: Sequence number for ordering investigations within an attendance
         tests:
           - not_null
       - name: code
-        description: SNOMED CT coded finding
+        description: SNOMED CT investigation code

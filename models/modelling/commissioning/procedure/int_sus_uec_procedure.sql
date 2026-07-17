@@ -8,7 +8,7 @@ with investigations as (
         , count(*) as observation_count
         , array_agg(distinct snomed_id)  WITHIN GROUP (ORDER BY snomed_id ASC) as ordered_id_array
         ,'investigation' as observation_type
-    from {{ref('stg_sus_ae_clinical_investigations_snomed')}}
+    from {{ref('stg_sus_ecds_clinical_investigations_snomed')}}
     where code is not null 
     group by primarykey_id, code
 ),
@@ -25,7 +25,7 @@ treatments as (
         , count(*) as observation_count
         , array_agg(distinct snomed_id)  WITHIN GROUP (ORDER BY snomed_id ASC) as ordered_id_array
         ,'treatment' as observation_type
-    from {{ref('stg_sus_ae_clinical_treatments_snomed')}}
+    from {{ref('stg_sus_ecds_clinical_treatments_snomed')}}
     where code is not null 
     group by primarykey_id, code
 ),
@@ -42,7 +42,7 @@ comorbs as (
         , count(*) as observation_count
         , array_agg(distinct comorbidities_id)  WITHIN GROUP (ORDER BY comorbidities_id ASC) as ordered_id_array
         ,'comorbs' as observation_type
-    from {{ref('stg_sus_ae_clinical_comorbidities')}}
+    from {{ref('stg_sus_ecds_clinical_comorbidities')}}
     where code is not null 
     group by primarykey_id, code
 ),
@@ -60,7 +60,7 @@ findings as (
         , count(*) as observation_count
         , array_agg(distinct coded_findings_id)  WITHIN GROUP (ORDER BY coded_findings_id ASC) as ordered_id_array
         ,'findings' as observation_type
-    from {{ref('stg_sus_ae_clinical_coded_findings')}}
+    from {{ref('stg_sus_ecds_clinical_coded_findings')}}
     where code is not null 
     group by primarykey_id, code
 ), 
