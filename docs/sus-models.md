@@ -63,7 +63,7 @@ Person-level rolling-window summaries (one row per patient).
 
 - `fct_person_sus_apc_recent` — recent inpatient spell counts + length of stay (12/3/1-month)
 - `fct_person_sus_op_recent` — recent outpatient appointment counts (12-month: attendances, first attendances, specialties, providers)
-- `fct_person_sus_ecds_recent` — recent A&E attendance counts (12-month: illness/injury/Type 1)
+- `fct_person_sus_uec_recent` — recent A&E attendance counts (12-month: illness/injury/Type 1)
 
 ## Lineage
 

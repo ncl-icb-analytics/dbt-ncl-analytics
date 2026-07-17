@@ -36,6 +36,6 @@ select dp.sk_patient_id
 from {{ref('dim_person_demographics_basic')}} as dp
 left join unique_person_ids as upi on dp.sk_patient_id = upi.sk_patient_id
 left join {{ref('fct_person_gp_recent')}} as hg on dp.sk_patient_id = hg.sk_patient_id
-left join {{ref('fct_person_sus_ecds_recent')}} as hu on dp.sk_patient_id = hu.sk_patient_id
+left join {{ref('fct_person_sus_uec_recent')}} as hu on dp.sk_patient_id = hu.sk_patient_id
 left join {{ref('fct_person_sus_op_recent')}} as ho on dp.sk_patient_id = ho.sk_patient_id
 left join {{ref('fct_person_sus_apc_recent')}} as ha on dp.sk_patient_id = ha.sk_patient_id

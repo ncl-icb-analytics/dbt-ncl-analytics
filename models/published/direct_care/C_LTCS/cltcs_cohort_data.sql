@@ -255,7 +255,7 @@ left join {{ref('fct_person_sus_op_recent')}} opa
     on il.patient_id  = opa.sk_patient_id
 left join {{ref('fct_person_sus_apc_recent')}} apca
     on il.patient_id  = apca.sk_patient_id
-left join {{ref('fct_person_sus_ecds_recent')}} aea
+left join {{ref('fct_person_sus_uec_recent')}} aea
     on il.patient_id  = aea.sk_patient_id
 left join {{ref('fct_person_gp_recent')}} gpa
     on il.patient_id  = gpa.sk_patient_id

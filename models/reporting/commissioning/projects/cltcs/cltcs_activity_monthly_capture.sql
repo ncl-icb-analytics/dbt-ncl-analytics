@@ -36,7 +36,7 @@ makes daily runs a no-op except the first build of each month.
 */
 
 with patient_spine as (
-    select sk_patient_id from {{ ref('fct_person_sus_ecds_recent') }}
+    select sk_patient_id from {{ ref('fct_person_sus_uec_recent') }}
     union
     select sk_patient_id from {{ ref('fct_person_sus_apc_recent') }}
     union
@@ -53,7 +53,7 @@ captured as (
         current_timestamp()::timestamp_ntz        as captured_at,
         sp.sk_patient_id,
 
-        -- A&E (fct_person_sus_ecds_recent)
+        -- A&E (fct_person_sus_uec_recent)
         zeroifnull(aea.ae_tot_12mo) as ae_tot_12mo,
         zeroifnull(aea.ae_t1_12mo)  as ae_t1_12mo,
         zeroifnull(aea.ae_inj_12mo) as ae_inj_12mo,
@@ -80,7 +80,7 @@ captured as (
         zeroifnull(wl.wl_current_distinct_tfc_count)       as wl_current_distinct_tfc_count
 
     from patient_spine sp
-    left join {{ ref('fct_person_sus_ecds_recent') }} aea
+    left join {{ ref('fct_person_sus_uec_recent') }} aea
         on sp.sk_patient_id = aea.sk_patient_id
     left join {{ ref('fct_person_sus_apc_recent') }} apca
         on sp.sk_patient_id = apca.sk_patient_id
