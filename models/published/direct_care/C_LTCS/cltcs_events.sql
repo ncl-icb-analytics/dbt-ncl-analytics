@@ -17,7 +17,7 @@ with inclusion_list as (
     select patient_id, area_code, olids_id
     from {{ ref('cltcs_patient_list')}}
 ),
-sus_ae_events as(
+sus_uec_events as(
     select
         il.patient_id,
         il.area_code,
@@ -89,7 +89,7 @@ gp_events as (
 ),
 
 complete_events as (
-    select * from sus_ae_events
+    select * from sus_uec_events
     union all
     select * from sus_apc_events
     union all

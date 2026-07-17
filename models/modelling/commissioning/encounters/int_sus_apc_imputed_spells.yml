@@ -6,7 +6,7 @@ models:
       treatment function, patient, and global fallbacks, deduplicated to one row per spell if the same admission date 
       and time are obseerved. Sourced from int_sus_apc_encounter over a rolling 2-year window. Missing start/end dates and duration are
       imputed using median length of stay by HRG, treatment function, patient, and global fallbacks. Downstream
-      12-month consumers (fct_person_sus_ip_recent, int_sus_apc_merged_spells) apply their own 12-month filter.
+      12-month consumers (fct_person_sus_apc_recent, int_sus_apc_merged_spells) apply their own 12-month filter.
       Spell-level attributes otherwise match int_sus_apc_encounter.
     config:
       meta:

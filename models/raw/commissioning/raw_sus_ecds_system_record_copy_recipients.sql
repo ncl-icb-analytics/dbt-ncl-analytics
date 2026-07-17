@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.system.record.copy_recipients \ndbt: source(''sus_ae'', ''system.record.copy_recipients'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  COPY_RECIPIENTS_ID -> copy_recipients_id\n  copy_recipients -> copy_recipients\n  dmicImportLogId -> dmic_import_log_id"
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.system.record.copy_recipients \ndbt: source(''sus_ecds'', ''system.record.copy_recipients'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  COPY_RECIPIENTS_ID -> copy_recipients_id\n  copy_recipients -> copy_recipients\n  dmicImportLogId -> dmic_import_log_id"
     )
 }}
 select

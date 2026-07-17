@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.patient.mental_health_act_legal_status \ndbt: source(''sus_ae'', ''patient.mental_health_act_legal_status'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  MENTAL_HEALTH_ACT_LEGAL_STATUS_ID -> mental_health_act_legal_status_id\n  classification -> classification\n  start_date -> start_date\n  start_time -> start_time\n  expiry_date -> expiry_date\n  expiry_time -> expiry_time\n  dmicImportLogId -> dmic_import_log_id\n  assignment_timestamp -> assignment_timestamp\n  expiry_timestamp -> expiry_timestamp"
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.patient.mental_health_act_legal_status \ndbt: source(''sus_ecds'', ''patient.mental_health_act_legal_status'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  MENTAL_HEALTH_ACT_LEGAL_STATUS_ID -> mental_health_act_legal_status_id\n  classification -> classification\n  start_date -> start_date\n  start_time -> start_time\n  expiry_date -> expiry_date\n  expiry_time -> expiry_time\n  dmicImportLogId -> dmic_import_log_id\n  assignment_timestamp -> assignment_timestamp\n  expiry_timestamp -> expiry_timestamp"
     )
 }}
 select

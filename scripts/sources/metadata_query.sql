@@ -83,7 +83,7 @@ WITH schema_metadata AS (
   
   UNION ALL
   
-    -- sus_ae: SUS emergency care attendances and activity
+    -- sus_ecds: SUS emergency care attendances and activity
   SELECT 
     'DATA_LAKE' as database_name,
     'SUS_UNIFIED_ECDS' as schema_name,

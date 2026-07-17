@@ -175,7 +175,7 @@ new version for nearly every patient every run. Instead capture them **once per
 month, append-only**, giving one row per patient per month.
 
 Tables in scope (all keyed on `sk_patient_id`):
-`fct_person_sus_ae_recent`, `fct_person_sus_ip_recent`, `fct_person_sus_op_recent`,
+`fct_person_sus_ecds_recent`, `fct_person_sus_apc_recent`, `fct_person_sus_op_recent`,
 `fct_person_gp_recent`, `fct_person_medications_recent`,
 `fct_person_wl_current_count_total`.
 
@@ -219,8 +219,8 @@ with captured as (
         rm.unique_active_ingredient_count_12mo,
         wl.wl_current_total_count
         -- ...add the columns you want history for
-    from {{ ref('fct_person_sus_ae_recent') }} ae
-    left join {{ ref('fct_person_sus_ip_recent') }} ip using (sk_patient_id)
+    from {{ ref('fct_person_sus_ecds_recent') }} ae
+    left join {{ ref('fct_person_sus_apc_recent') }} ip using (sk_patient_id)
     left join {{ ref('fct_person_gp_recent') }}     gp using (sk_patient_id)
     left join {{ ref('fct_person_medications_recent') }} rm using (sk_patient_id)
     left join {{ ref('fct_person_wl_current_count_total') }} wl using (sk_patient_id)

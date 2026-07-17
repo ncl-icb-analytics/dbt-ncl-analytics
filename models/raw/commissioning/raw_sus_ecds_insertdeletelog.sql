@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.InsertDeleteLog \ndbt: source(''sus_ae'', ''InsertDeleteLog'') \nColumns:\n  PRIMARYKEY_ID -> primarykey_id\n  dmicImportLogId -> dmic_import_log_id\n  dmicIsDeleted -> dmic_is_deleted\n  dmicDeletedImportLogId -> dmic_deleted_import_log_id"
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.InsertDeleteLog \ndbt: source(''sus_ecds'', ''InsertDeleteLog'') \nColumns:\n  PRIMARYKEY_ID -> primarykey_id\n  dmicImportLogId -> dmic_import_log_id\n  dmicIsDeleted -> dmic_is_deleted\n  dmicDeletedImportLogId -> dmic_deleted_import_log_id"
     )
 }}
 select

@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.clinical.injury.alcohol_drug_involvements \ndbt: source(''sus_ae'', ''clinical.injury.alcohol_drug_involvements'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  ALCOHOL_DRUG_INVOLVEMENTS_ID -> alcohol_drug_involvements_id\n  code -> code\n  is_code_approved -> is_code_approved\n  dmicImportLogId -> dmic_import_log_id"
+        description="Raw layer (SUS emergency care attendances and activity). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.SUS_UNIFIED_ECDS.clinical.injury.alcohol_drug_involvements \ndbt: source(''sus_ecds'', ''clinical.injury.alcohol_drug_involvements'') \nColumns:\n  ROWNUMBER_ID -> rownumber_id\n  PRIMARYKEY_ID -> primarykey_id\n  ALCOHOL_DRUG_INVOLVEMENTS_ID -> alcohol_drug_involvements_id\n  code -> code\n  is_code_approved -> is_code_approved\n  dmicImportLogId -> dmic_import_log_id"
     )
 }}
 select
