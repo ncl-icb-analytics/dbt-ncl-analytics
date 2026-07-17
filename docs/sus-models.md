@@ -22,12 +22,12 @@ Clean, deduplicated pass-throughs of the raw SUS tables. One row per record of t
 - `stg_sus_apc_spell_episodes_commissioning_grouping_unbundled_hrg` — unbundled HRGs per episode
 
 **AE / ECDS**
-- `stg_sus_ae_emergency_care` — one row per A&E attendance
-- `stg_sus_ae_clinical_diagnoses_snomed` — SNOMED diagnoses per attendance
-- `stg_sus_ae_clinical_investigations_snomed` — SNOMED investigations per attendance
-- `stg_sus_ae_clinical_treatments_snomed` — SNOMED treatments per attendance
-- `stg_sus_ae_clinical_coded_findings` — SNOMED coded findings per attendance
-- `stg_sus_ae_clinical_comorbidities` — SNOMED comorbidities per attendance
+- `stg_sus_ecds_emergency_care` — one row per A&E attendance
+- `stg_sus_ecds_clinical_diagnoses_snomed` — SNOMED diagnoses per attendance
+- `stg_sus_ecds_clinical_investigations_snomed` — SNOMED investigations per attendance
+- `stg_sus_ecds_clinical_treatments_snomed` — SNOMED treatments per attendance
+- `stg_sus_ecds_clinical_coded_findings` — SNOMED coded findings per attendance
+- `stg_sus_ecds_clinical_comorbidities` — SNOMED comorbidities per attendance
 
 **OP**
 - `stg_sus_op_appointment` — one row per outpatient appointment
