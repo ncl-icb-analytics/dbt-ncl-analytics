@@ -61,7 +61,7 @@ Normalises the three dataset types into shared shapes: encounters, diagnoses, pr
 
 Person-level rolling-window summaries (one row per patient).
 
-- `fct_person_sus_ip_recent` — recent inpatient spell counts + length of stay (12/3/1-month)
+- `fct_person_sus_apc_recent` — recent inpatient spell counts + length of stay (12/3/1-month)
 - `fct_person_sus_op_recent` — recent outpatient appointment counts (12-month: attendances, first attendances, specialties, providers)
 - `fct_person_sus_ae_recent` — recent A&E attendance counts (12-month: illness/injury/Type 1)
 
