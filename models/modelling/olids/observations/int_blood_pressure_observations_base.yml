@@ -40,12 +40,6 @@ models:
         description: Original clinical_effective_date before future date correction
       - name: date_recorded
         description: Date the observation was recorded in the clinical system
-      - name: lds_start_datetime
-        description: |
-          London Data Service processing timestamp. Used as incremental key
-          to correctly handle late-arriving data.
-        tests:
-          - not_null
       - name: result_value
         description: Blood pressure reading value
         tests:
