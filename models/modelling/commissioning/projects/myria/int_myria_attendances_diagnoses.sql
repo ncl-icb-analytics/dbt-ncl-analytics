@@ -93,7 +93,7 @@ SELECT
         DATEDIFF(MM,ae.START_DATE,DATE_TRUNC('month',CURRENT_DATE)) as activity_months_ago
     FROM 
        {{ ref("int_sus_uec_encounter") }} ae
-    LEFT JOIN {{ ref("int_sus_ae_diagnosis") }} dx
+    LEFT JOIN {{ ref("int_sus_uec_diagnosis") }} dx
         ON ae.VISIT_OCCURRENCE_ID = dx.VISIT_OCCURRENCE_ID
      WHERE
         ae.START_DATE < DATE_TRUNC('month',CURRENT_DATE) -- only activity before the start of this month

@@ -85,7 +85,7 @@ acute_exclusions as (
 
 ae_diagnosis_excluded as ( 
     select resp.visit_occurrence_id
-    from {{ ref('int_sus_ae_diagnosis') }} obs
+    from {{ ref('int_sus_uec_diagnosis') }} obs
     inner join respiratory_activities as resp on obs.visit_occurrence_id = resp.visit_occurrence_id  -- is in respiratory list
     where -- in exclusion list 
         (
