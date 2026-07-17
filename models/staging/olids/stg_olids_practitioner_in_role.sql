@@ -9,7 +9,6 @@ select
     role,
     date_employment_start,
     date_employment_end,
-    publisher_organisation_code,
     lds_transform_datetime,
 
     -- Metadata

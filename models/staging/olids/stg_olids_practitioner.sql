@@ -9,7 +9,6 @@ select
     surname,
     name,
     is_obsolete,
-    publisher_organisation_code,
     lds_transform_datetime,
 
     -- Metadata

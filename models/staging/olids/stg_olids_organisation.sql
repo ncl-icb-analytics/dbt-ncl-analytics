@@ -13,7 +13,6 @@ select
     open_date,
     close_date,
     is_obsolete,
-    publisher_organisation_code,
     lds_transform_datetime,
 
     -- Metadata

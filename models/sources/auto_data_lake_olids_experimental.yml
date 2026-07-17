@@ -80,6 +80,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -178,6 +180,8 @@ sources:
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: CLINICAL_SYSTEM
       data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
@@ -339,6 +343,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -417,6 +423,8 @@ sources:
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: CLINICAL_SYSTEM
       data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
@@ -500,10 +508,52 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: DATE
     - name: LDS_TRANSFORM_DATETIME
       data_type: TIMESTAMP_LTZ
+  - name: FRESHNESS
+    identifier: '"FRESHNESS"'
+    columns:
+    - name: TABLE_NAME
+      data_type: TEXT
+    - name: PUBLISHER_CODE
+      data_type: TEXT
+    - name: MAX_SOURCE_EXTRACTION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: MAX_LDS_TRANSFORM_DATETIME
+      data_type: TIMESTAMP_LTZ
+    - name: MAX_ACTIVITY_DATE
+      data_type: DATE
+    - name: CONSENSUS_ACTIVITY_DATE
+      data_type: DATE
+    - name: ACTIVITY_LAG_DAYS
+      data_type: NUMBER(9,0)
+  - name: FRESHNESS_SUMMARY
+    identifier: '"FRESHNESS_SUMMARY"'
+    columns:
+    - name: TABLE_NAME
+      data_type: TEXT
+    - name: MAX_SOURCE_EXTRACTION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: MAX_LDS_TRANSFORM_DATETIME
+      data_type: TIMESTAMP_LTZ
+    - name: CONSENSUS_ACTIVITY_DATE
+      data_type: DATE
+    - name: MAX_ACTIVITY_DATE
+      data_type: DATE
+    - name: PRACTICES_REPORTING
+      data_type: NUMBER(13,0)
+    - name: PRACTICES_LAGGING_CONSENSUS_7D
+      data_type: NUMBER(13,0)
+    - name: PRACTICES_LAGGING_CONSENSUS_14D
+      data_type: NUMBER(13,0)
+    - name: WORST_PUBLISHER_CODE
+      data_type: TEXT
+    - name: WORST_PUBLISHER_LAG_DAYS
+      data_type: NUMBER(9,0)
   - name: LOCATION
     identifier: '"LOCATION"'
     columns:
@@ -654,6 +704,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -766,6 +818,8 @@ sources:
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: CLINICAL_SYSTEM
       data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
@@ -885,6 +939,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -918,8 +974,6 @@ sources:
       data_type: BOOLEAN
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
-    - name: PUBLISHER_ORGANISATION_CODE
-      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -987,6 +1041,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -1022,6 +1078,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -1053,6 +1111,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -1080,6 +1140,8 @@ sources:
       data_type: BOOLEAN
     - name: LDS_TRANSFORM_DATETIME
       data_type: TIMESTAMP_LTZ
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
   - name: PATIENT_UPRN
     identifier: '"PATIENT_UPRN"'
     columns:
@@ -1172,6 +1234,8 @@ sources:
       data_type: TEXT
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -1338,6 +1402,8 @@ sources:
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
     - name: LDS_TRANSFORM_DATETIME
@@ -1446,6 +1512,8 @@ sources:
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
     - name: PUBLISHER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: CLINICAL_SYSTEM
       data_type: TEXT
     - name: SOURCE_EXTRACTION_DATE
       data_type: TIMESTAMP_NTZ
