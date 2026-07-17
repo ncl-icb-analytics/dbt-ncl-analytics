@@ -1,6 +1,6 @@
 
 models:
-  - name: int_sus_ae_procedure
+  - name: int_sus_uec_procedure
     description: "Obervations from A&E attendances from SUS data limited to investigations,
       treatments, comorbidities and coded findings"
     config:
