@@ -197,6 +197,23 @@ bp_control as (
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
 ),
 
+-- Diabetes care processes: as-at read of the STABLE per-reading inputs (latest measurement
+-- dates + hba1c value + a date-independent foot-check qualifier). The care-processes model is
+-- rolling-12-month (anchored on CURRENT_DATE), so only its stable inputs are snapshotted; the
+-- 12-month completion window is re-applied on index_date in the final SELECT (like BP's recency
+-- gate), reproducing the 8-process count and hba1c recency as-at index_date rather than the
+-- snapshot run date. (latest_retinal_screening_date is in the snapshot for future use.)
+diabetes as (
+    select f.sk_patient_id, f.index_date,
+           d.latest_hba1c_date, d.latest_hba1c_value,
+           d.latest_bp_date, d.latest_cholesterol_date, d.latest_creatinine_date,
+           d.latest_acr_date, d.latest_foot_check_date, d.latest_bmi_date,
+           d.latest_smoking_date, d.foot_check_qualifies
+    from {{ temporal_join('spine', 'index_date', ref('fct_person_diabetes_9_care_processes_snapshot'),
+                          join_key='person_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
 -- Asthma management: no snapshot, reconstruct per index date via asthma_management_history()
 -- (as_of == index date). Keyed on person_id. Macro returns all 7 flags; we select the 5 used.
 asthma as (
@@ -302,6 +319,20 @@ select
     , bp.latest_systolic_value
     , bp.latest_diastolic_value
     , bp.latest_bp_date
+    -- diabetes 8 care processes (rolling 12-month completion window re-anchored on index_date)
+    , (
+          case when dia.latest_hba1c_date       between dateadd(month, -12, s.index_date) and s.index_date then 1 else 0 end
+        + case when dia.latest_bp_date          between dateadd(month, -12, s.index_date) and s.index_date then 1 else 0 end
+        + case when dia.latest_cholesterol_date between dateadd(month, -12, s.index_date) and s.index_date then 1 else 0 end
+        + case when dia.latest_creatinine_date  between dateadd(month, -12, s.index_date) and s.index_date then 1 else 0 end
+        + case when dia.latest_acr_date         between dateadd(month, -12, s.index_date) and s.index_date then 1 else 0 end
+        + case when dia.latest_foot_check_date  between dateadd(month, -12, s.index_date) and s.index_date and dia.foot_check_qualifies then 1 else 0 end
+        + case when dia.latest_bmi_date         between dateadd(month, -12, s.index_date) and s.index_date then 1 else 0 end
+        + case when dia.latest_smoking_date     between dateadd(month, -12, s.index_date) and s.index_date then 1 else 0 end
+      ) as care_processes_completed
+    , case when dia.latest_hba1c_date between dateadd(month, -12, s.index_date) and s.index_date
+           then dia.latest_hba1c_value else null end as latest_hba1c_value
+    , dia.latest_hba1c_date
     -- annual activity (as-at month, from the activity capture)
     , zeroifnull(act.op_att_tot_12mo) as op_att_tot_12mo
     , zeroifnull(act.op_spec_12mo) as op_spec_12mo
@@ -372,8 +403,10 @@ select
     -- , pd.age
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
-    -- Diabetes 8 care processes
-    -- , care_processes_completed, latest_hba1c_value, latest_hba1c_date
+    -- Diabetes: 8-process count + hba1c implemented above (as-at from the care-processes
+    -- snapshot, window re-anchored on index_date). The 9th process (retinal screening) is
+    -- captured in fct_person_diabetes_9_care_processes_snapshot but not surfaced here yet, to
+    -- keep parity with cltcs_cohort_data.
     -- Waiting list flag + arrays (not in the activity capture)
     -- , has_same_tfc_multiple_providers_flag, current_waiting_list_arrays
     -- Recent medications
@@ -407,4 +440,5 @@ left join score_frailty    sf  on sf.sk_patient_id = s.sk_patient_id and sf.inde
 left join activity         act on act.sk_patient_id = s.sk_patient_id and act.index_date = s.index_date
 left join pregnancy        preg on preg.person_id = s.person_id and preg.index_date = s.index_date
 left join bp_control       bp  on bp.sk_patient_id = s.sk_patient_id and bp.index_date = s.index_date
+left join diabetes         dia on dia.sk_patient_id = s.sk_patient_id and dia.index_date = s.index_date
 left join asthma           am  on am.person_id = s.person_id and am.index_date = s.index_date
