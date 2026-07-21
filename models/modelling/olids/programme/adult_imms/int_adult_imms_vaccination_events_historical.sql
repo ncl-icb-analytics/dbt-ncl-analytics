@@ -30,7 +30,7 @@ WITH IMMS_CODE_OBS as (
     --JOIN MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_CODE_DOSE clut on o.mapped_concept_code  = clut.CODE 
         WHERE o.clinical_effective_date <= CURRENT_DATE
     --look for events across the historical population by age at event in OBS table rather than age of person.
-        AND o.age_at_event >= 60
+        --AND o.age_at_event >= 60
      )
 --FIND all vaccination events coded as drugs by joining the mapped concept codes in the medication orders table (~100,000 rows)
 ,IMMS_CODE_MED as (
@@ -55,7 +55,7 @@ SELECT DISTINCT
     JOIN {{ ref('int_adult_imms_code_dose') }} clut on m.mapped_concept_code  = clut.CODE
     --JOIN MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_CODE_DOSE clut on m.mapped_concept_code  = clut.CODE
     WHERE m.clinical_effective_date <= CURRENT_DATE
-    AND m.age_at_event >= 60
+    --AND m.age_at_event >= 60
 )
 --UNION OBSERVATIONS AND MEDICATIONS. Only add drug events if they do not already exist as an admin code
 ,VACCS_COMBINED AS (
