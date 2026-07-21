@@ -1,0 +1,46 @@
+models:
+  - name: cltcs_monthly_covariates
+    description: >
+      Monthly point-in-time covariate panel for the C-LTCS matched-control candidate pool.
+      One row per (patient_id, index_date): each control candidate's covariate profile
+      reconstructed as-at index_date. The spine is the monthly population roster
+      (cltcs_population_monthly_capture) for that month (INNER = eligibility gate); covariates
+      are read as-at from their SCD2 snapshots via temporal_join (LEFT) and from the monthly
+      activity capture. Columns mirror cltcs_cohort_data for comparability. All patients are
+      kept -- the treated/control split happens at matching. Covariates with no history yet
+      are listed commented-out in a GAP block in the model.
+    config:
+      meta:
+        owner:
+          name: Thomas Shallcross
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - patient_id
+              - index_date
+    columns:
+      - name: patient_id
+        description: "Commissioning patient key (sk_patient_id). Part of the grain."
+        data_tests:
+          - not_null
+      - name: index_date
+        description: "As-at date the covariates are reconstructed for. Part of the grain."
+        data_tests:
+          - not_null
+      - name: re_id_key
+        description: "HxFlake pseudonym generated from patient_id (for re-identification)."
+      - name: neighbourhood_code
+        description: "C-LTCS local neighbourhood tag, carried from the population roster for that month; may be null."
+      - name: efi_score
+        description: "AIC eFI2 score as-at index_date. NULL = not assessed (not coalesced)."
+      - name: cambridge_comorbidity_score
+        description: "Cambridge multimorbidity score as-at index_date. NULL = not computed."
+      - name: moc_stage_completed_label
+        description: "LTC-LCS Model of Care stage. Ride-along on the risk-summary snapshot (not a check_col), so it reflects the last risk-group version open and may lag index_date."
+      - name: moc_pathway_status
+        description: "LTC-LCS Model of Care pathway status. Ride-along (see moc_stage_completed_label caveat)."
+      - name: score_treatment
+        description: "C-LTCS treatment sub-score as-at index_date."
+      - name: score_frailty
+        description: "C-LTCS frailty sub-score as-at index_date. (score_activation / score_coordination deferred until snapshotted.)"
