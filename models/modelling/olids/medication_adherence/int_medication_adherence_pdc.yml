@@ -1,0 +1,109 @@
+models:
+  - name: int_medication_adherence_pdc
+    description: >
+      Rolling PDC (Proportion of Days Covered) per person, drug and monthly
+      12-month window, plus an overall PDC over each (person, drug) refill
+      chain. Port of MedicationTableSnowpark.compute_pdc_rolling
+      (window_length=12, pdc_type=2 dynamic exposure denominator,
+      exclusive=True) with all drug classes in one table. The pdc /
+      covered_days / overall_pdc columns are faithful to the original —
+      including the last-order quirk where the final prescription of a chain
+      contributes ~0 covered days; the *_corrected columns fix that quirk. See
+      the model header for the full divergence list. One row per (person_id,
+      drug_name, window_start); windows with no qualifying orders carry NULL
+      exposure / covered_days / pdc.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - person_id
+              - drug_name
+              - window_start
+      # Both bounds derive from overall_start (+ offset / + offset + 12
+      # months), so day-of-month clamping can differ between them (e.g.
+      # overall_start 31 Jan: window_start clamps to 28 Feb, window_end to
+      # 29 Feb in a leap year) — assert the month distance, which clamping
+      # never affects, rather than exact dateadd equality.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "datediff(month, window_start, window_end) = window_length_months"
+      # The correction only removes a subtraction, so it can never lower PDC
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "pdc_corrected >= pdc or pdc is null or pdc_corrected is null"
+      # PDC is uncapped by design (>1 possible with overlapping supply);
+      # warn on pathological values rather than block
+      - dbt_utils.expression_is_true:
+          config:
+            severity: warn
+          arguments:
+            expression: "pdc <= 1.5 or pdc is null"
+    columns:
+      - name: person_id
+        description: Person identifier.
+        tests:
+          - not_null
+      - name: drug_name
+        description: Drug grouping key (see int_medication_adherence_orders for grain caveat).
+        tests:
+          - not_null
+      - name: drug_class
+        description: Adherence drug class label.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - RAAS
+                  - Beta-blocker
+                  - Calcium-channel blocker
+                  - Non-insulin anti-diabetic
+                  - Lipid lowering drugs
+      - name: window_start
+        description: Window start — overall_start plus N months (person-anchored, not calendar-aligned).
+        tests:
+          - not_null
+      - name: window_end
+        description: Window end — window_start plus 12 months (exclusive bound in the order join).
+        tests:
+          - not_null
+      - name: exposure_start
+        description: First order date within the window (pdc_type=2 denominator start). NULL when the window has no qualifying orders.
+      - name: exposure_end
+        description: Last order end date within the window. NULL when the window has no qualifying orders.
+      - name: covered_days
+        description: Net covered days in the window, faithful variant (can be negative via the last-order quirk).
+      - name: covered_days_corrected
+        description: Net covered days in the window, corrected variant.
+      - name: window_days
+        description: Exposure span in days (pdc_type=2 denominator). NULL for empty windows.
+      - name: pdc
+        description: Faithful PDC — covered_days / window_days when covered_days > 0, else NULL. Uncapped.
+      - name: pdc_corrected
+        description: Corrected PDC — last order's supply counts in full.
+      - name: overall_start
+        description: First order date of the (person, drug) chain.
+        tests:
+          - not_null
+      - name: overall_end
+        description: Last order end date of the (person, drug) chain.
+        tests:
+          - not_null
+      - name: total_exposure_days
+        description: Days from overall_start to overall_end.
+        tests:
+          - not_null
+      - name: overall_pdc
+        description: Faithful overall PDC across the full chain span (guarded only on total_exposure_days > 0, so it can be <= 0).
+      - name: overall_pdc_corrected
+        description: Corrected overall PDC.
+      - name: pdc_type
+        description: Constant 2 (dynamic exposure-window denominator), as run in the original.
+      - name: exclusive
+        description: Constant TRUE — early-refill overlap subtracted, strict window upper bound.
+      - name: window_length_months
+        description: Constant 12.

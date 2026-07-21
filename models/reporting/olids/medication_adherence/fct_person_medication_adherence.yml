@@ -1,0 +1,89 @@
+models:
+  - name: fct_person_medication_adherence
+    description: >
+      Reporting-layer medicines adherence: rolling 12-month PDC (Proportion of
+      Days Covered) and overall chain PDC per person and drug, for the five
+      adherence drug classes (in-house int_medication_adherence_pdc joined to
+      dim_person). Carries both the faithful port of the NCL meds_adherence
+      Snowpark pipeline and corrected variants; see int_medication_adherence_pdc
+      for documented divergences. One row per (person_id, vtm_code,
+      window_start); drug_name presents the readable VTM name via a
+      deduplicated 1:1 code-to-name map, matching the original pipeline's
+      output. No opt-out filter is applied — secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - person_id
+              - vtm_code
+              - window_start
+    columns:
+      - name: person_id
+        description: Person identifier; joins to dim_person.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_person')
+                field: person_id
+      - name: vtm_code
+        description: >
+          Drug grouping key — the VTM code the refill chain was computed on
+          (a concept display string for rows that never resolved to a VTM).
+          Part of the unique grain; distinct codes could in principle share a
+          name, so uniqueness is tested here, not on drug_name.
+        tests:
+          - not_null
+      - name: drug_name
+        description: >
+          Readable drug name — the VTM name for the chain's vtm_code via a
+          deduplicated 1:1 map (one name per code), falling back to the
+          concept display string for unresolved chains. Matches the original
+          pipeline's drug_name presentation.
+        tests:
+          - not_null
+      - name: drug_class
+        description: Adherence drug class label.
+        tests:
+          - not_null
+      - name: window_start
+        description: Rolling window start (person-anchored monthly).
+        tests:
+          - not_null
+      - name: window_end
+        description: Window end (window_start + 12 months).
+      - name: exposure_start
+        description: First order date within the window; NULL for windows with no qualifying orders.
+      - name: exposure_end
+        description: Last order end date within the window; NULL for windows with no qualifying orders.
+      - name: covered_days
+        description: Net covered days in the window (faithful variant).
+      - name: covered_days_corrected
+        description: Net covered days in the window (corrected variant).
+      - name: window_days
+        description: Exposure span in days — the PDC denominator (pdc_type 2).
+      - name: pdc
+        description: Faithful rolling PDC (uncapped; NULL when no positive coverage).
+      - name: pdc_corrected
+        description: Corrected rolling PDC (final order of the chain counts in full).
+      - name: overall_start
+        description: First order date of the (person, drug) chain.
+      - name: overall_end
+        description: Last order end date of the (person, drug) chain.
+      - name: total_exposure_days
+        description: Days from overall_start to overall_end.
+      - name: overall_pdc
+        description: Faithful overall PDC across the chain span.
+      - name: overall_pdc_corrected
+        description: Corrected overall PDC.
+      - name: pdc_type
+        description: Constant 2 (dynamic exposure-window denominator).
+      - name: exclusive
+        description: Constant TRUE (early-refill overlap subtracted; strict window upper bound).
+      - name: window_length_months
+        description: Constant 12.
