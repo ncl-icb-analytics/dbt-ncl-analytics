@@ -9,7 +9,7 @@ models:
         owner:
           name: Emily Baldwin
     columns:
-      - name: diagnosis_id
+      - name: event_id
         data_type: varchar
         description: "Unique identifier for the diagnosis record."
 

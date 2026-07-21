@@ -109,17 +109,17 @@ select
     , core.patient_gp_registration_general_practice as reg_practice_at_event
     , 'AE_ATTENDANCE' as visit_occurrence_type
 
-from {{ ref('stg_sus_ae_emergency_care')}} as core
+from {{ ref('stg_sus_ecds_emergency_care')}} as core
 
 /* Diagnosis code for infering reason */ -- ADD DEDUP LOGIC?
-left join {{ref('stg_sus_ae_clinical_diagnoses_snomed')}} diagnosis
+left join {{ref('stg_sus_ecds_clinical_diagnoses_snomed')}} diagnosis
     on core.primarykey_id = diagnosis.primarykey_id and diagnosis.is_primary = TRUE
 
 left join {{ref('stg_dictionary_ecds_diagnosis')}} as diag_dict
     on diagnosis.code = diag_dict.snomed_code
 
 /* First investigation code for infering reason */ 
-left join {{ref('stg_sus_ae_clinical_investigations_snomed')}} as investigations
+left join {{ref('stg_sus_ecds_clinical_investigations_snomed')}} as investigations
     on core.primarykey_id = investigations.primarykey_id 
     and investigations.snomed_id = 1
 
@@ -128,7 +128,7 @@ left join
     on investigations.code = inv_dict.snomed_code
 
 /* First treatment for infering reason  */ 
-left join {{ref('stg_sus_ae_clinical_treatments_snomed')}} as treatments
+left join {{ref('stg_sus_ecds_clinical_treatments_snomed')}} as treatments
     on core.primarykey_id = treatments.primarykey_id 
     and treatments.snomed_id = 1
 

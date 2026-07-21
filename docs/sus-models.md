@@ -22,12 +22,12 @@ Clean, deduplicated pass-throughs of the raw SUS tables. One row per record of t
 - `stg_sus_apc_spell_episodes_commissioning_grouping_unbundled_hrg` — unbundled HRGs per episode
 
 **AE / ECDS**
-- `stg_sus_ae_emergency_care` — one row per A&E attendance
-- `stg_sus_ae_clinical_diagnoses_snomed` — SNOMED diagnoses per attendance
-- `stg_sus_ae_clinical_investigations_snomed` — SNOMED investigations per attendance
-- `stg_sus_ae_clinical_treatments_snomed` — SNOMED treatments per attendance
-- `stg_sus_ae_clinical_coded_findings` — SNOMED coded findings per attendance
-- `stg_sus_ae_clinical_comorbidities` — SNOMED comorbidities per attendance
+- `stg_sus_ecds_emergency_care` — one row per A&E attendance
+- `stg_sus_ecds_clinical_diagnoses_snomed` — SNOMED diagnoses per attendance
+- `stg_sus_ecds_clinical_investigations_snomed` — SNOMED investigations per attendance
+- `stg_sus_ecds_clinical_treatments_snomed` — SNOMED treatments per attendance
+- `stg_sus_ecds_clinical_coded_findings` — SNOMED coded findings per attendance
+- `stg_sus_ecds_clinical_comorbidities` — SNOMED comorbidities per attendance
 
 **OP**
 - `stg_sus_op_appointment` — one row per outpatient appointment
@@ -47,11 +47,11 @@ Normalises the three dataset types into shared shapes: encounters, diagnoses, pr
 **Diagnoses** (`diagnosis/`)
 - `int_sus_apc_diagnosis` — ICD-10 diagnoses (secondary-care diagnosis table / phenolab)
 - `int_sus_op_diagnosis` — ICD-10 diagnoses for outpatient records
-- `int_sus_ae_diagnosis` — A&E SNOMED diagnoses mapped to ICD-10
+- `int_sus_uec_diagnosis` — A&E SNOMED diagnoses mapped to ICD-10
 
 **Procedures** (`procedure/`)
 - `int_sus_apc_procedure` / `int_sus_op_procedure` — OPCS-4 procedures
-- `int_sus_ae_procedure` — A&E observations (investigations, treatments, comorbidities, findings) as SNOMED
+- `int_sus_uec_procedure` — A&E observations (investigations, treatments, comorbidities, findings) as SNOMED
 - `int_sus_apc_procedure_hrg` / `int_sus_op_procedure_hrg` — core + unbundled HRGs for commissioning
 
 **Demographics** (`demographics/`)
@@ -61,9 +61,9 @@ Normalises the three dataset types into shared shapes: encounters, diagnoses, pr
 
 Person-level rolling-window summaries (one row per patient).
 
-- `fct_person_sus_ip_recent` — recent inpatient spell counts + length of stay (12/3/1-month)
+- `fct_person_sus_apc_recent` — recent inpatient spell counts + length of stay (12/3/1-month)
 - `fct_person_sus_op_recent` — recent outpatient appointment counts (12-month: attendances, first attendances, specialties, providers)
-- `fct_person_sus_ae_recent` — recent A&E attendance counts (12-month: illness/injury/Type 1)
+- `fct_person_sus_uec_recent` — recent A&E attendance counts (12-month: illness/injury/Type 1)
 
 ## Lineage
 

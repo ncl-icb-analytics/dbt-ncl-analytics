@@ -123,7 +123,7 @@ with
             ,source_concept_name as observation_concept_name
             ,concept_vocabulary as observation_vocabulary
  
-        from {{ ref("int_sus_ae_diagnosis") }} ae
+        from {{ ref("int_sus_uec_diagnosis") }} ae
 
    ),
 
@@ -142,7 +142,7 @@ with
         , snomed_code::varchar  as concept_code
         , snomed_decription as concept_name
         , 'SNOMED' as observation_vocabulary
-        from {{ ref("int_sus_ae_procedure") }} ae
+        from {{ ref("int_sus_uec_procedure") }} ae
    ),
 
     all_observations as (
