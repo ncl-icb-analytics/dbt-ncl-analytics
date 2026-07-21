@@ -1,5 +1,5 @@
 -- Emit a rolling 2-year window of spells (for consumers like the C-LTCS event
--- timeline). Downstream 1-year consumers (fct_person_sus_ip_recent,
+-- timeline). Downstream 1-year consumers (fct_person_sus_apc_recent,
 -- int_sus_apc_merged_spells) re-apply their own 12-month filter, so their row
 -- coverage is unaffected. Median durations are computed over the full 2-year
 -- emit set. in_year_duration remains a fixed 12-month "in year" measure.

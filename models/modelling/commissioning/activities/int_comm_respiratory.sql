@@ -45,7 +45,7 @@ with ae_attendance_summary as (
 
 ae_diagnosis as ( -- likely to be too permissive as all diagnosis codes are recorded regardless of relevance
     select visit_occurrence_id
-    from {{ ref('int_sus_ae_diagnosis') }} -- consider changing to all J?
+    from {{ ref('int_sus_uec_diagnosis') }} -- consider changing to all J?
     where (
             {% for prefix in icd10_prefix_list %}
                 startswith(mapped_icd10_code, '{{ prefix }}')

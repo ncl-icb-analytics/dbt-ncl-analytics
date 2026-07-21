@@ -25,9 +25,9 @@ encoding_features as(
         on il.sk_patient_id  = opa.sk_patient_id
     left join {{ref('fct_person_gp_recent')}} gpa
         on il.sk_patient_id  = gpa.sk_patient_id
-    left join {{ref('fct_person_sus_ae_recent')}} aea
+    left join {{ref('fct_person_sus_uec_recent')}} aea
         on il.sk_patient_id  = aea.sk_patient_id
-    left join {{ref('fct_person_sus_ip_recent')}} apca
+    left join {{ref('fct_person_sus_apc_recent')}} apca
         on il.sk_patient_id  = apca.sk_patient_id
 )
 select

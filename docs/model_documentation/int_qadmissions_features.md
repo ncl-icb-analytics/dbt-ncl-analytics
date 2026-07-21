@@ -18,7 +18,7 @@ dim_person_demographics (base spine)
   + fct_person_diabetes_register   → b_type1 / b_type2
   + int_smoking_status_latest      → smoke_cat
   + 5 × int_<med>_medications_all  → b_anticoagulant / b_antidepressant / b_antipsychotic / b_corticosteroids / b_nsaid
-  + fct_person_sus_ip_recent       → hes_admitprior_cat
+  + fct_person_sus_apc_recent       → hes_admitprior_cat
   + int_bmi_latest                 → bmi
   + int_haemoglobin_latest         → c_hb        
   + int_platelets_latest           → high_platelet
@@ -65,7 +65,7 @@ The features split into four groups based on where their codes come from.
 
 - `bmi` ← `int_bmi_latest`
 - `smoke_cat` ← `int_smoking_status_latest`
-- `hes_admitprior_cat` ← `fct_person_sus_ip_recent.apc_nel_12mo`
+- `hes_admitprior_cat` ← `fct_person_sus_apc_recent.apc_nel_12mo`
 - `town` ← `int_qadmissions_townsend` (joins `dim_person_demographics.lsoa_code_21` to `qadmissions_townsend_lsoa_2011` seed via `stg_reference_lsoa2011_lsoa2021` bridge)
 - `alcohol_cat6` ← `int_qadmissions_alcohol_category` (Full AUDIT scores from `int_alcohol_audit_scores`)
 - `ethrisk` ← `int_qadmissions_ethrisk` (`dim_person_ethnicity.ethnicity_subcategory` joined to `qadmissions_eth2016_to_ethrisk9` seed)
@@ -126,7 +126,7 @@ Every diagnosis is "ever" — no time window applied. The `falls_flags` CTE in `
 
 ### Prior emergency admissions
 
-Already capped at 12 months prior (per the paper's "emergency admissions in the year before") via `fct_person_sus_ip_recent.apc_nel_12mo`. No design choice to revisit.
+Already capped at 12 months prior (per the paper's "emergency admissions in the year before") via `fct_person_sus_apc_recent.apc_nel_12mo`. No design choice to revisit.
 
 ---
 

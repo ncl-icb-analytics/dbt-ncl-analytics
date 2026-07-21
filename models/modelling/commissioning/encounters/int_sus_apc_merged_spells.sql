@@ -1,5 +1,5 @@
 with spells as (
-    -- same population/filters as fct_person_sus_ip_recent, clipped to the 12-month window
+    -- same population/filters as fct_person_sus_apc_recent, clipped to the 12-month window
     -- (mirrors the in_year_duration clipping: start floored at window_start, end left as-is)
     select
         sk_patient_id,

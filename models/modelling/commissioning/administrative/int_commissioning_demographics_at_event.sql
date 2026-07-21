@@ -51,7 +51,7 @@ ae_demo as (
     , patient_usual_address_index_of_multiple_deprivation_decile as imd_at_event
     , patient_gp_registration_general_practice as reg_practice_at_event
     , 'AE_ATTENDANCE' as visit_occurrence_type
-    from {{ ref('stg_sus_ae_emergency_care') }} ),
+    from {{ ref('stg_sus_ecds_emergency_care') }} ),
 
 wl_demo as (
     select submission_id as primarykey_id -- replace with referral? using submission as is numeric and linkable back
