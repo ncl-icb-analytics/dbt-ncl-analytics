@@ -159,6 +159,20 @@ score_frailty as (
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
 ),
 
+score_activation as (
+    select f.sk_patient_id, f.index_date, d.score_activation
+    from {{ temporal_join('spine', 'index_date', ref('cltcs_score_activation_snapshot'),
+                          join_key='sk_patient_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
+score_coordination as (
+    select f.sk_patient_id, f.index_date, d.score_coordination
+    from {{ temporal_join('spine', 'index_date', ref('cltcs_score_coordination_snapshot'),
+                          join_key='sk_patient_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
 -- Rolling-12-month activity, captured monthly: equijoin on the month (not temporal).
 activity as (
     select s.sk_patient_id, s.index_date,
@@ -465,7 +479,9 @@ select
     -- recent medications (last year), as-at the captured month
     , coalesce(med.medications_recent_12mo, array_construct()) as medications_recent_12mo
     , zeroifnull(med.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
-    -- C-LTCS scores (v1: treatment + frailty only)
+    -- C-LTCS scores (all four sub-scores, as-at index_date)
+    , coalesce(sa.score_activation, 0) as score_activation
+    , coalesce(sco.score_coordination, 0) as score_coordination
     , coalesce(st.score_treatment, 0) as score_treatment
     , coalesce(sf.score_frailty, 0) as score_frailty
 
@@ -479,8 +495,6 @@ select
     -- , pd.age
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
-    -- Scores: no snapshot input yet
-    -- , score_activation, score_coordination
     -- ============================================================================
 
 from spine s
@@ -494,6 +508,8 @@ left join care_home        ch  on ch.sk_patient_id = s.sk_patient_id and ch.inde
 left join risk_summary     rs  on rs.sk_patient_id = s.sk_patient_id and rs.index_date = s.index_date
 left join score_treatment  st  on st.sk_patient_id = s.sk_patient_id and st.index_date = s.index_date
 left join score_frailty    sf  on sf.sk_patient_id = s.sk_patient_id and sf.index_date = s.index_date
+left join score_activation sa  on sa.sk_patient_id = s.sk_patient_id and sa.index_date = s.index_date
+left join score_coordination sco on sco.sk_patient_id = s.sk_patient_id and sco.index_date = s.index_date
 left join activity         act on act.sk_patient_id = s.sk_patient_id and act.index_date = s.index_date
 left join pregnancy        preg on preg.person_id = s.person_id and preg.index_date = s.index_date
 left join bp_control       bp  on bp.sk_patient_id = s.sk_patient_id and bp.index_date = s.index_date

@@ -40,10 +40,14 @@ models:
         description: "LTC-LCS Model of Care stage. Ride-along on the risk-summary snapshot (not a check_col), so it reflects the last risk-group version open and may lag index_date."
       - name: moc_pathway_status
         description: "LTC-LCS Model of Care pathway status. Ride-along (see moc_stage_completed_label caveat)."
+      - name: score_activation
+        description: "C-LTCS activation sub-score as-at index_date. Raw (unrounded) formula over rolling-12-month activity, read from cltcs_score_activation_snapshot."
+      - name: score_coordination
+        description: "C-LTCS coordination sub-score as-at index_date. Raw (unrounded) formula over rolling-12-month activity, read from cltcs_score_coordination_snapshot."
       - name: score_treatment
         description: "C-LTCS treatment sub-score as-at index_date."
       - name: score_frailty
-        description: "C-LTCS frailty sub-score as-at index_date. (score_activation / score_coordination deferred until snapshotted.)"
+        description: "C-LTCS frailty sub-score as-at index_date."
       - name: care_processes_completed
         description: >
           Number of the 8 diabetes care processes (HbA1c, BP, cholesterol, creatinine, urine
