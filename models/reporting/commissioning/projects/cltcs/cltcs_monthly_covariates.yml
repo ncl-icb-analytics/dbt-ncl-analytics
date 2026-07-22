@@ -55,6 +55,16 @@ models:
         description: "Value of the latest HbA1c reading, only when that reading falls within 12 months of index_date (else NULL), mirroring cltcs_cohort_data."
       - name: latest_hba1c_date
         description: "Date of the latest HbA1c reading as-at index_date (ungated)."
+      # QRISK CVD risk -- as-at read of int_qrisk_latest_snapshot; passthrough (no coalesce, no
+      # recency gate), NULL when absent, matching cltcs_cohort_data.
+      - name: qrisk_score
+        description: "Latest valid QRISK cardiovascular risk score (%, 0-100) as-at index_date. NULL when the patient has no valid QRISK by then. Not recency-gated (mirrors cltcs_cohort_data)."
+      - name: qrisk_type
+        description: "QRISK variant of the latest score (QRISK / QRISK2 / QRISK3 / Unknown), as-at index_date."
+      - name: cvd_risk_category
+        description: "Banded CVD risk label for the latest QRISK as-at index_date (Low Risk (<10%) / Moderate Risk (10-20%) / High Risk (>=20%) / Invalid)."
+      - name: warrants_statin_consideration
+        description: "True when the latest QRISK as-at index_date is >= 10% (a pure score threshold; it does not cross-reference statin prescriptions). NULL when absent."
       # Adult social care (ASC) -- captured monthly (cltcs_asc_monthly_capture); values are as-at
       # the captured month, forward-only (null -> coalesced defaults before the capture's first run).
       - name: has_asc_service

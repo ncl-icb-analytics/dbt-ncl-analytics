@@ -215,6 +215,17 @@ diabetes as (
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
 ),
 
+-- QRISK CVD risk: as-at read of the latest-valid-QRISK snapshot. Every column is a pure
+-- function of the reading (no CURRENT_DATE), so it reads in straight (no re-derivation, no
+-- recency gate) and passes through NULL when absent -- matching cltcs_cohort_data.
+qrisk as (
+    select f.sk_patient_id, f.index_date,
+           d.qrisk_score, d.qrisk_type, d.cvd_risk_category, d.warrants_statin_consideration
+    from {{ temporal_join('spine', 'index_date', ref('int_qrisk_latest_snapshot'),
+                          join_key='person_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
 -- Asthma management: no snapshot, reconstruct per index date via asthma_management_history()
 -- (as_of == index date). Keyed on person_id. Macro returns all 7 flags; we select the 5 used.
 asthma as (
@@ -388,6 +399,11 @@ select
     , case when dia.latest_hba1c_date between dateadd(month, -12, s.index_date) and s.index_date
            then dia.latest_hba1c_value else null end as latest_hba1c_value
     , dia.latest_hba1c_date
+    -- CVD risk (QRISK): latest valid score as-at index_date; passthrough, NULL when absent
+    , qr.qrisk_score
+    , qr.qrisk_type
+    , qr.cvd_risk_category
+    , qr.warrants_statin_consideration
     -- annual activity (as-at month, from the activity capture)
     , zeroifnull(act.op_att_tot_12mo) as op_att_tot_12mo
     , zeroifnull(act.op_spec_12mo) as op_spec_12mo
@@ -463,9 +479,6 @@ select
     -- , pd.age
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
-    -- QRISK cardiovascular risk (int_qrisk_latest -- no snapshot yet; latest-observation shape,
-    -- an SCD2 thin-input snapshot candidate like BP)
-    -- , qrisk_score, qrisk_type, cvd_risk_category, warrants_statin_consideration
     -- Scores: no snapshot input yet
     -- , score_activation, score_coordination
     -- ============================================================================
@@ -485,6 +498,7 @@ left join activity         act on act.sk_patient_id = s.sk_patient_id and act.in
 left join pregnancy        preg on preg.person_id = s.person_id and preg.index_date = s.index_date
 left join bp_control       bp  on bp.sk_patient_id = s.sk_patient_id and bp.index_date = s.index_date
 left join diabetes         dia on dia.sk_patient_id = s.sk_patient_id and dia.index_date = s.index_date
+left join qrisk            qr  on qr.sk_patient_id = s.sk_patient_id and qr.index_date = s.index_date
 left join asthma           am  on am.person_id = s.person_id and am.index_date = s.index_date
 left join asc_service      asc_c on asc_c.sk_patient_id = s.sk_patient_id and asc_c.index_date = s.index_date
 left join meds             med on med.person_id = s.person_id and med.index_date = s.index_date
