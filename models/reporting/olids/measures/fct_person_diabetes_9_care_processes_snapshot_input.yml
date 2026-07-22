@@ -43,3 +43,5 @@ models:
           Date-independent part of the foot-check completion rule: an adequate examination of
           both feet (allowing for an absent/amputated foot) that was not declined or deemed
           unsuitable. Combined with the 12-month recency of latest_foot_check_date downstream.
+        data_tests:
+          - not_null

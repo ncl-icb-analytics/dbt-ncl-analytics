@@ -29,7 +29,13 @@ models:
           - not_null
       - name: person_id
         description: "OLIDS person key, resolved in cltcs_adult_population (latest-registered-record tiebreak)."
+        data_tests:
+          - not_null
       - name: neighbourhood_code
-        description: "C-LTCS local neighbourhood tag from cltcs_adult_population; may be null."
+        description: >
+          C-LTCS local neighbourhood tag, carried from cltcs_adult_population. Non-null in
+          practice: cltcs_adult_population filters to practices in the local (Haringey/Camden)
+          mapping, so out-of-locality candidates are excluded; this would only become nullable
+          if that pool is later widened to out-of-locality candidates.
       - name: captured_at
         description: "Timestamp the row was written (for audit; not part of the grain)."
