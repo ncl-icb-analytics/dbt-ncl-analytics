@@ -2,16 +2,15 @@ version: 2
 
 models:
   - name: stg_ers_ubrn_action
-    description: "Staging model for eRS UBRN action events (ebsx02UBRNAction), deduplicated (INNER JOIN on raw_ers_pc_activesubmission) to active submissions only.\nContact: Jonathan.Linney@nhs.net"
+    description: "Staging model for eRS UBRN action events (ebsx02UBRNAction).\nContact: Jonathan.Linney@nhs.net"
     config:
       meta:
         owner:
           name: Jonathan Linney
     columns:
       - name: action_id
-        description: "Unique identifier for a single UBRN action event, deduplicated across resubmissions via join to ActiveSubmission"
+        description: "UBRN action event identifier"
         tests:
-          - unique
           - not_null
       - name: ubrn_id
         description: "Unique Booking Reference Number (UBRN) identifier"
