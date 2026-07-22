@@ -96,3 +96,13 @@ models:
           Sum of main_language_flag + has_severe_mental_illness + has_learning_disability +
           has_asc_service (mirrors cltcs_cohort_data). Now computable since has_asc_service is
           available from the ASC capture.
+      # Waiting list flag + array -- captured monthly (cltcs_activity_monthly_capture, alongside the
+      # WL counts); values are as-at the captured month, forward-only (null -> coalesced defaults on
+      # months captured before these columns were added).
+      - name: has_same_tfc_multiple_providers_flag
+        description: "True if the patient has an open waiting list for the same treatment-function code under more than one provider, as-at the captured month. Coalesced to false when absent."
+      - name: current_waiting_list_arrays
+        description: >
+          Array of the patient's open waiting-list entries as-at the captured month, each an object of
+          provider / tfc_name / days_on_waiting_list / days_until_future_appointment. Empty array when
+          absent.

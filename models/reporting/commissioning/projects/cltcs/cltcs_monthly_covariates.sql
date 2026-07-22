@@ -167,7 +167,8 @@ activity as (
            a.op_att_tot_12mo, a.op_spec_12mo, a.op_prov_12mo,
            a.gp_att_tot_12mo, a.gp_app_tot_12mo, a.gp_dna_tot_12mo,
            a.wl_current_total_count, a.wl_current_distinct_providers_count,
-           a.wl_current_distinct_tfc_count
+           a.wl_current_distinct_tfc_count,
+           a.same_tfc_multiple_providers_flag, a.current_waiting_list_arrays
     from spine s
     left join {{ ref('cltcs_activity_monthly_capture') }} a
       on  a.sk_patient_id = s.sk_patient_id
@@ -419,10 +420,12 @@ select
     , coalesce(rs.in_any_risk_group, false) as in_any_risk_group
     , rs.moc_stage_completed_label
     , rs.moc_pathway_status
-    -- waiting list counts (flag + arrays are a gap -- see GAP block)
+    -- waiting list counts + flag + arrays (captured monthly; values as-at the captured month)
     , zeroifnull(act.wl_current_total_count) as wl_total_count
     , zeroifnull(act.wl_current_distinct_providers_count) as wl_provider_count
     , zeroifnull(act.wl_current_distinct_tfc_count) as wl_specialty_count
+    , coalesce(act.same_tfc_multiple_providers_flag, false) as has_same_tfc_multiple_providers_flag
+    , coalesce(act.current_waiting_list_arrays, array_construct()) as current_waiting_list_arrays
     -- polypharmacy
     , zeroifnull(poly.medication_count) as medication_count
     , case
@@ -450,8 +453,6 @@ select
     -- snapshot, window re-anchored on index_date). The 9th process (retinal screening) is
     -- captured in fct_person_diabetes_9_care_processes_snapshot but not surfaced here yet, to
     -- keep parity with cltcs_cohort_data.
-    -- Waiting list flag + arrays (not in the activity capture)
-    -- , has_same_tfc_multiple_providers_flag, current_waiting_list_arrays
     -- Recent medications
     -- , medications_recent_12mo, unique_active_ingredient_count_12mo
     -- Scores: no snapshot input yet
