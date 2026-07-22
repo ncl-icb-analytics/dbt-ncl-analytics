@@ -55,3 +55,44 @@ models:
         description: "Value of the latest HbA1c reading, only when that reading falls within 12 months of index_date (else NULL), mirroring cltcs_cohort_data."
       - name: latest_hba1c_date
         description: "Date of the latest HbA1c reading as-at index_date (ungated)."
+      # Adult social care (ASC) -- captured monthly (cltcs_asc_monthly_capture); values are as-at
+      # the captured month, forward-only (null -> coalesced defaults before the capture's first run).
+      - name: has_asc_service
+        description: "1 if the patient had any ASC service in the captured month, else 0 (presence flag; coalesced to 0 when absent)."
+      - name: borough_name
+        description: "Array of distinct local-authority (borough) names for the patient's ASC services, as-at the captured month. Distinct from neighbourhood_code. Empty array when absent."
+      - name: service_type
+        description: "Array of distinct ASC service types for the patient, as-at the captured month. Empty array when absent."
+      - name: primary_support_reason_category
+        description: "Array of distinct high-level ASC primary support reason categories, as-at the captured month. Empty array when absent."
+      - name: has_physical_support_personal_care
+        description: "Patient had an ASC service with personal care physical support in the captured month."
+      - name: has_physical_support_access_mobility
+        description: "Patient had an ASC service with access and mobility physical support in the captured month."
+      - name: has_learning_disability_support
+        description: "Patient had an ASC service with learning disability support in the captured month."
+      - name: has_mental_health_support
+        description: "Patient had an ASC service with mental health support in the captured month."
+      - name: has_unknown_primary_support_reason
+        description: "Patient had an ASC service with an unknown primary support reason in the captured month."
+      - name: has_memory_cognition_support
+        description: "Patient had an ASC service with memory and cognition support in the captured month."
+      - name: has_social_support_unpaid_carer
+        description: "Patient had an ASC service with social support for an unpaid carer in the captured month."
+      - name: has_social_support_social_isolation
+        description: "Patient had an ASC service with social support for social isolation or other in the captured month."
+      - name: has_sensory_support_visual_impairment
+        description: "Patient had an ASC service with sensory support for visual impairment in the captured month."
+      - name: has_sensory_support_hearing_impairment
+        description: "Patient had an ASC service with sensory support for hearing impairment in the captured month."
+      - name: has_social_support_substance_misuse
+        description: "Patient had an ASC service with social support for substance misuse in the captured month."
+      - name: has_sensory_support_dual_impairment
+        description: "Patient had an ASC service with sensory support for dual impairment in the captured month."
+      - name: has_social_support_asylum_seeker
+        description: "Patient had an ASC service with social support for asylum seekers in the captured month."
+      - name: attendance_difficulty_score
+        description: >
+          Sum of main_language_flag + has_severe_mental_illness + has_learning_disability +
+          has_asc_service (mirrors cltcs_cohort_data). Now computable since has_asc_service is
+          available from the ASC capture.

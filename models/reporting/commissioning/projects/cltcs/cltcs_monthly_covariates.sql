@@ -231,6 +231,25 @@ asthma as (
         {{ asthma_management_history(as_of="cast('" ~ d ~ "' as date)") }}
     )
     {%- endfor %}
+),
+
+-- Adult social care: rolling "recent" ASC services, captured monthly (like activity);
+-- equijoin on the month, not temporal. has_asc_service = 1 when a capture row exists.
+asc_service as (
+    select s.sk_patient_id, s.index_date,
+           a.has_asc_service,
+           a.borough_name, a.service_type, a.primary_support_reason_category,
+           a.has_physical_support_personal_care, a.has_physical_support_access_mobility,
+           a.has_learning_disability_support, a.has_mental_health_support,
+           a.has_unknown_primary_support_reason, a.has_memory_cognition_support,
+           a.has_social_support_unpaid_carer, a.has_social_support_social_isolation,
+           a.has_sensory_support_visual_impairment, a.has_sensory_support_hearing_impairment,
+           a.has_social_support_substance_misuse, a.has_sensory_support_dual_impairment,
+           a.has_social_support_asylum_seeker
+    from spine s
+    left join {{ ref('cltcs_asc_monthly_capture') }} a
+      on  a.sk_patient_id = s.sk_patient_id
+      and a.snapshot_month = date_trunc('month', s.index_date)
 )
 
 select
@@ -298,6 +317,30 @@ select
     , coalesce(br.bmi_risk_sort_key, 0) as bmi_risk_sort_key
     , coalesce(br.alcohol_status, 'Not Recorded') as alcohol_status
     , coalesce(br.alcohol_risk_sort_key, 0) as alcohol_risk_sort_key
+    -- social care usage (ASC), as-at the captured month
+    , coalesce(asc_c.borough_name, array_construct()) as borough_name
+    , coalesce(asc_c.service_type, array_construct()) as service_type
+    , coalesce(asc_c.primary_support_reason_category, array_construct()) as primary_support_reason_category
+    , coalesce(asc_c.has_physical_support_personal_care, false) as has_physical_support_personal_care
+    , coalesce(asc_c.has_physical_support_access_mobility, false) as has_physical_support_access_mobility
+    , coalesce(asc_c.has_learning_disability_support, false) as has_learning_disability_support
+    , coalesce(asc_c.has_mental_health_support, false) as has_mental_health_support
+    , coalesce(asc_c.has_unknown_primary_support_reason, false) as has_unknown_primary_support_reason
+    , coalesce(asc_c.has_memory_cognition_support, false) as has_memory_cognition_support
+    , coalesce(asc_c.has_social_support_unpaid_carer, false) as has_social_support_unpaid_carer
+    , coalesce(asc_c.has_social_support_social_isolation, false) as has_social_support_social_isolation
+    , coalesce(asc_c.has_sensory_support_visual_impairment, false) as has_sensory_support_visual_impairment
+    , coalesce(asc_c.has_sensory_support_hearing_impairment, false) as has_sensory_support_hearing_impairment
+    , coalesce(asc_c.has_social_support_substance_misuse, false) as has_social_support_substance_misuse
+    , coalesce(asc_c.has_sensory_support_dual_impairment, false) as has_sensory_support_dual_impairment
+    , coalesce(asc_c.has_social_support_asylum_seeker, false) as has_social_support_asylum_seeker
+    , coalesce(asc_c.has_asc_service, 0) as has_asc_service
+    -- derived attendance-difficulty score (depends on has_asc_service, now available). Inputs
+    -- main_language_flag / has_severe_mental_illness / has_learning_disability are aliases from
+    -- earlier in this SELECT; has_asc_service from the asc_service CTE above.
+    , zeroifnull(to_number(main_language_flag)) + zeroifnull(to_number(has_severe_mental_illness))
+      + zeroifnull(to_number(has_learning_disability)) + zeroifnull(to_number(has_asc_service))
+      as attendance_difficulty_score
     -- care home / residence
     , coalesce(ch.is_care_home_resident, false) as is_care_home_resident
     , coalesce(ch.is_nursing_home_resident, false) as is_nursing_home_resident
@@ -411,17 +454,6 @@ select
     -- , has_same_tfc_multiple_providers_flag, current_waiting_list_arrays
     -- Recent medications
     -- , medications_recent_12mo, unique_active_ingredient_count_12mo
-    -- Adult social care (ASC)
-    -- , borough_name, service_type, primary_support_reason_category
-    -- , has_physical_support_personal_care, has_physical_support_access_mobility
-    -- , has_learning_disability_support, has_mental_health_support
-    -- , has_unknown_primary_support_reason, has_memory_cognition_support
-    -- , has_social_support_unpaid_carer, has_social_support_social_isolation
-    -- , has_sensory_support_visual_impairment, has_sensory_support_hearing_impairment
-    -- , has_social_support_substance_misuse, has_sensory_support_dual_impairment
-    -- , has_social_support_asylum_seeker, has_asc_service
-    -- Derived, depends on has_asc_service -> deferred
-    -- , attendance_difficulty_score
     -- Scores: no snapshot input yet
     -- , score_activation, score_coordination
     -- ============================================================================
@@ -442,3 +474,4 @@ left join pregnancy        preg on preg.person_id = s.person_id and preg.index_d
 left join bp_control       bp  on bp.sk_patient_id = s.sk_patient_id and bp.index_date = s.index_date
 left join diabetes         dia on dia.sk_patient_id = s.sk_patient_id and dia.index_date = s.index_date
 left join asthma           am  on am.person_id = s.person_id and am.index_date = s.index_date
+left join asc_service      asc_c on asc_c.sk_patient_id = s.sk_patient_id and asc_c.index_date = s.index_date
