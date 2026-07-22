@@ -449,12 +449,11 @@ select
     -- , pd.age
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
-    -- Diabetes: 8-process count + hba1c implemented above (as-at from the care-processes
-    -- snapshot, window re-anchored on index_date). The 9th process (retinal screening) is
-    -- captured in fct_person_diabetes_9_care_processes_snapshot but not surfaced here yet, to
-    -- keep parity with cltcs_cohort_data.
     -- Recent medications
     -- , medications_recent_12mo, unique_active_ingredient_count_12mo
+    -- QRISK cardiovascular risk (int_qrisk_latest -- no snapshot yet; latest-observation shape,
+    -- an SCD2 thin-input snapshot candidate like BP)
+    -- , qrisk_score, qrisk_type, cvd_risk_category, warrants_statin_consideration
     -- Scores: no snapshot input yet
     -- , score_activation, score_coordination
     -- ============================================================================
