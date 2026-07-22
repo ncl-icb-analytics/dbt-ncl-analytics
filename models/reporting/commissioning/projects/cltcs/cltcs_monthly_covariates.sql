@@ -251,6 +251,17 @@ asc_service as (
     left join {{ ref('cltcs_asc_monthly_capture') }} a
       on  a.sk_patient_id = s.sk_patient_id
       and a.snapshot_month = date_trunc('month', s.index_date)
+),
+
+-- Recent medications: rolling "recent" prescriptions, captured monthly (like activity/ASC);
+-- equijoin on the month, keyed on person_id (like the pregnancy/asthma joins).
+meds as (
+    select s.person_id, s.index_date,
+           m.medications_recent_12mo, m.unique_active_ingredient_count_12mo
+    from spine s
+    left join {{ ref('cltcs_medications_monthly_capture') }} m
+      on  m.person_id = s.person_id
+      and m.snapshot_month = date_trunc('month', s.index_date)
 )
 
 select
@@ -435,6 +446,9 @@ select
       end as medication_name_list
     , coalesce(poly.is_polypharmacy_5plus, false) as is_polypharmacy_5plus
     , coalesce(poly.is_polypharmacy_10plus, false) as is_polypharmacy_10plus
+    -- recent medications (last year), as-at the captured month
+    , coalesce(med.medications_recent_12mo, array_construct()) as medications_recent_12mo
+    , zeroifnull(med.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
     -- C-LTCS scores (v1: treatment + frailty only)
     , coalesce(st.score_treatment, 0) as score_treatment
     , coalesce(sf.score_frailty, 0) as score_frailty
@@ -449,8 +463,6 @@ select
     -- , pd.age
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
-    -- Recent medications
-    -- , medications_recent_12mo, unique_active_ingredient_count_12mo
     -- QRISK cardiovascular risk (int_qrisk_latest -- no snapshot yet; latest-observation shape,
     -- an SCD2 thin-input snapshot candidate like BP)
     -- , qrisk_score, qrisk_type, cvd_risk_category, warrants_statin_consideration
@@ -475,3 +487,4 @@ left join bp_control       bp  on bp.sk_patient_id = s.sk_patient_id and bp.inde
 left join diabetes         dia on dia.sk_patient_id = s.sk_patient_id and dia.index_date = s.index_date
 left join asthma           am  on am.person_id = s.person_id and am.index_date = s.index_date
 left join asc_service      asc_c on asc_c.sk_patient_id = s.sk_patient_id and asc_c.index_date = s.index_date
+left join meds             med on med.person_id = s.person_id and med.index_date = s.index_date

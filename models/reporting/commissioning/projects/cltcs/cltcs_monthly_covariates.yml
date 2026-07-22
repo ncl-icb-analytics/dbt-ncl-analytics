@@ -106,3 +106,13 @@ models:
           Array of the patient's open waiting-list entries as-at the captured month, each an object of
           provider / tfc_name / days_on_waiting_list / days_until_future_appointment. Empty array when
           absent.
+      # Recent medications -- captured monthly (cltcs_medications_monthly_capture); values are as-at
+      # the captured month, forward-only (empty array / 0 before the capture's first run).
+      - name: medications_recent_12mo
+        description: >
+          Array of the patient's medications prescribed in the year to the captured month, each an
+          object of medication_name / prescription_count. Empty array when absent.
+      - name: unique_active_ingredient_count_12mo
+        description: >
+          Distinct active-ingredient (VTM) count over the year to the captured month. Prescriptions
+          with no VTM mapping in dm+d are excluded from this count. 0 when absent.
