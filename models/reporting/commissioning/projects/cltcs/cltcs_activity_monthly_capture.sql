@@ -77,7 +77,9 @@ captured as (
         -- Waiting list (fct_person_wl_current_count_total)
         zeroifnull(wl.wl_current_total_count)              as wl_current_total_count,
         zeroifnull(wl.wl_current_distinct_providers_count) as wl_current_distinct_providers_count,
-        zeroifnull(wl.wl_current_distinct_tfc_count)       as wl_current_distinct_tfc_count
+        zeroifnull(wl.wl_current_distinct_tfc_count)       as wl_current_distinct_tfc_count,
+        coalesce(wl.same_tfc_multiple_providers_flag, false)        as same_tfc_multiple_providers_flag,
+        coalesce(wl.current_waiting_list_arrays, array_construct()) as current_waiting_list_arrays
 
     from patient_spine sp
     left join {{ ref('fct_person_sus_uec_recent') }} aea
