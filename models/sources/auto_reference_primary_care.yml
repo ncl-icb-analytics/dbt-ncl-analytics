@@ -11,6 +11,8 @@ sources:
     columns:
     - name: NEIGHBOURHOOD_CODE
       data_type: TEXT
+    - name: NEIGHBOURHOOD_CODE_LEGACY
+      data_type: TEXT
     - name: NEIGHBOURHOOD_NAME
       data_type: TEXT
     - name: NEIGHBOURHOOD_NAME_WITH_BOROUGH
@@ -94,7 +96,7 @@ sources:
       data_type: TEXT
     - name: NEIGHBOURHOOD_CODE
       data_type: TEXT
-    - name: NEIGHBOURHOOD_CODE_WNL
+    - name: NEIGHBOURHOOD_CODE_LEGACY
       data_type: TEXT
     - name: NEIGHBOURHOOD_NAME
       data_type: TEXT
@@ -109,6 +111,8 @@ sources:
     - name: LSOA
       data_type: TEXT
     - name: MSOA
+      data_type: TEXT
+    - name: CONTACT_PHONE
       data_type: TEXT
     - name: ADDRESS_LINE_1
       data_type: TEXT
