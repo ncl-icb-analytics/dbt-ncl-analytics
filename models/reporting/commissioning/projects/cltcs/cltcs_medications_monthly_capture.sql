@@ -34,6 +34,11 @@ Grain: one row per (person_id, snapshot_month).
 Retention: a post_hook keeps ~4 years (48 months) of monthly captures.
 Forward-only: history starts at the first run; it cannot backfill months before it existed.
 
+WARNING (operational): never run this model with --full-refresh. The append-only history is not
+reconstructable, so a full refresh drops the table and re-seeds ONLY the current month, permanently
+deleting every previously captured month. The same hazard applies to the sibling
+cltcs_*_monthly_capture models.
+
 Only the two 12-month columns (medications_recent_12mo, unique_active_ingredient_count_12mo)
 are consumed by cltcs_monthly_covariates; the 30-day columns and sibling 12-month counts are
 captured for future use.
