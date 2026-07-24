@@ -111,7 +111,7 @@ encoding_features as (
         on il.person_id =bp.person_id
     left join {{ ref('dim_person_ccms') }} ccms
         on il.person_id =ccms.person_id
-    left join {{ ref('dim_person_efi2') }} efi
+    left join {{ ref('fct_person_efi2') }} efi
         on il.person_id =efi.person_id
     left join {{ ref('fct_person_frailty_register') }} fr
         on il.person_id =fr.person_id

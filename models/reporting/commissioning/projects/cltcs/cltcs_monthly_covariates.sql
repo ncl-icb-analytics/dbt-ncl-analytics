@@ -57,12 +57,29 @@ spine as (
 
 -- Covariate CTEs: LEFT temporal_join, each version read as-at the row's index_date.
 demographics as (
-    -- practice_name and age are NOT in the demographics snapshot input -> gaps (see GAP block)
+    -- practice_name is NOT in the demographics snapshot input -> gap (see GAP block).
+    -- age is deliberately NOT snapshotted (it changes every build); it is computed from live DOB
+    -- (the dob CTE) as-at index_date in the final SELECT.
     select f.sk_patient_id, f.index_date,
            d.practice_code, d.main_language, d.gender, d.ethnicity_category
     from {{ temporal_join('spine', 'index_date', ref('dim_person_demographics_snapshot'),
                           join_key='person_id', join_type='left',
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
+-- Date of birth is immutable, so it needs no snapshot: read it live from dim_person_demographics
+-- and compute age as-at index_date below (person-keyed, one DOB per person).
+dob as (
+    select person_id, birth_date_approx
+    from {{ ref('dim_person_demographics') }}
+),
+
+-- practice_name is a label of the practice (not per-person as-at state), so it needs no snapshot:
+-- look it up from the code->name reference (dim_practice, one row per practice_code) on the as-at
+-- practice_code the demographics CTE already resolves (mirrors the area_code / age approach).
+practice as (
+    select practice_code, practice_name
+    from {{ ref('dim_practice') }}
 ),
 
 conditions as (
@@ -119,20 +136,23 @@ care_home as (
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
 ),
 
-{#- frailty CTE disabled: int_person_frailty_snapshot is not built in this environment yet.
-    To re-enable: build the snapshot, remove this Jinja-comment wrapper, and un-comment the
-    frailty output columns and the "left join frailty" line below. (int_person_frailty
-    renames the columns to efi2_score / efi2_category / rockwood_frailty_level /
-    rockwood_frailty_category.)
+-- Frailty (as-at index_date). eFI2 and Rockwood are kept as two separate sources, mirroring
+-- cltcs_cohort_data: eFI2 score/category from fct_person_efi2_snapshot (thin input drops the
+-- CURRENT_DATE()-derived end_date/age_at_end), Rockwood level/category from
+-- int_rockwood_latest_snapshot. Both keyed on person_id.
+efi2 as (
+    select f.sk_patient_id, f.index_date, d.efi_score, d.category
+    from {{ temporal_join('spine', 'index_date', ref('fct_person_efi2_snapshot'),
+                          join_key='person_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
 
-    frailty as (
-        select f.sk_patient_id, f.index_date,
-               d.efi2_score, d.efi2_category, d.rockwood_frailty_level, d.rockwood_frailty_category
-        from {{ temporal_join('spine', 'index_date', ref('int_person_frailty_snapshot'),
-                              join_key='person_id', join_type='left',
-                              valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
-    ),
--#}
+rockwood as (
+    select f.sk_patient_id, f.index_date, d.frailty_level, d.frailty_category
+    from {{ temporal_join('spine', 'index_date', ref('int_rockwood_latest_snapshot'),
+                          join_key='person_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
 
 risk_summary as (
     select f.sk_patient_id, f.index_date,
@@ -155,6 +175,20 @@ score_treatment as (
 score_frailty as (
     select f.sk_patient_id, f.index_date, d.score_frailty
     from {{ temporal_join('spine', 'index_date', ref('cltcs_score_frailty_snapshot'),
+                          join_key='sk_patient_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
+score_activation as (
+    select f.sk_patient_id, f.index_date, d.score_activation
+    from {{ temporal_join('spine', 'index_date', ref('cltcs_score_activation_snapshot'),
+                          join_key='sk_patient_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
+score_coordination as (
+    select f.sk_patient_id, f.index_date, d.score_coordination
+    from {{ temporal_join('spine', 'index_date', ref('cltcs_score_coordination_snapshot'),
                           join_key='sk_patient_id', join_type='left',
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
 ),
@@ -215,6 +249,17 @@ diabetes as (
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
 ),
 
+-- QRISK CVD risk: as-at read of the latest-valid-QRISK snapshot. Every column is a pure
+-- function of the reading (no CURRENT_DATE), so it reads in straight (no re-derivation, no
+-- recency gate) and passes through NULL when absent -- matching cltcs_cohort_data.
+qrisk as (
+    select f.sk_patient_id, f.index_date,
+           d.qrisk_score, d.qrisk_type, d.cvd_risk_category, d.warrants_statin_consideration
+    from {{ temporal_join('spine', 'index_date', ref('int_qrisk_latest_snapshot'),
+                          join_key='person_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
 -- Asthma management: no snapshot, reconstruct per index date via asthma_management_history()
 -- (as_of == index date). Keyed on person_id. Macro returns all 7 flags; we select the 5 used.
 asthma as (
@@ -251,6 +296,17 @@ asc_service as (
     left join {{ ref('cltcs_asc_monthly_capture') }} a
       on  a.sk_patient_id = s.sk_patient_id
       and a.snapshot_month = date_trunc('month', s.index_date)
+),
+
+-- Recent medications: rolling "recent" prescriptions, captured monthly (like activity/ASC);
+-- equijoin on the month, keyed on person_id (like the pregnancy/asthma joins).
+meds as (
+    select s.person_id, s.index_date,
+           m.medications_recent_12mo, m.unique_active_ingredient_count_12mo
+    from spine s
+    left join {{ ref('cltcs_medications_monthly_capture') }} m
+      on  m.person_id = s.person_id
+      and m.snapshot_month = date_trunc('month', s.index_date)
 )
 
 select
@@ -259,8 +315,16 @@ select
     , {{ hxflake_pseudo_generation('s.sk_patient_id') }} as re_id_key
     , s.index_date
     , s.neighbourhood_code
+    -- cltcs_cohort_data's area_code is the same nh_gp-mapping neighbourhood_code (legacy name); alias it
+    , s.neighbourhood_code as area_code
     -- demographics (as-at)
     , coalesce(dem.practice_code, 'Unknown') as practice_code
+    -- practice_name resolved from the as-at practice_code via dim_practice (current canonical name)
+    , coalesce(pr.practice_name, 'Unknown') as practice_name
+    -- age at index_date from live (immutable) DOB; same formula as dim_person_demographics.age, anchored on index_date
+    , case when dob.birth_date_approx is not null
+           then floor(datediff(month, dob.birth_date_approx, s.index_date) / 12)
+           else null end as age
     , coalesce(dem.main_language, 'Unknown') as main_language
     , coalesce(dem.gender, 'Unknown') as gender
     , coalesce(dem.ethnicity_category, 'Unknown') as ethnicity_category
@@ -303,11 +367,12 @@ select
     , coalesce(con.musculoskeletal_conditions, 0) as musculoskeletal_conditions
     , coalesce(con.neurology_conditions, 0) as neurology_conditions
     , coalesce(con.geriatric_conditions, 0) as geriatric_conditions
-    -- frailty DISABLED until int_person_frailty_snapshot is built (re-enable the CTE + join too)
-    -- , fr.efi2_score as efi_score
-    -- , coalesce(fr.efi2_category, 'Unknown') as efi_category
-    -- , coalesce(fr.rockwood_frailty_level, 'Unknown') as frailty_level
-    -- , coalesce(fr.rockwood_frailty_category, 'Unknown') as frailty_category
+    -- frailty (as-at index_date): eFI2 + Rockwood, kept separate to mirror cltcs_cohort_data.
+    -- efi_score left NULL (not assessed is distinct from a low score); categories -> 'Unknown'.
+    , ef.efi_score
+    , coalesce(ef.category, 'Unknown') as efi_category
+    , coalesce(rk.frailty_level, 'Unknown') as frailty_level
+    , coalesce(rk.frailty_category, 'Unknown') as frailty_category
     -- multimorbidity (NULL = not computed)
     , ccm.cambridge_comorbidity_score
     -- lifestyle and behavioural factors
@@ -377,6 +442,11 @@ select
     , case when dia.latest_hba1c_date between dateadd(month, -12, s.index_date) and s.index_date
            then dia.latest_hba1c_value else null end as latest_hba1c_value
     , dia.latest_hba1c_date
+    -- CVD risk (QRISK): latest valid score as-at index_date; passthrough, NULL when absent
+    , qr.qrisk_score
+    , qr.qrisk_type
+    , qr.cvd_risk_category
+    , qr.warrants_statin_consideration
     -- annual activity (as-at month, from the activity capture)
     , zeroifnull(act.op_att_tot_12mo) as op_att_tot_12mo
     , zeroifnull(act.op_spec_12mo) as op_spec_12mo
@@ -435,43 +505,44 @@ select
       end as medication_name_list
     , coalesce(poly.is_polypharmacy_5plus, false) as is_polypharmacy_5plus
     , coalesce(poly.is_polypharmacy_10plus, false) as is_polypharmacy_10plus
-    -- C-LTCS scores (v1: treatment + frailty only)
+    -- recent medications (last year), as-at the captured month
+    , coalesce(med.medications_recent_12mo, array_construct()) as medications_recent_12mo
+    , zeroifnull(med.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
+    -- C-LTCS scores (all four sub-scores, as-at index_date)
+    , coalesce(sa.score_activation, 0) as score_activation
+    , coalesce(sco.score_coordination, 0) as score_coordination
     , coalesce(st.score_treatment, 0) as score_treatment
     , coalesce(sf.score_frailty, 0) as score_frailty
 
 
 
     -- ============================================================================
-    -- GAP COLUMNS -- history not yet available; add once the source exists.
-    -- (present in cltcs_cohort_data; listed here so the work is visible.)
-    -- Demographics: not in the demographics snapshot input
-    -- , coalesce(pd.practice_name, 'Unknown') as practice_name
-    -- , pd.age
+    -- GAP COLUMNS -- present in cltcs_cohort_data but not (yet) emitted here.
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
-    -- Recent medications
-    -- , medications_recent_12mo, unique_active_ingredient_count_12mo
-    -- QRISK cardiovascular risk (int_qrisk_latest -- no snapshot yet; latest-observation shape,
-    -- an SCD2 thin-input snapshot candidate like BP)
-    -- , qrisk_score, qrisk_type, cvd_risk_category, warrants_statin_consideration
-    -- Scores: no snapshot input yet
-    -- , score_activation, score_coordination
     -- ============================================================================
 
 from spine s
 left join demographics     dem on dem.sk_patient_id = s.sk_patient_id and dem.index_date = s.index_date
+left join dob              on dob.person_id = s.person_id
+left join practice         pr  on pr.practice_code = dem.practice_code
 left join conditions       con on con.sk_patient_id = s.sk_patient_id and con.index_date = s.index_date
 left join polypharmacy     poly on poly.sk_patient_id = s.sk_patient_id and poly.index_date = s.index_date
 left join behavioural_risk br  on br.sk_patient_id = s.sk_patient_id and br.index_date = s.index_date
 left join ccms             ccm on ccm.sk_patient_id = s.sk_patient_id and ccm.index_date = s.index_date
 left join care_home        ch  on ch.sk_patient_id = s.sk_patient_id and ch.index_date = s.index_date
--- left join frailty          fr  on fr.sk_patient_id = s.sk_patient_id and fr.index_date = s.index_date  -- DISABLED: int_person_frailty_snapshot not built
+left join efi2             ef  on ef.sk_patient_id = s.sk_patient_id and ef.index_date = s.index_date
+left join rockwood         rk  on rk.sk_patient_id = s.sk_patient_id and rk.index_date = s.index_date
 left join risk_summary     rs  on rs.sk_patient_id = s.sk_patient_id and rs.index_date = s.index_date
 left join score_treatment  st  on st.sk_patient_id = s.sk_patient_id and st.index_date = s.index_date
 left join score_frailty    sf  on sf.sk_patient_id = s.sk_patient_id and sf.index_date = s.index_date
+left join score_activation sa  on sa.sk_patient_id = s.sk_patient_id and sa.index_date = s.index_date
+left join score_coordination sco on sco.sk_patient_id = s.sk_patient_id and sco.index_date = s.index_date
 left join activity         act on act.sk_patient_id = s.sk_patient_id and act.index_date = s.index_date
 left join pregnancy        preg on preg.person_id = s.person_id and preg.index_date = s.index_date
 left join bp_control       bp  on bp.sk_patient_id = s.sk_patient_id and bp.index_date = s.index_date
 left join diabetes         dia on dia.sk_patient_id = s.sk_patient_id and dia.index_date = s.index_date
+left join qrisk            qr  on qr.sk_patient_id = s.sk_patient_id and qr.index_date = s.index_date
 left join asthma           am  on am.person_id = s.person_id and am.index_date = s.index_date
 left join asc_service      asc_c on asc_c.sk_patient_id = s.sk_patient_id and asc_c.index_date = s.index_date
+left join meds             med on med.person_id = s.person_id and med.index_date = s.index_date
