@@ -11,6 +11,14 @@
 -- NOTE 2: The original [Year of Birth] logic (YEAR(dv_FinYear)) applies YEAR() to
 --         a string; preserved intent but see the flagged lines.
 
+with unbundled_by_encounter as (
+    select
+        sk_encounter_id,
+        sum(cost) as aggregate_unbundled_adjustment_national
+    from {{ ref('stg_sus_op_monthly_encounterunbundled') }}
+    group by sk_encounter_id
+)
+
 select
       b.administrative_category
     , b.age
@@ -45,7 +53,8 @@ select
         else null
       end as age_range_derived
     , null as aggregate_unbundled_adjustment_local
-    , e.cost as aggregate_unbundled_adjustment_national
+    , e.aggregate_unbundled_adjustment_national
+        as aggregate_unbundled_adjustment_national
     , null as aggregate_unbundled_adjustment_non_mandatory
     ,{{calculate_acp_from_activity_date('b.appointment_date') }} as applicable_costing_period
     , null as applicable_date
@@ -395,4 +404,4 @@ select
 from {{ ref('stg_sus_op_monthly_encounterdenormalised_daterange') }} b
 left outer join {{ ref('stg_sus_op_monthly_encounterbilling') }}  c on b.sk_encounter_id = c.sk_encounter_id
 left outer join {{ ref('stg_sus_op_monthly_encounterpatient') }}   d on b.sk_encounter_id = d.sk_encounter_id
-left outer join {{ ref('stg_sus_op_monthly_encounterunbundled') }} e on b.sk_encounter_id = e.sk_encounter_id
+left outer join unbundled_by_encounter e on b.sk_encounter_id = e.sk_encounter_id
