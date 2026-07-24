@@ -32,6 +32,8 @@ models:
         description: "HxFlake pseudonym generated from patient_id (for re-identification)."
       - name: neighbourhood_code
         description: "C-LTCS local neighbourhood tag, carried from the population roster for that month; may be null."
+      - name: area_code
+        description: "Same value as neighbourhood_code, under the name cltcs_cohort_data uses (area_code is a legacy alias of the nh_gp-mapping neighbourhood_code). Emitted for definitional parity with the treated arm."
       - name: efi_score
         description: "eFI2 score (0-1) as-at index_date, from fct_person_efi2_snapshot. NULL when not assessed (distinct from a low score) -- not coalesced, mirroring cltcs_cohort_data."
       - name: efi_category

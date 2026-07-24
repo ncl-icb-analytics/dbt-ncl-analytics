@@ -298,6 +298,8 @@ select
     , {{ hxflake_pseudo_generation('s.sk_patient_id') }} as re_id_key
     , s.index_date
     , s.neighbourhood_code
+    -- cltcs_cohort_data's area_code is the same nh_gp-mapping neighbourhood_code (legacy name); alias it
+    , s.neighbourhood_code as area_code
     -- demographics (as-at)
     , coalesce(dem.practice_code, 'Unknown') as practice_code
     , coalesce(dem.main_language, 'Unknown') as main_language
