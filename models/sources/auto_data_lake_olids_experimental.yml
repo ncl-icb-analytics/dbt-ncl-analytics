@@ -1423,8 +1423,6 @@ sources:
       data_type: UUID
     - name: AUTHOR_ORGANISATION_ID
       data_type: UUID
-    - name: ORGANISATION_ID
-      data_type: UUID
     - name: ENCOUNTER_ID
       data_type: UUID
     - name: PRACTITIONER_ID
@@ -1505,7 +1503,7 @@ sources:
       data_type: NUMBER(4,0)
     - name: AGE_AT_EVENT_NEONATE
       data_type: NUMBER(9,0)
-    - name: RECORDED_DATE
+    - name: RECORDED_DATETIME
       data_type: TIMESTAMP_NTZ
     - name: VALUE
       data_type: FLOAT

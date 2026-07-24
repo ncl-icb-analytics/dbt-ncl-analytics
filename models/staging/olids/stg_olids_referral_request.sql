@@ -26,7 +26,7 @@ select
     age_at_event,
     age_at_event_baby,
     age_at_event_neonate,
-    recorded_date as date_recorded,
+    recorded_datetime as date_recorded,
     publisher_organisation_code,
     lds_transform_datetime,
 
