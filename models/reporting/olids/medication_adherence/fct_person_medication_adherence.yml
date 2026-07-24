@@ -1,89 +1,126 @@
 models:
   - name: fct_person_medication_adherence
     description: >
-      Reporting-layer medicines adherence: rolling 12-month PDC (Proportion of
-      Days Covered) and overall chain PDC per person and drug, for the five
-      adherence drug classes (in-house int_medication_adherence_pdc joined to
-      dim_person). Carries both the faithful port of the NCL meds_adherence
-      Snowpark pipeline and corrected variants; see int_medication_adherence_pdc
-      for documented divergences. One row per (person_id, vtm_code,
-      window_start); drug_name presents the readable VTM name via a
-      deduplicated 1:1 code-to-name map, matching the original pipeline's
-      output. No opt-out filter is applied — secondary-use consumers must join
+      Person-grain medicines adherence snapshot per adherence drug class,
+      aggregated across each person's qualifying refill chains (drugs, VTM
+      grain). Snapshot cohort: repeat therapy active in the last year —
+      chains need at least one repeat-authorised order AND supply extending
+      into the last year (var medication_adherence_recency_years); NULL
+      measures with drug_count 0 mean "no current repeat therapy in class".
+      Two measure families side by side for comparison: *_pdc_corrected_*
+      (windowed interval PDC over observed days — frame-clipped, censored,
+      final order counts; see int_medication_adherence_pdc) and *_pdc_*
+      without _corrected (the faithful AIC measure — last-order quirk,
+      future-supply projection and window overhang included). Per family and
+      class: latest (each family's own most recent fully elapsed non-NULL
+      window — the two families' latest readings can come from different
+      windows) and overall (chain span within the 3-year processing
+      horizon), each as min (worst drug) and mean across the person's
+      chains, plus the number of contributing chains. Drill-down lives in
+      int_medication_adherence_pdc_windows. One row per person. No opt-out
+      filter — secondary-use consumers must join
       DIM_PERSON_SECONDARY_USE_ALLOWED.
     config:
       meta:
         owner:
           name: em-baldwin
-    data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - person_id
-              - vtm_code
-              - window_start
     columns:
       - name: person_id
-        description: Person identifier; joins to dim_person.
+        description: Person identifier; one row per person.
         tests:
+          - unique
           - not_null
           - relationships:
               arguments:
                 to: ref('dim_person')
                 field: person_id
-      - name: vtm_code
-        description: >
-          Drug grouping key — the VTM code the refill chain was computed on
-          (a concept display string for rows that never resolved to a VTM).
-          Part of the unique grain; distinct codes could in principle share a
-          name, so uniqueness is tested here, not on drug_name.
-        tests:
-          - not_null
-      - name: drug_name
-        description: >
-          Readable drug name — the VTM name for the chain's vtm_code via a
-          deduplicated 1:1 map (one name per code), falling back to the
-          concept display string for unresolved chains. Matches the original
-          pipeline's drug_name presentation.
-        tests:
-          - not_null
-      - name: drug_class
-        description: Adherence drug class label.
-        tests:
-          - not_null
-      - name: window_start
-        description: Rolling window start (person-anchored monthly).
-        tests:
-          - not_null
-      - name: window_end
-        description: Window end (window_start + 12 months).
-      - name: exposure_start
-        description: First order date within the window; NULL for windows with no qualifying orders.
-      - name: exposure_end
-        description: Last order end date within the window; NULL for windows with no qualifying orders.
-      - name: covered_days
-        description: Net covered days in the window (faithful variant).
-      - name: covered_days_corrected
-        description: Net covered days in the window (corrected variant).
-      - name: window_days
-        description: Exposure span in days — the PDC denominator (pdc_type 2).
-      - name: pdc
-        description: Faithful rolling PDC (uncapped; NULL when no positive coverage).
-      - name: pdc_corrected
-        description: Corrected rolling PDC (final order of the chain counts in full).
-      - name: overall_start
-        description: First order date of the (person, drug) chain.
-      - name: overall_end
-        description: Last order end date of the (person, drug) chain.
-      - name: total_exposure_days
-        description: Days from overall_start to overall_end.
-      - name: overall_pdc
-        description: Faithful overall PDC across the chain span.
-      - name: overall_pdc_corrected
-        description: Corrected overall PDC.
-      - name: pdc_type
-        description: Constant 2 (dynamic exposure-window denominator).
-      - name: exclusive
-        description: Constant TRUE (early-refill overlap subtracted; strict window upper bound).
-      - name: window_length_months
-        description: Constant 12.
+      - name: raas_latest_pdc_corrected_min
+        description: RAAS — worst drug, corrected PDC, latest elapsed window.
+      - name: raas_latest_pdc_corrected_mean
+        description: RAAS — mean corrected PDC, latest elapsed windows.
+      - name: raas_overall_pdc_corrected_min
+        description: RAAS — worst drug, corrected overall PDC.
+      - name: raas_overall_pdc_corrected_mean
+        description: RAAS — mean corrected overall PDC.
+      - name: raas_latest_pdc_min
+        description: RAAS — worst drug, faithful PDC, latest elapsed window.
+      - name: raas_latest_pdc_mean
+        description: RAAS — mean faithful PDC, latest elapsed windows.
+      - name: raas_overall_pdc_min
+        description: RAAS — worst drug, faithful overall PDC.
+      - name: raas_overall_pdc_mean
+        description: RAAS — mean faithful overall PDC.
+      - name: raas_drug_count
+        description: RAAS — number of qualifying chains (distinct VTM codes).
+      - name: beta_blocker_latest_pdc_corrected_min
+        description: Beta-blockers — worst drug, corrected PDC, latest elapsed window.
+      - name: beta_blocker_latest_pdc_corrected_mean
+        description: Beta-blockers — mean corrected PDC, latest elapsed windows.
+      - name: beta_blocker_overall_pdc_corrected_min
+        description: Beta-blockers — worst drug, corrected overall PDC.
+      - name: beta_blocker_overall_pdc_corrected_mean
+        description: Beta-blockers — mean corrected overall PDC.
+      - name: beta_blocker_latest_pdc_min
+        description: Beta-blockers — worst drug, faithful PDC, latest elapsed window.
+      - name: beta_blocker_latest_pdc_mean
+        description: Beta-blockers — mean faithful PDC, latest elapsed windows.
+      - name: beta_blocker_overall_pdc_min
+        description: Beta-blockers — worst drug, faithful overall PDC.
+      - name: beta_blocker_overall_pdc_mean
+        description: Beta-blockers — mean faithful overall PDC.
+      - name: beta_blocker_drug_count
+        description: Beta-blockers — number of qualifying chains.
+      - name: ccb_latest_pdc_corrected_min
+        description: Calcium-channel blockers — worst drug, corrected PDC, latest elapsed window.
+      - name: ccb_latest_pdc_corrected_mean
+        description: Calcium-channel blockers — mean corrected PDC, latest elapsed windows.
+      - name: ccb_overall_pdc_corrected_min
+        description: Calcium-channel blockers — worst drug, corrected overall PDC.
+      - name: ccb_overall_pdc_corrected_mean
+        description: Calcium-channel blockers — mean corrected overall PDC.
+      - name: ccb_latest_pdc_min
+        description: Calcium-channel blockers — worst drug, faithful PDC, latest elapsed window.
+      - name: ccb_latest_pdc_mean
+        description: Calcium-channel blockers — mean faithful PDC, latest elapsed windows.
+      - name: ccb_overall_pdc_min
+        description: Calcium-channel blockers — worst drug, faithful overall PDC.
+      - name: ccb_overall_pdc_mean
+        description: Calcium-channel blockers — mean faithful overall PDC.
+      - name: ccb_drug_count
+        description: Calcium-channel blockers — number of qualifying chains.
+      - name: non_insulin_antidiabetic_latest_pdc_corrected_min
+        description: Non-insulin anti-diabetics — worst drug, corrected PDC, latest elapsed window.
+      - name: non_insulin_antidiabetic_latest_pdc_corrected_mean
+        description: Non-insulin anti-diabetics — mean corrected PDC, latest elapsed windows.
+      - name: non_insulin_antidiabetic_overall_pdc_corrected_min
+        description: Non-insulin anti-diabetics — worst drug, corrected overall PDC.
+      - name: non_insulin_antidiabetic_overall_pdc_corrected_mean
+        description: Non-insulin anti-diabetics — mean corrected overall PDC.
+      - name: non_insulin_antidiabetic_latest_pdc_min
+        description: Non-insulin anti-diabetics — worst drug, faithful PDC, latest elapsed window.
+      - name: non_insulin_antidiabetic_latest_pdc_mean
+        description: Non-insulin anti-diabetics — mean faithful PDC, latest elapsed windows.
+      - name: non_insulin_antidiabetic_overall_pdc_min
+        description: Non-insulin anti-diabetics — worst drug, faithful overall PDC.
+      - name: non_insulin_antidiabetic_overall_pdc_mean
+        description: Non-insulin anti-diabetics — mean faithful overall PDC.
+      - name: non_insulin_antidiabetic_drug_count
+        description: Non-insulin anti-diabetics — number of qualifying chains.
+      - name: lipid_lowering_latest_pdc_corrected_min
+        description: Lipid lowering drugs — worst drug, corrected PDC, latest elapsed window.
+      - name: lipid_lowering_latest_pdc_corrected_mean
+        description: Lipid lowering drugs — mean corrected PDC, latest elapsed windows.
+      - name: lipid_lowering_overall_pdc_corrected_min
+        description: Lipid lowering drugs — worst drug, corrected overall PDC.
+      - name: lipid_lowering_overall_pdc_corrected_mean
+        description: Lipid lowering drugs — mean corrected overall PDC.
+      - name: lipid_lowering_latest_pdc_min
+        description: Lipid lowering drugs — worst drug, faithful PDC, latest elapsed window.
+      - name: lipid_lowering_latest_pdc_mean
+        description: Lipid lowering drugs — mean faithful PDC, latest elapsed windows.
+      - name: lipid_lowering_overall_pdc_min
+        description: Lipid lowering drugs — worst drug, faithful overall PDC.
+      - name: lipid_lowering_overall_pdc_mean
+        description: Lipid lowering drugs — mean faithful overall PDC.
+      - name: lipid_lowering_drug_count
+        description: Lipid lowering drugs — number of qualifying chains.
