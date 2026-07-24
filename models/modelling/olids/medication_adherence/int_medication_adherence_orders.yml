@@ -5,9 +5,12 @@ models:
       in the five adherence drug classes selected by BNF paragraph via
       get_medication_orders (020505 RAAS, 020400 beta-blockers, 020602 CCBs,
       060102 non-insulin anti-diabetics, 021200 lipid lowering), restricted to
-      oral solid forms, with missing-value sentinels normalised to NULL and
-      drug_name resolved to VTM (therapeutic-moiety) grain via
-      stg_reference_bnf_latest. Port of the NCL meds_adherence Snowpark
+      the last 3 years of orders (month-truncated cutoff, var
+      medication_adherence_order_lookback_years — chains older than the
+      horizon are left-truncated; a divergence from the original, which
+      processed full history), restricted to oral solid forms, with
+      missing-value sentinels normalised to NULL and drug_name resolved to
+      VTM (therapeutic-moiety) grain via stg_reference_bnf_latest. Port of the NCL meds_adherence Snowpark
       extraction + normalise_missing_values + filter_oral_medications; see the
       model header for documented divergences. One row per medication order.
     config:
@@ -89,3 +92,11 @@ models:
         description: Mapped SNOMED concept code.
       - name: mapped_concept_display
         description: Mapped SNOMED concept display term.
+      - name: is_repeat_order
+        description: >
+          TRUE when the order's medication statement carries a
+          REPEAT_PRESCRIPTION authorisation type. Additive column (not in the
+          original pipeline); used by the reporting snapshot to restrict its
+          cohort to repeat chains — plays no part in the PDC computation.
+        tests:
+          - not_null

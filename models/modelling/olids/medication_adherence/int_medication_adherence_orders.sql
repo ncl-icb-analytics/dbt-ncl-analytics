@@ -47,7 +47,23 @@ Processing dropped as already handled upstream:
   structural no-op for them.
 - age_at_event is not carried: the original selected it but never used it in
   any calculation or output. Demographics come from dim_person at reporting.
+- is_repeat_order is additive (not in the original): flags orders whose
+  medication statement has a REPEAT_PRESCRIPTION authorisation type (same
+  cluster/join pattern as int_medication_orders_repeat_current). It plays no
+  part in the PDC computation — the reporting snapshot uses it to restrict
+  its cohort to repeat chains.
 */
+
+{# Processing horizon: only orders from the last N years enter the pipeline
+   (var-overridable). The cutoff is truncated to a month boundary so the
+   horizon only moves once a month — a raw rolling cutoff would re-anchor
+   refill chains (and therefore every window grid) on every build day.
+   THIS IS A DIVERGENCE FROM THE ORIGINAL, WHICH PROCESSED FULL HISTORY:
+   chains older than the horizon are left-truncated, so overall_start,
+   window grids and overall_pdc describe the horizon, not the full chain.
+   Any parity comparison against an AIC deployment must apply the same
+   horizon (or override it to a large value). #}
+{% set order_lookback_years = var('medication_adherence_order_lookback_years', 3) %}
 
 {% set bnf_paragraph_classes = {
     '020505': 'RAAS',
@@ -57,7 +73,13 @@ Processing dropped as already handled upstream:
     '021200': 'Lipid lowering drugs'
 } %}
 
-with medication_orders as (
+with repeat_prescription_codes as (
+    select distinct code
+    from {{ ref('stg_reference_combined_codesets') }}
+    where cluster_id = 'REPEAT_PRESCRIPTION'
+),
+
+medication_orders as (
     {%- for bnf_paragraph, label in bnf_paragraph_classes.items() %}
     select
         mo.*,
@@ -65,6 +87,7 @@ with medication_orders as (
     from (
         {{ get_medication_orders(bnf_code=bnf_paragraph) }}
     ) mo
+    where mo.order_date >= date_trunc('month', dateadd(year, -{{ order_lookback_years }}, current_date))
     {% if not loop.last %}union all{% endif %}
     {%- endfor %}
 ),
@@ -114,12 +137,17 @@ with_vtm as (
             when vs.vtm is not null then 'VTM_SNOMED'
             when vb.vtm is not null then 'VTM_BNF'
             else 'CONCEPT_DISPLAY'
-        end as drug_name_source
+        end as drug_name_source,
+        (rpc.code is not null) as is_repeat_order
     from medication_orders mo
     left join vtm_by_snomed vs
         on mo.mapped_concept_code = vs.snomed_code
     left join vtm_by_bnf vb
         on left(mo.bnf_code, 9) = vb.bnf_chemical_substance
+    left join {{ ref('stg_olids_medication_statement') }} ms
+        on mo.medication_statement_id = ms.id
+    left join repeat_prescription_codes rpc
+        on ms.authorisation_type_code = rpc.code
 ),
 
 -- normalise_missing_values: sentinel strings -> NULL (no trim, matching the
@@ -149,7 +177,8 @@ normalised as (
         end as quantity_unit,
         order_quantity_value as quantity_value,
         mapped_concept_code,
-        mapped_concept_display
+        mapped_concept_display,
+        is_repeat_order
     from with_vtm
 )
 
