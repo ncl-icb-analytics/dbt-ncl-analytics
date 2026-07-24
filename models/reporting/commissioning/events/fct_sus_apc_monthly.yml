@@ -1,0 +1,462 @@
+version: 2
+
+models:
+  - name: fct_sus_apc_monthly
+    description: |
+      Monthly SUS APC fact table with full transformations applied.
+      
+      Grain: One row per spell per month
+      
+      Core commissioning reporting fact table combining spell-level activity data, 
+      commissioner attribution, business rules application, and SLA contract classification.
+      
+      Includes all spells (both commissioning-accessed and private activity) for comprehensive 
+      audit trail. Private activity (administrative_category_classification = 'PRIVATE') can be 
+      filtered at consumption layer using fct_sus_apc_consolidated instead.
+      
+      Unbundled activity may produce multiple rows per spell if applicable business rules are triggered.
+    
+    config:
+      meta:
+        owner:
+          name: Commissioning Analytics
+      tags: ['fact', 'apc', 'spell', 'commissioning', 'monthly']
+      materialized: table
+    
+    columns:
+      - name: sk_spell_id
+        description: Surrogate key for fact table (composite of spell_id + financial_year)
+        data_type: varchar
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: spell_id
+        description: Natural key - unique spell identifier from source (primarykey_id)
+        data_type: number
+        data_tests:
+          - not_null
+      
+      - name: sk_patient_id
+        description: Pseudonymised NHS Number
+        data_type: varchar
+        data_tests:
+          - not_null
+      
+      - name: local_patient_identifier
+        description: Trust-provided patient identifier
+        data_type: varchar
+      
+      - name: spell_admission_date
+        description: Spell start date (patient admission to hospital)
+        data_type: timestamp_ntz
+        data_tests:
+          - not_null
+      
+      - name: spell_discharge_date
+        description: Spell end date (patient discharge from hospital)
+        data_type: timestamp_ntz
+        data_tests:
+          - not_null
+      
+      - name: spell_admission_year
+        description: Calendar year of spell admission (YYYY)
+        data_type: number
+      
+      - name: spell_admission_month
+        description: Calendar month of spell admission (1-12)
+        data_type: number
+      
+      - name: spell_admission_quarter
+        description: Calendar quarter of spell admission (1-4)
+        data_type: number
+      
+      - name: spell_discharge_year
+        description: Calendar year of spell discharge (YYYY)
+        data_type: number
+      
+      - name: spell_discharge_month
+        description: Calendar month of spell discharge (1-12)
+        data_type: number
+      
+      - name: financial_year
+        description: UK financial year of spell admission (e.g., 2023/24)
+        data_type: varchar
+      
+      - name: length_of_stay_days
+        description: Length of spell in days (discharge_date - admission_date)
+        data_type: number
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 10000
+      
+      - name: total_bed_days
+        description: Total bed days across all episodes in spell
+        data_type: number
+      
+      - name: episode_count
+        description: Number of distinct episodes within the spell
+        data_type: number
+      
+      - name: zcommissioner_code
+        description: |
+          Date-effective commissioner code assigned at spell admission via hierarchical lookup:
+          1. GP practice (if available)
+          2. Patient LSOA
+          3. Provider (hosted provider scenario)
+          4. Provider postcode (fallback)
+          
+          If no match found, returns 'UNKNOWN' (flagged in missing_commissioner_flag).
+        data_type: varchar
+        data_tests:
+          - not_null
+      
+      - name: commissioner_lookup_method
+        description: Method used to derive commissioner (PRACTICE, LSOA, PROVIDER, PROVIDER_POSTCODE, NOT_FOUND)
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['PRACTICE', 'LSOA', 'PROVIDER', 'PROVIDER_POSTCODE', 'NOT_FOUND']
+      
+      - name: commissioner_lookup_priority
+        description: Priority order of lookup method (1=highest, 4=lowest, 99=not found)
+        data_type: number
+      
+      - name: administrative_category
+        description: Source administrative category code
+        data_type: varchar
+      
+      - name: administrative_category_classification
+        description: Classified administrative category (ELECTIVE, PRIVATE, NON_ELECTIVE_EMERGENCY, NON_ELECTIVE_URGENT, NON_ELECTIVE_TRANSFER, UNKNOWN)
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['ELECTIVE', 'PRIVATE', 'NON_ELECTIVE_EMERGENCY', 'NON_ELECTIVE_URGENT', 'NON_ELECTIVE_TRANSFER', 'UNKNOWN']
+      
+      - name: admission_method
+        description: Source admission method code
+        data_type: varchar
+      
+      - name: admission_method_classification
+        description: Classified admission method (ELECTIVE, EMERGENCY, TRANSFER, OTHER, UNKNOWN)
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['ELECTIVE', 'EMERGENCY', 'TRANSFER', 'OTHER', 'UNKNOWN']
+      
+      - name: admission_source_code
+        description: Source of admission (e.g., 49=care home)
+        data_type: varchar
+      
+      - name: discharge_destination
+        description: Destination on discharge (e.g., 49=care home)
+        data_type: varchar
+      
+      - name: spell_hrg_code
+        description: Healthcare Resource Group code assigned to spell (HRG4+)
+        data_type: varchar
+      
+      - name: commissioning_service_agreement_provider
+        description: Provider organisation code
+        data_type: varchar
+        data_tests:
+          - not_null
+      
+      - name: provider_name
+        description: Provider organisation name (from lookup, with fallback to code if not found)
+        data_type: varchar
+      
+      - name: provider_code
+        description: Provider organisation code from reference table
+        data_type: varchar
+      
+      - name: provider_type
+        description: Provider type classification (NHS Trust, Independent Sector, etc.)
+        data_type: varchar
+      
+      - name: patient_date_of_birth
+        description: Patient date of birth (pseudonymised)
+        data_type: date
+      
+      - name: patient_age_at_admission
+        description: Patient age in years at time of admission
+        data_type: number
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 120
+      
+      - name: patient_gender_code
+        description: Source gender code (M/F/X/9)
+        data_type: varchar
+      
+      - name: patient_gender_description
+        description: Gender description (Male/Female/Other/Unknown)
+        data_type: varchar
+      
+      - name: patient_ethnic_category_code
+        description: Source ethnic category code
+        data_type: varchar
+      
+      - name: patient_ethnic_category_description
+        description: Ethnic category description
+        data_type: varchar
+      
+      - name: sensitive_spell_flag
+        description: Flag indicating sensitive admission (1=sensitive, 0=routine). Private patients and flagged spells.
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      
+      - name: place_of_delivery_derived
+        description: Derived place of delivery for maternity spells (null for non-maternity)
+        data_type: varchar
+      
+      - name: care_home_flag
+        description: Flag indicating admission from care home (1=from care home, 0=other)
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      
+      - name: discharged_to_care_home_flag
+        description: Flag indicating discharge to care home (1=to care home, 0=other)
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      
+      - name: spell_tariff_value
+        description: Assigned spell tariff value (may vary by HRG, admission type, and LOS)
+        data_type: number
+      
+      - name: dominant_episode_specialty
+        description: Main specialty code from dominant episode in spell
+        data_type: varchar
+      
+      - name: dominant_episode_treatment_function
+        description: Treatment function code from dominant episode in spell
+        data_type: varchar
+      
+      - name: source_extract_type
+        description: Extract type from source system (for audit trail)
+        data_type: varchar
+      
+      - name: zdatatype
+        description: Data source identifier (always 'SPELL_UNIFIED' for APC spells)
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['SPELL_UNIFIED']
+      
+      - name: zbusinessrule
+        description: |
+          Pipe-delimited list of matched business rules that apply to this spell.
+          Format: RULE_NAME | RULE_NAME | ... (e.g., "Emergency_Standard | High_Bed_Day")
+        data_type: varchar
+      
+      - name: zcontracttype
+        description: |
+          SLA contract type classification derived from business rules.
+          Indicates billing/contracting category for the spell.
+        data_type: varchar
+      
+      - name: future_date_flag
+        description: Data quality flag - 1 if admission date is in future (possible data error)
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      
+      - name: invalid_age_flag
+        description: Data quality flag - 1 if patient age is outside valid range [0-120]
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      
+      - name: missing_commissioner_flag
+        description: Data quality flag - 1 if commissioner lookup returned 'UNKNOWN'
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      
+      - name: missing_hrg_flag
+        description: Data quality flag - 1 if HRG code is missing
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      
+      - name: model_execution_timestamp
+        description: Timestamp when intermediate model was last executed
+        data_type: timestamp_ntz
+      
+      - name: fact_load_timestamp
+        description: Timestamp when fact table was last loaded
+        data_type: timestamp_ntz
+    
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "spell_admission_date <= spell_discharge_date"
+            name: "admission_before_discharge"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "length_of_stay_days >= 0"
+            name: "positive_length_of_stay"
+
+  - name: fct_sus_apc_consolidated
+    description: |
+      Published consolidated APC fact table, restricted to commissioning-access records 
+      and excluding private-patient activity.
+      
+      Grain: One row per spell per month (filtered)
+      
+      Applies publish filters from the unified view and resolves provider to current-care 
+      organisation. Recommended for downstream consumers and standard reporting.
+      
+      To use the full unfiltered monthly fact (including private activity and debugging), 
+      reference fct_sus_apc_monthly directly.
+    
+    config:
+      meta:
+        owner:
+          name: Commissioning Analytics
+      tags: ['fact', 'apc', 'spell', 'commissioning', 'consolidated', 'published']
+    
+    columns:
+      - name: sk_spell_id
+        description: Surrogate key for fact table (composite of spell_id + financial_year)
+        data_type: varchar
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: spell_id
+        description: Natural key - unique spell identifier from source (primarykey_id)
+        data_type: number
+        data_tests:
+          - not_null
+      
+      - name: sk_patient_id
+        description: Pseudonymised NHS Number
+        data_type: varchar
+        data_tests:
+          - not_null
+      
+      - name: zcommissioning_access
+        description: |
+          Legacy commissioning access status flag (0=private/excluded, 1=commissioning access).
+          Retained for publish filtering and audit trail.
+        data_type: number
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1]  /* Only commissioning access records in consolidated view */
+      
+      - name: zorganisation_code_code_of_provider_merged
+        description: |
+          Current-care organisation code for the provider. Resolved via organisation 
+          dictionary at time of fact load, allowing provider mergers/reorganisations to be 
+          reflected historically.
+          Falls back to source provider code if merge mapping unavailable.
+        data_type: varchar
+      
+      - name: spell_admission_date
+        description: Spell start date
+        data_type: timestamp_ntz
+        data_tests:
+          - not_null
+      
+      - name: spell_discharge_date
+        description: Spell end date
+        data_type: timestamp_ntz
+        data_tests:
+          - not_null
+      
+      - name: financial_year
+        description: UK financial year of spell admission
+        data_type: varchar
+      
+      - name: length_of_stay_days
+        description: Length of spell in days
+        data_type: number
+      
+      - name: administrative_category_classification
+        description: Classified administrative category (ELECTIVE, NON_ELECTIVE_*, etc.)
+        data_type: varchar
+      
+      - name: zcommissioner_code
+        description: Date-effective commissioner code assigned to spell
+        data_type: varchar
+        data_tests:
+          - not_null
+      
+      - name: zbusinessrule
+        description: Pipe-delimited list of matched business rules
+        data_type: varchar
+      
+      - name: zcontracttype
+        description: SLA contract type classification
+        data_type: varchar
+      
+      - name: spell_hrg_code
+        description: Healthcare Resource Group code
+        data_type: varchar
+      
+      - name: spell_tariff_value
+        description: Assigned spell tariff value
+        data_type: number
+      
+      - name: patient_age_at_admission
+        description: Patient age in years at admission
+        data_type: number
+      
+      - name: patient_gender_description
+        description: Patient gender (Male/Female/Other/Unknown)
+        data_type: varchar
+      
+      - name: patient_ethnic_category_description
+        description: Patient ethnic category
+        data_type: varchar
+      
+      - name: provider_name
+        description: Current provider organisation name
+        data_type: varchar
+      
+      - name: care_home_flag
+        description: Flag indicating admission from care home
+        data_type: number
+      
+      - name: sensitive_spell_flag
+        description: Flag indicating sensitive admission
+        data_type: number
+    
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "coalesce(administrative_category, '00') not in ('02', '2')"
+            name: "exclude_private_activity"
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
