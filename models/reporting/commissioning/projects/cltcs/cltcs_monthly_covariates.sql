@@ -74,6 +74,14 @@ dob as (
     from {{ ref('dim_person_demographics') }}
 ),
 
+-- practice_name is a label of the practice (not per-person as-at state), so it needs no snapshot:
+-- look it up from the code->name reference (dim_practice, one row per practice_code) on the as-at
+-- practice_code the demographics CTE already resolves (mirrors the area_code / age approach).
+practice as (
+    select practice_code, practice_name
+    from {{ ref('dim_practice') }}
+),
+
 conditions as (
     select f.sk_patient_id, f.index_date,
            d.has_atrial_fibrillation, d.has_asthma, d.has_cancer, d.has_coronary_heart_disease,
@@ -311,6 +319,8 @@ select
     , s.neighbourhood_code as area_code
     -- demographics (as-at)
     , coalesce(dem.practice_code, 'Unknown') as practice_code
+    -- practice_name resolved from the as-at practice_code via dim_practice (current canonical name)
+    , coalesce(pr.practice_name, 'Unknown') as practice_name
     -- age at index_date from live (immutable) DOB; same formula as dim_person_demographics.age, anchored on index_date
     , case when dob.birth_date_approx is not null
            then floor(datediff(month, dob.birth_date_approx, s.index_date) / 12)
@@ -508,8 +518,6 @@ select
 
     -- ============================================================================
     -- GAP COLUMNS -- present in cltcs_cohort_data but not (yet) emitted here.
-    -- Demographics: practice_name is not in the demographics snapshot input
-    -- , coalesce(pd.practice_name, 'Unknown') as practice_name
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
     -- ============================================================================
@@ -517,6 +525,7 @@ select
 from spine s
 left join demographics     dem on dem.sk_patient_id = s.sk_patient_id and dem.index_date = s.index_date
 left join dob              on dob.person_id = s.person_id
+left join practice         pr  on pr.practice_code = dem.practice_code
 left join conditions       con on con.sk_patient_id = s.sk_patient_id and con.index_date = s.index_date
 left join polypharmacy     poly on poly.sk_patient_id = s.sk_patient_id and poly.index_date = s.index_date
 left join behavioural_risk br  on br.sk_patient_id = s.sk_patient_id and br.index_date = s.index_date

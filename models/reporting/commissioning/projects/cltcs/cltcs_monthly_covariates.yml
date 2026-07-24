@@ -36,6 +36,8 @@ models:
         description: "Same value as neighbourhood_code, under the name cltcs_cohort_data uses (area_code is a legacy alias of the nh_gp-mapping neighbourhood_code). Emitted for definitional parity with the treated arm."
       - name: age
         description: "Age in whole years as-at index_date, computed from live (immutable) date of birth via floor(datediff(month, dob, index_date)/12) -- same definition as dim_person_demographics.age, anchored on index_date. NULL when DOB is unavailable. Not snapshotted (DOB never changes), so it has no forward-only floor."
+      - name: practice_name
+        description: "Registered-practice name, resolved from the as-at practice_code via the dim_practice reference (one row per practice_code). 'Unknown' when the code is absent/unmapped. The name is dim_practice's current canonical name, not rename-accurate to index_date -- practice_code (the matching key) is fully as-at; the name is a near-static label. Not snapshotted, so it adds no forward-only floor beyond practice_code's."
       - name: efi_score
         description: "eFI2 score (0-1) as-at index_date, from fct_person_efi2_snapshot. NULL when not assessed (distinct from a low score) -- not coalesced, mirroring cltcs_cohort_data."
       - name: efi_category
