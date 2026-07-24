@@ -61,13 +61,13 @@ select erl.sk_patient_id
 from source_pop erl
 left join {{ ref('dim_person_conditions')}} pc
     on erl.person_id = pc.person_id
-left join {{ref('fct_person_sus_ae_recent')}} aea
+left join {{ref('fct_person_sus_uec_recent')}} aea
     on erl.sk_patient_id  = aea.sk_patient_id
-left join {{ref('fct_person_sus_ip_recent')}} apca
+left join {{ref('fct_person_sus_apc_recent')}} apca
     on erl.sk_patient_id  = apca.sk_patient_id
 left join {{ref('fct_person_medications_recent')}} rm
     on erl.person_id = rm.person_id
-left join {{ref('stg_aic_int_efi2_scores')}} fr
+left join {{ref('dim_person_efi2')}} fr
     on erl.person_id = fr.person_id
 left join {{ref('fct_person_frailty_register')}} frr
     on erl.person_id = frr.person_id

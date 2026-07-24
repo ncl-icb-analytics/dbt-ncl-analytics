@@ -57,11 +57,11 @@ sources:
     domain: commissioning
   
    # SUS Unified - Emergency Care
-  - source_name: sus_ae
+  - source_name: sus_ecds
     database: DATA_LAKE
     schema: SUS_UNIFIED_ECDS
     description: SUS emergency care attendances and activity
-    raw_prefix: raw_sus_ae
+    raw_prefix: raw_sus_ecds
     domain: commissioning
 
   # eRS referrals

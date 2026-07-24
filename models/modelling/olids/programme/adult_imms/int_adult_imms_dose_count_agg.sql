@@ -17,13 +17,22 @@ END As VACC_ORDER
 ,p.month_year
 ,p.month_label
 ,p.age_band_5y
+,p.age_65_plus
+,p.age_75_plus
 ,p.is_care_home_resident
+,p.is_immunosuppressed
+,p.in_ppv_clinical_risk_group
+,p.is_pregnant
+,p.ethnicity_category
+,p.ethcat_order
+,p.imd_quintile
+,p.imdquintile_order
 ,p.vaccination_count 
 FROM (
 ------- ADULT IMMUNISATION DOSE COUNTS (65+ POPULATION)
 --PPV Dose 1
 select 
- 'PPV (dose 1)' as vaccination_dose, ppv_dose1_fiscal as fiscal_year,  practice_code, ppv_dose1_sort as month_year, ppv_dose1_label as month_label,  age_band_5y, is_care_home_resident, count(person_id) as vaccination_count
+ 'PPV (dose 1)' as vaccination_dose, ppv_dose1_fiscal as fiscal_year,  practice_code, ppv_dose1_sort as month_year, ppv_dose1_label as month_label,  age_band_5y, age_65_plus, age_75_plus, is_care_home_resident, is_immunosuppressed, in_ppv_clinical_risk_group, is_pregnant, ethnicity_category, ethcat_order, imd_quintile, imdquintile_order, count(person_id) as vaccination_count
 FROM {{ ref('int_adult_imms_dose_count') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_DOSE_COUNT
 where ppv_dose1_sort is not null
@@ -33,7 +42,7 @@ UNION
 
 --Shingles Dose 1
 select 
- 'Shingles (dose 1)' as vaccination_dose, shing_dose1_fiscal as fiscal_year,  practice_code, shing_dose1_sort as month_year, shing_dose1_label as month_label,  age_band_5y, is_care_home_resident, count(person_id) as vaccination_count
+ 'Shingles (dose 1)' as vaccination_dose, shing_dose1_fiscal as fiscal_year,  practice_code, shing_dose1_sort as month_year, shing_dose1_label as month_label,  age_band_5y, age_65_plus, age_75_plus, is_care_home_resident, is_immunosuppressed, in_ppv_clinical_risk_group, is_pregnant, ethnicity_category, ethcat_order, imd_quintile, imdquintile_order, count(person_id) as vaccination_count
 FROM {{ ref('int_adult_imms_dose_count') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_DOSE_COUNT
 where shing_dose1_sort is not null
@@ -43,7 +52,7 @@ UNION
 
 --Shingles Dose 2
 select 
- 'Shingles (dose 2)' as vaccination_dose, shing_dose2_fiscal as fiscal_year,  practice_code, shing_dose2_sort as month_year, shing_dose2_label as month_label,  age_band_5y, is_care_home_resident, count(person_id) as vaccination_count
+ 'Shingles (dose 2)' as vaccination_dose, shing_dose2_fiscal as fiscal_year,  practice_code, shing_dose2_sort as month_year, shing_dose2_label as month_label,  age_band_5y, age_65_plus, age_75_plus, is_care_home_resident, is_immunosuppressed, in_ppv_clinical_risk_group, is_pregnant, ethnicity_category, ethcat_order, imd_quintile, imdquintile_order, count(person_id) as vaccination_count
 FROM {{ ref('int_adult_imms_dose_count') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_DOSE_COUNT
 where shing_dose2_sort is not null
@@ -53,10 +62,12 @@ UNION
 
 --RSV Dose 1
 select 
- 'RSV (dose 1)' as vaccination_dose, rsv_dose1_fiscal as fiscal_year,  practice_code, rsv_dose1_sort as month_year, RSV_DOSE1_LABEL as month_label,  age_band_5y, is_care_home_resident, count(person_id) as vaccination_count
+ 'RSV (dose 1)' as vaccination_dose, rsv_dose1_fiscal as fiscal_year,  practice_code, rsv_dose1_sort as month_year, RSV_DOSE1_LABEL as month_label,  age_band_5y, age_65_plus, age_75_plus, is_care_home_resident, is_immunosuppressed, in_ppv_clinical_risk_group, is_pregnant, ethnicity_category, ethcat_order, imd_quintile, imdquintile_order, count(person_id) as vaccination_count
 FROM {{ ref('int_adult_imms_dose_count') }}
 --FROM MODELLING.OLIDS_PROGRAMME.INT_ADULT_IMMS_DOSE_COUNT
 where rsv_dose1_sort is not null
 group by all
 
 ) p
+
+
