@@ -57,12 +57,21 @@ spine as (
 
 -- Covariate CTEs: LEFT temporal_join, each version read as-at the row's index_date.
 demographics as (
-    -- practice_name and age are NOT in the demographics snapshot input -> gaps (see GAP block)
+    -- practice_name is NOT in the demographics snapshot input -> gap (see GAP block).
+    -- age is deliberately NOT snapshotted (it changes every build); it is computed from live DOB
+    -- (the dob CTE) as-at index_date in the final SELECT.
     select f.sk_patient_id, f.index_date,
            d.practice_code, d.main_language, d.gender, d.ethnicity_category
     from {{ temporal_join('spine', 'index_date', ref('dim_person_demographics_snapshot'),
                           join_key='person_id', join_type='left',
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
+
+-- Date of birth is immutable, so it needs no snapshot: read it live from dim_person_demographics
+-- and compute age as-at index_date below (person-keyed, one DOB per person).
+dob as (
+    select person_id, birth_date_approx
+    from {{ ref('dim_person_demographics') }}
 ),
 
 conditions as (
@@ -302,6 +311,10 @@ select
     , s.neighbourhood_code as area_code
     -- demographics (as-at)
     , coalesce(dem.practice_code, 'Unknown') as practice_code
+    -- age at index_date from live (immutable) DOB; same formula as dim_person_demographics.age, anchored on index_date
+    , case when dob.birth_date_approx is not null
+           then floor(datediff(month, dob.birth_date_approx, s.index_date) / 12)
+           else null end as age
     , coalesce(dem.main_language, 'Unknown') as main_language
     , coalesce(dem.gender, 'Unknown') as gender
     , coalesce(dem.ethnicity_category, 'Unknown') as ethnicity_category
@@ -494,17 +507,16 @@ select
 
 
     -- ============================================================================
-    -- GAP COLUMNS -- history not yet available; add once the source exists.
-    -- (present in cltcs_cohort_data; listed here so the work is visible.)
-    -- Demographics: not in the demographics snapshot input
+    -- GAP COLUMNS -- present in cltcs_cohort_data but not (yet) emitted here.
+    -- Demographics: practice_name is not in the demographics snapshot input
     -- , coalesce(pd.practice_name, 'Unknown') as practice_name
-    -- , pd.age
     -- Trajectories (sparkline arrays) -- dropped from scope
     -- , ae_encounters_sl, ip_encounters_sl, op_encounters_sl, gp_encounters_sl
     -- ============================================================================
 
 from spine s
 left join demographics     dem on dem.sk_patient_id = s.sk_patient_id and dem.index_date = s.index_date
+left join dob              on dob.person_id = s.person_id
 left join conditions       con on con.sk_patient_id = s.sk_patient_id and con.index_date = s.index_date
 left join polypharmacy     poly on poly.sk_patient_id = s.sk_patient_id and poly.index_date = s.index_date
 left join behavioural_risk br  on br.sk_patient_id = s.sk_patient_id and br.index_date = s.index_date
