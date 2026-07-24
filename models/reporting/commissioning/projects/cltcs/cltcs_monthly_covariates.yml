@@ -33,7 +33,13 @@ models:
       - name: neighbourhood_code
         description: "C-LTCS local neighbourhood tag, carried from the population roster for that month; may be null."
       - name: efi_score
-        description: "AIC eFI2 score as-at index_date. NULL = not assessed (not coalesced)."
+        description: "eFI2 score (0-1) as-at index_date, from fct_person_efi2_snapshot. NULL when not assessed (distinct from a low score) -- not coalesced, mirroring cltcs_cohort_data."
+      - name: efi_category
+        description: "eFI2 frailty category (ROBUST / MILD / MODERATE / SEVERE FRAILTY) as-at index_date; 'Unknown' when absent."
+      - name: frailty_level
+        description: "Latest Rockwood frailty level as-at index_date, from int_rockwood_latest_snapshot; 'Unknown' when absent."
+      - name: frailty_category
+        description: "Latest Rockwood frailty category as-at index_date, from int_rockwood_latest_snapshot; 'Unknown' when absent."
       - name: cambridge_comorbidity_score
         description: "Cambridge multimorbidity score as-at index_date. NULL = not computed."
       - name: moc_stage_completed_label

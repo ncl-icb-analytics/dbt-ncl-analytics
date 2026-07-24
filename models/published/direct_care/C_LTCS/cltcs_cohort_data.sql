@@ -263,7 +263,7 @@ left join {{ref('fct_person_medications_recent')}} rm
     on il.olids_id = rm.person_id
 left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
-left join {{ref('dim_person_efi2')}} fr
+left join {{ref('fct_person_efi2')}} fr
     on il.olids_id = fr.person_id
 left join {{ref('dim_person_ccms')}} ccms
     on il.olids_id = ccms.person_id

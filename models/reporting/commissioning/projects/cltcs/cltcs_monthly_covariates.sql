@@ -119,20 +119,23 @@ care_home as (
                           valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
 ),
 
-{#- frailty CTE disabled: int_person_frailty_snapshot is not built in this environment yet.
-    To re-enable: build the snapshot, remove this Jinja-comment wrapper, and un-comment the
-    frailty output columns and the "left join frailty" line below. (int_person_frailty
-    renames the columns to efi2_score / efi2_category / rockwood_frailty_level /
-    rockwood_frailty_category.)
+-- Frailty (as-at index_date). eFI2 and Rockwood are kept as two separate sources, mirroring
+-- cltcs_cohort_data: eFI2 score/category from fct_person_efi2_snapshot (thin input drops the
+-- CURRENT_DATE()-derived end_date/age_at_end), Rockwood level/category from
+-- int_rockwood_latest_snapshot. Both keyed on person_id.
+efi2 as (
+    select f.sk_patient_id, f.index_date, d.efi_score, d.category
+    from {{ temporal_join('spine', 'index_date', ref('fct_person_efi2_snapshot'),
+                          join_key='person_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
 
-    frailty as (
-        select f.sk_patient_id, f.index_date,
-               d.efi2_score, d.efi2_category, d.rockwood_frailty_level, d.rockwood_frailty_category
-        from {{ temporal_join('spine', 'index_date', ref('int_person_frailty_snapshot'),
-                              join_key='person_id', join_type='left',
-                              valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
-    ),
--#}
+rockwood as (
+    select f.sk_patient_id, f.index_date, d.frailty_level, d.frailty_category
+    from {{ temporal_join('spine', 'index_date', ref('int_rockwood_latest_snapshot'),
+                          join_key='person_id', join_type='left',
+                          valid_from_col='dbt_valid_from', valid_to_col='dbt_valid_to') }}
+),
 
 risk_summary as (
     select f.sk_patient_id, f.index_date,
@@ -339,11 +342,12 @@ select
     , coalesce(con.musculoskeletal_conditions, 0) as musculoskeletal_conditions
     , coalesce(con.neurology_conditions, 0) as neurology_conditions
     , coalesce(con.geriatric_conditions, 0) as geriatric_conditions
-    -- frailty DISABLED until int_person_frailty_snapshot is built (re-enable the CTE + join too)
-    -- , fr.efi2_score as efi_score
-    -- , coalesce(fr.efi2_category, 'Unknown') as efi_category
-    -- , coalesce(fr.rockwood_frailty_level, 'Unknown') as frailty_level
-    -- , coalesce(fr.rockwood_frailty_category, 'Unknown') as frailty_category
+    -- frailty (as-at index_date): eFI2 + Rockwood, kept separate to mirror cltcs_cohort_data.
+    -- efi_score left NULL (not assessed is distinct from a low score); categories -> 'Unknown'.
+    , ef.efi_score
+    , coalesce(ef.category, 'Unknown') as efi_category
+    , coalesce(rk.frailty_level, 'Unknown') as frailty_level
+    , coalesce(rk.frailty_category, 'Unknown') as frailty_category
     -- multimorbidity (NULL = not computed)
     , ccm.cambridge_comorbidity_score
     -- lifestyle and behavioural factors
@@ -504,7 +508,8 @@ left join polypharmacy     poly on poly.sk_patient_id = s.sk_patient_id and poly
 left join behavioural_risk br  on br.sk_patient_id = s.sk_patient_id and br.index_date = s.index_date
 left join ccms             ccm on ccm.sk_patient_id = s.sk_patient_id and ccm.index_date = s.index_date
 left join care_home        ch  on ch.sk_patient_id = s.sk_patient_id and ch.index_date = s.index_date
--- left join frailty          fr  on fr.sk_patient_id = s.sk_patient_id and fr.index_date = s.index_date  -- DISABLED: int_person_frailty_snapshot not built
+left join efi2             ef  on ef.sk_patient_id = s.sk_patient_id and ef.index_date = s.index_date
+left join rockwood         rk  on rk.sk_patient_id = s.sk_patient_id and rk.index_date = s.index_date
 left join risk_summary     rs  on rs.sk_patient_id = s.sk_patient_id and rs.index_date = s.index_date
 left join score_treatment  st  on st.sk_patient_id = s.sk_patient_id and st.index_date = s.index_date
 left join score_frailty    sf  on sf.sk_patient_id = s.sk_patient_id and sf.index_date = s.index_date
