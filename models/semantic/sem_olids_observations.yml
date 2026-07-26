@@ -43,9 +43,9 @@ models:
       - int_eosinophil_count_latest: Blood eosinophil count with category
       - int_efi_latest: Electronic Frailty Index (GP-coded only, incomplete coverage)
       - int_rockwood_latest: Rockwood Clinical Frailty Scale
-      - int_foot_examination_latest: Diabetic foot examination
-      - int_retinal_screening_latest: Diabetic retinal screening
-      - fct_person_diabetes_8_care_processes: DM 8 care process completion
+
+      Diabetes care processes, foot examination, and retinal screening
+      moved to sem_olids_diabetes_care.
 
     config:
       materialized: semantic_view

@@ -71,11 +71,11 @@ DIMENSIONS(
     trends.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
 
     -- Organisation
-    trends.practice_code AS practice_code COMMENT = 'GP practice code',
-    trends.practice_name AS practice_name COMMENT = 'GP practice name',
-    trends.pcn_code AS pcn_code COMMENT = 'PCN code',
-    trends.pcn_name AS pcn_name COMMENT = 'PCN name',
-    trends.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN with borough prefix',
+    trends.registered_practice_code AS practice_code WITH SYNONYMS = ('practice code', 'ODS code', 'GP practice') COMMENT = 'ODS code of the registered GP practice that month',
+    trends.registered_practice_name AS practice_name COMMENT = 'Name of the registered GP practice that month',
+    trends.registered_pcn_code AS pcn_code COMMENT = 'PCN code of the registered practice',
+    trends.registered_pcn_name AS pcn_name WITH SYNONYMS = ('PCN', 'primary care network') COMMENT = 'PCN name of the registered practice',
+    trends.registered_pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'Registered PCN name with borough prefix',
     trends.borough_registered AS borough_registered COMMENT = 'Borough of registration',
     trends.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the registered practice: 93C = NHS North Central London (Camden, Islington, Barnet, Enfield, Haringey); W2U3Z = NHS North West London (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside the WNL footprint.',
     trends.sub_icb_name AS sub_icb_name COMMENT = 'Sub-ICB display name (NHS North Central London or NHS North West London) of the registered practice. NULL outside the WNL footprint.',

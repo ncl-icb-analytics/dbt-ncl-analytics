@@ -9,7 +9,10 @@ models:
 
       All medication orders (issues) enriched with BNF classification,
       prescription type (acute/repeat from medication statements),
-      prescribing practice details, patient demographics and conditions.
+      prescribing practice details (prescribing_practice_* dimensions),
+      and core patient demographics. Condition, vulnerability, and
+      polypharmacy cohorts are NOT denormalised here — they come from
+      sem_olids_population via person_id CTE joins.
 
       Pre-defined medication category tables are linked for key drug
       classes: statins, antihypertensives, ACE inhibitors, ARBs,

@@ -1,0 +1,56 @@
+{{
+    config(
+        materialized='semantic_view',
+        schema='SEMANTIC'
+    )
+}}
+
+{#
+    Resource Index Semantic View
+    ============================
+
+    Person-level resource index over the latest complete rolling 12-month
+    SLAM window. Actual cost is SLAM acute only; EPD prescribing is excluded.
+    Resource ratio is SUM(actual_cost_12m) / SUM(expected_cost_12m), never an
+    average of person-level ratios. Expected cost is Carr-Hill practice
+    allocation and lags the cost window by about one year.
+#}
+
+TABLES(
+    ri AS {{ ref('fct_person_resource_index') }}
+        PRIMARY KEY (sk_patient_id)
+        COMMENT = 'Person-level resource index over the latest rolling 12-month cost window'
+)
+
+DIMENSIONS(
+    ri.sk_patient_id AS sk_patient_id COMMENT = 'Pseudonymised patient key for cross-dataset linkage to sem_olids_population.sk_patient_id. Join CTEs on sk_patient_id, then aggregate. Never return sk_patient_id in final results.',
+    ri.gender AS gender COMMENT = 'Gender at the resource-index window end',
+    ri.age AS age COMMENT = 'Age at window end or death',
+    ri.age_band AS age_band COMMENT = 'NHS age band used for the cost curve',
+    ri.ethnicity AS ethnicity COMMENT = 'Ethnicity',
+    ri.months_registered AS months_registered COMMENT = 'Months registered in the rolling window',
+    ri.first_month_registered AS first_month_registered COMMENT = 'First registered month in the window',
+    ri.last_month_registered AS last_month_registered COMMENT = 'Last registered month in the window',
+    ri.died_in_window AS died_in_window COMMENT = 'Died inside the rolling window',
+    ri.practice_code AS practice_code COMMENT = 'Practice at the last registered month',
+    ri.registered_borough AS registered_borough COMMENT = 'Borough of the window practice',
+    ri.registered_neighbourhood_name AS registered_neighbourhood_name COMMENT = 'Neighbourhood of the window practice',
+    ri.registered_sub_icb_code AS registered_sub_icb_code COMMENT = 'Sub-ICB code of the window practice',
+    ri.registered_sub_icb_name AS registered_sub_icb_name COMMENT = 'Sub-ICB name of the window practice',
+    ri.residence_imd_decile AS residence_imd_decile COMMENT = 'Residence IMD decile',
+    ri.residence_imd_quintile AS residence_imd_quintile COMMENT = 'Residence IMD quintile',
+    ri.residence_borough AS residence_borough COMMENT = 'Residence borough',
+    ri.residence_ward_2025_name AS residence_ward_2025_name COMMENT = 'Residence ward',
+    ri.weighted_ratio_imputed AS weighted_ratio_imputed COMMENT = 'TRUE when the WNL mean weighted ratio was used as a fallback'
+)
+
+METRICS(
+    ri.total_actual_cost_12m AS SUM(ri.actual_cost_12m) COMMENT = 'Total actual SLAM acute cost in the rolling 12-month window',
+    ri.total_expected_cost_12m AS SUM(ri.expected_cost_12m) COMMENT = 'Total expected cost in the rolling 12-month window',
+    ri.total_weighted_months AS SUM(ri.weighted_months_12m) COMMENT = 'Total Carr-Hill weighted months',
+    ri.patient_count AS COUNT(DISTINCT ri.sk_patient_id) COMMENT = 'Distinct people'
+)
+
+COMMENT = 'Resource Index Semantic View - person-level rolling 12-month SLAM acute resource index. Calculate resource ratio as SUM(actual_cost_12m) / SUM(expected_cost_12m), never an average of person-level ratios. Carr-Hill expected cost is a practice-average allocation lagging the cost window by about one year.'
+AI_SQL_GENERATION 'Resource ratio = SUM(actual_cost_12m) / SUM(expected_cost_12m). NEVER average per-person ratios. Actual cost is SLAM ACUTE ONLY; EPD prescribing is excluded. The rolling 12-month window is anchored to the latest complete SLAM month. Carr-Hill expected cost is a practice-average allocation that lags the cost window by about one year. weighted_ratio_imputed identifies people whose practice had no published ratio and used the WNL fallback. CROSS-DATASET COHORT INTERSECTION: join a sem_olids_population CTE and this view CTE on sk_patient_id, aggregate the result, never return sk_patient_id, and apply HAVING COUNT(DISTINCT sk_patient_id) > 5.'
+AI_QUESTION_CATEGORIZATION 'Use this view for: rolling 12-month resource use, actual versus expected cost, resource ratios by demographic or geography, Carr-Hill weighted population, and resource use of OLIDS-defined cohorts via sk_patient_id linkage.'
