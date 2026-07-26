@@ -24,6 +24,10 @@ models:
 
       Grain: one row per medication order (issue).
 
+      Exposes person_id as a pseudonymised linkage dimension for cross-view
+      cohort intersection (CTE joins to the other sem_olids_* views);
+      aggregate-only output.
+
       Core table: int_medication_order_bnf (view, not materialised).
 
     config:

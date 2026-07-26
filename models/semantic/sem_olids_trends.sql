@@ -41,6 +41,9 @@ FACTS(
 )
 
 DIMENSIONS(
+    -- Person linkage key
+    trends.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
+
     -- Time Dimensions
     trends.analysis_month AS analysis_month WITH SYNONYMS = ('month', 'date', 'period') COMMENT = 'Month end date for analysis',
     trends.year_number AS year_number COMMENT = 'Calendar year (e.g., 2024)',
@@ -82,6 +85,7 @@ DIMENSIONS(
     trends.lsoa_code_21 AS lsoa_code_21 COMMENT = 'LSOA 2021 code',
     trends.ward_code AS ward_code COMMENT = 'Electoral ward code',
     trends.ward_name AS ward_name COMMENT = 'Electoral ward name',
+    trends.borough_resident AS borough_resident COMMENT = 'London borough of residence',
     trends.is_london_resident AS is_london_resident COMMENT = 'Resides in Greater London',
     trends.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Residence neighbourhood',
 
@@ -220,5 +224,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS Population Trends Semantic View - 60-month time series for condition prevalence, incidence, and multimorbidity trends. Source: OLIDS (One London Integrated Data Set). Condition registers built to QOF Business Rules v50. Grain: one row per person per month. age_band_esp available for grouping but ESP weights are not in this view — use sem_olids_population for age-standardised rates.'
-AI_SQL_GENERATION 'Use financial_year and financial_quarter for UK reporting periods. For trend queries, group by analysis_month or financial_year. Prevalence metrics count patients WITH a condition; incidence metrics count NEW diagnoses. Always filter to is_active = TRUE unless analysing deceased patients. Condition registers are built to QOF Business Rules v50. Note: ESP weights (esp_proportion) are not available in this view. For age-standardised rates, use sem_olids_population which has esp_weight and esp_proportion denormalised at person level.'
-AI_QUESTION_CATEGORIZATION 'Use this view for questions about: trends over time, prevalence changes, incidence rates, year-on-year comparisons, financial year reporting, and monthly/quarterly analysis. For current state snapshots use sem_olids_population. For clinical biomarkers use sem_olids_observations.'
+AI_SQL_GENERATION 'CROSS-VIEW COHORT INTERSECTION: person_id is a pseudonymised join key shared by all sem_olids_* views. To intersect cohorts across views (e.g. newly diagnosed patients here x medication initiation in sem_olids_prescribing), put each SEMANTIC_VIEW() call in its own CTE selecting person_id plus the needed dimensions/metrics, JOIN the CTEs on person_id, then aggregate. person_id must NEVER appear in the final SELECT, GROUP BY, or ORDER BY — results must be aggregate counts/rates with the same small-number suppression as any other aggregate. Use financial_year and financial_quarter for UK reporting periods. For trend queries, group by analysis_month or financial_year. Prevalence metrics count patients WITH a condition; incidence metrics count NEW diagnoses. Always filter to is_active = TRUE unless analysing deceased patients. Condition registers are built to QOF Business Rules v50. Note: ESP weights (esp_proportion) are not available in this view. For age-standardised rates, use sem_olids_population which has esp_weight and esp_proportion denormalised at person level.'
+AI_QUESTION_CATEGORIZATION 'Use this view for questions about: trends over time, prevalence changes, incidence rates, year-on-year comparisons, financial year reporting, and monthly/quarterly analysis. For current state snapshots use sem_olids_population. For clinical biomarkers use sem_olids_observations. Questions needing cohorts from TWO domains (e.g. incidence x medication initiation) are answerable by joining this view to the other sem_olids_* views on person_id in CTEs, with aggregate-only output.'
