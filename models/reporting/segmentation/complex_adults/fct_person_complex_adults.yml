@@ -1,15 +1,26 @@
 models:
   - name: fct_person_complex_adults
-    description: 'Complex adults cohort v1.0. One row per person meeting all criteria:
-      age >= 18, AND (moderate/severe frailty OR 3+ included LTCs), AND (>=2 NEL
-      admissions OR >=3 ED attendances in last 12 months, OR housebound).
+    description: 'Complex adults cohort v2.0. One row per person meeting all criteria:
+      age >= 18, AND at least one complexity criterion (moderate/severe frailty OR
+      3+ included LTCs OR homeless OR on the palliative care register OR alcohol
+      misuse OR substance misuse), AND (>=2 NEL admissions OR >=3 ED attendances in
+      last 12 months, OR housebound).
       Includes all persons regardless of registration status; filter is_active = TRUE
       for the currently registered population.
 
-      Included LTCs (15): AF, asthma, CHD, CKD, COPD, dementia, depression, diabetes,
-      epilepsy, heart failure, hypertension, SMI, stroke/TIA, Parkinson''s, anxiety.
+      Criteria signed off by K Saravanakumar, 27 July 2026. v2.0 widened the
+      complexity limb from 2 alternatives to 6, made frailty additive across eFI2 and
+      coded diagnoses, and added learning disability to the LTC list at 65+.
+
+      Included LTCs (16): AF, asthma, CHD, CKD, COPD, dementia, depression, diabetes,
+      epilepsy, heart failure, hypertension, SMI, stroke/TIA, Parkinson''s, anxiety,
+      and learning disability (65+ only).
       ED attendances count all urgent & emergency care settings from ECDS (Type 1/2
-      A&E, UTC, WiC, SDEC). 12-month windows are rolling from the build date.'
+      A&E, UTC, WiC, SDEC). 12-month windows are rolling from the build date.
+
+      Every complexity criterion is exposed as its own column alongside
+      complexity_criteria_count, so the marginal contribution of any single criterion
+      can be measured without rebuilding the model.'
 
     data_tests:
       - dbt_utils.at_least_one:
@@ -33,12 +44,62 @@ models:
         description: Currently registered with an NCL GP practice
       - name: age
         description: Current age (>= 18 for all cohort members)
+
+      - name: has_learning_disability
+        description: On the learning disability register AND aged 65+. Only counts
+          towards ltc_count at 65+, so this is FALSE for under-65s on the register.
       - name: ltc_count
-        description: Count of the 15 included LTC registers the person is on
+        description: Count of the 16 included LTC registers the person is on
+          (learning disability counted only at 65+)
+      - name: has_3plus_ltcs
+        description: Complexity criterion - ltc_count >= 3
+
+      - name: efi2_score
+        description: eFI2 score from fct_person_efi2. NULL for under-65s and deceased
+          persons, who are outside the eFI2 scoring population.
+      - name: efi2_category
+        description: eFI2 frailty category (ROBUST, MILD FRAILTY, MODERATE FRAILTY,
+          SEVERE FRAILTY). NULL for under-65s and deceased persons.
+      - name: has_efi2_moderate_severe_frailty
+        description: eFI2 category is MODERATE FRAILTY or SEVERE FRAILTY
       - name: latest_frailty_severity
-        description: Latest recorded frailty severity (Mild, Moderate, Severe, Unknown; null if not on frailty register)
+        description: Latest recorded coded frailty severity (Mild, Moderate, Severe,
+          Unknown; null if not on the frailty register)
+      - name: has_coded_moderate_severe_frailty
+        description: Latest coded frailty severity is Moderate or Severe
       - name: has_moderate_severe_frailty
-        description: Latest frailty severity is Moderate or Severe
+        description: Complexity criterion - moderate/severe frailty by eFI2 OR coded
+          diagnosis. Additive because eFI2 covers only living 65+, while the coded
+          register has no age or death restriction.
+
+      - name: is_homeless
+        description: Complexity criterion - latest residential code is a homelessness
+          code, or registered with the Camden Health Improvement Practice (Y02674)
+      - name: is_on_palliative_care_register
+        description: Complexity criterion - on the QOF palliative care register
+      - name: has_alcohol_misuse
+        description: Complexity criterion - any ALCOHOL_MISUSE_DISORDERS record, ever.
+          Ever-coded rather than active, because the cluster includes alcohol-caused
+          disease that does not resolve.
+      - name: latest_alcohol_disorder_date
+        description: Date of the most recent alcohol misuse disorder record
+      - name: has_substance_misuse
+        description: Complexity criterion - most recent ILLSUB_COD record is
+          QUALIFYING (see int_substance_misuse_status)
+      - name: latest_substance_misuse_date
+        description: Date of the most recent qualifying substance misuse record
+
+      - name: complexity_criteria_count
+        description: How many of the six complexity criteria the person meets (1-6).
+          A value of 1 means the person would leave the cohort if that single
+          criterion were removed.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 6
+
       - name: nel_admissions_12mo
         description: Non-elective admissions in last 12 months (SUS APC, admission methods 2x, births excluded)
       - name: ed_attendances_12mo
