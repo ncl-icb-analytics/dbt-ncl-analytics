@@ -7,6 +7,15 @@ deceased and deducted patients remain in the months where they had exposure.
 
 PDS does not close registration episodes at death, so exposure is truncated at
 the death month. The death month itself counts.
+
+PDS also leaves episodes open when a patient is deducted without registering
+elsewhere in England (embarkation, removal): the episode keeps a null
+event_to_date and the deduction lands in stg_pds_reason_for_removal instead.
+Untreated, those patients stay "registered" forever (~700k at WNL practices,
+inflating the monthly list ~13% over the published count). Exposure is
+therefore also truncated at the earliest removal that starts on or after the
+episode start; the removal month itself counts. A later episode (re-registration)
+is unaffected.
 */
 {{ config(materialized = 'table') }}
 
@@ -27,7 +36,7 @@ months as (
     where dateadd(month, s.seq, b.start_month) <= b.end_month
 ),
 
-wnl_episodes as (
+wnl_episodes_raw as (
     select
         e.sk_patient_id,
         e.event_from_date,
@@ -38,6 +47,27 @@ wnl_episodes as (
     join {{ ref('dim_practice') }} as d
         on e.practice_code = d.practice_code
         and d.is_wnl_practice
+),
+
+-- earliest deduction starting on/after each episode's start caps that episode
+-- (last_day so the removal month still counts)
+wnl_episodes as (
+    select
+        e.sk_patient_id,
+        e.event_from_date,
+        least(
+            e.event_to_date,
+            coalesce(last_day(min(r.event_from_date)), e.event_to_date)
+        ) as event_to_date,
+        e.practice_code,
+        e.row_id
+    from wnl_episodes_raw as e
+    left join {{ ref('stg_pds_reason_for_removal') }} as r
+        on r.sk_patient_id = e.sk_patient_id
+        and r.event_from_date >= e.event_from_date
+        and r.event_from_date <= e.event_to_date
+    group by e.sk_patient_id, e.event_from_date, e.event_to_date,
+        e.practice_code, e.row_id
 ),
 
 person as (

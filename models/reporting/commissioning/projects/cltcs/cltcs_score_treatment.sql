@@ -94,7 +94,7 @@ encoding_features as (
       from inclusion_list il
     left join {{ref('dim_person_conditions')}} pc
         on il.person_id =pc.person_id
-    left join {{ref('fct_person_sus_ae_recent')}} aea
+    left join {{ref('fct_person_sus_uec_recent')}} aea
         on il.sk_patient_id  =aea.sk_patient_id
     left join {{ref('fct_person_gp_recent')}} gpa
         on il.sk_patient_id  =gpa.sk_patient_id

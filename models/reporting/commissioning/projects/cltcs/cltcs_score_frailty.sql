@@ -103,15 +103,15 @@ encoding_features as (
         on il.person_id =ps.person_id
     left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
         on il.person_id =lcs.person_id
-    left join {{ ref('fct_person_sus_ae_recent') }} aea
+    left join {{ ref('fct_person_sus_uec_recent') }} aea
         on il.sk_patient_id =aea.sk_patient_id
-    left join {{ ref('fct_person_sus_ip_recent') }} apca
+    left join {{ ref('fct_person_sus_apc_recent') }} apca
         on il.sk_patient_id =apca.sk_patient_id
     left join {{ ref('fct_person_bp_control') }} bp
         on il.person_id =bp.person_id
     left join {{ ref('dim_person_ccms') }} ccms
         on il.person_id =ccms.person_id
-    left join {{ ref('dim_person_efi2') }} efi
+    left join {{ ref('fct_person_efi2') }} efi
         on il.person_id =efi.person_id
     left join {{ ref('fct_person_frailty_register') }} fr
         on il.person_id =fr.person_id

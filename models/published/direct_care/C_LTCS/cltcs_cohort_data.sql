@@ -253,9 +253,9 @@ left join {{ref('fct_person_wl_current_count_total')}} wl
     on il.patient_id = wl.sk_patient_id
 left join {{ref('fct_person_sus_op_recent')}} opa
     on il.patient_id  = opa.sk_patient_id
-left join {{ref('fct_person_sus_ip_recent')}} apca
+left join {{ref('fct_person_sus_apc_recent')}} apca
     on il.patient_id  = apca.sk_patient_id
-left join {{ref('fct_person_sus_ae_recent')}} aea
+left join {{ref('fct_person_sus_uec_recent')}} aea
     on il.patient_id  = aea.sk_patient_id
 left join {{ref('fct_person_gp_recent')}} gpa
     on il.patient_id  = gpa.sk_patient_id
@@ -263,7 +263,7 @@ left join {{ref('fct_person_medications_recent')}} rm
     on il.olids_id = rm.person_id
 left join {{ref('cltcs_scores')}} cs
     on il.patient_id = cs.patient_id
-left join {{ref('dim_person_efi2')}} fr
+left join {{ref('fct_person_efi2')}} fr
     on il.olids_id = fr.person_id
 left join {{ref('dim_person_ccms')}} ccms
     on il.olids_id = ccms.person_id

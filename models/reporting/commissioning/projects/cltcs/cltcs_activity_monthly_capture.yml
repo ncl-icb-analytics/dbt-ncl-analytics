@@ -27,3 +27,14 @@ models:
           - not_null
       - name: captured_at
         description: "Timestamp the row was written (for audit; not part of the grain)."
+      - name: same_tfc_multiple_providers_flag
+        description: >
+          Boolean flag indicating whether the patient has the same TFC code assigned to multiple
+          providers (from fct_person_wl_current_count_total). Coalesced to false; added after the
+          other columns, so months captured before it existed hold NULL (append_new_columns) --
+          which is why there is no not_null test.
+      - name: current_waiting_list_arrays
+        description: >
+          Array of waiting list objects for the patient, sorted by days on waiting list (from
+          fct_person_wl_current_count_total). Coalesced to an empty array; NULL on months captured
+          before this column was added (append_new_columns).
