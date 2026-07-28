@@ -590,49 +590,6 @@ sources:
       data_type: DATE
     - name: LDS_LAKEHOUSE_DATETIME_UPDATED
       data_type: TIMESTAMP_NTZ
-  - name: FLAG
-    identifier: '"FLAG"'
-    columns:
-    - name: LDS_RECORD_ID
-      data_type: TEXT
-    - name: ID
-      data_type: TEXT
-    - name: PERSON_ID
-      data_type: NUMBER(38,0)
-    - name: PATIENT_ID
-      data_type: TEXT
-    - name: EFFECTIVE_DATE
-      data_type: TIMESTAMP_NTZ
-    - name: EXPIRED_DATE
-      data_type: TIMESTAMP_NTZ
-    - name: IS_ACTIVE
-      data_type: BOOLEAN
-    - name: FLAG_TEXT
-      data_type: TEXT
-    - name: LDS_ID
-      data_type: TEXT
-    - name: LDS_BUSINESS_KEY
-      data_type: TEXT
-    - name: LDS_DATASET_ID
-      data_type: TEXT
-    - name: LDS_CDM_EVENT_ID
-      data_type: TEXT
-    - name: LDS_VERSIONER_EVENT_ID
-      data_type: TEXT
-    - name: RECORD_OWNER_ORGANISATION_CODE
-      data_type: TEXT
-    - name: LDS_DATETIME_DATA_ACQUIRED
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_INITIAL_DATA_RECEIVED_DATE
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_IS_DELETED
-      data_type: BOOLEAN
-    - name: LDS_START_DATE_TIME
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: DATE
-    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
-      data_type: TIMESTAMP_NTZ
   - name: LOCATION
     identifier: '"LOCATION"'
     columns:
