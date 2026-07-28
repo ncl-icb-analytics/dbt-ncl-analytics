@@ -67,11 +67,14 @@ Most common. Add an entry to `scripts/sources/source_mappings.yml`:
 
 Run `python scripts/sources/run_all_source_generation.py`. Commit the new `auto_*.yml` and `models/raw/**/*.sql` files.
 
-Use `exclude_tables` when a schema object is visible in metadata but must not be generated:
+Within a source entry, use `exclude_tables` when a schema object is visible in metadata but must not be generated:
 
 ```yaml
-exclude_tables:
-  - BROKEN_OR_UNUSED_VIEW
+- source_name: my_source
+  database: DATA_LAKE
+  schema: MY_SCHEMA
+  exclude_tables:
+    - BROKEN_OR_UNUSED_VIEW
 ```
 
 ### Option B: curated table list from a volatile schema
