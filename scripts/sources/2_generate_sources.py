@@ -327,6 +327,8 @@ def main():
             # Check if specific tables are configured
             if 'tables' in mapping and table_name not in mapping['tables']:
                 continue
+            if table_name in mapping.get('exclude_tables', []):
+                continue
 
             # Auto-generate from metadata
             sorted_columns = table_group.sort_values('ORDINAL_POSITION')
