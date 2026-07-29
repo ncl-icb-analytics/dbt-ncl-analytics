@@ -13,7 +13,7 @@ sources:
     - name: ID
       data_type: UUID
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PRACTITIONER_ID
@@ -118,7 +118,7 @@ sources:
     - name: PUBLISHER_ORGANISATION_ID
       data_type: UUID
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PRACTITIONER_IN_ROLE_ID
@@ -328,7 +328,7 @@ sources:
     - name: ID
       data_type: UUID
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: ENCOUNTER_ID
@@ -411,7 +411,7 @@ sources:
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PRACTITIONER_ID
       data_type: UUID
     - name: APPOINTMENT_ID
@@ -529,7 +529,7 @@ sources:
     - name: CARE_MANAGER_ORGANISATION_ID
       data_type: UUID
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: EPISODE_TYPE_SOURCE_CONCEPT_ID
@@ -585,49 +585,6 @@ sources:
     - name: LDS_IS_DELETED
       data_type: BOOLEAN
     - name: LDS_START_DATETIME
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_LAKEHOUSE_DATE_PROCESSED
-      data_type: DATE
-    - name: LDS_LAKEHOUSE_DATETIME_UPDATED
-      data_type: TIMESTAMP_NTZ
-  - name: FLAG
-    identifier: '"FLAG"'
-    columns:
-    - name: LDS_RECORD_ID
-      data_type: TEXT
-    - name: ID
-      data_type: TEXT
-    - name: PERSON_ID
-      data_type: NUMBER(38,0)
-    - name: PATIENT_ID
-      data_type: TEXT
-    - name: EFFECTIVE_DATE
-      data_type: TIMESTAMP_NTZ
-    - name: EXPIRED_DATE
-      data_type: TIMESTAMP_NTZ
-    - name: IS_ACTIVE
-      data_type: BOOLEAN
-    - name: FLAG_TEXT
-      data_type: TEXT
-    - name: LDS_ID
-      data_type: TEXT
-    - name: LDS_BUSINESS_KEY
-      data_type: TEXT
-    - name: LDS_DATASET_ID
-      data_type: TEXT
-    - name: LDS_CDM_EVENT_ID
-      data_type: TEXT
-    - name: LDS_VERSIONER_EVENT_ID
-      data_type: TEXT
-    - name: RECORD_OWNER_ORGANISATION_CODE
-      data_type: TEXT
-    - name: LDS_DATETIME_DATA_ACQUIRED
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_INITIAL_DATA_RECEIVED_DATE
-      data_type: TIMESTAMP_NTZ
-    - name: LDS_IS_DELETED
-      data_type: BOOLEAN
-    - name: LDS_START_DATE_TIME
       data_type: TIMESTAMP_NTZ
     - name: LDS_LAKEHOUSE_DATE_PROCESSED
       data_type: DATE
@@ -753,7 +710,7 @@ sources:
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: MEDICATION_STATEMENT_ID
       data_type: UUID
     - name: ENCOUNTER_ID
@@ -884,7 +841,7 @@ sources:
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: ENCOUNTER_ID
       data_type: UUID
     - name: PRACTITIONER_ID
@@ -1052,7 +1009,7 @@ sources:
     - name: ID
       data_type: UUID
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: ENCOUNTER_ID
@@ -1210,9 +1167,9 @@ sources:
     - name: LDS_SOURCE_RECORD_ID
       data_type: UUID
     - name: ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
-      data_type: UUID
+      data_type: NUMBER(38,0)
     - name: NHS_NUMBER_HASH
       data_type: BINARY
     - name: SK_PATIENT_ID
@@ -1287,7 +1244,7 @@ sources:
     - name: ID
       data_type: UUID
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PUBLISHER_ORGANISATION_ID
@@ -1344,7 +1301,7 @@ sources:
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PUBLISHER_ORGANISATION_ID
       data_type: UUID
     - name: PROVIDER_ORGANISATION_ID
@@ -1397,7 +1354,7 @@ sources:
     - name: LDS_SOURCE_RECORD_ID_PERSON
       data_type: UUID
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PERSON_UUID
@@ -1444,7 +1401,7 @@ sources:
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: PUBLISHER_ORGANISATION_ID
       data_type: UUID
     - name: PRACTITIONER_IN_ROLE_ID
@@ -1750,7 +1707,7 @@ sources:
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: ENCOUNTER_ID
       data_type: UUID
     - name: PRACTITIONER_ID
@@ -1825,7 +1782,7 @@ sources:
     - name: PERSON_ID
       data_type: NUMBER(38,0)
     - name: PATIENT_ID
-      data_type: UUID
+      data_type: TEXT
     - name: ENCOUNTER_ID
       data_type: UUID
     - name: PRACTITIONER_ID
