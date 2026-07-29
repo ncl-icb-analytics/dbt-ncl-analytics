@@ -26,7 +26,7 @@ placeholder literals for logic testing; swap in the monthly date_spine (commente
 index_dates CTE) for production.
 */
 
-{%- set index_dates = ['2026-07-20', '2026-07-21'] -%}
+{%- set index_dates = ['2026-07-29'] -%}
 {#-
     v1: placeholder index dates for the logic test (both fall in the 2026-07 roster month).
     Driven by this Jinja list so the spine and the per-date pregnancy reconstruction below
@@ -312,6 +312,7 @@ meds as (
 select
     -- keys / grain
       s.sk_patient_id as patient_id
+    , s.person_id as person_id
     , {{ hxflake_pseudo_generation('s.sk_patient_id') }} as re_id_key
     , s.index_date
     , s.neighbourhood_code
