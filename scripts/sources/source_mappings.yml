@@ -75,7 +75,7 @@ sources:
   # # SUS Monthly - Admitted Patient Care
   - source_name: sus_apc_monthly
     database: DATA_LAKE
-    schema: SUS_AE
+    schema: SUS_IP
     description: SUS Monthly admitted patient care episodes and procedures
     raw_prefix: raw_sus_apc_monthly
     domain: commissioning
@@ -89,25 +89,6 @@ sources:
     raw_prefix: raw_sus_ae
     domain: commissioning
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   # eRS referrals
   - source_name: eRS_primary_care

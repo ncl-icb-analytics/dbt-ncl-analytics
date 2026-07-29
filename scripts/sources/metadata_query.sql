@@ -116,7 +116,7 @@ WITH schema_metadata AS (
     -- sus_apc_monthly: SUS Monthly admitted patient care episodes and procedures
   SELECT 
     'DATA_LAKE' as database_name,
-    'SUS_AE' as schema_name,
+    'SUS_IP' as schema_name,
     table_name,
     column_name,
     data_type,
@@ -124,7 +124,7 @@ WITH schema_metadata AS (
     numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'SUS_AE'
+  WHERE table_schema = 'SUS_IP'
   
   UNION ALL
   
@@ -564,6 +564,21 @@ WITH schema_metadata AS (
   UNION ALL
   
     -- reference_analyst_managed: Analyst-managed reference datasets and business rules
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'ANALYST_MANAGED' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'ANALYST_MANAGED'
+  
+  UNION ALL
+  
+    -- sus_commissioner_reference: Date-effective SUS commissioner attribution reference tables
   SELECT 
     'DATA_LAKE__NCL' as database_name,
     'ANALYST_MANAGED' as schema_name,
