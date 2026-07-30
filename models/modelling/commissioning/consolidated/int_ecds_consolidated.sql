@@ -93,19 +93,19 @@ END	AS "Department_Type"
 ,att."CLINICAL_DISEASE_NOTIFICATION_CODE"	AS "Disease_Notification" 
 
 --Clinical Diagnosis Fields 
-,"di"."1" AS "Primary_Diagnosis" 
-,"di"."2" AS "Secondary_Diagnosis1" 
-,"di"."3" AS "Secondary_Diagnosis2" 
-,"di"."4" AS "Secondary_Diagnosis3" 
-,"di"."5" AS "Secondary_Diagnosis4"
-,"di"."6" AS "Secondary_Diagnosis5" 
-,"di"."7" AS "Secondary_Diagnosis6" 
-,"di"."8" AS "Secondary_Diagnosis7" 
-,"di"."9" AS "Secondary_Diagnosis8" 
-,"di"."10" AS "Secondary_Diagnosis9" 
-,"di"."11" AS "Secondary_Diagnosis10" 
-,"di"."12" AS "Secondary_Diagnosis11" 
-,"di"."13" AS "Secondary_Diagnosis12" 
+,di."1" AS "Primary_Diagnosis" 
+,di."2" AS "Secondary_Diagnosis1" 
+,di."3" AS "Secondary_Diagnosis2" 
+,di."4" AS "Secondary_Diagnosis3" 
+,di."5" AS "Secondary_Diagnosis4"
+,di."6" AS "Secondary_Diagnosis5" 
+,di."7" AS "Secondary_Diagnosis6" 
+,di."8" AS "Secondary_Diagnosis7" 
+,di."9" AS "Secondary_Diagnosis8" 
+,di."10" AS "Secondary_Diagnosis9" 
+,di."11" AS "Secondary_Diagnosis10" 
+,di."12" AS "Secondary_Diagnosis11" 
+,di."13" AS "Secondary_Diagnosis12" 
 
 --Alcohol Related Injury Field 
 ,ia."CODE" AS "Inury_Alcohol_Drug_Involvement"
@@ -125,18 +125,18 @@ END	AS "Department_Type"
 ,iv."12" AS "Clinical_Investigation12" 
 
 --Clinical Treatment Fields 
-,"ct"."1" AS "Treatment1" 
-,"ct"."2" AS "Treatment2" 
-,"ct"."3" AS "Treatment3" 
-,"ct"."4" AS "Treatment4" 
-,"ct"."5" AS "Treatment5" 
-,"ct"."6" AS "Treatment6" 
-,"ct"."7" AS "Treatment7" 
-,"ct"."8" AS "Treatment8" 
-,"ct"."9" AS "Treatment9" 
-,"ct"."10" AS "Treatment10" 
-,"ct"."11" AS "Treatment11" 
-,"ct"."12" AS "Treatment12" 
+,ct."1" AS "Treatment1" 
+,ct."2" AS "Treatment2" 
+,ct."3" AS "Treatment3" 
+,ct."4" AS "Treatment4" 
+,ct."5" AS "Treatment5" 
+,ct."6" AS "Treatment6" 
+,ct."7" AS "Treatment7" 
+,ct."8" AS "Treatment8" 
+,ct."9" AS "Treatment9" 
+,ct."10" AS "Treatment10" 
+,ct."11" AS "Treatment11" 
+,ct."12" AS "Treatment12" 
 
 --Comorbidity Fields 
 ,Co."1" AS "Comorbidity1" 
@@ -194,7 +194,7 @@ END																			AS VARCHAR(50))	AS zBusinessRule
 FROM {{ref('raw_sus_ae_emergency_care')}} att 
 
 
-LEFT JOIN "UKHD"."dbo"."dim_ref_Dates" dt 
+LEFT JOIN "UKHFD"."dbo"."dim_ref_Dates" dt 
 ON att."ATTENDANCE_ARRIVAL_DATE" = dt."Full_Date" 
 
 
@@ -202,119 +202,126 @@ LEFT JOIN {{ref('raw_sus_ae_attendance_referred_to')}} AS ar
 ON att."PRIMARYKEY_ID" = ar."PRIMARYKEY_ID"  
 AND "REFERRED_TO_ID" = 1 
 
+LEFT JOIN (SELECT
+				*
+			FROM (
+						SELECT
+							PRIMARYKEY_ID,
+							"CODE",
+							RowNum
+						FROM
+							(
+							SELECT
+								ROW_NUMBER() OVER (PARTITION BY
+									PRIMARYKEY_ID
+								ORDER BY "SEQUENCE_NUMBER" NULLS FIRST) AS RowNum,*
+							FROM {{ref('raw_sus_ae_clinical_diagnoses_snomed') }}
+							) a
+						WHERE
+							RowNum BETWEEN 1 AND 13 
+						) d PIVOT (MAX(d."CODE") FOR d.RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)) P
+						) as di
+	ON att.PRIMARYKEY_ID = di.PRIMARYKEY_ID
 
--- 1. DIAGNOSES PIVOT
+LEFT JOIN
+		{{ ref('raw_sus_ae_clinical_injury_alcohol_drug_involvements') }}  AS ia
+	ON att.PRIMARYKEY_ID = ia.PRIMARYKEY_ID
+		AND ia.ALCOHOL_DRUG_INVOLVEMENTS_ID =
+ 		                                     --** SSC-FDM-0002 - CORRELATED SUBQUERIES MAY HAVE SOME FUNCTIONAL DIFFERENCES. **
+ 		                                     (SELECT
+				MIN(ia.ALCOHOL_DRUG_INVOLVEMENTS_ID) FROM
+				{{ ref('raw_sus_ae_clinical_injury_alcohol_drug_involvements') }}  ia
+			WHERE
+				att.PRIMARYKEY_ID = ia.PRIMARYKEY_ID
+ 		                                     )
+LEFT JOIN (SELECT
+				*
+			FROM (
+						SELECT
+							PRIMARYKEY_ID,
+							RowNum,
+							"CODE"
+						FROM
+						(
+						SELECT
+								ROW_NUMBER() OVER (PARTITION BY
+									PRIMARYKEY_ID
+								ORDER BY SNOMED_ID NULLS FIRST) AS RowNum,
+								*
+						FROM
+								{{ ref('raw_sus_ae_clinical_investigations_snomed') }}
+							) ci
+						WHERE
+							RowNum BETWEEN 1 AND 12
+						) ci
+						PIVOT (MAX("CODE") FOR RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) P
+						) iv
+	ON att.PRIMARYKEY_ID = iv.PRIMARYKEY_ID
+
+LEFT JOIN (SELECT
+				*
+			FROM (
+					SELECT
+							PRIMARYKEY_ID,
+							"CODE",
+							RowNum
+					FROM
+						(
+						SELECT
+								ROW_NUMBER() OVER (PARTITION BY
+									PRIMARYKEY_ID
+								ORDER BY "DATE" NULLS FIRST, "TIME" NULLS FIRST, SNOMED_ID NULLS FIRST) AS RowNum,
+								*
+						FROM
+								{{ ref('raw_sus_ae_clinical_treatments_snomed') }}
+						) a
+						WHERE
+							RowNum BETWEEN 1 AND 12) t
+						PIVOT (MAX(t."CODE") FOR t.RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) P
+						) ct
+	ON att.PRIMARYKEY_ID = ct.PRIMARYKEY_ID
+
+LEFT JOIN
+	{{ref('raw_sus_ae_patient_mental_health_act_legal_status')}} AS mh
+	ON att.PRIMARYKEY_ID = mh.PRIMARYKEY_ID
+		AND mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID = 1
+		--AND mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID = (SELECT MIN(mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID) FROM [dmic_ECDS].[ECDS].[patient.mental_health_act_legal_status] AS mh WITH (NOLOCK) 
+			--WHERE att.PRIMARYKEY_ID = mh.PRIMARYKEY_ID)
 LEFT JOIN (
-    SELECT
-        "PRIMARYKEY_ID",
-        MAX(CASE WHEN "RowNum" = 1  THEN "CODE" END) AS "1",
-        MAX(CASE WHEN "RowNum" = 2  THEN "CODE" END) AS "2",
-        MAX(CASE WHEN "RowNum" = 3  THEN "CODE" END) AS "3",
-        MAX(CASE WHEN "RowNum" = 4  THEN "CODE" END) AS "4",
-        MAX(CASE WHEN "RowNum" = 5  THEN "CODE" END) AS "5",
-        MAX(CASE WHEN "RowNum" = 6  THEN "CODE" END) AS "6",
-        MAX(CASE WHEN "RowNum" = 7  THEN "CODE" END) AS "7",
-        MAX(CASE WHEN "RowNum" = 8  THEN "CODE" END) AS "8",
-        MAX(CASE WHEN "RowNum" = 9  THEN "CODE" END) AS "9",
-        MAX(CASE WHEN "RowNum" = 10 THEN "CODE" END) AS "10",
-        MAX(CASE WHEN "RowNum" = 11 THEN "CODE" END) AS "11",
-        MAX(CASE WHEN "RowNum" = 12 THEN "CODE" END) AS "12",
-        MAX(CASE WHEN "RowNum" = 13 THEN "CODE" END) AS "13"
-    FROM (
-        SELECT "PRIMARYKEY_ID", "CODE",
-            ROW_NUMBER() OVER (PARTITION BY "PRIMARYKEY_ID" ORDER BY "SEQUENCE_NUMBER") AS "RowNum"
-        FROM {{ ref('raw_sus_ae_clinical_diagnoses_snomed') }}
-    ) a
-    WHERE "RowNum" BETWEEN 1 AND 13
-    GROUP BY "PRIMARYKEY_ID"
-) "di"
-ON att."PRIMARYKEY_ID" = "di"."PRIMARYKEY_ID"
-
-LEFT JOIN {{ ref('raw_sus_ae_clinical_injury_alcohol_drug_involvements') }} AS ia
-ON att."PRIMARYKEY_ID" = ia."PRIMARYKEY_ID" 
-AND ia."ALCOHOL_DRUG_INVOLVEMENTS_ID" = (SELECT MIN(ia."ALCOHOL_DRUG_INVOLVEMENTS_ID") FROM  {{ref('raw_sus_ae_clinical_injury_alcohol_drug_involvements')}} ia
-WHERE att."PRIMARYKEY_ID" = ia."PRIMARYKEY_ID") 
+				SELECT
+				*
+				FROM (
 
 
--- 2. INVESTIGATIONS PIVOT
-LEFT JOIN (
-    SELECT
-        "PRIMARYKEY_ID",
-        MAX(CASE WHEN "RowNum" = 1  THEN "CODE" END) AS "1",
-        MAX(CASE WHEN "RowNum" = 2  THEN "CODE" END) AS "2",
-        MAX(CASE WHEN "RowNum" = 3  THEN "CODE" END) AS "3",
-        MAX(CASE WHEN "RowNum" = 4  THEN "CODE" END) AS "4",
-        MAX(CASE WHEN "RowNum" = 5  THEN "CODE" END) AS "5",
-        MAX(CASE WHEN "RowNum" = 6  THEN "CODE" END) AS "6",
-        MAX(CASE WHEN "RowNum" = 7  THEN "CODE" END) AS "7",
-        MAX(CASE WHEN "RowNum" = 8  THEN "CODE" END) AS "8",
-        MAX(CASE WHEN "RowNum" = 9  THEN "CODE" END) AS "9",
-        MAX(CASE WHEN "RowNum" = 10 THEN "CODE" END) AS "10",
-        MAX(CASE WHEN "RowNum" = 11 THEN "CODE" END) AS "11",
-        MAX(CASE WHEN "RowNum" = 12 THEN "CODE" END) AS "12"
-    FROM (
-        SELECT "PRIMARYKEY_ID", "CODE",
-            ROW_NUMBER() OVER (PARTITION BY "PRIMARYKEY_ID" ORDER BY "SNOMED_ID") AS "RowNum"
-        FROM {{ ref('raw_sus_ae_clinical_investigations_snomed') }}
-    ) a
-    WHERE "RowNum" BETWEEN 1 AND 12
-    GROUP BY "PRIMARYKEY_ID"
-) iv
-ON att."PRIMARYKEY_ID" = iv."PRIMARYKEY_ID"
+				SELECT DISTINCT
+							ROWNUMBER_ID
+					  ,
+							PRIMARYKEY_ID
+					  ,
+							COMORBIDITIES_ID
+					  ,
+							"CODE"
+					  ,
+							"IS_CODE_APPROVED"
+					  ,
+							"DMIC_IMPORT_LOG_ID"
+				  FROM
+							{{ ref('raw_sus_ae_clinical_comorbidities') }}
+				  WHERE
+							"CODE" IS NOT NULL
+
+				) a --) a
+
+				PIVOT (MAX("CODE")
+					FOR COMORBIDITIES_ID IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+					)) pvt
+	) Co
+	ON att.PRIMARYKEY_ID = Co.PRIMARYKEY_ID
+
+LEFT JOIN
+	{{ref('raw_sus_ae_attendance_expected_treatment_times')}} et
+	ON att.PRIMARYKEY_ID = et.PRIMARYKEY_ID
+	AND et.EXPECTED_TREATMENT_TIMES_ID = 1
 
 
--- 3. TREATMENTS PIVOT
-LEFT JOIN (
-    SELECT
-        "PRIMARYKEY_ID",
-        MAX(CASE WHEN "RowNum" = 1  THEN "CODE" END) AS "1",
-        MAX(CASE WHEN "RowNum" = 2  THEN "CODE" END) AS "2",
-        MAX(CASE WHEN "RowNum" = 3  THEN "CODE" END) AS "3",
-        MAX(CASE WHEN "RowNum" = 4  THEN "CODE" END) AS "4",
-        MAX(CASE WHEN "RowNum" = 5  THEN "CODE" END) AS "5",
-        MAX(CASE WHEN "RowNum" = 6  THEN "CODE" END) AS "6",
-        MAX(CASE WHEN "RowNum" = 7  THEN "CODE" END) AS "7",
-        MAX(CASE WHEN "RowNum" = 8  THEN "CODE" END) AS "8",
-        MAX(CASE WHEN "RowNum" = 9  THEN "CODE" END) AS "9",
-        MAX(CASE WHEN "RowNum" = 10 THEN "CODE" END) AS "10",
-        MAX(CASE WHEN "RowNum" = 11 THEN "CODE" END) AS "11",
-        MAX(CASE WHEN "RowNum" = 12 THEN "CODE" END) AS "12"
-    FROM (
-        SELECT "PRIMARYKEY_ID", "CODE",
-            ROW_NUMBER() OVER (PARTITION BY "PRIMARYKEY_ID" ORDER BY "DATE", "TIME", "SNOMED_ID") AS "RowNum"
-        FROM {{ ref('raw_sus_ae_clinical_treatments_snomed') }}
-    ) a
-    WHERE "RowNum" BETWEEN 1 AND 12
-    GROUP BY "PRIMARYKEY_ID"
-) "ct"
-ON att."PRIMARYKEY_ID" = "ct"."PRIMARYKEY_ID" 
-
-
-LEFT JOIN {{ref('raw_sus_ae_patient_mental_health_act_legal_status')}} AS mh
-ON att."PRIMARYKEY_ID" = mh."PRIMARYKEY_ID" 
-AND mh."MENTAL_HEALTH_ACT_LEGAL_STATUS_ID" = 1 
-
-
--- 4. COMORBIDITIES PIVOT
-LEFT JOIN (
-    SELECT
-        "PRIMARYKEY_ID",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 1  THEN "CODE" END) AS "1",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 2  THEN "CODE" END) AS "2",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 3  THEN "CODE" END) AS "3",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 4  THEN "CODE" END) AS "4",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 5  THEN "CODE" END) AS "5",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 6  THEN "CODE" END) AS "6",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 7  THEN "CODE" END) AS "7",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 8  THEN "CODE" END) AS "8",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 9  THEN "CODE" END) AS "9",
-        MAX(CASE WHEN "COMORBIDITIES_ID" = 10 THEN "CODE" END) AS "10"
-    FROM {{ ref('raw_sus_ae_clinical_comorbidities') }}
-    WHERE "CODE" IS NOT NULL
-    GROUP BY "PRIMARYKEY_ID"
-) Co
-ON att."PRIMARYKEY_ID" = Co."PRIMARYKEY_ID"
-
-
-LEFT JOIN {{ref('raw_sus_ae_attendance_expected_treatment_times')}} et
-ON att."PRIMARYKEY_ID" = et."PRIMARYKEY_ID" AND et."EXPECTED_TREATMENT_TIMES_ID" = 1
