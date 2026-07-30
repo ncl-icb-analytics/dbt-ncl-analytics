@@ -9,10 +9,9 @@ models:
       patient-attributable spend; expected = empirical WNL age-sex
       cost-per-month rate x months registered. resource_index =
       sum(actual) / sum(expected) for any cut (never average the ratio).
-      Also carries the Carr-Hill basis - weighted_months_12m apportions the
-      practice's latest published weighted/registered ratio to its patients
-      (practice-average uplift, so valid for area/deprivation cuts, not
-      person-level comparison; published FY lags the cost window ~1 year).
+      Also carries the UKHFD Core need basis. weighted_months_12m apportions
+      the practice's average of six service-specific weighted-population
+      ratios to its patients. The health-inequalities weight is excluded.
     config:
       meta:
         owner:
@@ -63,12 +62,16 @@ models:
               config:
                 where: residence_imd_quintile is not null
       - name: practice_weighted_ratio
-        description: Practice Carr-Hill weighted/registered ratio (latest published FY; WNL exposure-weighted mean when unpublished).
+        description: Practice UKHFD average weighted/registered ratio; WNL exposure-weighted mean when unavailable.
         data_tests:
           - not_null
+      - name: practice_weight_financial_year
+        description: UKHFD allocation base year used for the practice.
+      - name: practice_weight_financial_year_start
+        description: First day of the UKHFD allocation base year used for the practice.
       - name: weighted_ratio_imputed
-        description: TRUE when the practice has no published ratio and the WNL mean was used.
+        description: TRUE when the practice has no eligible UKHFD ratio and the WNL mean was used.
       - name: weighted_months_12m
-        description: practice_weighted_ratio x months_registered. sum()/12 = Carr-Hill weighted person-years for any cut.
+        description: practice_weighted_ratio x months_registered. sum()/12 = Core need-weighted person-years for any cut.
         data_tests:
           - not_null
