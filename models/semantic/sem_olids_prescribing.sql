@@ -187,8 +187,8 @@ DIMENSIONS(
     rx.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
 
     -- Order time
-    rx.order_date AS order_date WITH SYNONYMS = ('prescription date', 'date') COMMENT = 'Date the medication was issued',
-    rx.fiscal_year_start AS fiscal_year_start COMMENT = 'UK fiscal year start (Apr-Mar). Use for annual cost comparisons.',
+    rx.order_date AS order_date WITH SYNONYMS = ('prescription date', 'date') COMMENT = 'Date the medication was issued. Guaranteed between 1990-01-01 and today; dirty source dates are excluded upstream.',
+    rx.fiscal_year_start AS fiscal_year_start COMMENT = 'Integer start year of the UK fiscal year (Apr-Mar), e.g. 2024 = FY2024/25. Compare as a number, not a date. Use for annual cost comparisons.',
 
     -- BNF classification (use chatbot BNF tool to resolve drug names to codes)
     rx.bnf_chapter AS bnf_chapter WITH SYNONYMS = ('BNF chapter', 'therapeutic area') COMMENT = 'BNF chapter (2-digit). Key chapters: 01=GI, 02=Cardiovascular, 03=Respiratory, 04=CNS, 05=Infections, 06=Endocrine, 07=Obstetrics/Gynae/UTI, 08=Malignancy, 09=Nutrition/Blood, 10=Musculoskeletal, 11=Eye, 12=ENT, 13=Skin, 14=Vaccines',
@@ -274,11 +274,19 @@ METRICS(
     statins.statin_order_count AS COUNT(statins.medication_order_id) COMMENT = 'Statin orders',
     statins.statin_patient_count AS COUNT(DISTINCT statins.person_id) COMMENT = 'Patients with statin orders',
     antihypertensives.antihypertensive_order_count AS COUNT(antihypertensives.medication_order_id) COMMENT = 'Antihypertensive orders',
+    antihypertensives.antihypertensive_patient_count AS COUNT(DISTINCT antihypertensives.person_id) COMMENT = 'Patients with antihypertensive orders',
     anticoagulants.anticoagulant_order_count AS COUNT(anticoagulants.medication_order_id) COMMENT = 'Anticoagulant orders',
+    anticoagulants.anticoagulant_patient_count AS COUNT(DISTINCT anticoagulants.person_id) COMMENT = 'Patients with anticoagulant orders',
+    antiplatelets.antiplatelet_order_count AS COUNT(antiplatelets.medication_order_id) COMMENT = 'Antiplatelet orders',
+    antiplatelets.antiplatelet_patient_count AS COUNT(DISTINCT antiplatelets.person_id) COMMENT = 'Patients with antiplatelet orders',
     antipsychotics.antipsychotic_order_count AS COUNT(antipsychotics.medication_order_id) COMMENT = 'Antipsychotic orders',
+    antipsychotics.antipsychotic_patient_count AS COUNT(DISTINCT antipsychotics.person_id) COMMENT = 'Patients with antipsychotic orders',
     antidepressants.antidepressant_order_count AS COUNT(antidepressants.medication_order_id) COMMENT = 'Antidepressant orders',
+    antidepressants.antidepressant_patient_count AS COUNT(DISTINCT antidepressants.person_id) COMMENT = 'Patients with antidepressant orders',
     antibacterials.antibacterial_order_count AS COUNT(antibacterials.medication_order_id) COMMENT = 'Antibacterial orders',
+    antibacterials.antibacterial_patient_count AS COUNT(DISTINCT antibacterials.person_id) COMMENT = 'Patients with antibacterial orders',
     diabetes_meds.diabetes_med_order_count AS COUNT(diabetes_meds.medication_order_id) COMMENT = 'Diabetes medication orders',
+    diabetes_meds.diabetes_med_patient_count AS COUNT(DISTINCT diabetes_meds.person_id) COMMENT = 'Patients with diabetes medication orders',
     glp1.glp1_order_count AS COUNT(glp1.medication_order_id) COMMENT = 'GLP-1 receptor agonist orders',
     glp1.glp1_patient_count AS COUNT(DISTINCT glp1.person_id) COMMENT = 'Patients with GLP-1 receptor agonist orders',
     sglt2.sglt2_order_count AS COUNT(sglt2.medication_order_id) COMMENT = 'SGLT2 inhibitor orders',
@@ -288,16 +296,25 @@ METRICS(
     metformin.metformin_order_count AS COUNT(metformin.medication_order_id) COMMENT = 'Metformin orders (incl. combinations)',
     metformin.metformin_patient_count AS COUNT(DISTINCT metformin.person_id) COMMENT = 'Patients with metformin orders (incl. combinations)',
     ace_inhibitors.ace_inhibitor_order_count AS COUNT(ace_inhibitors.medication_order_id) COMMENT = 'ACE inhibitor orders',
+    ace_inhibitors.ace_inhibitor_patient_count AS COUNT(DISTINCT ace_inhibitors.person_id) COMMENT = 'Patients with ACE inhibitor orders',
     arbs.arb_order_count AS COUNT(arbs.medication_order_id) COMMENT = 'ARB orders',
+    arbs.arb_patient_count AS COUNT(DISTINCT arbs.person_id) COMMENT = 'Patients with ARB orders',
     beta_blockers.beta_blocker_order_count AS COUNT(beta_blockers.medication_order_id) COMMENT = 'Beta-blocker orders',
+    beta_blockers.beta_blocker_patient_count AS COUNT(DISTINCT beta_blockers.person_id) COMMENT = 'Patients with beta-blocker orders',
     lithium.lithium_order_count AS COUNT(lithium.medication_order_id) COMMENT = 'Lithium orders',
+    lithium.lithium_patient_count AS COUNT(DISTINCT lithium.person_id) COMMENT = 'Patients with lithium orders',
     ics.ics_order_count AS COUNT(ics.medication_order_id) COMMENT = 'Inhaled corticosteroid orders',
+    ics.ics_patient_count AS COUNT(DISTINCT ics.person_id) COMMENT = 'Patients with inhaled corticosteroid orders',
     epilepsy_meds.epilepsy_med_order_count AS COUNT(epilepsy_meds.medication_order_id) COMMENT = 'Anti-epileptic drug orders',
+    epilepsy_meds.epilepsy_med_patient_count AS COUNT(DISTINCT epilepsy_meds.person_id) COMMENT = 'Patients with anti-epileptic drug orders',
     nsaids.nsaid_order_count AS COUNT(nsaids.medication_order_id) COMMENT = 'NSAID orders',
+    nsaids.nsaid_patient_count AS COUNT(DISTINCT nsaids.person_id) COMMENT = 'Patients with NSAID orders',
     ppis.ppi_order_count AS COUNT(ppis.medication_order_id) COMMENT = 'PPI orders',
-    valproate.valproate_order_count AS COUNT(valproate.medication_order_id) COMMENT = 'Valproate orders'
+    ppis.ppi_patient_count AS COUNT(DISTINCT ppis.person_id) COMMENT = 'Patients with PPI orders',
+    valproate.valproate_order_count AS COUNT(valproate.medication_order_id) COMMENT = 'Valproate orders',
+    valproate.valproate_patient_count AS COUNT(DISTINCT valproate.person_id) COMMENT = 'Patients with valproate orders'
 )
 
 COMMENT = 'OLIDS Prescribing Semantic View - All medication orders with BNF classification, prescription type, prescribing-practice attribution, core patient demographics, and pre-defined drug category flags. Source: OLIDS (One London Integrated Data Set). Grain: one row per medication order. BNF chapter is the primary therapeutic filter — the chatbot has a BNF lookup tool to resolve drug class names. Condition, vulnerability, and polypharmacy cohorts come from sem_olids_population via person_id CTE joins.'
-AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. This is medication-order grain. Example: SELECT bnf_chapter, AGG(order_count), AGG(total_cost) FROM SEM_OLIDS_PRESCRIBING WHERE order_date >= DATEADD(year, -1, CURRENT_DATE) GROUP BY bnf_chapter. Example linkage: reduce active diabetes people in sem_olids_population and SGLT2 orders here before joining. Default treatment exposure is the last 12 months of order_date. For dimension-backed classes, filter the category dimension in WHERE (sglt2_drug, glp1_drug, dpp4_drug, statin_intensity, anticoagulant_type, valproate_product_type or metformin is_combination). For metric-only classes, use person-grain HAVING AGG(<class>_order_count) > 0. Never put a metric in WHERE. Prefer the pre-defined category tables over BNF filtering for known drug classes. BNF codes are compact, not dotted: bnf_chapter 2-digit (02 = Cardiovascular), bnf_section 4-digit (0205 = Hypertension and heart failure), bnf_code 15-character product code — use the BNF lookup tool to resolve drug class names, then WHERE bnf_section = result or bnf_code LIKE result || ''%''. fiscal_year_start has a small dirty-date tail; filter to sane recent years. Practice dimensions are prescribing practice; registered practice is in population. Demographics are current snapshot — use age_at_event for historical age cohorting.'
+AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. This is medication-order grain. Example: SELECT bnf_chapter, AGG(order_count), AGG(total_cost) FROM SEM_OLIDS_PRESCRIBING WHERE order_date >= DATEADD(year, -1, CURRENT_DATE) GROUP BY bnf_chapter. Example linkage: reduce active diabetes people in sem_olids_population and SGLT2 orders here before joining. Default treatment exposure is the last 12 months of order_date. For dimension-backed classes, filter the category dimension in WHERE (sglt2_drug, glp1_drug, dpp4_drug, statin_intensity, anticoagulant_type, valproate_product_type or metformin is_combination). For metric-only classes, use person-grain HAVING AGG(<class>_order_count) > 0. Never put a metric in WHERE. Every category has <class>_order_count and <class>_patient_count metrics — use AGG(<class>_patient_count) for "patients on X" headcounts. Prefer the pre-defined category tables over BNF filtering for known drug classes. BNF codes are compact, not dotted: bnf_chapter 2-digit (02 = Cardiovascular), bnf_section 4-digit (0205 = Hypertension and heart failure), bnf_code 15-character product code — use the BNF lookup tool to resolve drug class names, then WHERE bnf_section = result or bnf_code LIKE result || ''%''. order_date is clean (1990-01-01 to today). fiscal_year_start is an integer year (2024 = FY2024/25), not a date. Practice dimensions are prescribing practice; registered practice is in population. Demographics are current snapshot — use age_at_event for historical age cohorting.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: prescribing volume and cost by BNF chapter/practice/PCN, statin prescribing rates and intensity, antibiotic stewardship, antipsychotic/antidepressant prescribing, valproate safety monitoring, repeat vs acute prescribing, cost per patient by therapeutic area, prescribing equity by deprivation/ethnicity, and any medication-related questions. For current population health (conditions, demographics) without prescribing use sem_olids_population. For clinical biomarkers use sem_olids_observations. Questions needing cohorts from TWO domains (e.g. medication x biomarker control, medication x appointment access, treated vs untreated gaps) are answerable by joining this view to the other sem_olids_* views on person_id in CTEs, with aggregate-only output.'

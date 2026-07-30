@@ -154,3 +154,6 @@ SELECT
     category,
     source_observation_id
 FROM events
+-- Date sanity: a reading cannot post-date today. Legacy pre-1990 dates are
+-- kept (transferred records) — window filters should state their range.
+WHERE clinical_effective_date <= CURRENT_DATE
