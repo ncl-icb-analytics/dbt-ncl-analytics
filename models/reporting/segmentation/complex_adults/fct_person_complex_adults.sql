@@ -4,7 +4,7 @@
         cluster_by=['person_id'])
 }}
 
--- Complex Adults Cohort v2.0
+-- Complex Adults Cohort v2.1
 -- One row per person meeting all cohort criteria:
 --   Age >= 18
 --   AND at least one complexity criterion:
@@ -14,7 +14,20 @@
 --       OR on the palliative care register
 --       OR alcohol misuse
 --       OR substance misuse
---   AND (>=2 NEL admissions OR >=3 ED attendances in last 12 months, OR housebound)
+--   AND at least one activity criterion:
+--       >=2 NEL admissions OR >=3 ED attendances
+--       OR >=15 attended GP appointments (all rolling 12 months)
+--       OR attended outpatient care across >=5 treatment-function specialties
+--       OR housebound
+--
+-- Changes from v2.0:
+--   - GP activity joins the utilisation limb: >=15 attended clinical
+--     appointments in 12 months (int_appointment_gp_clinical_recent; DNAs and
+--     admin excluded). 15+ is around the active-adult 95th percentile, so
+--     the criterion reads as sustained high GP use.
+--   - Outpatient specialty breadth joins the utilisation limb: attended care
+--     across >=5 treatment-function specialties in 12 months. Five specialties
+--     is around the active-adult 95th percentile.
 --
 -- Changes from v1.0 (criteria signed off by K Saravanakumar, 27 Jul 2026):
 --   - Complexity limb widened from 2 alternatives to 6.
@@ -38,7 +51,8 @@
 --
 -- ED attendances count all urgent & emergency care settings from ECDS
 -- (Type 1/2 A&E, UTC, WiC, SDEC).
--- 12-month windows are rolling from the build date.
+-- GP and outpatient 12-month windows end on the latest available activity date
+-- in each source to account for reporting lag.
 --
 -- Every complexity criterion is exposed as its own column alongside
 -- complexity_criteria_count, so the marginal contribution of any single
@@ -76,6 +90,25 @@ WITH ltc AS (
         OR (s.condition_code = 'LD' AND a.age >= 65)
     )
     GROUP BY s.person_id
+),
+
+gp_max_date AS (
+    SELECT MAX(start_date) AS max_date
+    FROM {{ ref('int_appointment_gp_clinical_recent') }}
+    WHERE is_attended AND start_date <= CURRENT_DATE()
+),
+
+gp_appointments AS (
+    SELECT
+        a.person_id,
+        COUNT(*) AS gp_appointments_12mo
+    FROM {{ ref('int_appointment_gp_clinical_recent') }} AS a
+    CROSS JOIN gp_max_date AS m
+    WHERE
+        a.is_attended
+        AND a.start_date >= DATEADD(MONTH, -12, m.max_date)
+        AND a.start_date <= m.max_date
+    GROUP BY a.person_id
 ),
 
 complexity AS (
@@ -149,6 +182,8 @@ complexity AS (
         -- Utilisation
         ZEROIFNULL(ip.apc_nel_12mo) AS nel_admissions_12mo,
         ZEROIFNULL(ae.ae_tot_12mo) AS ed_attendances_12mo,
+        ZEROIFNULL(gp.gp_appointments_12mo) AS gp_appointments_12mo,
+        ZEROIFNULL(op.op_spec_12mo) AS outpatient_specialties_12mo,
         COALESCE(h.is_housebound, FALSE) AS is_housebound
 
     FROM {{ ref('dim_person_demographics') }} AS d
@@ -166,6 +201,10 @@ complexity AS (
         ON d.person_id = alc.person_id
     LEFT JOIN {{ ref('int_substance_misuse_status') }} AS sub
         ON d.person_id = sub.person_id
+    LEFT JOIN gp_appointments AS gp
+        ON d.person_id = gp.person_id
+    LEFT JOIN {{ ref('fct_person_sus_op_recent') }} AS op
+        ON d.sk_patient_id = op.sk_patient_id
     LEFT JOIN {{ ref('dim_person_housebound_status') }} AS h
         ON d.person_id = h.person_id
     LEFT JOIN {{ ref('fct_person_sus_apc_recent') }} AS ip
@@ -199,9 +238,11 @@ WHERE (
     OR has_alcohol_misuse
     OR has_substance_misuse
 )
--- Utilisation or housebound
+-- Activity or housebound
 AND (
     nel_admissions_12mo >= 2
     OR ed_attendances_12mo >= 3
+    OR gp_appointments_12mo >= 15
+    OR outpatient_specialties_12mo >= 5
     OR is_housebound
 )

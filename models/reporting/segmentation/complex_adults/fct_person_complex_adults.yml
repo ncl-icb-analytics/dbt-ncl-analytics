@@ -1,14 +1,21 @@
 models:
   - name: fct_person_complex_adults
-    description: 'Complex adults cohort v2.0. One row per person meeting all criteria:
+    description: 'Complex adults cohort v2.1. One row per person meeting all criteria:
       age >= 18, AND at least one complexity criterion (moderate/severe frailty OR
       3+ included LTCs OR homeless OR on the palliative care register OR alcohol
-      misuse OR substance misuse), AND (>=2 NEL admissions OR >=3 ED attendances in
-      last 12 months, OR housebound).
+      misuse OR substance misuse), AND at least one activity criterion (>=2 NEL
+      admissions OR >=3 ED attendances OR >=15 attended GP appointments OR attended
+      outpatient care across >=5 treatment-function specialties in the last 12
+      months, OR housebound).
       Includes all persons regardless of registration status; filter is_active = TRUE
       for the currently registered population.
 
-      Criteria signed off by K Saravanakumar, 27 July 2026. v2.0 widened the
+      v2.1 added GP activity and outpatient specialty breadth to the utilisation
+      limb. GP activity includes attended clinical appointments only; DNAs and admin
+      are excluded. Outpatient specialty breadth counts distinct treatment-function
+      specialties with an attended appointment.
+
+      v2.0 criteria signed off by K Saravanakumar, 27 July 2026: widened the
       complexity limb from 2 alternatives to 6, made frailty additive across eFI2 and
       coded diagnoses, and added learning disability to the LTC list at 65+.
 
@@ -16,7 +23,8 @@ models:
       epilepsy, heart failure, hypertension, SMI, stroke/TIA, Parkinson''s, anxiety,
       and learning disability (65+ only).
       ED attendances count all urgent & emergency care settings from ECDS (Type 1/2
-      A&E, UTC, WiC, SDEC). 12-month windows are rolling from the build date.
+      A&E, UTC, WiC, SDEC). GP and outpatient 12-month windows end on the latest
+      available activity date in each source to account for reporting lag.
 
       Every complexity criterion is exposed as its own column alongside
       complexity_criteria_count, so the marginal contribution of any single criterion
@@ -90,9 +98,9 @@ models:
         description: Date of the most recent qualifying substance misuse record
 
       - name: complexity_criteria_count
-        description: How many of the six complexity criteria the person meets (1-6).
-          A value of 1 means the person would leave the cohort if that single
-          criterion were removed.
+        description: How many of the six complexity criteria the person meets
+          (1-6). A value of 1 means the person would leave the cohort if that
+          single criterion were removed.
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
@@ -104,5 +112,13 @@ models:
         description: Non-elective admissions in last 12 months (SUS APC, admission methods 2x, births excluded)
       - name: ed_attendances_12mo
         description: Urgent & emergency care attendances in last 12 months (ECDS, all department types - Type 1/2 A&E, UTC, WiC, SDEC)
+      - name: gp_appointments_12mo
+        description: Activity criterion input - attended clinical GP appointments
+          in last 12 months (int_appointment_gp_clinical_recent, any clinical
+          practitioner role; DNAs and admin excluded). Criterion is >=15.
+      - name: outpatient_specialties_12mo
+        description: Activity criterion input - distinct treatment-function
+          specialties with an attended outpatient appointment in the last 12
+          months. Criterion is >=5.
       - name: is_housebound
         description: Latest housebound status is housebound
