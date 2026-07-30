@@ -11,20 +11,19 @@ dropped (~17% of in-patch patient-keyed spend). One row per patient.
     (rolled from int_person_cost_index_actual_monthly)
   * expected_cost_12m - WNL age-sex cost-per-month rate for the patient's
     band x their months registered
-  * weighted_months_12m - Carr-Hill basis: the practice's latest published
+  * weighted_months_12m - Core need basis: the practice's UKHFD average
     weighted/registered ratio (int_practice_weighted_population) x months
     registered. sum(weighted_months_12m)/12 = weighted person-years, the
     denominator for spend-per-weighted-patient in any cut.
 
 Two index bases:
   age-sex:   resource_index = sum(actual) / sum(expected) — own-data curve.
-  Carr-Hill: spend per weighted person-year vs the WNL mean — external
-    national GP-funding weights (age-sex workload, morbidity/mortality,
-    care-home, turnover, rurality, MFF). Ratio caveats: practice-level
-    annual average apportioned uniformly to the practice's patients (fine
-    for area/deprivation cuts, not person-level comparison), and the
-    published year lags the cost window (~1 year); practices with no
-    published ratio get the WNL exposure-weighted mean (flagged).
+  Core need: spend per weighted person-year vs the WNL mean. The practice
+    denominator averages six UKHFD service-specific weighted populations,
+    excluding the health-inequalities component. The latest allocation base
+    year not later than the cost window is used. The practice ratio is spread
+    uniformly across its patients; practices with no ratio get the WNL
+    exposure-weighted mean (flagged).
 
 Index > 1 = spend above expectation on either basis. Deprivation / morbidity
 are exposed as cut dimensions (residence_imd_decile + quintile), not folded
@@ -109,9 +108,18 @@ cost as (
 ),
 
 practice_weights as (
-    select practice_code, weighted_to_registered_ratio
-    from {{ ref('int_practice_weighted_population') }}
-    where is_latest
+    select
+        w.practice_code,
+        w.financial_year,
+        w.financial_year_start,
+        w.weighted_to_registered_ratio
+    from {{ ref('int_practice_weighted_population') }} as w
+    cross join bounds as b
+    where w.financial_year_start <= b.window_end_month
+    qualify row_number() over (
+        partition by w.practice_code
+        order by w.financial_year_start desc
+    ) = 1
 ),
 
 -- WNL exposure-weighted mean ratio: fallback for practices with no
@@ -160,6 +168,8 @@ select
     coalesce(cost.actual_cost_12m, 0)                       as actual_cost_12m,
     curve.expected_cost_per_month * pop.months_registered   as expected_cost_12m,
     coalesce(w.weighted_to_registered_ratio, mr.ratio)      as practice_weighted_ratio,
+    w.financial_year                                       as practice_weight_financial_year,
+    w.financial_year_start                                 as practice_weight_financial_year_start,
     w.weighted_to_registered_ratio is null                  as weighted_ratio_imputed,
     coalesce(w.weighted_to_registered_ratio, mr.ratio)
         * pop.months_registered                             as weighted_months_12m
