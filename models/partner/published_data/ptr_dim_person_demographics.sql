@@ -2,7 +2,7 @@
     config(
         materialized='table',
         tags=['dimension', 'person', 'demographics', 'current_state'],
-        cluster_by=['person_id'])
+        cluster_by=['sk_patient_id'],)
 }}
 
 /*

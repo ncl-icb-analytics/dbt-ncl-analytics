@@ -142,7 +142,7 @@ models:
       +materialized: table
       +database: "PUBLISHED_REPORTING__PARTNER"
       +tags: ["partner"]
-      +table_tag: "PUBLISHED_REPORTING__PARTNER.SECURITY.PARTNER_ACCESS = 'restricted'"
+      +row_access_policy: 'PUBLISHED_REPORTING__PARTNER.SECURITY.PARTNER_POLICY on (sk_patient_id)'
          
       +post-hook:
         - "{{ add_model_comment() }}"
