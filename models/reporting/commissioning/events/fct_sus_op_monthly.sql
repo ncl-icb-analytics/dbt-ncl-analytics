@@ -20,7 +20,7 @@ care_home_assignment as (
         b.sk_encounter_id,
         max_by(org.organisation_code, ch.period_start) as care_home_code
     from base as b
-    inner join {{ ref('raw_fact_patient_factcarehome') }} as ch
+    inner join {{ ref('stg_fact_patient_factcarehome') }} as ch
         on b.sk_patient_id = ch.sk_patient_id
        and b.appointment_date between cast(ch.period_start as date)
                                   and coalesce(cast(ch.period_end as date), '2050-12-31'::date)
@@ -49,14 +49,43 @@ dedupe_ranked as (
     from base as b
 ),
 
+reference_enriched as (
+    select
+        d.*,
+        coalesce(diagnosis_term.sensitive_category, procedure_term.sensitive_category)
+            as mapped_sensitive_category,
+        case
+            when left(upper(trim(d.core_hrg)), 2) not in ('WF', 'UZ') then 'OPPROC'
+            else coalesce(pod_mapping.pod_level_4, 'Unknown')
+        end as mapped_pod_level_4
+    from dedupe_ranked as d
+    left join {{ ref('sus_op_pod_mapping') }} as pod_mapping
+        on pod_mapping.core_hrg = upper(trim(d.core_hrg))
+       and pod_mapping.specialty_group in (
+            'ALL',
+            case
+                when trim(d.main_specialty_code) = '560'
+                  or trim(d.main_specialty_code) between '900' and '960'
+                    then 'NON_SPECIALIST'
+                else 'SPECIALIST'
+            end
+       )
+    left join {{ ref('sus_op_sensitive_terminology') }} as diagnosis_term
+        on diagnosis_term.code_system = 'ICD10'
+       and diagnosis_term.code = upper(trim(d.primary_diagnosis_code))
+    left join {{ ref('sus_op_sensitive_terminology') }} as procedure_term
+        on procedure_term.code_system = 'OPCS4'
+       and procedure_term.code = upper(trim(d.primary_procedure_code))
+),
+
 postprocessed as (
     select
-        d.* exclude (duplicate_rank)
+        d.* exclude (duplicate_rank, mapped_sensitive_category, mapped_pod_level_4)
         replace (
             iff(d.duplicate_rank > 1, 2, d.zcommissioning_access) as zcommissioning_access,
-            coalesce(d.zsensitive_data_category, {{ sus_op_sensitive_category('d.') }})
+            coalesce(d.zsensitive_data_category, d.mapped_sensitive_category)
                 as zsensitive_data_category,
-            coalesce(d.zpod_level_4, {{ sus_op_pod_level_4('d.') }}) as zpod_level_4,
+            coalesce(d.zpod_level_4, d.mapped_pod_level_4) as zpod_level_4,
             iff(d.tariff_total_payment_national is not null,
                 d.tariff_total_payment_national, d.zderivedprice) as zderivedprice,
             iff(d.tariff_total_payment_national is not null, 'PBR', d.zderivedpriceflag)
@@ -66,126 +95,158 @@ postprocessed as (
             d.local_patient_identifier as zlocalpatientidentifier,
             coalesce(d.zcarehome, ch.care_home_code) as zcarehome
         )
-    from dedupe_ranked as d
+    from reference_enriched as d
     left join care_home_assignment as ch
         on d.sk_encounter_id = ch.sk_encounter_id
+),
+
+rule_code_matches as (
+    select
+        p.sk_encounter_id,
+        array_agg(distinct
+            rule_code.rule_name || '|' || rule_code.attribute_name || '|'
+            || rule_code.include_or_exclude
+        ) as matched_rule_codes
+    from postprocessed as p
+    inner join {{ ref('sus_op_business_rule_codes') }} as rule_code
+        on (rule_code.effective_from is null or p.appointment_date >= rule_code.effective_from)
+       and (rule_code.effective_to is null or p.appointment_date <= rule_code.effective_to)
+       and case rule_code.match_type
+            when 'EXACT' then
+                upper(trim(
+                    case rule_code.attribute_name
+                        when 'provider_code' then left(p.organisation_code_code_of_provider, 3)
+                        when 'site_code' then p.site_code_of_treatment
+                        when 'provider_site_code' then p.provider_site_code
+                        when 'consultant_code' then p.consultant_code
+                        when 'commissioner_code' then p.organisation_code_code_of_commissioner
+                        when 'treatment_function_code' then p.treatment_function_code
+                        when 'provider_reference_no' then p.provider_reference_no
+                    end
+                )) = upper(rule_code.code)
+            when 'PREFIX' then
+                upper(case rule_code.attribute_name
+                    when 'provider_reference_no' then p.provider_reference_no
+                end) like upper(rule_code.code) || '%'
+            when 'CONTAINS' then
+                upper(case rule_code.attribute_name
+                    when 'provider_reference_no' then p.provider_reference_no
+                end) like '%' || upper(rule_code.code) || '%'
+           end
+    group by p.sk_encounter_id
 ),
 
 rule_flags as (
     select
         p.*,
-        left(p.organisation_code_code_of_provider, 3) in ('RV8', 'R1K')
-            and p.provider_reference_no = 'AMBUL17D' as rule_aecu_clinic_lnwht,
-        left(p.organisation_code_code_of_provider, 3) in ('RV8', 'R1K')
-            and p.provider_reference_no = 'AMBCAREWA' as rule_aecu_wa_lnwht,
-        left(p.organisation_code_code_of_provider, 3) = 'RAL'
-            and p.consultant_code in ('C4525871','C4191142','C4663760','C5207347','C4207100')
-            and p.treatment_function_code = '320'
-            and p.appointment_date >= '2015-03-01'::date
-            and p.organisation_code_code_of_commissioner in ('5K5', '07P') as rule_card_brent,
+        {{ sus_op_rule_code_matches('AECU_CLINIC_LNWHT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('AECU_CLINIC_LNWHT', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }} as rule_aecu_clinic_lnwht,
+        {{ sus_op_rule_code_matches('AECU_WA_LNWHT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('AECU_WA_LNWHT', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }} as rule_aecu_wa_lnwht,
+        {{ sus_op_rule_code_matches('CARD_BRENT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('CARD_BRENT', 'consultant_code', 'p.consultant_code', 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('CARD_BRENT', 'treatment_function_code', 'p.treatment_function_code', 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('CARD_BRENT', 'commissioner_code', 'p.organisation_code_code_of_commissioner', 'p.appointment_date') }} as rule_card_brent,
         (
-            p.provider_reference_no like '%QPC%'
-            or p.provider_reference_no like '%WCC%'
+            {{ sus_op_rule_code_matches('CARD_ICHT_ANY', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }}
             or (
-                p.provider_reference_no in (
-                    '09A08Y_320CD','09A08Y_320CFA','09A08Y_320CFU','09A08Y_320CHF','09A08Y_320CHFU'
-                )
-                and left(p.organisation_code_code_of_provider, 3) in ('RYJ','RQN','RJ5')
+                {{ sus_op_rule_code_matches('CARD_ICHT', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }}
+                and {{ sus_op_rule_code_matches('CARD_ICHT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
             )
         ) as rule_card_icht,
-        p.site_code_of_treatment in ('RQM23', 'RQM20') as rule_derm_cw,
-        p.provider_reference_no like '%DUP%'
-            and left(p.organisation_code_code_of_provider, 3) in ('RYJ','RQN','RJ5') as rule_dup_icht,
-        left(p.organisation_code_code_of_provider, 3) = 'RV8'
-            and p.appointment_date between '2015-04-01'::date and '2015-04-30'::date
-            as rule_duplicate_lnwht,
-        p.treatment_function_code = '304'
-            and left(p.organisation_code_code_of_provider, 3) = 'RQM' as rule_ecg_cw,
-        p.treatment_function_code = '360' as rule_gum,
-        p.site_code_of_treatment = 'RQM19' as rule_gyn_cw,
-        left(p.organisation_code_code_of_provider, 3) = 'NV1' as rule_in_health,
-        left(p.organisation_code_code_of_provider, 3)
-            in ('RKL','RV3','RRP','RNK','RQY','RWK','TAF','RPG','RV5','RAT','RWR')
-            as rule_mh_london_providers,
+        {{ sus_op_rule_code_matches('DERM_CW', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }} as rule_derm_cw,
+        {{ sus_op_rule_code_matches('DUP_ICHT', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('DUP_ICHT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }} as rule_dup_icht,
+        {{ sus_op_rule_code_matches('DUPLICATE_LNWHT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }} as rule_duplicate_lnwht,
+        {{ sus_op_rule_code_matches('ECG_CW', 'treatment_function_code', 'p.treatment_function_code', 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('ECG_CW', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }} as rule_ecg_cw,
+        {{ sus_op_rule_code_matches('GUM', 'treatment_function_code', 'p.treatment_function_code', 'p.appointment_date') }} as rule_gum,
+        {{ sus_op_rule_code_matches('GYN_CW', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }} as rule_gyn_cw,
+        {{ sus_op_rule_code_matches('IN_HEALTH', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }} as rule_in_health,
+        {{ sus_op_rule_code_matches('MH_LondonProviders', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }} as rule_mh_london_providers,
         left(p.treatment_function_code, 1) = '7' as rule_mh_psych,
         (
-            (left(p.organisation_code_code_of_provider, 3) = 'RV8'
+            ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and p.commissioning_serial_no_agreement_no = 'NCB')
-            or (p.site_code_of_treatment = 'R1K01'
+            or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and p.commissioning_serial_no_agreement_no = 'NCB')
         ) as rule_nc_nwl1,
         (
-            (left(p.organisation_code_code_of_provider, 3) = 'RV8'
+            ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and p.commissioning_serial_no_agreement_no like '%=%'
              and p.treatment_function_code = '320')
-            or (p.site_code_of_treatment = 'R1K01'
+            or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and p.commissioning_serial_no_agreement_no like '%=%'
                 and p.treatment_function_code = '320')
         ) as rule_nc_nwl2,
         (
-            (left(p.organisation_code_code_of_provider, 3) = 'RV8'
+            ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and p.commissioning_serial_no_agreement_no like '%=%'
              and p.treatment_function_code = '340')
-            or (p.site_code_of_treatment = 'R1K01'
+            or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and p.commissioning_serial_no_agreement_no like '%=%'
                 and p.treatment_function_code = '340')
         ) as rule_nc_nwl3,
         (
-            (left(p.organisation_code_code_of_provider, 3) = 'RV8'
+            ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and left(p.treatment_function_code, 2) = '14')
-            or (p.site_code_of_treatment = 'R1K01'
+            or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and left(p.treatment_function_code, 2) = '14')
         ) as rule_nc_nwl4,
         (
-            (left(p.organisation_code_code_of_provider, 3) = 'RV8'
+            ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and left(p.treatment_function_code, 1) = '7')
-            or (p.site_code_of_treatment = 'R1K01'
+            or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and left(p.treatment_function_code, 1) = '7')
         ) as rule_nc_nwl5,
         (
-            (left(p.organisation_code_code_of_provider, 3) = 'RV8'
+            ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and p.treatment_function_code = '310'
-             and p.provider_reference_no not in ('CAUD15E','CAUDREP15E','NAUD15E','NAUDREP15E'))
-            or (p.site_code_of_treatment = 'R1K01'
+             and not {{ sus_op_rule_code_matches('NC_NWL6', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date', 'EXCLUDE') }})
+            or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and p.treatment_function_code = '310'
-                and p.provider_reference_no not in ('CAUD15E','CAUDREP15E','NAUD15E','NAUDREP15E'))
+                and not {{ sus_op_rule_code_matches('NC_NWL6', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date', 'EXCLUDE') }})
         ) as rule_nc_nwl6,
         (
-            (left(p.organisation_code_code_of_provider, 3) = 'RV8'
+            ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and p.treatment_function_code = '301'
-             and (p.provider_reference_no like 'NPBCS%' or p.provider_reference_no like '%breath%'))
-            or (p.site_code_of_treatment = 'R1K01'
+             and {{ sus_op_rule_code_matches('NC_NWL7', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }})
+            or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and p.treatment_function_code = '301'
-                and (p.provider_reference_no like 'NPBCS%' or p.provider_reference_no like '%breath%'))
+                and {{ sus_op_rule_code_matches('NC_NWL7', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }})
         ) as rule_nc_nwl7,
         p.commissioner_reference_no = 'S6002'
-            and left(p.organisation_code_code_of_provider, 3) = 'NT4'
-            and p.treatment_function_code = '130'
-            and p.appointment_date >= '2014-10-01'::date
-            and p.organisation_code_code_of_commissioner in ('5K5', '07P') as rule_opth_brent,
+            and {{ sus_op_rule_code_matches('OPTH_BRENT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('OPTH_BRENT', 'treatment_function_code', 'p.treatment_function_code', 'p.appointment_date') }}
+            and {{ sus_op_rule_code_matches('OPTH_BRENT', 'commissioner_code', 'p.organisation_code_code_of_commissioner', 'p.appointment_date') }} as rule_opth_brent,
         coalesce(p.administrative_category, '00') in ('02', '2') as rule_private,
-        p.appointment_date >= '2012-04-01'::date
-            and p.provider_reference_no = 'SLEEP CLIN'
+        {{ sus_op_rule_code_matches('SLEEPCLINIC_WMUH', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }}
             and (
-                left(p.organisation_code_code_of_provider, 3) = 'RFW'
-                or (left(p.organisation_code_code_of_provider, 3) = 'RQM'
-                    and p.provider_site_code = 'RQM91')
+                {{ sus_op_rule_code_matches('WMUH_DIRECT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+                or (
+                    {{ sus_op_rule_code_matches('WMUH_SITE', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+                    and {{ sus_op_rule_code_matches('WMUH_SITE', 'provider_site_code', 'p.provider_site_code', 'p.appointment_date') }}
+                )
             ) as rule_sleepclinic_wmuh,
-        p.appointment_date >= '2012-04-01'::date
-            and p.provider_reference_no = 'SLEEPSTYSC'
+        {{ sus_op_rule_code_matches('SLEEPSTUDY_WMUH', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }}
             and (
-                left(p.organisation_code_code_of_provider, 3) = 'RFW'
-                or (left(p.organisation_code_code_of_provider, 3) = 'RQM'
-                    and p.provider_site_code = 'RQM91')
+                {{ sus_op_rule_code_matches('WMUH_DIRECT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+                or (
+                    {{ sus_op_rule_code_matches('WMUH_SITE', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+                    and {{ sus_op_rule_code_matches('WMUH_SITE', 'provider_site_code', 'p.provider_site_code', 'p.appointment_date') }}
+                )
             ) as rule_sleepstudy_wmuh,
-        p.appointment_date >= '2015-07-01'::date
-            and p.provider_reference_no = 'SOAEC'
+        {{ sus_op_rule_code_matches('SOAEC_WMUH', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date') }}
             and (
-                left(p.organisation_code_code_of_provider, 3) = 'RFW'
-                or (left(p.organisation_code_code_of_provider, 3) = 'RQM'
-                    and p.provider_site_code = 'RQM91')
+                {{ sus_op_rule_code_matches('WMUH_DIRECT', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+                or (
+                    {{ sus_op_rule_code_matches('WMUH_SITE', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
+                    and {{ sus_op_rule_code_matches('WMUH_SITE', 'provider_site_code', 'p.provider_site_code', 'p.appointment_date') }}
+                )
             ) as rule_soaec_wmuh
     from postprocessed as p
+    left join rule_code_matches as matched
+        on p.sk_encounter_id = matched.sk_encounter_id
 ),
 
 with_sla as (

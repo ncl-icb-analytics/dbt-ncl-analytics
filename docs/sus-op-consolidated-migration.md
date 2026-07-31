@@ -40,9 +40,39 @@ assignment, the 25 active OP rules and the legacy SLA contract classification.
 The SLA seed was generated from `objectswithdata.sql` and covers the supplied
 financial years 1314 through 1718.
 
+The outpatient POD mapping and the ICD-10/OPCS-4 terminology used for sensitive
+activity are maintained in `sus_op_pod_mapping` and
+`sus_op_sensitive_terminology`. These seeds are the governed review surface for
+code changes; the macros contain only the evaluation logic. The patient
+care-home relationship is consumed through `stg_fact_patient_factcarehome`, so
+the reporting model does not bypass the staging layer.
+
+Provider, site, consultant, commissioner, treatment-function and local-reference
+values used by the named rules are maintained in `sus_op_business_rule_codes`.
+The SQL retains compound boolean logic and contract precedence rather than
+implementing an opaque configurable rules engine.
+
 `fct_sus_op_consolidated` applies the publish filters from the consolidated view
 and resolves the provider's current-care organisation through the organisation
 dictionary.
+
+Both outpatient facts have a grain of one row per `sk_encounter_id`. The
+unbundled-HRG inputs are aggregated before joining to the Date Range encounter,
+and uniqueness tests on both facts enforce that grain.
+
+## Relationship to existing SUS models
+
+The existing models documented in `docs/sus-models.md` provide reusable clinical
+encounter, diagnosis, procedure and person-level reporting datasets. The models
+in this migration serve a different commissioning purpose: they reproduce the
+legacy monthly post-processing, commissioner attribution, contract rules and
+consolidated publish filters. They should remain long-term only while those
+commissioning-specific outputs are required.
+
+Shared clinical logic should continue to live in the existing intermediate SUS
+models rather than being copied into these facts. After reconciliation and
+consumer migration, the legacy SQL Server OP procedures and views are retirement
+candidates; the dbt clinical encounter models are not replaced by this work.
 
 ## Known boundary
 
@@ -56,7 +86,7 @@ IMD 2015 mapping is supplied and agreed.
 1. Load and validate the four commissioner reference tables.
 2. Run the normal source-generation pipeline (or its offline steps 2 and 3) so
    manual-source drift is checked and the raw models remain generated artifacts.
-3. Run `dbt seed --select sus_op_business_rules_sla`.
+3. Run `dbt seed --select sus_op_business_rules_sla sus_op_business_rule_codes sus_op_pod_mapping sus_op_sensitive_terminology`.
 4. Build `+fct_sus_op_monthly fct_sus_op_consolidated` so the upstream Date Range
    transformation and both facts are created. The leading `+` is required to
    rebuild `int_sus_op_monthly`; building only the facts can reuse an older

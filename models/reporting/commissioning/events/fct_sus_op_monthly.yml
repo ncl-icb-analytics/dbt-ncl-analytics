@@ -5,7 +5,7 @@ models:
     description: >-
       Monthly SUS outpatient activity fact with commissioner attribution, legacy
       OP post processing and the active outpatient business rules applied
-      declaratively. Unbundled activity can produce multiple rows per encounter.
+      declaratively. Grain: one row per sk_encounter_id.
     config:
       meta:
         owner:
@@ -15,6 +15,7 @@ models:
         description: Source outpatient encounter identifier.
         data_tests:
           - not_null
+          - unique
       - name: source_extract_type
         description: Extract type supplied by EncounterDenormalised_DateRange.
       - name: zdatatype
@@ -35,8 +36,8 @@ models:
   - name: fct_sus_op_consolidated
     description: >-
       Published consolidated outpatient fact, restricted to commissioning-access
-      records and excluding private-patient activity. Unbundled activity can
-      produce multiple rows per encounter.
+      records and excluding private-patient activity. Grain: one row per
+      sk_encounter_id.
     config:
       meta:
         owner:
@@ -46,6 +47,7 @@ models:
         description: Source outpatient encounter identifier.
         data_tests:
           - not_null
+          - unique
       - name: zcommissioning_access
         description: Legacy commissioning access status retained for publish filtering.
         data_tests:

@@ -1,53 +1,49 @@
+{% macro sus_op_rule_code_matches(rule_name, attribute_name, value_expression, activity_date, include_or_exclude='INCLUDE') %}
+    coalesce(
+        array_contains(
+            '{{ rule_name }}|{{ attribute_name }}|{{ include_or_exclude }}'::variant,
+            matched.matched_rule_codes
+        ),
+        false
+    )
+{% endmacro %}
+
 {% macro sus_op_pod_level_4(alias='') %}
+    {{ sus_op_pod_level_4_from_values(alias ~ 'core_hrg', alias ~ 'main_specialty_code') }}
+{% endmacro %}
+
+{% macro sus_op_pod_level_4_from_values(op_hrg, main_spec) %}
     case
-        when left(upper(trim({{ alias }}core_hrg)), 2) not in ('WF', 'UZ') then 'OPPROC'
-        when upper(trim({{ alias }}core_hrg)) in ('WF01D', 'WF02D', 'WF01C', 'WF02C')
-            then 'NON_FACE_TO_FACE'
-        when upper(trim({{ alias }}core_hrg)) = 'WF01B'
-             and not (trim({{ alias }}main_specialty_code) = '560'
-                      or trim({{ alias }}main_specialty_code) between '900' and '960')
-            then 'OPFASPCL'
-        when upper(trim({{ alias }}core_hrg)) = 'WF02B'
-             and not (trim({{ alias }}main_specialty_code) = '560'
-                      or trim({{ alias }}main_specialty_code) between '900' and '960')
-            then 'OPFAMPCL'
-        when upper(trim({{ alias }}core_hrg)) = 'WF01A'
-             and not (trim({{ alias }}main_specialty_code) = '560'
-                      or trim({{ alias }}main_specialty_code) between '900' and '960')
-            then 'OPFUPSPCL'
-        when upper(trim({{ alias }}core_hrg)) = 'WF02A'
-             and not (trim({{ alias }}main_specialty_code) = '560'
-                      or trim({{ alias }}main_specialty_code) between '900' and '960')
-            then 'OPFUPMPCL'
-        when upper(trim({{ alias }}core_hrg)) = 'WF01B' then 'OPFASPNCL'
-        when upper(trim({{ alias }}core_hrg)) = 'WF02B' then 'OPFAMPNCL'
-        when upper(trim({{ alias }}core_hrg)) = 'WF01A' then 'OPFUPSPNCL'
-        when upper(trim({{ alias }}core_hrg)) = 'WF02A' then 'OPFUPMPNCL'
-        else 'Unknown'
+        when left(upper(trim({{ op_hrg }})), 2) not in ('WF', 'UZ') then 'OPPROC'
+        else coalesce(
+            (
+                select min(mapping.pod_level_4)
+                from {{ ref('sus_op_pod_mapping') }} as mapping
+                where mapping.core_hrg = upper(trim({{ op_hrg }}))
+                  and mapping.specialty_group in (
+                      'ALL',
+                      case
+                          when trim({{ main_spec }}) = '560'
+                            or trim({{ main_spec }}) between '900' and '960'
+                              then 'NON_SPECIALIST'
+                          else 'SPECIALIST'
+                      end
+                  )
+            ),
+            'Unknown'
+        )
     end
 {% endmacro %}
 
 {% macro sus_op_sensitive_category(alias='') %}
-    case
-        when {{ alias }}primary_diagnosis_code in (
-            'B200','B201','B202','B203','B204','B205','B206','B207','B208','B209',
-            'B210','B211','B212','B213','B217','B218','B219','B220','B221','B222',
-            'B227','B230','B231','B232','B238','B24X','Z113','Z114','Z202','Z206',
-            'Z21X','Z224','Z830'
-        ) then 'HIV'
-        when {{ alias }}primary_diagnosis_code in (
-            'A500','A501','A502','A503','A504','A505','A506','A507','A509','A510',
-            'A511','A512','A513','A514','A515','A519','A520','A521','A522','A523',
-            'A527','A528','A529','A530','A539','A540','A541','A542','A543','A544',
-            'A545','A546','A548','A549','A55X','A560','A561','A562','A563','A564',
-            'A568','A630','A638','A634X'
-        ) then 'STI'
-        when {{ alias }}primary_diagnosis_code in ('Z311','Z312','Z313','Z318')
-          or {{ alias }}primary_procedure_code in (
-            'Q131','Q132','Q133','Q134','Q135','Q136','Q137','Q138','Q139','Q383',
-            'Y961','Y962','Y963','Y964','Y965','Y966','Y968','Y969'
-          ) then 'IVF'
-    end
+    (
+        select min_by(terminology.sensitive_category, terminology.priority)
+        from {{ ref('sus_op_sensitive_terminology') }} as terminology
+        where (terminology.code_system = 'ICD10'
+               and terminology.code = upper(trim({{ alias }}primary_diagnosis_code)))
+           or (terminology.code_system = 'OPCS4'
+               and terminology.code = upper(trim({{ alias }}primary_procedure_code)))
+    )
 {% endmacro %}
 
 {% macro sus_op_business_rule_string(alias='') %}

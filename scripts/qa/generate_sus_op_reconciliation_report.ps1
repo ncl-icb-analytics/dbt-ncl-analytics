@@ -19,45 +19,45 @@ $detailText = @'
 1617|RQM|920523|381673
 1617|RYJ|1240576|337147
 1718|R1K|771295|771296
-1718|RAS|413555|413556
-1718|RQM|1007193|1007751
-1718|RYJ|1499757|1499867
-1819|R1K|775637|816455
+1718|RAS|413555|413555
+1718|RQM|1007193|1007198
+1718|RYJ|1499757|1499758
+1819|R1K|775637|816452
 1819|RAS|389934|413608
-1819|RQM|849122|1058246
-1819|RYJ|1359700|1557588
-1920|R1K|844710|844709
+1819|RQM|849122|1057965
+1819|RYJ|1359700|1557553
+1920|R1K|844710|844707
 1920|RAS|402948|403018
-1920|RQM|1109701|1109811
-1920|RYJ|1674369|1674435
-2021|R1K|662474|668723
+1920|RQM|1109701|1109692
+1920|RYJ|1674369|1674364
+2021|R1K|662474|668720
 2021|RAS|308006|308499
 2021|RQM|984580|998813
-2021|RYJ|1495531|1518590
-2122|R1K|868571|875371
+2021|RYJ|1495531|1518548
+2122|R1K|868571|875370
 2122|RAS|383772|385678
 2122|RQM|1210918|1239958
-2122|RYJ|1754297|1765556
-2223|R1K|881451|884727
+2122|RYJ|1754297|1765503
+2223|R1K|881451|884726
 2223|RAS|384121|385375
 2223|RQM|1225619|1229323
-2223|RYJ|1753148|1737592
-2324|R1K|1060290|1096774
+2223|RYJ|1753148|1737533
+2324|R1K|1060290|1096770
 2324|RAS|500250|509758
 2324|RQM|1166729|1280900
-2324|RYJ|1805282|1843833
-2425|R1K|1457410|1478084
+2324|RYJ|1805282|1843778
+2425|R1K|1457410|1478081
 2425|RAS|665213|667988
-2425|RQM|1388414|1388258
-2425|RYJ|1956187|1957595
+2425|RQM|1388414|1388255
+2425|RYJ|1956187|1957525
 2526|R1K|1573887|1576315
 2526|RAS|646622|648129
 2526|RQM|1382143|1383452
-2526|RYJ|1995745|1998833
+2526|RYJ|1995745|1998787
 2627|R1K|255784|256225
 2627|RAS|103550|103725
 2627|RQM|227140|227257
-2627|RYJ|320563|321377
+2627|RYJ|320563|321364
 '@
 
 $detailRows = foreach ($line in $detailText -split "`n") {
@@ -175,11 +175,11 @@ try {
     $summarySheet.Range('A10').Interior.Color = $blue
     $findings = @(
         '2015/16 and 2016/17 are materially incomplete in Snowflake and require historical coverage confirmation.',
+        'The unbundled-HRG join was fixed; all four main providers now have zero duplicate encounter rows.',
         '2017/18 and 2019/20 reconcile almost exactly across the four main providers.',
         '2018/19 is a material exception (+13.97%), led by RQM and RYJ.',
         '2023/24 is the main recent exception (+4.38%), led by RQM (+9.79%).',
-        '2024/25, 2025/26 and partial 2026/27 reconcile within 0.5% in total.',
-        'No separately identifiable NCL patch was present for these four main providers.'
+        '2024/25, 2025/26 and partial 2026/27 reconcile within 0.5% in total.'
     )
     for ($i=0; $i -lt $findings.Count; $i++) {
         $summarySheet.Cells.Item(11 + $i, 1).Value2 = [char]0x2022
@@ -330,11 +330,12 @@ $htmlBody = @'
 <p><b>Key findings</b></p>
 <ul>
 <li>2015/16 and 2016/17 appear materially incomplete in Snowflake and need historical coverage confirmation.</li>
+<li>The Snowflake unbundled-HRG join has been fixed and there are now zero duplicate encounter rows for the four main providers.</li>
 <li>2017/18 and 2019/20 reconcile almost exactly.</li>
 <li>2018/19 is a material exception (+13.97%), mainly driven by RQM and RYJ.</li>
 <li>2023/24 is the main recent exception (+4.38%), with RQM at +9.79%.</li>
 <li>2024/25, 2025/26 and partial 2026/27 reconcile within 0.5% overall.</li>
-<li>No separately identifiable NCL patch was present for the four main providers.</li>
+<li>The remaining 2026/27 difference is 1,534 rows (0.17%) and is consistent with refresh timing between ERNI CURRENT and the Snowflake Date Range extract.</li>
 </ul>
 <p><b>Review requested</b></p>
 <p>Could you please review the attached output and confirm:</p>
