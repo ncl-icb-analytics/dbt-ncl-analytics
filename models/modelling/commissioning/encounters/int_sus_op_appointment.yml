@@ -47,9 +47,13 @@ models:
         description: "Site name"
 
       - name: start_date
-        data_type: timestamp_ntz
+        data_type: date
         description: "The date the appointment took place or will take place if in
           the future"
+
+      - name: start_time
+        data_type: time
+        description: "The time the appointment"
 
       - name: expected_duration
         data_type: varchar
