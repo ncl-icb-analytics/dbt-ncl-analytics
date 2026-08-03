@@ -48,7 +48,6 @@ select
     , core.attendance_departure_date as end_date
     , core.attendance_departure_time as end_time
     , core.attendance_departure_time_since_arrival as duration
-    , core.attendance_departure_date as end_date 
     -- bed days cc and excess bed days to be added later
     -- other time related fields to be added later
 

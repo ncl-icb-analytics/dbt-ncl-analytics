@@ -70,10 +70,6 @@ models:
         data_type: number
         description: "Time to urgent care department discharge from arrival, in minutes"
 
-      - name: end_date
-        data_type: timestamp_ntz
-        description: "Date of departure from urgent care department"
-
       - name: chief_complaint_code
         data_type: varchar
         description: "Chief complaint code of patient for the encounter"
