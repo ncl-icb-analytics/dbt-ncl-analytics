@@ -22,8 +22,8 @@ select  primarykey_id,
 
     -- appointment information
     appointment_identifier, 
-    appointment_date,
-    appointment_time,
+    appointment_date::date as appointment_date,
+    appointment_time::time as appointment_time,
     {{ clean_organisation_id('appointment_commissioning_service_agreement_provider') }} as appointment_commissioning_service_agreement_provider, 
     appointment_care_location_site_code_of_treatment,
     appointment_expected_duration::integer as appointment_expected_duration,
