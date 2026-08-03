@@ -283,3 +283,4 @@ LEFT JOIN NUT_REV n using (person_id)
 LEFT JOIN WT_MGMT w using (person_id)
 LEFT JOIN DENTAL_INSPECTION d using (person_id)
 LEFT JOIN EXERCISE e using (person_id)
+WHERE p.HAS_ACTIVE_SMI_DIAGNOSIS
