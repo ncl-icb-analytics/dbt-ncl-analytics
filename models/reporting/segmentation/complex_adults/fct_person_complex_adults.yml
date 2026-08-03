@@ -1,14 +1,20 @@
 models:
   - name: fct_person_complex_adults
-    description: 'Complex adults cohort v2.1. One row per person meeting all criteria:
+    description: 'Complex adults cohort v2.2. One row per person meeting all criteria:
       age >= 18, AND at least one complexity criterion (moderate/severe frailty OR
       3+ included LTCs OR homeless OR on the palliative care register OR alcohol
-      misuse OR substance misuse), AND at least one activity criterion (>=2 NEL
-      admissions OR >=3 ED attendances OR >=15 attended GP appointments OR attended
-      outpatient care across >=5 treatment-function specialties in the last 12
-      months, OR housebound).
+      misuse OR substance misuse OR high acute use with no GP contact), AND at
+      least one activity criterion (>=2 NEL admissions OR >=3 ED attendances OR
+      >=15 attended GP appointments OR attended outpatient care across >=5
+      treatment-function specialties in the last 12 months, OR housebound).
       Includes all persons regardless of registration status; filter is_active = TRUE
       for the currently registered population.
+
+      v2.2 added high acute use with no GP contact to the complexity limb:
+      (>=3 ED attendances OR >=2 NEL admissions in 12 months) AND 0 attended GP
+      appointments in the GP 12-month window. Anyone meeting it also meets the
+      ED/NEL activity criteria, so it acts as a direct entry route for people
+      using acute services with no primary care footprint.
 
       v2.1 added GP activity and outpatient specialty breadth to the utilisation
       limb. GP activity includes attended clinical appointments only; DNAs and admin
@@ -96,17 +102,23 @@ models:
           QUALIFYING (see int_substance_misuse_status)
       - name: latest_substance_misuse_date
         description: Date of the most recent qualifying substance misuse record
+      - name: has_high_acute_use_no_gp
+        description: Complexity criterion - (>=3 ED attendances OR >=2 NEL
+          admissions in the last 12 months) AND 0 attended GP appointments in
+          the GP 12-month window. The GP side uses the same definition as
+          gp_appointments_12mo (attended clinical appointments only, lag-aware
+          window), so this flags acute service use with no primary care contact.
 
       - name: complexity_criteria_count
-        description: How many of the six complexity criteria the person meets
-          (1-6). A value of 1 means the person would leave the cohort if that
+        description: How many of the seven complexity criteria the person meets
+          (1-7). A value of 1 means the person would leave the cohort if that
           single criterion were removed.
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 1
-                max_value: 6
+                max_value: 7
 
       - name: nel_admissions_12mo
         description: Non-elective admissions in last 12 months (SUS APC, admission methods 2x, births excluded)

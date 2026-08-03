@@ -4,7 +4,7 @@
         cluster_by=['person_id'])
 }}
 
--- Complex Adults Cohort v2.1
+-- Complex Adults Cohort v2.2
 -- One row per person meeting all cohort criteria:
 --   Age >= 18
 --   AND at least one complexity criterion:
@@ -14,11 +14,20 @@
 --       OR on the palliative care register
 --       OR alcohol misuse
 --       OR substance misuse
+--       OR high acute use with no GP contact (>=3 ED attendances OR >=2 NEL
+--          admissions, AND 0 attended GP appointments, all in 12 months)
 --   AND at least one activity criterion:
 --       >=2 NEL admissions OR >=3 ED attendances
 --       OR >=15 attended GP appointments (all rolling 12 months)
 --       OR attended outpatient care across >=5 treatment-function specialties
 --       OR housebound
+--
+-- Changes from v2.1:
+--   - High acute use with no GP contact joins the complexity limb. Anyone
+--     meeting it also meets the ED/NEL activity criteria, so it acts as a
+--     direct entry route for people cycling through acute services with no
+--     primary care footprint (and therefore no coded LTC/frailty/register
+--     data to catch them via the other complexity criteria).
 --
 -- Changes from v2.0:
 --   - GP activity joins the utilisation limb: >=15 attended clinical
@@ -179,6 +188,16 @@ complexity AS (
         COALESCE(sub.has_substance_misuse, FALSE) AS has_substance_misuse,
         sub.latest_qualifying_date AS latest_substance_misuse_date,
 
+        -- High acute use with no GP contact: (>=3 ED attendances OR >=2 NEL
+        -- admissions in 12 months) AND no attended GP appointment in the GP
+        -- 12-month window. No row in gp_appointments means zero attended
+        -- clinical appointments, so the GP side matches the >=15 criterion's
+        -- definition (DNAs and admin excluded, lag-aware window).
+        (
+            (ZEROIFNULL(ae.ae_tot_12mo) >= 3 OR ZEROIFNULL(ip.apc_nel_12mo) >= 2)
+            AND gp.person_id IS NULL
+        ) AS has_high_acute_use_no_gp,
+
         -- Utilisation
         ZEROIFNULL(ip.apc_nel_12mo) AS nel_admissions_12mo,
         ZEROIFNULL(ae.ae_tot_12mo) AS ed_attendances_12mo,
@@ -216,7 +235,7 @@ complexity AS (
 
 SELECT
     *,
-    -- How many of the six complexity criteria the person meets. A value of 1
+    -- How many of the seven complexity criteria the person meets. A value of 1
     -- means removing that single criterion would remove the person from the
     -- cohort, so this supports marginal-contribution reporting directly.
     (
@@ -226,6 +245,7 @@ SELECT
         + is_on_palliative_care_register::INT
         + has_alcohol_misuse::INT
         + has_substance_misuse::INT
+        + has_high_acute_use_no_gp::INT
     ) AS complexity_criteria_count
 
 FROM complexity
@@ -237,6 +257,7 @@ WHERE (
     OR is_on_palliative_care_register
     OR has_alcohol_misuse
     OR has_substance_misuse
+    OR has_high_acute_use_no_gp
 )
 -- Activity or housebound
 AND (
