@@ -202,9 +202,11 @@ rule_flags as (
         (
             ({{ sus_op_rule_code_matches('NC_NWL', 'provider_code', "left(p.organisation_code_code_of_provider, 3)", 'p.appointment_date') }}
              and p.treatment_function_code = '310'
+             and p.provider_reference_no is not null
              and not {{ sus_op_rule_code_matches('NC_NWL6', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date', 'EXCLUDE') }})
             or ({{ sus_op_rule_code_matches('NC_NWL', 'site_code', 'p.site_code_of_treatment', 'p.appointment_date') }}
                 and p.treatment_function_code = '310'
+                and p.provider_reference_no is not null
                 and not {{ sus_op_rule_code_matches('NC_NWL6', 'provider_reference_no', 'p.provider_reference_no', 'p.appointment_date', 'EXCLUDE') }})
         ) as rule_nc_nwl6,
         (
