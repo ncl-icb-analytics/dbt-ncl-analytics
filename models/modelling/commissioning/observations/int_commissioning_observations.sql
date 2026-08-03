@@ -148,25 +148,25 @@ with
     all_observations as (
         select *
         from apc_diagnosis
-        union 
+        union all
         select *
         from apc_procedure
-        union
+        union all
         select *
         from apc_procedure_hrg
-        union
+        union all
         select *
         from op_diagnosis
-        union 
+        union all
         select *
         from op_procedure
-        union
+        union all
         select * 
         from op_procedure_hrg
-        union
+        union all
         select *
         from ae_diagnosis
-        union
+        union all
         select *
         from ae_procedure
     )
