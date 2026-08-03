@@ -44,3 +44,6 @@ models:
                 inclusive: true
               config:
                 where: "townsend_score IS NOT NULL"
+          - dbt_utils.not_null_proportion: 
+              arguments:
+                at_least: 0.5
