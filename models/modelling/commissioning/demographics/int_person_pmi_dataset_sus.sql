@@ -130,28 +130,26 @@ ethnicity_event as (
 
 lsoa_event as (
     select
-        b.sk_patient_id,
-        map_lsoa.lsoa21_cd as lsoa21_code,
-        b.code_date::date as lsoa_event_date,
-        
+        sk_patient_id,
+        lsoa_11_at_event as lsoa_11,
+        code_date::date as lsoa_event_date,
+
         --Rank rows for this field to identify which to use
         row_number() over (
-            partition by b.sk_patient_id 
+            partition by sk_patient_id
             order by
-                --Prefer values that map to LSOA 2021 first
+                --Prioritise non-null 2011 LSOA values
                 case
-                    when map_lsoa.lsoa21_cd is not null then 1
+                    when lsoa_11_at_event is not null then 1
                     else 2
                 end,
                 --Prefer more recent records
-                b.code_date desc,
+                code_date desc,
                 --Occurrence ID only if a tie-breaker is needed
-                b.visit_occurrence_id desc
+                visit_occurrence_id desc
         ) as lsoa_field_rank
-    
-    from base as b
-    left join {{ref('stg_reference_lsoa2011_lsoa2021')}} map_lsoa
-        on b.lsoa_11_at_event = map_lsoa.lsoa11_cd
+
+    from base
     qualify lsoa_field_rank = 1
 ),
 
@@ -189,11 +187,11 @@ select
     age.dob_event_date,
     eth.ethnicity_code,
     eth.ethnicity_event_date,
-    res.lsoa21_code as lsoa21_code,
+    map_lsoa.lsoa21_cd as lsoa21_code,
     res.lsoa_event_date,
     reg.practice_code,
     reg.registered_event_date
-    
+
 from (select distinct sk_patient_id from base) as base
 
 --Join to get key field values
@@ -208,6 +206,10 @@ on base.sk_patient_id = eth.sk_patient_id
 
 left join lsoa_event res
 on base.sk_patient_id = res.sk_patient_id
+
+--Join to map LSOA 2011 codes to LSOA 2021 (done after ranking in the CTE)
+left join {{ref('stg_reference_lsoa2011_lsoa2021')}} map_lsoa
+on res.lsoa_11 = map_lsoa.lsoa11_cd
 
 left join registered_event reg
 on base.sk_patient_id = reg.sk_patient_id
