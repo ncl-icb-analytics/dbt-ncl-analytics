@@ -212,6 +212,8 @@ sources:
     description: Data management reference datasets
     raw_prefix: raw_reference
     domain: shared
+    exclude_tables:
+      - WNL  # Broken view retained upstream; unused by dbt.
 
   # CANCER schemas in DATA_LAKE__NCL
   - source_name: reference_cancer_cwt_alliance

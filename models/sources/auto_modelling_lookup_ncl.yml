@@ -409,15 +409,6 @@ sources:
       data_type: TEXT
     - name: IMD_DECILE
       data_type: NUMBER(28,0)
-  - name: IMD_PRACTICE_25
-    identifier: '"IMD_PRACTICE_25"'
-    columns:
-    - name: PRACTICE_CODE
-      data_type: TEXT
-    - name: DATE_INDICATOR
-      data_type: TEXT
-    - name: IMD_DECILE
-      data_type: NUMBER(28,0)
   - name: INTERPRETER_REQUIRED
     identifier: '"INTERPRETER_REQUIRED"'
     columns:

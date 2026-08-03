@@ -35,8 +35,8 @@
     - SGLT2 inhibitors: by active ingredient (dapagliflozin, empagliflozin, etc.)
     - DPP-4 inhibitors: by active ingredient (sitagliptin, linagliptin, etc.)
     - Metformin: incl. fixed-dose combinations (combo-inclusive count)
-    - Respiratory: asthma meds, inhaled corticosteroids
-    - NSAIDs, PPIs, systemic corticosteroids
+    - Respiratory: inhaled corticosteroids (ICS)
+    - NSAIDs, PPIs
     - Antibacterials
 
     Use Cases:
@@ -56,15 +56,7 @@ TABLES(
 
     demographics AS {{ ref('dim_person_demographics') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Patient demographics, geography, ethnicity, deprivation (current snapshot)',
-
-    conditions AS {{ ref('dim_person_conditions') }}
-        PRIMARY KEY (person_id)
-        COMMENT = 'Long-term condition flags and diabetes type',
-
-    status AS {{ ref('dim_person_status_summary') }}
-        PRIMARY KEY (person_id)
-        COMMENT = 'Polypharmacy, smoking, vulnerability status',
+        COMMENT = 'Patient demographics core (current snapshot). Condition, vulnerability, and polypharmacy cohorts come from sem_olids_population via a person_id CTE join.',
 
     practice AS {{ ref('dim_practice') }}
         PRIMARY KEY (practice_code)
@@ -158,8 +150,6 @@ TABLES(
 
 RELATIONSHIPS(
     rx (person_id) REFERENCES demographics,
-    rx (person_id) REFERENCES conditions,
-    rx (person_id) REFERENCES status,
     rx (practice_code) REFERENCES practice (practice_code),
     statins (medication_order_id) REFERENCES rx,
     antihypertensives (medication_order_id) REFERENCES rx,
@@ -189,12 +179,13 @@ FACTS(
     rx.estimated_cost AS estimated_cost COMMENT = 'Estimated cost of this medication order (GBP). Populated for ~96% of orders.',
     rx.quantity_value AS quantity_value COMMENT = 'Quantity prescribed',
     rx.duration_days AS duration_days COMMENT = 'Duration of prescription in days',
-    rx.age_at_event AS age_at_event COMMENT = 'Patient age at time of order',
-    conditions.total_conditions AS total_conditions COMMENT = 'Patient total active long-term conditions',
-    status.medication_count AS medication_count COMMENT = 'Patient current repeat medication count (from polypharmacy model)'
+    rx.age_at_event AS age_at_event COMMENT = 'Patient age at time of order'
 )
 
 DIMENSIONS(
+    -- Person linkage key (on rx so it can be selected alongside order facts)
+    rx.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
+
     -- Order time
     rx.order_date AS order_date WITH SYNONYMS = ('prescription date', 'date') COMMENT = 'Date the medication was issued',
     rx.fiscal_year_start AS fiscal_year_start COMMENT = 'UK fiscal year start (Apr-Mar). Use for annual cost comparisons.',
@@ -214,80 +205,29 @@ DIMENSIONS(
     rx.issue_method AS issue_method COMMENT = 'How the order was issued (Electronic, Print, Outside Other, Handwritten, Outside Hospital, Outside Out Of Hours, Automatic, Over The Counter)',
 
     -- Prescribing practice
-    rx.practice_code AS practice_code WITH SYNONYMS = ('practice code', 'ODS code') COMMENT = 'ODS code of the prescribing practice',
-    practice.practice_name AS practice_name COMMENT = 'Name of the prescribing practice',
-    practice.pcn_code AS pcn_code COMMENT = 'PCN code of the prescribing practice',
-    practice.pcn_name AS pcn_name COMMENT = 'PCN name of the prescribing practice',
-    practice.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN with borough prefix',
-    practice.borough_registered AS borough_registered COMMENT = 'Borough of the prescribing practice',
+    rx.prescribing_practice_code AS practice_code WITH SYNONYMS = ('practice code', 'ODS code', 'GP practice') COMMENT = 'ODS code of the prescribing practice',
+    practice.prescribing_practice_name AS practice_name COMMENT = 'Name of the prescribing practice',
+    practice.prescribing_pcn_code AS pcn_code COMMENT = 'PCN code of the prescribing practice',
+    practice.prescribing_pcn_name AS pcn_name WITH SYNONYMS = ('PCN', 'primary care network') COMMENT = 'PCN name of the prescribing practice',
+    practice.prescribing_pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'Prescribing PCN with borough prefix',
+    practice.prescribing_borough AS borough_registered WITH SYNONYMS = ('borough') COMMENT = 'Borough of the prescribing practice',
     practice.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the prescribing practice: 93C = NHS North Central London (Camden, Islington, Barnet, Enfield, Haringey); W2U3Z = NHS North West London (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside the WNL footprint.',
     practice.sub_icb_name AS sub_icb_name COMMENT = 'Sub-ICB display name (NHS North Central London or NHS North West London) of the prescribing practice. NULL outside the WNL footprint.',
 
-    -- Patient demographics (current snapshot)
+    -- Patient demographics core (current snapshot; richer demographics, conditions,
+    -- vulnerability and polypharmacy cohorts come from sem_olids_population via person_id)
     demographics.gender AS gender COMMENT = 'Patient gender (Male, Female, Unknown)',
     demographics.age_band_5y AS age_band_5y COMMENT = 'Current 5-year age band (drifts — use age_at_event for historical cohorting)',
     demographics.age_band_10y AS age_band_10y COMMENT = 'Current 10-year age band (drifts)',
     demographics.age_band_nhs AS age_band_nhs COMMENT = 'Current NHS standard age band (drifts)',
-    demographics.age_band_esp AS age_band_esp COMMENT = 'Current ESP 2013 age band (drifts — use age_at_event for historical)',
-    demographics.age_life_stage AS age_life_stage COMMENT = 'Life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown)',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
-    demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
-    demographics.ethnicity_granular AS ethnicity_granular COMMENT = 'Detailed ethnicity classification (Unknown if not recorded)',
-    demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
-    demographics.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
     demographics.is_active AS is_active COMMENT = 'Patient currently registered',
 
-    -- Patient geography (residence)
-    demographics.lsoa_code_21 AS lsoa_code_21 COMMENT = 'Patient LSOA 2021 code (residence-based)',
-    demographics.ward_code AS ward_code COMMENT = 'Patient electoral ward 2025 code (residence-based)',
-    demographics.ward_name AS ward_name COMMENT = 'Patient electoral ward 2025 name (residence-based)',
+    -- Patient geography and deprivation (residence-based)
     demographics.borough_resident AS borough_resident COMMENT = 'Patient borough of residence',
-    demographics.is_london_resident AS is_london_resident COMMENT = 'Patient resides in Greater London',
     demographics.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Patient NCL neighbourhood of residence',
-
-    -- Deprivation (patient residence)
-    demographics.imd_decile_19 AS imd_decile_19 COMMENT = 'IMD 2019 decile (1=most deprived, 10=least). NULL if LSOA not mapped.',
-    demographics.imd_quintile_19 AS imd_quintile_19 COMMENT = 'IMD 2019 quintile (1 - Most Deprived to 5 - Least Deprived, Unknown)',
-    demographics.imd_decile_25 AS imd_decile_25 COMMENT = 'IMD 2025 decile (1=most deprived, 10=least). Preferred over 2019.',
+    demographics.imd_decile_25 AS imd_decile_25 COMMENT = 'IMD 2025 decile (1=most deprived, 10=least). NULL if LSOA not mapped.',
     demographics.imd_quintile_25 AS imd_quintile_25 COMMENT = 'IMD 2025 quintile (1 - Most Deprived to 5 - Least Deprived, Unknown)',
-
-    -- Multimorbidity
-    conditions.total_qof_conditions AS total_qof_conditions COMMENT = 'Number of QOF-registered conditions',
-    conditions.cardiovascular_conditions AS cardiovascular_conditions COMMENT = 'Count of cardiovascular conditions (AF, CHD, HF, HTN, PAD, Stroke/TIA)',
-    conditions.respiratory_conditions AS respiratory_conditions COMMENT = 'Count of respiratory conditions (Asthma, COPD)',
-    conditions.mental_health_conditions AS mental_health_conditions COMMENT = 'Count of mental health conditions (Depression, SMI, Dementia, Anxiety)',
-    conditions.metabolic_conditions AS metabolic_conditions COMMENT = 'Count of metabolic conditions (Diabetes, NDH, CKD, Obesity)',
-
-    -- Key conditions (for prescribing-condition analysis)
-    conditions.diabetes_type AS diabetes_type COMMENT = 'Diabetes type (Type 1, Type 2, Unknown, Not Diabetic)',
-    conditions.has_diabetes AS has_diabetes WITH SYNONYMS = ('DM') COMMENT = 'On diabetes register',
-    conditions.has_hypertension AS has_hypertension WITH SYNONYMS = ('HTN') COMMENT = 'On hypertension register',
-    conditions.has_coronary_heart_disease AS has_coronary_heart_disease WITH SYNONYMS = ('CHD') COMMENT = 'On CHD register',
-    conditions.has_atrial_fibrillation AS has_atrial_fibrillation WITH SYNONYMS = ('AF') COMMENT = 'On AF register',
-    conditions.has_heart_failure AS has_heart_failure WITH SYNONYMS = ('HF') COMMENT = 'On HF register',
-    conditions.has_stroke_tia AS has_stroke_tia WITH SYNONYMS = ('stroke', 'TIA') COMMENT = 'On stroke/TIA register',
-    conditions.has_peripheral_arterial_disease AS has_peripheral_arterial_disease WITH SYNONYMS = ('PAD') COMMENT = 'On PAD register',
-    conditions.has_copd AS has_copd COMMENT = 'On COPD register',
-    conditions.has_asthma AS has_asthma COMMENT = 'On asthma register',
-    conditions.has_depression AS has_depression COMMENT = 'On depression register',
-    conditions.has_severe_mental_illness AS has_severe_mental_illness WITH SYNONYMS = ('SMI') COMMENT = 'On SMI register',
-    conditions.has_anxiety AS has_anxiety COMMENT = 'On anxiety register',
-    conditions.has_dementia AS has_dementia COMMENT = 'On dementia register',
-    conditions.has_epilepsy AS has_epilepsy COMMENT = 'On epilepsy register',
-    conditions.has_chronic_kidney_disease AS has_chronic_kidney_disease WITH SYNONYMS = ('CKD') COMMENT = 'On CKD register',
-    conditions.has_non_diabetic_hyperglycaemia AS has_non_diabetic_hyperglycaemia WITH SYNONYMS = ('NDH', 'prediabetes') COMMENT = 'Non-diabetic hyperglycaemia',
-    conditions.has_obesity AS has_obesity COMMENT = 'Recorded obesity',
-    conditions.has_cancer AS has_cancer COMMENT = 'On cancer register',
-    conditions.has_frailty AS has_frailty COMMENT = 'Recorded frailty',
-    conditions.has_learning_disability AS has_learning_disability WITH SYNONYMS = ('LD') COMMENT = 'On LD register',
-    conditions.has_palliative_care AS has_palliative_care COMMENT = 'On palliative care register',
-
-    -- Polypharmacy and risk behaviours (from dim_person_status_summary)
-    status.is_polypharmacy_5plus AS is_polypharmacy_5plus COMMENT = 'Has 5+ current repeat medications',
-    status.is_polypharmacy_10plus AS is_polypharmacy_10plus COMMENT = 'Has 10+ current repeat medications (severe polypharmacy)',
-    status.medication_count_band AS medication_count_band COMMENT = 'Medication count band (0, 1-4, 5-9, 10-14, 15+)',
-    status.smoking_status AS smoking_status COMMENT = 'Smoking status (Never Smoked, Ex-Smoker, Current Smoker, Unknown)',
-    status.is_care_home_resident AS is_care_home_resident COMMENT = 'Residing in care home',
 
     -- Statin classification (only populated for statin orders)
     statins.statin_intensity AS statin_intensity COMMENT = 'Statin intensity (HIGH_INTENSITY, MODERATE_INTENSITY, COMBINATION, OTHER_STATIN). Only for statin orders.',
@@ -358,6 +298,6 @@ METRICS(
     valproate.valproate_order_count AS COUNT(valproate.medication_order_id) COMMENT = 'Valproate orders'
 )
 
-COMMENT = 'OLIDS Prescribing Semantic View - All medication orders with BNF classification, prescription type, practice attribution, demographics, conditions, and pre-defined drug category flags. Source: OLIDS (One London Integrated Data Set). Grain: one row per medication order. BNF chapter is the primary therapeutic filter — the chatbot has a BNF lookup tool to resolve drug class names.'
-AI_SQL_GENERATION 'BNF CODE FORMAT: bnf_chapter is a 2-digit compact code (e.g. 02 = Cardiovascular), bnf_section is 4-digit (e.g. 0205 = Hypertension and heart failure), bnf_paragraph is 6-digit, bnf_code is the full 15-character product code (e.g. 0212000B0AAAAAA). These are compact codes NOT dotted codes — use the BNF lookup tool to resolve drug class names to the correct prefix. For top-level breakdowns, GROUP BY bnf_chapter. For specific drug classes, WHERE bnf_section = tool_result or WHERE bnf_code LIKE tool_result || ''%''. Pre-defined category tables (statins, antibacterials, etc.) are joined — their metrics count only orders in that category; use these for known drug classes rather than BNF filtering. For statin intensity, use statin_intensity. For anticoagulant DOAC/VKA split, use anticoagulant_type. For valproate safety, use valproate_product_type and clinical_indication. For GLP-1 receptor agonists use the glp1 category (glp1_drug for the specific agent e.g. SEMAGLUTIDE, TIRZEPATIDE; is_diabetes_indication to split diabetes vs obesity prescribing). For SGLT2 inhibitors use the sglt2 category (sglt2_drug for the specific agent e.g. DAPAGLIFLOZIN, EMPAGLIFLOZIN). For DPP-4 inhibitors use the dpp4 category (dpp4_drug for the specific agent e.g. SITAGLIPTIN, LINAGLIPTIN). For metformin use the metformin category (combo-inclusive; is_combination splits plain metformin from fixed-dose combinations) rather than BNF filtering. Cost: SUM(estimated_cost) for total prescribing cost (~96% populated). issue_type: Repeat, Acute, Repeat Dispensing, Automatic. Use fiscal_year_start for annual trends. Patient demographics are current snapshot — use age_at_event for historical age cohorting.'
-AI_QUESTION_CATEGORIZATION 'Use this view for: prescribing volume and cost by BNF chapter/practice/PCN, statin prescribing rates and intensity, antibiotic stewardship, antipsychotic/antidepressant prescribing, valproate safety monitoring, repeat vs acute prescribing, cost per patient by therapeutic area, prescribing equity by deprivation/ethnicity, and any medication-related questions. For current population health (conditions, demographics) without prescribing use sem_olids_population. For clinical biomarkers use sem_olids_observations.'
+COMMENT = 'OLIDS Prescribing Semantic View - All medication orders with BNF classification, prescription type, prescribing-practice attribution, core patient demographics, and pre-defined drug category flags. Source: OLIDS (One London Integrated Data Set). Grain: one row per medication order. BNF chapter is the primary therapeutic filter — the chatbot has a BNF lookup tool to resolve drug class names. Condition, vulnerability, and polypharmacy cohorts come from sem_olids_population via person_id CTE joins.'
+AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. This is medication-order grain. Example: SELECT bnf_chapter, AGG(order_count), AGG(total_cost) FROM SEM_OLIDS_PRESCRIBING WHERE order_date >= DATEADD(year, -1, CURRENT_DATE) GROUP BY bnf_chapter. Example linkage: reduce active diabetes people in sem_olids_population and SGLT2 orders here before joining. Default treatment exposure is the last 12 months of order_date. For dimension-backed classes, filter the category dimension in WHERE (sglt2_drug, glp1_drug, dpp4_drug, statin_intensity, anticoagulant_type, valproate_product_type or metformin is_combination). For metric-only classes, use person-grain HAVING AGG(<class>_order_count) > 0. Never put a metric in WHERE. Prefer the pre-defined category tables over BNF filtering for known drug classes. BNF codes are compact, not dotted: bnf_chapter 2-digit (02 = Cardiovascular), bnf_section 4-digit (0205 = Hypertension and heart failure), bnf_code 15-character product code — use the BNF lookup tool to resolve drug class names, then WHERE bnf_section = result or bnf_code LIKE result || ''%''. fiscal_year_start has a small dirty-date tail; filter to sane recent years. Practice dimensions are prescribing practice; registered practice is in population. Demographics are current snapshot — use age_at_event for historical age cohorting.'
+AI_QUESTION_CATEGORIZATION 'Use this view for: prescribing volume and cost by BNF chapter/practice/PCN, statin prescribing rates and intensity, antibiotic stewardship, antipsychotic/antidepressant prescribing, valproate safety monitoring, repeat vs acute prescribing, cost per patient by therapeutic area, prescribing equity by deprivation/ethnicity, and any medication-related questions. For current population health (conditions, demographics) without prescribing use sem_olids_population. For clinical biomarkers use sem_olids_observations. Questions needing cohorts from TWO domains (e.g. medication x biomarker control, medication x appointment access, treated vs untreated gaps) are answerable by joining this view to the other sem_olids_* views on person_id in CTEs, with aggregate-only output.'

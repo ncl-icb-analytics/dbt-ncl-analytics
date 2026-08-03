@@ -40,10 +40,7 @@ TABLES(
         COMMENT = 'Cleaned GP appointments — Care Related Encounters only, restricted to last 60 months matching OLIDS retention',
     demographics AS {{ ref('dim_person_demographics') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Patient demographics, geography, ethnicity, deprivation (current snapshot)',
-    conditions AS {{ ref('dim_person_conditions') }}
-        PRIMARY KEY (person_id)
-        COMMENT = 'Long-term condition flags and diabetes type classification',
+        COMMENT = 'Patient demographics core (current snapshot). Condition and vulnerability cohorts come from sem_olids_population via a person_id CTE join.',
     practice AS {{ ref('dim_practice') }}
         PRIMARY KEY (practice_code)
         COMMENT = 'Practice details for the appointment-owning practice (name, PCN, borough)',
@@ -54,7 +51,6 @@ TABLES(
 
 RELATIONSHIPS(
     appt (person_id) REFERENCES demographics,
-    appt (person_id) REFERENCES conditions,
     appt (publisher_organisation_code) REFERENCES practice (practice_code),
     appt (practitioner_role_group) REFERENCES costs
 )
@@ -66,8 +62,6 @@ FACTS(
     appt.patient_wait_mins AS patient_wait_mins COMMENT = 'Minutes patient waited beyond scheduled time',
     appt.patient_delay_mins AS patient_delay_mins COMMENT = 'Minutes patient arrived late',
     appt.age_at_event AS age_at_event COMMENT = 'Patient age at appointment (event-time, stable for historical analysis)',
-    demographics.age AS age COMMENT = 'Patient current age (drifts over time — use age_at_event for historical cohorting)',
-    conditions.total_conditions AS total_conditions COMMENT = 'Total active long-term conditions',
     appt.pssru_cost_per_minute_gbp AS pssru_cost_per_minute_gbp COMMENT = 'PSSRU 2024 cost per minute for the appointment practitioner role group (2023/24 prices)',
     appt.appointment_cost_gbp_base_prices AS appointment_cost_gbp_base_prices COMMENT = 'Appointment cost in PSSRU base year prices (2023/24) — real-terms. Use for cross-year comparisons.',
     appt.appointment_cost_gbp_nominal AS appointment_cost_gbp_nominal COMMENT = 'Appointment cost in contemporaneous fiscal year prices (GDP deflator adjusted from PSSRU 2023/24 base). NULL for fiscal years outside uk_cost_indices seed coverage (pre 2000-01).',
@@ -75,6 +69,9 @@ FACTS(
 )
 
 DIMENSIONS(
+    -- Person linkage key (on appt so it can be selected alongside appointment facts)
+    appt.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
+
     -- Appointment time
     appt.start_date AS start_date WITH SYNONYMS = ('appointment date', 'date') COMMENT = 'Appointment date and time',
 
@@ -103,64 +100,34 @@ DIMENSIONS(
     appt.is_untimed_session AS is_untimed_session COMMENT = 'TRUE if parent schedule is an open/untimed session (duty doctor, eConsult list). Duration is NULL for these.',
 
     -- Appointment-owning practice (the practice that delivered the appointment)
-    appt.publisher_organisation_code AS publisher_organisation_code WITH SYNONYMS = ('practice code', 'GP practice', 'ODS code') COMMENT = 'ODS code of the practice that owns this appointment',
-    practice.practice_name AS practice_name COMMENT = 'Name of the practice that owns this appointment',
-    practice.pcn_code AS pcn_code COMMENT = 'PCN code of the appointment-owning practice',
-    practice.pcn_name AS pcn_name COMMENT = 'PCN name of the appointment-owning practice',
-    practice.pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'PCN with borough prefix for the appointment-owning practice',
-    practice.borough_registered AS borough_registered COMMENT = 'Borough of the appointment-owning practice',
+    appt.appointment_practice_code AS publisher_organisation_code WITH SYNONYMS = ('practice code', 'GP practice', 'ODS code') COMMENT = 'ODS code of the practice that delivered this appointment',
+    practice.appointment_practice_name AS practice_name COMMENT = 'Name of the practice that delivered this appointment',
+    practice.appointment_pcn_code AS pcn_code COMMENT = 'PCN code of the appointment-owning practice',
+    practice.appointment_pcn_name AS pcn_name WITH SYNONYMS = ('PCN', 'primary care network') COMMENT = 'PCN name of the appointment-owning practice',
+    practice.appointment_pcn_name_with_borough AS pcn_name_with_borough COMMENT = 'Appointment-owning PCN with borough prefix',
+    practice.appointment_borough AS borough_registered WITH SYNONYMS = ('borough') COMMENT = 'Borough of the appointment-owning practice',
     practice.sub_icb_code AS sub_icb_code COMMENT = 'Sub-ICB / place-based partnership ODS code of the appointment-owning practice: 93C = NHS North Central London (Camden, Islington, Barnet, Enfield, Haringey); W2U3Z = NHS North West London (Brent, Ealing, Hammersmith and Fulham, Harrow, Hillingdon, Hounslow, Kensington and Chelsea, Westminster). NULL outside the WNL footprint.',
     practice.sub_icb_name AS sub_icb_name COMMENT = 'Sub-ICB display name (NHS North Central London or NHS North West London) of the appointment-owning practice. NULL outside the WNL footprint.',
 
     -- Booking
     appt.booking_method AS booking_method COMMENT = 'Booking method source code',
 
-    -- Patient demographics (current snapshot — slowly changing attributes
-    -- like ethnicity/language are reasonable for historical analysis;
-    -- age-derived bands are CURRENT and drift over time)
+    -- Patient demographics core (current snapshot; richer demographics and
+    -- condition cohorts come from sem_olids_population via person_id)
     demographics.gender AS gender COMMENT = 'Patient gender (Male, Female, Unknown)',
     demographics.age_band_5y AS age_band_5y COMMENT = 'Current 5-year age band (drifts — use age_at_event for cohorting historical appointments)',
     demographics.age_band_10y AS age_band_10y COMMENT = 'Current 10-year age band (drifts — use age_at_event for cohorting historical appointments)',
     demographics.age_band_nhs AS age_band_nhs COMMENT = 'Current NHS standard age band (drifts — use age_at_event for cohorting historical appointments)',
-    demographics.age_band_esp AS age_band_esp COMMENT = 'Current ESP 2013 age band (drifts — use age_at_event for historical). (<1, 1-4, 5-9, ..., 80-84, 85-89, 90-94, 95+)',
-    demographics.age_life_stage AS age_life_stage COMMENT = 'Current life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown). Drifts — use age_at_event for historical.',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
-    demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (White: British, White: Irish, White: Roma, White: Traveller, White: Other White, Mixed: White and Black Caribbean, Mixed: White and Black African, Mixed: White and Asian, Mixed: Other Mixed, Asian: Indian, Asian: Pakistani, Asian: Bangladeshi, Asian: Chinese, Asian: Other Asian, Black: African, Black: Caribbean, Black: Other Black, Other: Arab, Other: Other, Unknown, Not Stated, Not Recorded, Recorded Not Known, Refused)',
-    demographics.ethnicity_granular AS ethnicity_granular COMMENT = 'Detailed ethnicity classification (Unknown if not recorded)',
-    demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
-    demographics.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required',
-
-    -- Patient registration status
+    demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown). Kept in-view for DNA/access equity analysis.',
+    demographics.interpreter_needed AS interpreter_needed COMMENT = 'Whether interpreter is required. Kept in-view for DNA/access equity analysis.',
     demographics.is_active AS is_active COMMENT = 'Patient currently registered with an NCL GP practice',
 
-    -- Geography (patient residence)
-    demographics.lsoa_code_21 AS lsoa_code_21 COMMENT = 'Patient LSOA 2021 code (residence-based)',
-    demographics.ward_code AS ward_code COMMENT = 'Patient electoral ward 2025 code (residence-based)',
-    demographics.ward_name AS ward_name COMMENT = 'Patient electoral ward 2025 name (residence-based)',
+    -- Patient geography and deprivation (residence-based)
     demographics.borough_resident AS borough_resident COMMENT = 'Patient borough of residence',
-    demographics.is_london_resident AS is_london_resident COMMENT = 'Patient resides in Greater London',
     demographics.neighbourhood_resident AS neighbourhood_resident COMMENT = 'Patient NCL neighbourhood of residence',
-
-    -- Deprivation (patient residence)
-    demographics.imd_decile_19 AS imd_decile_19 COMMENT = 'IMD 2019 decile (1=most deprived, 10=least). NULL if LSOA not mapped.',
-    demographics.imd_quintile_19 AS imd_quintile_19 COMMENT = 'IMD 2019 quintile (1 - Most Deprived to 5 - Least Deprived, Unknown)',
-    demographics.imd_decile_25 AS imd_decile_25 COMMENT = 'IMD 2025 decile (1=most deprived, 10=least). Preferred over 2019.',
+    demographics.imd_decile_25 AS imd_decile_25 COMMENT = 'IMD 2025 decile (1=most deprived, 10=least). NULL if LSOA not mapped.',
     demographics.imd_quintile_25 AS imd_quintile_25 COMMENT = 'IMD 2025 quintile (1 - Most Deprived to 5 - Least Deprived, Unknown)',
-
-    -- Key conditions (for equity/utilisation analysis — current state, not at appointment time)
-    conditions.diabetes_type AS diabetes_type COMMENT = 'Diabetes type (Type 1, Type 2, Unknown, Not Diabetic)',
-    conditions.has_diabetes AS has_diabetes WITH SYNONYMS = ('DM', 'diabetic') COMMENT = 'On diabetes register',
-    conditions.has_hypertension AS has_hypertension WITH SYNONYMS = ('HTN') COMMENT = 'On hypertension register',
-    conditions.has_copd AS has_copd COMMENT = 'On COPD register',
-    conditions.has_asthma AS has_asthma COMMENT = 'On asthma register',
-    conditions.has_depression AS has_depression COMMENT = 'On depression register',
-    conditions.has_severe_mental_illness AS has_severe_mental_illness WITH SYNONYMS = ('SMI') COMMENT = 'On SMI register',
-    conditions.has_dementia AS has_dementia COMMENT = 'On dementia register',
-    conditions.has_heart_failure AS has_heart_failure WITH SYNONYMS = ('HF') COMMENT = 'On heart failure register',
-    conditions.has_chronic_kidney_disease AS has_chronic_kidney_disease WITH SYNONYMS = ('CKD') COMMENT = 'On CKD register',
-    conditions.has_cancer AS has_cancer COMMENT = 'On cancer register',
-    conditions.has_frailty AS has_frailty COMMENT = 'Recorded frailty',
-    conditions.has_learning_disability AS has_learning_disability WITH SYNONYMS = ('LD') COMMENT = 'On LD register',
 
     -- Cost reference
     costs.afc_band AS afc_band COMMENT = 'Agenda for Change band for role group'
@@ -190,6 +157,6 @@ METRICS(
     appt.avg_patient_wait AS AVG(appt.patient_wait_mins) COMMENT = 'Average wait beyond scheduled time (minutes)'
 )
 
-COMMENT = 'OLIDS GP Appointments with practice details, patient demographics, conditions, and PSSRU costs. Grain: one row per appointment. practice_code/practice_name = appointment-owning practice; registered_* = patient current registration (may differ). Supports GP contract access KPIs, DNA equity analysis, workforce mix, and utilisation by condition/deprivation.'
-AI_SQL_GENERATION 'For GP contract KPIs: urgent_same_day_count / urgent_attended_count = same-day rate; routine_within_7d_count / routine_attended_count = 7-day rate. For practice-level analysis, group by practice_code or practice_name (appointment owner). For patient registration analysis, use registered_practice_name or registered_borough. For equity analysis, group by imd_quintile_25 or ethnicity_category. For condition-specific utilisation, filter on has_diabetes etc. Group by DATE_TRUNC(month, start_date) for trends. Cost estimation: aggregate the per-appointment cost facts directly — SUM(appointment_cost_gbp_base_prices) for real-terms cost in PSSRU 2023/24 prices (use for cross-year comparisons), or SUM(appointment_cost_gbp_nominal) for contemporaneous (GDP-deflator-adjusted) cost. Do NOT derive cost from total_duration * cost_per_minute_gbp — that ignores the per-row deflator adjustment.'
-AI_QUESTION_CATEGORIZATION 'Use this view for: GP appointment access, same-day urgent access, wait times, DNA rates by deprivation/ethnicity, contact mode trends, workforce mix, utilisation by condition, practice-level access comparison, and GP contract KPIs. For current population snapshots without appointment data use sem_olids_population. For clinical biomarkers use sem_olids_observations. For time-series condition trends use sem_olids_trends.'
+COMMENT = 'OLIDS GP Appointments with appointment-practice attribution, core patient demographics, and PSSRU costs. Grain: one row per appointment. appointment_practice_* dimensions = the practice that delivered the appointment (may differ from the patient''s current registration, which lives in sem_olids_population as registered_practice_*). Condition cohorts come from sem_olids_population via person_id CTE joins. Supports GP contract access KPIs, DNA equity analysis, workforce mix, and appointment costing.'
+AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. This view is appointment-event grain; filter start_date before linkage. Example: SELECT contact_mode, AGG(attended_count) FROM SEM_OLIDS_APPOINTMENTS WHERE is_attended = TRUE GROUP BY contact_mode. Example linkage: reduce DNA patients here and a condition cohort in sem_olids_population to person_id before joining. Appointment practice is the delivering practice; registered practice is in population. GP contract KPIs: same-day rate = urgent_same_day_count / urgent_attended_count; 7-day rate = routine_within_7d_count / routine_attended_count. Cost: SUM(appointment_cost_gbp_base_prices) for real-terms comparisons (PSSRU 2023/24 prices), SUM(appointment_cost_gbp_nominal) for contemporaneous cost; never derive cost from total_duration * cost_per_minute_gbp — that ignores the per-row deflator.'
+AI_QUESTION_CATEGORIZATION 'Use this view for: GP appointment access, same-day urgent access, wait times, DNA rates by deprivation/ethnicity, contact mode trends, workforce mix, utilisation by condition, practice-level access comparison, and GP contract KPIs. For current population snapshots without appointment data use sem_olids_population. For clinical biomarkers use sem_olids_observations. For time-series condition trends use sem_olids_trends. Questions needing cohorts from TWO domains (e.g. DNA x biomarker control, appointment access x medication) are answerable by joining this view to the other sem_olids_* views on person_id in CTEs, with aggregate-only output.'
