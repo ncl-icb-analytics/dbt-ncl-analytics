@@ -53,7 +53,7 @@ models:
 
       - name: start_time
         data_type: time
-        description: "The time the appointment"
+        description: "The time for the appointment"
 
       - name: expected_duration
         data_type: varchar

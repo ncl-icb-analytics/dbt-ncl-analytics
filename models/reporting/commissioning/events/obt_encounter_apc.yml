@@ -47,7 +47,7 @@ models:
         description: "Spell start date"
 
       - name: start_time
-        data_type: date
+        data_type: time
         description: "Spell start time"
 
       - name: end_date
@@ -55,7 +55,7 @@ models:
         description: "Spell end date"
 
       - name: end_time
-        data_type: date
+        data_type: time
         description: "Spell end time"
 
       - name: duration
