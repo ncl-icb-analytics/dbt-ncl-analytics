@@ -7,8 +7,19 @@ lsoa_21 (Most recent non-'unknown' lsoa)
 practice_code (Most recent non-'unknown' practice_code)
 */
 with base as (
-    select *
+    select
+        sk_patient_id,
+        gender_at_event,
+        gender_desc_at_event,
+        age_at_event,
+        ethnicity_at_event,
+        ethnicity_desc_at_event,
+        lsoa_11_at_event,
+        reg_practice_at_event,
+        code_date,
+        visit_occurrence_id
     from {{ref('int_commissioning_demographics_at_event')}}
+    where code_date::date <= current_date()
 ),
 
 --ctes to reduce field values into 1 per patient
@@ -36,7 +47,6 @@ gender_event as (
         ) as gender_field_rank
         
     from base
-    where code_date::date <= current_date()
     qualify gender_field_rank = 1
 ),
 
@@ -51,7 +61,6 @@ int_age_gap as (
         
     from base
     where code_date is not null
-    and code_date::date <= current_date()
     and age_at_event <= 120
 ),
 
@@ -116,39 +125,33 @@ ethnicity_event as (
         ) as ethnicity_field_rank
         
     from base
-    where code_date::date <= current_date()
     qualify ethnicity_field_rank = 1
 ),
 
 lsoa_event as (
     select
-        sk_patient_id,
-        lsoa21_cd as lsoa_21,
-        code_date::date as lsoa_event_date,
+        b.sk_patient_id,
+        map_lsoa.lsoa21_cd as lsoa21_code,
+        b.code_date::date as lsoa_event_date,
         
         --Rank rows for this field to identify which to use
         row_number() over (
-            partition by sk_patient_id 
+            partition by b.sk_patient_id 
             order by
-                --Prioritise non-null LSOA values that are stated and not null
+                --Prefer values that map to LSOA 2021 first
                 case
-                    when lsoa_21 is not null then 1
+                    when map_lsoa.lsoa21_cd is not null then 1
                     else 2
                 end,
                 --Prefer more recent records
-                code_date desc,
+                b.code_date desc,
                 --Occurrence ID only if a tie-breaker is needed
-                visit_occurrence_id desc
+                b.visit_occurrence_id desc
         ) as lsoa_field_rank
     
-    from base
-    
-    --Join to map LSOA 2011 codes to LSOA 2021
+    from base as b
     left join {{ref('stg_reference_lsoa2011_lsoa2021')}} map_lsoa
-    on base.lsoa_11_at_event = map_lsoa.lsoa11_cd
-
-    where code_date::date <= current_date()
-
+        on b.lsoa_11_at_event = map_lsoa.lsoa11_cd
     qualify lsoa_field_rank = 1
 ),
 
@@ -174,7 +177,6 @@ registered_event as (
         ) as registered_field_rank
         
     from base
-    where code_date::date <= current_date()
     qualify registered_field_rank = 1
 )
 
@@ -187,7 +189,7 @@ select
     age.dob_event_date,
     eth.ethnicity_code,
     eth.ethnicity_event_date,
-    res.lsoa_21 as lsoa21_code,
+    res.lsoa21_code as lsoa21_code,
     res.lsoa_event_date,
     reg.practice_code,
     reg.registered_event_date
