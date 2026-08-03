@@ -20,7 +20,6 @@ select
     , end_date
     , end_time
     , duration
-    , end_date
     , chief_complaint_code
     , chief_complaint_desc
     , chief_complaint_ecds_group1
