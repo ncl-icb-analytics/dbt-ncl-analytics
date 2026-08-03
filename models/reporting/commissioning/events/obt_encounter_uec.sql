@@ -16,6 +16,9 @@ select
     , pod
     , department_type
     , start_date
+    , start_time
+    , end_date
+    , end_time
     , duration
     , end_date
     , chief_complaint_code

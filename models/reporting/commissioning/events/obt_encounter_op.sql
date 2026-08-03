@@ -14,6 +14,7 @@ select
     , site_id
     , site_name
     , start_date
+    , start_time
     , expected_duration
     , appointment_outcome
     , outcome_desc

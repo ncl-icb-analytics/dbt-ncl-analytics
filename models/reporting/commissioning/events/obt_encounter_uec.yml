@@ -51,9 +51,21 @@ models:
         description: "Point of delivery code of the provider e.g. A&E, SDEC etc."
 
       - name: start_date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Date of arrival at urgent care department"
 
+      - name: start_time
+        data_type: time
+        description: "Time of arrival at urgent care department"
+      
+      - name: end_date
+        data_type: date
+        description: "Date of departure at urgent care department"
+
+      - name: end_time
+        data_type: time
+        description: "Time of departure at urgent care department"
+      
       - name: duration
         data_type: number
         description: "Time to urgent care department discharge from arrival, in minutes"

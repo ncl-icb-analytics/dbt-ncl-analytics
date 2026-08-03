@@ -43,12 +43,20 @@ models:
         description: "Site name"
 
       - name: start_date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Spell start date"
 
+      - name: start_time
+        data_type: date
+        description: "Spell start time"
+
       - name: end_date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Spell end date"
+
+      - name: end_time
+        data_type: date
+        description: "Spell end time"
 
       - name: duration
         data_type: number

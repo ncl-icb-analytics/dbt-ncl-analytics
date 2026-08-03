@@ -14,7 +14,9 @@ select
     , site_id
     , site_name
     , start_date
+    , start_time
     , end_date
+    , end_time
     , duration
     , duration_to_date
     , spell_admission_method
