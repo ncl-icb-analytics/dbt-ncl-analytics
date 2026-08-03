@@ -25,6 +25,10 @@ select
      --adding additional fields
     , org_id_prov
     , dmic_ccg_code as dm_icb_commissioner
+    -- end of the last reporting period this spell appeared in an active submission;
+    -- providers must resubmit every active spell each period, so this is the last
+    -- evidence the spell was genuinely open
+    , reporting_period_end_date
 from deduplicated
 
 -- NB: De-deuplicated layer MHSDS.docx shared by Shak recommends to deduplicate using

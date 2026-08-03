@@ -15,6 +15,15 @@ models:
       - name: dm_icb_commissioner
         description: The ICB (Integrated Care Board) that commissioned the spell.
 
+      - name: reporting_period_end_date
+        description: >
+          End date of the last reporting period in which this spell appeared in an
+          active submission. MHSDS providers must resubmit every active spell each
+          monthly period, so a spell whose reporting_period_end_date is historic and
+          has no discharge date is orphaned rather than genuinely open.
+        tests:
+          - not_null
+
 
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
