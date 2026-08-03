@@ -23,7 +23,7 @@ models:
         description: "Unique ID for each diagnosis code that spell. unlinkable to source table due to deduplication"
 
       - name: date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Start date of admission spell"
 
       - name: visit_occurrence_id
