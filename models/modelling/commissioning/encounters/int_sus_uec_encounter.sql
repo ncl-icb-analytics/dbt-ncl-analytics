@@ -44,6 +44,9 @@ select
    
     /* Time & date */
     , core.attendance_arrival_date as start_date
+    , core.attendance_arrival_time as start_time
+    , core.attendance_departure_date as end_date
+    , core.attendance_departure_time as end_time
     , core.attendance_departure_time_since_arrival as duration
     , core.attendance_departure_date as end_date 
     -- bed days cc and excess bed days to be added later
