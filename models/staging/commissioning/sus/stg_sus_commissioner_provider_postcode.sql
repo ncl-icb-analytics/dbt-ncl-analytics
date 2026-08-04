@@ -3,5 +3,5 @@ select
     trim(commissioner_code) as commissioner_code,
     cast(effective_from as date) as effective_from,
     cast(effective_to as date) as effective_to
-from {{ ref('raw_sus_commissioner_provider_postcode') }}
+from {{ ref('raw_sus_commissioner_provider_postcode_commissioner') }}
 where cast(effective_from as date) <= cast(effective_to as date)
