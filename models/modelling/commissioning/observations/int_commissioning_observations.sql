@@ -188,3 +188,12 @@ select
     observation_concept_name,
     observation_vocabulary
 from all_observations ao
+
+/*
+    Add restriction here to account for records in the intermediate tables with 
+    observation codes in the source data that do not map to known observation codes.
+
+    This is typically a correct code entered in a non-standard format or 
+    with additional information. (i.e. "E11.3 D" instead of "E11.3")
+*/
+where observation_concept_code is not null
