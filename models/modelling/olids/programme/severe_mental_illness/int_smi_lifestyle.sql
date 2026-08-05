@@ -312,7 +312,7 @@ p.PERSON_ID
 ,e.EXERCISE_STATUS
 ,NVL(e.LOW_EXERCISE_FLAG, 'Unknown') AS low_exercise_flag
 ,NVL(w.exer_int_last_12m, 'No') AS exer_int_last_12m
-,NVL(w.REFERRAL_EXERCISE_ADVICE, 'No') AS referrral_exercise_advice
+,NVL(w.REFERRAL_EXERCISE_ADVICE, 'No') AS referral_exercise_advice
 --FROM MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p
 FROM {{ ref('int_smi_population_base')  }} p
 LEFT JOIN ILLICIT i using (person_id)
