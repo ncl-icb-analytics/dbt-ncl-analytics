@@ -11,7 +11,7 @@ models:
     columns:
       - name: event_id
         data_type: varchar
-        description: "Unique identifier for the diagnosis record."
+        description: "The generated surrogate key to act as a unique record identifier."
 
       - name: sk_patient_id
         data_type: varchar
@@ -33,7 +33,6 @@ models:
       - name: clinical_end_date
         data_type: varchar
         description: "End date of the clinical event containing the observation."
-
 
       - name: ordered_id_array
         data_type: array
