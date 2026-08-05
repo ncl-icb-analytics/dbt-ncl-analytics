@@ -10,13 +10,13 @@ models:
     columns:
       - name: sk_encounter_id
         description: Unique identifier for the appointment (SK_EncounterID)
-        tests:  
+        tests:
           - not_null
-          
-    data_tests:  
+
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
-          arguments: 
-            combination_of_columns: 
+          arguments:
+            combination_of_columns:
               - sk_encounter_id
               - hrg
               - unbundled_no

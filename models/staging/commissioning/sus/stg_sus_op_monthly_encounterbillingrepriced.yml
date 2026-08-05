@@ -16,10 +16,10 @@ models:
     data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments: # 👈 Add the arguments block here to satisfy the modern parser
-            min_value: 1 
+            min_value: 1
 
       - dbt_utils.unique_combination_of_columns:
-          arguments: 
+          arguments:
             combination_of_columns:
               - sk_encounter_id
               - sk_costing_algorithm_id
