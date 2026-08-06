@@ -79,6 +79,8 @@ WITH uptake_with_demographics AS (
         d.ward_code,
         d.ward_name,
         COALESCE(la.LAD25_NM,'Unknown') AS borough_resident,
+        CASE WHEN la.RESIDENT_FLAG IS NULL THEN 'Unknown'
+        ELSE la.RESIDENT_FLAG END as residential_loc,
         d.neighbourhood_resident,
         d.icb_code_resident,
         d.icb_resident,
