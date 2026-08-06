@@ -15,20 +15,6 @@ with base as (
     from {{ ref('int_sus_op_monthly') }}
 ),
 
-care_home_assignment as (
-    select
-        b.sk_encounter_id,
-        max_by(org.organisation_code, ch.period_start) as care_home_code
-    from base as b
-    inner join {{ ref('stg_fact_patient_factcarehome') }} as ch
-        on b.sk_patient_id = ch.sk_patient_id
-       and b.appointment_date between cast(ch.period_start as date)
-                                  and coalesce(cast(ch.period_end as date), '2050-12-31'::date)
-    left join {{ ref('stg_dictionary_dbo_organisation') }} as org
-        on ch.sk_organisation_id = org.sk_organisation_id
-    group by b.sk_encounter_id
-),
-
 dedupe_ranked as (
     select
         b.*,
@@ -52,8 +38,13 @@ dedupe_ranked as (
 reference_enriched as (
     select
         d.*,
-        coalesce(diagnosis_term.sensitive_category, procedure_term.sensitive_category)
-            as mapped_sensitive_category,
+        case
+            when diagnosis_term.priority is null then procedure_term.sensitive_category
+            when procedure_term.priority is null
+              or diagnosis_term.priority <= procedure_term.priority
+                then diagnosis_term.sensitive_category
+            else procedure_term.sensitive_category
+        end as mapped_sensitive_category,
         case
             when left(upper(trim(d.core_hrg)), 2) not in ('WF', 'UZ') then 'OPPROC'
             else coalesce(pod_mapping.pod_level_4, 'Unknown')
@@ -96,7 +87,7 @@ postprocessed as (
             coalesce(d.zcarehome, ch.care_home_code) as zcarehome
         )
     from reference_enriched as d
-    left join care_home_assignment as ch
+    left join {{ ref('int_sus_op_care_home') }} as ch
         on d.sk_encounter_id = ch.sk_encounter_id
 ),
 

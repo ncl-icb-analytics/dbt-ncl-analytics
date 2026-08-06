@@ -1,7 +1,7 @@
 models:
   - name: stg_sus_op_monthly_encounterunbundled
     description: 'Encounter unbundled from SUS data.
-      One row per encounter.
+      One row per encounter, HRG and unbundled number.
       '
     config:
       meta:
@@ -10,7 +10,7 @@ models:
     columns:
       - name: sk_encounter_id
         description: Unique identifier for the appointment (SK_EncounterID)
-        tests:
+        data_tests:
           - not_null
 
     data_tests:

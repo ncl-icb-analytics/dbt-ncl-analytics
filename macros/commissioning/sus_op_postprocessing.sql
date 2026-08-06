@@ -1,3 +1,4 @@
+-- Derives SUS OP POD, sensitive-category and legacy business-rule outputs.
 {% macro sus_op_rule_code_matches(rule_name, attribute_name, value_expression, activity_date, include_or_exclude='INCLUDE') %}
     coalesce(
         array_contains(

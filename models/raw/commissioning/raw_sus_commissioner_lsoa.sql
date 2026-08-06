@@ -1,3 +1,9 @@
+{{
+    config(
+        description="Raw date-effective LSOA-to-commissioner lookup from SUS_COMMISSIONER_LSOA. Columns are renamed to dbt conventions."
+    )
+}}
+
 select
     "OACODE" as oa_code,
     "SK_OUTPUTAREAID" as sk_output_area_id,

@@ -1,4 +1,13 @@
 param(
+    [Parameter(Mandatory)]
+    [string]$FiguresPath,
+
+    [Parameter(Mandatory)]
+    [string[]]$Recipients,
+
+    [Parameter(Mandatory)]
+    [string]$Sender,
+
     [string]$OutputDirectory = (Join-Path $PSScriptRoot '..\..\reports\sus_op_reconciliation')
 )
 
@@ -9,65 +18,23 @@ New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
 $xlsxPath = Join-Path $outputPath 'SUS_OP_ERNI_vs_Snowflake_Reconciliation.xlsx'
 $emlPath = Join-Path $outputPath 'SUS_OP_Reconciliation_Review.eml'
 
-$detailText = @'
-1516|R1K|659913|99274
-1516|RAS|308338|34818
-1516|RQM|523547|254790
-1516|RYJ|1064579|331777
-1617|R1K|740234|103904
-1617|RAS|384908|36498
-1617|RQM|920523|381673
-1617|RYJ|1240576|337147
-1718|R1K|771295|771296
-1718|RAS|413555|413555
-1718|RQM|1007193|1007198
-1718|RYJ|1499757|1499758
-1819|R1K|775637|816452
-1819|RAS|389934|413608
-1819|RQM|849122|1057965
-1819|RYJ|1359700|1557553
-1920|R1K|844710|844707
-1920|RAS|402948|403018
-1920|RQM|1109701|1109692
-1920|RYJ|1674369|1674364
-2021|R1K|662474|668720
-2021|RAS|308006|308499
-2021|RQM|984580|998813
-2021|RYJ|1495531|1518548
-2122|R1K|868571|875370
-2122|RAS|383772|385678
-2122|RQM|1210918|1239958
-2122|RYJ|1754297|1765503
-2223|R1K|881451|884726
-2223|RAS|384121|385375
-2223|RQM|1225619|1229323
-2223|RYJ|1753148|1737533
-2324|R1K|1060290|1096770
-2324|RAS|500250|509758
-2324|RQM|1166729|1280900
-2324|RYJ|1805282|1843778
-2425|R1K|1457410|1478081
-2425|RAS|665213|667988
-2425|RQM|1388414|1388255
-2425|RYJ|1956187|1957525
-2526|R1K|1573887|1576315
-2526|RAS|646622|648129
-2526|RQM|1382143|1383452
-2526|RYJ|1995745|1998787
-2627|R1K|255784|256225
-2627|RAS|103550|103725
-2627|RQM|227140|227257
-2627|RYJ|320563|321364
-'@
+$resolvedFiguresPath = (Resolve-Path -LiteralPath $FiguresPath).Path
+$inputRows = @(Import-Csv -LiteralPath $resolvedFiguresPath)
+if (-not $inputRows) { throw "Figures CSV contains no data: $resolvedFiguresPath" }
 
-$detailRows = foreach ($line in $detailText -split "`n") {
-    if (-not $line.Trim()) { continue }
-    $parts = $line.Trim() -split '\|'
-    $erni = [long]$parts[2]
-    $snowflake = [long]$parts[3]
+$requiredColumns = @('FinancialYear', 'Provider', 'ERNI', 'Snowflake')
+$actualColumns = @($inputRows[0].PSObject.Properties.Name)
+$missingColumns = @($requiredColumns | Where-Object { $_ -notin $actualColumns })
+if ($missingColumns) {
+    throw "Figures CSV is missing required columns: $($missingColumns -join ', ')"
+}
+
+$detailRows = foreach ($row in $inputRows) {
+    $erni = [long]$row.ERNI
+    $snowflake = [long]$row.Snowflake
     [pscustomobject]@{
-        FinancialYear = $parts[0]
-        Provider = $parts[1]
+        FinancialYear = $row.FinancialYear.Trim()
+        Provider = $row.Provider.Trim()
         ERNI = $erni
         Snowflake = $snowflake
         Difference = $snowflake - $erni
@@ -75,13 +42,14 @@ $detailRows = foreach ($line in $detailText -split "`n") {
     }
 }
 
-$yearLabels = @{
-    '1516'='2015/16'; '1617'='2016/17'; '1718'='2017/18'; '1819'='2018/19'
-    '1920'='2019/20'; '2021'='2020/21'; '2122'='2021/22'; '2223'='2022/23'
-    '2324'='2023/24'; '2425'='2024/25'; '2526'='2025/26'; '2627'='2026/27*'
+$yearKeys = @($detailRows.FinancialYear | Sort-Object -Unique)
+$yearLabels = @{}
+foreach ($year in $yearKeys) {
+    if ($year -notmatch '^\d{4}$') { throw "FinancialYear must use YYZZ format: $year" }
+    $yearLabels[$year] = "20$($year.Substring(0, 2))/$($year.Substring(2, 2))"
 }
 
-$yearSummary = foreach ($year in @('1516','1617','1718','1819','1920','2021','2122','2223','2324','2425','2526','2627')) {
+$yearSummary = foreach ($year in $yearKeys) {
     $rows = $detailRows | Where-Object FinancialYear -eq $year
     $erni = ($rows | Measure-Object ERNI -Sum).Sum
     $snowflake = ($rows | Measure-Object Snowflake -Sum).Sum
@@ -90,9 +58,27 @@ $yearSummary = foreach ($year in @('1516','1617','1718','1819','1920','2021','21
         ERNI = $erni
         Snowflake = $snowflake
         Difference = $snowflake - $erni
-        DifferencePct = ($snowflake - $erni) / $erni
+        DifferencePct = if ($erni) { ($snowflake - $erni) / $erni } else { $null }
     }
 }
+
+$providerDisplay = @($detailRows.Provider | Sort-Object -Unique) -join ', '
+$findings = @(foreach ($item in $yearSummary) {
+    if ($null -eq $item.DifferencePct) {
+        "$($item.FinancialYear): Investigate; ERNI has zero rows."
+    } else {
+        $absPct = [math]::Abs($item.DifferencePct)
+        $status = if ($absPct -le 0.005) { 'Close match' } elseif ($absPct -le 0.02) { 'Review' } else { 'Investigate' }
+        "$($item.FinancialYear): $status; difference $($item.Difference.ToString('N0')) ($($item.DifferencePct.ToString('P2')))."
+    }
+})
+$reviewYears = @($yearSummary | Where-Object { $null -eq $_.DifferencePct -or [math]::Abs($_.DifferencePct) -gt 0.005 } | ForEach-Object FinancialYear)
+$steps = @(
+    'Confirm that ERNI and Snowflake have equivalent coverage for every comparison period.',
+    $(if ($reviewYears) { "Investigate flagged years by financial month: $($reviewYears -join ', ')." } else { 'No year-level differences exceed the close-match threshold.' }),
+    'Compare total rows with distinct encounter and attendance identifiers.',
+    'Use a close-matching month as a control for record-level reconciliation.'
+)
 
 $sqlErni = @'
 SELECT
@@ -141,12 +127,10 @@ try {
 
     $navy = 0x6B351F
     $blue = 0xD9A23B
-    $lightBlue = 0xF3E5D3
-    $lightRed = 0xCEEBFF
+    $lightRed = 0xCCCCFF
     $lightAmber = 0xCCF2FF
     $lightGreen = 0xE2F0D9
     $white = 0xFFFFFF
-    $darkText = 0x333333
 
     $summarySheet.Range('A1:F1').Merge()
     $summarySheet.Range('A1').Value2 = 'SUS Outpatient Reconciliation: ERNI vs Snowflake'
@@ -158,7 +142,7 @@ try {
     $summarySheet.Range('A3').Value2 = 'Scope'
     $summarySheet.Range('A3').Font.Bold = $true
     $summarySheet.Range('A4').Value2 = 'Providers'
-    $summarySheet.Range('B4').Value2 = 'RYJ, RQM, RAS and R1K'
+    $summarySheet.Range('B4').Value2 = $providerDisplay
     $summarySheet.Range('A5').Value2 = 'ERNI source'
     $summarySheet.Range('B5').Value2 = '[dmic_sus_pbrmart].[dbo].[consolidated_ns_op]'
     $summarySheet.Range('A6').Value2 = 'Snowflake source'
@@ -166,49 +150,39 @@ try {
     $summarySheet.Range('A7').Value2 = 'Percentage formula'
     $summarySheet.Range('B7').Value2 = '(Snowflake - ERNI) / ERNI'
     $summarySheet.Range('A8').Value2 = 'Reporting note'
-    $summarySheet.Range('B8').Value2 = '2026/27 is a partial year.'
+    $summarySheet.Range('B8').Value2 = 'Coverage and refresh timing must be confirmed for partial years.'
 
     $summarySheet.Range('A10:F10').Merge()
     $summarySheet.Range('A10').Value2 = 'Key findings'
     $summarySheet.Range('A10').Font.Bold = $true
     $summarySheet.Range('A10').Font.Color = $white
     $summarySheet.Range('A10').Interior.Color = $blue
-    $findings = @(
-        '2015/16 and 2016/17 are materially incomplete in Snowflake and require historical coverage confirmation.',
-        'The unbundled-HRG join was fixed; all four main providers now have zero duplicate encounter rows.',
-        '2017/18 and 2019/20 reconcile almost exactly across the four main providers.',
-        '2018/19 is a material exception (+13.97%), led by RQM and RYJ.',
-        '2023/24 is the main recent exception (+4.38%), led by RQM (+9.79%).',
-        '2024/25, 2025/26 and partial 2026/27 reconcile within 0.5% in total.'
-    )
+    $findingStartRow = 11
     for ($i=0; $i -lt $findings.Count; $i++) {
-        $summarySheet.Cells.Item(11 + $i, 1).Value2 = [char]0x2022
-        $summarySheet.Cells.Item(11 + $i, 2).Value2 = $findings[$i]
+        $summarySheet.Cells.Item($findingStartRow + $i, 1).Value2 = [string][char]0x2022
+        $summarySheet.Cells.Item($findingStartRow + $i, 2).Value2 = $findings[$i]
     }
-    $summarySheet.Range('B11:B16').WrapText = $true
+    $findingEndRow = $findingStartRow + $findings.Count - 1
+    $summarySheet.Range("B${findingStartRow}:B${findingEndRow}").WrapText = $true
 
-    $summarySheet.Range('A18:F18').Merge()
-    $summarySheet.Range('A18').Value2 = 'Recommended next steps'
-    $summarySheet.Range('A18').Font.Bold = $true
-    $summarySheet.Range('A18').Font.Color = $white
-    $summarySheet.Range('A18').Interior.Color = $blue
-    $steps = @(
-        'Confirm expected Snowflake historical coverage for 2015/16 and 2016/17.',
-        'Break down 2018/19 and 2023/24 by financial month.',
-        'Prioritise RQM and RYJ for encounter- and attendance-level comparison.',
-        'Compare total rows with distinct SK encounter IDs and attendance identifiers.',
-        'Use an exactly matching month as a control during record-level reconciliation.'
-    )
+    $stepsHeaderRow = $findingEndRow + 2
+    $summarySheet.Range("A${stepsHeaderRow}:F${stepsHeaderRow}").Merge()
+    $summarySheet.Cells.Item($stepsHeaderRow, 1).Value2 = 'Recommended next steps'
+    $summarySheet.Cells.Item($stepsHeaderRow, 1).Font.Bold = $true
+    $summarySheet.Cells.Item($stepsHeaderRow, 1).Font.Color = $white
+    $summarySheet.Cells.Item($stepsHeaderRow, 1).Interior.Color = $blue
+    $stepStartRow = $stepsHeaderRow + 1
     for ($i=0; $i -lt $steps.Count; $i++) {
-        $summarySheet.Cells.Item(19 + $i, 1).Value2 = [string]($i + 1)
-        $summarySheet.Cells.Item(19 + $i, 2).Value2 = $steps[$i]
+        $summarySheet.Cells.Item($stepStartRow + $i, 1).Value2 = [string]($i + 1)
+        $summarySheet.Cells.Item($stepStartRow + $i, 2).Value2 = $steps[$i]
     }
-    $summarySheet.Range('B19:B23').WrapText = $true
+    $stepEndRow = $stepStartRow + $steps.Count - 1
+    $summarySheet.Range("B${stepStartRow}:B${stepEndRow}").WrapText = $true
     $summarySheet.Columns.Item('A').ColumnWidth = 18
     $summarySheet.Columns.Item('B').ColumnWidth = 95
     $summarySheet.Columns.Item('C:F').ColumnWidth = 12
-    $summarySheet.Range('A1:F23').Font.Name = 'Aptos'
-    $summarySheet.Range('A1:F23').VerticalAlignment = -4160
+    $summarySheet.Range("A1:F${stepEndRow}").Font.Name = 'Aptos'
+    $summarySheet.Range("A1:F${stepEndRow}").VerticalAlignment = -4160
 
     $headers = @('Financial year','ERNI rows','Snowflake rows','Difference','Difference %')
     for ($c=0; $c -lt $headers.Count; $c++) { $yearSheet.Cells.Item(1,$c+1).Value2 = $headers[$c] }
@@ -218,7 +192,9 @@ try {
         $yearSheet.Cells.Item($r+2,2).Formula = '=' + ([double]$item.ERNI).ToString([Globalization.CultureInfo]::InvariantCulture)
         $yearSheet.Cells.Item($r+2,3).Formula = '=' + ([double]$item.Snowflake).ToString([Globalization.CultureInfo]::InvariantCulture)
         $yearSheet.Cells.Item($r+2,4).Formula = '=' + ([double]$item.Difference).ToString([Globalization.CultureInfo]::InvariantCulture)
-        $yearSheet.Cells.Item($r+2,5).Formula = '=' + ([double]$item.DifferencePct).ToString([Globalization.CultureInfo]::InvariantCulture)
+        if ($null -ne $item.DifferencePct) {
+            $yearSheet.Cells.Item($r+2,5).Formula = '=' + ([double]$item.DifferencePct).ToString([Globalization.CultureInfo]::InvariantCulture)
+        }
     }
     $yearLastRow = $yearSummary.Count + 1
     $yearHeader = $yearSheet.Range("A1:E1")
@@ -229,6 +205,7 @@ try {
     $yearSheet.Range("E2:E$yearLastRow").NumberFormat = '0.00%;[Red]-0.00%'
     $yearSheet.Range("A1:E$yearLastRow").Borders.LineStyle = 1
     $yearSheet.Range("A1:E$yearLastRow").AutoFilter() | Out-Null
+    $yearSheet.Activate()
     $yearSheet.Application.ActiveWindow.SplitRow = 1
     $yearSheet.Application.ActiveWindow.FreezePanes = $true
     $yearSheet.Columns.AutoFit() | Out-Null
@@ -252,9 +229,15 @@ try {
         $detailSheet.Cells.Item($detailRowNumber,3).Formula = '=' + ([double]$item.ERNI).ToString([Globalization.CultureInfo]::InvariantCulture)
         $detailSheet.Cells.Item($detailRowNumber,4).Formula = '=' + ([double]$item.Snowflake).ToString([Globalization.CultureInfo]::InvariantCulture)
         $detailSheet.Cells.Item($detailRowNumber,5).Formula = '=' + ([double]$item.Difference).ToString([Globalization.CultureInfo]::InvariantCulture)
-        $detailSheet.Cells.Item($detailRowNumber,6).Formula = '=' + ([double]$item.DifferencePct).ToString([Globalization.CultureInfo]::InvariantCulture)
-        $absPct = [math]::Abs($item.DifferencePct)
-        $status = if ($absPct -le 0.005) { 'Close match' } elseif ($absPct -le 0.02) { 'Review' } else { 'Investigate' }
+        if ($null -ne $item.DifferencePct) {
+            $detailSheet.Cells.Item($detailRowNumber,6).Formula = '=' + ([double]$item.DifferencePct).ToString([Globalization.CultureInfo]::InvariantCulture)
+        }
+        $status = if ($null -eq $item.DifferencePct) {
+            'Investigate'
+        } else {
+            $absPct = [math]::Abs($item.DifferencePct)
+            if ($absPct -le 0.005) { 'Close match' } elseif ($absPct -le 0.02) { 'Review' } else { 'Investigate' }
+        }
         $detailSheet.Cells.Item($detailRowNumber,7).Value2 = $status
         $detailSheet.Cells.Item($detailRowNumber,7).Interior.Color = if ($status -eq 'Close match') { $lightGreen } elseif ($status -eq 'Review') { $lightAmber } else { $lightRed }
         $detailRowNumber++
@@ -268,6 +251,7 @@ try {
     $detailSheet.Range("F2:F$detailLastRow").NumberFormat = '0.00%;[Red]-0.00%'
     $detailSheet.Range("A1:G$detailLastRow").Borders.LineStyle = 1
     $detailSheet.Range("A1:G$detailLastRow").AutoFilter() | Out-Null
+    $detailSheet.Activate()
     $detailSheet.Application.ActiveWindow.SplitRow = 1
     $detailSheet.Application.ActiveWindow.FreezePanes = $true
     $detailSheet.Columns.AutoFit() | Out-Null
@@ -315,10 +299,25 @@ finally {
 }
 
 $subject = 'SUS OP reconciliation - all-year report for review'
-$htmlBody = @'
+$recipientDisplay = $Recipients -join ', '
+$providerDisplay = @($detailRows.Provider | Sort-Object -Unique) -join ', '
+$findingItems = foreach ($item in $yearSummary) {
+    if ($null -eq $item.DifferencePct) {
+        $status = 'Investigate: ERNI has zero rows'
+        $percentage = 'n/a'
+    } else {
+        $absPct = [math]::Abs($item.DifferencePct)
+        $status = if ($absPct -le 0.005) { 'Close match' } elseif ($absPct -le 0.02) { 'Review' } else { 'Investigate' }
+        $percentage = $item.DifferencePct.ToString('P2')
+    }
+    "<li>$($item.FinancialYear): <b>$status</b>; difference $($item.Difference.ToString('N0')) ($percentage).</li>"
+}
+$findingsHtml = $findingItems -join "`n"
+
+$htmlBody = @"
 <html><body style="font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#222">
-<p>Hi Janni, Nathan and Ibby,</p>
-<p>Following Ibby's feedback, I have completed an all-year reconciliation focused on our four main outpatient providers: <b>RYJ, RQM, RAS and R1K</b>.</p>
+<p>Hi $recipientDisplay,</p>
+<p>I have completed an all-year reconciliation for these outpatient providers: <b>$providerDisplay</b>.</p>
 <p>The attached Excel report contains:</p>
 <ul>
 <li>an executive summary and recommended next steps;</li>
@@ -329,26 +328,20 @@ $htmlBody = @'
 </ul>
 <p><b>Key findings</b></p>
 <ul>
-<li>2015/16 and 2016/17 appear materially incomplete in Snowflake and need historical coverage confirmation.</li>
-<li>The Snowflake unbundled-HRG join has been fixed and there are now zero duplicate encounter rows for the four main providers.</li>
-<li>2017/18 and 2019/20 reconcile almost exactly.</li>
-<li>2018/19 is a material exception (+13.97%), mainly driven by RQM and RYJ.</li>
-<li>2023/24 is the main recent exception (+4.38%), with RQM at +9.79%.</li>
-<li>2024/25, 2025/26 and partial 2026/27 reconcile within 0.5% overall.</li>
-<li>The remaining 2026/27 difference is 1,534 rows (0.17%) and is consistent with refresh timing between ERNI CURRENT and the Snowflake Date Range extract.</li>
+$findingsHtml
 </ul>
 <p><b>Review requested</b></p>
 <p>Could you please review the attached output and confirm:</p>
 <ol>
-<li>whether Snowflake is expected to contain complete data for 2015/16 and 2016/17;</li>
-<li>whether 2018/19 and 2023/24 had any known dissemination or source-processing differences;</li>
+<li>whether the comparison periods have equivalent source coverage;</li>
+<li>whether material differences have known dissemination or processing causes;</li>
 <li>whether the comparison filters and provider scope are correct; and</li>
-<li>whether we should proceed with a month-level and record-level investigation of RQM and RYJ.</li>
+<li>whether we should proceed with month-level and record-level investigation.</li>
 </ol>
-<p>Subject to your feedback, the next step will be to break down 2018/19 and 2023/24 by financial month and compare distinct encounter and attendance identifiers.</p>
-<p>Kind regards,<br>Dharmesh</p>
+<p>Subject to your feedback, the next step will be to investigate years marked Review or Investigate by financial month and identifier.</p>
+<p>Kind regards,<br>$Sender</p>
 </body></html>
-'@
+"@
 
 $boundary = '----=_Codex_' + [guid]::NewGuid().ToString('N')
 $htmlBytes = [Text.Encoding]::UTF8.GetBytes($htmlBody)
@@ -357,8 +350,8 @@ $attachmentBytes = [IO.File]::ReadAllBytes($xlsxPath)
 $attachmentBase64 = [Convert]::ToBase64String($attachmentBytes, [Base64FormattingOptions]::InsertLineBreaks)
 $dateHeader = [DateTimeOffset]::Now.ToString('r')
 $eml = @"
-From: Dharmesh
-To: Janni; Nathan; Ibby
+From: $Sender
+To: $($Recipients -join '; ')
 Subject: $subject
 Date: $dateHeader
 MIME-Version: 1.0

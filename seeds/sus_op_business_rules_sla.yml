@@ -5,6 +5,10 @@ seeds:
     description: >-
       Legacy commissioner/provider/financial-year SLA combinations used by the
       outpatient business-rule contract-type calculation.
+    config:
+      meta:
+        owner:
+          name: Commissioning Analytics
     columns:
       - name: commissioner_code
         data_tests:

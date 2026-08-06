@@ -10,6 +10,7 @@ sources:
     tables:
       - name: practice_commissioner
         identifier: '"SUS_COMMISSIONER_PRACTICE"'
+        description: Date-effective practice-to-commissioner relationships.
         columns:
           - name: SK_ORGANISATIONID_PRACTICE
           - name: ORGANISATIONCODE_PRACTICE
@@ -23,6 +24,7 @@ sources:
           - name: ISPROXY
       - name: lsoa_commissioner
         identifier: '"SUS_COMMISSIONER_LSOA"'
+        description: Date-effective LSOA-to-commissioner relationships.
         columns:
           - name: OACODE
           - name: SK_OUTPUTAREAID
@@ -32,6 +34,7 @@ sources:
           - name: EFFECTIVETO
       - name: provider_commissioner
         identifier: '"SUS_COMMISSIONER_PROVIDER"'
+        description: Date-effective provider-to-commissioner relationships.
         columns:
           - name: PROVIDERCODE
           - name: COMMISSIONERCODE
@@ -39,6 +42,7 @@ sources:
           - name: EFFECTIVETO
       - name: provider_postcode_commissioner
         identifier: '"SUS_COMMISSIONER_PROVIDER_POSTCODE"'
+        description: Date-effective provider-postcode-to-commissioner fallback relationships.
         columns:
           - name: PROVIDERCODE
           - name: COMMISSIONERCODE

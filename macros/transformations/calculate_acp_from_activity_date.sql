@@ -1,3 +1,4 @@
+-- Formats an activity date as the legacy applicable-costing-period label.
 {% macro calculate_acp_from_activity_date(activity_date) %}
     'M' || to_varchar(month(dateadd('month', -3, {{ activity_date }})))
         || ' - ' || to_varchar({{ activity_date }}, 'Mon')

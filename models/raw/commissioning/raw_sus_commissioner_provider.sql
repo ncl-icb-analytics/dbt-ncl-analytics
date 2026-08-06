@@ -1,3 +1,9 @@
+{{
+    config(
+        description="Raw date-effective provider-to-commissioner lookup from SUS_COMMISSIONER_PROVIDER. Columns are renamed to dbt conventions."
+    )
+}}
+
 select
     "PROVIDERCODE" as provider_code,
     "COMMISSIONERCODE" as commissioner_code,

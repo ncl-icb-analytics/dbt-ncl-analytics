@@ -6,6 +6,10 @@ seeds:
       Reviewable values used by named outpatient business rules. SQL retains
       compound rule logic and precedence; this seed owns codes, match behaviour
       and effective periods.
+    config: &sus_op_reference_config
+      meta:
+        owner:
+          name: Commissioning Analytics
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -43,6 +47,7 @@ seeds:
       Reviewable HRG and specialty-group mapping used to derive outpatient POD
       level 4. SPECIALIST excludes specialty 560 and specialties 900-960;
       NON_SPECIALIST includes them; ALL applies regardless of specialty.
+    config: *sus_op_reference_config
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -66,6 +71,7 @@ seeds:
       Reviewable ICD-10 and OPCS-4 terminology used to classify sensitive SUS
       outpatient activity. Priority preserves the legacy diagnosis-before-procedure
       evaluation order.
+    config: *sus_op_reference_config
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
