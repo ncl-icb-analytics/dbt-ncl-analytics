@@ -1,0 +1,28 @@
+seeds:
+  - name: children_complexity_diagnosis_codes
+    description: >
+      Primary care diagnosis codes indicating complex health needs in
+      under-18s, for the children with complexity segment. The list is the
+      NWL-defined code set; codes are pending receipt from the segmentation
+      requestor, so the seed currently ships empty and the criterion
+      (has_complexity_diagnosis in int_segmentation_children_complexity)
+      returns no rows until it is populated. Populating the seed is a
+      data-only change.
+    config:
+      column_types:
+        snomed_code: varchar(18)
+        description: varchar(500)
+        category: varchar(100)
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: snomed_code
+        description: SNOMED CT concept id.
+        data_tests:
+          - not_null
+          - unique
+      - name: description
+        description: Code description.
+      - name: category
+        description: Grouping for reporting cuts (e.g. condition family).
