@@ -49,13 +49,16 @@ def load_results() -> list[dict]:
         return []
 
 
-def manifest_node_ids() -> set[str]:
+def manifest_node_ids() -> tuple[bool, set[str]]:
+    """(available, node ids). An unreadable manifest must NOT read as an empty
+    project - that would make every tracked node look removed and wrongly
+    auto-close unresolved deploy issues."""
     try:
         with open("target/manifest.json", encoding="utf-8") as f:
             m = json.load(f)
-        return set(m.get("nodes", {})) | set(m.get("sources", {}))
-    except OSError:
-        return set()
+        return True, set(m.get("nodes", {})) | set(m.get("sources", {}))
+    except (OSError, json.JSONDecodeError):
+        return False, set()
 
 
 def find_open_issues() -> list[dict]:
@@ -134,7 +137,10 @@ def resolve_success() -> None:
         return
 
     built_green = {r["unique_id"] for r in load_results() if r.get("status") in SUCCESS_STATUSES}
-    current_nodes = manifest_node_ids()
+    manifest_available, current_nodes = manifest_node_ids()
+    if not manifest_available:
+        print("manifest unavailable - leaving deploy failure issues open")
+        return
     for i in issues:
         tracked = failed_node_blocks(i["number"])
         unresolved = {uid for uid in tracked if uid in current_nodes and uid not in built_green}
