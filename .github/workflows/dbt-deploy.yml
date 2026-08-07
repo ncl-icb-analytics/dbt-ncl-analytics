@@ -7,10 +7,14 @@
 # successful deploy (fetched from the DBT_ARTIFACTS stage). Falls back to a
 # full build when no state manifest exists or on manual dispatch.
 #
-# On success, publishes target/manifest.json + run_results.json + meta.json
-# back to the stage (see .github/actions/publish-dbt-artifacts). Publishing
-# only on success is load-bearing: a manifest from a failed deploy would make
-# the next state:modified run skip the failed models.
+# Publishes target/manifest.json + run_results.json + meta.json back to the
+# stage on every attempt, success or not (see
+# .github/actions/publish-dbt-artifacts). Deliberate consequence: a node that
+# failed is NOT retried by later unrelated deploys - the deploy that broke it
+# goes red once (blaming the right PR), everyone after stays green. The node
+# redeploys when its fix merges (the fix makes it state:modified again);
+# transient failures on scheduled-lineage models are retried by the nightly
+# and weekly scheduled builds.
 #
 # Prerequisites:
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
@@ -53,6 +57,7 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: read
+      issues: write  # failure issues (report_dbt_failures.py)
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
@@ -66,12 +71,13 @@ jobs:
 
       - name: Install dbt Fusion
         run: |
-          # Pinned in .fusion-version - the same engine version produced the
-          # state manifest, so state:modified comparisons are apples-to-apples.
-          ver=2.0.0-preview.175
-          [ -f .fusion-version ] && read -r ver < .fusion-version
-          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$ver" --target x86_64-unknown-linux-gnu --update
+          # Latest Fusion, unpinned - matches the VS Code extension, which
+          # auto-updates to latest. If an engine upgrade changes manifest
+          # internals, state:modified may over-select once (extra rebuilds,
+          # never missed ones) and the new manifest resets the baseline.
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --target x86_64-unknown-linux-gnu --update
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/dbt" --version
 
       - uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
         with:
@@ -107,12 +113,29 @@ jobs:
           echo "dbt_command=dbt $args" >> "$GITHUB_OUTPUT"
           dbt $args --profiles-dir .
 
+      # Publish even when the build failed (not when cancelled - a cancelled
+      # run's manifest would mark half-built models as deployed).
       - name: Publish dbt artifacts
-        if: success()
+        if: ${{ !cancelled() }}
         uses: ./.github/actions/publish-dbt-artifacts
         with:
           dbt-command: ${{ steps.build.outputs.dbt_command }}
           target: prod
+          build-outcome: ${{ steps.build.outcome }}
+
+      # Failure issue naming the broken nodes (-> Teams via the
+      # +label:"dbt-run-failure" issues subscription). Deploy issues do NOT
+      # close on the next green deploy - unrelated deploys skip broken nodes
+      # under the publish-always baseline - only when every tracked node
+      # builds green again or leaves the project.
+      - name: Report or resolve failure issue
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DBT_CONTEXT: deploy
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 .github/scripts/report_dbt_failures.py
 
       - name: Cleanup credentials
         if: always()

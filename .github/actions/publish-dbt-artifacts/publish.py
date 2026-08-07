@@ -22,12 +22,20 @@ if not re.match(r"^[A-Za-z0-9_.]+$", STAGE) or not re.match(r"^[A-Za-z0-9_-]+$",
 manifest = "target/manifest.json"
 run_results = "target/run_results.json"
 if not os.path.exists(manifest):
-    sys.exit(f"{manifest} not found - nothing to publish")
+    # Build died before parse (compile/setup error) - keep the previous
+    # baseline rather than failing the publish step on an already-red run.
+    print(f"{manifest} not found - skipping publish")
+    sys.exit(0)
 
+# Record the engine that produced the artifacts (unpinned installs = latest).
 fusion_version = None
-if os.path.exists(".fusion-version"):
-    with open(".fusion-version") as f:
-        fusion_version = f.read().strip()
+try:
+    import subprocess
+
+    out = subprocess.run(["dbt", "--version"], capture_output=True, text=True, timeout=30).stdout
+    fusion_version = out.strip().splitlines()[0] if out.strip() else None
+except Exception:
+    pass
 
 meta = {
     "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -43,6 +51,7 @@ meta = {
     "dbt_command": os.environ.get("DBT_COMMAND"),
     "target": TARGET,
     "fusion_version": fusion_version,
+    "build_status": os.environ.get("DBT_BUILD_OUTCOME", "success"),
 }
 with open("target/meta.json", "w") as f:
     json.dump(meta, f, indent=2)

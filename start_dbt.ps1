@@ -13,12 +13,10 @@
 # dbt itself is the Fusion binary (installed to %USERPROFILE%\.local\bin), NOT a
 # Python package. The .venv exists only for the Python tooling in scripts/.
 
-# Fusion engine version. Pinned (via .fusion-version at repo root) to the version
-# Snowflake hosts, so local, CI, and the 5am native build run the same engine.
-# Bump .fusion-version when Snowflake's hosted 2.0.0-preview moves.
-# Set $FusionVersionPin to override locally; fallback is used only if the file is missing.
-$FusionVersionPin = ''
-$FusionFallbackVersion = '2.0.0-preview.186'
+# Fusion engine is unpinned: CI installs latest and the VS Code dbt extension
+# auto-updates to latest. This script only installs when dbt is missing; if
+# an installed dbt is out of date it WARNS instead of updating, because the
+# extension's LSP holds a lock on dbt.exe and updating underneath it fails.
 
 $actions = @()
 $installDir = Join-Path $env:USERPROFILE '.local\bin'
@@ -66,50 +64,48 @@ Write-Host ""
 # ---------------------------------------------------------------------------
 Write-Host "Checking dbt Fusion engine..." -ForegroundColor Cyan
 
-function Resolve-FusionVersion {
-    if ($FusionVersionPin) { return $FusionVersionPin }
-    $pinFile = Join-Path $PSScriptRoot '.fusion-version'
-    if (Test-Path $pinFile) {
-        $v = (Get-Content $pinFile -Raw).Trim()
-        if ($v) { return $v }
-    }
-    return $FusionFallbackVersion
-}
-
 function Install-Fusion {
-    param([string]$Version, [switch]$Update)
     # Clear partial downloads left by a previous failed/locked install, else the
     # installer can trip over them.
     Get-ChildItem -Path $installDir -Filter 'tmp-dbt-download-*' -Directory -ErrorAction SilentlyContinue |
         Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
     $installer = [scriptblock]::Create((Invoke-RestMethod 'https://public.cdn.getdbt.com/fs/install/install.ps1'))
-    if ($Update) { & $installer -Version $Version -Target $fusionTarget -Update }
-    else { & $installer -Version $Version -Target $fusionTarget }
+    & $installer -Target $fusionTarget
+}
+
+function Get-LatestFusionVersion {
+    # The installer resolves 'latest' from the same endpoint.
+    try {
+        $tag = (Invoke-RestMethod 'https://public.cdn.getdbt.com/fs/versions.json' -TimeoutSec 5).latest.tag
+        if ($tag) { return $tag -replace '^v', '' }
+    } catch { }
+    return $null
 }
 
 try {
-    $dbtPresent = [bool](Get-Command dbt -ErrorAction SilentlyContinue)
-    # Resolution is a local file read, so check every launch and (re)install only on mismatch.
-    $desired = Resolve-FusionVersion
-    $current = if ($dbtPresent) { (dbt --version 2>&1) -join ' ' } else { '' }
-    if ($current -notmatch [regex]::Escape($desired)) {
-        Write-Host "[INFO] Installing dbt Fusion $desired..." -ForegroundColor Cyan
-        Install-Fusion -Version $desired -Update:$dbtPresent
+    if (-not (Get-Command dbt -ErrorAction SilentlyContinue)) {
+        Write-Host "[INFO] Installing dbt Fusion (latest)..." -ForegroundColor Cyan
+        Install-Fusion
         if ($env:PATH -notlike "*$installDir*") { $env:PATH = "$installDir;$env:PATH" }
+        Write-Host "  $((dbt --version 2>&1) | Select-Object -First 1)" -ForegroundColor Gray
     } else {
-        Write-Host "[OK] dbt Fusion $desired" -ForegroundColor Green
+        # Never auto-update an existing install: the VS Code dbt extension's
+        # LSP holds a lock on dbt.exe, so in-place updates fail awkwardly.
+        # The extension auto-updates Fusion itself; just surface staleness.
+        $currentLine = (dbt --version 2>&1) | Select-Object -First 1
+        $latest = Get-LatestFusionVersion
+        if ($latest -and "$currentLine" -notmatch [regex]::Escape($latest)) {
+            Write-Host "[WARNING] dbt Fusion is out of date (installed: $currentLine, latest: $latest)" -ForegroundColor Yellow
+            Write-Host "  The VS Code dbt extension updates it automatically, or close VS Code" -ForegroundColor Gray
+            Write-Host "  (releases the dbt.exe lock) and run: dbt system update" -ForegroundColor Gray
+        } else {
+            Write-Host "[OK] dbt Fusion up to date" -ForegroundColor Green
+        }
+        Write-Host "  $currentLine" -ForegroundColor Gray
     }
-    Write-Host "  $((dbt --version 2>&1) | Select-Object -First 1)" -ForegroundColor Gray
 } catch {
-    Write-Host "[WARNING] Could not install/update dbt Fusion: $_" -ForegroundColor Yellow
-    if ("$_" -match 'EPERM|rename|being used|denied|Access') {
-        # dbt.exe is locked - usually a running dbt LSP (the VS Code dbt extension).
-        Write-Host "  dbt.exe looks locked by a running process (often the VS Code dbt extension's LSP)." -ForegroundColor Gray
-        Write-Host "  Close VS Code, then run: Get-Process dbt -ErrorAction SilentlyContinue | Stop-Process -Force" -ForegroundColor Gray
-        Write-Host "  and re-open the terminal. Existing dbt keeps working in the meantime." -ForegroundColor Gray
-    } else {
-        Write-Host "  Install manually: irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex" -ForegroundColor Gray
-    }
+    Write-Host "[WARNING] Could not install dbt Fusion: $_" -ForegroundColor Yellow
+    Write-Host "  Install manually: irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex" -ForegroundColor Gray
     $actions += "Install dbt Fusion (see CONTRIBUTING.md)"
 }
 Write-Host ""
