@@ -57,9 +57,26 @@ WITH uptake_with_demographics AS (
         WHEN d.ETHNICITY_CATEGORY = 'White' THEN 5
         WHEN d.ETHNICITY_CATEGORY = 'Unknown' THEN 6
         END AS ethcat_order, 
-        d.ethnicity_subcategory,
-        d.ethnicity_granular,
-        d.main_language,
+        CASE
+        WHEN d.ETHNICITY_SUBCATEGORY in ('Not Recorded','Not stated','Not Stated','Recorded Not Known','Refused') THEN 'Unknown'
+        ELSE d.ETHNICITY_SUBCATEGORY END AS ethnicity_subcategory,
+        CASE
+        WHEN d.ethnicity_granular = 'MENA' THEN 'Middle East and North African'
+        WHEN d.ethnicity_granular in ('Muslim', 'Sikh') THEN 'Unknown'
+        WHEN d.ethnicity_granular in ('Recorded Not Known', 'Refused', 'Not stated', 'Not Recorded','Not Stated') THEN 'Unknown'
+        WHEN d.ethnicity_granular = 'Black - E.African Asian' THEN 'East African Asian'
+        WHEN d.ethnicity_granular = 'Indo-Caribbean' THEN 'Caribbean Asian'
+        WHEN d.ethnicity_granular = 'Cornish' THEN 'English'
+        WHEN d.ethnicity_granular in ('Gypsy or Irish Traveller','Gypsy','Irish Traveller') THEN 'Gypsy or Irish Traveller'
+        WHEN d.ethnicity_granular in ('Albanian/Serbian', 'Serbian') THEN 'Albanian or Serbian'
+        ELSE d.ethnicity_granular END AS ethnicity_granular,
+        CASE 
+        WHEN d.main_language = 'Pushto' THEN 'Pashto' 
+        WHEN d.main_language = 'Gujerati' THEN 'Gujarati'
+        WHEN d.main_language ILIKE '%sign language%' THEN 'Sign language'
+        WHEN d.main_language = 'Norwegian Bokmål' THEN 'Norwegian'
+        WHEN d.main_language = 'Not Recorded' THEN 'Unknown'
+        ELSE d.main_language END AS main_language,
         d.language_type,
         d.interpreter_needed,
         d.interpreter_type,

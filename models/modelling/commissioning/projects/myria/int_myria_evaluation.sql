@@ -243,6 +243,22 @@ select
     sum(match_weight) as n_weighted, -- controls: equals the treated N
     pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) as n_eff, -- Kish effective N
     -- NEL EMERGENCY STATS------------------------------------------------
+--ENCOUNTERS
+    -- weighted mean of the annualised rate
+    sum(match_weight * (ip_nel_emergency_encounters / (n_days/365.0))) / sum(match_weight)
+    as avg_ip_nel_emergency_encounters,
+    -- weighted SD (population form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(ip_nel_emergency_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_nel_emergency_encounters/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_ip_nel_emergency_encounters,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(ip_nel_emergency_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_nel_emergency_encounters/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_ip_nel_emergency_encounters,
+--COST
     -- weighted mean of the annualised rate
     sum(match_weight * (ip_nel_emergency_cost / (n_days/365.0))) / sum(match_weight)
     as avg_ip_nel_emergency_cost,
@@ -251,57 +267,166 @@ select
     sum(match_weight * pow(ip_nel_emergency_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (ip_nel_emergency_cost/(n_days/365.0))) / sum(match_weight), 2)
     ) as stddev_ip_nel_emergency_cost,
--- standard error using effective N, not the raw row count
+    -- standard error using effective N, not the raw row count
     sqrt(
     ( sum(match_weight * pow(ip_nel_emergency_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (ip_nel_emergency_cost/(n_days/365.0))) / sum(match_weight), 2) )
     / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
     ) as se_ip_nel_emergency_cost,
+--DURATION
+    -- weighted mean of the annualised rate
+    sum(match_weight * (ip_nel_emergency_duration / (n_days/365.0))) / sum(match_weight)
+    as avg_ip_nel_emergency_duration,
+    -- weighted SD (population form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(ip_nel_emergency_duration/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_nel_emergency_duration/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_ip_nel_emergency_duration,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(ip_nel_emergency_duration/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_nel_emergency_duration/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_ip_nel_emergency_duration,
 -- IP ELECTIVE STATS-----------------------------------------------
--- weighted mean of the annualised rate
+--ENCOUNTERS
+    -- weighted mean of the annualised rate
+    sum(match_weight * (ip_elective_encounters / (n_days/365.0))) / sum(match_weight)
+    as avg_ip_elective_encounters,
+    -- weighted SD (population form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(ip_elective_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_elective_encounters/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_ip_elective_encounters,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(ip_elective_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_elective_encounters/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_ip_elective_encounters,
+--COST
+    -- weighted mean of the annualised rate
     sum(match_weight * (ip_elective_cost / (n_days/365.0))) / sum(match_weight)
     as avg_ip_elective_cost,
--- weighted SD (population form via the sum-of-squares identity)
+    -- weighted SD (population form via the sum-of-squares identity)
     sqrt(
     sum(match_weight * pow(ip_elective_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (ip_elective_cost/(n_days/365.0))) / sum(match_weight), 2)
     ) as stddev_ip_elective_cost,
--- standard error using effective N, not the raw row count
+    -- standard error using effective N, not the raw row count
     sqrt(
     ( sum(match_weight * pow(ip_elective_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (ip_elective_cost/(n_days/365.0))) / sum(match_weight), 2) )
     / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
     ) as se_ip_elective_cost,
------AE STATS ------------------------------------------------------------------------
--- weighted mean of the annualised rate
+--DURATION
+    -- weighted mean of the annualised rate
+    sum(match_weight * (ip_elective_duration / (n_days/365.0))) / sum(match_weight)
+    as avg_ip_elective_duration,
+    -- weighted SD (population form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(ip_elective_duration/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_elective_duration/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_ip_elective_duration,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(ip_elective_duration/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ip_elective_duration/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_ip_elective_duration,
+-----AE STATS
+--ENCOUNTERS
+    -- weighted mean of the annualised rate
+    sum(match_weight * (ae_encounters / (n_days/365.0))) / sum(match_weight)
+    as avg_ae_encounters,
+    -- weighted SD (paeulation form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(ae_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ae_encounters/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_ae_encounters,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(ae_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (ae_encounters/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_ae_encounters,
+--COST
+    -- weighted mean of the annualised rate
     sum(match_weight * (ae_cost / (n_days/365.0))) / sum(match_weight)
     as avg_ae_cost,
--- weighted SD (population form via the sum-of-squares identity)
+    -- weighted SD (paeulation form via the sum-of-squares identity)
     sqrt(
     sum(match_weight * pow(ae_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (ae_cost/(n_days/365.0))) / sum(match_weight), 2)
     ) as stddev_ae_cost,
--- standard error using effective N, not the raw row count
+    -- standard error using effective N, not the raw row count
     sqrt(
     ( sum(match_weight * pow(ae_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (ae_cost/(n_days/365.0))) / sum(match_weight), 2) )
     / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
     ) as se_ae_cost,
---- OP STATS---------------------------------------------------------------
--- weighted mean of the annualised rate
+--- OP STATS
+--ENCOUNTERS
+    -- weighted mean of the annualised rate
+    sum(match_weight * (op_encounters / (n_days/365.0))) / sum(match_weight)
+    as avg_op_encounters,
+    -- weighted SD (population form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(op_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (op_encounters/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_op_encounters,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(op_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (op_encounters/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_op_encounters,
+--COST
+    -- weighted mean of the annualised rate
     sum(match_weight * (op_cost / (n_days/365.0))) / sum(match_weight)
     as avg_op_cost,
--- weighted SD (population form via the sum-of-squares identity)
+    -- weighted SD (population form via the sum-of-squares identity)
     sqrt(
     sum(match_weight * pow(op_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (op_cost/(n_days/365.0))) / sum(match_weight), 2)
     ) as stddev_op_cost,
--- standard error using effective N, not the raw row count
+    -- standard error using effective N, not the raw row count
     sqrt(
     ( sum(match_weight * pow(op_cost/(n_days/365.0), 2)) / sum(match_weight)
     - pow(sum(match_weight * (op_cost/(n_days/365.0))) / sum(match_weight), 2) )
     / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
-    ) as se_op_cost
+    ) as se_op_cost,
+--- GP STATS
+ --ENCOUNTERS
+    -- weighted mean of the annualised rate
+    sum(match_weight * (gp_encounters / (n_days/365.0))) / sum(match_weight)
+    as avg_gp_encounters,
+    -- weighted SD (pgpulation form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(gp_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (gp_encounters/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_gp_encounters,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(gp_encounters/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (gp_encounters/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_gp_encounters,
+--COST
+    -- weighted mean of the annualised rate
+    sum(match_weight * (gp_cost / (n_days/365.0))) / sum(match_weight)
+    as avg_gp_cost,
+    -- weighted SD (pgpulation form via the sum-of-squares identity)
+    sqrt(
+    sum(match_weight * pow(gp_cost/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (gp_cost/(n_days/365.0))) / sum(match_weight), 2)
+    ) as stddev_gp_cost,
+    -- standard error using effective N, not the raw row count
+    sqrt(
+    ( sum(match_weight * pow(gp_cost/(n_days/365.0), 2)) / sum(match_weight)
+    - pow(sum(match_weight * (gp_cost/(n_days/365.0))) / sum(match_weight), 2) )
+    / ( pow(sum(match_weight), 2) / sum(pow(match_weight, 2)) )
+    ) as se_gp_cost
    
 from member_annual_costs as m 
  where n_days <> 0
