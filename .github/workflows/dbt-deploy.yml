@@ -57,6 +57,7 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: read
+      issues: write  # failure issues (report_dbt_failures.py)
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
@@ -120,6 +121,20 @@ jobs:
           dbt-command: ${{ steps.build.outputs.dbt_command }}
           target: prod
           build-outcome: ${{ steps.build.outcome }}
+
+      # Failure issue naming the broken nodes (-> Teams via the
+      # +label:"dbt-run-failure" issues subscription). Deploy issues do NOT
+      # close on the next green deploy - unrelated deploys skip broken nodes
+      # under the publish-always baseline - only when every tracked node
+      # builds green again or leaves the project.
+      - name: Report or resolve failure issue
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DBT_CONTEXT: deploy
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 .github/scripts/report_dbt_failures.py
 
       - name: Cleanup credentials
         if: always()
