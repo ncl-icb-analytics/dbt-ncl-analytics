@@ -24,7 +24,9 @@ SELECT SK_PATIENT_ID
 FROM {{ref('dim_person_demographics_basic')}}
 )
 
-SELECT SK_PATIENT_ID
+-- Cast to match PARTNER_POLICY's signature (PERSON_SIGNATURE NUMBER(38,0));
+-- dim_person_demographics_basic stores sk_patient_id as TEXT.
+SELECT SK_PATIENT_ID::NUMBER(38,0) AS SK_PATIENT_ID
 ,'PARTNER__' || UPPER(REPLACE(BOROUGH, ' ', '_')) AS PARTNER_ROLE
 FROM REGISTERED_OR_RESIDENT
 WHERE BOROUGH NOT IN ('Out of area', 'Unknown')

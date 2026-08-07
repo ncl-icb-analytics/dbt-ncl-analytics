@@ -142,19 +142,21 @@ models:
       +materialized: table
       +database: "PUBLISHED_REPORTING__PARTNER"
       +tags: ["partner"]
-      +row_access_policy: >-
-        {%- if target.name in ['prod', 'snowflake-prod'] -%}
-        PUBLISHED_REPORTING__PARTNER.SECURITY.PARTNER_POLICY on (sk_patient_id)
-        {%- else -%}
-        DEV__PUBLISHED_REPORTING__PARTNER.SECURITY.PARTNER_POLICY on (sk_patient_id)
-        {%- endif -%}
-         
       +post-hook:
         - "{{ add_model_comment() }}"
         - "{{ log_row_count() }}"
       published_data:
         +database: "PUBLISHED_REPORTING__PARTNER"
         +schema: "PUBLISHED_DATA"
+        # Row access policy on published data only. NOT on security/: the policy
+        # body queries PARTNER_MAPPING, so attaching it to the mapping table
+        # would be self-referential.
+        +row_access_policy: >-
+          {%- if target.name in ['prod', 'snowflake-prod'] -%}
+          PUBLISHED_REPORTING__PARTNER.SECURITY.PARTNER_POLICY on (sk_patient_id)
+          {%- else -%}
+          DEV__PUBLISHED_REPORTING__PARTNER.SECURITY.PARTNER_POLICY on (sk_patient_id)
+          {%- endif -%}
         olids:
           +meta:
             custom_message: "Includes OLIDS data already filtered via REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED (National Data Opt-Out and Type 1 opt-outs excluded). Safe to use for secondary purposes."
