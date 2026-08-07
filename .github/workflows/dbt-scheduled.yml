@@ -52,6 +52,8 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: read
+    outputs:
+      run_type: ${{ steps.plan.outputs.run_type }}
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
@@ -160,3 +162,60 @@ jobs:
       - name: Cleanup credentials
         if: always()
         run: rm -f ~/.snowflake/rsa_key.p8
+
+  # Failure notifications ride the GitHub -> Teams app via issues (no webhooks;
+  # NHS-tenant Teams blocks them). One open issue per run type, commented on
+  # repeat failures, closed on recovery. SDL intraday is excluded by design.
+  # Teams channel setup: @github subscribe wnl-icb-analytics/dbt-analytics issues label:"scheduled-run-failure"
+  notify-failure:
+    name: Open failure issue
+    runs-on: ubuntu-latest
+    needs: run
+    if: always() && needs.run.result == 'failure' && !contains(fromJSON('["sdl-intraday", "skip"]'), needs.run.outputs.run_type)
+    permissions:
+      issues: write
+    steps:
+      - name: Create or comment on failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_TYPE: ${{ needs.run.outputs.run_type }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create scheduled-run-failure --repo "$GITHUB_REPOSITORY" \
+            --color B60205 --description "Scheduled dbt prod run failed" --force
+          body="[$RUN_TYPE run failed]($RUN_URL) at $(date -u '+%Y-%m-%d %H:%M UTC')."
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scheduled-run-failure \
+            --state open --search "in:title \"$RUN_TYPE\"" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "Scheduled dbt run failing: $RUN_TYPE" \
+              --label scheduled-run-failure \
+              --body "$body
+
+          Auto-closes on the next successful $RUN_TYPE run."
+          fi
+
+  close-failure-issue:
+    name: Close failure issue on recovery
+    runs-on: ubuntu-latest
+    needs: run
+    if: needs.run.result == 'success' && !contains(fromJSON('["sdl-intraday", "skip"]'), needs.run.outputs.run_type)
+    permissions:
+      issues: write
+    steps:
+      - name: Close matching failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_TYPE: ${{ needs.run.outputs.run_type }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label scheduled-run-failure \
+            --state open --search "in:title \"$RUN_TYPE\"" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue close "$existing" --repo "$GITHUB_REPOSITORY" \
+              --comment "Recovered: [successful $RUN_TYPE run]($RUN_URL)."
+          else
+            echo "No open failure issue for $RUN_TYPE"
+          fi
