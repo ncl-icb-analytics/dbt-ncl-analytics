@@ -7,10 +7,14 @@
 # successful deploy (fetched from the DBT_ARTIFACTS stage). Falls back to a
 # full build when no state manifest exists or on manual dispatch.
 #
-# On success, publishes target/manifest.json + run_results.json + meta.json
-# back to the stage (see .github/actions/publish-dbt-artifacts). Publishing
-# only on success is load-bearing: a manifest from a failed deploy would make
-# the next state:modified run skip the failed models.
+# Publishes target/manifest.json + run_results.json + meta.json back to the
+# stage on every attempt, success or not (see
+# .github/actions/publish-dbt-artifacts). Deliberate consequence: a node that
+# failed is NOT retried by later unrelated deploys - the deploy that broke it
+# goes red once (blaming the right PR), everyone after stays green. The node
+# redeploys when its fix merges (the fix makes it state:modified again);
+# transient failures on scheduled-lineage models are retried by the nightly
+# and weekly scheduled builds.
 #
 # Prerequisites:
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
@@ -107,12 +111,15 @@ jobs:
           echo "dbt_command=dbt $args" >> "$GITHUB_OUTPUT"
           dbt $args --profiles-dir .
 
+      # Publish even when the build failed (not when cancelled - a cancelled
+      # run's manifest would mark half-built models as deployed).
       - name: Publish dbt artifacts
-        if: success()
+        if: ${{ !cancelled() }}
         uses: ./.github/actions/publish-dbt-artifacts
         with:
           dbt-command: ${{ steps.build.outputs.dbt_command }}
           target: prod
+          build-outcome: ${{ steps.build.outcome }}
 
       - name: Cleanup credentials
         if: always()

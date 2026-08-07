@@ -22,7 +22,10 @@ if not re.match(r"^[A-Za-z0-9_.]+$", STAGE) or not re.match(r"^[A-Za-z0-9_-]+$",
 manifest = "target/manifest.json"
 run_results = "target/run_results.json"
 if not os.path.exists(manifest):
-    sys.exit(f"{manifest} not found - nothing to publish")
+    # Build died before parse (compile/setup error) - keep the previous
+    # baseline rather than failing the publish step on an already-red run.
+    print(f"{manifest} not found - skipping publish")
+    sys.exit(0)
 
 fusion_version = None
 if os.path.exists(".fusion-version"):
@@ -43,6 +46,7 @@ meta = {
     "dbt_command": os.environ.get("DBT_COMMAND"),
     "target": TARGET,
     "fusion_version": fusion_version,
+    "build_status": os.environ.get("DBT_BUILD_OUTCOME", "success"),
 }
 with open("target/meta.json", "w") as f:
     json.dump(meta, f, indent=2)
