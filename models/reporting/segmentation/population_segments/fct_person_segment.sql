@@ -26,11 +26,10 @@
 -- plus NAFLD (int_segmentation_ltc_count). The complex adults cohort keeps
 -- its own list without NAFLD.
 --
--- Known artefact of the circulated definition: 1+ LTC is also a children
--- with complexity criterion, so every child with an LTC promotes to
--- segment 3 and segment 2 is currently empty. Implemented as specced and
--- flagged to the requester; if segment 3's "defined LTCs" turns out to be
--- a narrower list, only int_segmentation_children_complexity changes.
+-- The children with complexity LTC criterion is 2+ LTCs (not the circulated
+-- 1+), so a single LTC reads as health needs (segment 2) rather than
+-- complexity; with 1+ every LTC child promoted to segment 3 and segment 2
+-- was unreachable.
 --
 -- The underlying cohorts are not mutually exclusive (a complex adult may
 -- also be on the palliative care register); each is exposed as its own
@@ -64,7 +63,7 @@ WITH segments AS (
         l.ltc_list,
         ca.complexity_criteria_count AS adult_complexity_criteria_count,
         cc.complexity_criteria_count AS child_complexity_criteria_count,
-        cc.has_ltc AS child_has_ltc,
+        cc.has_2plus_ltcs AS child_has_2plus_ltcs,
         cc.has_complexity_diagnosis AS child_has_complexity_diagnosis,
         cc.has_5plus_paediatric_op_appointments
             AS child_has_5plus_paediatric_op_appointments,

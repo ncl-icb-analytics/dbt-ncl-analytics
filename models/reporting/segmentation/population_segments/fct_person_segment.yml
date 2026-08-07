@@ -20,10 +20,9 @@ models:
       mutually exclusive, so each is exposed as its own boolean alongside the
       exclusive segment assignment.
 
-      Known artefact of the circulated definition: 1+ LTC is also a children
-      with complexity criterion, so every child with an LTC promotes to
-      segment 3 and segment 2 is currently empty. Implemented as specced and
-      flagged to the requester.
+      The children with complexity LTC criterion is 2+ LTCs (not the
+      circulated 1+), so a single LTC reads as health needs (segment 2)
+      rather than complexity; with 1+, segment 2 was unreachable.
     data_tests:
       - dbt_utils.at_least_one:
           arguments:
@@ -97,8 +96,8 @@ models:
           (null if not in the cohort)
       - name: child_complexity_criteria_count
         description: Children complexity criteria met, 0-6 (null for adults)
-      - name: child_has_ltc
-        description: Children criterion - 1+ qualifying LTC (null for adults)
+      - name: child_has_2plus_ltcs
+        description: Children criterion - 2+ qualifying LTCs (null for adults)
       - name: child_has_complexity_diagnosis
         description: Children criterion - 1+ coded complexity diagnosis.
           Always FALSE until the NWL code list populates the

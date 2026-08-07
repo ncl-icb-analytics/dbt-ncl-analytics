@@ -13,7 +13,9 @@
 -- children with complexity segment.
 --
 -- Criteria (any qualifies):
---   1+ qualifying LTC (int_segmentation_ltc_count)
+--   2+ qualifying LTCs (int_segmentation_ltc_count; 2+ rather than the
+--       circulated 1+ so a single LTC reads as health needs (segment 2)
+--       rather than complexity, keeping segment 2 reachable)
 --   1+ coded complexity diagnosis (children_complexity_diagnosis_codes seed,
 --       ever recorded; seed ships empty pending the NWL code list)
 --   5+ attended paediatric outpatient appointments in 12 months
@@ -121,7 +123,7 @@ children AS (
         d.age,
 
         ZEROIFNULL(l.ltc_count) AS ltc_count,
-        ZEROIFNULL(l.ltc_count) >= 1 AS has_ltc,
+        ZEROIFNULL(l.ltc_count) >= 2 AS has_2plus_ltcs,
 
         ZEROIFNULL(dx.complexity_diagnosis_codes) AS complexity_diagnosis_codes,
         dx.latest_complexity_diagnosis_date,
@@ -162,7 +164,7 @@ children AS (
 SELECT
     *,
     (
-        has_ltc
+        has_2plus_ltcs
         OR has_complexity_diagnosis
         OR has_5plus_paediatric_op_appointments
         OR has_2plus_outpatient_specialties
@@ -170,7 +172,7 @@ SELECT
         OR has_7plus_community_contacts
     ) AS meets_any_criterion,
     (
-        has_ltc::INT
+        has_2plus_ltcs::INT
         + has_complexity_diagnosis::INT
         + has_5plus_paediatric_op_appointments::INT
         + has_2plus_outpatient_specialties::INT

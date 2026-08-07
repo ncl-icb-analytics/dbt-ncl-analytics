@@ -8,7 +8,9 @@ models:
 
       All under-18s are kept with each criterion exposed as a count and flag;
       meets_any_criterion drives the children with complexity segment in
-      fct_person_segment. Criteria (any qualifies): 1+ qualifying LTC; 1+
+      fct_person_segment. Criteria (any qualifies): 2+ qualifying LTCs (2+
+      rather than the circulated 1+ so a single LTC reads as health needs,
+      segment 2, rather than complexity); 1+
       coded complexity diagnosis (NWL code list, seed ships empty until
       received); 5+ attended paediatric outpatient appointments in 12 months;
       attended outpatient care across 2+ treatment-function specialties in 12
@@ -42,8 +44,8 @@ models:
         description: Current age (< 18 for all rows)
       - name: ltc_count
         description: Count of qualifying LTC registers (int_segmentation_ltc_count)
-      - name: has_ltc
-        description: Criterion - on at least one qualifying LTC register
+      - name: has_2plus_ltcs
+        description: Criterion - on 2+ qualifying LTC registers
       - name: complexity_diagnosis_codes
         description: Distinct complexity diagnosis codes ever recorded
           (children_complexity_diagnosis_codes seed)
