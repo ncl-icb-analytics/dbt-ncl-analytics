@@ -27,10 +27,15 @@ if not os.path.exists(manifest):
     print(f"{manifest} not found - skipping publish")
     sys.exit(0)
 
+# Record the engine that produced the artifacts (unpinned installs = latest).
 fusion_version = None
-if os.path.exists(".fusion-version"):
-    with open(".fusion-version") as f:
-        fusion_version = f.read().strip()
+try:
+    import subprocess
+
+    out = subprocess.run(["dbt", "--version"], capture_output=True, text=True, timeout=30).stdout
+    fusion_version = out.strip().splitlines()[0] if out.strip() else None
+except Exception:
+    pass
 
 meta = {
     "generated_at": datetime.now(timezone.utc).isoformat(),

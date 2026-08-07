@@ -71,12 +71,13 @@ jobs:
 
       - name: Install dbt Fusion
         run: |
-          # Pinned in .fusion-version - the same engine version produced the
-          # state manifest, so state:modified comparisons are apples-to-apples.
-          ver=2.0.0-preview.175
-          [ -f .fusion-version ] && read -r ver < .fusion-version
-          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --version "$ver" --target x86_64-unknown-linux-gnu --update
+          # Latest Fusion, unpinned - matches the VS Code extension, which
+          # auto-updates to latest. If an engine upgrade changes manifest
+          # internals, state:modified may over-select once (extra rebuilds,
+          # never missed ones) and the new manifest resets the baseline.
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --target x86_64-unknown-linux-gnu --update
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/dbt" --version
 
       - uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
         with:
