@@ -117,7 +117,8 @@ models:
           appointments in 12 months (null for adults)
       - name: child_has_2plus_outpatient_specialties
         description: Children criterion - attended outpatient care across 2+
-          treatment-function specialties in 12 months (null for adults)
+          main specialties in 12 months, excluding trauma & orthopaedics, ENT,
+          ophthalmology and A&E, per NWL (null for adults)
       - name: child_has_mh_inpatient_stay
         description: Children criterion - 1+ mental health inpatient stay in
           12 months, MHSDS spells by start date (null for adults)

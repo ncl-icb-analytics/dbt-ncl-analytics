@@ -13,8 +13,9 @@ models:
       segment 2, rather than complexity); 1+
       coded complexity diagnosis (the NWL CLDCHN code list, ever recorded);
       5+ attended paediatric outpatient appointments in 12 months;
-      attended outpatient care across 2+ treatment-function specialties in 12
-      months; 1+ mental health inpatient stay in 12 months (MHSDS spells by
+      attended outpatient care across 2+ main specialties in 12 months,
+      excluding trauma & orthopaedics, ENT, ophthalmology and A&E (aligned
+      to NWL); 1+ mental health inpatient stay in 12 months (MHSDS spells by
       start date); 7+ attended community service contacts in 12 months
       (CSDS).
 
@@ -60,8 +61,9 @@ models:
       - name: has_5plus_paediatric_op_appointments
         description: Criterion - paediatric_op_appointments_12mo >= 5
       - name: outpatient_specialties_12mo
-        description: Distinct treatment-function specialties with an attended
-          outpatient appointment in the last 12 months (any specialty)
+        description: Distinct main specialties with an attended outpatient
+          appointment in the last 12 months, excluding trauma & orthopaedics
+          (110), ENT (120), ophthalmology (130) and A&E (180)
       - name: has_2plus_outpatient_specialties
         description: Criterion - outpatient_specialties_12mo >= 2
       - name: mh_inpatient_stays_12mo

@@ -20,8 +20,9 @@
 --       ever recorded; the NWL CLDCHN code list, per the spec)
 --   5+ attended paediatric outpatient appointments in 12 months
 --       (paediatric_treatment_function_codes seed)
---   attended outpatient care across 2+ treatment-function specialties
---       in 12 months (any specialty, fct_person_sus_op_recent)
+--   attended outpatient care across 2+ main specialties in 12 months,
+--       excluding trauma & orthopaedics, ENT, ophthalmology and A&E
+--       (aligned to NWL, see op_specialties below)
 --   1+ mental health inpatient stay in 12 months (MHSDS spells counted by
 --       start date; lifetime count also exposed)
 --   7+ attended community service contacts in 12 months (CSDS)
@@ -65,6 +66,33 @@ paediatric_op AS (
     WHERE
         op.appointment_attended_or_dna IN ('5', '6')
         AND op.start_date BETWEEN DATEADD(MONTH, -12, m.max_date) AND m.max_date
+        AND op.sk_patient_id IS NOT NULL
+        AND op.sk_patient_id != '1'
+    GROUP BY op.sk_patient_id
+),
+
+-- Outpatient specialty breadth, aligned to NWL: distinct main specialties
+-- rather than treatment functions, excluding trauma & orthopaedics (110),
+-- ENT (120), ophthalmology (130) and A&E (180). Those four are the
+-- high-volume, low-complexity childhood attendances (fractures, grommets,
+-- squints) and are 20% of children's outpatient activity here.
+--
+-- Main specialty loses paediatric sub-specialty granularity, which the
+-- treatment function coding kept. That is accepted as the cost of matching
+-- the previously clinically agreed NWL cohort; the paediatric criterion
+-- above still counts paediatric treatment functions, so sub-specialty
+-- activity is not lost from the cohort as a whole. On this population the
+-- two codings differ by under 1% once the exclusions are applied.
+op_specialties AS (
+    SELECT
+        op.sk_patient_id,
+        COUNT(DISTINCT op.main_specialty_code) AS outpatient_specialties_12mo
+    FROM {{ ref('int_sus_op_appointment') }} AS op
+    CROSS JOIN op_max_date AS m
+    WHERE
+        op.appointment_attended_or_dna IN ('5', '6')
+        AND op.start_date BETWEEN DATEADD(MONTH, -12, m.max_date) AND m.max_date
+        AND op.main_specialty_code NOT IN ('110', '120', '130', '180')
         AND op.sk_patient_id IS NOT NULL
         AND op.sk_patient_id != '1'
     GROUP BY op.sk_patient_id
@@ -134,8 +162,10 @@ children AS (
         ZEROIFNULL(op.paediatric_op_appointments_12mo) >= 5
             AS has_5plus_paediatric_op_appointments,
 
-        ZEROIFNULL(spec.op_spec_12mo) AS outpatient_specialties_12mo,
-        ZEROIFNULL(spec.op_spec_12mo) >= 2 AS has_2plus_outpatient_specialties,
+        ZEROIFNULL(spec.outpatient_specialties_12mo)
+            AS outpatient_specialties_12mo,
+        ZEROIFNULL(spec.outpatient_specialties_12mo) >= 2
+            AS has_2plus_outpatient_specialties,
 
         ZEROIFNULL(mh.mh_inpatient_stays_12mo) AS mh_inpatient_stays_12mo,
         ZEROIFNULL(mh.mh_inpatient_stays_total) AS mh_inpatient_stays_total,
@@ -152,7 +182,7 @@ children AS (
         ON d.person_id = dx.person_id
     LEFT JOIN paediatric_op AS op
         ON d.sk_patient_id = op.sk_patient_id
-    LEFT JOIN {{ ref('fct_person_sus_op_recent') }} AS spec
+    LEFT JOIN op_specialties AS spec
         ON d.sk_patient_id = spec.sk_patient_id
     LEFT JOIN mh_spells AS mh
         ON d.sk_patient_id = mh.sk_patient_id
