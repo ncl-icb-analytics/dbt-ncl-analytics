@@ -17,7 +17,7 @@
 --       circulated 1+ so a single LTC reads as health needs (segment 2)
 --       rather than complexity, keeping segment 2 reachable)
 --   1+ coded complexity diagnosis (children_complexity_diagnosis_codes seed,
---       ever recorded; seed ships empty pending the NWL code list)
+--       ever recorded; the NWL CLDCHN code list, per the spec)
 --   5+ attended paediatric outpatient appointments in 12 months
 --       (paediatric_treatment_function_codes seed)
 --   attended outpatient care across 2+ treatment-function specialties

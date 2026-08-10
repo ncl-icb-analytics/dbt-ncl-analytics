@@ -11,8 +11,8 @@ models:
       fct_person_segment. Criteria (any qualifies): 2+ qualifying LTCs (2+
       rather than the circulated 1+ so a single LTC reads as health needs,
       segment 2, rather than complexity); 1+
-      coded complexity diagnosis (NWL code list, seed ships empty until
-      received); 5+ attended paediatric outpatient appointments in 12 months;
+      coded complexity diagnosis (the NWL CLDCHN code list, ever recorded);
+      5+ attended paediatric outpatient appointments in 12 months;
       attended outpatient care across 2+ treatment-function specialties in 12
       months; 1+ mental health inpatient stay in 12 months (MHSDS spells by
       start date); 7+ attended community service contacts in 12 months
@@ -52,8 +52,8 @@ models:
       - name: latest_complexity_diagnosis_date
         description: Date of the most recent complexity diagnosis record
       - name: has_complexity_diagnosis
-        description: Criterion - at least one complexity diagnosis ever recorded.
-          Always FALSE until the NWL code list populates the seed.
+        description: Criterion - at least one complexity diagnosis ever recorded,
+          against the NWL CLDCHN code list.
       - name: paediatric_op_appointments_12mo
         description: Attended outpatient appointments under a paediatric
           treatment function in the last 12 months

@@ -99,9 +99,9 @@ models:
       - name: child_has_2plus_ltcs
         description: Children criterion - 2+ qualifying LTCs (null for adults)
       - name: child_has_complexity_diagnosis
-        description: Children criterion - 1+ coded complexity diagnosis.
-          Always FALSE until the NWL code list populates the
-          children_complexity_diagnosis_codes seed (null for adults).
+        description: Children criterion - 1+ coded complexity diagnosis, against
+          the NWL CLDCHN list in the children_complexity_diagnosis_codes seed
+          (null for adults).
       - name: child_has_5plus_paediatric_op_appointments
         description: Children criterion - 5+ attended paediatric outpatient
           appointments in 12 months (null for adults)
