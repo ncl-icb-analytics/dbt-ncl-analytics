@@ -26,10 +26,9 @@
 -- plus NAFLD (int_segmentation_ltc_count). The complex adults cohort keeps
 -- its own list without NAFLD.
 --
--- The children with complexity LTC criterion is 2+ LTCs (not the circulated
--- 1+), so a single LTC reads as health needs (segment 2) rather than
--- complexity; with 1+ every LTC child promoted to segment 3 and segment 2
--- was unreachable.
+-- The children with complexity LTC criterion is 2+ LTCs, so a single LTC
+-- reads as health needs (segment 2) rather than complexity. See
+-- int_segmentation_children_complexity for the rationale.
 --
 -- The underlying cohorts are not mutually exclusive (a complex adult may
 -- also be on the palliative care register); each is exposed as its own

@@ -1,28 +1,36 @@
 models:
   - name: fct_person_segment
-    description: >
-      Population segmentation for the ICB Strategy. One row per person in
-      dim_person_demographics — everyone with registration history, including
-      people who have left or died. Filter is_active = TRUE for the currently
-      registered population.
+    description: |
+      Population segmentation: every person assigned to exactly one of eight
+      segments.
 
-      Every person is assigned to exactly one segment by hierarchy (highest
-      wins): 8 End of Life (palliative care register, any age); 7 Adults with
-      Complexity (>= 18, fct_person_complex_adults); 6 Adults with Multiple
-      LTCs (>= 18, 2+ qualifying LTCs); 5 Adults with a Single LTC; 4 Mostly
-      Healthy Adults; 3 Children with Complexity (< 18,
-      int_segmentation_children_complexity); 2 Children with Health Needs
-      (< 18, 1+ qualifying LTC); 1 Mostly Healthy Children.
+      Grain: one row per person, keyed on person_id.
 
-      Qualifying LTCs for segments 6/5/2 are the 16 complex adults conditions
-      plus NAFLD (int_segmentation_ltc_count); the complex adults cohort
-      keeps its own list without NAFLD. The underlying cohorts are not
-      mutually exclusive, so each is exposed as its own boolean alongside the
-      exclusive segment assignment.
+      Population: everyone in dim_person_demographics, i.e. anyone with NCL GP
+      registration history, including people who have since left or died.
+      Filter is_active = TRUE for the currently registered population. People
+      never registered in NCL are out of scope, even where commissioning
+      activity exists for them.
 
-      The children with complexity LTC criterion is 2+ LTCs (not the
-      circulated 1+), so a single LTC reads as health needs (segment 2)
-      rather than complexity; with 1+, segment 2 was unreachable.
+      Segments, assigned by hierarchy (highest wins):
+
+      - 8 End of Life - on the palliative care register, any age
+      - 7 Adults with Complexity - 18+, fct_person_complex_adults
+      - 6 Adults with Multiple LTCs - 18+, 2+ qualifying LTCs
+      - 5 Adults with a Single LTC - 18+, exactly 1 qualifying LTC
+      - 4 Mostly Healthy Adults - 18+, none of the above
+      - 3 Children with Complexity - under 18, any criterion in
+        int_segmentation_children_complexity
+      - 2 Children with Health Needs - under 18, 1+ qualifying LTC
+      - 1 Mostly Healthy Children - under 18, none of the above
+
+      Qualifying LTCs for segments 6, 5, 3 and 2 are the 16 complex adults
+      conditions plus NAFLD (int_segmentation_ltc_count); the complex adults
+      cohort keeps its own list without NAFLD. Segment 3 requires 2+ LTCs, so
+      a single LTC reads as health needs.
+
+      The source cohorts overlap, so each is also exposed as its own boolean
+      alongside the exclusive segment assignment.
     data_tests:
       - dbt_utils.at_least_one:
           arguments:
