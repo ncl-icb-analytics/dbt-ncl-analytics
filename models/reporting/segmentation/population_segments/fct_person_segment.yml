@@ -71,6 +71,16 @@ models:
         description: Person is recorded as deceased
       - name: age
         description: Current age (age at death for deceased persons)
+      - name: gender
+        description: Gender
+      - name: practice_code
+        description: Current or latest practice code
+      - name: practice_name
+        description: Current or latest practice name
+      - name: borough_registered
+        description: Practice borough where patient is registered
+      - name: neighbourhood_registered
+        description: Practice neighbourhood classification
       - name: is_end_of_life
         description: Cohort flag - on the QOF palliative care register (segment 8)
       - name: is_complex_adult
