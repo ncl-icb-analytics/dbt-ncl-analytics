@@ -95,18 +95,27 @@ assigned AS (
             WHEN is_complex_child THEN 3
             WHEN has_child_health_needs THEN 2
             ELSE 1
-        END AS segment_number,
-        CASE
-            WHEN is_end_of_life THEN 'End of Life'
-            WHEN age >= 18 AND is_complex_adult THEN 'Adults with Complexity'
-            WHEN has_multiple_ltcs THEN 'Adults with Multiple LTCs'
-            WHEN has_single_ltc THEN 'Adults with a Single LTC'
-            WHEN age >= 18 THEN 'Mostly Healthy Adults'
-            WHEN is_complex_child THEN 'Children with Complexity'
-            WHEN has_child_health_needs THEN 'Children with Health Needs'
-            ELSE 'Mostly Healthy Children'
-        END AS segment_name
+        END AS segment_number
     FROM segments
+),
+
+-- segment_name is derived from segment_number rather than re-evaluating the
+-- hierarchy a second time, so the number and its label cannot drift apart
+-- if the conditions are ever edited.
+named AS (
+    SELECT
+        *,
+        CASE segment_number
+            WHEN 8 THEN 'End of Life'
+            WHEN 7 THEN 'Adults with Complexity'
+            WHEN 6 THEN 'Adults with Multiple LTCs'
+            WHEN 5 THEN 'Adults with a Single LTC'
+            WHEN 4 THEN 'Mostly Healthy Adults'
+            WHEN 3 THEN 'Children with Complexity'
+            WHEN 2 THEN 'Children with Health Needs'
+            WHEN 1 THEN 'Mostly Healthy Children'
+        END AS segment_name
+    FROM assigned
 )
 
 -- Columns listed explicitly so the segment assignment leads the table
@@ -143,4 +152,4 @@ SELECT
     child_has_2plus_outpatient_specialties,
     child_has_mh_inpatient_stay,
     child_has_7plus_community_contacts
-FROM assigned
+FROM named

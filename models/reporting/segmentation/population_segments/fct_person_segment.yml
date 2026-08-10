@@ -40,6 +40,24 @@ models:
           name: child_segments_are_children
           arguments:
             expression: "segment_number NOT IN (1, 2, 3) OR age < 18"
+      # Each segment_number publishes its agreed name. segment_name is derived
+      # from segment_number in the model, so this asserts the published
+      # contract rather than guarding drift: renaming a segment fails here and
+      # has to be an acknowledged breaking change for consumers.
+      - dbt_utils.expression_is_true:
+          name: segment_name_matches_segment_number
+          arguments:
+            expression: >-
+              segment_name = CASE segment_number
+              WHEN 8 THEN 'End of Life'
+              WHEN 7 THEN 'Adults with Complexity'
+              WHEN 6 THEN 'Adults with Multiple LTCs'
+              WHEN 5 THEN 'Adults with a Single LTC'
+              WHEN 4 THEN 'Mostly Healthy Adults'
+              WHEN 3 THEN 'Children with Complexity'
+              WHEN 2 THEN 'Children with Health Needs'
+              WHEN 1 THEN 'Mostly Healthy Children'
+              END
     config:
       meta:
         owner:
