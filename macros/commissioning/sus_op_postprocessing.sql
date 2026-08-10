@@ -80,35 +80,30 @@
 {% macro sus_op_contract_type(alias='') %}
     case
         /* Legacy procedure gives contract type 6 precedence over every other match. */
-        when {{ alias }}rule_dup_icht or {{ alias }}rule_duplicate_lnwht then '|6'
+        when {{ alias }}rule_dup_icht or {{ alias }}rule_duplicate_lnwht then '6'
         /* Legacy contract type 7 is normalised to 2 after rule evaluation. */
-        when {{ alias }}rule_private then '|2'
-        else coalesce(
-            nullif(concat(
-                iff({{ alias }}rule_aecu_clinic_lnwht, '|1', ''),
-                iff({{ alias }}rule_aecu_wa_lnwht, '|1', ''),
-                iff({{ alias }}rule_card_brent, '|4', ''),
-                iff({{ alias }}rule_card_icht, '|4', ''),
-                iff({{ alias }}rule_derm_cw, '|4', ''),
-                iff({{ alias }}rule_ecg_cw, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_gum, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_gyn_cw, '|4', ''),
-                iff({{ alias }}rule_in_health, '|5', ''),
-                iff({{ alias }}rule_mh_london_providers, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_mh_psych, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_nc_nwl1, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_nc_nwl2, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_nc_nwl3, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_nc_nwl4, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_nc_nwl5, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_nc_nwl6, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_nc_nwl7, iff({{ alias }}has_sla, '|1', '|2'), ''),
-                iff({{ alias }}rule_opth_brent, '|4', ''),
-                iff({{ alias }}rule_sleepclinic_wmuh, '|1', ''),
-                iff({{ alias }}rule_sleepstudy_wmuh, '|1', ''),
-                iff({{ alias }}rule_soaec_wmuh, '|1', '')
-            ), ''),
-            iff({{ alias }}has_sla, '1', '2')
-        )
+        when {{ alias }}rule_private then '2'
+        /* Preserve the legacy rule order while returning one usable category. */
+        when {{ alias }}rule_aecu_clinic_lnwht or {{ alias }}rule_aecu_wa_lnwht then '1'
+        when {{ alias }}rule_card_brent
+          or {{ alias }}rule_card_icht
+          or {{ alias }}rule_derm_cw
+          or {{ alias }}rule_gyn_cw
+          or {{ alias }}rule_opth_brent then '4'
+        when {{ alias }}rule_ecg_cw or {{ alias }}rule_gum then iff({{ alias }}has_sla, '1', '2')
+        when {{ alias }}rule_in_health then '5'
+        when {{ alias }}rule_mh_london_providers
+          or {{ alias }}rule_mh_psych
+          or {{ alias }}rule_nc_nwl1
+          or {{ alias }}rule_nc_nwl2
+          or {{ alias }}rule_nc_nwl3
+          or {{ alias }}rule_nc_nwl4
+          or {{ alias }}rule_nc_nwl5
+          or {{ alias }}rule_nc_nwl6
+          or {{ alias }}rule_nc_nwl7 then iff({{ alias }}has_sla, '1', '2')
+        when {{ alias }}rule_sleepclinic_wmuh
+          or {{ alias }}rule_sleepstudy_wmuh
+          or {{ alias }}rule_soaec_wmuh then '1'
+        else iff({{ alias }}has_sla, '1', '2')
     end
 {% endmacro %}

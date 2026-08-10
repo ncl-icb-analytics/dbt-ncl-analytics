@@ -31,12 +31,19 @@ models:
       - name: zbusinessrule
         description: Pipe-delimited list of matched active outpatient business rules.
       - name: zcontracttype
-        description: Contract type produced by the migrated business-rule logic.
+        description: >-
+          Single legacy contract category produced by the migrated business-rule
+          logic, without delimiters or concatenated values.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['1', '2', '4', '5', '6']
 
   - name: fct_sus_op_consolidated
     description: >-
-      Published consolidated outpatient fact, restricted to commissioning-access
-      records and excluding private-patient activity. Grain: one row per
+      Published consolidated outpatient fact retaining legacy commissioning-access
+      statuses 0 and 1 and excluding private-patient activity. Grain: one row per
       sk_encounter_id.
     config:
       meta:
@@ -49,8 +56,9 @@ models:
           - not_null
           - unique
       - name: zcommissioning_access
-        description: Legacy commissioning access status retained for publish filtering.
+        description: Legacy publish status; consolidated output retains values 0 and 1.
         data_tests:
+          - not_null
           - accepted_values:
               arguments:
                 values: [0, 1]
