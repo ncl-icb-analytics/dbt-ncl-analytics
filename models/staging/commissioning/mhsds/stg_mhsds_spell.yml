@@ -8,7 +8,7 @@ models:
     columns:
       - name: uniq_hosp_prov_spell_num
         description: A unique identifier for each Hospital Provider Spell for a Health Care Provider
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -21,11 +21,11 @@ models:
           active submission. MHSDS providers must resubmit every active spell each
           monthly period, so a spell whose reporting_period_end_date is historic and
           has no discharge date is orphaned rather than genuinely open.
-        tests:
+        data_tests:
           - not_null
 
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

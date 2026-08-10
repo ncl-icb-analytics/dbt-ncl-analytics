@@ -107,15 +107,19 @@ with spells as (
     from {{ ref('uk_cost_indices') }}
 )
 
+-- Both lookups are aggregated so they always return exactly one row. Bare
+-- selects filtered on a literal would return zero rows if a seed refresh ever
+-- dropped the row, and the cross joins below would then collapse `costed` for
+-- every spell, silently zeroing the whole model's proxy_cost.
 , price_base_deflator as (
     -- Deflator for the price schedule's own fiscal year (26/27)
-    select gdp_deflator as base_gdp_deflator
+    select max(gdp_deflator) as base_gdp_deflator
     from {{ ref('uk_cost_indices') }}
     where fiscal_year_start = 2026
 )
 
 , unclassified_price as (
-    select bed_day_price_gbp as fallback_price_gbp
+    select max(bed_day_price_gbp) as fallback_price_gbp
     from {{ ref('nhse_mh_bed_day_prices_2627') }}
     where setting_key = 'unclassified'
 )

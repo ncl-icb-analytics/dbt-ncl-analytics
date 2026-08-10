@@ -16,7 +16,7 @@ models:
     columns:
       - name: encounter_id
         description: "Surrogate key - unique identifier for the encounter"
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: sk_patient_id
@@ -45,7 +45,7 @@ models:
           'open' (still in a current submission, accrues to current date), or
           'last_submission' (orphaned undischarged spell closed at its last
           reporting period).
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['discharged', 'open', 'last_submission']
@@ -54,7 +54,7 @@ models:
           Dominant care setting from the spell's ward stays (by bed days) -
           acute_picu, rehab, specialist, forensic, or unclassified where no
           usable ward stay data exists (~57% of spells).
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['acute_picu', 'rehab', 'specialist', 'forensic', 'unclassified']
@@ -70,10 +70,17 @@ models:
           back to MBU98Z), multiplied by the provider's 26/27 Market Forces
           Factor (1.0 where unknown), and rebased from 26/27 prices to each bed
           day's own fiscal year using the GDP deflator (uk_cost_indices).
+        data_tests:
+          # Canary for the seed lookups: if the 26/27 deflator row or the
+          # 'unclassified' price row ever goes missing, every spell's cost
+          # becomes 0, which "proxy_cost >= 0" below would still pass.
+          - dbt_expectations.expect_column_max_to_be_between:
+              arguments:
+                min_value: 1
       - name: source
         description: Source system of the data (MHSDS)
 
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "end_date is null or end_date >= start_date"
