@@ -81,28 +81,66 @@ WITH segments AS (
         ON d.person_id = l.person_id
     LEFT JOIN {{ ref('int_segmentation_children_complexity') }} AS cc
         ON d.person_id = cc.person_id
+),
+
+assigned AS (
+    SELECT
+        *,
+        CASE
+            WHEN is_end_of_life THEN 8
+            WHEN age >= 18 AND is_complex_adult THEN 7
+            WHEN has_multiple_ltcs THEN 6
+            WHEN has_single_ltc THEN 5
+            WHEN age >= 18 THEN 4
+            WHEN is_complex_child THEN 3
+            WHEN has_child_health_needs THEN 2
+            ELSE 1
+        END AS segment_number,
+        CASE
+            WHEN is_end_of_life THEN 'End of Life'
+            WHEN age >= 18 AND is_complex_adult THEN 'Adults with Complexity'
+            WHEN has_multiple_ltcs THEN 'Adults with Multiple LTCs'
+            WHEN has_single_ltc THEN 'Adults with a Single LTC'
+            WHEN age >= 18 THEN 'Mostly Healthy Adults'
+            WHEN is_complex_child THEN 'Children with Complexity'
+            WHEN has_child_health_needs THEN 'Children with Health Needs'
+            ELSE 'Mostly Healthy Children'
+        END AS segment_name
+    FROM segments
 )
 
+-- Columns listed explicitly so the segment assignment leads the table
+-- rather than trailing the cohort flags and drivers.
 SELECT
-    *,
-    CASE
-        WHEN is_end_of_life THEN 8
-        WHEN age >= 18 AND is_complex_adult THEN 7
-        WHEN has_multiple_ltcs THEN 6
-        WHEN has_single_ltc THEN 5
-        WHEN age >= 18 THEN 4
-        WHEN is_complex_child THEN 3
-        WHEN has_child_health_needs THEN 2
-        ELSE 1
-    END AS segment_number,
-    CASE
-        WHEN is_end_of_life THEN 'End of Life'
-        WHEN age >= 18 AND is_complex_adult THEN 'Adults with Complexity'
-        WHEN has_multiple_ltcs THEN 'Adults with Multiple LTCs'
-        WHEN has_single_ltc THEN 'Adults with a Single LTC'
-        WHEN age >= 18 THEN 'Mostly Healthy Adults'
-        WHEN is_complex_child THEN 'Children with Complexity'
-        WHEN has_child_health_needs THEN 'Children with Health Needs'
-        ELSE 'Mostly Healthy Children'
-    END AS segment_name
-FROM segments
+    person_id,
+    sk_patient_id,
+    segment_number,
+    segment_name,
+
+    is_active,
+    is_deceased,
+    age,
+    gender,
+    practice_code,
+    practice_name,
+    borough_registered,
+    neighbourhood_registered,
+
+    is_end_of_life,
+    is_complex_adult,
+    has_multiple_ltcs,
+    has_single_ltc,
+    is_complex_child,
+    has_child_health_needs,
+
+    ltc_count,
+    ltc_list,
+    adult_complexity_criteria_count,
+    child_complexity_criteria_count,
+    child_has_2plus_ltcs,
+    child_has_complexity_diagnosis,
+    child_has_5plus_paediatric_op_appointments,
+    child_has_2plus_outpatient_specialties,
+    child_has_mh_inpatient_stay,
+    child_has_7plus_community_contacts
+FROM assigned

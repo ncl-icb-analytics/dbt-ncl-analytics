@@ -52,12 +52,6 @@ models:
           - not_null
       - name: sk_patient_id
         description: Pseudonymised patient key for joining to SUS/MHSDS/CSDS activity
-      - name: is_active
-        description: Currently registered with an NCL GP practice
-      - name: is_deceased
-        description: Person is recorded as deceased
-      - name: age
-        description: Current age (age at death for deceased persons)
       - name: segment_number
         description: Assigned segment, 1-8, mutually exclusive by hierarchy
           (highest wins)
@@ -71,6 +65,12 @@ models:
         description: Assigned segment name
         data_tests:
           - not_null
+      - name: is_active
+        description: Currently registered with an NCL GP practice
+      - name: is_deceased
+        description: Person is recorded as deceased
+      - name: age
+        description: Current age (age at death for deceased persons)
       - name: is_end_of_life
         description: Cohort flag - on the QOF palliative care register (segment 8)
       - name: is_complex_adult
