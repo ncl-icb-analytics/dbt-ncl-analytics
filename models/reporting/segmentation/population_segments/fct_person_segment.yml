@@ -15,12 +15,24 @@ models:
       Segments, assigned by hierarchy (highest wins):
 
       - 8 End of Life - on the palliative care register, any age
-      - 7 Adults with Complexity - 18+, fct_person_complex_adults
+      - 7 Adults with Complexity - 18+, with both a complexity criterion
+        (moderate or severe frailty, 3+ LTCs, homeless, on the palliative
+        care register, alcohol or substance misuse, or high acute use with
+        no GP contact) and a utilisation criterion (3+ ED attendances, 2+
+        non-elective admissions, 15+ attended GP appointments, outpatient
+        care across 5+ treatment-function specialties, or housebound).
+        Activity counted over a rolling 12 months. See
+        fct_person_complex_adults
       - 6 Adults with Multiple LTCs - 18+, 2+ qualifying LTCs
       - 5 Adults with a Single LTC - 18+, exactly 1 qualifying LTC
       - 4 Mostly Healthy Adults - 18+, none of the above
-      - 3 Children with Complexity - under 18, any criterion in
-        int_segmentation_children_complexity
+      - 3 Children with Complexity - under 18, meeting any of: 2+ qualifying
+        LTCs; 1+ diagnosis from the NWL complex needs code list (ever
+        recorded); 5+ attended paediatric outpatient appointments;
+        outpatient care across 2+ main specialties, excluding trauma &
+        orthopaedics, ENT, ophthalmology and A&E; 1+ mental health inpatient
+        stay; 7+ attended community contacts. Activity criteria are over a
+        rolling 12 months. See int_segmentation_children_complexity
       - 2 Children with Health Needs - under 18, 1+ qualifying LTC
       - 1 Mostly Healthy Children - under 18, none of the above
 
