@@ -102,6 +102,10 @@ models:
         - "{{ log_row_count() }}"
       commissioning:
         +schema: "COMMISSIONING_MODELLING"
+      segmentation:
+        +schema: "SEGMENTATION"
+        +meta:
+          custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
       olids:
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
