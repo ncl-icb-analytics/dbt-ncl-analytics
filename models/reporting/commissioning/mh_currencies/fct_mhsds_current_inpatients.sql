@@ -20,6 +20,7 @@ select
     , org.organisation_name as provider_name
     , c.start_date_hosp_prov_spell as admission_date
     , datediff(day, c.start_date_hosp_prov_spell, current_date) as days_in_bed
+    , datediff(month, c.start_date_hosp_prov_spell, current_date) as months_in_bed
     , c.age_hosp_start_date as age_at_admission
     , c.is_cyp
     , c.mh_admitted_patient_class

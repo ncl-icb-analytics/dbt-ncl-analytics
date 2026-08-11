@@ -39,6 +39,8 @@ models:
           - not_null
       - name: days_in_bed
         description: Days from admission to the run date.
+      - name: months_in_bed
+        description: Whole calendar months from admission to the run date.
       - name: age_at_admission
         description: MHSDS-derived age at admission.
       - name: is_cyp
