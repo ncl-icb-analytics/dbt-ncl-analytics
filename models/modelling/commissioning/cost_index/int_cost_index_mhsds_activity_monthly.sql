@@ -15,7 +15,7 @@ with month_spine as (
         {{ dbt_utils.date_spine(
             datepart='month'
             , start_date="'2015-01-01'"
-            , end_date="date_trunc('month', current_date)"
+            , end_date="dateadd(month, 1, date_trunc('month', current_date))"
         ) }}
     )
 )
