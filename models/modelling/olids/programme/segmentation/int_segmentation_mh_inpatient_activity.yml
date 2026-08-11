@@ -1,0 +1,25 @@
+models:
+  - name: int_segmentation_mh_inpatient_activity
+    description: >
+      Mental health inpatient activity block for segmentation. One row per
+      sk_patient_id with any MHSDS hospital provider spell. Spells are
+      counted by start date only (end dates for orphaned open spells are
+      unreliable); the 12-month window ends on the latest spell start date.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: sk_patient_id
+        description: Pseudonymised patient key
+        data_tests:
+          - unique
+          - not_null
+      - name: mh_inpatient_stays_total
+        description: Spells ever recorded
+        data_tests:
+          - not_null
+      - name: mh_inpatient_stays_12mo
+        description: Spells starting in the window
+        data_tests:
+          - not_null
