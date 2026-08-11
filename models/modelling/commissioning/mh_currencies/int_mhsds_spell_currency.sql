@@ -32,9 +32,11 @@ with base as (
         b.uniq_hosp_prov_spell_num
         , d.icd10_3
     from base as b
+    -- end_date closes orphaned spells at their last submission evidence, so
+    -- later-recorded diagnoses cannot reclassify them; open spells fall to today
     left join {{ ref('stg_mhsds_primdiag') }} as d
         on b.uniq_serv_req_id = d.uniq_serv_req_id
-        and d.coded_diag_timestamp <= coalesce(b.disch_date_hosp_prov_spell, current_date)
+        and d.coded_diag_timestamp <= coalesce(b.end_date, current_date)
     qualify row_number() over (
         partition by b.uniq_hosp_prov_spell_num
         order by d.coded_diag_timestamp desc nulls last

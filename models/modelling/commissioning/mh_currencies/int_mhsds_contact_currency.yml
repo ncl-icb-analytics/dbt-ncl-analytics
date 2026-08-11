@@ -28,6 +28,8 @@ models:
           - not_null
       - name: uniq_serv_req_id
         description: Unique service request identifier.
+        data_tests:
+          - not_null
       - name: person_id
         description: MHSDS person identifier.
       - name: sk_patient_id

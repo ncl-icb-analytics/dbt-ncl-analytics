@@ -23,7 +23,7 @@ seeds:
         setting_code: varchar(10)
         currency_name: varchar(500)
         unit: varchar(100)
-        price_gbp: float
+        price_gbp: number(12, 2)
         additional_notes: varchar(500)
     columns:
       - name: currency_code
