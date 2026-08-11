@@ -38,6 +38,20 @@ models:
         description: Fiscal year start.
         data_tests:
           - not_null
+      - name: spell_start_date
+        description: Spell admission date.
+        data_tests:
+          - not_null
+      - name: spell_end_date
+        description: Derived spell end date; null while the spell is open.
+      - name: segment_start_date
+        description: First night covered by this row.
+        data_tests:
+          - not_null
+      - name: segment_end_date
+        description: Day after the last night covered by this row (exclusive).
+        data_tests:
+          - not_null
       - name: bed_days
         description: Bed days allocated to the fiscal year.
         data_tests:
