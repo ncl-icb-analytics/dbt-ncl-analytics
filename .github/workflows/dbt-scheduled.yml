@@ -21,6 +21,19 @@
 
 name: dbt Scheduled Runs
 
+# Schedule events have no run name of their own, so every run would show as
+# "dbt Scheduled Runs" in the Actions list. Mirrors the cron -> run type
+# mapping in the "Resolve run type" step; keep the two in step.
+# Weekly-on-the-1st still titles itself "dbt weekly" even though it skips -
+# run-name resolves before the job runs.
+run-name: >-
+  dbt ${{ inputs.run_type
+  || (github.event.schedule == '0 5 * * *' && 'snapshots')
+  || (github.event.schedule == '0 7,12 * * *' && 'sdl-intraday')
+  || (github.event.schedule == '0 4 1 * *' && 'monthly-full-refresh')
+  || (github.event.schedule == '0 4 * * 1' && 'weekly')
+  || 'daily' }}
+
 on:
   schedule:
     - cron: '0 4 * * 0,2-6'
