@@ -19,56 +19,14 @@ with fiscal_years as (
     where fiscal_year_start = 2026
 )
 
-, activity as (
-    select
-        c.*
-        , substring(c.currency_code, 4, 2) as currency_family
-        , right(c.currency_code, 1) as currency_setting_code
-    from {{ ref('int_mhsds_contact_currency') }} as c
-)
-
-, price_attempts as (
-    select
-        a.*
-        , exact_price.price_gbp as exact_price_gbp
-        , population_price.price_gbp as population_price_gbp
-        , unclassified_setting_price.price_gbp as unclassified_setting_price_gbp
-        , unclassified_family_price.price_gbp as unclassified_family_price_gbp
-    from activity as a
-    left join {{ ref('nhse_currency_prices_2627') }} as exact_price
-        on a.currency_code = exact_price.currency_code
-    left join {{ ref('nhse_currency_prices_2627') }} as population_price
-        on a.currency_group = population_price.population_group
-        and a.currency_family = population_price.currency_family
-        and population_price.setting_code = 'Z'
-    -- 99-family codes (MAZ/MCS) fall back to MBU97 crisis prices; MAZ99Z and
-    -- MCS99Z are priced, so these attempts only fire for the 96/97 families
-    left join {{ ref('nhse_currency_prices_2627') }} as unclassified_setting_price
-        on unclassified_setting_price.population_group = 'MBU'
-        and unclassified_setting_price.currency_family = iff(a.currency_family = '99', '97', a.currency_family)
-        and unclassified_setting_price.setting_code = a.currency_setting_code
-    left join {{ ref('nhse_currency_prices_2627') }} as unclassified_family_price
-        on unclassified_family_price.population_group = 'MBU'
-        and unclassified_family_price.currency_family = iff(a.currency_family = '99', '97', a.currency_family)
-        and unclassified_family_price.setting_code = 'Z'
-)
-
 , priced as (
     select
-        *
-        , coalesce(
-            exact_price_gbp
-            , population_price_gbp
-            , unclassified_setting_price_gbp
-            , unclassified_family_price_gbp
-        ) as unit_price_2627_gbp
-        , case
-            when exact_price_gbp is not null then 'exact'
-            when population_price_gbp is not null then 'population_family'
-            when unclassified_setting_price_gbp is not null then 'unclassified_setting'
-            when unclassified_family_price_gbp is not null then 'unclassified_family'
-        end as price_source
-    from price_attempts
+        c.*
+        , price.unit_price_2627_gbp
+        , price.price_source
+    from {{ ref('int_mhsds_contact_currency') }} as c
+    left join {{ ref('int_nhse_currency_price_resolution') }} as price
+        on c.currency_code = price.currency_code
 )
 
 select
