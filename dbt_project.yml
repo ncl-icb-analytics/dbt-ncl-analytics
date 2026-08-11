@@ -81,6 +81,11 @@ models:
         - "{{ log_row_count() }}"
       commissioning:
         +schema: "COMMISSIONING_MODELLING"
+        # Transitional ERNI/NWL (WSIC) migrations - kept apart from the long-term
+        # models until converged onto the estate chains, then retired.
+        legacy_nwl:
+          +schema: "LEGACY_NWL"
+          +tags: ["legacy_nwl"]
       olids:
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
@@ -96,6 +101,10 @@ models:
         - "{{ log_row_count() }}"
       commissioning:
         +schema: "COMMISSIONING_REPORTING"
+        # Transitional ERNI/NWL (WSIC) migrations - see modelling/commissioning/legacy_nwl
+        legacy_nwl:
+          +schema: "LEGACY_NWL"
+          +tags: ["legacy_nwl"]
       olids:
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."

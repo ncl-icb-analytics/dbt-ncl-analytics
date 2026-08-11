@@ -55,6 +55,8 @@ get_schema() {
         else
             echo "OLIDS"
         fi
+    elif [[ $file == models/*/commissioning/legacy_nwl/* ]]; then
+        echo "LEGACY_NWL"
     elif [[ $file == models/modelling/commissioning/* ]]; then
         echo "COMMISSIONING_MODELLING"
     elif [[ $file == models/reporting/commissioning/* ]]; then
