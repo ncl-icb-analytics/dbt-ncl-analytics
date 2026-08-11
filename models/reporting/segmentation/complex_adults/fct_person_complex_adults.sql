@@ -67,60 +67,7 @@
 -- complexity_criteria_count, so the marginal contribution of any single
 -- criterion can be measured without rebuilding the model.
 
-WITH ltc AS (
-    SELECT
-        s.person_id,
-        BOOLOR_AGG(s.condition_code = 'AF') AS has_af,
-        BOOLOR_AGG(s.condition_code = 'AST') AS has_asthma,
-        BOOLOR_AGG(s.condition_code = 'CHD') AS has_chd,
-        BOOLOR_AGG(s.condition_code = 'CKD') AS has_ckd,
-        BOOLOR_AGG(s.condition_code = 'COPD') AS has_copd,
-        BOOLOR_AGG(s.condition_code = 'DEM') AS has_dementia,
-        BOOLOR_AGG(s.condition_code = 'DEP') AS has_depression,
-        BOOLOR_AGG(s.condition_code = 'DM') AS has_diabetes,
-        BOOLOR_AGG(s.condition_code = 'EP') AS has_epilepsy,
-        BOOLOR_AGG(s.condition_code = 'HF') AS has_heart_failure,
-        BOOLOR_AGG(s.condition_code = 'HTN') AS has_hypertension,
-        BOOLOR_AGG(s.condition_code = 'SMI') AS has_smi,
-        BOOLOR_AGG(s.condition_code = 'STIA') AS has_stroke_tia,
-        BOOLOR_AGG(s.condition_code = 'PD') AS has_parkinsons,
-        BOOLOR_AGG(s.condition_code = 'ANX') AS has_anxiety,
-        BOOLOR_AGG(s.condition_code = 'LD') AS has_learning_disability,
-        COUNT(DISTINCT s.condition_code) AS ltc_count
-    FROM {{ ref('fct_person_ltc_summary') }} AS s
-    INNER JOIN {{ ref('dim_person_age') }} AS a
-        ON s.person_id = a.person_id
-    WHERE (
-        s.condition_code IN (
-            'AF', 'AST', 'CHD', 'CKD', 'COPD', 'DEM', 'DEP', 'DM',
-            'EP', 'HF', 'HTN', 'SMI', 'STIA', 'PD', 'ANX'
-        )
-        -- Learning disability counts towards the LTC total only at 65+
-        OR (s.condition_code = 'LD' AND a.age >= 65)
-    )
-    GROUP BY s.person_id
-),
-
-gp_max_date AS (
-    SELECT MAX(start_date) AS max_date
-    FROM {{ ref('int_appointment_gp_clinical_recent') }}
-    WHERE is_attended AND start_date <= CURRENT_DATE()
-),
-
-gp_appointments AS (
-    SELECT
-        a.person_id,
-        COUNT(*) AS gp_appointments_12mo
-    FROM {{ ref('int_appointment_gp_clinical_recent') }} AS a
-    CROSS JOIN gp_max_date AS m
-    WHERE
-        a.is_attended
-        AND a.start_date >= DATEADD(MONTH, -12, m.max_date)
-        AND a.start_date <= m.max_date
-    GROUP BY a.person_id
-),
-
-complexity AS (
+WITH complexity AS (
     SELECT
         d.person_id,
         d.sk_patient_id,
@@ -190,9 +137,9 @@ complexity AS (
 
         -- High acute use with no GP contact: (>=3 ED attendances OR >=2 NEL
         -- admissions in 12 months) AND no attended GP appointment in the GP
-        -- 12-month window. No row in gp_appointments means zero attended
-        -- clinical appointments, so the GP side matches the >=15 criterion's
-        -- definition (DNAs and admin excluded, lag-aware window).
+        -- 12-month window. No row in int_segmentation_gp_activity means zero
+        -- attended clinical appointments, so the GP side matches the >=15
+        -- criterion's definition (DNAs and admin excluded, lag-aware window).
         (
             (ZEROIFNULL(ae.ae_tot_12mo) >= 3 OR ZEROIFNULL(ip.apc_nel_12mo) >= 2)
             AND gp.person_id IS NULL
@@ -206,7 +153,7 @@ complexity AS (
         COALESCE(h.is_housebound, FALSE) AS is_housebound
 
     FROM {{ ref('dim_person_demographics') }} AS d
-    LEFT JOIN ltc AS l
+    LEFT JOIN {{ ref('int_segmentation_complex_adults_ltc') }} AS l
         ON d.person_id = l.person_id
     LEFT JOIN {{ ref('fct_person_efi2') }} AS e
         ON d.person_id = e.person_id
@@ -220,7 +167,7 @@ complexity AS (
         ON d.person_id = alc.person_id
     LEFT JOIN {{ ref('int_substance_misuse_status') }} AS sub
         ON d.person_id = sub.person_id
-    LEFT JOIN gp_appointments AS gp
+    LEFT JOIN {{ ref('int_segmentation_gp_activity') }} AS gp
         ON d.person_id = gp.person_id
     LEFT JOIN {{ ref('fct_person_sus_op_recent') }} AS op
         ON d.sk_patient_id = op.sk_patient_id
