@@ -1,4 +1,14 @@
-with base as (
+-- A person occupies at most one MH bed per night, but spell ids are
+-- provider-scoped, so one admission can carry several records: trust mergers
+-- re-register long-stay patients under new ids with the original admission
+-- date (BEH/C&I -> NLFT), NHS and independent-sector providers both submit
+-- the same placement, and shifted-date copies partially overlap. Three rules
+-- restore single occupancy:
+--   1. one spell per person and admission date (latest submission evidence wins)
+--   2. drop spells wholly contained inside a longer spell
+--   3. discharge-forward: a later admission ends any spell still open at
+--      that date (end_date_source 'superseded')
+with deduplicated as (
     select
         s.uniq_hosp_prov_spell_num
         , s.uniq_serv_req_id
@@ -13,6 +23,45 @@ with base as (
     from {{ ref('stg_mhsds_spell') }} as s
     left join {{ ref('int_mhsds_spell_encounters') }} as e
         on s.uniq_hosp_prov_spell_num = e.encounter_id
+    qualify row_number() over (
+        partition by coalesce(s.person_id, s.uniq_hosp_prov_spell_num)
+            , s.start_date_hosp_prov_spell
+        order by s.reporting_period_end_date desc nulls last
+            , s.uniq_hosp_prov_spell_num
+    ) = 1
+)
+
+, uncontained as (
+    select d.*
+    from deduplicated as d
+    where not exists (
+        select 1
+        from deduplicated as o
+        where o.person_id = d.person_id
+            and o.uniq_hosp_prov_spell_num != d.uniq_hosp_prov_spell_num
+            and o.start_date_hosp_prov_spell <= d.start_date_hosp_prov_spell
+            and coalesce(o.end_date, current_date) >= coalesce(d.end_date, current_date)
+            and (o.start_date_hosp_prov_spell < d.start_date_hosp_prov_spell
+                or coalesce(o.end_date, current_date) > coalesce(d.end_date, current_date))
+    )
+)
+
+, base as (
+    select
+        * exclude (end_date, end_date_source, next_start_date)
+        , iff(next_start_date < coalesce(end_date, current_date)
+            , next_start_date, end_date) as end_date
+        , iff(next_start_date < coalesce(end_date, current_date)
+            , 'superseded', end_date_source) as end_date_source
+    from (
+        select
+            u.*
+            , lead(start_date_hosp_prov_spell) over (
+                partition by coalesce(person_id, uniq_hosp_prov_spell_num)
+                order by start_date_hosp_prov_spell, uniq_hosp_prov_spell_num
+            ) as next_start_date
+        from uncontained as u
+    )
 )
 
 , latest_ward_stay as (

@@ -3,8 +3,9 @@ version: 2
 models:
   - name: fct_mhsds_current_inpatients
     description: >
-      People currently occupying a mental health bed. Grain: one row per open
-      hospital provider spell (a person can hold more than one). Population:
+      People currently occupying a mental health bed. Grain: one row per
+      person (single occupancy is enforced upstream: a later admission
+      supersedes any spell still open at that date). Population:
       spells with no discharge date that appear in an active submission within
       2 reporting periods of the latest — orphaned undischarged spells are
       excluded. Time semantics: current as of the latest MHSDS submission;
@@ -25,6 +26,7 @@ models:
         description: MHSDS person identifier.
         data_tests:
           - not_null
+          - unique
       - name: sk_patient_id
         description: Pseudonymised patient identifier.
       - name: org_id_prov
