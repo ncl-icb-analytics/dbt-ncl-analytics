@@ -62,6 +62,8 @@ models:
         description: Service team type referred to code.
       - name: team_type_category
         description: Service team population category retained for audit.
+      - name: last_submission_period_end
+        description: End of the last active reporting period carrying the spell.
       - name: winning_tier
         description: Classification tier that ended the cascade.
         data_tests:

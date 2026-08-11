@@ -20,6 +20,7 @@ with deduplicated as (
         , e.end_date_source
         , s.disch_date_hosp_prov_spell
         , s.age_hosp_start_date
+        , s.reporting_period_end_date as last_submission_period_end
     from {{ ref('stg_mhsds_spell') }} as s
     -- inner: every staged spell has an encounters row today, and if the
     -- encounters model ever drops duplicate spells this model must follow
@@ -186,6 +187,7 @@ select
     , c.referral_reason_category
     , c.serv_team_type_ref_to_mh
     , c.team_type_category
+    , c.last_submission_period_end
     , c.winning_tier
     , coalesce(pg.currency_group, c.winning_category) as currency_group
     , coalesce(pg.currency_group, c.winning_category) || '98' || coalesce(c.setting_code, 'Z') as currency_code

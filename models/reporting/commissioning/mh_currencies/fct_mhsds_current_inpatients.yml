@@ -43,6 +43,10 @@ models:
         description: Days from admission to the run date.
       - name: months_in_bed
         description: Whole calendar months from admission to the run date.
+      - name: last_submission_period_end
+        description: >
+          End of the last active reporting period carrying the spell; the
+          active feed runs about 6 weeks behind the run date.
       - name: age_at_admission
         description: MHSDS-derived age at admission.
       - name: is_cyp

@@ -22,7 +22,13 @@ with fiscal_years as (
 , activity as (
     select
         c.*
-        , greatest(coalesce(c.end_date, current_date), dateadd(day, 1, c.start_date_hosp_prov_spell)) as activity_end_date
+        -- open spells accrue cost only to their last submission evidence:
+        -- the active feed runs ~6 weeks behind, so accruing to today would
+        -- cost unevidenced nights
+        , greatest(
+            coalesce(c.end_date, c.last_submission_period_end, current_date)
+            , dateadd(day, 1, c.start_date_hosp_prov_spell)
+        ) as activity_end_date
         , substring(c.currency_code, 4, 2) as currency_family
         , right(c.currency_code, 1) as currency_setting_code
     from {{ ref('int_mhsds_spell_currency') }} as c
