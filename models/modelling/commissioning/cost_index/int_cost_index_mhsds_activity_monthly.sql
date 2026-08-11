@@ -23,8 +23,8 @@ with month_spine as (
 , bed_day_segments as (
     select
         sk_patient_id
-        , segment_start_date                                    as segment_start
-        , segment_end_date                                      as segment_end
+        , bed_days_from_date                                    as segment_start
+        , bed_days_to_date                                      as segment_end
         , proxy_cost / nullif(bed_days, 0)                      as cost_per_bed_day
     from {{ ref('fct_mhsds_currency_bed_days') }}
     where sk_patient_id is not null
