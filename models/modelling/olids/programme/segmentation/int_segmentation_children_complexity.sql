@@ -25,7 +25,8 @@
 --       excluding trauma & orthopaedics, ENT, ophthalmology and A&E
 --       (int_segmentation_op_activity, aligned to NWL)
 --   1+ mental health inpatient stay in 12 months
---       (int_segmentation_mh_inpatient_activity, spells by start date)
+--       (int_segmentation_mh_inpatient_activity, spells overlapping the
+--       window so long-stay admissions before it still count)
 --   7+ attended community service contacts in 12 months
 --       (int_segmentation_community_activity; counts are a floor)
 

@@ -159,7 +159,7 @@ models:
           ophthalmology and A&E, per NWL (null for adults)
       - name: child_has_mh_inpatient_stay
         description: Children criterion - 1+ mental health inpatient stay in
-          12 months, MHSDS spells by start date (null for adults)
+          12 months, MHSDS spells overlapping the window (null for adults)
       - name: child_has_7plus_community_contacts
         description: Children criterion - 7+ attended community service
           contacts in 12 months, CSDS (null for adults)
