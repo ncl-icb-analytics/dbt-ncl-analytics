@@ -1,11 +1,13 @@
+{#
+    on_schema_change: sk_patient_id was added for cross-dataset linkage, and
+    'fail' blocked the deploy outright. Appending lets a new column land, but
+    existing person-months keep a NULL key until a full refresh backfills them.
+    Both environments were fully refreshed on 2026-08-11, so the key is complete.
+#}
 {{
     config(
         materialized='incremental',
         unique_key=['person_id', 'analysis_month'],
-        -- sk_patient_id was added for cross-dataset linkage. 'fail' blocked the
-        -- deploy outright; appending lets it land, but existing person-months
-        -- keep a NULL key until a full refresh backfills them, so linkage from
-        -- this model is incomplete for historical months until that runs.
         on_schema_change='append_new_columns',
         cluster_by=['analysis_month'],
         tags=['daily', 'monthly-full']
