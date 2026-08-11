@@ -85,13 +85,11 @@ TABLES(
 
     efi AS {{ ref('int_efi_latest') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Latest GP-recorded Electronic Frailty Index (eFI or coded eFI2). Not the calculated eFI2 score below; it may be out of date or absent. For clinical-diagnosis frailty prevalence, use has_frailty from sem_olids_population.',
+        COMMENT = 'Latest GP-recorded Electronic Frailty Index (eFI or coded eFI2), as coded by the practice. Superseded by the calculated efi2_score below: this is recorded for only ~10k people against ~258k scored by the pipeline, and reflects whenever the practice last coded it rather than the current data. Use it only when the question is specifically about what practices have recorded. For clinical-diagnosis frailty prevalence use has_frailty from sem_olids_population.',
 
-    -- REVIEW: Code establishes separate data paths and thresholds, but not whether
-    -- calculated eFI2 clinically supersedes GP-recorded eFI/eFI2.
     efi2 AS {{ ref('int_efi2_scores') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Calculated eFI2 score per living person aged 65+ as at end_date. Recomputed from OLIDS data, rather than GP-recorded like efi or clinician-assessed like Rockwood. Use for the current eFI2 cohort only; do not combine its category with efi or Rockwood categories. Profiled 2026-08-11: 63.58% Robust, 20.57% Mild, 9.18% Moderate, 6.68% Severe among 258,355 scored people; 4,732 had no matching demographics row.',
+        COMMENT = 'Calculated eFI2 score per living person aged 65+ as at end_date, recomputed from current OLIDS data rather than GP-recorded like efi or clinician-assessed like Rockwood. This is the preferred frailty measure: it covers the whole 65+ cohort (~258k people, against ~10k with a GP-recorded eFI) and reflects the latest data rather than whenever a practice last coded a score. Use for the current eFI2 cohort only; do not combine its category with efi or Rockwood categories. Profiled 2026-08-11: 63.58% Robust, 20.57% Mild, 9.18% Moderate, 6.68% Severe among 258,355 scored people; 4,732 had no matching demographics row.',
 
     rockwood AS {{ ref('int_rockwood_latest') }}
         PRIMARY KEY (person_id)
