@@ -56,6 +56,18 @@ All classification lookups are seeds under `seeds/` so analysts can read (and am
 - `stg_mhsds_servicetype` — one row per referral: the latest service/team type. MHS102 where present, falling back to the v6 `ServTeamType` field on MHS101 (~23% of referrals only have the latter).
 - `stg_mhsds_spell`, `stg_mhsds_carecontact`, `stg_mhsds_referral`, `stg_mhsds_mhs502wardstay` — pre-existing deduplicated staging, extended with age and linkage columns.
 
+## Domain models
+
+`fct_mhsds_referral_episodes` is the access fact, at one row per service
+request. It holds referral demand, wait and contact measures, rejection and
+closure status, indirect activity, and occupancy-ruled spell linkage.
+
+`dim_person_mh_profile` is one row per person appearing in a referral, care
+contact, or occupancy-ruled spell. It combines referral, contact, crisis,
+inpatient, diagnosis, legal-status, and safeguarding state. Its current
+columns reflect the active MHSDS feed, which runs about six weeks behind the
+run date.
+
 ## Classification — `models/modelling/commissioning/mh_currencies/`
 
 Both models classify with the same **three-tier cascade**. Each tier is consulted only if every earlier tier could not classify:
