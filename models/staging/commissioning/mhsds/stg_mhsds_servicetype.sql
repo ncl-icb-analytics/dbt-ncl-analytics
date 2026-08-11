@@ -38,8 +38,11 @@ with mhs102 as (
     from {{ ref('raw_mhsds_mhs102servicetypereferredto') }} as m
     inner join {{ ref('raw_mhsds_activesubmission') }} as a
         on m.uniq_submission_id = a.uniq_submission_id
+    -- v5 rows carry the team id in care_prof_team_local_id, v6 in
+    -- other_care_prof_team_local_id
     inner join {{ ref('raw_mhsds_mhs902serviceteamdetails') }} as t
-        on m.other_care_prof_team_local_id = t.care_prof_team_local_id
+        on coalesce(m.care_prof_team_local_id, m.other_care_prof_team_local_id)
+            = t.care_prof_team_local_id
         and m.uniq_submission_id = t.uniq_submission_id
     where t.serv_team_type_mh is not null
     qualify row_number() over (

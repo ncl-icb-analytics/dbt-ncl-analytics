@@ -8,8 +8,11 @@ models:
       supersedes any spell still open at that date). Population:
       spells with no discharge date that appear in an active submission within
       2 reporting periods of the latest — orphaned undischarged spells are
-      excluded. Time semantics: current as of the latest MHSDS submission;
-      days_in_bed accrues to the run date.
+      excluded. Time semantics: current as of the active
+      MHSDS feed, which runs ~6 weeks behind the run date
+      (last_submission_period_end shows each spell's evidence date) - very
+      recent admissions and discharges are not yet visible; days_in_bed
+      accrues to the run date.
     config:
       meta:
         owner:

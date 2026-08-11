@@ -80,14 +80,16 @@ select
     , p.care_cont_date
     , fy.fiscal_year_start
     , p.attend_status
-    , p.attend_status in ('5', '6') or p.attend_status is null as is_costed_attendance
+    -- lpad guards against zero-padded codes ('05'/'06') appearing in a
+    -- future feed; nulls costed per national guidance
+    , lpad(p.attend_status, 2, '0') in ('05', '06') or p.attend_status is null as is_costed_attendance
     , p.currency_group
     , p.currency_code
     , p.unit_price_2627_gbp
     , p.price_source
     , coalesce(mff.mff_factor, 1.0) as mff_factor
     , iff(
-        p.attend_status in ('5', '6') or p.attend_status is null
+        lpad(p.attend_status, 2, '0') in ('05', '06') or p.attend_status is null
         , p.unit_price_2627_gbp * coalesce(mff.mff_factor, 1.0) * fy.gdp_deflator / pb.base_gdp_deflator
         , 0
     ) as proxy_cost
