@@ -20,38 +20,14 @@ with month_spine as (
     )
 )
 
-, fiscal_years as (
-    select
-        fiscal_year_start
-        , case when fiscal_year_start = min(fiscal_year_start) over ()
-            then '1900-01-01'::date
-            else date_from_parts(fiscal_year_start, 4, 1)
-        end as fiscal_year_range_start
-    from {{ ref('uk_cost_indices') }}
-)
-
 , bed_day_segments as (
     select
-        b.sk_patient_id
-        , greatest(
-            s.start_date_hosp_prov_spell
-            , fy.fiscal_year_range_start
-        )                                                       as segment_start
-        , dateadd(
-            day
-            , b.bed_days
-            , greatest(
-                s.start_date_hosp_prov_spell
-                , fy.fiscal_year_range_start
-            )
-        )                                                       as segment_end
-        , b.proxy_cost / nullif(b.bed_days, 0)                 as cost_per_bed_day
-    from {{ ref('fct_mhsds_currency_bed_days') }} as b
-    inner join {{ ref('int_mhsds_spell_currency') }} as s
-        on b.uniq_hosp_prov_spell_num = s.uniq_hosp_prov_spell_num
-    inner join fiscal_years as fy
-        on b.fiscal_year_start = fy.fiscal_year_start
-    where b.sk_patient_id is not null
+        sk_patient_id
+        , segment_start_date                                    as segment_start
+        , segment_end_date                                      as segment_end
+        , proxy_cost / nullif(bed_days, 0)                      as cost_per_bed_day
+    from {{ ref('fct_mhsds_currency_bed_days') }}
+    where sk_patient_id is not null
 )
 
 , bed_day_activity as (
