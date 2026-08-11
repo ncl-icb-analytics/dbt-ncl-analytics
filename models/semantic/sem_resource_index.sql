@@ -41,7 +41,7 @@ DIMENSIONS(
     ri.residence_imd_quintile AS residence_imd_quintile COMMENT = 'Residence IMD quintile',
     ri.residence_borough AS residence_borough COMMENT = 'Residence borough',
     ri.residence_ward_2025_name AS residence_ward_2025_name COMMENT = 'Residence ward',
-    ri.weighted_ratio_imputed AS weighted_ratio_imputed COMMENT = 'TRUE when the WNL mean weighted ratio was used as a fallback'
+    ri.weighted_ratio_imputed AS weighted_ratio_imputed COMMENT = 'TRUE when the practice had no published Carr-Hill ratio and the WNL mean was used instead.'
 )
 
 METRICS(
@@ -51,6 +51,6 @@ METRICS(
     ri.patient_count AS COUNT(DISTINCT ri.sk_patient_id) COMMENT = 'Distinct people'
 )
 
-COMMENT = 'Resource Index Semantic View - person-level rolling 12-month SLAM acute resource index. Calculate resource ratio as AGG(total_actual_cost_12m) / AGG(total_expected_cost_12m), never an average of person-level ratios. Carr-Hill expected cost is a practice-average allocation lagging the cost window by about one year.'
+COMMENT = 'Resource Index Semantic View - person-level rolling 12-month SLAM acute resource index. Grain: one row per person. Calculate resource ratio as AGG(total_actual_cost_12m) / AGG(total_expected_cost_12m), never an average of person-level ratios. Carr-Hill expected cost is a practice-average allocation lagging the cost window by about one year.'
 AI_SQL_GENERATION 'Resource ratio is AGG(total_actual_cost_12m) / AGG(total_expected_cost_12m); never average person-level ratios. For cross-dataset linkage, query each semantic view in its own CTE, reduce each CTE to one row per sk_patient_id or aligned period before joining, then aggregate. Use COUNT(DISTINCT sk_patient_id) for people and the view metric for events; keep sk_patient_id out of final output. Example: SELECT residence_borough, AGG(total_actual_cost_12m), AGG(total_expected_cost_12m) FROM SEM_RESOURCE_INDEX GROUP BY residence_borough. weighted_ratio_imputed marks people whose practice had no published ratio and used the WNL fallback. Example linkage: reduce an active population cohort in sem_olids_population and resource use here before joining on sk_patient_id. Actual cost is SLAM acute only. The rolling window ends at the latest complete SLAM month. Carr-Hill expected cost lags the cost window by about one year.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: rolling 12-month resource use, actual versus expected cost, resource ratios by demographic or geography, Carr-Hill weighted population, and resource use of OLIDS-defined cohorts via sk_patient_id linkage.'

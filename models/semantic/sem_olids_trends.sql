@@ -43,6 +43,7 @@ FACTS(
 DIMENSIONS(
     -- Person linkage key
     trends.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
+    trends.sk_patient_id AS sk_patient_id COMMENT = 'Representative pseudonymised patient key for linkage to non-OLIDS views (SUS acute activity, cost index, resource index). Every active person has one; the underlying person-patient mapping can be many-to-many, so joins remain approximate at the margins. Join CTEs on sk_patient_id after aligning analysis_month, then aggregate; never return sk_patient_id in final results.',
 
     -- Time Dimensions
     trends.analysis_month AS analysis_month WITH SYNONYMS = ('month', 'date', 'period') COMMENT = 'Month end date for analysis',
@@ -60,7 +61,7 @@ DIMENSIONS(
     trends.age_band_5y AS age_band_5y COMMENT = '5-year age bands (0-4, 5-9, ..., 80-84, 85+, Unknown)',
     trends.age_band_10y AS age_band_10y COMMENT = '10-year age bands (0-9, 10-19, ..., 70-79, 80+, Unknown)',
     trends.age_band_nhs AS age_band_nhs COMMENT = 'NHS standard age bands (0-4, 5-14, 15-24, ..., 75-84, 85+)',
-    trends.age_band_esp AS age_band_esp COMMENT = 'ESP 2013 age bands (<1, 1-4, 5-9, ..., 80-84, 85-89, 90-94, 95+). Join to esp_weight for standardised rates.',
+    trends.age_band_esp AS age_band_esp COMMENT = 'ESP 2013 age bands (<1, 1-4, 5-9, ..., 80-84, 85-89, 90-94, 95+). ESP weights (esp_proportion) are not in this view — use sem_olids_population for standardised rates.',
     trends.age_life_stage AS age_life_stage COMMENT = 'Life stage (Infant, Toddler, Child, Adolescent, Young Adult, Adult, Older Adult, Elderly, Very Elderly, Unknown)',
 
     -- Ethnicity
@@ -224,5 +225,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS Population Trends Semantic View - 60-month time series for condition prevalence, incidence, and multimorbidity trends. Source: OLIDS (One London Integrated Data Set). Condition registers built to QOF Business Rules v50. Grain: one row per person per month. age_band_esp available for grouping but ESP weights are not in this view — use sem_olids_population for age-standardised rates.'
-AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. This is person-month grain: align analysis_month before linkage. Example: SELECT financial_year, AGG(patient_count), AGG(diabetes_prevalence) FROM SEM_OLIDS_TRENDS WHERE is_active = TRUE GROUP BY financial_year. Example linkage: reduce an aligned monthly cohort here and events in sem_olids_appointments before joining. Use financial_year or financial_quarter for UK reporting. is_active = TRUE is for active-registration cohorts; retain inactive historical non-deceased rows when asked. ESP weights are in sem_olids_population.'
+AI_SQL_GENERATION 'LINKAGE: query each view in its own CTE, reduce to one row per person before joining on person_id, then aggregate; keep person_id out of the final output. This is person-month grain: align analysis_month before linkage. analysis_month is a month-END date; sem_cost_index.activity_month is a month-START date — align on DATE_TRUNC(month, ...), never raw date equality. Example: SELECT financial_year, AGG(patient_count), AGG(diabetes_prevalence) FROM SEM_OLIDS_TRENDS WHERE is_active = TRUE GROUP BY financial_year. Example linkage: reduce an aligned monthly cohort here and events in sem_olids_appointments before joining. Use financial_year or financial_quarter for UK reporting. is_active = TRUE is for active-registration cohorts; retain inactive historical non-deceased rows when asked. age_band_esp is available for grouping; ESP 2013 age-only weights are in sem_olids_population.'
 AI_QUESTION_CATEGORIZATION 'Use this view for questions about: trends over time, prevalence changes, incidence rates, year-on-year comparisons, financial year reporting, and monthly/quarterly analysis. For current state snapshots use sem_olids_population. For clinical biomarkers use sem_olids_observations. Questions needing cohorts from TWO domains (e.g. incidence x medication initiation) are answerable by joining this view to the other sem_olids_* views on person_id in CTEs, with aggregate-only output.'

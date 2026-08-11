@@ -14,7 +14,6 @@
     Cost is the SUS listed/national price, not actual provider cost; use
     sem_cost_index for SLAM actual provider cost.
 
-    REVIEW: SUS coverage window has not yet been validated.
 #}
 
 TABLES(
@@ -76,8 +75,8 @@ DIMENSIONS(
     uec.uec_site_name AS site_name COMMENT = 'Provider site name',
     uec.uec_pod AS pod COMMENT = 'Point of delivery',
     uec.uec_department_type AS department_type COMMENT = 'Urgent and emergency care department type',
-    uec.uec_arrival_mode AS arrival_mode_desc COMMENT = 'Arrival mode',
-    uec.uec_discharge_destination AS discharge_destination_desc COMMENT = 'Discharge destination',
+    uec.uec_arrival_mode AS arrival_mode_desc COMMENT = 'UEC arrival mode: own transport (~72%), emergency road ambulance (~13%), public transport (~10%), or less common ambulance/police/prison/air transport. NULL means not recorded.',
+    uec.uec_discharge_destination AS discharge_destination_desc COMMENT = 'UEC discharge destination after the attendance',
     uec.uec_main_specialty_code AS main_specialty_code COMMENT = 'Main specialty code',
     uec.uec_main_specialty_name AS main_specialty_name COMMENT = 'Main specialty name',
     uec.uec_hrg_code AS hrg_code COMMENT = 'HRG code',
@@ -124,6 +123,6 @@ METRICS(
     op.op_total_cost AS SUM(op.cost) COMMENT = 'SUS listed/national price, not actual provider cost'
 )
 
-COMMENT = 'SUS Acute Activity Semantic View - APC admission spells, UEC A&E attendances, and attended outpatient appointments. Cost is SUS listed/national price, not actual provider cost. Do not mix settings in one query. REVIEW: SUS coverage window has not yet been validated.'
-AI_SQL_GENERATION 'APC is admission-spell grain, UEC is A&E-attendance grain, and OP is attended outpatient-appointment grain; never mix settings. For cross-dataset linkage, query each semantic view in its own CTE, reduce each CTE to one row per sk_patient_id or aligned period before joining, then aggregate. Use COUNT(DISTINCT sk_patient_id) for people and the view metric for events; keep sk_patient_id out of final output. Example: SELECT apc_admission_method_group, AGG(apc_patient_count), AGG(apc_spell_count) FROM SEM_SUS_ACUTE_ACTIVITY WHERE apc_admission_method_group = ''Non-elective - emergency'' GROUP BY apc_admission_method_group. Example linkage: reduce an active population cohort in sem_olids_population and APC events here before joining on sk_patient_id. Use apc_start_date for APC date windows. Cost is the SUS listed/national price; use sem_cost_index for SLAM actual provider cost.'
+COMMENT = 'SUS Acute Activity Semantic View - APC admission spells, UEC A&E attendances, and attended outpatient appointments. Cost is SUS listed/national price, not actual provider cost. Do not mix settings in one query. Coverage: UEC and OP from 2018-04; APC reaches back to the 1990s but validate density before long trends. Planned APC admissions can carry a future apc_start_date - filter apc_start_date <= CURRENT_DATE for activity to date.'
+AI_SQL_GENERATION 'APC is admission-spell grain, UEC is A&E-attendance grain, and OP is attended outpatient-appointment grain; never mix settings. For cross-dataset linkage, query each semantic view in its own CTE, reduce each CTE to one row per sk_patient_id or aligned period before joining, then aggregate. Use COUNT(DISTINCT sk_patient_id) for people and the view metric for events; keep sk_patient_id out of final output. Only ~30% of UEC people and ~32% of UEC attendances link to an active GP registration, so linked cohorts are incomplete. Example: SELECT apc_admission_method_group, AGG(apc_patient_count), AGG(apc_spell_count) FROM SEM_SUS_ACUTE_ACTIVITY WHERE apc_admission_method_group = ''Non-elective - emergency'' GROUP BY apc_admission_method_group. Example linkage: reduce an active population cohort in sem_olids_population and APC events here before joining on sk_patient_id. Use apc_start_date for APC date windows. Cost is the SUS listed/national price; use sem_cost_index for SLAM actual provider cost.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: emergency admissions, A&E attendances, outpatient attendances, acute activity and SUS listed cost by provider or specialty, and acute utilisation of OLIDS-defined cohorts via sk_patient_id joins to sem_olids_population.'

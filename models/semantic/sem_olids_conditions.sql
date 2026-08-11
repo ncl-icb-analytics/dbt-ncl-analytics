@@ -55,12 +55,13 @@ FACTS(
 DIMENSIONS(
     -- Person linkage key
     demographics.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results. Multimorbidity PAIRS: two CTEs over this view filtered to different condition_code values, joined on person_id.',
+    demographics.sk_patient_id AS sk_patient_id COMMENT = 'Representative pseudonymised patient key for linkage to non-OLIDS views (SUS acute activity, cost index, resource index). Every active person has one; the underlying person-patient mapping can be many-to-many, so joins remain approximate at the margins. Join CTEs on sk_patient_id, then aggregate; never return sk_patient_id in final results.',
 
     -- Register rows (current registers)
     ltc.condition_code AS condition_code WITH SYNONYMS = ('condition', 'register code') COMMENT = 'Short condition code (AF, AST, CAN, CHD, CKD, COPD, CYP_AST, DEM, DEP, DM, EP, FH, FRAIL, GESTDIAB, HF, HTN, LD, LD_U14, NAF, NDH, OB, OST, PAD, PC, RA, SCD, SMI, STIA, THAL, ...). Filter this before counting.',
     ltc.condition_name AS condition_name COMMENT = 'Human-readable condition name',
     ltc.clinical_domain AS clinical_domain COMMENT = 'Clinical domain grouping (Cardiovascular, Respiratory, Mental Health, Metabolic, ...)',
-    ltc.is_qof AS is_qof COMMENT = 'Whether this is a QOF register (vs locally-defined non-QOF register)',
+    ltc.is_qof AS is_qof COMMENT = 'TRUE for a QOF Business Rules v50 register; FALSE for a locally-defined register.',
     ltc.earliest_diagnosis_date AS earliest_diagnosis_date WITH SYNONYMS = ('diagnosis date', 'diagnosed') COMMENT = 'Earliest qualifying diagnosis date for this register. For obesity (OB) this is the latest valid BMI date, not a diagnosis.',
     ltc.latest_diagnosis_date AS latest_diagnosis_date COMMENT = 'Latest qualifying diagnosis date for this register',
 
@@ -68,7 +69,7 @@ DIMENSIONS(
     episodes.episode_condition_code AS condition_code COMMENT = 'Condition code on the episode row (37 codes; keyed on condition_name)',
     episodes.episode_condition_name AS condition_name COMMENT = 'Condition name on the episode row',
     episodes.episode_number AS episode_number COMMENT = 'Sequential episode index per person-condition (1 = first)',
-    episodes.episode_status AS episode_status COMMENT = 'active or resolved',
+    episodes.episode_status AS episode_status COMMENT = 'Episode state: active or resolved.',
     episodes.episode_start_date AS episode_start_date COMMENT = 'First onset/diagnosis event in the episode',
     episodes.episode_end_date AS episode_end_date COMMENT = 'Resolution date; NULL while active',
     episodes.first_ever_diagnosis_date AS first_ever_diagnosis_date COMMENT = 'Earliest episode start across all episodes of this condition for the person',
@@ -80,7 +81,7 @@ DIMENSIONS(
     demographics.age_band_5y AS age_band_5y COMMENT = '5-year age bands (0-4, 5-9, ..., 80-84, 85+, Unknown)',
     demographics.age_band_10y AS age_band_10y COMMENT = '10-year age bands (0-9, 10-19, ..., 70-79, 80+, Unknown)',
     demographics.age_band_nhs AS age_band_nhs COMMENT = 'NHS Digital standard age bands (0-4, 5-14, 15-24, ..., 75-84, 85+)',
-    demographics.age_band_esp AS age_band_esp COMMENT = 'ESP 2013 age bands. Join to esp_weight for standardised rates.',
+    demographics.age_band_esp AS age_band_esp COMMENT = 'ESP 2013 age bands. This view exposes esp_weight and esp_proportion as facts, so age-standardised rates can be built here directly; take ANY_VALUE(esp_proportion) per age band.',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
     demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (detailed groupings; Unknown/Not Stated/Not Recorded/Refused where missing)',
     demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
@@ -123,5 +124,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS Conditions Detail Semantic View - person x condition register rows with diagnosis dates (ltc, 38 registers QOF v50) and historical condition episodes (episodes). Enables time-since-diagnosis, diagnosed-in-period cohorts, resolution/episode analysis, and multimorbidity pairs via person_id self-joins. For flat boolean condition flags use sem_olids_population.'
-AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. Never mix ltc and episodes elements: ltc is current register grain and episodes is person-condition-episode grain. Filter condition_code before counting. Example: SELECT condition_code, AGG(people_on_register) FROM SEM_OLIDS_CONDITIONS WHERE condition_code = ''DM'' GROUP BY condition_code. For diagnosis cohorts use earliest_diagnosis_date (e.g. WHERE earliest_diagnosis_date >= DATEADD(year, -1, CURRENT_DATE) for newly diagnosed); obesity dates are BMI dates. Registers include inactive and deceased persons — filter is_active = TRUE unless asked otherwise. Multimorbidity pairs: two person-grain CTEs over this view, each filtered to one condition_code, joined on person_id. Example linkage: reduce a condition cohort here and orders in sem_olids_prescribing before joining. On this view use the governed people metric for released headcounts; COUNT(DISTINCT person_id) suppression does not compile.'
+AI_SQL_GENERATION 'LINKAGE: query each view in its own CTE, reduce to one row per person before joining on person_id, then aggregate; keep person_id out of the final output. Never mix ltc and episodes elements: ltc is current register grain and episodes is person-condition-episode grain. Filter condition_code before counting. Example: SELECT condition_code, AGG(people_on_register) FROM SEM_OLIDS_CONDITIONS WHERE condition_code = ''DM'' GROUP BY condition_code. For diagnosis cohorts use earliest_diagnosis_date (e.g. WHERE earliest_diagnosis_date >= DATEADD(year, -1, CURRENT_DATE) for newly diagnosed); obesity dates are BMI dates. Registers include inactive and deceased persons — filter is_active = TRUE unless asked otherwise. Multimorbidity pairs: two person-grain CTEs over this view, each filtered to one condition_code, joined on person_id. Example linkage: reduce a condition cohort here and orders in sem_olids_prescribing before joining. age_band_esp is available for grouping; esp_proportion is the ESP 2013 age-only weight in sem_olids_population. In-view COUNT(DISTINCT person_id) fails HERE with a granularity error (person_id is demographics grain; register and episode dimensions are finer) — use the governed metrics people_on_register or people_with_episodes for in-view headcounts and their HAVING suppression. COUNT(DISTINCT person_id) is still correct in the outer query over joined CTE results.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: when people were diagnosed, time since diagnosis, newly diagnosed cohorts by period, diagnosis-date-based incidence, condition episodes and resolution, recurrent episodes, and multimorbidity pair analysis. For current prevalence with boolean flags and demographics use sem_olids_population. For monthly prevalence/incidence trends use sem_olids_trends.'
