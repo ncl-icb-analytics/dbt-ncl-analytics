@@ -26,7 +26,62 @@ to a non-null inferred value, non-negative and not extreme outliers, matching th
 models. Typed markers are included where the value is non-null.
 */
 
-WITH events AS (
+WITH bp_stage_rows AS (
+    SELECT
+        systolic_observation_id AS source_observation_id,
+        GREATEST(
+            CASE
+                WHEN systolic_value >= 180 THEN 3
+                WHEN COALESCE(is_home_bp_event, FALSE) OR COALESCE(is_abpm_bp_event, FALSE)
+                    THEN IFF(systolic_value >= 150, 2, IFF(systolic_value >= 135, 1, 0))
+                ELSE IFF(systolic_value >= 160, 2, IFF(systolic_value >= 140, 1, 0))
+            END,
+            CASE
+                WHEN diastolic_value >= 120 THEN 3
+                WHEN COALESCE(is_home_bp_event, FALSE) OR COALESCE(is_abpm_bp_event, FALSE)
+                    THEN IFF(diastolic_value >= 95, 2, IFF(diastolic_value >= 85, 1, 0))
+                ELSE IFF(diastolic_value >= 100, 2, IFF(diastolic_value >= 90, 1, 0))
+            END
+        ) AS hypertension_stage_number
+    FROM {{ ref('int_blood_pressure_all') }}
+    WHERE systolic_observation_id IS NOT NULL
+
+    UNION ALL
+
+    SELECT
+        diastolic_observation_id AS source_observation_id,
+        GREATEST(
+            CASE
+                WHEN systolic_value >= 180 THEN 3
+                WHEN COALESCE(is_home_bp_event, FALSE) OR COALESCE(is_abpm_bp_event, FALSE)
+                    THEN IFF(systolic_value >= 150, 2, IFF(systolic_value >= 135, 1, 0))
+                ELSE IFF(systolic_value >= 160, 2, IFF(systolic_value >= 140, 1, 0))
+            END,
+            CASE
+                WHEN diastolic_value >= 120 THEN 3
+                WHEN COALESCE(is_home_bp_event, FALSE) OR COALESCE(is_abpm_bp_event, FALSE)
+                    THEN IFF(diastolic_value >= 95, 2, IFF(diastolic_value >= 85, 1, 0))
+                ELSE IFF(diastolic_value >= 100, 2, IFF(diastolic_value >= 90, 1, 0))
+            END
+        ) AS hypertension_stage_number
+    FROM {{ ref('int_blood_pressure_all') }}
+    WHERE diastolic_observation_id IS NOT NULL
+),
+
+blood_pressure_stages AS (
+    SELECT
+        source_observation_id,
+        CASE MAX(hypertension_stage_number)
+            WHEN 3 THEN 'Stage 3 (Severe)'
+            WHEN 2 THEN 'Stage 2'
+            WHEN 1 THEN 'Stage 1'
+            ELSE 'Normal'
+        END AS hypertension_stage
+    FROM bp_stage_rows
+    GROUP BY source_observation_id
+),
+
+events AS (
 
     -- Cardiovascular: Blood Pressure (one row each for systolic and diastolic)
     SELECT person_id, systolic_observation_id AS source_observation_id,
@@ -138,22 +193,38 @@ WITH events AS (
         clinical_effective_date, inferred_value::FLOAT, inferred_unit::VARCHAR, eosinophil_category::VARCHAR
     FROM {{ ref('int_eosinophil_count') }}
     WHERE NOT is_negative AND NOT is_extreme_outlier AND inferred_value IS NOT NULL
+
+    -- Frailty: explicitly coded eFI/eFI2 scores and Rockwood assessments
+    UNION ALL
+    SELECT person_id, id, 'Electronic Frailty Index (eFI)', 'Frailty',
+        clinical_effective_date, efi_value::FLOAT, 'score', efi_category::VARCHAR
+    FROM {{ ref('int_efi_all') }}
+    WHERE efi_value IS NOT NULL
+
+    UNION ALL
+    SELECT person_id, id, 'Rockwood Frailty Scale', 'Frailty',
+        clinical_effective_date, rockwood_score::FLOAT, 'score', frailty_category::VARCHAR
+    FROM {{ ref('int_rockwood_all') }}
+    WHERE rockwood_score IS NOT NULL
 )
 
 SELECT
     {{ dbt_utils.generate_surrogate_key([
-        'person_id', 'observation_type', 'clinical_effective_date',
-        'source_observation_id', 'value'
+        'events.person_id', 'events.observation_type', 'events.clinical_effective_date',
+        'events.source_observation_id', 'events.value'
     ]) }} AS observation_event_id,
-    person_id,
-    observation_type,
-    observation_group,
-    clinical_effective_date,
-    value,
-    unit,
-    category,
-    source_observation_id
+    events.person_id,
+    events.observation_type,
+    events.observation_group,
+    events.clinical_effective_date,
+    events.value,
+    events.unit,
+    events.category,
+    blood_pressure_stages.hypertension_stage,
+    events.source_observation_id
 FROM events
+LEFT JOIN blood_pressure_stages
+    ON events.source_observation_id = blood_pressure_stages.source_observation_id
 -- Date sanity: a reading cannot post-date today. Legacy pre-1990 dates are
 -- kept (transferred records) — window filters should state their range.
-WHERE clinical_effective_date <= CURRENT_DATE
+WHERE events.clinical_effective_date <= CURRENT_DATE
