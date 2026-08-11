@@ -122,6 +122,24 @@ models:
         data_type: varchar
         description: "Treatment function description for the specialised service within which the patient is treated."
 
+      - name: referral_organisation_id
+        data_type: varchar
+        description: "Code: Organisation identifier for the referring organisation."
+
+      - name: referral_organisation_date
+        data_type: date
+        description: "Date the referral was made."
+
+      - name: referral_source_op
+        data_type:  varchar
+        description: "Code: Referral Group code for the source of referral. 
+          Categories into GP, Consultant, and others."
+
+      - name: referral_source_op_desc
+        data_type: varchar
+        description: "Desc: Referral Group code for the source of referral. 
+          Categories into GP, Consultant, and others."
+          
       - name: referral_acuity
         data_type: number
         description: "Code: The priority of a request for services as assessed by or on behalf of the consultant"
