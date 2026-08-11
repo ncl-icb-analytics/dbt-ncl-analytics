@@ -17,4 +17,6 @@ select unique_service_request_identifier
     , activity_location_type_code
     , attendance_status
     , clinical_contact_duration_of_care_contact
+    , organisation_code_provider as org_id_prov
+    , care_contact_time
 from deduplicated
