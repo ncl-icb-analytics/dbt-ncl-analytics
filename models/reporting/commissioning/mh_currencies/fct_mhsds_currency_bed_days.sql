@@ -74,13 +74,13 @@ with fiscal_years as (
 
 select
     p.uniq_hosp_prov_spell_num
+    , fy.fiscal_year_start
     , p.uniq_serv_req_id
     , p.sk_patient_id
     , p.person_id
     , p.org_id_prov
     , p.currency_group
     , p.currency_code
-    , fy.fiscal_year_start
     , p.start_date_hosp_prov_spell as spell_start_date
     , p.end_date as spell_end_date
     -- date window this row's bed days cover; to-date exclusive

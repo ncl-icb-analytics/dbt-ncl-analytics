@@ -16,6 +16,10 @@ models:
         description: Hospital provider spell identifier.
         data_tests:
           - not_null
+      - name: fiscal_year_start
+        description: Fiscal year start.
+        data_tests:
+          - not_null
       - name: uniq_serv_req_id
         description: Unique service request identifier.
       - name: sk_patient_id
@@ -32,10 +36,6 @@ models:
           - not_null
       - name: currency_code
         description: Inpatient currency code.
-        data_tests:
-          - not_null
-      - name: fiscal_year_start
-        description: Fiscal year start.
         data_tests:
           - not_null
       - name: spell_start_date
