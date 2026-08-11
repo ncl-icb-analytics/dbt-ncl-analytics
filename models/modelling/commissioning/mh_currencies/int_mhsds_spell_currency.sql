@@ -21,7 +21,9 @@ with deduplicated as (
         , s.disch_date_hosp_prov_spell
         , s.age_hosp_start_date
     from {{ ref('stg_mhsds_spell') }} as s
-    left join {{ ref('int_mhsds_spell_encounters') }} as e
+    -- inner: every staged spell has an encounters row today, and if the
+    -- encounters model ever drops duplicate spells this model must follow
+    inner join {{ ref('int_mhsds_spell_encounters') }} as e
         on s.uniq_hosp_prov_spell_num = e.encounter_id
     qualify row_number() over (
         partition by coalesce(s.person_id, s.uniq_hosp_prov_spell_num)
