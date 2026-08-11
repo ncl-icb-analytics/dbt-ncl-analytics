@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: int_csds_contact_currency
+    description: >
+      CSDS community contact currency classification. Grain: one row per
+      unique_service_request_identifier and unique_care_contact_identifier;
+      providers reuse local contact identifiers across referrals. Population:
+      all contacts in CYP201. Time semantics: age is derived at referral
+      received date; the latest submitted CYP102 service type is used.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - unique_service_request_identifier
+              - unique_care_contact_identifier
+    columns:
+      - name: unique_service_request_identifier
+        description: Unique service request identifier.
+        data_tests:
+          - not_null
+      - name: unique_care_contact_identifier
+        description: Unique care contact identifier.
+        data_tests:
+          - not_null
+      - name: person_id
+        description: CSDS person identifier.
+      - name: sk_patient_id
+        description: Pseudonymised patient identifier.
+      - name: org_id_prov
+        description: Provider organisation code.
+      - name: care_contact_date
+        description: Care contact date.
+      - name: ic_age_at_service_referral_received_date
+        description: CSDS-derived age in years at referral received.
+      - name: age_category
+        description: Adult or CYP currency age category.
+      - name: attendance_status
+        description: Care contact attendance status.
+      - name: is_costed_attendance
+        description: Whether the attendance is priced.
+      - name: team_type_code
+        description: Service or team type referred to code.
+      - name: team_type_name
+        description: Mapped service or team type name.
+      - name: primary_referral_reason
+        description: Primary referral reason code.
+      - name: currency_code
+        description: Community contact currency code.
+      - name: currency_source
+        description: Currency classification source.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['reason_split', 'team_type', 'team_fallback', 'unmapped_team']
