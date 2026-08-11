@@ -19,27 +19,21 @@ with fiscal_years as (
     where fiscal_year_start = 2026
 )
 
-, price_attempts as (
-    select
-        c.*
-        , exact_price.price_gbp as exact_price_gbp
-        , age_default_price.price_gbp as age_default_price_gbp
-    from {{ ref('int_csds_contact_currency') }} as c
-    left join {{ ref('nhse_currency_prices_2627') }} as exact_price
-        on c.currency_code = exact_price.currency_code
-    left join {{ ref('nhse_currency_prices_2627') }} as age_default_price
-        on iff(c.age_category = 'CYP', 'CCO99Z', 'CAO99Z') = age_default_price.currency_code
-)
-
 , priced as (
     select
-        *
-        , coalesce(exact_price_gbp, age_default_price_gbp) as unit_price_2627_gbp
+        c.*
+        , coalesce(price.unit_price_2627_gbp, age_default.unit_price_2627_gbp) as unit_price_2627_gbp
         , case
-            when exact_price_gbp is not null then 'exact'
-            when age_default_price_gbp is not null then 'age_default'
+            when price.unit_price_2627_gbp is not null then 'exact'
+            when age_default.unit_price_2627_gbp is not null then 'age_default'
         end as price_source
-    from price_attempts
+    from {{ ref('int_csds_contact_currency') }} as c
+    left join {{ ref('int_nhse_currency_price_resolution') }} as price
+        on c.currency_code = price.currency_code
+    -- every seed-mapped community code is priced; the age default is a
+    -- guard for codes absent from the schedule entirely
+    left join {{ ref('int_nhse_currency_price_resolution') }} as age_default
+        on iff(c.age_category = 'CYP', 'CCO99Z', 'CAO99Z') = age_default.currency_code
 )
 
 select
