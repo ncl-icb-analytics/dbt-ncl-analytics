@@ -8,10 +8,14 @@ models:
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
-            combination_of_columns: [patient_id, file_date]
+            combination_of_columns: [patient_id, file_date, match_id]
     columns:
       - name: patient_id
-        description: Patient identifier, unique within a matching run.
+        description: Patient identifier; may appear in multiple match pairs within a run.
+        data_tests:
+          - not_null
+      - name: match_id
+        description: Match-pair identifier within the matching run.
         data_tests:
           - not_null
       - name: file_date

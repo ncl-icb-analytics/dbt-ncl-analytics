@@ -45,6 +45,9 @@ models:
       - name: person_id
         description: Unique person identifier
 
+      - name: sk_patient_id
+        description: Representative pseudonymised patient identifier for linkage to non-OLIDS data.
+
       - name: practice_name
         description: Practice name where person was registered
 

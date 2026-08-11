@@ -88,43 +88,6 @@ sources:
       data_type: TEXT
     - name: REGION
       data_type: TEXT
-  - name: NATIONAL_GP_PRACTICE_LATEST_LIST_SIZES_BAK
-    identifier: '"NATIONAL_GP_PRACTICE_LATEST_LIST_SIZES_BAK"'
-    columns:
-    - name: LIST_SIZE_VALUE
-      data_type: NUMBER(38,1)
-    - name: LIST_SIZE_DATE
-      data_type: DATE
-    - name: SOURCE_ID
-      data_type: NUMBER(38,0)
-    - name: SOURCE_SHORT_NAME
-      data_type: TEXT
-    - name: SOURCE_NAME
-      data_type: TEXT
-    - name: GP_PRACTICE_CODE
-      data_type: TEXT
-    - name: GP_PRACTICE_NAME
-      data_type: TEXT
-    - name: ORGANISATION_CODE
-      data_type: NUMBER(38,0)
-    - name: SUB_ICB_CODE
-      data_type: TEXT
-    - name: QUARTER_DATE
-      data_type: DATE
-    - name: COMMISSIONER_CODE
-      data_type: TEXT
-    - name: COMMISSIONER_NAME
-      data_type: TEXT
-    - name: PRACTICE_NAME
-      data_type: TEXT
-    - name: WEIGHTED_LIST_SIZE
-      data_type: FLOAT
-    - name: NORMALISED_LIST_SIZE
-      data_type: FLOAT
-    - name: PRACTICE_LIST_SIZE
-      data_type: NUMBER(38,0)
-    - name: LAST_UPDATED
-      data_type: TIMESTAMP_NTZ
   - name: NCL_GP_PRACTICE_LATEST_LIST_SIZES
     identifier: '"NCL_GP_PRACTICE_LATEST_LIST_SIZES"'
     columns:
@@ -138,13 +101,19 @@ sources:
       data_type: TEXT
     - name: SOURCE_NAME
       data_type: TEXT
-    - name: GP_PRACTICE_CODE
+    - name: PRACTICE_CODE
       data_type: TEXT
-    - name: GP_PRACTICE_NAME
-      data_type: TEXT
-    - name: ORGANISATION_CODE
-      data_type: NUMBER(38,0)
     - name: SUB_ICB_CODE
+      data_type: TEXT
+    - name: PRACTICE_NAME_FULL
+      data_type: TEXT
+    - name: LAST_UPDATED
+      data_type: TIMESTAMP_NTZ
+    - name: ORGANISATION_CODE
+      data_type: TEXT
+    - name: ICB
+      data_type: TEXT
+    - name: REGION
       data_type: TEXT
   - name: NCL_GP_PRACTICE_LATEST_LIST_SIZES_BACKUP
     identifier: '"NCL_GP_PRACTICE_LATEST_LIST_SIZES_BACKUP"'
@@ -264,41 +233,6 @@ sources:
       data_type: DATE
     - name: RUN_DATE
       data_type: DATE
-  - name: WNL
-    identifier: '"WNL"'
-    columns:
-    - name: GP_PRACTICE_CODE
-      data_type: TEXT
-    - name: Organisation_Name
-      data_type: TEXT
-    - name: SUB_ICB_CODE
-      data_type: TEXT
-    - name: Status
-      data_type: TEXT
-    - name: Address_Line_1
-      data_type: TEXT
-    - name: Address_Line_2
-      data_type: TEXT
-    - name: Address_Line_3
-      data_type: TEXT
-    - name: Address_Line_4
-      data_type: TEXT
-    - name: Address_Line_5
-      data_type: TEXT
-    - name: Country
-      data_type: TEXT
-    - name: StartDate
-      data_type: TIMESTAMP_NTZ
-    - name: EndDate
-      data_type: TIMESTAMP_NTZ
-    - name: OrganisationPrimaryRole
-      data_type: TEXT
-    - name: Q1_PRACTICE_LIST_SIZE
-      data_type: NUMBER(38,0)
-    - name: Q1_WEIGHTED_LIST_SIZE
-      data_type: FLOAT
-    - name: Q1_LAST_UPDATED
-      data_type: TIMESTAMP_NTZ
   - name: WNL_ORGANISATION
     identifier: '"WNL_ORGANISATION"'
     columns:

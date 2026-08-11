@@ -82,6 +82,10 @@ select
     , dict_treat.specialty_name as treatment_function_code_desc
 
     /* Referral information */
+    , core.appointment_referral_referring_organisation as referral_organisation_id
+    , core.appointment_referral_received_date as referral_organisation_date
+    , core.appointment_referral_source_op as referral_source_op
+    , dict_appt_referral_source.referral_group as referral_source_op_desc
     , core.appointment_referral_priority_type as referral_acuity -- proxy for acuity, change as poor
     , dict_appt_priority.priority_type_desc as referral_acuity_desc
 
@@ -144,6 +148,11 @@ left join
 left join 
     {{ ref('stg_dictionary_dbo_serviceprovider') }} as dict_provider 
     on core.appointment_commissioning_service_agreement_provider = dict_provider.service_provider_full_code
+
+-- referral source
+left join
+    {{ ref('stg_dictionary_op_sourceofreferrals') }} as dict_appt_referral_source
+    on core.appointment_referral_source_op = dict_appt_referral_source.bk_source_of_referral_code
 
 -- referral priority
 left join
