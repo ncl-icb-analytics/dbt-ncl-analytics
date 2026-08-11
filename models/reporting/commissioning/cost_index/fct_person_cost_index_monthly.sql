@@ -5,23 +5,30 @@ WNL resource analysis.
 Grain: sk_patient_id x activity_month x service_grouping x service x
 is_patient_attributable x cost_basis x cost_source x activity_unit.
 
-Full-history union of the two cost spines built so far:
+Full-history union of the cost spines built so far:
   * SLAM (int_cost_index_slam_activity_monthly) — acute / community actual cost, WNL
     (NCL + NWL). From 2021-04 to the last complete month.
   * EPD prescribing (int_cost_index_epd_prescribing_monthly) — GP prescriptions
     (Community), WNL. From 2018-04 and about 12 months behind SLAM.
+  * MHSDS (int_cost_index_mhsds_activity_monthly) — MH inpatient and contacts.
+    Proxy-costed from the NHSE 26/27 currency price schedule (deflated + MFF).
+  * CSDS (int_cost_index_csds_activity_monthly) — community contacts.
+    Proxy-costed from the NHSE 26/27 currency price schedule (deflated + MFF).
 
 Full history at every layer here — no rolling window. The 12-month analysis
 window is applied in reporting facts (fct_person_resource_index).
 cost_basis distinguishes actual cost from future proxy/nominal sources.
 
-Still to union (sources identified, build pending): GP appointments (OLIDS),
-MH inpatient + contacts (MHSDS — spell dedup now in int_mhsds_spell_encounters),
-community contacts (CSDS), high-cost drugs/devices PLD (LSDrPLCM/LSDePLCM).
+Still to union (sources identified, build pending): GP appointments (OLIDS)
+and high-cost drugs/devices PLD (LSDrPLCM/LSDePLCM).
 
 is_patient_attributable carries through from the POD mapping — filter it for
 per-patient resource cuts (excludes SLAM block/adjustment lines);
 keep all rows for provider/system totals.
+
+MH/community provider block payments inside SLAM are mostly not
+patient-attributable, so patient-attributable cuts do not double count; whole-
+system totals mixing SLAM block lines with these proxy sources may double count.
 */
 
 with slam as (
@@ -55,10 +62,44 @@ with slam as (
     from {{ ref('int_cost_index_epd_prescribing_monthly') }} as p
 )
 
+, mhsds as (
+    select
+        sk_patient_id
+        , activity_month
+        , 'Mental Health'    as service_grouping
+        , service
+        , true               as is_patient_attributable
+        , 'proxy'            as cost_basis
+        , 'MHSDS'            as cost_source
+        , activity_unit
+        , total_cost
+        , total_activity
+    from {{ ref('int_cost_index_mhsds_activity_monthly') }}
+)
+
+, csds as (
+    select
+        sk_patient_id
+        , activity_month
+        , 'Community'                as service_grouping
+        , 'Community Health Contact' as service
+        , true                       as is_patient_attributable
+        , 'proxy'                    as cost_basis
+        , 'CSDS'                     as cost_source
+        , 'contact'                  as activity_unit
+        , total_cost
+        , total_activity
+    from {{ ref('int_cost_index_csds_activity_monthly') }}
+)
+
 , combined as (
     select * from slam
     union all
     select * from rx
+    union all
+    select * from mhsds
+    union all
+    select * from csds
 )
 
 select
