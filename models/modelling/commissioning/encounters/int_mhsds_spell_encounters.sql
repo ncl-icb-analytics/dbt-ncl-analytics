@@ -21,8 +21,23 @@ End-date derivation (end_date_source):
                       reporting period it appeared in. ~95% of undischarged
                       spells fall here; treating them as open would accrue
                       thousands of phantom bed days each.
+- 'superseded'      - a later admission for the same person started before this
+                      spell's derived end date; the spell is closed at that
+                      admission date (see single occupancy below).
 Estimated discharge dates are NOT used for closure: 81% of them post-date the
 last submission evidence for the spell.
+
+Single occupancy:
+A person occupies at most one MH bed per night, but spell ids are
+provider-scoped, so one admission can carry several records: trust mergers
+re-register long-stay patients under new ids with the original admission date
+(BEH/C&I -> NLFT), NHS and independent-sector providers both submit the same
+placement, and shifted-date copies partially overlap. Three rules restore
+single occupancy (together they removed ~13% of bed-day history):
+1. one spell per person and admission date (latest submission evidence wins)
+2. drop spells wholly contained inside a longer spell
+3. discharge-forward: a later admission ends any spell still open at that
+   date (end_date_source 'superseded')
 
 Proxy costing:
 - Bed-day prices from the NHSE 26/27 indicative price schedule (24/25 NCC),
@@ -59,6 +74,57 @@ with spells as (
             else greatest(reporting_period_end_date, dateadd(day, 1, start_date_hosp_prov_spell))
         end as end_date
     from spells
+)
+
+-- Single occupancy rule 1: one spell per person and admission date, keeping
+-- the record with the latest submission evidence.
+, deduplicated as (
+    select *
+    from classified
+    qualify row_number() over (
+        partition by coalesce(person_id, uniq_hosp_prov_spell_num)
+            , start_date_hosp_prov_spell
+        order by reporting_period_end_date desc nulls last
+            , uniq_hosp_prov_spell_num
+    ) = 1
+)
+
+-- Rule 2: drop spells wholly contained inside a longer spell for the same
+-- person (strict containment on at least one side, so exact duplicates on
+-- both dates are not mutually eliminated).
+, uncontained as (
+    select d.*
+    from deduplicated as d
+    where not exists (
+        select 1
+        from deduplicated as o
+        where o.person_id = d.person_id
+            and o.uniq_hosp_prov_spell_num != d.uniq_hosp_prov_spell_num
+            and o.start_date_hosp_prov_spell <= d.start_date_hosp_prov_spell
+            and coalesce(o.end_date, current_date) >= coalesce(d.end_date, current_date)
+            and (o.start_date_hosp_prov_spell < d.start_date_hosp_prov_spell
+                or coalesce(o.end_date, current_date) > coalesce(d.end_date, current_date))
+    )
+)
+
+-- Rule 3: discharge-forward supersession. A later admission ends any spell
+-- still open at that date (end_date_source 'superseded').
+, base as (
+    select
+        * exclude (end_date, end_date_source, next_start_date)
+        , iff(next_start_date < coalesce(end_date, current_date)
+            , next_start_date, end_date) as end_date
+        , iff(next_start_date < coalesce(end_date, current_date)
+            , 'superseded', end_date_source) as end_date_source
+    from (
+        select
+            u.*
+            , lead(start_date_hosp_prov_spell) over (
+                partition by coalesce(person_id, uniq_hosp_prov_spell_num)
+                order by start_date_hosp_prov_spell, uniq_hosp_prov_spell_num
+            ) as next_start_date
+        from uncontained as u
+    )
 )
 
 -- Dominant care setting per spell from ward stays, weighted by bed days.
@@ -138,7 +204,7 @@ with spells as (
             * coalesce(mff.mff_factor, 1.0)
             * fy.gdp_deflator / pb.base_gdp_deflator
         ) as proxy_cost
-    from classified as c
+    from base as c
     cross join price_base_deflator as pb
     cross join unclassified_price as up
     join fiscal_years as fy
@@ -173,7 +239,7 @@ select
     , coalesce(costed.proxy_cost, 0) as proxy_cost
     , 'MHSDS' as source
 from
-    classified as c
+    base as c
 left join
     {{ ref('stg_mhsds_bridging') }} as b
     on c.person_id = b.person_id
