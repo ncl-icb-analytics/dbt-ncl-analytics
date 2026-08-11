@@ -83,9 +83,9 @@ select
     , fy.fiscal_year_start
     , p.start_date_hosp_prov_spell as spell_start_date
     , p.end_date as spell_end_date
-    -- date window this row's bed days cover; end date exclusive
-    , greatest(p.start_date_hosp_prov_spell, fy.fy_range_start) as segment_start_date
-    , least(p.activity_end_date, dateadd(day, 1, fy.fy_range_end)) as segment_end_date
+    -- date window this row's bed days cover; to-date exclusive
+    , greatest(p.start_date_hosp_prov_spell, fy.fy_range_start) as bed_days_from_date
+    , least(p.activity_end_date, dateadd(day, 1, fy.fy_range_end)) as bed_days_to_date
     , datediff(day
         , greatest(p.start_date_hosp_prov_spell, fy.fy_range_start)
         , least(p.activity_end_date, dateadd(day, 1, fy.fy_range_end))

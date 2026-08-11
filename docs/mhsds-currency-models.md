@@ -79,6 +79,9 @@ Prices are 2026/27 indicative prices (from the 24/25 National Cost Collection). 
 
 - `fct_mhsds_currency_bed_days` — one row per spell × fiscal year. Nights are attributed to the fiscal year in which they start and sum to the spell length; `proxy_cost` = nights × resolved price × MFF × deflator ratio. Same-day spells count one bed day.
 - `fct_mhsds_currency_contacts` — one row per (referral, contact). Attended contacts (status 5, 6, or missing) are costed; DNAs and cancellations are kept with `proxy_cost = 0` so activity counts remain complete.
+- `fct_mhsds_current_inpatients` — one row per open spell: who is in a mental health bed now, where, for how long, and under which currency. "Open" means the spell is still being submitted with no discharge date; orphaned undischarged spells are excluded.
+
+On `fct_mhsds_currency_bed_days`, `bed_days_from_date`/`bed_days_to_date` give the exact window each row's bed days cover (to-date exclusive), alongside the whole spell's `spell_start_date`/`spell_end_date` for context — the pairs differ only for spells crossing fiscal years.
 
 ## Caveats analysts should know
 

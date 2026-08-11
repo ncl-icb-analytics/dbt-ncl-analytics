@@ -44,12 +44,14 @@ models:
           - not_null
       - name: spell_end_date
         description: Derived spell end date; null while the spell is open.
-      - name: segment_start_date
-        description: First night covered by this row.
+      - name: bed_days_from_date
+        description: First night counted in this row's bed_days.
         data_tests:
           - not_null
-      - name: segment_end_date
-        description: Day after the last night covered by this row (exclusive).
+      - name: bed_days_to_date
+        description: >
+          Day after the last night counted in this row's bed_days (exclusive,
+          so bed_days = bed_days_to_date - bed_days_from_date).
         data_tests:
           - not_null
       - name: bed_days
