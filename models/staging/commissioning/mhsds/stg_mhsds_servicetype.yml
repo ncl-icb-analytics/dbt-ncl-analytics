@@ -4,11 +4,11 @@ models:
   - name: stg_mhsds_servicetype
     description: >
       MHSDS service types for referral currency grouping. Grain: one row per
-      uniq_serv_req_id. Population: referrals represented in MHS102. Time
-      semantics: where a referral has more than one submitted service type, the
-      latest submission is retained. DMIC derives serv_team_type_ref_to_mh onto
-      MHS102 for v6 submissions, where it is populated for 99.95% of rows; no
-      MHS101 v6 union is used.
+      uniq_serv_req_id. Population: all referrals in MHS101. Time semantics:
+      where a referral has more than one submitted service type, the latest
+      submission is retained. Team type comes from MHS102 (DMIC-derived) where
+      present, falling back to the v6 ServTeamType on MHS101 — ~23% of
+      referrals have no MHS102 row and only the MHS101 field.
     config:
       meta:
         owner:
