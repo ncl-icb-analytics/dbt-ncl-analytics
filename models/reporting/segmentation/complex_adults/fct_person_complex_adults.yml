@@ -1,40 +1,61 @@
 models:
   - name: fct_person_complex_adults
-    description: 'Complex adults cohort v2.2. One row per person meeting all criteria:
-      age >= 18, AND at least one complexity criterion (moderate/severe frailty OR
-      3+ included LTCs OR homeless OR on the palliative care register OR alcohol
-      misuse OR substance misuse OR high acute use with no GP contact), AND at
-      least one activity criterion (>=2 NEL admissions OR >=3 ED attendances OR
-      >=15 attended GP appointments OR attended outpatient care across >=5
-      treatment-function specialties in the last 12 months, OR housebound).
-      Includes all persons regardless of registration status; filter is_active = TRUE
-      for the currently registered population.
+    description: |
+      Complex adults cohort (v2.2): adults with both clinical complexity and
+      high service use. Segment 7 of fct_person_segment.
 
-      v2.2 added high acute use with no GP contact to the complexity limb:
-      (>=3 ED attendances OR >=2 NEL admissions in 12 months) AND 0 attended GP
-      appointments in the GP 12-month window. Anyone meeting it also meets the
-      ED/NEL activity criteria, so it acts as a direct entry route for people
-      using acute services with no primary care footprint.
+      Grain: one row per cohort member, keyed on person_id.
 
-      v2.1 added GP activity and outpatient specialty breadth to the utilisation
-      limb. GP activity includes attended clinical appointments only; DNAs and admin
-      are excluded. Outpatient specialty breadth counts distinct treatment-function
-      specialties with an attended appointment.
+      Population: everyone in dim_person_demographics aged 18+, i.e. anyone
+      with NCL GP registration history, including people who have since left
+      or died. Filter is_active = TRUE for the currently registered
+      population.
 
-      v2.0 criteria signed off by K Saravanakumar, 27 July 2026: widened the
-      complexity limb from 2 alternatives to 6, made frailty additive across eFI2 and
-      coded diagnoses, and added learning disability to the LTC list at 65+.
+      Membership needs a complexity criterion AND a utilisation criterion.
 
-      Included LTCs (16): AF, asthma, CHD, CKD, COPD, dementia, depression, diabetes,
-      epilepsy, heart failure, hypertension, SMI, stroke/TIA, Parkinson''s, anxiety,
-      and learning disability (65+ only).
-      ED attendances count all urgent & emergency care settings from ECDS (Type 1/2
-      A&E, UTC, WiC, SDEC). GP and outpatient 12-month windows end on the latest
-      available activity date in each source to account for reporting lag.
+      Complexity (any one):
 
-      Every complexity criterion is exposed as its own column alongside
-      complexity_criteria_count, so the marginal contribution of any single criterion
-      can be measured without rebuilding the model.'
+      - Moderate or severe frailty, by eFI2 or coded diagnosis
+      - 3+ of the 16 included LTCs
+      - Homeless
+      - On the palliative care register
+      - Alcohol misuse
+      - Substance misuse
+      - High acute use with no GP contact: 3+ ED attendances or 2+
+        non-elective admissions, with no attended GP appointment
+
+      Utilisation (any one, over a rolling 12 months):
+
+      - 3+ ED attendances
+      - 2+ non-elective admissions
+      - 15+ attended GP appointments
+      - Outpatient care across 5+ treatment-function specialties
+      - Housebound
+
+      Included LTCs (16): AF, asthma, CHD, CKD, COPD, dementia, depression,
+      diabetes, epilepsy, heart failure, hypertension, SMI, stroke/TIA,
+      Parkinson's, anxiety, and learning disability (65+ only). NAFLD is not
+      included here, unlike the wider segmentation LTC list.
+
+      Notes:
+
+      - Every criterion is exposed as its own column alongside
+        complexity_criteria_count, so the marginal contribution of any one
+        can be measured without rebuilding the model.
+      - Frailty is additive across its two sources: eFI2 scores only living
+        over-65s, the coded register has no age or death restriction.
+      - ED attendances cover all ECDS urgent and emergency care settings
+        (Type 1/2 A&E, UTC, WiC, SDEC).
+      - GP appointments are attended clinical appointments; DNAs and admin
+        are excluded.
+      - 12-month windows end on the latest activity date in each source, to
+        allow for reporting lag.
+
+      Criteria signed off by K Saravanakumar, 27 July 2026 (v2.0). v2.1 added
+      GP activity and outpatient specialty breadth to the utilisation limb;
+      v2.2 added high acute use with no GP contact to the complexity limb, as
+      a direct entry route for people using acute services with no primary
+      care footprint.
 
     data_tests:
       - dbt_utils.at_least_one:

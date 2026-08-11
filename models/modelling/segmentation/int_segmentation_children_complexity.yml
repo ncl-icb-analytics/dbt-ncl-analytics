@@ -1,28 +1,40 @@
 models:
   - name: int_segmentation_children_complexity
-    description: >
-      Children with complexity criteria for population segmentation. One row
-      per person aged under 18 in dim_person_demographics, regardless of
-      registration status; filter is_active = TRUE for the currently
-      registered population.
+    description: |
+      Children with complexity criteria, composed from the segmentation
+      building blocks. Defines the cohort published as
+      fct_person_complex_children and segment 3 of fct_person_segment.
 
-      All under-18s are kept with each criterion exposed as a count and flag;
-      meets_any_criterion drives the children with complexity segment in
-      fct_person_segment. Criteria (any qualifies): 2+ qualifying LTCs (2+
-      rather than the circulated 1+ so a single LTC reads as health needs,
-      segment 2, rather than complexity); 1+
-      coded complexity diagnosis (the NWL CLDCHN code list, ever recorded);
-      5+ attended paediatric outpatient appointments in 12 months;
-      attended outpatient care across 2+ main specialties in 12 months,
-      excluding trauma & orthopaedics, ENT, ophthalmology and A&E (aligned
-      to NWL); 1+ mental health inpatient stay in 12 months (MHSDS spells
-      overlapping the window, so long-stay admissions before it still
-      count); 7+ attended community service contacts in 12 months (CSDS).
+      Grain: one row per person aged under 18, keyed on person_id.
 
-      12-month windows end on the latest activity date in each source to
-      account for reporting lag. SUS/MHSDS/CSDS activity joins on
-      sk_patient_id; some CSDS records have no patient key, so community
-      contact counts are a floor.
+      Population: every under-18 in dim_person_demographics, whether or not
+      they meet a criterion, so the flags are inspectable across all
+      children. meets_any_criterion drives cohort membership downstream.
+
+      Criteria, over a rolling 12 months unless stated:
+
+      - 2+ qualifying LTCs, ever recorded (int_segmentation_ltc_count)
+      - 1+ diagnosis from the NWL complex needs code list, ever recorded
+        (int_segmentation_children_dx)
+      - 5+ attended paediatric outpatient appointments
+        (int_segmentation_op_activity)
+      - Outpatient care across 2+ main specialties, excluding trauma and
+        orthopaedics, ENT, ophthalmology and A&E, aligned to NWL
+        (int_segmentation_op_activity)
+      - 1+ mental health inpatient stay, counting spells overlapping the
+        window (int_segmentation_mh_inpatient_activity)
+      - 7+ attended community service contacts
+        (int_segmentation_community_activity)
+
+      Notes:
+
+      - The LTC criterion is 2+ rather than the circulated 1+, so a single
+        LTC reads as health needs (segment 2) rather than complexity.
+      - 12-month windows end on the latest activity date in each source, to
+        allow for reporting lag.
+      - SUS, MHSDS and CSDS activity joins on sk_patient_id; some CSDS
+        records carry no patient key, so community contact counts are a
+        floor.
     data_tests:
       - dbt_utils.at_least_one:
           arguments:

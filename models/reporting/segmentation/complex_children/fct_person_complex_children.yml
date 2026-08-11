@@ -1,26 +1,42 @@
 models:
   - name: fct_person_complex_children
-    description: 'Children with complexity cohort. One row per person aged under
-      18 meeting at least one complexity criterion: 2+ qualifying LTCs, 1+ coded
-      complexity diagnosis (NWL CLDCHN code list), 5+ attended paediatric
-      outpatient appointments in 12 months, attended outpatient care across 2+
-      main specialties in 12 months (excluding trauma & orthopaedics, ENT,
-      ophthalmology and A&E), 1+ mental health inpatient stay in 12 months, or
-      7+ attended community service contacts in 12 months.
-      Includes all persons regardless of registration status; filter
-      is_active = TRUE for the currently registered population.
+    description: |
+      Children with complexity cohort: under-18s with complex health needs,
+      significant service use, or both. Segment 3 of fct_person_segment.
 
-      Reporting companion to fct_person_complex_adults: the same cohort that
-      fct_person_segment assigns to segment 3, with demographics and
-      per-criterion columns alongside complexity_criteria_count so the marginal
-      contribution of any single criterion can be measured. Persons on the
-      palliative care register appear here too but sit in segment 8 (End of
-      Life) in fct_person_segment.
+      Grain: one row per cohort member, keyed on person_id.
 
-      Criteria and windows are defined in int_segmentation_children_complexity;
-      12-month windows end on the latest activity date in each source to
-      account for reporting lag. Community contact counts are a floor (some
-      CSDS records carry no patient key).'
+      Population: everyone in dim_person_demographics aged under 18, i.e.
+      anyone with NCL GP registration history, including people who have
+      since left. Filter is_active = TRUE for the currently registered
+      population.
+
+      Membership needs any one criterion, over a rolling 12 months unless
+      stated:
+
+      - 2+ qualifying LTCs (ever recorded)
+      - 1+ diagnosis from the NWL complex needs code list (ever recorded)
+      - 5+ attended paediatric outpatient appointments
+      - Outpatient care across 2+ main specialties, excluding trauma and
+        orthopaedics, ENT, ophthalmology and A&E
+      - 1+ mental health inpatient stay
+      - 7+ attended community service contacts
+
+      Notes:
+
+      - Every criterion is exposed as its own column alongside
+        complexity_criteria_count, so the marginal contribution of any one
+        can be measured without rebuilding the model.
+      - Criteria and windows are defined in
+        int_segmentation_children_complexity.
+      - Children on the palliative care register appear here but segment as
+        End of Life (segment 8), which outranks complexity.
+      - 12-month windows end on the latest activity date in each source, to
+        allow for reporting lag.
+      - Community contact counts are a floor: some CSDS records carry no
+        patient key.
+      - Mental health inpatient stays count spells overlapping the window,
+        so long-stay patients admitted before it are included.
 
     data_tests:
       - dbt_utils.at_least_one:
