@@ -40,6 +40,7 @@ SELECT
     -- Core identifiers
     apm.analysis_month,
     apm.person_id,
+    d.sk_patient_id,
     d.practice_name,
     
     -- Date components for filtering
