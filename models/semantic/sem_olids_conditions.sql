@@ -81,7 +81,7 @@ DIMENSIONS(
     demographics.age_band_5y AS age_band_5y COMMENT = '5-year age bands (0-4, 5-9, ..., 80-84, 85+, Unknown)',
     demographics.age_band_10y AS age_band_10y COMMENT = '10-year age bands (0-9, 10-19, ..., 70-79, 80+, Unknown)',
     demographics.age_band_nhs AS age_band_nhs COMMENT = 'NHS Digital standard age bands (0-4, 5-14, 15-24, ..., 75-84, 85+)',
-    demographics.age_band_esp AS age_band_esp COMMENT = 'ESP 2013 age bands. ESP weights (esp_proportion) are not in this view — use sem_olids_population for standardised rates.',
+    demographics.age_band_esp AS age_band_esp COMMENT = 'ESP 2013 age bands. This view exposes esp_weight and esp_proportion as facts, so age-standardised rates can be built here directly; take ANY_VALUE(esp_proportion) per age band.',
     demographics.ethnicity_category AS ethnicity_category COMMENT = 'Ethnicity category (Asian or Asian British, Black or Black British, Mixed, Other, White, Unknown)',
     demographics.ethnicity_subcategory AS ethnicity_subcategory COMMENT = 'Ethnicity subcategory (detailed groupings; Unknown/Not Stated/Not Recorded/Refused where missing)',
     demographics.main_language AS main_language COMMENT = 'Main spoken language (Not Recorded if unknown)',
