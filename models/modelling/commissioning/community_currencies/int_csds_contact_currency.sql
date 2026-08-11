@@ -28,7 +28,9 @@ with activity as (
             when ic_age_at_service_referral_received_date between 0 and 17 then 'CYP'
             else 'Adult'
         end as age_category
-        , attendance_status in ('5', '6') or attendance_status is null as is_costed_attendance
+        -- lpad guards against zero-padded codes; nulls (~54% of contacts,
+        -- structural across providers) costed per NHSE v1.1 guidance
+        , lpad(attendance_status, 2, '0') in ('05', '06') or attendance_status is null as is_costed_attendance
     from activity
 )
 
