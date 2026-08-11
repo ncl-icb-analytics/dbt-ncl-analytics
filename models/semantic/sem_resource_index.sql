@@ -41,7 +41,7 @@ DIMENSIONS(
     ri.residence_imd_quintile AS residence_imd_quintile COMMENT = 'Residence IMD quintile',
     ri.residence_borough AS residence_borough COMMENT = 'Residence borough',
     ri.residence_ward_2025_name AS residence_ward_2025_name COMMENT = 'Residence ward',
-    ri.weighted_ratio_imputed AS weighted_ratio_imputed COMMENT = 'TRUE when the WNL mean weighted ratio was used as a fallback'
+    ri.weighted_ratio_imputed AS weighted_ratio_imputed COMMENT = 'TRUE when the practice had no published Carr-Hill ratio and the WNL mean was used instead.'
 )
 
 METRICS(

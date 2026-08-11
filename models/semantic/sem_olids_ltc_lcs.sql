@@ -46,6 +46,7 @@ FACTS(
 DIMENSIONS(
     -- Person linkage key
     demographics.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
+    demographics.sk_patient_id AS sk_patient_id COMMENT = 'Representative pseudonymised patient key for linkage to non-OLIDS views (SUS acute activity, cost index, resource index). Every active person has one; the underlying person-patient mapping can be many-to-many, so joins remain approximate at the margins. Join CTEs on sk_patient_id, then aggregate; never return sk_patient_id in final results.',
 
     -- Case-finding indicators: programme-specific numbering
     cf.in_af_61 AS in_af_61 COMMENT = 'AF case-finding indicator 61',
@@ -76,7 +77,7 @@ DIMENSIONS(
     cf.in_any_case_finding AS in_any_case_finding COMMENT = 'At least one case-finding indicator; always TRUE in this table',
 
     -- LTC LCS risk and Model of Care
-    rs.af_risk_group AS af_risk_group COMMENT = 'AF risk group',
+    rs.af_risk_group AS af_risk_group COMMENT = 'AF LTC LCS risk group: HRC, HR, MR, or LR when stratified.',
     rs.asthma_adult_risk_group AS asthma_adult_risk_group COMMENT = 'Adult asthma risk group',
     rs.asthma_cyp_risk_group AS asthma_cyp_risk_group COMMENT = 'Children and young people asthma risk group',
     rs.chd_risk_group AS chd_risk_group COMMENT = 'CHD risk group',
@@ -88,12 +89,12 @@ DIMENSIONS(
     rs.nafld_risk_group AS nafld_risk_group COMMENT = 'NAFLD risk group',
     rs.pad_risk_group AS pad_risk_group COMMENT = 'PAD risk group',
     rs.stroke_tia_risk_group AS stroke_tia_risk_group COMMENT = 'Stroke/TIA risk group',
-    rs.overall_risk_group AS overall_risk_group COMMENT = 'Overall risk group: HRC, HR, MR, or LR',
-    rs.overall_risk_rank AS overall_risk_rank COMMENT = 'Overall risk rank from 1 to 5',
+    rs.overall_risk_group AS overall_risk_group COMMENT = 'Highest LTC LCS risk across conditions: HRC (high risk complex), HR, MR, or LR. Unstratified Model of Care members default to LR.',
+    rs.overall_risk_rank AS overall_risk_rank COMMENT = 'Risk rank: 1=HRC, 2=HR, 3/4=MR subgroups, 5=LR.',
     rs.moc_pathway AS moc_pathway COMMENT = 'Model of Care pathway: HRCS, HRS, MRS, or LRS',
     rs.moc_risk_category AS moc_risk_category COMMENT = 'Model of Care risk category',
     rs.moc_pathway_status AS moc_pathway_status COMMENT = 'Model of Care pathway status: Declined, Cycle complete, In progress, or Not started',
-    rs.moc_stage_completed_label AS moc_stage_completed_label COMMENT = 'Latest completed Model of Care stage',
+    rs.moc_stage_completed_label AS moc_stage_completed_label COMMENT = 'Furthest recorded Model of Care stage: Not started, Check & Test, Remote Desktop Review, MDT Review, Care Plan Sharing, Discussion, or Follow-up.',
     rs.moc_next_action AS moc_next_action COMMENT = 'Next Model of Care action',
     rs.moc_cycle_complete AS moc_cycle_complete COMMENT = 'Model of Care cycle complete flag',
     rs.moc_any_activity_12m AS moc_any_activity_12m COMMENT = 'Any Model of Care activity in the last 12 months',
@@ -101,7 +102,7 @@ DIMENSIONS(
     rs.moc_re_engaged_after_decline AS moc_re_engaged_after_decline COMMENT = 'Re-engaged after a previous decline',
     rs.moc_has_missing_priors AS moc_has_missing_priors COMMENT = 'Prior Model of Care stages are missing',
     rs.moc_check_test_completed_12m AS moc_check_test_completed_12m COMMENT = 'Check and test completed in the last 12 months',
-    rs.moc_stage_2_completed AS moc_stage_2_completed COMMENT = 'Model of Care stage 2 completed',
+    rs.moc_stage_2_completed AS moc_stage_2_completed COMMENT = 'Stage 2 complete: Remote Desktop Review for MR/LR; both MDT Review and Care Plan Sharing for HRC/HR.',
     rs.moc_discussion_completed_12m AS moc_discussion_completed_12m COMMENT = 'Discussion completed in the last 12 months',
     rs.moc_followup_completed_12m AS moc_followup_completed_12m COMMENT = 'Follow-up completed in the last 12 months',
 
@@ -156,5 +157,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS LTC LCS Semantic View - case-finding candidates and the risk-stratified LTC LCS register population with Model of Care progress. Grain: one row per person in each element; cf (case finding) and rs (risk summary) are person-grain but DIFFERENT populations - never mix their elements in one query. Pathway-neutral stage flags avoid double counting the same review event. No date dimensions are exposed; recency is available only via the *_12m boolean flags.'
-AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. Case finding and risk summary are different populations; never mix cf and rs elements. Example: SELECT borough_resident, AGG(stratified_patients) FROM SEM_OLIDS_LTC_LCS WHERE is_active = TRUE GROUP BY borough_resident. Example linkage: reduce case-finding patients here and DNA patients in sem_olids_appointments before joining. Risk summary includes inactive and deceased people. Use the pathway-neutral Model of Care flags; hypertension has no indicator 64.'
+AI_SQL_GENERATION 'LINKAGE: query each view in its own CTE, reduce to one row per person before joining on person_id, then aggregate; keep person_id out of the final output. Case finding and risk summary are different populations; never mix cf and rs elements. Example: SELECT borough_resident, AGG(stratified_patients) FROM SEM_OLIDS_LTC_LCS WHERE is_active = TRUE GROUP BY borough_resident. Example linkage: reduce case-finding patients here and DNA patients in sem_olids_appointments before joining. Risk summary includes inactive and deceased people. Use the pathway-neutral Model of Care flags; hypertension has no indicator 64.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: LTC LCS case-finding indicators and candidates, risk stratification (HRC/HR/MR/LR), Model of Care pathway progress including check and test, care plans, discussions and follow-ups, and cycle completion.'

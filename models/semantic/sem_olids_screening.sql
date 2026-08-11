@@ -59,25 +59,26 @@ RELATIONSHIPS(
 DIMENSIONS(
     -- Person linkage key
     demographics.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
+    demographics.sk_patient_id AS sk_patient_id COMMENT = 'Representative pseudonymised patient key for linkage to non-OLIDS views (SUS acute activity, cost index, resource index). Every active person has one; the underlying person-patient mapping can be many-to-many, so joins remain approximate at the margins. Join CTEs on sk_patient_id, then aggregate; never return sk_patient_id in final results.',
 
     -- Bowel screening (age 50-74)
     bowel.bowel_screening_status AS programme_status WITH SYNONYMS = ('bowel status') COMMENT = 'Bowel programme status (Never Screened, Up to Date, Overdue, Unknown)',
     bowel.bowel_latest_completed_date AS latest_completed_date COMMENT = 'Date of most recent completed bowel screening',
-    bowel.bowel_next_due_date AS next_screening_due_date COMMENT = 'Next bowel screening due date (latest completed + 2.5 years)',
+    bowel.bowel_next_due_date AS next_screening_due_date COMMENT = 'Bowel due date (latest completed + 2.5 years), not an activity date. Future means not yet due; past means overdue.',
     bowel.bowel_never_screened AS never_screened COMMENT = 'No completed bowel screening ever',
     bowel.bowel_latest_is_declined AS latest_is_declined COMMENT = 'Latest bowel record is a decline',
 
     -- Breast screening (female 50-71)
     breast.breast_screening_status AS programme_status COMMENT = 'Breast programme status (Never Screened, Up to Date, Overdue, Unknown)',
     breast.breast_latest_completed_date AS latest_completed_date COMMENT = 'Date of most recent completed breast screening',
-    breast.breast_next_due_date AS next_screening_due_date COMMENT = 'Next breast screening due date (latest completed + 3 years)',
+    breast.breast_next_due_date AS next_screening_due_date COMMENT = 'Breast due date (latest completed + 3 years), not an activity date. Future means not yet due; past means overdue.',
     breast.breast_never_screened AS never_screened COMMENT = 'No completed breast screening ever',
     breast.breast_latest_is_declined AS latest_is_declined COMMENT = 'Latest breast record is a decline',
 
     -- Cervical screening (female 25-64)
     cervical.cervical_screening_status AS programme_status COMMENT = 'Cervical programme status (Unsuitable, Never Screened, Up to Date, Overdue, Unknown)',
     cervical.cervical_latest_completed_date AS latest_completed_date COMMENT = 'Date of most recent completed cervical screening',
-    cervical.cervical_next_due_date AS next_screening_due_date COMMENT = 'Next cervical screening due date (interval depends on age band)',
+    cervical.cervical_next_due_date AS next_screening_due_date COMMENT = 'Cervical due date (3.5 years at 25-49, 5.5 years at 50-64), not an activity date. Future means not yet due; past means overdue.',
     cervical.cervical_never_screened AS never_screened COMMENT = 'No completed cervical screening ever',
     cervical.cervical_latest_is_declined AS latest_is_declined COMMENT = 'Latest cervical record is a decline',
     cervical.cervical_latest_is_unsuitable AS latest_is_unsuitable COMMENT = 'Latest cervical record marks person unsuitable',
@@ -146,5 +147,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS Screening Semantic View - bowel, breast, and cervical screening status plus NHS Health Check eligibility/due status. Grain: one row per person per programme table; each screening table is pre-filtered to its age/sex-eligible cohort. Programme tables include inactive/deceased persons — filter is_active = TRUE for coverage reporting.'
-AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. Coverage is AGG(<programme>_up_to_date_count) / AGG(<programme>_eligible_count) with is_active = TRUE. The <programme>_next_due_date dimensions are due dates, not event dates: future = not yet due, past = overdue. Never use them in activity windows. Example: SELECT borough_resident, AGG(bowel_eligible_count), AGG(bowel_up_to_date_count) FROM SEM_OLIDS_SCREENING WHERE is_active = TRUE GROUP BY borough_resident. Example linkage: reduce overdue people here and SMI people in sem_olids_population before joining. Query one programme table at a time; combining programme tables multiplies rows. Each programme table is already restricted to its eligible cohort (bowel 50-74 all sexes; breast female 50-71; cervical female 25-64) — do not add age/sex filters unless narrowing further. Up-to-date intervals per QOF v50: bowel 2.5y, breast 3y, cervical 3.5y (25-49) / 5.5y (50-64). NHS Health Check eligibility excludes people on CVD-risk registers (has_any_excluding_condition); due means eligible and more than five years since the last check.'
+AI_SQL_GENERATION 'LINKAGE: query each view in its own CTE, reduce to one row per person before joining on person_id, then aggregate; keep person_id out of the final output. Coverage is AGG(<programme>_up_to_date_count) / AGG(<programme>_eligible_count) with is_active = TRUE. The <programme>_next_due_date dimensions are due dates, not event dates: future = not yet due, past = overdue. Never use them in activity windows. Example: SELECT borough_resident, AGG(bowel_eligible_count), AGG(bowel_up_to_date_count) FROM SEM_OLIDS_SCREENING WHERE is_active = TRUE GROUP BY borough_resident. Example linkage: reduce overdue people here and SMI people in sem_olids_population before joining. Query one programme table at a time; combining programme tables multiplies rows. Each programme table is already restricted to its eligible cohort (bowel 50-74 all sexes; breast female 50-71; cervical female 25-64) — do not add age/sex filters unless narrowing further. Up-to-date intervals per QOF v50: bowel 2.5y, breast 3y, cervical 3.5y (25-49) / 5.5y (50-64). NHS Health Check eligibility excludes people on CVD-risk registers (has_any_excluding_condition); due means eligible and more than five years since the last check.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: bowel/breast/cervical screening coverage, overdue and never-screened cohorts, screening declines, NHS Health Check eligibility and due status, and screening equity by deprivation/ethnicity/language/practice. For condition registers use sem_olids_population. For diabetic retinal screening use sem_olids_diabetes_care.'

@@ -24,12 +24,12 @@ TABLES(
 DIMENSIONS(
     cost.sk_patient_id AS sk_patient_id COMMENT = 'Pseudonymised patient key for cross-dataset linkage to sem_olids_population.sk_patient_id. Join CTEs on sk_patient_id, then aggregate. Never return sk_patient_id in final results.',
     cost.activity_month AS activity_month COMMENT = 'First day of the activity month',
-    cost.service_grouping AS service_grouping COMMENT = 'Service grouping',
+    cost.service_grouping AS service_grouping COMMENT = 'Service grouping: Planned, Crisis, Community, Excluded, or Unmapped. Unmapped is ~1.5% of cost.',
     cost.service AS service COMMENT = 'Service',
     cost.is_patient_attributable AS is_patient_attributable COMMENT = 'TRUE for patient-attributable cost. Filter TRUE for patient-level analysis.',
-    cost.cost_basis AS cost_basis COMMENT = 'Cost basis: actual, proxy, nominal, or tariff',
-    cost.cost_source AS cost_source COMMENT = 'Cost source: SLAM or EPD',
-    cost.activity_unit AS activity_unit COMMENT = 'Unit used for total activity'
+    cost.cost_basis AS cost_basis COMMENT = 'Cost basis. Production currently contains actual only.',
+    cost.cost_source AS cost_source COMMENT = 'Cost source: SLAM (acute provider cost) or EPD (prescribing).',
+    cost.activity_unit AS activity_unit COMMENT = 'Unit for total_activity: slam_activity or prescription_item.'
 )
 
 METRICS(

@@ -62,6 +62,7 @@ FACTS(
 DIMENSIONS(
     -- Person linkage key (on cp so it can be selected alongside the process-count facts)
     cp.person_id AS person_id COMMENT = 'Pseudonymised person key, shared by all sem_olids_* views. Exposed only for cross-view cohort intersection: join CTEs over two views on person_id, then aggregate. Never return person_id in final results.',
+    demographics.sk_patient_id AS sk_patient_id COMMENT = 'Representative pseudonymised patient key for linkage to non-OLIDS views (SUS acute activity, cost index, resource index). Every active person has one; the underlying person-patient mapping can be many-to-many, so joins remain approximate at the margins. Join CTEs on sk_patient_id, then aggregate; never return sk_patient_id in final results.',
 
     -- Care processes (rolling 12 months from build date)
     cp.hba1c_completed_in_last_12m AS hba1c_completed_in_last_12m WITH SYNONYMS = ('DM HbA1c check') COMMENT = 'HbA1c recorded in last 12m',
@@ -84,7 +85,7 @@ DIMENSIONS(
     triple.bp_in_target_range AS bp_in_target_range COMMENT = 'Latest BP <130/80 (NICE diabetes target; FALSE if never measured)',
     triple.cholesterol_in_target_range AS cholesterol_in_target_range COMMENT = 'Latest total cholesterol <5 mmol/L (FALSE if never measured)',
     triple.all_three_targets_met AS all_three_targets_met WITH SYNONYMS = ('triple target') COMMENT = 'All three treatment targets met (latest-ever values)',
-    triple.hba1c_clinical_category AS hba1c_clinical_category COMMENT = 'HbA1c clinical category band',
+    triple.hba1c_clinical_category AS hba1c_clinical_category COMMENT = 'HbA1c band: Normal, Prediabetes, Diabetes - At NICE Target, Diabetes - Elevated (within QOF), Diabetes - Above Target, Diabetes - High Risk, or Diabetes - Very High Risk.',
     triple.hba1c_measured_in_last_12m AS hba1c_measured_in_last_12m COMMENT = 'HbA1c recorded in last 12m (triple-target model)',
     triple.hba1c_recent_but_out_of_range AS hba1c_recent_but_out_of_range COMMENT = 'HbA1c measured in 12m but target not met',
     triple.bp_recent_but_out_of_range AS bp_recent_but_out_of_range COMMENT = 'BP measured in 12m but target not met',
@@ -92,7 +93,7 @@ DIMENSIONS(
 
     -- Foot check detail
     foot.foot_check_status AS foot_check_status COMMENT = 'Exemption-first foot check status (Complete - Both Feet, Permanently Exempt - Both Feet Missing, Not Appropriate - Declined/Unsuitable, Partial - Left/Right Only, Not Done)',
-    foot.townson_scale_level AS townson_scale_level WITH SYNONYMS = ('foot risk level') COMMENT = 'Townson foot-risk scale level where recorded (Low/Moderate/High/...)',
+    foot.townson_scale_level AS townson_scale_level WITH SYNONYMS = ('foot risk level') COMMENT = 'Recorded Townson foot-risk level. Use for risk detail; use foot_check_completed_in_last_12m for the care-process measure.',
     foot.left_foot_status AS left_foot_status COMMENT = 'Left foot status (risk level, Amputated, Absent (Congenital), Not Assessed)',
     foot.right_foot_status AS right_foot_status COMMENT = 'Right foot status',
     foot.is_permanently_exempt AS is_permanently_exempt COMMENT = 'Both feet absent or amputated — permanently exempt from foot checks',
@@ -155,5 +156,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS Diabetes Care Semantic View - care-process completion (8 + 9 with retinal), triple treatment targets, and foot-check detail for the diabetes register. Grain: one row per person on the diabetes register (QOF, age >=17). 12-month windows are rolling from build date. Register includes inactive/deceased persons — filter is_active = TRUE. Biomarker values (HbA1c, BP readings) live in sem_olids_observations.'
-AI_SQL_GENERATION 'LINKAGE: Query each semantic view in its own CTE. Reduce each CTE to one row per person, or per aligned period, before joining on person_id; then aggregate. Use COUNT(DISTINCT person_id) for people and the view metric for events. Keep person_id out of final output. This is person grain; filter is_active = TRUE for current cohorts. Example: SELECT borough_resident, AGG(dm_register_count), AGG(all_8_count) FROM SEM_OLIDS_DIABETES_CARE WHERE is_active = TRUE GROUP BY borough_resident. Example linkage: reduce the diabetes cohort here and appointments in sem_olids_appointments before joining. Completion rate is AGG(all_8_count) / AGG(dm_register_count) (per-process AGG(*_done_count) over AGG(dm_register_count)). Targets are latest-ever values; use *_recent_but_out_of_range for recently-measured-but-out-of-range cohorts. For foot-check care-process reporting prefer the cp foot_check_completed_in_last_12m flag; use the foot model only for risk-level and exemption detail (its recency window uses month-boundary arithmetic and can differ slightly). The 12-month windows are relative to the build date, not the QOF year end.'
+AI_SQL_GENERATION 'LINKAGE: query each view in its own CTE, reduce to one row per person before joining on person_id, then aggregate; keep person_id out of the final output. This is person grain; filter is_active = TRUE for current cohorts. Example: SELECT borough_resident, AGG(dm_register_count), AGG(all_8_count) FROM SEM_OLIDS_DIABETES_CARE WHERE is_active = TRUE GROUP BY borough_resident. Example linkage: reduce the diabetes cohort here and appointments in sem_olids_appointments before joining. Completion rate is AGG(all_8_count) / AGG(dm_register_count) (per-process AGG(*_done_count) over AGG(dm_register_count)). Targets are latest-ever values; use *_recent_but_out_of_range for recently-measured-but-out-of-range cohorts. For foot-check care-process reporting prefer the cp foot_check_completed_in_last_12m flag; use the foot model only for risk-level and exemption detail (its recency window uses month-boundary arithmetic and can differ slightly). The 12-month windows are relative to the build date, not the QOF year end.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: diabetes 8/9 care processes, care-process gaps, retinal screening, foot checks and foot risk (Townson), triple target (HbA1c/BP/cholesterol), and diabetes care quality by practice/PCN/deprivation/ethnicity. For raw biomarker values and control categories use sem_olids_observations. For diabetes prevalence and type use sem_olids_population. For diabetes medications use sem_olids_prescribing.'
