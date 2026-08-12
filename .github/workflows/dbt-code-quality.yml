@@ -1,8 +1,10 @@
 name: dbt Code Quality
 
 on:
+  # No branch filter: stacked PRs target feature branches, and the
+  # hardcoded-references check is required on main, so every layer must run it.
+  # Static checks only - no secrets.
   pull_request:
-    branches: [main]
 
 jobs:
   hardcoded-references:
