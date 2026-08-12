@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS_EXPERIMENTAL.CONCEPT \ndbt: source(''olids'', ''CONCEPT'') \nColumns:\n  CONCEPT_ID -> concept_id\n  CODE -> code\n  DISPLAY -> display\n  SYSTEM -> system\n  PRESENT_IN_TERMINOLOGY_SERVER -> present_in_terminology_server\n  IS_MAPPED -> is_mapped\n  USE_COUNT -> use_count"
+        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS.CONCEPT \ndbt: source(''olids'', ''CONCEPT'') \nColumns:\n  CONCEPT_ID -> concept_id\n  CODE -> code\n  DISPLAY -> display\n  SYSTEM -> system\n  PRESENT_IN_TERMINOLOGY_SERVER -> present_in_terminology_server\n  IS_MAPPED -> is_mapped\n  USE_COUNT -> use_count"
     )
 }}
 select

@@ -17,12 +17,12 @@ select
     date_of_death_month as death_month,
     death_notification_status,
     postcode, -- REVIEW: plain postcode replaces the removed postcode_hash
-    patient_flagged_sensitive as sensitivity_flag,
+    -- feed renamed patient_flagged_sensitive; published name kept stable
+    is_patient_flagged_sensitive as sensitivity_flag,
 
     -- Registration
     gp_practice_code,
     CAST(gp_registration_date AS DATE) AS gp_registration_date,
-    CAST(as_at_date AS DATE) AS as_at_date,
 
     -- Contact / nominated services
     preferred_contact_method,

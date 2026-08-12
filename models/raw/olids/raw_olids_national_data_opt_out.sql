@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS_EXPERIMENTAL.NATIONAL_DATA_OPT_OUT \ndbt: source(''olids'', ''NATIONAL_DATA_OPT_OUT'') \nColumns:\n  LDS_BUSINESS_ID -> lds_business_id\n  LDS_RECORD_ID -> lds_record_id\n  SK_PATIENT_ID -> sk_patient_id\n  PREFERENCE_TYPE -> preference_type\n  PREFERENCE_STATUS -> preference_status\n  LDS_IS_DELETED -> lds_is_deleted\n  EFFECTIVE_FROM -> effective_from\n  EFFECTIVE_TO -> effective_to\n  IS_LATEST -> is_latest"
+        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS.NATIONAL_DATA_OPT_OUT \ndbt: source(''olids'', ''NATIONAL_DATA_OPT_OUT'') \nColumns:\n  LDS_BUSINESS_ID -> lds_business_id\n  LDS_RECORD_ID -> lds_record_id\n  SK_PATIENT_ID -> sk_patient_id\n  PREFERENCE_TYPE -> preference_type\n  PREFERENCE_STATUS -> preference_status\n  LDS_IS_DELETED -> lds_is_deleted\n  EFFECTIVE_FROM -> effective_from\n  EFFECTIVE_TO -> effective_to\n  IS_LATEST -> is_latest"
     )
 }}
 select

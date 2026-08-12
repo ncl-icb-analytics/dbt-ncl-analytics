@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS_EXPERIMENTAL.ENRICHED_CONCEPT_MAP \ndbt: source(''olids'', ''ENRICHED_CONCEPT_MAP'') \nColumns:\n  SOURCE_CONCEPT_ID -> source_concept_id\n  SOURCE_CODE -> source_code\n  SOURCE_DISPLAY -> source_display\n  SOURCE_SYSTEM -> source_system\n  TARGET_CONCEPT_ID -> target_concept_id\n  TARGET_CODE -> target_code\n  TARGET_DISPLAY -> target_display\n  TARGET_SYSTEM -> target_system\n  IS_PRIMARY -> is_primary\n  EQUIVALENCE -> equivalence\n  EQUIVALENCE_RANK -> equivalence_rank"
+        description="Raw layer (OLIDS stable layer - cleaned and filtered patient records). 1:1 passthrough with cleaned column names. \nSource: DATA_LAKE.OLIDS.ENRICHED_CONCEPT_MAP \ndbt: source(''olids'', ''ENRICHED_CONCEPT_MAP'') \nColumns:\n  SOURCE_CONCEPT_ID -> source_concept_id\n  SOURCE_CODE -> source_code\n  SOURCE_DISPLAY -> source_display\n  SOURCE_SYSTEM -> source_system\n  TARGET_CONCEPT_ID -> target_concept_id\n  TARGET_CODE -> target_code\n  TARGET_DISPLAY -> target_display\n  TARGET_SYSTEM -> target_system\n  IS_PRIMARY -> is_primary\n  EQUIVALENCE -> equivalence\n  EQUIVALENCE_RANK -> equivalence_rank"
     )
 }}
 select

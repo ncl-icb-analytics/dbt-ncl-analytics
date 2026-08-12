@@ -995,8 +995,6 @@ sources:
       data_type: UUID
     - name: REGISTERED_PRACTICE_ORGANISATION_ID
       data_type: UUID
-    - name: LOCAL_PATIENT_ID
-      data_type: TEXT
     - name: SK_PATIENT_ID
       data_type: NUMBER(38,0)
     - name: TITLE
@@ -1163,8 +1161,6 @@ sources:
       data_type: TEXT
     - name: MATCH_PATTERN
       data_type: TEXT
-    - name: ERROR_MESSAGE
-      data_type: TEXT
     - name: PUBLISHER_ORGANISATION_CODE
       data_type: TEXT
   - name: PERSON
@@ -1187,21 +1183,17 @@ sources:
     - name: DATE_OF_BIRTH_YEAR
       data_type: NUMBER(4,0)
     - name: DATE_OF_BIRTH_MONTH
-      data_type: NUMBER(2,0)
-    - name: DATE_OF_BIRTH_DAY
-      data_type: NUMBER(2,0)
-    - name: DATE_OF_BIRTH_TIME
-      data_type: TIME
+      data_type: NUMBER
+    - name: DATE_OF_BIRTH_PRECISION
+      data_type: TEXT(2,0)
     - name: DATE_OF_DEATH
       data_type: DATE
     - name: DATE_OF_DEATH_YEAR
       data_type: NUMBER(4,0)
     - name: DATE_OF_DEATH_MONTH
-      data_type: NUMBER(2,0)
-    - name: DATE_OF_DEATH_DAY
-      data_type: NUMBER(2,0)
-    - name: DATE_OF_DEATH_TIME
-      data_type: TIME
+      data_type: NUMBER
+    - name: DATE_OF_DEATH_PRECISION
+      data_type: TEXT(2,0)
     - name: DEATH_NOTIFICATION_STATUS
       data_type: TEXT
     - name: POSTCODE
@@ -1220,16 +1212,12 @@ sources:
       data_type: TEXT
     - name: NHAIS_POSTING_ID
       data_type: TEXT
-    - name: AS_AT_DATE
-      data_type: TEXT
+    - name: IS_PATIENT_FLAGGED_SENSITIVE
+      data_type: BOOLEAN
+    - name: IS_LATEST_FOR_PERSON
+      data_type: BOOLEAN
     - name: LOCAL_PATIENT_ID
       data_type: TEXT
-    - name: INTERNAL_ID
-      data_type: TEXT
-    - name: MPS_ID
-      data_type: TEXT
-    - name: PATIENT_FLAGGED_SENSITIVE
-      data_type: BOOLEAN
     - name: ERROR_SUCCESS_CODE
       data_type: TEXT
     - name: LDS_IS_DELETED

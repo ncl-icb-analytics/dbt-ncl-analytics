@@ -32,8 +32,6 @@ models:
         description: Registered practice ODS code
       - name: gp_registration_date
         description: Date of registration with current GP practice
-      - name: as_at_date
-        description: Snapshot reference date for registration fields
       - name: preferred_contact_method
         description: Preferred contact method
       - name: nominated_pharmacy
