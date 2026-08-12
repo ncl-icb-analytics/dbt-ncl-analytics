@@ -4,7 +4,7 @@ models:
     config:
       meta:
         owner:
-          name: Thomas Shallcross
+          name: Eddie Davison
     columns:
       - name: uniq_serv_req_id
         description: Primary key - unique service request identifier
@@ -38,6 +38,12 @@ models:
 
       - name: refer_clos_reason
         description: The reason that a Referral Request has been closed. A Referral Request can be closed as a result of a Patient being discharged from the SERVICE. Cancelled referrals such as those entered onto a system in error should not be submitted within the data set.
+
+      - name: serv_disch_date
+        description: Date the person was discharged from the service.
+
+      - name: age_serv_refer_rec_date
+        description: Age on the referral request received date.
 
       - name: care_prof_team_local_id
         description: A unique local CARE PROFESSIONAL TEAM IDENTIFIER code within a Health Care Provider.

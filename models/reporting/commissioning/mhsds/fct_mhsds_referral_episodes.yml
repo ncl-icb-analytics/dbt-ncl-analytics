@@ -1,0 +1,96 @@
+version: 2
+
+models:
+  - name: fct_mhsds_referral_episodes
+    description: >
+      MHSDS referral episodes for access analysis. Grain: one row per
+      uniq_serv_req_id. Population: all staged MHSDS referrals. Time
+      semantics: episode status uses the latest active MHSDS submission.
+      Open means no recorded closure; the active feed runs about six weeks
+      behind and orphaned referrals are not distinguished.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: uniq_serv_req_id
+        description: Unique service request identifier.
+        data_tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: MHSDS person identifier.
+      - name: sk_patient_id
+        description: Pseudonymised patient identifier.
+      - name: org_id_prov
+        description: Provider organisation code.
+      - name: dm_icb_commissioner
+        description: Commissioner ICB code.
+      - name: referral_request_received_date
+        description: Referral request received date.
+        data_tests:
+          - not_null
+      - name: age_serv_refer_rec_date
+        description: Age on the referral request received date.
+      - name: is_cyp_at_referral
+        description: Whether age at referral is under 18.
+      - name: source_of_referral_mh
+        description: Mental health referral source.
+      - name: referring_care_professional_type
+        description: Type of referring care professional.
+      - name: clin_resp_priority_type
+        description: Clinical response priority code.
+      - name: prim_reason_referral_mh
+        description: Primary mental health referral reason code.
+      - name: referral_reason_category
+        description: Currency population category from the referral reason.
+      - name: serv_team_type_ref_to_mh
+        description: Referred-to mental health service team type.
+      - name: team_type_name
+        description: Referred-to service team name.
+      - name: team_type_category
+        description: Currency population category from the service team type.
+      - name: setting_group
+        description: Team contact setting group.
+      - name: setting_name
+        description: Team contact setting name.
+      - name: is_crisis_referral
+        description: Whether the referral meets the currency crisis rule.
+      - name: n_contacts
+        description: Number of care contacts linked to the referral.
+      - name: n_attended_contacts
+        description: Number of attended or missing-status care contacts.
+      - name: n_dna_contacts
+        description: Number of did-not-attend care contacts.
+      - name: n_cancelled_contacts
+        description: Number of cancelled care contacts.
+      - name: first_contact_date
+        description: First linked care contact date.
+      - name: first_attended_contact_date
+        description: First attended linked care contact date.
+      - name: wait_days_to_first_attended_contact
+        description: Days from referral receipt to the first attended contact.
+      - name: has_pre_referral_contact
+        description: Whether the first attended contact predates referral receipt.
+      - name: n_indirect_activities
+        description: Number of indirect activities linked to the referral.
+      - name: n_spells
+        description: Number of occupancy-ruled inpatient spells linked to the referral.
+      - name: has_inpatient_spell
+        description: Whether the referral has an occupancy-ruled inpatient spell.
+      - name: refer_rejection_date
+        description: Referral rejection date.
+      - name: refer_reject_reason
+        description: Referral rejection reason.
+      - name: is_rejected
+        description: Whether a referral rejection date is recorded.
+      - name: serv_disch_date
+        description: Service discharge date.
+      - name: refer_clos_reason
+        description: Referral closure reason.
+      - name: episode_status
+        description: 'Referral status: rejected, closed, or open.'
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['rejected', 'closed', 'open']
