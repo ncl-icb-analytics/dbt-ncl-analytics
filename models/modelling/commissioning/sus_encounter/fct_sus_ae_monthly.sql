@@ -78,7 +78,6 @@ flagged as (
     from keyed
 
 )
-
 select
     -- [STRUCTURE] Snowflake threw internal error 300002 when these expressions
     -- sat inside SELECT * REPLACE (...). Dropping REPLACE and excluding the
@@ -86,7 +85,7 @@ select
     -- columns below now appear at the END of the column list rather than in
     -- their original positions. Immaterial for anything selecting by name;
     -- matters only for positional / select * comparisons against legacy.
-    * exclude (
+    f.* exclude (
         dupe_id
         ,dupe_row_number
         ,z_arrival_datetime
@@ -101,6 +100,7 @@ select
         ,z_provider_site_code
         ,z_pod_level_4
         ,z_ccg_code
+        ,z_care_home
     )
 
         ------------------------------------------------------------------
@@ -246,11 +246,10 @@ select
         --
         --   ,imd.z_imd_2015_london_quintile as z_imd_2015_london_quintile   -- [TODO]
         --   ,imd.z_imd_2015_national_decile as z_imd_2015_national_decile   -- [TODO]
-        --   ,ch.ods_code                    as z_care_home                  -- [TODO]
-        ------------------------------------------------------------------
-
-from flagged
-
+        ,ch.care_home_code as z_care_home
+from flagged f
+left join {{ ref('int_sus_ae_care_home') }} as ch
+    on f.sk_encounter_id = ch.sk_encounter_id
 -- [TODO] SP step 5 -- once index_of_multiple_deprivation_2015 is a source:
 -- left join (
 --     select z_lsoa11, z_imd_2015_london_quintile, z_imd_2015_national_decile
@@ -258,16 +257,3 @@ from flagged
 --     qualify row_number() over (partition by z_lsoa11 order by z_lsoa11) = 1
 -- ) imd on flagged.z_lsoa11 = imd.z_lsoa11
 
--- [TODO] SP step 7 -- once care_home_extract is a source. The SP joined on
--- sk_patient_id AND arrival_date between start_date and coalesce(end_date,
--- '2050-12-31'). Overlapping spells for one patient WILL fan out; the qualify
--- picks the most recent spell that covers the attendance.
--- left join (
---     select sk_patient_id, ods_code, start_date,
---            coalesce(z_end_date, '2050-12-31'::date) as end_date
---     from {{ '{{' }} source('dmic_reference', 'care_home_extract') {{ '}}' }}
--- ) ch on flagged.sk_patient_id = ch.sk_patient_id
---     and to_date(flagged.arrival_date) between ch.start_date and ch.end_date
--- qualify row_number() over (
---     partition by flagged.sk_encounter_id order by ch.start_date desc
--- ) = 1
