@@ -21,6 +21,7 @@ with deduplicated as (
         , s.disch_date_hosp_prov_spell
         , s.age_hosp_start_date
         , s.reporting_period_end_date as last_submission_period_end
+        , s.dm_icb_commissioner
     from {{ ref('stg_mhsds_spell') }} as s
     -- inner: every staged spell has an encounters row today, and if the
     -- encounters model ever drops duplicate spells this model must follow
@@ -188,9 +189,15 @@ select
     , c.serv_team_type_ref_to_mh
     , c.team_type_category
     , c.last_submission_period_end
+    , c.dm_icb_commissioner
+    -- MHSDS commissioner code schemes vary by table; resolve to a canonical
+    -- ICB via the WNL lookup, passing unknown Q-prefixed (ICB) codes through
+    , coalesce(comm.icb_code, iff(left(c.dm_icb_commissioner, 1) = 'Q', c.dm_icb_commissioner, null)) as commissioner_icb_code
     , c.winning_tier
     , coalesce(pg.currency_group, c.winning_category) as currency_group
     , coalesce(pg.currency_group, c.winning_category) || '98' || coalesce(c.setting_code, 'Z') as currency_code
 from classified as c
 left join {{ ref('nhse_mh_currency_population_groups_2627') }} as pg
     on c.winning_category = pg.population_category
+left join {{ ref('wnl_commissioner_icb_lookup') }} as comm
+    on c.dm_icb_commissioner = comm.commissioner_code

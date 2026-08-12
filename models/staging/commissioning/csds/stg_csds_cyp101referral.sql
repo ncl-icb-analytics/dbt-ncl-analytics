@@ -20,5 +20,7 @@ SELECT
     service_discharge_date,
     priority_type_code
     , ic_age_at_service_referral_received_date
+    , dm_icb_commissioner
+    , dm_sub_icb_commissioner
 
 FROM deduplicated

@@ -1,8 +1,8 @@
-# MHSDS Currency Models
+# MHSDS Models: A Walkthrough
 
-Models that classify **MHSDS** (Mental Health Services Data Set) activity into the NHSE 2026/27 mental health currencies and attach indicative prices. They answer two questions: *which currency group does each spell or contact belong to*, and *what would that activity cost at national indicative prices*.
+Models that classify **MHSDS** (Mental Health Services Data Set) activity into the NHSE 2026/27 mental health currencies, price it, and expose the domain (referrals, people, bed occupancy) as reusable facts. This doc walks the pipeline in the order data flows, linking each transformation's code.
 
-Source logic: NHSE "MH Currencies 26-27" grouping SQL (provider version), reimplemented as layered dbt models with the mappings held in seeds. The NHSE code classifies but does not cost; pricing follows the "Basis of Price" column of the NHSE Non-Acute Collection Template price schedule (bed day for inpatient, contact for community/crisis).
+Source logic for the currencies: NHSE "MH Currencies 26-27" grouping SQL (provider version). The NHSE code classifies but does not cost; pricing follows the "Basis of Price" column of the NHSE Non-Acute Collection Template price schedule (bed day for inpatient, contact for community/crisis).
 
 ## The currency framework in one minute
 
@@ -28,78 +28,80 @@ A currency code has three parts: `MAA98A` = population group (`MAA`) + family (`
 | 97 | Crisis contact | A Core Services, B Alternatives, C MH Crisis Assessment Centres, D A&E Linked, Z unknown |
 | 99 | Cross-cutting contact | MAZ99A–D by crisis setting, MAZ99Z, MCS99Z |
 
-## How MHSDS data behaves (and why the models look like this)
+## 1. Deduplicate the raw feed → clean staging
 
-MHSDS is a **monthly resubmission feed**: providers resubmit every active record each month, and each row belongs to a submission. Analysts should never count raw rows. Every staging model runs `deduplicate_mhsds`, which keeps the latest record per business key **restricted to active submissions** — one clean row per referral, contact, spell, etc.
+MHSDS is a **monthly resubmission feed**: providers resubmit every active record each month. Every staging model runs [`deduplicate_mhsds`](../macros/transformations/deduplicate_mhsds.sql), which keeps the latest record per business key restricted to active submissions — never count raw rows.
 
-Two data facts shape the design:
+Two data facts shape everything downstream:
 
-- **Local IDs are not globally unique.** Providers reuse local care-contact IDs across referrals, so the contact grain everywhere is `(uniq_serv_req_id, uniq_care_cont_id)`, never the contact ID alone.
-- **Undischarged spells are usually orphans.** Most spells with no discharge date simply stop being submitted (system cutovers, the 2024 BEH/C&I → NLFT merger). `int_mhsds_spell_encounters` classifies each spell's end date as `discharged`, `open` (still being submitted), or `last_submission` (orphaned — closed at its last submission evidence); the currency models reuse that end date rather than re-deriving it.
+- **Local IDs are not globally unique.** Providers reuse local care-contact IDs across referrals, so the contact grain everywhere is `(uniq_serv_req_id, uniq_care_cont_id)`.
+- **Undischarged spells are usually orphans.** Most spells with no discharge date simply stop being submitted (system cutovers, the 2024 BEH/C&I → NLFT merger). [`int_mhsds_spell_encounters`](../models/modelling/commissioning/encounters/int_mhsds_spell_encounters.sql) classifies each spell's end as `discharged`, `open`, or `last_submission`; the currency models reuse that derivation rather than re-deriving it.
 
-## Seeds — where the mappings live
+The staging models:
 
-All classification lookups are seeds under `seeds/` so analysts can read (and amend) the groupings without touching SQL:
+- [`stg_mhsds_referral.sql`](../models/staging/commissioning/mhsds/stg_mhsds_referral.sql) — one row per referral: received/closure dates, referral reason, priority.
+- [`stg_mhsds_carecontact.sql`](../models/staging/commissioning/mhsds/stg_mhsds_carecontact.sql) — one row per (referral, contact): date, attendance, consultation mechanism.
+- [`stg_mhsds_spell.sql`](../models/staging/commissioning/mhsds/stg_mhsds_spell.sql) — one row per hospital spell.
+- [`stg_mhsds_mhs502wardstay.sql`](../models/staging/commissioning/mhsds/stg_mhsds_mhs502wardstay.sql) — ward stays per spell (bed type, dates).
+- [`stg_mhsds_servicetype.sql`](../models/staging/commissioning/mhsds/stg_mhsds_servicetype.sql) — one team type per referral, resolved MHS102 → MHS902 → MHS101-v6 (~23% of referrals only carry the last).
+- [`stg_mhsds_primdiag.sql`](../models/staging/commissioning/mhsds/stg_mhsds_primdiag.sql) — diagnosis history per referral: ICD-10-coded rows pass through, SNOMED-coded rows (0.1%) map via the UK complex-map refset; codes normalised to 3 characters (strip dot, X→0).
+- [`stg_mhsds_mhactperiod.sql`](../models/staging/commissioning/mhsds/stg_mhsds_mhactperiod.sql) — Mental Health Act legal status periods (MHS401).
+- [`stg_mhsds_patientindicators.sql`](../models/staging/commissioning/mhsds/stg_mhsds_patientindicators.sql) — child protection / looked-after status (MHS005).
+- [`stg_mhsds_bridging.sql`](../models/staging/commissioning/mhsds/stg_mhsds_bridging.sql) — person → pseudonymised patient id.
 
-| Seed | Maps |
-|---|---|
-| `nhse_currency_prices_2627` | Every currency code in the NHSE price schedule → 26/27 indicative price. NULL price = specialised, out of NCC scope. Also carries Talking Therapies, ADHD/ASD and community (CSDS) prices for adjacent work. |
-| `nhse_mh_currency_population_groups_2627` | Category letter (A/B/C/E/F/S/Y/Z) → currency group + whether under-18s can take it |
-| `nhse_mh_currency_referral_reasons_2627` | `PrimReasonReferralMH` → category |
-| `nhse_mh_currency_team_types_2627` | `ServTeamTypeRefToMH` → category, crisis flag, contact setting (96/97 suffix) |
-| `nhse_mh_currency_bed_types_2627` | `MHAdmittedPatientClass` (v5 2-digit and v6 3-digit codes) → category + inpatient setting (98 suffix) |
-| `nhse_mh_currency_icd10_groups_2627` | 3-character ICD-10 ranges → category |
+## 2. The mapping rules as data (seeds)
 
-## Staging — `models/staging/commissioning/mhsds/`
+All classification lookups are CSVs an analyst can read or amend without SQL:
 
-- `stg_mhsds_primdiag` — one row per referral per diagnosis timestamp. Resolves each MHS604 primary diagnosis to a 3-character ICD-10 code: ICD-10-coded rows (99.9%) pass through; SNOMED-coded rows map via the UK SNOMED→ICD-10 complex map refset. Normalisation strips the dot, replaces X with 0, takes 3 characters (e.g. `F32.1` → `F32`).
-- `stg_mhsds_servicetype` — one row per referral: the latest service/team type. MHS102 where present, falling back to the v6 `ServTeamType` field on MHS101 (~23% of referrals only have the latter).
-- `stg_mhsds_spell`, `stg_mhsds_carecontact`, `stg_mhsds_referral`, `stg_mhsds_mhs502wardstay` — pre-existing deduplicated staging, extended with age and linkage columns.
+- [`nhse_mh_currency_population_groups_2627.csv`](../seeds/nhse_mh_currency_population_groups_2627.csv) — category letter → currency group + whether under-18s can take it.
+- [`nhse_mh_currency_referral_reasons_2627.csv`](../seeds/nhse_mh_currency_referral_reasons_2627.csv) — `PrimReasonReferralMH` → category.
+- [`nhse_mh_currency_team_types_2627.csv`](../seeds/nhse_mh_currency_team_types_2627.csv) — `ServTeamTypeRefToMH` → category, crisis flag, contact setting.
+- [`nhse_mh_currency_bed_types_2627.csv`](../seeds/nhse_mh_currency_bed_types_2627.csv) — `MHAdmittedPatientClass` (v5 and v6 code sets coexist; they never collide) → category + inpatient setting.
+- [`nhse_mh_currency_icd10_groups_2627.csv`](../seeds/nhse_mh_currency_icd10_groups_2627.csv) — 3-character ICD-10 ranges → category.
+- [`nhse_currency_prices_2627.csv`](../seeds/nhse_currency_prices_2627.csv) — every code in the NHSE price schedule → 26/27 indicative price (NULL = specialised, out of NCC scope).
 
-## Domain models
+## 3. Spell classification — [`int_mhsds_spell_currency.sql`](../models/modelling/commissioning/mh_currencies/int_mhsds_spell_currency.sql)
 
-`fct_mhsds_referral_episodes` is the access fact, at one row per service
-request. It holds referral demand, wait and contact measures, rejection and
-closure status, indirect activity, and occupancy-ruled spell linkage.
+One row per hospital spell. Reading it CTE by CTE:
 
-`dim_person_mh_profile` is one row per person appearing in a referral, care
-contact, or occupancy-ruled spell. It combines referral, contact, crisis,
-inpatient, diagnosis, legal-status, and safeguarding state. Its current
-columns reflect the active MHSDS feed, which runs about six weeks behind the
-run date.
+- **`deduplicated` / `uncontained` / `base`** enforce **single occupancy** — a person occupies at most one MH bed per night, but provider-scoped spell ids duplicate admissions (merger re-registration, NHS + independent-sector dual submission, shifted-date copies). Three rules restore it: one spell per person + admission date (latest submission evidence wins), contained spells dropped, and discharge-forward supersession (a later admission ends any spell still open). These rules removed ~13% of bed-day history that was double counted.
+- **`latest_ward_stay`** picks the spell's current ward, whose admitted-patient class gives the bed-type category and the inpatient setting (98A–D).
+- **`latest_diagnosis`** takes the latest primary diagnosis on or before the spell's derived end date, categorised by ICD-10 range.
+- **`classified`** runs the NHSE cascade: **diagnosis → bed type → referral reason**, each tier consulted only when earlier tiers cannot classify. Children (under 18 at admission) can only land in the all-age groups (MBC/MBY); a child whose diagnosis says an adult-only group goes to `MCG`, not through the cascade. Unclassifiable adults go to `MBU`.
+- Currency code = group + `98` + ward setting (`Z` if unknown). `winning_tier` and the per-tier categories are kept on every row so each classification is explainable.
 
-## Classification — `models/modelling/commissioning/mh_currencies/`
+## 4. Contact classification — [`int_mhsds_contact_currency.sql`](../models/modelling/commissioning/mh_currencies/int_mhsds_contact_currency.sql)
 
-Both models classify with the same **three-tier cascade**. Each tier is consulted only if every earlier tier could not classify:
+One row per (referral, contact), excluding contacts inside an inpatient spell window for the same referral. Same cascade with team type as the middle tier, plus:
 
-1. **Diagnosis** — latest primary diagnosis on or before discharge (spells) / the contact date (contacts), categorised by ICD-10 range.
-2. **Bed type** (spells) / **team type** (contacts) — from the latest ward stay's admitted patient class, or the referral's service team type.
-3. **Referral reason** — `PrimReasonReferralMH`.
+- CYP contacts on MH Support Teams classify to `MCS` first.
+- The crisis flag: crisis-team referrals count as crisis; A18 (single point of access) only for urgent/emergency priority.
+- Family + setting: community teams → `96A–D`, crisis teams → `97A–D`, MAZ → `99A–D` by crisis setting, MHSTs → `MCS99Z`; teams with no setting fall to `96Z`/`97Z` by the crisis flag.
 
-**Children (under 18 at admission / at contact)** can only land in the all-age groups (MBC, MBY, plus MCS for MHST contacts). A child whose diagnosis classifies to an adult-only group (e.g. psychosis) does not fall through — they go to `MCG` (CYP – Other), exactly as in the NHSE logic. Unclassifiable adults go to `MBU`.
+## 5. Price resolution — [`int_nhse_currency_price_resolution.sql`](../models/modelling/commissioning/currencies/int_nhse_currency_price_resolution.sql)
 
-- `int_mhsds_spell_currency` — one row per hospital spell. Currency code = group + `98` + the setting of the latest ward stay (`Z` if unknown). Carries every input (`diagnosis_category`, `bed_category`, `referral_reason_category`, `winning_tier`) so analysts can see *why* each spell classified as it did.
-- `int_mhsds_contact_currency` — one row per (referral, contact), excluding contacts that fall inside an inpatient spell window for the same referral. Family and setting come from the team type: community teams → `96A–D`, crisis teams → `97A–D`, MAZ → `99A–D` by crisis setting, MHSTs → `MCS99Z`; teams with no setting fall to `96Z`/`97Z` by the crisis-referral flag (A18 single points of access count as crisis only for urgent/emergency priority referrals).
+One row per currency code any classifier can emit, with the fallback chain resolved once: exact code → the population's `Z` price → MBU for the setting → MBU `Z`. Needed because specialised settings are out of NCC scope (NULL prices) and some derivable codes have no published price. Its `not_null` test guarantees no fact row can be unpriced.
 
-## Pricing — `models/reporting/commissioning/mh_currencies/`
+## 6. Costing — the reporting facts
 
-Prices are 2026/27 indicative prices (from the 24/25 National Cost Collection). To cost historic activity each price is:
+- [`fct_mhsds_currency_bed_days.sql`](../models/reporting/commissioning/mh_currencies/fct_mhsds_currency_bed_days.sql) — one row per spell × fiscal year. Nights are attributed to the year they start in (`bed_days_from_date`/`bed_days_to_date` give each row's exact window); the resolved price is rebased to that year with the GDP deflator ([`uk_cost_indices`](../seeds/uk_cost_indices.csv)) and adjusted by the provider MFF ([`nhse_provider_mff_2627`](../seeds/nhse_provider_mff_2627.csv)). Open spells accrue cost only to their last submission evidence — the active feed runs ~6 weeks behind, so accruing to today would cost unevidenced nights.
+- [`fct_mhsds_currency_contacts.sql`](../models/reporting/commissioning/mh_currencies/fct_mhsds_currency_contacts.sql) — one row per (referral, contact). Attended contacts (status 5/6/missing) are costed; DNAs and cancellations are kept at zero cost so activity counts stay complete. (DNA cost is already smeared into attended unit prices by the NCC's construction — pricing them would double count.)
 
-1. **Resolved** through a fallback chain — exact code → the population's `Z` (unknown-setting) price → the MBU (unclassified) price for that setting → MBU `Z`. Needed because specialised settings (e.g. all forensic, all eating-disorder inpatient) are out of NCC scope and unpriced, and some derivable codes (e.g. `MAZ98x`) have no published price. `price_source` records which step supplied the price.
-2. **Rebased** to the activity's own fiscal year with the GDP deflator (`uk_cost_indices`), so 2019 activity is costed at 2019-equivalent prices.
-3. **Adjusted** by the provider's Market Forces Factor (`nhse_provider_mff_2627`, 1.0 where unknown).
+## 7. The domain facts
 
-- `fct_mhsds_currency_bed_days` — one row per spell × fiscal year. Nights are attributed to the fiscal year in which they start and sum to the spell length; `proxy_cost` = nights × resolved price × MFF × deflator ratio. Same-day spells count one bed day.
-- `fct_mhsds_currency_contacts` — one row per (referral, contact). Attended contacts (status 5, 6, or missing) are costed; DNAs and cancellations are kept with `proxy_cost = 0` so activity counts remain complete.
-- `fct_mhsds_current_inpatients` — one row per open spell: who is in a mental health bed now, where, for how long, and under which currency. "Open" means the spell is still being submitted with no discharge date; orphaned undischarged spells are excluded.
+- [`fct_mhsds_current_inpatients.sql`](../models/reporting/commissioning/mh_currencies/fct_mhsds_current_inpatients.sql) — who is in an MH bed now: one row per **person** (single occupancy is enforced upstream), with admission date, days/months in bed, setting, currency, and the spell's last submission evidence date. "Now" means as of the active feed (~6 weeks behind).
+- [`fct_mhsds_referral_episodes.sql`](../models/reporting/commissioning/mhsds/fct_mhsds_referral_episodes.sql) — one row per referral: team and reason categories, crisis flag, contact aggregates (attended/DNA/cancelled + MHS204 indirect activity), wait to first attended contact (pre-referral contacts flagged as data quality, not negative waits), spell linkage, rejection, and episode status (rejected/closed/open).
+- [`dim_person_mh_profile.sql`](../models/reporting/commissioning/mhsds/dim_person_mh_profile.sql) — one row per person: referral counts and dates, contact recency (12m/90d windows), crisis contact in 12 months, current/ever inpatient (reconciles exactly with the census), latest diagnosis category, MHA detention history, looked-after-child flag and raw CPP status code (code semantics unverified against the TOS, so no boolean).
 
-On `fct_mhsds_currency_bed_days`, `bed_days_from_date`/`bed_days_to_date` give the exact window each row's bed days cover (to-date exclusive), alongside the whole spell's `spell_start_date`/`spell_end_date` for context — the pairs differ only for spells crossing fiscal years.
+## 8. Cost-index roll-up — [`int_cost_index_mhsds_activity_monthly.sql`](../models/modelling/commissioning/cost_index/int_cost_index_mhsds_activity_monthly.sql)
+
+Person × month: bed days apportioned from the spell × fiscal-year fact to calendar months (per-night rate carries the deflator and MFF), contacts split into MH Crisis / MH Community. Feeds [`fct_person_cost_index_monthly`](../models/reporting/commissioning/cost_index/fct_person_cost_index_monthly.sql) as the `MHSDS` proxy-cost source.
 
 ## Caveats analysts should know
 
-- **These are proxy costs**, not payments: indicative national prices applied to activity, suitable for comparative and distributional analysis, not for reconciling contracts.
-- **~27% of spells and ~25% of contacts are unclassified** (`MBU`) — driven by missing diagnosis/team-type recording, consistent with national MHSDS completeness. They still cost at MBU prices.
-- **Provider-submitted currencies can't validate this**: the MHS013 currency model table is empty in our feed, so classification is derived only.
-- **Legacy long-stay spells** (admissions back to the 1970s, mostly forensic/LD) accrue decades of bed days and are included; filter on `start_date` or `end_date_source` if they distort a cut.
-- The FY2022/23 dip in contact volumes is a **source completeness artefact** (two providers' submissions), not a real activity change.
-- `fct_mhsds_currency_bed_days` totals reconcile within ~0.3% of `int_mhsds_spell_encounters` (the earlier MBU-only costing), which remains in place for encounter-level use.
+- **These are proxy costs** — indicative national prices on activity, for comparative and distributional analysis, not contract reconciliation.
+- **~27% of spells and ~25% of contacts are unclassified** (`MBU`), consistent with national MHSDS completeness; they still cost at MBU prices.
+- **Provider-submitted currencies can't validate this**: MHS013 is empty in our feed.
+- **Legacy long-stay spells** (admissions back to the 1970s) accrue decades of bed days; filter on dates if they distort a cut.
+- The FY2022/23 contact-volume dip is a source completeness artefact (two providers' submissions), not a real activity change.
+- Recorded referral rejections (~1%) look under-reported against national rates — a data finding, not corrected.

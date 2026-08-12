@@ -1,6 +1,60 @@
 version: 2
 
 sources:
+  - name: ukhfd_geo
+    database: '"UKHFD"'
+    schema: '"Old_LSOA_To_New_LSOA_To_LAD"'
+    description: ONS lookup bridging retired 2011 LSOAs to 2021 LSOAs and their LAD.
+    tables:
+      - name: old_lsoa_to_new_lsoa_map
+        identifier: '"dim_Map_SCD"'
+        description: One row per (old LSOA, new LSOA) pair per snapshot; Is_Latest marks the current mapping.
+        columns:
+          - name: Old_LSOA_Code
+            quote: true
+          - name: New_LSOA_Code
+            quote: true
+          - name: LAD_Code
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+          - name: Effective_To
+            quote: true
+
+  - name: ukhfd_ods
+    database: '"UKHFD"'
+    schema: '"ODS"'
+    description: National ODS organisation reference dimensions.
+    tables:
+      - name: all_gp_and_gdp_practices
+        identifier: '"dim_All_GP_and_GDP_Practices_SCD"'
+        description: All GP and general dental practices nationally (epraccur-style SCD); Is_Latest marks the current row per organisation.
+        columns:
+          - name: Organisation_Code
+            quote: true
+          - name: Organisation_Name
+            quote: true
+          - name: Postcode
+            quote: true
+          - name: Open_Date
+            quote: true
+          - name: Close_Date
+            quote: true
+          - name: Status_Code
+            quote: true
+          - name: Parent_Organisation_Code
+            quote: true
+          - name: Prescribing_Setting
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+          - name: Effective_To
+            quote: true
+
   - name: ukhfd_comm_allocations
     database: '"UKHFD"'
     schema: '"Comm_Allocations"'
