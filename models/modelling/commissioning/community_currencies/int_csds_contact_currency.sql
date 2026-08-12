@@ -75,7 +75,7 @@ with activity as (
         , pcn_code
         , pcn_name
         , registered_borough_name as practice_registered_borough
-    from {{ ref('raw_reference_primary_care_pcn_membership_all') }}
+    from {{ ref('stg_reference_primary_care_pcn_membership_all') }}
     -- REVIEW: The lookup has no membership dates. If duplicate practice codes
     -- emerge, prefer Active practice status before the PCN code tie-breaker.
     qualify row_number() over (
@@ -88,14 +88,9 @@ with activity as (
 -- registrations): name only, from the ODS practice dimension
 , ods_practice as (
     select
-        upper(organisation_code) as practice_code
+        organisation_code as practice_code
         , organisation_name as practice_name
-    from {{ ref('raw_ukhfd_ods_all_gp_and_gdp_practices') }}
-    where is_latest = 1
-    qualify row_number() over (
-        partition by upper(organisation_code)
-        order by effective_from desc
-    ) = 1
+    from {{ ref('stg_ukhfd_ods_all_gp_and_gdp_practices') }}
 )
 
 , residence as (
@@ -110,12 +105,7 @@ with activity as (
     select
         lsoa21_cd
         , lad26_nm as residence_borough
-    from {{ ref('raw_reference_geo_lsoa21_sicbl26_icb26_nhser26_lad26') }}
-    where lsoa21_cd is not null
-    qualify row_number() over (
-        partition by lsoa21_cd
-        order by objectid
-    ) = 1
+    from {{ ref('stg_reference_geo_lsoa21_sicbl26_icb26_nhser26_lad26') }}
 )
 
 -- ~5% of submitted "2021" LSOAs are retired 2011 codes; bridge them to a
@@ -124,14 +114,9 @@ with activity as (
     select
         b.old_lsoa_code as lsoa11_cd
         , l.residence_borough
-    from {{ ref('raw_ukhfd_old_lsoa_to_new_lsoa_map') }} as b
+    from {{ ref('stg_ukhfd_old_lsoa_to_new_lsoa_map') }} as b
     inner join lsoa_to_lad as l
         on b.new_lsoa_code = l.lsoa21_cd
-    where b.is_latest = 1
-    qualify row_number() over (
-        partition by b.old_lsoa_code
-        order by b.new_lsoa_code
-    ) = 1
 )
 
 , enriched as (

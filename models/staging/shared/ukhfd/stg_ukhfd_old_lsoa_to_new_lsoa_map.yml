@@ -1,0 +1,19 @@
+models:
+  - name: stg_ukhfd_old_lsoa_to_new_lsoa_map
+    description: '2011 LSOA to 2021 LSOA bridge from UKHFD, one row per 2011 code'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: old_lsoa_code
+        description: 2011 LSOA code
+        data_tests:
+          - unique
+          - not_null
+      - name: new_lsoa_code
+        description: 2021 LSOA code the old code maps to
