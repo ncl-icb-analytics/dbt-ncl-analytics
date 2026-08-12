@@ -7,6 +7,8 @@ with activity as (
         , c.org_id_prov
         , c.care_contact_date
         , r.ic_age_at_service_referral_received_date
+        , coalesce(c.dm_icb_commissioner, r.dm_icb_commissioner) as dm_icb_commissioner
+        , coalesce(c.dm_sub_icb_commissioner, r.dm_sub_icb_commissioner) as dm_sub_icb_commissioner
         , c.attendance_status
         , nullif(trim(st.team_type_code), '') as team_type_code
         , nullif(trim(r.primary_reason_for_referral_community_care), '') as primary_referral_reason
@@ -17,6 +19,113 @@ with activity as (
         on c.unique_service_request_identifier = st.unique_service_request_identifier
     left join {{ ref('stg_csds_bridging') }} as b
         on c.person_id = b.person_id
+)
+
+, practice_at_contact as (
+    select
+        a.unique_service_request_identifier
+        , a.unique_care_contact_identifier
+        , gp.practice_code
+    from activity as a
+    inner join {{ ref('stg_csds_gp_registration') }} as gp
+        on a.person_id = gp.person_id
+        and a.care_contact_date >= gp.registration_start_date
+        and (
+            gp.registration_end_date is null
+            or a.care_contact_date < gp.registration_end_date
+        )
+    qualify row_number() over (
+        partition by a.unique_service_request_identifier, a.unique_care_contact_identifier
+        order by gp.registration_start_date desc nulls last, gp.practice_code
+    ) = 1
+)
+
+, latest_gp_registration as (
+    select
+        person_id
+        , practice_code
+    from {{ ref('stg_csds_gp_registration') }}
+    qualify row_number() over (
+        partition by person_id
+        order by registration_start_date desc nulls last, practice_code
+    ) = 1
+)
+
+, practice_assignment as (
+    select
+        a.unique_service_request_identifier
+        , a.unique_care_contact_identifier
+        , coalesce(at_contact.practice_code, latest.practice_code) as practice_code
+        , case
+            when at_contact.practice_code is not null then 'at_contact'
+            when latest.practice_code is not null then 'latest_known'
+        end as practice_attribution
+    from activity as a
+    left join practice_at_contact as at_contact
+        on a.unique_service_request_identifier = at_contact.unique_service_request_identifier
+        and a.unique_care_contact_identifier = at_contact.unique_care_contact_identifier
+    left join latest_gp_registration as latest
+        on a.person_id = latest.person_id
+)
+
+, practice_context as (
+    select
+        practice_code
+        , practice_name
+        , pcn_code
+        , pcn_name
+        , registered_borough_name as practice_registered_borough
+    from {{ ref('raw_reference_primary_care_pcn_membership_all') }}
+    -- REVIEW: The lookup has no membership dates. If duplicate practice codes
+    -- emerge, prefer Active practice status before the PCN code tie-breaker.
+    qualify row_number() over (
+        partition by practice_code
+        order by iff(practice_status = 'Active', 0, 1), pcn_code
+    ) = 1
+)
+
+, residence as (
+    select
+        person_id
+        , lsoa21_residence
+        , sub_icb_of_residence
+    from {{ ref('stg_csds_mpi') }}
+)
+
+, lsoa_to_lad as (
+    select
+        lsoa21_cd
+        , lad26_nm as residence_borough
+    from {{ ref('raw_reference_geo_lsoa21_sicbl26_icb26_nhser26_lad26') }}
+    where lsoa21_cd is not null
+    qualify row_number() over (
+        partition by lsoa21_cd
+        order by objectid
+    ) = 1
+)
+
+, enriched as (
+    select
+        a.*
+        , practice.practice_code
+        , practice.practice_attribution
+        , context.practice_name
+        , context.pcn_code
+        , context.pcn_name
+        , context.practice_registered_borough
+        , residence.lsoa21_residence
+        , geography.residence_borough
+        , residence.sub_icb_of_residence
+    from activity as a
+    left join practice_assignment as practice
+        on a.unique_service_request_identifier = practice.unique_service_request_identifier
+        and a.unique_care_contact_identifier = practice.unique_care_contact_identifier
+    left join practice_context as context
+        on practice.practice_code = context.practice_code
+    left join residence
+        on a.person_id = residence.person_id
+    left join lsoa_to_lad as geography
+        on residence.lsoa21_residence = geography.lsoa21_cd
 )
 
 , categorised as (
@@ -31,7 +140,7 @@ with activity as (
         -- lpad guards against zero-padded codes; nulls (~54% of contacts,
         -- structural across providers) costed per NHSE v1.1 guidance
         , lpad(attendance_status, 2, '0') in ('05', '06') or attendance_status is null as is_costed_attendance
-    from activity
+    from enriched
 )
 
 , classified as (
@@ -59,6 +168,17 @@ select
     , org_id_prov
     , care_contact_date
     , ic_age_at_service_referral_received_date
+    , dm_icb_commissioner
+    , dm_sub_icb_commissioner
+    , practice_code
+    , practice_attribution
+    , practice_name
+    , pcn_code
+    , pcn_name
+    , practice_registered_borough
+    , lsoa21_residence
+    , residence_borough
+    , sub_icb_of_residence
     , age_category
     , attendance_status
     , is_costed_attendance

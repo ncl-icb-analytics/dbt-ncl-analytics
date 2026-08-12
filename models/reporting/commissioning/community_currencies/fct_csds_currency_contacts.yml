@@ -36,6 +36,35 @@ models:
         description: Provider organisation code.
       - name: care_contact_date
         description: Care contact date.
+      - name: dm_icb_commissioner
+        description: Derived ICB commissioner code.
+      - name: dm_sub_icb_commissioner
+        description: Derived sub-ICB commissioner code.
+      - name: practice_code
+        description: GP practice code at or nearest to contact.
+      - name: practice_attribution
+        description: Method used to assign the GP practice.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['at_contact', 'latest_known']
+      - name: practice_name
+        description: GP practice name.
+      - name: pcn_code
+        description: >
+          Populated for practices in the WNL PCN membership lookup only -
+          out-of-area registrations (about a third of contacts, as providers
+          serve other ICBs) carry practice_code but null PCN fields.
+      - name: pcn_name
+        description: Primary care network name.
+      - name: practice_registered_borough
+        description: Borough where the GP practice is registered.
+      - name: lsoa21_residence
+        description: 2021 LSOA code for latest submitted residence.
+      - name: residence_borough
+        description: Borough for latest submitted residence.
+      - name: sub_icb_of_residence
+        description: Sub-ICB location code of latest submitted residence.
       - name: fiscal_year_start
         description: Fiscal year containing the care contact date.
       - name: attendance_status

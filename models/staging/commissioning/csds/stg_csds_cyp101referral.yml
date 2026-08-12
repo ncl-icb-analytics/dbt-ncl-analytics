@@ -27,6 +27,10 @@ models:
         description: Referral priority type code.
       - name: ic_age_at_service_referral_received_date
         description: CSDS-derived age in years at referral received.
+      - name: dm_icb_commissioner
+        description: Derived ICB commissioner code.
+      - name: dm_sub_icb_commissioner
+        description: Derived sub-ICB commissioner code.
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

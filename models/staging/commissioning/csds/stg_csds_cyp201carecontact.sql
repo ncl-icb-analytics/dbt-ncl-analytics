@@ -19,4 +19,6 @@ select unique_service_request_identifier
     , clinical_contact_duration_of_care_contact
     , organisation_code_provider as org_id_prov
     , care_contact_time
+    , dm_icb_commissioner
+    , dm_sub_icb_commissioner
 from deduplicated

@@ -41,3 +41,7 @@ models:
         description: Provider organisation code.
       - name: care_contact_time
         description: Time of care contact.
+      - name: dm_icb_commissioner
+        description: Derived ICB commissioner code.
+      - name: dm_sub_icb_commissioner
+        description: Derived sub-ICB commissioner code.

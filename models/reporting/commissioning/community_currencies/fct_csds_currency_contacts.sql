@@ -43,6 +43,17 @@ select
     , p.person_id
     , p.org_id_prov
     , p.care_contact_date
+    , p.dm_icb_commissioner
+    , p.dm_sub_icb_commissioner
+    , p.practice_code
+    , p.practice_attribution
+    , p.practice_name
+    , p.pcn_code
+    , p.pcn_name
+    , p.practice_registered_borough
+    , p.lsoa21_residence
+    , p.residence_borough
+    , p.sub_icb_of_residence
     , fy.fiscal_year_start
     , p.attendance_status
     , p.is_costed_attendance
