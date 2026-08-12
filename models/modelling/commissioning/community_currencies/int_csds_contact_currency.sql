@@ -84,6 +84,20 @@ with activity as (
     ) = 1
 )
 
+-- national fallback for practices outside the WNL PCN lookup (out-of-area
+-- registrations): name only, from the ODS practice dimension
+, ods_practice as (
+    select
+        upper(organisation_code) as practice_code
+        , organisation_name as practice_name
+    from {{ ref('raw_ukhfd_ods_all_gp_and_gdp_practices') }}
+    where is_latest = 1
+    qualify row_number() over (
+        partition by upper(organisation_code)
+        order by effective_from desc
+    ) = 1
+)
+
 , residence as (
     select
         person_id
@@ -108,14 +122,15 @@ with activity as (
 -- 2021 code (any split member - LAD is stable across splits) and resolve
 , lsoa11_to_lad as (
     select
-        b.lsoa11_cd
+        b.old_lsoa_code as lsoa11_cd
         , l.residence_borough
-    from {{ ref('raw_reference_lsoa2011_lsoa2021') }} as b
+    from {{ ref('raw_ukhfd_old_lsoa_to_new_lsoa_map') }} as b
     inner join lsoa_to_lad as l
-        on b.lsoa21_cd = l.lsoa21_cd
+        on b.new_lsoa_code = l.lsoa21_cd
+    where b.is_latest = 1
     qualify row_number() over (
-        partition by b.lsoa11_cd
-        order by b.lsoa21_cd
+        partition by b.old_lsoa_code
+        order by b.new_lsoa_code
     ) = 1
 )
 
@@ -124,7 +139,11 @@ with activity as (
         a.*
         , practice.practice_code
         , practice.practice_attribution
-        , context.practice_name
+        , coalesce(context.practice_name, ods.practice_name) as practice_name
+        , case
+            when context.practice_code is not null then 'wnl_pcn_lookup'
+            when ods.practice_code is not null then 'ods_national'
+        end as practice_metadata_source
         , context.pcn_code
         , context.pcn_name
         , context.practice_registered_borough
@@ -137,6 +156,8 @@ with activity as (
         and a.unique_care_contact_identifier = practice.unique_care_contact_identifier
     left join practice_context as context
         on practice.practice_code = context.practice_code
+    left join ods_practice as ods
+        on practice.practice_code = ods.practice_code
     left join residence
         on a.person_id = residence.person_id
     left join lsoa_to_lad as geography
@@ -190,6 +211,7 @@ select
     , practice_code
     , practice_attribution
     , practice_name
+    , practice_metadata_source
     , pcn_code
     , pcn_name
     , practice_registered_borough

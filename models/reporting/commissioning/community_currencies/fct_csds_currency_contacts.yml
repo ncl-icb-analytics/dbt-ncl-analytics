@@ -50,6 +50,14 @@ models:
                 values: ['at_contact', 'latest_known']
       - name: practice_name
         description: GP practice name.
+      - name: practice_metadata_source
+        description: >
+          Where practice context resolved - the WNL PCN membership lookup or
+          the national ODS practice dimension (name only).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['wnl_pcn_lookup', 'ods_national']
       - name: pcn_code
         description: >
           Populated for practices in the WNL PCN membership lookup only -

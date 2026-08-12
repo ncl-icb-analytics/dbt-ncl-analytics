@@ -48,6 +48,7 @@ select
     , p.practice_code
     , p.practice_attribution
     , p.practice_name
+    , p.practice_metadata_source
     , p.pcn_code
     , p.pcn_name
     , p.practice_registered_borough
