@@ -1,7 +1,9 @@
 select
     sk_patient_id,
-    preference_type,
-    preference_status,
+    -- normalise feed literals ('National Data Opt-out', 'Opt-In') to the
+    -- established contract (NATIONAL_DATA_OPT_OUT, OPT_IN) downstream filters on
+    upper(translate(preference_type, ' -', '__')) as preference_type,
+    upper(replace(preference_status, '-', '_')) as preference_status,
     effective_from,
     effective_to,
     is_latest,
