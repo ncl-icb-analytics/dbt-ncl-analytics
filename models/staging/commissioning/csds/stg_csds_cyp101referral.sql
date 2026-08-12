@@ -19,5 +19,6 @@ SELECT
     primary_reason_for_referral_community_care,
     service_discharge_date,
     priority_type_code
+    , ic_age_at_service_referral_received_date
 
 FROM deduplicated
