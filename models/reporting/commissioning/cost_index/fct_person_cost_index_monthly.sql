@@ -16,7 +16,7 @@ window is applied in reporting facts (fct_person_resource_index).
 cost_basis distinguishes actual cost from future proxy/nominal sources.
 
 Still to union (sources identified, build pending): GP appointments (OLIDS),
-MH inpatient + contacts (MHSDS — needs the discharge-forward dedup fix),
+MH inpatient + contacts (MHSDS — spell dedup now in int_mhsds_spell_encounters),
 community contacts (CSDS), high-cost drugs/devices PLD (LSDrPLCM/LSDePLCM).
 
 is_patient_attributable carries through from the POD mapping — filter it for

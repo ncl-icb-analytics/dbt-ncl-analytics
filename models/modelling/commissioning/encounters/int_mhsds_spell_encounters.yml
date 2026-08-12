@@ -6,6 +6,11 @@ models:
       Undischarged spells that stopped appearing in active submissions are
       closed at their last reporting period (end_date_source = 'last_submission')
       rather than treated as ongoing; see model header for the full derivation.
+      Single-occupancy rules remove duplicate spell records for the same
+      admission (merger re-registrations, NHS/independent-sector dual
+      submissions, shifted-date overlaps): one spell per person and admission
+      date, contained spells dropped, and later admissions superseding spells
+      still open at that date.
       Proxy costs use NHSE 26/27 indicative bed-day prices (MBU98 family) by
       care setting, provider MFF, and GDP-deflator rebasing to each bed day's
       fiscal year.
@@ -42,13 +47,14 @@ models:
       - name: end_date_source
         description: >
           How end_date was derived - 'discharged' (real discharge date),
-          'open' (still in a current submission, accrues to current date), or
+          'open' (still in a current submission, accrues to current date),
           'last_submission' (orphaned undischarged spell closed at its last
-          reporting period).
+          reporting period), or 'superseded' (closed at a later admission
+          date for the same person).
         data_tests:
           - accepted_values:
               arguments:
-                values: ['discharged', 'open', 'last_submission']
+                values: ['discharged', 'open', 'last_submission', 'superseded']
       - name: care_setting
         description: >
           Dominant care setting from the spell's ward stays (by bed days) -

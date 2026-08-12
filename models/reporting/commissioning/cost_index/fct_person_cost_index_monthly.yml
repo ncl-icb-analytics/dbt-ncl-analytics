@@ -10,7 +10,7 @@ models:
       is_patient_attributable x cost_basis x cost_source x activity_unit.
 
       Pending unions (sources identified): GP appointments (OLIDS), MH
-      inpatient + contacts (MHSDS, post discharge-forward fix), community
+      inpatient + contacts (MHSDS, spell dedup done), community
       contacts (CSDS), high-cost drugs/devices PLD.
 
       Filter is_patient_attributable for per-patient cuts.
