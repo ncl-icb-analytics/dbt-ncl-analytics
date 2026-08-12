@@ -49,6 +49,8 @@ select
     , p.sk_patient_id
     , p.person_id
     , p.org_id_prov
+    , p.dm_icb_commissioner
+    , p.commissioner_icb_code
     , p.currency_group
     , p.currency_code
     , p.start_date_hosp_prov_spell as spell_start_date

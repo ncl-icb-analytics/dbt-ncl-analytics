@@ -45,6 +45,7 @@ select
     , p.care_contact_date
     , p.dm_icb_commissioner
     , p.dm_sub_icb_commissioner
+    , p.commissioner_icb_code
     , p.practice_code
     , p.practice_attribution
     , p.practice_name

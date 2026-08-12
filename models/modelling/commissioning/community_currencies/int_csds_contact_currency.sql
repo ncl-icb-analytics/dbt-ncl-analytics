@@ -206,8 +206,9 @@ select
     , org_id_prov
     , care_contact_date
     , ic_age_at_service_referral_received_date
-    , dm_icb_commissioner
+    , classified.dm_icb_commissioner
     , dm_sub_icb_commissioner
+    , coalesce(comm.icb_code, iff(left(classified.dm_icb_commissioner, 1) = 'Q', classified.dm_icb_commissioner, null)) as commissioner_icb_code
     , practice_code
     , practice_attribution
     , practice_name
@@ -236,3 +237,5 @@ select
         else 'team_type'
     end as currency_source
 from classified
+left join {{ ref('wnl_commissioner_icb_lookup') }} as comm
+    on classified.dm_icb_commissioner = comm.commissioner_code
