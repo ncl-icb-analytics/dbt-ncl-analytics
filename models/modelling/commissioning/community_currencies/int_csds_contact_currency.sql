@@ -104,6 +104,21 @@ with activity as (
     ) = 1
 )
 
+-- ~5% of submitted "2021" LSOAs are retired 2011 codes; bridge them to a
+-- 2021 code (any split member - LAD is stable across splits) and resolve
+, lsoa11_to_lad as (
+    select
+        b.lsoa11_cd
+        , l.residence_borough
+    from {{ ref('raw_reference_lsoa2011_lsoa2021') }} as b
+    inner join lsoa_to_lad as l
+        on b.lsoa21_cd = l.lsoa21_cd
+    qualify row_number() over (
+        partition by b.lsoa11_cd
+        order by b.lsoa21_cd
+    ) = 1
+)
+
 , enriched as (
     select
         a.*
@@ -114,7 +129,7 @@ with activity as (
         , context.pcn_name
         , context.practice_registered_borough
         , residence.lsoa21_residence
-        , geography.residence_borough
+        , coalesce(geography.residence_borough, geography_2011.residence_borough) as residence_borough
         , residence.sub_icb_of_residence
     from activity as a
     left join practice_assignment as practice
@@ -126,6 +141,8 @@ with activity as (
         on a.person_id = residence.person_id
     left join lsoa_to_lad as geography
         on residence.lsoa21_residence = geography.lsoa21_cd
+    left join lsoa11_to_lad as geography_2011
+        on residence.lsoa21_residence = geography_2011.lsoa11_cd
 )
 
 , categorised as (
