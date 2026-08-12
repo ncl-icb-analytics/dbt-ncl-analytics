@@ -1,5 +1,4 @@
 select
-    -- REVIEW: retained for hash-keyed consumers, but person geography now uses plain postcode.
     -- Primary key (compound)
     postcode_hash,
 

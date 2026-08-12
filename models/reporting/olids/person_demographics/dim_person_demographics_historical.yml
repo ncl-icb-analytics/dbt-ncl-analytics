@@ -185,8 +185,8 @@ models:
         description: 'Practice neighbourhood classification'
 
       # REVIEW: plain postcode replaces the removed postcode hash.
-      - name: postcode
-        description: 'Patient residential postcode during this period'
+      - name: postcode_hash
+        description: 'Pseudonymised residential postcode hash during this period'
 
       - name: uprn_hash
         description: 'Patient address UPRN hash (placeholder)'

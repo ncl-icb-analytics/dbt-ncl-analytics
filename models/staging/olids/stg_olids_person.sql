@@ -16,7 +16,7 @@ select
     date_of_death_year as death_year,
     date_of_death_month as death_month,
     death_notification_status,
-    postcode, -- REVIEW: plain postcode replaces the removed postcode_hash
+    postcode as postcode_hash, -- feed pseudonymises: POSTCODE carries the hash
     -- feed renamed patient_flagged_sensitive; published name kept stable
     is_patient_flagged_sensitive as sensitivity_flag,
 

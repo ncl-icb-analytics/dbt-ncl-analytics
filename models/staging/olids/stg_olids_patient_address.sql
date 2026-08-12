@@ -5,7 +5,7 @@ select
     -- Business columns
     patient_id,
     address_type_source_concept_id,
-    postcode, -- REVIEW: plain postcode replaces the removed postcode_hash
+    postcode as postcode_hash, -- feed pseudonymises: POSTCODE carries the hash
     is_home_address,
     start_date,
     end_date,

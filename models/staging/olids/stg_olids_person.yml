@@ -24,8 +24,8 @@ models:
       - name: death_notification_status
         description: Death notification status
       # REVIEW: plain postcode replaces the removed postcode hash.
-      - name: postcode
-        description: Registered postcode
+      - name: postcode_hash
+        description: Pseudonymised postcode hash (source POSTCODE column)
       - name: sensitivity_flag
         description: Record sensitivity flag
       - name: gp_practice_code

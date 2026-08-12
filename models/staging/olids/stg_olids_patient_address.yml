@@ -16,8 +16,8 @@ models:
       - name: address_type_source_concept_id
         description: Foreign key to concept.id - type of address (home, temporary, work, etc.)
       # REVIEW: plain postcode replaces the removed postcode hash.
-      - name: postcode
-        description: Patient postcode
+      - name: postcode_hash
+        description: Pseudonymised postcode hash (source POSTCODE column)
       - name: is_home_address
         description: True for a home address
       - name: start_date
