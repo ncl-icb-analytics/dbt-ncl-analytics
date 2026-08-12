@@ -8,6 +8,11 @@ models:
     columns:
       - name: sk_patient_id
         description: Surrogate patient key
+        tests:
+          - not_null
+          - unique:
+              config:
+                where: "is_latest = 1"
       - name: preference_type
         description: Opt-out preference type
       - name: preference_status
