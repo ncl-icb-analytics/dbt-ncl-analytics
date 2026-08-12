@@ -53,7 +53,7 @@ SELECT
   ward_name AS "Ward",
   patient_imd_decile_19 AS "IMD Decile",
   patient_imd_quintile_19 AS "IMD Quintile",
-  postcode, -- REVIEW: plain postcode replaces the removed postcode_hash.
+  postcode_hash,
   uprn_hash,
   registration_start_date,
   bmi_category AS "BMI Category",
