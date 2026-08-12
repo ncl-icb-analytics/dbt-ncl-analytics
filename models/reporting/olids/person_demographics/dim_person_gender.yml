@@ -26,6 +26,13 @@ models:
         description: 'Persons gender derived from gender concept mappings'
         tests:
           - not_null
+          # screening, child-bearing-age and valproate cohorts filter on these
+          # literals; a feed display change must fail here, not zero cohorts
+          - accepted_values:
+              arguments:
+                values: ['Female', 'Male', 'Indeterminate sex', 'Unknown']
+              config:
+                severity: error
           - accepted_values:
               arguments:
                 values: ['Male', 'Female', 'Indeterminate sex', 'Unknown']
