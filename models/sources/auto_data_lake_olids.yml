@@ -2,7 +2,7 @@ version: 2
 sources:
 - name: olids
   database: '"DATA_LAKE"'
-  schema: '"OLIDS_EXPERIMENTAL"'
+  schema: '"OLIDS"'
   description: OLIDS stable layer - cleaned and filtered patient records
   tables:
   - name: ALLERGY_INTOLERANCE

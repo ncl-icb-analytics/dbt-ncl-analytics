@@ -6,7 +6,8 @@ models:
       Long-format biomarker observation history. One row per observation event
       across blood pressure (systolic + diastolic), cholesterol, LDL, QRISK,
       HbA1c, BMI, waist circumference, eGFR, creatinine, urine ACR, ALT, GGT,
-      bilirubin, haemoglobin, platelets, and eosinophils.
+      bilirubin, haemoglobin, platelets, eosinophils, eFI/eFI2, and Rockwood
+      frailty assessments.
 
       Backs sem_olids_observations_history. Supports serial / latest-N /
       trajectory questions via window functions over (person_id,
@@ -35,11 +36,12 @@ models:
           Biomarker label (Systolic BP, Diastolic BP, Total Cholesterol,
           LDL Cholesterol, QRISK, HbA1c, BMI, Waist Circumference, eGFR,
           Creatinine, Urine ACR, ALT, GGT, Bilirubin, Haemoglobin, Platelets,
-          Eosinophils). Filter to a single type before aggregating value.
+          Eosinophils, Electronic Frailty Index (eFI), Rockwood Frailty Scale).
+          Filter to a single type before aggregating value.
         data_tests:
           - not_null
       - name: observation_group
-        description: Clinical group (Cardiovascular, Metabolic, Renal, Liver, Haematology).
+        description: Clinical group (Cardiovascular, Metabolic, Renal, Liver, Haematology, Frailty).
         data_tests:
           - not_null
       - name: clinical_effective_date
@@ -52,5 +54,7 @@ models:
         description: Unit of measure for `value`.
       - name: category
         description: Type-specific clinical category label for this reading (VARCHAR; meaning varies by observation_type).
+      - name: hypertension_stage
+        description: NICE NG136 stage for paired BP events (Normal, Stage 1, Stage 2, Stage 3 (Severe)); NULL for other types.
       - name: source_observation_id
         description: Source observation id from the originating _all model (traceability).

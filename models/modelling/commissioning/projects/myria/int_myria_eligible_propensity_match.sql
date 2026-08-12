@@ -5,6 +5,7 @@
 }}
 /*JUNE 30th UPDATE FIND ALL PATIENTS ELIGIBLE FOR EVALUATIon USING USING THE DATES THAT MATCH THE RFL SUBMISSIonS. THIS FILE WILL AUTOMATICALLY UPDATE WHEN NEW SUBMISSIonS 
 TO RFL ARE ADDED AND THE LATEST ENROLLMENT FILE IS ADDED from DOCCLA
+4th August 2026 - onboarded days calculation changed to use discharged date if available not current date.
 */
 with submission_dates as (
 select distinct file_date
@@ -114,7 +115,10 @@ select
     enrolled_date,
     case when m.onboarded_date is not null then 1 else 0 end as onboarded,
     onboarded_date,
-    datediff('day', onboarded_date, current_date) as days_onboarded,
+    --datediff('day', onboarded_date, current_date) as days_onboarded, -- Jess changes 3rd August 26.
+    case when discharged_date is not null and onboarded_date is not null
+    then datediff('day', onboarded_date, discharged_date)
+    else datediff('day', onboarded_date, current_date) end as days_onboarded,
     case when m.discharged_date is not null then 1 else 0 end as discharged,
     discharged_date,
     -- Demographic fields

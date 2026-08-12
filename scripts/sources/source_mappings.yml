@@ -164,7 +164,7 @@ sources:
   # OLIDS Core Tables
   - source_name: olids
     database: DATA_LAKE
-    schema: OLIDS_EXPERIMENTAL
+    schema: OLIDS
     description: OLIDS stable layer - cleaned and filtered patient records
     raw_prefix: raw_olids
     domain: olids
@@ -212,6 +212,8 @@ sources:
     description: Data management reference datasets
     raw_prefix: raw_reference
     domain: shared
+    exclude_tables:
+      - WNL  # Broken view retained upstream; unused by dbt.
 
   # CANCER schemas in DATA_LAKE__NCL
   - source_name: reference_cancer_cwt_alliance

@@ -1,0 +1,45 @@
+name: Publish dbt artifacts
+description: >
+  Uploads target/manifest.json and target/run_results.json (gzipped) plus a
+  meta.json sidecar to the DBT_ARTIFACTS stage. latest/manifest.json.gz is the
+  state baseline for state:modified deploys and the source for
+  ncl-semantic-layer-poc. Published on every deploy attempt, success or not:
+  a node that failed is deliberately NOT retried by later unrelated deploys -
+  it redeploys when its fix merges (the fix makes it state:modified again),
+  and transient failures are retried by the scheduled builds. Skips quietly
+  when no manifest exists (build died before parse).
+
+inputs:
+  dbt-command:
+    description: The dbt command that produced the artifacts (recorded in meta.json)
+    required: true
+  build-outcome:
+    description: Outcome of the dbt build step (success/failure), recorded as build_status in meta.json
+    required: false
+    default: success
+  target:
+    description: dbt target name, used as the stage path prefix
+    required: false
+    default: prod
+  stage:
+    description: Fully qualified internal stage
+    required: false
+    default: DATA_LAKE__NCL.DBT_OBSERVABILITY.STG_DBT_ARTIFACTS
+
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
+      with:
+        version: "0.6.x"
+
+    - name: Upload artifacts to stage
+      shell: bash
+      env:
+        DBT_COMMAND: ${{ inputs.dbt-command }}
+        DBT_TARGET: ${{ inputs.target }}
+        ARTIFACT_STAGE: ${{ inputs.stage }}
+        DBT_BUILD_OUTCOME: ${{ inputs.build-outcome }}
+      run: >
+        uv run --with snowflake-connector-python
+        python "${{ github.action_path }}/publish.py"

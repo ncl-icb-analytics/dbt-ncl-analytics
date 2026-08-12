@@ -32,6 +32,10 @@ select
     , main_specialty_category
     , treatment_function_code
     , treatment_function_code_desc
+    , referral_organisation_id
+    , referral_organisation_date
+    , referral_source_op
+    , referral_source_op_desc
     , referral_acuity
     , referral_acuity_desc
     , spec_comm_flag

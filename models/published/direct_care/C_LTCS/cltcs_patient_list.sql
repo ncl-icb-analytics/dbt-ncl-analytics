@@ -78,7 +78,7 @@ left join {{ref('fct_person_sus_apc_recent')}} apca
     on erl.patient_id  = apca.sk_patient_id
 left join {{ref('fct_person_medications_recent')}} rm
     on erl.olids_id = rm.person_id
-left join {{ref('stg_aic_int_efi2_scores')}} fr
+left join {{ref('fct_person_efi2')}} fr
     on erl.olids_id = fr.person_id
 left join {{ref('fct_person_frailty_register')}} frr
     on erl.olids_id = frr.person_id
