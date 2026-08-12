@@ -12,6 +12,10 @@ on:
       - 'models/**'
   workflow_dispatch:
 
+concurrency:
+  group: test-coverage
+  cancel-in-progress: true
+
 jobs:
   check-coverage:
     name: Check Model Test Coverage
