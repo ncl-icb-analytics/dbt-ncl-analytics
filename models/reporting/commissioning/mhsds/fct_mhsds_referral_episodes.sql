@@ -19,20 +19,11 @@ with contact_aggregates as (
     group by uniq_serv_req_id
 )
 
-, indirect_activities as (
-    {{
-        deduplicate_mhsds(
-            mhsds_table = ref('raw_mhsds_mhs204indirectactivity'),
-            partition_cols = ['mhs204_uniq_id']
-        )
-    }}
-)
-
 , indirect_activity_aggregates as (
     select
         uniq_serv_req_id
         , count(*) as n_indirect_activities
-    from indirect_activities
+    from {{ ref('stg_mhsds_indirectactivity') }}
     group by uniq_serv_req_id
 )
 
