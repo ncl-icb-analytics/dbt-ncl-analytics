@@ -167,14 +167,14 @@ per_chain as (
 select
     person_id
     {%- for label, prefix in class_prefixes.items() %},
-    min(iff(drug_class = '{{ label }}', latest_pdc_corrected, null)) as {{ prefix }}_latest_pdc_corrected_min,
-    avg(iff(drug_class = '{{ label }}', latest_pdc_corrected, null)) as {{ prefix }}_latest_pdc_corrected_mean,
-    min(iff(drug_class = '{{ label }}', overall_pdc_corrected, null)) as {{ prefix }}_overall_pdc_corrected_min,
-    avg(iff(drug_class = '{{ label }}', overall_pdc_corrected, null)) as {{ prefix }}_overall_pdc_corrected_mean,
-    min(iff(drug_class = '{{ label }}', latest_pdc, null)) as {{ prefix }}_latest_pdc_min,
-    avg(iff(drug_class = '{{ label }}', latest_pdc, null)) as {{ prefix }}_latest_pdc_mean,
-    min(iff(drug_class = '{{ label }}', overall_pdc, null)) as {{ prefix }}_overall_pdc_min,
-    avg(iff(drug_class = '{{ label }}', overall_pdc, null)) as {{ prefix }}_overall_pdc_mean,
+  --  min(iff(drug_class = '{{ label }}', latest_pdc_corrected, null)) as {{ prefix }}_latest_pdc_corrected_min,
+    avg(iff(drug_class = '{{ label }}', latest_pdc_corrected, null)) as {{ prefix }}_latest_pdc_clipped_mean,
+  --  min(iff(drug_class = '{{ label }}', overall_pdc_corrected, null)) as {{ prefix }}_overall_pdc_corrected_min,
+    avg(iff(drug_class = '{{ label }}', overall_pdc_corrected, null)) as {{ prefix }}_overall_pdc_clipped_mean,
+  --  min(iff(drug_class = '{{ label }}', latest_pdc, null)) as {{ prefix }}_latest_pdc_min,
+  --  avg(iff(drug_class = '{{ label }}', latest_pdc, null)) as {{ prefix }}_latest_pdc_mean,
+  -- min(iff(drug_class = '{{ label }}', overall_pdc, null)) as {{ prefix }}_overall_pdc_min,
+  --  avg(iff(drug_class = '{{ label }}', overall_pdc, null)) as {{ prefix }}_overall_pdc_mean,
     count(distinct iff(drug_class = '{{ label }}', vtm_code, null)) as {{ prefix }}_drug_count
     {%- endfor %}
 from per_chain
