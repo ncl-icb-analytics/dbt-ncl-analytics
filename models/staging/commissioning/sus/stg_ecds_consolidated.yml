@@ -1,0 +1,18 @@
+models:
+  - name: stg_ecds_consolidated
+    description: 'ECDS consolidated data.
+      '
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+    columns:
+      - name: primarykey_id
+        description: Unique identifier for the attendance (PRIMARYKEY_ID)
+        tests:
+          - not_null
+          - unique
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1

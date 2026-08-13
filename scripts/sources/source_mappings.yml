@@ -65,12 +65,12 @@ sources:
     domain: commissioning
 
   # UK Health Dimensions
-  - source_name: ukhd
-    database: UKHD
+  - source_name: ukhfd
+    database: UKHFD
     schema: dbo
     description: UKHD reference and dimension tables
-    raw_prefix: raw_ukhd
-    domain: reference
+    raw_prefix: raw_ukhfd
+    domain: shared
 
   # eRS referrals
   - source_name: eRS_primary_care
