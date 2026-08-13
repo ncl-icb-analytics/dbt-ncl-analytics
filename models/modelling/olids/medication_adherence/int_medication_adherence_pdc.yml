@@ -6,17 +6,18 @@ models:
       chain. Port of MedicationTableSnowpark.compute_pdc_rolling
       (window_length=12, pdc_type=2 dynamic exposure denominator,
       exclusive=True) with all drug classes in one table. Two column
-      families measuring different things: the faithful columns (pdc,
-      covered_days, window_days, overall_pdc) replicate the original AIC
-      measure exactly — including the last-order quirk, projection of future
-      supply, and window-overhang counting. The *_corrected window columns
-      are a windowed interval PDC over observed days: supply, denominator
-      and the early-refill subtraction are all clipped to the window frame
-      [window_start, least(window_end, build date)], and the final order
-      counts. overall_*_corrected has no frame, so it is quirk-fixed and
-      right-censored only. See the model header for full semantics. One row
-      per (person_id, drug_name, window_start); windows with no qualifying
-      orders carry NULL exposure / covered_days / pdc.
+      families differing in exactly one thing: the faithful columns (pdc,
+      covered_days, overall_pdc) replicate the original AIC measure exactly,
+      including the last-order quirk; the *_corrected columns fix that quirk
+      so the final order of each chain counts. Both share the same windows,
+      exposure spans and denominators (window_days, total_exposure_days), so
+      covered_days_corrected - covered_days is exactly the final order's
+      duration in the windows containing it, and pdc_corrected >= pdc always.
+      Neither family is right-censored or clipped to the window frame — see
+      the model header and the overview doc for the accepted costs (future
+      supply counts as covered; exposure overhang biases boundary windows
+      upward). One row per (person_id, drug_name, window_start); windows with
+      no qualifying orders carry NULL exposure / covered_days / pdc.
     config:
       meta:
         owner:
@@ -36,29 +37,18 @@ models:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "datediff(month, window_start, window_end) = window_length_months"
-      # When the exposure lies fully inside the observed frame, corrected
-      # differs from faithful by the quirk fix (which only removes a
-      # subtraction) plus sub-day arithmetic noise: the faithful subtraction
-      # is a fractional duration difference, the corrected one a date-based
-      # datediff over the same region, so they can disagree by <1 day per
-      # early-refill order. Hence a small tolerance and warn severity;
-      # windows with overhang or future exposure are exempt entirely (frame
-      # clipping removes covered-only days the faithful figure counts).
+      # The families share a denominator and differ only by the last-order
+      # subtraction the corrected variant omits, so corrected can never be
+      # lower. Exact invariant — no tolerance, no exemptions.
       - dbt_utils.expression_is_true:
-          config:
-            severity: warn
           arguments:
-            expression: >
-              pdc_corrected >= pdc - 0.05 or pdc is null or pdc_corrected is null
-              or exposure_start < window_start or exposure_end > window_end
-              or exposure_end > current_date
-      # Frame clipping guarantees the corrected denominator never exceeds
-      # the window frame length
+            expression: "pdc_corrected >= pdc or pdc is null or pdc_corrected is null"
+      # Same identity at chain level
       - dbt_utils.expression_is_true:
           arguments:
             expression: >
-              window_days_corrected is null
-              or window_days_corrected <= datediff(day, window_start, window_end)
+              overall_pdc_corrected >= overall_pdc
+              or overall_pdc is null or overall_pdc_corrected is null
       # PDC is uncapped by design (>1 possible with overlapping supply);
       # warn on pathological values rather than block
       - dbt_utils.expression_is_true:
@@ -100,25 +90,25 @@ models:
       - name: exposure_end
         description: Last order end date within the window. NULL when the window has no qualifying orders.
       - name: covered_days
-        description: Net covered days in the window, faithful variant (can be negative via the last-order quirk; counts projected future supply).
+        description: Net covered days in the window, faithful variant (can be negative via the last-order quirk; counts supply projected past the build date).
       - name: covered_days_corrected
         description: >
-          Net covered days of the windowed interval PDC — supply and the
-          early-refill subtraction clipped to the observed window frame
-          [window_start, least(window_end, build date)]; last order counts.
+          Net covered days with the last-order quirk fixed — identical to
+          covered_days except in windows containing the chain's final order,
+          where it is larger by that order's duration.
       - name: window_days
-        description: Exposure span in days (pdc_type=2 denominator, faithful — can extend beyond the window frame and the build date). NULL for empty windows.
-      - name: window_days_corrected
-        description: Exposure span clipped to the observed window frame — denominator for pdc_corrected. Negative for frames entirely in the future (pdc_corrected NULL via guard).
+        description: >
+          Exposure span in days — the pdc_type=2 denominator for BOTH
+          families. Can extend beyond the window frame (overhang) and past
+          the build date. NULL for empty windows.
       - name: pdc
-        description: Faithful PDC — covered_days / window_days when covered_days > 0, else NULL. Uncapped.
+        description: Faithful PDC — covered_days / window_days when covered_days > 0, else NULL. Uncapped; reproduces the AIC measure including the last-order quirk.
       - name: pdc_corrected
         description: >
-          Windowed interval PDC over observed days — of the observed days
-          inside this 12-month frame while the person was exposed, the
-          proportion with supply. Last order counts; everything clipped to
-          the frame and the build date. Different semantics from the
-          faithful pdc (AIC exposure-span measure).
+          The same measure with the last-order quirk fixed —
+          covered_days_corrected / window_days (same denominator as pdc).
+          Always >= pdc. Not right-censored and not frame-clipped: see the
+          model header for the accepted biases.
       - name: overall_start
         description: First order date of the (person, drug) chain.
         tests:
@@ -128,17 +118,13 @@ models:
         tests:
           - not_null
       - name: total_exposure_days
-        description: Days from overall_start to overall_end (faithful — can extend past the build date).
-        tests:
-          - not_null
-      - name: total_exposure_days_corrected
-        description: Days from overall_start to overall_end right-censored at the build date — denominator for overall_pdc_corrected.
+        description: Days from overall_start to overall_end — the denominator for BOTH overall PDC columns. Can extend past the build date.
         tests:
           - not_null
       - name: overall_pdc
         description: Faithful overall PDC across the full chain span (guarded only on total_exposure_days > 0, so it can be <= 0).
       - name: overall_pdc_corrected
-        description: Corrected overall PDC (quirk-fixed and right-censored at the build date).
+        description: Overall PDC with the last-order quirk fixed — same denominator as overall_pdc, always >= it.
       - name: pdc_type
         description: Constant 2 (dynamic exposure-window denominator), as run in the original.
       - name: exclusive

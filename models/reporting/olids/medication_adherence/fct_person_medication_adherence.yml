@@ -7,18 +7,21 @@ models:
       chains need at least one repeat-authorised order AND supply extending
       into the last year (var medication_adherence_recency_years); NULL
       measures with drug_count 0 mean "no current repeat therapy in class".
-      Two measure families side by side for comparison: *_pdc_corrected_*
-      (windowed interval PDC over observed days — frame-clipped, censored,
-      final order counts; see int_medication_adherence_pdc) and *_pdc_*
-      without _corrected (the faithful AIC measure — last-order quirk,
-      future-supply projection and window overhang included). Per family and
-      class: latest (each family's own most recent fully elapsed non-NULL
-      window — the two families' latest readings can come from different
-      windows) and overall (chain span within the 3-year processing
-      horizon), each as min (worst drug) and mean across the person's
-      chains, plus the number of contributing chains. Drill-down lives in
-      int_medication_adherence_pdc_windows. One row per person. No opt-out
-      filter — secondary-use consumers must join
+      Two measure families available for comparison, differing in exactly one
+      thing: *_pdc_corrected_* is the AIC measure with the last-order quirk
+      fixed, *_pdc_* without _corrected is the faithful AIC measure (see
+      int_medication_adherence_pdc). Neither is right-censored or clipped to
+      the window frame, so both count supply projected past the build date
+      and exposure overhanging the frame — biases that push values upward
+      and matter against thresholds such as 0.80. Per family and class:
+      latest (each family's own most recent fully elapsed non-NULL window —
+      the two families' latest readings can come from different windows) and
+      overall (chain span within the 3-year processing horizon), aggregated
+      across the person's chains, plus the number of contributing chains.
+      NOTE: the model currently emits only the mean corrected columns; the
+      min and faithful aggregations are present but commented out in the
+      SQL. Drill-down lives in int_medication_adherence_pdc_windows. One row
+      per person. No opt-out filter — secondary-use consumers must join
       DIM_PERSON_SECONDARY_USE_ALLOWED.
     config:
       meta:

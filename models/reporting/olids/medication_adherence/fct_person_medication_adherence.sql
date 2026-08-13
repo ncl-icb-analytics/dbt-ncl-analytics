@@ -30,28 +30,32 @@ Chains failing either test are absent; a class with no qualifying chains
 shows NULL measures and drug_count 0 — meaning "no current repeat therapy in
 class", not "no data" (history remains in the windows table).
 
-Per qualifying (person, class, drug) two corrected-PDC readings are taken:
-- latest: pdc_corrected of the most recent fully elapsed rolling window
-  (window_end <= current_date) that has a value — adherence over the
-  chain's most recent completed ~12 months of therapy. NULL for chains
-  younger than one window length.
-- overall: overall_pdc_corrected across the chain's full span.
+Per qualifying (person, class, drug) two readings are taken from each
+family:
+- latest: PDC of the most recent fully elapsed rolling window (window_end
+  <= current_date) that has a value — adherence over the chain's most
+  recent completed ~12 months of therapy. NULL for chains younger than one
+  window length.
+- overall: the chain-level PDC across its full span (within the 3-year
+  processing horizon).
 
 Because a person can hold several chains within a class, each reading is
 aggregated both ways — min (worst drug) and mean — pending a decision on
 which to keep; <class>_drug_count says how many chains contributed.
 
-Both measure families are exposed side by side for comparison:
-- *_pdc_corrected_* columns: windowed interval PDC over observed days —
-  supply, denominator and the early-refill subtraction clipped to the
-  window frame and the build date, final order counts.
-- *_pdc_* columns (no _corrected): the faithful AIC measure — last-order
-  quirk, future-supply projection and window overhang included.
-Each family's "latest" reading independently picks that family's most
-recent fully elapsed window with a non-NULL value, so the two latest
-readings can come from DIFFERENT windows of the same chain (a chain whose
-faithful value is NULL in a window — e.g. covered_days <= 0 via the quirk —
-falls back to an earlier window for the faithful reading only).
+Both measure families are available for comparison, differing in exactly
+one thing (see int_medication_adherence_pdc):
+- *_pdc_corrected_* columns: the AIC measure with the last-order quirk
+  fixed, so the final order of each chain contributes its supply.
+- *_pdc_* columns (no _corrected): the faithful AIC measure, quirk included.
+Neither is right-censored or clipped to the window frame, so supply
+projected past the build date counts and exposure may overhang the frame —
+both biases push values upward and matter when comparing against a
+threshold such as 0.80. Each family's "latest" reading independently picks
+that family's most recent fully elapsed window with a non-NULL value, so
+the two latest readings can come from DIFFERENT windows of the same chain
+(a chain whose faithful value is NULL in a window — covered_days <= 0 via
+the quirk — falls back to an earlier window for the faithful reading only).
 
 No opt-out filter is applied at this layer. For secondary use, consumers
 should INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED
@@ -168,13 +172,13 @@ select
     person_id
     {%- for label, prefix in class_prefixes.items() %},
   --  min(iff(drug_class = '{{ label }}', latest_pdc_corrected, null)) as {{ prefix }}_latest_pdc_corrected_min,
-    avg(iff(drug_class = '{{ label }}', latest_pdc_corrected, null)) as {{ prefix }}_latest_pdc_clipped_mean,
+    avg(iff(drug_class = '{{ label }}', latest_pdc_corrected, null)) as {{ prefix }}_latest_pdc_corrected_mean,
   --  min(iff(drug_class = '{{ label }}', overall_pdc_corrected, null)) as {{ prefix }}_overall_pdc_corrected_min,
-    avg(iff(drug_class = '{{ label }}', overall_pdc_corrected, null)) as {{ prefix }}_overall_pdc_clipped_mean,
+    avg(iff(drug_class = '{{ label }}', overall_pdc_corrected, null)) as {{ prefix }}_overall_pdc_corrected_mean,
   --  min(iff(drug_class = '{{ label }}', latest_pdc, null)) as {{ prefix }}_latest_pdc_min,
-  --  avg(iff(drug_class = '{{ label }}', latest_pdc, null)) as {{ prefix }}_latest_pdc_mean,
+    avg(iff(drug_class = '{{ label }}', latest_pdc, null)) as {{ prefix }}_latest_pdc_mean,
   -- min(iff(drug_class = '{{ label }}', overall_pdc, null)) as {{ prefix }}_overall_pdc_min,
-  --  avg(iff(drug_class = '{{ label }}', overall_pdc, null)) as {{ prefix }}_overall_pdc_mean,
+    avg(iff(drug_class = '{{ label }}', overall_pdc, null)) as {{ prefix }}_overall_pdc_mean,
     count(distinct iff(drug_class = '{{ label }}', vtm_code, null)) as {{ prefix }}_drug_count
     {%- endfor %}
 from per_chain

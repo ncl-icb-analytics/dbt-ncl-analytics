@@ -59,33 +59,25 @@ models:
       - name: exposure_end
         description: Last order end date within the window; NULL for windows with no qualifying orders.
       - name: covered_days
-        description: Net covered days in the window (faithful variant).
+        description: Net covered days in the window (faithful variant, with the last-order quirk).
       - name: covered_days_corrected
-        description: Net covered days in the window (corrected variant).
+        description: Net covered days with the last-order quirk fixed (larger than covered_days by the final order's duration, in windows containing it).
       - name: window_days
-        description: Exposure span in days — the faithful PDC denominator (pdc_type 2; can extend past the build date).
-      - name: window_days_corrected
-        description: Exposure span clipped to the observed window frame — the corrected PDC denominator.
+        description: Exposure span in days — the pdc_type=2 denominator for both families (can extend beyond the window frame and past the build date).
       - name: pdc
-        description: Faithful rolling PDC (AIC exposure-span semantics; uncapped; NULL when no positive coverage).
+        description: Faithful rolling PDC (AIC measure, uncapped; NULL when no positive coverage).
       - name: pdc_corrected
-        description: >
-          Windowed interval PDC over observed days — supply, denominator and
-          early-refill subtraction clipped to [window_start,
-          least(window_end, build date)]; final order counts. Different
-          semantics from the faithful pdc.
+        description: Rolling PDC with the last-order quirk fixed — same denominator as pdc, always >= it.
       - name: overall_start
         description: First order date of the (person, drug) chain.
       - name: overall_end
         description: Last order end date of the (person, drug) chain.
       - name: total_exposure_days
-        description: Days from overall_start to overall_end (faithful; can extend past the build date).
-      - name: total_exposure_days_corrected
-        description: Days from overall_start to overall_end right-censored at the build date — the corrected overall denominator.
+        description: Days from overall_start to overall_end — denominator for both overall PDC columns.
       - name: overall_pdc
         description: Faithful overall PDC across the chain span.
       - name: overall_pdc_corrected
-        description: Corrected overall PDC (quirk-fixed and right-censored at the build date).
+        description: Overall PDC with the last-order quirk fixed — same denominator, always >= overall_pdc.
       - name: pdc_type
         description: Constant 2 (dynamic exposure-window denominator).
       - name: exclusive
