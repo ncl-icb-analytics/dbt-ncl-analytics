@@ -24,7 +24,7 @@ models:
         description: "Unique identifier of procedure (surrogate key) using appointment identifier, code order and code"
 
       - name: date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Date of appointment"
 
       - name: visit_occurrence_id

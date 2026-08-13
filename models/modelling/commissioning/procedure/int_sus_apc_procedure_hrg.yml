@@ -21,7 +21,7 @@ models:
           - not_null
 
       - name: date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Episode start date."
 
       - name: visit_occurrence_id

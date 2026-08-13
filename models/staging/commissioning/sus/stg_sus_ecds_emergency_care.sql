@@ -10,12 +10,12 @@ select primarykey_id
     , attendance_location_department_type
     , system_record_provider
     -- arrival
-    , attendance_arrival_date 
-    , attendance_arrival_time
+    , attendance_arrival_date::date as attendance_arrival_date
+    , attendance_arrival_time::time as attendance_arrival_time
     , attendance_arrival_arrival_mode_code
     -- discharge
-    , attendance_departure_date 
-    , attendance_departure_time
+    , attendance_departure_date::date as attendance_departure_date 
+    , attendance_departure_time::time as attendance_departure_time
     , attendance_departure_time_since_arrival
     , attendance_discharge_destination_code 
     -- reasons for attendance

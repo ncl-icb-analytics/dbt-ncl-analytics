@@ -33,7 +33,7 @@ models:
           findings)"
 
       - name: date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Start date of the attendance associated with the observation"
 
       - name: visit_occurrence_type
