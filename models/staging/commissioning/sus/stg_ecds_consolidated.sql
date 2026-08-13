@@ -284,37 +284,25 @@ LEFT JOIN
 		AND mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID = 1
 		--AND mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID = (SELECT MIN(mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID) FROM [dmic_ECDS].[ECDS].[patient.mental_health_act_legal_status] AS mh WITH (NOLOCK) 
 			--WHERE att.PRIMARYKEY_ID = mh.PRIMARYKEY_ID)
+
+--Corrected pivot as per Coderabbit review
 LEFT JOIN (
-				SELECT
-				*
-				FROM (
-
-
-				SELECT DISTINCT
-							ROWNUMBER_ID
-					  ,
-							PRIMARYKEY_ID
-					  ,
-							COMORBIDITIES_ID
-					  ,
-							"CODE"
-					  ,
-							"IS_CODE_APPROVED"
-					  ,
-							"DMIC_IMPORT_LOG_ID"
-				  FROM
-							{{ ref('raw_sus_ecds_clinical_comorbidities') }}
-				  WHERE
-							"CODE" IS NOT NULL
-
-				) a --) a
-
-				PIVOT (MAX("CODE")
-					FOR COMORBIDITIES_ID IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-
-					)) pvt
-	) Co
-	ON att.PRIMARYKEY_ID = Co.PRIMARYKEY_ID
+    SELECT *
+    FROM (
+        SELECT
+            primarykey_id,
+            comorbidities_id,
+            "CODE"
+        FROM {{ ref('raw_sus_ecds_clinical_comorbidities') }}
+        WHERE "CODE" IS NOT null
+    ) AS comorbidities
+    PIVOT (
+        max("CODE") FOR comorbidities_id IN (
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        )
+    ) AS pivoted
+) AS co
+    ON att.primarykey_id = co.primarykey_id
 
 LEFT JOIN
 	{{ref('raw_sus_ecds_attendance_expected_treatment_times')}} et
