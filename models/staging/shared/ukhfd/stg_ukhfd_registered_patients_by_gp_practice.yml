@@ -7,6 +7,10 @@ models:
       first of each month. One row per organisation, sex and 5-year age band
       per monthly snapshot; org_type spans GP practice, PCN, ICB and other
       geographies, and sex/age band include ALL rollup rows.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
     columns:
       - name: org_type
         description: Organisation type, e.g. GP, PCN, ICB, SUB_ICB_LOCATION_CODE.
