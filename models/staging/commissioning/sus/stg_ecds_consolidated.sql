@@ -45,7 +45,7 @@ END	AS "Department_Type"
 ,"ATTENDANCE_ARRIVAL_CONVEYING_AMBULANCE_TRUST" AS "Conveying_Ambulance_Trust_Code" 
 ,"ATTENDANCE_ARRIVAL_AMBULANCE_CARE_CONTACT_IDENTIFIER" AS "Ambulance_Care_Contact_Identifier" 
 ,"ATTENDANCE_ARRIVAL_ATTENDANCE_SOURCE_CODE" AS "Attendance_Source" 
-,"ATTENDANCE_ARRIVAL_ATTENDANCE_SOURCE_ORGANISATION"	AS "Attendance_Source_For_Organistion_Site_Identifier" 
+,"ATTENDANCE_ARRIVAL_ATTENDANCE_SOURCE_ORGANISATION"	AS "Attendance_Source_For_Organisation_Site_Identifier" 
 ,"ATTENDANCE_INITIAL_ASSESSMENT_DATE"	AS "Initial_Assessment_Date" 
 ,"ATTENDANCE_INITIAL_ASSESSMENT_TIME"	AS "Initial_Assessment_Time" 
 ,"ATTENDANCE_INITIAL_ASSESSMENT_TIME_SINCE_ARRIVAL" AS "Initial_Assessment_Time_Since_Arrival" 
@@ -108,7 +108,7 @@ END	AS "Department_Type"
 ,di."13" AS "Secondary_Diagnosis12" 
 
 --Alcohol Related Injury Field 
-,ia."CODE" AS "Inury_Alcohol_Drug_Involvement"
+,ia."CODE" AS "Injury_Alcohol_Drug_Involvement"
 
 --Clinical Investigation Fields 
 ,iv."1" AS "Clinical_Investigation1"
@@ -151,12 +151,12 @@ END	AS "Department_Type"
 ,Co."10" AS "Comorbidity10" 
 
 --Mental Health Legal Status Field 
-,'MH.CLASSIFICATION' AS "Mental_Health_Legal_Status_Classification" 
+,mh."CLASSIFICATION" AS "Mental_Health_Legal_Status_Classification" 
 --Referral Fields 
 ,att."REFERRAL_PATIENT_PATHWAY_IDENTIFIER_VALUE_PSEUDO" AS "Patient_Pathway_Identifier" 
 ,att."REFERRAL_PERIOD_STATUS"	AS "Referral_To_Treatment_Period_Status" 
 ,att."REFERRAL_PERIOD_START_DATE"	AS "Referral_To_Treatment_Period_Start_Date" 
-,att."REFERRAL_PERIOD_END_DATE" AS "Referrral_To_Treatment_Period_End_Date" 
+,att."REFERRAL_PERIOD_END_DATE" AS "Referral_To_Treatment_Period_End_Date" 
 ,att."REFERRAL_WAITING_TIME_MEASUREMENT_TYPE"	AS "Waiting_Time_Measurement_Type" 
 
 --zDerived Fields 

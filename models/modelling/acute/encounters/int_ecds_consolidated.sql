@@ -47,7 +47,7 @@ select
     ,"Conveying_Ambulance_Trust_Code"
     ,"Ambulance_Care_Contact_Identifier"
     ,"Attendance_Source"
-    ,"Attendance_Source_For_Organistion_Site_Identifier"
+    ,"Attendance_Source_For_Organisation_Site_Identifier"
     ,"Initial_Assessment_Date"
     ,"Initial_Assessment_Time"
     ,"Initial_Assessment_Time_Since_Arrival"
@@ -111,7 +111,7 @@ select
     ,"Secondary_Diagnosis12"
 
     -- Alcohol related injury field
-    ,"Inury_Alcohol_Drug_Involvement"
+    ,"Injury_Alcohol_Drug_Involvement"
 
     -- Clinical investigation fields
     ,"Clinical_Investigation1"
@@ -160,7 +160,7 @@ select
     ,"Patient_Pathway_Identifier"
     ,"Referral_To_Treatment_Period_Status"
     ,"Referral_To_Treatment_Period_Start_Date"
-    ,"Referrral_To_Treatment_Period_End_Date"
+    ,"Referral_To_Treatment_Period_End_Date"
     ,"Waiting_Time_Measurement_Type"
 
     -- zDerived fields
