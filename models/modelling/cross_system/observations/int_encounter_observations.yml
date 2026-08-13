@@ -35,7 +35,7 @@ models:
           emergency)."
 
       - name: date
-        data_type: timestamp_ntz
+        data_type: date
         description: "Start date of the clinical event containing the observation."
 
       - name: clinical_end_date

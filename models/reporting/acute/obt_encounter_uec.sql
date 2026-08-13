@@ -16,8 +16,10 @@ select
     , pod
     , department_type
     , start_date
-    , duration
+    , start_time
     , end_date
+    , end_time
+    , duration
     , chief_complaint_code
     , chief_complaint_desc
     , chief_complaint_ecds_group1

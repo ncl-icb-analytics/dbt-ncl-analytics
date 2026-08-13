@@ -43,6 +43,7 @@ select
 
      /* Time and date */
     , core.appointment_date as start_date
+    , core.appointment_time as start_time
     , core.appointment_expected_duration as expected_duration
     
     /* Outcome information */
