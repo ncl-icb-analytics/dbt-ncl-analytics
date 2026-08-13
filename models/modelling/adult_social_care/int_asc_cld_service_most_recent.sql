@@ -14,7 +14,7 @@ with latest_submission_periods as (
 
 borough_names as(
     select organisation_code, organisation_name 
-    from {{ ref("organisations_local_authority") }} 
+    from {{ ref("organisation_local_authority") }} 
 ),
 
 latest_period_cld as (

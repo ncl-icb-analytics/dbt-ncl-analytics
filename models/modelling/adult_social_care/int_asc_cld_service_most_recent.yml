@@ -28,7 +28,7 @@ models:
           - not_null
 
       - name: borough_name
-        description: Local authority name from organisations_local_authority
+        description: Local authority name from organisation_local_authority
 
       - name: service_type
         description: Type of social care service

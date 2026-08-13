@@ -1,5 +1,5 @@
 models:
-  - name: organisations_local_authority
+  - name: organisation_local_authority
     description: Organisation reference data for local authorities
     config:
       meta:
