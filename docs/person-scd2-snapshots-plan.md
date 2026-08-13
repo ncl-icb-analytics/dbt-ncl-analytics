@@ -81,8 +81,8 @@ only the identifier, the scaled subdomain scores and the final score, plus
 
 | Snapshot | Input view | Contents |
 |----------|-----------|----------|
-| [`cltcs_score_treatment_snapshot`](../snapshots/cltcs_score_treatment_snapshot.yml) | [`cltcs_score_treatment_snapshot_input`](../models/reporting/commissioning/projects/cltcs/cltcs_score_treatment_snapshot_input.sql) | `sk_patient_id`, 6 `scaled_score_*`, `score_treatment` |
-| [`cltcs_score_frailty_snapshot`](../snapshots/cltcs_score_frailty_snapshot.yml) | [`cltcs_score_frailty_snapshot_input`](../models/reporting/commissioning/projects/cltcs/cltcs_score_frailty_snapshot_input.sql) | `sk_patient_id`, 7 `scaled_score_*`, `score_exclusions`, `score_frailty` |
+| [`cltcs_score_treatment_snapshot`](../snapshots/cltcs_score_treatment_snapshot.yml) | [`cltcs_score_treatment_snapshot_input`](../models/reporting/cltcs/cltcs_score_treatment_snapshot_input.sql) | `sk_patient_id`, 6 `scaled_score_*`, `score_treatment` |
+| [`cltcs_score_frailty_snapshot`](../snapshots/cltcs_score_frailty_snapshot.yml) | [`cltcs_score_frailty_snapshot_input`](../models/reporting/cltcs/cltcs_score_frailty_snapshot_input.sql) | `sk_patient_id`, 7 `scaled_score_*`, `score_exclusions`, `score_frailty` |
 
 - `unique_key: [sk_patient_id]`, `hard_deletes: invalidate`,
   `updated_at: table_refresh_date`.
@@ -189,13 +189,13 @@ dbt has no native "monthly append", so use an **incremental model** with
 only inserts once per calendar month.
 
 Built as
-[`cltcs_activity_monthly_capture`](../models/reporting/commissioning/projects/cltcs/cltcs_activity_monthly_capture.sql)
+[`cltcs_activity_monthly_capture`](../models/reporting/cltcs/cltcs_activity_monthly_capture.sql)
 (+ `.yml` with a `dbt_utils.unique_combination_of_columns` test on
 `[sk_patient_id, snapshot_month]`). It captures A&E / inpatient / outpatient / GP /
 medications / waiting-list rolling-12-month counts over a union spine of all six
 sources (any patient with activity in at least one), `zeroifnull`-ed. Sketch:
 
-`models/reporting/commissioning/projects/cltcs/cltcs_activity_monthly_capture.sql`:
+`models/reporting/cltcs/cltcs_activity_monthly_capture.sql`:
 ```sql
 {{
     config(

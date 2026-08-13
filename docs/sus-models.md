@@ -35,7 +35,7 @@ Clean, deduplicated pass-throughs of the raw SUS tables. One row per record of t
 - `stg_sus_op_appointment_clinical_coding_procedure_opcs` — OPCS-4 procedures per appointment
 - `stg_sus_op_appointment_commissioning_grouping_unbundled_hrg` — unbundled HRGs per appointment
 
-## Intermediate — `models/modelling/commissioning/`
+## Intermediate — `models/modelling/acute/` and `models/modelling/population/demographics/`
 
 Normalises the three dataset types into shared shapes: encounters, diagnoses, procedures, HRGs, demographics.
 
@@ -57,7 +57,7 @@ Normalises the three dataset types into shared shapes: encounters, diagnoses, pr
 **Demographics** (`demographics/`)
 - `int_person_pmi_dataset_sus` — one row per patient (gender, DOB, ethnicity, LSOA, GP practice)
 
-## Reporting — `models/reporting/commissioning/person_level/`
+## Reporting — `models/reporting/acute/`
 
 Person-level rolling-window summaries (one row per patient).
 

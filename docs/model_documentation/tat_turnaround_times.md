@@ -31,7 +31,7 @@ the dev objects are built now (from validation runs).
 |---|---|---|---|
 | `raw_tat_turnaround_times_raw` | raw (view) | `STAGING.DBT_RAW.RAW_TAT_TURNAROUND_TIMES_RAW` | `DEV__STAGING.DBT_RAW.RAW_TAT_TURNAROUND_TIMES_RAW` |
 | `stg_tat_turnaround_times` | staging (table) | `STAGING.TAT.STG_TAT_TURNAROUND_TIMES` | `DEV__STAGING.TAT.STG_TAT_TURNAROUND_TIMES` |
-| `int_tat_turnaround_times` | modelling (table) | `MODELLING.COMMISSIONING_MODELLING.INT_TAT_TURNAROUND_TIMES` | `DEV__MODELLING.COMMISSIONING_MODELLING.INT_TAT_TURNAROUND_TIMES` |
+| `int_tat_turnaround_times` | modelling (table) | `MODELLING.DIAGNOSTICS.INT_TAT_TURNAROUND_TIMES` | `DEV__MODELLING.DIAGNOSTICS.INT_TAT_TURNAROUND_TIMES` |
 
 - **raw** — 1:1 passthrough, cleaned column names (generated).
 - **staging** — typed + normalised: header-spelling variants COALESCEd, UK datetimes parsed,
