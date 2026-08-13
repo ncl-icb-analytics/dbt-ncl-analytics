@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: int_ecds_consolidated
+    description: >
+      Intermediate layer: consolidated ECDS (Emergency Care Data Set) attendances.
+      One row per emergency care attendance, combining the core attendance record
+      with pivoted diagnoses (13), investigations (12), treatments (12) and
+      comorbidities (10), plus referral, alcohol/drug involvement and expected
+      treatment time. Financial year and month are joined from the UKHFD date
+      dimension on arrival date.
+
+      Note: all column names are quoted mixed-case and must be referenced as such
+      downstream (e.g. "Record_Identifier"), with the exception of ZBUSINESSRULE.
+
+    columns:
+      - name: '"Record_Identifier"'
+        description: ECDS PRIMARYKEY_ID. Grain of this model - one row per attendance.
+        tests:
+          - unique
+          - not_null
+
+      - name: '"Patient_ID"'
+        description: Pseudonymised patient NHS number.
+
+      - name: '"Arrival_Date"'
+        description: Date the patient arrived at the emergency care department.
+        tests:
+          - not_null
+
+      - name: '"Financial_Year"'
+        description: Financial year derived from arrival date via the UKHFD date dimension.
+
+      - name: '"Financial_Month"'
+        description: Financial month number (1-12, April = 1) from the UKHFD date dimension.
+
+      - name: '"Provider_Code"'
+        description: First three characters of the commissioning service agreement provider.
+
+      - name: '"Site_Code"'
+        description: Organisation site code where the attendance took place.
+
+      - name: '"Department_Type"'
+        description: >
+          ECDS department type. Overridden to '03' where site code is RQM25.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['01', '02', '03', '04']
+              config:
+                severity: warn
+
+      - name: '"Commissioner_Code"'
+        description: Commissioner from the commissioning service agreement.
+
+      - name: '"Primary_Diagnosis"'
+        description: First SNOMED clinical diagnosis by sequence number.
+
+      - name: ZBUSINESSRULE
+        description: >
+          Derived UTC / WIC / MIU classification based on site code and department
+          type. NULL where the attendance does not match a known NWL urgent care
+          setting. Unquoted, so stored uppercase.
