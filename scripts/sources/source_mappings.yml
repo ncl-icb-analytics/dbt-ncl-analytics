@@ -67,7 +67,7 @@ sources:
   # UK Health Dimensions
   - source_name: ukhfd
     database: UKHFD
-    schema: dbo
+    schema: dbt_raw
     description: UKHD reference and dimension tables
     raw_prefix: raw_ukhfd
     domain: shared

@@ -130,6 +130,8 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: DETAILS_SINCE
       data_type: DATE
+    - name: NEIGHBOURHOOD_CODE_WNL
+      data_type: TEXT
   - name: PRACTICE_ALL
     identifier: '"PRACTICE_ALL"'
     columns:

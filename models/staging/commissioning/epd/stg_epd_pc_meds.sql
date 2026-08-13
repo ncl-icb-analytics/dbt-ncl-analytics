@@ -91,4 +91,4 @@ select
         = max(uniq_submission_id) over (partition by processed_period)
                                                 as is_latest_submission
 
-from {{ ref('raw_epd_pc_meds') }}
+from {{ ref('raw_epd_pc_medsv1') }}

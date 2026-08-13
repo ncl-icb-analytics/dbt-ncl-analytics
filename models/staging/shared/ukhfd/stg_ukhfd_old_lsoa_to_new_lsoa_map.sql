@@ -7,7 +7,7 @@
 select
     old_lsoa_code
     , new_lsoa_code
-from {{ ref('raw_ukhfd_old_lsoa_to_new_lsoa_map') }}
+from {{ ref('raw_ukhfd_geo_old_lsoa_to_new_lsoa_map') }}
 where is_latest = 1
 qualify row_number() over (
     partition by old_lsoa_code

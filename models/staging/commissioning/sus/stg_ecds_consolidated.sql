@@ -7,8 +7,8 @@ att."PRIMARYKEY_ID" AS "Record_Identifier"
 ,att."SYSTEM_TRANSACTION_CDS_UNIQUE_IDENTIFIER" AS "CDS_Unique_Identifier" 
 ,att."PATIENT_LOCAL_PATIENT_IDENTIFIER_VALUE" AS "Local_Patient_Identifier" 
 ,att."COMMISSIONING_SERVICE_AGREEMENT_PROVIDER_REFERENCE_NUMBER" AS "Provider_Reference_Number" 
-,dt."Fin_Year" AS "Financial_Year" 
-,dt."Fin_Month_No" AS "Financial_Month" 
+,dt.fin_year AS "Financial_Year" 
+,dt.fin_month_no AS "Financial_Month" 
 ,att."COMMISSIONING_NATIONAL_PRICING_COSTING_PERIOD" AS "Applicable_Costing_Period" 
 
 --Patient Detail Fields 
@@ -190,15 +190,12 @@ WHEN "ATTENDANCE_LOCATION_SITE" = 'RYJ03' AND "ATTENDANCE_LOCATION_DEPARTMENT_TY
 ELSE NULL 
 END																			AS VARCHAR(50))	AS zBusinessRule
 
-
-FROM {{ref('raw_sus_ae_emergency_care')}} att 
-
+FROM {{ref('raw_sus_ecds_emergency_care')}} att 
 
 LEFT JOIN {{ref('raw_ukhfd_dim_ref_dates')}} dt 
-ON att."ATTENDANCE_ARRIVAL_DATE" = dt."Full_Date" 
+ON att."ATTENDANCE_ARRIVAL_DATE" = dt.full_date 
 
-
-LEFT JOIN {{ref('raw_sus_ae_attendance_referred_to')}} AS ar 
+LEFT JOIN {{ref('raw_sus_ecds_attendance_referred_to')}} AS ar 
 ON att."PRIMARYKEY_ID" = ar."PRIMARYKEY_ID"  
 AND "REFERRED_TO_ID" = 1 
 
@@ -215,7 +212,7 @@ LEFT JOIN (SELECT
 								ROW_NUMBER() OVER (PARTITION BY
 									PRIMARYKEY_ID
 								ORDER BY "SEQUENCE_NUMBER" NULLS FIRST) AS RowNum,*
-							FROM {{ref('raw_sus_ae_clinical_diagnoses_snomed') }}
+							FROM {{ref('raw_sus_ecds_clinical_diagnoses_snomed') }}
 							) a
 						WHERE
 							RowNum BETWEEN 1 AND 13 
@@ -224,13 +221,13 @@ LEFT JOIN (SELECT
 	ON att.PRIMARYKEY_ID = di.PRIMARYKEY_ID
 
 LEFT JOIN
-		{{ ref('raw_sus_ae_clinical_injury_alcohol_drug_involvements') }}  AS ia
+		{{ ref('raw_sus_ecds_clinical_injury_alcohol_drug_involvements') }}  AS ia
 	ON att.PRIMARYKEY_ID = ia.PRIMARYKEY_ID
 		AND ia.ALCOHOL_DRUG_INVOLVEMENTS_ID =
  		                                     --** SSC-FDM-0002 - CORRELATED SUBQUERIES MAY HAVE SOME FUNCTIONAL DIFFERENCES. **
  		                                     (SELECT
 				MIN(ia.ALCOHOL_DRUG_INVOLVEMENTS_ID) FROM
-				{{ ref('raw_sus_ae_clinical_injury_alcohol_drug_involvements') }}  ia
+				{{ ref('raw_sus_ecds_clinical_injury_alcohol_drug_involvements') }}  ia
 			WHERE
 				att.PRIMARYKEY_ID = ia.PRIMARYKEY_ID
  		                                     )
@@ -249,7 +246,7 @@ LEFT JOIN (SELECT
 								ORDER BY SNOMED_ID NULLS FIRST) AS RowNum,
 								*
 						FROM
-								{{ ref('raw_sus_ae_clinical_investigations_snomed') }}
+								{{ ref('raw_sus_ecds_clinical_investigations_snomed') }}
 							) ci
 						WHERE
 							RowNum BETWEEN 1 AND 12
@@ -273,7 +270,7 @@ LEFT JOIN (SELECT
 								ORDER BY "DATE" NULLS FIRST, "TIME" NULLS FIRST, SNOMED_ID NULLS FIRST) AS RowNum,
 								*
 						FROM
-								{{ ref('raw_sus_ae_clinical_treatments_snomed') }}
+								{{ ref('raw_sus_ecds_clinical_treatments_snomed') }}
 						) a
 						WHERE
 							RowNum BETWEEN 1 AND 12) t
@@ -282,7 +279,7 @@ LEFT JOIN (SELECT
 	ON att.PRIMARYKEY_ID = ct.PRIMARYKEY_ID
 
 LEFT JOIN
-	{{ref('raw_sus_ae_patient_mental_health_act_legal_status')}} AS mh
+	{{ref('raw_sus_ecds_patient_mental_health_act_legal_status')}} AS mh
 	ON att.PRIMARYKEY_ID = mh.PRIMARYKEY_ID
 		AND mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID = 1
 		--AND mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID = (SELECT MIN(mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID) FROM [dmic_ECDS].[ECDS].[patient.mental_health_act_legal_status] AS mh WITH (NOLOCK) 
@@ -306,7 +303,7 @@ LEFT JOIN (
 					  ,
 							"DMIC_IMPORT_LOG_ID"
 				  FROM
-							{{ ref('raw_sus_ae_clinical_comorbidities') }}
+							{{ ref('raw_sus_ecds_clinical_comorbidities') }}
 				  WHERE
 							"CODE" IS NOT NULL
 
@@ -320,7 +317,7 @@ LEFT JOIN (
 	ON att.PRIMARYKEY_ID = Co.PRIMARYKEY_ID
 
 LEFT JOIN
-	{{ref('raw_sus_ae_attendance_expected_treatment_times')}} et
+	{{ref('raw_sus_ecds_attendance_expected_treatment_times')}} et
 	ON att.PRIMARYKEY_ID = et.PRIMARYKEY_ID
 	AND et.EXPECTED_TREATMENT_TIMES_ID = 1
 
