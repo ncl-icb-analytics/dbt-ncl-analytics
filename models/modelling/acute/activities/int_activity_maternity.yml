@@ -2,8 +2,9 @@
 models:
   - name: int_activity_maternity
     description: "Activities considered as maternity related for commissioning analysis.
-      Covers admitted patient care spells and OP encounters; requires expert review
-      to determine if maternity-related."
+      Covers admitted patient care spells and OP encounters, identified by obstetrics
+      specialty (501) or HRG chapter NZ; requires expert review to determine if
+      maternity-related."
     config:
       meta:
         owner:

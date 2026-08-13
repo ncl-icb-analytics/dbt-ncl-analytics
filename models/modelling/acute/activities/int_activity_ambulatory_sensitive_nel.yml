@@ -4,7 +4,8 @@ models:
   - name: int_activity_ambulatory_sensitive_nel
     description: > 
       Warning: In development. Incomplete logic.
-      Activities considered as Ambulatory care sensitive according to open codelist indicated as primary diagnosis reason. NEL based on admission method coding.
+      Activities considered as Ambulatory care sensitive according to open codelist indicated as primary diagnosis reason.
+      Covers non-elective admitted patient care spells only (admission method 2*, excluding 2C).
     config:
       meta:
         owner:

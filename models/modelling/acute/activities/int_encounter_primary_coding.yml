@@ -3,7 +3,7 @@ version: 2
 models:
   - name: int_encounter_primary_coding
     description: >
-      Standardized summary of primary clinical information from commissioning encounters.
+      Primary clinical coding per encounter across SUS acute activity.
       Combines primary diagnoses, procedures, treatments, and investigations from A&E attendances (ECDS),
       admitted patient care spells, and outpatient appointments into a unified structure.
       Each row represents one encounter with standardized primary clinical coding fields.

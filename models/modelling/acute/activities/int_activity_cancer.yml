@@ -2,7 +2,9 @@
 models:
   - name: int_activity_cancer
     description: "Activities considered as cancer-related for commissioning analysis.
-      Currently limited to OP encounters and requires expert review to determine if
+      Currently limited to OP encounters (APC and A&E not yet included), identified by
+      HRG chapter SB/SC, clinical oncology or medical oncology specialty (800/370), or
+      ICD-10 C00-C97 and D00-D09 coding. Requires expert review to determine if
       cancer-related."
     config:
       meta:

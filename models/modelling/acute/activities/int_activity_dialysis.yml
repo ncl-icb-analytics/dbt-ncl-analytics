@@ -2,8 +2,9 @@
 models:
   - name: int_activity_dialysis
     description: "Activities considered as dialysis related for commissioning analysis.
-      Currently limited to OP encounters and requires expert review to determine if
-      dialysis-related."
+      Currently limited to OP encounters (APC and A&E not yet included), identified by
+      renal dialysis HRGs (LA08E, LE01A/B, LE02A/B) or OPCS-4 X40 procedures. Requires
+      expert review to determine if dialysis-related."
     config:
       meta:
         owner:
