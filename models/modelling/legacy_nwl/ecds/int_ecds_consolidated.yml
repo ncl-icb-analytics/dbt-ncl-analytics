@@ -3,15 +3,15 @@ version: 2
 models:
   - name: int_ecds_consolidated
     description: >
-      Intermediate layer: consolidated ECDS (Emergency Care Data Set) attendances.
-      One row per emergency care attendance, combining the core attendance record
-      with pivoted diagnoses (13), investigations (12), treatments (12) and
-      comorbidities (10), plus referral, alcohol/drug involvement and expected
-      treatment time. Financial year and month are joined from the UKHFD date
-      dimension on arrival date.
+      Transitional model preserving the existing NWL ECDS output. Consolidated
+      ECDS (Emergency Care Data Set) attendances - one row per emergency care
+      attendance, combining the core attendance record with pivoted diagnoses
+      (13), investigations (12), treatments (12) and comorbidities (10), plus
+      referral, alcohol/drug involvement and expected treatment time.
 
-      Note: all column names are quoted mixed-case and must be referenced as such
-      downstream (e.g. "Record_Identifier"), with the exception of ZBUSINESSRULE.
+      This model is transitional pending alignment with the shared Acute model
+      design. It is not a target-state model and should not be built upon
+      without reference to that work.
 
     columns:
       - name: '"Record_Identifier"'

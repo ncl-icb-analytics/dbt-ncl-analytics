@@ -1,6 +1,9 @@
 {{
     config(
-        materialized='table'
+        materialized='table',
+        database='MODELLING',
+        schema='LEGACY_NWL',
+        tags=['legacy_nwl']
     )
 }}
 
