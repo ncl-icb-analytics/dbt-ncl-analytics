@@ -12,11 +12,14 @@ models:
       This model is transitional pending alignment with the shared Acute model
       design. It is not a target-state model and should not be built upon
       without reference to that work.
-
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
     columns:
       - name: '"Record_Identifier"'
         description: ECDS PRIMARYKEY_ID. Grain of this model - one row per attendance.
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -25,7 +28,7 @@ models:
 
       - name: '"Arrival_Date"'
         description: Date the patient arrived at the emergency care department.
-        tests:
+        data_tests:
           - not_null
 
       - name: '"Financial_Year"'
@@ -43,7 +46,7 @@ models:
       - name: '"Department_Type"'
         description: >
           ECDS department type. Overridden to '03' where site code is RQM25.
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['01', '02', '03', '04']
