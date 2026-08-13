@@ -1,6 +1,6 @@
 
 models:
-  - name: int_encounter_observations
+  - name: int_observations
     description: "Observations derived from SUS AE, SUS OP, SUS APC, CSDS (to be added),
       and MHDS (to be added). Diagnosis and procedure codes in ICD10 or snomed codes
       as indicated. No measurement data. One row per code with counts and ordering within the clinical event shown"

@@ -15,7 +15,7 @@ with specialty_filters as (
     -- union all
     
     select distinct visit_occurrence_id
-    from {{ ref('int_encounter_observations')}}
+    from {{ ref('int_observations')}}
     where observation_vocabulary = 'HRG' 
       and left(observation_concept_code, 2) = 'NZ'
 ),

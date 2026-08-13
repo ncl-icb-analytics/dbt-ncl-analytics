@@ -218,7 +218,7 @@ For example: `int_activity_dialysis.sql`, `int_organisation_borough_mapping.sql`
 -- int_activity_dialysis.sql
 with specialty_filters as (
     select visit_occurrence_id
-    from {{ ref('int_encounter_observations') }}
+    from {{ ref('int_observations') }}
     where
         (observation_vocabulary = 'HRG'
             and observation_concept_code in ('LA08E', 'LE01A', 'LE01B', 'LE02A', 'LE02B'))

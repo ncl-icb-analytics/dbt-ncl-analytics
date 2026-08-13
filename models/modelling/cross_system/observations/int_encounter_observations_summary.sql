@@ -1,6 +1,6 @@
 
 with base_observations as (
-    select * from {{ ref('int_encounter_observations') }}
+    select * from {{ ref('int_observations') }}
     where sk_patient_id is not null
     and date between dateadd(month, -12, current_date()) and current_date()
     and observation_concept_code is not null

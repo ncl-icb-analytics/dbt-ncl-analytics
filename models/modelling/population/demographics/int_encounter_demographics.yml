@@ -1,6 +1,6 @@
 
 models:
-  - name: int_person_demographics_at_event
+  - name: int_encounter_demographics
     description: Patient demographics captured at time of healthcare event. 
       Combines OP, APC, AE, and waiting list data. One row per person per event.
     config:

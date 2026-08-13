@@ -1,7 +1,7 @@
 with specialty_filters as (
     -- Combine filter conditions to avoid repetition
     select visit_occurrence_id
-    from {{ ref('int_encounter_observations')}}
+    from {{ ref('int_observations')}}
     where 
         (observation_vocabulary = 'HRG' and 
             (observation_concept_code in ('LA08E', 'LE01A', 'LE01B', 'LE02A',  'LE02B'))) -- latter are acute injury diaysys? 

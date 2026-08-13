@@ -18,7 +18,7 @@ with base as (
         reg_practice_at_event,
         code_date,
         visit_occurrence_id
-    from {{ref('int_person_demographics_at_event')}}
+    from {{ref('int_encounter_demographics')}}
     where code_date::date <= current_date()
 ),
 
