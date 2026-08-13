@@ -2,8 +2,8 @@
 models:
   - name: int_activity_maternity
     description: "Activities considered as maternity related for commissioning analysis.
-      Currently limited to OP encounters and requires expert review to determine if
-      maternity-related."
+      Covers admitted patient care spells and OP encounters; requires expert review
+      to determine if maternity-related."
     config:
       meta:
         owner:

@@ -176,5 +176,5 @@ inclusion_list as (
 
 select summ.*, 
     true as respiratory_encounter
-from {{ref('int_activity_primary_summary')}} as summ
+from {{ref('int_encounter_primary_coding')}} as summ
 inner join inclusion_list as filt on filt.visit_occurrence_id = summ.visit_occurrence_id
