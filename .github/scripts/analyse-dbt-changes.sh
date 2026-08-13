@@ -15,6 +15,7 @@ get_layer() {
     local file=$1
     if [[ $file == models/raw/* ]]; then echo "Raw"
     elif [[ $file == models/staging/* ]]; then echo "Staging"
+    elif [[ $file == models/reference/* ]]; then echo "Reference"
     elif [[ $file == models/modelling/* ]]; then echo "Modelling"
     elif [[ $file == models/reporting/* ]]; then echo "Reporting"
     elif [[ $file == models/published/* ]]; then echo "Published"
@@ -46,6 +47,8 @@ get_schema() {
         # Schema = source-system folder containing the model
         local source_dir=$(basename "$(dirname "$file")")
         echo "${source_dir^^}"
+    elif [[ $file == models/*/olids/risk_stratification/* ]]; then
+        echo "RISK_STRATIFICATION"
     # Extract subdomain for auto-schema domains (olids)
     elif [[ $file == models/*/olids/* ]]; then
         # Extract the subdomain folder after olids/
@@ -55,10 +58,12 @@ get_schema() {
         else
             echo "OLIDS"
         fi
-    elif [[ $file == models/modelling/commissioning/* ]]; then
-        echo "COMMISSIONING_MODELLING"
-    elif [[ $file == models/reporting/commissioning/* ]]; then
-        echo "COMMISSIONING_REPORTING"
+    elif [[ $file == models/reference/*/* ]]; then
+        local ref_schema=$(echo "$file" | sed -n 's|models/reference/\([^/]*\)/.*|\1|p')
+        echo "${ref_schema^^}"
+    elif [[ $file == models/modelling/*/* || $file == models/reporting/*/* ]]; then
+        local domain=$(echo "$file" | sed -n 's|models/[^/]*/\([^/]*\)/.*|\1|p')
+        echo "${domain^^}"
     elif [[ $file == models/published/secondary_use/commissioning/* ]]; then
         echo "COMMISSIONING_PUBLISHED"
     elif [[ $file == models/*/shared/* ]]; then
