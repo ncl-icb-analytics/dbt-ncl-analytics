@@ -1,0 +1,18 @@
+
+models:
+  - name: int_encounter_demographics
+    description: Patient demographics captured at time of healthcare event. 
+      Combines OP, APC, AE, and waiting list data. One row per person per event.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: visit_occurrence_id
+        description: Source event identifier.
+        data_tests:
+          - not_null
+      - name: sk_patient_id
+        description: Pseudo NHS number.
+        data_tests:
+          - not_null

@@ -46,6 +46,14 @@ models:
       - dbt_utils.at_least_one:
           arguments:
             column_name: appointment_id
+      # is_attended derives from appointment_status_code = '5' (57.8M of 62M
+      # rows); a code-set change would silently zero attendance
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 10000000
+            row_condition: "is_attended"
+          config:
+            severity: error
     columns:
       - name: appointment_id
         description: Unique appointment identifier from OLIDS

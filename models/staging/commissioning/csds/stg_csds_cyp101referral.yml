@@ -1,6 +1,10 @@
 models:
   - name: stg_csds_cyp101referral
-    description: CSDS CYP referral requests (deduplicated)
+    description: >
+      CSDS CYP referral requests. Grain: one row per
+      unique_service_request_identifier. Population: CYP101 referral records.
+      Time semantics: the latest submitted record per service request is
+      retained.
     config:
       meta:
         owner:
@@ -15,6 +19,18 @@ models:
         description: CSDS person identifier
       - name: referral_request_received_date
         description: Date referral request was received
+      - name: primary_reason_for_referral_community_care
+        description: Primary reason for community care referral.
+      - name: service_discharge_date
+        description: Service discharge date.
+      - name: priority_type_code
+        description: Referral priority type code.
+      - name: ic_age_at_service_referral_received_date
+        description: CSDS-derived age in years at referral received.
+      - name: dm_icb_commissioner
+        description: Derived ICB commissioner code.
+      - name: dm_sub_icb_commissioner
+        description: Derived sub-ICB commissioner code.
     tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

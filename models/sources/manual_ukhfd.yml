@@ -1,6 +1,92 @@
 version: 2
 
 sources:
+  - name: ukhfd_geo
+    database: '"UKHFD"'
+    schema: '"Old_LSOA_To_New_LSOA_To_LAD"'
+    description: ONS lookup bridging retired 2011 LSOAs to 2021 LSOAs and their LAD.
+    tables:
+      - name: old_lsoa_to_new_lsoa_map
+        identifier: '"dim_Map_SCD"'
+        description: One row per (old LSOA, new LSOA) pair per snapshot; Is_Latest marks the current mapping.
+        columns:
+          - name: Old_LSOA_Code
+            quote: true
+          - name: New_LSOA_Code
+            quote: true
+          - name: LAD_Code
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+          - name: Effective_To
+            quote: true
+
+  - name: ukhfd_ods
+    database: '"UKHFD"'
+    schema: '"ODS"'
+    description: National ODS organisation reference dimensions.
+    tables:
+      - name: all_gp_and_gdp_practices
+        identifier: '"dim_All_GP_and_GDP_Practices_SCD"'
+        description: All GP and general dental practices nationally (epraccur-style SCD); Is_Latest marks the current row per organisation.
+        columns:
+          - name: Organisation_Code
+            quote: true
+          - name: Organisation_Name
+            quote: true
+          - name: Postcode
+            quote: true
+          - name: Open_Date
+            quote: true
+          - name: Close_Date
+            quote: true
+          - name: Status_Code
+            quote: true
+          - name: Parent_Organisation_Code
+            quote: true
+          - name: Prescribing_Setting
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+          - name: Effective_To
+            quote: true
+
+  - name: ukhfd_demography
+    database: '"UKHFD"'
+    schema: '"Demography"'
+    description: GP-registered patient counts from the NHS England "Patients Registered at a GP Practice" monthly publication.
+    tables:
+      - name: registered_patients_by_gp_practice
+        identifier: '"fact_No_Of_Patients_Regd_At_GP_Prac_Regions_5Yr_AgeBand"'
+        description: Registered patient counts by organisation (GP practice, PCN, ICB and other geographies), sex and 5-year age band per monthly snapshot.
+        columns:
+          - name: Org_Type
+            quote: true
+          - name: Org_Code
+            quote: true
+          - name: ONS_Code
+            quote: true
+          - name: Sex
+            quote: true
+          - name: Age_Band
+            quote: true
+          - name: Number_Of_Patients
+            quote: true
+          - name: Effective_Snapshot_Date
+            quote: true
+          - name: DataSourceFileForThisSnapshot_Version
+            quote: true
+          - name: Report_Period_Length
+            quote: true
+          - name: Unique_ID
+            quote: true
+          - name: AuditKey
+            quote: true
+
   - name: ukhfd_comm_allocations
     database: '"UKHFD"'
     schema: '"Comm_Allocations"'

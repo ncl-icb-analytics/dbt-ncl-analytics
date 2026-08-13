@@ -24,6 +24,12 @@ models:
         data_tests:
           - not_null
 
+      - name: uniq_serv_req_id
+        description: Unique service request identifier linked to the spell.
+
+      - name: age_hosp_start_date
+        description: MHSDS-derived age at admission.
+
 
     data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:

@@ -1,0 +1,58 @@
+version: 2
+models:
+  - name: practice_weighted_population
+    description: |
+      Practice need-weighted population by allocation base year, from the NHS
+      England revenue allocations practice-level workbooks (Core WP.xlsx) via
+      UKHFD. NHS England weights each practice's projected registered
+      population for need using the allocation formulae (technical guide
+      PRN01601 and successors); base years present are 2025/26 and 2028/29.
+      All values, including registered population, are modelled projections
+      for the allocation base year rather than actual list counts, which is
+      why they carry decimals - use practice_registered_patients for actual
+      monthly headcounts. weighted_patients is the mean of the General and
+      Acute, Community, Mental Health, Maternity, Prescribing and Primary
+      Medical Care weighted populations, matching the Average weighted pop
+      (excl. HI) formula in Core WP.xlsx. Health inequalities and Core
+      Services are excluded from the mean.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [practice_code, financial_year]
+    columns:
+      - name: practice_code
+        description: GP practice ODS code (national coverage; filter to WNL downstream).
+        data_tests:
+          - not_null
+      - name: financial_year
+        description: Allocation base financial year label, e.g. 2025/26.
+      - name: financial_year_start
+        description: 1 April of the financial year.
+      - name: registered_patients
+        description: Projected registered population for the allocation base year (modelled, carries decimals).
+      - name: weighted_patients
+        description: Mean of the six service-specific UKHFD weighted populations.
+      - name: weighted_to_registered_ratio
+        description: Mean weighted population divided by registered population.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0.25
+                max_value: 5
+              config:
+                severity: warn
+      - name: weighted_component_count
+        description: Number of service-specific weighted populations in the mean; expected to be six.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [6]
+      - name: source_file_version
+        description: UKHFD source-file version for the allocation snapshot.
+      - name: is_latest
+        description: TRUE for the practice's newest UKHFD allocation base year.

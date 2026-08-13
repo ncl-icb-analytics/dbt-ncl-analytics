@@ -164,7 +164,7 @@ FACTS(
 
     -- Frailty
     efi.latest_efi_score_preferred AS latest_efi_score_preferred COMMENT = 'Latest GP-recorded eFI or coded eFI2 score (0-1). Not the calculated eFI2 score.',
-    efi2.efi_score AS efi2_score WITH SYNONYMS = ('calculated eFI2 score', 'electronic frailty index 2 score') COMMENT = 'Calculated electronic Frailty Index 2 score (0-1) for living people aged 65+. Recomputed as at efi2_score_date; use efi2_category for population counts. Do not combine with GP-recorded eFI/eFI2 or Rockwood scores.',
+    efi2.efi2_score AS efi_score WITH SYNONYMS = ('calculated eFI2 score', 'electronic frailty index 2 score') COMMENT = 'Calculated electronic Frailty Index 2 score (0-1) for living people aged 65+. Recomputed as at efi2_score_date; use efi2_category for population counts. Do not combine with GP-recorded eFI/eFI2 or Rockwood scores.',
     rockwood.rockwood_score AS rockwood_score COMMENT = 'Rockwood Clinical Frailty Scale score (1-9)',
 
     -- ESP
@@ -189,7 +189,7 @@ DIMENSIONS(
     qrisk.latest_qrisk_date AS clinical_effective_date COMMENT = 'Date of latest QRISK',
     acr.latest_acr_date AS clinical_effective_date COMMENT = 'Date of latest ACR',
     efi.latest_efi_date AS latest_efi_date COMMENT = 'Date of latest GP-recorded eFI or coded eFI2 assessment; not the calculated eFI2 score date.',
-    efi2.end_date AS efi2_score_date COMMENT = 'As-at date for the calculated eFI2 score. This is the model refresh date, not a clinical assessment date.',
+    efi2.efi2_score_date AS end_date COMMENT = 'As-at date for the calculated eFI2 score. This is the model refresh date, not a clinical assessment date.',
     rockwood.latest_rockwood_date AS clinical_effective_date COMMENT = 'Date of latest Rockwood assessment',
     lft.last_lft_date AS last_lft_date COMMENT = 'Date of latest liver function test (most recent of ALT/GGT/bilirubin)',
     haemoglobin.latest_haemoglobin_date AS clinical_effective_date COMMENT = 'Date of latest haemoglobin',
@@ -310,7 +310,7 @@ DIMENSIONS(
     -- Electronic Frailty Index
     efi.latest_efi_type_preferred AS latest_efi_type_preferred COMMENT = 'GP-recorded algorithm type (EFI, EFI2). Uses the most recent record; not the calculated eFI2 model.',
     efi.latest_efi_category_preferred AS latest_efi_category_preferred WITH SYNONYMS = ('recorded eFI category') COMMENT = 'Category of the latest GP-recorded eFI or coded eFI2 (Fit, Mildly Frail, Moderately Frail, Severely Frail). Do not use as the calculated eFI2 category; coverage is incomplete.',
-    efi2.category AS efi2_category WITH SYNONYMS = ('calculated frailty category', 'eFI2 category', 'electronic frailty index 2 category') COMMENT = 'Calculated eFI2 category for living people aged 65+: Robust (<0.0857), Mild Frailty (>=0.0857 to <0.1624), Moderate Frailty (>=0.1624 to <=0.2391), Severe Frailty (>0.2391). Use this rather than efi2_score for population health counts. Separate from GP-recorded eFI/eFI2 and Rockwood categories.',
+    efi2.efi2_category AS category WITH SYNONYMS = ('calculated frailty category', 'eFI2 category', 'electronic frailty index 2 category') COMMENT = 'Calculated eFI2 category for living people aged 65+: Robust (<0.0857), Mild Frailty (>=0.0857 to <0.1624), Moderate Frailty (>=0.1624 to <=0.2391), Severe Frailty (>0.2391). Use this rather than efi2_score for population health counts. Separate from GP-recorded eFI/eFI2 and Rockwood categories.',
 
     -- Rockwood Clinical Frailty Scale
     rockwood.frailty_category AS frailty_category WITH SYNONYMS = ('Rockwood category', 'CFS category') COMMENT = 'Rockwood frailty category (Fit, Vulnerable, Mild Frailty, Moderate Frailty, Severe Frailty)',

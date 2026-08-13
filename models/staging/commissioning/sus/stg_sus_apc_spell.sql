@@ -21,10 +21,10 @@ select core.primarykey_id
     , core.spell_care_location_site_code_of_treatment
 
      /* Time and date */
-    , core.spell_admission_date
-    , core.spell_admission_time
-    , core.spell_discharge_date
-    , core.spell_discharge_time
+    , core.spell_admission_date::date as spell_admission_date 
+    , core.spell_admission_time::time as spell_admission_time
+    , core.spell_discharge_date::date as spell_discharge_date
+    , core.spell_discharge_time::time as spell_discharge_time
     , core.spell_discharge_length_of_hospital_stay
     , core.spell_commissioning_tariff_calculation_pbr_length_of_stay_critical_care_days as spell_length_of_stay_critical_care_days
     , core.spell_discharge_destination

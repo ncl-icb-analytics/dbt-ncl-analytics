@@ -44,6 +44,8 @@ select
     , d.org_id_prov
     , d.dmic_ccg_code as dm_icb_commissioner
     , las.reporting_period_end_date
+    , d.uniq_serv_req_id
+    , d.age_hosp_start_date
 from deduplicated as d
 left join last_active_submission as las
     on d.uniq_hosp_prov_spell_num = las.uniq_hosp_prov_spell_num

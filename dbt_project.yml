@@ -91,6 +91,17 @@ models:
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
 
+    # Reference layer - derived reference datasets
+    # Schema = subfolder name: models/reference/organisation -> REFERENCE.ORGANISATION
+    reference:
+      +enabled: true
+      +materialized: table
+      +database: "REFERENCE"
+      +tags: ["reference"]
+      +post-hook:
+        - "{{ add_model_comment() }}"
+        - "{{ log_row_count() }}"
+
     # Modelling layer - business logic and transformations
     modelling:
       +enabled: true
@@ -100,15 +111,14 @@ models:
       +post-hook:
         - "{{ add_model_comment() }}"
         - "{{ log_row_count() }}"
-      commissioning:
-        +schema: "COMMISSIONING_MODELLING"
       segmentation:
-        +schema: "SEGMENTATION"
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
       olids:
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
+        risk_stratification:
+          +schema: "RISK_STRATIFICATION"
 
     # Reporting layer - aggregated and analytical models
     reporting:
@@ -119,10 +129,7 @@ models:
       +post-hook:
         - "{{ add_model_comment() }}"
         - "{{ log_row_count() }}"
-      commissioning:
-        +schema: "COMMISSIONING_REPORTING"
       segmentation:
-        +schema: "SEGMENTATION"
         +tags: ["daily"]
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
@@ -132,6 +139,8 @@ models:
         # Schema names automatically derived from subdomain folder names via generate_schema_name macro
         definitions:
           +database: "{{ target.database.replace('MODELLING', 'REPORTING') }}"
+        risk_stratification:
+          +schema: "RISK_STRATIFICATION"
 
     # Semantic layer - Snowflake Semantic Views for Cortex Analyst
     semantic:

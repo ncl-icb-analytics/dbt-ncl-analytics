@@ -56,3 +56,6 @@ models:
 
       - name: act_loc_type_code
         description: The location where the care activity took place, such as a hospital, clinic, or patient's home.
+
+      - name: age_care_cont_date
+        description: MHSDS-derived age at the contact date.

@@ -36,12 +36,20 @@ models:
         description: "discharge.destinationA code that indicates the type of premises that a patient is discharged to, this is only mandatory on the last episode in a spell so may be null. The values to be submitted should be two digit codes"
 
       - name: start_date
-        data_type: timestamp_ntz
+        data_type: date
         description: "A date that identifies when an episode within a hospital provider spell started, i.e. the date on which the patient was admitted or, if in hospital, the date the consultant responsible for care changed."
 
+      - name: start_time
+        data_type: time
+        description: "A time that identifies when an episode within a hospital provider spell started"
+
       - name: end_date
-        data_type: timestamp_ntz
+        data_type: date
         description: "A date that identifies when an episode within a hospital provider spell ended, i.e. the date on which the patient was discharged or, if staying in hospital, the date the consultant responsible for care changed."
+
+      - name: end_time
+        data_type: time
+        description: "A time that identifies when an episode within a hospital provider spell ended"
 
       - name: duration
         data_type: number

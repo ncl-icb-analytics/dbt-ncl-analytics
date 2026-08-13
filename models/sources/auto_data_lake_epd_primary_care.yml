@@ -11,7 +11,8 @@ sources:
     - name: UniqSubmissionId
       data_type: TEXT
   - name: Meds
-    identifier: '"Meds"'
+    # upstream renamed Meds -> MedsV1 (Aug 2026); source name kept for consumers
+    identifier: '"MedsV1"'
     columns:
     - name: AgeBands
       data_type: TEXT
