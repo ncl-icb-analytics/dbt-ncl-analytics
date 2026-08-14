@@ -3,6 +3,10 @@
 
 --- Select the number of missing days per provider per dataset (APC, OP, ECDS)
 
+-- 14/08/26 - JL - Added 4 NWL providers to the list of providers to monitor (in the files that feed this summary).  These are: RQM, R1K, RAS, RYJ.
+--             which includes re-pointing the Organisation lookup to the new organisation_nhs_provider table to pick up the NWL names too.
+--             and changed the action required message in this table to 'contact OneLondon' instead of ISL as that is now the responsible body.
+
 
 {{
     config(
@@ -107,7 +111,7 @@ SELECT
     COUNT(CASE WHEN dataset = 'OP' THEN 1 END) AS OP_MISSING_DAYS,
     COUNT(CASE WHEN dataset = 'ECDS' THEN 1 END) AS ECDS_MISSING_DAYS,
     COUNT(*) AS TOTAL_MISSING_SUBMISSIONS,
-    'Contact ISL about missing submissions and notify users if critical' AS ACTION_REQUIRED
+    'Contact OneLondon about missing submissions and notify users if critical' AS ACTION_REQUIRED
 FROM all_missing
 GROUP BY PROVIDER
 ORDER BY PROVIDER
