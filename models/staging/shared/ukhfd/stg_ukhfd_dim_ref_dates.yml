@@ -13,13 +13,13 @@ models:
     columns:
       - name: full_date
         description: Calendar date. Grain of this model.
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: fin_year
         description: Financial year label for the date (April to March).
-        tests:
+        data_tests:
           - not_null
 
       - name: fin_month_no

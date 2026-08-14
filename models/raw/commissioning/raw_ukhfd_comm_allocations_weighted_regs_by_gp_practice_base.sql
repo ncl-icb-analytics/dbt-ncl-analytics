@@ -5,7 +5,7 @@
 }}
 select
     "Title" as title,
-    "GP_Practice_Code" as gp_practice_code,
+    "GP_Practice_Code" as practice_code,
     "Metric_Name" as metric_name,
     "Metric_Value" as metric_value,
     "Metric_Value_Str" as metric_value_str,
