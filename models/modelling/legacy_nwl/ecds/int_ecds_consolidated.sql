@@ -57,7 +57,7 @@ select
     ,c."Initial_Assessment_Date"
     ,c."Initial_Assessment_Time"
     ,c."Initial_Assessment_Time_Since_Arrival"
-    ,CAST(et."TIMESTAMP" AS TIME) AS "Expected_Treatment_Time"
+    ,et.timestamp AS "Expected_Treatment_Time"
     ,c."Seen_For_Treatment_Date"
     ,c."Seen_For_Treatment_Time"
     ,c."Seen_For_Treatment_Time_Since_Arrival"
@@ -80,9 +80,9 @@ select
     ,c."Clinically_Ready_To_Proceed_Time_Since_Arrival"
 
     -- Attendance referred to fields
-    ,ar."SERVICE" AS "Referred_To_Service"
-    ,ar."ASSESSMENT_DATE" AS "Referred_To_Service_Assessment_Date"
-    ,ar."ASSESSMENT_TIME" AS "Referred_To_Service_Assessment_Time"
+    ,ar.service AS "Referred_To_Service"
+    ,ar.assessment_date AS "Referred_To_Service_Assessment_Date"
+    ,ar.assessment_time AS "Referred_To_Service_Assessment_Time"
 
     -- Clinical fields
     ,c."Chief_Complaint"
@@ -117,7 +117,7 @@ select
     ,di."13" AS "Secondary_Diagnosis12"
 
     -- Alcohol related injury field
-    ,ia."CODE" AS "Injury_Alcohol_Drug_Involvement"
+    ,ia.code AS "Injury_Alcohol_Drug_Involvement"
 
     -- Clinical investigation fields
     ,iv."1" AS "Clinical_Investigation1"
@@ -178,7 +178,7 @@ from {{ ref('stg_ecds_consolidated') }} c
 LEFT JOIN {{ ref('raw_ukhfd_dim_ref_dates') }} dt
 ON c."Arrival_Date" = dt.full_date
 
-LEFT JOIN {{ ref('raw_sus_ecds_attendance_referred_to') }} AS ar
+LEFT JOIN {{ ref('stg_sus_ecds_attendance_referred_to') }} AS ar
 ON c."Record_Identifier" = ar."PRIMARYKEY_ID"
 AND ar."REFERRED_TO_ID" = 1
 
@@ -187,30 +187,30 @@ LEFT JOIN (SELECT
 			FROM (
 						SELECT
 							PRIMARYKEY_ID,
-							"CODE",
+							code,
 							RowNum
 						FROM
 							(
 							SELECT
 								ROW_NUMBER() OVER (PARTITION BY
 									PRIMARYKEY_ID
-								ORDER BY "SEQUENCE_NUMBER" NULLS FIRST) AS RowNum,*
-							FROM {{ ref('raw_sus_ecds_clinical_diagnoses_snomed') }}
+								ORDER BY sequence_number NULLS FIRST) AS RowNum,*
+							FROM {{ ref('stg_sus_ecds_clinical_diagnoses_snomed') }}
 							) a
 						WHERE
 							RowNum BETWEEN 1 AND 13
-						) d PIVOT (MAX(d."CODE") FOR d.RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)) P
+						) d PIVOT (MAX(d.code) FOR d.RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)) P
 						) as di
 	ON c."Record_Identifier" = di.PRIMARYKEY_ID
 
 LEFT JOIN
-		{{ ref('raw_sus_ecds_clinical_injury_alcohol_drug_involvements') }}  AS ia
+		{{ ref('stg_sus_ecds_clinical_injury_alcohol_drug_involvements') }}  AS ia
 	ON c."Record_Identifier" = ia.PRIMARYKEY_ID
 		AND ia.ALCOHOL_DRUG_INVOLVEMENTS_ID =
  		                                     --** SSC-FDM-0002 - CORRELATED SUBQUERIES MAY HAVE SOME FUNCTIONAL DIFFERENCES. **
  		                                     (SELECT
 				MIN(ia2.ALCOHOL_DRUG_INVOLVEMENTS_ID) FROM
-				{{ ref('raw_sus_ecds_clinical_injury_alcohol_drug_involvements') }}  ia2
+				{{ ref('stg_sus_ecds_clinical_injury_alcohol_drug_involvements') }}  ia2
 			WHERE
 				c."Record_Identifier" = ia2.PRIMARYKEY_ID
  		                                     )
@@ -221,7 +221,7 @@ LEFT JOIN (SELECT
 						SELECT
 							PRIMARYKEY_ID,
 							RowNum,
-							"CODE"
+							code
 						FROM
 						(
 						SELECT
@@ -230,12 +230,12 @@ LEFT JOIN (SELECT
 								ORDER BY SNOMED_ID NULLS FIRST) AS RowNum,
 								*
 						FROM
-								{{ ref('raw_sus_ecds_clinical_investigations_snomed') }}
+								{{ ref('stg_sus_ecds_clinical_investigations_snomed') }}
 							) ci
 						WHERE
 							RowNum BETWEEN 1 AND 12
 						) ci
-						PIVOT (MAX("CODE") FOR RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) P
+						PIVOT (MAX(code) FOR RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) P
 						) iv
 	ON c."Record_Identifier" = iv.PRIMARYKEY_ID
 
@@ -244,26 +244,26 @@ LEFT JOIN (SELECT
 			FROM (
 					SELECT
 							PRIMARYKEY_ID,
-							"CODE",
+							code,
 							RowNum
 					FROM
 						(
 						SELECT
 								ROW_NUMBER() OVER (PARTITION BY
 									PRIMARYKEY_ID
-								ORDER BY "DATE" NULLS FIRST, "TIME" NULLS FIRST, SNOMED_ID NULLS FIRST) AS RowNum,
+								ORDER BY date NULLS FIRST, time NULLS FIRST, SNOMED_ID NULLS FIRST) AS RowNum,
 								*
 						FROM
-								{{ ref('raw_sus_ecds_clinical_treatments_snomed') }}
+								{{ ref('stg_sus_ecds_clinical_treatments_snomed') }}
 						) a
 						WHERE
 							RowNum BETWEEN 1 AND 12) t
-						PIVOT (MAX(t."CODE") FOR t.RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) P
+						PIVOT (MAX(t.code) FOR t.RowNum IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) P
 						) ct
 	ON c."Record_Identifier" = ct.PRIMARYKEY_ID
 
 LEFT JOIN
-	{{ ref('raw_sus_ecds_patient_mental_health_act_legal_status') }} AS mh
+	{{ ref('stg_sus_ecds_patient_mental_health_act_legal_status') }} AS mh
 	ON c."Record_Identifier" = mh.PRIMARYKEY_ID
 		AND mh.MENTAL_HEALTH_ACT_LEGAL_STATUS_ID = 1
 
@@ -274,12 +274,12 @@ LEFT JOIN (
         SELECT
             primarykey_id,
             comorbidities_id,
-            "CODE"
-        FROM {{ ref('raw_sus_ecds_clinical_comorbidities') }}
-        WHERE "CODE" IS NOT null
+            code
+        FROM {{ ref('stg_sus_ecds_clinical_comorbidities') }}
+        WHERE code IS NOT null
     ) AS comorbidities
     PIVOT (
-        max("CODE") FOR comorbidities_id IN (
+        max(code) FOR comorbidities_id IN (
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10
         )
     ) AS pivoted
@@ -287,6 +287,6 @@ LEFT JOIN (
     ON c."Record_Identifier" = co.primarykey_id
 
 LEFT JOIN
-	{{ ref('raw_sus_ecds_attendance_expected_treatment_times') }} et
+	{{ ref('stg_sus_ecds_attendance_expected_treatment_times') }} et
 	ON c."Record_Identifier" = et.PRIMARYKEY_ID
 	AND et.EXPECTED_TREATMENT_TIMES_ID = 1

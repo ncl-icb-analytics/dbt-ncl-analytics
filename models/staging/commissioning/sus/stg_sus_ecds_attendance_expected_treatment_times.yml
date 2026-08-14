@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: stg_sus_ecds_attendance_expected_treatment_times
+    description: >
+      Expected treatment times recorded against an ECDS attendance.
+      Multiple rows per attendance, sequenced by expected_treatment_times_id.
+      
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+    columns:
+      - name: primarykey_id
+        description: ECDS attendance identifier. Joins to stg_ecds_consolidated."Record_Identifier".
+        tests:
+          - not_null
+
+      - name: expected_treatment_times_id
+        description: Sequence identifier for this child record within the attendance.
+        tests:
+          - not_null

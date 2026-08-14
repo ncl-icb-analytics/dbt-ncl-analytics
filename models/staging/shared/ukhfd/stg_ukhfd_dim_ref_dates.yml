@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_ukhfd_dim_ref_dates
+    description: >
+      Staging layer for the UKHFD reference date dimension. One row per calendar
+      date. Provides financial year and financial month attributes used to
+      derive reporting periods from event dates.
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+    columns:
+      - name: full_date
+        description: Calendar date. Grain of this model.
+        tests:
+          - unique
+          - not_null
+
+      - name: fin_year
+        description: Financial year label for the date (April to March).
+        tests:
+          - not_null
+
+      - name: fin_month_no
+        description: Financial month number, where April = 1 and March = 12.
