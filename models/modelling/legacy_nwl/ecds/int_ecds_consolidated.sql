@@ -175,7 +175,7 @@ select
 
 from {{ ref('stg_ecds_consolidated') }} c
 
-LEFT JOIN {{ ref('raw_ukhfd_dim_ref_dates') }} dt
+LEFT JOIN {{ ref('stg_ukhfd_dim_ref_dates') }} dt
 ON c."Arrival_Date" = dt.full_date
 
 LEFT JOIN {{ ref('stg_sus_ecds_attendance_referred_to') }} AS ar
