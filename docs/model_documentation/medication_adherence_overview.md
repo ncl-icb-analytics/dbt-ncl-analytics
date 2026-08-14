@@ -3,7 +3,7 @@
 ## Purpose
 
 The pipeline computes rolling and overall Proportion of Days Covered (PDC) — the standard prescribing-based medication adherence measure — per person and drug (VTM grain) across five drug classes: RAAS, beta-blockers, calcium-channel blockers, non-insulin anti-diabetics and lipid lowering drugs (BNF paragraphs 020505, 020400, 020602, 060102, 021200).
-This implementation is a faithful port of the AIC centre meds_adherence Snowpark pipeline deployed in NEL and SEL (`MedicationTableSnowpark`, `compute_pdc_rolling` with a 12-month rolling window, dynamic exposure denominator `pdc_type=2` and exclusive overlap counting) into WNL native dbt models. Every deliberate divergence from the original is documented in the model headers; alongside the faithful `pdc` / `overall_pdc` columns, `*_corrected` variants fix the original's last-order quirk (see below) so the two can be compared before choosing which to consume. The correction is deliberately **single-cause**: both families share the same windows, exposure spans and denominators, so `covered_days_corrected − covered_days` is exactly the final order's duration in the windows containing it, and `pdc_corrected >= pdc` always holds.
+This implementation is a faithful port of the AIC centre meds_adherence Snowpark pipeline deployed in NEL and SEL (`MedicationTableSnowpark`, `compute_pdc_rolling` with a 12-month rolling window, dynamic exposure denominator `pdc_type=2` and exclusive overlap counting) into WNL native dbt models. Every deliberate divergence from the original is documented in the model headers. Two column families are emitted: the faithful `pdc` / `overall_pdc` columns replicate the AIC measure exactly, while the `*_corrected` columns implement **PDC2** as defined by Prieto-Merino et al. (2021) — they fix the original's last-order quirk *and* right-censor all supply at the observation date, so days that cannot be observed enter neither numerator nor denominator. The observation date (`as_at_date`) is derived from the data, not the clock, and is emitted as a column so every row carries the cutoff it was computed under.
 
 ## Outstanding issues
 - **Results not yet validated**: the logic is complete and builds, but `analyses/medication_adherence_pdc_validation.sql` has not been run through — sections 1–3 (VTM resolution coverage, reference ambiguity, chain fragmentation) are the decision gates.
@@ -11,7 +11,7 @@ This implementation is a faithful port of the AIC centre meds_adherence Snowpark
 - **No numeric parity check is possible**: tNo comparator data in WNL environment to validate against but have the ISPORE poster to replicate validation
 - **VTM resolution reliability**: refill chains group on the VTM code resolved via `stg_reference_bnf_latest` (SNOMED tier, then 9-char BNF chemical-substance tier, then concept-display fallback). This does not have an automated refrash
 - **Selection nuance**: the original filtered on its environment's `bnf_reference`; this port filters on the repo's canonical dm+d-derived `bnf_code` via `get_medication_orders`.
-- **Two upward biases are accepted, not corrected** (inherited from AIC — see *Preserved AIC artefacts* below): supply projected past the build date counts as covered, and exposure overhanging the window frame counts. Both push PDC up, so absolute levels — particularly against the conventional 0.80 threshold — should be treated with caution until quantified.
+- **One upward bias is accepted, not corrected** (inherited from AIC — see *Preserved AIC artefacts* below): exposure overhanging the window frame counts, and overhang days are covered by construction. This pushes windowed PDC up, so absolute levels — particularly against the conventional 0.80 threshold — should be treated with caution until quantified. (The other inherited bias, unobserved future supply, is corrected in the `*_corrected` family.)
 - **3-year processing horizon**: orders older than 3 years are excluded, so chains that began earlier are left-truncated and `overall_*` describes the horizon rather than full therapy history.
 - Local unit testing of the dose-instruction parser (the frequency pattern precedence is replicated verbatim but only eyeball-validated via the analysis queries).
 
@@ -45,18 +45,21 @@ The measurement method is unchanged; the data plumbing and packaging are not. Th
 | History processed | Full history | Last 3 years (`medication_adherence_order_lookback_years`) | Volume. Chains are left-truncated, so `overall_*` describes the horizon |
 | Output shape | One table per drug class | One table with a `drug_class` column | Grouping keys already included the class; the loop only existed to name tables |
 | Compute | Snowpark with `collect()` round-trips | Set-based SQL | No semantic effect |
-| Quirk handling | Quirk only | Quirk (faithful) **plus** a `*_corrected` family | See below |
+| Quirk handling | Quirk only | Quirk (faithful) **plus** a `*_corrected` PDC2 family | See below |
+| Observation cutoff | None — future supply counted | `as_at_date` applied to the `*_corrected` family | PDC2 bounds the denominator by the observation period |
 | Repeat flag | None | `is_repeat_order` added | Used by the person-level mart's cohort; plays no part in the PDC |
 | Person-level output | None | `fct_person_medication_adherence` (repeat + 1-year-recency cohort) | WNL addition, no AIC counterpart |
 
 ### Preserved AIC artefacts (deliberately not fixed in the faithful columns)
 
-1. **Last-order quirk** — `days_to_next_order` is 0-filled on each chain's final order, so its entire duration is subtracted and it contributes ~0 covered days. This is the **only** thing the `*_corrected` columns change.
-2. **Future supply projected as covered** — supply intervals run past the build date and count; exposure spans can end in the future. Neither family censors, so recent windows and active chains read high.
-3. **Window overhang** — the window only *selects* orders; the exposure span (hence both numerator and denominator) may start before `window_start` and end after `window_end`, and overhang days are covered by construction, biasing boundary windows toward 1.
+1. **Last-order quirk** — `days_to_next_order` is 0-filled on each chain's final order, so its entire duration is subtracted and it contributes ~0 covered days. **Fixed in the `*_corrected` family.**
+2. **Future supply projected as covered** — supply intervals run past the observation date and count as covered, and exposure spans can end in the future. **Fixed in the `*_corrected` family** by right-censoring at `as_at_date`. Note the asymmetry this removes: because the denominator ends at last-supply exhaustion, unobserved days entered the calculation *only when covered* — a one-directional bias that neither PDC1 nor PDC2 has.
+3. **Window overhang** — the window only *selects* orders; the exposure span (hence both numerator and denominator) may start before `window_start` and end after `window_end`, and overhang days are covered by construction, biasing boundary windows toward 1. **Not corrected in either family**: bounding exposure to the frame would make the measure a PDC1/PDC2 hybrid rather than PDC2 over the exposure span, and would put a third cause between the two families.
 4. Uncapped PDC (values > 1 are possible), the null-unsafe `duration_flag`, and `months_between(…)::int` rounding.
 
-Artefacts 2 and 3 were each trialled as corrections and deliberately removed (2026-07-22) so that `corrected` differs from `faithful` by one auditable cause, and so the modelling layer stays a pure function of its inputs (no `current_date`, so rebuilds cannot move historical values). Both artefacts bias **upward**.
+Because censoring removes covered days, `pdc_corrected >= pdc` holds only where the exposure ends at or before `as_at_date`; the invariant tests exempt the rest. Censoring **truncates rather than drops** — an order whose supply straddles `as_at_date` contributes its elapsed portion to numerator and denominator alike, so a perfectly adherent person is unaffected while a person with gaps loses the inflation.
+
+`as_at_date` = `least(max order date in the source, current_date)`, or the pinned value of the var `medication_adherence_as_at_date` (`YYYY-MM-DD`) for reproducing a historical run. Deriving it from the data rather than the clock means a rebuild on unchanged data reproduces the same numbers.
 
 ### Comparing output with an AIC deployment
 Use the **faithful** columns and rebuild with a long horizon (`--vars '{medication_adherence_order_lookback_years: 20}'`). Residual differences should then be attributable to source coverage (OLIDS vs the AIC environment) and the VTM resolution route — data differences, not method differences.
@@ -76,7 +79,7 @@ The pipeline uses OLIDS medication orders (via the `get_medication_orders` macro
 
 3. `int_medication_adherence_pdc`
    - Generates person-anchored monthly rolling 12-month windows from each chain's first order.
-   - Computes windowed PDC with the dynamic exposure denominator and exclusive overlap subtraction, plus an overall chain PDC — faithful and corrected variants sharing one denominator and differing only in the last-order subtraction.
+   - Computes windowed PDC with the dynamic exposure denominator and exclusive overlap subtraction, plus an overall chain PDC — a faithful AIC variant and a corrected PDC2 variant (quirk fixed, right-censored at `as_at_date`) with its own denominators.
    - Empty windows are retained with NULL exposure/PDC, matching the original.
 
 4. `int_medication_adherence_pdc_windows`

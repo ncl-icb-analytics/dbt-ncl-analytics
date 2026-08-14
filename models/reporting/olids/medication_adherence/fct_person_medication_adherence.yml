@@ -7,13 +7,13 @@ models:
       chains need at least one repeat-authorised order AND supply extending
       into the last year (var medication_adherence_recency_years); NULL
       measures with drug_count 0 mean "no current repeat therapy in class".
-      Two measure families available for comparison, differing in exactly one
-      thing: *_pdc_corrected_* is the AIC measure with the last-order quirk
-      fixed, *_pdc_* without _corrected is the faithful AIC measure (see
-      int_medication_adherence_pdc). Neither is right-censored or clipped to
-      the window frame, so both count supply projected past the build date
-      and exposure overhanging the frame — biases that push values upward
-      and matter against thresholds such as 0.80. Per family and class:
+      Two measure families available for comparison: *_pdc_corrected_* is
+      PDC2 (last-order quirk fixed and supply right-censored at the
+      observation date), *_pdc_* without _corrected is the faithful AIC
+      measure (quirk included, unobserved future supply counted). See
+      int_medication_adherence_pdc. Neither bounds exposure to the window
+      frame, so overhang remains an upward bias that matters against
+      thresholds such as 0.80. Per family and class:
       latest (each family's own most recent fully elapsed non-NULL window —
       the two families' latest readings can come from different windows) and
       overall (chain span within the 3-year processing horizon), aggregated

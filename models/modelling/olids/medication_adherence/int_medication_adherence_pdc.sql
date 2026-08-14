@@ -23,47 +23,51 @@ pdc_type=2, exclusive=True):
 - An overall PDC per (person, drug) over the full chain span rides along on
   every window row, as in the original output.
 
-FAITHFUL VS CORRECTED — ONE DIFFERENCE ONLY.
+FAITHFUL VS CORRECTED
 
-Both families share the same windows, the same exposure spans, the same
-clipping, and therefore the SAME DENOMINATORS (window_days,
-total_exposure_days). They differ solely in the early-refill subtraction
-applied to the final order of each chain:
-- faithful (pdc, covered_days, overall_pdc) reproduces the AIC last-order
-  quirk — days_to_next_order is 0-filled on the final order, so its entire
-  duration is subtracted and it contributes ~0 covered days.
-- corrected (pdc_corrected, covered_days_corrected, overall_pdc_corrected)
-  uses days_to_next_order_corrected, which is NULL on the final order, so
-  nothing is subtracted and that supply counts.
+faithful (pdc, covered_days, window_days, overall_pdc, total_exposure_days)
+replicates the AIC measure exactly, including three artefacts:
+1. Last-order quirk — days_to_next_order is 0-filled on each chain's final
+   order, so its whole duration is subtracted and it contributes ~0 covered
+   days.
+2. No right-censoring — supply projected beyond the observation date counts
+   as covered, and exposure spans can end in the future.
+3. No POI bounding — the window only selects orders, so exposure may begin
+   before window_start and end after window_end; overhang days are covered
+   by construction.
 
-The resulting identity is exact and auditable:
-    covered_days_corrected - covered_days
-      = the final order's calculated_duration (where positive), in windows
-        containing that order; zero in every other window.
-Hence pdc_corrected >= pdc always — same denominator, larger numerator —
-enforced as a hard invariant test.
+corrected (pdc_corrected, covered_days_corrected, window_days_corrected,
+overall_pdc_corrected, total_exposure_days_corrected) fixes 1 and 2:
+- the final order's supply counts (days_to_next_order_corrected is NULL on
+  last orders); and
+- every supply interval, and both corrected denominators, are right-censored
+  at as_at_date, so unobserved days enter neither numerator nor denominator.
+  The early-refill stockpile subtraction is censored identically, so days
+  never counted as covered are never subtracted (without this, a recent
+  long-duration order followed by a quick refill drives covered days
+  sharply negative).
 
-DELIBERATELY NOT APPLIED to the corrected family (both trialled, then
-removed 2026-07-22 in favour of a single-cause difference from faithful):
-- Right-censoring at the build date. Keeping current_date out of THIS model
-  makes it a pure function of its inputs, so a rebuild cannot move a value
-  for a chain whose orders have not changed. (The pipeline as a whole is
-  not fully date-free: int_medication_adherence_orders applies a 3-year
-  processing horizon, which re-anchors truncated chains once a month.)
-  Accepted cost — supply projected beyond the build date counts as covered,
-  inflating the most recent windows and active chains' overall PDC.
-  Date-dependent decisions belong in the snapshot layer
-  (fct_person_medication_adherence).
-- Clipping to the window frame. Under pdc_type=2 the window is a selection
-  frame; clipping to it would produce a third measure (a type-1/type-2
-  hybrid) rather than a bug-fixed version of the AIC one. Accepted cost —
-  overhang: exposure may begin before window_start and end after
-  window_end, and overhang days are covered by construction, so boundary
-  windows are biased toward 1.
-Both costs are quantified and documented in
-docs/model_documentation/medication_adherence_overview.md, and must be
-understood before any PDC value is compared against a threshold such as the
-conventional 0.80 adherence cut-off.
+That aligns the corrected family with PDC2 as defined by Prieto-Merino et al.
+(2021): the denominator runs from first supply to the date the last supply
+runs out, bounded by the observation period. Censoring truncates rather than
+drops — an order whose supply straddles as_at_date contributes its elapsed
+portion to numerator and denominator alike; only an order dated after
+as_at_date (a data error) contributes nothing.
+
+Artefact 3 is deliberately NOT corrected: bounding exposure to the window
+frame would make this a type-1/type-2 hybrid rather than PDC2 over the
+exposure span, and would put a third cause between the two families.
+
+as_at_date is derived from the DATA — least(max order date, current_date) —
+not from the clock, so rebuilding on unchanged data reproduces the same
+numbers; the current_date term only caps future-dated source records.
+Override with var medication_adherence_as_at_date ('YYYY-MM-DD') to pin a
+historical run. It is emitted as a column so every row carries the cutoff it
+was computed under.
+
+Because censoring removes covered days, pdc_corrected >= pdc holds only
+where the exposure ends at or before as_at_date; the invariant tests exempt
+the rest.
 
 Other divergences from the original:
 - All five drug classes in one table (the original wrote one table per class;
@@ -81,34 +85,52 @@ Other divergences from the original:
 */
 
 {% set window_length_months = 12 %}
+{% set as_at_override = var('medication_adherence_as_at_date', none) %}
 
-with orders as (
+with observation_cutoff as (
+    {%- if as_at_override %}
+    -- Pinned via var for reproducible historical runs
+    select to_date('{{ as_at_override }}') as as_at_date
+    {%- else %}
+    -- Data-derived: how far the source actually observes, capped so that
+    -- future-dated source records cannot push the cutoff forward
+    select least(max(order_date), current_date) as as_at_date
+    from {{ ref('int_medication_adherence_order_durations') }}
+    {%- endif %}
+),
+
+orders as (
     select
-        person_id,
-        drug_name,
-        drug_class,
-        order_date,
-        calculated_duration,
-        coalesce(order_enddate, order_date) as order_enddate_filled,
+        o.person_id,
+        o.drug_name,
+        o.drug_class,
+        o.order_date,
+        o.calculated_duration,
+        coalesce(o.order_enddate, o.order_date) as order_enddate_filled,
+        c.as_at_date,
+        -- Corrected: supply truncated at the observation date
+        least(coalesce(o.order_enddate, o.order_date), c.as_at_date) as order_enddate_censored,
         -- Faithful: reproduces the last-order quirk (days_to_next_order is
         -- 0-filled on the final order, so 0 < duration always holds and the
         -- whole duration is subtracted)
         case
-            when days_to_next_order is not null
-                and days_to_next_order < calculated_duration
-                then calculated_duration - days_to_next_order
+            when o.days_to_next_order is not null
+                and o.days_to_next_order < o.calculated_duration
+                then o.calculated_duration - o.days_to_next_order
             else 0
         end as adjusted_overlap,
-        -- Corrected: identical for every non-final order (the two
-        -- days_to_next columns agree there); NULL on the final order, so
-        -- nothing is subtracted and its supply counts
+        -- Corrected: start of the early-refill stockpile region
+        -- [order_date + days_to_next, supply end]. NULL when there is no
+        -- early refill — including final orders, whose
+        -- days_to_next_order_corrected is NULL. Clipped downstream so
+        -- censored-away days are not subtracted.
         case
-            when days_to_next_order_corrected is not null
-                and days_to_next_order_corrected < calculated_duration
-                then calculated_duration - days_to_next_order_corrected
-            else 0
-        end as adjusted_overlap_corrected
-    from {{ ref('int_medication_adherence_order_durations') }}
+            when o.days_to_next_order_corrected is not null
+                and o.days_to_next_order_corrected < o.calculated_duration
+                then dateadd(day, o.days_to_next_order_corrected, o.order_date)
+        end as overlap_region_start
+    from {{ ref('int_medication_adherence_order_durations') }} o
+    cross join observation_cutoff c
 ),
 
 overall_bounds as (
@@ -150,8 +172,9 @@ windowed_orders as (
         a.window_end,
         o.order_date,
         o.order_enddate_filled,
+        o.order_enddate_censored,
         o.adjusted_overlap,
-        o.adjusted_overlap_corrected
+        o.overlap_region_start
     from anchors a
     inner join orders o
         on a.person_id = o.person_id
@@ -161,7 +184,8 @@ windowed_orders as (
         and o.order_enddate_filled >= a.window_start
 ),
 
--- pdc_type=2 dynamic exposure span per window
+-- pdc_type=2 dynamic exposure span per window (uncensored — the corrected
+-- denominator applies the cutoff in windows_assembled)
 window_exposure as (
     select
         person_id,
@@ -175,8 +199,8 @@ window_exposure as (
     group by person_id, drug_name, drug_class, window_start, window_end
 ),
 
--- Each order clipped to the exposure span. Both families share this
--- overlap; only the subtraction differs.
+-- Each order clipped to the exposure span; the corrected columns additionally
+-- truncate supply (and the stockpile subtraction) at the observation date
 windowed_clipped as (
     select
         wo.person_id,
@@ -194,8 +218,29 @@ windowed_clipped as (
                 )
             else 0
         end as overlap_days,
+        case
+            when least(wo.order_enddate_censored, e.exposure_end)
+                > greatest(wo.order_date, e.exposure_start)
+                then datediff(
+                    day,
+                    greatest(wo.order_date, e.exposure_start),
+                    least(wo.order_enddate_censored, e.exposure_end)
+                )
+            else 0
+        end as overlap_days_corrected,
         wo.adjusted_overlap,
-        wo.adjusted_overlap_corrected
+        case
+            when wo.overlap_region_start is not null
+                then greatest(
+                    0,
+                    datediff(
+                        day,
+                        wo.overlap_region_start,
+                        least(wo.order_enddate_censored, e.exposure_end)
+                    )
+                )
+            else 0
+        end as adjusted_overlap_corrected
     from windowed_orders wo
     inner join window_exposure e
         on wo.person_id = e.person_id
@@ -213,7 +258,7 @@ window_covered as (
         window_start,
         window_end,
         sum(overlap_days - adjusted_overlap) as covered_days,
-        sum(overlap_days - adjusted_overlap_corrected) as covered_days_corrected
+        sum(overlap_days_corrected - adjusted_overlap_corrected) as covered_days_corrected
     from windowed_clipped
     group by person_id, drug_name, drug_class, window_start, window_end
 ),
@@ -228,6 +273,7 @@ overall_clipped as (
         o.drug_class,
         b.overall_start,
         b.overall_end,
+        o.as_at_date,
         case
             when least(o.order_enddate_filled, b.overall_end)
                 > greatest(o.order_date, b.overall_start)
@@ -238,8 +284,29 @@ overall_clipped as (
                 )
             else 0
         end as overlap_days,
+        case
+            when least(o.order_enddate_censored, b.overall_end)
+                > greatest(o.order_date, b.overall_start)
+                then datediff(
+                    day,
+                    greatest(o.order_date, b.overall_start),
+                    least(o.order_enddate_censored, b.overall_end)
+                )
+            else 0
+        end as overlap_days_corrected,
         o.adjusted_overlap,
-        o.adjusted_overlap_corrected
+        case
+            when o.overlap_region_start is not null
+                then greatest(
+                    0,
+                    datediff(
+                        day,
+                        o.overlap_region_start,
+                        least(o.order_enddate_censored, b.overall_end)
+                    )
+                )
+            else 0
+        end as adjusted_overlap_corrected
     from orders o
     inner join overall_bounds b
         on o.person_id = b.person_id
@@ -254,10 +321,11 @@ overall_covered as (
         drug_class,
         overall_start,
         overall_end,
+        as_at_date,
         sum(overlap_days - adjusted_overlap) as covered_days,
-        sum(overlap_days - adjusted_overlap_corrected) as covered_days_corrected
+        sum(overlap_days_corrected - adjusted_overlap_corrected) as covered_days_corrected
     from overall_clipped
-    group by person_id, drug_name, drug_class, overall_start, overall_end
+    group by person_id, drug_name, drug_class, overall_start, overall_end, as_at_date
 ),
 
 overall_pdc as (
@@ -266,6 +334,7 @@ overall_pdc as (
         drug_name,
         drug_class,
         datediff(day, overall_start, overall_end) as total_exposure_days,
+        datediff(day, overall_start, least(overall_end, as_at_date)) as total_exposure_days_corrected,
         -- No covered_days > 0 guard here — faithful to the original, which
         -- only guarded on total_exposure_days (overall_pdc can be <= 0)
         case
@@ -273,8 +342,9 @@ overall_pdc as (
                 then covered_days / datediff(day, overall_start, overall_end)
         end as overall_pdc,
         case
-            when datediff(day, overall_start, overall_end) > 0
-                then covered_days_corrected / datediff(day, overall_start, overall_end)
+            when datediff(day, overall_start, least(overall_end, as_at_date)) > 0
+                then covered_days_corrected
+                     / datediff(day, overall_start, least(overall_end, as_at_date))
         end as overall_pdc_corrected
     from overall_covered
 ),
@@ -288,24 +358,28 @@ windows_assembled as (
         a.window_end,
         a.overall_start,
         a.overall_end,
+        c.as_at_date,
         e.exposure_start,
         e.exposure_end,
-        c.covered_days,
-        c.covered_days_corrected,
-        datediff(day, e.exposure_start, e.exposure_end) as window_days
+        cov.covered_days,
+        cov.covered_days_corrected,
+        datediff(day, e.exposure_start, e.exposure_end) as window_days,
+        -- Corrected denominator: exposure truncated at the observation date
+        datediff(day, e.exposure_start, least(e.exposure_end, c.as_at_date)) as window_days_corrected
     from anchors a
+    cross join observation_cutoff c
     left join window_exposure e
         on a.person_id = e.person_id
         and a.drug_name = e.drug_name
         and a.drug_class = e.drug_class
         and a.window_start = e.window_start
         and a.window_end = e.window_end
-    left join window_covered c
-        on a.person_id = c.person_id
-        and a.drug_name = c.drug_name
-        and a.drug_class = c.drug_class
-        and a.window_start = c.window_start
-        and a.window_end = c.window_end
+    left join window_covered cov
+        on a.person_id = cov.person_id
+        and a.drug_name = cov.drug_name
+        and a.drug_class = cov.drug_class
+        and a.window_start = cov.window_start
+        and a.window_end = cov.window_end
 )
 
 select
@@ -319,19 +393,22 @@ select
     w.covered_days,
     w.covered_days_corrected,
     w.window_days,
+    w.window_days_corrected,
     case
         when w.covered_days > 0 and w.window_days > 0
             then w.covered_days / w.window_days
     end as pdc,
     case
-        when w.covered_days_corrected > 0 and w.window_days > 0
-            then w.covered_days_corrected / w.window_days
+        when w.covered_days_corrected > 0 and w.window_days_corrected > 0
+            then w.covered_days_corrected / w.window_days_corrected
     end as pdc_corrected,
     w.overall_start,
     w.overall_end,
     op.total_exposure_days,
+    op.total_exposure_days_corrected,
     op.overall_pdc,
     op.overall_pdc_corrected,
+    w.as_at_date,
     2 as pdc_type,
     true as exclusive,
     {{ window_length_months }} as window_length_months

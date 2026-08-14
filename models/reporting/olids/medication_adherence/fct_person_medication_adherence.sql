@@ -43,15 +43,17 @@ Because a person can hold several chains within a class, each reading is
 aggregated both ways — min (worst drug) and mean — pending a decision on
 which to keep; <class>_drug_count says how many chains contributed.
 
-Both measure families are available for comparison, differing in exactly
-one thing (see int_medication_adherence_pdc):
-- *_pdc_corrected_* columns: the AIC measure with the last-order quirk
-  fixed, so the final order of each chain contributes its supply.
-- *_pdc_* columns (no _corrected): the faithful AIC measure, quirk included.
-Neither is right-censored or clipped to the window frame, so supply
-projected past the build date counts and exposure may overhang the frame —
-both biases push values upward and matter when comparing against a
-threshold such as 0.80. Each family's "latest" reading independently picks
+Both measure families are available for comparison (see
+int_medication_adherence_pdc):
+- *_pdc_corrected_* columns: PDC2 — the last-order quirk fixed AND all
+  supply right-censored at the observation date, so unobserved days enter
+  neither numerator nor denominator.
+- *_pdc_* columns (no _corrected): the faithful AIC measure — quirk
+  included, and unobserved future supply counted as covered.
+Neither family bounds exposure to the window frame, so a window's value can
+describe a period overhanging that frame — an upward bias that matters when
+comparing against a threshold such as 0.80. Each family's "latest" reading
+independently picks
 that family's most recent fully elapsed window with a non-NULL value, so
 the two latest readings can come from DIFFERENT windows of the same chain
 (a chain whose faithful value is NULL in a window — covered_days <= 0 via
