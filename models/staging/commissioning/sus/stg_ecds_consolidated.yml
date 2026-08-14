@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: stg_ecds_consolidated
+    description: >
+      Staging model consolidating ECDS emergency-care attendance records with
+      referral, diagnosis, investigation, treatment, comorbidity,
+      mental-health and expected-treatment information.
+
+      Grain: one row per emergency-care attendance, identified by
+      "Record_Identifier".
+
+      A relationship test is not applied to "Record_Identifier" because it is
+      the natural attendance identifier supplied by ECDS and there is no
+      separate authoritative attendance dimension. Its integrity is enforced
+      using unique and not_null tests.
+
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+
+    columns:
+      - name: '"Record_Identifier"'
+        description: >
+          Source ECDS PRIMARYKEY_ID. Uniquely identifies one emergency-care
+          attendance and defines the grain of this model.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: '"Patient_ID"'
+        description: Pseudonymised NHS number associated with the attendance.
+
+      - name: '"Provider_Code"'
+        description: Three-character provider organisation code.
+
+      - name: '"Site_Code"'
+        description: Organisation site code where the attendance occurred.
+
+      - name: '"Department_Type"'
+        description: ECDS emergency department type code.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["01", "02", "03", "04"]
+              config:
+                severity: warn
+
+      - name: '"Arrival_Date"'
+        description: Date on which the patient arrived at emergency care.
+        data_tests:
+          - not_null
+
+      - name: '"Mental_Health_Legal_Status_Classification"'
+        description: >
+          Mental Health Act legal-status classification selected using the
+          documented record-selection rule.
+
+      - name: '"Expected_Treatment_Time"'
+        description: >
+          Expected treatment time selected using the documented
+          record-selection rule.
+
+      - name: '"Injury_Alcohol_Drug_Involvement"'
+        description: >
+          SNOMED code indicating alcohol or drug involvement in the injury.
+
+      - name: '"Referral_To_Treatment_Period_End_Date"'
+        description: End date of the referral-to-treatment period.
+
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1

@@ -7,5 +7,6 @@ select
     time_constraint_years,
     age_limit,
     other_instructions,
-    new_descriptions
-from {{ ref('raw_aic_base_efi2_codelist') }}
+    new_descriptions from 
+{{ ref('raw_common_efi2_codelists') }}
+

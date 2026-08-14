@@ -1,0 +1,148 @@
+version: 2
+
+models:
+  - name: int_ecds_consolidated
+    description: >
+      Transitional model preserving the existing NWL ECDS output. Consolidated
+      ECDS (Emergency Care Data Set) attendances - one row per emergency care
+      attendance, combining the core attendance record with pivoted diagnoses
+      (13), investigations (12), treatments (12) and comorbidities (10), plus
+      referral, alcohol/drug involvement and expected treatment time.
+
+      This model is transitional pending alignment with the shared Acute model
+      design. It is not a target-state model and should not be built upon
+      without reference to that work.
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+    columns:
+      - name: '"Record_Identifier"'
+        description: >
+          ECDS PRIMARYKEY_ID. Grain of this model - one row per attendance.
+          No relationships test is applied: this model is a left join from
+          stg_ecds_consolidated, so every value is sourced from that model by
+          construction and the test would be tautological. The uniqueness test
+          is the meaningful assertion here, since it detects fan-out from any
+          of the child-table joins.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: '"Patient_ID"'
+        description: Pseudonymised patient NHS number.
+
+      - name: '"Arrival_Date"'
+        description: Date the patient arrived at the emergency care department.
+        data_tests:
+          - not_null
+
+      - name: '"Financial_Year"'
+        description: Financial year derived from arrival date via the UKHFD date dimension.
+
+      - name: '"Financial_Month"'
+        description: Financial month number (1-12, April = 1) from the UKHFD date dimension.
+
+      - name: '"Provider_Code"'
+        description: First three characters of the commissioning service agreement provider.
+
+      - name: '"Site_Code"'
+        description: Organisation site code where the attendance took place.
+
+      - name: '"Department_Type"'
+        description: >
+          ECDS department type. Overridden to '03' where site code is RQM25.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['01', '02', '03', '04']
+              config:
+                severity: warn
+
+      - name: '"Commissioner_Code"'
+        description: Commissioner from the commissioning service agreement.
+
+      - name: '"Discharge_Status"'
+        description: >
+          ECDS discharge status code, recording the patient's clinical status at
+          the point of discharge from emergency care. Distinct from
+          "Discharge_Destination" (where the patient went) and
+          "Discharge_Follow_Up" (what was arranged next).
+
+      - name: '"Referred_To_Service"'
+        description: >
+          Service the patient was referred to during the attendance, taken from
+          the first referral record only (referred_to_id = 1). An attendance may
+          carry multiple referrals; any beyond the first are not represented in
+          this model.
+
+      - name: '"National_Tariff_Excluded"'
+        description: >
+          Flag indicating the attendance is excluded from national tariff pricing,
+          typically because it falls under local pricing arrangements.
+
+      - name: '"National_Tariff"'
+        description: >
+          Base national tariff price for the attendance's HRG, before application
+          of the market forces factor.
+
+      - name: '"National_Tariff_Final_Price"'
+        description: >
+          Final reimbursable price for the attendance, being the national tariff
+          with the market forces adjustment applied. This is the figure to use for
+          activity costing.
+
+      - name: '"MFF_Factor"'
+        description: >
+          Market forces factor - the provider-specific multiplier that adjusts
+          national prices for unavoidable regional cost differences.
+
+      - name: '"MFF_Adjustment"'
+        description: >
+          Monetary value of the market forces adjustment applied to the base
+          national tariff, i.e. the difference between "National_Tariff" and
+          "National_Tariff_Final_Price".
+
+      - name: '"Primary_Diagnosis"'
+        description: First SNOMED clinical diagnosis by sequence number.
+
+      - name: '"Mental_Health_Legal_Status_Classification"'
+        description: >
+          Mental Health Act legal status classification in force at the time of
+          the attendance, taken from the first legal status record only
+          (mental_health_act_legal_status_id = 1). NULL where no Mental Health
+          Act status was recorded, which is the case for the large majority of
+          attendances.
+
+      - name: '"Patient_Pathway_Identifier"'
+        description: >
+          Pseudonymised identifier linking the attendance to a wider referral to
+          treatment (RTT) pathway, allowing emergency care activity to be traced
+          against an ongoing elective pathway.
+
+      - name: '"Referral_To_Treatment_Period_Status"'
+        description: >
+          RTT period status code at the time of the attendance, indicating whether
+          the attendance started, continued, or ended an RTT clock.
+
+      - name: '"Referral_To_Treatment_Period_Start_Date"'
+        description: >
+          Date the RTT clock started for the associated pathway. NULL where the
+          attendance is not part of an RTT pathway.
+
+      - name: '"Referral_To_Treatment_Period_End_Date"'
+        description: >
+          Date the RTT clock stopped for the associated pathway. NULL where the
+          clock is still running or the attendance is not part of an RTT pathway.
+
+      - name: '"Waiting_Time_Measurement_Type"'
+        description: >
+          Code describing how waiting time is measured for the associated RTT
+          pathway, which determines how the start and end dates should be
+          interpreted.
+
+      - name: ZBUSINESSRULE
+        description: >
+          Derived UTC / WIC / MIU classification based on site code and department
+          type. NULL where the attendance does not match a known NWL urgent care
+          setting. Unquoted, so stored uppercase.

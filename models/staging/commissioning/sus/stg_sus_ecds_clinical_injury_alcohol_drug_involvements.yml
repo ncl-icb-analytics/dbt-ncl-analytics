@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: stg_sus_ecds_clinical_injury_alcohol_drug_involvements
+    description: >
+      Alcohol and drug involvement codes recorded against an injury-related ECDS attendance.
+      Multiple rows per attendance.
+      
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+    columns:
+      - name: primarykey_id
+        description: ECDS attendance identifier. Joins to stg_ecds_consolidated."Record_Identifier".
+        tests:
+          - not_null
+
+      - name: alcohol_drug_involvements_id
+        description: Sequence identifier for this child record within the attendance.
+        tests:
+          - not_null

@@ -1,0 +1,300 @@
+version: 2
+sources:
+- name: ukhfd
+  database: '"UKHFD"'
+  schema: '"dbo"'
+  description: UKHD reference and dimension tables
+  tables:
+  - name: dim_ref_Age
+    identifier: '"dim_ref_Age"'
+    columns:
+    - name: pk_Age
+      data_type: NUMBER(38,0)
+    - name: Age_Band_5_YRS
+      data_type: TEXT
+    - name: Age_Band_10_YRS
+      data_type: TEXT
+    - name: Age_Band_20_YRS
+      data_type: TEXT
+    - name: NHS_Group
+      data_type: TEXT
+    - name: NHS_Group_Shortname
+      data_type: TEXT
+    - name: created_date
+      data_type: TIMESTAMP_NTZ
+    - name: import_date
+      data_type: TIMESTAMP_NTZ
+  - name: dim_ref_Dates
+    identifier: '"dim_ref_Dates"'
+    columns:
+    - name: Date_112
+      data_type: NUMBER(38,0)
+    - name: Full_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Excel_Date_Value
+      data_type: NUMBER(38,0)
+    - name: Year_Month
+      data_type: NUMBER(38,0)
+    - name: Working_Day_Type
+      data_type: TEXT
+    - name: Working_Day_Calc
+      data_type: NUMBER(38,0)
+    - name: Weekday_No
+      data_type: NUMBER(38,0)
+    - name: Weekday_Name
+      data_type: TEXT
+    - name: Weekday_Short_Name
+      data_type: TEXT
+    - name: Bank_Holiday_Desc
+      data_type: TEXT
+    - name: Month_No
+      data_type: NUMBER(38,0)
+    - name: Month_No_2_Char
+      data_type: TEXT
+    - name: Month_Name
+      data_type: TEXT
+    - name: Month_Short_Name
+      data_type: TEXT
+    - name: YearMonth_YYYYMM
+      data_type: NUMBER(38,0)
+    - name: MonthYear_MMMM_YYYYY
+      data_type: TEXT
+    - name: Fin_Year_First_Part
+      data_type: NUMBER(38,0)
+    - name: Fin_Year_Second_Part
+      data_type: NUMBER(38,0)
+    - name: Fin_Year
+      data_type: NUMBER(38,0)
+    - name: Fin_Year_yy_yy
+      data_type: TEXT
+    - name: Fin_Year_YYYY_dash_YY
+      data_type: TEXT
+    - name: Fin_Week_No
+      data_type: NUMBER(38,0)
+    - name: Fin_Week_No_2_Char
+      data_type: TEXT
+    - name: Fin_Month_No
+      data_type: NUMBER(38,0)
+    - name: Fin_Month_No_2_Char
+      data_type: TEXT
+    - name: Fin_Quarter_No
+      data_type: NUMBER(38,0)
+    - name: Fin_Quarter_Name
+      data_type: TEXT
+    - name: Fin_Year_Quarter_YYYYYYQ
+      data_type: NUMBER(38,0)
+    - name: Fin_Quarter_Qq_Fin_Year_YYYY_dash_YY
+      data_type: TEXT
+    - name: Cal_Week_No
+      data_type: NUMBER(38,0)
+    - name: Cal_Week_No_2_Char
+      data_type: TEXT
+    - name: Cal_Quarter_No
+      data_type: NUMBER(38,0)
+    - name: Cal_Quarter_YYYYQ
+      data_type: NUMBER(38,0)
+    - name: Cal_Quarter_Name
+      data_type: TEXT
+    - name: Cal_Year
+      data_type: NUMBER(38,0)
+    - name: Quarter_Name
+      data_type: TEXT
+    - name: Month_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Month_Start_112
+      data_type: NUMBER(38,0)
+    - name: Month_End
+      data_type: TIMESTAMP_NTZ
+    - name: Month_End_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Month_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Month_Start_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Month_End
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Month_End_112
+      data_type: NUMBER(38,0)
+    - name: Next_Month_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Month_Start_112
+      data_type: NUMBER(38,0)
+    - name: Next_Month_End
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Month_End_112
+      data_type: NUMBER(38,0)
+    - name: Fin_Year_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Fin_Year_Start_112
+      data_type: NUMBER(38,0)
+    - name: Fin_Year_End
+      data_type: TIMESTAMP_NTZ
+    - name: Fin_Year_End_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Fin_Year_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Fin_Year_Start_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Fin_Year_End
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Fin_Year_End_112
+      data_type: NUMBER(38,0)
+    - name: Next_Fin_Year_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Fin_Year_Start_112
+      data_type: NUMBER(38,0)
+    - name: Next_Fin_Year_End
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Fin_Year_End_112
+      data_type: NUMBER(38,0)
+    - name: Cal_Year_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Cal_Year_Start_112
+      data_type: NUMBER(38,0)
+    - name: Cal_Year_End
+      data_type: TIMESTAMP_NTZ
+    - name: Cal_Year_End_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Cal_Year_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Cal_Year_Start_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Cal_Year_End
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Cal_Year_End_112
+      data_type: NUMBER(38,0)
+    - name: Next_Cal_Year_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Cal_Year_Start_112
+      data_type: NUMBER(38,0)
+    - name: Next_Cal_Year_End
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Cal_Year_End_112
+      data_type: NUMBER(38,0)
+    - name: Quarter_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Quarter_Start_112
+      data_type: NUMBER(38,0)
+    - name: Quarter_End
+      data_type: TIMESTAMP_NTZ
+    - name: Quarter_End_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Quarter_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Quarter_Start_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Quarter_End
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Quarter_End_112
+      data_type: NUMBER(38,0)
+    - name: Next_Quarter_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Quarter_Start_112
+      data_type: NUMBER(38,0)
+    - name: Next_Quarter_End
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Quarter_End_112
+      data_type: NUMBER(38,0)
+    - name: Day_Of_Quarter
+      data_type: NUMBER(38,0)
+    - name: Day_Of_Quarter_2_Char
+      data_type: TEXT
+    - name: Week_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Week_Start_112
+      data_type: NUMBER(38,0)
+    - name: Week_End
+      data_type: TIMESTAMP_NTZ
+    - name: Week_End_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Week_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Week_Start_112
+      data_type: NUMBER(38,0)
+    - name: Previous_Week_End
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Week_End_112
+      data_type: NUMBER(38,0)
+    - name: Next_Week_Start
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Week_Start_112
+      data_type: NUMBER(38,0)
+    - name: Next_Week_End
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Week_End_112
+      data_type: NUMBER(38,0)
+    - name: Month_Day_No
+      data_type: NUMBER(38,0)
+    - name: Month_Day_No_2_Char
+      data_type: TEXT
+    - name: Previous_Day
+      data_type: TIMESTAMP_NTZ
+    - name: Previous_Day112
+      data_type: NUMBER(38,0)
+    - name: Next_Day
+      data_type: TIMESTAMP_NTZ
+    - name: Next_Day_112
+      data_type: NUMBER(38,0)
+    - name: Day_Of_Year
+      data_type: NUMBER(38,0)
+    - name: Day_Of_Year_3_Char
+      data_type: TEXT
+    - name: Day_Of_Fin_Year
+      data_type: NUMBER(38,0)
+    - name: Day_Of_Fin_Year_3_Char
+      data_type: TEXT
+    - name: created_date
+      data_type: TIMESTAMP_NTZ
+    - name: import_date
+      data_type: TIMESTAMP_NTZ
+  - name: dim_ref_Time
+    identifier: '"dim_ref_Time"'
+    columns:
+    - name: Time_Key
+      data_type: NUMBER(38,0)
+    - name: Time
+      data_type: TEXT
+    - name: Time24
+      data_type: TEXT
+    - name: HourName
+      data_type: TEXT
+    - name: MinuteName
+      data_type: TEXT
+    - name: Hour
+      data_type: NUMBER(38,0)
+    - name: Hour_2Char
+      data_type: TEXT
+    - name: Hour24
+      data_type: NUMBER(38,0)
+    - name: Hour24_2Char
+      data_type: TEXT
+    - name: Minute
+      data_type: NUMBER(38,0)
+    - name: Minute_2Char
+      data_type: TEXT
+    - name: Second
+      data_type: NUMBER(38,0)
+    - name: Second_2Char
+      data_type: TEXT
+    - name: AM
+      data_type: TEXT
+    - name: Morning_Or_Afternoon
+      data_type: TEXT
+    - name: Business_Hours_09To17
+      data_type: BOOLEAN
+    - name: Business_Hours_08To18
+      data_type: BOOLEAN
+    - name: Daytime_Hours_07To23
+      data_type: BOOLEAN
+    - name: Qtr_Of_Day
+      data_type: NUMBER(38,0)
+    - name: Qtr_Hr_Of_Day
+      data_type: NUMBER(38,0)
+    - name: Qtr_Hrs
+      data_type: TEXT
+    - name: Qtr_of_Hr
+      data_type: NUMBER(38,0)
+    - name: Created_Date
+      data_type: TIMESTAMP_NTZ
+    - name: Import_Date
+      data_type: TIMESTAMP_NTZ

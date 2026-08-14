@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_sus_ecds_patient_mental_health_act_legal_status
+    description: >
+      Mental Health Act legal status classifications recorded against an ECDS attendance.
+      Multiple rows per attendance, sequenced by mental_health_act_legal_status_id.
+
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - primarykey_id
+              - mental_health_act_legal_status_id
+
+    columns:
+      - name: primarykey_id
+        description: ECDS attendance identifier. Joins to stg_ecds_consolidated."Record_Identifier".
+        data_tests:
+          - not_null
+
+      - name: mental_health_act_legal_status_id
+        description: Sequence identifier for this child record within the attendance.
+        data_tests:
+          - not_null
