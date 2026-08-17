@@ -63,7 +63,7 @@ LEFT JOIN {{ ref('dim_person_demographics')}} dem
     ON obs.person_id = dem.person_id
 
 -- Pull in the overwrite map
-LEFT JOIN {{ ref('cancer_snomed_code_to_icd10_overwrite')}} ow
+LEFT JOIN {{ ref('cancer_snomed_code_to_icd10_override')}} ow
     ON obs.mapped_concept_code = ow.concept_code
     AND case 
             when ow.gender is not null 
@@ -72,7 +72,7 @@ LEFT JOIN {{ ref('cancer_snomed_code_to_icd10_overwrite')}} ow
         end
 
 -- Map to ICD10
-LEFT JOIN {{ ref('tmp_seed_trud_map')}} trud
+LEFT JOIN {{ ref('stg_reference_snomed_to_icd10')}} trud
     ON obs.mapped_concept_code = trud.snomed_concept_id
     AND trud.map_priority = (
             CASE
