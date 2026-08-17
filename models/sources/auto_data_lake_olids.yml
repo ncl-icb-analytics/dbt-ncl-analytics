@@ -928,11 +928,11 @@ sources:
     - name: EPISODICITY_SOURCE_CONCEPT_ID
       data_type: UUID
     - name: IS_PRIMARY
-      data_type: BOOLEAN
+      data_type: TEXT
     - name: DATE_RECORDED
       data_type: TIMESTAMP_NTZ
     - name: IS_PROBLEM_DELETED
-      data_type: BOOLEAN
+      data_type: TEXT
     - name: IS_CONFIDENTIAL
       data_type: BOOLEAN
     - name: LDS_IS_DELETED
@@ -995,8 +995,6 @@ sources:
       data_type: UUID
     - name: REGISTERED_PRACTICE_ORGANISATION_ID
       data_type: UUID
-    - name: LOCAL_PATIENT_ID
-      data_type: TEXT
     - name: SK_PATIENT_ID
       data_type: NUMBER(38,0)
     - name: TITLE
@@ -1185,17 +1183,17 @@ sources:
     - name: DATE_OF_BIRTH_YEAR
       data_type: NUMBER(4,0)
     - name: DATE_OF_BIRTH_MONTH
-      data_type: NUMBER(2,0)
+      data_type: NUMBER
     - name: DATE_OF_BIRTH_PRECISION
-      data_type: TEXT
+      data_type: TEXT(2,0)
     - name: DATE_OF_DEATH
       data_type: DATE
     - name: DATE_OF_DEATH_YEAR
       data_type: NUMBER(4,0)
     - name: DATE_OF_DEATH_MONTH
-      data_type: NUMBER(2,0)
+      data_type: NUMBER
     - name: DATE_OF_DEATH_PRECISION
-      data_type: TEXT
+      data_type: TEXT(2,0)
     - name: DEATH_NOTIFICATION_STATUS
       data_type: TEXT
     - name: POSTCODE
@@ -1218,6 +1216,8 @@ sources:
       data_type: BOOLEAN
     - name: IS_LATEST_FOR_PERSON
       data_type: BOOLEAN
+    - name: LOCAL_PATIENT_ID
+      data_type: TEXT
     - name: ERROR_SUCCESS_CODE
       data_type: TEXT
     - name: LDS_IS_DELETED
@@ -1468,7 +1468,7 @@ sources:
     - name: IS_OUTGOING_REFERRAL
       data_type: BOOLEAN
     - name: IS_REVIEW
-      data_type: BOOLEAN
+      data_type: NUMBER(1,0)
     - name: REFERRAL_REQUEST_SOURCE_CONCEPT_ID
       data_type: UUID
     - name: SOURCE_CODE
