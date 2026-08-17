@@ -10,8 +10,36 @@ sources:
     columns:
     - name: UniqSubmissionId
       data_type: TEXT
-  - name: Meds
-    # upstream renamed Meds -> MedsV1 (Aug 2026); source name kept for consumers
+  - name: MedsHeader
+    identifier: '"MedsHeader"'
+    columns:
+    - name: DatSerVer
+      data_type: NUMBER(18,4)
+    - name: OrgIdProvider
+      data_type: TEXT
+    - name: RPStartDate
+      data_type: DATE
+    - name: RPEndDate
+      data_type: DATE
+    - name: ReceivedDate
+      data_type: TIMESTAMP_NTZ
+    - name: FileType
+      data_type: TEXT
+    - name: TotalRecords
+      data_type: NUMBER(38,0)
+    - name: UniqSubmissionID
+      data_type: TEXT
+    - name: dmicProcessedPeriod
+      data_type: TEXT
+    - name: Unique_MonthID
+      data_type: TEXT
+    - name: dmicImportLogId
+      data_type: NUMBER(38,0)
+    - name: dmicSystemId
+      data_type: NUMBER(38,0)
+    - name: dmicDateAdded
+      data_type: TIMESTAMP_NTZ
+  - name: MedsV1
     identifier: '"MedsV1"'
     columns:
     - name: AgeBands
@@ -152,32 +180,3 @@ sources:
       data_type: TEXT
     - name: UniqSubmissionId
       data_type: TEXT
-  - name: MedsHeader
-    identifier: '"MedsHeader"'
-    columns:
-    - name: DatSerVer
-      data_type: NUMBER(18,4)
-    - name: OrgIdProvider
-      data_type: TEXT
-    - name: RPStartDate
-      data_type: DATE
-    - name: RPEndDate
-      data_type: DATE
-    - name: ReceivedDate
-      data_type: TIMESTAMP_NTZ
-    - name: FileType
-      data_type: TEXT
-    - name: TotalRecords
-      data_type: NUMBER(38,0)
-    - name: UniqSubmissionID
-      data_type: TEXT
-    - name: dmicProcessedPeriod
-      data_type: TEXT
-    - name: Unique_MonthID
-      data_type: TEXT
-    - name: dmicImportLogId
-      data_type: NUMBER(38,0)
-    - name: dmicSystemId
-      data_type: NUMBER(38,0)
-    - name: dmicDateAdded
-      data_type: TIMESTAMP_NTZ
