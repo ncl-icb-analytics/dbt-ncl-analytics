@@ -9,6 +9,8 @@ select
     , sk_patient_id
     , source
     , local_patient_identifier
+    , cds_unique_identifier
+    , provider_reference_number
     , organisation_id
     , organisation_name
     , site_id
@@ -20,11 +22,34 @@ select
     , end_date
     , end_time
     , duration
+    , initial_assessment_date
+    , initial_assessment_time
+    , initial_assessment_time_since_arrival
+    , seen_for_treatment_date
+    , seen_for_treatment_time
+    , seen_for_treatment_time_since_arrival
+    , conclusion_date
+    , conclusion_time
+    , conclusion_time_since_arrival
+    , decided_to_admit_date
+    , decided_to_admit_time
+    , decided_to_admit_time_since_arrival
+    , clinically_ready_to_proceed_time
+    , clinically_ready_to_proceed_time_since_arrival
     , chief_complaint_code
     , chief_complaint_desc
     , chief_complaint_ecds_group1
     , is_injury_related
     , acuity
+    , injury_intent_code
+    , injury_intent_desc
+    , injury_mechanism_code
+    , injury_mechanism_desc
+    , place_of_injury_code
+    , place_of_injury_desc
+    , injury_date
+    , injury_time
+    , disease_notification_code
     , primary_diagnosis_code_snomed
     , primary_diagnosis_desc_snomed
     , primary_diagnosis_code_icd10
@@ -38,8 +63,28 @@ select
     , primary_investigation_desc_ecds_group1
     , arrival_mode_code
     , arrival_mode_desc
+    , attendance_category_code
+    , attendance_category_desc
+    , is_arrival_planned
+    , ambulance_incident_number
+    , conveying_ambulance_trust_code
+    , conveying_ambulance_trust_name
+    , ambulance_care_contact_identifier
+    , attendance_source_code
+    , attendance_source_desc
+    , attendance_source_organisation_site_identifier
+    , attendance_source_organisation_site_name
     , discharge_destination_code
     , discharge_destination_desc
+    , discharge_status_code
+    , discharge_status_desc
+    , discharge_follow_up_code
+    , discharge_follow_up_desc
+    , discharge_information_given_code
+    , decided_to_admit_treatment_function_code
+    , decided_to_admit_treatment_function_desc
+    , receiving_site_id
+    , receiving_site_name
     , main_specialty_code
     , main_specialty_name
     , hrg_code
@@ -47,7 +92,14 @@ select
     , core_hrg_chapter
     , core_hrg_chapter_desc
     , cost
+    , applicable_costing_period
+    , residence_commissioner_code_at_event
+    , residence_commissioner_name_at_event
+    , registrant_commissioner_code_at_event
+    , registrant_commissioner_name_at_event
     , age_at_event
+    , patient_type_code
+    , patient_type_desc
     , gender_at_event
     , gender_desc_at_event
     , ethnicity_at_event
@@ -57,5 +109,11 @@ select
     , lad_at_event
     , imd_at_event
     , reg_practice_at_event
+    , general_practitioner_code
     , visit_occurrence_type
+    , patient_pathway_identifier
+    , referral_to_treatment_status_code
+    , referral_to_treatment_period_start_date
+    , referral_to_treatment_period_end_date
+    , waiting_time_measurement_type_code
 from {{ ref('int_sus_uec_encounter') }}
