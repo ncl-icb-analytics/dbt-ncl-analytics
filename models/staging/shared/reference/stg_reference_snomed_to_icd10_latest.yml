@@ -1,8 +1,12 @@
 version: 2
 
 models:
-  - name: stg_reference_snomed_to_icd10
+  - name: stg_reference_snomed_to_icd10_latest
     description: "Staging layer for SNOMED CT to ICD-10 cross-map reference data sourced from NHS TRUD. Contains mappings between SNOMED concepts and their corresponding ICD-10 codes."
+    config:
+      meta:
+        owner:
+          name: Jake Kealey
     columns:
       - name: snomed_concept_id
         description: "SNOMED CT concept identifier"

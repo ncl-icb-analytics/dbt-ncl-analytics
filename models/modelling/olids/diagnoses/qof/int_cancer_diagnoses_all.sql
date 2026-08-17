@@ -72,7 +72,7 @@ LEFT JOIN {{ ref('cancer_snomed_code_to_icd10_override')}} ow
         end
 
 -- Map to ICD10
-LEFT JOIN {{ ref('stg_reference_snomed_to_icd10')}} trud
+LEFT JOIN {{ ref('stg_reference_snomed_to_icd10_latest')}} trud
     ON obs.mapped_concept_code = trud.snomed_concept_id
     AND trud.map_priority = (
             CASE
