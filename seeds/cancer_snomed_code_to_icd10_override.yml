@@ -1,7 +1,7 @@
 version: 2
 
 seeds:
-  - name: cancer_snomed_code_to_icd10_overwrite
+  - name: cancer_snomed_code_to_icd10_override
     description:
       Table to support mapping OLIDS Cancer Diagnosis concept codes to ICD10. 
       Only includes instances where the possible map options correspond to different cancer types based on the ICD10 to CWT Cancer Type mapping.
