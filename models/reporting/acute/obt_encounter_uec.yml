@@ -264,7 +264,7 @@ models:
       - name: decided_to_admit_time_since_arrival
         data_type: number
         description: "Source-reported elapsed time from arrival to the decision to admit, in minutes."
-      - name: clinically_ready_to_proceed_time
+      - name: clinically_ready_to_proceed_at
         data_type: timestamp_tz
         description: "First timestamp at which an authorised care professional decided ongoing emergency-department care was no longer required."
       - name: clinically_ready_to_proceed_time_since_arrival

@@ -87,7 +87,7 @@ select
     , core.attendance_decision_to_admit_date as decided_to_admit_date
     , core.attendance_decision_to_admit_time as decided_to_admit_time
     , core.attendance_decision_to_admit_time_since_arrival as decided_to_admit_time_since_arrival
-    , core.attendance_clinically_ready_to_proceed_timestamp as clinically_ready_to_proceed_time
+    , core.attendance_clinically_ready_to_proceed_timestamp as clinically_ready_to_proceed_at
     , core.attendance_clinically_ready_to_proceed_time_since_arrival
         as clinically_ready_to_proceed_time_since_arrival
 

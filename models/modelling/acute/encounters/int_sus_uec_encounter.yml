@@ -126,7 +126,7 @@ models:
         data_type: number
         description: "Source-reported elapsed time from arrival to the decision to admit, in minutes."
 
-      - name: clinically_ready_to_proceed_time
+      - name: clinically_ready_to_proceed_at
         data_type: timestamp_tz
         description: "First timestamp at which an authorised care professional decided that the patient no longer required ongoing emergency-department care."
 

@@ -34,7 +34,7 @@ select
     , decided_to_admit_date
     , decided_to_admit_time
     , decided_to_admit_time_since_arrival
-    , clinically_ready_to_proceed_time
+    , clinically_ready_to_proceed_at
     , clinically_ready_to_proceed_time_since_arrival
     , chief_complaint_code
     , chief_complaint_desc
