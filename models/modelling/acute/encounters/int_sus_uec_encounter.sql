@@ -28,14 +28,6 @@ commissioner_codes as (
         order by coalesce(end_date, '9999-12-31'::date) desc, start_date desc
     ) = 1
     ),
-organisation_codes as (
-    select organisation_code, organisation_name
-    from {{ ref('stg_dictionary_dbo_organisation') }}
-    qualify row_number() over (
-        partition by organisation_code
-        order by coalesce(end_date, '9999-12-31'::date) desc, start_date desc
-    ) = 1
-    ),
 treatment_function_codes as (
     select bk_specialty_code, treatment_function_description
     from {{ ref('stg_dictionary_dbo_specialties') }}
@@ -149,7 +141,10 @@ select
     , attendance_source.snomed_uk_preferred_term as attendance_source_desc
     , core.attendance_arrival_attendance_source_organisation
         as attendance_source_organisation_site_identifier
-    , attendance_source_site.organisation_name as attendance_source_organisation_site_name
+    , coalesce(
+        attendance_source_site.organisation_name,
+        attendance_source_provider.organisation_name
+      ) as attendance_source_organisation_site_name
 
     /* Discharge information */
     , core.attendance_discharge_destination_code as discharge_destination_code
@@ -164,7 +159,10 @@ select
     , treatment_function.treatment_function_description
         as decided_to_admit_treatment_function_desc
     , core.attendance_decision_to_admit_receiving_site as receiving_site_id
-    , receiving_site.organisation_name as receiving_site_name
+    , coalesce(
+        receiving_site.organisation_name,
+        receiving_site_provider.organisation_name
+      ) as receiving_site_name
 
     /* Clinician information */
     , '180' as main_specialty_code
@@ -273,18 +271,27 @@ left join ethnicity_codes as eth
 left join gender_codes as gen
     on core.patient_stated_gender = gen.gender_code
 
--- Organisation descriptions. organisation_codes is deduplicated to protect encounter grain.
-left join organisation_codes as dict_site on
+-- NHS provider and site reference models are deduplicated to protect encounter grain.
+left join {{ ref('organisation_nhs_site') }} as dict_site on
     core.attendance_location_site = dict_site.organisation_code
 
-left join organisation_codes as ambulance_trust on
+left join {{ ref('organisation_nhs_provider') }} as ambulance_trust on
     core.attendance_arrival_conveying_ambulance_trust = ambulance_trust.organisation_code
 
-left join organisation_codes as attendance_source_site on
+left join {{ ref('organisation_nhs_site') }} as attendance_source_site on
     core.attendance_arrival_attendance_source_organisation = attendance_source_site.organisation_code
 
-left join organisation_codes as receiving_site on
+-- A very small number of source values are provider rather than site codes.
+left join {{ ref('organisation_nhs_provider') }} as attendance_source_provider on
+    core.attendance_arrival_attendance_source_organisation
+    = attendance_source_provider.organisation_code
+
+left join {{ ref('organisation_nhs_site') }} as receiving_site on
     core.attendance_decision_to_admit_receiving_site = receiving_site.organisation_code
+
+left join {{ ref('organisation_nhs_provider') }} as receiving_site_provider on
+    core.attendance_decision_to_admit_receiving_site
+    = receiving_site_provider.organisation_code
 
 -- provider name
 left join {{ ref('organisation_nhs_provider') }} as dict_org on

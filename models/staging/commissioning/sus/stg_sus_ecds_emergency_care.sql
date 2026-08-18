@@ -31,6 +31,8 @@ select primarykey_id
         as attendance_arrival_conveying_ambulance_trust
     , attendance_arrival_ambulance_care_contact_identifier
     , attendance_arrival_attendance_source_code
+    -- This field predominantly contains five-character site identifiers. Do not
+    -- use clean_organisation_id's provider default, which would truncate sites.
     , nullif(upper(trim(attendance_arrival_attendance_source_organisation)), '')
         as attendance_arrival_attendance_source_organisation
 
@@ -48,6 +50,7 @@ select primarykey_id
     , attendance_decision_to_admit_time::time as attendance_decision_to_admit_time
     , attendance_decision_to_admit_time_since_arrival
     , attendance_decision_to_admit_treatment_function_code
+    -- Receiving-site identifiers are preserved at site grain for dictionary joins.
     , nullif(upper(trim(attendance_decision_to_admit_receiving_site)), '')
         as attendance_decision_to_admit_receiving_site
     , attendance_clinically_ready_to_proceed_timestamp::timestamp_tz

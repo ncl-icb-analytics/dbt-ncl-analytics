@@ -1,0 +1,27 @@
+models:
+  - name: organisation_nhs_site
+    description: Organisation reference data for NHS sites.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: organisation_code
+        description: NHS organisation site identifier.
+        tests:
+          - not_null
+          - unique
+      - name: organisation_name
+        description: Organisation site name.
+      - name: sk_organisation_type_id
+        description: Organisation type identifier; restricted to NHS sites (type 42).
+      - name: start_date
+        description: Organisation site start date.
+      - name: end_date
+        description: Organisation site end date, or null if active.
+      - name: status
+        description: Organisation site status.
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
