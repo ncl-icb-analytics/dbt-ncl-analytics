@@ -23,6 +23,9 @@ Usage:
 - Filter by campaign_id to analyze specific campaigns
 - Use vaccination_status to segment by outcome (administered, declined, no record)
 - Join with dim_person_demographics for demographic analysis
+
+August 2026 KH adjusted final output to distinct to avoid duplication.
+
 */
 
 {{ config(
@@ -187,5 +190,6 @@ final_uptake AS (
         ON cd.campaign_id = cc.campaign_id
 )
 
-SELECT * FROM final_uptake
+SELECT distinct * FROM final_uptake
+
 ORDER BY campaign_id, person_id

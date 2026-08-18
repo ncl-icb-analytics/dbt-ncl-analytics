@@ -29,13 +29,20 @@ Usage:
 - Filter by programme_type for programme-specific dashboards
 - Use campaign_id for specific campaign analysis
 - Demographic breakdowns for equity analysis
+
+PowerBI
+eligible reason not required for dashboard. Reduce repeating rows
 */
 
 WITH uptake_with_demographics AS (
     SELECT 
         -- Programme and campaign identifiers
         u.programme_type,
-        u.campaign_id,
+        CASE WHEN u.campaign_id = 'COVID Autumn 2024' THEN 'CV Autumn 2024'
+         WHEN u.campaign_id = 'COVID Spring 2025' THEN 'CV Spring 2025'
+         WHEN u.campaign_id = 'COVID Autumn 2025' THEN 'CV Autumn 2025'
+         WHEN u.campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
+         ELSE u.campaign_id END AS campaign_id,
         u.campaign_year,
         u.campaign_season,
         u.person_id,
@@ -136,8 +143,8 @@ WITH uptake_with_demographics AS (
         u.is_eligible,
         u.campaign_category,
         u.risk_group,
-        u.eligibility_reason,
-        u.rule_type,
+        --u.eligibility_reason,
+        --u.rule_type,
         
         -- Vaccination information from uptake facts
         u.vaccination_status,
@@ -176,5 +183,5 @@ WITH uptake_with_demographics AS (
         on la.LSOA21_CD = d.LSOA_CODE_21
 )
 
-SELECT * FROM uptake_with_demographics
+SELECT distinct * FROM uptake_with_demographics
 ORDER BY programme_type, campaign_id, practice_code, person_id
