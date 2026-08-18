@@ -8,7 +8,7 @@ models:
     columns:
       - name: organisation_code
         description: NHS organisation site identifier.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: organisation_name
