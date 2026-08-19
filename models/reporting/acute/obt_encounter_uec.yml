@@ -538,3 +538,45 @@ models:
       - name: waiting_time_measurement_type_code
         data_type: varchar
         description: "Code identifying the waiting-time measurement type for the referral-to-treatment pathway."
+      - name: financial_year
+        data_type: varchar
+        description: "NHS financial year derived from start_date in YYYYYY format, for example 202526."
+      - name: financial_month
+        data_type: number
+        description: "NHS financial month derived from start_date, where April is 1 and March is 12."
+      - name: expected_treatment_time
+        data_type: timestamp_tz
+        description: "Expected treatment timestamp from the first source-sequenced expected-treatment record."
+      - name: referred_to_service_code
+        data_type: varchar
+        description: "SNOMED CT service code from the first source-sequenced referred-to record."
+      - name: referred_to_service_assessment_date
+        data_type: date
+        description: "Assessment date recorded by the first source-sequenced referred-to service."
+      - name: referred_to_service_assessment_time
+        data_type: time
+        description: "Assessment time recorded by the first source-sequenced referred-to service."
+      - name: is_national_tariff_excluded
+        data_type: boolean
+        description: "Whether the attendance was excluded from national tariff pricing."
+      - name: national_tariff
+        data_type: number
+        description: "National tariff amount before market-forces adjustment."
+      - name: national_tariff_final_price
+        data_type: number
+        description: "Final national-pricing amount; also exposed as cost for compatibility."
+      - name: mff_factor
+        data_type: number
+        description: "Market Forces Factor reported for the attendance."
+      - name: mff_adjustment
+        data_type: number
+        description: "Market Forces Factor monetary adjustment reported for the attendance."
+      - name: injury_alcohol_drug_involvement_code
+        data_type: varchar
+        description: "SNOMED CT code from the first source-sequenced alcohol or drug involvement record."
+      - name: mental_health_legal_status_code
+        data_type: varchar
+        description: "Mental Health Act legal-status classification from the first source-sequenced record."
+      - name: urgent_care_setting_type
+        data_type: varchar
+        description: "Source ECDS activity type for the urgent-care setting; distinct from pod and department_type."

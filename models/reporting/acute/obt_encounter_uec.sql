@@ -17,8 +17,11 @@ select
     , site_name
     , pod
     , department_type
+    , urgent_care_setting_type
     , start_date
     , start_time
+    , financial_year
+    , financial_month
     , end_date
     , end_time
     , duration
@@ -36,6 +39,7 @@ select
     , decided_to_admit_time_since_arrival
     , clinically_ready_to_proceed_at
     , clinically_ready_to_proceed_time_since_arrival
+    , expected_treatment_time
     , chief_complaint_code
     , chief_complaint_desc
     , chief_complaint_ecds_group1
@@ -50,6 +54,7 @@ select
     , injury_date
     , injury_time
     , disease_notification_code
+    , injury_alcohol_drug_involvement_code
     , primary_diagnosis_code_snomed
     , primary_diagnosis_desc_snomed
     , primary_diagnosis_code_icd10
@@ -139,6 +144,11 @@ select
     , core_hrg_chapter_desc
     , cost
     , applicable_costing_period
+    , is_national_tariff_excluded
+    , national_tariff
+    , national_tariff_final_price
+    , mff_factor
+    , mff_adjustment
     , residence_commissioner_code_at_event
     , residence_commissioner_name_at_event
     , registrant_commissioner_code_at_event
@@ -162,4 +172,8 @@ select
     , referral_to_treatment_period_start_date
     , referral_to_treatment_period_end_date
     , waiting_time_measurement_type_code
+    , referred_to_service_code
+    , referred_to_service_assessment_date
+    , referred_to_service_assessment_time
+    , mental_health_legal_status_code
 from {{ ref('int_sus_uec_encounter') }}

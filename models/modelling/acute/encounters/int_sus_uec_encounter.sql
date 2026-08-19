@@ -111,6 +111,38 @@ comorbidity_codes_wide as (
     from {{ ref('stg_sus_ecds_clinical_comorbidities') }}
     where comorbidities_id between 1 and 10
     group by primarykey_id
+    ),
+first_expected_treatment as (
+    select primarykey_id, expected_treatment_at
+    from {{ ref('stg_sus_ecds_attendance_expected_treatment_times') }}
+    qualify row_number() over (
+        partition by primarykey_id
+        order by expected_treatment_times_id, rownumber_id
+    ) = 1
+    ),
+first_referred_to_service as (
+    select primarykey_id, referred_to_service_code, assessment_date, assessment_time
+    from {{ ref('stg_sus_ecds_attendance_referred_to') }}
+    qualify row_number() over (
+        partition by primarykey_id
+        order by referred_to_id, rownumber_id
+    ) = 1
+    ),
+first_injury_alcohol_drug_involvement as (
+    select primarykey_id, code
+    from {{ ref('stg_sus_ecds_clinical_injury_alcohol_drug_involvements') }}
+    qualify row_number() over (
+        partition by primarykey_id
+        order by alcohol_drug_involvements_id, rownumber_id
+    ) = 1
+    ),
+first_mental_health_legal_status as (
+    select primarykey_id, legal_status_code
+    from {{ ref('stg_sus_ecds_patient_mental_health_act_legal_status') }}
+    qualify row_number() over (
+        partition by primarykey_id
+        order by mental_health_act_legal_status_id, rownumber_id
+    ) = 1
     )
 
 select 
@@ -135,10 +167,13 @@ select
         when core.attendance_location_department_type = '05' then 'SDEC'
         else 'Others' end as pod
     , core.attendance_location_department_type as department_type
+    , core.attendance_location_activity_type as urgent_care_setting_type
 
     /* Time & date */
     , core.attendance_arrival_date as start_date
     , core.attendance_arrival_time as start_time
+    , {{ fin_year_from_date('core.attendance_arrival_date') }} as financial_year
+    , {{ fin_month_from_date('core.attendance_arrival_date') }} as financial_month
     , core.attendance_departure_date as end_date
     , core.attendance_departure_time as end_time
     , core.attendance_departure_time_since_arrival as duration
@@ -157,6 +192,7 @@ select
     , core.attendance_clinically_ready_to_proceed_timestamp as clinically_ready_to_proceed_at
     , core.attendance_clinically_ready_to_proceed_time_since_arrival
         as clinically_ready_to_proceed_time_since_arrival
+    , expected_treatment.expected_treatment_at as expected_treatment_time
 
     /* Clinical information */
     -- complaint information
@@ -176,6 +212,7 @@ select
     , core.clinical_injury_date as injury_date
     , core.clinical_injury_time as injury_time
     , core.clinical_disease_notification_code as disease_notification_code
+    , injury_alcohol_drug.code as injury_alcohol_drug_involvement_code
 
     -- diagnosis information
     , diagnosis.primary_diagnosis_code_snomed
@@ -298,6 +335,11 @@ select
     , dict_hrg.hrg_chapter as core_hrg_chapter_desc
     , core.commissioning_national_pricing_final_price as cost
     , core.commissioning_national_pricing_costing_period as applicable_costing_period
+    , core.commissioning_national_pricing_excluded as is_national_tariff_excluded
+    , core.commissioning_national_pricing_tariff as national_tariff
+    , core.commissioning_national_pricing_final_price as national_tariff_final_price
+    , core.commissioning_national_pricing_market_forces_factor as mff_factor
+    , core.commissioning_national_pricing_market_forces_adjustment as mff_adjustment
     , core.patient_residence_ccg_from_patient_postcode as residence_commissioner_code_at_event
     , residence_commissioner.commissioner_name as residence_commissioner_name_at_event
     , core.commissioning_service_agreement_commissioner as registrant_commissioner_code_at_event
@@ -329,6 +371,12 @@ select
     , core.referral_period_start_date as referral_to_treatment_period_start_date
     , core.referral_period_end_date as referral_to_treatment_period_end_date
     , core.referral_waiting_time_measurement_type as waiting_time_measurement_type_code
+    , referred_to.referred_to_service_code
+    , referred_to.assessment_date as referred_to_service_assessment_date
+    , referred_to.assessment_time as referred_to_service_assessment_time
+
+    /* Mental health information */
+    , mental_health_legal_status.legal_status_code as mental_health_legal_status_code
 
 from {{ ref('stg_sus_ecds_emergency_care')}} as core
 
@@ -357,6 +405,18 @@ left join
 
 left join comorbidity_codes_wide as comorbidities
     on core.primarykey_id = comorbidities.primarykey_id
+
+left join first_expected_treatment as expected_treatment
+    on core.primarykey_id = expected_treatment.primarykey_id
+
+left join first_referred_to_service as referred_to
+    on core.primarykey_id = referred_to.primarykey_id
+
+left join first_injury_alcohol_drug_involvement as injury_alcohol_drug
+    on core.primarykey_id = injury_alcohol_drug.primarykey_id
+
+left join first_mental_health_legal_status as mental_health_legal_status
+    on core.primarykey_id = mental_health_legal_status.primarykey_id
 
 /* context dictionaries  */
 left join 

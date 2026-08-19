@@ -8,6 +8,11 @@ select primarykey_id
     , patient_local_patient_identifier_value as local_patient_identifier
     , commissioning_service_agreement_provider_reference_number
     , commissioning_national_pricing_costing_period
+    , commissioning_national_pricing_excluded::boolean
+        as commissioning_national_pricing_excluded
+    , commissioning_national_pricing_tariff
+    , commissioning_national_pricing_market_forces_factor
+    , commissioning_national_pricing_market_forces_adjustment
     , patient_patient_type
     , nullif(upper(trim(patient_residence_ccg_from_patient_postcode)), '')
         as patient_residence_ccg_from_patient_postcode
@@ -18,6 +23,7 @@ select primarykey_id
     ,  {{ clean_organisation_id('attendance_location_hes_provider_3') }} as attendance_location_hes_provider_3
     , nullif(upper(trim(attendance_location_site)), '') as attendance_location_site
     , attendance_location_department_type
+    , attendance_location_activity_type
     , system_record_provider
 
     -- arrival
