@@ -1,6 +1,12 @@
 models:
-  - name: stg_ukhfd_ods_all_gp_and_gdp_practices
-    description: 'National ODS GP and dental practice dimension from UKHFD, latest record per practice code'
+  - name: stg_ukhfd_all_gp_and_gdp_practices
+    description: >
+      National ODS GP and dental practice dimension from UKHFD, latest record
+      per practice code.
+
+      Source: UKHFD.ODS.dim_All_GP_and_GDP_Practices_SCD
+      (source 'ukhfd_ods' in models/sources/manual_ukhfd.yml)
+      via raw_ukhfd_all_gp_and_gdp_practices.
     config:
       meta:
         owner:

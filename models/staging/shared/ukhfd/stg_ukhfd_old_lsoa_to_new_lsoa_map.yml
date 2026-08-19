@@ -1,6 +1,11 @@
 models:
   - name: stg_ukhfd_old_lsoa_to_new_lsoa_map
-    description: '2011 LSOA to 2021 LSOA bridge from UKHFD, one row per 2011 code'
+    description: >
+      2011 LSOA to 2021 LSOA bridge from UKHFD, one row per 2011 code.
+
+      Source: UKHFD.Old_LSOA_To_New_LSOA_To_LAD.dim_Map_SCD
+      (source 'ukhfd_geo' in models/sources/manual_ukhfd.yml)
+      via raw_ukhfd_old_lsoa_to_new_lsoa_map.
     config:
       meta:
         owner:

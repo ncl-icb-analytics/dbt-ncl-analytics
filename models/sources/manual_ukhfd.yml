@@ -5,6 +5,10 @@ sources:
     database: '"UKHFD"'
     schema: '"Old_LSOA_To_New_LSOA_To_LAD"'
     description: ONS lookup bridging retired 2011 LSOAs to 2021 LSOAs and their LAD.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd
     tables:
       - name: old_lsoa_to_new_lsoa_map
         identifier: '"dim_Map_SCD"'
@@ -27,6 +31,10 @@ sources:
     database: '"UKHFD"'
     schema: '"ODS"'
     description: National ODS organisation reference dimensions.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd
     tables:
       - name: all_gp_and_gdp_practices
         identifier: '"dim_All_GP_and_GDP_Practices_SCD"'
@@ -59,6 +67,10 @@ sources:
     database: '"UKHFD"'
     schema: '"Demography"'
     description: GP-registered patient counts from the NHS England "Patients Registered at a GP Practice" monthly publication.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd
     tables:
       - name: registered_patients_by_gp_practice
         identifier: '"fact_No_Of_Patients_Regd_At_GP_Prac_Regions_5Yr_AgeBand"'
@@ -91,6 +103,10 @@ sources:
     database: '"UKHFD"'
     schema: '"Comm_Allocations"'
     description: UK Health Funding Dataset commissioning allocation inputs.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd
     tables:
       - name: weighted_regs_by_gp_practice_base
         identifier: '"fact_Weighted_Regs_By_GP_Practice_Base"'
