@@ -1,6 +1,9 @@
 models:
-  - name: stg_aic_base_athena_concept
-    description: OHDSI Athena concept vocabulary
+  - name: stg_common_aicentre_vocab
+    description: >
+      AI Centre OMOP-style concept vocabulary (DATA_LAKE__NCL.COMMON.AICENTRE_VOCAB),
+      used to attach descriptions to coded activity (ICD-10, OPCS-4, SNOMED).
+      Migrated from stg_aic_base_athena_concept (AIC_DEV.BASE_ATHENA__CONCEPT).
     config:
       meta:
         owner:

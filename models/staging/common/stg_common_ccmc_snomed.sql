@@ -3,4 +3,4 @@ select
     conditionname,
     conceptid,
     primaryterm
-from {{ ref('raw_aic_base_ccms_snomed_codes') }}
+from {{ ref('raw_common_ccmc_snomed') }}

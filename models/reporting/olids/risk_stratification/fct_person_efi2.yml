@@ -3,9 +3,9 @@ models:
     description: >
       Reporting-layer eFI2 score and frailty category per person (in-house
       int_efi2_scores joined to dim_person) — a computed per-person frailty measure, so
-      fct_. Native equivalent of the AIC import stg_aic_int_efi2_scores, built in parallel
-      to it. See int_efi2_scores for the documented divergences from the AIC-published
-      score. Renamed from dim_person_efi2 (was a dim_; it is a measure).
+      fct_. Native replacement for the retired AIC import stg_aic_int_efi2_scores, which
+      it was built in parallel to. See int_efi2_scores for the documented divergences
+      from the AIC-published score. Renamed from dim_person_efi2 (was a dim_; it is a measure).
     config:
       meta:
         owner:

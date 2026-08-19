@@ -450,15 +450,10 @@ sources:
     domain: commissioning
     manual: true
   
-    # AIC dev tables
-  - source_name: aic
-    database: DATA_LAKE__NCL
-    schema: AIC_DEV
-    description: parallel pipeline for AIC
-    raw_prefix: raw_aic
-    domain: shared
-    manual: true
-
+  # NOTE: the AIC_DEV pipeline (source_name: aic) was retired and is superseded
+  # by DATA_LAKE__NCL.COMMON, declared manually in models/sources/manual_common.yml.
+  # Manual-only sources (common, ukhfd_*) set their raw domain/prefix via `meta`
+  # in their own YAML rather than here.
 
   # Central Performance Analytics Team (CPAT PMCT)
   - source_name: pmct

@@ -9,4 +9,4 @@ select
     valid_start_date,
     valid_end_date,
     invalid_reason
-from {{ ref('raw_aic_base_athena_concept') }}
+from {{ ref('raw_common_aicentre_vocab') }}

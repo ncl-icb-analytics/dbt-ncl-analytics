@@ -3,4 +3,4 @@ select
     conditionname,
     productid,
     primaryterm
-from {{ ref('raw_aic_base_ccms_dmd_codes') }}
+from {{ ref('raw_common_ccmc_dmd') }}

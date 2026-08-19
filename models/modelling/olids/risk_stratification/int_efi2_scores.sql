@@ -10,7 +10,8 @@ eFI2 (electronic Frailty Index 2) score and frailty category per person.
 
 Native OLIDS-built equivalent of the AI Centre's INT_EFI2_SCORES, ported from
 lds-pipelines (branch 190-chore-diff-sel-ncl). Deficit codelist + weights are the
-AIC-published inputs (stg_aic_base_efi2_*); the scoring logic mirrors lds.
+published inputs now sourced from DATA_LAKE__NCL.COMMON (stg_common_efi2_*);
+the scoring logic mirrors lds.
 
 The frailty category cut points match lds (ROBUST < 0.0857, MILD to < 0.1624,
 MODERATE to <= 0.2391, SEVERE above), but are expressed as ordered thresholds
