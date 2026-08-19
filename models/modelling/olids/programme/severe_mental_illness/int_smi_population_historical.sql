@@ -13,17 +13,17 @@ person_id,
 analysis_month, 
 has_smi
 FROM {{ ref('person_month_analysis_base') }} pmab
-WHERE is_deceased = FALSE
---AND IS_ACTIVE = TRUE
 -- Limit to last 48 months (4 years)
-AND analysis_month >= DATEADD('month', -48, CURRENT_DATE)
+WHERE analysis_month >= DATEADD('month', -48, CURRENT_DATE)
+--AND IS_ACTIVE = TRUE
 AND HAS_SMI
+-- AND is_deceased = FALSE
 )
 SELECT
     pmab.person_id
     ,e.has_smi
     ,pmab.analysis_month    -- -- Fiscal year end flag
-   ,pmab.financial_year as fiscal_year_label   
+    ,pmab.financial_year as fiscal_year_label   
     ,pmab.age
     ,pmab.gender
     ,pmab.AGE_BAND_NHS
@@ -39,6 +39,7 @@ SELECT
         WHEN pmab.age_band_nhs = '85+' THEN 9
     END AS AGE_NHS_ORDER
     ,pmab.is_deceased
+    ,pmab.is_active
     ,pmab.birth_date_approx
     -- Ethnicity
     ,pmab.ethnicity_category
