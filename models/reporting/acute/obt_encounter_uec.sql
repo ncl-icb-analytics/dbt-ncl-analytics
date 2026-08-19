@@ -55,12 +55,58 @@ select
     , primary_diagnosis_code_icd10
     , primary_diagnosis_desc_icd10
     , primary_diagnosis_desc_ecds_group1
+    , secondary_diagnosis_1_code_snomed
+    , secondary_diagnosis_2_code_snomed
+    , secondary_diagnosis_3_code_snomed
+    , secondary_diagnosis_4_code_snomed
+    , secondary_diagnosis_5_code_snomed
+    , secondary_diagnosis_6_code_snomed
+    , secondary_diagnosis_7_code_snomed
+    , secondary_diagnosis_8_code_snomed
+    , secondary_diagnosis_9_code_snomed
+    , secondary_diagnosis_10_code_snomed
+    , secondary_diagnosis_11_code_snomed
+    , secondary_diagnosis_12_code_snomed
     , primary_treatment
     , primary_treatment_desc_snomed
     , primary_treatment_desc_ecds_group1
+    , treatment_1_code_snomed
+    , treatment_2_code_snomed
+    , treatment_3_code_snomed
+    , treatment_4_code_snomed
+    , treatment_5_code_snomed
+    , treatment_6_code_snomed
+    , treatment_7_code_snomed
+    , treatment_8_code_snomed
+    , treatment_9_code_snomed
+    , treatment_10_code_snomed
+    , treatment_11_code_snomed
+    , treatment_12_code_snomed
     , primary_investigation
     , primary_investigation_desc_snomed
     , primary_investigation_desc_ecds_group1
+    , clinical_investigation_1_code_snomed
+    , clinical_investigation_2_code_snomed
+    , clinical_investigation_3_code_snomed
+    , clinical_investigation_4_code_snomed
+    , clinical_investigation_5_code_snomed
+    , clinical_investigation_6_code_snomed
+    , clinical_investigation_7_code_snomed
+    , clinical_investigation_8_code_snomed
+    , clinical_investigation_9_code_snomed
+    , clinical_investigation_10_code_snomed
+    , clinical_investigation_11_code_snomed
+    , clinical_investigation_12_code_snomed
+    , comorbidity_1_code_snomed
+    , comorbidity_2_code_snomed
+    , comorbidity_3_code_snomed
+    , comorbidity_4_code_snomed
+    , comorbidity_5_code_snomed
+    , comorbidity_6_code_snomed
+    , comorbidity_7_code_snomed
+    , comorbidity_8_code_snomed
+    , comorbidity_9_code_snomed
+    , comorbidity_10_code_snomed
     , arrival_mode_code
     , arrival_mode_desc
     , attendance_category_code

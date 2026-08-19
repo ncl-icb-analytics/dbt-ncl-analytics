@@ -36,6 +36,81 @@ treatment_function_codes as (
         partition by bk_specialty_code
         order by date_updated desc nulls last, date_created desc nulls last
     ) = 1
+    ),
+diagnosis_codes_wide as (
+    select
+        primarykey_id
+        , max(case when snomed_id = 1 then code end) as primary_diagnosis_code_snomed
+        , max(case when snomed_id = 2 then code end) as secondary_diagnosis_1_code_snomed
+        , max(case when snomed_id = 3 then code end) as secondary_diagnosis_2_code_snomed
+        , max(case when snomed_id = 4 then code end) as secondary_diagnosis_3_code_snomed
+        , max(case when snomed_id = 5 then code end) as secondary_diagnosis_4_code_snomed
+        , max(case when snomed_id = 6 then code end) as secondary_diagnosis_5_code_snomed
+        , max(case when snomed_id = 7 then code end) as secondary_diagnosis_6_code_snomed
+        , max(case when snomed_id = 8 then code end) as secondary_diagnosis_7_code_snomed
+        , max(case when snomed_id = 9 then code end) as secondary_diagnosis_8_code_snomed
+        , max(case when snomed_id = 10 then code end) as secondary_diagnosis_9_code_snomed
+        , max(case when snomed_id = 11 then code end) as secondary_diagnosis_10_code_snomed
+        , max(case when snomed_id = 12 then code end) as secondary_diagnosis_11_code_snomed
+        , max(case when snomed_id = 13 then code end) as secondary_diagnosis_12_code_snomed
+    from {{ ref('stg_sus_ecds_clinical_diagnoses_snomed') }}
+    where snomed_id between 1 and 13
+    group by primarykey_id
+    ),
+investigation_codes_wide as (
+    select
+        primarykey_id
+        , max(case when snomed_id = 1 then code end) as clinical_investigation_1_code_snomed
+        , max(case when snomed_id = 2 then code end) as clinical_investigation_2_code_snomed
+        , max(case when snomed_id = 3 then code end) as clinical_investigation_3_code_snomed
+        , max(case when snomed_id = 4 then code end) as clinical_investigation_4_code_snomed
+        , max(case when snomed_id = 5 then code end) as clinical_investigation_5_code_snomed
+        , max(case when snomed_id = 6 then code end) as clinical_investigation_6_code_snomed
+        , max(case when snomed_id = 7 then code end) as clinical_investigation_7_code_snomed
+        , max(case when snomed_id = 8 then code end) as clinical_investigation_8_code_snomed
+        , max(case when snomed_id = 9 then code end) as clinical_investigation_9_code_snomed
+        , max(case when snomed_id = 10 then code end) as clinical_investigation_10_code_snomed
+        , max(case when snomed_id = 11 then code end) as clinical_investigation_11_code_snomed
+        , max(case when snomed_id = 12 then code end) as clinical_investigation_12_code_snomed
+    from {{ ref('stg_sus_ecds_clinical_investigations_snomed') }}
+    where snomed_id between 1 and 12
+    group by primarykey_id
+    ),
+treatment_codes_wide as (
+    select
+        primarykey_id
+        , max(case when snomed_id = 1 then code end) as treatment_1_code_snomed
+        , max(case when snomed_id = 2 then code end) as treatment_2_code_snomed
+        , max(case when snomed_id = 3 then code end) as treatment_3_code_snomed
+        , max(case when snomed_id = 4 then code end) as treatment_4_code_snomed
+        , max(case when snomed_id = 5 then code end) as treatment_5_code_snomed
+        , max(case when snomed_id = 6 then code end) as treatment_6_code_snomed
+        , max(case when snomed_id = 7 then code end) as treatment_7_code_snomed
+        , max(case when snomed_id = 8 then code end) as treatment_8_code_snomed
+        , max(case when snomed_id = 9 then code end) as treatment_9_code_snomed
+        , max(case when snomed_id = 10 then code end) as treatment_10_code_snomed
+        , max(case when snomed_id = 11 then code end) as treatment_11_code_snomed
+        , max(case when snomed_id = 12 then code end) as treatment_12_code_snomed
+    from {{ ref('stg_sus_ecds_clinical_treatments_snomed') }}
+    where snomed_id between 1 and 12
+    group by primarykey_id
+    ),
+comorbidity_codes_wide as (
+    select
+        primarykey_id
+        , max(case when comorbidities_id = 1 then code end) as comorbidity_1_code_snomed
+        , max(case when comorbidities_id = 2 then code end) as comorbidity_2_code_snomed
+        , max(case when comorbidities_id = 3 then code end) as comorbidity_3_code_snomed
+        , max(case when comorbidities_id = 4 then code end) as comorbidity_4_code_snomed
+        , max(case when comorbidities_id = 5 then code end) as comorbidity_5_code_snomed
+        , max(case when comorbidities_id = 6 then code end) as comorbidity_6_code_snomed
+        , max(case when comorbidities_id = 7 then code end) as comorbidity_7_code_snomed
+        , max(case when comorbidities_id = 8 then code end) as comorbidity_8_code_snomed
+        , max(case when comorbidities_id = 9 then code end) as comorbidity_9_code_snomed
+        , max(case when comorbidities_id = 10 then code end) as comorbidity_10_code_snomed
+    from {{ ref('stg_sus_ecds_clinical_comorbidities') }}
+    where comorbidities_id between 1 and 10
+    group by primarykey_id
     )
 
 select 
@@ -103,21 +178,69 @@ select
     , core.clinical_disease_notification_code as disease_notification_code
 
     -- diagnosis information
-    , diagnosis.code as primary_diagnosis_code_snomed
+    , diagnosis.primary_diagnosis_code_snomed
     , diag_dict.snomed_uk_preferred_term as primary_diagnosis_desc_snomed
     , diag_dict.icd10_mapping as primary_diagnosis_code_icd10
     , diag_dict.icd10_description as primary_diagnosis_desc_icd10
     , diag_dict.ecds_group1 as primary_diagnosis_desc_ecds_group1
+    , diagnosis.secondary_diagnosis_1_code_snomed
+    , diagnosis.secondary_diagnosis_2_code_snomed
+    , diagnosis.secondary_diagnosis_3_code_snomed
+    , diagnosis.secondary_diagnosis_4_code_snomed
+    , diagnosis.secondary_diagnosis_5_code_snomed
+    , diagnosis.secondary_diagnosis_6_code_snomed
+    , diagnosis.secondary_diagnosis_7_code_snomed
+    , diagnosis.secondary_diagnosis_8_code_snomed
+    , diagnosis.secondary_diagnosis_9_code_snomed
+    , diagnosis.secondary_diagnosis_10_code_snomed
+    , diagnosis.secondary_diagnosis_11_code_snomed
+    , diagnosis.secondary_diagnosis_12_code_snomed
     
     -- treatment 
-    , treatments.code as primary_treatment
+    , treatments.treatment_1_code_snomed as primary_treatment
     , treat_dict.snomed_uk_preferred_term as primary_treatment_desc_snomed
     , treat_dict.ecds_group1 as primary_treatment_desc_ecds_group1
+    , treatments.treatment_1_code_snomed
+    , treatments.treatment_2_code_snomed
+    , treatments.treatment_3_code_snomed
+    , treatments.treatment_4_code_snomed
+    , treatments.treatment_5_code_snomed
+    , treatments.treatment_6_code_snomed
+    , treatments.treatment_7_code_snomed
+    , treatments.treatment_8_code_snomed
+    , treatments.treatment_9_code_snomed
+    , treatments.treatment_10_code_snomed
+    , treatments.treatment_11_code_snomed
+    , treatments.treatment_12_code_snomed
     
     -- investigation 
-    , investigations.code as primary_investigation
+    , investigations.clinical_investigation_1_code_snomed as primary_investigation
     , inv_dict.snomed_uk_preferred_term as primary_investigation_desc_snomed
     , inv_dict.ecds_group1 as primary_investigation_desc_ecds_group1
+    , investigations.clinical_investigation_1_code_snomed
+    , investigations.clinical_investigation_2_code_snomed
+    , investigations.clinical_investigation_3_code_snomed
+    , investigations.clinical_investigation_4_code_snomed
+    , investigations.clinical_investigation_5_code_snomed
+    , investigations.clinical_investigation_6_code_snomed
+    , investigations.clinical_investigation_7_code_snomed
+    , investigations.clinical_investigation_8_code_snomed
+    , investigations.clinical_investigation_9_code_snomed
+    , investigations.clinical_investigation_10_code_snomed
+    , investigations.clinical_investigation_11_code_snomed
+    , investigations.clinical_investigation_12_code_snomed
+
+    -- comorbidities are pivoted by the source sequence identifier
+    , comorbidities.comorbidity_1_code_snomed
+    , comorbidities.comorbidity_2_code_snomed
+    , comorbidities.comorbidity_3_code_snomed
+    , comorbidities.comorbidity_4_code_snomed
+    , comorbidities.comorbidity_5_code_snomed
+    , comorbidities.comorbidity_6_code_snomed
+    , comorbidities.comorbidity_7_code_snomed
+    , comorbidities.comorbidity_8_code_snomed
+    , comorbidities.comorbidity_9_code_snomed
+    , comorbidities.comorbidity_10_code_snomed
     
     /* Arrival information */
     -- arrival mode and desc
@@ -210,29 +333,30 @@ select
 from {{ ref('stg_sus_ecds_emergency_care')}} as core
 
 /* Diagnosis code for infering reason */ -- ADD DEDUP LOGIC?
-left join {{ref('stg_sus_ecds_clinical_diagnoses_snomed')}} diagnosis
-    on core.primarykey_id = diagnosis.primarykey_id and diagnosis.is_primary = TRUE
+left join diagnosis_codes_wide as diagnosis
+    on core.primarykey_id = diagnosis.primarykey_id
 
 left join {{ref('stg_dictionary_ecds_diagnosis')}} as diag_dict
-    on diagnosis.code = diag_dict.snomed_code
+    on diagnosis.primary_diagnosis_code_snomed = diag_dict.snomed_code
 
 /* First investigation code for infering reason */ 
-left join {{ref('stg_sus_ecds_clinical_investigations_snomed')}} as investigations
-    on core.primarykey_id = investigations.primarykey_id 
-    and investigations.snomed_id = 1
+left join investigation_codes_wide as investigations
+    on core.primarykey_id = investigations.primarykey_id
 
 left join
     {{ ref('stg_dictionary_ecds_investigation') }} as inv_dict
-    on investigations.code = inv_dict.snomed_code
+    on investigations.clinical_investigation_1_code_snomed = inv_dict.snomed_code
 
 /* First treatment for infering reason  */ 
-left join {{ref('stg_sus_ecds_clinical_treatments_snomed')}} as treatments
-    on core.primarykey_id = treatments.primarykey_id 
-    and treatments.snomed_id = 1
+left join treatment_codes_wide as treatments
+    on core.primarykey_id = treatments.primarykey_id
 
 left join
     {{ ref('stg_dictionary_ecds_treatment') }} as treat_dict
-    on treatments.code = treat_dict.snomed_code
+    on treatments.treatment_1_code_snomed = treat_dict.snomed_code
+
+left join comorbidity_codes_wide as comorbidities
+    on core.primarykey_id = comorbidities.primarykey_id
 
 /* context dictionaries  */
 left join 

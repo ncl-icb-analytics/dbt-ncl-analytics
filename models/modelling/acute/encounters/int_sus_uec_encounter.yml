@@ -210,6 +210,43 @@ models:
         data_type: varchar
         description: "The first listed diagnosis ECDS group 1 description, considered to be the most important / significant."
 
+      - name: secondary_diagnosis_1_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 2."
+      - name: secondary_diagnosis_2_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 3."
+      - name: secondary_diagnosis_3_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 4."
+      - name: secondary_diagnosis_4_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 5."
+      - name: secondary_diagnosis_5_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 6."
+      - name: secondary_diagnosis_6_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 7."
+      - name: secondary_diagnosis_7_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 8."
+      - name: secondary_diagnosis_8_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 9."
+      - name: secondary_diagnosis_9_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 10."
+      - name: secondary_diagnosis_10_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 11."
+      - name: secondary_diagnosis_11_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 12."
+      - name: secondary_diagnosis_12_code_snomed
+        data_type: varchar
+        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 13."
+
       - name: primary_treatment
         data_type: varchar
         description: "First treatment SNOMED code recorded in encounter"
@@ -222,6 +259,43 @@ models:
         data_type: varchar
         description: "First treatment ECDS group 1 description recorded in encounter"
 
+      - name: treatment_1_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 1."
+      - name: treatment_2_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 2."
+      - name: treatment_3_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 3."
+      - name: treatment_4_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 4."
+      - name: treatment_5_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 5."
+      - name: treatment_6_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 6."
+      - name: treatment_7_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 7."
+      - name: treatment_8_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 8."
+      - name: treatment_9_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 9."
+      - name: treatment_10_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 10."
+      - name: treatment_11_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 11."
+      - name: treatment_12_code_snomed
+        data_type: varchar
+        description: "SNOMED CT treatment code recorded at source sequence position 12."
+
       - name: primary_investigation
         data_type: varchar
         description: "First investigation SNOMED code recorded in encounter"
@@ -233,6 +307,74 @@ models:
       - name: primary_investigation_desc_ecds_group1
         data_type: varchar
         description: "First investigation ECDS group 1 description recorded in encounter"
+
+      - name: clinical_investigation_1_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 1."
+      - name: clinical_investigation_2_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 2."
+      - name: clinical_investigation_3_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 3."
+      - name: clinical_investigation_4_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 4."
+      - name: clinical_investigation_5_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 5."
+      - name: clinical_investigation_6_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 6."
+      - name: clinical_investigation_7_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 7."
+      - name: clinical_investigation_8_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 8."
+      - name: clinical_investigation_9_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 9."
+      - name: clinical_investigation_10_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 10."
+      - name: clinical_investigation_11_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 11."
+      - name: clinical_investigation_12_code_snomed
+        data_type: varchar
+        description: "SNOMED CT investigation code recorded at source sequence position 12."
+
+      - name: comorbidity_1_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 1."
+      - name: comorbidity_2_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 2."
+      - name: comorbidity_3_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 3."
+      - name: comorbidity_4_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 4."
+      - name: comorbidity_5_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 5."
+      - name: comorbidity_6_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 6."
+      - name: comorbidity_7_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 7."
+      - name: comorbidity_8_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 8."
+      - name: comorbidity_9_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 9."
+      - name: comorbidity_10_code_snomed
+        data_type: varchar
+        description: "SNOMED CT comorbidity code recorded at source sequence position 10."
 
       - name: arrival_mode_code
         data_type: varchar
