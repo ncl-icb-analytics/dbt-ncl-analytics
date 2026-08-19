@@ -37,6 +37,42 @@ treatment_function_codes as (
         order by date_updated desc nulls last, date_created desc nulls last
     ) = 1
     ),
+snomed_codes as (
+    select snomed_code, preferred_term
+    from {{ ref('stg_dictionary_snomed_concept') }}
+    ),
+diagnosis_dictionary as (
+    select snomed_code, snomed_uk_preferred_term
+    from {{ ref('stg_dictionary_ecds_diagnosis') }}
+    qualify row_number() over (
+        partition by snomed_code
+        order by dv_is_active desc nulls last, valid_to desc nulls first, valid_from desc nulls last
+    ) = 1
+    ),
+treatment_dictionary as (
+    select snomed_code, snomed_uk_preferred_term
+    from {{ ref('stg_dictionary_ecds_treatment') }}
+    qualify row_number() over (
+        partition by snomed_code
+        order by dv_is_active desc nulls last, valid_to desc nulls first, valid_from desc nulls last
+    ) = 1
+    ),
+investigation_dictionary as (
+    select snomed_code, snomed_uk_preferred_term
+    from {{ ref('stg_dictionary_ecds_investigation') }}
+    qualify row_number() over (
+        partition by snomed_code
+        order by dv_is_active desc nulls last, valid_to desc nulls first, valid_from desc nulls last
+    ) = 1
+    ),
+comorbidity_dictionary as (
+    select snomed_code, snomed_uk_preferred_term
+    from {{ ref('stg_dictionary_ecds_comorbidity') }}
+    qualify row_number() over (
+        partition by snomed_code
+        order by dv_is_active desc nulls last, valid_to desc nulls first, valid_from desc nulls last
+    ) = 1
+    ),
 diagnosis_codes_wide as (
     select
         primarykey_id
@@ -53,7 +89,21 @@ diagnosis_codes_wide as (
         , max(case when snomed_id = 11 then code end) as secondary_diagnosis_10_code_snomed
         , max(case when snomed_id = 12 then code end) as secondary_diagnosis_11_code_snomed
         , max(case when snomed_id = 13 then code end) as secondary_diagnosis_12_code_snomed
-    from {{ ref('stg_sus_ecds_clinical_diagnoses_snomed') }}
+        , max(case when snomed_id = 2 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_1_desc_snomed
+        , max(case when snomed_id = 3 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_2_desc_snomed
+        , max(case when snomed_id = 4 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_3_desc_snomed
+        , max(case when snomed_id = 5 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_4_desc_snomed
+        , max(case when snomed_id = 6 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_5_desc_snomed
+        , max(case when snomed_id = 7 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_6_desc_snomed
+        , max(case when snomed_id = 8 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_7_desc_snomed
+        , max(case when snomed_id = 9 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_8_desc_snomed
+        , max(case when snomed_id = 10 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_9_desc_snomed
+        , max(case when snomed_id = 11 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_10_desc_snomed
+        , max(case when snomed_id = 12 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_11_desc_snomed
+        , max(case when snomed_id = 13 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as secondary_diagnosis_12_desc_snomed
+    from {{ ref('stg_sus_ecds_clinical_diagnoses_snomed') }} as c
+    left join diagnosis_dictionary as d on c.code = d.snomed_code
+    left join snomed_codes as s on c.code = s.snomed_code
     where snomed_id between 1 and 13
     group by primarykey_id
     ),
@@ -72,7 +122,20 @@ investigation_codes_wide as (
         , max(case when snomed_id = 10 then code end) as clinical_investigation_10_code_snomed
         , max(case when snomed_id = 11 then code end) as clinical_investigation_11_code_snomed
         , max(case when snomed_id = 12 then code end) as clinical_investigation_12_code_snomed
-    from {{ ref('stg_sus_ecds_clinical_investigations_snomed') }}
+        , max(case when snomed_id = 2 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_2_desc_snomed
+        , max(case when snomed_id = 3 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_3_desc_snomed
+        , max(case when snomed_id = 4 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_4_desc_snomed
+        , max(case when snomed_id = 5 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_5_desc_snomed
+        , max(case when snomed_id = 6 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_6_desc_snomed
+        , max(case when snomed_id = 7 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_7_desc_snomed
+        , max(case when snomed_id = 8 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_8_desc_snomed
+        , max(case when snomed_id = 9 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_9_desc_snomed
+        , max(case when snomed_id = 10 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_10_desc_snomed
+        , max(case when snomed_id = 11 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_11_desc_snomed
+        , max(case when snomed_id = 12 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as clinical_investigation_12_desc_snomed
+    from {{ ref('stg_sus_ecds_clinical_investigations_snomed') }} as c
+    left join investigation_dictionary as d on c.code = d.snomed_code
+    left join snomed_codes as s on c.code = s.snomed_code
     where snomed_id between 1 and 12
     group by primarykey_id
     ),
@@ -91,7 +154,20 @@ treatment_codes_wide as (
         , max(case when snomed_id = 10 then code end) as treatment_10_code_snomed
         , max(case when snomed_id = 11 then code end) as treatment_11_code_snomed
         , max(case when snomed_id = 12 then code end) as treatment_12_code_snomed
-    from {{ ref('stg_sus_ecds_clinical_treatments_snomed') }}
+        , max(case when snomed_id = 2 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_2_desc_snomed
+        , max(case when snomed_id = 3 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_3_desc_snomed
+        , max(case when snomed_id = 4 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_4_desc_snomed
+        , max(case when snomed_id = 5 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_5_desc_snomed
+        , max(case when snomed_id = 6 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_6_desc_snomed
+        , max(case when snomed_id = 7 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_7_desc_snomed
+        , max(case when snomed_id = 8 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_8_desc_snomed
+        , max(case when snomed_id = 9 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_9_desc_snomed
+        , max(case when snomed_id = 10 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_10_desc_snomed
+        , max(case when snomed_id = 11 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_11_desc_snomed
+        , max(case when snomed_id = 12 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as treatment_12_desc_snomed
+    from {{ ref('stg_sus_ecds_clinical_treatments_snomed') }} as c
+    left join treatment_dictionary as d on c.code = d.snomed_code
+    left join snomed_codes as s on c.code = s.snomed_code
     where snomed_id between 1 and 12
     group by primarykey_id
     ),
@@ -108,7 +184,19 @@ comorbidity_codes_wide as (
         , max(case when comorbidities_id = 8 then code end) as comorbidity_8_code_snomed
         , max(case when comorbidities_id = 9 then code end) as comorbidity_9_code_snomed
         , max(case when comorbidities_id = 10 then code end) as comorbidity_10_code_snomed
-    from {{ ref('stg_sus_ecds_clinical_comorbidities') }}
+        , max(case when comorbidities_id = 1 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_1_desc_snomed
+        , max(case when comorbidities_id = 2 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_2_desc_snomed
+        , max(case when comorbidities_id = 3 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_3_desc_snomed
+        , max(case when comorbidities_id = 4 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_4_desc_snomed
+        , max(case when comorbidities_id = 5 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_5_desc_snomed
+        , max(case when comorbidities_id = 6 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_6_desc_snomed
+        , max(case when comorbidities_id = 7 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_7_desc_snomed
+        , max(case when comorbidities_id = 8 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_8_desc_snomed
+        , max(case when comorbidities_id = 9 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_9_desc_snomed
+        , max(case when comorbidities_id = 10 then coalesce(d.snomed_uk_preferred_term, s.preferred_term) end) as comorbidity_10_desc_snomed
+    from {{ ref('stg_sus_ecds_clinical_comorbidities') }} as c
+    left join comorbidity_dictionary as d on c.code = d.snomed_code
+    left join snomed_codes as s on c.code = s.snomed_code
     where comorbidities_id between 1 and 10
     group by primarykey_id
     ),
@@ -121,19 +209,31 @@ first_expected_treatment as (
     ) = 1
     ),
 first_referred_to_service as (
-    select primarykey_id, referred_to_service_code, assessment_date, assessment_time
-    from {{ ref('stg_sus_ecds_attendance_referred_to') }}
+    select
+        r.primarykey_id
+        , r.referred_to_service_code
+        , d.snomed_uk_preferred_term as referred_to_service_desc
+        , r.assessment_date
+        , r.assessment_time
+    from {{ ref('stg_sus_ecds_attendance_referred_to') }} as r
+    left join {{ ref('stg_dictionary_ecds_referredtoservice') }} as d
+        on r.referred_to_service_code = d.snomed_code
     qualify row_number() over (
-        partition by primarykey_id
-        order by referred_to_id, rownumber_id
+        partition by r.primarykey_id
+        order by r.referred_to_id, r.rownumber_id
     ) = 1
     ),
 first_injury_alcohol_drug_involvement as (
-    select primarykey_id, code
-    from {{ ref('stg_sus_ecds_clinical_injury_alcohol_drug_involvements') }}
+    select
+        i.primarykey_id
+        , i.code
+        , d.snomed_uk_preferred_term as description
+    from {{ ref('stg_sus_ecds_clinical_injury_alcohol_drug_involvements') }} as i
+    left join {{ ref('stg_dictionary_ecds_injurydrugalcohol') }} as d
+        on i.code = d.snomed_code
     qualify row_number() over (
-        partition by primarykey_id
-        order by alcohol_drug_involvements_id, rownumber_id
+        partition by i.primarykey_id
+        order by i.alcohol_drug_involvements_id, i.rownumber_id
     ) = 1
     ),
 first_mental_health_legal_status as (
@@ -212,7 +312,9 @@ select
     , core.clinical_injury_date as injury_date
     , core.clinical_injury_time as injury_time
     , core.clinical_disease_notification_code as disease_notification_code
+    , disease_notification.preferred_term as disease_notification_desc
     , injury_alcohol_drug.code as injury_alcohol_drug_involvement_code
+    , injury_alcohol_drug.description as injury_alcohol_drug_involvement_desc
 
     -- diagnosis information
     , diagnosis.primary_diagnosis_code_snomed
@@ -221,17 +323,29 @@ select
     , diag_dict.icd10_description as primary_diagnosis_desc_icd10
     , diag_dict.ecds_group1 as primary_diagnosis_desc_ecds_group1
     , diagnosis.secondary_diagnosis_1_code_snomed
+    , diagnosis.secondary_diagnosis_1_desc_snomed
     , diagnosis.secondary_diagnosis_2_code_snomed
+    , diagnosis.secondary_diagnosis_2_desc_snomed
     , diagnosis.secondary_diagnosis_3_code_snomed
+    , diagnosis.secondary_diagnosis_3_desc_snomed
     , diagnosis.secondary_diagnosis_4_code_snomed
+    , diagnosis.secondary_diagnosis_4_desc_snomed
     , diagnosis.secondary_diagnosis_5_code_snomed
+    , diagnosis.secondary_diagnosis_5_desc_snomed
     , diagnosis.secondary_diagnosis_6_code_snomed
+    , diagnosis.secondary_diagnosis_6_desc_snomed
     , diagnosis.secondary_diagnosis_7_code_snomed
+    , diagnosis.secondary_diagnosis_7_desc_snomed
     , diagnosis.secondary_diagnosis_8_code_snomed
+    , diagnosis.secondary_diagnosis_8_desc_snomed
     , diagnosis.secondary_diagnosis_9_code_snomed
+    , diagnosis.secondary_diagnosis_9_desc_snomed
     , diagnosis.secondary_diagnosis_10_code_snomed
+    , diagnosis.secondary_diagnosis_10_desc_snomed
     , diagnosis.secondary_diagnosis_11_code_snomed
+    , diagnosis.secondary_diagnosis_11_desc_snomed
     , diagnosis.secondary_diagnosis_12_code_snomed
+    , diagnosis.secondary_diagnosis_12_desc_snomed
     
     -- treatment 
     , treatments.treatment_1_code_snomed as primary_treatment
@@ -239,16 +353,27 @@ select
     , treat_dict.ecds_group1 as primary_treatment_desc_ecds_group1
     , treatments.treatment_1_code_snomed
     , treatments.treatment_2_code_snomed
+    , treatments.treatment_2_desc_snomed
     , treatments.treatment_3_code_snomed
+    , treatments.treatment_3_desc_snomed
     , treatments.treatment_4_code_snomed
+    , treatments.treatment_4_desc_snomed
     , treatments.treatment_5_code_snomed
+    , treatments.treatment_5_desc_snomed
     , treatments.treatment_6_code_snomed
+    , treatments.treatment_6_desc_snomed
     , treatments.treatment_7_code_snomed
+    , treatments.treatment_7_desc_snomed
     , treatments.treatment_8_code_snomed
+    , treatments.treatment_8_desc_snomed
     , treatments.treatment_9_code_snomed
+    , treatments.treatment_9_desc_snomed
     , treatments.treatment_10_code_snomed
+    , treatments.treatment_10_desc_snomed
     , treatments.treatment_11_code_snomed
+    , treatments.treatment_11_desc_snomed
     , treatments.treatment_12_code_snomed
+    , treatments.treatment_12_desc_snomed
     
     -- investigation 
     , investigations.clinical_investigation_1_code_snomed as primary_investigation
@@ -256,28 +381,49 @@ select
     , inv_dict.ecds_group1 as primary_investigation_desc_ecds_group1
     , investigations.clinical_investigation_1_code_snomed
     , investigations.clinical_investigation_2_code_snomed
+    , investigations.clinical_investigation_2_desc_snomed
     , investigations.clinical_investigation_3_code_snomed
+    , investigations.clinical_investigation_3_desc_snomed
     , investigations.clinical_investigation_4_code_snomed
+    , investigations.clinical_investigation_4_desc_snomed
     , investigations.clinical_investigation_5_code_snomed
+    , investigations.clinical_investigation_5_desc_snomed
     , investigations.clinical_investigation_6_code_snomed
+    , investigations.clinical_investigation_6_desc_snomed
     , investigations.clinical_investigation_7_code_snomed
+    , investigations.clinical_investigation_7_desc_snomed
     , investigations.clinical_investigation_8_code_snomed
+    , investigations.clinical_investigation_8_desc_snomed
     , investigations.clinical_investigation_9_code_snomed
+    , investigations.clinical_investigation_9_desc_snomed
     , investigations.clinical_investigation_10_code_snomed
+    , investigations.clinical_investigation_10_desc_snomed
     , investigations.clinical_investigation_11_code_snomed
+    , investigations.clinical_investigation_11_desc_snomed
     , investigations.clinical_investigation_12_code_snomed
+    , investigations.clinical_investigation_12_desc_snomed
 
     -- comorbidities are pivoted by the source sequence identifier
     , comorbidities.comorbidity_1_code_snomed
+    , comorbidities.comorbidity_1_desc_snomed
     , comorbidities.comorbidity_2_code_snomed
+    , comorbidities.comorbidity_2_desc_snomed
     , comorbidities.comorbidity_3_code_snomed
+    , comorbidities.comorbidity_3_desc_snomed
     , comorbidities.comorbidity_4_code_snomed
+    , comorbidities.comorbidity_4_desc_snomed
     , comorbidities.comorbidity_5_code_snomed
+    , comorbidities.comorbidity_5_desc_snomed
     , comorbidities.comorbidity_6_code_snomed
+    , comorbidities.comorbidity_6_desc_snomed
     , comorbidities.comorbidity_7_code_snomed
+    , comorbidities.comorbidity_7_desc_snomed
     , comorbidities.comorbidity_8_code_snomed
+    , comorbidities.comorbidity_8_desc_snomed
     , comorbidities.comorbidity_9_code_snomed
+    , comorbidities.comorbidity_9_desc_snomed
     , comorbidities.comorbidity_10_code_snomed
+    , comorbidities.comorbidity_10_desc_snomed
     
     /* Arrival information */
     -- arrival mode and desc
@@ -314,6 +460,7 @@ select
     , core.attendance_discharge_follow_up_code as discharge_follow_up_code
     , discharge_follow_up.snomed_uk_preferred_term as discharge_follow_up_desc
     , core.attendance_discharge_information_given_code as discharge_information_given_code
+    , discharge_information.preferred_term as discharge_information_given_desc
     , core.attendance_decision_to_admit_treatment_function_code
         as decided_to_admit_treatment_function_code
     , treatment_function.treatment_function_description
@@ -363,15 +510,18 @@ select
     , core.patient_usual_address_index_of_multiple_deprivation_decile as imd_at_event
     , core.patient_gp_registration_general_practice as reg_practice_at_event
     , core.patient_gp_registration_general_practitioner as general_practitioner_code
+    , general_practitioner.gp_name as general_practitioner_name
     , 'AE_ATTENDANCE' as visit_occurrence_type
 
     /* Referral to treatment information */
     , core.referral_patient_pathway_identifier_value_pseudo as patient_pathway_identifier
     , core.referral_period_status as referral_to_treatment_status_code
+    , rtt_status.rtt_period_status_description as referral_to_treatment_status_desc
     , core.referral_period_start_date as referral_to_treatment_period_start_date
     , core.referral_period_end_date as referral_to_treatment_period_end_date
     , core.referral_waiting_time_measurement_type as waiting_time_measurement_type_code
     , referred_to.referred_to_service_code
+    , referred_to.referred_to_service_desc
     , referred_to.assessment_date as referred_to_service_assessment_date
     , referred_to.assessment_time as referred_to_service_assessment_time
 
@@ -448,6 +598,12 @@ left join {{ ref('stg_dictionary_ecds_dischargestatus') }} as discharge_status
 left join {{ ref('stg_dictionary_ecds_dischargefollowup') }} as discharge_follow_up
     on core.attendance_discharge_follow_up_code = discharge_follow_up.snomed_code
 
+left join {{ ref('stg_dictionary_snomed_concept') }} as disease_notification
+    on core.clinical_disease_notification_code = disease_notification.snomed_code
+
+left join {{ ref('stg_dictionary_snomed_concept') }} as discharge_information
+    on core.attendance_discharge_information_given_code = discharge_information.snomed_code
+
 /* Demographic dictionaries */
 left join ethnicity_codes as eth
     on core.patient_ethnic_category = eth.bk_ethnicity_code
@@ -493,3 +649,9 @@ left join commissioner_codes as registrant_commissioner
 
 left join treatment_function_codes as treatment_function
     on core.attendance_decision_to_admit_treatment_function_code = treatment_function.bk_specialty_code
+
+left join {{ ref('stg_dictionary_dbo_gp') }} as general_practitioner
+    on core.patient_gp_registration_general_practitioner = general_practitioner.gp_code
+
+left join {{ ref('stg_dictionary_dbo_rttperiodstatus') }} as rtt_status
+    on core.referral_period_status = rtt_status.rtt_period_status_code

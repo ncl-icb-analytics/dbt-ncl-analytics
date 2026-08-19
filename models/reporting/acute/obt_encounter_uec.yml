@@ -580,3 +580,203 @@ models:
       - name: urgent_care_setting_type
         data_type: varchar
         description: "Source ECDS activity type for the urgent-care setting; distinct from pod and department_type."
+
+      - name: secondary_diagnosis_1_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 1; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_2_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 2; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_3_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 3; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_4_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 4; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_5_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 5; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_6_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 6; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_7_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 7; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_8_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 8; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_9_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 9; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_10_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 10; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_11_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 11; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: secondary_diagnosis_12_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 12; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_2_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 2; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_3_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 3; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_4_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 4; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_5_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 5; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_6_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 6; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_7_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 7; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_8_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 8; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_9_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 9; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_10_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 10; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_11_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 11; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: treatment_12_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for treatment position 12; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_2_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 2; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_3_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 3; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_4_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 4; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_5_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 5; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_6_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 6; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_7_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 7; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_8_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 8; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_9_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 9; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_10_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 10; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_11_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 11; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: clinical_investigation_12_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for clinical investigation position 12; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_1_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 1; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_2_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 2; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_3_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 3; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_4_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 4; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_5_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 5; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_6_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 6; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_7_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 7; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_8_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 8; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_9_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 9; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: comorbidity_10_desc_snomed
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for comorbidity position 10; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
+
+      - name: disease_notification_desc
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for the disease-notification code."
+
+      - name: injury_alcohol_drug_involvement_desc
+        data_type: varchar
+        description: "Human-readable UK preferred term for the first source-sequenced injury alcohol or drug involvement code."
+
+      - name: discharge_information_given_desc
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term describing the discharge information given to the patient."
+
+      - name: general_practitioner_name
+        data_type: varchar
+        description: "Human-readable name for general_practitioner_code; remains null when the submitted code is absent from the governed GP reference."
+
+      - name: referral_to_treatment_status_desc
+        data_type: varchar
+        description: "Human-readable description of the referral-to-treatment period status code."
+
+      - name: referred_to_service_desc
+        data_type: varchar
+        description: "Human-readable UK preferred term for the first source-sequenced referred-to service code."

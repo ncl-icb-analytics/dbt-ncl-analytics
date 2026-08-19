@@ -54,64 +54,110 @@ select
     , injury_date
     , injury_time
     , disease_notification_code
+    , disease_notification_desc
     , injury_alcohol_drug_involvement_code
+    , injury_alcohol_drug_involvement_desc
     , primary_diagnosis_code_snomed
     , primary_diagnosis_desc_snomed
     , primary_diagnosis_code_icd10
     , primary_diagnosis_desc_icd10
     , primary_diagnosis_desc_ecds_group1
     , secondary_diagnosis_1_code_snomed
+    , secondary_diagnosis_1_desc_snomed
     , secondary_diagnosis_2_code_snomed
+    , secondary_diagnosis_2_desc_snomed
     , secondary_diagnosis_3_code_snomed
+    , secondary_diagnosis_3_desc_snomed
     , secondary_diagnosis_4_code_snomed
+    , secondary_diagnosis_4_desc_snomed
     , secondary_diagnosis_5_code_snomed
+    , secondary_diagnosis_5_desc_snomed
     , secondary_diagnosis_6_code_snomed
+    , secondary_diagnosis_6_desc_snomed
     , secondary_diagnosis_7_code_snomed
+    , secondary_diagnosis_7_desc_snomed
     , secondary_diagnosis_8_code_snomed
+    , secondary_diagnosis_8_desc_snomed
     , secondary_diagnosis_9_code_snomed
+    , secondary_diagnosis_9_desc_snomed
     , secondary_diagnosis_10_code_snomed
+    , secondary_diagnosis_10_desc_snomed
     , secondary_diagnosis_11_code_snomed
+    , secondary_diagnosis_11_desc_snomed
     , secondary_diagnosis_12_code_snomed
+    , secondary_diagnosis_12_desc_snomed
     , primary_treatment
     , primary_treatment_desc_snomed
     , primary_treatment_desc_ecds_group1
     , treatment_1_code_snomed
     , treatment_2_code_snomed
+    , treatment_2_desc_snomed
     , treatment_3_code_snomed
+    , treatment_3_desc_snomed
     , treatment_4_code_snomed
+    , treatment_4_desc_snomed
     , treatment_5_code_snomed
+    , treatment_5_desc_snomed
     , treatment_6_code_snomed
+    , treatment_6_desc_snomed
     , treatment_7_code_snomed
+    , treatment_7_desc_snomed
     , treatment_8_code_snomed
+    , treatment_8_desc_snomed
     , treatment_9_code_snomed
+    , treatment_9_desc_snomed
     , treatment_10_code_snomed
+    , treatment_10_desc_snomed
     , treatment_11_code_snomed
+    , treatment_11_desc_snomed
     , treatment_12_code_snomed
+    , treatment_12_desc_snomed
     , primary_investigation
     , primary_investigation_desc_snomed
     , primary_investigation_desc_ecds_group1
     , clinical_investigation_1_code_snomed
     , clinical_investigation_2_code_snomed
+    , clinical_investigation_2_desc_snomed
     , clinical_investigation_3_code_snomed
+    , clinical_investigation_3_desc_snomed
     , clinical_investigation_4_code_snomed
+    , clinical_investigation_4_desc_snomed
     , clinical_investigation_5_code_snomed
+    , clinical_investigation_5_desc_snomed
     , clinical_investigation_6_code_snomed
+    , clinical_investigation_6_desc_snomed
     , clinical_investigation_7_code_snomed
+    , clinical_investigation_7_desc_snomed
     , clinical_investigation_8_code_snomed
+    , clinical_investigation_8_desc_snomed
     , clinical_investigation_9_code_snomed
+    , clinical_investigation_9_desc_snomed
     , clinical_investigation_10_code_snomed
+    , clinical_investigation_10_desc_snomed
     , clinical_investigation_11_code_snomed
+    , clinical_investigation_11_desc_snomed
     , clinical_investigation_12_code_snomed
+    , clinical_investigation_12_desc_snomed
     , comorbidity_1_code_snomed
+    , comorbidity_1_desc_snomed
     , comorbidity_2_code_snomed
+    , comorbidity_2_desc_snomed
     , comorbidity_3_code_snomed
+    , comorbidity_3_desc_snomed
     , comorbidity_4_code_snomed
+    , comorbidity_4_desc_snomed
     , comorbidity_5_code_snomed
+    , comorbidity_5_desc_snomed
     , comorbidity_6_code_snomed
+    , comorbidity_6_desc_snomed
     , comorbidity_7_code_snomed
+    , comorbidity_7_desc_snomed
     , comorbidity_8_code_snomed
+    , comorbidity_8_desc_snomed
     , comorbidity_9_code_snomed
+    , comorbidity_9_desc_snomed
     , comorbidity_10_code_snomed
+    , comorbidity_10_desc_snomed
     , arrival_mode_code
     , arrival_mode_desc
     , attendance_category_code
@@ -132,6 +178,7 @@ select
     , discharge_follow_up_code
     , discharge_follow_up_desc
     , discharge_information_given_code
+    , discharge_information_given_desc
     , decided_to_admit_treatment_function_code
     , decided_to_admit_treatment_function_desc
     , receiving_site_id
@@ -166,13 +213,16 @@ select
     , imd_at_event
     , reg_practice_at_event
     , general_practitioner_code
+    , general_practitioner_name
     , visit_occurrence_type
     , patient_pathway_identifier
     , referral_to_treatment_status_code
+    , referral_to_treatment_status_desc
     , referral_to_treatment_period_start_date
     , referral_to_treatment_period_end_date
     , waiting_time_measurement_type_code
     , referred_to_service_code
+    , referred_to_service_desc
     , referred_to_service_assessment_date
     , referred_to_service_assessment_time
     , mental_health_legal_status_code
