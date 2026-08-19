@@ -32,7 +32,7 @@ select
     c.concept_name,  -- mapped concept name from the vocabulary
     'ICD10' as concept_vocabulary
 from final_icd_codes f
-left join  {{ ref('stg_aic_base_athena_concept') }} c
+left join  {{ ref('stg_common_aicentre_vocab') }} c
     on c.concept_code = f.code
     and c.vocabulary_id = 'ICD10'
 left join {{ ref("int_sus_apc_encounter") }} se on se.visit_occurrence_id = f.primarykey_id

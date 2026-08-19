@@ -8,4 +8,4 @@ select
     age_limit,
     other_instructions,
     new_descriptions
-from {{ ref('raw_aic_base_efi2_codelist') }}
+from {{ ref('raw_common_efi2_codelists') }}

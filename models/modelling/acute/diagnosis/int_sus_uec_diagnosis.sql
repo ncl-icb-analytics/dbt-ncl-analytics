@@ -52,7 +52,7 @@ left join {{ref('int_sus_uec_encounter')}} as sa on sa.visit_occurrence_id = f.p
 left join final_icd_codes as d on d.code = f.code
 
 left join
-    {{ ref('stg_aic_base_athena_concept') }} c
+    {{ ref('stg_common_aicentre_vocab') }} c
     on c.concept_code = d.concept_code
     and c.vocabulary_id = 'ICD10'
 

@@ -26,7 +26,7 @@ SELECT
     d.conditionid,
     d.conditionname
 FROM {{ ref('stg_olids_medication_order') }} mo
-INNER JOIN {{ ref('stg_aic_base_ccms_dmd_codes') }} d
+INNER JOIN {{ ref('stg_common_ccmc_dmd') }} d
     ON mo.mapped_concept_code = d.productid::VARCHAR
 WHERE mo.clinical_effective_date IS NOT NULL
     AND (

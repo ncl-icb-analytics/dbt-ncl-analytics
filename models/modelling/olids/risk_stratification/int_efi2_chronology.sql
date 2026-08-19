@@ -13,7 +13,7 @@ weights to the raw eFI2 score per person.
 
 Port of lds-pipelines stg_efi2__chronology. Substitutions vs lds (OLIDS-native):
 - lds stg_efi2__rules                -> int_efi2_rules
-- lds base_efi2__weights             -> stg_aic_base_efi2_weights
+- lds base_efi2__weights             -> stg_common_efi2_weights
 - lds stg_gp__medication_order        -> stg_olids_medication_order
 
 person_unique (the population over which missing-lifestyle deficits and
@@ -42,7 +42,7 @@ with
             ew.detail_key,
             ew.weight
         from {{ ref("int_efi2_rules") }} id
-        left join {{ ref("stg_aic_base_efi2_weights") }} ew
+        left join {{ ref("stg_common_efi2_weights") }} ew
             on lower(id.deficit) = lower(ew.deficit)
         where weight is not null
     ),
@@ -168,7 +168,7 @@ with
             s.detail_key,
             ew.weight
         from alcohol_state s
-        left join {{ ref("stg_aic_base_efi2_weights") }} ew
+        left join {{ ref("stg_common_efi2_weights") }} ew
             on lower(ew.deficit) = 'alcohol' and ew.detail_key = s.detail_key
         where s.detail_key is not null
     ),
@@ -216,7 +216,7 @@ with
             ew.weight
         from missing_bmi mb
         left join
-            {{ ref("stg_aic_base_efi2_weights") }} ew
+            {{ ref("stg_common_efi2_weights") }} ew
             on lower(mb.deficit) = lower(ew.deficit)
             and lower(mb.detail_key) = lower(ew.detail_key)
     ),
@@ -252,7 +252,7 @@ with
             ew.weight
         from missing_alcohol ma
         left join
-            {{ ref("stg_aic_base_efi2_weights") }} ew
+            {{ ref("stg_common_efi2_weights") }} ew
             on lower(ma.deficit) = lower(ew.deficit)
             and ma.detail_key = ew.detail_key
     ),
@@ -348,7 +348,7 @@ with
             ew.weight
         from polypharmacy p
         left join
-            {{ ref("stg_aic_base_efi2_weights") }} ew
+            {{ ref("stg_common_efi2_weights") }} ew
             on lower(p.deficit) = lower(ew.deficit)
             and p.detail_key = ew.detail_key
     ),
@@ -373,7 +373,7 @@ with
             null as detail_key,
             ew.weight
         from smoking s
-        left join {{ ref("stg_aic_base_efi2_weights") }} ew on lower(s.deficit) = lower(ew.deficit)
+        left join {{ ref("stg_common_efi2_weights") }} ew on lower(s.deficit) = lower(ew.deficit)
     ),
 
     -- Now union all the scores

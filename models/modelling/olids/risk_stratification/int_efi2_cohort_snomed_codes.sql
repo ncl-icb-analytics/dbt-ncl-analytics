@@ -27,7 +27,7 @@ select distinct
 from {{ ref('int_efi2_patient_list') }} pd
 left join {{ ref('stg_olids_observation') }} obs
     on obs.person_id = pd.person_id
-inner join {{ ref('stg_aic_base_efi2_codelist') }} cd
+inner join {{ ref('stg_common_efi2_codelists') }} cd
     on cd.snomedct_conceptid::varchar = obs.mapped_concept_code::varchar
 
 where
