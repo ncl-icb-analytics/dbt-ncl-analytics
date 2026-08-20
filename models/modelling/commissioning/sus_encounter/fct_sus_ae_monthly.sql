@@ -25,12 +25,26 @@
 --   5. z_imd_2015_*                  -- source not yet in Snowflake (parked)
 --   7. z_care_home                   -- source not yet in Snowflake (parked)
 --
+-- A SECOND stored procedure, dbo.processBusinessRules, is also migrated here
+-- as the trailing CTE layers (rules_applied -> contract_typed -> final). It
+-- has to run after the derivations above because several of its rules test
+-- z_provider_site_code and z_financial_year. See macro ae_business_rules for
+-- the 30 rules themselves and the parity notes on each.
+--
 -- SP steps intentionally dropped: the blocks commented out in the original
 -- (sensitive data category, NHS number pseudo, reason for access, zCCGCode via
 -- udf_zCCGCodeFromFields, LSOA01). These were dead code in the SP -- the
 -- "Sandpit does not contain..." notes explain why. They stay NULL, as they
 -- were in the legacy table.
 --------------------------------------------------------------------------------
+
+{#-
+    Rules are held in seqno order in the macro for traceability against the
+    legacy table, but sorted alphabetically here: the stored procedure built
+    zBusinessRule with ORDER BY br_code, so the pipe-delimited string must be
+    in code order to match.
+-#}
+{% set rules = ae_business_rules() | sort(attribute='code') %}
 
 with int_ae as (
 
@@ -77,8 +91,11 @@ flagged as (
          end as dupe_row_number
     from keyed
 
-)
-select
+),
+
+derived as (
+
+    select
     -- [STRUCTURE] Snowflake threw internal error 300002 when these expressions
     -- sat inside SELECT * REPLACE (...). Dropping REPLACE and excluding the
     -- overwritten columns instead avoids it. Consequence: the 12 derived
@@ -247,13 +264,134 @@ select
         --   ,imd.z_imd_2015_london_quintile as z_imd_2015_london_quintile   -- [TODO]
         --   ,imd.z_imd_2015_national_decile as z_imd_2015_national_decile   -- [TODO]
         ,ch.care_home_code as z_care_home
-from flagged f
-left join {{ ref('int_sus_ae_care_home') }} as ch
-    on f.sk_encounter_id = ch.sk_encounter_id
+    from flagged f
+    left join {{ ref('int_sus_ae_care_home') }} as ch
+        on f.sk_encounter_id = ch.sk_encounter_id
+
+),
+
+--------------------------------------------------------------------------------
+-- Migrated from [dbo].[processBusinessRules].
+--
+-- The stored procedure looped a cursor over dbo.br_rules_updates, executing
+-- each rule's stored SQL text as dynamic SQL, writing matches to a temp table,
+-- pivoting that into a per-rule column table, then string-concatenating the
+-- matched rule names back into zBusinessRule. All of that machinery exists
+-- only because the rules were data; here they are predicates, so one pass
+-- evaluates every rule at once.
+--------------------------------------------------------------------------------
+
+rules_applied as (
+
+    select
+        *
+
+        -- One flag per rule. array_construct_compact drops the NULLs, leaving
+        -- only the codes that matched.
+        ,array_construct_compact(
+{%- for rule in rules %}
+            iff({{ rule.condition }}, '{{ rule.code }}', null){{ "," if not loop.last }}
+{%- endfor %}
+         ) as matched_rule_codes
+
+        -- Same shape, but carrying each rule's contract type. Held in the same
+        -- alphabetical order as the codes above, and deliberately NOT
+        -- deduplicated: the legacy procedure replaced names with type codes
+        -- one-for-one, so two rules of the same type produce '|1|1'.
+        ,array_construct_compact(
+{%- for rule in rules %}
+            iff({{ rule.condition }}, '{{ rule.contract_type }}', null){{ "," if not loop.last }}
+{%- endfor %}
+         ) as matched_contract_types
+
+    from derived
+
+),
+
+contract_typed as (
+
+    select
+        -- z_business_rule and z_contract_type arrive from the sandpit view as
+        -- NULL stubs; they are dropped here and rebuilt below.
+        * exclude (
+            matched_rule_codes
+            ,matched_contract_types
+            ,z_business_rule
+            ,z_contract_type
+        )
+
+        -- Pipe-delimited list of matched rule names, alphabetically ordered --
+        -- the legacy FOR XML PATH concatenation used ORDER BY br_code. NULL
+        -- when no rule matched, as in legacy.
+        ,case
+            when array_size(matched_rule_codes) = 0 then null
+            else '|' || array_to_string(matched_rule_codes, '|')
+         end as z_business_rule
+
+        -- Contract type string. 99 is the sentinel for "no rule matched" and
+        -- is resolved in the next layer.
+        ,case
+            when array_size(matched_contract_types) = 0 then '99'
+            else '|' || array_to_string(matched_contract_types, '|')
+         end as z_contract_type_raw
+
+    from rules_applied
+
+),
+
+sla_matched as (
+
+    -- SLA lookup, used only to resolve the 99 sentinel. distinct guards against
+    -- fan-out; the seed has a uniqueness test but the join must not depend on
+    -- it holding.
+    select distinct ccg, provider, z_financial_year
+    from {{ ref('ref_br_rules_sla') }}
+
+)
+
+select
+    d.* exclude (z_contract_type_raw)
+
+    ------------------------------------------------------------------
+    -- Contract type resolution, in the legacy procedure's own order:
+    --   1. rows containing 99 (no rule matched, or the UCC_WMX rule whose
+    --      contract type is itself 99) become 1 where an SLA exists for the
+    --      commissioner / provider / financial year, else 2
+    --   2. anything still containing 6 collapses to just 6
+    --   3. anything containing 7 collapses to 2
+    --
+    -- NOTE: no active rule has contract type 7, so step 3 is currently dead.
+    -- Retained for parity in case a rule is reactivated.
+    --
+    -- NOTE: the SLA seed only covers financial years up to 1718, so unmatched
+    -- attendances from 1819 onwards always resolve to 2.
+    ------------------------------------------------------------------
+    ,case
+        when replace(
+                d.z_contract_type_raw,
+                '99',
+                iff(s.ccg is not null, '1', '2')
+             ) like '%6%' then '|6'
+        when replace(
+                d.z_contract_type_raw,
+                '99',
+                iff(s.ccg is not null, '1', '2')
+             ) like '%7%' then '|2'
+        else replace(
+                d.z_contract_type_raw,
+                '99',
+                iff(s.ccg is not null, '1', '2')
+             )
+     end as z_contract_type
+
+from contract_typed d
+left join sla_matched s
+    on d.organisation_code_code_of_commissioner = s.ccg
+    and d.organisation_code_code_of_provider = s.provider
+    and d.z_financial_year = s.z_financial_year
 -- [TODO] SP step 5 -- once index_of_multiple_deprivation_2015 is a source:
 -- left join (
 --     select z_lsoa11, z_imd_2015_london_quintile, z_imd_2015_national_decile
 --     from {{ '{{' }} source('dmic_reference', 'index_of_multiple_deprivation_2015') {{ '}}' }}
 --     qualify row_number() over (partition by z_lsoa11 order by z_lsoa11) = 1
 -- ) imd on flagged.z_lsoa11 = imd.z_lsoa11
-
