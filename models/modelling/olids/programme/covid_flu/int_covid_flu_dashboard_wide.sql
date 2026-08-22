@@ -45,6 +45,14 @@ SELECT
          WHEN campaign_id = 'COVID Autumn 2025' THEN 'CV Autumn 2025'
          WHEN campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
          ELSE campaign_id END AS campaign_id,
+    CASE 
+        WHEN u.campaign_id = 'Flu 2024-25' THEN 1
+        WHEN u.campaign_id = 'COVID Autumn 2024' THEN 2
+        WHEN u.campaign_id = 'COVID Spring 2025' THEN 3
+        WHEN u.campaign_id = 'Flu 2025-26' THEN 4
+        WHEN u.campaign_id = 'COVID Autumn 2025' THEN 5
+        WHEN u.campaign_id = 'COVID Spring 2026' THEN 6
+        END AS campaign_sort,
     programme_type,
     campaign_year,
     campaign_season,
