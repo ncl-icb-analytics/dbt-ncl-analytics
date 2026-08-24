@@ -13,11 +13,10 @@
 #
 # Snapshots run inside the daily build rather than on their own cron. `dbt
 # build` treats them as DAG nodes, so each snapshot lands before the models
-# that read it. Their `_snapshot_input` parents stay out of the daily
-# selection deliberately - defining a snapshot should not pull a model tree
-# into the daily build - so the inputs refresh on the weekly `+staging+` run,
-# which already covers every snapshot node. `snapshots` remains a
-# workflow_dispatch option for ad-hoc runs.
+# that read it. OLIDS `_snapshot_input` models inherit the `daily` tag and
+# refresh before their snapshots; other inputs refresh on the weekly
+# `+staging+` run. `snapshots` remains a workflow_dispatch option for ad-hoc
+# runs.
 #
 # Does NOT publish artifacts to the DBT_ARTIFACTS stage: latest/ is the
 # state:modified baseline meaning "main, as deployed", written only by
