@@ -71,4 +71,6 @@ Person-level rolling-window summaries (one row per patient).
 raw_sus_{apc,ae,op}_*  →  stg_sus_*  →  int_sus_*  →  fct_person_sus_*_recent
 ```
 
-Clinical codes (ICD-10, OPCS-4, SNOMED) are extracted at staging and enriched with vocabulary mappings at the intermediate layer. HRG (tariff/commissioning) codes are carried separately for commissioning analysis.
+Clinical codes (ICD-10, OPCS-4, SNOMED) are extracted at staging and enriched
+with vocabulary mappings in the modelling layer. HRG (tariff/commissioning)
+codes are carried separately for commissioning analysis.

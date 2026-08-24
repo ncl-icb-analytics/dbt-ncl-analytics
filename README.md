@@ -80,7 +80,7 @@ The VS Code workspace runs `.\start_dbt.ps1` automatically when you open a termi
 
 ## Project Structure
 
-```
+```text
 models/
 ├── sources/       # Generated and manual source declarations
 ├── raw/           # Generated 1:1 views of source data
