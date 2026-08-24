@@ -4,8 +4,11 @@
 # Catches broken refs/sources, Jinja/YAML errors, SQL syntax, and (where the
 # target catalog is populated) column/type errors - before merge.
 #
-#   pull_request -> compile against DEV   (ci-dev target, every PR commit)
-#   merge_group  -> compile against PROD  (ci-prod target, before deploy)
+#   pull_request -> compile against DEV (ci-dev target, every dbt PR commit)
+#
+# The required dbt PR Validation check compiles against PROD on merge_group,
+# immediately before its bounded runtime build. Keeping that work together
+# avoids running the same production compile twice for a queued PR.
 #
 # Auth: key-pair (reuses the secrets the deploy workflow already uses).
 # Compile is read-only (no materialization); it only reads schema metadata.
@@ -22,7 +25,6 @@ on:
       - 'dbt_project.yml'
       - 'profiles.yml'
       - 'packages.yml'
-  merge_group:
 
 jobs:
   compile:
@@ -34,7 +36,7 @@ jobs:
     permissions:
       contents: read
     env:
-      DBT_TARGET: ${{ github.event_name == 'merge_group' && 'ci-prod' || 'ci-dev' }}
+      DBT_TARGET: ci-dev
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
       SNOWFLAKE_ROLE: DBT_ADMIN
