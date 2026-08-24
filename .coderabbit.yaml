@@ -116,6 +116,12 @@ reviews:
           lookup only when it makes the rule clearer. Logic must not masquerade
           as data: a seed may hold declarative facts or parameters, but business
           decisions and control flow must remain visible in SQL.
+        - Flag new output columns implemented as literal NULL or otherwise known
+          to be null for every row. They advertise data the model does not
+          provide and make unpopulated fields look like missing data. Require the
+          column to be mapped, derived or omitted. Allow a placeholder only when
+          a documented published-output contract requires a fixed schema and the
+          description explains why the field is empty.
         - Review the changed behaviour and its effect on the existing contract.
           Do not ask a contributor enhancing an existing model to redesign
           unrelated pre-existing code. Raise existing design debt as blocking
@@ -254,7 +260,9 @@ reviews:
         generic product name. Published outputs may use quoted consumer-facing
         column names with spaces, case or punctuation. Do not require those
         characters to be removed, and do not require friendly names when
-        snake_case already suits the consumer.
+        snake_case already suits the consumer. A published model may expose an
+        all-null placeholder only when its documented output contract requires a
+        fixed schema and explains why the field is empty.
 
     # Partner products
     - path: "models/partner/**"
