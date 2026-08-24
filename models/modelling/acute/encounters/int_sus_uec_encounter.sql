@@ -13,14 +13,9 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 with
 attendance_category_codes as (
     select
-        "Main_Code_Text" as attendance_category_code
-        , "Main_Description" as attendance_category_desc
-    from {{ source('ukhfd_data_dictionary', 'emergency_care_attendance_category') }}
-    where "Is_Latest" = 1
-    qualify row_number() over (
-        partition by "Main_Code_Text"
-        order by "Effective_From" desc nulls last
-    ) = 1
+        attendance_category_code
+        , attendance_category_desc
+    from {{ ref('stg_ukhfd_emergency_care_attendance_category') }}
     ),
 practice_all as (
     select
@@ -31,11 +26,7 @@ practice_all as (
         , geographic_borough_name
         , pcn_name
         , neighbourhood_name
-    from {{ ref('raw_reference_primary_care_practice_all') }}
-    qualify row_number() over (
-        partition by practice_code
-        order by ods_last_updated desc nulls last, details_since desc nulls last
-    ) = 1
+    from {{ ref('stg_reference_primary_care_practice_all') }}
     ),
 ethnicity_codes as (
     select distinct bk_ethnicity_code, ethnicity_desc
