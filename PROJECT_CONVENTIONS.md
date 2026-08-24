@@ -153,8 +153,9 @@ also state what it is reconciling with and how consumers can distinguish it.
   to be null for every row. It advertises data that the model does not provide
   and leaves consumers unable to distinguish an unpopulated field from missing
   data. Map or derive the column, or omit it until it can be populated. A
-  placeholder is allowed only when a documented published-output contract
-  requires a fixed schema; describe the contract and why the field is empty.
+  placeholder is allowed only in a model under `models/published/`, when its
+  documented output contract requires a fixed schema. Describe the contract and
+  why the field is empty.
 - Prefix booleans with `is_` or `has_`; suffix dates with `_date`, timestamps
   with `_at` and identifiers with `_id`.
 - Do not carry legacy derived names such as `zcontracttype` or `z_contract_type`

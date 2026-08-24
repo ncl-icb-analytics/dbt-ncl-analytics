@@ -118,8 +118,9 @@ Published, partner and semantic models serve downstream consumers.
   executable rules in SQL and use seeds for declarative facts or parameters.
 - Use unquoted `snake_case` output columns from staging onward. Published models
   may instead use quoted friendly names for consumers; this is optional.
-- Do not add columns known to be null for every row unless a documented
-  published-output contract requires a fixed-schema placeholder.
+- Do not add columns known to be null for every row. Only a model under
+  `models/published/` may use one when its documented output contract requires a
+  fixed-schema placeholder.
 - This repository is public. Never commit patient- or person-level data,
   identifying values, row-level extracts or screenshots containing real data.
   High-level aggregate counts, rates and validation totals are not person-level

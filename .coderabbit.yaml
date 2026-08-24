@@ -119,9 +119,10 @@ reviews:
         - Flag new output columns implemented as literal NULL or otherwise known
           to be null for every row. They advertise data the model does not
           provide and make unpopulated fields look like missing data. Require the
-          column to be mapped, derived or omitted. Allow a placeholder only when
-          a documented published-output contract requires a fixed schema and the
-          description explains why the field is empty.
+          column to be mapped, derived or omitted. Allow a placeholder only in a
+          model under models/published/, when its documented output contract
+          requires a fixed schema and the description explains why the field is
+          empty.
         - Review the changed behaviour and its effect on the existing contract.
           Do not ask a contributor enhancing an existing model to redesign
           unrelated pre-existing code. Raise existing design debt as blocking
