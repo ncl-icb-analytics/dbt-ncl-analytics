@@ -88,7 +88,6 @@ models:
       +tags: ["staging", "daily"]
       +post-hook: ["{{ add_model_comment() }}"]
       olids:
-        +tags: ["daily"]
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
 
@@ -113,7 +112,6 @@ models:
         - "{{ add_model_comment() }}"
         - "{{ log_row_count() }}"
       olids:
-        +tags: ["daily"]
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
         risk_stratification:
@@ -129,7 +127,6 @@ models:
         - "{{ add_model_comment() }}"
         - "{{ log_row_count() }}"
       olids:
-        +tags: ["daily"]
         +meta:
           custom_message: "Includes OLIDS data - for secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id to apply National Data Opt-Out and Type 1 opt-out filtering."
         # Schema names automatically derived from subdomain folder names via generate_schema_name macro
@@ -193,7 +190,6 @@ models:
       direct_care:
         +database: "PUBLISHED_REPORTING__DIRECT_CARE"
         olids:
-          +tags: ["daily"]
           +meta:
             custom_message: "Includes OLIDS data - direct care use; opt-out filtering NOT applied. For secondary use, INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED ON person_id."
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
@@ -204,7 +200,6 @@ models:
       secondary_use:
         +database: "PUBLISHED_REPORTING__SECONDARY_USE"
         olids:
-          +tags: ["daily"]
           +meta:
             custom_message: "Includes OLIDS data already filtered via REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED (National Data Opt-Out and Type 1 opt-outs excluded). Safe to use for secondary purposes."
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
