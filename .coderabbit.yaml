@@ -32,6 +32,16 @@ reviews:
     drafts: true
     auto_incremental_review: true
     auto_pause_after_reviewed_commits: 0
+  pre_merge_checks:
+    custom_checks:
+      - name: "PR description gives context"
+        mode: warning
+        instructions: |
+          Warn only when the PR description is empty, merely repeats the title
+          or diff, or gives no reason for the change. One clear sentence
+          explaining why the change is being made or what problem it solves is
+          enough. Do not require headings, templates, test details or a
+          file-by-file summary. Allow draft descriptions to remain incomplete.
   finishing_touches:
     docstrings:
       enabled: false
