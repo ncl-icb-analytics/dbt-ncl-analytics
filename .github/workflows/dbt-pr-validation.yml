@@ -184,10 +184,6 @@ jobs:
           PR_SELECT: ${{ steps.changes.outputs.select }}
           HAS_STATE: ${{ steps.state.outputs.has_state }}
         run: |
-          # Unselected parents resolve to prod relations from the deployed
-          # manifest; --favor-state stops stale DEV__ leftovers winning.
-          DEFER_ARGS="--defer --state state --favor-state"
-
           if [ "$HAS_STATE" != "true" ]; then
             # No deployed baseline (first activation / stage wiped): fall back
             # to the candidate's directly changed nodes - bounded, and never
@@ -197,7 +193,8 @@ jobs:
               exit 0
             fi
             echo "No state manifest - falling back to $NODE_COUNT directly changed nodes: $PR_SELECT"
-            dbt build --target dev --select $PR_SELECT --profiles-dir .
+            read -r -a pr_select_args <<< "$PR_SELECT"
+            dbt build --target dev --select "${pr_select_args[@]}" --profiles-dir .
             exit 0
           fi
 
@@ -240,8 +237,10 @@ jobs:
             # plus nodes this PR affects indirectly (configs, renamed tests).
             [ -n "$OTHER" ] && echo "  not directly from this PR's files (inherited un-deployed state or indirect):$OTHER"
           fi
-          # --state for the selector comes from DEFER_ARGS (single --state flag).
-          dbt build --target dev --select state:modified $DEFER_ARGS --profiles-dir .
+          # Unselected parents resolve to prod relations from the deployed
+          # manifest; --favor-state stops stale DEV__ leftovers winning. The
+          # single --state flag serves both the selector and the defer.
+          dbt build --target dev --select state:modified --defer --state state --favor-state --profiles-dir .
 
       - name: Cleanup credentials
         if: always() && github.event_name != 'pull_request'

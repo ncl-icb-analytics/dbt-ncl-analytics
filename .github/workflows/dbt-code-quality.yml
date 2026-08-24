@@ -10,6 +10,10 @@ on:
   merge_group:
     types: [checks_requested]
 
+# Static checks only - the token never needs more than checkout.
+permissions:
+  contents: read
+
 jobs:
   hardcoded-references:
     name: No Hardcoded Table References
@@ -22,9 +26,12 @@ jobs:
         id: changed
         env:
           MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
-          BASE="${MERGE_GROUP_BASE_SHA:-origin/${{ github.base_ref }}}"
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
           echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.(sql)$' | grep -E '^(models|macros|analyses)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
@@ -44,9 +51,12 @@ jobs:
         id: changed
         env:
           MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
-          BASE="${MERGE_GROUP_BASE_SHA:-origin/${{ github.base_ref }}}"
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
           echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
@@ -70,9 +80,12 @@ jobs:
         id: changed
         env:
           MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
-          BASE="${MERGE_GROUP_BASE_SHA:-origin/${{ github.base_ref }}}"
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
           echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
@@ -96,9 +109,12 @@ jobs:
         id: changed
         env:
           MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
-          BASE="${MERGE_GROUP_BASE_SHA:-origin/${{ github.base_ref }}}"
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
           echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''

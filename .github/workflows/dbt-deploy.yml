@@ -68,15 +68,24 @@ jobs:
             // A merge queue controls the final commit message, so also inspect
             // the associated PR title. This keeps `[skip deploy]` reliable when
             // the marker was supplied before the PR entered the queue.
+            // The lookup is advisory: a transient API failure must not cancel
+            // the deploy (and a skipped deploy job would open no issue), so
+            // fail open and treat the marker as absent.
             if (!skipSource) {
-              const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                commit_sha: context.sha,
-              });
-              const markedPull = pulls.find(pull => marker.test(pull.title));
-              if (markedPull) {
-                skipSource = `PR #${markedPull.number}: ${markedPull.title}`;
+              try {
+                const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  commit_sha: context.sha,
+                });
+                const markedPull = pulls.find(pull => marker.test(pull.title));
+                if (markedPull) {
+                  skipSource = `PR #${markedPull.number}: ${markedPull.title}`;
+                }
+              } catch (error) {
+                core.warning(
+                  `Could not read associated PRs (${error.message}); assuming no [skip deploy] marker.`
+                );
               }
             }
 
