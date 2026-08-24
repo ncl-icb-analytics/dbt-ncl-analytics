@@ -86,8 +86,10 @@ reviews:
           most one row per join key; otherwise rows and counts are multiplied.
           If one-to-many is intended, require the new grain to be documented.
           Flag DISTINCT used after a join to hide duplication: it can discard
-          real differences. Select or aggregate the right-hand input first, or
-          change the model contract.
+          real differences. When several right-hand rows should contribute to
+          one result, prefer an intentional GROUP BY at the join key before the
+          join. When one record should win, require a documented, deterministic
+          selection rule. Otherwise change the model contract.
         - Prefer reuse or composition of an established model over a second
           definition of the same concept. A new parallel model must explain why
           the existing contract cannot be extended or composed.

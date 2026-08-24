@@ -164,7 +164,10 @@ also state what it is reconciling with and how consumers can distinguish it.
   become several, inflating counts and breaking the model's stated grain. If a
   one-to-many result is intended, document the new grain. Do not add `distinct`
   after the join to hide duplicated rows: it can discard real differences.
-  Select or aggregate the right-hand input first, or change the model contract.
+  When several right-hand rows should contribute to one result, aggregate them
+  intentionally with `group by` at the join key before joining. When one record
+  should win, select it with a documented, deterministic rule. Otherwise change
+  the model contract.
 - Keep unknown, false, not applicable and missing evidence distinct where the
   domain distinguishes them.
 - Put organisation-wide definitions and terminology in shared models. Keep
