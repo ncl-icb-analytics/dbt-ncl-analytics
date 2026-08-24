@@ -116,7 +116,8 @@ Published, partner and semantic models serve downstream consumers.
   consolidation or enrichment.
 - Prefer readable, straightforward SQL. Logic must not masquerade as data: keep
   executable rules in SQL and use seeds for declarative facts or parameters.
-- Use unquoted `snake_case` output columns in staging and every later layer.
+- Use unquoted `snake_case` output columns from staging onward. Published models
+  may instead use quoted friendly names for consumers; this is optional.
 - This repository is public. Never commit patient- or person-level data,
   identifying values, row-level extracts or screenshots containing real data.
   High-level aggregate counts, rates and validation totals are not person-level

@@ -139,9 +139,12 @@ reviews:
           stated exception.
 
         From staging onward, every output column name must be unquoted
-        snake_case. Flag quoted output aliases or identifiers, including quotes
-        used to preserve spaces, case or punctuation. Quoting a physical input
-        identifier in generated raw SQL or a source declaration is allowed.
+        snake_case except in published models. Flag quoted output aliases or
+        identifiers elsewhere, including quotes used to preserve spaces, case
+        or punctuation. Published models may use quoted consumer-facing names
+        and do not need to remove those characters, but friendly names are
+        optional and unquoted snake_case remains valid. Quoting a physical input
+        identifier in generated raw SQL or a source declaration is also allowed.
         Follow established names: is_/has_ booleans; _date dates; _at
         timestamps; _id identifiers. Outside generated raw models, do not carry
         legacy derived names such as zcontracttype or z_contract_type into new
@@ -240,7 +243,10 @@ reviews:
         and secondary_use placement, OLIDS opt-out or documented exemption, and
         the matching Snowflake governance tags. Follow an established product
         family such as the Myria _published models rather than renaming it to a
-        generic product name.
+        generic product name. Published outputs may use quoted consumer-facing
+        column names with spaces, case or punctuation. Do not require those
+        characters to be removed, and do not require friendly names when
+        snake_case already suits the consumer.
 
     # Partner products
     - path: "models/partner/**"

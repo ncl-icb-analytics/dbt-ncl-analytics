@@ -144,9 +144,11 @@ also state what it is reconciling with and how consumers can distinguish it.
   reshape long, nested or repeated `CASE` expressions when their branching hides
   the business rule or makes it hard to test. Use a named model, CTE or lookup
   only when it makes the rule clearer.
-- All output columns from staging onward must be unquoted `snake_case`. Do not
-  use quoted aliases to preserve spaces, case or punctuation. Generated raw SQL
-  may quote physical input identifiers before assigning project aliases.
+- All output columns from staging onward must be unquoted `snake_case`, except
+  in published models. Published models may use quoted consumer-facing names
+  with spaces, case or punctuation and do not need to remove those characters.
+  This is optional; unquoted `snake_case` remains valid. Generated raw SQL may
+  quote physical input identifiers before assigning project aliases.
 - Prefix booleans with `is_` or `has_`; suffix dates with `_date`, timestamps
   with `_at` and identifiers with `_id`.
 - Do not carry legacy derived names such as `zcontracttype` or `z_contract_type`
