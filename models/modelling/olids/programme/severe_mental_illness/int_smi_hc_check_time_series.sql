@@ -237,7 +237,7 @@ WITH all_audit_scores AS (
      END As ASSESSED_LAST_12M
     ,a.result_value as alcohol_units
     ,a.result_unit_display as unit_display
-    FROM {{ ref('int_smi_alcohol_all') }} a
+    FROM {{ ref('int_alcohol_units_all') }} a
     --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_alcohol_all a
     INNER JOIN {{ ref('int_smi_population_historical')  }} p USING (PERSON_ID)
     --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_HISTORICAL p USING (PERSON_ID)

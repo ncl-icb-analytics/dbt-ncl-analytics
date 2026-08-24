@@ -12,7 +12,7 @@ flags, 8 medication-driven flags, and 1 eGFR flag — 36 columns total.
 
 Sources:
 - Observations: stg_olids_observation.mapped_concept_code joined to
-  raw_aic_base_ccms_snomed_codes.conceptid
+  stg_common_ccmc_snomed.conceptid
 - Medications: int_ccms_medication_orders (pre-filtered to CCMS codelist +
   the lithium any-time exception)
 - Spine: int_patient_person_unique (every person with a patient record)
@@ -39,7 +39,7 @@ snomed_codes_filtered AS (
         conceptid::VARCHAR AS conceptid,
         conditionid,
         conditionname
-    FROM {{ ref('stg_aic_base_ccms_snomed_codes') }}
+    FROM {{ ref('stg_common_ccmc_snomed') }}
 ),
 
 over_16s as (

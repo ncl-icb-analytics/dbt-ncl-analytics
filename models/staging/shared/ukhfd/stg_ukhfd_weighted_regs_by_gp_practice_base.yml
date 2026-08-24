@@ -2,7 +2,13 @@ version: 2
 
 models:
   - name: stg_ukhfd_weighted_regs_by_gp_practice_base
-    description: UKHFD practice-level need indices and weighted populations by allocation base year.
+    description: >
+      UKHFD practice-level need indices and weighted populations by allocation
+      base year.
+
+      Source: UKHFD.Comm_Allocations.fact_Weighted_Regs_By_GP_Practice_Base
+      (source 'ukhfd_comm_allocations' in models/sources/manual_ukhfd.yml)
+      via raw_ukhfd_weighted_regs_by_gp_practice_base.
     config:
       meta:
         owner:

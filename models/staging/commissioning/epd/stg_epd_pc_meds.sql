@@ -2,7 +2,7 @@
 Staging for the English Prescribing Dataset (EPD) primary care meds feed.
 
 One row per dispensed prescription item per patient per processing period.
-Faithful passthrough of raw_epd_pc_meds: renames the patient key and types
+Faithful passthrough of raw_epd_pc_medsv1: renames the patient key and types
 the cost/quantity/date columns. No rows are dropped (out-of-area patients
 are retained and simply won't match WNL person dimensions downstream).
 
@@ -91,4 +91,4 @@ select
         = max(uniq_submission_id) over (partition by processed_period)
                                                 as is_latest_submission
 
-from {{ ref('raw_epd_pc_meds') }}
+from {{ ref('raw_epd_pc_medsv1') }}

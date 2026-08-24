@@ -4,7 +4,8 @@ models:
       eFI2 (electronic Frailty Index 2) score and frailty category per person —
       native OLIDS-built equivalent of the AI Centre INT_EFI2_SCORES, ported from
       lds-pipelines. Built in parallel to the AIC import (stg_aic_int_efi2_scores),
-      which it does NOT replace.
+      which has since been retired with the rest of the raw_aic pipeline — this is
+      now the only eFI2 score in the project.
 
       Known divergences from the AIC output to validate before any cutover. Items
       1-3 are deliberate paper-alignment choices (the paper takes priority over AIC

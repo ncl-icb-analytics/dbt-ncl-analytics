@@ -69,8 +69,10 @@ jobs:
       group: dbt-prod
       cancel-in-progress: false
     permissions:
+      actions: read  # previous successful run for failure attribution
       contents: read
       issues: write  # failure issues (report_dbt_failures.py)
+      pull-requests: read  # associate dependency changes with merged PRs
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
@@ -81,6 +83,9 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           persist-credentials: false
+          # Failure attribution compares dependency-path changes with the last
+          # successful run of the same schedule type.
+          fetch-depth: 0
 
       - name: Resolve run type
         id: plan
@@ -181,7 +186,8 @@ jobs:
       # webhooks; NHS-tenant Teams blocks them). One open issue per run type,
       # commented with the failed nodes on repeat failures, closed on
       # recovery. SDL intraday is excluded by design.
-      # Teams channel setup: @github subscribe wnl-icb-analytics/dbt-analytics +label:"dbt-run-failure"
+      # Teams channel setup:
+      # @github subscribe wnl-icb-analytics/dbt-analytics +label:"dbt-scheduled-run-failure"
       - name: Report or resolve failure issue
         if: ${{ !cancelled() && !contains(fromJSON('["sdl-intraday", "skip"]'), steps.plan.outputs.run_type) }}
         env:
@@ -189,6 +195,10 @@ jobs:
           DBT_CONTEXT: ${{ steps.plan.outputs.run_type }}
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ISSUE_LABEL: dbt-scheduled-run-failure
+          # Allows open scheduled issues created before the label split to be
+          # found on recovery, or relabelled if they fail again.
+          LEGACY_ISSUE_LABEL: dbt-run-failure
         run: python3 .github/scripts/report_dbt_failures.py
 
       - name: Cleanup credentials

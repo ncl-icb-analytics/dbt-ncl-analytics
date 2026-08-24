@@ -15,7 +15,8 @@ No opt-out filter is applied at this layer. For secondary use, consumers should
 INNER JOIN to REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_SECONDARY_USE_ALLOWED
 ON person_id per the project convention.
 
-Native equivalent of the AIC-imported stg_aic_int_efi2_scores.
+Native replacement for the retired AIC import stg_aic_int_efi2_scores
+(AIC_DEV.INT_EFI2_SCORES), which was removed with the rest of the raw_aic pipeline.
 */
 
 select
