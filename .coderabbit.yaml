@@ -80,8 +80,14 @@ reviews:
           and hardcoded warehouse relations. Existing direct source() calls in
           staging are legacy debt: mention them as a non-blocking follow-up
           unless the change adds or depends on that bypass.
-        - Check subject, population, reference time and grain. Flag joins that
-          fan out the stated grain; DISTINCT is not a repair for a bad join.
+        - Check subject, population, reference time and grain. For each join,
+          check whether it should be one-to-one, many-to-one or one-to-many. If
+          the left-hand grain should survive, the right-hand input must have at
+          most one row per join key; otherwise rows and counts are multiplied.
+          If one-to-many is intended, require the new grain to be documented.
+          Flag DISTINCT used after a join to hide duplication: it can discard
+          real differences. Select or aggregate the right-hand input first, or
+          change the model contract.
         - Prefer reuse or composition of an established model over a second
           definition of the same concept. A new parallel model must explain why
           the existing contract cannot be extended or composed.

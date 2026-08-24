@@ -158,9 +158,13 @@ also state what it is reconciling with and how consumers can distinguish it.
   kept as a clearly named column or upstream source field. Existing SLAM and
   community `dv_` families are established interfaces; do not require their
   redesign in an enhancement PR.
-- State join cardinality. A right-hand input must be unique at the join key when
-  the left-hand grain is meant to survive. Do not use `distinct` to conceal a
-  fan-out.
+- State whether each join should be one-to-one, many-to-one or one-to-many. If
+  the result should keep one row for each left-hand record, the right-hand input
+  must have at most one row for each join key. Otherwise one left-hand row can
+  become several, inflating counts and breaking the model's stated grain. If a
+  one-to-many result is intended, document the new grain. Do not add `distinct`
+  after the join to hide duplicated rows: it can discard real differences.
+  Select or aggregate the right-hand input first, or change the model contract.
 - Keep unknown, false, not applicable and missing evidence distinct where the
   domain distinguishes them.
 - Put organisation-wide definitions and terminology in shared models. Keep

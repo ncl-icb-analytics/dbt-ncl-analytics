@@ -123,7 +123,8 @@ Published, partner and semantic models serve downstream consumers.
   High-level aggregate counts, rates and validation totals are not person-level
   data when they cannot identify an individual.
 - Treat SQL, descriptions, ownership and tests as one model change.
-- Test the key or key combination that enforces grain and check join fan-out.
+- Test the key or key combination that enforces grain. Check that joins do not
+  multiply rows unless the model documents the new grain.
 - Split confused responsibilities, not individual transformations or CTEs.
 - Use `ref()` in hand-written models; only generated raw models use `source()`.
 - Keep programme, geography, legacy, audience and product rules at the scope
