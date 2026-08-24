@@ -1,0 +1,37 @@
+models:
+  - name: obt_ecds_encounter_daily
+    description: >-
+      Daily-managed ECDS encounter reporting view. Contains the complete
+      urgent and emergency care encounter output, including the UKHFD attendance
+      category description, registered-practice geography and DBI site code
+      fields introduced on this branch.
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: visit_occurrence_id
+        description: Primary key for the encounter within SUS ECDS.
+        data_tests:
+          - unique
+          - not_null
+      - name: attendance_category_desc
+        description: Emergency care attendance category description from UKHFD.
+      - name: practice_name
+        description: Registered GP practice name at the time of the encounter.
+      - name: sub_icb_code
+        description: Sub-ICB code associated with the registered GP practice.
+      - name: sub_icb_name
+        description: Sub-ICB name associated with the registered GP practice.
+      - name: geographic_borough_name
+        description: Geographic borough associated with the registered GP practice.
+      - name: pcn_name
+        description: PCN name associated with the registered GP practice.
+      - name: neighbourhood_name
+        description: Neighbourhood associated with the registered GP practice.
+      - name: dbi_site_code
+        description: DBI site code derived from attendance site and department type.

@@ -11,6 +11,32 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 
 */
 with
+attendance_category_codes as (
+    select
+        "Main_Code_Text" as attendance_category_code
+        , "Main_Description" as attendance_category_desc
+    from {{ source('ukhfd_data_dictionary', 'emergency_care_attendance_category') }}
+    where "Is_Latest" = 1
+    qualify row_number() over (
+        partition by "Main_Code_Text"
+        order by "Effective_From" desc nulls last
+    ) = 1
+    ),
+practice_all as (
+    select
+        practice_code
+        , practice_name
+        , sub_icb_code
+        , sub_icb_name
+        , geographic_borough_name
+        , pcn_name
+        , neighbourhood_name
+    from {{ ref('raw_reference_primary_care_practice_all') }}
+    qualify row_number() over (
+        partition by practice_code
+        order by ods_last_updated desc nulls last, details_since desc nulls last
+    ) = 1
+    ),
 ethnicity_codes as (
     select distinct bk_ethnicity_code, ethnicity_desc
     from {{ref('stg_dictionary_dbo_ethnicity')}}
@@ -268,6 +294,48 @@ select
         else 'Others' end as pod
     , core.attendance_location_department_type as department_type
     , core.attendance_location_activity_type as urgent_care_setting_type
+    , case
+        when core.attendance_location_site = 'RQM25'
+            and core.attendance_location_department_type = '03' then 'UTC_CW'
+        when core.attendance_location_site = 'AD915'
+            and core.attendance_location_department_type = '03' then 'UTC_EHT'
+        when core.attendance_location_site = 'R1K114'
+            and core.attendance_location_department_type = '03' then 'UTC_EHT'
+        when core.attendance_location_site = 'AD904'
+            and core.attendance_location_department_type = '03' then 'UTC_THH'
+        when core.attendance_location_site = 'RAS01'
+            and core.attendance_location_department_type = '03' then 'UTC_THH'
+        when core.attendance_location_site = 'AD906'
+            and core.attendance_location_department_type = '03' then 'UTC_NP'
+        when core.attendance_location_site = 'R1K111'
+            and core.attendance_location_department_type = '03' then 'UTC_NP'
+        when core.attendance_location_site = 'NL021'
+            and core.attendance_location_department_type = '03' then 'UTC_SMH'
+        when core.attendance_location_site = 'RYJ01'
+            and core.attendance_location_department_type = '03' then 'UTC_SMH_Streamed'
+        when core.attendance_location_site = 'AD918'
+            and core.attendance_location_department_type = '03' then 'UTC_CMX'
+        when core.attendance_location_site = 'R1K112'
+            and core.attendance_location_department_type = '03' then 'UTC_CMX'
+        when core.attendance_location_site = 'RY901'
+            and core.attendance_location_department_type = '03' then 'UTC_WMX'
+        when core.attendance_location_site = 'RYX24'
+            and core.attendance_location_department_type in ('03', '04') then 'WIC_EDG'
+        when core.attendance_location_site = 'RYX23'
+            and core.attendance_location_department_type in ('03', '04') then 'WIC_FINCH'
+        when core.attendance_location_site = 'RYX11'
+            and core.attendance_location_department_type in ('03', '04') then 'WIC_PGREEN'
+        when core.attendance_location_site = 'RYX02'
+            and core.attendance_location_department_type in ('03', '04') then 'WIC_SOHO'
+        when core.attendance_location_site = 'RYX01'
+            and core.attendance_location_department_type in ('03', '04') then 'WIC_STCharles'
+        when core.attendance_location_site = 'RAS02'
+            and core.attendance_location_department_type = '03' then 'MIU_MV'
+        when core.attendance_location_site = 'RYJ02'
+            and core.attendance_location_department_type = '03' then 'UTC_CX'
+        when core.attendance_location_site = 'RYJ03'
+            and core.attendance_location_department_type = '03' then 'UTC_HH'
+      end as dbi_site_code
 
     /* Time & date */
     , core.attendance_arrival_date as start_date
@@ -430,13 +498,7 @@ select
     , core.attendance_arrival_arrival_mode_code as arrival_mode_code
     , dict_arrival.snomed_uk_preferred_term as arrival_mode_desc
     , core.attendance_arrival_attendance_category as attendance_category_code
-    , case core.attendance_arrival_attendance_category
-        when '1' then 'Unplanned first attendance for a new or deteriorating condition'
-        when '2' then 'Unplanned follow-up within 7 days at this emergency care service'
-        when '3' then 'Unplanned follow-up within 7 days at another emergency care service'
-        when '4' then 'Planned follow-up within 7 days at this emergency care service'
-        when 'X' then 'Not applicable - patient dead on arrival'
-      end as attendance_category_desc
+    , attendance_category.attendance_category_desc
     , core.attendance_arrival_planned as is_arrival_planned
     , core.attendance_arrival_ambulance_incident_number as ambulance_incident_number
     , core.attendance_arrival_conveying_ambulance_trust as conveying_ambulance_trust_code
@@ -509,6 +571,12 @@ select
     , core.patient_usual_address_local_authority_district as lad_at_event
     , core.patient_usual_address_index_of_multiple_deprivation_decile as imd_at_event
     , core.patient_gp_registration_general_practice as reg_practice_at_event
+    , registered_practice.practice_name
+    , registered_practice.sub_icb_code
+    , registered_practice.sub_icb_name
+    , registered_practice.geographic_borough_name
+    , registered_practice.pcn_name
+    , registered_practice.neighbourhood_name
     , core.patient_gp_registration_general_practitioner as general_practitioner_code
     , general_practitioner.gp_name as general_practitioner_name
     , 'AE_ATTENDANCE' as visit_occurrence_type
@@ -572,6 +640,11 @@ left join first_mental_health_legal_status as mental_health_legal_status
 left join 
     {{ref('stg_dictionary_ecds_arrivalmode')}} as dict_arrival
     on core.attendance_arrival_arrival_mode_code = dict_arrival.snomed_code
+
+left join attendance_category_codes as attendance_category
+    on core.attendance_arrival_attendance_category
+    = attendance_category.attendance_category_code
+
 left join 
     {{ref('stg_dictionary_ecds_dischargedestination')}} as dict_dist
     on core.attendance_discharge_destination_code = dict_dist.snomed_code
@@ -652,6 +725,10 @@ left join treatment_function_codes as treatment_function
 
 left join {{ ref('stg_dictionary_dbo_gp') }} as general_practitioner
     on core.patient_gp_registration_general_practitioner = general_practitioner.gp_code
+
+left join practice_all as registered_practice
+    on core.patient_gp_registration_general_practice
+    = registered_practice.practice_code
 
 left join {{ ref('stg_dictionary_dbo_rttperiodstatus') }} as rtt_status
     on core.referral_period_status = rtt_status.rtt_period_status_code

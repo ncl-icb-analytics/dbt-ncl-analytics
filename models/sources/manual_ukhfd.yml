@@ -1,6 +1,24 @@
 version: 2
 
 sources:
+  - name: ukhfd_data_dictionary
+    database: '"UKHFD"'
+    schema: '"Data_Dictionary"'
+    description: National data dictionary reference dimensions.
+    tables:
+      - name: emergency_care_attendance_category
+        identifier: '"dim_Emergency_Care_Attendance_Category_SCD"'
+        description: Emergency care attendance category codes and descriptions; Is_Latest marks the current row per code.
+        columns:
+          - name: Main_Code_Text
+            quote: true
+          - name: Main_Description
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+
   - name: ukhfd_geo
     database: '"UKHFD"'
     schema: '"Old_LSOA_To_New_LSOA_To_LAD"'
