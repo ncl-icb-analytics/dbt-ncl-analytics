@@ -216,9 +216,15 @@ jobs:
             # Never let a listing hiccup skip validation - build and let dbt
             # report the real problem.
             echo "dbt ls failed (exit $LS_EXIT) - proceeding to build state:modified"
-          elif [ -z "$SELECTED" ]; then
+          elif [ -z "$SELECTED" ] && [ "$NODE_COUNT" = "0" ]; then
+            # Only trust an empty listing when this PR changed no dbt files;
+            # skipping is then correct regardless of how ls formats output.
             echo "Nothing modified versus deployed state - skipping DEV build"
             exit 0
+          elif [ -z "$SELECTED" ]; then
+            # This PR changed dbt files, so an empty listing means the output
+            # parsing failed, not that nothing changed - distrust it and build.
+            echo "dbt ls returned no parseable nodes but this PR changed $NODE_COUNT dbt nodes - proceeding to build state:modified"
           else
             SELECTED_COUNT=$(echo "$SELECTED" | wc -w)
             OWN=""; OTHER=""
