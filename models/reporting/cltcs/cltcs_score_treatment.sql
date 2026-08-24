@@ -41,12 +41,19 @@ encoding_features as (
           end as egfr_overdue_flag
 
         -- actionable risk factors
-        , zeroifnull(br.smoking_risk_sort_key) as smoking_risk_sort_key
-        , zeroifnull(br.bmi_risk_sort_key) as bmi_risk_sort_key
-        , zeroifnull(br.alcohol_risk_sort_key) as alcohol_risk_sort_key
-        , zeroifnull(br.risk_factor_count) as risk_factor_count
+        , zeroifnull(br.smoking_risk_sort_key) as smoking_risk_sort_key -- 0 unknown, 1 never, 2 ex, 3 current therefore unchanged
+        , case
+            when zeroifnull(br.bmi_risk_sort_key) >= 5 then 3 -- obese class 2/3
+            when zeroifnull(br.bmi_risk_sort_key) = 4 then 2 -- obese class 1
+            when zeroifnull(br.bmi_risk_sort_key) < 4 and zeroifnull(br.bmi_risk_sort_key) > 1 then 1 -- overweight
+            else 0 end as bmi_flag -- normal
+        , case
+            when zeroifnull(br.alcohol_risk_sort_key) >= 7 then 3
+            when zeroifnull(br.alcohol_risk_sort_key) < 7 and zeroifnull(br.alcohol_risk_sort_key) >=3 then 2
+            when zeroifnull(br.alcohol_risk_sort_key) < 3 and zeroifnull(br.alcohol_risk_sort_key) > 1 then 1
+            else 0 end as alcohol_flag
         , case when id.illicit_drug_pattern is not null
-                  and id.illicit_drug_pattern <> 'Does not misuse drugs' then 1 else 0 end as substance_misuse_flag
+                  and id.illicit_drug_pattern <> 'Does not misuse drugs' then 3 else 0 end as substance_misuse_flag
 
         -- medication burden
         , zeroifnull(rm.unique_active_ingredient_count_12mo) as unique_active_ingredient_count_12mo
@@ -68,7 +75,6 @@ encoding_features as (
 
         -- barriers to treatment
         , case when ps.is_housebound then 1 else 0 end as is_housebound_flag
-        , ps.behavioural_risk_count
         , case when pc.has_severe_mental_illness then 1 else 0 end as has_smi_flag
 
         -- acute use related features
@@ -76,6 +82,7 @@ encoding_features as (
         , zeroifnull(aea.ae_t1_12mo) as ae_t1_12mo
         , zeroifnull(gpa.gp_att_tot_12mo) as gp_att_tot_12mo
         , zeroifnull(aea.ae_lower_respiratory_attendance_12mo) as ae_lower_respiratory_attendance_12mo
+        , zeroifnull(apca.acs_nel_12mo) as acs_nel_12mo
         -- condition specific care gaps
         ---- asthma
         , case when am.testing_no_diagnosis = TRUE then 1 else 0 end as asthma_testing_no_diagnosis_flag
@@ -96,6 +103,8 @@ encoding_features as (
         on il.person_id =pc.person_id
     left join {{ref('fct_person_sus_uec_recent')}} aea
         on il.sk_patient_id  =aea.sk_patient_id
+    left join {{ ref('fct_person_sus_apc_recent') }} apca
+        on il.sk_patient_id =apca.sk_patient_id
     left join {{ref('fct_person_gp_recent')}} gpa
         on il.sk_patient_id  =gpa.sk_patient_id
     left join {{ref('fct_person_medications_recent')}} rm
@@ -150,21 +159,20 @@ domain_sub_scores as (
 
         ) as score_biomarker_gaps,
 
-        -- condition and prevention care gaps (overall LTC LCS risk only — avoid summing per-condition keys)
+        -- condition and prevention care gaps (overall LTC LCS risk only — avoid summing per-condition keys, flags * 3 to match scale of BMI/Smoking/alcohol)
         (
-            asthma_salbutamol_only_flag
-            + asthma_salbutamol_repeats_flag
-            + diabetes_care_gap_count
-            + diabetes_not_triple_target_flag
+            asthma_salbutamol_only_flag * 3
+            + asthma_salbutamol_repeats_flag * 3
+            + diabetes_care_gap_count * 3
+            + diabetes_not_triple_target_flag * 3
             + case
                 when zeroifnull(moc_stage_completed) < 2
-                    and overall_risk_group_sort_key > 0 then 1
+                    and overall_risk_group_sort_key > 0 then 3
                 else 0
-              end * 2
-            + risk_factor_count
+              end
             + smoking_risk_sort_key
-            + bmi_risk_sort_key
-            + alcohol_risk_sort_key
+            + bmi_flag
+            + alcohol_flag
         ) as score_care_gaps,
 
         -- clinical complexity: multimorbidity
@@ -183,21 +191,22 @@ domain_sub_scores as (
         -- D4: medication burden
         ( ln( 1+ medication_count)
             + ln( 1+ unique_active_ingredient_count_12mo)
+            + polypharmacy_10plus_flag * 2
         ) as score_medication,
 
         -- illness-related UEC (not injury totals; no ae_ill_3mo in feature set)
         (
             ln( 1+ ae_ill_12mo)
-            + ln( 1+ ae_t1_12mo) * 2
-            + ln( 1+ ae_lower_respiratory_attendance_12mo)
+            + ln( 1+ ae_t1_12mo)
+            + ln(1+acs_nel_12mo)
             - ln( 1+ gp_att_tot_12mo)
         ) as score_illness_uec,
         -- barriers to treatment / and biopsychosocial treatment complexity
         (
             is_housebound_flag
-            + behavioural_risk_count
             + has_smi_flag
-            + substance_misuse_flag
+            + substance_misuse_flag / 3 -- to reduce back to binary flag
+            + case when alcohol_flag >= 3 then 1 else 0 end -- binary flag for active alcohol misuse disorder
         ) as score_barriers
         -- to add existring engagement in care pathways
     from encoding_features
