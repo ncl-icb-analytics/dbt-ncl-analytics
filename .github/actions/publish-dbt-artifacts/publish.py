@@ -1,8 +1,9 @@
 """Upload dbt artifacts to the DBT_ARTIFACTS stage.
 
 Puts target/manifest.json + target/run_results.json (auto-compressed to .gz)
-and a meta.json sidecar to @<stage>/<target>/latest/, overwriting the previous
-set. Auth: key-pair via SNOWFLAKE_PRIVATE_KEY_PATH (same env as the workflows).
+and a meta.json sidecar to @<stage>/<target>/latest/. Runs that do not pass
+compile are stored under attempts/<run_id>/ without replacing deploy state.
+Auth: key-pair via SNOWFLAKE_PRIVATE_KEY_PATH (same env as the workflows).
 """
 
 import json
@@ -21,11 +22,16 @@ if not re.match(r"^[A-Za-z0-9_.]+$", STAGE) or not re.match(r"^[A-Za-z0-9_-]+$",
 
 manifest = "target/manifest.json"
 run_results = "target/run_results.json"
+build_status = os.environ.get("DBT_BUILD_OUTCOME", "success")
+compile_status = os.environ.get("DBT_COMPILE_OUTCOME", "success")
 if not os.path.exists(manifest):
     # Build died before parse (compile/setup error) - keep the previous
     # baseline rather than failing the publish step on an already-red run.
     print(f"{manifest} not found - skipping publish")
     sys.exit(0)
+
+build_ran = build_status in {"success", "failure"}
+promote_manifest = compile_status == "success" and build_ran
 
 # Record the engine that produced the artifacts (unpinned installs = latest).
 fusion_version = None
@@ -51,7 +57,9 @@ meta = {
     "dbt_command": os.environ.get("DBT_COMMAND"),
     "target": TARGET,
     "fusion_version": fusion_version,
-    "build_status": os.environ.get("DBT_BUILD_OUTCOME", "success"),
+    "build_status": build_status,
+    "compile_status": compile_status,
+    "state_manifest_promoted": promote_manifest,
 }
 with open("target/meta.json", "w") as f:
     json.dump(meta, f, indent=2)
@@ -66,12 +74,24 @@ conn = snowflake.connector.connect(
 )
 try:
     cur = conn.cursor()
-    dest = f"@{STAGE}/{TARGET}/latest/"
     uploads = [(manifest, True), ("target/meta.json", False)]
     if os.path.exists(run_results):
         uploads.insert(1, (run_results, True))
     else:
         print(f"{run_results} not found - skipping")
+
+    if promote_manifest:
+        dest = f"@{STAGE}/{TARGET}/latest/"
+    else:
+        run_id = os.environ.get("GITHUB_RUN_ID", "unknown")
+        if not re.match(r"^[A-Za-z0-9_-]+$", run_id):
+            sys.exit(f"Invalid run id: {run_id}")
+        dest = f"@{STAGE}/{TARGET}/attempts/{run_id}/"
+        print(
+            "Keeping the previous deploy state because compile did not pass "
+            "or the build step did not run"
+        )
+
     for path, compress in uploads:
         path = os.path.abspath(path).replace("\\", "/")
         cur.execute(
@@ -79,5 +99,8 @@ try:
             f"AUTO_COMPRESS={'TRUE' if compress else 'FALSE'} OVERWRITE=TRUE"
         )
         print(f"Uploaded {path} -> {dest} ({cur.fetchall()[0][6]})")
+
+    if not promote_manifest:
+        print(f"Diagnostic artifacts stored in {dest}")
 finally:
     conn.close()
