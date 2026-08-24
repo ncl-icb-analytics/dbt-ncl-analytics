@@ -50,7 +50,7 @@ reviews:
         This is a public repository. Treat any change that appears to contain
         real patient- or person-level data, direct identifiers, or combinations
         of values that could identify a person as a critical blocking finding.
-        Check seeds, fixtures, examples, logs, exports, screenshots, comments,
+        Check seeds, test data, examples, logs, exports, screenshots, comments,
         documentation and hardcoded SQL values. Column names and clearly
         synthetic examples are not patient data by themselves. High-level
         aggregates such as broad counts, rates, distributions and validation

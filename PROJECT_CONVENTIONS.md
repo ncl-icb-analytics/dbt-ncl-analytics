@@ -21,7 +21,7 @@ Before writing SQL:
 This repository is public. Never commit real patient- or person-level data,
 direct identifiers, combinations of values that could identify a person,
 row-level extracts, logs or screenshots containing real data. This applies to
-seeds, fixtures, examples, documentation and hardcoded SQL values as well as
+seeds, test data, examples, documentation and hardcoded SQL values as well as
 model files.
 
 Treat suspected disclosure as a critical blocking finding. Identify the file,
