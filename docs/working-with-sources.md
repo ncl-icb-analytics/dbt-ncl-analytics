@@ -1,6 +1,8 @@
 # Working with Sources
 
-A quick reference for adding, updating, and regenerating sources in this project. See [How it works](#how-it-works) further down for background.
+A quick reference for adding, updating, and regenerating sources in this project.
+See [Project conventions](../PROJECT_CONVENTIONS.md) for the raw and staging
+contracts, and [How it works](#how-it-works) further down for pipeline background.
 
 ## The raw layer
 
@@ -26,17 +28,31 @@ Rules:
 - **Column aliases**: originals are double-quoted (preserves case), aliases are snake_case. Special characters get cleaned (`%` → `percent`, `#` → `number`, `&` → `and`, spaces/dashes/dots → `_`). CamelCase becomes snake_case with acronym handling (`GPPracticeCode` → `gp_practice_code`). Reserved words like `group`, `order`, `where` get `_value` appended. Columns starting with a digit get a `col_` prefix or are reordered.
 - **Never edit by hand** — raw models are regenerated on every pipeline run.
 
-Staging models (`stg_`*) should always reference raw models via `ref()`, never the source directly:
+New staging models and changed dependencies should reference raw models via
+`ref()`, never the source directly:
 
 ```sql
 -- Correct (in a staging model)
-select * from {{ ref('raw_reference_imd_2025') }}
+select
+    lsoa_code_2021,
+    lsoa_name_2021
+from {{ ref('raw_reference_imd_2025') }}
 
 -- Avoid - bypasses the raw layer and its cleaned column names
-select * from {{ source('reference_analyst_managed', 'IMD_2025') }}
+select
+    "LSOA_CODE_2021",
+    "LSOA_NAME_2021"
+from {{ source('reference_analyst_managed', 'IMD_2025') }}
 ```
 
-This gives the project one place where source column names are mapped, quoted identifiers are handled, and the interface between dbt and Snowflake is defined.
+This gives the project one place where source column names are mapped, quoted
+identifiers are handled, and the interface between dbt and Snowflake is defined.
+Only staging models may reference `raw_` models; modelling, reporting and product
+models must start from staging or a later contract.
+
+A small number of existing staging models still call `source()` directly. Treat
+these as legacy debt: do not copy the pattern, and record it as a non-blocking
+follow-up in an enhancement unless the change adds or depends on the bypass.
 
 ## Quick reference
 
@@ -133,7 +149,7 @@ Manual source drift check - 2 warning(s) across 14 table(s):
 ## Common pitfalls
 
 - **Never edit `models/raw/**/*.sql` or `auto_*.yml` by hand** — both are regenerated from the source YAMLs on every run. Fix the source YAML instead.
-- `**DEV__` vs prod database** — `sources.yml` entries often use `DEV__<database>` so dev builds work. When prod and dev schemas drift, raw models can compile against a table shape that only exists in one environment. If a raw model throws `invalid identifier`, check that `source_mappings.yml` and the manual YAML both point at the same database as the raw model is being built against.
+- **`DEV__` vs prod database** — `sources.yml` entries often use `DEV__<database>` so dev builds work. When prod and dev schemas drift, raw models can compile against a table shape that only exists in one environment. If a raw model throws `invalid identifier`, check that `source_mappings.yml` and the manual YAML both point at the same database as the raw model is being built against.
 - **Duplicate source names** — step 3 fails fast if the same source name appears in more than one manual YAML file. Don't copy-paste source blocks between files.
 - **Missing mapping** — if step 3 warns `No mapping found for source '<name>'`, add the source to `source_mappings.yml` (with `manual: true` if it's a manual YAML) so raw models pick up the right `raw_prefix` and `domain`.
 

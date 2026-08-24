@@ -1,6 +1,6 @@
 # SUS Models
 
-Models built from **SUS** (Secondary Uses Service) data — the national activity feed for secondary care. Three dataset types flow through three layers (staging → intermediate → reporting).
+Models built from **SUS** (Secondary Uses Service) data — the national activity feed for secondary care. Three dataset types flow through three layers (staging → modelling → reporting).
 
 ## Dataset types
 
@@ -35,7 +35,7 @@ Clean, deduplicated pass-throughs of the raw SUS tables. One row per record of t
 - `stg_sus_op_appointment_clinical_coding_procedure_opcs` — OPCS-4 procedures per appointment
 - `stg_sus_op_appointment_commissioning_grouping_unbundled_hrg` — unbundled HRGs per appointment
 
-## Intermediate — `models/modelling/acute/` and `models/modelling/population/demographics/`
+## Modelling — `models/modelling/acute/` and `models/modelling/population/demographics/`
 
 Normalises the three dataset types into shared shapes: encounters, diagnoses, procedures, HRGs, demographics.
 
