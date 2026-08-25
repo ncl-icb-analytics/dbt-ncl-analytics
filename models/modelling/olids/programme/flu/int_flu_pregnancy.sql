@@ -2,13 +2,14 @@
 Flu Pregnancy Eligibility Rule
 
 Business Rule: Person is eligible if they have:
-1. Scenario A: Pregnant at campaign start (9 months before) with no subsequent delivery, OR
-2. Scenario B: Became pregnant between campaign start and reference date (remains eligible even if delivered)
+1. Scenario A: Pregnant on the campaign start date with no subsequent delivery, OR
+2. Scenario B: Became pregnant between campaign start and audit end (remains eligible even if delivered)
 3. AND aged 12 years or older (minimum age for pregnancy flu vaccination)
 
 Campaign-specific logic:
-- Scenario A: Pregnant 9 months before campaign start with no subsequent delivery
-- Scenario B: Pregnancy code between campaign_start_date and campaign_reference_date
+- Scenario A: Latest pregnancy code in [1 January of the campaign year, campaign start),
+  i.e. the 8 months before campaign start, with no subsequent delivery
+- Scenario B: Pregnancy code between campaign_start_date and audit_end_date
 
 Simplified rule - focuses on flu season timing rather than complex pregnancy state logic.
 */
@@ -34,26 +35,25 @@ people_pregnant_during_campaign AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.campaign_start_date
-        AND obs.clinical_effective_date <= cc.campaign_reference_date
+        AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
--- Step 2: Scenario A - Pregnant at campaign start (9 months before) with no subsequent delivery
--- First, find people pregnant at the pregnancy eligibility date (9 months before campaign start)
+-- Step 2: Scenario A - Pregnant on the campaign start date with no subsequent delivery
+-- Latest pregnancy code in the 8 months before campaign start (1 January to 31 August)
 people_pregnant_at_campaign_start AS (
-    SELECT 
+    SELECT
         cc.campaign_id,
         obs.person_id,
         MAX(obs.clinical_effective_date) AS pregnancy_date,
-        DATEADD('month', -9, cc.campaign_start_date) AS pregnancy_eligibility_date,
+        DATEADD('month', -8, cc.campaign_start_date) AS pregnancy_eligibility_date,
         cc.audit_end_date
     FROM ({{ get_observations("'PREG_COD'", 'UKHSA_FLU') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
-        -- Pregnant around 9 months before campaign start (±3 month window)
-        AND obs.clinical_effective_date BETWEEN 
-            DATEADD('month', -12, cc.campaign_start_date) AND 
-            DATEADD('month', -6, cc.campaign_start_date)
+        -- [1 January of the campaign year, campaign start)
+        AND obs.clinical_effective_date >= DATEADD('month', -8, cc.campaign_start_date)
+        AND obs.clinical_effective_date < cc.campaign_start_date
     GROUP BY cc.campaign_id, obs.person_id, cc.campaign_start_date, cc.audit_end_date
 ),
 
