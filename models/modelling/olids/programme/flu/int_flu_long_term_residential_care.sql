@@ -1,12 +1,14 @@
 /*
-Simplified Long-term Residential Care Eligibility Rule
+Flu Long-term Residential Care Eligibility Rule
 
 Business Rule: Person is eligible if they have:
-1. Latest residential status code (RESIDE_COD) is a long-term care code (LONGRES_COD)
-   - Gets all residential codes and checks if most recent one indicates long-term care
+1. LONGRES_GROUP - a long-term residential care code (LONGRES_COD) that is no older than
+   their latest residence code (RESIDE_COD), i.e. LONGRES_DAT >= RESIDE_DAT
 2. AND aged 6 months or over (no upper age limit)
 
-Hierarchical rule - uses latest code logic to determine current residential status.
+LONGRES_COD is a subset of RESIDE_COD, so the two clusters are compared as separate
+latest dates rather than ranked in a single union - ranking ties every qualifying
+observation with itself and picks a winner nondeterministically.
 */
 
 {{ config(materialized='table') }}
@@ -18,61 +20,49 @@ WITH all_campaigns AS (
     SELECT * FROM ({{ flu_previous_config() }})
 ),
 
--- Step 1: Get all residential status codes for each person (for all campaigns)
-all_residential_codes AS (
-    SELECT 
+-- Step 1: Latest long-term care code date per person (LONGRES_DAT)
+latest_longres_date AS (
+    SELECT
         cc.campaign_id,
         obs.person_id,
-        obs.clinical_effective_date,
-        'RESIDE_COD' AS code_type,
-        1 AS is_residential_code,
-        cc.audit_end_date
-    FROM ({{ get_observations("'RESIDE_COD'", 'UKHSA_FLU') }}) obs
-    CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
-        AND obs.clinical_effective_date <= cc.audit_end_date
-    
-    UNION ALL
-    
-    SELECT 
-        cc.campaign_id,
-        obs.person_id,
-        obs.clinical_effective_date,
-        'LONGRES_COD' AS code_type,
-        1 AS is_longres_code,
-        cc.audit_end_date
+        MAX(obs.clinical_effective_date) AS longres_date
     FROM ({{ get_observations("'LONGRES_COD'", 'UKHSA_FLU') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
+    GROUP BY cc.campaign_id, obs.person_id
 ),
 
--- Step 2: Find latest residential code per person (for all campaigns)
-latest_residential_status AS (
-    SELECT 
-        campaign_id,
-        person_id,
-        clinical_effective_date AS latest_residential_date,
-        code_type AS latest_code_type,
-        ROW_NUMBER() OVER (PARTITION BY campaign_id, person_id ORDER BY clinical_effective_date DESC) AS rn
-    FROM all_residential_codes
+-- Step 2: Latest residence code date per person (RESIDE_DAT)
+latest_residence_date AS (
+    SELECT
+        cc.campaign_id,
+        obs.person_id,
+        MAX(obs.clinical_effective_date) AS residence_date
+    FROM ({{ get_observations("'RESIDE_COD'", 'UKHSA_FLU') }}) obs
+    CROSS JOIN all_campaigns cc
+    WHERE obs.clinical_effective_date IS NOT NULL
+        AND obs.clinical_effective_date <= cc.audit_end_date
+    GROUP BY cc.campaign_id, obs.person_id
 ),
 
--- Step 3: Filter to people whose latest residential code indicates long-term care (for all campaigns)
+-- Step 3: Long-term care code is current if not superseded by a later residence code
 people_in_long_term_care AS (
-    SELECT 
-        campaign_id,
-        person_id,
-        latest_residential_date,
-        latest_code_type
-    FROM latest_residential_status
-    WHERE rn = 1  -- Most recent residential code
-        AND latest_code_type = 'LONGRES_COD'  -- Latest code indicates long-term care
+    SELECT
+        l.campaign_id,
+        l.person_id,
+        l.longres_date AS latest_residential_date
+    FROM latest_longres_date l
+    LEFT JOIN latest_residence_date r
+        ON l.campaign_id = r.campaign_id
+        AND l.person_id = r.person_id
+    WHERE r.residence_date IS NULL
+        OR l.longres_date >= r.residence_date
 ),
 
 -- Step 4: Add demographics and apply age restrictions (for all campaigns)
 final_eligibility AS (
-    SELECT 
+    SELECT
         pltc.campaign_id,
         'Clinical Condition' AS campaign_category,
         'Long Term Residential Care' AS risk_group,

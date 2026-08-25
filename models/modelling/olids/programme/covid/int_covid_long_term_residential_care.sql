@@ -125,7 +125,9 @@ people_in_longterm_care_with_age AS (
     WHERE demo.is_active = TRUE
         AND demo.birth_date_approx IS NOT NULL
         AND pltc.is_in_longterm_care = TRUE
-        AND DATEDIFF('year', demo.birth_date_approx, pltc.campaign_reference_date) >= 65  -- Care home eligibility is 65+
+        -- Care home eligibility is 65+. Tested on birth date because Snowflake
+        -- DATEDIFF('year', ...) subtracts calendar years rather than completed years.
+        AND demo.birth_date_approx <= DATEADD('year', -65, pltc.campaign_reference_date)
 ),
 
 -- Step 7: Format for eligibility table
