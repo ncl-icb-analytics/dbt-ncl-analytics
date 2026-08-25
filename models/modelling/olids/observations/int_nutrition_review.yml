@@ -1,0 +1,16 @@
+models:
+  - name: int_nutrition_review
+    description: 'NUTRITION review. Built for SMI Longer Lives campaign using SMI_LONGER_LIVES_NUTRITION_ACTIVITY, NUTRIASSDEC_COD, NUTRIASS_COD'
+
+    config:
+      meta:
+        owner:
+          name: KateHomer55
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: person_id
+        tests:
+          - not_null

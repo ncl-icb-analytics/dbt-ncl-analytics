@@ -21,15 +21,15 @@ Includes ALL persons (active, inactive, deceased) within 5 years following inter
 */
 with exclusion_activities as (
     select visit_occurrence_id
-    from {{ref('int_comm_maternity')}}
+    from {{ref('int_activity_maternity')}}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     union all
     select visit_occurrence_id
-    from {{ref('int_comm_dialysis')}}
+    from {{ref('int_activity_dialysis')}}
     where start_date between dateadd(month, -12, current_date()) and current_date()
     union all
     select visit_occurrence_id
-    from {{ref('int_comm_cancer')}}
+    from {{ref('int_activity_cancer')}}
     where start_date between dateadd(month, -12, current_date()) and current_date()
 ),
 people_in_scope as (
@@ -71,15 +71,15 @@ op_flags as (
     select sk_patient_id,
     CASE WHEN visit_occurrence_id IN (
             SELECT visit_occurrence_id 
-            FROM {{ref('int_comm_cancer')}}
+            FROM {{ref('int_activity_cancer')}}
         ) THEN 1 ELSE 0 END AS cancer_flag,
      CASE WHEN visit_occurrence_id IN (
             SELECT visit_occurrence_id 
-            FROM {{ref('int_comm_dialysis')}}
+            FROM {{ref('int_activity_dialysis')}}
         ) THEN 1 ELSE 0 END AS dialysis_flag,
      CASE WHEN visit_occurrence_id IN (
             SELECT visit_occurrence_id 
-            FROM {{ref('int_comm_maternity')}}
+            FROM {{ref('int_activity_maternity')}}
         ) THEN 1 ELSE 0 END AS maternity_flag
     from op_cohort
 ),

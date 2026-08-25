@@ -24,8 +24,8 @@ dbt deps
 dbt debug
 ```
 
-dbt runs on the [Fusion engine](docs/dbt-fusion-guide.md) (installed by `start_dbt.ps1`),
-not a Python package. `uv` is only needed for the Python helper scripts in `scripts/`.
+dbt runs on the Fusion engine (installed by `start_dbt.ps1`), not a Python
+package. `uv` is only needed for the Python helper scripts in `scripts/`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed setup including commit signing.
 
@@ -76,36 +76,39 @@ The VS Code workspace runs `.\start_dbt.ps1` automatically when you open a termi
 models/
 ├── raw/           # 1:1 views of source data
 ├── staging/       # Cleaned and standardised
+├── reference/     # Derived reference datasets
 ├── modelling/     # Business logic and transformations
-│   ├── commissioning/
+│   ├── acute/
+│   ├── community/
 │   ├── olids/
-│   └── shared/
+│   └── population/
 ├── reporting/     # Analytics-ready datasets
 └── published/     # External reports and dashboards
 ```
 
 Data flows: `DATA_LAKE → Raw → Staging → Modelling → Reporting → Published`
 
-## Documentation
+## Learning dbt
+
+New to dbt or this project? Start at **[dbt-onboarding.vercel.app](https://dbt-onboarding.vercel.app/)** —
+our interactive courses (git, what dbt is, and a hands-on first PR) plus a handbook,
+all written around our environment and conventions. It is the canonical source for
+learning dbt here. You only need the `ANALYST` role to follow along.
+
+For general dbt learning: [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals-vs-code) | [dbt Learn catalog](https://learn.getdbt.com/catalog) | [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)
+
+## Project reference
 
 | Resource | Description |
 |----------|-------------|
-| [What is dbt?](docs/what-is-dbt.md) | Introduction to dbt, why we use it, and where it adds value |
-| [dbt Fusion Guide](docs/dbt-fusion-guide.md) | Using the VS Code extension: lineage, refactoring, autocomplete |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, commit signing, workflow |
-| [Modelling Guide](docs/modelling-guide.md) | Layer principles, naming conventions, building models |
-| [Materialisation Guide](docs/materialisation-guide.md) | Choosing between views, tables, incremental, ephemeral |
-| [Snapshots Guide](docs/snapshots-guide.md) | Tracking historical changes with SCDs |
-| [Development Guide](docs/development-guide.md) | Daily workflows, advanced patterns |
-| [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Quick-start: setup, commit signing, workflow |
 | [GitHub Codespaces](docs/codespaces.md) | Cloud dev: add secrets, create a codespace, how auth works |
+| [GitHub Actions](docs/github-actions.md) | CI/CD pipelines, deployment, project automations |
 | [Working with Sources](docs/working-with-sources.md) | Adding sources, regenerating raw models, and handling drift |
+| [SLAM Data](docs/slam-data-guide.md) | Source-to-staging methodology for the SLAM contract feeds |
+| [SUS Models](docs/sus-models.md) | Secondary care (SUS) model structure |
 
-## Learning dbt
-
-New to dbt? Start with [What is dbt?](docs/what-is-dbt.md) to understand what dbt does and why we use it. Then read the [Modelling Guide](docs/modelling-guide.md) to understand how this project is structured, and the [dbt Fusion Guide](docs/dbt-fusion-guide.md) to get the most out of the VS Code extension.
-
-For general dbt learning: [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals-vs-code) | [dbt Learn catalog](https://learn.getdbt.com/catalog) | [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)
+Older learning guides now live in [docs/archive/](docs/archive/), superseded by the onboarding site.
 
 ## Architecture
 
@@ -129,8 +132,10 @@ Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
 | `models/raw/` | `DEV__STAGING.DBT_RAW` | `STAGING.DBT_RAW` |
 | `models/staging/commissioning/csds/` | `DEV__STAGING.CSDS` | `STAGING.CSDS` |
 | `models/staging/olids/` | `DEV__STAGING.OLIDS` | `STAGING.OLIDS` |
+| `models/reference/organisation/` | `DEV__REFERENCE.ORGANISATION` | `REFERENCE.ORGANISATION` |
+| `models/modelling/acute/` | `DEV__MODELLING.ACUTE` | `MODELLING.ACUTE` |
 | `models/modelling/olids/diagnoses/` | `DEV__MODELLING.OLIDS_DIAGNOSES` | `MODELLING.OLIDS_DIAGNOSES` |
-| `models/modelling/commissioning/` | `DEV__MODELLING.COMMISSIONING_MODELLING` | `MODELLING.COMMISSIONING_MODELLING` |
+| `models/reporting/population/` | `DEV__REPORTING.POPULATION` | `REPORTING.POPULATION` |
 | `models/reporting/olids/indicators/` | `DEV__REPORTING.OLIDS_INDICATORS` | `REPORTING.OLIDS_INDICATORS` |
 | `models/modelling/commissioning/legacy_nwl/` | `DEV__MODELLING.LEGACY_NWL` | `MODELLING.LEGACY_NWL` |
 | `models/reporting/commissioning/legacy_nwl/` | `DEV__REPORTING.LEGACY_NWL` | `REPORTING.LEGACY_NWL` |

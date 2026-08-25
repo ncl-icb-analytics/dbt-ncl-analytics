@@ -20,14 +20,18 @@ models:
       analysis. Apply the same 5-year caveat to any historical
       comparisons drawn from this view.
 
-      Practice attribution: practice_code, practice_name, pcn_code,
-      pcn_name, borough come from dim_practice joined via the appointment's
-      publisher_organisation_code — this is the practice that delivered
-      the appointment. The registered_* columns (registered_practice_name,
-      registered_pcn_name, registered_borough, registered_neighbourhood)
-      come from dim_person_demographics and reflect the patient's CURRENT
-      registration, which may differ if the patient has since transferred
-      or attended via NHS-wide access.
+      Practice attribution: publisher_organisation_code plus practice_name,
+      pcn_code, pcn_name, borough_registered come from dim_practice joined
+      via the appointment's publisher_organisation_code — this is the
+      practice that delivered the appointment, which may differ from the
+      patient's current registration if they have since transferred or
+      attended via NHS-wide access. Patient-side geography (borough_resident,
+      neighbourhood_resident, IMD) is residence-based from
+      dim_person_demographics.
+
+      Exposes person_id as a pseudonymised linkage dimension for cross-view
+      cohort intersection (CTE joins to the other sem_olids_* views);
+      aggregate-only output.
 
       Patient demographics (age bands, ethnicity, IMD) reflect the
       patient's current state, not their state at appointment time.

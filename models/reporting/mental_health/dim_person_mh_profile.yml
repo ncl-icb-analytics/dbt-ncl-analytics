@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: dim_person_mh_profile
+    description: >
+      MHSDS mental health profile for people with a referral, care contact, or
+      occupancy-ruled inpatient spell. Grain: one row per person_id. Current
+      state reflects the active MHSDS feed, which runs about six weeks behind
+      the run date.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: person_id
+        description: MHSDS person identifier.
+        data_tests:
+          - unique
+          - not_null
+      - name: sk_patient_id
+        description: Pseudonymised patient identifier.
+      - name: n_referrals_ever
+        description: Number of referral episodes.
+      - name: n_open_referrals
+        description: Number of referral episodes without a recorded closure.
+      - name: first_referral_date
+        description: First referral request received date.
+      - name: latest_referral_date
+        description: Latest referral request received date.
+      - name: latest_contact_date
+        description: Latest care contact date.
+      - name: has_contact_last_12m
+        description: Whether a contact is recorded in the last 12 months.
+      - name: has_contact_last_90d
+        description: Whether a contact is recorded in the last 90 days.
+      - name: n_attended_contacts_12m
+        description: Number of attended care contacts in the last 12 months.
+      - name: has_crisis_contact_12m
+        description: Whether an attended crisis-referral contact is recorded in the last 12 months.
+      - name: is_current_inpatient
+        description: Whether the person has an open occupancy-ruled inpatient spell.
+      - name: latest_admission_date
+        description: Latest occupancy-ruled inpatient spell admission date.
+      - name: latest_discharge_date
+        description: Latest discharged occupancy-ruled inpatient spell end date.
+      - name: n_spells_ever
+        description: Number of occupancy-ruled inpatient spells.
+      - name: ever_inpatient
+        description: Whether the person has an occupancy-ruled inpatient spell.
+      - name: icd10_3
+        description: Latest three-character ICD-10 diagnosis code.
+      - name: diagnosis_category
+        description: Currency population category for the latest diagnosis.
+      - name: latest_diagnosis_date
+        description: Latest diagnosis coding timestamp.
+      - name: ever_detained
+        description: Whether a formal Mental Health Act legal status is recorded.
+      - name: latest_detention_start_date
+        description: Latest formal Mental Health Act legal-status start date.
+      - name: is_currently_detained
+        description: Whether a formal legal-status period is current in the feed.
+      - name: cpp_status_code
+        description: >
+          Latest child protection plan status code, uninterpreted - the MHSDS
+          code semantics are unverified against the TOS.
+      - name: is_looked_after_child
+        description: Whether the latest patient indicators record looked-after status.

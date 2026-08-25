@@ -1,0 +1,28 @@
+models:
+  - name: stg_mhsds_indirectactivity
+    description: 'Mental Health Services Data Set (MHSDS) indirect activities (MHS204): clinical activity on behalf of a patient without the patient present, deduplicated to the latest record per activity within active submissions'
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+    columns:
+      - name: mhs204_uniq_id
+        description: MHSDS indirect activity identifier
+        data_tests:
+          - unique
+      - name: uniq_serv_req_id
+        description: unique service request identifier of the referral the activity belongs to
+      - name: person_id
+        description: MHSDS person identifier
+      - name: indirect_act_date
+        description: date of the indirect activity
+      - name: duration_indirect_act
+        description: duration of the indirect activity in minutes
+      - name: care_prof_team_local_id
+        description: local identifier of the care professional team
+      - name: other_care_prof_team_local_id
+        description: local team identifier used by some providers in place of care_prof_team_local_id

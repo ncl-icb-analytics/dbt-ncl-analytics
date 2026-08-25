@@ -148,19 +148,19 @@ The winning file per slice is published in `STAGING.SLAM.STG_SLAM_LATEST_SUBMISS
 -- parse coverage: source cost values vs cleaned
 select count(t.total_cost) as src, count(s.dv_total_cost) as cleaned
 from DATA_LAKE.SDL.LSDRPLCM t
-join STAGING.LSDRPLCM.STG_LSDRPLCM s on s.meta_sk_row_id = t.meta_sk_row_id;
+join STAGING.SLAM.STG_LSDRPLCM s on s.meta_sk_row_id = t.meta_sk_row_id;
 
 -- winning files for a period
 select meta_file_id from STAGING.SLAM.STG_SLAM_LATEST_SUBMISSION
 where feed = 'LSACM' and dv_financial_year = '202526' and dv_financial_month = 12;
 
 -- rows excluded from month-level reporting (unrecoverable periods)
-select financial_year_raw, count(*) from STAGING.LSDRPLCM.STG_LSDRPLCM
+select financial_year_raw, count(*) from STAGING.SLAM.STG_LSDRPLCM
 where dv_financial_year is null group by 1 order by 2 desc;
 
 -- restatement collapse: history vs latest
-select (select count(*) from STAGING.LSDRPLCM.STG_LSDRPLCM) as history_rows,
-       (select count(*) from STAGING.LSDRPLCM.STG_LSDRPLCM_LATEST) as latest_rows;
+select (select count(*) from STAGING.SLAM.STG_LSDRPLCM) as history_rows,
+       (select count(*) from STAGING.SLAM.STG_LSDRPLCM_LATEST) as latest_rows;
 ```
 
-Column descriptions in Snowsight state what each derived field was parsed from and how failures behave. The cleaning code is in `macros/transformations/parse_slam.sql` and `models/staging/commissioning/ls*/`.
+Column descriptions in Snowsight state what each derived field was parsed from and how failures behave. The cleaning code is in `macros/transformations/parse_slam.sql` and `models/staging/commissioning/slam/`.

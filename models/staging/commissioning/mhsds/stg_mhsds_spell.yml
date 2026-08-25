@@ -8,15 +8,30 @@ models:
     columns:
       - name: uniq_hosp_prov_spell_num
         description: A unique identifier for each Hospital Provider Spell for a Health Care Provider
-        tests:
+        data_tests:
           - not_null
           - unique
 
       - name: dm_icb_commissioner
         description: The ICB (Integrated Care Board) that commissioned the spell.
 
+      - name: reporting_period_end_date
+        description: >
+          End date of the last reporting period in which this spell appeared in an
+          active submission. MHSDS providers must resubmit every active spell each
+          monthly period, so a spell whose reporting_period_end_date is historic and
+          has no discharge date is orphaned rather than genuinely open.
+        data_tests:
+          - not_null
 
-    tests:
+      - name: uniq_serv_req_id
+        description: Unique service request identifier linked to the spell.
+
+      - name: age_hosp_start_date
+        description: MHSDS-derived age at admission.
+
+
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

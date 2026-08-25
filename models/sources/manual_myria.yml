@@ -3,7 +3,9 @@ sources:
 - name: myria
   database: '"DATA_LAKE__NCL"'
   schema: '"MYRIA"'
-  description: Project Myria (BEVC) canonical inputs - Doccla enrolled patients and the propensity-matched evaluation population. One row per patient per file; FILE_DATE identifies the upload. Loaded by MYRIA.LOAD_NEW_FILES().
+  description: Project Myria (BEVC) canonical inputs - Doccla enrolled patients and
+    the propensity-matched evaluation population. One row per patient per file; FILE_DATE
+    identifies the upload. Loaded by MYRIA.LOAD_NEW_FILES().
   tables:
   - name: ENROLLED_PATIENTS
     identifier: '"ENROLLED_PATIENTS"'
@@ -153,3 +155,94 @@ sources:
       data_type: TEXT
     - name: LOADED_AT
       data_type: TIMESTAMP_NTZ
+  - name: RFL_SUBMISSION_PATIENTS
+    identifier: '"RFL_SUBMISSION_PATIENTS"'
+    columns:
+    - name: FILE_DATE
+      data_type: DATE
+    - name: SOURCE_FILE
+      data_type: TEXT
+    - name: LOADED_AT
+      data_type: TIMESTAMP_NTZ
+    - name: HEX_ID
+      data_type: TEXT
+    - name: HOSPITAL_NUMBER
+      data_type: NUMBER(8,0)
+    - name: DATA_SOURCE_REFRESH_DATE
+      data_type: TEXT
+    - name: GP_CODE
+      data_type: TEXT
+    - name: GP_PRACTICE_NAME
+      data_type: TEXT
+    - name: LOCAL_AUTHORITY
+      data_type: TEXT
+    - name: BH_NEL_ADMISSIONS_1_YEAR
+      data_type: NUMBER(2,0)
+    - name: RFL_ADMISSIONS_1_YEAR
+      data_type: NUMBER(2,0)
+    - name: NEL_ADMISSIONS_2_YEARS
+      data_type: NUMBER(2,0)
+    - name: ALCOHOL_DEPENDENCE
+      data_type: NUMBER(1,0)
+    - name: ATRIAL_FIBRILLATION
+      data_type: NUMBER(1,0)
+    - name: BRONCHIECTASIS
+      data_type: NUMBER(1,0)
+    - name: CEREBROVASCULAR_DISEASE
+      data_type: NUMBER(1,0)
+    - name: CHRONIC_KIDNEY_DISEASE
+      data_type: NUMBER(1,0)
+    - name: CHRONIC_LIVER_DISEASE
+      data_type: NUMBER(1,0)
+    - name: COPD
+      data_type: NUMBER(1,0)
+    - name: CORONARY_HEART_DISEASE
+      data_type: NUMBER(1,0)
+    - name: DEMENTIA
+      data_type: NUMBER(1,0)
+    - name: END_STAGE_RENAL_FAILURE
+      data_type: NUMBER(1,0)
+    - name: FRAILTY_FALLS
+      data_type: NUMBER(1,0)
+    - name: HEART_FAILURE
+      data_type: NUMBER(1,0)
+    - name: HYPERTENSION
+      data_type: NUMBER(1,0)
+    - name: LIVER_FAILURE
+      data_type: NUMBER(1,0)
+    - name: OSTEOPOROSIS
+      data_type: NUMBER(1,0)
+    - name: PARKINSONS_DISEASE
+      data_type: NUMBER(1,0)
+    - name: PERIPHERAL_VASCULAR_DISEASE
+      data_type: NUMBER(1,0)
+    - name: PULMONARY_HEART_DISEASE
+      data_type: NUMBER(1,0)
+    - name: RHEUMATOID_ARTHRITIS
+      data_type: NUMBER(1,0)
+    - name: SEVERE_INTERSTITIAL_LUNG_DISEASE
+      data_type: NUMBER(1,0)
+    - name: TOTAL_HIGH_RISK_CONDITIONS
+      data_type: NUMBER(2,0)
+    - name: MOST_RECENT_NEL_ADMISSION_DATE
+      data_type: TEXT
+    - name: IS_ACTIVE
+      data_type: NUMBER(1,0)
+    - name: NCL_BOROUGH_REGISTERED
+      data_type: TEXT
+    - name: BOROUGH_RESIDENT
+      data_type: TEXT
+    - name: IS_DECEASED
+      data_type: NUMBER(1,0)
+    - name: DEATH_DATE_APPROX
+      data_type: TEXT
+    - name: IS_ON_PDS
+      data_type: NUMBER(1,0)
+    - name: IS_MATCH_OLIDS
+      data_type: NUMBER(1,0)
+    - name: INACTIVE_REASON
+      data_type: TEXT
+    - name: IS_ON_PALLIATIVE_CARE_REGISTER
+      data_type: NUMBER(1,0)
+    - name: BH_DISCHARGE_LAST_12M
+      data_type: NUMBER(1,0)

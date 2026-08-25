@@ -5,19 +5,6 @@
    models. Models supply only feed-specific columns; aliases are fixed:
    `s` = source table, `sl` = submission_slices_ranked. #}
 
-{# Maps SDL WNL source table names to their raw-layer passthrough models. #}
-{% macro sdl_wnl_raw_model(table_name) -%}
-{%- set models = {
-    'LSACM': 'raw_sdl_wnl_lsacm',
-    'LSPLCM': 'raw_sdl_wnl_lsplcm',
-    'LSDRPLCM': 'raw_sdl_wnl_lsdrplcm',
-    'LSDEPLCM': 'raw_sdl_wnl_lsdeplcm',
-    'COMOPL': 'raw_sdl_wnl_comopl',
-    'REF': 'raw_sdl_wnl_ref',
-} -%}
-{{- models[table_name] -}}
-{%- endmacro %}
-
 {# Money/activity string -> NUMBER(38,6).
    Handles thousands commas, currency symbols (incl. mojibake bytes), spaces,
    and accounting-style "(1,234.56)" negatives. 'TBC' and other non-numeric
@@ -69,9 +56,17 @@
 
 {# Financial year string -> canonical 'YYYYYY' (e.g. '202526'), validated so the
    second year follows the first. Accepts '202526', '2025/26', '2025-26',
-   '2025 26', '2025-2026'. Bare calendar years ('2020') are ambiguous -> NULL.
-   Garbage ('215551', specialty names on misaligned rows) -> NULL. #}
-{% macro parse_slam_financial_year(col) %}
+   '2025 26', '2025-2026'. Garbage ('215551', specialty names on misaligned
+   rows) -> NULL.
+
+   Bare calendar years ('2020') are ambiguous across feeds (could be either FY
+   end) -> NULL by default. allow_bare_year=true reads a bare 4-digit '20YY'
+   (2015-2030) as the FY START year ('2020' -> '202021'); used only for LSACM,
+   whose DLP/Local layouts carry the FY start year in dlp_FinancialYear with no
+   YYYYYY column. Safe there because, after the AcuteAGG summaries are
+   quarantined, a bare year in LSACM.financial_year is reliably a real FY start;
+   the PLD feeds keep returning NULL so their activity-date fallback wins. #}
+{% macro parse_slam_financial_year(col, allow_bare_year=false) %}
     case
         when regexp_replace({{ col }}, '[^0-9]', '') rlike '^20[0-9]{4}$'
              and try_to_number(substr(regexp_replace({{ col }}, '[^0-9]', ''), 5, 2))
@@ -82,6 +77,12 @@
                  = try_to_number(substr(regexp_replace({{ col }}, '[^0-9]', ''), 1, 4)) + 1
             then substr(regexp_replace({{ col }}, '[^0-9]', ''), 1, 4)
                  || substr(regexp_replace({{ col }}, '[^0-9]', ''), 7, 2)
+{% if allow_bare_year %}
+        when regexp_replace({{ col }}, '[^0-9]', '') rlike '^20[0-9]{2}$'
+             and try_to_number(regexp_replace({{ col }}, '[^0-9]', '')) between 2015 and 2030
+            then regexp_replace({{ col }}, '[^0-9]', '')
+                 || lpad(to_varchar(mod(try_to_number(regexp_replace({{ col }}, '[^0-9]', '')) + 1, 100)), 2, '0')
+{% endif %}
     end
 {% endmacro %}
 
@@ -152,6 +153,8 @@
    `table_name` is the source table; `feed` is the registry FEED literal
    (mixed case, e.g. 'LSDrPLCM'). #}
 {% macro slam_submission_slices(table_name, feed) %}
+{# LSACM DLP/Local layouts carry the FY only as a bare start year - allow it. #}
+{%- set allow_bare = (feed == 'LSACM') -%}
 registry as (
     select
         file_id,
@@ -165,7 +168,7 @@ registry as (
                  = mod(try_to_number(substr(regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1), 1, 2)) + 1, 100)
                 then '20' || regexp_substr(original_file_name, '_(2[0-9][0-9]{2})_InformationStandard', 1, 1, 'e', 1)
         end                                     as financial_year_from_file_name
-    from {{ ref('raw_sdl_wnl_meta_file_registry') }}
+    from {{ source('sdl_wnl', 'META_FILE_REGISTRY') }}
     where feed = '{{ feed }}'
 ),
 
@@ -177,7 +180,7 @@ submission_slices as (
         financial_year,
         financial_month,
         organisation_identifier_code_of_provider as provider_code_raw
-    from {{ ref(sdl_wnl_raw_model(table_name)) }}
+    from {{ source('sdl_wnl', table_name) }}
     group by all
 ),
 
@@ -186,10 +189,10 @@ submission_slices_enriched as (
         s.*,
         r.submission_loaded_at,
         r.submission_file_name,
-        {{ parse_slam_financial_year('s.financial_year') }}
+        {{ parse_slam_financial_year('s.financial_year', allow_bare_year=allow_bare) }}
                                                 as dv_financial_year_stated,
         coalesce(
-            {{ parse_slam_financial_year('s.financial_year') }},
+            {{ parse_slam_financial_year('s.financial_year', allow_bare_year=allow_bare) }},
             r.financial_year_from_file_name
         )                                       as dv_financial_year,
         {{ parse_slam_financial_month('s.financial_month') }}
@@ -214,7 +217,7 @@ submission_slices_enriched as (
 ,
 new_files as (
     select meta_file_id, meta_batch_id
-    from {{ ref(sdl_wnl_raw_model(table_name)) }}
+    from {{ source('sdl_wnl', table_name) }}
     group by all
     minus
     select distinct meta_file_id, meta_batch_id
@@ -237,7 +240,9 @@ where exists (
 
 {# Body of a stg_*_latest view: staging rows restricted to the file holding
    the current provider statement of each (provider, FY, month) slice, via
-   the stg_slam_latest_submission lookup. #}
+   the stg_slam_latest_submission lookup. LSACM adds commissioner to the slice
+   (DLP/Local providers submit per-commissioner files) — the lookup's
+   dv_commissioner is NULL for the other feeds, so they stay provider-grain. #}
 {% macro slam_latest_view(staging_model, feed) %}
 select s.*
 from {{ ref(staging_model) }} as s
@@ -248,6 +253,9 @@ join {{ ref('stg_slam_latest_submission') }} as l
    and equal_null(l.dv_provider_code, s.dv_provider_code)
    and equal_null(l.dv_financial_year, s.dv_financial_year)
    and equal_null(l.dv_financial_month, s.dv_financial_month)
+{% if feed == 'LSACM' %}
+   and equal_null(l.dv_commissioner, s.commissioner_code)
+{% endif %}
 {% endmacro %}
 
 {# Join condition matching a source row to its submission slice. Null-safe on

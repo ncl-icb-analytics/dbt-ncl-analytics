@@ -4,7 +4,7 @@
         tags=['adult_imms'],
         cluster_by=['person_id'])
 }}
---define PPV clinical risk groups using COVID. NEED TO ADD Cochlear Implant and CSF leak once SNOMED codelists are available.
+--define PPV clinical risk groups using COVID. PLUS Cochlear Implant and CSF leak specified in UKHSA rules.
 WITH PPV_clinical_risk_groups AS (
 select distinct person_id
 FROM (
@@ -14,6 +14,16 @@ SELECT person_id, risk_group, reference_date
    WHERE risk_group 
    in ('Chronic Respiratory Disease','Asplenia/Spleen Dysfunction','Chronic Heart Disease','Chronic Kidney Disease','Diabetes','Chronic Liver Disease','Immunosuppression')
    QUALIFY ROW_NUMBER() OVER (PARTITION BY PERSON_ID, RISK_GROUP ORDER BY REFERENCE_DATE DESC) = 1
+
+UNION ALL
+SELECT person_id, 'Cochlear Implant' as risk_group, date(clinical_effective_date) as reference_date
+FROM {{ ref('int_cochlear_implant_latest') }}
+--FROM MODELLING.OLIDS_OBSERVATIONS.INT_COCHLEAR_IMPLANT_LATEST  
+
+UNION ALL
+SELECT person_id, 'CSF Leak' as risk_group, date(clinical_effective_date) as reference_date
+FROM {{ ref('int_csf_leak_latest')}}
+--FROM MODELLING.OLIDS_OBSERVATIONS.INT_CSF_LEAK_LATEST
 ) a
 )
 

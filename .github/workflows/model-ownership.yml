@@ -1,8 +1,8 @@
 name: Model Ownership
 
 on:
+  # No branch filter: stacked PRs target feature branches. Static check, no secrets.
   pull_request:
-    branches: [main]
     paths:
       - 'models/**/*.sql'
 
