@@ -3,18 +3,15 @@
 # Runs dbt (Fusion) directly on the runner against Snowflake PROD - no dbt
 # project object, no ADD VERSION, no 20k file limit.
 #
-# Selection: state:modified+ against the manifest published by the last
-# successful deploy (fetched from the DBT_ARTIFACTS stage). Falls back to a
-# full build when no state manifest exists or on manual dispatch.
+# Selection: state:modified+ against the latest deploy-state manifest in the
+# DBT_ARTIFACTS stage. Falls back to a full build when no state manifest exists
+# or on manual dispatch.
 #
-# Publishes target/manifest.json + run_results.json + meta.json back to the
-# stage on every attempt, success or not (see
-# .github/actions/publish-dbt-artifacts). Deliberate consequence: a node that
-# failed is NOT retried by later unrelated deploys - the deploy that broke it
-# goes red once (blaming the right PR), everyone after stays green. The node
-# redeploys when its fix merges (the fix makes it state:modified again);
-# transient failures on scheduled-lineage models are retried by the nightly
-# and weekly scheduled builds.
+# Runs that pass Fusion compile publish target/manifest.json + run_results.json
+# + meta.json as the next baseline, even if execution later fails. This prevents
+# later unrelated deploys from retrying failed nodes. A compile failure, or a
+# failure before the build starts, keeps the prior baseline and stores any
+# available artifacts under attempts/<run_id>/.
 #
 # Prerequisites:
 #   - Snowflake secrets: SNOWFLAKE_ACCOUNT, SNOWFLAKE__USERNAME,
@@ -38,17 +35,73 @@ on:
       - 'dbt_project.yml'
 
 jobs:
+  deploy-decision:
+    name: Check deploy marker
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      should-deploy: ${{ steps.decision.outputs.should-deploy }}
+    steps:
+      - name: Resolve skip-deploy marker
+        id: decision
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            if (context.eventName === 'workflow_dispatch') {
+              core.setOutput('should-deploy', 'true');
+              return;
+            }
+
+            const marker = /\[skip(?: |-)deploy\]/i;
+            const pushMessages = [
+              context.payload.head_commit?.message,
+              ...(context.payload.commits ?? []).map(commit => commit.message),
+            ].filter(Boolean);
+
+            let skipSource = pushMessages.find(message => marker.test(message));
+
+            // A merge queue controls the final commit message, so also inspect
+            // the associated PR title. This keeps `[skip deploy]` reliable when
+            // the marker was supplied before the PR entered the queue.
+            // The lookup is advisory: a transient API failure must not cancel
+            // the deploy (and a skipped deploy job would open no issue), so
+            // fail open and treat the marker as absent.
+            if (!skipSource) {
+              try {
+                const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  commit_sha: context.sha,
+                });
+                const markedPull = pulls.find(pull => marker.test(pull.title));
+                if (markedPull) {
+                  skipSource = `PR #${markedPull.number}: ${markedPull.title}`;
+                }
+              } catch (error) {
+                core.warning(
+                  `Could not read associated PRs (${error.message}); assuming no [skip deploy] marker.`
+                );
+              }
+            }
+
+            const shouldDeploy = !skipSource;
+            core.setOutput('should-deploy', String(shouldDeploy));
+            core.notice(
+              shouldDeploy
+                ? 'No [skip deploy] marker found; production deployment will run.'
+                : `Production deployment skipped by ${skipSource}`
+            );
+
   deploy:
     name: Deploy Modified Models + Downstream
+    needs: deploy-decision
     runs-on: ubuntu-latest
     timeout-minutes: 350
-    # Skip if the merge commit message contains [skip deploy] or [skip-deploy].
-    # Manual workflow_dispatch always runs.
-    if: |
-      github.event_name == 'workflow_dispatch' || (
-        !contains(github.event.head_commit.message, '[skip deploy]') &&
-        !contains(github.event.head_commit.message, '[skip-deploy]')
-      )
+    # Manual workflow_dispatch always runs. Pushes skip when the marker is in
+    # a pushed commit message or the associated PR title, including queued PRs.
+    if: needs.deploy-decision.outputs.should-deploy == 'true'
     # Queue prod runs sequentially (shared with dbt-scheduled.yml). Each queued
     # deploy compares against the manifest its predecessor published, so it
     # only builds its own delta.
@@ -58,6 +111,7 @@ jobs:
     permissions:
       contents: read
       issues: write  # failure issues (report_dbt_failures.py)
+      pull-requests: read  # associate the deployed commit with its PR
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE__USERNAME }}
@@ -68,6 +122,9 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           persist-credentials: false
+          # Failure attribution compares failed dbt dependency paths with the
+          # commit being deployed.
+          fetch-depth: 0
 
       - name: Install dbt Fusion
         run: |
@@ -95,6 +152,10 @@ jobs:
       - name: Install dbt packages
         run: dbt deps
 
+      - name: Compile project
+        id: compile
+        run: dbt compile --target prod --profiles-dir .
+
       - name: Fetch state manifest
         id: state
         if: github.event_name == 'push'
@@ -104,37 +165,40 @@ jobs:
         id: build
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "${{ steps.state.outputs.has_state }}" != "true" ]; then
-            args="build --target prod"
+            args=(build --target prod)
             echo "Full build (manual trigger or no state manifest)"
           else
-            args="build --target prod --select state:modified+ --state state"
+            args=(build --target prod --select "state:modified+" --state state)
             echo "State-based build: modified + downstream"
           fi
-          echo "dbt_command=dbt $args" >> "$GITHUB_OUTPUT"
-          dbt $args --profiles-dir .
+          echo "dbt_command=dbt ${args[*]}" >> "$GITHUB_OUTPUT"
+          dbt "${args[@]}" --profiles-dir .
 
-      # Publish even when the build failed (not when cancelled - a cancelled
-      # run's manifest would mark half-built models as deployed).
+      # Execution failures advance state so later PRs remain isolated. Compile
+      # failures are archived without replacing the prior baseline.
       - name: Publish dbt artifacts
         if: ${{ !cancelled() }}
         uses: ./.github/actions/publish-dbt-artifacts
         with:
-          dbt-command: ${{ steps.build.outputs.dbt_command }}
+          dbt-command: ${{ steps.compile.outcome != 'success' && 'dbt compile --target prod' || steps.build.outputs.dbt_command }}
           target: prod
-          build-outcome: ${{ steps.build.outcome }}
+          build-outcome: ${{ steps.compile.outcome != 'success' && 'failure' || steps.build.outcome }}
+          compile-outcome: ${{ steps.compile.outcome }}
 
       # Failure issue naming the broken nodes (-> Teams via the
-      # +label:"dbt-run-failure" issues subscription). Deploy issues do NOT
-      # close on the next green deploy - unrelated deploys skip broken nodes
-      # under the publish-always baseline - only when every tracked node
-      # builds green again or leaves the project.
+      # +label:"dbt-run-failure" issues subscription). This label is deploy-only;
+      # scheduled failures use dbt-scheduled-run-failure. Deploy issues do NOT
+      # close on the next green deploy - unrelated deploys skip execution-time
+      # failures under the latest-attempt baseline - only when every tracked
+      # node builds green again or leaves the project.
       - name: Report or resolve failure issue
         if: ${{ !cancelled() }}
         env:
           GH_TOKEN: ${{ github.token }}
           DBT_CONTEXT: deploy
-          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          BUILD_OUTCOME: ${{ steps.compile.outcome != 'success' && 'failure' || steps.build.outcome }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ISSUE_LABEL: dbt-run-failure
         run: python3 .github/scripts/report_dbt_failures.py
 
       - name: Cleanup credentials
