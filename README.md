@@ -99,16 +99,18 @@ models/
 
 Raw has one route: `DATA_LAKE → Raw → Staging`. Only staging models may
 reference `raw_` models. After staging, models reuse the contract that fits;
-modelling and reporting may reference each other where the DAG remains acyclic.
+modelling and reporting may reference each other when this does not create a
+circular dependency.
 Published, partner and semantic models serve downstream consumers.
 
 ## Working conventions
 
-- State the subject, population, reference time and grain before writing SQL.
-- Explain population selection in the model description, including thresholds,
-  date rules and the named code list or definition used.
+- State the subject and grain before writing SQL. Add the population and time
+  basis where the model selects or derives them.
+- When a model selects a population, explain the rules in its description,
+  including thresholds, date rules and the named code list or definition used.
 - Search names, YAML and lineage before creating another definition.
-- Reuse or extend the canonical staging model for a source object; do not add a
+- Reuse or extend the staging model for a source object; do not add a
   pipeline- or consumer-named duplicate.
 - Keep staging joins exceptional and universal: cleaning, standardisation or
   enrichment that every consumer of the source should inherit.
@@ -117,7 +119,7 @@ Published, partner and semantic models serve downstream consumers.
 - Name models for their subject and grain, not for processing steps such as
   consolidation or enrichment.
 - Prefer readable, straightforward SQL. Logic must not masquerade as data: keep
-  executable rules in SQL and use seeds for declarative facts or parameters.
+  rules in SQL and use seeds for lookup values and parameters.
 - Use unquoted `snake_case` output columns from staging onward. Published models
   may instead use quoted friendly names for consumers; this is optional.
 - Do not add columns known to be null for every row. Only a model under
@@ -133,8 +135,8 @@ Published, partner and semantic models serve downstream consumers.
 - Split confused responsibilities, not individual transformations or CTEs.
 - Use `ref()` in hand-written models; only generated raw models use `source()`.
 - Keep programme, geography, legacy, audience and product rules at the scope
-  that owns them. Make narrower scope visible in the model's folder/schema,
-  name and description.
+  that owns them. Make narrower scope visible in the model's folder/schema and
+  name, and explain it in the description when the name is not enough.
 
 See [Project conventions](PROJECT_CONVENTIONS.md) for the review checklist
 and [Working with Sources](docs/working-with-sources.md) for source generation.
@@ -143,7 +145,7 @@ and [Working with Sources](docs/working-with-sources.md) for source generation.
 
 The [dbt onboarding site](https://dbt-onboarding.vercel.app/) contains interactive
 courses on git, dbt and a first pull request, plus the project handbook. It is the
-canonical learning guide for this project. You only need the `ANALYST` role to
+main learning guide for this project. You only need the `ANALYST` role to
 follow along.
 
 For general dbt learning: [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals-vs-code) | [dbt Learn catalog](https://learn.getdbt.com/catalog) | [dbt Documentation](https://docs.getdbt.com/) | [dbt Community Slack](https://www.getdbt.com/community/)

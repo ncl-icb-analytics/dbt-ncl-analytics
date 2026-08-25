@@ -1,20 +1,21 @@
 # Project conventions
 
 This is the repository-wide checklist for model work. The
-[dbt onboarding handbook](https://dbt-onboarding.vercel.app/) is the canonical
-guide to the reasoning behind these conventions.
+[dbt onboarding handbook](https://dbt-onboarding.vercel.app/) is the main guide
+to the reasoning behind these conventions.
 
 ## Start with the contract
 
 Before writing SQL:
 
-1. State the subject, population, reference time and grain.
+1. State the subject and grain. Add the population and time basis when the model
+   selects or derives them.
 2. Search model names, YAML and lineage for an existing contract.
 3. Start with the most settled layer that fits the use: published for its named
    product, reporting for business-ready analysis, then modelling when shared
    meaning is still missing.
-4. Decide whether to reuse, compose, extend or create. If creating a model,
-   record why nearby models do not fit.
+4. Decide whether to reuse, compose, extend or create. When an existing model
+   overlaps the proposed contract, record why it does not fit.
 
 ## Public repository data safety
 
@@ -58,10 +59,10 @@ create a cycle.
 | Partner | Serve governed partner datasets and their access mapping. Keep partner policy out of shared reporting models. | `ptr_` for partner-facing marts |
 | Semantic | Define Snowflake semantic views over established models. Keep facts, dimensions and metrics aligned with their source contracts. | `sem_` |
 
-Meaning should become more scoped as it moves downstream, not contradict a
-promise already made upstream.
+Downstream models may narrow or tailor a shared definition, but must not silently
+contradict it.
 
-Each source object has one canonical staging interface. Reuse or extend that
+Each source object has one staging interface. Reuse or extend that
 model instead of adding another staging model for a pipeline, migration or
 consumer. Name new staging models for the source object they clean, using the
 project's established source and entity vocabulary.
@@ -80,15 +81,16 @@ same concept and normally change for the same reason.
 
 Split a model when parts have independent grains, tests, owners, consumers,
 reuse or reasons to change. A split should give each contract a clear home; it
-should not create a deep DAG of fragments that have no meaning on their own.
+should not create a deep dependency chain of fragments that have no meaning on
+their own.
 
 ## Programme-specific models
 
 A shared model may own a definition agreed for the whole project. A threshold,
 population, period, priority rule, term, label or classification authorised by
 one programme has narrower scope. Put that rule or vocabulary in the programme's
-folder or schema and compose the shared clinical, person and activity models it
-needs; do not change a shared model as though the programme's interpretation
+folder or schema and reuse the shared clinical, person and activity models it
+needs. Do not change a shared model as though the programme's interpretation
 applied to everyone.
 
 Make programme scope visible in both path and name:
@@ -112,8 +114,9 @@ project-wide definition.
 Programme scope is one case of a narrower contract. Geography-specific,
 legacy-migration and consumer-specific models need the same clarity. If they run
 beside a shared model for the same subject and grain, make the narrower scope
-visible in the model name, folder/schema and description. Do not give a scoped
-variant an unqualified name that could be mistaken for the canonical model.
+visible in the model name and folder/schema. Explain it in the description when
+the name is not enough. Do not give a scoped variant an unqualified name that
+could be mistaken for the shared model.
 
 Before adding a parallel `int_`, `fct_`, `dim_` or `obt_` model, explain why the
 existing contract cannot be extended or composed. A transitional model should
@@ -128,7 +131,7 @@ also state what it is reconciling with and how consumers can distinguish it.
   calls. Never hardcode a warehouse relation in model SQL.
 - Only staging models may `ref()` a `raw_` model. All other models start from
   staging or a later contract; modelling and reporting may reuse each other's
-  models where the dependency is acyclic and the contract fits.
+  models where the contract fits and this does not create a circular dependency.
 - Staging models read raw models with `ref()` and select columns explicitly.
 - Folder placement supplies database, schema, materialisation, tags and hooks
   through `dbt_project.yml`. Check neighbouring models before adding a local
@@ -180,24 +183,22 @@ also state what it is reconciling with and how consumers can distinguish it.
 
 ## Seeds
 
-Use seeds for small, team-owned lookup values, mappings, thresholds and numeric
-conversion parameters. Logic must not masquerade as data: seed rows should be
-declarative facts or parameters, while executable business rules remain visible
-in readable SQL. A seed has become a miniature DSL when it encodes expressions,
-branching or precedence whose control flow requires a model or macro to
-interpret it. Replace that structure with a clear SQL contract rather than
-adding syntax to the seed.
+Use seeds for small, team-owned lookup values, mappings, thresholds, priorities
+and conversion parameters. Logic must not masquerade as data. A seed should not
+store expressions, operators or branching that a model or macro must parse.
+Keep those rules visible in readable SQL rather than adding syntax to the seed.
 
 ## YAML, documentation and tests
 
 Treat SQL, properties and tests as one change.
 
-- Every model needs a description. Describe its subject, population, reference
-  time and grain rather than restating its name. Explain the inclusion and
-  exclusion rules that define the population, including thresholds and date
-  rules, so an analyst can tell who or what is selected. Name the code list,
-  value set or upstream definition used instead of copying a long list of codes
-  into prose.
+- Every model needs a description of its subject and what one row represents.
+  State the time basis where it matters. When a model filters or derives a
+  population, explain its inclusion and exclusion rules, including thresholds
+  and date rules, so an analyst can tell who or what is selected. Name the code
+  list, value set or upstream definition used instead of copying a long list of
+  codes into prose. Do not invent population text for a staging or lookup model
+  that does no selection.
 - New non-raw models need `config.meta.owner.name`.
 - Document columns when units, code systems, dates, null
   meaning, derivation or relationships affect interpretation.
@@ -233,12 +234,10 @@ For logic changes, compare development and production with aggregate or
 non-identifying checks. Never put credentials, identifiers, row-level outputs or
 screenshots of real data in this public repository or its pull requests.
 
-A pull request should say:
-
-- why the change exists;
-- what each changed model does;
-- what was checked, including any downstream limit;
-- where reviewer judgement is needed.
+A pull request needs enough context to explain why the change exists. One clear
+sentence can be enough for a small change. Add changed behaviour, checks,
+downstream limits or points for reviewer judgement when they help someone assess
+the change.
 
 ## Review scope
 

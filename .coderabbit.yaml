@@ -2,10 +2,10 @@
 
 language: en-GB
 tone_instructions: >-
-  Be friendly, direct and constructive. Prioritise correctness, data quality,
-  project architecture and clinical meaning. Explain impact. Mark polish as
-  "nit:" and inherited concerns as "follow-up (non-blocking):". Keep scope
-  proportional to the diff.
+  Be friendly and direct. Prioritise correctness, data quality and
+  clinical meaning. Mark polish "nit:" and inherited issues "follow-up
+  (non-blocking):". Combine overlapping comments. Keep design advice
+  non-blocking and proportional to the diff.
 early_access: false
 
 reviews:
@@ -16,7 +16,7 @@ reviews:
   high_level_summary_instructions: >-
     Summarise changed model contracts, layer or dependency changes, downstream
     impact and validation. Distinguish new behaviour from inherited design.
-    State whether a potential public-repository data-safety issue was found.
+    Mention public-repository data safety only when a potential issue was found.
   poem: true
   review_status: true
   collapse_walkthrough: true
@@ -84,22 +84,23 @@ reviews:
           staging or a later contract.
         - Beyond staging, choose dependencies by the contract needed rather than
           enforcing a rigid ladder. Modelling may reuse reporting models when
-          they are the established interface and the dependency stays acyclic.
+          they are the established interface and this does not create a circular
+          dependency.
         - All hand-written models use ref(). Only generated raw models use
           source(). Flag every source() call in a changed hand-written model,
           including one that was already present in staging, and require it to
           be replaced with ref() to the generated raw model. This is a small fix
           within the changed model, not a non-blocking follow-up. Do not search
           unrelated files for legacy calls. Flag hardcoded warehouse relations.
-        - Check subject, population, reference time and grain. Review joins
-          against the stated grain; do not require the author to label every
-          join relationship. If the left-hand grain should survive, the
-          right-hand input must have at most one row per join key. Prefer an
-          intentional GROUP BY when several rows should contribute, or a
-          documented, deterministic rule when one record should win. Require the
-          resulting grain to be documented only when the join changes it. Flag
-          DISTINCT used after a join to hide duplication because it can discard
-          real differences.
+        - Check the subject and grain. Check population and time rules when the
+          model selects or derives them. Review joins against the stated grain;
+          do not require the author to label every join relationship. If the
+          left-hand grain should survive, the right-hand input must have at most
+          one row per join key. Prefer an intentional GROUP BY when several rows
+          should contribute, or a documented, deterministic rule when one record
+          should win. Require the resulting grain to be documented only when the
+          join changes it. Flag DISTINCT used after a join to hide duplication
+          because it can discard real differences.
         - Prefer reuse or composition of an established model over a second
           definition of the same concept. A new parallel model must explain why
           the existing contract cannot be extended or composed.
@@ -115,24 +116,28 @@ reviews:
           still meet hard layer and correctness rules, but inherited internal
           design can be a non-blocking follow-up when faithful parity is the
           stated goal.
-        - Flag confused responsibilities when one model combines concepts that
-          have different grains, tests, owners, consumers or reasons to change.
-          Suggest the boundary that would make those responsibilities clear.
-          Do not equate one transformation or CTE with one model: cohesive steps
-          that serve the same contract should stay together.
+        - When a new model or the changed logic adds concepts with different
+          grains, tests, owners, consumers or reasons to change, flag the confused
+          responsibility and suggest a useful boundary. Mention inherited
+          confusion only as a non-blocking follow-up. Do not equate one
+          transformation or CTE with one model: cohesive steps that serve the
+          same contract should stay together.
         - Prefer readable, straightforward SQL. Flag long, nested or repeated
           CASE statements when branching hides the business rule or makes it
           hard to test. A short local CASE is fine. Suggest a named model, CTE or
           lookup only when it makes the rule clearer. Logic must not masquerade
-          as data: a seed may hold declarative facts or parameters, but business
-          decisions and control flow must remain visible in SQL.
+          as data: a seed may hold lookup values and parameters, but must not
+          store expressions or branching for SQL or a macro to interpret.
+          Business decisions must remain visible in readable SQL.
         - Flag new output columns implemented as literal NULL or otherwise known
           to be null for every row. They advertise data the model does not
           provide and make unpopulated fields look like missing data. Require the
           column to be mapped, derived or omitted. Allow a placeholder only in a
           model under models/published/, when its documented output contract
           requires a fixed schema and the description explains why the field is
-          empty.
+          empty. Treat a column as known to be empty only when the diff or pull
+          request evidence establishes this; do not infer it from its name or a
+          limited sample.
         - Review the changed behaviour and its effect on the existing contract.
           Do not ask a contributor enhancing an existing model to redesign
           unrelated pre-existing code. Raise existing design debt as blocking
@@ -142,23 +147,24 @@ reviews:
           (non-blocking):", keep it out of the merge recommendation, and do not
           search unrelated files for further debt.
         - Shared models may own definitions and terminology agreed for the whole
-          project. Rules, terms, labels or classifications with programme-level
-          authority must compose those shared models from the programme's folder
-          or schema, with the programme visible in its established model-name
-          family. Audience and product rules or vocabulary belong at their own
-          downstream boundary.
+          project. A rule, term, label or classification approved for one
+          programme must stay in that programme's folder or schema and reuse the
+          shared models it needs. Show the programme in the model name using the
+          neighbouring naming pattern. Audience and product rules or vocabulary
+          belong in their own downstream models.
         - Any narrower model that runs beside a shared contract—programme,
           geography, legacy migration or named consumer—must make that scope
-          clear in its model name, folder/schema and description. Do not give a
-          scoped variant an unqualified name that appears canonical.
+          clear in its model name and folder/schema. Require the description to
+          explain the scope when the name is not enough. Do not give a scoped
+          variant an unqualified name that appears project-wide.
         - Preserve unknown, false, not-applicable and missing-evidence states when
           the domain distinguishes them.
-        - Clinical definitions, thresholds, code lists and date rules must be
-          visible and checkable in the model contract. Require the model
-          description to explain the selection rules that define its population
-          so an analyst can tell who or what is included, not only the grain.
-          Refer to a named code list, value set or upstream definition rather
-          than copying a long list of codes into prose.
+        - Clinical definitions, thresholds, code lists and date rules owned by a
+          model must be visible and checkable in its contract. When a model
+          filters or derives a population, require its description to explain
+          who or what is included. Refer to a named code list, value set or
+          upstream definition rather than copying a long list of codes into
+          prose. Do not ask for population rules where the model has none.
         - When SQL, descriptions and tests disagree about business behaviour,
           identify the contradiction and ask which contract is authoritative.
           Do not prescribe a population-changing fix without evidence of the
@@ -178,11 +184,12 @@ reviews:
         timestamps; _id identifiers. Outside generated raw models, do not carry
         legacy derived names such as zcontracttype or z_contract_type into new
         project interfaces. Prefer the unprefixed business name when the derived
-        value is canonical. Use dv_ when retaining both supplied and derived
-        values makes their distinction useful, with the supplied value kept as a
-        clearly named column or upstream source field. Existing SLAM and community
-        dv_ families are established interfaces; do not request their redesign in
-        an enhancement PR. Do not comment on whitespace, commas or line length.
+        value is the project interface. Use dv_ when retaining both supplied and
+        derived values makes their distinction useful, with the supplied value
+        kept as a clearly named column or upstream source field. Existing SLAM
+        and community dv_ families are established interfaces; do not request
+        their redesign in an enhancement PR. Do not comment on whitespace,
+        commas or line length.
 
     # Raw layer
     - path: "models/raw/**"
@@ -197,7 +204,7 @@ reviews:
     - path: "models/staging/**"
       instructions: |
         Staging is the required boundary between raw and every downstream area.
-        It provides one canonical project interface to a source object. New
+        It provides one main project interface to a source object. New
         models use ref() to a raw_ model, never source() or a hardcoded relation.
         If a changed staging model already calls source() directly, require that
         call to be replaced with ref() as part of the change. Select columns
@@ -208,7 +215,7 @@ reviews:
         purpose is universal source cleaning, standardisation or enrichment that
         every consumer should inherit; flag business populations and
         consumer-specific rules.
-        Each source object should have one canonical staging interface. Reuse or
+        Each source object should have one staging interface. Reuse or
         extend an existing staging model for the same raw object rather than
         creating a pipeline-, consumer- or migration-named duplicate. Name a
         new model for the source object it cleans, using established project
@@ -232,13 +239,13 @@ reviews:
         named, tested home. It must not reference raw_ models or source(). Models
         normally start with int_ and may join, filter or change grain. They may
         reuse reporting models where those provide the right established
-        contract. Check that each model has one coherent responsibility, an
-        explicit population, time and grain, and a reusable scope. One
+        contract. Check that each model has one clear responsibility and grain.
+        Check its population and time basis where it selects or derives them. One
         responsibility may contain several CTEs and transformations when they
         change for the same reason. Recommend a split only for independently
         changing concepts or contracts. Programme-specific logic belongs in its
-        programme folder/schema and composes shared models without redefining
-        them. Use int_ plus the established programme subject, for example
+        programme folder/schema and reuses shared models without redefining them.
+        Use int_ plus the established programme subject, for example
         int_flu_, int_smi_, int_myria_ or int_ltc_lcs_; inspect neighbouring
         names rather than inventing a new abbreviation. The folder alone is not
         enough if an unqualified model name would suggest project-wide scope.
@@ -251,7 +258,8 @@ reviews:
         Reporting is the marts layer: supported business entities and concepts
         for direct analysis. It must not reference raw_ models or source(). It
         may compose staging, modelling and reporting contracts as needed. Each
-        model must state and test its population, reference time and grain.
+        model must state what one row represents. Where it selects a population
+        or time period, state those too and test the resulting grain.
         Useful width is allowed when joins preserve the core grain and reuse
         established definitions. Follow the existing dim_, fct_, pit_, obt_,
         dq_, def_ and programme naming families. def_ models describe shared
@@ -302,11 +310,15 @@ reviews:
       instructions: |
         Review model properties as contracts, not formatting:
 
-        - Every model needs a description. It should state subject, population,
-          reference time and grain where these apply. Explain the inclusion and
-          exclusion rules that define the population, including thresholds and
-          date rules, and name the code list, value set or upstream definition
-          used. Do not require long code lists to be copied into prose.
+        - Review only new or changed model entries; do not inventory untouched
+          models elsewhere in the same file. New or changed models need a
+          description stating the subject and what one row represents. State the
+          time basis where it matters. When the model filters or derives a
+          population, explain the inclusion and exclusion rules, including
+          thresholds and date rules. Name the code list, value set or upstream
+          definition used. Staging and lookup models
+          need only describe their source or subject and grain when they do no
+          population selection. Do not copy long code lists into prose.
         - New non-raw models require config.meta.owner.name.
         - New or changed test blocks use data_tests. Do not ask an enhancement
           PR to migrate an untouched legacy tests block.
@@ -338,13 +350,11 @@ reviews:
       instructions: |
         Seeds are small, team-owned reference data reviewed like code. They are
         not extracts, feeds or patient-level data. Check that CSV and YAML stay
-        aligned and that thresholds, units, provenance and update rules are
+        aligned and that thresholds, units, source and update rules are
         documented when they affect model logic. Seeds may hold lookup values,
-        mappings, thresholds and numeric conversion parameters, but must not
-        become a miniature DSL. Flag executable expressions, branching or
-        precedence that requires a model or macro to interpret control flow.
-        Logic must not masquerade as data: keep executable business rules in
-        readable SQL and use seed rows only as declarative facts or parameters.
+        mappings, thresholds, priorities and conversion parameters. Flag
+        expressions, operators or branching that a model or macro must parse:
+        logic must not masquerade as data, and the rule belongs in readable SQL.
         Any seed that appears to contain real patient- or person-level data is a
         critical blocking finding under the repository-wide data-safety rule.
 

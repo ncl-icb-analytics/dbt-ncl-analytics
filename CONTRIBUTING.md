@@ -157,7 +157,8 @@ downstream dependencies.
 
 Before editing SQL:
 
-1. State the required subject, population, reference time and grain.
+1. State the subject and grain. Add the population and time basis where the
+   model selects or derives them.
 2. Search model names, YAML and lineage for a contract you can reuse or extend.
 3. Check downstream impact with `dbt ls -s model_name+`.
 4. Confirm the model area. Raw may only be consumed through staging; after
@@ -318,8 +319,8 @@ git commit -m "docs: update setup instructions in CONTRIBUTING"
    - Go to the repository on GitHub
    - Click "Pull requests" → "New pull request"
    - Select your branch
-   - Fill in the PR description: why, what changed, what was checked, and where
-     reviewer judgement is needed
+   - Explain why the change exists. One clear sentence can be enough for a small
+     change; add changed behaviour, checks or review questions when they help
    - Reference any related issues (e.g., "Fixes #123")
 
    This repository is public. Do not include credentials, patient- or
@@ -424,7 +425,7 @@ This repository commits `dbt_packages/` to ensure consistent package versions. W
 ## Next Steps
 
 Once you're set up, learn how dbt and this project work at
-**[dbt-onboarding.vercel.app](https://dbt-onboarding.vercel.app/)** — the canonical
+**[dbt-onboarding.vercel.app](https://dbt-onboarding.vercel.app/)** — the main
 source for dbt learning here. It covers the layers, naming conventions, building and
 testing models, materialisations, and the full branch-to-merge workflow.
 

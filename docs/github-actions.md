@@ -15,7 +15,7 @@ Every pull request receives fast feedback:
 | `model-ownership.yml` | Comments when changed models lack ownership metadata |
 | `dbt-pr-validation.yml` | Reports that runtime validation will run in the merge queue |
 
-The staging-reference check is a lower-bound architecture check: raw models and
+The staging-reference check is the minimum architecture check: raw models and
 `source()` calls must not appear outside staging. Project conventions are
 stricter: every changed staging model must replace any direct `source()` call it
 contains with `ref()` to the generated raw model. Unrelated legacy models remain
