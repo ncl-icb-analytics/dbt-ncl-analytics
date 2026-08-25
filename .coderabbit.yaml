@@ -155,7 +155,11 @@ reviews:
         - Preserve unknown, false, not-applicable and missing-evidence states when
           the domain distinguishes them.
         - Clinical definitions, thresholds, code lists and date rules must be
-          visible and checkable in the model contract.
+          visible and checkable in the model contract. Require the model
+          description to explain the selection rules that define its population
+          so an analyst can tell who or what is included, not only the grain.
+          Refer to a named code list, value set or upstream definition rather
+          than copying a long list of codes into prose.
         - When SQL, descriptions and tests disagree about business behaviour,
           identify the contradiction and ask which contract is authoritative.
           Do not prescribe a population-changing fix without evidence of the
@@ -300,7 +304,10 @@ reviews:
         Review model properties as contracts, not formatting:
 
         - Every model needs a description. It should state subject, population,
-          reference time and grain where these apply.
+          reference time and grain where these apply. Explain the inclusion and
+          exclusion rules that define the population, including thresholds and
+          date rules, and name the code list, value set or upstream definition
+          used. Do not require long code lists to be copied into prose.
         - New non-raw models require config.meta.owner.name.
         - New or changed test blocks use data_tests. Do not ask an enhancement
           PR to migrate an untouched legacy tests block.

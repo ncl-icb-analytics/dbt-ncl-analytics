@@ -196,9 +196,13 @@ adding syntax to the seed.
 Treat SQL, properties and tests as one change.
 
 - Every model needs a description. Describe its subject, population, reference
-  time and grain rather than restating its name.
+  time and grain rather than restating its name. Explain the inclusion and
+  exclusion rules that define the population, including thresholds and date
+  rules, so an analyst can tell who or what is selected. Name the code list,
+  value set or upstream definition used instead of copying a long list of codes
+  into prose.
 - New non-raw models need `config.meta.owner.name`.
-- Document columns when units, code systems, selection rules, dates, null
+- Document columns when units, code systems, dates, null
   meaning, derivation or relationships affect interpretation.
 - New and changed test blocks use `data_tests`. Do not require an enhancement to
   migrate an untouched legacy `tests` block. Test the key or key combination

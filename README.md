@@ -105,6 +105,8 @@ Published, partner and semantic models serve downstream consumers.
 ## Working conventions
 
 - State the subject, population, reference time and grain before writing SQL.
+- Explain population selection in the model description, including thresholds,
+  date rules and the named code list or definition used.
 - Search names, YAML and lineage before creating another definition.
 - Reuse or extend the canonical staging model for a source object; do not add a
   pipeline- or consumer-named duplicate.
