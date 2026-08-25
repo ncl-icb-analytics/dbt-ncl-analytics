@@ -36,74 +36,88 @@ Testing WIDE FORMAT for RISK GROUP using columns and flags.
 
 ----1,027,933 historical people with a vaccination record (2026/27 not yet added)
 
-with vacc_pop as (
-SELECT
-    person_id,
-    -- Eligibility information from uptake facts
-    is_eligible,
-    CASE WHEN campaign_id = 'COVID Autumn 2024' THEN 'CV Autumn 2024'
-         WHEN campaign_id = 'COVID Spring 2025' THEN 'CV Spring 2025'
-         WHEN campaign_id = 'COVID Autumn 2025' THEN 'CV Autumn 2025'
-         WHEN campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
-         ELSE campaign_id END AS campaign_id,
-    CASE 
-        WHEN campaign_id = 'Flu 2024-25' THEN 1
-        WHEN campaign_id = 'COVID Autumn 2024' THEN 2
-        WHEN campaign_id = 'COVID Spring 2025' THEN 3
-        WHEN campaign_id = 'Flu 2025-26' THEN 4
-        WHEN campaign_id = 'COVID Autumn 2025' THEN 5
-        WHEN campaign_id = 'COVID Spring 2026' THEN 6
-        END AS campaign_sort,
-    programme_type,
-    campaign_year,
-    campaign_season,
-     -- Vaccination information from uptake facts
-    vaccination_status,
-    DATE(vaccination_date) AS vaccination_date,
-    TO_CHAR(TO_DATE(vaccination_date), 'MMMM') as vaccination_month,
-    YEAR(vaccination_date) AS vaccination_year,
-    vaccination_status_reason,
-    vaccinated_despite_ineligible,
-    -- Uptake flags and metrics from uptake facts
-    vaccinated,
-    declined,
-    eligible_no_record,
-    uptake_category,
-    days_to_vaccination,
-    -- Programme-specific fields
-    laiv_given, 
-    -- Campaign dates
-    campaign_start_date,
-    campaign_reference_date,
-    --Sub Cohorts groups may change over time as new campaigns are added.
-    MAX(IFF(risk_group in ( 'Active Asthma Management', 'Asthma','Asthma Admission' ), 1, 0)) AS asthma,
-    MAX(IFF(risk_group = 'Age 65 and Over', 1, 0)) AS age_65_plus,
-    MAX(IFF(risk_group = 'Age 75+', 1, 0)) AS age_75_plus,
-    MAX(IFF(risk_group in ('Asplenia/Spleen Dysfunction','Asplenia'), 1, 0)) AS asplenia,
-    MAX(IFF(risk_group = 'Carer', 1, 0)) AS carer,
-    MAX(IFF(risk_group = 'Children Preschool', 1, 0)) AS children_preschool,
-    MAX(IFF(risk_group = 'Children School Age', 1, 0)) AS children_school_age,
-    MAX(IFF(risk_group = 'Chronic Heart Disease', 1, 0)) AS chronic_heart_disease,
-    MAX(IFF(risk_group in ('Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)'), 1, 0)) AS chronic_kidney_disease,
-    MAX(IFF(risk_group = 'Chronic Liver Disease', 1, 0)) AS chronic_liver_disease,
-    MAX(IFF(risk_group = 'Chronic Neurological Disease', 1, 0)) AS chronic_neurological_disease,
-    MAX(IFF(risk_group = 'Chronic Respiratory Disease', 1, 0)) AS chronic_respiratory_disease,
-    MAX(IFF(risk_group in ('Diabetes','Gestational Diabetes'), 1, 0)) AS diabetes,
-    MAX(IFF(risk_group = 'Health and Social Care Workers', 1, 0)) AS health_social_care_workers,
-    MAX(IFF(risk_group in ('Homeless', 'Homelessness'), 1, 0)) AS homeless,
-    MAX(IFF(risk_group = 'Household Contact Immunocompromised', 1, 0)) AS household_contact_immunocompromised,
-    MAX(IFF(risk_group = 'Immunosuppression', 1, 0)) AS immunosuppression,
-    MAX(IFF(risk_group = 'Learning Disability', 1, 0)) AS learning_disability,
-    MAX(IFF(risk_group in ('Long Term Residential Care', 'Long-term Residential Care'), 1, 0)) AS long_term_residential_care,
-    MAX(IFF(risk_group = 'Morbid Obesity', 1, 0)) AS morbid_obesity,
-    MAX(IFF(risk_group = 'Pregnancy', 1, 0)) AS pregnancy,
-    MAX(IFF(risk_group = 'Severe Mental Illness', 1, 0)) AS severe_mental_illness,
-    MAX(IFF(risk_group = 'Under 65 At Risk', 1, 0)) AS under_65_at_risk,
-    MAX(IFF(risk_group = 'Vaccinated Despite Ineligibility', 1, 0)) AS vaccinated_despite_ineligibility
-FROM {{ ref('fct_covid_flu_uptake') }} 
---FROM REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE
+with subcohort as (
+select person_id,
+--Sub Cohort Clinical groups may change over time as new campaigns are added.
+    MAX(IFF(risk_group in ( 'Active Asthma Management', 'Asthma','Asthma Admission' ), 1, 0)) AS has_asthma,
+    MAX(IFF(risk_group in ('Asplenia/Spleen Dysfunction','Asplenia'), 1, 0)) AS has_asplenia,
+    MAX(IFF(risk_group = 'Chronic Heart Disease', 1, 0)) AS has_chd,
+    MAX(IFF(risk_group in ('Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)'), 1, 0)) AS has_ckd,
+    MAX(IFF(risk_group = 'Chronic Liver Disease', 1, 0)) AS has_cld,
+    MAX(IFF(risk_group = 'Chronic Neurological Disease', 1, 0)) AS has_cnd,
+    MAX(IFF(risk_group = 'Chronic Respiratory Disease', 1, 0)) AS has_crd,
+    MAX(IFF(risk_group in ('Diabetes','Gestational Diabetes'), 1, 0)) AS has_diabetes,
+    MAX(IFF(risk_group = 'Immunosuppression', 1, 0)) AS is_immunosuppressed
+--FROM {{ ref('fct_covid_flu_uptake') }} 
+FROM REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE
 GROUP BY all
  order by 1
+)
+,VACC_POP as (
+SELECT 
+    s.person_id,
+    -- Eligibility information from uptake facts
+    cf.is_eligible,
+    CASE WHEN cf.campaign_id = 'COVID Autumn 2024' THEN 'CV Autumn 2024'
+         WHEN cf.campaign_id = 'COVID Spring 2025' THEN 'CV Spring 2025'
+         WHEN cf.campaign_id = 'COVID Autumn 2025' THEN 'CV Autumn 2025'
+         WHEN cf.campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
+         ELSE cf.campaign_id END AS campaign_id,
+    CASE 
+        WHEN cf.campaign_id = 'Flu 2024-25' THEN 1
+        WHEN cf.campaign_id = 'COVID Autumn 2024' THEN 2
+        WHEN cf.campaign_id = 'COVID Spring 2025' THEN 3
+        WHEN cf.campaign_id = 'Flu 2025-26' THEN 4
+        WHEN cf.campaign_id = 'COVID Autumn 2025' THEN 5
+        WHEN cf.campaign_id = 'COVID Spring 2026' THEN 6
+        END AS campaign_sort,
+    cf.programme_type,
+    cf.campaign_year,
+    cf.campaign_season,
+     -- Vaccination information from uptake facts
+    cf.vaccination_status,
+    DATE(cf.vaccination_date) AS vaccination_date,
+    TO_CHAR(TO_DATE(cf.vaccination_date), 'MMMM') as vaccination_month,
+    YEAR(cf.vaccination_date) AS vaccination_year,
+    cf.vaccination_status_reason,
+    cf.vaccinated_despite_ineligible,
+    -- Uptake flags and metrics from uptake facts
+    cf.vaccinated,
+    cf.declined,
+    cf.eligible_no_record,
+    cf.uptake_category,
+    cf.days_to_vaccination,
+    -- Programme-specific fields
+    -- cf.laiv_given, 
+    -- Campaign dates
+    cf.campaign_start_date,
+    cf.campaign_reference_date,
+   cf.risk_group,
+   --add subcohort clinical flags for dashboard filtering and analysis.
+   s.has_asthma,
+   s.has_asplenia,
+   s.has_chd,
+   s.has_ckd,
+   s.has_cld,
+   s.has_cnd,
+   s.has_crd,
+   s.has_diabetes,
+   s.is_immunosuppressed
+   
+FROM Subcohort s
+--LEFT JOIN REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE cf using (person_id)
+LEFT JOIN {{ ref('fct_covid_flu_uptake') }} cf using (person_id)
+where risk_group   not in ('Active Asthma Management', 'Asthma','Asthma Admission', 
+      'Asplenia/Spleen Dysfunction','Asplenia',
+      'Chronic Heart Disease', 
+      'Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)',
+      'Chronic Liver Disease', 
+      'Chronic Neurological Disease' ,
+      'Chronic Respiratory Disease', 
+    'Diabetes','Gestational Diabetes',
+    'Immunosuppression'
+    )  
+ group by all
 )
 --add in demographics.
 SELECT 
