@@ -148,7 +148,8 @@ people_with_homeless_eligible_with_age AS (
         ON ep.person_id = demo.person_id
     WHERE demo.is_active = TRUE
         AND demo.birth_date_approx IS NOT NULL
-        AND DATEDIFF('year', demo.birth_date_approx, ep.campaign_reference_date) >= 5  -- Minimum age 5
+        -- Minimum age 5, tested on birth date (DATEDIFF('year') subtracts calendar years)
+        AND demo.birth_date_approx <= DATEADD('year', -5, ep.campaign_reference_date)
 ),
 
 -- Step 7: Format for eligibility table

@@ -116,8 +116,8 @@ final_eligibility AS (
         ep.qualifying_event_date,
         cc.campaign_reference_date AS reference_date,
         CASE
-            WHEN ep.via_homeless_code THEN 'People who are homeless aged 16-64'
-            ELSE 'People who are homeless aged 16-64 (registered at Camden Health Improvement Practice)'
+            WHEN ep.via_homeless_code THEN 'People who are homeless aged 16 or over'
+            ELSE 'People who are homeless aged 16 or over (registered at Camden Health Improvement Practice)'
         END AS description,
         demo.birth_date_approx,
         DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
@@ -129,7 +129,7 @@ final_eligibility AS (
     JOIN {{ ref('dim_person_demographics') }} demo
         ON ep.person_id = demo.person_id
     WHERE 1=1
-        -- Apply age restrictions: 16 to under 65 years (192 months to under 65 years)
+        -- Apply age restriction: 16 years or older (192 months)
         AND DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) >= 192
 )
 
