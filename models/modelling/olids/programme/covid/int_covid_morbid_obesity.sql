@@ -113,16 +113,24 @@ final_eligible AS (
         'Morbid obesity based on the latest BMI and BMI stage evidence' AS description,
         demo.birth_date_approx,
         DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
-        DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date) AS age_years_at_ref_date,
+        DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date)
+        - IFF(
+            DATEADD(
+                'year',
+                DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date),
+                demo.birth_date_approx
+            ) > cc.campaign_reference_date,
+            1,
+            0
+        ) AS age_years_at_ref_date,
         CURRENT_TIMESTAMP() AS created_at
     FROM eligible_obesity_evidence evidence
     JOIN all_campaigns cc
         ON evidence.campaign_id = cc.campaign_id
     JOIN {{ ref('dim_person_demographics') }} demo
         ON evidence.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
-        AND DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date) >= 18
+    WHERE demo.birth_date_approx IS NOT NULL
+        AND DATEADD('year', 18, demo.birth_date_approx) <= cc.campaign_reference_date
 )
 
 SELECT * FROM final_eligible
