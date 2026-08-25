@@ -147,6 +147,13 @@ also state what it is reconciling with and how consumers can distinguish it.
   reshape long, nested or repeated `CASE` expressions when their branching hides
   the business rule or makes it hard to test. Use a named model, CTE or lookup
   only when it makes the rule clearer.
+- Give a business definition one owner when more than one model depends on it.
+  Do not repeat the same maintained provider list, code set, threshold or date
+  rule across model SQL. Join to the shared, reference or programme-scoped model
+  that owns maintained data; use a macro for reused SQL logic and a project
+  variable only for a value intended to be supplied per run or environment. A
+  value that defines one model's concept belongs in that model even if it may
+  change. Do not create another DAG node merely to extract a local literal.
 - All output columns from staging onward must be unquoted `snake_case`, except
   in published models. Published models may use quoted consumer-facing names
   with spaces, case or punctuation and do not need to remove those characters.
@@ -205,9 +212,12 @@ Treat SQL, properties and tests as one change.
 - New and changed test blocks use `data_tests`. Do not require an enhancement to
   migrate an untouched legacy `tests` block. Test the key or key combination
   that enforces the grain.
-- Add accepted-value and relationship tests only when the model contract makes
-  those assertions true. Valid nulls or out-of-scope parents should not be
-  forced away to satisfy a generic test.
+- Focus tests on assumptions most likely to break when sources or rules change:
+  grain, join uniqueness, population boundaries and membership of maintained
+  lists. Prefer a relationship test to the model that owns a changing list over
+  copying its values into an accepted-values test. Add accepted-value, not-null
+  and relationship tests only when the contract makes them true. Valid nulls or
+  out-of-scope parents should not be forced away to satisfy a generic test.
 - Put a test where its promise is made. Downstream models should test their new
   composition and grain, not copy every upstream assertion.
 - Use singular tests for domain rules that generic tests cannot express. Return

@@ -129,6 +129,14 @@ reviews:
           as data: a seed may hold lookup values and parameters, but must not
           store expressions or branching for SQL or a macro to interpret.
           Business decisions must remain visible in readable SQL.
+        - Flag a maintained provider list, code set, threshold or date rule only
+          when the same business definition is repeated across models or several
+          models need to depend on it. Prefer a join to the shared, reference or
+          programme-scoped model that owns maintained data, a macro for reused
+          SQL logic, or a project variable for a value supplied per run or
+          environment. A value that defines one model's concept belongs in that
+          model even if it may change. Do not suggest another DAG node merely to
+          extract a local literal.
         - Flag new output columns implemented as literal NULL or otherwise known
           to be null for every row. They advertise data the model does not
           provide and make unpopulated fields look like missing data. Require the
@@ -322,9 +330,13 @@ reviews:
         - New non-raw models require config.meta.owner.name.
         - New or changed test blocks use data_tests. Do not ask an enhancement
           PR to migrate an untouched legacy tests block.
-        - Test the key or key combination that enforces grain.
+        - Focus tests on assumptions most likely to break when sources or rules
+          change: grain, join uniqueness, population boundaries and membership
+          of maintained lists. Prefer a relationship test to the model that owns
+          a changing list over copying values into an accepted-values test.
         - Add accepted-value, not-null and relationship tests only when the
-          documented domain contract makes them true.
+          documented domain contract makes them true. Do not force away valid
+          nulls or out-of-scope parents to satisfy a generic test.
         - Column descriptions should explain units, code systems, selection
           rules, dates, null meaning, derivation or non-obvious relationships;
           do not require prose that merely repeats a column name.

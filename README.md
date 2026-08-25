@@ -120,6 +120,10 @@ Published, partner and semantic models serve downstream consumers.
   consolidation or enrichment.
 - Prefer readable, straightforward SQL. Logic must not masquerade as data: keep
   rules in SQL and use seeds for lookup values and parameters.
+- Give a business definition one owner when several models depend on it. Do not
+  repeat maintained provider lists, code sets, thresholds or date rules. Keep a
+  value that defines only one model's concept in that model rather than creating
+  another DAG node for it.
 - Use unquoted `snake_case` output columns from staging onward. Published models
   may instead use quoted friendly names for consumers; this is optional.
 - Do not add columns known to be null for every row. Only a model under
