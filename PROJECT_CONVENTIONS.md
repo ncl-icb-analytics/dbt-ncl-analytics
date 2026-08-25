@@ -165,16 +165,13 @@ also state what it is reconciling with and how consumers can distinguish it.
   kept as a clearly named column or upstream source field. Existing SLAM and
   community `dv_` families are established interfaces; do not require their
   redesign in an enhancement PR.
-- State whether each join should be one-to-one, many-to-one or one-to-many. If
-  the result should keep one row for each left-hand record, the right-hand input
-  must have at most one row for each join key. Otherwise one left-hand row can
-  become several, inflating counts and breaking the model's stated grain. If a
-  one-to-many result is intended, document the new grain. Do not add `distinct`
-  after the join to hide duplicated rows: it can discard real differences.
-  When several right-hand rows should contribute to one result, aggregate them
-  intentionally with `group by` at the join key before joining. When one record
-  should win, select it with a documented, deterministic rule. Otherwise change
-  the model contract.
+- Check joins against the model's stated grain. If the result should keep one
+  row for each left-hand record, the right-hand input must have at most one row
+  for each join key; otherwise rows and counts are multiplied. Aggregate several
+  contributing rows with an intentional `group by` at the join key, or select
+  one record with a documented, deterministic rule. Document the resulting grain
+  when a join is intended to change it. Do not add `distinct` after a join to
+  hide duplicated rows: it can discard real differences.
 - Keep unknown, false, not applicable and missing evidence distinct where the
   domain distinguishes them.
 - Put organisation-wide definitions and terminology in shared models. Keep
