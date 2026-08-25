@@ -3,8 +3,8 @@ Simplified Chronic Kidney Disease (CKD) Eligibility Rule
 
 Business Rule: Person is eligible if they have:
 1. A direct CKD diagnosis (CKD_COD) - earliest occurrence, OR
-2. Latest CKD stage 3-5 code (CKD35_COD) is more recent than or equal to 
-   latest any-stage CKD code (CKD15_COD)
+2. Latest CKD stage 3-5 code (CKD_35_COD) is more recent than or equal to
+   latest any-stage CKD code (CKD_15_COD)
 3. AND aged 6 months or older (minimum age for flu vaccination)
 
 The hierarchical logic ensures people with more recent severe CKD stages are included,
@@ -43,7 +43,7 @@ people_with_any_stage_ckd AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_any_stage_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'CKD15_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'CKD_15_COD'", 'UKHSA_FLU') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
@@ -57,7 +57,7 @@ people_with_severe_ckd AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_severe_stage_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'CKD35_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'CKD_35_COD'", 'UKHSA_FLU') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date

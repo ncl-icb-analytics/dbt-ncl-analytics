@@ -93,6 +93,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             TRUE AS eligible_gestational_diabetes,
             TRUE AS eligible_homeless,
 
+            -- Minimum age for the age-based cohort
+            65 AS age_based_min_age,                                    -- Autumn 2024 offer was 65+
+
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
 
@@ -156,9 +159,12 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             TRUE AS eligible_gestational_diabetes,
             TRUE AS eligible_homeless,
 
+            -- Minimum age for the age-based cohort
+            75 AS age_based_min_age,
+
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
-            
+
     {%- elif campaign_id == 'COVID Spring 2026' -%}
         SELECT
             '{{ campaign_id }}' AS campaign_id,
@@ -219,6 +225,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             FALSE AS eligible_pregnancy,                 -- Not eligible in Spring 2026
             FALSE AS eligible_gestational_diabetes,      -- Not eligible in Spring 2026
             FALSE AS eligible_homeless,                  -- Not eligible in Spring 2026
+
+            -- Minimum age for the age-based cohort
+            75 AS age_based_min_age,
 
             -- Current audit date
             '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
@@ -282,6 +291,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             FALSE AS eligible_pregnancy,                 -- Not eligible in 2025/26
             FALSE AS eligible_gestational_diabetes,      -- Not eligible in 2025/26
             FALSE AS eligible_homeless,                  -- Not eligible in 2025/26
+
+            -- Minimum age for the age-based cohort
+            75 AS age_based_min_age,
 
             -- Current audit date
             '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
