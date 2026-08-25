@@ -143,20 +143,15 @@ derived as (
         ,{{ ae_event_datetime('arrival_date', 'arrival_time', 'em_departure_time') }}
             as z_em_departure_datetime
 
-        -- [PARITY BUG] em_duration_time is a DURATION IN MINUTES, not a clock
+        -- em_duration_time is a DURATION IN MINUTES, not a clock
         -- time -- values cluster hard at 239/240, i.e. the four-hour A&E
         -- target. The SP converted it to a 1900-anchored datetime and used
         -- T-SQL's datetime + datetime, which adds the DAY count. So 240
         -- minutes became 240 days: arrival 2021-04-01 with a 87-minute
-        -- duration produced 2021-06-27 in the legacy table.
-        --
-        -- Reproduced here so the migration matches legacy. The correct
-        -- expression, once signed off, is:
-        --     dateadd(minute, em_duration_time, <z_arrival_datetime expr>)
-        -- Note nothing downstream can be relying on the real duration -- it
-        -- has never been populated. [TODO] raise with SUS reporting owner.
-        ,dateadd(day, em_duration_time, to_date(arrival_date))
-            as z_em_duration_datetime
+        -- duration produced 2021-06-27 in the legacy table. This has been corrected for this model.
+       ,dateadd(minute, em_duration_time,
+            timestamp_ntz_from_parts(to_date(arrival_date), to_time(arrival_time)))
+                as z_em_duration_datetime
 
         ,{{ ae_event_datetime('arrival_date', 'arrival_time', 'em_initial_assessment_time') }}
             as z_em_initial_assessment_datetime
