@@ -99,8 +99,49 @@ reviews:
           one row per join key. Prefer an intentional GROUP BY when several rows
           should contribute, or a documented, deterministic rule when one record
           should win. Require the resulting grain to be documented only when the
-          join changes it. Flag DISTINCT used after a join to hide duplication
-          because it can discard real differences.
+          join changes it. For an effective-date lookup, check that no more than
+          one reference period can match each left-hand row. Flag DISTINCT used
+          after a join to hide duplication because it can discard real
+          differences and forces the warehouse to deduplicate an already
+          multiplied result, increasing memory use and spill.
+        - Before a Snowflake PIVOT, require its input to contain only the target
+          grain key or keys, pivot column and value. Snowflake implicitly groups
+          by every other input column, so carrying metadata into the PIVOT can
+          silently change the result's grain.
+        - Flag avoidable large intermediate results. Where the contract permits,
+          filter and project a large input before joins, windows, pivots, grouping
+          or deduplication; aggregate or select repeated child rows at the target
+          grain before joining; and defer descriptive enrichment until after the
+          reduction. Do not require a new model when a clear CTE is enough.
+        - Flag repeated scans or sorts of the same large input, several
+          ROW_NUMBER or QUALIFY passes with the same partition over that input,
+          repeated correlated lookups, and Cartesian or broadly matching
+          rule-table joins followed by grouping or deduplication when the same
+          rules can be expressed once against a narrow input. Keep separate
+          selections when they implement different contracts.
+        - Flag bare UNION between large branches known to be disjoint, DISTINCT
+          over a wide or post-join result, and distinct or ordered list and array
+          aggregates over a large input when that work is not part of the
+          contract. A narrow key list or small lookup may use DISTINCT plainly.
+          Where possible, deduplicate the narrow key and values before building
+          a wide aggregate.
+        - Do not infer poor performance merely from a wide result, a pivot, a
+          window, or many small reference joins. Explain the likely expensive
+          intermediate operation. When impact depends on data volume or workload,
+          ask for Query Profile, spill or pruning evidence and keep speculative
+          tuning non-blocking.
+        - Suggest cluster_by only for a materialised model when several
+          downstream consumers repeatedly filter or join a large result on the
+          same selective columns. It sorts this model's output for downstream
+          pruning; it does not make this model's upstream reads cheaper. OLIDS
+          clinical event inputs are usually already clustered by mapped concept
+          code for the expensive code-filter scan. After that scan selects the
+          required rows, person_id may be the right output key when several
+          consumers join the result by person. Do not ask for fresh evidence when
+          the key follows the established model-family pattern. For a new or
+          unusual key, a wide output whose sort may spill, or a build already
+          known to spill, name the downstream access pattern and ask for
+          partitions-scanned and build-cost evidence.
         - Prefer reuse or composition of an established model over a second
           definition of the same concept. A new parallel model must explain why
           the existing contract cannot be extended or composed.
@@ -377,7 +418,11 @@ reviews:
         null/empty-input behaviour. Place new macros with neighbouring clinical,
         transformation, configuration, governance or utility macros. Require
         documentation for the macro contract and arguments, not a prose version
-        of its implementation.
+        of its implementation. When a macro expands to a correlated scalar
+        lookup for each calling row, check its use in large models. Prefer a join
+        at the required grain or one computed selection when repeated work or
+        fan-out is plausible. Treat scale-dependent cost as non-blocking without
+        query evidence; correctness fan-out remains blocking.
 
     # QOF register macros
     - path: "macros/qof_registers/**"

@@ -180,8 +180,51 @@ also state what it is reconciling with and how consumers can distinguish it.
   for each join key; otherwise rows and counts are multiplied. Aggregate several
   contributing rows with an intentional `group by` at the join key, or select
   one record with a documented, deterministic rule. Document the resulting grain
-  when a join is intended to change it. Do not add `distinct` after a join to
-  hide duplicated rows: it can discard real differences.
+  when a join is intended to change it. For an effective-date lookup, ensure no
+  more than one reference period can match each left-hand row. Do not add
+  `distinct` after a join to hide duplicated rows: it can discard real
+  differences and makes the warehouse deduplicate the already multiplied result,
+  increasing memory use and spill.
+- Before a Snowflake `pivot`, project only the target grain key or keys, pivot
+  column and value. Snowflake implicitly groups by every other input column, so
+  carrying metadata into the pivot can silently change the result's grain.
+- Keep costly intermediate results no larger than their purpose requires. Where
+  it does not change the contract, filter rows and select the required columns
+  before large joins, windows, pivots, grouping or deduplication. Aggregate or
+  select repeated child records at the required grain before joining them, and
+  defer descriptive enrichment until after that reduction when the enrichment
+  does not affect which records survive.
+- Avoid repeated scans and sorts of the same large input when one narrow base
+  can express the same rules. Several `row_number()` or `qualify` passes with the
+  same partition can often become one window or intentional aggregation. Keep
+  separate selections when they implement different contracts; reducing a scan
+  is not a reason to make the logic harder to understand.
+- Use `union all` for large branches known to be disjoint or when cross-branch
+  duplicate removal is not part of the contract. Scrutinise `distinct` over a
+  wide or post-join result, and distinct or ordered list and array aggregates
+  over a large input. A narrow key list or small lookup may use `distinct`
+  plainly. Where possible, deduplicate the narrow key and values before building
+  a wide aggregate.
+- Scrutinise Cartesian or broadly matching rule-table joins followed by grouping
+  or deduplication, and repeated correlated lookups against a large input. Join
+  only candidate rows or compute the selection once when the model contract
+  allows it.
+- Base scale-dependent performance findings on a plausible large intermediate
+  result or query evidence. A wide output, pivot, window, or several small
+  reference joins is not a defect by itself. Ask for Query Profile, spill or
+  pruning evidence when the cost cannot be established from the change, and
+  keep speculative tuning non-blocking.
+- Consider `cluster_by` for a materialised model when several downstream
+  consumers repeatedly filter or join a large result on the same selective
+  columns. It sorts the model's output for downstream partition pruning; it does
+  not make that model's upstream reads cheaper. OLIDS clinical event inputs are
+  usually already clustered by mapped concept code for the expensive code-filter
+  scan. After that scan selects the required rows, a reused materialised result
+  may instead benefit from person-level clustering because its consumers join by
+  person. Follow an established model-family key without requiring fresh proof.
+  For a new or unusual key, or a build that spills, compare build cost and
+  downstream pruning before and after. See the onboarding handbook's
+  [clustering page](https://dbt-onboarding.vercel.app/advanced/clustering).
 - Keep unknown, false, not applicable and missing evidence distinct where the
   domain distinguishes them.
 - Put organisation-wide definitions and terminology in shared models. Keep

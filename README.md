@@ -120,6 +120,15 @@ Published, partner and semantic models serve downstream consumers.
   consolidation or enrichment.
 - Prefer readable, straightforward SQL. Logic must not masquerade as data: keep
   rules in SQL and use seeds for lookup values and parameters.
+- Keep large intermediate results small: filter, select and aggregate to the
+  required grain before costly joins, windows and deduplication. Use `union all`
+  when duplicate removal is not part of the contract, and do not use `distinct`
+  to repair a join fan-out.
+- Consider clustering a large materialised model when several downstream
+  consumers use the same selective filters or joins. OLIDS event inputs are
+  usually clustered by mapped concept code; after filtering them, a reused
+  result may instead cluster by person for downstream joins. `cluster_by`
+  controls the new output, not its upstream scan.
 - Give a business definition one owner when several models depend on it. Do not
   repeat maintained provider lists, code sets, thresholds or date rules. Keep a
   value that defines only one model's concept in that model rather than creating
