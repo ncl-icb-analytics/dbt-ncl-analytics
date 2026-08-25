@@ -48,8 +48,8 @@ select person_id,
     MAX(IFF(risk_group = 'Chronic Respiratory Disease', 1, 0)) AS has_crd,
     MAX(IFF(risk_group in ('Diabetes','Gestational Diabetes'), 1, 0)) AS has_diabetes,
     MAX(IFF(risk_group = 'Immunosuppression', 1, 0)) AS is_immunosuppressed
---FROM {{ ref('fct_covid_flu_uptake') }} 
-FROM REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE
+FROM {{ ref('fct_covid_flu_uptake') }} 
+--FROM REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE
 GROUP BY all
  order by 1
 )
