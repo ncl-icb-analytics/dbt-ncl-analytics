@@ -32,9 +32,10 @@ Usage:
 PowerBI
 Testing WIDE FORMAT for RISK GROUP using columns and flags. 
 */
---TESTING NEW DASHBOARD MODEL with WIDE RISK GROUPS
+--TESTING NEW DASHBOARD MODEL with WIDE RISK GROUPS - NEED TO SPLIT FURTHER INTO SUBCOHORTS AND RISK GROUPS.
 
 ----1,027,933 historical people with a vaccination record (2026/27 not yet added)
+
 with vacc_pop as (
 SELECT
     person_id,
@@ -46,12 +47,12 @@ SELECT
          WHEN campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
          ELSE campaign_id END AS campaign_id,
     CASE 
-        WHEN u.campaign_id = 'Flu 2024-25' THEN 1
-        WHEN u.campaign_id = 'COVID Autumn 2024' THEN 2
-        WHEN u.campaign_id = 'COVID Spring 2025' THEN 3
-        WHEN u.campaign_id = 'Flu 2025-26' THEN 4
-        WHEN u.campaign_id = 'COVID Autumn 2025' THEN 5
-        WHEN u.campaign_id = 'COVID Spring 2026' THEN 6
+        WHEN campaign_id = 'Flu 2024-25' THEN 1
+        WHEN campaign_id = 'COVID Autumn 2024' THEN 2
+        WHEN campaign_id = 'COVID Spring 2025' THEN 3
+        WHEN campaign_id = 'Flu 2025-26' THEN 4
+        WHEN campaign_id = 'COVID Autumn 2025' THEN 5
+        WHEN campaign_id = 'COVID Spring 2026' THEN 6
         END AS campaign_sort,
     programme_type,
     campaign_year,
@@ -74,36 +75,31 @@ SELECT
     -- Campaign dates
     campaign_start_date,
     campaign_reference_date,
-    --Risk groups may change over time as new campaigns are added.
-    MAX(IFF(risk_group = 'Active Asthma Management', 1, 0)) AS active_asthma_management_flag,
-    MAX(IFF(risk_group = 'Age 65 and Over', 1, 0)) AS age_65_and_over_flag,
-    MAX(IFF(risk_group = 'Age 75+', 1, 0)) AS age_75_plus_flag,
-    MAX(IFF(risk_group = 'Asplenia', 1, 0)) AS asplenia_flag,
-    MAX(IFF(risk_group = 'Asplenia/Spleen Dysfunction', 1, 0)) AS asplenia_spleen_dysfunction_flag,
-    MAX(IFF(risk_group = 'Asthma', 1, 0)) AS asthma_flag,
-    MAX(IFF(risk_group = 'Asthma Admission', 1, 0)) AS asthma_admission_flag,
-    MAX(IFF(risk_group = 'Carer', 1, 0)) AS carer_flag,
-    MAX(IFF(risk_group = 'Children Preschool', 1, 0)) AS children_preschool_flag,
-    MAX(IFF(risk_group = 'Children School Age', 1, 0)) AS children_school_age_flag,
-    MAX(IFF(risk_group = 'Chronic Heart Disease', 1, 0)) AS chronic_heart_disease_flag,
-    MAX(IFF(risk_group = 'Chronic Kidney Disease', 1, 0)) AS chronic_kidney_disease_flag,
-    MAX(IFF(risk_group = 'Chronic Kidney Disease (Stage 3-5)', 1, 0)) AS chronic_kidney_disease_stage_3_5_flag,
-    MAX(IFF(risk_group = 'Chronic Liver Disease', 1, 0)) AS chronic_liver_disease_flag,
-    MAX(IFF(risk_group = 'Chronic Neurological Disease', 1, 0)) AS chronic_neurological_disease_flag,
-    MAX(IFF(risk_group = 'Chronic Respiratory Disease', 1, 0)) AS chronic_respiratory_disease_flag,
-    MAX(IFF(risk_group = 'Diabetes', 1, 0)) AS diabetes_flag,
-    MAX(IFF(risk_group = 'Gestational Diabetes', 1, 0)) AS gestational_diabetes_flag,
-    MAX(IFF(risk_group = 'Health and Social Care Workers', 1, 0)) AS health_social_care_workers_flag,
-    MAX(IFF(risk_group in ('Homeless', 'Homelessness'), 1, 0)) AS homeless_flag,
-    MAX(IFF(risk_group = 'Household Contact Immunocompromised', 1, 0)) AS household_contact_immunocompromised_flag,
-    MAX(IFF(risk_group = 'Immunosuppression', 1, 0)) AS immunosuppression_flag,
-    MAX(IFF(risk_group = 'Learning Disability', 1, 0)) AS learning_disability_flag,
-    MAX(IFF(risk_group in ('Long Term Residential Care', 'Long-term Residential Care'), 1, 0)) AS long_term_residential_care_flag,
-    MAX(IFF(risk_group = 'Morbid Obesity', 1, 0)) AS morbid_obesity_flag,
-    MAX(IFF(risk_group = 'Pregnancy', 1, 0)) AS pregnancy_flag,
-    MAX(IFF(risk_group = 'Severe Mental Illness', 1, 0)) AS severe_mental_illness_flag,
-    MAX(IFF(risk_group = 'Under 65 At Risk', 1, 0)) AS under_65_at_risk_flag,
-    MAX(IFF(risk_group = 'Vaccinated Despite Ineligibility', 1, 0)) AS vaccinated_despite_ineligibility_flag
+    --Sub Cohorts groups may change over time as new campaigns are added.
+    MAX(IFF(risk_group in ( 'Active Asthma Management', 'Asthma','Asthma Admission' ), 1, 0)) AS asthma,
+    MAX(IFF(risk_group = 'Age 65 and Over', 1, 0)) AS age_65_plus,
+    MAX(IFF(risk_group = 'Age 75+', 1, 0)) AS age_75_plus,
+    MAX(IFF(risk_group in ('Asplenia/Spleen Dysfunction','Asplenia'), 1, 0)) AS asplenia,
+    MAX(IFF(risk_group = 'Carer', 1, 0)) AS carer,
+    MAX(IFF(risk_group = 'Children Preschool', 1, 0)) AS children_preschool,
+    MAX(IFF(risk_group = 'Children School Age', 1, 0)) AS children_school_age,
+    MAX(IFF(risk_group = 'Chronic Heart Disease', 1, 0)) AS chronic_heart_disease,
+    MAX(IFF(risk_group in ('Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)'), 1, 0)) AS chronic_kidney_disease,
+    MAX(IFF(risk_group = 'Chronic Liver Disease', 1, 0)) AS chronic_liver_disease,
+    MAX(IFF(risk_group = 'Chronic Neurological Disease', 1, 0)) AS chronic_neurological_disease,
+    MAX(IFF(risk_group = 'Chronic Respiratory Disease', 1, 0)) AS chronic_respiratory_disease,
+    MAX(IFF(risk_group in ('Diabetes','Gestational Diabetes'), 1, 0)) AS diabetes,
+    MAX(IFF(risk_group = 'Health and Social Care Workers', 1, 0)) AS health_social_care_workers,
+    MAX(IFF(risk_group in ('Homeless', 'Homelessness'), 1, 0)) AS homeless,
+    MAX(IFF(risk_group = 'Household Contact Immunocompromised', 1, 0)) AS household_contact_immunocompromised,
+    MAX(IFF(risk_group = 'Immunosuppression', 1, 0)) AS immunosuppression,
+    MAX(IFF(risk_group = 'Learning Disability', 1, 0)) AS learning_disability,
+    MAX(IFF(risk_group in ('Long Term Residential Care', 'Long-term Residential Care'), 1, 0)) AS long_term_residential_care,
+    MAX(IFF(risk_group = 'Morbid Obesity', 1, 0)) AS morbid_obesity,
+    MAX(IFF(risk_group = 'Pregnancy', 1, 0)) AS pregnancy,
+    MAX(IFF(risk_group = 'Severe Mental Illness', 1, 0)) AS severe_mental_illness,
+    MAX(IFF(risk_group = 'Under 65 At Risk', 1, 0)) AS under_65_at_risk,
+    MAX(IFF(risk_group = 'Vaccinated Despite Ineligibility', 1, 0)) AS vaccinated_despite_ineligibility
 FROM {{ ref('fct_covid_flu_uptake') }} 
 --FROM REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE
 GROUP BY all
