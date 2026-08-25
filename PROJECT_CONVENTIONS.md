@@ -228,11 +228,13 @@ model contract.
   can create or revisit many candidate rows only to discard most of them later.
   Join only candidate rows or compute the selection once when the contract
   allows it.
-- Base scale-dependent findings on a plausible large intermediate result or
-  query evidence. A wide output, pivot, window, or several small reference joins
-  is not a defect by itself. Ask for Query Profile, spill or pruning evidence
-  when the cost cannot be established from the change, and keep speculative
-  tuning non-blocking.
+- Base a performance finding on an operation in the changed SQL that plausibly
+  creates a large intermediate result, using any scale information already in
+  the pull request. A wide output, pivot, window, or several small reference
+  joins is not a defect by itself. When size or impact is unknown, state the
+  assumption and keep the comment non-blocking. Query Profile, spill and pruning
+  checks may be suggested as optional validation; do not require the contributor
+  to provide them for the review.
 - Consider `cluster_by` for a materialised model when several downstream
   consumers repeatedly filter or join a large result on the same selective
   columns. The current build pays to sort its output so later queries can avoid
@@ -241,9 +243,10 @@ model contract.
   clustered by mapped concept code for the expensive code-filter scan. After
   selecting those rows, a reused result may instead cluster by person for its
   downstream joins. Follow an established model-family key without requiring
-  fresh proof. For a new or unusual key, or a build that spills, compare the
-  build cost with the downstream pruning benefit. See the onboarding handbook's
-  [clustering page](https://dbt-onboarding.vercel.app/advanced/clustering).
+  fresh proof. For a new or unusual key, explain the visible downstream access
+  pattern and the build-cost trade-off. Optional before-and-after measurement can
+  confirm the benefit, but is not a review requirement. See the
+  [onboarding clustering page](https://dbt-onboarding.vercel.app/advanced/clustering).
 
 ## Seeds
 

@@ -137,11 +137,14 @@ reviews:
           by hashing or sorting them. A narrow key list or small lookup may use
           DISTINCT plainly. Where possible, deduplicate the narrow key and values
           before building a wide aggregate.
-        - Do not infer poor performance merely from a wide result, a pivot, a
-          window, or many small reference joins. Explain the likely expensive
-          intermediate operation. When impact depends on data volume or workload,
-          ask for Query Profile, spill or pruning evidence and keep speculative
-          tuning non-blocking.
+        - Judge performance from the changed SQL and scale information already in
+          the pull request. Do not infer poor performance merely from a wide
+          result, a pivot, a window, or many small reference joins. Explain the
+          likely expensive intermediate operation. When its size or impact is
+          unknown, state the assumption and label the comment "follow-up
+          (non-blocking):". Do not ask the contributor to provide Query Profile,
+          spill or pruning evidence; profiling may be suggested only as optional
+          validation.
         - Suggest cluster_by only for a materialised model when several
           downstream consumers repeatedly filter or join a large result on the
           same selective columns. The current build pays to sort its output so
@@ -152,9 +155,10 @@ reviews:
           required rows, person_id may be the right output key when several
           consumers join the result by person. Do not ask for fresh evidence when
           the key follows the established model-family pattern. For a new or
-          unusual key, a wide output whose sort may spill, or a build already
-          known to spill, name the downstream access pattern and ask for
-          partitions-scanned and build-cost evidence.
+          unusual key, comment only when the changed lineage or pull-request
+          context shows the downstream access pattern. Explain the build-sort and
+          pruning trade-off, keep the suggestion non-blocking, and do not request
+          partitions-scanned or runtime evidence.
         - Prefer reuse or composition of an established model over a second
           definition of the same concept. A new parallel model must explain why
           the existing contract cannot be extended or composed.
@@ -434,8 +438,9 @@ reviews:
         of its implementation. When a macro expands to a correlated scalar
         lookup for each calling row, check its use in large models. Prefer a join
         at the required grain or one computed selection when repeated work or
-        fan-out is plausible. Treat scale-dependent cost as non-blocking without
-        query evidence; correctness fan-out remains blocking.
+        fan-out is plausible. When scale is not clear from the callers or pull
+        request, keep the performance concern non-blocking; correctness fan-out
+        remains blocking.
 
     # QOF register macros
     - path: "macros/qof_registers/**"
