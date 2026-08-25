@@ -85,11 +85,12 @@ reviews:
         - Beyond staging, choose dependencies by the contract needed rather than
           enforcing a rigid ladder. Modelling may reuse reporting models when
           they are the established interface and the dependency stays acyclic.
-        - New or changed hand-written dependencies use ref(). Only generated raw
-          models use source(). Flag newly introduced source() calls outside raw
-          and hardcoded warehouse relations. Existing direct source() calls in
-          staging are legacy debt: mention them as a non-blocking follow-up
-          unless the change adds or depends on that bypass.
+        - All hand-written models use ref(). Only generated raw models use
+          source(). Flag every source() call in a changed hand-written model,
+          including one that was already present in staging, and require it to
+          be replaced with ref() to the generated raw model. This is a small fix
+          within the changed model, not a non-blocking follow-up. Do not search
+          unrelated files for legacy calls. Flag hardcoded warehouse relations.
         - Check subject, population, reference time and grain. For each join,
           check whether it should be one-to-one, many-to-one or one-to-many. If
           the left-hand grain should survive, the right-hand input must have at
@@ -194,9 +195,10 @@ reviews:
       instructions: |
         Staging is the required boundary between raw and every downstream area.
         It provides one canonical project interface to a source object. New
-        models and changed dependencies use ref() to a raw_ model, never source()
-        or a hardcoded relation. Treat existing direct source() calls as legacy
-        under the proportional-review rule. Select columns explicitly. Apply
+        models use ref() to a raw_ model, never source() or a hardcoded relation.
+        If a changed staging model already calls source() directly, require that
+        call to be replaced with ref() as part of the change. Select columns
+        explicitly. Apply
         project names, types and universal source or delivery fixes while
         normally preserving the source entity, grain and legitimate rows.
         Staging should normally have no joins. Allow a join only when its sole

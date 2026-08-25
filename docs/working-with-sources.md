@@ -51,8 +51,9 @@ Only staging models may reference `raw_` models; modelling, reporting and produc
 models must start from staging or a later contract.
 
 A small number of existing staging models still call `source()` directly. Treat
-these as legacy debt: do not copy the pattern, and record it as a non-blocking
-follow-up in an enhancement unless the change adds or depends on the bypass.
+these as legacy debt, not examples to copy. When changing one of those models,
+replace the call with `ref()` to its generated raw model as part of the change.
+Do not expand the pull request into unrelated staging models.
 
 ## Quick reference
 

@@ -121,11 +121,11 @@ also state what it is reconciling with and how consumers can distinguish it.
 
 ## SQL and dependencies
 
-- New and changed hand-written dependencies use `ref()`. Only generated raw
-  models use `source()`. Existing direct `source()` calls in staging are legacy
-  debt; do not copy them. In an enhancement, record them as a non-blocking
-  follow-up unless the change adds or depends on the bypass. Never hardcode a
-  warehouse relation in model SQL.
+- All hand-written models use `ref()`. Only generated raw models use `source()`.
+  If a changed hand-written model already calls `source()` directly, replace the
+  call with `ref()` to the generated raw model as part of the change. This small
+  fix is not a non-blocking follow-up. Do not search unrelated files for legacy
+  calls. Never hardcode a warehouse relation in model SQL.
 - Only staging models may `ref()` a `raw_` model. All other models start from
   staging or a later contract; modelling and reporting may reuse each other's
   models where the dependency is acyclic and the contract fits.
