@@ -109,7 +109,9 @@ all_homeless_routes AS (
         cc.campaign_id,
         chip.person_id,
         cc.campaign_reference_date,
-        phs.latest_homeless_date AS qualifying_event_date,
+        -- Latest homeless code date where one exists, else the campaign start date
+        -- (downstream models test qualifying_event_date as not null)
+        COALESCE(phs.latest_homeless_date, cc.campaign_start_date) AS qualifying_event_date,
         FALSE AS via_homeless_code
     FROM registered_chip chip
     CROSS JOIN all_campaigns cc
