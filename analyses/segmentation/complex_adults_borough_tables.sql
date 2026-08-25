@@ -5,10 +5,7 @@
 --   Query 2  Criteria per 1,000 adults, boroughs as columns
 --   Query 3  NCL people per criterion, and how many depend on it alone
 --
--- Usage: run directly in Snowflake (no dbt compile needed).
---
--- Tables live in DEV__REPORTING until PR #882 merges; delete the DEV__
--- prefixes afterwards to run against production.
+-- Usage: compile with dbt, then run the compiled queries in Snowflake.
 --
 -- REBUILD FIRST. Dev tables move between builds - see the header of
 -- complex_adults_criteria_by_borough.sql in this folder for the build command
@@ -31,8 +28,8 @@ SELECT
     COUNT(*) AS registered_adults,
     COUNT(c.person_id) AS cohort,
     ROUND(COUNT(c.person_id) * 1000.0 / COUNT(*), 1) AS per_1000_adults
-FROM DEV__REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS AS d
-LEFT JOIN DEV__REPORTING.SEGMENTATION.FCT_PERSON_COMPLEX_ADULTS AS c
+FROM {{ ref('dim_person_demographics') }} AS d
+LEFT JOIN {{ ref('fct_person_complex_adults') }} AS c
     ON d.person_id = c.person_id
     AND c.is_active
 WHERE d.is_active AND d.age >= 18
@@ -57,7 +54,7 @@ WITH cohort AS (
         gp_appointments_12mo >= 15 AS act_gp,
         outpatient_specialties_12mo >= 5 AS act_op,
         is_housebound AS act_housebound
-    FROM DEV__REPORTING.SEGMENTATION.FCT_PERSON_COMPLEX_ADULTS
+    FROM {{ ref('fct_person_complex_adults') }}
     WHERE is_active
 ),
 
@@ -97,7 +94,7 @@ reasons AS (
 
 denominator AS (
     SELECT borough_registered AS borough, COUNT(*) AS adults
-    FROM DEV__REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS
+    FROM {{ ref('dim_person_demographics') }}
     WHERE is_active AND age >= 18
     GROUP BY 1
 ),
@@ -178,7 +175,7 @@ WITH cohort AS (
         gp_appointments_12mo >= 15 AS act_gp,
         outpatient_specialties_12mo >= 5 AS act_op,
         is_housebound AS act_housebound
-    FROM DEV__REPORTING.SEGMENTATION.FCT_PERSON_COMPLEX_ADULTS
+    FROM {{ ref('fct_person_complex_adults') }}
     WHERE is_active
 ),
 

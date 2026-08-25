@@ -3,12 +3,7 @@
 -- Answers "what is driving the cohort numbers, split by criterion and borough".
 -- Returns one row per borough per criterion, plus an NCL total row.
 --
--- Usage: run directly in Snowflake (no dbt compile needed).
---
--- WHERE THE TABLES LIVE
---   Until PR #882 merges the models exist only in DEV__REPORTING, which is
---   what this file points at. After the merge, delete the two DEV__ prefixes
---   below to run against production.
+-- Usage: compile with dbt, then run the compiled queries in Snowflake.
 --
 -- REFRESH FIRST
 --   Dev tables move. The activity windows anchor to CURRENT_DATE (ED, non-
@@ -62,7 +57,7 @@ WITH cohort AS (
         gp_appointments_12mo >= 15 AS act_gp,
         outpatient_specialties_12mo >= 5 AS act_op,
         is_housebound AS act_housebound
-    FROM DEV__REPORTING.SEGMENTATION.FCT_PERSON_COMPLEX_ADULTS
+    FROM {{ ref('fct_person_complex_adults') }}
     WHERE is_active
 ),
 
@@ -158,7 +153,7 @@ denominator AS (
     SELECT
         COALESCE(borough_registered, 'NCL') AS area,
         COUNT(*) AS adults
-    FROM DEV__REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS
+    FROM {{ ref('dim_person_demographics') }}
     WHERE is_active AND age >= 18
     GROUP BY ROLLUP(borough_registered)
 ),
@@ -208,8 +203,8 @@ SELECT
     COUNT_IF(c.complexity_criteria_count = 1) AS complexity_1,
     COUNT_IF(c.complexity_criteria_count >= 3) AS complexity_3plus,
     ROUND(AVG(c.complexity_criteria_count), 2) AS mean_complexity_criteria
-FROM DEV__REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS AS d
-LEFT JOIN DEV__REPORTING.SEGMENTATION.FCT_PERSON_COMPLEX_ADULTS AS c
+FROM {{ ref('dim_person_demographics') }} AS d
+LEFT JOIN {{ ref('fct_person_complex_adults') }} AS c
     ON d.person_id = c.person_id
     AND c.is_active
 WHERE d.is_active AND d.age >= 18
