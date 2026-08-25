@@ -164,9 +164,12 @@ reviews:
           context shows the downstream access pattern. Explain the build-sort and
           pruning trade-off, keep the suggestion non-blocking, and do not request
           partitions-scanned or runtime evidence.
-        - Prefer reuse or composition of an established model over a second
-          definition of the same concept. A new parallel model must explain why
-          the existing contract cannot be extended or composed.
+        - When a new model appears to duplicate an existing one, ask how its
+          contract differs and whether the existing model can be extended,
+          composed or reused. A separate model should have a distinct subject,
+          grain, scope, stakeholder group or business reason to change. The
+          stakeholder group means the programme, product team or business users
+          served by the contract, not a repository maintainer.
         - Name models for their subject and grain, not the processing step that
           produced them. Treat names such as consolidated, enriched, processed,
           intermediate and final as warning signs unless they describe a real
@@ -206,7 +209,10 @@ reviews:
           column to be mapped, derived or omitted. Allow a placeholder only in a
           model under models/published/, when its documented output contract
           requires a fixed schema and the description explains why the field is
-          empty. Treat a column as known to be empty only when the diff or pull
+          empty. Where union branches need compatible shapes, allow branch-specific
+          NULL aliases in the model performing the union when another branch
+          populates that output; do not expose all-null columns from the upstream
+          models. Treat a column as known to be empty only when the diff or pull
           request evidence establishes this; do not infer it from its name or a
           limited sample.
         - Review the changed behaviour and its effect on the existing contract.
@@ -221,8 +227,8 @@ reviews:
           project. A rule, term, label or classification approved for one
           programme must stay in that programme's folder or schema and reuse the
           shared models it needs. Show the programme in the model name using the
-          neighbouring naming pattern. Audience and product rules or vocabulary
-          belong in their own downstream models.
+          naming pattern of models in the same folder or model family. Audience
+          and product rules or vocabulary belong in their own downstream models.
         - Any narrower model that runs beside a shared contract—programme,
           geography, legacy migration or named consumer—must make that scope
           clear in its model name and folder/schema. Require the description to
@@ -251,11 +257,13 @@ reviews:
         and do not need to remove those characters, but friendly names are
         optional and unquoted snake_case remains valid. Quoting a physical input
         identifier in generated raw SQL or a source declaration is also allowed.
-        Follow established names: is_/has_ booleans; _date dates; _at
-        timestamps; _id identifiers. Outside generated raw models, do not carry
-        legacy derived names such as zcontracttype or z_contract_type into new
-        project interfaces. Prefer the unprefixed business name when the derived
-        value is the project interface. Use dv_ when retaining both supplied and
+        Use is_ or has_ for booleans and make dates, timestamps and identifiers
+        clear in the name. Prefer _date, _at and _id where they read naturally,
+        but accept an established model-family convention or another unambiguous
+        form such as date_. Outside generated raw models, do not carry legacy
+        derived names such as zcontracttype or z_contract_type into new project
+        interfaces. Prefer the unprefixed business name when the derived value
+        is the project interface. Use dv_ when retaining both supplied and
         derived values makes their distinction useful, with the supplied value
         kept as a clearly named column or upstream source field. Existing SLAM
         and community dv_ families are established interfaces; do not request
@@ -301,7 +309,8 @@ reviews:
         Reference models hold project-owned lookups and derived reference data
         shared across domains. They use staging-or-later inputs, not raw models
         or source(). Keep programme, audience and product rules out of this area.
-        Follow neighbouring names and state the lookup grain and update basis.
+        Follow names used by models in the same folder or model family and state
+        the lookup grain and update basis.
 
     # Modelling layer
     - path: "models/modelling/**"
@@ -317,9 +326,10 @@ reviews:
         changing concepts or contracts. Programme-specific logic belongs in its
         programme folder/schema and reuses shared models without redefining them.
         Use int_ plus the established programme subject, for example
-        int_flu_, int_smi_, int_myria_ or int_ltc_lcs_; inspect neighbouring
-        names rather than inventing a new abbreviation. The folder alone is not
-        enough if an unqualified model name would suggest project-wide scope.
+        int_flu_, int_smi_, int_myria_ or int_ltc_lcs_; inspect names in the same
+        folder or model family rather than inventing a new abbreviation. The
+        folder alone is not enough if an unqualified model name would suggest
+        project-wide scope.
         OLIDS schemas and governance messages are derived from folder
         configuration.
 
@@ -430,6 +440,10 @@ reviews:
         mappings, thresholds, priorities and conversion parameters. Flag
         expressions, operators or branching that a model or macro must parse:
         logic must not masquerade as data, and the rule belongs in readable SQL.
+        When a new seed appears to duplicate an existing one, ask how its
+        contract differs and whether the existing seed can be extended or reused.
+        A separate seed should have a distinct subject, grain, scope, stakeholder
+        group or business reason to change.
         Any seed that appears to contain real patient- or person-level data is a
         critical blocking finding under the repository-wide data-safety rule.
 
@@ -437,10 +451,11 @@ reviews:
     - path: "macros/**"
       instructions: |
         Review the project behaviour the macro centralises, its callers and
-        null/empty-input behaviour. Place new macros with neighbouring clinical,
-        transformation, configuration, governance or utility macros. Require
-        documentation for the macro contract and arguments, not a prose version
-        of its implementation. When a macro expands to a correlated scalar
+        null/empty-input behaviour. Place new macros with the clinical,
+        transformation, configuration, governance or utility macros in the same
+        folder or family. Require documentation for the macro contract and
+        arguments, not a prose version of its implementation. When a macro
+        expands to a correlated scalar
         lookup for each calling row, check its use in large models. Prefer a join
         at the required grain or one computed selection when repeated work or
         fan-out is plausible. When scale is not clear from the callers or pull

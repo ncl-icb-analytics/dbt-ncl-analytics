@@ -112,6 +112,10 @@ Published, partner and semantic models serve downstream consumers.
 - Search names, YAML and lineage before creating another definition.
 - Reuse or extend the staging model for a source object; do not add a
   pipeline- or consumer-named duplicate.
+- When a new model or seed looks duplicative, ask how its contract differs and
+  whether the existing object can be extended, composed or reused. A separate
+  object should have a distinct subject, grain, scope, stakeholder group or
+  business reason to change.
 - Keep staging joins exceptional and universal: cleaning, standardisation or
   enrichment that every consumer of the source should inherit.
 - Choose model areas by responsibility and consumers. Do not bypass staging to
@@ -128,7 +132,8 @@ Published, partner and semantic models serve downstream consumers.
   may instead use quoted friendly names for consumers; this is optional.
 - Do not add columns known to be null for every row. Only a model under
   `models/published/` may use one when its documented output contract requires a
-  fixed-schema placeholder.
+  fixed-schema placeholder. Put branch-specific nulls needed to align a union in
+  the model performing the union, not in its upstream models.
 - This repository is public. Never commit patient- or person-level data,
   identifying values, row-level extracts or screenshots containing real data.
   High-level aggregate counts, rates and validation totals are not person-level

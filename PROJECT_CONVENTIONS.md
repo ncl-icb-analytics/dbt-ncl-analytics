@@ -52,7 +52,7 @@ create a cycle.
 |------|----------|--------|
 | Raw | Generated 1:1 evidence from a source table. Rename physical columns to readable `snake_case`; do not cast, filter, deduplicate, join or interpret. Never edit generated raw files by hand. | `raw_` |
 | Staging | Provide the single project interface to a source object. Use project names and types and handle universal delivery quirks while normally preserving the source entity, grain and legitimate rows. | `stg_` |
-| Reference | Hold project-owned lookups and derived reference datasets shared across domains. | Follow neighbouring models |
+| Reference | Hold project-owned lookups and derived reference datasets shared across domains. | Follow models in the same folder or model family |
 | Modelling | Give a purposeful transformation or shared domain rule a named, tested home. A model may change grain, but should have one coherent reason to change. | `int_` |
 | Reporting | Provide a supported business entity or concept for direct analysis at a documented grain. Marts may be wide when they preserve the core grain and reuse established definitions. | `dim_`, `fct_`, `pit_`, `obt_`, `dq_`, `def_`; programme prefixes where established |
 | Published | Serve a named report, dashboard, extract or application. Product selection, audience policy, legal basis and delivery names belong here; shared domain meaning belongs upstream. | Follow the established product family |
@@ -102,9 +102,9 @@ Make programme scope visible in both path and name:
   prefix such as `cltcs_`.
 - Published models make the report, dashboard, extract or application visible
   while following established families such as the Myria `_published` models.
-- Search neighbouring programme models before naming a new one. Reuse their
-  vocabulary and abbreviation; do not introduce a second prefix for the same
-  programme.
+- Search programme models in the same folder or model family before naming a
+  new one. Reuse their vocabulary and abbreviation; do not introduce a second
+  prefix for the same programme.
 
 The folder alone is not enough when the model name would otherwise look like a
 project-wide definition.
@@ -118,9 +118,12 @@ visible in the model name and folder/schema. Explain it in the description when
 the name is not enough. Do not give a scoped variant an unqualified name that
 could be mistaken for the shared model.
 
-Before adding a parallel `int_`, `fct_`, `dim_` or `obt_` model, explain why the
-existing contract cannot be extended or composed. A transitional model should
-also state what it is reconciling with and how consumers can distinguish it.
+When a new model or seed appears to duplicate an existing one, ask how its
+contract differs and whether the existing model or seed can be extended,
+composed or reused. A separate object should have a distinct subject, grain,
+scope, stakeholder group or business reason to change. A transitional model
+should also state what it is reconciling with and how consumers can distinguish
+it.
 
 ## SQL and dependencies
 
@@ -134,8 +137,8 @@ also state what it is reconciling with and how consumers can distinguish it.
   models where the contract fits and this does not create a circular dependency.
 - Staging models read raw models with `ref()` and select columns explicitly.
 - Folder placement supplies database, schema, materialisation, tags and hooks
-  through `dbt_project.yml`. Check neighbouring models before adding a local
-  config override.
+  through `dbt_project.yml`. Check models in the same folder or model family
+  before adding a local config override.
 - Use established model vocabulary. Names normally combine a role prefix, a
   domain subject and a suffix only when it explains shape, time or grain, such
   as `_all`, `_latest`, `_current`, `_historical`, `_register` or `_summary`.
@@ -165,9 +168,13 @@ also state what it is reconciling with and how consumers can distinguish it.
   data. Map or derive the column, or omit it until it can be populated. A
   placeholder is allowed only in a model under `models/published/`, when its
   documented output contract requires a fixed schema. Describe the contract and
-  why the field is empty.
-- Prefix booleans with `is_` or `has_`; suffix dates with `_date`, timestamps
-  with `_at` and identifiers with `_id`.
+  why the field is empty. Where union branches need compatible shapes, add
+  branch-specific nulls in the model performing the union rather than exposing
+  all-null columns from upstream models.
+- Use `is_` or `has_` for booleans and make dates, timestamps and identifiers
+  clear in the name. Prefer `_date`, `_at` and `_id` where they read naturally,
+  but follow an established model-family convention or use another unambiguous
+  form such as `date_`.
 - Do not carry legacy derived names such as `zcontracttype` or `z_contract_type`
   into new project interfaces. When every consumer should use the derived value,
   give it the unprefixed business name. Use `dv_` when retaining both supplied
