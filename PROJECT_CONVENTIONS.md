@@ -206,10 +206,14 @@ model contract.
 - Keep costly intermediate results no larger than their purpose requires. Where
   it does not change the contract, filter rows and select the required columns
   before large joins, windows, pivots, grouping or deduplication, because each
-  operation must otherwise process the extra rows or width. Aggregate or select
-  repeated child records at the required grain before joining them, and defer
-  descriptive enrichment until after that reduction when it does not affect
-  which records survive.
+  operation must otherwise process the extra rows or width. A filter that the
+  model always applies should precede the expensive operation when it does not
+  depend on that operation's result; do not move it when doing so would change a
+  rank, aggregate, join outcome or population. Aggregate or select repeated
+  child records at the required grain before joining them, and defer descriptive
+  enrichment until after that reduction when it does not affect which records
+  survive. Snowflake may push a safe predicate down, but do not rely on that
+  optimisation when applying the filter early is a clear, safe reduction.
 - Avoid repeated scans and sorts of the same large input when one narrow base
   can express the same rules. Each pass can reread and reorder the same data.
   Several `row_number()` or `qualify` passes with the same partition can often

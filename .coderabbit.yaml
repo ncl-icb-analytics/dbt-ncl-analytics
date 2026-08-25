@@ -121,8 +121,13 @@ reviews:
           or deduplication; aggregate or select repeated child rows at the target
           grain before joining; and defer descriptive enrichment until after the
           reduction. These changes reduce the rows or width that the expensive
-          operation must process. Do not require a new model when a clear CTE is
-          enough.
+          operation must process. Flag a filter after an expensive operation only
+          when the model always applies it, it does not depend on that operation's
+          result, and moving it earlier is a clear reduction in rows. Moving a
+          filter must not change a rank, aggregate, join outcome or population.
+          Snowflake may push a predicate down, but do not rely on that when the
+          safe early filter can be expressed directly. Do not require a new model
+          when a clear CTE is enough.
         - Flag repeated scans or sorts of the same large input, several
           ROW_NUMBER or QUALIFY passes with the same partition over that input,
           repeated correlated lookups, and Cartesian or broadly matching
