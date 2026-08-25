@@ -72,7 +72,7 @@ people_eligible_via_other_routes AS (
     -- Clinical risk groups (ATRISK_GROUP)
     SELECT DISTINCT campaign_id, person_id, 'clinical_risk_group' AS exclusion_reason
     FROM (
-        SELECT campaign_id, person_id FROM {{ ref('int_flu_active_asthma_management') }}
+        SELECT campaign_id, person_id FROM {{ ref('int_flu_asthma') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_heart_disease') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_kidney_disease') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_liver_disease') }}
