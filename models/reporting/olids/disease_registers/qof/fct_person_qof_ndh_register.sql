@@ -1,4 +1,4 @@
--- Pair: macros/qof_registers/calculate_ndh_register.sql.
+-- Pair: macros/qof_registers/calculate_qof_ndh_register.sql.
 -- This live fact includes future-dated records. Its PIT pair is strict as-of
 -- and derives age at the reference date rather than using current age.
 

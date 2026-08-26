@@ -1,5 +1,5 @@
-{% macro calculate_ndh_register(reference_date_expr='CURRENT_DATE()', include_future_records=false) %}
-    {# Pair: fct_person_ndh_register.sql. The default is strict as-of with age at the reference date; the live fact explicitly enables future-dated records. #}
+{% macro calculate_qof_ndh_register(reference_date_expr='CURRENT_DATE()', include_future_records=false) %}
+    {# Pair: fct_person_qof_ndh_register.sql. The default is strict as-of with age at the reference date; the live fact explicitly enables future-dated records. #}
     {#
     Calculates QOF v51 NDH_REG status at a supplied achievement date.
 

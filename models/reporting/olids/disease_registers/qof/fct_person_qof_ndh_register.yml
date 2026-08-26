@@ -1,12 +1,13 @@
 models:
-  - name: fct_person_ndh_register
+  - name: fct_person_qof_ndh_register
     description: >
       QOF v51 NDH_REG v102 (CQRS NDHGDM) at the current date. One row represents one person
       on the register. It includes people aged 18 or over with NDH, impaired
       glucose tolerance or pre-diabetes, and people of any age with gestational
       diabetes. The five NDH_REG diabetes-history rules determine membership.
+      This model is the QOF denominator, not a clinical NDH diagnosis cohort.
       As with the existing live fact family, future-dated evidence is retained;
-      use pit_ndh_register for strict as-of membership.
+      use pit_qof_ndh_register for strict as-of membership.
     config:
       meta:
         indicator:
@@ -24,7 +25,6 @@ models:
           qof_indicator: "NDH001"
           source_column: "is_on_register"
           usage_contexts:
-            - "POPULATION_HEALTH_NEEDS_DASHBOARD"
             - "QOF"
           code_clusters:
             - cluster_id: "NDH_COD"
@@ -44,6 +44,9 @@ models:
     data_tests:
       - dbt_utils.at_least_one:
           column_name: person_id
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "has_ndh_route OR has_gdm_route"
     columns:
       - name: person_id
         description: Unique identifier for the person
@@ -70,8 +73,12 @@ models:
         description: >
           Whether the person has NDH/IGT/PRD evidence and is aged 18 or over
           at the current reference date
+        data_tests:
+          - not_null
       - name: has_gdm_route
         description: Whether the person has the any-age gestational diabetes route
+        data_tests:
+          - not_null
       - name: qualifying_rule
         description: First ordered NDH_REG rule that selected the person, from 2 to 5
         data_tests:
