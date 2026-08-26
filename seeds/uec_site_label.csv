@@ -2,18 +2,18 @@ site_code,department_type,uec_site_label,provider_code,icb_footprint,effective_f
 RQM25,03,UTC_CW,RQM,NWL,2021-07-01,2022-09-30,Chelsea and Westminster UTC; dept 01 at this site is the emergency department
 AD915,03,UTC_EHT,AD9,NWL,2021-04-01,2022-12-31,Ealing Hospital UTC (Totally)
 R1K14,03,UTC_EHT,R1K,NWL,2023-01-25,2023-08-18,Ealing Hospital UTC (trust site code)
-R1K04,03,UTC_EHT,R1K,NWL,2023-08-19,,Ealing Hospital UTC coded against the hospital site
+R1K04,03,UTC_EHT,R1K,NWL,2023-08-18,,Ealing Hospital UTC coded against the hospital site
 AD904,03,UTC_THH,AD9,NWL,2019-01-01,2023-01-25,Hillingdon Hospital UTC (Totally)
 RAS01,03,UTC_THH,RAS,NWL,2023-01-26,,Hillingdon Hospital UTC coded against the hospital site
 AD906,03,UTC_NP,AD9,NWL,2019-01-01,2023-01-25,Northwick Park Hospital UTC (Totally)
 R1K11,03,UTC_NP,R1K,NWL,2023-01-26,2023-08-18,Northwick Park Hospital UTC (trust site code)
-R1K01,03,UTC_NP,R1K,NWL,2023-08-19,,Northwick Park Hospital UTC coded against the hospital site
+R1K01,03,UTC_NP,R1K,NWL,2023-08-18,,Northwick Park Hospital UTC coded against the hospital site
 NLO21,03,UTC_SMH,NLO,NWL,2019-03-31,2023-10-18,St Mary's UTC (Totally)
 RYJ01,03,UTC_SMH_Streamed,RYJ,NWL,2023-01-01,,St Mary's UTC streamed from the emergency department
 AD918,03,UTC_CMX,AD9,NWL,2019-01-01,2023-01-25,Central Middlesex Hospital UTC (Totally)
 R1K12,03,UTC_CMX,R1K,NWL,2023-01-26,2023-08-17,Central Middlesex Hospital UTC (trust site code)
 R1K02,03,UTC_CMX,R1K,NWL,2023-09-01,,Central Middlesex Hospital UTC coded against the hospital site
-RY901,03,UTC_WMX,RY9,NWL,2018-09-01,2023-09-27,West Middlesex UTC submitted by HRCH
+RY901,03,UTC_WMX,RY9,NWL,2018-09-01,2023-09-28,West Middlesex UTC submitted by HRCH
 J4X8V,03,UTC_WMX,RQM,NWL,2023-09-28,,West Middlesex University Hospital UTC
 RYJ02,03,UTC_CX,RYJ,NWL,2023-01-01,,Charing Cross Hospital UTC
 RYJ03,03,UTC_HH,RYJ,NWL,2024-05-07,,Hammersmith Hospital UTC
