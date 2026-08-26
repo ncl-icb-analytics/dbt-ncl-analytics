@@ -124,3 +124,12 @@ models:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "source_schema != 'DATA_LAKE.OLIDS' or sla_days is not null"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "is_breached = (content_age_days >= breach_after_days)"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "(freshness_status = 'breached') = is_breached"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "source_schema = 'DATA_LAKE.FACT_PATIENT' or observed_at is not null"

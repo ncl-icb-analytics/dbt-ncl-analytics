@@ -31,9 +31,9 @@ analyst_signals as (
         greatest(breach_after_days - content_age_days, 0) as days_until_breach,
         content_age_days > expected_days as is_past_expected,
         sla_days is not null and content_age_days > sla_days as is_sla_missed,
-        content_age_days > breach_after_days as is_breached,
+        content_age_days >= breach_after_days as is_breached,
         case
-            when content_age_days > breach_after_days then 'breached'
+            when content_age_days >= breach_after_days then 'breached'
             when sla_days is not null and content_age_days > sla_days then 'sla_missed'
             when content_age_days > expected_days then 'past_expected'
             else 'current'

@@ -219,7 +219,7 @@ fact_patient as (
         max(case when period::date <= current_date() then last_day(period::date) end)::date as content_date,
         null::timestamp_ntz as observed_at,
         'latest_activity_period' as signal_type,
-        'Latest monthly activity period in the patient activity fact' as signal_detail,
+        'Latest monthly activity period; the source table does not expose a load timestamp' as signal_detail,
         30 as expected_days,
         null::number as sla_days,
         60 as breach_after_days
@@ -241,7 +241,7 @@ pmct as (
                     )
             end
         )) as content_date,
-        null::timestamp_ntz as observed_at,
+        max(create_ts)::timestamp_ntz as observed_at,
         'diagnostics_reporting_period' as signal_type,
         'Latest diagnostics reporting month used by project models' as signal_detail,
         30 as expected_days,
@@ -277,7 +277,7 @@ terminology as (
         'Latest terminology release loaded successfully from NHS TRUD' as signal_detail,
         35 as expected_days,
         null::number as sla_days,
-        60 as breach_after_days
+        120 as breach_after_days
     from {{ ref('raw_reference_ingest_log') }}
     where lower(status) = 'success'
 )
