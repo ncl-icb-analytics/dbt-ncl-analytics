@@ -198,6 +198,88 @@ waiting_list as (
         14 as breach_after_days
     from {{ ref('raw_wl_wl_submissionlog_data') }}
     where der_is_latest_filetype_provider_weekending = true
+),
+
+ers as (
+    select
+        'DATA_LAKE.ERS' as source_schema,
+        max(case when rp_end_date::date <= current_date() then rp_end_date end)::date as content_date,
+        max(dmic_date_added)::timestamp_ntz as observed_at,
+        'reporting_period_end' as signal_type,
+        'Latest e-Referral Service reporting-period end date in the submission header' as signal_detail,
+        30 as expected_days,
+        null::number as sla_days,
+        45 as breach_after_days
+    from {{ ref('raw_ers_pc_ebsx00header') }}
+),
+
+fact_patient as (
+    select
+        'DATA_LAKE.FACT_PATIENT' as source_schema,
+        max(case when period::date <= current_date() then period end)::date as content_date,
+        null::timestamp_ntz as observed_at,
+        'latest_activity_period' as signal_type,
+        'Latest monthly activity period in the patient activity fact' as signal_detail,
+        30 as expected_days,
+        null::number as sla_days,
+        60 as breach_after_days
+    from {{ ref('raw_fact_patient_factactivity') }}
+),
+
+pmct as (
+    select
+        'DATA_LAKE.PMCT' as source_schema,
+        max(
+            case
+                when try_to_date(
+                    left(split_part(period, '-', 2), 3) || ' ' || split_part(period, '-', 3),
+                    'MON YYYY'
+                ) <= current_date()
+                    then try_to_date(
+                        left(split_part(period, '-', 2), 3) || ' ' || split_part(period, '-', 3),
+                        'MON YYYY'
+                    )
+            end
+        ) as content_date,
+        null::timestamp_ntz as observed_at,
+        'diagnostics_reporting_period' as signal_type,
+        'Latest diagnostics reporting month used by project models' as signal_detail,
+        30 as expected_days,
+        null::number as sla_days,
+        60 as breach_after_days
+    from {{ ref('raw_pmct_diagnosticsmonthlysourceappendreviseprovcomm') }}
+),
+
+tat as (
+    select
+        'DATA_LAKE.TAT' as source_schema,
+        max(
+            case
+                when try_to_date(month, 'MON YYYY') <= current_date()
+                    then try_to_date(month, 'MON YYYY')
+            end
+        ) as content_date,
+        max(loaded_at)::timestamp_ntz as observed_at,
+        'diagnostic_reporting_month' as signal_type,
+        'Latest diagnostic turnaround-time reporting month in provider submissions' as signal_detail,
+        30 as expected_days,
+        null::number as sla_days,
+        60 as breach_after_days
+    from {{ ref('raw_tat_turnaround_times_raw') }}
+),
+
+terminology as (
+    select
+        'DATA_LAKE.TERMINOLOGY' as source_schema,
+        max(case when release_date::date <= current_date() then release_date end)::date as content_date,
+        max(run_end)::timestamp_ntz as observed_at,
+        'latest_successful_release' as signal_type,
+        'Latest terminology release loaded successfully from NHS TRUD' as signal_detail,
+        35 as expected_days,
+        null::number as sla_days,
+        60 as breach_after_days
+    from {{ ref('raw_reference_ingest_log') }}
+    where lower(status) = 'success'
 )
 
 select * from olids
@@ -219,3 +301,13 @@ union all
 select * from mhsds
 union all
 select * from waiting_list
+union all
+select * from ers
+union all
+select * from fact_patient
+union all
+select * from pmct
+union all
+select * from tat
+union all
+select * from terminology

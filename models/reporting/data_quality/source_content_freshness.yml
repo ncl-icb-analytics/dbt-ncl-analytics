@@ -29,6 +29,11 @@ models:
                   - DATA_LAKE.CSDS
                   - DATA_LAKE.MHSDS
                   - DATA_LAKE.WL
+                  - DATA_LAKE.ERS
+                  - DATA_LAKE.FACT_PATIENT
+                  - DATA_LAKE.PMCT
+                  - DATA_LAKE.TAT
+                  - DATA_LAKE.TERMINOLOGY
       - name: content_date
         description: Latest date represented by the source-specific content signal.
         data_tests:
@@ -61,12 +66,36 @@ models:
         description: Date by which the next content update was expected.
         data_tests:
           - not_null
+      - name: sla_by_date
+        description: Contractual content-age deadline. Populated only for OLIDS.
+      - name: breach_by_date
+        description: Date when unchanged content reaches the breach threshold.
+        data_tests:
+          - not_null
       - name: days_past_expected
         description: Days beyond the expected cadence, floored at zero.
         data_tests:
           - not_null
+      - name: days_past_sla
+        description: Days beyond the OLIDS SLA, or null for feeds without an SLA.
+      - name: days_past_breach
+        description: Days beyond the breach threshold, floored at zero.
+        data_tests:
+          - not_null
       - name: days_until_breach
-        description: Days remaining before breach; negative when already breached.
+        description: Days remaining before breach, floored at zero.
+        data_tests:
+          - not_null
+      - name: is_past_expected
+        description: Whether content is older than its normal update cadence.
+        data_tests:
+          - not_null
+      - name: is_sla_missed
+        description: Whether OLIDS content is older than its SLA.
+        data_tests:
+          - not_null
+      - name: is_breached
+        description: Whether content is older than its breach threshold.
         data_tests:
           - not_null
       - name: freshness_status
@@ -75,11 +104,11 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: [fresh, within_sla, late, breach, unknown]
+                values: [current, past_expected, sla_missed, breached]
     data_tests:
       - dbt_expectations.expect_table_row_count_to_equal:
           arguments:
-            value: 10
+            value: 15
       - dbt_utils.expression_is_true:
           arguments:
             expression: "expected_days > 0"
