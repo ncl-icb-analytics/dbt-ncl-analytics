@@ -28,9 +28,9 @@ RYX23,03,WIC_FINCH,RYX,NCL,2018-09-01,2021-03-31,Finchley Memorial Hospital walk
 RYX23,04,WIC_FINCH,RYX,NCL,2021-04-01,,Finchley Memorial Hospital walk-in centre
 RYX24,03,WIC_EDG,RYX,NCL,2018-09-01,2020-03-26,Edgware Community Hospital walk-in centre (submitted as dept 03)
 RYX24,04,WIC_EDG,RYX,NCL,2021-10-01,,Edgware Community Hospital walk-in centre
-RAL01,03,UTC_RFH,RAL,NCL,2023-04-01,,Royal Free Hospital UTC (label to confirm with NCL)
-RAL26,03,UTC_BARNET,RAL,NCL,2019-01-27,,Barnet Hospital UTC (label to confirm with NCL)
-RALC7,03,UTC_CHASEFARM,RAL,NCL,2019-01-01,,Chase Farm Hospital UTC (label to confirm with NCL)
-RAPNM,03,UTC_NMUH,RAP,NCL,2018-04-01,2024-12-31,North Middlesex Hospital UTC before the Royal Free merger (label to confirm with NCL)
-RAL27,03,UTC_NMUH,RAL,NCL,2025-01-01,,North Middlesex Hospital UTC after the Royal Free merger (label to confirm with NCL)
-RKEQ4,03,UTC_WHITT,RKE,NCL,2021-11-01,,Whittington Hospital UTC (label to confirm with NCL)
+RAL01,03,UTC_RFH,RAL,NCL,2023-04-01,,Royal Free Hospital UTC
+RAL26,03,UTC_BH,RAL,NCL,2023-04-01,,Barnet Hospital UTC
+RALC7,03,UTC_CFH,RAL,NCL,2019-01-01,,Chase Farm Hospital UTC
+RAPNM,03,UTC_NMUH,RAP,NCL,2018-04-01,2024-12-31,North Middlesex Hospital UTC before the Royal Free merger
+RAL27,03,UTC_NMUH,RAL,NCL,2025-01-01,,North Middlesex Hospital UTC after the Royal Free merger
+RKEQ4,03,UTC_WH,RKE,NCL,2021-11-01,,Whittington Hospital UTC

@@ -9,8 +9,8 @@ seeds:
       example LNWH UTCs moved from Totally AD9xx codes to R1K1x in January
       2023 and to the hospital site codes in August 2023), so consumers must
       join on arrival date between effective_from and effective_to. Blank
-      effective_to means still current. Dates were derived from ECDS activity;
-      NCL labels are provisional until confirmed.
+      effective_to means still current. Sites and dates were derived from ECDS
+      activity for both ICBs.
     config:
       meta:
         owner:
