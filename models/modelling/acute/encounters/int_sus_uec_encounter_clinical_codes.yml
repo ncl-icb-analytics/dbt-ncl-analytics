@@ -6,9 +6,11 @@ models:
       ECDS clinical codes per A&E attendance as ordered arrays. One row per
       attendance (visit_occurrence_id) that has at least one coded secondary
       diagnosis, investigation, treatment or comorbidity. Each feed has a plain
-      code array for filtering (array_contains) and an array of objects with
-      seq, code and desc for reading, both in source sequence order; nothing is
-      truncated. desc is the ECDS dictionary preferred term, falling back to the
+      code array for filtering (array_contains) and an array of objects for
+      reading, both in source sequence order; nothing is truncated. Objects
+      carry seq, code and desc, plus at (recorded timestamp) for investigations
+      and treatments and qualifier_code/qualifier (confirmed or suspected) for
+      diagnoses. ECDS carries no investigation result values. desc is the ECDS dictionary preferred term, falling back to the
       SNOMED concept term, or null where neither has the code. Join to
       int_sus_uec_encounter on visit_occurrence_id; attendances with no codes
       are absent here. For descriptions and one-row-per-code analysis use
@@ -33,7 +35,7 @@ models:
           sequence order. The primary diagnosis is on int_sus_uec_encounter.
           Descriptions and ICD-10 mapping: int_sus_uec_diagnosis.
       - name: secondary_diagnoses
-        description: Array of objects {seq, code, desc} for each secondary diagnosis code in source sequence order.
+        description: Array of objects {seq, code, desc, qualifier_code, qualifier} per secondary diagnosis in source sequence order; qualifier is confirmed present or suspected.
       - name: n_secondary_diagnoses
         description: Number of secondary diagnosis codes; 0 when none.
       - name: investigation_codes
@@ -41,7 +43,7 @@ models:
           All investigation SNOMED codes in sequence order. Descriptions:
           int_sus_uec_procedure where observation_type = 'investigation'.
       - name: investigations
-        description: Array of objects {seq, code, desc} for each investigation code in source sequence order.
+        description: Array of objects {seq, code, desc, at} per investigation in source sequence order; at is the recorded timestamp where present (about 80% of records).
       - name: n_investigations
         description: Number of investigation codes; 0 when none.
       - name: treatment_codes
@@ -49,7 +51,7 @@ models:
           All treatment SNOMED codes in sequence order. Descriptions:
           int_sus_uec_procedure where observation_type = 'treatment'.
       - name: treatments
-        description: Array of objects {seq, code, desc} for each treatment code in source sequence order.
+        description: Array of objects {seq, code, desc, at} per treatment in source sequence order; at is the recorded timestamp where present (about 94% of records).
       - name: n_treatments
         description: Number of treatment codes; 0 when none.
       - name: comorbidity_codes
