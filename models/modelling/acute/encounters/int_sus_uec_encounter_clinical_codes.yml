@@ -5,8 +5,10 @@ models:
     description: >
       ECDS clinical codes per A&E attendance as ordered arrays. One row per
       attendance (visit_occurrence_id) that has at least one coded secondary
-      diagnosis, investigation, treatment or comorbidity. Arrays hold every code
-      in source sequence order and are not truncated. Join to
+      diagnosis, investigation, treatment or comorbidity. Each feed has a code
+      array and a description array in the same source sequence order; nothing
+      is truncated. Descriptions are the ECDS dictionary preferred term, falling
+      back to the SNOMED concept term, or '' where neither has the code. Join to
       int_sus_uec_encounter on visit_occurrence_id; attendances with no codes
       are absent here. For descriptions and one-row-per-code analysis use
       int_sus_uec_diagnosis and int_sus_uec_procedure.
@@ -29,23 +31,31 @@ models:
           All secondary diagnosis SNOMED codes (source positions 2 onward) in
           sequence order. The primary diagnosis is on int_sus_uec_encounter.
           Descriptions and ICD-10 mapping: int_sus_uec_diagnosis.
+      - name: secondary_diagnosis_descs
+        description: Descriptions for secondary_diagnosis_codes, same order.
       - name: n_secondary_diagnoses
         description: Number of secondary diagnosis codes; 0 when none.
       - name: investigation_codes
         description: >
           All investigation SNOMED codes in sequence order. Descriptions:
           int_sus_uec_procedure where observation_type = 'investigation'.
+      - name: investigation_descs
+        description: Descriptions for investigation_codes, same order.
       - name: n_investigations
         description: Number of investigation codes; 0 when none.
       - name: treatment_codes
         description: >
           All treatment SNOMED codes in sequence order. Descriptions:
           int_sus_uec_procedure where observation_type = 'treatment'.
+      - name: treatment_descs
+        description: Descriptions for treatment_codes, same order.
       - name: n_treatments
         description: Number of treatment codes; 0 when none.
       - name: comorbidity_codes
         description: >
           All comorbidity SNOMED codes in sequence order. Descriptions:
           int_sus_uec_procedure where observation_type = 'comorbs'.
+      - name: comorbidity_descs
+        description: Descriptions for comorbidity_codes, same order.
       - name: n_comorbidities
         description: Number of comorbidity codes; 0 when none.
