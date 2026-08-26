@@ -223,6 +223,17 @@ seeds:
     +quote_columns: false
     +post-hook: ["{{ add_model_comment() }}"]
 
+    uec_site_label:
+      +column_types:
+        site_code: varchar(10)
+        department_type: varchar(2)
+        uec_site_label: varchar(50)
+        provider_code: varchar(10)
+        icb_footprint: varchar(3)
+        effective_from: date
+        effective_to: date
+        note: varchar(200)
+
     practice_merges:
       +column_types:
         predecessor_code: varchar(10)
