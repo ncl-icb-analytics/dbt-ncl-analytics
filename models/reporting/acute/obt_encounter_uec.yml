@@ -110,43 +110,6 @@ models:
         data_type: varchar
         description: "The first listed diagnosis ECDS group 1 description, considered to be the most important / significant."
 
-      - name: secondary_diagnosis_1_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 2."
-      - name: secondary_diagnosis_2_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 3."
-      - name: secondary_diagnosis_3_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 4."
-      - name: secondary_diagnosis_4_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 5."
-      - name: secondary_diagnosis_5_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 6."
-      - name: secondary_diagnosis_6_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 7."
-      - name: secondary_diagnosis_7_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 8."
-      - name: secondary_diagnosis_8_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 9."
-      - name: secondary_diagnosis_9_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 10."
-      - name: secondary_diagnosis_10_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 11."
-      - name: secondary_diagnosis_11_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 12."
-      - name: secondary_diagnosis_12_code_snomed
-        data_type: varchar
-        description: "SNOMED CT diagnosis code recorded at source diagnosis sequence position 13."
-
       - name: primary_treatment
         data_type: varchar
         description: "First treatment SNOMED code recorded in encounter"
@@ -159,43 +122,6 @@ models:
         data_type: varchar
         description: "First treatment ECDS group 1 description recorded in encounter"
 
-      - name: treatment_1_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 1."
-      - name: treatment_2_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 2."
-      - name: treatment_3_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 3."
-      - name: treatment_4_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 4."
-      - name: treatment_5_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 5."
-      - name: treatment_6_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 6."
-      - name: treatment_7_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 7."
-      - name: treatment_8_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 8."
-      - name: treatment_9_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 9."
-      - name: treatment_10_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 10."
-      - name: treatment_11_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 11."
-      - name: treatment_12_code_snomed
-        data_type: varchar
-        description: "SNOMED CT treatment code recorded at source sequence position 12."
-
       - name: primary_investigation
         data_type: varchar
         description: "First investigation SNOMED code recorded in encounter"
@@ -207,74 +133,6 @@ models:
       - name: primary_investigation_desc_ecds_group1
         data_type: varchar
         description: "First investigation ECDS group 1 description recorded in encounter"
-
-      - name: clinical_investigation_1_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 1."
-      - name: clinical_investigation_2_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 2."
-      - name: clinical_investigation_3_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 3."
-      - name: clinical_investigation_4_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 4."
-      - name: clinical_investigation_5_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 5."
-      - name: clinical_investigation_6_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 6."
-      - name: clinical_investigation_7_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 7."
-      - name: clinical_investigation_8_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 8."
-      - name: clinical_investigation_9_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 9."
-      - name: clinical_investigation_10_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 10."
-      - name: clinical_investigation_11_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 11."
-      - name: clinical_investigation_12_code_snomed
-        data_type: varchar
-        description: "SNOMED CT investigation code recorded at source sequence position 12."
-
-      - name: comorbidity_1_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 1."
-      - name: comorbidity_2_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 2."
-      - name: comorbidity_3_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 3."
-      - name: comorbidity_4_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 4."
-      - name: comorbidity_5_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 5."
-      - name: comorbidity_6_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 6."
-      - name: comorbidity_7_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 7."
-      - name: comorbidity_8_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 8."
-      - name: comorbidity_9_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 9."
-      - name: comorbidity_10_code_snomed
-        data_type: varchar
-        description: "SNOMED CT comorbidity code recorded at source sequence position 10."
 
       - name: arrival_mode_code
         data_type: varchar
@@ -544,18 +402,9 @@ models:
       - name: financial_month
         data_type: number
         description: "NHS financial month derived from start_date, where April is 1 and March is 12."
-      - name: expected_treatment_time
+      - name: expected_treatment_at
         data_type: timestamp_tz
         description: "Expected treatment timestamp from the first source-sequenced expected-treatment record."
-      - name: referred_to_service_code
-        data_type: varchar
-        description: "SNOMED CT service code from the first source-sequenced referred-to record."
-      - name: referred_to_service_assessment_date
-        data_type: date
-        description: "Assessment date recorded by the first source-sequenced referred-to service."
-      - name: referred_to_service_assessment_time
-        data_type: time
-        description: "Assessment time recorded by the first source-sequenced referred-to service."
       - name: is_national_tariff_excluded
         data_type: boolean
         description: "Whether the attendance was excluded from national tariff pricing."
@@ -571,199 +420,16 @@ models:
       - name: mff_adjustment
         data_type: number
         description: "Market Forces Factor monetary adjustment reported for the attendance."
-      - name: injury_alcohol_drug_involvement_code
-        data_type: varchar
-        description: "SNOMED CT code from the first source-sequenced alcohol or drug involvement record."
-      - name: mental_health_legal_status_code
-        data_type: varchar
-        description: "Mental Health Act legal-status classification from the first source-sequenced record."
       - name: urgent_care_setting_type
         data_type: varchar
         description: "Source ECDS activity type for the urgent-care setting; distinct from pod and department_type."
 
-      - name: secondary_diagnosis_1_desc_snomed
+      - name: uec_site_label
         data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 1; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_2_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 2; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_3_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 3; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_4_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 4; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_5_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 5; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_6_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 6; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_7_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 7; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_8_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 8; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_9_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 9; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_10_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 10; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_11_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 11; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: secondary_diagnosis_12_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for secondary diagnosis position 12; uses the ECDS diagnosis dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_2_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 2; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_3_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 3; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_4_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 4; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_5_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 5; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_6_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 6; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_7_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 7; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_8_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 8; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_9_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 9; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_10_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 10; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_11_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 11; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: treatment_12_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for treatment position 12; uses the ECDS treatment dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_2_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 2; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_3_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 3; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_4_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 4; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_5_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 5; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_6_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 6; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_7_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 7; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_8_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 8; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_9_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 9; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_10_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 10; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_11_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 11; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: clinical_investigation_12_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for clinical investigation position 12; uses the ECDS investigation dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_1_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 1; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_2_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 2; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_3_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 3; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_4_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 4; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_5_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 5; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_6_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 6; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_7_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 7; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_8_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 8; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_9_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 9; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
-      - name: comorbidity_10_desc_snomed
-        data_type: varchar
-        description: "Human-readable SNOMED CT preferred term for comorbidity position 10; uses the ECDS comorbidity dictionary with the generic SNOMED concept reference as fallback."
-
+        description: "Operational label for urgent treatment centres, walk-in centres and minor injuries units (for example UTC_NP), from organisation_uec_site joined on site, department type and arrival date. Null for emergency departments and sites not in the reference."
       - name: disease_notification_desc
         data_type: varchar
         description: "Human-readable SNOMED CT preferred term for the disease-notification code."
-
-      - name: injury_alcohol_drug_involvement_desc
-        data_type: varchar
-        description: "Human-readable UK preferred term for the first source-sequenced injury alcohol or drug involvement code."
 
       - name: discharge_information_given_desc
         data_type: varchar
@@ -776,7 +442,3 @@ models:
       - name: referral_to_treatment_status_desc
         data_type: varchar
         description: "Human-readable description of the referral-to-treatment period status code."
-
-      - name: referred_to_service_desc
-        data_type: varchar
-        description: "Human-readable UK preferred term for the first source-sequenced referred-to service code."
