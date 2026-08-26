@@ -58,6 +58,8 @@ get_schema() {
         else
             echo "OLIDS"
         fi
+    elif [[ $file == models/*/commissioning/legacy_nwl/* ]]; then
+        echo "LEGACY_NWL"
     elif [[ $file == models/reference/*/* ]]; then
         local ref_schema=$(echo "$file" | sed -n 's|models/reference/\([^/]*\)/.*|\1|p')
         echo "${ref_schema^^}"

@@ -137,11 +137,19 @@ Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
 | `models/modelling/olids/diagnoses/` | `DEV__MODELLING.OLIDS_DIAGNOSES` | `MODELLING.OLIDS_DIAGNOSES` |
 | `models/reporting/population/` | `DEV__REPORTING.POPULATION` | `REPORTING.POPULATION` |
 | `models/reporting/olids/indicators/` | `DEV__REPORTING.OLIDS_INDICATORS` | `REPORTING.OLIDS_INDICATORS` |
+| `models/modelling/commissioning/legacy_nwl/` | `DEV__MODELLING.LEGACY_NWL` | `MODELLING.LEGACY_NWL` |
+| `models/reporting/commissioning/legacy_nwl/` | `DEV__REPORTING.LEGACY_NWL` | `REPORTING.LEGACY_NWL` |
 | `models/published/direct_care/olids/` | `DEV__PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_*` | `PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_*` |
 
 **How it works:**
 - **Database**: Set by `+database` in `dbt_project.yml`, prefixed with `DEV__` in dev
 - **Schema**: Either explicit (`+schema`), the source-system folder for staging models, or auto-derived from folder path for the `olids` domain
+
+`commissioning/legacy_nwl` holds transitional models ported from the WSIC/ERNI estate.
+They override the domain schema so they do not sit alongside the long-term models, and
+are removed once the equivalent estate-wide chain covers them. Subfolders are free-form —
+everything under `legacy_nwl/` lands in the same schema. Select the set with
+`--select tag:legacy_nwl`. Raw and staging models are shared and stay in the normal folders.
 
 The naming logic is in `macros/overrides/generate_database_name.sql` and `generate_schema_name.sql`.
 

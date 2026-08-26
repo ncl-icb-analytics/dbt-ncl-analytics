@@ -1,0 +1,50 @@
+version: 2
+
+sources:
+  - name: sus_commissioner_reference
+    database: '"DATA_LAKE__NCL"'
+    schema: '"ANALYST_MANAGED"'
+    description: >-
+      Date-effective commissioner attribution lookups migrated from the on-premises
+      DBA database. These tables are loaded from the SUS Consolidated Handover files.
+    tables:
+      - name: practice_commissioner
+        identifier: '"SUS_COMMISSIONER_PRACTICE"'
+        description: Date-effective practice-to-commissioner relationships.
+        columns:
+          - name: SK_ORGANISATIONID_PRACTICE
+          - name: ORGANISATIONCODE_PRACTICE
+          - name: SK_ORGANISATIONID_COMMISSIONER
+          - name: ORGANISATIONCODE_COMMISSIONER
+          - name: PRACTICESTARTDATE
+          - name: PRACTICEENDDATE
+          - name: RELATIONSHIPSTARTDATE
+          - name: RELATIONSHIPENDDATE
+          - name: ISACTIVE
+          - name: ISPROXY
+      - name: lsoa_commissioner
+        identifier: '"SUS_COMMISSIONER_LSOA"'
+        description: Date-effective LSOA-to-commissioner relationships.
+        columns:
+          - name: OACODE
+          - name: SK_OUTPUTAREAID
+          - name: ORGANISATIONCODE_COMMISSIONER
+          - name: SK_ORGANISATIONID
+          - name: EFFECTIVEFROM
+          - name: EFFECTIVETO
+      - name: provider_commissioner
+        identifier: '"SUS_COMMISSIONER_PROVIDER"'
+        description: Date-effective provider-to-commissioner relationships.
+        columns:
+          - name: PROVIDERCODE
+          - name: COMMISSIONERCODE
+          - name: EFFECTIVEFROM
+          - name: EFFECTIVETO
+      - name: provider_postcode_commissioner
+        identifier: '"SUS_COMMISSIONER_PROVIDER_POSTCODE"'
+        description: Date-effective provider-postcode-to-commissioner fallback relationships.
+        columns:
+          - name: PROVIDERCODE
+          - name: COMMISSIONERCODE
+          - name: EFFECTIVEFROM
+          - name: EFFECTIVETO

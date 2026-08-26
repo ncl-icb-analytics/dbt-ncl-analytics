@@ -55,7 +55,15 @@ sources:
     description: SUS admitted patient care episodes and procedures
     raw_prefix: raw_sus_apc
     domain: commissioning
-  
+
+  # SUS Monthly - Outpatient
+  - source_name: sus_op_monthly
+    database: DATA_LAKE
+    schema: SUS_OP
+    description: SUS Monthly outpatient appointments and activity
+    raw_prefix: raw_sus_op_monthly
+    domain: commissioning
+
    # SUS Unified - Emergency Care
   - source_name: sus_ecds
     database: DATA_LAKE
@@ -63,7 +71,6 @@ sources:
     description: SUS emergency care attendances and activity
     raw_prefix: raw_sus_ecds
     domain: commissioning
-
   # eRS referrals
   - source_name: eRS_primary_care
     database: DATA_LAKE
@@ -396,6 +403,16 @@ sources:
     description: Analyst-managed reference datasets and business rules
     raw_prefix: raw_reference
     domain: shared
+    manual: true
+
+  # SUS commissioner handover reference tables - curated subset of the volatile
+  # analyst-managed schema. Raw models are generated from the manual source YAML.
+  - source_name: sus_commissioner_reference
+    database: DATA_LAKE__NCL
+    schema: ANALYST_MANAGED
+    description: Date-effective SUS commissioner attribution reference tables
+    raw_prefix: raw_sus_commissioner
+    domain: commissioning
     manual: true
 
   # POD_GROUP_MANAGER - governed POD group mappings maintained by the

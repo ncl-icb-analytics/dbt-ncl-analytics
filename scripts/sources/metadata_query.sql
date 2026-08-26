@@ -82,6 +82,21 @@ WITH schema_metadata AS (
   WHERE table_schema = 'SUS_UNIFIED_APC'
   
   UNION ALL
+
+    -- sus_op_monthly: SUS Monthly outpatient appointments and activity
+  SELECT
+    'DATA_LAKE' as database_name,
+    'SUS_OP' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'SUS_OP'
+
+  UNION ALL
   
     -- sus_ecds: SUS emergency care attendances and activity
   SELECT 

@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: int_sus_op_monthly
+    description: >-
+      Monthly SUS outpatient encounters standardised from the Date Range feed.
+      Grain: one row per sk_encounter_id.
+    config:
+      meta:
+        owner:
+          name: Commissioning Analytics
+    columns:
+      - name: sk_encounter_id
+        description: SUS outpatient encounter identifier.
+        data_tests:
+          - not_null
+          - unique

@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_sus_commissioner_practice
+    description: Date-effective practice-to-commissioner attribution.
+    config: &commissioner_config
+      meta:
+        owner:
+          name: Commissioning Analytics
+    columns:
+      - name: practice_code
+        data_tests: [not_null]
+      - name: commissioner_code
+        data_tests: [not_null]
+  - name: stg_sus_commissioner_lsoa
+    description: Date-effective LSOA-to-commissioner attribution.
+    config: *commissioner_config
+    columns:
+      - name: lsoa_code
+        data_tests: [not_null]
+      - name: commissioner_code
+        data_tests: [not_null]
+  - name: stg_sus_commissioner_provider
+    description: Date-effective hosted-provider-to-commissioner attribution.
+    config: *commissioner_config
+    columns:
+      - name: provider_code
+        data_tests: [not_null]
+      - name: commissioner_code
+        data_tests: [not_null]
+  - name: stg_sus_commissioner_provider_postcode
+    description: Date-effective provider-postcode-to-commissioner fallback attribution.
+    config: *commissioner_config
+    columns:
+      - name: provider_code
+        data_tests: [not_null]
+      - name: commissioner_code
+        data_tests: [not_null]

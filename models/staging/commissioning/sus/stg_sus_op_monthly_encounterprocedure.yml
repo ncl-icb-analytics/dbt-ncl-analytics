@@ -1,0 +1,21 @@
+models:
+  - name: stg_sus_op_monthly_encounterprocedure
+    description: 'Encounter procedure from SUS data.
+      One row per encounter procedure.
+      '
+    config:
+      meta:
+        owner:
+          name: Poya Khalaj
+    columns:
+      - name: sk_encounter_id
+        description: Encounter identifier forming part of the procedure grain.
+        data_tests:
+          - not_null
+
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - sk_encounter_id
+              - procedure_number
