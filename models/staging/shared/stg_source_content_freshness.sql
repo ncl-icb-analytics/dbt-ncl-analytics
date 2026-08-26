@@ -216,7 +216,7 @@ ers as (
 fact_patient as (
     select
         'DATA_LAKE.FACT_PATIENT' as source_schema,
-        max(case when period::date <= current_date() then period end)::date as content_date,
+        max(case when period::date <= current_date() then last_day(period::date) end)::date as content_date,
         null::timestamp_ntz as observed_at,
         'latest_activity_period' as signal_type,
         'Latest monthly activity period in the patient activity fact' as signal_detail,
@@ -229,7 +229,7 @@ fact_patient as (
 pmct as (
     select
         'DATA_LAKE.PMCT' as source_schema,
-        max(
+        last_day(max(
             case
                 when try_to_date(
                     left(split_part(period, '-', 2), 3) || ' ' || split_part(period, '-', 3),
@@ -240,7 +240,7 @@ pmct as (
                         'MON YYYY'
                     )
             end
-        ) as content_date,
+        )) as content_date,
         null::timestamp_ntz as observed_at,
         'diagnostics_reporting_period' as signal_type,
         'Latest diagnostics reporting month used by project models' as signal_detail,
@@ -253,12 +253,12 @@ pmct as (
 tat as (
     select
         'DATA_LAKE.TAT' as source_schema,
-        max(
+        last_day(max(
             case
                 when try_to_date(month, 'MON YYYY') <= current_date()
                     then try_to_date(month, 'MON YYYY')
             end
-        ) as content_date,
+        )) as content_date,
         max(loaded_at)::timestamp_ntz as observed_at,
         'diagnostic_reporting_month' as signal_type,
         'Latest diagnostic turnaround-time reporting month in provider submissions' as signal_detail,
