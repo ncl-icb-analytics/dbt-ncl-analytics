@@ -118,11 +118,11 @@ models:
       - name: interpreter_needed
         description: Whether interpreter services are needed
 
-      - name: imd_quintile_19
-        description: Index of Multiple Deprivation quintile (2019)
+      # - name: imd_quintile_19
+      #   description: Index of Multiple Deprivation quintile (2019)
 
-      - name: imd_decile_19
-        description: Index of Multiple Deprivation decile (2019)
+      # - name: imd_decile_19
+      #   description: Index of Multiple Deprivation decile (2019)
 
       - name: lsoa_code
         description: Lower Super Output Area code
@@ -151,8 +151,8 @@ models:
       - name: risk_group
         description: Specific risk group classification
 
-      - name: eligibility_reason
-        description: Reason for eligibility
+      # - name: eligibility_reason
+      #   description: Reason for eligibility
 
       - name: vaccination_status
         description: Vaccination status

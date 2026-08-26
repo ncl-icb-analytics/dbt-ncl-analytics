@@ -3,7 +3,8 @@ sources:
 - name: cltcs_emis_extract
   database: '"DATA_LAKE__NCL"'
   schema: '"CLTCS"'
-  description: EMIS extract for c-ltcs pipeline from PID environment via MESH
+  description: EMIS extract for c-ltcs pipeline from PID environment via MESH and
+    other local lookups
   tables:
   - name: CLTCS_LOCAL_MAPPING_NH_GP
     identifier: '"CLTCS_LOCAL_MAPPING_NH_GP"'

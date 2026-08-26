@@ -22,6 +22,8 @@ WITH snowflake_objects AS (
         'STAGING',
         'MODELLING',
         'REPORTING',
+        'REFERENCE',
+        'DEV__REFERENCE',
         'PUBLISHED_REPORTING__DIRECT_CARE',
         'PUBLISHED_REPORTING__SECONDARY_USE',
         'DEV__STAGING',
@@ -61,5 +63,5 @@ LEFT JOIN current_dbt_models m
    AND s.table_schema = m.schema_name
    AND s.table_name = m.table_name
 WHERE m.table_name IS NULL
-  AND s.days_since_altered > 21
+  AND s.days_since_altered > 35
 ORDER BY s.table_catalog, s.table_schema, s.table_name;

@@ -4,8 +4,7 @@ models:
       BNF chapter and subchapter exclusions for polypharmacy calculation.
 
       Defines which BNF codes should be excluded from polypharmacy medication counts.
-      Uses hierarchical approach where subchapter-level rules (4-digit) override
-      chapter-level rules (2-digit).
+      Uses hierarchical matching where the longest BNF prefix overrides shorter rules.
 
       Source: Meds Ops team specification (2025-10-27)
       Reference: GitHub issue #158
@@ -22,7 +21,7 @@ models:
     columns:
       - name: bnf_chapter_code
         description: |
-          BNF chapter or subchapter code (2-4 characters).
+          Dotted BNF chapter or subchapter code.
           Examples: "01" (chapter), "05.03.01" (subchapter)
         tests:
           - not_null

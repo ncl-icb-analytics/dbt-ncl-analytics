@@ -1,8 +1,18 @@
 name: dbt Code Quality
 
 on:
+  # No branch filter: stacked PRs target feature branches, and the
+  # hardcoded-references check is required on main, so every layer must run it.
+  # Static checks only - no secrets.
   pull_request:
-    branches: [main]
+  # Required checks must also report on merge-queue candidates or queued PRs
+  # cannot merge.
+  merge_group:
+    types: [checks_requested]
+
+# Static checks only - the token never needs more than checkout.
+permissions:
+  contents: read
 
 jobs:
   hardcoded-references:
@@ -14,8 +24,15 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         id: changed
+        env:
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(sql)$' | grep -E '^(models|macros|analyses)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          # merge_group has no base_ref; diff against the candidate's base SHA.
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
+          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.(sql)$' | grep -E '^(models|macros|analyses)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
@@ -32,8 +49,15 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         id: changed
+        env:
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          # merge_group has no base_ref; diff against the candidate's base SHA.
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
+          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
@@ -54,8 +78,15 @@ jobs:
           python3 -m pip install pyyaml
       - name: Get changed files
         id: changed
+        env:
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          # merge_group has no base_ref; diff against the candidate's base SHA.
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
+          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |
@@ -76,8 +107,15 @@ jobs:
           sudo chmod +x /usr/local/bin/yq
       - name: Get changed files
         id: changed
+        env:
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          # Via env, not inline template expansion: a branch name can contain
+          # shell metacharacters.
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          # merge_group has no base_ref; diff against the candidate's base SHA.
+          BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
+          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - name: Run check
         if: steps.changed.outputs.files != ''
         run: |

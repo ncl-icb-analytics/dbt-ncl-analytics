@@ -12,7 +12,7 @@
 # Bump .fusion-version when Snowflake's hosted 2.0.0-preview moves.
 # Set FUSION_VERSION_PIN to override locally; fallback is used only if the file is missing.
 FUSION_VERSION_PIN=""
-FUSION_FALLBACK_VERSION="2.0.0-preview.175"
+FUSION_FALLBACK_VERSION="2.0.0-preview.186"
 
 actions=()
 install_dir="$HOME/.local/bin"

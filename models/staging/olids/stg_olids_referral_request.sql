@@ -17,6 +17,8 @@ select
     referral_request_priority_source_concept_id,
     referral_request_type_source_concept_id,
     referral_request_specialty_source_concept_id,
+    mapped_concept_code,
+    mapped_concept_display,
     mode,
     is_outgoing_referral,
     is_review,
@@ -24,13 +26,11 @@ select
     age_at_event,
     age_at_event_baby,
     age_at_event_neonate,
-    date_recorded,
-    lds_id,
+    recorded_datetime as date_recorded,
     publisher_organisation_code,
-    lds_datetime_first_acquired,
+    lds_transform_datetime,
 
     -- Metadata
-    lds_start_datetime,
     lds_is_deleted,
     lds_source_record_id
 

@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: stg_mhsds_primdiag
+    description: >
+      MHSDS primary diagnosis history for currency grouping. Grain: one row per
+      uniq_serv_req_id and coded_diag_timestamp. Population: MHS604 primary
+      diagnoses. Time semantics: each submitted diagnosis timestamp is retained
+      after deduplication.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: uniq_serv_req_id
+        description: Unique service request identifier.
+        data_tests:
+          - not_null
+      - name: person_id
+        description: MHSDS person identifier.
+      - name: coded_diag_timestamp
+        description: Diagnosis coding timestamp.
+        data_tests:
+          - not_null
+      - name: diag_scheme_in_use
+        description: Diagnosis coding scheme.
+      - name: prim_diag
+        description: Primary diagnosis code as submitted.
+      - name: icd10_code
+        description: Resolved ICD-10 code before normalisation.
+      - name: icd10_3
+        description: Three-character normalised ICD-10 code.
+      - name: org_id_prov
+        description: Provider organisation code.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - uniq_serv_req_id
+              - coded_diag_timestamp

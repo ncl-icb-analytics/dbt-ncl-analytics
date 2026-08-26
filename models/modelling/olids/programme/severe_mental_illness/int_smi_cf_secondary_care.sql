@@ -17,6 +17,7 @@ mpi.sk_patient_id
 ,local_patient_id  
 ,org_id_prov
 ,'NLFT' as provider
+,max(date(a.reporting_period_end_date)) as latest_reporting_date
 FROM {{ ref('stg_mhsds_mpi') }} mpi
 --FROM MODELLING.DBT_STAGING.STG_MHSDS_MPI mpi
 INNER JOIN {{ ref('stg_mhsds_activesubmission') }} a ON mpi.uniq_submission_id = a.uniq_submission_id
@@ -28,6 +29,7 @@ where ORG_ID_PROV in ('G6V2S') --,'TAF') use NLFT code only C&I legacy patients 
 and mpi.DMIC_CCG_CODE = '93C'
 and smi.HAS_ACTIVE_SMI_DIAGNOSIS
 and mpi.pers_death_date is null -- extra check to exclude people who have died as they will not be in the EPR system and therefore will not have case finding data. This is in addition to the death date check in the population base definition.
+group by all
 )
 --ward code look up
 ,WARD_DETAILS AS (
@@ -109,7 +111,7 @@ WHERE HAS_ACTIVE_SMI_DIAGNOSIS
     ,sp.uniq_hosp_prov_spell_num as spell_number
     ,ws.uniq_ward_stay_id
     ,ws.ward_code
-    ,wd.site_name
+    ,NVL(wd.site_name, 'Unknown') as site_name
     ,DATE(sp.start_date_hosp_prov_spell) as spell_start_date
     ,DATE(sp.disch_date_hosp_prov_spell) as spell_discharge_date
     ,sp.disch_date_hosp_prov_spell is null as is_current_spell  
@@ -147,7 +149,7 @@ sk_patient_id
 ,admission_type
 ,ward_type
 ,ward_code
-,site_name
+,CASE WHEN ward_code = 'HCPH' THEN 'Haringey' ELSE site_name END AS site_name
 ,spell_number
 ,spell_start_date
 ,start_date_ward_stay
@@ -171,6 +173,7 @@ p.person_id
 ,sp.mpi_person_id
 ,p.hx_flake
 ,loc.local_patient_id 
+,loc.latest_reporting_date
 ,sp.spell_number
 ,sp.spell_start_date
 ,sp.spell_discharge_date
@@ -216,4 +219,4 @@ p.person_id
 from  latest_spell sp
 left join smipopulation p on p.mpi_person_id = sp.mpi_person_id
 --some people have multiple MPI_PERSON_IDs to each sk_patient_id/local_patient_id.
-left join (select distinct mpi_person_id, local_patient_id from LOCAL_ID) loc on loc.mpi_person_id = sp.mpi_person_id 
+left join (select distinct mpi_person_id, local_patient_id, latest_reporting_date from LOCAL_ID) loc on loc.mpi_person_id = sp.mpi_person_id 
