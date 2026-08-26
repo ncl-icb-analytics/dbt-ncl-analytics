@@ -3,8 +3,8 @@ version: 2
 models:
   - name: source_content_freshness
     description: >
-      Content-currency signals for sources used by semantic views. One row per
-      source schema. Consumers use the platform source monitor only when
+      Content-currency signals shown by the application freshness view. One row
+      per source schema. Consumers use the platform source monitor only when
       uses_monitor_fallback is true or the content signal is unavailable.
     config:
       meta:
@@ -16,6 +16,19 @@ models:
         data_tests:
           - not_null
           - unique
+          - accepted_values:
+              arguments:
+                values:
+                  - DATA_LAKE.OLIDS
+                  - DATA_LAKE.PDS
+                  - DATA_LAKE.DEATHS
+                  - DATA_LAKE.SUS_UNIFIED_APC
+                  - DATA_LAKE.SUS_UNIFIED_OP
+                  - DATA_LAKE.SUS_UNIFIED_ECDS
+                  - DATA_LAKE.EPD_PRIMARY_CARE
+                  - DATA_LAKE.CSDS
+                  - DATA_LAKE.MHSDS
+                  - DATA_LAKE.WL
       - name: content_date
         description: Latest date represented by the source-specific content signal.
       - name: observed_at

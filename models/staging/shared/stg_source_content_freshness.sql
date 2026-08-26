@@ -1,10 +1,3 @@
-{{
-    config(
-        materialized='view',
-        tags=['daily']
-    )
-}}
-
 /*
 One content-currency signal per source used by the semantic views.
 
@@ -18,14 +11,14 @@ weekly SUS and waiting-list feeds 7/14 days, and monthly feeds 30/45 days.
 with olids as (
     select
         'DATA_LAKE.OLIDS' as source_schema,
-        max("CONSENSUS_ACTIVITY_DATE")::date as content_date,
-        max("MAX_LDS_TRANSFORM_DATETIME")::timestamp_ntz as observed_at,
+        max(consensus_activity_date)::date as content_date,
+        max(max_lds_transform_datetime)::timestamp_ntz as observed_at,
         'practice_consensus_date' as signal_type,
         'Latest activity date reported by the practice consensus' as signal_detail,
         false as uses_monitor_fallback,
         5 as sla_days,
         10 as breach_after_days
-    from {{ source('olids', 'FRESHNESS_SUMMARY') }}
+    from {{ ref('raw_olids_freshness_summary') }}
 ),
 
 pds as (
@@ -43,106 +36,136 @@ pds as (
 deaths as (
     select
         'DATA_LAKE.DEATHS' as source_schema,
-        max("REG_DATE")::date as content_date,
-        max("DMIC_RECORD_VALID_DATE_FROM")::timestamp_ntz as observed_at,
+        max(case when reg_date::date <= current_date() then reg_date end)::date as content_date,
+        max(dmic_record_valid_date_from)::timestamp_ntz as observed_at,
         'latest_registration_date' as signal_type,
         'Latest death registration date present in the feed' as signal_detail,
         false as uses_monitor_fallback,
         30 as sla_days,
         45 as breach_after_days
-    from {{ source('registries_deaths', 'Deaths') }}
+    from {{ ref('raw_registries_deaths_deaths') }}
 ),
 
 sus_apc as (
     select
         'DATA_LAKE.SUS_UNIFIED_APC' as source_schema,
-        max("system.interchange.received_date")::date as content_date,
-        max("system.report.query_date")::timestamp_ntz as observed_at,
+        max(
+            case
+                when system_interchange_received_date::date <= current_date()
+                    then system_interchange_received_date
+            end
+        )::date as content_date,
+        max(system_report_query_date)::timestamp_ntz as observed_at,
         'latest_record_received_date' as signal_type,
         'Latest source receipt date present in admitted-patient records' as signal_detail,
         false as uses_monitor_fallback,
         7 as sla_days,
         14 as breach_after_days
-    from {{ source('sus_apc', 'spell') }}
+    from {{ ref('raw_sus_apc_spell') }}
 ),
 
 sus_op as (
     select
         'DATA_LAKE.SUS_UNIFIED_OP' as source_schema,
-        max("system.interchange.received_date")::date as content_date,
-        max("system.report.query_date")::timestamp_ntz as observed_at,
+        max(
+            case
+                when system_interchange_received_date::date <= current_date()
+                    then system_interchange_received_date
+            end
+        )::date as content_date,
+        max(system_report_query_date)::timestamp_ntz as observed_at,
         'latest_record_received_date' as signal_type,
         'Latest source receipt date present in outpatient records' as signal_detail,
         false as uses_monitor_fallback,
         7 as sla_days,
         14 as breach_after_days
-    from {{ source('sus_op', 'appointment') }}
+    from {{ ref('raw_sus_op_appointment') }}
 ),
 
 sus_ecds as (
     select
         'DATA_LAKE.SUS_UNIFIED_ECDS' as source_schema,
-        max("system.interchange.received_date")::date as content_date,
-        max("system.report.query_date")::timestamp_ntz as observed_at,
+        max(
+            case
+                when system_interchange_received_date::date <= current_date()
+                    then system_interchange_received_date
+            end
+        )::date as content_date,
+        max(system_report_query_date)::timestamp_ntz as observed_at,
         'latest_record_received_date' as signal_type,
         'Latest source receipt date present in emergency-care records' as signal_detail,
         false as uses_monitor_fallback,
         7 as sla_days,
         14 as breach_after_days
-    from {{ source('sus_ecds', 'emergency_care') }}
+    from {{ ref('raw_sus_ecds_emergency_care') }}
 ),
 
 epd as (
     select
         'DATA_LAKE.EPD_PRIMARY_CARE' as source_schema,
-        max("RPEndDate")::date as content_date,
-        max("ReceivedDate")::timestamp_ntz as observed_at,
+        max(case when rp_end_date::date <= current_date() then rp_end_date end)::date as content_date,
+        max(received_date)::timestamp_ntz as observed_at,
         'reporting_period_end' as signal_type,
         'Latest prescribing reporting-period end date in the submission header' as signal_detail,
         false as uses_monitor_fallback,
         30 as sla_days,
         45 as breach_after_days
-    from {{ source('epd_primary_care', 'MedsHeader') }}
+    from {{ ref('raw_epd_pc_medsheader') }}
 ),
 
 csds as (
     select
         'DATA_LAKE.CSDS' as source_schema,
-        max("REPORTING PERIOD END DATE")::date as content_date,
-        max("UPLOAD DATE TIME")::timestamp_ntz as observed_at,
+        max(
+            case
+                when reporting_period_end_date::date <= current_date()
+                    then reporting_period_end_date
+            end
+        )::date as content_date,
+        max(upload_date_time)::timestamp_ntz as observed_at,
         'reporting_period_end' as signal_type,
         'Latest reporting-period end date in the community-services header' as signal_detail,
         false as uses_monitor_fallback,
         30 as sla_days,
         45 as breach_after_days
-    from {{ source('csds', 'CYP000Header') }}
+    from {{ ref('raw_csds_cyp000header') }}
 ),
 
 mhsds as (
     select
         'DATA_LAKE.MHSDS' as source_schema,
-        max("ReportingPeriodEndDate")::date as content_date,
-        max("dmicDateAdded")::timestamp_ntz as observed_at,
+        max(
+            case
+                when reporting_period_end_date::date <= current_date()
+                    then reporting_period_end_date
+            end
+        )::date as content_date,
+        max(dmic_date_added)::timestamp_ntz as observed_at,
         'reporting_period_end' as signal_type,
         'Latest reporting-period end date in the mental-health header' as signal_detail,
         false as uses_monitor_fallback,
         30 as sla_days,
         45 as breach_after_days
-    from {{ source('mhsds', 'MHS000Header') }}
+    from {{ ref('raw_mhsds_mhs000header') }}
 ),
 
 waiting_list as (
     select
         'DATA_LAKE.WL' as source_schema,
-        max("derWeekEnding")::date as content_date,
-        max("derSubmissionDateTimeFromDLP")::timestamp_ntz as observed_at,
+        max(
+            case
+                when der_week_ending::date <= current_date()
+                    then der_week_ending
+            end
+        )::date as content_date,
+        max(der_submission_date_time_from_dlp)::timestamp_ntz as observed_at,
         'week_ending_date' as signal_type,
         'Latest submitted waiting-list week ending date' as signal_detail,
         false as uses_monitor_fallback,
         7 as sla_days,
         14 as breach_after_days
-    from {{ source('wl', 'WL_SubmissionLog_Data') }}
-    where "derIsLatestFiletypeProviderWeekending" = true
+    from {{ ref('raw_wl_wl_submissionlog_data') }}
+    where der_is_latest_filetype_provider_weekending = true
 )
 
 select * from olids
