@@ -95,8 +95,8 @@ select
     , assigned_commissioner_code_at_event
     , assigned_commissioner_name_at_event
     , age_at_event
-    , patient_type_code
-    , patient_type_desc
+    , patient_type_code_at_event
+    , patient_type_desc_at_event
     , gender_at_event
     , gender_desc_at_event
     , ethnicity_at_event

@@ -185,12 +185,12 @@ select
 
     /* patient information at time of event */
     , core.patient_age_at_arrival as age_at_event
-    , core.patient_patient_type as patient_type_code
+    , core.patient_patient_type as patient_type_code_at_event
     , case
         when core.patient_patient_type = 'ADU' then 'Adult'
         when core.patient_patient_type = 'CHI' then 'Child'
         else core.patient_patient_type
-      end as patient_type_desc
+      end as patient_type_desc_at_event
     , core.patient_stated_gender as gender_at_event
     , gen.gender as gender_desc_at_event
     , core.patient_ethnic_category as ethnicity_at_event

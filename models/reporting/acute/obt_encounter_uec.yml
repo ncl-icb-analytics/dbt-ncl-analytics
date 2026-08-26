@@ -44,7 +44,12 @@ models:
 
       - name: pod
         data_type: varchar
-        description: "Point of delivery category of the provider e.g. A&E, SDEC etc."
+        description: >-
+          Point-of-delivery grouping derived from ECDS emergency care department
+          type: 01 = AE-T1 (24-hour consultant-led emergency department),
+          02 = AE-Other (other or single-specialty emergency department),
+          03 = UCC (urgent treatment centre), 04 = WiC (walk-in centre),
+          05 = SDEC (same day emergency care), and all other values = Others.
 
       - name: department_type
         data_type: varchar
@@ -176,7 +181,10 @@ models:
 
       - name: cost
         data_type: number
-        description: "SUS listed cost associated with the encounter"
+        description: >-
+          National-pricing final price reported by SUS for the emergency care
+          attendance. This is a submitted tariff/pricing value, not an accounting
+          measure of the provider's actual cost of delivering care.
 
       - name: age_at_event
         data_type: number
@@ -366,12 +374,12 @@ models:
       - name: assigned_commissioner_name_at_event
         data_type: varchar
         description: "Human-readable name of the assigned commissioner."
-      - name: patient_type_code
+      - name: patient_type_code_at_event
         data_type: varchar
         description: "Source ECDS patient-type code, such as ADU or CHI."
-      - name: patient_type_desc
+      - name: patient_type_desc_at_event
         data_type: varchar
-        description: "Human-readable patient type, with ADU represented as Adult and CHI as Child."
+        description: "Human-readable patient type at the attendance, with ADU represented as Adult and CHI as Child."
       - name: general_practitioner_code
         data_type: varchar
         description: "Individual GP code; distinct from reg_practice_at_event, which identifies the GP practice."
