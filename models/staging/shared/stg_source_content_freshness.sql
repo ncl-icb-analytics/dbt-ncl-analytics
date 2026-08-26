@@ -1,11 +1,9 @@
 /*
-One content-currency signal per source used by the semantic views.
+One source-derived content-currency signal per profiled DATA_LAKE source.
 
 Dates inside each feed take precedence over Snowflake object-change metadata.
-PDS has no exposed extract or reporting-period field, so consumers must use the
-platform source monitor for that row.
-Fresh/warning/breach thresholds follow source cadence: OLIDS 5/10 days,
-weekly SUS and waiting-list feeds 7/14 days, and monthly feeds 30/45 days.
+Expected days describe normal delivery cadence. SLA days are contractual and
+apply only to OLIDS. Breach days mark a sustained delay that needs attention.
 */
 
 with olids as (
@@ -15,22 +13,56 @@ with olids as (
         max(max_lds_transform_datetime)::timestamp_ntz as observed_at,
         'practice_consensus_date' as signal_type,
         'Latest activity date reported by the practice consensus' as signal_detail,
-        false as uses_monitor_fallback,
+        1 as expected_days,
         5 as sla_days,
         10 as breach_after_days
     from {{ ref('raw_olids_freshness_summary') }}
 ),
 
+pds_core_dates as (
+    select
+        max(
+            case
+                when person_business_effective_from_date::date <= current_date()
+                    then person_business_effective_from_date
+            end
+        ) as content_at
+    from {{ ref('raw_pds_pds_person') }}
+
+    union all
+
+    select
+        max(
+            case
+                when usual_address_business_effective_from_date::date <= current_date()
+                    then usual_address_business_effective_from_date
+            end
+        ) as content_at
+    from {{ ref('raw_pds_pds_address') }}
+
+    union all
+
+    select
+        max(
+            case
+                when primary_care_provider_business_effective_from_date::date <= current_date()
+                    then primary_care_provider_business_effective_from_date
+            end
+        ) as content_at
+    from {{ ref('raw_pds_pds_patient_care_practice') }}
+),
+
 pds as (
     select
         'DATA_LAKE.PDS' as source_schema,
-        null::date as content_date,
-        null::timestamp_ntz as observed_at,
-        'platform_monitor_fallback' as signal_type,
-        'No extract or reporting-period field is exposed by the source tables' as signal_detail,
-        true as uses_monitor_fallback,
-        30 as sla_days,
-        45 as breach_after_days
+        case when count(content_at) = 3 then min(content_at)::date end as content_date,
+        max(content_at)::timestamp_ntz as observed_at,
+        'core_business_effective_date' as signal_type,
+        'Latest business-effective date reached by person, address, and registered-practice data' as signal_detail,
+        1 as expected_days,
+        null::number as sla_days,
+        7 as breach_after_days
+    from pds_core_dates
 ),
 
 deaths as (
@@ -40,8 +72,8 @@ deaths as (
         max(dmic_record_valid_date_from)::timestamp_ntz as observed_at,
         'latest_registration_date' as signal_type,
         'Latest death registration date present in the feed' as signal_detail,
-        false as uses_monitor_fallback,
-        30 as sla_days,
+        30 as expected_days,
+        null::number as sla_days,
         45 as breach_after_days
     from {{ ref('raw_registries_deaths_deaths') }}
 ),
@@ -58,8 +90,8 @@ sus_apc as (
         max(system_report_query_date)::timestamp_ntz as observed_at,
         'latest_record_received_date' as signal_type,
         'Latest source receipt date present in admitted-patient records' as signal_detail,
-        false as uses_monitor_fallback,
-        7 as sla_days,
+        7 as expected_days,
+        null::number as sla_days,
         14 as breach_after_days
     from {{ ref('raw_sus_apc_spell') }}
 ),
@@ -76,8 +108,8 @@ sus_op as (
         max(system_report_query_date)::timestamp_ntz as observed_at,
         'latest_record_received_date' as signal_type,
         'Latest source receipt date present in outpatient records' as signal_detail,
-        false as uses_monitor_fallback,
-        7 as sla_days,
+        7 as expected_days,
+        null::number as sla_days,
         14 as breach_after_days
     from {{ ref('raw_sus_op_appointment') }}
 ),
@@ -94,8 +126,8 @@ sus_ecds as (
         max(system_report_query_date)::timestamp_ntz as observed_at,
         'latest_record_received_date' as signal_type,
         'Latest source receipt date present in emergency-care records' as signal_detail,
-        false as uses_monitor_fallback,
-        7 as sla_days,
+        7 as expected_days,
+        null::number as sla_days,
         14 as breach_after_days
     from {{ ref('raw_sus_ecds_emergency_care') }}
 ),
@@ -107,8 +139,8 @@ epd as (
         max(received_date)::timestamp_ntz as observed_at,
         'reporting_period_end' as signal_type,
         'Latest prescribing reporting-period end date in the submission header' as signal_detail,
-        false as uses_monitor_fallback,
-        30 as sla_days,
+        30 as expected_days,
+        null::number as sla_days,
         45 as breach_after_days
     from {{ ref('raw_epd_pc_medsheader') }}
 ),
@@ -125,8 +157,8 @@ csds as (
         max(upload_date_time)::timestamp_ntz as observed_at,
         'reporting_period_end' as signal_type,
         'Latest reporting-period end date in the community-services header' as signal_detail,
-        false as uses_monitor_fallback,
-        30 as sla_days,
+        30 as expected_days,
+        null::number as sla_days,
         45 as breach_after_days
     from {{ ref('raw_csds_cyp000header') }}
 ),
@@ -143,8 +175,8 @@ mhsds as (
         max(dmic_date_added)::timestamp_ntz as observed_at,
         'reporting_period_end' as signal_type,
         'Latest reporting-period end date in the mental-health header' as signal_detail,
-        false as uses_monitor_fallback,
-        30 as sla_days,
+        30 as expected_days,
+        null::number as sla_days,
         45 as breach_after_days
     from {{ ref('raw_mhsds_mhs000header') }}
 ),
@@ -161,8 +193,8 @@ waiting_list as (
         max(der_submission_date_time_from_dlp)::timestamp_ntz as observed_at,
         'week_ending_date' as signal_type,
         'Latest submitted waiting-list week ending date' as signal_detail,
-        false as uses_monitor_fallback,
-        7 as sla_days,
+        7 as expected_days,
+        null::number as sla_days,
         14 as breach_after_days
     from {{ ref('raw_wl_wl_submissionlog_data') }}
     where der_is_latest_filetype_provider_weekending = true
