@@ -41,6 +41,9 @@ models:
         data_tests:
           - not_null
     data_tests:
+      - dbt_expectations.expect_table_row_count_to_equal:
+          arguments:
+            value: 10
       - dbt_utils.expression_is_true:
           arguments:
             expression: "breach_after_days > sla_days"

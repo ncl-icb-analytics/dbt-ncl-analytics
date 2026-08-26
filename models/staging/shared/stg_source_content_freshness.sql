@@ -11,6 +11,8 @@ One content-currency signal per source used by the semantic views.
 Dates inside each feed take precedence over Snowflake object-change metadata.
 PDS has no exposed extract or reporting-period field, so consumers must use the
 platform source monitor for that row.
+Fresh/warning/breach thresholds follow source cadence: OLIDS 5/10 days,
+weekly SUS and waiting-list feeds 7/14 days, and monthly feeds 30/45 days.
 */
 
 with olids as (
