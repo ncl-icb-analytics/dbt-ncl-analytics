@@ -227,7 +227,10 @@ models:
         description: "Identifier assigned to the submitted CDS transaction; used for source traceability, not as the encounter grain."
       - name: provider_reference_number
         data_type: varchar
-        description: "Provider reference number from the commissioning service agreement attached to the attendance."
+        description: >-
+          Locally agreed provider/commissioner reference. Its population and
+          meaning vary by provider; it is not comparable across providers and is
+          not an ODS code.
       - name: initial_assessment_date
         data_type: date
         description: "Date of the first formal clinical assessment in emergency care."
@@ -246,15 +249,6 @@ models:
       - name: seen_for_treatment_time_since_arrival
         data_type: number
         description: "Source-reported elapsed time from arrival until first seen for treatment, in minutes."
-      - name: conclusion_date
-        data_type: date
-        description: "Date the clinical attendance concluded; this may precede end_date, when the patient physically left."
-      - name: conclusion_time
-        data_type: time
-        description: "Time the clinical attendance concluded; this may precede end_time, when the patient physically left."
-      - name: conclusion_time_since_arrival
-        data_type: number
-        description: "Elapsed minutes from arrival to clinical conclusion; distinct from duration, which runs to departure."
       - name: decided_to_admit_date
         data_type: date
         description: "Date the decision was made to admit the patient from emergency care."
@@ -266,7 +260,7 @@ models:
         description: "Source-reported elapsed time from arrival to the decision to admit, in minutes."
       - name: clinically_ready_to_proceed_at
         data_type: timestamp_tz
-        description: "First timestamp at which an authorised care professional decided ongoing emergency-department care was no longer required."
+        description: "First time a clinician decided the patient no longer needed emergency-department care (ECDS v4 Clinically Ready To Proceed)."
       - name: clinically_ready_to_proceed_time_since_arrival
         data_type: number
         description: "Source-reported elapsed time from arrival until clinically ready to proceed, in minutes."
@@ -290,7 +284,7 @@ models:
         description: "Human-readable UK preferred term for the place-of-injury code."
       - name: injury_date
         data_type: date
-        description: "Date on which the injury occurred, as recorded for the attendance."
+        description: "Date on which the injury occurred; null when it was not recorded, including source placeholder 1900-01-01."
       - name: injury_time
         data_type: time
         description: "Time at which the injury occurred, as recorded for the attendance."
@@ -327,9 +321,9 @@ models:
       - name: attendance_source_organisation_site_identifier
         data_type: varchar
         description: "Normalised organisation-site identifier for the source of the attendance."
-      - name: attendance_source_organisation_site_name
+      - name: attendance_source_organisation_name
         data_type: varchar
-        description: "Human-readable name of the source organisation site."
+        description: "Human-readable site or provider name for the source organisation."
       - name: discharge_status_code
         data_type: varchar
         description: "SNOMED CT code describing the patient's status at discharge."
@@ -354,24 +348,24 @@ models:
       - name: receiving_site_id
         data_type: varchar
         description: "Normalised identifier of the site expected to receive the patient after the decision to admit."
-      - name: receiving_site_name
+      - name: receiving_organisation_name
         data_type: varchar
-        description: "Human-readable name of the site expected to receive the patient."
+        description: "Human-readable site or provider name of the receiving organisation."
       - name: applicable_costing_period
         data_type: varchar
         description: "National-pricing costing period supplied for the attendance."
-      - name: residence_commissioner_code_at_event
+      - name: residence_area_code_at_event
         data_type: varchar
-        description: "Commissioner derived from the patient's residence postcode at the time of attendance."
-      - name: residence_commissioner_name_at_event
+        description: "CCG or sub-ICB location code for the patient's residence postcode; not assigned payment responsibility."
+      - name: residence_area_name_at_event
         data_type: varchar
-        description: "Human-readable name of the residence-derived commissioner."
-      - name: registrant_commissioner_code_at_event
+        description: "Human-readable name of the residence geography."
+      - name: assigned_commissioner_code_at_event
         data_type: varchar
-        description: "Commissioner on the service agreement; distinct from the residence-derived commissioner."
-      - name: registrant_commissioner_name_at_event
+        description: "Commissioner assigned expected payment responsibility under the Commissioner Assignment Method."
+      - name: assigned_commissioner_name_at_event
         data_type: varchar
-        description: "Human-readable name of the commissioner on the service agreement."
+        description: "Human-readable name of the assigned commissioner."
       - name: patient_type_code
         data_type: varchar
         description: "Source ECDS patient-type code, such as ADU or CHI."
@@ -381,18 +375,3 @@ models:
       - name: general_practitioner_code
         data_type: varchar
         description: "Individual GP code; distinct from reg_practice_at_event, which identifies the GP practice."
-      - name: patient_pathway_identifier
-        data_type: varchar
-        description: "Pseudonymised identifier for activity belonging to the same referral-to-treatment pathway."
-      - name: referral_to_treatment_status_code
-        data_type: varchar
-        description: "Referral-to-treatment period status recorded for the attendance."
-      - name: referral_to_treatment_period_start_date
-        data_type: date
-        description: "Start date of the referral-to-treatment period associated with the attendance."
-      - name: referral_to_treatment_period_end_date
-        data_type: date
-        description: "End date of the referral-to-treatment period associated with the attendance."
-      - name: waiting_time_measurement_type_code
-        data_type: varchar
-        description: "Code identifying the waiting-time measurement type for the referral-to-treatment pathway."
