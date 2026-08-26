@@ -2,33 +2,21 @@
 Changed-register counts for external EMIS QOF v51 validation.
 
 Active means alive, non-test and currently registered in
-dim_person_active_patients on the query date. The EMIS validation column limits
-that population to practices in emis_olids_reg_pass_direct_care.
+dim_person_active_patients on the query date. All NCL practices are on EMIS.
 */
 
-WITH validated_practices AS (
-    SELECT DISTINCT practice_code
-    FROM {{ ref('emis_olids_reg_pass_direct_care') }}
-),
-
-active_people AS (
+WITH active_people AS (
     SELECT
-        active.person_id,
-        active.current_practice_code,
-        validated.practice_code IS NOT NULL AS is_emis_validation_scope
-    FROM {{ ref('dim_person_active_patients') }} AS active
-    LEFT JOIN validated_practices AS validated
-        ON active.current_practice_code = validated.practice_code
+        person_id,
+        current_practice_code
+    FROM {{ ref('dim_person_active_patients') }}
 ),
 
 scope AS (
     SELECT
         CURRENT_DATE() AS count_date,
         COUNT(*) AS active_population,
-        COUNT(DISTINCT current_practice_code) AS active_practices,
-        COUNT_IF(is_emis_validation_scope) AS emis_validation_population,
-        COUNT(DISTINCT CASE WHEN is_emis_validation_scope
-            THEN current_practice_code END) AS emis_validation_practices
+        COUNT(DISTINCT current_practice_code) AS active_practices
     FROM active_people
 ),
 
@@ -228,8 +216,7 @@ aggregated AS (
         cohort.breakdown,
         cohort.breakdown_type,
         COUNT(*) AS all_person_count,
-        COUNT_IF(active.person_id IS NOT NULL) AS active_person_count,
-        COUNT_IF(active.is_emis_validation_scope) AS emis_validation_person_count
+        COUNT_IF(active.person_id IS NOT NULL) AS active_person_count
     FROM cohort_rows AS cohort
     LEFT JOIN active_people AS active USING (person_id)
     GROUP BY cohort.register_code, cohort.breakdown, cohort.breakdown_type
@@ -242,7 +229,6 @@ with_expected_zeroes AS (
         'COPD_REG',
         'Rule 3: Newly Registered + Spirometry',
         'Mutually exclusive rule',
-        0,
         0,
         0
     WHERE NOT EXISTS (
@@ -257,14 +243,11 @@ SELECT
     scope.count_date,
     scope.active_practices,
     scope.active_population,
-    scope.emis_validation_practices,
-    scope.emis_validation_population,
     breakdown.register_code,
     breakdown.breakdown,
     breakdown.breakdown_type,
     breakdown.all_person_count,
-    breakdown.active_person_count,
-    breakdown.emis_validation_person_count
+    breakdown.active_person_count
 FROM with_expected_zeroes AS breakdown
 CROSS JOIN scope
 ORDER BY breakdown.register_code, breakdown.breakdown_type, breakdown.breakdown
