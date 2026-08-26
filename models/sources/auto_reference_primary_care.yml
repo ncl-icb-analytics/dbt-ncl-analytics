@@ -102,7 +102,7 @@ sources:
       data_type: TEXT
     - name: NEIGHBOURHOOD_CODE
       data_type: TEXT
-    - name: NEIGHBOURHOOD_CODE_WNL
+    - name: NEIGHBOURHOOD_CODE_LEGACY
       data_type: TEXT
     - name: NEIGHBOURHOOD_NAME
       data_type: TEXT
