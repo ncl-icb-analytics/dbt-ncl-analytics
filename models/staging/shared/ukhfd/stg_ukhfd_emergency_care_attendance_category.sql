@@ -1,9 +1,13 @@
+{{ config(materialized = 'table') }}
+
+-- Latest description per emergency care attendance category code from the
+-- UKHFD data dictionary SCD dimension.
 select
-    "Main_Code_Text" as attendance_category_code
-    , "Main_Description" as attendance_category_desc
-from {{ source('ukhfd_data_dictionary', 'emergency_care_attendance_category') }}
-where "Is_Latest" = 1
+    main_code_text as attendance_category_code
+    , main_description as attendance_category_desc
+from {{ ref('raw_ukhfd_emergency_care_attendance_category') }}
+where is_latest = 1
 qualify row_number() over (
-    partition by "Main_Code_Text"
-    order by "Effective_From" desc nulls last
+    partition by main_code_text
+    order by effective_from desc nulls last
 ) = 1
