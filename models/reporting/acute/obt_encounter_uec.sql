@@ -32,9 +32,6 @@ select
     , seen_for_treatment_date
     , seen_for_treatment_time
     , seen_for_treatment_time_since_arrival
-    , conclusion_date
-    , conclusion_time
-    , conclusion_time_since_arrival
     , decided_to_admit_date
     , decided_to_admit_time
     , decided_to_admit_time_since_arrival
@@ -79,7 +76,7 @@ select
     , attendance_source_code
     , attendance_source_desc
     , attendance_source_organisation_site_identifier
-    , attendance_source_organisation_site_name
+    , attendance_source_organisation_name
     , discharge_destination_code
     , discharge_destination_desc
     , discharge_status_code
@@ -91,7 +88,7 @@ select
     , decided_to_admit_treatment_function_code
     , decided_to_admit_treatment_function_desc
     , receiving_site_id
-    , receiving_site_name
+    , receiving_organisation_name
     , main_specialty_code
     , main_specialty_name
     , hrg_code
@@ -105,10 +102,11 @@ select
     , national_tariff_final_price
     , mff_factor
     , mff_adjustment
-    , residence_commissioner_code_at_event
-    , residence_commissioner_name_at_event
-    , registrant_commissioner_code_at_event
-    , registrant_commissioner_name_at_event
+
+    , residence_area_code_at_event
+    , residence_area_name_at_event
+    , assigned_commissioner_code_at_event
+    , assigned_commissioner_name_at_event
     , age_at_event
     , patient_type_code
     , patient_type_desc
@@ -124,10 +122,4 @@ select
     , general_practitioner_code
     , general_practitioner_name
     , visit_occurrence_type
-    , patient_pathway_identifier
-    , referral_to_treatment_status_code
-    , referral_to_treatment_status_desc
-    , referral_to_treatment_period_start_date
-    , referral_to_treatment_period_end_date
-    , waiting_time_measurement_type_code
 from {{ ref('int_sus_uec_encounter') }}

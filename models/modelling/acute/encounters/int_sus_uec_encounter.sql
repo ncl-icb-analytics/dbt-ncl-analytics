@@ -7,7 +7,7 @@ Clinical Purpose:
 - Understanding patient service preference
 - Care coordination management across providers
 
-Includes ALL persons (active, inactive, deceased) within 5 years following intermediate layer principles.
+Includes all persons (active, inactive and deceased) and all available activity from April 2018.
 
 One row per attendance. Clinical code arrays are in
 int_sus_uec_encounter_clinical_codes; onward referrals, Mental Health Act
@@ -96,9 +96,6 @@ select
     , core.attendance_seen_for_treatment_date as seen_for_treatment_date
     , core.attendance_seen_for_treatment_time as seen_for_treatment_time
     , core.attendance_seen_for_treatment_time_since_arrival as seen_for_treatment_time_since_arrival
-    , core.attendance_conclusion_date as conclusion_date
-    , core.attendance_conclusion_time as conclusion_time
-    , core.attendance_conclusion_time_since_arrival as conclusion_time_since_arrival
     , core.attendance_decision_to_admit_date as decided_to_admit_date
     , core.attendance_decision_to_admit_time as decided_to_admit_time
     , core.attendance_decision_to_admit_time_since_arrival as decided_to_admit_time_since_arrival
@@ -163,7 +160,7 @@ select
     , coalesce(
         attendance_source_site.organisation_name,
         attendance_source_provider.organisation_name
-      ) as attendance_source_organisation_site_name
+      ) as attendance_source_organisation_name
 
     /* Discharge information */
     , core.attendance_discharge_destination_code as discharge_destination_code
@@ -182,7 +179,7 @@ select
     , coalesce(
         receiving_site.organisation_name,
         receiving_site_provider.organisation_name
-      ) as receiving_site_name
+      ) as receiving_organisation_name
 
     /* Clinician information */
     , '180' as main_specialty_code
@@ -200,10 +197,11 @@ select
     , core.commissioning_national_pricing_final_price as national_tariff_final_price
     , core.commissioning_national_pricing_market_forces_factor as mff_factor
     , core.commissioning_national_pricing_market_forces_adjustment as mff_adjustment
-    , core.patient_residence_ccg_from_patient_postcode as residence_commissioner_code_at_event
-    , residence_commissioner.commissioner_name as residence_commissioner_name_at_event
-    , core.commissioning_service_agreement_commissioner as registrant_commissioner_code_at_event
-    , registrant_commissioner.commissioner_name as registrant_commissioner_name_at_event
+
+    , core.patient_residence_ccg_from_patient_postcode as residence_area_code_at_event
+    , residence_commissioner.commissioner_name as residence_area_name_at_event
+    , core.commissioning_service_agreement_commissioner as assigned_commissioner_code_at_event
+    , registrant_commissioner.commissioner_name as assigned_commissioner_name_at_event
 
     /* patient information at time of event */
     , core.patient_age_at_arrival as age_at_event
@@ -225,14 +223,6 @@ select
     , core.patient_gp_registration_general_practitioner as general_practitioner_code
     , general_practitioner.gp_name as general_practitioner_name
     , 'AE_ATTENDANCE' as visit_occurrence_type
-
-    /* Referral to treatment information */
-    , core.referral_patient_pathway_identifier_value_pseudo as patient_pathway_identifier
-    , core.referral_period_status as referral_to_treatment_status_code
-    , rtt_status.rtt_period_status_description as referral_to_treatment_status_desc
-    , core.referral_period_start_date as referral_to_treatment_period_start_date
-    , core.referral_period_end_date as referral_to_treatment_period_end_date
-    , core.referral_waiting_time_measurement_type as waiting_time_measurement_type_code
 
 from {{ ref('stg_sus_ecds_emergency_care')}} as core
 
@@ -330,14 +320,24 @@ left join {{ ref('organisation_nhs_site') }} as attendance_source_site on
 
 -- A very small number of source values are provider rather than site codes.
 left join {{ ref('organisation_nhs_provider') }} as attendance_source_provider on
-    core.attendance_arrival_attendance_source_organisation
+    case
+        when length(core.attendance_arrival_attendance_source_organisation) = 5
+          and right(core.attendance_arrival_attendance_source_organisation, 2) = '00'
+            then left(core.attendance_arrival_attendance_source_organisation, 3)
+        else core.attendance_arrival_attendance_source_organisation
+    end
     = attendance_source_provider.organisation_code
 
 left join {{ ref('organisation_nhs_site') }} as receiving_site on
     core.attendance_decision_to_admit_receiving_site = receiving_site.organisation_code
 
 left join {{ ref('organisation_nhs_provider') }} as receiving_site_provider on
-    core.attendance_decision_to_admit_receiving_site
+    case
+        when length(core.attendance_decision_to_admit_receiving_site) = 5
+          and right(core.attendance_decision_to_admit_receiving_site, 2) = '00'
+            then left(core.attendance_decision_to_admit_receiving_site, 3)
+        else core.attendance_decision_to_admit_receiving_site
+    end
     = receiving_site_provider.organisation_code
 
 -- provider name
@@ -349,16 +349,23 @@ left join
     on core.commissioning_grouping_health_resource_group = dict_hrg.hrg_code
 
 left join commissioner_codes as residence_commissioner
-    on core.patient_residence_ccg_from_patient_postcode = residence_commissioner.commissioner_code
+    on case
+        when length(core.patient_residence_ccg_from_patient_postcode) = 5
+          and right(core.patient_residence_ccg_from_patient_postcode, 2) = '00'
+            then left(core.patient_residence_ccg_from_patient_postcode, 3)
+        else core.patient_residence_ccg_from_patient_postcode
+    end = residence_commissioner.commissioner_code
 
 left join commissioner_codes as registrant_commissioner
-    on core.commissioning_service_agreement_commissioner = registrant_commissioner.commissioner_code
+    on case
+        when length(core.commissioning_service_agreement_commissioner) = 5
+          and right(core.commissioning_service_agreement_commissioner, 2) = '00'
+            then left(core.commissioning_service_agreement_commissioner, 3)
+        else core.commissioning_service_agreement_commissioner
+    end = registrant_commissioner.commissioner_code
 
 left join treatment_function_codes as treatment_function
     on core.attendance_decision_to_admit_treatment_function_code = treatment_function.bk_specialty_code
 
 left join {{ ref('stg_dictionary_dbo_gp') }} as general_practitioner
     on core.patient_gp_registration_general_practitioner = general_practitioner.gp_code
-
-left join {{ ref('stg_dictionary_dbo_rttperiodstatus') }} as rtt_status
-    on core.referral_period_status = rtt_status.rtt_period_status_code
