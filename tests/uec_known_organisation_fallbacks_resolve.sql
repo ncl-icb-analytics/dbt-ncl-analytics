@@ -21,6 +21,13 @@ where site_id in ('AD904', 'RAS01')
 
 union all
 
+select visit_occurrence_id, 'independent_provider' as field_name
+from {{ ref('int_sus_uec_encounter') }}
+where organisation_id in ('AD9', 'NLO')
+  and organisation_name is null
+
+union all
+
 select visit_occurrence_id, 'assigned_commissioner' as field_name
 from {{ ref('int_sus_uec_encounter') }}
 where assigned_commissioner_code_at_event in ('93C00', '06N00', '14Y00')
