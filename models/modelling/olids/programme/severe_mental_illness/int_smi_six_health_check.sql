@@ -44,7 +44,7 @@ b.person_id
 ,DATE(b.clinical_effective_date) as BMI_DATE
 ,'BMI Declined' as bmi_category
 ,NULL as BMI_VALUE
-FROM {{ ref('int_smi_bmi_declined') }} b
+FROM {{ ref('int_bmi_assessment_declined') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where b.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY b.person_id ORDER BY b.clinical_effective_date DESC) = 1
@@ -85,7 +85,7 @@ b.person_id
 ,DATE(b.clinical_effective_date) as glucose_date
 ,'Glucose Declined' as glucose_category
 ,NULL AS glucose_display
-FROM {{ ref('int_smi_glucose_declined') }} b
+FROM {{ ref('int_blood_glucose_declined') }} b
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where b.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY b.person_id ORDER BY b.clinical_effective_date DESC) = 1
@@ -161,7 +161,7 @@ select
      ,NULL AS LATEST_SYSTOLIC_VALUE
      ,NULL AS LATEST_DIASTOLIC_VALUE
      ,'BP Declined' AS BP_CATEGORY
-FROM {{ ref('int_smi_bp_declined') }} bp
+FROM {{ ref('int_blood_pressure_declined') }} bp
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where bp.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY bp.person_id ORDER BY bp.clinical_effective_date DESC) = 1
@@ -188,7 +188,7 @@ s.person_id
 ,'Smoking status' as TEST_TYPE
 ,DATE(s.clinical_effective_date) as smoking_date
 ,'Smoking Declined' AS SMOKING_STATUS
-FROM {{ ref('int_smi_smoking_declined') }} s
+FROM {{ ref('int_smoking_assessment_declined') }} s
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where s.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY s.person_id ORDER BY s.clinical_effective_date DESC) = 1
@@ -219,7 +219,7 @@ a.person_id
 ,a.alcohol_risk_category
 ,a.result_value as alcohol_units
 ,a.result_unit_display as unit_display
-FROM {{ ref('int_smi_alcohol_latest') }} a
+FROM {{ ref('int_alcohol_units_latest') }} a
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where DATE(clinical_effective_date)  >= DATEADD('month', -12, CURRENT_DATE)
 
@@ -232,7 +232,7 @@ s.person_id
 ,'Alcohol Declined' AS ALCOHOL_RISK_CATEGORY
 ,NULL as alcohol_units
 ,NULL as unit_display
-FROM {{ ref('int_smi_alcohol_declined') }} s
+FROM {{ ref('int_alcohol_assessment_declined') }} s
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 where s.clinical_effective_date  >= DATEADD('month', -12, CURRENT_DATE)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY s.person_id ORDER BY s.clinical_effective_date DESC) = 1

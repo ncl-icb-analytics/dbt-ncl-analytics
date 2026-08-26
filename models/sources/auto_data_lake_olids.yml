@@ -514,6 +514,65 @@ sources:
       data_type: DATE
     - name: LDS_TRANSFORM_DATETIME
       data_type: TIMESTAMP_LTZ
+  - name: EPISODE_OF_CARE_V2
+    identifier: '"EPISODE_OF_CARE_V2"'
+    columns:
+    - name: ID
+      data_type: UUID
+    - name: LDS_SOURCE_RECORD_ID
+      data_type: UUID
+    - name: PATIENT_ID
+      data_type: TEXT
+    - name: PERSON_ID
+      data_type: NUMBER(38,0)
+    - name: PUBLISHER_ORGANISATION_ID
+      data_type: UUID
+    - name: MANAGING_ORGANISATION_ID
+      data_type: UUID
+    - name: AUTHOR_ORGANISATION_ID
+      data_type: UUID
+    - name: MANAGING_ORGANISATION_CODE
+      data_type: TEXT
+    - name: USUAL_PRACTITIONER_IN_ROLE_ID
+      data_type: UUID
+    - name: EPISODE_OF_CARE_START_DATE
+      data_type: DATE
+    - name: EPISODE_OF_CARE_END_DATE
+      data_type: DATE
+    - name: TYPE
+      data_type: TEXT
+    - name: EPISODE_TYPE_SOURCE_CONCEPT_ID
+      data_type: UUID
+    - name: EPISODE_TYPE_SOURCE_CODE
+      data_type: TEXT
+    - name: EPISODE_TYPE_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: EPISODE_TYPE_CODE
+      data_type: TEXT
+    - name: EPISODE_TYPE_DISPLAY
+      data_type: TEXT
+    - name: STATUS
+      data_type: TEXT
+    - name: EPISODE_STATUS_SOURCE_CONCEPT_ID
+      data_type: UUID
+    - name: EPISODE_STATUS_SOURCE_CODE
+      data_type: TEXT
+    - name: EPISODE_STATUS_SOURCE_DISPLAY
+      data_type: TEXT
+    - name: EPISODE_STATUS_CODE
+      data_type: TEXT
+    - name: EPISODE_STATUS_DISPLAY
+      data_type: TEXT
+    - name: LDS_IS_DELETED
+      data_type: BOOLEAN
+    - name: PUBLISHER_ORGANISATION_CODE
+      data_type: TEXT
+    - name: CLINICAL_SYSTEM
+      data_type: TEXT
+    - name: SOURCE_EXTRACTION_DATE
+      data_type: DATE
+    - name: LDS_TRANSFORM_DATETIME
+      data_type: TIMESTAMP_LTZ
   - name: FRESHNESS
     identifier: '"FRESHNESS"'
     columns:
@@ -928,11 +987,11 @@ sources:
     - name: EPISODICITY_SOURCE_CONCEPT_ID
       data_type: UUID
     - name: IS_PRIMARY
-      data_type: TEXT
+      data_type: BOOLEAN
     - name: DATE_RECORDED
       data_type: TIMESTAMP_NTZ
     - name: IS_PROBLEM_DELETED
-      data_type: TEXT
+      data_type: BOOLEAN
     - name: IS_CONFIDENTIAL
       data_type: BOOLEAN
     - name: LDS_IS_DELETED
@@ -995,6 +1054,8 @@ sources:
       data_type: UUID
     - name: REGISTERED_PRACTICE_ORGANISATION_ID
       data_type: UUID
+    - name: LOCAL_PATIENT_ID
+      data_type: TEXT
     - name: SK_PATIENT_ID
       data_type: NUMBER(38,0)
     - name: TITLE
@@ -1183,17 +1244,17 @@ sources:
     - name: DATE_OF_BIRTH_YEAR
       data_type: NUMBER(4,0)
     - name: DATE_OF_BIRTH_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(2,0)
     - name: DATE_OF_BIRTH_PRECISION
-      data_type: TEXT(2,0)
+      data_type: TEXT
     - name: DATE_OF_DEATH
       data_type: DATE
     - name: DATE_OF_DEATH_YEAR
       data_type: NUMBER(4,0)
     - name: DATE_OF_DEATH_MONTH
-      data_type: NUMBER
+      data_type: NUMBER(2,0)
     - name: DATE_OF_DEATH_PRECISION
-      data_type: TEXT(2,0)
+      data_type: TEXT
     - name: DEATH_NOTIFICATION_STATUS
       data_type: TEXT
     - name: POSTCODE
@@ -1216,8 +1277,6 @@ sources:
       data_type: BOOLEAN
     - name: IS_LATEST_FOR_PERSON
       data_type: BOOLEAN
-    - name: LOCAL_PATIENT_ID
-      data_type: TEXT
     - name: ERROR_SUCCESS_CODE
       data_type: TEXT
     - name: LDS_IS_DELETED
@@ -1468,7 +1527,7 @@ sources:
     - name: IS_OUTGOING_REFERRAL
       data_type: BOOLEAN
     - name: IS_REVIEW
-      data_type: NUMBER(1,0)
+      data_type: BOOLEAN
     - name: REFERRAL_REQUEST_SOURCE_CONCEPT_ID
       data_type: UUID
     - name: SOURCE_CODE

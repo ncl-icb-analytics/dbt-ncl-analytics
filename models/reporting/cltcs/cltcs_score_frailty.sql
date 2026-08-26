@@ -119,7 +119,7 @@ encoding_features as (
         on il.person_id =rockwood.person_id
     left join {{ ref('fct_person_polypharmacy_current') }} polyp
         on il.person_id =polyp.person_id
-    left join {{ ref('int_smi_illicit_drug_latest') }} id
+    left join {{ ref('int_illicit_drug_use_latest') }} id
         on il.person_id =id.person_id
     left join {{ ref('dim_person_care_home') }} ch
         on il.person_id =ch.person_id

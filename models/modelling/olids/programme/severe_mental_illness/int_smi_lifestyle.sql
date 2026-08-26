@@ -16,7 +16,7 @@ i.person_id
 ,i.illicit_drug_class
 ,IFF(i.ILLICIT_DRUG_PATTERN = 'Does not misuse drugs', 'No', 'Yes') AS drug_misuse_flag
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_illicit_drug_latest i
-FROM {{ ref('int_smi_illicit_drug_latest') }} i
+FROM {{ ref('int_illicit_drug_use_latest') }} i
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (person_id)
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 )
@@ -29,7 +29,7 @@ sm.person_id
 ,IFF(sm.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS sm_int_last_12m
 ,sm.subs_misuse_services
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_subs_misuse_intervention_latest sm 
-FROM {{ ref('int_smi_longlives_subs_misuse_intervention_latest') }} sm
+FROM {{ ref('int_subs_misuse_intervention_latest') }} sm
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
@@ -60,7 +60,7 @@ s.person_id
 ,IFF(s.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS smok_last_12m
 ,NULL as smoker_flag
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_SMI_SMOKING_DECLINED s
-FROM {{ ref('int_smi_smoking_declined') }} s
+FROM {{ ref('int_smoking_assessment_declined') }} s
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY s.person_id ORDER BY s.clinical_effective_date DESC) = 1
@@ -76,7 +76,7 @@ s.person_id
 ,IFF(s.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS smok_int_last_12m
 ,s.smoking_cessation_services
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_SMI_LONGLIVES_SMOKING_INTERVENTION_latest s 
-FROM {{ ref('int_smi_longlives_smoking_intervention_latest') }} s 
+FROM {{ ref('int_smoking_intervention_latest') }} s 
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
@@ -130,7 +130,7 @@ a.person_id
 ,a.result_value as alcohol_units
 ,a.result_unit_display as unit_display
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_alcohol_latest a
-FROM {{ ref('int_smi_alcohol_latest') }} a
+FROM {{ ref('int_alcohol_units_latest') }} a
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 
@@ -144,7 +144,7 @@ s.person_id
 ,NULL as alcohol_units
 ,NULL as unit_display
 --FROM MODELLING.OLIDS_OBSERVATIONS.INT_SMI_ALCOHOL_DECLINED s
-FROM {{ ref('int_smi_alcohol_declined') }} s
+FROM {{ ref('int_alcohol_assessment_declined') }} s
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p USING (PERSON_ID)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY s.person_id ORDER BY s.clinical_effective_date DESC) = 1
@@ -163,7 +163,7 @@ ai.person_id
 ,IFF(ai.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS alc_int_last_12m
 ,ai.alcohol_advice_services
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_alcohol_intervention_latest ai 
-FROM {{ ref('int_smi_longlives_alcohol_intervention_latest') }} ai
+FROM {{ ref('int_alcohol_intervention_latest') }} ai
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
@@ -194,7 +194,7 @@ b.person_id
 ,NULL as BMI_VALUE
 ,7 as BMI_RISK_SORT_KEY
 --FROM DEV__MODELLING.OLIDS_OBSERVATIONS.INT_SMI_BMI_DECLINED b
-FROM {{ ref('int_smi_bmi_declined') }} b
+FROM {{ ref('int_bmi_assessment_declined') }} b
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p USING (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 QUALIFY ROW_NUMBER() OVER (PARTITION BY b.person_id ORDER BY b.clinical_effective_date DESC) = 1
@@ -211,7 +211,7 @@ n.person_id
 ,IFF(n.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS nutr_rev_last_12m
 ,n.poor_diet_flag
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_nutrition_review_latest n 
-FROM {{ ref('int_smi_longlives_nutrition_review_latest') }} n
+FROM {{ ref('int_nutrition_review_latest') }} n
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
@@ -226,7 +226,7 @@ w.person_id
 ,IFF(w.referral_exercise_advice = 'Yes' AND w.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS exer_int_last_12m
 ,w.referral_exercise_advice
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_weight_mgmt_latest w
-FROM {{ ref('int_smi_longlives_weight_mgmt_latest') }} w
+FROM {{ ref('int_weight_mgmt_intervention_latest') }} w
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
@@ -238,7 +238,7 @@ d.person_id
 ,d.CONCEPT_DISPLAY as dental_type
 ,IFF(d.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS dental_last_12m
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_dental_inspection_latest d
-FROM {{ ref('int_smi_longlives_dental_inspection_latest') }} d
+FROM {{ ref('int_dental_inspection_latest') }} d
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )
@@ -251,7 +251,7 @@ e.person_id
 ,IFF(e.clinical_effective_date >= DATEADD('month', -12, CURRENT_DATE), 'Yes', 'No') AS exercise_last_12m
 ,e.low_exercise_flag
 --FROM MODELLING.OLIDS_OBSERVATIONS.int_smi_longlives_exercise_assessment_latest e
-FROM {{ ref('int_smi_longlives_exercise_assessment_latest') }} e
+FROM {{ ref('int_exercise_assessment_latest') }} e
 --INNER JOIN MODELLING.OLIDS_PROGRAMME.INT_SMI_POPULATION_BASE p using (PERSON_ID)
 INNER JOIN {{ ref('int_smi_population_base')  }} p using (PERSON_ID)
 )

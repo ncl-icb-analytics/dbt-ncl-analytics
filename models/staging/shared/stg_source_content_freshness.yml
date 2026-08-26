@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: stg_source_content_freshness
+    description: >
+      Source-specific content-currency signals used by the reporting freshness
+      contract. PDS is marked for platform-monitor fallback.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: source_schema
+        description: DATA_LAKE source schema.
+        data_tests:
+          - not_null
+          - unique

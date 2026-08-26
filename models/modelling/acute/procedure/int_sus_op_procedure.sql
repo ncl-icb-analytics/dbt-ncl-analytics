@@ -30,7 +30,7 @@ select
 from final_opcs4_codes f
 
 left join
-     {{ ref('stg_aic_base_athena_concept') }} c
+     {{ ref('stg_common_aicentre_vocab') }} c
     on replace(c.concept_code, '.', '') = f.code
     and c.vocabulary_id = 'OPCS4'
 

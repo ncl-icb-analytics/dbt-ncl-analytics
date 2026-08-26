@@ -7,6 +7,10 @@ models:
       first of each month. One row per organisation, sex and 5-year age band
       per monthly snapshot; org_type spans GP practice, PCN, ICB and other
       geographies, and sex/age band include ALL rollup rows.
+
+      Source: UKHFD.Demography.fact_No_Of_Patients_Regd_At_GP_Prac_Regions_5Yr_AgeBand
+      (source 'ukhfd_demography' in models/sources/manual_ukhfd.yml)
+      via raw_ukhfd_registered_patients_by_gp_practice.
     config:
       meta:
         owner:

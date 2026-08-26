@@ -149,7 +149,7 @@ sk_patient_id
 ,admission_type
 ,ward_type
 ,ward_code
-,site_name
+,CASE WHEN ward_code = 'HCPH' THEN 'Haringey' ELSE site_name END AS site_name
 ,spell_number
 ,spell_start_date
 ,start_date_ward_stay

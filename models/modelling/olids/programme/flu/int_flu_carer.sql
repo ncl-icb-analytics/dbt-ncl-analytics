@@ -4,7 +4,8 @@ Simplified Carer Eligibility Rule
 Business Rule: Person is eligible if they have:
 1. Latest carer code (CARER_COD) AND no more recent not-carer code (NOTCARER_COD)
    - CARER_COD > NOTCARER_COD (or no NOTCARER_COD at all)
-2. AND NOT eligible via other clinical risk groups, BMI, or pregnancy
+2. AND NOT a member of ATRISK_GROUP (the 8 clinical risk groups), BMI_GROUP or
+   PREG_GROUP. Learning disability is not an at-risk group, so it does not exclude.
 3. AND aged 5 years or older (minimum age for carer flu vaccination)
 
 Exclusion rule - carer status with exclusion from other eligibility routes.
@@ -65,11 +66,13 @@ people_with_active_carer_status AS (
 ),
 
 -- Step 4: Identify people eligible via other routes (exclusions, for all campaigns)
+-- Only ATRISK_GROUP, BMI_GROUP and PREG_GROUP exclude a carer. Learning disability is
+-- not part of ATRISK_GROUP and so is deliberately absent here.
 people_eligible_via_other_routes AS (
-    -- Clinical risk groups
+    -- Clinical risk groups (ATRISK_GROUP)
     SELECT DISTINCT campaign_id, person_id, 'clinical_risk_group' AS exclusion_reason
     FROM (
-        SELECT campaign_id, person_id FROM {{ ref('int_flu_active_asthma_management') }}
+        SELECT campaign_id, person_id FROM {{ ref('int_flu_asthma') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_heart_disease') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_kidney_disease') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_liver_disease') }}
@@ -77,7 +80,6 @@ people_eligible_via_other_routes AS (
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_immunosuppression') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_neurological_disease') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_asplenia') }}
-        UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_learning_disability') }}
         UNION SELECT campaign_id, person_id FROM {{ ref('int_flu_chronic_respiratory_disease') }}
     )
     

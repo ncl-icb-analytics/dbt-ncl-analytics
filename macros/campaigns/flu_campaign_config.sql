@@ -22,6 +22,11 @@ vars:
   flu_current_campaign: "Flu 2024-25"     # Change this to switch campaigns
   flu_previous_campaign: "Flu 2023-24"    # For comparison queries
 
+AUDIT END DATE:
+audit_end_date is the spec AUDITEND_DAT. It rolls forward with CURRENT_DATE while a
+campaign is running and stops at that campaign's campaign_end_date, so closed seasons
+do not keep absorbing newly recorded events.
+
 CHILD AGE GROUPS:
 - Preschool: Typically ages 2-3, but birth date ranges vary by campaign
 - School Age: Typically ages 4-16, but birth date ranges vary by campaign
@@ -53,9 +58,9 @@ CHILD AGE GROUPS:
             -- Vaccination tracking dates
             '2023-08-31'::DATE AS flu_vaccination_after_date,
             '2023-08-31'::DATE AS laiv_vaccination_after_date,
-            
-            -- Current audit date
-            CURRENT_DATE AS audit_end_date
+
+            -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
+            LEAST(CURRENT_DATE, '2024-03-31'::DATE) AS audit_end_date
     {%- elif campaign_id == 'Flu 2024-25' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
@@ -80,9 +85,9 @@ CHILD AGE GROUPS:
             -- Vaccination tracking dates
             '2024-08-31'::DATE AS flu_vaccination_after_date,
             '2024-08-31'::DATE AS laiv_vaccination_after_date,
-            
-            -- Current audit date
-            CURRENT_DATE AS audit_end_date
+
+            -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
+            LEAST(CURRENT_DATE, '2025-02-28'::DATE) AS audit_end_date
     {%- elif campaign_id == 'Flu 2025-26' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
@@ -107,9 +112,9 @@ CHILD AGE GROUPS:
             -- Vaccination tracking dates (shifted +1 year)
             '2025-08-31'::DATE AS flu_vaccination_after_date,
             '2025-08-31'::DATE AS laiv_vaccination_after_date,
-            
-            -- Current audit date
-            CURRENT_DATE AS audit_end_date
+
+            -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
+            LEAST(CURRENT_DATE, '2026-02-28'::DATE) AS audit_end_date
     {%- else -%}
         -- Default to current campaign if unknown campaign_id
         {{ flu_campaign_config('Flu 2024-25') }}

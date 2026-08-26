@@ -34,7 +34,7 @@ select
 from final_icd_codes f
 
 left join
-    {{ ref('stg_aic_base_athena_concept') }} c
+    {{ ref('stg_common_aicentre_vocab') }} c
     on c.concept_code = f.code
     and c.vocabulary_id = 'ICD10'
 

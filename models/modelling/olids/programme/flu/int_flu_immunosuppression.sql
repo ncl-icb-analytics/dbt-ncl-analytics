@@ -5,7 +5,7 @@ Business Rule: Person is eligible if they have:
 1. ANY of the following evidence of immunosuppression:
    - Immunosuppression diagnosis (IMMDX_COD) - latest occurrence
    - Immunosuppression medication (IMMRX_COD) since lookback date
-   - Immunosuppression administration (IMMADM_COD) since lookback date  
+   - Immunosuppression administration (IMM_ADM_COD) since lookback date
    - Chemotherapy/radiotherapy (DXT_CHEMO_COD) since lookback date
 2. AND aged 6 months or older (minimum age for flu vaccination)
 
@@ -57,7 +57,7 @@ people_with_recent_immuno_admin AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_admin_date,
         'Recent immunosuppression administration' AS evidence_type
-    FROM ({{ get_observations("'IMMADM_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'IMM_ADM_COD'", 'UKHSA_FLU') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.immuno_medication_lookback_date

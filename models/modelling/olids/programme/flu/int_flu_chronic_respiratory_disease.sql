@@ -3,8 +3,7 @@ Simplified Chronic Respiratory Disease Eligibility Rule
 
 Business Rule: Person is eligible if they have:
 1. ANY of the following respiratory conditions:
-   - Eligible via Active Asthma Management (AST_GROUP)
-   - Eligible via Asthma Admission (AST_ADM_GROUP)  
+   - Eligible via Asthma (AST_GROUP)
    - Chronic respiratory disease diagnosis (RESP_COD) - earliest occurrence
 2. AND aged 6 months or older (minimum age for flu vaccination)
 
@@ -20,27 +19,17 @@ WITH all_campaigns AS (
     SELECT * FROM ({{ flu_previous_config() }})
 ),
 
--- Step 1: Get people eligible via active asthma management (for all campaigns)
+-- Step 1: Get people eligible via asthma (for all campaigns)
 people_eligible_via_asthma AS (
     SELECT 
         campaign_id,
         person_id,
         qualifying_event_date,
-        'Eligible via active asthma management' AS eligibility_reason
-    FROM {{ ref('int_flu_active_asthma_management') }}
+        'Eligible via asthma' AS eligibility_reason
+    FROM {{ ref('int_flu_asthma') }}
 ),
 
--- Step 2: Get people eligible via asthma admission (for all campaigns)
-people_eligible_via_asthma_admission AS (
-    SELECT 
-        campaign_id,
-        person_id,
-        qualifying_event_date,
-        'Eligible via asthma admission' AS eligibility_reason
-    FROM {{ ref('int_flu_asthma_admission') }}
-),
-
--- Step 3: Find people with chronic respiratory disease diagnosis (for all campaigns)
+-- Step 2: Find people with chronic respiratory disease diagnosis (for all campaigns)
 people_with_chronic_resp_diagnosis AS (
     SELECT 
         cc.campaign_id,
@@ -55,15 +44,10 @@ people_with_chronic_resp_diagnosis AS (
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
--- Step 4: Combine all respiratory eligibility paths (for all campaigns)
+-- Step 3: Combine all respiratory eligibility paths (for all campaigns)
 all_respiratory_eligibility AS (
     SELECT campaign_id, person_id, qualifying_event_date, eligibility_reason
     FROM people_eligible_via_asthma
-    
-    UNION
-    
-    SELECT campaign_id, person_id, qualifying_event_date, eligibility_reason
-    FROM people_eligible_via_asthma_admission
     
     UNION
     
@@ -71,7 +55,7 @@ all_respiratory_eligibility AS (
     FROM people_with_chronic_resp_diagnosis
 ),
 
--- Step 5: Remove duplicates and get best qualifying event per person (for all campaigns)
+-- Step 4: Remove duplicates and get best qualifying event per person (for all campaigns)
 best_respiratory_eligibility AS (
     SELECT 
         campaign_id,
@@ -85,7 +69,7 @@ best_respiratory_eligibility AS (
     FROM all_respiratory_eligibility
 ),
 
--- Step 6: Add demographics and apply age restrictions (for all campaigns)
+-- Step 5: Add demographics and apply age restrictions (for all campaigns)
 final_eligibility AS (
     SELECT 
         bre.campaign_id,

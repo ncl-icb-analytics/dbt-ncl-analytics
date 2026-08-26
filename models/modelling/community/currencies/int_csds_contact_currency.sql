@@ -90,7 +90,7 @@ with activity as (
     select
         organisation_code as practice_code
         , organisation_name as practice_name
-    from {{ ref('stg_ukhfd_ods_all_gp_and_gdp_practices') }}
+    from {{ ref('stg_ukhfd_all_gp_and_gdp_practices') }}
 )
 
 , residence as (

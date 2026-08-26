@@ -281,7 +281,7 @@ WITH schema_metadata AS (
     -- olids: OLIDS stable layer - cleaned and filtered patient records
   SELECT 
     'DATA_LAKE' as database_name,
-    'OLIDS_EXPERIMENTAL' as schema_name,
+    'OLIDS' as schema_name,
     table_name,
     column_name,
     data_type,
@@ -289,7 +289,7 @@ WITH schema_metadata AS (
     numeric_scale,
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'OLIDS_EXPERIMENTAL'
+  WHERE table_schema = 'OLIDS'
   
   UNION ALL
   
@@ -650,21 +650,6 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'C_LTCS'
-  
-  UNION ALL
-  
-    -- aic: parallel pipeline for AIC
-  SELECT 
-    'DATA_LAKE__NCL' as database_name,
-    'AIC_DEV' as schema_name,
-    table_name,
-    column_name,
-    data_type,
-    numeric_precision,
-    numeric_scale,
-    ordinal_position
-  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'AIC_DEV'
   
   UNION ALL
   
