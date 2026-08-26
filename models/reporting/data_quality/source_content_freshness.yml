@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: source_content_freshness
+    description: >
+      Content-currency signals for sources used by semantic views. One row per
+      source schema. Consumers use the platform source monitor only when
+      uses_monitor_fallback is true or the content signal is unavailable.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: source_schema
+        description: DATA_LAKE source schema.
+        data_tests:
+          - not_null
+          - unique
+      - name: content_date
+        description: Latest date represented by the source-specific content signal.
+      - name: observed_at
+        description: When the source recorded or received the content signal.
+      - name: signal_type
+        description: Rule used to derive content_date.
+        data_tests:
+          - not_null
+      - name: signal_detail
+        description: User-facing explanation of the source-specific rule.
+        data_tests:
+          - not_null
+      - name: uses_monitor_fallback
+        description: Whether consumers should use platform source-change metadata.
+        data_tests:
+          - not_null
+      - name: sla_days
+        description: Age in days after which the source changes from fresh to warning.
+        data_tests:
+          - not_null
+      - name: breach_after_days
+        description: Age in days after which the source changes from warning to breach.
+        data_tests:
+          - not_null
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "breach_after_days > sla_days"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "uses_monitor_fallback or content_date is not null"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "content_date is null or content_date <= current_date()"
