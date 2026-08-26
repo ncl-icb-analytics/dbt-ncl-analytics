@@ -71,7 +71,7 @@ people_with_obesity_evidence AS (
     SELECT campaign_id, person_id FROM latest_bmi_stage
 ),
 
-eligible_obesity_evidence AS (
+evaluated_obesity_evidence AS (
     SELECT
         people.campaign_id,
         people.person_id,
@@ -93,13 +93,12 @@ eligible_obesity_evidence AS (
     LEFT JOIN latest_severe_obesity severe
         ON people.campaign_id = severe.campaign_id
         AND people.person_id = severe.person_id
-    WHERE (
-        severe.severe_obesity_date = stage.bmi_stage_date
-        AND (bmi.bmi_date IS NULL OR severe.severe_obesity_date > bmi.bmi_date)
-    ) OR (
-        bmi.bmi_value >= 40
-        AND (stage.bmi_stage_date IS NULL OR bmi.bmi_date >= stage.bmi_stage_date)
-    )
+),
+
+eligible_obesity_evidence AS (
+    SELECT campaign_id, person_id, qualifying_event_date
+    FROM evaluated_obesity_evidence
+    WHERE qualifying_event_date IS NOT NULL
 ),
 
 final_eligible AS (
@@ -129,7 +128,8 @@ final_eligible AS (
         ON evidence.campaign_id = cc.campaign_id
     JOIN {{ ref('dim_person_demographics') }} demo
         ON evidence.person_id = demo.person_id
-    WHERE demo.birth_date_approx IS NOT NULL
+    WHERE demo.is_active = TRUE
+        AND demo.birth_date_approx IS NOT NULL
         AND DATEADD('year', 18, demo.birth_date_approx) <= cc.campaign_reference_date
 )
 

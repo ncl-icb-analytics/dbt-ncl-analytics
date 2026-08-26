@@ -61,6 +61,9 @@ models:
         owner:
           name: EddieDavison92
     tests:
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: BMI_COD,BMI_STAGE_COD,SEV_OBESITY_COD
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:

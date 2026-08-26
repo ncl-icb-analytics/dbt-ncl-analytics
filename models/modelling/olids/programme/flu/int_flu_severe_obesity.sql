@@ -1,7 +1,7 @@
 /*
 Severe Obesity Eligibility Rule
 
-Business Rule: A person aged 18 or over is eligible when either:
+Business Rule: A person aged 18 or over at the campaign audit end is eligible when either:
 1. Their latest BMI is at least 40 and is not older than their latest BMI stage, or
 2. Their latest BMI stage is severe obesity and is later than their latest BMI.
 
@@ -64,7 +64,7 @@ people_with_obesity_evidence AS (
     SELECT campaign_id, person_id FROM latest_bmi_stage
 ),
 
-eligible_obesity_evidence AS (
+evaluated_obesity_evidence AS (
     SELECT
         people.campaign_id,
         people.person_id,
@@ -86,13 +86,12 @@ eligible_obesity_evidence AS (
     LEFT JOIN latest_severe_obesity severe
         ON people.campaign_id = severe.campaign_id
         AND people.person_id = severe.person_id
-    WHERE (
-        severe.severe_obesity_date = stage.bmi_stage_date
-        AND (bmi.bmi_date IS NULL OR severe.severe_obesity_date > bmi.bmi_date)
-    ) OR (
-        bmi.bmi_value >= 40
-        AND (stage.bmi_stage_date IS NULL OR bmi.bmi_date >= stage.bmi_stage_date)
-    )
+),
+
+eligible_obesity_evidence AS (
+    SELECT campaign_id, person_id, qualifying_event_date
+    FROM evaluated_obesity_evidence
+    WHERE qualifying_event_date IS NOT NULL
 ),
 
 final_eligibility AS (
@@ -113,7 +112,7 @@ final_eligibility AS (
         ON evidence.campaign_id = cc.campaign_id
     JOIN {{ ref('dim_person_demographics') }} demo
         ON evidence.person_id = demo.person_id
-    WHERE DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) >= 216
+    WHERE DATEADD('year', 18, demo.birth_date_approx) <= cc.audit_end_date
 )
 
 SELECT * FROM final_eligibility
