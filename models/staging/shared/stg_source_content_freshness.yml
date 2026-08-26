@@ -15,3 +15,15 @@ models:
         data_tests:
           - not_null
           - unique
+      - name: content_date
+        description: Consensus content date used for freshness status.
+        data_tests:
+          - not_null
+      - name: latest_content_date
+        description: Latest valid content date present in the source.
+        data_tests:
+          - not_null
+      - name: consensus_content_date
+        description: Date representing the source's normal breadth of coverage.
+        data_tests:
+          - not_null

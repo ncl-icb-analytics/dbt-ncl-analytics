@@ -66,7 +66,9 @@ pds as (
 ),
 
 deaths_latest_observation as (
-    select max(dmic_record_valid_date_from)::timestamp_ntz as observed_at
+    select
+        max(dmic_record_valid_date_from)::timestamp_ntz as observed_at,
+        max(case when reg_date::date <= current_date() then reg_date end)::date as latest_content_date
     from {{ ref('raw_registries_deaths_deaths') }}
 ),
 
@@ -376,34 +378,72 @@ terminology as (
         120 as breach_after_days
     from {{ ref('raw_reference_ingest_log') }}
     where lower(status) = 'success'
+),
+
+source_signals as (
+    select * from olids
+    union all
+    select * from pds
+    union all
+    select * from deaths
+    union all
+    select * from sus_apc
+    union all
+    select * from sus_op
+    union all
+    select * from sus_ecds
+    union all
+    select * from epd
+    union all
+    select * from csds
+    union all
+    select * from mhsds
+    union all
+    select * from waiting_list
+    union all
+    select * from ers
+    union all
+    select * from fact_patient
+    union all
+    select * from pmct
+    union all
+    select * from tat
+    union all
+    select * from terminology
+),
+
+source_latest_dates as (
+    select
+        'DATA_LAKE.PDS' as source_schema,
+        max(content_at)::date as latest_content_date
+    from pds_core_dates
+
+    union all
+
+    select
+        'DATA_LAKE.DEATHS' as source_schema,
+        max(latest_content_date) as latest_content_date
+    from deaths_latest_observation
+
+    union all
+
+    select
+        source_schema,
+        latest_receipt_date as latest_content_date
+    from sus_source_latest
 )
 
-select * from olids
-union all
-select * from pds
-union all
-select * from deaths
-union all
-select * from sus_apc
-union all
-select * from sus_op
-union all
-select * from sus_ecds
-union all
-select * from epd
-union all
-select * from csds
-union all
-select * from mhsds
-union all
-select * from waiting_list
-union all
-select * from ers
-union all
-select * from fact_patient
-union all
-select * from pmct
-union all
-select * from tat
-union all
-select * from terminology
+select
+    source_signals.source_schema,
+    source_signals.content_date,
+    coalesce(source_latest_dates.latest_content_date, source_signals.content_date) as latest_content_date,
+    source_signals.content_date as consensus_content_date,
+    source_signals.observed_at,
+    source_signals.signal_type,
+    source_signals.signal_detail,
+    source_signals.expected_days,
+    source_signals.sla_days,
+    source_signals.breach_after_days
+from source_signals
+left join source_latest_dates
+    on source_signals.source_schema = source_latest_dates.source_schema

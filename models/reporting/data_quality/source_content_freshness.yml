@@ -35,7 +35,15 @@ models:
                   - DATA_LAKE.TAT
                   - DATA_LAKE.TERMINOLOGY
       - name: content_date
-        description: Latest date represented by the source-specific content signal.
+        description: Consensus content date used for freshness status.
+        data_tests:
+          - not_null
+      - name: latest_content_date
+        description: Latest valid content date present in the source.
+        data_tests:
+          - not_null
+      - name: consensus_content_date
+        description: Date representing the source's normal breadth of coverage.
         data_tests:
           - not_null
       - name: observed_at
@@ -118,6 +126,12 @@ models:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "content_date is null or content_date <= current_date()"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "content_date = consensus_content_date"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "latest_content_date >= consensus_content_date"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "sla_days is null or source_schema = 'DATA_LAKE.OLIDS'"
