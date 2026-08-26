@@ -1,22 +1,12 @@
 models:
   - name: fct_person_ndh_register
-    description: 'QOF non-diabetic hyperglycaemia register for patients with pre-diabetes
-      diagnosis.
-
-      One row per person with NDH_COD present (elevated glucose but not diabetic),
-      excluding those with diabetes diagnosis.'
-
-    tests:
-      - dbt_utils.at_least_one:
-          column_name: person_id
-
-    columns:
-      - name: person_id
-        description: Unique identifier for the person
-        tests:
-          - unique
-          - not_null
-
+    description: >
+      QOF v51 NDH_REG v102 (CQRS NDHGDM) at the current date. One row represents one person
+      on the register. It includes people aged 18 or over with NDH, impaired
+      glucose tolerance or pre-diabetes, and people of any age with gestational
+      diabetes. The five NDH_REG diabetes-history rules determine membership.
+      As with the existing live fact family, future-dated evidence is retained;
+      use pit_ndh_register for strict as-of membership.
     config:
       meta:
         indicator:
@@ -24,15 +14,12 @@ models:
           type: "CONDITION"
           category: "LTC"
           clinical_domain: "Cardiometabolic"
-          name_short: "Non-Diabetic Hyperglycaemia"
-          description_short: "QOF non-diabetic hyperglycaemia register"
+          name_short: "Non-Diabetic Hyperglycaemia and Gestational Diabetes"
+          description_short: "QOF v51 NDH/GDM register"
           description_long: >
-            Non-diabetic hyperglycaemia diagnosed using QOF criteria: Age ≥18 years
-            with NDH,  IGT, or pre-diabetes diagnosis codes, excluding those with
-            active diabetes diagnosis.  Used for diabetes prevention programmes and
-            lifestyle intervention monitoring. Maps  to QOF indicator NDH001 (NDH
-            Register). Uses NDH_COD, IGT_COD, and PRD_COD for  diagnosis codes with
-            complex diabetes exclusion logic.
+            QOF v51 NDH_REG v102. NDH_COD, IGT_COD and PRD_COD require age 18
+            or over; GESTDIAB_COD provides an any-age route. Diabetes history
+            is evaluated by the ordered NDH_REG rules.
           is_qof: true
           qof_indicator: "NDH001"
           source_column: "is_on_register"
@@ -46,7 +33,50 @@ models:
               category: "INCLUSION"
             - cluster_id: "PRD_COD"
               category: "INCLUSION"
+            - cluster_id: "GESTDIAB_COD"
+              category: "INCLUSION"
             - cluster_id: "DM_COD"
-              category: "EXCLUSION"
+              category: "QUALIFYING"
+            - cluster_id: "DMRES_COD"
+              category: "QUALIFYING"
         owner:
           name: EddieDavison92
+    data_tests:
+      - dbt_utils.at_least_one:
+          column_name: person_id
+    columns:
+      - name: person_id
+        description: Unique identifier for the person
+        data_tests:
+          - unique
+          - not_null
+      - name: is_on_register
+        description: Always true because this fact contains register members only
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [true]
+      - name: earliest_diagnosis_date
+        description: Earliest NDH, IGT, pre-diabetes, or gestational diabetes date
+      - name: latest_diagnosis_date
+        description: Latest NDH, IGT, pre-diabetes, or gestational diabetes date
+      - name: earliest_gestational_diabetes_date
+        description: Earliest GESTDIAB_COD date; null when the person entered through NDH
+      - name: latest_gestational_diabetes_date
+        description: Latest GESTDIAB_COD date; null when the person entered through NDH
+      - name: has_gestational_diabetes_diagnosis
+        description: Whether the person has GESTDIAB_COD evidence by the current date
+      - name: has_ndh_route
+        description: >
+          Whether the person has NDH/IGT/PRD evidence and is aged 18 or over
+          at the current reference date
+      - name: has_gdm_route
+        description: Whether the person has the any-age gestational diabetes route
+      - name: qualifying_rule
+        description: First ordered NDH_REG rule that selected the person, from 2 to 5
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [2, 3, 4, 5]
+      - name: quality_service_start_date
+        description: 01 April at the start of the QOF year containing the current date

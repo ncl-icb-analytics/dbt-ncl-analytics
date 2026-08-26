@@ -25,3 +25,4 @@ SELECT
     is_on_register,
     {{ get_reference_date() }} AS reference_date
 FROM register_data
+WHERE is_on_register = TRUE
