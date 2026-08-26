@@ -11,7 +11,7 @@ models:
           name: Eddie Davison
     columns:
       - name: source_schema
-        description: DATA_LAKE source schema.
+        description: Logical source identifier shown in freshness reporting.
         data_tests:
           - not_null
           - unique

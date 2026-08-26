@@ -281,6 +281,47 @@ mhsds as (
     from {{ ref('raw_mhsds_mhs000header') }}
 ),
 
+slam_periods as (
+    select
+        feed,
+        last_day(dateadd(
+            month,
+            dv_financial_month - 1,
+            try_to_date(left(dv_financial_year, 4) || '-04-01')
+        )) as reporting_period_end,
+        submission_loaded_at
+    from {{ ref('stg_slam_latest_submission') }}
+    where dv_financial_year rlike '^20[0-9]{4}$'
+        and dv_financial_month between 1 and 12
+),
+
+slam_feed_latest as (
+    select
+        feed,
+        max(
+            case
+                when reporting_period_end <= current_date()
+                    then reporting_period_end
+            end
+        )::date as content_date,
+        max(submission_loaded_at)::timestamp_ntz as observed_at
+    from slam_periods
+    group by feed
+),
+
+slam as (
+    select
+        'SDL' as source_schema,
+        case when count(content_date) = 4 then min(content_date) end as content_date,
+        max(observed_at) as observed_at,
+        'slam_feed_consensus_month' as signal_type,
+        'Latest complete reporting month reached by all four SLAM feeds in SDL' as signal_detail,
+        30 as expected_days,
+        null::number as sla_days,
+        60 as breach_after_days
+    from slam_feed_latest
+),
+
 waiting_list as (
     select
         'DATA_LAKE.WL' as source_schema,
@@ -332,22 +373,22 @@ pmct as (
         last_day(max(
             case
                 when try_to_date(
-                    left(split_part(period, '-', 2), 3) || ' ' || split_part(period, '-', 3),
+                    left(split_part("PERIOD", '-', 2), 3) || ' ' || split_part("PERIOD", '-', 3),
                     'MON YYYY'
                 ) <= current_date()
                     then try_to_date(
-                        left(split_part(period, '-', 2), 3) || ' ' || split_part(period, '-', 3),
+                        left(split_part("PERIOD", '-', 2), 3) || ' ' || split_part("PERIOD", '-', 3),
                         'MON YYYY'
                     )
             end
         )) as content_date,
-        max(create_ts)::timestamp_ntz as observed_at,
+        max("_INGESTED_AT")::timestamp_ntz as observed_at,
         'diagnostics_reporting_period' as signal_type,
-        'Latest diagnostics reporting month used by project models' as signal_detail,
+        'Latest diagnostics reporting month in the current performance presentation feed' as signal_detail,
         30 as expected_days,
         null::number as sla_days,
         60 as breach_after_days
-    from {{ ref('raw_pmct_diagnosticsmonthlysourceappendreviseprovcomm') }}
+    from "DATA_LAKE"."PERFORMANCE"."DiagnosticsMonthlySourceAppendReviseProvComm"
 ),
 
 tat as (
@@ -355,8 +396,8 @@ tat as (
         'DATA_LAKE.TAT' as source_schema,
         last_day(max(
             case
-                when try_to_date(month, 'MON YYYY') <= current_date()
-                    then try_to_date(month, 'MON YYYY')
+                when data_period::date <= current_date()
+                    then data_period
             end
         )) as content_date,
         max(loaded_at)::timestamp_ntz as observed_at,
@@ -365,7 +406,7 @@ tat as (
         30 as expected_days,
         null::number as sla_days,
         60 as breach_after_days
-    from {{ ref('raw_tat_turnaround_times_raw') }}
+    from {{ ref('stg_tat_turnaround_times') }}
 ),
 
 terminology as (
@@ -401,6 +442,8 @@ source_signals as (
     union all
     select * from mhsds
     union all
+    select * from slam
+    union all
     select * from waiting_list
     union all
     select * from ers
@@ -426,6 +469,13 @@ source_latest_dates as (
         'DATA_LAKE.DEATHS' as source_schema,
         max(latest_content_date) as latest_content_date
     from deaths_latest_observation
+
+    union all
+
+    select
+        'SDL' as source_schema,
+        max(content_date) as latest_content_date
+    from slam_feed_latest
 
     union all
 

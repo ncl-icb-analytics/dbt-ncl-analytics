@@ -12,7 +12,7 @@ models:
           name: Eddie Davison
     columns:
       - name: source_schema
-        description: DATA_LAKE source schema.
+        description: Logical source identifier shown in freshness reporting.
         data_tests:
           - not_null
           - unique
@@ -28,6 +28,7 @@ models:
                   - DATA_LAKE.EPD_PRIMARY_CARE
                   - DATA_LAKE.CSDS
                   - DATA_LAKE.MHSDS
+                  - SDL
                   - DATA_LAKE.WL
                   - DATA_LAKE.ERS
                   - DATA_LAKE.FACT_PATIENT
@@ -116,7 +117,7 @@ models:
     data_tests:
       - dbt_expectations.expect_table_row_count_to_equal:
           arguments:
-            value: 15
+            value: 16
       - dbt_utils.expression_is_true:
           arguments:
             expression: "expected_days > 0"
