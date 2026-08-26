@@ -52,15 +52,6 @@ age_based_eligibility AS (
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'AGE_BASED' AS rule_type, 1 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_children_school_age') }}
-    
-    UNION ALL
-    
-    -- Under 65 At Risk (parent category for clinical conditions in under 65s)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'PARENT_CATEGORY' AS rule_type, 2 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_under_65_at_risk') }}
 ),
 
 -- Simple clinical condition eligibility
@@ -116,15 +107,6 @@ clinical_condition_eligibility AS (
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'SOCIAL_FACTOR' AS rule_type, 4 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_household_immunocompromised') }}
-    
-    UNION ALL
-    
-    -- Asthma Admission (simple rule)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'CLINICAL_CONDITION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_asthma_admission') }}
 ),
 
 -- Complex clinical condition eligibility (combination/hierarchical/exclusion rules)
@@ -134,7 +116,7 @@ complex_clinical_eligibility AS (
         campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'COMBINATION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_active_asthma_management') }}
+    FROM {{ ref('int_flu_asthma') }}
     
     UNION ALL
     
