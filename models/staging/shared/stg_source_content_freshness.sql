@@ -388,7 +388,7 @@ pmct as (
         30 as expected_days,
         null::number as sla_days,
         60 as breach_after_days
-    from "DATA_LAKE"."PERFORMANCE"."DiagnosticsMonthlySourceAppendReviseProvComm"
+    from {{ source('performance', 'DiagnosticsMonthlySourceAppendReviseProvComm') }}
 ),
 
 tat as (
