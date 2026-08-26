@@ -22,6 +22,12 @@ attendance_category_codes as (
         , attendance_category_desc
     from {{ ref('stg_ukhfd_emergency_care_attendance_category') }}
     ),
+uec_activity_type_codes as (
+    select
+        uec_activity_type_code
+        , uec_activity_type_desc
+    from {{ ref('stg_ukhfd_uec_activity_type') }}
+    ),
 ethnicity_codes as (
     select distinct bk_ethnicity_code, ethnicity_desc
     from {{ref('stg_dictionary_dbo_ethnicity')}}
@@ -79,7 +85,8 @@ select
         when core.attendance_location_department_type = '05' then 'SDEC'
         else 'Others' end as pod
     , core.attendance_location_department_type as department_type
-    , core.attendance_location_activity_type as urgent_care_setting_type
+    , core.attendance_location_activity_type as uec_activity_type_code
+    , uec_activity_type.uec_activity_type_desc
     , uec_site.uec_site_label
 
     /* Time & date */
@@ -111,6 +118,7 @@ select
     , dict_complaint.ecds_group1 as chief_complaint_ecds_group1
     , core.clinical_chief_complaint_is_injury_related as is_injury_related
     , core.clinical_acuity_code as acuity
+    , acuity_concept.preferred_term as acuity_desc
 
     -- injury information is kept with the complaint fields for maintainability
     , core.clinical_injury_intent_code as injury_intent_code
@@ -269,6 +277,9 @@ left join attendance_category_codes as attendance_category
     on core.attendance_arrival_attendance_category
     = attendance_category.attendance_category_code
 
+left join uec_activity_type_codes as uec_activity_type
+    on core.attendance_location_activity_type = uec_activity_type.uec_activity_type_code
+
 left join
     {{ref('stg_dictionary_ecds_dischargedestination')}} as dict_dist
     on core.attendance_discharge_destination_code = dict_dist.snomed_code
@@ -300,6 +311,9 @@ left join {{ ref('stg_dictionary_snomed_concept') }} as disease_notification
 
 left join {{ ref('stg_dictionary_snomed_concept') }} as discharge_information
     on core.attendance_discharge_information_given_code = discharge_information.snomed_code
+
+left join {{ ref('stg_dictionary_snomed_concept') }} as acuity_concept
+    on core.clinical_acuity_code = acuity_concept.snomed_code
 
 /* Demographic dictionaries */
 left join ethnicity_codes as eth

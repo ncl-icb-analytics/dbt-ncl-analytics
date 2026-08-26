@@ -12,7 +12,7 @@ NLO21,03,UTC_SMH,NLO,NWL,2019-03-31,2023-10-18,St Mary's UTC (Totally)
 RYJ01,03,UTC_SMH_Streamed,RYJ,NWL,2023-01-01,,St Mary's UTC streamed from the emergency department
 AD918,03,UTC_CMX,AD9,NWL,2019-01-01,2023-01-25,Central Middlesex Hospital UTC (Totally)
 R1K12,03,UTC_CMX,R1K,NWL,2023-01-26,2023-08-17,Central Middlesex Hospital UTC (trust site code)
-R1K02,03,UTC_CMX,R1K,NWL,2023-09-01,,Central Middlesex Hospital UTC coded against the hospital site
+R1K02,03,UTC_CMX,R1K,NWL,2023-08-18,,Central Middlesex Hospital UTC coded against the hospital site
 RY901,03,UTC_WMX,RY9,NWL,2018-09-01,2023-09-28,West Middlesex UTC submitted by HRCH
 J4X8V,03,UTC_WMX,RQM,NWL,2023-09-28,,West Middlesex University Hospital UTC
 RYJ02,03,UTC_CX,RYJ,NWL,2023-01-01,,Charing Cross Hospital UTC

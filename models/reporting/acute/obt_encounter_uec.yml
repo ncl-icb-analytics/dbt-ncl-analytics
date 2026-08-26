@@ -90,6 +90,10 @@ models:
         data_type: varchar
         description: "Clinical acuity code of the encounter"
 
+      - name: acuity_desc
+        data_type: varchar
+        description: "Human-readable SNOMED CT UK preferred term for the clinical acuity code."
+
       - name: primary_diagnosis_code_snomed
         data_type: varchar
         description: "The first listed diagnosis SNOMED code, considered to be the most important / significant."
@@ -399,9 +403,13 @@ models:
       - name: mff_adjustment
         data_type: number
         description: "Market Forces Factor monetary adjustment reported for the attendance."
-      - name: urgent_care_setting_type
+      - name: uec_activity_type_code
         data_type: varchar
-        description: "Source ECDS activity type for the urgent-care setting; distinct from pod and department_type."
+        description: "Source ECDS activity type code for the urgent-care setting; distinct from pod and department_type."
+
+      - name: uec_activity_type_desc
+        data_type: varchar
+        description: "Current UKHFD description of the urgent and emergency care activity type code."
 
       - name: uec_site_label
         data_type: varchar

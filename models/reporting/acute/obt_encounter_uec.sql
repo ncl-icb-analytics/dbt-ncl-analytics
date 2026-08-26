@@ -17,7 +17,8 @@ select
     , site_name
     , pod
     , department_type
-    , urgent_care_setting_type
+    , uec_activity_type_code
+    , uec_activity_type_desc
     , uec_site_label
     , start_date
     , start_time
@@ -43,6 +44,7 @@ select
     , chief_complaint_ecds_group1
     , is_injury_related
     , acuity
+    , acuity_desc
     , injury_intent_code
     , injury_intent_desc
     , injury_mechanism_code
