@@ -16,11 +16,15 @@
 -- NWL: excludes trauma & orthopaedics (110), ENT (120), ophthalmology (130)
 -- and A&E (180) - the high-volume, low-complexity childhood attendances
 -- (fractures, grommets, squints), 20% of children's outpatient activity
--- here. Main specialty loses paediatric sub-specialty granularity, which
--- the treatment function coding kept; accepted as the cost of matching the
--- previously clinically agreed NWL cohort, and the paediatric criterion
--- still counts paediatric treatment functions. On this population the two
--- codings differ by under 1% once the exclusions are applied.
+-- here. Paediatric T&O (214), ENT (215) and ophthalmology (216) treatment
+-- functions are also excluded: some providers (Chelsea and Westminster,
+-- GOSH) record them under main specialty 420 paediatrics, which would
+-- otherwise let the same activity through. Main specialty loses paediatric
+-- sub-specialty granularity, which the treatment function coding kept;
+-- accepted as the cost of matching the previously clinically agreed NWL
+-- cohort, and the paediatric criterion still counts paediatric treatment
+-- functions. On this population the two codings differ by under 1% once
+-- the exclusions are applied.
 
 WITH op_max_date AS (
     SELECT MAX(start_date) AS max_date
@@ -56,6 +60,8 @@ op_specialties AS (
         op.appointment_attended_or_dna IN ('5', '6')
         AND op.start_date BETWEEN DATEADD(MONTH, -12, m.max_date) AND m.max_date
         AND op.main_specialty_code NOT IN ('110', '120', '130', '180')
+        AND COALESCE(op.treatment_function_code, '')
+        NOT IN ('214', '215', '216')
         AND op.sk_patient_id IS NOT NULL
         AND op.sk_patient_id != '1'
     GROUP BY op.sk_patient_id
