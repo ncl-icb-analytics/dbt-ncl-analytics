@@ -133,3 +133,16 @@ models:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "source_schema = 'DATA_LAKE.FACT_PATIENT' or observed_at is not null"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >-
+              source_schema not in (
+                'DATA_LAKE.SUS_UNIFIED_APC',
+                'DATA_LAKE.SUS_UNIFIED_OP',
+                'DATA_LAKE.SUS_UNIFIED_ECDS'
+              ) or signal_type = 'provider_volume_consensus_receipt_date'
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >-
+              source_schema != 'DATA_LAKE.DEATHS'
+              or signal_type = 'latest_batch_registration_p99'

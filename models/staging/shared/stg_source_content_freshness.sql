@@ -65,71 +65,167 @@ pds as (
     from pds_core_dates
 ),
 
+deaths_latest_observation as (
+    select max(dmic_record_valid_date_from)::timestamp_ntz as observed_at
+    from {{ ref('raw_registries_deaths_deaths') }}
+),
+
+deaths_latest_batch as (
+    select
+        datediff(day, '2000-01-01'::date, reg_date::date) as registration_day
+    from {{ ref('raw_registries_deaths_deaths') }}
+    cross join deaths_latest_observation
+    where dmic_record_valid_date_from = observed_at
+        and reg_date::date <= current_date()
+),
+
 deaths as (
     select
         'DATA_LAKE.DEATHS' as source_schema,
-        max(case when reg_date::date <= current_date() then reg_date end)::date as content_date,
-        max(dmic_record_valid_date_from)::timestamp_ntz as observed_at,
-        'latest_registration_date' as signal_type,
-        'Latest death registration date present in the feed' as signal_detail,
+        dateadd(
+            day,
+            round(percentile_cont(0.99) within group (order by registration_day)),
+            '2000-01-01'::date
+        )::date as content_date,
+        max(observed_at) as observed_at,
+        'latest_batch_registration_p99' as signal_type,
+        '99th percentile of registration dates in the latest source version' as signal_detail,
         30 as expected_days,
         null::number as sla_days,
         45 as breach_after_days
-    from {{ ref('raw_registries_deaths_deaths') }}
+    from deaths_latest_batch
+    cross join deaths_latest_observation
+),
+
+sus_receipts as (
+    select
+        'DATA_LAKE.SUS_UNIFIED_APC' as source_schema,
+        coalesce(
+            nullif(trim(spell_commissioning_service_agreement_provider_derived), ''),
+            nullif(trim(spell_commissioning_service_agreement_provider), '')
+        ) as provider,
+        system_interchange_received_date::date as receipt_date,
+        system_report_query_date::timestamp_ntz as observed_at
+    from {{ ref('raw_sus_apc_spell') }}
+    where system_interchange_received_date::date <= current_date()
+
+    union all
+
+    select
+        'DATA_LAKE.SUS_UNIFIED_OP' as source_schema,
+        coalesce(
+            nullif(trim(appointment_commissioning_service_agreement_provider_derived), ''),
+            nullif(trim(appointment_commissioning_service_agreement_provider), '')
+        ) as provider,
+        system_interchange_received_date::date as receipt_date,
+        system_report_query_date::timestamp_ntz as observed_at
+    from {{ ref('raw_sus_op_appointment') }}
+    where system_interchange_received_date::date <= current_date()
+
+    union all
+
+    select
+        'DATA_LAKE.SUS_UNIFIED_ECDS' as source_schema,
+        coalesce(
+            nullif(trim(system_record_provider), ''),
+            nullif(trim(commissioning_service_agreement_provider), ''),
+            nullif(trim(attendance_location_hes_provider_3), '')
+        ) as provider,
+        system_interchange_received_date::date as receipt_date,
+        system_report_query_date::timestamp_ntz as observed_at
+    from {{ ref('raw_sus_ecds_emergency_care') }}
+    where system_interchange_received_date::date <= current_date()
+),
+
+sus_source_latest as (
+    select
+        source_schema,
+        max(receipt_date) as latest_receipt_date,
+        max(observed_at) as observed_at
+    from sus_receipts
+    group by source_schema
+),
+
+sus_provider_activity as (
+    select
+        receipts.source_schema,
+        receipts.provider,
+        max(receipts.receipt_date) as provider_receipt_date,
+        count(*) as recent_record_count
+    from sus_receipts as receipts
+    inner join sus_source_latest as source_latest
+        on receipts.source_schema = source_latest.source_schema
+    where receipts.provider is not null
+        and receipts.receipt_date >= dateadd(day, -90, source_latest.latest_receipt_date)
+    group by receipts.source_schema, receipts.provider
+),
+
+sus_provider_coverage as (
+    select
+        source_schema,
+        provider_receipt_date,
+        sum(recent_record_count) over (
+            partition by source_schema
+            order by provider_receipt_date desc
+            rows between unbounded preceding and current row
+        ) / sum(recent_record_count) over (partition by source_schema) as cumulative_record_share
+    from sus_provider_activity
+),
+
+sus_source_consensus as (
+    select
+        source_latest.source_schema,
+        coalesce(
+            max(case when cumulative_record_share >= 0.90 then provider_receipt_date end),
+            max(source_latest.latest_receipt_date)
+        )::date as content_date,
+        max(source_latest.observed_at) as observed_at
+    from sus_source_latest as source_latest
+    left join sus_provider_coverage as provider_coverage
+        on source_latest.source_schema = provider_coverage.source_schema
+    group by source_latest.source_schema
 ),
 
 sus_apc as (
     select
-        'DATA_LAKE.SUS_UNIFIED_APC' as source_schema,
-        max(
-            case
-                when system_interchange_received_date::date <= current_date()
-                    then system_interchange_received_date
-            end
-        )::date as content_date,
-        max(system_report_query_date)::timestamp_ntz as observed_at,
-        'latest_record_received_date' as signal_type,
-        'Latest source receipt date present in admitted-patient records' as signal_detail,
+        source_schema,
+        content_date,
+        observed_at,
+        'provider_volume_consensus_receipt_date' as signal_type,
+        'Latest receipt date reached by providers representing 90% of records received in the prior 90 days' as signal_detail,
         7 as expected_days,
         null::number as sla_days,
         14 as breach_after_days
-    from {{ ref('raw_sus_apc_spell') }}
+    from sus_source_consensus
+    where source_schema = 'DATA_LAKE.SUS_UNIFIED_APC'
 ),
 
 sus_op as (
     select
-        'DATA_LAKE.SUS_UNIFIED_OP' as source_schema,
-        max(
-            case
-                when system_interchange_received_date::date <= current_date()
-                    then system_interchange_received_date
-            end
-        )::date as content_date,
-        max(system_report_query_date)::timestamp_ntz as observed_at,
-        'latest_record_received_date' as signal_type,
-        'Latest source receipt date present in outpatient records' as signal_detail,
+        source_schema,
+        content_date,
+        observed_at,
+        'provider_volume_consensus_receipt_date' as signal_type,
+        'Latest receipt date reached by providers representing 90% of records received in the prior 90 days' as signal_detail,
         7 as expected_days,
         null::number as sla_days,
         14 as breach_after_days
-    from {{ ref('raw_sus_op_appointment') }}
+    from sus_source_consensus
+    where source_schema = 'DATA_LAKE.SUS_UNIFIED_OP'
 ),
 
 sus_ecds as (
     select
-        'DATA_LAKE.SUS_UNIFIED_ECDS' as source_schema,
-        max(
-            case
-                when system_interchange_received_date::date <= current_date()
-                    then system_interchange_received_date
-            end
-        )::date as content_date,
-        max(system_report_query_date)::timestamp_ntz as observed_at,
-        'latest_record_received_date' as signal_type,
-        'Latest source receipt date present in emergency-care records' as signal_detail,
+        source_schema,
+        content_date,
+        observed_at,
+        'provider_volume_consensus_receipt_date' as signal_type,
+        'Latest receipt date reached by providers representing 90% of records received in the prior 90 days' as signal_detail,
         7 as expected_days,
         null::number as sla_days,
         14 as breach_after_days
-    from {{ ref('raw_sus_ecds_emergency_care') }}
+    from sus_source_consensus
+    where source_schema = 'DATA_LAKE.SUS_UNIFIED_ECDS'
 ),
 
 epd as (
