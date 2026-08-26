@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 /*
 One source-derived content-currency signal per profiled DATA_LAKE source.
 
@@ -86,7 +88,7 @@ deaths as (
         'DATA_LAKE.DEATHS' as source_schema,
         dateadd(
             day,
-            round(percentile_cont(0.99) within group (order by registration_day)),
+            round(percentile_cont(0.99) within group (order by registration_day))::int,
             '2000-01-01'::date
         )::date as content_date,
         max(observed_at) as observed_at,

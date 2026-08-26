@@ -125,7 +125,7 @@ models:
             expression: "breach_after_days > coalesce(sla_days, expected_days)"
       - dbt_utils.expression_is_true:
           arguments:
-            expression: "content_date is null or content_date <= current_date()"
+            expression: "content_date <= current_date()"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "content_date = consensus_content_date"
