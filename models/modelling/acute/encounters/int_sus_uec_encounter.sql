@@ -207,18 +207,24 @@ select
     , core.commissioning_national_pricing_market_forces_adjustment as mff_adjustment
 
     , core.patient_residence_ccg_from_patient_postcode as residence_area_code_at_event
-    , residence_commissioner.commissioner_name as residence_area_name_at_event
+    , coalesce(
+        residence_commissioner_exact.commissioner_name
+        , residence_commissioner_fallback.commissioner_name
+    ) as residence_area_name_at_event
     , core.commissioning_service_agreement_commissioner as assigned_commissioner_code_at_event
-    , registrant_commissioner.commissioner_name as assigned_commissioner_name_at_event
+    , coalesce(
+        registrant_commissioner_exact.commissioner_name
+        , registrant_commissioner_fallback.commissioner_name
+    ) as assigned_commissioner_name_at_event
 
     /* patient information at time of event */
     , core.patient_age_at_arrival as age_at_event
-    , core.patient_patient_type as patient_type_code
+    , core.patient_patient_type as patient_type_code_at_event
     , case
         when core.patient_patient_type = 'ADU' then 'Adult'
         when core.patient_patient_type = 'CHI' then 'Child'
         else core.patient_patient_type
-      end as patient_type_desc
+      end as patient_type_desc_at_event
     , core.patient_stated_gender as gender_at_event
     , gen.gender as gender_desc_at_event
     , core.patient_ethnic_category as ethnicity_at_event
@@ -362,21 +368,27 @@ left join
     {{ ref('stg_dictionary_dbo_hrg') }} as dict_hrg
     on core.commissioning_grouping_health_resource_group = dict_hrg.hrg_code
 
-left join commissioner_codes as residence_commissioner
-    on case
-        when length(core.patient_residence_ccg_from_patient_postcode) = 5
-          and right(core.patient_residence_ccg_from_patient_postcode, 2) = '00'
-            then left(core.patient_residence_ccg_from_patient_postcode, 3)
-        else core.patient_residence_ccg_from_patient_postcode
-    end = residence_commissioner.commissioner_code
+left join commissioner_codes as residence_commissioner_exact
+    on core.patient_residence_ccg_from_patient_postcode
+    = residence_commissioner_exact.commissioner_code
 
-left join commissioner_codes as registrant_commissioner
-    on case
-        when length(core.commissioning_service_agreement_commissioner) = 5
-          and right(core.commissioning_service_agreement_commissioner, 2) = '00'
-            then left(core.commissioning_service_agreement_commissioner, 3)
-        else core.commissioning_service_agreement_commissioner
-    end = registrant_commissioner.commissioner_code
+left join commissioner_codes as residence_commissioner_fallback
+    on residence_commissioner_exact.commissioner_code is null
+    and length(core.patient_residence_ccg_from_patient_postcode) = 5
+    and right(core.patient_residence_ccg_from_patient_postcode, 2) = '00'
+    and left(core.patient_residence_ccg_from_patient_postcode, 3)
+    = residence_commissioner_fallback.commissioner_code
+
+left join commissioner_codes as registrant_commissioner_exact
+    on core.commissioning_service_agreement_commissioner
+    = registrant_commissioner_exact.commissioner_code
+
+left join commissioner_codes as registrant_commissioner_fallback
+    on registrant_commissioner_exact.commissioner_code is null
+    and length(core.commissioning_service_agreement_commissioner) = 5
+    and right(core.commissioning_service_agreement_commissioner, 2) = '00'
+    and left(core.commissioning_service_agreement_commissioner, 3)
+    = registrant_commissioner_fallback.commissioner_code
 
 left join treatment_function_codes as treatment_function
     on core.attendance_decision_to_admit_treatment_function_code = treatment_function.bk_specialty_code
