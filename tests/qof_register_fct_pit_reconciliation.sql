@@ -13,7 +13,7 @@
     ('heart_failure', ref('fct_person_heart_failure_register'), calculate_heart_failure_register('CURRENT_DATE()')),
     ('hypertension', ref('fct_person_hypertension_register'), calculate_hypertension_register('CURRENT_DATE()')),
     ('learning_disability', ref('fct_person_learning_disability_register'), calculate_learning_disability_register('CURRENT_DATE()')),
-    ('ndh', ref('fct_person_qof_ndh_register'), calculate_qof_ndh_register('CURRENT_DATE()')),
+    ('ndh', ref('fct_person_qof_ndh_gdm_register'), calculate_qof_ndh_gdm_register('CURRENT_DATE()')),
     ('obesity', ref('fct_person_obesity_register'), calculate_obesity_register('CURRENT_DATE()')),
     ('obesity2', ref('fct_person_obesity2_register'), calculate_obesity2_register('CURRENT_DATE()')),
     ('osteoporosis', ref('fct_person_osteoporosis_register'), calculate_osteoporosis_register('CURRENT_DATE()')),

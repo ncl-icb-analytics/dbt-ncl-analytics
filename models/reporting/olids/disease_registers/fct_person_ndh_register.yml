@@ -4,7 +4,7 @@ models:
       Clinical NDH register at the current date. One row represents one person
       aged 18 or over with NDH, impaired glucose tolerance or pre-diabetes
       evidence and no unresolved diabetes. Gestational diabetes alone never
-      adds a row; use fct_person_qof_ndh_register for the QOF v51 denominator.
+      adds a row; use fct_person_qof_ndh_gdm_register for the QOF v51 denominator.
     config:
       meta:
         indicator:

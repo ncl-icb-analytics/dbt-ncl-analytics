@@ -1,5 +1,5 @@
 models:
-  - name: pit_qof_ndh_register
+  - name: pit_qof_ndh_gdm_register
     description: >
       QOF v51 NDH_REG v102 (CQRS NDHGDM) calculated as of {{ var('qof_reference_date') }}.
       One row represents one qualifying person. NDH/IGT/PRD requires age 18

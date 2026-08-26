@@ -11,7 +11,7 @@ Clinical non-diabetic hyperglycaemia register.
 One row represents one person aged 18 or over with NDH, impaired glucose
 tolerance or pre-diabetes evidence and no unresolved diabetes. The QOF v51
 gestational-diabetes route is exposed separately through
-fct_person_qof_ndh_register and cannot add a row to this model by itself.
+fct_person_qof_ndh_gdm_register and cannot add a row to this model by itself.
 */
 
 WITH ndh_diagnoses AS (

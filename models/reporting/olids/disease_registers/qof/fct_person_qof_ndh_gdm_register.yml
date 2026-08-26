@@ -1,5 +1,5 @@
 models:
-  - name: fct_person_qof_ndh_register
+  - name: fct_person_qof_ndh_gdm_register
     description: >
       QOF v51 NDH_REG v102 (CQRS NDHGDM) at the current date. One row represents one person
       on the register. It includes people aged 18 or over with NDH, impaired
@@ -7,7 +7,7 @@ models:
       diabetes. The five NDH_REG diabetes-history rules determine membership.
       This model is the QOF denominator, not a clinical NDH diagnosis cohort.
       As with the existing live fact family, future-dated evidence is retained;
-      use pit_qof_ndh_register for strict as-of membership.
+      use pit_qof_ndh_gdm_register for strict as-of membership.
     config:
       meta:
         indicator:

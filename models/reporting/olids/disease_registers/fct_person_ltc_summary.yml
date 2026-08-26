@@ -4,7 +4,7 @@ models:
 
       One row per person per condition with standardised condition codes,
       clinical domains, diagnosis dates and QOF classification. NDH rows contain
-      NDH/IGT/PRD members only; use fct_person_qof_ndh_register for the QOF v51
+      NDH/IGT/PRD members only; use fct_person_qof_ndh_gdm_register for the QOF v51
       NDH/GDM denominator.'
 
     config:
