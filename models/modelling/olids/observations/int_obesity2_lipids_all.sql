@@ -20,4 +20,3 @@ FROM (
     {{ get_observations("'LDLCCHOL_COD', 'TRIGLYC_COD', 'HDLCCHOL_COD'", source='PCD', include_history=true) }}
 ) AS obs
 WHERE TRY_CAST(obs.result_value AS FLOAT) IS NOT NULL
-

@@ -18,4 +18,3 @@ WHERE has_dyslipidaemia
       gender IN ('Female', 'F')
       AND latest_hdl_value < 1.3
   )
-

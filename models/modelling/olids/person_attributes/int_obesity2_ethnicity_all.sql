@@ -28,4 +28,3 @@ FROM (
         include_history=true
     ) }}
 ) AS obs
-

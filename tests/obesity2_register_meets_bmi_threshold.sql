@@ -9,4 +9,3 @@ WHERE latest_bmi_35_date IS NULL
       has_lower_bmi_threshold_ethnicity
       AND latest_bmi_32_5_date IS NOT NULL
   )
-

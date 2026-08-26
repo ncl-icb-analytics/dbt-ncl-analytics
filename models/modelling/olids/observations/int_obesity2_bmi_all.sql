@@ -20,4 +20,3 @@ SELECT
 FROM (
     {{ get_observations("'BMI35_COD', 'BMIVAL_COD'", source='PCD', include_history=true) }}
 ) AS obs
-

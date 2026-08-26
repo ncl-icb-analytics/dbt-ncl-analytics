@@ -31,4 +31,3 @@ models:
         description: Date recorded in the source system
       - name: source_cluster_id
         description: ASCVD_COD or OBSLPAPNOEA_COD
-

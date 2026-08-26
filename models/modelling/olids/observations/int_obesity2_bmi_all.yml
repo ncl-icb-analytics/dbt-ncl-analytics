@@ -34,4 +34,3 @@ models:
         description: Numeric BMI in kg/m2 for BMIVAL_COD rows
       - name: source_cluster_id
         description: BMI35_COD or BMIVAL_COD
-

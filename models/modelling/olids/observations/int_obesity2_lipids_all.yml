@@ -38,4 +38,3 @@ models:
         description: Display unit supplied with the result
       - name: source_cluster_id
         description: LDL, triglyceride or HDL QOF cluster identifier
-

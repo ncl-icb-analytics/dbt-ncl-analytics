@@ -32,4 +32,3 @@ models:
         description: Date recorded in the source system
       - name: source_cluster_id
         description: Lipid-lowering drug cluster identifier
-

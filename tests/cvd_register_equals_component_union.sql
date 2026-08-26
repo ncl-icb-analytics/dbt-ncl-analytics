@@ -26,4 +26,3 @@ FROM expected_membership AS expected
 FULL OUTER JOIN actual_membership AS actual
     ON expected.person_id = actual.person_id
 WHERE expected.person_id IS NULL OR actual.person_id IS NULL
-

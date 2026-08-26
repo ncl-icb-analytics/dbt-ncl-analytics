@@ -28,4 +28,3 @@ models:
         description: Date at which eligibility was evaluated
         data_tests:
           - not_null
-

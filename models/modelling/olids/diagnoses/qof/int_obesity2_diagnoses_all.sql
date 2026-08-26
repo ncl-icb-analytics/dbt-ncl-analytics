@@ -19,4 +19,3 @@ SELECT
 FROM (
     {{ get_observations("'ASCVD_COD', 'OBSLPAPNOEA_COD'", source='PCD', include_history=true) }}
 ) AS obs
-

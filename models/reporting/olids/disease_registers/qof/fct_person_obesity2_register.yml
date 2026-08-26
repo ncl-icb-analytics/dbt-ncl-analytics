@@ -104,4 +104,3 @@ models:
         description: Latest type 2 diabetes diagnosis date
       - name: latest_diabetes_resolved_date
         description: Latest diabetes resolved date
-
