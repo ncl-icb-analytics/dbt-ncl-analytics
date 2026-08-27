@@ -277,6 +277,10 @@ Treat SQL, properties and tests as one change.
   list, value set or upstream definition used instead of copying a long list of
   codes into prose. Do not invent population text for a staging or lookup model
   that does no selection.
+- Write descriptions for analysts. Project hooks publish model descriptions as
+  Snowflake object comments and `persist_docs` publishes column descriptions,
+  making them visible in Snowsight and other tools that read warehouse metadata.
+  Describe business meaning and interpretation rather than narrating the SQL.
 - New non-raw models need `config.meta.owner.name`.
 - Document columns when units, code systems, dates, null
   meaning, derivation or relationships affect interpretation.
@@ -301,11 +305,19 @@ when the change can affect consumers:
 
 ```powershell
 dbt compile -s my_model
-dbt show -s my_model --limit 20
+dbt show -s my_model --limit 20  # only when its output is safe for the tool
 dbt build -s my_model
 dbt ls -s my_model+
 dbt build -s my_model+
 ```
+
+Assume output from commands run by a coding agent is visible to its provider.
+`dbt show` executes the selected query and returns rows. Use it in an agent
+session only for synthetic or non-identifying output, or when the tool has
+approved zero-data-retention controls for that data. Apply the same rule to ad
+hoc queries and failing-test SQL. Otherwise prefer builds, tests and
+non-identifying aggregate checks, and inspect row-level data in an approved
+human-controlled tool.
 
 Use `.\build_changed.ps1` to build models changed on the branch. Add `-d` when
 downstream models may be affected and `-u` when changed models need rebuilt

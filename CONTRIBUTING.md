@@ -171,10 +171,16 @@ Validate in a tight loop:
 
 ```powershell
 dbt compile -s model_name
-dbt show -s model_name --limit 20
+dbt show -s model_name --limit 20  # only when its output is safe for the tool
 dbt build -s model_name
 dbt build -s model_name+
 ```
+
+`dbt show` executes the selected query and returns rows. Use it through a coding
+agent only for synthetic or non-identifying output, or when the tool has approved
+zero-data-retention controls for that data. Apply the same rule to ad hoc queries
+and failing-test SQL. Otherwise use builds, tests and non-identifying aggregate
+checks, and inspect row-level data in an approved human-controlled tool.
 
 Build downstream only where the change can affect consumers. If the full
 selection is too large, build direct children and state the limit in the pull
