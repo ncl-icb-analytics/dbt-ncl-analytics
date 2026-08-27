@@ -93,6 +93,17 @@ the pull request description with the problem and why it matters, then explain
 the solution, what you checked and where review is needed. Do not add agent,
 model or harness attribution to commits or pull requests.
 
+Recent history shows the difference. The scope names are incidental; the
+stronger examples say what was won or corrected:
+
+- Weak title: `feat: covid flu wide fix`
+- Stronger title: `fix(olids): allow empty missing-practice views`
+- Weak opening: `add a thin snapshot input containing only source_schema and
+  content_date`
+- Stronger opening: `The missing-practice views can legitimately return no rows
+  when every reference practice is present in OLIDS. Requiring at least one row
+  causes valid empty results to fail CI.`
+
 A draft pull request is fine while decisions, implementation or validation
 remain; CodeRabbit reviews drafts in this repository. Before requesting human
 review, check the branch against current `main` and surface any conflict. Do not
