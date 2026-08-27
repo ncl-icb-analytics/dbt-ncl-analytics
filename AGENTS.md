@@ -7,12 +7,19 @@ reasoning behind it.
 
 Look carefully before changing anything. Understand the intended outcome, the
 real constraint and the relevant surrounding code, configuration and lineage.
-Then make the smallest coherent change that makes the correct behaviour easy to
-understand. Solve the need in front of you; do not add flexibility, models,
-macros or configuration for hypothetical future requirements. Reuse settled
-code where it fits, but do not preserve complexity merely because it already
-exists. Keep the work focused; simplify nearby code only when that is needed to
-make the requested change clear and safe.
+Prefer the smallest coherent design, not necessarily the smallest diff or the
+narrowest answer to today's question. Reuse settled contracts where they fit,
+but do not preserve complexity merely because it already exists.
+
+Many healthcare objects in the warehouse are not yet represented in dbt. When
+work opens a new domain, aim for generally useful models of durable entities or
+concepts at an explicit grain. Include fields and shared definitions that belong
+to that contract and have plausible analytical use; do not bury shared domain
+logic in a report-specific pipeline or copy every available source column.
+Avoid abstractions, extra layers, macros or configuration that serve only
+imagined future requirements. If a reusable domain design would materially
+widen the requested change, explain the opportunity and agree the boundary with
+the user before implementing it.
 
 If the proposed direction is likely to produce wrong results, an unclear
 contract, a duplicate pipeline or avoidable cost and maintenance, say so before
