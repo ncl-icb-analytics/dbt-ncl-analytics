@@ -4,6 +4,11 @@ This is the repository-wide checklist for model work. The
 [dbt onboarding handbook](https://dbt-onboarding.vercel.app/) is the main guide
 to the reasoning behind these conventions.
 
+Here, a model contract means its subject, one-row grain, population and time
+scope, output columns and meanings, and intended uses. It does not mean dbt's
+`contract.enforced` feature unless that feature is named. A model family means
+models for the same subject that share an established folder or naming prefix.
+
 ## Start with the contract
 
 Before writing SQL:
@@ -11,11 +16,11 @@ Before writing SQL:
 1. State the subject and grain. Add the population and time basis when the model
    selects or derives them.
 2. Search model names, YAML and lineage for an existing contract.
-3. Start with the most settled layer that fits the use: published for its named
-   product, reporting for business-ready analysis, then modelling when shared
-   meaning is still missing.
-4. Decide whether to reuse, compose, extend or create. When an existing model
-   overlaps the proposed contract, record why it does not fit.
+3. Start with the most downstream established contract that fits: the product's
+   published model when changing that product, reporting for direct analysis,
+   then modelling when shared meaning is missing.
+4. Reuse, compose or extend where possible. Before creating an overlapping
+   model, explain why the existing contract does not fit.
 
 ## Public repository data safety
 
@@ -59,8 +64,9 @@ create a cycle.
 | Partner | Serve governed partner datasets and their access mapping. Keep partner policy out of shared reporting models. | `ptr_` for partner-facing marts |
 | Semantic | Define Snowflake semantic views over established models. Keep facts, dimensions and metrics aligned with their source contracts. | `sem_` |
 
-Downstream models may narrow or tailor a shared definition, but must not silently
-contradict it.
+Downstream models may narrow or tailor a shared definition. Make the narrower
+scope explicit in the path, name and description; do not silently contradict the
+shared definition.
 
 Each source object has one staging interface. Reuse or extend that
 model instead of adding another staging model for a pipeline, migration or
@@ -79,10 +85,10 @@ Use one model for one coherent responsibility, not one model for each
 transformation or CTE. Several steps belong together when they describe the
 same concept and normally change for the same reason.
 
-Split a model when parts have independent grains, tests, owners, consumers,
-reuse or reasons to change. A split should give each contract a clear home; it
-should not create a deep dependency chain of fragments that have no meaning on
-their own.
+Split a model when parts have independent grains, tests, business stakeholders,
+consumers, reuse or reasons to change. A split should give each contract a clear
+home; it should not create a deep dependency chain of fragments that have no
+meaning on their own.
 
 ## Programme-specific models
 
@@ -150,13 +156,14 @@ it.
   reshape long, nested or repeated `CASE` expressions when their branching hides
   the business rule or makes it hard to test. Use a named model, CTE or lookup
   only when it makes the rule clearer.
-- Give a business definition one owner when more than one model depends on it.
-  Do not repeat the same maintained provider list, code set, threshold or date
-  rule across model SQL. Join to the shared, reference or programme-scoped model
-  that owns maintained data; use a macro for reused SQL logic and a project
-  variable only for a value intended to be supplied per run or environment. A
-  value that defines one model's concept belongs in that model even if it may
-  change. Do not create another DAG node merely to extract a local literal.
+- Give a business definition one canonical home when more than one model depends
+  on it. Do not repeat the same maintained provider list, code set, threshold or
+  date rule across model SQL. Join to the shared, reference or programme-scoped
+  model that is the canonical home for maintained data; use a macro for reused
+  SQL logic and a project variable only for a value intended to be supplied per
+  run or environment. A value that defines one model's concept belongs in that
+  model even if it may change. Do not create another DAG node merely to extract
+  a local literal.
 - All output columns from staging onward must be unquoted `snake_case`, except
   in published models. Published models may use quoted consumer-facing names
   with spaces, case or punctuation and do not need to remove those characters.
@@ -200,11 +207,12 @@ it.
 - Analyst-facing reporting and published models should not expose an opaque
   category code or number as the only usable value. Include its authoritative
   label from the source when available; otherwise join to the shared reference
-  model that owns the description. Retain the code alongside the label when it
-  supports traceability, stable filtering or joins. A modelling block may remain
-  code-only when a downstream supported interface supplies the labels. Do not
-  invent labels or repeat maintained mappings in local `case` expressions.
-- Put organisation-wide definitions and terminology in shared models. Keep
+  model where the description is maintained. Retain the code alongside the label
+  when it supports traceability, stable filtering or joins. A modelling block
+  may remain code-only when a downstream reporting or published interface
+  supplies the labels. Do not invent labels or repeat maintained mappings in
+  local `case` expressions.
+- Put project-wide definitions and terminology in shared models. Keep
   programme, audience and product rules or vocabulary in the folders or schemas
   that own them, with their scope visible in model names.
 
@@ -275,7 +283,7 @@ Keep those rules visible in readable SQL rather than adding syntax to the seed.
 
 ## YAML, documentation and tests
 
-Treat SQL, properties and contract tests as one change. This project does not
+Treat SQL, model YAML and contract tests as one change. This project does not
 use test-driven development. Every model must test its stated grain with its key
 or key combination. Beyond grain, add a permanent test only when it protects a
 durable contract or an error likely to recur. Tests run on every build and
@@ -293,21 +301,25 @@ assertions already owned upstream.
   Snowflake object comments and `persist_docs` publishes column descriptions,
   making them visible in Snowsight and other tools that read warehouse metadata.
   Describe business meaning and interpretation rather than narrating the SQL.
-- New non-raw models need `config.meta.owner.name`.
+- New non-raw models need `config.meta.owner.name`. The owner is the business
+  stakeholder or group accountable for the model's meaning and use, not a
+  repository maintainer or code author merely because they made the change.
 - Document columns when units, code systems, dates, null
   meaning, derivation or relationships affect interpretation.
 - New and changed test blocks use `data_tests`. Do not require an enhancement to
   migrate an untouched legacy `tests` block.
 - Focus tests on assumptions most likely to break when sources or rules change:
   grain, join uniqueness, population boundaries and membership of maintained
-  lists. Prefer a relationship test to the model that owns a changing list over
-  copying its values into an accepted-values test. Add accepted-value, not-null
-  and relationship tests only when the contract makes them true. Valid nulls or
-  out-of-scope parents should not be forced away to satisfy a generic test.
+  lists. Prefer a relationship test to the model where a changing list is
+  maintained over copying its values into an accepted-values test. Add
+  accepted-value, not-null and relationship tests only when the contract makes
+  them true. Valid nulls or out-of-scope parents should not be forced away to
+  satisfy a generic test.
 - Put a test where its promise is made. Downstream models should test their new
   composition and grain, not copy every upstream assertion.
-- Use singular tests for domain rules that generic tests cannot express. Return
-  columns that identify and explain failing rows.
+- Use singular tests for domain rules that generic tests cannot express. Select
+  only the model keys and context needed to diagnose a failure. Treat any
+  returned rows as potentially patient-level under the safety rules above.
 
 ## Validate the change
 
@@ -321,27 +333,33 @@ dbt ls -s my_model+
 dbt build -s my_model+
 ```
 
+A pull request should normally merge only after it demonstrates correct
+behaviour, a clear model contract and performance suitable for the expected
+scale. This does not require speculative tuning or a benchmark for an ordinary
+change.
+
 Assume output from commands run by a coding agent is visible to its provider.
 `dbt show` executes SQL and returns its result. Use it sparingly in an agent
 session, and only when the query is designed to return a high-level,
 non-identifying aggregate. Do not use it to preview model rows. When validation
 needs row-level inspection, give the user a ready-to-run Snowflake-native query
-for an approved human-controlled tool and ask only for the non-identifying
-aggregate or confirmation needed. Apply the same rule to ad hoc queries and
-failing-test SQL.
+for a human-controlled Snowflake session approved for patient-level data. Ask
+only for the non-identifying aggregate or confirmation needed. Apply the same
+rule to ad hoc queries and failing-test SQL.
 
 Use `.\build_changed.ps1` to build models changed on the branch. Add `-d` when
-downstream models may be affected and `-u` when changed models need rebuilt
-parents.
+downstream models may be affected and `-u` when their parent models must also be
+rebuilt.
 
 For logic changes, compare development and production with aggregate or
-non-identifying checks. Never put credentials, identifiers, row-level outputs or
-screenshots of real data in this public repository or its pull requests.
+non-identifying checks. Never put credentials, identifier values, row-level
+outputs or screenshots of real data in this public repository or its pull
+requests.
 
 A pull request needs enough context to explain why the change exists. One clear
 sentence can be enough for a small change. Add changed behaviour, checks,
-downstream limits or points for reviewer judgement when they help someone assess
-the change.
+downstream limits or questions needing reviewer judgement when they help someone
+assess the change.
 
 ## Review scope
 
@@ -351,22 +369,21 @@ sweeping redesign of code that was already there.
 
 First identify the change type:
 
-- A new model puts its responsibility, boundary, scope and name in review.
-- An enhancement puts the addition and its effect on the existing contract in
-  review; redesign of inherited code is not implied.
-- An explicitly transitional legacy migration must still obey raw/staging
-  boundaries, preserve its stated grain and avoid unsafe behaviour. When faithful
-  parity is the stated goal, inherited internal design can be recorded as a
-  non-blocking follow-up rather than rebuilt in the migration pull request.
+- For a new model, review its responsibility, boundary, scope and name.
+- For an enhancement, review the addition and its effect on the existing
+  contract; do not imply a redesign of inherited code.
+- For an explicitly transitional legacy migration, enforce raw/staging
+  boundaries, grain and safety. When matching the legacy output is the stated
+  goal, record inherited internal design as a non-blocking follow-up rather than
+  rebuilding it in the migration pull request.
 
 Pre-existing design debt should block the pull request only when the change
 worsens it, depends on it, or cannot be merged safely without resolving it.
-Reviewers may still mention a concern visible in the reviewed area when recording
-it will help future work. Label it `follow-up (non-blocking):`, keep it out of the
-merge recommendation and do not expand the review into a search for unrelated
-debt. If an addition gives the model a second responsibility, review the new
-boundary needed for that addition rather than requiring the contributor to
-rebuild the whole model.
+Reviewers may still record a concern visible in the changed area when it will
+help future work. Label it `follow-up (non-blocking):`, keep it out of the merge
+recommendation and do not search for unrelated debt. If an addition gives the
+model a second responsibility, review the boundary needed for that addition
+rather than requiring the contributor to rebuild the whole model.
 
 When SQL, descriptions and tests disagree about business behaviour, flag the
 contradiction and ask which contract is authoritative. Do not prescribe a
