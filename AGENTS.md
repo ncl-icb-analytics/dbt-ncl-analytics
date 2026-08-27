@@ -113,8 +113,7 @@ the pull request description with the problem and why it matters, then explain
 the solution, what you checked and where review is needed. Do not add agent,
 model or harness attribution to commits or pull requests.
 
-Recent history shows the difference. The scope names are incidental; the
-stronger examples say what was won or corrected:
+Focus on what was won or corrected. The scope name is secondary:
 
 - Weak title: `feat: covid flu wide fix`
 - Stronger title: `fix(olids): allow empty missing-practice views`
