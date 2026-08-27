@@ -69,12 +69,12 @@ data; high-level aggregates are valid evidence when they cannot identify anyone.
 Do not repeat suspected sensitive values. Alert repository maintainers because
 deleting the latest diff does not remove public history.
 
-Assume command output is visible to the agent provider. `dbt show` executes the
-model query and returns rows: use it in an agent session only for synthetic or
-non-identifying output, or when the tool has approved zero-data-retention
-controls for that data. If row-level inspection is needed and those conditions
-are not met, do not run it. Give the user a ready-to-run Snowflake-native query
-for an approved human-controlled tool, and ask only for the non-identifying
-aggregate or confirmation needed; do not ask them to paste row-level results
-into the agent session. Apply the same rule to ad hoc queries and failing-test
-SQL. Otherwise prefer builds, tests and non-identifying aggregate checks.
+Assume command output is visible to the agent provider. `dbt show` executes SQL
+and returns its result. Use it sparingly, and only when the query is designed to
+return a high-level, non-identifying aggregate. Do not use it to preview model
+rows. If validation needs row-level inspection, give the user a ready-to-run
+Snowflake-native query for an approved human-controlled tool, and ask only for
+the non-identifying aggregate or confirmation needed; do not ask them to paste
+row-level results into the agent session. Apply the same rule to ad hoc queries
+and failing-test SQL. Otherwise prefer builds, tests and non-identifying
+aggregate checks.
