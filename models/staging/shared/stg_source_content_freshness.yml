@@ -4,7 +4,7 @@ models:
   - name: stg_source_content_freshness
     description: >
       Source-specific content-currency signals used by the reporting freshness
-      contract. PDS is marked for platform-monitor fallback.
+      contract. Every row is derived from fields inside the source data.
     config:
       meta:
         owner:
