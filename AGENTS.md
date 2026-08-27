@@ -40,6 +40,13 @@ Before writing SQL:
   source or a shared reference model. A modelling block may remain code-only
   when the downstream analyst-facing interface supplies the labels.
 
+The aim of reporting is to make each domain easy for analysts to understand and
+use. Choose the grain and output columns deliberately. Keep fields that explain
+the subject or support analysis; remove duplicate, unused or mostly empty fields
+when they have no clear analytical value. Do not carry columns forward merely
+because they exist upstream. Use names and descriptions that let an analyst
+interpret the model without reading its SQL.
+
 Remember that project configuration is part of the model:
 
 - Folder placement supplies the database, schema, materialisation, tags and
@@ -47,11 +54,15 @@ Remember that project configuration is part of the model:
   apply grants, comments and governance. Check nearby models and inherited
   config before adding an override; call out `dbt_project.yml` changes because
   they can affect many models.
-- Write YAML descriptions for analysts, not as implementation notes. Project
-  hooks publish model descriptions as Snowflake object comments, while
-  `persist_docs` publishes column descriptions. They appear in Snowsight and
-  other tools that read warehouse metadata. Describe grain, population, time,
-  units, codes and null meaning where they affect interpretation.
+- Write YAML descriptions as short analyst-facing contracts, not implementation
+  notes. State the subject, what one row represents and the population scope. If
+  the model introduces complex inclusion or exclusion rules, explain them
+  clearly enough for an analyst to understand who or what is selected, including
+  material thresholds, dates and the definition used. Do not write an essay or
+  narrate the SQL. Project hooks publish model descriptions as Snowflake object
+  comments, while `persist_docs` publishes column descriptions. They appear in
+  Snowsight and other tools that read warehouse metadata. Document units, codes
+  and null meaning where they affect interpretation.
 
 Keep SQL, descriptions, stakeholder ownership and contract tests together. Test
 every model's stated grain with its key or key combination. This project does
