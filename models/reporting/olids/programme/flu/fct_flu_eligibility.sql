@@ -18,10 +18,12 @@ Usage:
 - Specific campaign: dbt run --vars '{"flu_current_campaign": "flu_2025_26"}'
 - For vaccination tracking, use fct_flu_status instead
 - This replaces all the old complex macro-based models
+- Rule/campaign category groups simplified and aligned.
 */
 
 {{ config(
     materialized='table',
+    tags=['covid_flu'],
     cluster_by=['campaign_id', 'person_id', 'campaign_category']
 ) }}
 
@@ -30,183 +32,115 @@ WITH
 age_based_eligibility AS (
     -- Over 65
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'AGE_BASED' AS rule_type, 1 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_over_65') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.INT_FLU_OVER_65
     
     UNION ALL
     
     -- Children preschool age
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'AGE_BASED' AS rule_type, 1 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_children_preschool') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_children_preschool
     
     UNION ALL
     
     -- Children school age
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'AGE_BASED' AS rule_type, 1 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_children_school_age') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_children_school_age
 ),
 
--- Simple clinical condition eligibility
+-- Simple clinical condition eligibility for Under 65 at Risk
 clinical_condition_eligibility AS (
-    -- Chronic Heart Disease
+ -- under_65_at_risk
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, campaign_category, 'Under 65 at risk' as risk_group, risk_group as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'CLINICAL_CONDITION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_chronic_heart_disease') }}
-    
-    UNION ALL
-    
-    -- Chronic Liver Disease
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'CLINICAL_CONDITION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_chronic_liver_disease') }}
-    
-    UNION ALL
-    
-    -- Chronic Neurological Disease
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'CLINICAL_CONDITION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_chronic_neurological_disease') }}
-    
-    UNION ALL
-    
-    -- Asplenia
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'CLINICAL_CONDITION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_asplenia') }}
-    
-    UNION ALL
-    
-    -- Learning Disability
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'CLINICAL_CONDITION' AS rule_type, 4 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_learning_disability') }}
-    
-    UNION ALL
-    
-    -- Household Immunocompromised Contact
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'SOCIAL_FACTOR' AS rule_type, 4 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_household_immunocompromised') }}
-),
+    FROM {{ ref('int_flu_under_65_at_risk') }}
+     --FROM MODELLING.OLIDS_PROGRAMME.int_flu_under_65_at_risk
+    ),
 
--- Complex clinical condition eligibility (combination/hierarchical/exclusion rules)
-complex_clinical_eligibility AS (
-    -- Asthma (combination rule)
+-- Other non clinical risk eligibility for Under 65 at Risk
+other_risk_eligibility AS ( 
+ -- Health & Social Care Workers (Other rule)
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'COMBINATION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_asthma') }}
-    
-    UNION ALL
-    
-    -- CKD (hierarchical rule)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'HIERARCHICAL' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_chronic_kidney_disease') }}
-    
-    UNION ALL
-    
-    -- Diabetes (exclusion rule)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'EXCLUSION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_diabetes') }}
-    
-    UNION ALL
-    
-    -- Immunosuppression (combination rule)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'COMBINATION' AS rule_type, 2 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_immunosuppression') }}
-    
-    UNION ALL
-    
-    -- Health & Social Care Workers (combination rule)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'COMBINATION' AS rule_type, 4 AS eligibility_priority, created_at
+        'OTHER' AS rule_type, 4 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_health_social_care_worker') }}
-    
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_health_social_care_worker 
+      
     UNION ALL
-    
-    -- Chronic Respiratory Disease (combination rule)
+
+     -- Homeless (Other rule)
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'COMBINATION' AS rule_type, 3 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_chronic_respiratory_disease') }}
-    
-    UNION ALL
-    
-    -- Severe Obesity (hierarchical rule)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'HIERARCHICAL' AS rule_type, 4 AS eligibility_priority, created_at
-    FROM {{ ref('int_flu_severe_obesity') }}
-    
-    UNION ALL
-    
-    -- Homeless (hierarchical rule)
-    SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
-        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'HIERARCHICAL' AS rule_type, 4 AS eligibility_priority, created_at
+        'OTHER' AS rule_type, 4 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_homeless') }}
-    
-    UNION ALL
-    
-    -- Long-term Residential Care (hierarchical rule)
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_homeless
+
+   UNION ALL
+
+    -- Long-term Residential Care (Other rule)
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'HIERARCHICAL' AS rule_type, 2 AS eligibility_priority, created_at
+        'OTHER' AS rule_type, 2 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_long_term_residential_care') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_long_term_residential_care
     
     UNION ALL
-    
-    -- Pregnancy (hierarchical rule)
+
+     -- Pregnancy (Other rule)
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'HIERARCHICAL' AS rule_type, 2 AS eligibility_priority, created_at
+        'OTHER' AS rule_type, 2 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_pregnancy') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_pregnancy
     
     UNION ALL
     
-    -- Carer (exclusion rule)
+    -- Carer (Other rule)
     SELECT 
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date, reference_date,
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
-        'EXCLUSION' AS rule_type, 5 AS eligibility_priority, created_at
+        'OTHER' AS rule_type, 5 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_carer') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_carer
+
+     UNION ALL
+    
+    -- Severe Obesity (Other rule)
+    SELECT 
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
+        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
+        'OTHER' AS rule_type, 4 AS eligibility_priority, created_at
+    FROM {{ ref('int_flu_severe_obesity') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_severe_obesity
+
+     UNION ALL
+    
+     -- Learning Disability (Other rule)
+    SELECT 
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
+        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
+        'OTHER' AS rule_type, 4 AS eligibility_priority, created_at
+    FROM {{ ref('int_flu_learning_disability') }}
+    --FROM MODELLING.OLIDS_PROGRAMME.int_flu_learning_disability 
+
+   
 ),
 
 -- Union all eligibility types (vaccination tracking removed - belongs in separate table)
@@ -215,8 +149,9 @@ all_eligibility AS (
     UNION ALL
     SELECT * FROM clinical_condition_eligibility  
     UNION ALL
-    SELECT * FROM complex_clinical_eligibility
+    SELECT * FROM other_risk_eligibility
 ),
+
 
 -- Final formatting (campaign information already included in intermediate models)
 final_eligibility AS (
@@ -224,6 +159,7 @@ final_eligibility AS (
         campaign_id,
         campaign_category,
         risk_group,
+        subcohort,
         person_id,
         qualifying_event_date,
         reference_date,

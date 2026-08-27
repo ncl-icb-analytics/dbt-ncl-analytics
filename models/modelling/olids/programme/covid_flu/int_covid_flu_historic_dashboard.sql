@@ -1,6 +1,7 @@
 {{
     config(
         materialized='table',
+        tags=['covid_flu'],
         cluster_by=['programme_type', 'campaign_id', 'practice_code', 'person_id']
     )
 }}
@@ -35,11 +36,11 @@ ward_code,
 ward_name,
 imd_quintile_25,
 imd_decile_25,
---extra LTCS
-has_ckd,
-has_chd,
-has_dm,
-has_ast
+-- --extra LTCS
+-- has_ckd,
+-- has_chd,
+-- has_dm,
+-- has_ast
 --from REPORTING.OLIDS_PERSON_ANALYTICS.PERSON_MONTH_ANALYSIS_BASE
 FROM {{ ref('person_month_analysis_base') }}
 where analysis_month = '2025-09-30'
@@ -126,11 +127,11 @@ where analysis_month = '2025-09-30'
         p.is_early_years_age,
         p.is_primary_school_age,
         p.is_secondary_school_age,
-        -- extra LTCS
-        p.has_ckd,
-        p.has_chd,
-        p.has_dm,
-        p.has_ast,
+        -- -- extra LTCS
+        -- p.has_ckd,
+        -- p.has_chd,
+        -- p.has_dm,
+        -- p.has_ast,
         -- Flu vaccination setting (Early Years at GP for ages 2-3, School-based for Reception-Year 11)
         CASE
             WHEN u.programme_type = 'FLU' THEN
@@ -149,6 +150,7 @@ where analysis_month = '2025-09-30'
         u.is_eligible,
         u.campaign_category,
         u.risk_group,
+        u.subcohort,
         --u.eligibility_reason,
         --u.rule_type,
         

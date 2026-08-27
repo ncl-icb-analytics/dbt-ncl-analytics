@@ -138,14 +138,14 @@ people_with_ckd_eligible_with_age AS (
 
 -- Step 6: Format for eligibility table
 final_eligible AS (
-    SELECT 
+    SELECT distinct
         campaign_id,
         'CLINICAL_CONDITION' AS campaign_category,
         'Chronic Kidney Disease' AS risk_group,
         person_id,
         qualifying_event_date,
         campaign_reference_date AS reference_date,
-        CONCAT('Chronic kidney disease: ', eligibility_reason) AS description,
+        'People with chronic kidney disease' AS description,
         birth_date_approx,
         age_months_at_ref_date,
         age_years_at_ref_date,

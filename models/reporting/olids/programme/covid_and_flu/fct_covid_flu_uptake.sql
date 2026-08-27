@@ -27,6 +27,7 @@ Usage:
 
 {{ config(
     materialized='table',
+    tags=['covid_flu'],
     cluster_by=['programme_type', 'campaign_id', 'person_id']
 ) }}
 
@@ -41,6 +42,7 @@ WITH covid_uptake AS (
         is_eligible,
         campaign_category,
         risk_group,
+        subcohort,  
         eligibility_reason,
         rule_type,
         
@@ -80,6 +82,7 @@ flu_uptake AS (
         is_eligible,
         campaign_category,
         risk_group,
+        subcohort,
         eligibility_reason,
         rule_type,
         
@@ -119,6 +122,7 @@ final_combined AS (
     SELECT 
         programme_type,
         campaign_id,
+        subcohort,
         
         -- Extract campaign year for easier analysis
         CASE 
