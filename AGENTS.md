@@ -1,117 +1,88 @@
 # Working in dbt-analytics
 
 This is a public NHS dbt project on Snowflake. Read
-`PROJECT_CONVENTIONS.md` before model work; the
+`PROJECT_CONVENTIONS.md` before model work. The
 [dbt onboarding handbook](https://dbt-onboarding.vercel.app/) explains the
 reasoning behind it.
 
-Look carefully before changing anything. Understand the intended outcome, the
-real constraint and the relevant surrounding code, configuration and lineage.
-Prefer the smallest coherent design, not necessarily the smallest diff or the
-narrowest answer to today's question. Reuse settled contracts where they fit,
-but do not preserve complexity merely because it already exists.
+Inspect the intended outcome, real constraint, related contracts, configuration
+and lineage before editing. Prefer the smallest coherent design, not the
+smallest diff or narrowest answer. Reuse settled contracts, but do not preserve
+complexity merely because it exists.
 
-Many healthcare objects in the warehouse are not yet represented in dbt. When
-work opens a new domain, aim for generally useful models of durable entities or
-concepts at an explicit grain. Include fields and shared definitions that belong
-to that contract and have plausible analytical use; do not bury shared domain
-logic in a report-specific pipeline or copy every available source column.
-Avoid abstractions, extra layers, macros or configuration that serve only
-imagined future requirements. If a reusable domain design would materially
-widen the requested change, explain the opportunity and agree the boundary with
-the user before implementing it.
+Many warehouse healthcare objects are not yet represented in dbt. For a new
+domain, model generally useful, durable entities or concepts at an explicit
+grain. Include fields and shared definitions with plausible analytical use; do
+not bury shared domain logic in a report-specific pipeline or copy every source
+column. If this would materially widen the request, explain the opportunity and
+agree the boundary with the user.
 
 Use familiar engineering shorthand deliberately:
 
-- Measure twice, cut once: inspect the relevant contracts, lineage and
-  consequences before editing.
-- YAGNI: do not build machinery for imagined needs. It does not mean reducing a
-  new domain to today's report.
-- KISS and simple design: prefer readable SQL and obvious model contracts over
-  clever abstractions.
-- DRY and the Rule of Three: centralise a stable shared business definition;
-  wait for an implementation pattern to prove itself before abstracting it.
+- Measure twice, cut once: inspect contracts, lineage and consequences first.
+- YAGNI: reject imagined machinery, not reusable domain modelling.
+- KISS and simple design: prefer readable SQL and obvious contracts.
+- DRY and the Rule of Three: centralise stable business definitions; abstract
+  implementation patterns only after they prove stable.
 - Make it work, make it right, make it fast: establish the correct contract,
-  make the design clear, then tune a plausible or demonstrated cost.
+  clarify the design, then tune a plausible or demonstrated cost.
 
-If the proposed direction is likely to produce wrong results, an unclear
-contract, a duplicate pipeline or avoidable cost and maintenance, say so before
-implementing it. Explain the concrete consequence and offer the smallest
-realistic alternative. Do not turn design feedback into an unrequested
-redesign. When both approaches are safe and compatible with project rules, let
-the user decide and follow that decision.
-
-Use these instructions as project defaults, not as a substitute for judgement.
-The requested outcome and the model's established contract should guide the
-implementation. If a default does not fit, explain the trade-off rather than
-applying it mechanically. Public-data safety and the raw-to-staging boundary
-remain hard constraints. Make routine, reversible implementation choices
-yourself. Defer to the user when the intended outcome or clinical or business
-meaning is unclear, when the authority for a definition is uncertain, or when a
-decision would materially widen the scope, change an analyst-facing contract or
-be hard to reverse.
+Raise a concern before implementing a direction likely to cause wrong results,
+an unclear contract, a duplicate pipeline or avoidable cost. State the
+consequence and offer the smallest realistic alternative without turning it
+into an unrequested redesign. Make routine, reversible choices yourself. Ask
+the user when meaning, authority, scope or an analyst-facing contract is unclear
+or a decision is hard to reverse. When both choices are safe and follow project
+rules, let the user decide. Public-data safety and the raw-to-staging boundary
+are hard constraints.
 
 Before writing SQL:
 
 - State the subject and grain. Add population and time when the model selects or
   derives them.
 - Search model names, YAML and lineage. Start from the most settled useful model
-  and move upstream only when the required contract is missing.
-- Reuse, compose or extend an existing contract where it fits. Create a model or
-  seed only for a distinct, durable contract; do not invent a parallel pipeline.
+  and move upstream only when its contract is insufficient. Reuse, compose or
+  extend where possible; create a model or seed only for a distinct, durable
+  contract.
 - Only staging may consume raw. Hand-written models use `ref()`.
 - Do not guess clinical meaning. Make population, code-list, threshold and date
   rules visible, and ask when their authority or interpretation is unclear.
-- Use SQL comments to explain non-obvious business meaning, source quirks or why
-  a surprising choice is needed. Do not narrate obvious SQL. Update or remove a
-  comment when its logic changes.
-- Make supported reporting and published models understandable without extra
-  analyst lookups. Pair categorical codes with authoritative labels from the
-  source or a shared reference model. A modelling block may remain code-only
-  when the downstream analyst-facing interface supplies the labels.
+- Use SQL comments for non-obvious meaning, source quirks or surprising choices,
+  not to narrate SQL. Update or remove them when the logic changes.
+- Treat reporting and published models as analyst interfaces. Choose grain and
+  columns deliberately; remove duplicate, unused or mostly empty fields without
+  analytical value. Use clear names and pair opaque codes with authoritative
+  labels. A modelling block may remain code-only when the downstream interface
+  supplies the labels.
 
-The aim of reporting is to make each domain easy for analysts to understand and
-use. Choose the grain and output columns deliberately. Keep fields that explain
-the subject or support analysis; remove duplicate, unused or mostly empty fields
-when they have no clear analytical value. Do not carry columns forward merely
-because they exist upstream. Use names and descriptions that let an analyst
-interpret the model without reading its SQL.
+Project configuration is part of the model. Folder placement inherits database,
+schema, materialisation, tags and hooks from `dbt_project.yml`; check nearby
+models before overriding it and call out changes with wider effects. Tags drive
+schedules; hooks apply grants, comments and governance.
 
-Remember that project configuration is part of the model:
-
-- Folder placement supplies the database, schema, materialisation, tags and
-  post-hooks through `dbt_project.yml`. Tags drive build schedules and hooks
-  apply grants, comments and governance. Check nearby models and inherited
-  config before adding an override; call out `dbt_project.yml` changes because
-  they can affect many models.
-- Write YAML descriptions as short analyst-facing contracts, not implementation
-  notes. State the subject, what one row represents and the population scope. If
-  the model introduces complex inclusion or exclusion rules, explain them
-  clearly enough for an analyst to understand who or what is selected, including
-  material thresholds, dates and the definition used. Do not write an essay or
-  narrate the SQL. Project hooks publish model descriptions as Snowflake object
-  comments, while `persist_docs` publishes column descriptions. They appear in
-  Snowsight and other tools that read warehouse metadata. Document units, codes
-  and null meaning where they affect interpretation.
+Write YAML descriptions as short analyst-facing contracts. State the subject,
+what one row represents and the population scope. Explain material inclusion or
+exclusion rules, thresholds, dates and definitions without narrating the SQL.
+Project hooks publish model descriptions and `persist_docs` publishes column
+descriptions to Snowflake metadata used by Snowsight and other tools. Document
+units, codes and null meaning where they affect interpretation.
 
 Keep SQL, descriptions, stakeholder ownership and contract tests together. Test
-every model's stated grain with its key or key combination. This project does
-not use test-driven development. Beyond grain, add a permanent test only when it
-protects a durable contract or an error likely to recur. Tests run on every
-build and consume Snowflake compute, so do not test implementation details or
-repeat assertions already owned upstream.
+every model's grain with its key or key combination. This project does not use
+test-driven development. Beyond grain, add permanent tests only for durable
+contracts or errors likely to recur. Tests run on every build and consume
+Snowflake compute; do not test implementation details or repeat upstream
+assertions.
 
-Check downstream impact with `dbt ls -s model_name+`. Validate the smallest
-useful selection with `dbt compile` and `dbt build`, then build affected
-downstream models when the contract can change their results. Use `dbt show`
-only under the data-safety rules below.
+Check downstream impact with `dbt ls -s model_name+`. Compile and build the
+smallest useful selection, then build downstream models whose results may
+change. Use `dbt show` only under the data-safety rules below.
 
-Check the branch, worktree status and diff, and preserve unrelated work. Never
-work on `main`; use a `type/short-description` branch. Use Conventional Commit
-form for commits and the pull request title. Before pushing, read the diff. Open
-the pull request description with the problem and why it matters, then explain
-the solution, what you checked and where review is needed. Do not add agent,
-model or harness attribution to commits or pull requests.
+Check the branch and worktree status, preserve unrelated work and read the diff
+before pushing. Never work on `main`; use a `type/short-description` branch. Use
+Conventional Commit form for commits and the pull request title. Open the
+description with the problem and why it matters, then give the solution,
+validation and review focus. Do not add agent, model or harness attribution.
 
 Focus on what was won or corrected. The scope name is secondary:
 
@@ -123,30 +94,25 @@ Focus on what was won or corrected. The scope name is secondary:
   when every reference practice is present in OLIDS. Requiring at least one row
   causes valid empty results to fail CI.`
 
-A draft pull request is fine while decisions, implementation or validation
-remain; CodeRabbit reviews drafts in this repository. Before requesting human
-review, check the branch against current `main` and surface any conflict. Do not
-rebase or force-push a shared branch without the user's approval.
+Draft pull requests are fine while work or decisions remain; CodeRabbit reviews
+them. Before human review, check against current `main` and surface conflicts.
+Do not rebase or force-push a shared branch without the user's approval.
 
-When asked to monitor a pull request, review checks and comments posted after
-the latest push. Verify each automated finding against the diff and source
-before acting. If asked to resolve feedback, fix genuine issues and answer an
-inaccurate finding with a brief reason; do not change code merely to satisfy a
-bot.
+When asked to monitor a pull request, check results posted after the latest
+push. Verify automated findings against the diff and source. If asked to resolve
+feedback, fix genuine issues and answer inaccurate findings with a brief reason;
+do not change code merely to satisfy a bot.
 
 Never include credentials or real patient- or person-level data in repository
-files or GitHub text. This includes seeds, test data, row-level query results,
-logs, error output, screenshots and examples containing real data. Use synthetic
-data; high-level aggregates are valid evidence when they cannot identify anyone.
-Do not repeat suspected sensitive values. Alert repository maintainers because
-deleting the latest diff does not remove public history.
+files or GitHub text, including seeds, test data, query results, logs, errors,
+screenshots and examples. Use synthetic data. High-level aggregates are allowed
+when they cannot identify anyone. Do not repeat suspected sensitive values.
+Alert repository maintainers because deleting the latest diff does not remove
+public history.
 
-Assume command output is visible to the agent provider. `dbt show` executes SQL
-and returns its result. Use it sparingly, and only when the query is designed to
-return a high-level, non-identifying aggregate. Do not use it to preview model
-rows. If validation needs row-level inspection, give the user a ready-to-run
-Snowflake-native query for an approved human-controlled tool, and ask only for
-the non-identifying aggregate or confirmation needed; do not ask them to paste
-row-level results into the agent session. Apply the same rule to ad hoc queries
-and failing-test SQL. Otherwise prefer builds, tests and non-identifying
-aggregate checks.
+Assume agent command output is visible to its provider. Use `dbt show` sparingly
+and only for a query designed to return a high-level, non-identifying aggregate;
+never use it to preview model rows. If validation needs row-level inspection,
+give the user a Snowflake-native query for an approved human-controlled tool and
+ask only for the safe aggregate or confirmation needed. Apply the same rule to
+ad hoc queries and failing-test SQL.
