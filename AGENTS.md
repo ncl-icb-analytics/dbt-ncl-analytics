@@ -1,9 +1,7 @@
 # Working in dbt-analytics
 
 This is a public NHS dbt project on Snowflake. Read
-`PROJECT_CONVENTIONS.md` before model work. The
-[dbt onboarding handbook](https://dbt-onboarding.vercel.app/) explains the
-reasoning behind it.
+`PROJECT_CONVENTIONS.md` before model work.
 
 Inspect the intended outcome, real constraint, related contracts, configuration
 and lineage before editing. Prefer the smallest coherent design, not the
